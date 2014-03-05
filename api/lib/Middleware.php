@@ -4,6 +4,7 @@ namespace SolasMatch\API\Lib;
 
 use \SolasMatch\API\DAO as DAO;
 use \SolasMatch\API\Dispatcher;
+use \SolasMatch\Common as Common;
 
 require_once __DIR__."/../DataAccessObjects/AdminDao.class.php";
 require_once __DIR__."/../DataAccessObjects/TaskDao.class.php";
@@ -19,7 +20,7 @@ class Middleware
             return true;
         } else {
             Dispatcher::getDispatcher()->halt(
-                \HttpStatusEnum::FORBIDDEN,
+                Common\Enums\HttpStatusEnum::FORBIDDEN,
                 "The Autherization header does not match the current user or ".
                 "the user does not have permission to acess the current resource"
             );
@@ -44,10 +45,10 @@ class Middleware
                     }
                 }
             }
-            $openidHash = md5($email.substr(\Settings::get("session.site_key"), 0, 20));
+            $openidHash = md5($email.substr(Common\Lib\Settings::get("session.site_key"), 0, 20));
             if ($headerHash != $openidHash) {
                 Dispatcher::getDispatcher()->halt(
-                    \HttpStatusEnum::FORBIDDEN,
+                    Common\Enums\HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -73,7 +74,7 @@ class Middleware
             }
             if ($userId != $user->getId()) {
                 Dispatcher::getDispatcher()->halt(
-                    \HttpStatusEnum::FORBIDDEN,
+                    Common\Enums\HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -98,7 +99,7 @@ class Middleware
 			$req = $app->request;
             $task = $req->getBody();
             $format = $params['format'];
-            $client = new \APIHelper($format);
+            $client = new Common\Lib\APIHelper($format);
             $task = $client->deserialize($task, "Task");
             $projectId = $task->getProjectId();
             
@@ -122,7 +123,7 @@ class Middleware
                 return true;
             } else {
                 Dispatcher::getDispatcher()->halt(
-                    \HttpStatusEnum::FORBIDDEN,
+                    Common\Enums\HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -176,7 +177,7 @@ class Middleware
                 return true;
             } else {
                 Dispatcher::getDispatcher()->halt(
-                    \HttpStatusEnum::FORBIDDEN,
+                    Common\Enums\HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -213,7 +214,7 @@ class Middleware
                 return true;
             } else {
                 Dispatcher::getDispatcher()->halt(
-                    \HttpStatusEnum::FORBIDDEN,
+                    Common\Enums\HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -239,7 +240,7 @@ class Middleware
                 return true;
             } else {
                  Dispatcher::getDispatcher()->halt(
-                     \HttpStatusEnum::FORBIDDEN,
+                     Common\Enums\HttpStatusEnum::FORBIDDEN,
                      "The user does not have permission to acess the current resource"
                  );
             }
@@ -260,7 +261,7 @@ class Middleware
                 return true;
             } else {
                  Dispatcher::getDispatcher()->halt(
-                     \HttpStatusEnum::FORBIDDEN,
+                     Common\Enums\HttpStatusEnum::FORBIDDEN,
                      "The user does not have permission to acess the current resource"
                  );
             }
@@ -290,7 +291,7 @@ class Middleware
                 return true;
             } else {
                 Dispatcher::getDispatcher()->halt(
-                    \HttpStatusEnum::FORBIDDEN,
+                    Common\Enums\HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -320,7 +321,7 @@ class Middleware
                 return true;
             } else {
                 Dispatcher::getDispatcher()->halt(
-                    \HttpStatusEnum::FORBIDDEN,
+                    Common\Enums\HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -358,7 +359,7 @@ class Middleware
                 return true;
             } else {
                 Dispatcher::getDispatcher()->halt(
-                    \HttpStatusEnum::FORBIDDEN,
+                    Common\Enums\HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -403,7 +404,7 @@ class Middleware
                 return true;
             } else {
                 Dispatcher::getDispatcher()->halt(
-                    \HttpStatusEnum::FORBIDDEN,
+                    Common\Enums\HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -454,7 +455,7 @@ class Middleware
                 return true;
             } else {
                 Dispatcher::getDispatcher()->halt(
-                    \HttpStatusEnum::FORBIDDEN,
+                    Common\Enums\HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -483,7 +484,7 @@ class Middleware
                 return true;
             } else {
                 Dispatcher::getDispatcher()->halt(
-                    \HttpStatusEnum::FORBIDDEN,
+                    Common\Enums\HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -525,7 +526,7 @@ class Middleware
                 return true;
             } else {
                 Dispatcher::getDispatcher()->halt(
-                    \HttpStatusEnum::FORBIDDEN,
+                    Common\Enums\HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -546,7 +547,7 @@ class Middleware
             $params = $route->getParams();
             
             $format = $params['format'];
-            $client = new \APIHelper($format);
+            $client = new Common\Lib\APIHelper($format);
             $app = \Slim\Slim::getInstance();			
 			$req = $app->request;
 			$review = $req->getBody();
@@ -586,7 +587,7 @@ class Middleware
                 return true;
             } else {
                 Dispatcher::getDispatcher()->halt(
-                    \HttpStatusEnum::FORBIDDEN,
+                    Common\Enums\HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -635,7 +636,7 @@ class Middleware
                 return true;
             } else {
                 Dispatcher::getDispatcher()->halt(
-                    \HttpStatusEnum::FORBIDDEN,
+                    Common\Enums\HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -679,7 +680,7 @@ class Middleware
                 return true;
             } else {
                 Dispatcher::getDispatcher()->halt(
-                    \HttpStatusEnum::FORBIDDEN,
+                    Common\Enums\HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -734,7 +735,7 @@ class Middleware
                 return true;
             } else {
                 Dispatcher::getDispatcher()->halt(
-                    \HttpStatusEnum::FORBIDDEN,
+                    Common\Enums\HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -765,7 +766,7 @@ class Middleware
                 return true;
             } else {
                 Dispatcher::getDispatcher()->halt(
-                    \HttpStatusEnum::FORBIDDEN,
+                    Common\Enums\HttpStatusEnum::FORBIDDEN,
                     "The user does not have permission to acess the current resource"
                 );
             }
@@ -788,7 +789,7 @@ class Middleware
 			$req = $app->request;
             $task = $req->getBody();
             $format = $params['format'];
-            $client = new \APIHelper($format);
+            $client = new Common\Lib\APIHelper($format);
             $task = $client->deserialize($task, "Task");
             
             $taskId = $task->getId();
@@ -803,7 +804,7 @@ class Middleware
                 return true;
             } else {
                 Dispatcher::getDispatcher()->halt(
-                    \HttpStatusEnum::FORBIDDEN,
+                    Common\Enums\HttpStatusEnum::FORBIDDEN,
                     "Unable to claim task. This Task has been claimed by another user"
                 );
             }

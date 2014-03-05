@@ -2,6 +2,8 @@
 
 namespace SolasMatch\UI\DAO;
 
+use \SolasMatch\Common as Common;
+
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/BaseDao.php";
 
@@ -9,8 +11,8 @@ class AdminDao extends BaseDao
 {
     public function __construct()
     {
-        $this->client = new \APIHelper(\Settings::get("ui.api_format"));
-        $this->siteApi = \Settings::get("site.api");
+        $this->client = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
+        $this->siteApi = Common\Lib\Settings::get("site.api");
     }
 
     public function getSiteAdmins()
@@ -30,25 +32,25 @@ class AdminDao extends BaseDao
     public function createSiteAdmin($userId)
     {
         $request = "{$this->siteApi}v0/admins/$userId";
-        $this->client->call(null, $request, \HttpMethodEnum::PUT);
+        $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
     }
     
     public function removeSiteAdmin($userId)
     {
         $request = "{$this->siteApi}v0/admins/$userId";
-        $this->client->call(null, $request, \HttpMethodEnum::DELETE);
+        $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
     }
     
     public function createOrgAdmin($userId, $orgId)
     {
         $request = "{$this->siteApi}v0/admins/createOrgAdmin/$orgId/$userId";
-        $this->client->call(null, $request, \HttpMethodEnum::PUT);
+        $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
     }
     
     public function removeOrgAdmin($userId, $orgId)
     {
         $request = "{$this->siteApi}v0/admins/removeOrgAdmin/$orgId/$userId";
-        $this->client->call(null, $request, \HttpMethodEnum::DELETE);
+        $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
     }
     
     public function isSiteAdmin($userId)
@@ -96,25 +98,25 @@ class AdminDao extends BaseDao
     public function banUser($bannedUser)
     {
         $request = "{$this->siteApi}v0/admins/banUser";
-        $this->client->call(null, $request, \HttpMethodEnum::POST, $bannedUser);
+        $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST, $bannedUser);
     }
     
     public function banOrg($bannedOrg)
     {
         $request = "{$this->siteApi}v0/admins/banOrg";
-        $this->client->call(null, $request, \HttpMethodEnum::POST, $bannedOrg);
+        $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST, $bannedOrg);
     }
     
     public function unBanUser($userId)
     {
         $request = "{$this->siteApi}v0/admins/unBanUser/$userId";
-        $this->client->call(null, $request, \HttpMethodEnum::DELETE);
+        $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
     }
     
     public function unBanOrg($orgId)
     {
         $request = "{$this->siteApi}v0/admins/unBanOrg/$orgId";
-        $this->client->call(null, $request, \HttpMethodEnum::DELETE);
+        $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
     }
     
     public function isUserBanned($userId)

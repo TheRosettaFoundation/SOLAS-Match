@@ -1,5 +1,7 @@
 <?php
 
+namespace SolasMatch\Common\Lib;
+
 require_once __DIR__."/XMLSerializer.class.php";
 
 class HTMLSerializer extends Serializer

@@ -2,6 +2,7 @@
 
 namespace SolasMatch\API\V0;
 
+use \SolasMatch\Common as Common;
 use \SolasMatch\API\DAO as DAO;
 use \SolasMatch\API\Dispatcher;
 
@@ -11,7 +12,7 @@ use \SolasMatch\API\Dispatcher;
  */
 
 require_once __DIR__."/../DataAccessObjects/StatDao.class.php";
-require_once __DIR__."/../../Common/Settings.class.php";
+require_once __DIR__."/../../Common/lib/Settings.class.php";
 
 class StaticAPI
 {
@@ -21,15 +22,15 @@ class StaticAPI
          * This API function returns dart-configuration in json format.
          */
         Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/static/dart/conf(:format)/',
             function ($format = ".json") {
-                $siteLocation = \Settings::get('site.location');
-                $siteAPI = \Settings::get('site.api');
-                $task_1_colour = \Settings::get('ui.task_1_colour');
-                $task_2_colour = \Settings::get('ui.task_2_colour');
-                $task_3_colour = \Settings::get('ui.task_3_colour');
-                $task_4_colour = \Settings::get('ui.task_4_colour');
+                $siteLocation = Common\Lib\Settings::get('site.location');
+                $siteAPI = Common\Lib\Settings::get('site.api');
+                $task_1_colour = Common\Lib\Settings::get('ui.task_1_colour');
+                $task_2_colour = Common\Lib\Settings::get('ui.task_2_colour');
+                $task_3_colour = Common\Lib\Settings::get('ui.task_3_colour');
+                $task_4_colour = Common\Lib\Settings::get('ui.task_4_colour');
                 $arr = array(
                     'urls' => array(
                         'SOLASMatch' => $siteAPI,
@@ -50,7 +51,7 @@ class StaticAPI
         );
 
         Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/stats(:format)/',
             function ($format = ".json") {
                 $data = DAO\StatDao::getStatistics('');
@@ -61,7 +62,7 @@ class StaticAPI
         );
 
         Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/stats/:name/',
             function ($name, $format = ".json") {
                 if (!is_numeric($name) && strstr($name, '.')) {
@@ -77,7 +78,7 @@ class StaticAPI
         );
 
         Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/tips(:format)/',
             function ($format = ".json") {
                 Dispatcher::sendResponse(null, Lib\TipSelector::selectTip(), null, $format);
@@ -86,7 +87,7 @@ class StaticAPI
         );
 
         Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/static/notFound(:format)/',
             function ($format = '.json') {
                 Dispatcher::sendResponse(null, "404 Not Found", 404, $format);

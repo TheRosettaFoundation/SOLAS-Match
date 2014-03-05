@@ -1,5 +1,7 @@
 <?php
 
+namespace SolasMatch\Common\Lib;
+
 class UserSession
 {
     public static function setSession($user_id)
@@ -14,7 +16,7 @@ class UserSession
 
     public static function getCurrentUserID()
     {
-        if (isset($_SESSION['user_id']) && UserSession::isValidUserId($_SESSION['user_id'])) {
+        if (isset($_SESSION['user_id']) && self::isValidUserId($_SESSION['user_id'])) {
             return $_SESSION['user_id'];
         } else {
             return null;
@@ -87,5 +89,10 @@ class UserSession
         if (isset($_SESSION['AccessToken'])) {
             unset($_SESSION['AccessToken']);
         }
+    }
+
+    public static function registerWithSmarty()
+    {
+        \Slim\Slim::getInstance()->view()->getInstance()->registerClass('UserSession', __NAMESPACE__.'\UserSession');
     }
 }

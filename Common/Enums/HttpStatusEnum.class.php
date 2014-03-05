@@ -1,5 +1,7 @@
 <?php
 
+namespace SolasMatch\Common\Enums;
+
 class HttpStatusEnum
 {
     const OK                        = 200;

@@ -2,15 +2,16 @@
 
 namespace SolasMatch\API\DAO;
 
+use \SolasMatch\Common as Common;
 use \SolasMatch\API\Lib as Lib;
 
 include_once __DIR__."/TagsDao.class.php";
 include_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 include_once __DIR__."/../../Common/lib/ModelFactory.class.php";
-include_once __DIR__."/../../Common/models/Project.php";
-include_once __DIR__."/../../Common/models/ArchivedProject.php";
+include_once __DIR__."/../../Common/protobufs/models/Project.php";
+include_once __DIR__."/../../Common/protobufs/models/ArchivedProject.php";
 include_once __DIR__."/../lib/MessagingClient.class.php";
-include_once __DIR__."/../../Common/Requests/CalculateProjectDeadlinesRequest.php";
+include_once __DIR__."/../../Common/protobufs/Requests/CalculateProjectDeadlinesRequest.php";
 include_once __DIR__."/../../Common/lib/SolasMatchException.php";
 
 class ProjectDao
@@ -40,7 +41,7 @@ class ProjectDao
         $project->setId($result[0]['id']);
 
         TagsDao::updateTags($project->getId(), $project->getTagList());
-        $project = \ModelFactory::buildModel("Project", $result[0]);
+        $project = Common\Lib\ModelFactory::buildModel("Project", $result[0]);
         $projectTags = self::getTags($project->getId());
         if ($projectTags) {
             foreach ($projectTags as $tag) {
@@ -94,7 +95,7 @@ class ProjectDao
         $result = Lib\PDOWrapper::call("getProject", $args);
         if ($result) {
             foreach ($result as $row) {
-                $projects[] = \ModelFactory::buildModel("Project", $row);
+                $projects[] = Common\Lib\ModelFactory::buildModel("Project", $row);
             }
         }
         if (count($projects) == 0) {
@@ -109,7 +110,7 @@ class ProjectDao
             Lib\PDOWrapper::cleanseNull($userId);
         $result = Lib\PDOWrapper::call("archiveProject", $args);
         if ($result) {
-            return \ModelFactory::buildModel("ArchivedProject", $result[0]);
+            return Common\Lib\ModelFactory::buildModel("ArchivedProject", $result[0]);
         } else {
             return null;
         }
@@ -143,7 +144,7 @@ class ProjectDao
         $result = Lib\PDOWrapper::call("getArchivedProject", $args);
         if ($result) {
             foreach ($result as $row) {
-                $projects[] = \ModelFactory::buildModel("ArchivedProject", $row);
+                $projects[] = Common\Lib\ModelFactory::buildModel("ArchivedProject", $row);
             }
         }
         if (count($projects) == 0) {
@@ -161,7 +162,7 @@ class ProjectDao
         if ($result) {
             $tasks = array();
             foreach ($result as $row) {
-                $task = \ModelFactory::buildModel("Task", $row);
+                $task = Common\Lib\ModelFactory::buildModel("Task", $row);
                 if (is_object($task)) {
                     $tasks[] = $task;
                 }
@@ -176,7 +177,7 @@ class ProjectDao
         if ($result = Lib\PDOWrapper::call("getProjectTags", Lib\PDOWrapper::cleanseNull($project_id))) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = \ModelFactory::buildModel("Tag", $row);
+                $ret[] = Common\Lib\ModelFactory::buildModel("Tag", $row);
             }
         }
         return $ret;
@@ -237,7 +238,7 @@ class ProjectDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($mime);
         $result = Lib\PDOWrapper::call("getProjectFile", $args);
         if ($result) {
-            return \ModelFactory::buildModel("ProjectFile", $result[0]);
+            return Common\Lib\ModelFactory::buildModel("ProjectFile", $result[0]);
         } else {
             return null;
         }
@@ -247,30 +248,30 @@ class ProjectDao
     {
         $projectFileInfo = self::getProjectFileInfo($projectId, null, null, null, null);
         $filename = $projectFileInfo->getFilename();
-        $source = \Settings::get("files.upload_path")."proj-$projectId/$filename";
+        $source = Common\Lib\Settings::get("files.upload_path")."proj-$projectId/$filename";
         Lib\IO::downloadFile($source, $projectFileInfo->getMime());
     }
     
     public static function saveProjectFile($projectId, $file, $filename, $userId)
     {
-        $destination = \Settings::get("files.upload_path")."proj-$projectId/";
+        $destination = Common\Lib\Settings::get("files.upload_path")."proj-$projectId/";
         if (!file_exists($destination)) {
             mkdir($destination);
         }
         $mime = Lib\IO::detectMimeType($file, $filename);
-        $apiHelper = new \APIHelper(\Settings::get("ui.api_format"));
+        $apiHelper = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
         $canonicalMime = $apiHelper->getCanonicalMime($filename);
         if (!is_null($canonicalMime) && $mime != $canonicalMime) {
             $message = "The content type ($mime) of the file you are trying to upload does not";
             $message .= " match the content type ($canonicalMime) expected from its extension.";
-            throw new \SolasMatchException($message, \HttpStatusEnum::BAD_REQUEST);
+            throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::BAD_REQUEST);
         }
         $token = self::recordProjectFileInfo($projectId, $filename, $userId, $mime);
         try {
             file_put_contents($destination.$token, $file);
         } catch (Exception $e) {
             $message = "You cannot upload a project file for project ($projectId), as one already exists.";
-            throw new \SolasMatchException($message, \HttpStatusEnum::CONFLICT);
+            throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::CONFLICT);
         }
 
         return $token;
@@ -326,7 +327,7 @@ class ProjectDao
         if ($result = Lib\PDOWrapper::call("getArchivedTask", $args)) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = \ModelFactory::buildModel("ArchivedTask", $row);
+                $ret[] = Common\Lib\ModelFactory::buildModel("ArchivedTask", $row);
             }
         }
         return $ret;

@@ -1,10 +1,12 @@
 <?php
 
+namespace SolasMatch\Common\Lib;
+
 class Settings
 {
     public static function get($var)
     {
-        $settings = self::load(dirname(__FILE__).'/conf/conf.ini');
+        $settings = self::load(dirname(__FILE__).'/../conf/conf.ini');
         $var = explode('.', $var);
         if (isset($settings[$var[0]][$var[1]])) {
             return $settings[$var[0]][$var[1]];
@@ -19,10 +21,15 @@ class Settings
         if (file_exists($file)) {
             $settings = parse_ini_file($file, true);
             //This updates the upload path to be absolute
-            $settings['files']['upload_path'] = __DIR__."/../".$settings['files']['upload_path'];
+            $settings['files']['upload_path'] = __DIR__."/../../".$settings['files']['upload_path'];
         } else {
             echo "<p>Could not load ini file</p>";
         }
         return $settings;
+    }
+
+    public static function registerWithSmarty()
+    {
+        \Slim\Slim::getInstance()->view()->getInstance()->registerClass('Settings', __NAMESPACE__.'\Settings');
     }
 }

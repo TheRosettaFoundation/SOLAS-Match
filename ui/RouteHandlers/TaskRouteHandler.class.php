@@ -4,6 +4,7 @@ namespace SolasMatch\UI\RouteHandlers;
 
 use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
+use \SolasMatch\Common as Common;
 
 require_once __DIR__.'/../../api/lib/IO.class.php';
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
@@ -140,7 +141,7 @@ class TaskRouteHandler
         )->via("POST")->name("task-review");
         
         $app->get(
-            \Settings::get("site.api"),
+            Common\Lib\Settings::get("site.api"),
             array($middleware, "authUserForOrgTask")
         )->name("api");
     }
@@ -149,7 +150,7 @@ class TaskRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
-        $user_id = \UserSession::getCurrentUserID();
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
         
         $user = $userDao->getUser($user_id);
         $archived_tasks = $userDao->getUserArchivedTasks($user_id, 10);
@@ -193,7 +194,7 @@ class TaskRouteHandler
         $userDao = new DAO\UserDao();
         $user = $userDao->getUser($userId);
 
-        $loggedInUserId = \UserSession::getCurrentUserID();
+        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
         if ($loggedInUserId != $userId) {
             $adminDao = new DAO\AdminDao();
             if (!$adminDao->isSiteAdmin($loggedInUserId)) {
@@ -236,7 +237,7 @@ class TaskRouteHandler
         $taskDao = new DAO\TaskDao();
 
         $task = $taskDao->getTask($task_id);
-        $user_id = \UserSession::getCurrentUserID();
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
         
         $taskType = Lib\TemplateHelper::getTaskTypeFromId($task->getTaskType());
         if ($result = $taskDao->archiveTask($task_id, $user_id)) {
@@ -281,7 +282,7 @@ class TaskRouteHandler
 
         $task = $taskDao->getTask($taskId);
         if ($app->request()->isPost()) {
-            $user_id = \UserSession::getCurrentUserID();
+            $user_id = Common\Lib\UserSession::getCurrentUserID();
             $userDao->claimTask($user_id, $task);
             $app->redirect($app->urlFor("task-claimed", array(
                 "task_id" => $taskId
@@ -328,7 +329,7 @@ class TaskRouteHandler
     public function downloadTaskVersion($task_id, $version, $convert = 0)
     {
         $app = \Slim\Slim::getInstance();
-        $siteApi = \Settings::get("site.api");
+        $siteApi = Common\Lib\Settings::get("site.api");
         $app->redirect("{$siteApi}v0/tasks/$task_id/file/?version=$version&convertToXliff=$convert");
     }
 
@@ -338,7 +339,7 @@ class TaskRouteHandler
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
 
-        $user_id = \UserSession::getCurrentUserID();
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
         $task = $taskDao->getTask($task_id);
         if (is_null($task)) {
             $app->flash("error", sprintf(Lib\Localisation::getTranslation('task_view_5'), $task_id));
@@ -349,31 +350,31 @@ class TaskRouteHandler
         if ($taskClaimed) {
             $app->flashKeep();
             switch ($task->getTaskType()) {
-                case \TaskTypeEnum::DESEGMENTATION:
+                case Common\Enums\TaskTypeEnum::DESEGMENTATION:
                     $app->redirect($app->urlFor("task-desegmentation", array("task_id" => $task_id)));
                     break;
-                case \TaskTypeEnum::TRANSLATION:
-                case \TaskTypeEnum::PROOFREADING:
+                case Common\Enums\TaskTypeEnum::TRANSLATION:
+                case Common\Enums\TaskTypeEnum::PROOFREADING:
                     $app->redirect($app->urlFor("task-simple-upload", array("task_id" => $task_id)));
                     break;
-                case \TaskTypeEnum::SEGMENTATION:
+                case Common\Enums\TaskTypeEnum::SEGMENTATION:
                     $app->redirect($app->urlFor("task-segmentation", array("task_id" => $task_id)));
                     break;
             }
         } else {
-            $user_id = \UserSession::getCurrentUserID();
+            $user_id = Common\Lib\UserSession::getCurrentUserID();
             $project = $projectDao->getProject($task->getProjectId());
-            $numTaskTypes = \Settings::get("ui.task_types");
+            $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
 
             $taskTypeColours = array();
             for ($i = 1; $i <= $numTaskTypes; $i++) {
-                $taskTypeColours[$i] = \Settings::get("ui.task_{$i}_colour");
+                $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
             }
         
-            $converter = \Settings::get("converter.converter_enabled");
+            $converter = Common\Lib\Settings::get("converter.converter_enabled");
         
             $task_file_info = $taskDao->getTaskInfo($task_id);
-            $siteApi = \Settings::get("site.api");
+            $siteApi = Common\Lib\Settings::get("site.api");
             $file_path= "{$siteApi}v0/tasks/$task_id/file";
 
             $app->view()->appendData(array(
@@ -395,7 +396,7 @@ class TaskRouteHandler
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
 
-        $userId = \UserSession::getCurrentUserID();
+        $userId = Common\Lib\UserSession::getCurrentUserID();
         $fieldName = "mergedFile";
         $errorMessage = null;
         $task = $taskDao->getTask($taskId);
@@ -441,14 +442,14 @@ class TaskRouteHandler
             }
         }
 
-        $numTaskTypes = \Settings::get("ui.task_types");
+        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
 
         $taskTypeColours = array();
         for ($i = 1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = \Settings::get("ui.task_{$i}_colour");
+            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
 
-        $converter = \Settings::get("converter.converter_enabled");
+        $converter = Common\Lib\Settings::get("converter.converter_enabled");
         
         $app->view()->appendData(array(
             "task"          => $task,
@@ -472,7 +473,7 @@ class TaskRouteHandler
         
         $fieldName = "fileUpload";
         $errorMessage = null;
-        $userId = \UserSession::getCurrentUserID();
+        $userId = Common\Lib\UserSession::getCurrentUserID();
         $task = $taskDao->getTask($taskId);
         $project = $projectDao->getProject($task->getProjectId());
         if ($app->request()->isPost()) {
@@ -541,14 +542,14 @@ class TaskRouteHandler
 
         $taskFileInfo = $taskDao->getTaskInfo($taskId, 0);
         $filename = $taskFileInfo->getFilename();
-        $numTaskTypes = \Settings::get("ui.task_types");
+        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
 
         $taskTypeColours = array();
         for ($i = 1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = \Settings::get("ui.task_{$i}_colour");
+            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
 
-        $converter = \Settings::get("converter.converter_enabled");
+        $converter = Common\Lib\Settings::get("converter.converter_enabled");
 
         $app->view()->appendData(array(
             "task"          => $task,
@@ -612,8 +613,8 @@ class TaskRouteHandler
         $project = $projectDao->getProject($task->getProjectId());
         $projectTasks = $projectDao->getProjectTasks($task->getProjectId());
         foreach ($projectTasks as $projectTask) {
-            if ($projectTask->getTaskStatus() == \TaskStatusEnum::IN_PROGRESS ||
-                        $projectTask->getTaskStatus() == \TaskStatusEnum::COMPLETE) {
+            if ($projectTask->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS ||
+                        $projectTask->getTaskStatus() == Common\Enums\TaskStatusEnum::COMPLETE) {
                 $tasksEnabled[$projectTask->getId()] = false;
             } else {
                 $tasksEnabled[$projectTask->getId()] = true;
@@ -642,7 +643,7 @@ class TaskRouteHandler
         if (\SolasMatch\UI\isValidPost($app)) {
             $post = $app->request()->post();
            
-            if ($task->getTaskStatus() < \TaskStatusEnum::IN_PROGRESS) {
+            if ($task->getTaskStatus() < Common\Enums\TaskStatusEnum::IN_PROGRESS) {
                 if (isset($post['title']) && $post['title'] != "") {
                     $task->setTitle($post['title']);
                 }
@@ -774,11 +775,11 @@ class TaskRouteHandler
             }
         }
 
-        $numTaskTypes = \Settings::get("ui.task_types");
+        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
         $taskTypeColours = array();
         
         for ($i = 1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = \Settings::get("ui.task_{$i}_colour");
+            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
         
         $languages = Lib\TemplateHelper::getLanguageList();
@@ -809,7 +810,7 @@ class TaskRouteHandler
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
 
-        $user_id = \UserSession::getCurrentUserID();
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
         $task = $taskDao->getTask($task_id);
         $project = $projectDao->getProject($task->getProjectId());
         $user = $userDao->getUser($user_id);
@@ -821,7 +822,7 @@ class TaskRouteHandler
             ));
         }
         $task_file_info = $taskDao->getTaskInfo($task_id, 0);
-        $siteApi = \Settings::get("site.api");
+        $siteApi = Common\Lib\Settings::get("site.api");
         $file_path= "{$siteApi}v0/tasks/$task_id/file";
        
         $app->view()->appendData(array(
@@ -889,11 +890,11 @@ class TaskRouteHandler
         ));
         
         $org = $orgDao->getOrganisation($project->getOrganisationId());
-        $numTaskTypes = \Settings::get("ui.task_types");
+        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
         $taskTypeColours = array();
         
         for ($i = 1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = \Settings::get("ui.task_{$i}_colour");
+            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
         
         $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
@@ -918,7 +919,7 @@ class TaskRouteHandler
         $app = \Slim\Slim::getInstance();
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
-        $user_id = \UserSession::getCurrentUserID();
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
 
         $titleError = null;
         $wordCountError = null;
@@ -946,7 +947,7 @@ class TaskRouteHandler
             $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
             $taskSourceLocale->setCountryCode($projectSourceLocale->getCountryCode());
             $task->setSourceLocale($taskSourceLocale);
-            $task->setTaskStatus(\TaskStatusEnum::PENDING_CLAIM);
+            $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
             
             $taskTargetLocale = new \Locale();
             if (isset($post['targetLanguage'])) {
@@ -1021,16 +1022,16 @@ class TaskRouteHandler
         $countries = Lib\TemplateHelper::getCountryList();
 
         $taskTypes = array();
-        $taskTypes[\TaskTypeEnum::SEGMENTATION] = "Segmentation";
-        $taskTypes[\TaskTypeEnum::TRANSLATION] = "Translation";
-        $taskTypes[\TaskTypeEnum::PROOFREADING] = "Proofreading";
-        $taskTypes[\TaskTypeEnum::DESEGMENTATION] = "Desegmentation";
+        $taskTypes[Common\Enums\TaskTypeEnum::SEGMENTATION] = "Segmentation";
+        $taskTypes[Common\Enums\TaskTypeEnum::TRANSLATION] = "Translation";
+        $taskTypes[Common\Enums\TaskTypeEnum::PROOFREADING] = "Proofreading";
+        $taskTypes[Common\Enums\TaskTypeEnum::DESEGMENTATION] = "Desegmentation";
         
-        $numTaskTypes = \Settings::get("ui.task_types");
+        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
         $taskTypeColours = array();
         
         for ($i=1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = \Settings::get("ui.task_{$i}_colour");
+            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
 
         $extra_scripts = "
@@ -1077,13 +1078,13 @@ class TaskRouteHandler
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
 
-        $user_id = \UserSession::getCurrentUserID();
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
         $taskTypeErr = null;
         
         $task = $taskDao->getTask($task_id);
         $project = $projectDao->getProject($task->getProjectId());
-        $numTaskTypes = \Settings::get("ui.task_types");
-        $maxSegments = \Settings::get("site.max_segmentation");
+        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
+        $maxSegments = Common\Lib\Settings::get("site.max_segmentation");
         $taskTypeColours = array();
         
         for ($i=1; $i <= $numTaskTypes; $i++) {
@@ -1093,7 +1094,7 @@ class TaskRouteHandler
         $language_list = Lib\TemplateHelper::getLanguageList();
         $countries = Lib\TemplateHelper::getCountryList();
         
-        if ($app->request()->isPost() && $task->getTaskStatus() != \TaskStatusEnum::COMPLETE) {
+        if ($app->request()->isPost() && $task->getTaskStatus() != Common\Enums\TaskStatusEnum::COMPLETE) {
             $post = $app->request()->post();
             
             $fileInfo = $projectDao->getProjectFileInfo($project->getId());
@@ -1150,7 +1151,7 @@ class TaskRouteHandler
                         $taskModel = new \Task();
                         $this->setTaskModelData($taskModel, $project, $task, $i, $segmentationValue);
                         if (isset($post["translation_0"])) {
-                            $taskModel->setTaskType(\TaskTypeEnum::TRANSLATION);
+                            $taskModel->setTaskType(Common\Enums\TaskTypeEnum::TRANSLATION);
                             $taskModel->setWordCount($post["wordCount_$i"]);
                             $createdTranslation = $taskDao->createTask($taskModel);
                             $translationTaskIds[] = $createdTranslation->getId();
@@ -1165,7 +1166,7 @@ class TaskRouteHandler
                         }
 
                         if (isset($post["proofreading_0"])) {
-                            $taskModel->setTaskType(\TaskTypeEnum::PROOFREADING);
+                            $taskModel->setTaskType(Common\Enums\TaskTypeEnum::PROOFREADING);
                             $taskModel->setWordCount($post["wordCount_$i"]);
                             $createdProofReading = $taskDao->createTask($taskModel);
                             $proofreadTaskIds[] = $createdProofReading->getId();
@@ -1189,19 +1190,19 @@ class TaskRouteHandler
                     $taskModel = new \Task();
                     $this->setTaskModelData($taskModel, $project, $task);
                     $taskModel->setWordCount($task->getWordCount());
-                    $taskModel->setTaskType(\TaskTypeEnum::DESEGMENTATION);
+                    $taskModel->setTaskType(Common\Enums\TaskTypeEnum::DESEGMENTATION);
                     $createdDesegmentation = $taskDao->createTask($taskModel);
                     $createdDesegmentationId = $createdDesegmentation->getId();
 
                     try {
                         $filedata = file_get_contents($_FILES["segmentationUpload_0"]["tmp_name"]);
                         $error_message = $taskDao->saveTaskFile($createdDesegmentation->getId(), $user_id, $filedata);
-                    } catch (\SolasMatchException  $e) {
+                    } catch (Common\Exceptions\SolasMatchException  $e) {
                         $upload_error = true;
                         $error_message = "File error: " . $e->getMessage();
                     }
 
-                    $task->setTaskStatus(\TaskStatusEnum::COMPLETE);
+                    $task->setTaskStatus(Common\Enums\TaskStatusEnum::COMPLETE);
                     $taskDao->updateTask($task);
                     for ($i=0; $i < $segmentationValue; $i++) {
                         if (isset($post["translation_0"]) && isset($post["proofreading_0"])) {
@@ -1266,17 +1267,17 @@ class TaskRouteHandler
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
 
-        $user_id = \UserSession::getCurrentUserID();
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
         $task = $taskDao->getTask($task_id);
         $taskClaimedDate = $taskDao->getClaimedDate($task_id);
         $project = $projectDao->getProject($task->getProjectId());
         $claimant = $taskDao->getUserClaimedTask($task_id);
         $task_tags = $taskDao->getTaskTags($task_id);
 
-        $numTaskTypes = \Settings::get("ui.task_types");
+        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
         $taskTypeColours = array();
         for ($i = 1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = \Settings::get("ui.task_{$i}_colour");
+            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
 
         if ($app->request()->isPost()) {
@@ -1293,7 +1294,7 @@ class TaskRouteHandler
                         )
                     );
                     if (isset($post['revokeTask']) && $post['revokeTask']) {
-                        $task->setTaskStatus(\TaskStatusEnum::PENDING_CLAIM);
+                        $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
                         $taskDao->updateTask($task);
                         $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id);
                         if ($taskRevoke) {
@@ -1347,7 +1348,7 @@ class TaskRouteHandler
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
 
-        $user_id = \UserSession::getCurrentUserID();
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
         $task = $taskDao->getTask($task_id);
         $taskClaimedDate = $taskDao->getClaimedDate($task_id);
         $project = $projectDao->getProject($task->getProjectId());
@@ -1401,10 +1402,10 @@ class TaskRouteHandler
             }
         }
         
-        $numTaskTypes = \Settings::get("ui.task_types");
+        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
         $taskTypeColours = array();
         for ($i=1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = \Settings::get("ui.task_{$i}_colour");
+            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
         
         $app->view()->appendData(array(
@@ -1425,21 +1426,21 @@ class TaskRouteHandler
         $app = \Slim\Slim::getInstance();
         $taskDao = new DAO\TaskDao();
         $userDao = new DAO\UserDao();
-        $userId = \UserSession::getCurrentUserID();
+        $userId = Common\Lib\UserSession::getCurrentUserID();
 
         $task = $taskDao->getTask($taskId);
         $action = "";
         switch ($task->getTaskType()) {
-            case \TaskTypeEnum::SEGMENTATION:
+            case Common\Enums\TaskTypeEnum::SEGMENTATION:
                 $action = Lib\Localisation::getTranslation('task_review_segmented');
                 break;
-            case \TaskTypeEnum::TRANSLATION:
+            case Common\Enums\TaskTypeEnum::TRANSLATION:
                 $action = Lib\Localisation::getTranslation('task_review_translated');
                 break;
-            case \TaskTypeEnum::PROOFREADING:
+            case Common\Enums\TaskTypeEnum::PROOFREADING:
                 $action = Lib\Localisation::getTranslation('task_review_proofread');
                 break;
-            case \TaskTypeEnum::DESEGMENTATION:
+            case Common\Enums\TaskTypeEnum::DESEGMENTATION:
                 $action = Lib\Localisation::getTranslation('task_review_merged');
                 break;
         }
@@ -1604,7 +1605,7 @@ class TaskRouteHandler
         $taskModel->setTargetLocale($task->getTargetLocale());
         
         $taskModel->setProjectId($project->getId());
-        $taskModel->setTaskStatus(\TaskStatusEnum::PENDING_CLAIM);
+        $taskModel->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
     }
 }
 

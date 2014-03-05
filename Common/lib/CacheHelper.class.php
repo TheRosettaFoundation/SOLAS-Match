@@ -1,5 +1,7 @@
 <?php
 
+namespace SolasMatch\Common\Lib;
+
 class CacheHelper
 {
     const STATISTICS            = "Statistics";

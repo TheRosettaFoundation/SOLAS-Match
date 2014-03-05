@@ -1,6 +1,11 @@
 <?php
 
-require_once __DIR__."/FormatEnum.php";
+namespace SolasMatch\Common\Lib;
+
+use \SolasMatch\Common\Enums as Enums;
+use \SolasMatch\Common\Exceptions as Exceptions;
+
+require_once __DIR__."/../Enums/FormatEnum.class.php";
 require_once __DIR__."/JSONSerializer.class.php";
 require_once __DIR__."/XMLSerializer.class.php";
 require_once __DIR__."/HTMLSerializer.class.php";
@@ -20,19 +25,19 @@ class APIHelper
         switch ($format)
         {
             default:
-            case FormatEnum::JSON:
+            case Enums\FormatEnum::JSON:
                 $this->serializer = new JSONSerializer();
                 break;
-            case FormatEnum::XML:
+            case Enums\FormatEnum::XML:
                 $this->serializer = new XMLSerializer();
                 break;
-            case FormatEnum::HTML:
+            case Enums\FormatEnum::HTML:
                 $this->serializer = new HTMLSerializer();
                 break;
-            case FormatEnum::PHP:
+            case Enums\FormatEnum::PHP:
                 $this->serializer = new PHPSerializer();
                 break;
-            case FormatEnum::PROTOBUFS:
+            case Enums\FormatEnum::PROTOBUFS:
                 $this->serializer = new ProtobufSerializer();
                 break;
         }
@@ -41,7 +46,7 @@ class APIHelper
     public function call(
         $destination,
         $url,
-        $method = HttpMethodEnum::GET,
+        $method = Enums\HttpMethodEnum::GET,
         $data = null,
         $query_args = array(),
         $file = null,
@@ -108,7 +113,7 @@ class APIHelper
         if (in_array($this->responseCode, $success)) {
             $response_data = $this->serializer->deserialize($res, $destination);
         } else {
-            throw new SolasMatchException($res, $this->responseCode);
+            throw new Exceptions\SolasMatchException($res, $this->responseCode);
         }
         return $response_data;
     }
@@ -144,17 +149,17 @@ class APIHelper
     public static function getFormatFromString($format)
     {
         if ($format == ".json") {
-            $format = FormatEnum::JSON;
+            $format = Enums\FormatEnum::JSON;
         } elseif (strcasecmp($format, '.xml') == 0) {
-            $format = FormatEnum::XML;
+            $format = Enums\FormatEnum::XML;
         } elseif (strcasecmp($format, '.php') == 0) {
-            $format = FormatEnum::PHP;
+            $format = Enums\FormatEnum::PHP;
         } elseif (strcasecmp($format, '.html') == 0) {
-            $format = FormatEnum::HTML;
+            $format = Enums\FormatEnum::HTML;
         } elseif (strcasecmp($format, '.proto') == 0) {
-            $format = FormatEnum::PROTOBUFS;//change when implmented.
+            $format = Enums\FormatEnum::PROTOBUFS;//change when implmented.
         } else {
-            $format = FormatEnum::JSON;
+            $format = Enums\FormatEnum::JSON;
         }
         return $format;
     }

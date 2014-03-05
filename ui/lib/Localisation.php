@@ -3,9 +3,10 @@
 namespace SolasMatch\UI\Lib;
 
 use \SolasMatch\UI\DAO as DAO;
+use \SolasMatch\Common as Common;
 
 require_once __DIR__.'/../../Common/lib/CacheHelper.class.php';
-require_once __DIR__.'/../../Common/TimeToLiveEnum.php';
+require_once __DIR__.'/../../Common/Enums/TimeToLiveEnum.class.php';
 
 class Localisation
 {
@@ -17,27 +18,27 @@ class Localisation
     public static function init()
     {
         self::$ready = true;
-        $userLang = \UserSession::getUserLanguage();
-        $defaultLang = \Settings::get('site.default_site_language_code');
+        $userLang = Common\Lib\UserSession::getUserLanguage();
+        $defaultLang = Common\Lib\Settings::get('site.default_site_language_code');
 
         self::$defaultLanguageDoc = new \DOMDocument();
         self::$defaultLanguageDoc->loadXML(
-            \CacheHelper::getCached(
-                \CacheHelper::SITE_LANGUAGE,
-                \TimeToLiveEnum::HOUR,
+            Common\Lib\CacheHelper::getCached(
+                Common\Lib\CacheHelper::SITE_LANGUAGE,
+                Common\Enums\TimeToLiveEnum::HOUR,
                 __NAMESPACE__.'\Localisation::fetchTranslationFile',
                 'strings.xml'
             )
         );
 
-        if (!$userLang || strcasecmp(\Settings::get('site.default_site_language_code'), $userLang) === 0) {
+        if (!$userLang || strcasecmp(Common\Lib\Settings::get('site.default_site_language_code'), $userLang) === 0) {
             self::$userLanguageDoc = null;
         } else {
             self::$userLanguageDoc = new \DOMDocument();
             self::$userLanguageDoc->loadXML(
-                \CacheHelper::getCached(
-                    \CacheHelper::SITE_LANGUAGE.'_'.$userLang,
-                    \TimeToLiveEnum::HOUR,
+                Common\Lib\CacheHelper::getCached(
+                    Common\Lib\CacheHelper::SITE_LANGUAGE.'_'.$userLang,
+                    Common\Enums\TimeToLiveEnum::HOUR,
                     __NAMESPACE__.'\Localisation::fetchTranslationFile',
                     "strings_$userLang.xml"
                 )
@@ -112,12 +113,12 @@ class Localisation
         $locales = array();
         $filePaths = glob(__DIR__."/../localisation/strings_*.xml");
         $langDao = new DAO\LanguageDao();
-        $locales[] = $langDao->getLanguageByCode(\Settings::get('site.default_site_language_code'));
+        $locales[] = $langDao->getLanguageByCode(Common\Lib\Settings::get('site.default_site_language_code'));
         foreach ($filePaths as $filePath) {
             preg_match('/_(.*)\.xml/', realpath($filePath), $matches);
-            $lang = \CacheHelper::getCached(
-                \CacheHelper::LOADED_LANGUAGES."_$matches[1]",
-                \TimeToLiveEnum::QUARTER_HOUR,
+            $lang = Common\Lib\CacheHelper::getCached(
+                Common\Lib\CacheHelper::LOADED_LANGUAGES."_$matches[1]",
+                Common\Enums\TimeToLiveEnum::QUARTER_HOUR,
                 array($langDao, 'getLanguageByCode'),
                 $matches[1]
             );

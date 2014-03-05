@@ -2,6 +2,8 @@
 
 namespace SolasMatch\API;
 
+use \SolasMatch\Common as Common;
+
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers : Content-Type');
 header('Access-Control-Allow-Methods : GET, POST, PUT, DELETE');
@@ -11,17 +13,17 @@ require __DIR__."/vendor/autoload.php";
 
 \DrSlump\Protobuf::autoload();
 
-require_once __DIR__."/../Common/Settings.class.php";
 require_once __DIR__."/lib/Middleware.php";
-require_once __DIR__."/../Common/lib/ModelFactory.class.php";
-require_once __DIR__."/../Common/lib/BadgeTypes.class.php";
-require_once __DIR__."/../Common/lib/APIHelper.class.php";
-require_once __DIR__."/../Common/lib/UserSession.class.php";
-require_once __DIR__."/../Common/HttpMethodEnum.php";
-require_once __DIR__."/../Common/HttpStatusEnum.php";
 require_once __DIR__."/OAuth2/Client.php";
 require_once __DIR__."/OAuth2/Scope.php";
 require_once __DIR__."/OAuth2/Session.php";
+require_once __DIR__."/../Common/lib/Settings.class.php";
+require_once __DIR__."/../Common/lib/ModelFactory.class.php";
+require_once __DIR__."/../Common/Enums/BadgeTypes.class.php";
+require_once __DIR__."/../Common/lib/APIHelper.class.php";
+require_once __DIR__."/../Common/lib/UserSession.class.php";
+require_once __DIR__."/../Common/Enums/HttpMethodEnum.class.php";
+require_once __DIR__."/../Common/Enums/HttpStatusEnum.class.php";
 
 class Dispatcher {
     
@@ -76,7 +78,7 @@ class Dispatcher {
             new \League\OAuth2\Server\Storage\PDO\Session(),
             new \League\OAuth2\Server\Storage\PDO\Scope()
         );
-        self::$oauthServer->setAccessTokenTTL(\Settings::get('site.oauth_timeout'));
+        self::$oauthServer->setAccessTokenTTL(Common\Lib\Settings::get('site.oauth_timeout'));
         $passwordGrant = new \League\OAuth2\Server\Grant\Password();
         $passwordGrant->setVerifyCredentialsCallback("\SolasMatch\API\DAO\UserDao::apiLogin");
         self::$oauthServer->addGrantType($passwordGrant);
@@ -92,7 +94,7 @@ class Dispatcher {
     {
         header('Access-Control-Allow-Origin: *');
         $response = self::getDispatcher()->response();
-        $apiHelper = new \APIHelper($format);
+        $apiHelper = new Common\Lib\APIHelper($format);
         $response['Content-Type'] = $apiHelper->getContentType();
         $body = $apiHelper->serialize($body);
         $token = $apiHelper->serialize($oauthToken);
@@ -113,22 +115,22 @@ class Dispatcher {
     public static function register($httpMethod, $url, $function, $middleware = null)
     {        
         switch ($httpMethod) {
-            case \HttpMethodEnum::DELETE: {
+            case Common\Enums\HttpMethodEnum::DELETE: {
                 self::getDispatcher()->delete($url,$middleware, $function);
                 break;
             }
             
-            case \HttpMethodEnum::GET: {
+            case Common\Enums\HttpMethodEnum::GET: {
                 self::getDispatcher()->get($url,$middleware, $function);
                 break;
             }
             
-            case \HttpMethodEnum::POST: {
+            case Common\Enums\HttpMethodEnum::POST: {
                 self::getDispatcher()->post($url,$middleware, $function);
                 break;
             }
             
-            case \HttpMethodEnum::PUT: {
+            case Common\Enums\HttpMethodEnum::PUT: {
                 self::getDispatcher()->put($url,$middleware, $function);
                 break;
             }
@@ -143,7 +145,7 @@ class Dispatcher {
         $middleware = "\SolasMatch\API\Lib\Middleware::isloggedIn"
     ) {
         switch ($httpMethod) {
-            case \HttpMethodEnum::DELETE: {
+            case Common\Enums\HttpMethodEnum::DELETE: {
                 if($middleware!=null) {
                 	self::getDispatcher()->delete($url, $middleware, $function)->name($name);	
                 } else {
@@ -153,7 +155,7 @@ class Dispatcher {
                 break;
             }
             
-            case \HttpMethodEnum::GET: {
+            case Common\Enums\HttpMethodEnum::GET: {
                 if($middleware!=null) {
                 	self::getDispatcher()->get($url,  $middleware, $function)->name($name);
 				} else {
@@ -162,7 +164,7 @@ class Dispatcher {
                 break;
             }
             
-            case \HttpMethodEnum::POST: {
+            case Common\Enums\HttpMethodEnum::POST: {
                 if($middleware!=null) {
                 	self::getDispatcher()->post($url,  $middleware, $function)->name($name);
 				} else {
@@ -171,7 +173,7 @@ class Dispatcher {
                 break;
             }
             
-            case \HttpMethodEnum::PUT: {
+            case Common\Enums\HttpMethodEnum::PUT: {
                 if($middleware!=null) {	
                 	self::getDispatcher()->put($url,  $middleware, $function)->name($name);
 				} else {
@@ -186,15 +188,15 @@ class Dispatcher {
     {
         $req = self::getDispatcher()->request();
         switch ($httpMethod){
-            case \HttpMethodEnum::GET : {
+            case Common\Enums\HttpMethodEnum::GET : {
                  $result = $req->get($index);
                  return is_null($result) ? $default : $result; 
             }
-            case \HttpMethodEnum::POST : {
+            case Common\Enums\HttpMethodEnum::POST : {
                 $result = $req->post($index);
                 return is_null($result) ? $default : $result; 
             }
-            case \HttpMethodEnum::PUT : {
+            case Common\Enums\HttpMethodEnum::PUT : {
                $result = $req->put($index);
                return is_null($result) ? $default : $result; 
             }

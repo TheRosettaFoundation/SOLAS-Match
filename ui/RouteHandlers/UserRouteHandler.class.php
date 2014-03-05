@@ -4,13 +4,14 @@ namespace SolasMatch\UI\RouteHandlers;
 
 use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
+use \SolasMatch\Common as Common;
 
 require_once __DIR__."/../DataAccessObjects/UserDao.class.php";
-require_once __DIR__."/../../Common/models/Register.php";
-require_once __DIR__."/../../Common/models/Login.php";
-require_once __DIR__."/../../Common/models/PasswordResetRequest.php";
-require_once __DIR__."/../../Common/models/PasswordReset.php";
-require_once __DIR__."/../../Common/models/Locale.php";
+require_once __DIR__."/../../Common/protobufs/models/Register.php";
+require_once __DIR__."/../../Common/protobufs/models/Login.php";
+require_once __DIR__."/../../Common/protobufs/models/PasswordResetRequest.php";
+require_once __DIR__."/../../Common/protobufs/models/PasswordReset.php";
+require_once __DIR__."/../../Common/protobufs/models/Locale.php";
 
 class UserRouteHandler
 {
@@ -89,7 +90,7 @@ class UserRouteHandler
         $orgDao = new DAO\OrganisationDao();
         $userDao = new DAO\UserDao();
 
-        $use_statistics = \Settings::get("site.stats");
+        $use_statistics = Common\Lib\Settings::get("site.stats");
         if ($use_statistics == 'y') {
             $statsDao = new DAO\StatisticsDao();
             $statistics = $statsDao->getStats();
@@ -107,7 +108,7 @@ class UserRouteHandler
         $viewData["top_tags"] = $top_tags;
         $viewData["current_page"] = "home";
 
-        $current_user_id = \UserSession::getCurrentUserID();
+        $current_user_id = Common\Lib\UserSession::getCurrentUserID();
         
         if ($current_user_id != null) {
             $user_tags = $userDao->getUserTags($current_user_id);
@@ -146,7 +147,7 @@ class UserRouteHandler
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
         
-        $use_openid = \Settings::get("site.openid");
+        $use_openid = Common\Lib\Settings::get("site.openid");
         $app->view()->setData("openid", $use_openid);
         if (isset($use_openid)) {
             if ($use_openid == "y" || $use_openid == "h") {
@@ -161,8 +162,8 @@ class UserRouteHandler
         $warning = null;
         if (\SolasMatch\UI\isValidPost($app)) {
             $post = $app->request()->post();
-            $temp = md5($post['email'].substr(\Settings::get("session.site_key"), 0, 20));
-            \UserSession::clearCurrentUserID();
+            $temp = md5($post['email'].substr(Common\Lib\Settings::get("session.site_key"), 0, 20));
+            Common\Lib\UserSession::clearCurrentUserID();
             if (!Lib\TemplateHelper::isValidEmail($post['email'])) {
                 $error = Lib\Localisation::getTranslation('register_1');
             } elseif (!Lib\TemplateHelper::isValidPassword($post['password'])) {
@@ -328,7 +329,7 @@ class UserRouteHandler
     public function logout()
     {
         $app = \Slim\Slim::getInstance();
-        \UserSession::destroySession();    //TODO revisit when oauth is in place
+        Common\Lib\UserSession::destroySession();    //TODO revisit when oauth is in place
         $app->redirect($app->urlFor("home"));
     }
 
@@ -339,7 +340,7 @@ class UserRouteHandler
         
         $error = null;
         $openid = new \LightOpenID("http://".$_SERVER["HTTP_HOST"].$app->urlFor("home"));
-        $use_openid = \Settings::get("site.openid");
+        $use_openid = Common\Lib\Settings::get("site.openid");
         $app->view()->setData("openid", $use_openid);
         
         if ($app->request()->isPost() || $openid->mode) {
@@ -359,9 +360,9 @@ class UserRouteHandler
                     $app->flashNow('error', $error);
                 }
                 if (!is_null($user)) {
-                    \UserSession::setSession($user->getId());
-                    $request = \UserSession::getReferer();
-                    \UserSession::clearReferer();
+                    Common\Lib\UserSession::setSession($user->getId());
+                    $request = Common\Lib\UserSession::getReferer();
+                    Common\Lib\UserSession::clearReferer();
                     if ($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
                         $app->redirect($request);
                     } else {
@@ -400,9 +401,9 @@ class UserRouteHandler
                     $app->flash('error', $error);
                     $app->redirect($app->urlFor('login'));
                 }
-                \UserSession::setSession($user->getId());
-                $request = \UserSession::getReferer();
-                \UserSession::clearReferer();
+                Common\Lib\UserSession::setSession($user->getId());
+                $request = Common\Lib\UserSession::getReferer();
+                Common\Lib\UserSession::clearReferer();
                 if ($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
                     $app->redirect($request);
                 } else {
@@ -465,9 +466,9 @@ class UserRouteHandler
         $app = \Slim\Slim::getInstance();
         
         $userDao = new DAO\UserDao();
-        $loggedInuser = $userDao->getUser(\UserSession::getCurrentUserID());
+        $loggedInuser = $userDao->getUser(Common\Lib\UserSession::getCurrentUserID());
         $user = $userDao->getUser($userId);
-        \CacheHelper::unCache(\CacheHelper::GET_USER.$userId);
+        Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER.$userId);
         
         if (!is_object($user)) {
             $app->flash("error", Lib\Localisation::getTranslation('common_login_required_to_access_page'));
@@ -500,19 +501,19 @@ class UserRouteHandler
         $orgDao = new DAO\OrganisationDao();
         $adminDao = new DAO\AdminDao();
         
-        $app->view()->setData("isSiteAdmin", $adminDao->isSiteAdmin(\UserSession::getCurrentUserID()));
+        $app->view()->setData("isSiteAdmin", $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID()));
         $user=null;
         try {
-            \CacheHelper::unCache(\CacheHelper::GET_USER.$user_id);
+            Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER.$user_id);
             $user = $userDao->getUser($user_id);
-        } catch (\SolasMatchException $e) {
+        } catch (Common\Exceptions\SolasMatchException $e) {
              $app->flash('error', Lib\Localisation::getTranslation('common_login_required_to_access_page'));
              $app->redirect($app->urlFor('login'));
         }
         $userPersonalInfo=null;
         try {
             $userPersonalInfo = $userDao->getPersonalInfo($user_id);
-        } catch (\SolasMatchException $e) {
+        } catch (Common\Exceptions\SolasMatchException $e) {
             // should handle the error here or at least error_log it
         }
         if ($app->request()->isPost()) {
@@ -550,7 +551,7 @@ class UserRouteHandler
             }
         }
        
-        $org_creation = \Settings::get("site.organisation_creation");
+        $org_creation = Common\Lib\Settings::get("site.organisation_creation");
             
         $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
@@ -568,7 +569,7 @@ class UserRouteHandler
             "secondaryLanguages" => $secondaryLanguages
         ));
                 
-        if (\UserSession::getCurrentUserID() == $user_id) {
+        if (Common\Lib\UserSession::getCurrentUserID() == $user_id) {
             $notifData = $userDao->getUserTaskStreamNotification($user_id);
             $interval = null;
             $lastSent = null;
@@ -577,19 +578,19 @@ class UserRouteHandler
             if ($notifData) {
                 $interval = $notifData->getInterval();
                 switch ($interval) {
-                    case \NotificationIntervalEnum::DAILY:
+                    case Common\Enums\NotificationIntervalEnum::DAILY:
                         $interval = "daily";
                         break;
-                    case \NotificationIntervalEnum::WEEKLY:
+                    case Common\Enums\NotificationIntervalEnum::WEEKLY:
                         $interval = "weekly";
                         break;
-                    case \NotificationIntervalEnum::MONTHLY:
+                    case Common\Enums\NotificationIntervalEnum::MONTHLY:
                         $interval = "monthly";
                         break;
                 }
 
                 if ($notifData->getLastSent() != null) {
-                    $lastSent = date(\Settings::get("ui.date_format"), strtotime($notifData->getLastSent()));
+                    $lastSent = date(Common\Lib\Settings::get("ui.date_format"), strtotime($notifData->getLastSent()));
                 }
 
                 $strict = $notifData->getStrict();
@@ -642,19 +643,19 @@ class UserRouteHandler
         if ($notifData) {
             $interval = $notifData->getInterval();
             switch ($interval) {
-                case \NotificationIntervalEnum::DAILY:
+                case Common\Enums\NotificationIntervalEnum::DAILY:
                     $interval = "daily";
                     break;
-                case \NotificationIntervalEnum::WEEKLY:
+                case Common\Enums\NotificationIntervalEnum::WEEKLY:
                     $interval = "weekly";
                     break;
-                case \NotificationIntervalEnum::MONTHLY:
+                case Common\Enums\NotificationIntervalEnum::MONTHLY:
                     $interval = "monthly";
                     break;
             }
             
             if ($notifData->getLastSent() != null) {
-                $lastSent = date(\Settings::get("ui.date_format"), strtotime($notifData->getLastSent()));
+                $lastSent = date(Common\Lib\Settings::get("ui.date_format"), strtotime($notifData->getLastSent()));
             }
 
             if ($notifData->hasStrict()) {

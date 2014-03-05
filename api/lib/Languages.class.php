@@ -2,9 +2,11 @@
 
 namespace SolasMatch\API\Lib;
 
+use \SolasMatch\Common as Common;
+
 include_once __DIR__."/../../api/lib/PDOWrapper.class.php";
-require_once __DIR__."/../../Common/models/Language.php";
-require_once __DIR__."/../../Common/models/Country.php";
+require_once __DIR__."/../../Common/protobufs/models/Language.php";
+require_once __DIR__."/../../Common/protobufs/models/Country.php";
 
 class Languages
 {
@@ -40,7 +42,7 @@ class Languages
             PDOWrapper::cleanseNullOrWrapStr($code).", ".
             PDOWrapper::cleanseNullOrWrapStr($name)
         );
-        return \ModelFactory::buildModel("Language", $result[0]);
+        return Common\Lib\ModelFactory::buildModel("Language", $result[0]);
     }
 
     public static function getCountry($id, $code, $name)
@@ -51,14 +53,14 @@ class Languages
             PDOWrapper::cleanseNullOrWrapStr($code).", ".
             PDOWrapper::cleanseNullOrWrapStr($name)
         );
-        return \ModelFactory::buildModel("Country", $result[0]);
+        return Common\Lib\ModelFactory::buildModel("Country", $result[0]);
     }
 
     public static function getLanguageList()
     {
         $languages = array();
         foreach (PDOWrapper::call("getLanguages", "") as $lcid) {
-            $languages[] = \ModelFactory::buildModel("Language", $lcid);
+            $languages[] = Common\Lib\ModelFactory::buildModel("Language", $lcid);
         }
 
         return $languages;
@@ -70,7 +72,7 @@ class Languages
         if ($result = PDOWrapper::call("getActiveLanguages", "")) {
             $languages = array();
             foreach ($result as $row) {
-                $languages[] = \ModelFactory::buildModel("Language", $row);
+                $languages[] = Common\Lib\ModelFactory::buildModel("Language", $row);
             }
         }
         return $languages;
@@ -82,7 +84,7 @@ class Languages
         if ($result = PDOWrapper::call("getActiveSourceLanguages", "")) {
             $languages = array();
             foreach ($result as $row) {
-                $languages[] = \ModelFactory::buildModel("Language", $row);
+                $languages[] = Common\Lib\ModelFactory::buildModel("Language", $row);
             }
         }
         return $languages;
@@ -94,7 +96,7 @@ class Languages
         if ($result = PDOWrapper::call("getActiveTargetLanguages", "")) {
             $languages = array();
             foreach ($result as $row) {
-                $languages[] = \ModelFactory::buildModel("Language", $row);
+                $languages[] = Common\Lib\ModelFactory::buildModel("Language", $row);
             }
         }
         return $languages;
@@ -104,7 +106,7 @@ class Languages
     {
         $countries = array();
         foreach (PDOWrapper::call("getCountries", "") as $lcid) {
-            $countries[] = \ModelFactory::buildModel('Country', $lcid);
+            $countries[] = Common\Lib\ModelFactory::buildModel('Country', $lcid);
         }
         return $countries;
     }

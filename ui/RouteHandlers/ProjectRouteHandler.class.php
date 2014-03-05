@@ -4,9 +4,10 @@ namespace SolasMatch\UI\RouteHandlers;
 
 use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
+use \SolasMatch\Common as Common;
 
-require_once __DIR__."/../../Common/TaskTypeEnum.php";
-require_once __DIR__."/../../Common/TaskStatusEnum.php";
+require_once __DIR__."/../../Common/Enums/TaskTypeEnum.class.php";
+require_once __DIR__."/../../Common/Enums/TaskStatusEnum.class.php";
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
 
 class ProjectRouteHandler
@@ -99,7 +100,7 @@ class ProjectRouteHandler
     public function projectView($project_id)
     {
         $app = \Slim\Slim::getInstance();
-        $user_id = \UserSession::getCurrentUserID();
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
         $userDao = new DAO\UserDao();
@@ -235,11 +236,11 @@ class ProjectRouteHandler
             $extra_scripts .= file_get_contents(__DIR__."/../js/GraphHelper.js");
             $extra_scripts .= file_get_contents(__DIR__."/../js/project-view.js");
 
-            $numTaskTypes = \Settings::get("ui.task_types");
+            $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
             $taskTypeColours = array();
 
             for ($i=1; $i <= $numTaskTypes; $i++) {
-                $taskTypeColours[$i] = \Settings::get("ui.task_{$i}_colour");
+                $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
             }
 
             $app->view()->appendData(array(
@@ -372,7 +373,7 @@ class ProjectRouteHandler
     public function projectCreate($org_id)
     {
         $app = \Slim\Slim::getInstance();
-        $user_id = \UserSession::getCurrentUserID();
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
 
         $extraScripts = "
 <script src=\"{$app->urlFor("home")}ui/dart/build/packages/shadow_dom/shadow_dom.debug.js\"></script>
@@ -414,7 +415,7 @@ class ProjectRouteHandler
         $projectDao = new DAO\ProjectDao();
 
         $project = $projectDao->getProject($project_id);
-        $user_id = \UserSession::getCurrentUserID();
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
         $archivedProject = $projectDao->archiveProject($project_id, $user_id);
         
         if ($archivedProject) {
@@ -435,7 +436,7 @@ class ProjectRouteHandler
     public function downloadProjectFile($projectId)
     {
         $app = \Slim\Slim::getInstance();
-        $siteApi = \Settings::get("site.api");
+        $siteApi = Common\Lib\Settings::get("site.api");
         $app->redirect("{$siteApi}v0/projects/$projectId/file/");
     }
 }

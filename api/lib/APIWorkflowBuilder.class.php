@@ -2,9 +2,11 @@
 
 namespace SolasMatch\API\Lib;
 
+use \SolasMatch\Common\Lib\WorkflowBuilder;
+
 require_once __DIR__."/../../Common/lib/WorkflowBuilder.class.php";
 
-class APIWorkflowBuilder extends \WorkflowBuilder
+class APIWorkflowBuilder extends WorkflowBuilder
 {
     protected function getProjectTasks($projectId)
     {

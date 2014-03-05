@@ -1,5 +1,7 @@
 <?php
 
+namespace SolasMatch\Common\Lib;
+
 class Email
 {
     public static function sendEmail($recipient, $subject, $body)
@@ -30,7 +32,7 @@ class Email
         $mailParams = "$mailFrom";
  
         try {
-            $mailResult = Email::sendMail($mailTo, $mailSubject, $mailBody, $mailHeader, $mailParams);
+            $mailResult = self::sendMail($mailTo, $mailSubject, $mailBody, $mailHeader, $mailParams);
         } catch (Exception $e) {
             trigger_error("Error sending email: " . $e->getMessage(), E_USER_WARNING);
         }

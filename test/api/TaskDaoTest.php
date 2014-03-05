@@ -8,7 +8,7 @@ require_once __DIR__.'/../../api/DataAccessObjects/ProjectDao.class.php';
 require_once __DIR__.'/../../api/DataAccessObjects/TaskDao.class.php';
 require_once __DIR__.'/../../api/DataAccessObjects/UserDao.class.php';
 require_once __DIR__.'/../../Common/lib/ModelFactory.class.php';
-require_once __DIR__.'/../../Common/TaskTypeEnum.php';
+require_once __DIR__.'/../../Common/Enums/TaskTypeEnum.class.php';
 require_once __DIR__.'/../UnitTestHelper.php';
 
 class TaskDaoTest extends PHPUnit_Framework_TestCase

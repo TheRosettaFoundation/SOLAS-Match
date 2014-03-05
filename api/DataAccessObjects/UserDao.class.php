@@ -3,11 +3,11 @@
 namespace SolasMatch\API\DAO;
 
 use \SolasMatch\API\Lib as Lib;
+use \SolasMatch\Common as Common;
 
-require_once __DIR__."/../../Common/models/User.php";
+require_once __DIR__."/../../Common/protobufs/models/User.php";
 require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 require_once __DIR__."/../../Common/lib/Authentication.class.php";
-require_once __DIR__."/../../Common/HttpStatusEnum.php";
 require_once __DIR__."/../lib/MessagingClient.class.php";
 require_once __DIR__."/../../Common/protobufs/emails/UserReferenceEmail.php";
 
@@ -32,8 +32,8 @@ class UserDao
     
     public static function create($email, $clear_password)
     {
-        $nonce = \Authentication::generateNonce();
-        $password = \Authentication::hashPassword($clear_password, $nonce);
+        $nonce = Common\Lib\Authentication::generateNonce();
+        $password = Common\Lib\Authentication::hashPassword($clear_password, $nonce);
         $user = new \User();
         $user->setEmail($email);
         $user->setNonce($nonce);
@@ -45,8 +45,8 @@ class UserDao
     {
         $user = self::getUser($user_id);
 
-        $nonce = \Authentication::generateNonce();
-        $pass = \Authentication::hashPassword($password, $nonce);
+        $nonce = Common\Lib\Authentication::generateNonce();
+        $pass = Common\Lib\Authentication::hashPassword($password, $nonce);
 
         $user[0]->setNonce($nonce);
         $user[0]->setPassword($pass);
@@ -64,11 +64,11 @@ class UserDao
             $nativeLanguageCode = $nativeLocale->getLanguageCode();
             $nativeCountryCode = $nativeLocale->getCountryCode();
             if ($nativeLanguageCode != '' && $nativeCountryCode != '') {
-                BadgeDao::assignBadge($user->getId(), \BadgeTypes::NATIVE_LANGUAGE);
+                BadgeDao::assignBadge($user->getId(), Common\Enums\BadgeTypes::NATIVE_LANGUAGE);
             }
         }
         if ($user->getBiography() != '') {
-            BadgeDao::assignBadge($user->getId(), \BadgeTypes::PROFILE_FILLER);
+            BadgeDao::assignBadge($user->getId(), Common\Enums\BadgeTypes::PROFILE_FILLER);
         }
         $args = Lib\PDOWrapper::cleanseNullOrWrapStr($user->getEmail()).",".
             Lib\PDOWrapper::cleanseNull($user->getNonce()).",".
@@ -81,7 +81,7 @@ class UserDao
         
         $result = Lib\PDOWrapper::call('userInsertAndUpdate', $args);
         if (!is_null($result)) {
-            return \ModelFactory::buildModel("User", $result[0]);
+            return Common\Lib\ModelFactory::buildModel("User", $result[0]);
         } else {
             return null;
         }
@@ -89,7 +89,7 @@ class UserDao
 
     private static function clearPasswordMatchesUsersPassword($user, $clear_password)
     {
-        $hashed_input_password = \Authentication::hashPassword($clear_password, $user->getNonce());
+        $hashed_input_password = Common\Lib\Authentication::hashPassword($clear_password, $user->getNonce());
         return $hashed_input_password == $user->getPassword();
     }
 
@@ -115,7 +115,7 @@ class UserDao
             );
         }
 
-        \UserSession::setSession($user->getId());
+        Common\Lib\UserSession::setSession($user->getId());
         return true;
     }
 
@@ -129,22 +129,34 @@ class UserDao
         
         if (!is_object($user)) {
             self::logLoginAttempt(null, $email, 0);
-            throw new \SolasMatchException("Unable to find user", \HttpStatusEnum::NOT_FOUND);
+            throw new Common\Exceptions\SolasMatchException(
+                "Unable to find user",
+                Common\Enums\HttpStatusEnum::NOT_FOUND
+            );
         }
                 
         if (!self::isUserVerified($user->getId())) {
-             self::logLoginAttempt($user->getId(), $email, 0);
-             throw new \SolasMatchException("Account is unverified", \HttpStatusEnum::UNAUTHORIZED);
+            self::logLoginAttempt($user->getId(), $email, 0);
+            throw new Common\Exceptions\SolasMatchException(
+                "Account is unverified",
+                Common\Enums\HttpStatusEnum::UNAUTHORIZED
+            );
         }
 
         if (AdminDao::isUserBanned($user->getId())) {
             self::logLoginAttempt($user->getId(), $email, 0);
-            throw new \SolasMatchException('user is banned', \HttpStatusEnum::FORBIDDEN);
+            throw new Common\Exceptions\SolasMatchException(
+                'user is banned',
+                Common\Enums\HttpStatusEnum::FORBIDDEN
+            );
         }
 
         if (!self::clearPasswordMatchesUsersPassword($user, $clear_password)) {
             self::logLoginAttempt($user->getId(), $email, 0);
-            throw new \SolasMatchException('Unable to find user', \HttpStatusEnum::NOT_FOUND);
+            throw new Common\Exceptions\SolasMatchException(
+                'Unable to find user',
+                Common\Enums\HttpStatusEnum::NOT_FOUND
+            );
         }
         
         self::logLoginAttempt($user->getId(), $email, 1);
@@ -190,7 +202,7 @@ class UserDao
     {
         $args = Lib\PDOWrapper::cleanseNull($userId);
         $response = Lib\PDOWrapper::call('finishRegistration', $args);
-        BadgeDao::assignBadge($userId, \BadgeTypes::REGISTERED);
+        BadgeDao::assignBadge($userId, Common\Enums\BadgeTypes::REGISTERED);
         return $response[0]['result'];
     }
 
@@ -200,7 +212,7 @@ class UserDao
         $args = Lib\PDOWrapper::cleanseNullOrWrapStr($uuid);
         $result = Lib\PDOWrapper::call('getRegisteredUser', $args);
         if ($result) {
-            $ret = \ModelFactory::buildModel("User", $result[0]);
+            $ret = Common\Lib\ModelFactory::buildModel("User", $result[0]);
         }
         return $ret;
     }
@@ -239,7 +251,7 @@ class UserDao
                 if (!is_object($user)) {
                     $user = self::create($retvals['contact/email'], md5($retvals['contact/email']));
                 }
-                \UserSession::setSession($user->getId());
+                Common\Lib\UserSession::setSession($user->getId());
             }
             return true;
         }
@@ -247,13 +259,13 @@ class UserDao
 
     public static function logout()
     {
-        \UserSession::destroySession();
+        Common\Lib\UserSession::destroySession();
     }
 
     public static function getCurrentUser()
     {
         $ret = null;
-        if ($user_id = \UserSession::getCurrentUserId()) {
+        if ($user_id = Common\Lib\UserSession::getCurrentUserId()) {
                 $ret = self::getUser($user_id);
         }
         return $ret;
@@ -261,7 +273,7 @@ class UserDao
 
     public static function isLoggedIn()
     {
-        return (!is_null(\UserSession::getCurrentUserId()));
+        return (!is_null(Common\Lib\UserSession::getCurrentUserId()));
     }
 
     public static function belongsToRole($user, $role)
@@ -288,7 +300,7 @@ class UserDao
         if ($result = Lib\PDOWrapper::call("findOrganisationsUserBelongsTo", $args)) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = \ModelFactory::buildModel("Organisation", $row);
+                $ret[] = Common\Lib\ModelFactory::buildModel("Organisation", $row);
             }
         }
         return $ret;
@@ -301,7 +313,7 @@ class UserDao
         if ($result = Lib\PDOWrapper::call("getUserBadges", $args)) {
             $ret = array();
             foreach ($result as $badge) {
-                $ret[] = \ModelFactory::buildModel("Badge", $badge);
+                $ret[] = Common\Lib\ModelFactory::buildModel("Badge", $badge);
             }
         }
         return $ret;
@@ -312,7 +324,7 @@ class UserDao
         $ret = null;
         $args = Lib\PDOWrapper::cleanse($userId);
         if ($result = Lib\PDOWrapper::call("getUserTaskStreamNotification", $args)) {
-            $ret = \ModelFactory::buildModel("UserTaskStreamNotification", $result[0]);
+            $ret = Common\Lib\ModelFactory::buildModel("UserTaskStreamNotification", $result[0]);
         }
         return $ret;
     }
@@ -353,7 +365,7 @@ class UserDao
         if ($result = Lib\PDOWrapper::call("getUserTags", $args)) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = \ModelFactory::buildModel("Tag", $row);
+                $ret[] = Common\Lib\ModelFactory::buildModel("Tag", $row);
             }
         }
         return $ret;
@@ -384,7 +396,7 @@ class UserDao
         if ($result = Lib\PDOWrapper::call("getUser", $args)) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = \ModelFactory::buildModel("User", $row);
+                $ret[] = Common\Lib\ModelFactory::buildModel("User", $row);
             }
         }
         return $ret;
@@ -400,7 +412,7 @@ class UserDao
         if ($result = Lib\PDOWrapper::call("getUsersWithBadge", $args)) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = \ModelFactory::buildModel("User", $row);
+                $ret[] = Common\Lib\ModelFactory::buildModel("User", $row);
             }
         }
         return $ret;
@@ -516,7 +528,7 @@ class UserDao
         if ($result = Lib\PDOWrapper::call("getUserTrackedTasks", $args)) {
             $ret = array();
             foreach ($result as $row) {
-                $task = \ModelFactory::buildModel("Task", $row);
+                $task = Common\Lib\ModelFactory::buildModel("Task", $row);
                 $task->setTaskStatus(TaskDao::getTaskStatus($task->getId()));
                 $ret[] = $task;
             }
@@ -583,7 +595,7 @@ class UserDao
         $args = Lib\PDOWrapper::cleanseNullOrWrapStr($uniqueId).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($email);
         if ($result = Lib\PDOWrapper::call("getPasswordResetRequests", $args)) {
-            return \ModelFactory::buildModel("PasswordResetRequest", $result[0]);
+            return Common\Lib\ModelFactory::buildModel("PasswordResetRequest", $result[0]);
         } else {
             return null;
         }
@@ -608,7 +620,7 @@ class UserDao
         if ($result = Lib\PDOWrapper::call("getTrackedProjects", $args)) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = \ModelFactory::buildModel("Project", $row);
+                $ret[] = Common\Lib\ModelFactory::buildModel("Project", $row);
             }
             return $ret;
         }
@@ -675,7 +687,7 @@ class UserDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getCity()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getCountry());
         if ($result = Lib\PDOWrapper::call("userPersonalInfoInsertAndUpdate", $args)) {
-            $ret = \ModelFactory::buildModel("UserPersonalInformation", $result[0]);
+            $ret = Common\Lib\ModelFactory::buildModel("UserPersonalInformation", $result[0]);
         }
         return $ret;
     }
@@ -706,7 +718,7 @@ class UserDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($city).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($country);
         if ($result = Lib\PDOWrapper::call("getUserPersonalInfo", $args)) {
-            $ret = \ModelFactory::buildModel("UserPersonalInformation", $result[0]);
+            $ret = Common\Lib\ModelFactory::buildModel("UserPersonalInformation", $result[0]);
         }
         return $ret;
     }
@@ -718,10 +730,10 @@ class UserDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($locale->getLanguageCode()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($locale->getCountryCode());
         if ($result = Lib\PDOWrapper::call("userSecondaryLanguageInsert", $args)) {
-            $ret = \ModelFactory::buildModel("Locale", $result[0]);
+            $ret = Common\Lib\ModelFactory::buildModel("Locale", $result[0]);
         }
         if (count(self::getSecondaryLanguages($userId)) > 1) {
-            BadgeDao::assignBadge($userId, \BadgeTypes::POLYGLOT);
+            BadgeDao::assignBadge($userId, Common\Enums\BadgeTypes::POLYGLOT);
         }
         return $ret;
     }
@@ -733,7 +745,7 @@ class UserDao
         if ($result = Lib\PDOWrapper::call("getUserSecondaryLanguages", $args)) {
             $ret = array();
             foreach ($result as $locale) {
-                $ret[] = \ModelFactory::buildModel("Locale", $locale);
+                $ret[] = Common\Lib\ModelFactory::buildModel("Locale", $locale);
             }
         }
         return $ret;
@@ -782,7 +794,7 @@ class UserDao
         $args = Lib\PDOWrapper::cleanseNullOrWrapStr($token);
         $result = Lib\PDOWrapper::call('getUserByOAuthToken', $args);
         if ($result) {
-            $ret = \ModelFactory::buildModel("User", $result[0]);
+            $ret = Common\Lib\ModelFactory::buildModel("User", $result[0]);
         }
         return $ret;
     }

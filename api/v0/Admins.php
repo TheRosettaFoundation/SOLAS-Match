@@ -2,6 +2,7 @@
 
 namespace SolasMatch\API\V0;
 
+use \SolasMatch\Common as Common;
 use \SolasMatch\API\DAO as DAO;
 use \SolasMatch\API\Lib as Lib;
 use \SolasMatch\API as API;
@@ -13,7 +14,7 @@ class Admins
     public static function init()
     {
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/admins(:format)/',
             function ($format = ".json") {
                 API\Dispatcher::sendResponse(null, DAO\AdminDao::getAdmins(), null, $format);
@@ -22,7 +23,7 @@ class Admins
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/admins/getOrgAdmins/:orgId/',
             function ($orgId, $format = ".json") {
                 if (!is_numeric($orgId) && strstr($orgId, '.')) {
@@ -36,7 +37,7 @@ class Admins
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::PUT,
+            Common\Enums\HttpMethodEnum::PUT,
             '/v0/admins/:userId/',
             function ($userId, $format = '.json') {
                 if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -53,7 +54,7 @@ class Admins
         
                
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::DELETE,
+            Common\Enums\HttpMethodEnum::DELETE,
             '/v0/admins/:userId/',
             function ($userId, $format = '.json') {
                 if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -69,7 +70,7 @@ class Admins
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::PUT,
+            Common\Enums\HttpMethodEnum::PUT,
             '/v0/admins/createOrgAdmin/:orgId/:userId/',
             function ($orgId, $userId, $format = '.json') {
                 if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -86,7 +87,7 @@ class Admins
         
                
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::DELETE,
+            Common\Enums\HttpMethodEnum::DELETE,
             '/v0/admins/removeOrgAdmin/:orgId/:userId/',
             function ($orgId, $userId, $format = '.json') {
                 if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -102,7 +103,7 @@ class Admins
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/admins/isSiteAdmin/:userId/',
             function ($userId, $format = '.json') {
                 if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -118,7 +119,7 @@ class Admins
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/admins/isOrgAdmin/:orgId/:userId/',
             function ($orgId, $userId, $format = '.json') {
                 if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -138,7 +139,7 @@ class Admins
         
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/admins/getBannedUsers(:format)/',
             function ($format = ".json") {
                 API\Dispatcher::sendResponse(null, DAO\AdminDao::getBannedUser(), null, $format);
@@ -147,7 +148,7 @@ class Admins
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/admins/getBannedUser/:userId/',
             function ($userId, $format = ".json") {
                 if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -162,7 +163,7 @@ class Admins
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/admins/getBannedOrgs(:format)/',
             function ($format = ".json") {
                 API\Dispatcher::sendResponse(null, DAO\AdminDao::getBannedOrg(), null, $format);
@@ -171,7 +172,7 @@ class Admins
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/admins/getBannedOrg/:orgId/',
             function ($orgId, $format = ".json") {
                 if (!is_numeric($orgId) && strstr($orgId, '.')) {
@@ -186,11 +187,11 @@ class Admins
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::POST,
+            Common\Enums\HttpMethodEnum::POST,
             '/v0/admins/banUser(:format)/',
             function ($format = '.json') {
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
-                $client = new \APIHelper($format);
+                $client = new Common\Lib\APIHelper($format);
                 $data = $client->deserialize($data, 'BannedUser');
                 DAO\AdminDao::saveBannedUser($data);
                 API\Dispatcher::sendResponse(null, null, null, $format);
@@ -201,11 +202,11 @@ class Admins
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::POST,
+            Common\Enums\HttpMethodEnum::POST,
             '/v0/admins/banOrg(:format)/',
             function ($format = '.json') {
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
-                $client = new \APIHelper($format);
+                $client = new Common\Lib\APIHelper($format);
                 $data = $client->deserialize($data, 'BannedOrganisation');
                 DAO\AdminDao::saveBannedOrg($data);
                 API\Dispatcher::sendResponse(null, null, null, $format);
@@ -215,7 +216,7 @@ class Admins
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::DELETE,
+            Common\Enums\HttpMethodEnum::DELETE,
             '/v0/admins/unBanUser/:userId/',
             function ($userId, $format = '.json') {
                 if (!is_numeric($userId)&& strstr($userId, '.')) {
@@ -231,7 +232,7 @@ class Admins
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::DELETE,
+            Common\Enums\HttpMethodEnum::DELETE,
             '/v0/admins/unBanOrg/:orgId/',
             function ($orgId, $format = '.json') {
                 if (!is_numeric($orgId)&& strstr($orgId, '.')) {
@@ -247,7 +248,7 @@ class Admins
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/admins/isUserBanned/:userId/',
             function ($userId, $format = ".json") {
                 if (!is_numeric($userId)&& strstr($userId, '.')) {
@@ -262,7 +263,7 @@ class Admins
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/admins/isOrgBanned/:orgId/',
             function ($orgId, $format = ".json") {
                 if (!is_numeric($orgId)&& strstr($orgId, '.')) {

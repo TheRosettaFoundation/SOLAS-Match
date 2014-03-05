@@ -2,6 +2,8 @@
 
 namespace SolasMatch\UI\Lib;
 
+use \SolasMatch\Common as Common;
+
 class TemplateHelper
 {
     public static function timeSinceSqlTime($sql_string)
@@ -55,13 +57,13 @@ class TemplateHelper
     public static function getTaskTypeFromId($taskTypeId)
     {
         switch ($taskTypeId) {
-            case \TaskTypeEnum::DESEGMENTATION:
+            case Common\Enums\TaskTypeEnum::DESEGMENTATION:
                 return Localisation::getTranslation('common_desegmentation_task');
-            case \TaskTypeEnum::TRANSLATION:
+            case Common\Enums\TaskTypeEnum::TRANSLATION:
                 return Localisation::getTranslation('common_translation_task');
-            case \TaskTypeEnum::PROOFREADING:
+            case Common\Enums\TaskTypeEnum::PROOFREADING:
                 return Localisation::getTranslation('common_proofreading_task');
-            case \TaskTypeEnum::SEGMENTATION:
+            case Common\Enums\TaskTypeEnum::SEGMENTATION:
                 return Localisation::getTranslation('common_segmentation_task');
             default:
                 return Localisation::getTranslation('common_error_unknown_task_type');
@@ -107,7 +109,7 @@ class TemplateHelper
 
     public static function getTaskSourceLanguage($task)
     {
-        $use_language_codes = \Settings::get("ui.language_codes");
+        $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
         
         if ($use_language_codes == "y") {
             return $task->getSourceLocale()->getLanguageCode()."-".$task->getSourceLocale()->getCountryCode();
@@ -124,7 +126,7 @@ class TemplateHelper
 
     public static function getTaskTargetLanguage($task)
     {
-        $use_language_codes = \Settings::get("ui.language_codes");
+        $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
         
         if ($use_language_codes == "y") {
             return $task->getTargetLocale()->getLanguageCode()."-".$task->getTargetLocale()->getCountryCode();
@@ -141,7 +143,7 @@ class TemplateHelper
     
     public static function getProjectSourceLanguage($project)
     {
-        $use_language_codes = \Settings::get("ui.language_codes");
+        $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
         
         if ($use_language_codes == "y") {
             return $project->getSourceLanguageCode()."-".$project->getSourceCountryCode();
@@ -158,7 +160,7 @@ class TemplateHelper
     
     public static function getLanguage($locale)
     {
-        $use_language_codes = \Settings::get("ui.language_codes");
+        $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
         
         $languageName = $locale->getLanguageName();
         $languageCode = $locale->getLanguageCode();
@@ -176,7 +178,7 @@ class TemplateHelper
     
     public static function getCountry($locale)
     {
-        $use_language_codes = \Settings::get("ui.language_codes");
+        $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
         
         $countryName = $locale->getCountryName();
         $countryCode = $locale->getCountryCode();
@@ -194,7 +196,7 @@ class TemplateHelper
 
     public static function getLanguageAndCountry($locale)
     {
-        $use_language_codes = \Settings::get("ui.language_codes");
+        $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
         
         $languageName = $locale->getLanguageName();
         $languageCode = $locale->getLanguageCode();
@@ -219,7 +221,7 @@ class TemplateHelper
         $languageCode = $splitCodes[0];
         $countryCode = $splitCodes[1];
         
-        $use_language_codes = \Settings::get("ui.language_codes");
+        $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
         
         if ($use_language_codes == "y") {
             return $languageCode." - ".$countryCode;
@@ -277,7 +279,7 @@ class TemplateHelper
      
     public static function getLanguageList()
     {
-        $use_language_codes = \Settings::get("ui.language_codes");
+        $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
         $langDao = new \SolasMatch\UI\DAO\LanguageDao();
         $languages = $langDao->getLanguages();
        
@@ -295,7 +297,7 @@ class TemplateHelper
 
     public static function getCountryList()
     {
-        $use_language_codes = \Settings::get("ui.language_codes");
+        $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
         $countryDao = new \SolasMatch\UI\DAO\CountryDao();
         $countries = $countryDao->getCountries();
 

@@ -3,6 +3,7 @@
 namespace SolasMatch\API\DAO;
 
 use \SolasMatch\API\Lib as Lib;
+use \SolasMatch\Common as Common;
 
 //! The Badge Data Access Object for the API
 /*!
@@ -10,7 +11,7 @@ use \SolasMatch\API\Lib as Lib;
   Used by the API Route Handlers to supply info requested through the API and perform actions.
   All data is retrieved an input with direct access to the database using stored procedures.
 */
-require_once __DIR__."/../../Common/models/Badge.php";
+require_once __DIR__."/../../Common/protobufs/models/Badge.php";
 require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 
 class BadgeDao
@@ -35,7 +36,7 @@ class BadgeDao
         if ($result = Lib\PDOWrapper::call("getBadge", $args)) {
             $badges = array();
             foreach ($result as $badge) {
-                $badges[] = \ModelFactory::buildModel("Badge", $badge);
+                $badges[] = Common\Lib\ModelFactory::buildModel("Badge", $badge);
             }
             return $badges;
         }
@@ -57,7 +58,7 @@ class BadgeDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($badge->getDescription());
         
         if ($result = Lib\PDOWrapper::call("badgeInsertAndUpdate", $args)) {
-            return \ModelFactory::buildModel("Badge", $result[0]);
+            return Common\Lib\ModelFactory::buildModel("Badge", $result[0]);
         } else {
             return null;
         }
@@ -76,7 +77,7 @@ class BadgeDao
         if ($badge_array = Lib\PDOWrapper::call("getBadge", $args)) {
             $ret = array();
             foreach ($badge_array as $badge) {
-                $ret[] = \ModelFactory::buildModel("Badge", $badge);
+                $ret[] = Common\Lib\ModelFactory::buildModel("Badge", $badge);
             }
         }
         return $ret;

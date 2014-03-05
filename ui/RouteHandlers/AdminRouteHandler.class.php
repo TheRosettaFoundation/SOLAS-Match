@@ -4,6 +4,7 @@ namespace SolasMatch\UI\RouteHandlers;
 
 use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
+use \SolasMatch\Common as Common;
 
 class AdminRouteHandler
 {
@@ -23,7 +24,7 @@ class AdminRouteHandler
     public function adminDashboard()
     {
         $app = \Slim\Slim::getInstance();
-        $userId = \UserSession::getCurrentUserID();
+        $userId = Common\Lib\UserSession::getCurrentUserID();
         
         if ($post = $app->request()->post()) {
             $userDao = new DAO\UserDao();
@@ -106,7 +107,7 @@ class AdminRouteHandler
             }
         }
 
-        $siteName = \Settings::get("site.name");
+        $siteName = Common\Lib\Settings::get("site.name");
      
         $extra_scripts = "";
         $extra_scripts .= file_get_contents(__DIR__."/../js/site-admin.dashboard.js");

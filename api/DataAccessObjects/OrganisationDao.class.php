@@ -3,9 +3,10 @@
 namespace SolasMatch\API\DAO;
 
 use \SolasMatch\API\Lib as Lib;
+use \SolasMatch\Common as Common;
 
-require_once __DIR__."/../../Common/models/Organisation.php";
-require_once __DIR__."/../../Common/models/MembershipRequest.php";
+require_once __DIR__."/../../Common/protobufs/models/Organisation.php";
+require_once __DIR__."/../../Common/protobufs/models/MembershipRequest.php";
 require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 
 class OrganisationDao
@@ -46,7 +47,7 @@ class OrganisationDao
         $result = Lib\PDOWrapper::call("getOrg", $args);
         if (is_array($result)) {
             foreach ($result as $row) {
-                $ret[] = \ModelFactory::buildModel("Organisation", $row);
+                $ret[] = Common\Lib\ModelFactory::buildModel("Organisation", $row);
             }
         } else {
             $ret = null;
@@ -61,7 +62,7 @@ class OrganisationDao
         if ($result = Lib\PDOWrapper::call("searchForOrg", $args)) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = \ModelFactory::buildModel("Organisation", $row);
+                $ret[] = Common\Lib\ModelFactory::buildModel("Organisation", $row);
             }
         }
         return $ret;
@@ -73,7 +74,7 @@ class OrganisationDao
         $args = Lib\PDOWrapper::cleanseNull($user_id);
         if ($result = Lib\PDOWrapper::call("getOrgByUser", $args)) {
             if (is_array($result)) {
-                $ret = \ModelFactory::buildModel("Organisation", $result[0]);
+                $ret = Common\Lib\ModelFactory::buildModel("Organisation", $result[0]);
             }
         }
         return $ret;
@@ -85,7 +86,7 @@ class OrganisationDao
         $args = Lib\PDOWrapper::cleanseNull($org_id);
         if ($result = Lib\PDOWrapper::call("getOrgMembers", $args)) {
             foreach ($result as $user) {
-                $ret[]= \ModelFactory::buildModel("User", $user);
+                $ret[]= Common\Lib\ModelFactory::buildModel("User", $user);
             }
         }
         
@@ -106,7 +107,7 @@ class OrganisationDao
         $args = Lib\PDOWrapper::cleanse($org_id);
         if ($results = Lib\PDOWrapper::call("getMembershipRequests", $args)) {
             foreach ($results as $result) {
-                $ret[] = \ModelFactory::buildModel("MembershipRequest", $result);
+                $ret[] = Common\Lib\ModelFactory::buildModel("MembershipRequest", $result);
             }
         }
         
@@ -157,7 +158,7 @@ class OrganisationDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($org->getRegionalFocus());
         $result = Lib\PDOWrapper::call("organisationInsertAndUpdate", $args);
         if (is_array($result)) {
-            $ret = \ModelFactory::buildModel("Organisation", $result[0]);
+            $ret = Common\Lib\ModelFactory::buildModel("Organisation", $result[0]);
         }
         return $ret;
     }

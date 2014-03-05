@@ -1,6 +1,8 @@
 <?php
 
-class SolasMatchException extends Exception
+namespace SolasMatch\Common\Exceptions;
+
+class SolasMatchException extends \Exception
 {
     public function __construct($message, $code = null, $previous = null)
     {

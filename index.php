@@ -2,6 +2,8 @@
 
 namespace SolasMatch\UI;
 
+use \SolasMatch\Common as Common;
+
 mb_internal_encoding("UTF-8");
 
 header("Content-Type:application/xhtml+xml;charset=UTF-8");
@@ -10,13 +12,16 @@ require_once __DIR__."/ui/vendor/autoload.php";
 
 \DrSlump\Protobuf::autoload();
 
-require_once 'Common/Settings.class.php';
-require_once 'Common/HttpMethodEnum.php';
-require_once 'Common/BanTypeEnum.php';
-require_once 'Common/NotificationIntervalEnum.class.php';
+require_once 'Common/lib/Settings.class.php';
 require_once 'Common/lib/ModelFactory.class.php';
-require_once 'Common/lib/BadgeTypes.class.php';
 require_once 'Common/lib/UserSession.class.php';
+
+require_once 'Common/Enums/BadgeTypes.class.php';
+require_once 'Common/Enums/BanTypeEnum.class.php';
+require_once 'Common/Enums/HttpMethodEnum.class.php';
+require_once 'Common/Enums/NotificationIntervalEnum.class.php';
+require_once 'Common/Enums/TaskStatusEnum.class.php';
+require_once 'Common/Enums/TaskTypeEnum.class.php';
 
 require_once 'ui/lib/Middleware.class.php';
 require_once 'ui/lib/TemplateHelper.php';
@@ -24,17 +29,17 @@ require_once 'ui/lib/GraphViewer.class.php';
 require_once 'ui/lib/UIWorkflowBuilder.class.php';
 require_once 'ui/lib/Localisation.php';
 
-require_once 'Common/models/User.php';
-require_once 'Common/models/Tag.php';
-require_once 'Common/models/Task.php';
-require_once 'Common/models/Organisation.php';
-require_once 'Common/models/Badge.php';
-require_once 'Common/models/Language.php';
-require_once 'Common/models/Country.php';
-require_once 'Common/models/TaskMetadata.php';
-require_once 'Common/models/MembershipRequest.php';
-require_once 'Common/models/UserTaskStreamNotification.php';
-require_once 'Common/models/TaskReview.php';
+require_once 'Common/protobufs/models/User.php';
+require_once 'Common/protobufs/models/Tag.php';
+require_once 'Common/protobufs/models/Task.php';
+require_once 'Common/protobufs/models/Organisation.php';
+require_once 'Common/protobufs/models/Badge.php';
+require_once 'Common/protobufs/models/Language.php';
+require_once 'Common/protobufs/models/Country.php';
+require_once 'Common/protobufs/models/TaskMetadata.php';
+require_once 'Common/protobufs/models/MembershipRequest.php';
+require_once 'Common/protobufs/models/UserTaskStreamNotification.php';
+require_once 'Common/protobufs/models/TaskReview.php';
 
 require_once 'Common/protobufs/emails/EmailMessage.php';
 require_once 'Common/protobufs/emails/UserFeedback.php';
@@ -74,8 +79,8 @@ $app->configureMode('production', function () use ($app) {
         'log.enable' => true,
         'log.path' => '../logs', // Need to set this...
         'debug' => false,
-        'cookies.lifetime' => \Settings::get('site.cookie_timeout'),
-        'cookies.secret_key' => \Settings::get('session.site_key'),
+        'cookies.lifetime' => Common\Lib\Settings::get('site.cookie_timeout'),
+        'cookies.secret_key' => Common\Lib\Settings::get('session.site_key'),
         'cookies.cipher' => MCRYPT_RIJNDAEL_256,
         'cookies.cipher_mode' => MCRYPT_MODE_CBC
     ));
@@ -85,21 +90,21 @@ $app->configureMode('development', function () use ($app) {
     $app->config(array(
         'log.enable' => false,
         'debug' => false,
-        'cookies.lifetime' => \Settings::get('site.cookie_timeout'),
-        'cookies.secret_key' => \Settings::get('session.site_key'),
+        'cookies.lifetime' => Common\Lib\Settings::get('site.cookie_timeout'),
+        'cookies.secret_key' => Common\Lib\Settings::get('session.site_key'),
         'cookies.cipher' => MCRYPT_RIJNDAEL_256,
         'cookies.cipher_mode' => MCRYPT_MODE_CBC
     ));
 });
 
 $app->add(new \Slim\Middleware\SessionCookie(array(
-    'expires' => \Settings::get('site.cookie_timeout'),
+    'expires' => Common\Lib\Settings::get('site.cookie_timeout'),
     'path' => '/',
     'domain' => null,
     'secure' => false,
     'httponly' => false,
     'name' => 'slim_session',
-    'secret' => \Settings::get('session.site_key'),
+    'secret' => Common\Lib\Settings::get('session.site_key'),
     'cipher' => MCRYPT_RIJNDAEL_256,
     'cipher_mode' => MCRYPT_MODE_CBC
 )));
@@ -107,6 +112,12 @@ $app->add(new \Slim\Middleware\SessionCookie(array(
 // Register static classes so they can be used in smarty templates
 Lib\Localisation::registerWithSmarty();
 Lib\TemplateHelper::registerWithSmarty();
+Common\Enums\BanTypeEnum::registerWithSmarty();
+Common\Enums\NotificationIntervalEnum::registerWithSmarty();
+Common\Enums\TaskStatusEnum::registerWithSmarty();
+Common\Enums\TaskTypeEnum::registerWithSmarty();
+Common\Lib\Settings::registerWithSmarty();
+Common\Lib\UserSession::registerWithSmarty();
 
 // Include and initialize RouteHandlers
 require_once 'ui/RouteHandlers/AdminRouteHandler.class.php';
@@ -139,37 +150,37 @@ function isValidPost(&$app)
 }
 
 $app->hook('slim.before.dispatch', function () use ($app) {
-    if (!is_null($token = \UserSession::getAccessToken()) && $token->getExpires() <  time()) {
-        \UserSession::clearCurrentUserID();
+    if (!is_null($token = Common\Lib\UserSession::getAccessToken()) && $token->getExpires() <  time()) {
+        Common\Lib\UserSession::clearCurrentUserID();
     }
     $userDao = new DAO\UserDao();
-    if (!is_null(\UserSession::getCurrentUserID())) {
-        $current_user = $userDao->getUser(\UserSession::getCurrentUserID());
+    if (!is_null(Common\Lib\UserSession::getCurrentUserID())) {
+        $current_user = $userDao->getUser(Common\Lib\UserSession::getCurrentUserID());
         if (!is_null($current_user)) {
             $app->view()->appendData(array('user' => $current_user));
-            $org_array = $userDao->getUserOrgs(\UserSession::getCurrentUserID());
+            $org_array = $userDao->getUserOrgs(Common\Lib\UserSession::getCurrentUserID());
             if ($org_array && count($org_array) > 0) {
                 $app->view()->appendData(array(
                     'user_is_organisation_member' => true
                 ));
             }
 
-            $tasks = $userDao->getUserTasks(\UserSession::getCurrentUserID());
+            $tasks = $userDao->getUserTasks(Common\Lib\UserSession::getCurrentUserID());
             if ($tasks && count($tasks) > 0) {
                 $app->view()->appendData(array(
                     "user_has_active_tasks" => true
                 ));
             }
             $adminDao = new DAO\AdminDao();
-            $isAdmin = $adminDao->isSiteAdmin(\UserSession::getCurrentUserID());
+            $isAdmin = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
             if ($isAdmin) {
                 $app->view()->appendData(array(
                     'site_admin' => true
                 ));
             }
         } else {
-            \UserSession::clearCurrentUserID();
-            \UserSession::clearAccessToken();
+            Common\Lib\UserSession::clearCurrentUserID();
+            Common\Lib\UserSession::clearAccessToken();
         }
     }
     $app->view()->appendData(array(

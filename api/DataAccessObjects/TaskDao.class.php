@@ -2,10 +2,11 @@
 
 namespace SolasMatch\API\DAO;
 
+use \SolasMatch\Common as Common;
 use \SolasMatch\API\Lib as Lib;
 
-require_once __DIR__."/../../Common/Requests/UserTaskScoreRequest.php";
-require_once __DIR__."/../../Common/models/Task.php";
+require_once __DIR__."/../../Common/protobufs/Requests/UserTaskScoreRequest.php";
+require_once __DIR__."/../../Common/protobufs/models/Task.php";
 include_once __DIR__."/../../Common/lib/SolasMatchException.php";
 require_once __DIR__."/../lib/PDOWrapper.class.php";
 require_once __DIR__."/../lib/Notify.class.php";
@@ -55,7 +56,7 @@ class TaskDao
         $result = Lib\PDOWrapper::call("getTask", $args);
         if ($result) {
             foreach ($result as $row) {
-                $tasks[] = \ModelFactory::buildModel("Task", $row);
+                $tasks[] = Common\Lib\ModelFactory::buildModel("Task", $row);
             }
         }
         if (sizeof($tasks) == 0) {
@@ -123,7 +124,7 @@ class TaskDao
         if ($result) {
             $reviews = array();
             foreach ($result as $row) {
-                $reviews[] = \ModelFactory::buildModel('TaskReview', $row);
+                $reviews[] = Common\Lib\ModelFactory::buildModel('TaskReview', $row);
             }
         }
 
@@ -185,7 +186,7 @@ class TaskDao
             Lib\PDOWrapper::cleanse($task->getPublished());
         $result = Lib\PDOWrapper::call("taskInsertAndUpdate", $args);
         if ($result) {
-            $task = \ModelFactory::buildModel('Task', $result);
+            $task = Common\Lib\ModelFactory::buildModel('Task', $result);
         } else {
             return null;
         }
@@ -200,7 +201,7 @@ class TaskDao
 
     private static function calculateTaskScore($taskId)
     {
-        $use_backend = \Settings::get('site.backend');
+        $use_backend = Common\Lib\Settings::get('site.backend');
         if (strcasecmp($use_backend, "y") == 0) {
             $mMessagingClient = new Lib\MessagingClient();
             if ($mMessagingClient->init()) {
@@ -230,7 +231,7 @@ class TaskDao
         if ($result = Lib\PDOWrapper::call("getTaskTags", $args)) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = \ModelFactory::buildModel("Tag", $row);
+                $ret[] = Common\Lib\ModelFactory::buildModel("Tag", $row);
             }
         }
         return $ret;
@@ -255,7 +256,7 @@ class TaskDao
             Lib\PDOWrapper::cleanseNull($task->getPublished());
         $result = Lib\PDOWrapper::call("taskInsertAndUpdate", $args);
         if ($result) {
-            $task = \ModelFactory::buildModel("Task", $result[0]);
+            $task = Common\Lib\ModelFactory::buildModel("Task", $result[0]);
         } else {
             $task = null;
         }
@@ -268,7 +269,7 @@ class TaskDao
         if ($result = Lib\PDOWrapper::call("getTaskPreReqs", $args)) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = \ModelFactory::buildModel("Task", $row);
+                $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
             }
         }
         return $ret;
@@ -281,7 +282,7 @@ class TaskDao
         if ($result = Lib\PDOWrapper::call("getTasksFromPreReq", $args)) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = \ModelFactory::buildModel("Task", $row);
+                $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
             }
         }
         return $ret;
@@ -312,7 +313,7 @@ class TaskDao
         if ($r = Lib\PDOWrapper::call("getLatestAvailableTasks", $args)) {
             $ret = array();
             foreach ($r as $row) {
-                $ret[] = \ModelFactory::buildModel("Task", $row);
+                $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
             }
         }
         return $ret;
@@ -350,7 +351,7 @@ class TaskDao
 
             $ret = array();
             foreach ($result as $row) {
-                 $ret[] = \ModelFactory::buildModel("Task", $row);
+                 $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
             }
         }
         return $ret;
@@ -366,7 +367,7 @@ class TaskDao
         if ($result = Lib\PDOWrapper::call("getTaggedTasks", $args)) {
             $ret = array();
             foreach ($result as $row) {
-                    $ret[] = \ModelFactory::buildModel("Task", $row);
+                    $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
             }
         }
         return $ret;
@@ -413,7 +414,7 @@ class TaskDao
                 $index = $builder->find($dependantId, $graph);
                 $dependant = $graph->getAllNodes($index);
                 $preReqs = $dependant->getPreviousList();
-                if ((count($preReqs) == 2 && $dTask->getTaskType() == \TaskTypeEnum::DESEGMENTATION) ||
+                if ((count($preReqs) == 2 && $dTask->getTaskType() == Common\Enums\TaskTypeEnum::DESEGMENTATION) ||
                         count($preReqs) == 1) {
                     $ret = $ret && (self::archiveTaskNode($dependant, $graph, $userId));
                 }
@@ -489,7 +490,7 @@ class TaskDao
         if ($result) {
             $tasks = array();
             foreach ($result as $taskData) {
-                $tasks[] = \ModelFactory::buildModel("Task", $taskData);
+                $tasks[] = Common\Lib\ModelFactory::buildModel("Task", $taskData);
             }
             return $tasks;
         } else {
@@ -512,7 +513,7 @@ class TaskDao
         if ($result) {
             $tasks = array();
             foreach ($result as $taskData) {
-                $tasks[] = \ModelFactory::buildModel("ArchivedTask", $taskData);
+                $tasks[] = Common\Lib\ModelFactory::buildModel("ArchivedTask", $taskData);
             }
             return $tasks;
         } else {
@@ -530,7 +531,7 @@ class TaskDao
         if ($result = Lib\PDOWrapper::call('getSubscribedUsers', $args)) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = \ModelFactory::buildModel("User", $row);
+                $ret[] = Common\Lib\ModelFactory::buildModel("User", $row);
             }
         }
         return $ret;
@@ -587,7 +588,7 @@ class TaskDao
         $ret = null;
         $args = Lib\PDOWrapper::cleanse($taskId);
         if ($result = Lib\PDOWrapper::call('getUserClaimedTask', $args)) {
-            $ret = \ModelFactory::buildModel("User", $result[0]);
+            $ret = Common\Lib\ModelFactory::buildModel("User", $result[0]);
         }
         return $ret;
     }
@@ -671,7 +672,10 @@ class TaskDao
             $success = Lib\Upload::apiSaveFile($task, $userId, $file, $filename, $version);
         }
         if (!$success) {
-            throw new \SolasMatchException("Failed to write file data.", \HttpStatusEnum::INTERNAL_SERVER_ERROR);
+            throw new Common\Exceptions\SolasMatchException(
+                "Failed to write file data.",
+                Common\Enums\HttpStatusEnum::INTERNAL_SERVER_ERROR
+            );
         }
     }
     

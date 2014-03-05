@@ -5,7 +5,7 @@ namespace SolasMatch\API\Lib;
 use \SolasMatch\API\DAO as DAO;
 
 require_once __DIR__."/MessagingClient.class.php";
-require_once __DIR__."/../../Common/Settings.class.php";
+require_once __DIR__."/../../Common/lib/Settings.class.php";
 require_once __DIR__."/../vendor/autoload.php";
 
 \DrSlump\Protobuf::autoload();
@@ -22,8 +22,8 @@ require_once __DIR__."/../../Common/protobufs/emails/OrgFeedback.php";
 require_once __DIR__."/../../Common/protobufs/emails/EmailVerification.php";
 require_once __DIR__."/../../Common/protobufs/emails/BannedLogin.php";
 require_once __DIR__."/../../Common/protobufs/emails/UserBadgeAwardedEmail.php";
-require_once __DIR__."/../../Common/Requests/TaskUploadNotificationRequest.php";
-require_once __DIR__.'/../../Common/Requests/OrgCreatedNotificationRequest.php';
+require_once __DIR__."/../../Common/protobufs/Requests/TaskUploadNotificationRequest.php";
+require_once __DIR__.'/../../Common/protobufs/Requests/OrgCreatedNotificationRequest.php';
 require_once __DIR__.'/../../Common/protobufs/notifications/TaskRevokedNotification.php';
 
 class Notify

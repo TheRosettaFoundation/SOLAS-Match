@@ -1,29 +1,31 @@
 <?php
 
-require_once __DIR__."/../models/MembershipRequest.php";
-require_once __DIR__."/../models/ArchivedTask.php";
-require_once __DIR__."/../models/PasswordResetRequest.php";
-require_once __DIR__."/../models/PasswordReset.php";
-require_once __DIR__."/../models/Register.php";
-require_once __DIR__."/../models/Country.php";
-require_once __DIR__."/../models/Language.php";
-require_once __DIR__."/../models/Login.php";
-require_once __DIR__."/../models/Badge.php";
-require_once __DIR__."/../models/Tag.php";
-require_once __DIR__."/../models/Organisation.php";
-require_once __DIR__."/../models/TaskMetadata.php";
-require_once __DIR__."/../models/User.php";
-require_once __DIR__."/../models/Task.php";
-require_once __DIR__."/../models/Project.php";
-require_once __DIR__."/../models/ArchivedProject.php";
-require_once __DIR__."/../models/Statistic.php";
-require_once __DIR__."/../models/ProjectFile.php";
-require_once __DIR__."/../models/TaskReview.php";
-require_once __DIR__."/../models/UserTaskStreamNotification.php";
-require_once __DIR__."/../models/Locale.php";
-require_once __DIR__."/../models/UserPersonalInformation.php";
-require_once __DIR__."/../models/BannedUser.php";
-require_once __DIR__."/../models/BannedOrganisation.php";
+namespace SolasMatch\Common\Lib;
+
+require_once __DIR__."/../protobufs/models/MembershipRequest.php";
+require_once __DIR__."/../protobufs/models/ArchivedTask.php";
+require_once __DIR__."/../protobufs/models/PasswordResetRequest.php";
+require_once __DIR__."/../protobufs/models/PasswordReset.php";
+require_once __DIR__."/../protobufs/models/Register.php";
+require_once __DIR__."/../protobufs/models/Country.php";
+require_once __DIR__."/../protobufs/models/Language.php";
+require_once __DIR__."/../protobufs/models/Login.php";
+require_once __DIR__."/../protobufs/models/Badge.php";
+require_once __DIR__."/../protobufs/models/Tag.php";
+require_once __DIR__."/../protobufs/models/Organisation.php";
+require_once __DIR__."/../protobufs/models/TaskMetadata.php";
+require_once __DIR__."/../protobufs/models/User.php";
+require_once __DIR__."/../protobufs/models/Task.php";
+require_once __DIR__."/../protobufs/models/Project.php";
+require_once __DIR__."/../protobufs/models/ArchivedProject.php";
+require_once __DIR__."/../protobufs/models/Statistic.php";
+require_once __DIR__."/../protobufs/models/ProjectFile.php";
+require_once __DIR__."/../protobufs/models/TaskReview.php";
+require_once __DIR__."/../protobufs/models/UserTaskStreamNotification.php";
+require_once __DIR__."/../protobufs/models/Locale.php";
+require_once __DIR__."/../protobufs/models/UserPersonalInformation.php";
+require_once __DIR__."/../protobufs/models/BannedUser.php";
+require_once __DIR__."/../protobufs/models/BannedOrganisation.php";
 
 class ModelFactory
 {
@@ -34,76 +36,76 @@ class ModelFactory
         switch($modelName)
         {
             case "MembershipRequest":
-                $ret = ModelFactory::generateMembershipRequest($modelData);
+                $ret = self::generateMembershipRequest($modelData);
                 break;
             case "ArchivedTask":
-                $ret = ModelFactory::generateArchivedTask($modelData);
+                $ret = self::generateArchivedTask($modelData);
                 break;
             case "PasswordReset":
-                $ret = ModelFactory::generatePasswordReset($modelData);
+                $ret = self::generatePasswordReset($modelData);
                 break;
             case "PasswordResetRequest":
-                $ret = ModelFactory::generatePasswordResetRequest($modelData);
+                $ret = self::generatePasswordResetRequest($modelData);
                 break;
             case "Register":
-                $ret = ModelFactory::generateRegister($modelData);
+                $ret = self::generateRegister($modelData);
                 break;
             case "Country":
-                $ret = ModelFactory::generateCountry($modelData);
+                $ret = self::generateCountry($modelData);
                 break;
             case "Language":
-                $ret = ModelFactory::generateLanguage($modelData);
+                $ret = self::generateLanguage($modelData);
                 break;
             case "Login":
-                $ret = ModelFactory::generateLogin($modelData);
+                $ret = self::generateLogin($modelData);
                 break;
             case "Badge":
-                $ret = ModelFactory::generateBadge($modelData);
+                $ret = self::generateBadge($modelData);
                 break;
             case "Tag":
-                $ret = ModelFactory::generateTag($modelData);
+                $ret = self::generateTag($modelData);
                 break ;
             case "Organisation":
-                $ret = ModelFactory::generateOrganisation($modelData);
+                $ret = self::generateOrganisation($modelData);
                 break;
             case "TaskMetadata":
-                $ret = ModelFactory::generateTaskMetadata($modelData);
+                $ret = self::generateTaskMetadata($modelData);
                 break;
             case "User":
-                $ret = ModelFactory::generateUser($modelData);
+                $ret = self::generateUser($modelData);
                 break;
             case "UserTaskStreamNotification":
-                $ret = ModelFactory::generateUserTaskStreamNotification($modelData);
+                $ret = self::generateUserTaskStreamNotification($modelData);
                 break;
             case "Task":
-                $ret = ModelFactory::generateTask($modelData);
+                $ret = self::generateTask($modelData);
                 break;
             case "TaskReview":
-                $ret = ModelFactory::generateTaskReview($modelData);
+                $ret = self::generateTaskReview($modelData);
                 break;
             case "Project":
-                $ret = ModelFactory::generateProject($modelData);
+                $ret = self::generateProject($modelData);
                 break;
             case "ArchivedProject":
-                $ret = ModelFactory::generateArchivedProject($modelData);
+                $ret = self::generateArchivedProject($modelData);
                 break;
             case "Statistic":
-                $ret = ModelFactory::generateStatistic($modelData);
+                $ret = self::generateStatistic($modelData);
                 break;
             case "ProjectFile":
-                $ret = ModelFactory::generateProjectFile($modelData);
+                $ret = self::generateProjectFile($modelData);
                 break;
             case "UserPersonalInformation":
-                $ret = ModelFactory::generateUserPersonalInformation($modelData);
+                $ret = self::generateUserPersonalInformation($modelData);
                 break;
             case "Locale":
-                $ret = ModelFactory::generateLocale($modelData);
+                $ret = self::generateLocale($modelData);
                 break;
             case "BannedUser":
-                $ret = ModelFactory::generateBannedUser($modelData);
+                $ret = self::generateBannedUser($modelData);
                 break;
             case "BannedOrganisation":
-                $ret = ModelFactory::generateBannedOrganisation($modelData);
+                $ret = self::generateBannedOrganisation($modelData);
                 break;
             default:
                 echo "Unable to build model $modelName";
@@ -114,7 +116,7 @@ class ModelFactory
 
     private static function generateMembershipRequest($modelData)
     {
-        $ret = new MembershipRequest();
+        $ret = new \MembershipRequest();
         $ret ->setId($modelData["id"]);
         if (isset($modelData['user_id'])) {
             $ret->setUserId($modelData['user_id']);
@@ -130,9 +132,9 @@ class ModelFactory
 
     private static function generateArchivedTask($modelData)
     {
-        $ret = new ArchivedTask();
-        $sourceLocale = new Locale();
-        $targetLocale = new Locale();
+        $ret = new \ArchivedTask();
+        $sourceLocale = new \Locale();
+        $targetLocale = new \Locale();
 
         if (isset($modelData['id'])) {
             $ret->setId($modelData['id']);
@@ -187,7 +189,6 @@ class ModelFactory
 
         $ret->setTargetLocale($targetLocale);
         
-        
         if (isset($modelData['taskType'])) {
             $ret->setTaskType($modelData['taskType']);
         }
@@ -235,7 +236,7 @@ class ModelFactory
 
     private static function generatePasswordReset($modelData)
     {
-        $ret = new PasswordReset();
+        $ret = new \PasswordReset();
         
         if (isset($modelData['password'])) {
             $ret->setPassword($modelData['password']);
@@ -249,7 +250,7 @@ class ModelFactory
 
     private static function generatePasswordResetRequest($modelData)
     {
-        $ret = new PasswordResetRequest();
+        $ret = new \PasswordResetRequest();
 
         if (isset($modelData['user_id'])) {
             $ret->setUserId($modelData['user_id']);
@@ -266,7 +267,7 @@ class ModelFactory
 
     private static function generateRegister($modelData)
     {
-        $ret = new Register();
+        $ret = new \Register();
 
         if (isset($modelData['email'])) {
             $ret->setEmail($modelData['email']);
@@ -280,7 +281,7 @@ class ModelFactory
 
     private static function generateCountry($modelData)
     {
-        $ret = new Country();
+        $ret = new \Country();
 
         if (isset($modelData['id'])) {
             $ret->setId($modelData['id']);
@@ -297,7 +298,7 @@ class ModelFactory
 
     private static function generateLanguage($modelData)
     {
-        $ret = new Language();
+        $ret = new \Language();
 
         if (isset($modelData['id'])) {
             $ret->setId($modelData['id']);
@@ -314,7 +315,7 @@ class ModelFactory
 
     private static function generateLogin($modelData)
     {
-        $ret = new Login();
+        $ret = new \Login();
 
         if (isset($modelData['email'])) {
             $ret->setEmail($modelData['email']);
@@ -328,7 +329,7 @@ class ModelFactory
 
     private static function generateBadge($modelData)
     {
-        $ret = new Badge();
+        $ret = new \Badge();
 
         if (isset($modelData['id'])) {
             $ret->setId($modelData['id']);
@@ -348,7 +349,7 @@ class ModelFactory
 
     private static function generateTag($modelData)
     {
-        $ret = new Tag();
+        $ret = new \Tag();
 
         if (isset($modelData['id'])) {
             $ret->setId($modelData['id']);
@@ -362,7 +363,7 @@ class ModelFactory
 
     private static function generateOrganisation($modelData)
     {
-        $ret = new Organisation();
+        $ret = new \Organisation();
 
         if (isset($modelData['id'])) {
             $ret->setId($modelData['id']);
@@ -397,7 +398,7 @@ class ModelFactory
 
     private static function generateTaskMetadata($modelData)
     {
-        $ret = new TaskMetadata();
+        $ret = new \TaskMetadata();
 
         if (isset($modelData['task_id'])) {
             $ret->setId($modelData['task_id']);
@@ -423,8 +424,8 @@ class ModelFactory
 
     private static function generateUser($modelData)
     {
-        $ret = new User();
-        $locale = new Locale();
+        $ret = new \User();
+        $locale = new \Locale();
 
         if (isset($modelData['id'])) {
             $ret->setId($modelData['id']);
@@ -471,7 +472,7 @@ class ModelFactory
 
     private static function generateUserTaskStreamNotification($modelData)
     {
-        $ret = new UserTaskStreamNotification();
+        $ret = new \UserTaskStreamNotification();
 
         if (isset($modelData['user_id'])) {
             $ret->setUserId($modelData['user_id']);
@@ -495,9 +496,9 @@ class ModelFactory
 
     private static function generateTask($modelData)
     {
-        $ret = new Task();
-        $sourceLocale = new Locale();
-        $targetLocale = new Locale();
+        $ret = new \Task();
+        $sourceLocale = new \Locale();
+        $targetLocale = new \Locale();
 
         if (isset($modelData['id'])) {
             $ret->setId($modelData['id']);
@@ -566,7 +567,7 @@ class ModelFactory
 
     private static function generateTaskReview($modelData)
     {
-        $ret = new TaskReview();
+        $ret = new \TaskReview();
 
         if (isset($modelData['project_id'])) {
             $ret->setProjectId($modelData['project_id']);
@@ -598,8 +599,8 @@ class ModelFactory
 
     private static function generateProject($modelData)
     {
-        $ret = new Project();
-        $sourceLocale = new Locale();
+        $ret = new \Project();
+        $sourceLocale = new \Locale();
 
         if (isset($modelData['id'])) {
             $ret->setId($modelData['id']);
@@ -647,14 +648,13 @@ class ModelFactory
 
         $ret->setSourceLocale($sourceLocale);
 
-
         return $ret;
     }
 
     private static function generateArchivedProject($modelData)
     {
-        $ret = new ArchivedProject();
-        $sourceLocale = new Locale();
+        $ret = new \ArchivedProject();
+        $sourceLocale = new \Locale();
 
         if (isset($modelData['id'])) {
             $ret->setId($modelData['id']);
@@ -727,7 +727,7 @@ class ModelFactory
     
     private static function generateStatistic($modelData)
     {
-        $ret = new Statistic();
+        $ret = new \Statistic();
 
         if (isset($modelData['name'])) {
             $ret->setName($modelData['name']);
@@ -742,7 +742,7 @@ class ModelFactory
     
     private static function generateProjectFile($modelData)
     {
-        $ret = new ProjectFile();
+        $ret = new \ProjectFile();
 
         if (isset($modelData['project_id'])) {
             $ret->setProjectId($modelData['project_id']);
@@ -766,7 +766,7 @@ class ModelFactory
     
     private static function generateUserPersonalInformation($modelData)
     {
-        $ret = new UserPersonalInformation();
+        $ret = new \UserPersonalInformation();
 
         if (isset($modelData['id'])) {
             $ret->setId($modelData['id']);
@@ -807,7 +807,7 @@ class ModelFactory
     
     private static function generateLocale($modelData)
     {
-        $ret = new Locale();
+        $ret = new \Locale();
         
         if (isset($modelData['languageName'])) {
             $ret->setLanguageName($modelData['languageName']);
@@ -827,7 +827,7 @@ class ModelFactory
     
     private static function generateBannedUser($modelData)
     {
-        $ret = new BannedUser();
+        $ret = new \BannedUser();
         
         if (isset($modelData['user_id'])) {
             $ret->setUserId($modelData['user_id']);
@@ -850,7 +850,7 @@ class ModelFactory
     
     private static function generateBannedOrganisation($modelData)
     {
-        $ret = new BannedOrganisation();
+        $ret = new \BannedOrganisation();
         
         if (isset($modelData['org_id'])) {
             $ret->setOrgId($modelData['org_id']);

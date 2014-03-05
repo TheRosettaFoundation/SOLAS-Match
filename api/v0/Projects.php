@@ -2,6 +2,7 @@
 
 namespace SolasMatch\API\V0;
 
+use \SolasMatch\Common as Common;
 use \SolasMatch\API\DAO as DAO;
 use \SolasMatch\API\Lib as Lib;
 use \SolasMatch\API as API;
@@ -12,7 +13,7 @@ use \SolasMatch\API as API;
  * @author Dave
  */
 require_once __DIR__."/../DataAccessObjects/ProjectDao.class.php";
-require_once __DIR__."/../../Common/models/Project.php";
+require_once __DIR__."/../../Common/protobufs/models/Project.php";
 require_once __DIR__."/../lib/APIWorkflowBuilder.class.php";
 
 class Projects
@@ -20,7 +21,7 @@ class Projects
     public static function init()
     {
         API\Dispatcher::registerNamed(
-            \HTTPMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/projects(:format)/',
             function ($format = '.json') {
                 API\Dispatcher::sendResponse(null, DAO\ProjectDao::getProject(), null, $format);
@@ -29,11 +30,11 @@ class Projects
         );
         
         API\Dispatcher::registerNamed(
-            \HTTPMethodEnum::POST,
+            Common\Enums\HttpMethodEnum::POST,
             '/v0/projects(:format)/',
             function ($format = '.json') {
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
-                $client = new \APIHelper($format);
+                $client = new Common\Lib\APIHelper($format);
                 $data = $client->deserialize($data, 'Project');
                 $project = DAO\ProjectDao::createUpdate($data);
                 if (!is_null($project) && $project->getId() > 0) {
@@ -42,7 +43,7 @@ class Projects
                     API\Dispatcher::sendResponse(
                         null,
                         "Project details conflict with existing data",
-                        \HttpStatusEnum::CONFLICT,
+                        Common\Enums\HttpStatusEnum::CONFLICT,
                         $format
                     );
                 }
@@ -52,7 +53,7 @@ class Projects
         );
         
         API\Dispatcher::registerNamed(
-            \HTTPMethodEnum::PUT,
+            Common\Enums\HttpMethodEnum::PUT,
             '/v0/projects/:projectId/',
             function ($projectId, $format = '.json') {
                 if (!is_numeric($projectId) && strstr($projectId, '.')) {
@@ -61,7 +62,7 @@ class Projects
                     $projectId = $projectId[0];
                 }
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
-                $client = new \APIHelper($format);
+                $client = new Common\Lib\APIHelper($format);
                 $data = $client->deserialize($data, 'Project');
                 API\Dispatcher::sendResponse(null, DAO\ProjectDao::createUpdate($data), null, $format);
                 DAO\ProjectDao::calculateProjectDeadlines($data->getId());
@@ -71,7 +72,7 @@ class Projects
         );
         
         API\Dispatcher::registerNamed(
-            \HTTPMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/projects/:projectId/',
             function ($projectId, $format = '.json') {
                 if (!is_numeric($projectId) && strstr($projectId, '.')) {
@@ -90,7 +91,7 @@ class Projects
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::DELETE,
+            Common\Enums\HttpMethodEnum::DELETE,
             '/v0/projects/:projectId/',
             function ($projectId, $format = ".json") {
                 if (!is_numeric($projectId) && strstr($projectId, '.')) {
@@ -105,7 +106,7 @@ class Projects
         );
         
         API\Dispatcher::registerNamed(
-            \HTTPMethodEnum::POST,
+            Common\Enums\HttpMethodEnum::POST,
             '/v0/projects/:projectId/calculateDeadlines(:format)/',
             function ($projectId, $format = '.json') {
                 $ret = null;
@@ -116,7 +117,7 @@ class Projects
         );
         
         API\Dispatcher::registerNamed(
-            \HTTPMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/projects/:projectId/reviews(:format)/',
             function ($projectId, $format = '.json') {
                 $reviews = DAO\TaskDao::getTaskReviews($projectId);
@@ -127,7 +128,7 @@ class Projects
         );
         
         API\Dispatcher::registerNamed(
-            \HTTPMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/projects/:projectId/tasks(:format)/',
             function ($projectId, $format = '.json') {
                 $data = DAO\ProjectDao::getProjectTasks($projectId);
@@ -137,7 +138,7 @@ class Projects
         );
         
         API\Dispatcher::registerNamed(
-            \HTTPMethodEnum::PUT,
+            Common\Enums\HttpMethodEnum::PUT,
             '/v0/projects/archiveProject/:projectId/user/:userId/',
             function ($projectId, $userId, $format = ".json") {
                 if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -152,7 +153,7 @@ class Projects
         );
         
         API\Dispatcher::registerNamed(
-            \HTTPMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/archivedProjects(:format)/',
             function ($format = '.json') {
                 API\Dispatcher::sendResponse(null, DAO\ProjectDao::getArchivedProject(), null, $format);
@@ -162,7 +163,7 @@ class Projects
         );
         
         API\Dispatcher::registerNamed(
-            \HTTPMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/archivedProjects/:projectId/',
             function ($projectId, $format = '.json') {
                 if (!is_numeric($projectId) && strstr($projectId, '.')) {
@@ -181,7 +182,7 @@ class Projects
         );
         
         API\Dispatcher::registerNamed(
-            \HTTPMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/projects/buildGraph/:projectId/',
             function ($projectId, $format = '.json') {
                 if (!is_numeric($projectId) && strstr($projectId, '.')) {
@@ -197,7 +198,7 @@ class Projects
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/projects/:projectId/tags(:format)/',
             function ($projectId, $format = ".json") {
                 API\Dispatcher::sendResponse(null, DAO\ProjectDao::getTags($projectId), null, $format);
@@ -207,7 +208,7 @@ class Projects
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/projects/:projectId/info(:format)/',
             function ($projectId, $format = ".json") {
                 API\Dispatcher::sendResponse(
@@ -221,7 +222,7 @@ class Projects
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/projects/:projectId/file(:format)/',
             function ($projectId, $format = ".json") {
                 API\Dispatcher::sendResponse(null, DAO\ProjectDao::getProjectFile($projectId), null, $format);
@@ -231,7 +232,7 @@ class Projects
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::PUT,
+            Common\Enums\HttpMethodEnum::PUT,
             '/v0/projects/:projectId/file/:filename/:userId/',
             function ($projectId, $filename, $userId, $format = ".json") {
                 if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -242,7 +243,7 @@ class Projects
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 try {
                     $token = DAO\ProjectDao::saveProjectFile($projectId, $data, urldecode($filename), $userId);
-                    API\Dispatcher::sendResponse(null, $token, \HttpStatusEnum::CREATED, $format);
+                    API\Dispatcher::sendResponse(null, $token, Common\Enums\HttpStatusEnum::CREATED, $format);
                 } catch (Exception $e) {
                     API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
                 }
@@ -252,7 +253,7 @@ class Projects
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/projects/:projectId/archivedTasks(:format)/',
             function ($projectId, $format = ".json") {
                 API\Dispatcher::sendResponse(null, DAO\ProjectDao::getArchivedTask($projectId), null, $format);
@@ -262,7 +263,7 @@ class Projects
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::DELETE,
+            Common\Enums\HttpMethodEnum::DELETE,
             '/v0/projects/:projectId/deleteTags(:format)/',
             function ($projectId, $format = ".json") {
                 API\Dispatcher::sendResponse(null, DAO\ProjectDao::deleteProjectTags($projectId), null, $format);

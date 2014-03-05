@@ -4,6 +4,7 @@ namespace SolasMatch\UI\RouteHandlers;
 
 use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
+use \SolasMatch\Common as Common;
 
 class TagRouteHandler
 {
@@ -37,7 +38,7 @@ class TagRouteHandler
         $userDao = new DAO\UserDao();
         $tagDao = new DAO\TagDao();
 
-        $user_id = \UserSession::getCurrentUserID();
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
         $user_tags = $userDao->getUserTags($user_id);
         $foundTags = null;
         $name = "";
@@ -71,7 +72,7 @@ class TagRouteHandler
         $userDao = new DAO\UserDao();
 
         $tag = $tagDao->getTag($id);
-        $user_id = \UserSession::getCurrentUserID();
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
         $current_user = $userDao->getUser($user_id);
         
         $displayName = $current_user->getDisplayName();
@@ -126,7 +127,7 @@ class TagRouteHandler
 
         $app->view()->setData('tasks', $tasks);
         
-        $user_id = \UserSession::getCurrentUserID();
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
         $app->view()->appendData(array(
             "user_id" => $user_id
         ));
@@ -145,11 +146,11 @@ class TagRouteHandler
             }
         }
 
-        $numTaskTypes = \Settings::get("ui.task_types");
+        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
         $taskTypeColours = array();
         
         for ($i=1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = \Settings::get("ui.task_{$i}_colour");
+            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
 
         $top_tags= $tagDao->getTopTags(30);

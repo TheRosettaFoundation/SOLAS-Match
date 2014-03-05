@@ -3,6 +3,7 @@
 namespace SolasMatch\UI\Lib;
 
 use \SolasMatch\UI\DAO as DAO;
+use \SolasMatch\Common as Common;
 
 class GraphViewer
 {
@@ -280,7 +281,7 @@ class GraphViewer
 
     public function drawNode($task, $doc, &$defs)
     {
-        $taskTypeColour = \Settings::get("ui.task_".$task->getTaskType()."_colour");
+        $taskTypeColour = Common\Lib\Settings::get("ui.task_".$task->getTaskType()."_colour");
         $thisX = 0;
         $thisY = 0;
         
@@ -342,16 +343,16 @@ class GraphViewer
         $status = "";
         $taskStatusColour = "rgb(0, 0, 0)";
         switch ($task->getTaskStatus()) {
-            case (\TaskStatusEnum::WAITING_FOR_PREREQUISITES):
+            case (Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES):
                 $status = "Waiting";
                 break;
-            case (\TaskStatusEnum::PENDING_CLAIM):
+            case (Common\Enums\TaskStatusEnum::PENDING_CLAIM):
                 $status = "Pending Claim";
                 break;
-            case (\TaskStatusEnum::IN_PROGRESS):
+            case (Common\Enums\TaskStatusEnum::IN_PROGRESS):
                 $status = "In Progress";
                 break;
-            case (\TaskStatusEnum::COMPLETE):
+            case (Common\Enums\TaskStatusEnum::COMPLETE):
                 $status = "Complete";
                 break;
         }

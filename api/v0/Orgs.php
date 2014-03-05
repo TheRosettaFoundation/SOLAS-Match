@@ -2,6 +2,7 @@
 
 namespace SolasMatch\API\V0;
 
+use \SolasMatch\Common as Common;
 use \SolasMatch\API\DAO as DAO;
 use \SolasMatch\API\Lib as Lib;
 use \SolasMatch\API as API;
@@ -21,7 +22,7 @@ class Orgs
     public static function init()
     {
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/orgs(:format)/',
             function ($format = ".json") {
                 API\Dispatcher::sendResponse(null, DAO\OrganisationDao::getOrg(), null, $format);
@@ -30,11 +31,11 @@ class Orgs
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::POST,
+            Common\Enums\HttpMethodEnum::POST,
             '/v0/orgs(:format)/',
             function ($format = ".json") {
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
-                $client = new \APIHelper($format);
+                $client = new Common\Lib\APIHelper($format);
                 $data = $client->deserialize($data, "Organisation");
                 $data->setId(null);
                 $org = DAO\OrganisationDao::insertAndUpdate($data);
@@ -56,7 +57,7 @@ class Orgs
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::PUT,
+            Common\Enums\HttpMethodEnum::PUT,
             '/v0/orgs/:orgId/',
             function ($orgId, $format = ".json") {
                 if (!is_numeric($orgId) && strstr($orgId, '.')) {
@@ -65,7 +66,7 @@ class Orgs
                     $orgId = $orgId[0];
                 }
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
-                $client = new \APIHelper($format);
+                $client = new Common\Lib\APIHelper($format);
                 $data = $client->deserialize($data, "Organisation");
                 $data->setId($orgId);
                 API\Dispatcher::sendResponse(null, DAO\OrganisationDao::insertAndUpdate($data), null, $format);
@@ -75,7 +76,7 @@ class Orgs
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::DELETE,
+            Common\Enums\HttpMethodEnum::DELETE,
             '/v0/orgs/:orgId/',
             function ($orgId, $format = ".json") {
                 if (!is_numeric($orgId) && strstr($orgId, '.')) {
@@ -90,7 +91,7 @@ class Orgs
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/orgs/:orgId/',
             function ($orgId, $format = ".json") {
                 if (!is_numeric($orgId) && strstr($orgId, '.')) {
@@ -109,7 +110,7 @@ class Orgs
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/orgs/isMember/:orgId/:userId/',
             function ($orgId, $userId, $format = ".json") {
                 if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -124,7 +125,7 @@ class Orgs
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/orgs/getByName/:name/',
             function ($name, $format = ".json") {
                 if (!is_numeric($name) && strstr($name, '.')) {
@@ -147,7 +148,7 @@ class Orgs
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/orgs/searchByName/:name/',
             function ($name, $format = ".json") {
                 if (!is_numeric($name) && strstr($name, '.')) {
@@ -172,7 +173,7 @@ class Orgs
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/orgs/:orgId/projects(:format)/',
             function ($orgId, $format = '.json') {
                 API\Dispatcher::sendResponse(
@@ -186,7 +187,7 @@ class Orgs
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/orgs/:orgId/archivedProjects(:format)/',
             function ($orgId, $format = '.json') {
                 API\Dispatcher::sendResponse(null, DAO\ProjectDao::getArchivedProject(null, $orgId), null, $format);
@@ -195,7 +196,7 @@ class Orgs
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/orgs/:orgId/archivedProjects/:projectId/',
             function ($orgId, $projectId, $format = '.json') {
                 if (!is_numeric($projectId) && strstr($projectId, '.')) {
@@ -210,7 +211,7 @@ class Orgs
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/orgs/:orgId/archivedProjects/:projectId/tasks(:format)/',
             function ($orgId, $projectId, $format = '.json') {
                 API\Dispatcher::sendResponse(null, DAO\ProjectDao::getArchivedTask($projectId), null, $format);
@@ -219,7 +220,7 @@ class Orgs
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/orgs/:orgId/badges(:format)/',
             function ($orgId, $format = ".json") {
                 API\Dispatcher::sendResponse(null, DAO\BadgeDao::getOrgBadges($orgId), null, $format);
@@ -228,7 +229,7 @@ class Orgs
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/orgs/:orgId/members(:format)/',
             function ($orgId, $format = ".json") {
                 API\Dispatcher::sendResponse(null, DAO\OrganisationDao::getOrgMembers($orgId), null, $format);
@@ -237,7 +238,7 @@ class Orgs
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/orgs/:orgId/requests(:format)/',
             function ($orgId, $format = ".json") {
                 API\Dispatcher::sendResponse(null, DAO\OrganisationDao::getMembershipRequests($orgId), null, $format);
@@ -246,7 +247,7 @@ class Orgs
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::POST,
+            Common\Enums\HttpMethodEnum::POST,
             '/v0/orgs/:orgId/requests/:uid/',
             function ($orgId, $uid, $format = ".json") {
                 if (!is_numeric($uid) && strstr($uid, '.')) {
@@ -260,7 +261,7 @@ class Orgs
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::PUT,
+            Common\Enums\HttpMethodEnum::PUT,
             '/v0/orgs/:orgId/requests/:uid/',
             function ($orgId, $uid, $format = ".json") {
                 if (!is_numeric($uid)&& strstr($uid, '.')) {
@@ -276,7 +277,7 @@ class Orgs
         );
 
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::PUT,
+            Common\Enums\HttpMethodEnum::PUT,
             '/v0/orgs/addMember/:email/:orgId/',
             function ($email, $orgId, $format = ".json") {
                 if (!is_numeric($orgId) && strstr($orgId, '.')) {
@@ -297,7 +298,7 @@ class Orgs
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::DELETE,
+            Common\Enums\HttpMethodEnum::DELETE,
             '/v0/orgs/:orgId/requests/:uid/',
             function ($orgId, $uid, $format = ".json") {
                 if (!is_numeric($uid) && strstr($uid, '.')) {

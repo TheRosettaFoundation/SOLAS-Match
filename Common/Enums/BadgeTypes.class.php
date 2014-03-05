@@ -1,5 +1,7 @@
 <?php
 
+namespace SolasMatch\Common\Enums;
+
 class BadgeTypes
 {
     //badge type = badge ID

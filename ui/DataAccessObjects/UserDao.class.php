@@ -3,24 +3,25 @@
 namespace SolasMatch\UI\DAO;
 
 use \SolasMatch\UI\Lib as Lib;
+use \SolasMatch\Common as Common;
 
-require_once __DIR__."/../../Common/HttpStatusEnum.php";
+require_once __DIR__."/../../Common/Enums/HttpStatusEnum.class.php";
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
-require_once __DIR__."/../../Common/models/OAuthResponce.php";
+require_once __DIR__."/../../Common/protobufs/models/OAuthResponce.php";
 require_once __DIR__."/BaseDao.php";
 
 class UserDao extends BaseDao
 {
     public function __construct()
     {
-        $this->client = new \APIHelper(\Settings::get("ui.api_format"));
-        $this->siteApi = \Settings::get("site.api");
+        $this->client = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
+        $this->siteApi = Common\Lib\Settings::get("site.api");
     }
     
     public function getUserDart($userId)
     {
         $ret = null;
-        $helper = new \APIHelper(\FormatEnum::JSON);
+        $helper = new Common\Lib\APIHelper(Common\Enums\FormatEnum::JSON);
         return $helper->serialize($this->getUser($userId));
     }
     
@@ -28,9 +29,9 @@ class UserDao extends BaseDao
     {
         $ret = null;
         
-        $ret = \CacheHelper::getCached(
-            \CacheHelper::GET_USER.$userId,
-            \TimeToLiveEnum::MINUTE,
+        $ret = Common\Lib\CacheHelper::getCached(
+            Common\Lib\CacheHelper::GET_USER.$userId,
+            Common\Enums\TimeToLiveEnum::MINUTE,
             function ($args) {
                 $request = "{$args[2]}v0/users/$args[1]";
                 return $args[0]->call("User", $request);
@@ -47,7 +48,7 @@ class UserDao extends BaseDao
         $ret = $this->client->call(
             "User",
             $request,
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             null,
             null,
             null,
@@ -105,7 +106,7 @@ class UserDao extends BaseDao
         if ($limit) {
             $args = array("limit" => $limit);
         }
-        $ret = $this->client->call(array("Tag"), $request, \HttpMethodEnum::GET, null, $args);
+        $ret = $this->client->call(array("Tag"), $request, Common\Enums\HttpMethodEnum::GET, null, $args);
         return $ret;
     }
 
@@ -162,7 +163,7 @@ class UserDao extends BaseDao
 
         $args['strict'] = $strict;
 
-        $ret = $this->client->call(array("Task"), $request, \HttpMethodEnum::GET, null, $args);
+        $ret = $this->client->call(array("Task"), $request, Common\Enums\HttpMethodEnum::GET, null, $args);
         return $ret;
     }
 
@@ -176,7 +177,7 @@ class UserDao extends BaseDao
             $args = array("limit" => $limit);
         }
 
-        $ret = $this->client->call(array("ArchivedTask"), $request, \HttpMethodEnum::GET, null, $args);
+        $ret = $this->client->call(array("ArchivedTask"), $request, Common\Enums\HttpMethodEnum::GET, null, $args);
         return $ret;
     }
 
@@ -216,7 +217,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/leaveOrg/$userId/$orgId";
-        $ret = $this->client->call(null, $request, \HttpMethodEnum::DELETE);
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
         return $ret;
     }
 
@@ -224,7 +225,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/badges";
-        $ret = $this->client->call(null, $request, \HttpMethodEnum::POST, $badge);
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST, $badge);
         return $ret;
     }
 
@@ -232,7 +233,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/badges/$badgeId";
-        $ret = $this->client->call(null, $request, \HttpMethodEnum::PUT);
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
         return $ret;
     }
 
@@ -240,7 +241,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/assignBadge/".urlencode($email)."/$badgeId";
-        $ret = $this->client->call(null, $request, \HttpMethodEnum::PUT);
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
         return $ret;
     }
 
@@ -248,7 +249,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/taskStreamNotification";
-        $ret = $this->client->call(null, $request, \HttpMethodEnum::DELETE);
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
         return $ret;
     }
 
@@ -256,7 +257,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/{$notifData->getUserId()}/taskStreamNotification";
-        $ret = $this->client->call(null, $request, \HttpMethodEnum::PUT, $notifData);
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT, $notifData);
         return $ret;
     }
 
@@ -264,7 +265,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/badges/$badgeId";
-        $ret = $this->client->call(null, $request, \HttpMethodEnum::DELETE);
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
         return $ret;
     }
 
@@ -272,7 +273,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tasks";
-        $ret = $this->client->call(null, $request, \HttpMethodEnum::POST, $task);
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST, $task);
         return $ret;
     }
 
@@ -280,7 +281,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tasks/$taskId";
-        $ret = $this->client->call(null, $request, \HttpMethodEnum::DELETE);
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
         return $ret;
     }
 
@@ -288,8 +289,8 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/{$user->getId()}";
-        $ret = $this->client->call("User", $request, \HttpMethodEnum::PUT, $user);
-        \CacheHelper::unCache(\CacheHelper::GET_USER.$user->getId());
+        $ret = $this->client->call("User", $request, Common\Enums\HttpMethodEnum::PUT, $user);
+        Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER.$user->getId());
         return $ret;
     }
 
@@ -297,7 +298,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tags";
-        $ret = $this->client->call(null, $request, \HttpMethodEnum::POST, $tag);
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST, $tag);
         return $ret;
     }
 
@@ -305,21 +306,21 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tags/$tagId";
-        $ret = $this->client->call(null, $request, \HttpMethodEnum::PUT);
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
         return $ret;
     }
 
     public function requestReferenceEmail($userId)
     {
         $request = "{$this->siteApi}v0/users/$userId/requestReference";
-        $this->client->call(null, $request, \HttpMethodEnum::PUT);
+        $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
     }
 
     public function removeUserTag($userId, $tagId)
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tags/$tagId";
-        $ret = $this->client->call(null, $request, \HttpMethodEnum::DELETE);
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
         return $ret;
     }
 
@@ -327,7 +328,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/trackedTasks/$taskId";
-        $ret = $this->client->call(null, $request, \HttpMethodEnum::PUT);
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
         return $ret;
     }
 
@@ -335,7 +336,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/trackedTasks/$taskId";
-        $ret = $this->client->call(null, $request, \HttpMethodEnum::DELETE);
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
         return $ret;
     }
 
@@ -343,7 +344,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/email/$email/passwordResetRequest";
-        $ret = $this->client->call(null, $request, \HttpMethodEnum::POST);
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
         return $ret;
     }
 
@@ -351,7 +352,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/projects/$projectId";
-        $ret = $this->client->call(null, $request, \HttpMethodEnum::PUT);
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
         return $ret;
     }
 
@@ -359,7 +360,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/projects/$projectId";
-        $ret = $this->client->call(null, $request, \HttpMethodEnum::DELETE);
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
         return $ret;
     }
     
@@ -371,26 +372,30 @@ class UserDao extends BaseDao
         $login->setPassword($password);
         $request = "{$this->siteApi}v0/users/login";
         $queryArgs = array(
-            'client_id' => \Settings::get('oauth.client_id'),
-            'client_secret' => \Settings::get('oauth.client_secret')
+            'client_id' => Common\Lib\Settings::get('oauth.client_id'),
+            'client_secret' => Common\Lib\Settings::get('oauth.client_secret')
         );
         try {
-            $ret = $this->client->call("User", $request, \HttpMethodEnum::POST, $login, $queryArgs);
-        } catch (\SolasMatchException $e) {
+            $ret = $this->client->call("User", $request, Common\Enums\HttpMethodEnum::POST, $login, $queryArgs);
+        } catch (Common\Exceptions\SolasMatchException $e) {
             switch($e->getCode()) {
-                case \HttpStatusEnum::NOT_FOUND:
-                    throw new \SolasMatchException(Lib\Localisation::getTranslation('common_error_login_1'));
+                case Common\Enums\HttpStatusEnum::NOT_FOUND:
+                    throw new Common\Exceptions\SolasMatchException(
+                        Lib\Localisation::getTranslation('common_error_login_1')
+                    );
                     break;
-                case \HttpStatusEnum::UNAUTHORIZED:
+                case Common\Enums\HttpStatusEnum::UNAUTHORIZED:
                     // TODO: Resend verification email
-                    throw new \SolasMatchException(Lib\Localisation::getTranslation('common_error_login_2'));
+                    throw new Common\Exceptions\SolasMatchException(
+                        Lib\Localisation::getTranslation('common_error_login_2')
+                    );
                     break;
-                case \HttpStatusEnum::FORBIDDEN:
+                case Common\Enums\HttpStatusEnum::FORBIDDEN:
                     $userDao = new UserDao();
                     $user = $userDao->getUserByEmail($email);
                     $adminDao = new AdminDao();
                     $bannedUser = $adminDao->getBannedUser($user->getId());
-                    throw new \SolasMatchException(
+                    throw new Common\Exceptions\SolasMatchException(
                         Lib\Localisation::getTranslation("common_this_user_account_has_been_banned").' '.
                         $bannedUser->getComment()
                     );
@@ -402,7 +407,7 @@ class UserDao extends BaseDao
         
         $headers = $this->client->getHeaders();
         if (isset($headers["X-Custom-Token"])) {
-            \UserSession::setAccessToken(
+            Common\Lib\UserSession::setAccessToken(
                 $this->client->deserialize(base64_decode($headers["X-Custom-Token"]), 'OAuthResponce')
             );
         }
@@ -421,7 +426,7 @@ class UserDao extends BaseDao
         $redirectUri .= $_SERVER['SERVER_NAME'].$app->urlFor('login');
 
         $request = "{$this->siteApi}v0/users/$email/auth/code/?".
-            'client_id='.\Settings::get('oauth.client_id').'&'.
+            'client_id='.Common\Lib\Settings::get('oauth.client_id').'&'.
             "redirect_uri=$redirectUri&".
             'response_type=code';
 
@@ -441,15 +446,15 @@ class UserDao extends BaseDao
         }
         $redirectUri .= $_SERVER['SERVER_NAME'].$app->urlFor('login');
 
-        $postArgs = 'client_id='.\Settings::get('oauth.client_id').'&'.
-            'client_secret='.\Settings::get('oauth.client_secret').'&'.
+        $postArgs = 'client_id='.Common\Lib\Settings::get('oauth.client_id').'&'.
+            'client_secret='.Common\Lib\Settings::get('oauth.client_secret').'&'.
             "redirect_uri=$redirectUri&".
             "code=$authCode";
 
-        $user = $this->client->call('User', $request, \HttpMethodEnum::POST, $postArgs);
+        $user = $this->client->call('User', $request, Common\Enums\HttpMethodEnum::POST, $postArgs);
         $headers = $this->client->getHeaders();
         if (isset($headers["X-Custom-Token"])) {
-            \UserSession::setAccessToken(
+            Common\Lib\UserSession::setAccessToken(
                 $this->client->deserialize(base64_decode($headers["X-Custom-Token"]), 'OAuthResponce')
             );
         }
@@ -472,7 +477,7 @@ class UserDao extends BaseDao
         $passwordReset->setPassword($password);
         $passwordReset->setKey($key);
         $request = "{$this->siteApi}v0/users/passwordReset";
-        $ret = $this->client->call(null, $request, \HttpMethodEnum::POST, $passwordReset);
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST, $passwordReset);
         return $ret;
     }
 
@@ -483,7 +488,7 @@ class UserDao extends BaseDao
         $registerData->setEmail($email);
         $registerData->setPassword($password);
         $request = "{$this->siteApi}v0/users/register";
-        $registered = $this->client->call(null, $request, \HttpMethodEnum::POST, $registerData);
+        $registered = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST, $registerData);
         if ($registered) {
             return true;
         } else {
@@ -494,7 +499,7 @@ class UserDao extends BaseDao
     public function finishRegistration($uuid)
     {
         $request = "{$this->siteApi}v0/users/$uuid/finishRegistration";
-        $resp = $this->client->call(null, $request, \HttpMethodEnum::POST);
+        $resp = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
         return $resp;
     }
 
@@ -510,7 +515,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/personalInfo";
-        $ret = $this->client->call("UserPersonalInformation", $request, \HttpMethodEnum::POST, $personalInfo);
+        $ret = $this->client->call("UserPersonalInformation", $request, Common\Enums\HttpMethodEnum::POST, $personalInfo);
         return $ret;
     }
     
@@ -518,7 +523,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/personalInfo";
-        $ret = $this->client->call("UserPersonalInformation", $request, \HttpMethodEnum::PUT, $personalInfo);
+        $ret = $this->client->call("UserPersonalInformation", $request, Common\Enums\HttpMethodEnum::PUT, $personalInfo);
         return $ret;
     }
     
@@ -534,7 +539,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/secondaryLanguages";
-        $ret = $this->client->call("Locale", $request, \HttpMethodEnum::POST, $locale);
+        $ret = $this->client->call("Locale", $request, Common\Enums\HttpMethodEnum::POST, $locale);
         return $ret;
     }
     
@@ -551,14 +556,14 @@ class UserDao extends BaseDao
         $ret = null;
         $request = "{$this->siteApi}v0/users/removeSecondaryLanguage/$userId/{$locale->getLanguageCode()}".
             "/{$locale->getCountryCode()}";
-        $ret = $this->client->call(null, $request, \HttpMethodEnum::DELETE);
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
         return $ret;
     }
     
     public function deleteUser($userId)
     {
         $request = "{$this->siteApi}v0/users/$userId";
-        $this->client->call(null, $request, \HttpMethodEnum::DELETE);
+        $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
     }
     
     public function isBlacklistedForTask($userId, $taskId)

@@ -3,6 +3,7 @@
 namespace SolasMatch\API\DAO;
 
 use \SolasMatch\API\Lib as Lib;
+use \SolasMatch\Common as Common;
 
 /**
  * Description of StatDao
@@ -21,7 +22,7 @@ class StatDao
         if ($result) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = \ModelFactory::buildModel("Statistic", $row);
+                $ret[] = Common\Lib\ModelFactory::buildModel("Statistic", $row);
             }
         }
         return $ret;

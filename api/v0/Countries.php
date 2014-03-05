@@ -2,6 +2,7 @@
 
 namespace SolasMatch\API\V0;
 
+use \SolasMatch\Common as Common;
 use \SolasMatch\API\Lib as Lib;
 use \SolasMatch\API as API;
 
@@ -18,7 +19,7 @@ class Countries
     public static function init()
     {
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/countries(:format)/',
             function ($format = ".json") {
                 API\Dispatcher::sendResponse(null, Lib\Languages::getCountryList(), null, $format);
@@ -27,7 +28,7 @@ class Countries
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/countries/:countryId/',
             function ($countryId, $format = ".json") {
                 if (!is_numeric($countryId) && strstr($countryId, '.')) {
@@ -45,7 +46,7 @@ class Countries
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/countries/getByCode/:code/',
             function ($code, $format = ".json") {
                 if (!is_numeric($code) && strstr($code, '.')) {

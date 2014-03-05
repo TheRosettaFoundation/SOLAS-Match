@@ -2,6 +2,7 @@
 
 namespace SolasMatch\API\V0;
 
+use \SolasMatch\Common as Common;
 use \SolasMatch\API\Lib as Lib;
 use \SolasMatch\API as API;
 
@@ -18,7 +19,7 @@ class Langs
     public static function init()
     {
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/languages(:format)/',
             function ($format = ".json") {
                 $data = Lib\Languages::getLanguageList();
@@ -30,7 +31,7 @@ class Langs
         );
             
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/languages/getActiveLanguages(:format)/',
             function ($format = '.json') {
                 API\Dispatcher::sendResponse(null, Lib\Languages::getActiveLanguages(), null, $format);
@@ -40,7 +41,7 @@ class Langs
         );
                         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/languages/getActiveSourceLanguages(:format)/',
             function ($format = '.json') {
                 API\Dispatcher::sendResponse(null, Lib\Languages::getActiveSourceLanguages(), null, $format);
@@ -50,7 +51,7 @@ class Langs
         );
           
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/languages/getActiveTargetLanguages(:format)/',
             function ($format = '.json') {
                 API\Dispatcher::sendResponse(null, Lib\Languages::getActiveTargetLanguages(), null, $format);
@@ -60,7 +61,7 @@ class Langs
         );
       
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/languages/:languageId/',
             function ($languageId, $format = ".json") {
                 if (!is_numeric($languageId) && strstr($languageId, '.')) {
@@ -79,7 +80,7 @@ class Langs
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/languages/getByCode/:code/',
             function ($code, $format = ".json") {
                 if (!is_numeric($code) && strstr($code, '.')) {

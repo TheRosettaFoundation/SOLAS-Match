@@ -3,6 +3,7 @@
 namespace SolasMatch\UI\Lib;
 
 use \SolasMatch\UI\DAO as DAO;
+use \SolasMatch\Common as Common;
 
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 
@@ -13,8 +14,8 @@ class Middleware
         $app = \Slim\Slim::getInstance();
         
         $this->isUserBanned();
-        if (!\UserSession::getCurrentUserID()) {
-            \UserSession::setReferer(
+        if (!Common\Lib\UserSession::getCurrentUserID()) {
+            Common\Lib\UserSession::setReferer(
                 $app->request()->getUrl().$app->request()->getScriptName().$app->request()->getPathInfo()
             );
             $app->flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
@@ -34,11 +35,11 @@ class Middleware
     public function isSiteAdmin()
     {
         $this->isUserBanned();
-        if (is_null(\UserSession::getCurrentUserID())) {
+        if (is_null(Common\Lib\UserSession::getCurrentUserID())) {
             return false;
         }
         $adminDao = new DAO\AdminDao();
-        return $adminDao->isSiteAdmin(\UserSession::getCurrentUserID());
+        return $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
     }
 
     public function authenticateUserForTask(\Slim\Route $route)
@@ -52,7 +53,7 @@ class Middleware
         $params = $route->getParams();
 
         $this->authUserIsLoggedIn();
-        $user_id = \UserSession::getCurrentUserID();
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
         $claimant = null;
         if ($params !== null) {
             $task_id = $params['task_id'];
@@ -76,7 +77,7 @@ class Middleware
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
 
-        $user_id = \UserSession::getCurrentUserID();
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
         $params = $route->getParams();
 	    if ($params !== null) {
             $org_id = $params['org_id'];
@@ -117,7 +118,7 @@ class Middleware
             $project = $projectDao->getProject($task->getProjectId());
             
             $org_id = $project->getOrganisationId();
-            $user_id = \UserSession::getCurrentUserID();
+            $user_id = Common\Lib\UserSession::getCurrentUserID();
 
             if ($user_id) {
                 $user_orgs = $userDao->getUserOrgs($user_id);
@@ -146,7 +147,7 @@ class Middleware
         $projectDao = new DAO\ProjectDao();
         
         if ($params != null) {
-            $user_id = \UserSession::getCurrentUserID();
+            $user_id = Common\Lib\UserSession::getCurrentUserID();
             $project_id = $params['project_id'];
             $userOrgs = $userDao->getUserOrgs($user_id);
             $project = $projectDao->getProject($project_id);
@@ -183,7 +184,7 @@ class Middleware
 
             $project = $projectDao->getProject($task->getProjectId());
             $org_id = $project->getOrganisationId();
-            $user_id = UserSession::getCurrentUserID();
+            $user_id = Common\Lib\UserSession::getCurrentUserID();
 
             if ($user_id) {
                 $user_orgs = $userDao->getUserOrgs($user_id);
@@ -203,9 +204,9 @@ class Middleware
     public function isUserBanned()
     {
         $adminDao = new DAO\AdminDao();
-        if ($adminDao->isUserBanned(\UserSession::getCurrentUserID())) {
+        if ($adminDao->isUserBanned(Common\Lib\UserSession::getCurrentUserID())) {
             $app = \Slim\Slim::getInstance();
-            \UserSession::destroySession();
+            Common\Lib\UserSession::destroySession();
             $app->flash('error', Localisation::getTranslation('common_this_user_account_has_been_banned'));
             $app->redirect($app->urlFor('home'));
         }
@@ -219,7 +220,7 @@ class Middleware
             if (!is_null($params)) {
                 $taskId = $params['task_id'];
                 $userDao = new DAO\UserDao();
-                $isBlackListed = $userDao->isBlacklistedForTask(\UserSession::getCurrentUserID(), $taskId);
+                $isBlackListed = $userDao->isBlacklistedForTask(Common\Lib\UserSession::getCurrentUserID(), $taskId);
                 
                 if ($isBlackListed) {
                     $taskDao = new DAO\TaskDao();

@@ -2,6 +2,8 @@
 
 namespace SolasMatch\UI\DAO;
 
+use \SolasMatch\Common as Common;
+
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/BaseDao.php";
 
@@ -9,15 +11,15 @@ class TagDao extends BaseDao
 {
     public function __construct()
     {
-        $this->client = new \APIHelper(\Settings::get("ui.api_format"));
-        $this->siteApi = \Settings::get("site.api");
+        $this->client = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
+        $this->siteApi = Common\Lib\Settings::get("site.api");
     }
 
     public function getTag($id, $limit = null)
     {
         $request = "{$this->siteApi}v0/tags/$id";
         $args = $limit ? array("limit" => $limit) : null;
-        $response = $this->client->call("Tag", $request, \HttpMethodEnum::GET, null, $args);
+        $response = $this->client->call("Tag", $request, Common\Enums\HttpMethodEnum::GET, null, $args);
         return $response;
     }
 
@@ -25,7 +27,7 @@ class TagDao extends BaseDao
     {
         $request = "{$this->siteApi}v0/tags";
         $args = $limit ? array("limit" => $limit) : null;
-        $response = $this->client->call(array("Tag"), $request, \HttpMethodEnum::GET, null, $args);
+        $response = $this->client->call(array("Tag"), $request, Common\Enums\HttpMethodEnum::GET, null, $args);
         return $response;
     }
 
@@ -33,7 +35,7 @@ class TagDao extends BaseDao
     {
         $request = "{$this->siteApi}v0/tags/getByLabel/$label";
         $args = $limit ? array("limit" => $limit) : null;
-        $response = $this->client->call("Tag", $request, \HttpMethodEnum::GET, null, $args);
+        $response = $this->client->call("Tag", $request, Common\Enums\HttpMethodEnum::GET, null, $args);
         return $response;
     }
 
@@ -47,12 +49,12 @@ class TagDao extends BaseDao
     public function getTopTags($limit = null)
     {
         $args = $limit ? array("limit" => $limit) : null;
-        $topTags = \CacheHelper::getCached(
-            \CacheHelper::TOP_TAGS,
-            \TimeToLiveEnum::QUARTER_HOUR,
+        $topTags = Common\Lib\CacheHelper::getCached(
+            Common\Lib\CacheHelper::TOP_TAGS,
+            Common\Enums\TimeToLiveEnum::QUARTER_HOUR,
             function ($args) {
                 $request = "{$args[2]}v0/tags/topTags";
-                return $args[1]->call(array("Tag"), $request, \HttpMethodEnum::GET, null, $args[0]);
+                return $args[1]->call(array("Tag"), $request, Common\Enums\HttpMethodEnum::GET, null, $args[0]);
             },
             array($args, $this->client, $this->siteApi)
         );
@@ -63,28 +65,28 @@ class TagDao extends BaseDao
     {
         $args = $limit ? array("limit" => $limit) : null;
         $request = "{$this->siteApi}v0/tags/$tagId/tasks";
-        $response = $this->client->call(array("Task"), $request, \HttpMethodEnum::GET, null, $args);
+        $response = $this->client->call(array("Task"), $request, Common\Enums\HttpMethodEnum::GET, null, $args);
         return $response;
     }
 
     public function createTag($tag)
     {
         $request = "{$this->siteApi}v0/tags";
-        $response = $this->client->call("Tag", $request, \HttpMethodEnum::POST, $tag);
+        $response = $this->client->call("Tag", $request, Common\Enums\HttpMethodEnum::POST, $tag);
         return $response;
     }
 
     public function updateTag($tag)
     {
         $request = "{$this->siteApi}v0/tags/{$tag->getId()}";
-        $response = $this->client->call("Tag", $request, \HttpMethodEnum::PUT, $tag);
+        $response = $this->client->call("Tag", $request, Common\Enums\HttpMethodEnum::PUT, $tag);
         return $response;
     }
 
     public function deleteTag($tagId)
     {
         $request = "{$this->siteApi}v0/tags/{$tag->getId()}";
-        $response = $this->client->call(null, $request, \HttpMethodEnum::DELETE);
+        $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
         return $response;
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-require_once __DIR__.'/../Common/Settings.class.php';
+require_once __DIR__.'/../Common/lib/Settings.class.php';
 require_once __DIR__.'/../api/lib/PDOWrapper.class.php';
-require_once __DIR__.'/../Common/TaskTypeEnum.php';
-require_once __DIR__.'/../Common/TaskStatusEnum.php';
-require_once __DIR__.'/../Common/models/Locale.php';
+require_once __DIR__.'/../Common/Enums/TaskTypeEnum.class.php';
+require_once __DIR__.'/../Common/Enums/TaskStatusEnum.class.php';
+require_once __DIR__.'/../Common/protobufs/models/Locale.php';
 
 class UnitTestHelper
 {

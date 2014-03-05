@@ -2,6 +2,7 @@
 
 namespace SolasMatch\API\V0;
 
+use \SolasMatch\Common as Common;
 use \SolasMatch\API\DAO as DAO;
 use \SolasMatch\API as API;
 
@@ -18,7 +19,7 @@ class Badges
     public static function init()
     {
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/badges(:format)/',
             function ($format = ".json") {
                 API\Dispatcher::sendResponse(null, DAO\BadgeDao::getBadge(), null, $format);
@@ -27,11 +28,11 @@ class Badges
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::POST,
+            Common\Enums\HttpMethodEnum::POST,
             '/v0/badges(:format)/',
             function ($format = ".json") {
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
-                $client = new \APIHelper($format);
+                $client = new Common\Lib\APIHelper($format);
                 $data = $client->deserialize($data, "Badge");
                 $data->setId(null);
                 API\Dispatcher::sendResponse(null, DAO\BadgeDao::insertAndUpdateBadge($data), null, $format);
@@ -41,7 +42,7 @@ class Badges
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::PUT,
+            Common\Enums\HttpMethodEnum::PUT,
             '/v0/badges/:badgeId/',
             function ($badgeId, $format = ".json") {
                 if (!is_numeric($badgeId) && strstr($badgeId, '.')) {
@@ -50,7 +51,7 @@ class Badges
                     $badgeId = $badgeId[0];
                 }
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
-                $client = new \APIHelper($format);
+                $client = new Common\Lib\APIHelper($format);
                 $data = $client->deserialize($data, "Badge");
                 API\Dispatcher::sendResponse(null, DAO\BadgeDao::insertAndUpdateBadge($data), null, $format);
             },
@@ -59,7 +60,7 @@ class Badges
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::DELETE,
+            Common\Enums\HttpMethodEnum::DELETE,
             '/v0/badges/:badgeId/',
             function ($badgeId, $format = ".json") {
                 if (!is_numeric($badgeId) && strstr($badgeId, '.')) {
@@ -74,7 +75,7 @@ class Badges
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/badges/:badgeId/',
             function ($badgeId, $format = ".json") {
                 if (!is_numeric($badgeId)&& strstr($badgeId, '.')) {
@@ -92,7 +93,7 @@ class Badges
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/badges/:badgeId/users(:format)/',
             function ($badgeId, $format = ".json") {
                 $data = DAO\UserDao::getUsersWithBadge($badgeId);

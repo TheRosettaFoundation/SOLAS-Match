@@ -3,9 +3,10 @@
 namespace SolasMatch\API\Lib;
 
 use \SolasMatch\API\DAO as DAO;
+use \SolasMatch\Common as Common;
 
-require_once __DIR__."/../../Common/TaskStatusEnum.php";
-require_once __DIR__."/../../Common/TaskTypeEnum.php";
+require_once __DIR__."/../../Common/Enums/TaskStatusEnum.class.php";
+require_once __DIR__."/../../Common/Enums/TaskTypeEnum.class.php";
 require_once __DIR__."/Notify.class.php";
 
 class Upload
@@ -113,7 +114,10 @@ class Upload
         $projectFileMime = $projectFileInfo->getMime();
         
         if ($taskFileMime != $projectFileMime) {
-            throw new \SolasMatchException("Invalid file content.", \HttpStatusEnum::BAD_REQUEST);
+            throw new Common\Exceptions\SolasMatchException(
+                "Invalid file content.",
+                Common\Enums\HttpStatusEnum::BAD_REQUEST
+            );
         }
        
         if (is_null($version)) {
@@ -219,7 +223,7 @@ class Upload
             );
         }
 
-        $uploads_folder = \Settings::get('files.upload_path');
+        $uploads_folder = Common\Lib\Settings::get('files.upload_path');
         $project_folder = 'proj-' . $task->getProjectId();
         $task_folder = 'task-' . $task->getId();
         $version_folder = 'v-' . $version;
@@ -247,12 +251,12 @@ class Upload
                 $preReqTask = $taskDao->getTask($preReqId);
                 $taskDao->addTaskPreReq($id, $preReqId);
 
-                if ($task->getTaskType() != \TaskTypeEnum::DESEGMENTATION) {
+                if ($task->getTaskType() != Common\Enums\TaskTypeEnum::DESEGMENTATION) {
                     foreach ($currentTaskNode->getPreviousList() as $nodeId) {
                         $preReq = $taskDao->getTask($nodeId);
                         $preReq = $preReq[0];
-                        if ($preReq->getTaskStatus() == \TaskStatusEnum::COMPLETE
-                                && $preReq->getTaskType() != \TaskTypeEnum::SEGMENTATION) {
+                        if ($preReq->getTaskStatus() == Common\Enums\TaskStatusEnum::COMPLETE
+                                && $preReq->getTaskType() != Common\Enums\TaskTypeEnum::SEGMENTATION) {
                             Upload::copyOutputFile($id, $preReqId);
                         }
                     }
@@ -271,7 +275,7 @@ class Upload
         
         if (is_array($taskPreReqs) && count($taskPreReqs > 0)) {
             foreach ($taskPreReqs as $taskPreReq) {
-                if ($taskPreReq->getTaskStatus() == \TaskStatusEnum::COMPLETE) {
+                if ($taskPreReq->getTaskStatus() == Common\Enums\TaskStatusEnum::COMPLETE) {
                     Upload::copyOutputFile($id, $taskPreReq->getId());
                 }
             }
@@ -282,7 +286,7 @@ class Upload
             $projectFileInfo = $projectDao->getProjectFileInfo($projectId, null, null, null, null);
 
             file_put_contents(
-                \Settings::get("files.upload_path")."proj-$projectId/task-$id/v-0/{$projectFileInfo->getFileName()}",
+                Common\Lib\Settings::get("files.upload_path")."proj-$projectId/task-$id/v-0/{$projectFileInfo->getFileName()}",
                 $projectFile
             );
         }
@@ -301,9 +305,9 @@ class Upload
         $preReqFileName = DAO\TaskDao::getFilename($preReqId, $preReqlatestFileVersion);
         $projectId= $task->getProjectId();
         file_put_contents(
-            \Settings::get("files.upload_path")."proj-$projectId/task-$id/v-0/$preReqFileName",
+            Common\Lib\Settings::get("files.upload_path")."proj-$projectId/task-$id/v-0/$preReqFileName",
             file_get_contents(
-                \Settings::get("files.upload_path").
+                Common\Lib\Settings::get("files.upload_path").
                 "proj-$projectId/task-$preReqId/v-$preReqlatestFileVersion/$preReqFileName"
             )
         );

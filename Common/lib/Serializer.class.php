@@ -1,5 +1,7 @@
 <?php
 
+namespace SolasMatch\Common\Lib;
+
 abstract class Serializer
 {
     protected $format;

@@ -4,6 +4,7 @@ namespace SolasMatch\UI\RouteHandlers;
 
 use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
+use \SolasMatch\Common as Common;
 
 class StaticRouteHandeler
 {
@@ -56,27 +57,27 @@ class StaticRouteHandeler
         $app = \Slim\Slim::getInstance(); 
         if ($post = $app->request()->post()) {
             if (isset($post['language'])) {
-                \UserSession::setUserLanguage($post['language']);
+                Common\Lib\UserSession::setUserLanguage($post['language']);
             }
             $app->redirect($app->request()->getReferrer());
         } else {
-            $app->response()->body(\UserSession::getUserLanguage());
+            $app->response()->body(Common\Lib\UserSession::getUserLanguage());
         }
     }
     
     public function getUser()
     {
-        if (!is_null(\UserSession::getCurrentUserID())) {
+        if (!is_null(Common\Lib\UserSession::getCurrentUserID())) {
             $dao = new DAO\UserDao();
 
-            \Slim\Slim::getInstance()->response()->body($dao->getUserDart(\UserSession::getCurrentUserID()));
+            \Slim\Slim::getInstance()->response()->body($dao->getUserDart(Common\Lib\UserSession::getCurrentUserID()));
         }
     }
     
     public function getUserHash()
     {
-        if (!is_null(\UserSession::getAccessToken())) {
-            \Slim\Slim::getInstance()->response()->body(\UserSession::getAccessToken()->getToken()); 
+        if (!is_null(Common\Lib\UserSession::getAccessToken())) {
+            \Slim\Slim::getInstance()->response()->body(Common\Lib\UserSession::getAccessToken()->getToken());
         }
     }
     

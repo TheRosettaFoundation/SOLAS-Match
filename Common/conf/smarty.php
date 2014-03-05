@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__).'/../Settings.class.php');
+require_once(dirname(__FILE__).'/../lib/Settings.class.php');
 /*
 Include this script in normal site pages. It will make smarty
 available as the global $s variable.

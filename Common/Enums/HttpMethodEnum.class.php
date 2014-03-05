@@ -1,5 +1,7 @@
 <?php
 
+namespace SolasMatch\Common\Enums;
+
 class HttpMethodEnum
 {
     const DELETE    = "DELETE";

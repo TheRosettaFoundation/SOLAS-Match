@@ -2,6 +2,7 @@
 
 namespace SolasMatch\API\V0;
 
+use \SolasMatch\Common as Common;
 use \SolasMatch\API\DAO as DAO;
 use \SolasMatch\API as API;
 
@@ -18,11 +19,11 @@ class Tags
     public static function init()
     {
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/tags(:format)/',
             function ($format = ".json") {
-                $limit = API\Dispatcher::clenseArgs('limit', \HttpMethodEnum::GET, 20);
-                $topTags = API\Dispatcher::clenseArgs('topTags', \HttpMethodEnum::GET, false);
+                $limit = API\Dispatcher::clenseArgs('limit', Common\Enums\HttpMethodEnum::GET, 20);
+                $topTags = API\Dispatcher::clenseArgs('topTags', Common\Enums\HttpMethodEnum::GET, false);
                 if ($topTags) {
                     API\Dispatcher::sendResponse(null, DAO\TagsDao::getTopTags($limit), null, $format);
                 } else {
@@ -34,11 +35,11 @@ class Tags
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::POST,
+            Common\Enums\HttpMethodEnum::POST,
             '/v0/tags(:format)/',
             function ($format = ".json") {
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
-                $client = new \APIHelper($format);
+                $client = new Common\Lib\APIHelper($format);
                 $data=$client->deserialize($data, "Tag");
                 $data->setId(null);
                 API\Dispatcher::sendResponse(null, DAO\TagsDao::save($data), null, $format);
@@ -48,7 +49,7 @@ class Tags
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/tags/getByLabel/:tagLabel/',
             function ($tagLabel, $format = ".json") {
                 if (!is_numeric($tagLabel) && strstr($tagLabel, '.')) {
@@ -74,7 +75,7 @@ class Tags
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/tags/search/:tagName/',
             function ($tagName, $format = '.json') {
                 if (!is_numeric($tagName) && strstr($tagName, '.')) {
@@ -97,10 +98,10 @@ class Tags
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/tags/topTags(:format)/',
             function ($format = ".json") {
-                $limit = API\Dispatcher::clenseArgs('limit', \HttpMethodEnum::GET, 30);
+                $limit = API\Dispatcher::clenseArgs('limit', Common\Enums\HttpMethodEnum::GET, 30);
                 $data= DAO\TagsDao::getTopTags($limit);
                 API\Dispatcher::sendResponse(null, $data, null, $format);
             },
@@ -109,7 +110,7 @@ class Tags
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/tags/:tagId/',
             function ($tagId, $format = ".json") {
                 if (!is_numeric($tagId) && strstr($tagId, '.')) {
@@ -128,7 +129,7 @@ class Tags
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::PUT,
+            Common\Enums\HttpMethodEnum::PUT,
             '/v0/tags/:tagId/',
             function ($tagId, $format = ".json") {
                 if (!is_numeric($tagId) && strstr($tagId, '.')) {
@@ -137,7 +138,7 @@ class Tags
                     $tagId = $tagId[0];
                 }
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
-                $client = new \APIHelper($format);
+                $client = new Common\Lib\APIHelper($format);
                 $data = $client->deserialize($data, "Tag");
                 API\Dispatcher::sendResponse(null, DAO\TagsDao::save($data), null, $format);
             },
@@ -145,7 +146,7 @@ class Tags
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::DELETE,
+            Common\Enums\HttpMethodEnum::DELETE,
             '/v0/tags/:tagId/',
             function ($tagId, $format = ".json") {
                 if (!is_numeric($tagId) && strstr($tagId, '.')) {
@@ -160,10 +161,10 @@ class Tags
         );
         
         API\Dispatcher::registerNamed(
-            \HttpMethodEnum::GET,
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/tags/:tagId/tasks(:format)/',
             function ($tagId, $format = ".json") {
-                $limit = API\Dispatcher::clenseArgs('limit', \HttpMethodEnum::GET, 5);
+                $limit = API\Dispatcher::clenseArgs('limit', Common\Enums\HttpMethodEnum::GET, 5);
                 API\Dispatcher::sendResponse(null, DAO\TaskDao::getTasksWithTag($tagId, $limit), null, $format);
             },
             'getTaskForTag'

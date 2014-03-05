@@ -3,8 +3,9 @@
 namespace SolasMatch\API\DAO;
 
 use \SolasMatch\API\Lib as Lib;
+use \SolasMatch\Common as Common;
 
-require_once __DIR__."/../../Common/models/Tag.php";
+require_once __DIR__."/../../Common/protobufs/models/Tag.php";
 require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 
 class TagsDao
@@ -18,7 +19,7 @@ class TagsDao
         if ($result = Lib\PDOWrapper::call("getTag", $args)) {
             $ret = array();
             foreach ($result as $tag) {
-                $ret[] = \ModelFactory::buildModel("Tag", $tag);
+                $ret[] = Common\Lib\ModelFactory::buildModel("Tag", $tag);
             }
         }
         return $ret;
@@ -46,7 +47,7 @@ class TagsDao
         $args = Lib\PDOWrapper::cleanseWrapStr($tag->getLabel());
         $result = Lib\PDOWrapper::call("tagInsert", $args);
         if ($result) {
-            return \ModelFactory::buildModel("Tag", $result[0]);
+            return Common\Lib\ModelFactory::buildModel("Tag", $result[0]);
         } else {
             return null;
         }
@@ -59,7 +60,7 @@ class TagsDao
         if ($result = Lib\PDOWrapper::call("getTopTags", $args)) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = \ModelFactory::buildModel("Tag", $row);
+                $ret[] = Common\Lib\ModelFactory::buildModel("Tag", $row);
             }
         }
         return $ret;
@@ -81,7 +82,7 @@ class TagsDao
         if ($result = Lib\PDOWrapper::call("searchForTag", $args)) {
             $ret = array();
             foreach ($result as $row) {
-                $ret[] = \ModelFactory::buildModel("Tag", $row);
+                $ret[] = Common\Lib\ModelFactory::buildModel("Tag", $row);
             }
         }
         return $ret;

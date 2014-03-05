@@ -9,8 +9,8 @@ class TipDao extends BaseDao
 {
     public function __construct()
     {
-        $this->client = new \APIHelper(\Settings::get("ui.api_format"));
-        $this->siteApi = \Settings::get("site.api");
+        $this->client = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
+        $this->siteApi = Common\Lib\Settings::get("site.api");
     }
 
     public function getTip()

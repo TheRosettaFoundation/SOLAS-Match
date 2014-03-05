@@ -2,13 +2,15 @@
 
 namespace SolasMatch\API\Lib;
 
+use \SolasMatch\Common as Common;
+
 /**
  * Description of PDOWrapper
  *
  * @author sean
  */
 
-require_once __DIR__."/../../Common/Settings.class.php";
+require_once __DIR__."/../../Common/lib/Settings.class.php";
 
 class PDOWrapper
 {
@@ -31,10 +33,10 @@ class PDOWrapper
         // Set up the connection
         $this->logging = (strlen($this->logfile)>0) ? true : false;
         if ($this->logging) {
-            $this->logfile = \Settings::get('database.log_file'); // full path to debug logfile. Use only in debug mode!
+            $this->logfile = Common\Lib\Settings::get('database.log_file'); // full path to debug logfile. Use only in debug mode!
         }
-        $this->show_errors = (\Settings::get('database.show_errors') == 'y') ? true : false;
-        $this->show_sql = (\Settings::get('database.show_sql') == 'y') ? true : false;
+        $this->show_errors = (Common\Lib\Settings::get('database.show_errors') == 'y') ? true : false;
+        $this->show_sql = (Common\Lib\Settings::get('database.show_sql') == 'y') ? true : false;
         $this->init();
     }
 
@@ -71,11 +73,21 @@ class PDOWrapper
     {
         $conn = false;
         $ret = false;
-        $dbName = self::$unitTesting ? \Settings::get('unit_test.database') : \Settings::get('database.database');
-        $server = self::$unitTesting ? \Settings::get('unit_test.server') : \Settings::get('database.server');
-        $server_port = self::$unitTesting ? \Settings::get('unit_test.port') : \Settings::get('database.server_port');
-        $username = self::$unitTesting ? \Settings::get('unit_test.username') : \Settings::get('database.username');
-        $password = self::$unitTesting ? \Settings::get('unit_test.password') : \Settings::get('database.password');
+        $dbName = self::$unitTesting ?
+            Common\Lib\Settings::get('unit_test.database') :
+            Common\Lib\Settings::get('database.database');
+        $server = self::$unitTesting ?
+            Common\Lib\Settings::get('unit_test.server') :
+            Common\Lib\Settings::get('database.server');
+        $server_port = self::$unitTesting ?
+            Common\Lib\Settings::get('unit_test.port') :
+            Common\Lib\Settings::get('database.server_port');
+        $username = self::$unitTesting ?
+            Common\Lib\Settings::get('unit_test.username') :
+            Common\Lib\Settings::get('database.username');
+        $password = self::$unitTesting ?
+            Common\Lib\Settings::get('unit_test.password') :
+            Common\Lib\Settings::get('database.password');
         
         if ($this->use_permanent_connection) {
             $conn = new \PDO(

@@ -1,5 +1,7 @@
 <?php
 
+namespace SolasMatch\Common\Lib;
+
 class Authentication
 {
     public static function hashPassword($password, $nonce)

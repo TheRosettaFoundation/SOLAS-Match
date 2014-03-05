@@ -4,6 +4,7 @@ namespace SolasMatch\UI\RouteHandlers;
 
 use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
+use \SolasMatch\Common as Common;
 
 class BadgeRouteHandler
 {
@@ -34,7 +35,7 @@ class BadgeRouteHandler
             }
         }
 
-        $siteName = \Settings::get('site.name');
+        $siteName = Common\Lib\Settings::get('site.name');
 
         $app->view()->appendData(array(
                 "current_page"  => "badge-list",

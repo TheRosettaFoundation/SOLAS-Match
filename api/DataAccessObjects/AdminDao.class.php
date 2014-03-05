@@ -3,6 +3,7 @@
 namespace SolasMatch\API\DAO;
 
 use \SolasMatch\API\Lib as Lib;
+use \SolasMatch\Common as Common;
 
 //! The Administrator Data Access Object
 /*!
@@ -28,7 +29,7 @@ class AdminDao
         if ($result = Lib\PDOWrapper::call("getAdmin", $args)) {
             $ret = array();
             foreach ($result as $user) {
-                $ret[] = \ModelFactory::buildModel("User", $user);
+                $ret[] = Common\Lib\ModelFactory::buildModel("User", $user);
             }
         }
         return $ret;
@@ -180,7 +181,7 @@ class AdminDao
         if ($result = Lib\PDOWrapper::call("getBannedUser", $args)) {
             $ret = array();
             foreach ($result as $bannedUser) {
-                $ret[] = \ModelFactory::buildModel("BannedUser", $bannedUser);
+                $ret[] = Common\Lib\ModelFactory::buildModel("BannedUser", $bannedUser);
             }
         }
         
@@ -251,7 +252,7 @@ class AdminDao
         if ($result = Lib\PDOWrapper::call("getBannedOrg", $args)) {
             $ret = array();
             foreach ($result as $bannedOrg) {
-                $ret[] = \ModelFactory::buildModel("BannedOrganisation", $bannedOrg);
+                $ret[] = Common\Lib\ModelFactory::buildModel("BannedOrganisation", $bannedOrg);
             }
         }
         

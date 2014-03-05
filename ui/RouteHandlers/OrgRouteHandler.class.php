@@ -4,6 +4,7 @@ namespace SolasMatch\UI\RouteHandlers;
 
 use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
+use \SolasMatch\Common as Common;
 
 class OrgRouteHandler
 {
@@ -150,7 +151,7 @@ class OrgRouteHandler
             }
             
             if (is_null($nameErr)) {
-                $user_id = \UserSession::getCurrentUserID();
+                $user_id = Common\Lib\UserSession::getCurrentUserID();
                 $orgDao = new DAO\OrganisationDao();
                 $organisation = $orgDao->getOrganisationByName($org->getName());
 
@@ -183,7 +184,7 @@ class OrgRouteHandler
     public function orgDashboard()
     {
         $app = \Slim\Slim::getInstance();
-        $current_user_id = \UserSession::getCurrentUserID();
+        $current_user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
         $tagDao = new DAO\TagDao();
@@ -249,7 +250,7 @@ class OrgRouteHandler
                         $temp = array();
                         $temp['project'] = $project;
                         $temp['userSubscribedToProject'] = $userDao->isSubscribedToProject(
-                            \UserSession::getCurrentUserID(),
+                            Common\Lib\UserSession::getCurrentUserID(),
                             $project->getId()
                         );
                         $taskData[]=$temp;
@@ -278,7 +279,7 @@ class OrgRouteHandler
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
 
-        $userId = \UserSession::getCurrentUserID();
+        $userId = Common\Lib\UserSession::getCurrentUserID();
         $user = $userDao->getUser($userId);
         $user_orgs = $userDao->getUserOrgs($userId);
         if (is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
@@ -364,7 +365,7 @@ class OrgRouteHandler
         $app = \Slim\Slim::getInstance();
         $orgDao = new DAO\OrganisationDao();
         $org = $orgDao->getOrganisation($org_id);
-        $userId = \UserSession::getCurrentUserId();
+        $userId = Common\Lib\UserSession::getCurrentUserId();
         if ($post = $app->request()->post()) {
 
             if (isset($post['updateOrgDetails'])) {
@@ -598,7 +599,7 @@ class OrgRouteHandler
             }
         }
         
-        $currentUser = $userDao->getUser(\UserSession::getCurrentUserId());
+        $currentUser = $userDao->getUser(Common\Lib\UserSession::getCurrentUserId());
         $isMember = false;
         $orgMemberList = $orgDao->getOrgMembers($org_id);
         if (count($orgMemberList) > 0) {
@@ -638,7 +639,7 @@ class OrgRouteHandler
             }
         }
 
-        $siteName = \Settings::get("site.name");
+        $siteName = Common\Lib\Settings::get("site.name");
         $app->view()->setData("current_page", "org-public-profile");
         $app->view()->appendData(array(
                 "org" => $org,
@@ -813,7 +814,7 @@ class OrgRouteHandler
         $taskDao = new DAO\TaskDao();
         $userDao = new DAO\UserDao();
 
-        $userId = \UserSession::getCurrentUserID();
+        $userId = Common\Lib\UserSession::getCurrentUserID();
         $task = $taskDao->getTask($taskId);
 
         if ($app->request()->isPost()) {
