@@ -108,11 +108,7 @@ class ProjectDao extends BaseDao
     public function archiveProject($projectId, $userId)
     {
         $request = "{$this->siteApi}v0/projects/archiveProject/$projectId/user/$userId";
-        $ret = $this->client->call(
-            "\SolasMatch\Common\Protobufs\Models\ArchivedProject",
-            $request,
-            Common\Enums\HttpMethodEnum::PUT
-        );
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
         return $ret;
     }
 

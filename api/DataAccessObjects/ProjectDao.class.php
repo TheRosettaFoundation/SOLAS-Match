@@ -110,9 +110,9 @@ class ProjectDao
             Lib\PDOWrapper::cleanseNull($userId);
         $result = Lib\PDOWrapper::call("archiveProject", $args);
         if ($result) {
-            return Common\Lib\ModelFactory::buildModel("ArchivedProject", $result[0]);
+            return $result[0]['result'];
         } else {
-            return null;
+            return "0";
         }
     }
 
@@ -127,7 +127,9 @@ class ProjectDao
         $wordCount = null,
         $created = null,
         $archivedDate = null,
-        $userIdArchived = null
+        $userIdArchived = null,
+        $lCode = null,
+        $cCode = null
     ) {
         $projects = array();
         $args = Lib\PDOWrapper::cleanseNull($id).",".
@@ -140,11 +142,16 @@ class ProjectDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($wordCount).",".
             Lib\PDOWrapper::cleanseWrapStr($created).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($archivedDate).",".
-            Lib\PDOWrapper::cleanseNull($userIdArchived);
+            Lib\PDOWrapper::cleanseNull($userIdArchived).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($lCode).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($cCode);
         $result = Lib\PDOWrapper::call("getArchivedProject", $args);
         if ($result) {
             foreach ($result as $row) {
-                $projects[] = Common\Lib\ModelFactory::buildModel("ArchivedProject", $row);
+                $projects[] = Common\Lib\ModelFactory::buildModel(
+                    "ArchivedProject",
+                    $row
+                );
             }
         }
         if (count($projects) == 0) {
@@ -193,15 +200,6 @@ class ProjectDao
             return $result[0]['result'];
         } else {
             return null;
-        }
-    }
-
-    public static function removeAllProjectTags($projectId)
-    {
-        if ($tags = self::getTags($projectId)) {
-            foreach ($tags as $tag) {
-                self::removeProjectTag($projectId, $tag->getId());
-            }
         }
     }
 

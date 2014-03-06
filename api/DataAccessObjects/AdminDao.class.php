@@ -25,7 +25,7 @@ class AdminDao
     public static function getAdmins($orgId = null)
     {
         $ret = null;
-        $args= Lib\PDOWrapper::cleanseNullOrWrapStr($orgId);
+        $args = Lib\PDOWrapper::cleanseNull($orgId);
         if ($result = Lib\PDOWrapper::call("getAdmin", $args)) {
             $ret = array();
             foreach ($result as $user) {

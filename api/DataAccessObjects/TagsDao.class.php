@@ -116,6 +116,7 @@ class TagsDao
                 }
             }
         }
+        return $updatedProjectTagList;
     }
 
     private static function compareTo($tag1, $tag2)

@@ -147,7 +147,7 @@ class OrganisationDao
     public static function insertAndUpdate($org)
     {
         $ret = null;
-        $args = Lib\PDOWrapper::cleanseNullOrWrapStr($org->getId()).",".
+        $args = Lib\PDOWrapper::cleanseNull($org->getId()).",".
             Lib\PDOWrapper::cleanseWrapStr($org->getHomePage()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($org->getName()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($org->getBiography()).",".

@@ -67,9 +67,11 @@ class UserDao
                 BadgeDao::assignBadge($user->getId(), Common\Enums\BadgeTypes::NATIVE_LANGUAGE);
             }
         }
-        if ($user->getBiography() != '') {
+
+        if (!is_null($userId) && $user->getBiography() != '') {
             BadgeDao::assignBadge($user->getId(), Common\Enums\BadgeTypes::PROFILE_FILLER);
         }
+
         $args = Lib\PDOWrapper::cleanseNullOrWrapStr($user->getEmail()).",".
             Lib\PDOWrapper::cleanseNull($user->getNonce()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($user->getPassword()).",".
@@ -78,8 +80,8 @@ class UserDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($nativeLanguageCode).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($nativeCountryCode).",".
             Lib\PDOWrapper::cleanseNull($userId);
-        
         $result = Lib\PDOWrapper::call('userInsertAndUpdate', $args);
+
         if (!is_null($result)) {
             return Common\Lib\ModelFactory::buildModel("User", $result[0]);
         } else {
@@ -274,23 +276,6 @@ class UserDao
     public static function isLoggedIn()
     {
         return (!is_null(Common\Lib\UserSession::getCurrentUserId()));
-    }
-
-    public static function belongsToRole($user, $role)
-    {
-        $ret = false;
-        if ($role == 'translator') {
-            $ret = true;
-        } elseif ($role == 'organisation_member') {
-            $user_found = $this->find(array(
-                'user_id' => $user->getUserId(),
-                'role' => 'organisation_member'
-            ));
-            if (is_object($user_found)) {
-                $ret = true;
-            }
-        }
-        return $ret;
     }
 
     public static function findOrganisationsUserBelongsTo($user_id)
@@ -529,7 +514,6 @@ class UserDao
             $ret = array();
             foreach ($result as $row) {
                 $task = Common\Lib\ModelFactory::buildModel("Task", $row);
-                $task->setTaskStatus(TaskDao::getTaskStatus($task->getId()));
                 $ret[] = $task;
             }
         }
