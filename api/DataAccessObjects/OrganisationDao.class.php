@@ -169,4 +169,17 @@ class OrganisationDao
         $result= Lib\PDOWrapper::call("deleteOrg", $args);
         return $result[0]['result'];
     }
+
+    public static function getUsersTrackingOrg($organisationId)
+    {
+        $args = Lib\PDOWrapper::cleanse($organisationId);
+        if ($result = Lib\PDOWrapper::call("getUsersTrackingOrg", $args)) {
+            $ret = array();
+            foreach ($result as $row) {
+                $ret[] = Common\Lib\ModelFactory::buildModel("User", $row);
+            }
+            return $ret;
+        }
+        return null;
+    }
 }

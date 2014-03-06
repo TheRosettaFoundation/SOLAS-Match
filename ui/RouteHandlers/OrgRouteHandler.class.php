@@ -454,7 +454,9 @@ class OrgRouteHandler
         $userDao = new DAO\UserDao();
         $badgeDao = new DAO\BadgeDao();
 
+        $currentUser = $userDao->getUser(Common\Lib\UserSession::getCurrentUserId());
         $org = $orgDao->getOrganisation($org_id);
+
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
                    
@@ -596,10 +598,25 @@ class OrgRouteHandler
             } elseif (isset($post['makeOrgAdmin'])) {
                 $userId = $post['makeOrgAdmin'];
                 $adminDao->createOrgAdmin($userId, $org_id);
+            } elseif (isset($post['trackOrganisation'])) {
+                $user_id = $currentUser->getId();
+                if ($post['trackOrganisation']) {
+                    $userTrackOrganisation = $userDao->trackOrganisation($user_id, $org_id);
+                    if ($userTrackOrganisation) {
+                        $app->flashNow("success", Lib\Localisation::getTranslation('org_public_profile_org_track_success'));
+                    } else {
+                        $app->flashNow("error", Lib\Localisation::getTranslation('org_public_profile_org_track_error'));
+                    }
+                } else {
+                    $userUntrackOrganisation = $userDao->unTrackOrganisation($user_id, $org_id);
+                    if ($userUntrackOrganisation) {
+                        $app->flashNow("success", Lib\Localisation::getTranslation('org_public_profile_org_untrack_success'));
+                    } else {
+                        $app->flashNow("error", Lib\Localisation::getTranslation('org_public_profile_org_untrack_error'));
+                    }
+                }
             }
         }
-        
-        $currentUser = $userDao->getUser(Common\Lib\UserSession::getCurrentUserId());
         $isMember = false;
         $orgMemberList = $orgDao->getOrgMembers($org_id);
         if (count($orgMemberList) > 0) {
@@ -609,6 +626,8 @@ class OrgRouteHandler
                 }
             }
         }
+
+        $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($currentUser->getId(), $org_id);
 
         $adminAccess = false;
         if ($adminDao->isSiteAdmin($currentUser->getId()) == 1 ||
@@ -629,7 +648,7 @@ class OrgRouteHandler
             }
 
             $org_badges = $orgDao->getOrgBadges($org_id);
-        
+
             if ($orgMemberList) {
                 foreach ($orgMemberList as $orgMember) {
                     if ($adminDao->isOrgAdmin($org_id, $orgMember->getId())) {
@@ -648,9 +667,10 @@ class OrgRouteHandler
                 'adminAccess' => $adminAccess,
                 "org_badges" => $org_badges,
                 'siteName' => $siteName,
-                "membershipRequestUsers" => $user_list
+                "membershipRequestUsers" => $user_list,
+                'userSubscribedToOrganisation' => $userSubscribedToOrganisation
         ));
-        
+
         $app->render("org/org-public-profile.tpl");
     }
 

@@ -312,6 +312,17 @@ class Orgs
             'rejectMembershipRequests',
             '\SolasMatch\API\Lib\Middleware::authenticateOrgMember'
         );
+
+        API\Dispatcher::registerNamed(
+            Common\Enums\HttpMethodEnum::GET,
+            '/v0/orgs/:orgId/trackingUsers(:format)/',
+            function ($organisationId, $format = ".json") {
+                $data = DAO\OrganisationDao::getUsersTrackingOrg($organisationId);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
+            },
+            'getUsersTrackingOrg',
+            '\SolasMatch\API\Lib\Middleware::authenticateOrgMember'
+        );
     }
 }
 

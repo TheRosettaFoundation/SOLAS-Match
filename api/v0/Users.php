@@ -978,6 +978,67 @@ class Users
             'deleteSecondaryLanguage',
             '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
+
+        API\Dispatcher::registerNamed(
+            Common\Enums\HttpMethodEnum::GET,
+            '/v0/users/:userId/organisations(:format)/',
+            function ($userId, $format = ".json") {
+                $data = DAO\UserDao::getTrackedOrganisations($userId);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
+            },
+            'getUserTrackedOrganisations',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
+        );
+
+        API\Dispatcher::registerNamed(
+            Common\Enums\HttpMethodEnum::PUT,
+            '/v0/users/:userId/organisations/:organisationId/',
+            function ($userId, $organisationId, $format = ".json") {
+                if (!is_numeric($organisationId) && strstr($organisationId, '.')) {
+                    $organisationId = explode('.', $organisationId);
+                    $format = '.'.$organisationId[1];
+                    $organisationId = $organisationId[0];
+                }
+                $data = DAO\UserDao::trackOrganisation($userId, $organisationId);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
+            },
+            'userTrackOrganisation',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
+        );
+
+        API\Dispatcher::registerNamed(
+            Common\Enums\HttpMethodEnum::DELETE,
+            '/v0/users/:userId/organisations/:organisationId/',
+            function ($userId, $organisationId, $format = ".json") {
+                if (!is_numeric($organisationId) && strstr($organisationId, '.')) {
+                    $organisationId = explode('.', $organisationId);
+                    $format = '.'.$organisationId[1];
+                    $organisationId = $organisationId[0];
+                }
+                $data = DAO\UserDao::unTrackOrganisation($userId, $organisationId);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
+            },
+            'userUnTrackOrganisation',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
+        );
+
+        API\Dispatcher::registerNamed(
+            Common\Enums\HttpMethodEnum::GET,
+            '/v0/users/subscribedToOrganisation/:userId/:organisationId/',
+            function ($userId, $organisationId, $format = ".json") {
+                if (!is_numeric($organisationId) && strstr($organisationId, '.')) {
+                    $organisationId = explode('.', $organisationId);
+                    $format = '.'.$organisationId[1];
+                    $organisationId = $organisationId[0];
+                }
+                API\Dispatcher::sendResponse(
+                    null,
+                    DAO\UserDao::isSubscribedToOrganisation($userId, $organisationId), null, $format
+                );
+            },
+            'userSubscribedToOrganisation',
+            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
+        );
     }
 }
 Users::init();

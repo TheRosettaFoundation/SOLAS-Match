@@ -733,4 +733,52 @@ class UserDao
         }
         return $ret;
     }
+
+    //TODO: Add tests for these in Unit Tests
+    public static function trackOrganisation($userId, $organisationId)
+    {
+        $args = Lib\PDOWrapper::cleanse($userId).",".
+            Lib\PDOWrapper::cleanse($organisationId);
+        if ($result = Lib\PDOWrapper::call("userTrackOrganisation", $args)) {
+            return $result[0]["result"];
+        }
+        return null;
+    }
+
+    public static function unTrackOrganisation($userId, $organisationId)
+    {
+        $args = Lib\PDOWrapper::cleanse($userId).",".
+            Lib\PDOWrapper::cleanse($organisationId);
+        if ($result = Lib\PDOWrapper::call("userUnTrackOrganisation", $args)) {
+            return $result[0]["result"];
+        }
+        return null;
+    }
+
+    public static function getTrackedOrganisations($userId)
+    {
+        $args = Lib\PDOWrapper::cleanse($userId);
+        if ($result = Lib\PDOWrapper::call("getTrackedOrganisations", $args)) {
+            $ret = array();
+            foreach ($result as $row) {
+                $ret[] = Common\Lib\ModelFactory::buildModel("Organisation", $row);
+            }
+            return $ret;
+        }
+        return null;
+    }
+
+	/*
+        returns true if the user has subscribed to the specified organisation
+    */
+    public static function isSubscribedToOrganisation($userId, $organisationId)
+    {
+        $args = Lib\PDOWrapper::cleanse($userId).",".
+            Lib\PDOWrapper::cleanse($organisationId);
+        if ($result = Lib\PDOWrapper::call('userSubscribedToOrganisation', $args)) {
+            return $result[0]['result'];
+        } else {
+            return null;
+        }
+    }
 }

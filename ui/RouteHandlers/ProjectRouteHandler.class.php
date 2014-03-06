@@ -195,15 +195,34 @@ class ProjectRouteHandler
                     sprintf(Lib\Localisation::getTranslation('project_view_16'), $task->getTitle())
                 );
             }
+
+            if (isset($post['trackOrganisation'])) {
+                if ($post['trackOrganisation']) {
+                    $userTrackOrganisation = $userDao->trackOrganisation($user_id, $project->getOrganisationId());
+                    if ($userTrackOrganisation) {
+                        $app->flashNow("success", Lib\Localisation::getTranslation('org_public_profile_org_track_success'));
+                    } else {
+                        $app->flashNow("error", Lib\Localisation::getTranslation('org_public_profile_org_track_error'));
+                    }
+                } else {
+                    $userUntrackOrganisation = $userDao->unTrackOrganisation($user_id, $project->getOrganisationId());
+                    if ($userUntrackOrganisation) {
+                        $app->flashNow("success", Lib\Localisation::getTranslation('org_public_profile_org_untrack_success'));
+                    } else {
+                        $app->flashNow("error", Lib\Localisation::getTranslation('org_public_profile_org_untrack_error'));
+                    }
+                }
+            }
         }
 
         $org = $orgDao->getOrganisation($project->getOrganisationId());
         $project_tags = $projectDao->getProjectTags($project_id);
         $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
+        $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id, $project->getOrganisationId());
         
         $adminDao = new DAO\AdminDao();
         $isAdmin = $adminDao->isOrgAdmin($project->getOrganisationId(), $user_id) || $adminDao->isSiteAdmin($user_id);
-        
+
         if ($isOrgMember || $isAdmin) {
             $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);
             $taskMetaData = array();
@@ -263,9 +282,9 @@ class ProjectRouteHandler
         
         $app->view()->appendData(array(
                 "isOrgMember"   => $isOrgMember,
-                "isAdmin"       => $isAdmin
+                "isAdmin"       => $isAdmin,
+                'userSubscribedToOrganisation' => $userSubscribedToOrganisation
         ));
-        
         $app->render("project/project.view.tpl");
     }
     
