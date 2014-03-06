@@ -6,14 +6,28 @@
             <small>{Localisation::getTranslation('project_view_overview_of_project_details')}</small>
         </span>
         {assign var="project_id" value=$project->getId()}
-
-        {if isset($isOrgMember)}
-            <div class="pull-right">
+		<div class="pull-right">
+            {if ($isOrgMember || $isAdmin)}
                 <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='pull-right btn btn-primary'>
                     <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('common_edit_project')}
                 </a> 
-            </div>
-        {/if}
+            {/if}
+            {if (!$isOrgMember)}
+                <form id="trackedOrganisationForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                    {if ($userSubscribedToOrganisation)}
+                        <input type="hidden" name="trackOrganisation" value="0" />
+                        <a class="btn btn-small btn-inverse" onclick="$('#trackedOrganisationForm').submit();" >
+                            <i class="icon-remove-circle icon-white"></i>{Localisation::getTranslation('org_public_profile_untrack_organisation')}
+                        </a>
+                    {else}
+                        <input type="hidden" name="trackOrganisation" value="1" />
+                        <a class="btn btn-small" onclick="$('#trackedOrganisationForm').submit();" >
+                            <i class="icon-envelope icon-black"></i>{Localisation::getTranslation('org_public_profile_track_organisation')}
+                        </a>
+                    {/if}
+                </form>
+            {/if}
+		</div>
     </h1>
 
 {if isset($flash['success'])}

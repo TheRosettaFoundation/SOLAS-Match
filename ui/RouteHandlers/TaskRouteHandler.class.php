@@ -331,6 +331,7 @@ class TaskRouteHandler
         $app = \Slim\Slim::getInstance();
         $taskDao = new TaskDao();
         $projectDao = new ProjectDao();
+        $userDao = new UserDao();
 
         $user_id = UserSession::getCurrentUserID();
         $task = $taskDao->getTask($task_id);
@@ -340,6 +341,29 @@ class TaskRouteHandler
         }
         $taskClaimed = $taskDao->isTaskClaimed($task_id);
 
+        if ($app->request()->isPost()) {
+            $post = $app->request()->post();
+            $project = $projectDao->getProject($task->getProjectId());
+            $org_id=$project->getOrganisationId();
+
+            if (isset($post['trackOrganisation'])) {
+                if ($post['trackOrganisation']) {
+                    $userTrackOrganisation = $userDao->trackOrganisation($user_id, $org_id);
+                    if ($userTrackOrganisation) {
+                        $app->flashNow("success", Localisation::getTranslation('org_public_profile_org_track_success'));
+                    } else {
+                        $app->flashNow("error", Localisation::getTranslation('org_public_profile_org_track_error'));
+                    }
+                } else {
+                    $userUntrackOrganisation = $userDao->unTrackOrganisation($user_id, $org_id);
+                    if ($userUntrackOrganisation) {
+                        $app->flashNow("success", Localisation::getTranslation('org_public_profile_org_untrack_success'));
+                    } else {
+                            $app->flashNow("error", Localisation::getTranslation('org_public_profile_org_untrack_error'));
+                    }
+                }
+            }
+        }
         if ($taskClaimed) {
             $app->flashKeep();
             switch ($task->getTaskType()) {
@@ -357,6 +381,14 @@ class TaskRouteHandler
         } else {
             $user_id = UserSession::getCurrentUserID();
             $project = $projectDao->getProject($task->getProjectId());
+
+            /*Metadata required for Tracking Organisations*/
+            $userDao = new UserDao();
+            $orgDao = new OrganisationDao();
+            $org_id=$project->getOrganisationId();
+            $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id , $org_id);
+            $isMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
+
             $numTaskTypes = Settings::get("ui.task_types");
 
             $taskTypeColours = array();
@@ -376,7 +408,9 @@ class TaskRouteHandler
                         "converter"     => $converter,
                         "task" => $task,
                         "file_preview_path" => $file_path,
-                        "filename" => $task_file_info->getFilename()
+                        "filename" => $task_file_info->getFilename(),
+                        "isMember" => $isMember,
+                        'userSubscribedToOrganisation' => $userSubscribedToOrganisation
             ));
 
             $app->render("task/task.view.tpl");
@@ -865,6 +899,25 @@ class TaskRouteHandler
                     }
                 }
             }
+
+            if (isset($post['trackOrganisation'])) {
+                $org_id = $project->getOrganisationId();
+                if ($post['trackOrganisation']) {
+                    $userTrackOrganisation = $userDao->trackOrganisation($user_id, $org_id);
+                    if ($userTrackOrganisation) {
+                        $app->flashNow("success", Localisation::getTranslation('org_public_profile_org_track_success'));
+                    } else {
+                        $app->flashNow("error", Localisation::getTranslation('org_public_profile_org_track_error'));
+                    }
+                } else {
+                    $userUntrackOrganisation = $userDao->unTrackOrganisation($user_id, $org_id);
+                    if ($userUntrackOrganisation) {
+                        $app->flashNow("success", Localisation::getTranslation('org_public_profile_org_untrack_success'));
+                    } else {
+                            $app->flashNow("error", Localisation::getTranslation('org_public_profile_org_untrack_error'));
+                    }
+                }
+            }
         }
         
         $taskMetaData = array();
@@ -896,12 +949,15 @@ class TaskRouteHandler
         if ($isOrgMember || $isSiteAdmin) {
             $app->view()->appendData(array("isOrgMember" => $isOrgMember));
         }
+        $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id , $project->getOrganisationId());
 
         $app->view()->appendData(array(
                 "org" => $org,
                 "project" => $project,
                 "registered" => $registered,
-                "taskTypeColours" => $taskTypeColours
+                "taskTypeColours" => $taskTypeColours,
+                "isMember" => $isOrgMember,
+                "userSubscribedToOrganisation" => $userSubscribedToOrganisation
         ));
 
         $app->render("task/task.view.tpl");
