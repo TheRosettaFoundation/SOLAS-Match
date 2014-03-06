@@ -94,7 +94,7 @@ class ProjectDao extends BaseDao
     public function archiveProject($projectId, $userId)
     {
         $request = "{$this->siteApi}v0/projects/archiveProject/$projectId/user/$userId";
-        $ret = $this->client->call("ArchivedProject", $request, HttpMethodEnum::PUT);
+        $ret = $this->client->call(null, $request, HttpMethodEnum::PUT);
         return $ret;
     }
 

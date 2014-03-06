@@ -9,6 +9,9 @@ require_once __DIR__.'/../../api/DataAccessObjects/BadgeDao.class.php';
 require_once __DIR__.'/../../api/DataAccessObjects/TagsDao.class.php';
 require_once __DIR__.'/../../api/DataAccessObjects/TaskDao.class.php';
 require_once __DIR__.'/../../api/DataAccessObjects/ProjectDao.class.php';
+require_once __DIR__."/../../Common/NotificationIntervalEnum.class.php";
+require_once __DIR__."/../../Common/lib/Authentication.class.php";
+require_once __DIR__.'/../../Common/lib/BadgeTypes.class.php';
 require_once __DIR__.'/../../Common/lib/ModelFactory.class.php';
 require_once __DIR__.'/../UnitTestHelper.php';
 
@@ -35,33 +38,38 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf("User", $insertedUser);
         $this->assertNotNull($insertedUser->getId());
         
-        $newUserWithUpdates = new User();
-        $newUserWithUpdates->setId($insertedUser->getId());
-        $newUserWithUpdates->setDisplayName("Updated DisplayName");
-        $newUserWithUpdates->setEmail("updatedEmail@test.com");
-        $newUserWithUpdates->setBiography("Updated Bio");
+        $insertedUser->setDisplayName("Updated DisplayName");
+        $insertedUser->setEmail("updatedEmail@test.com");
+        $insertedUser->setBiography("Updated Bio");
         
         $locale = new Locale();
         $locale->setLanguageCode("en");
         $locale->setCountryCode("IE");
-        $newUserWithUpdates->setNativeLocale($locale);
+        $insertedUser->setNativeLocale($locale);
 
-        $newUserWithUpdates->setNonce(123456789);
-        $newUserWithUpdates->setPassword(md5("derpymerpy"));
-              
+        $insertedUser->setNonce(123456789);
+        $insertedUser->setPassword(md5("derpymerpy"));
+      
         // Success
-        $updatedUser = UserDao::save($newUserWithUpdates);
+        $updatedUser = UserDao::save($insertedUser);
+
         $this->assertInstanceOf("User", $updatedUser);
-        $this->assertEquals($newUserWithUpdates->getId(), $updatedUser->getId());
-        $this->assertEquals($newUserWithUpdates->getDisplayName(), $updatedUser->getDisplayName());
-        $this->assertEquals($newUserWithUpdates->getEmail(), $updatedUser->getEmail());
-        $this->assertEquals($newUserWithUpdates->getBiography(), $updatedUser->getBiography());
+        $this->assertEquals($insertedUser->getId(), $updatedUser->getId());
+        $this->assertEquals($insertedUser->getDisplayName(), $updatedUser->getDisplayName()); //Failure!!
+        $this->assertEquals($insertedUser->getEmail(), $updatedUser->getEmail());
+        $this->assertEquals($insertedUser->getBiography(), $updatedUser->getBiography());
         
-        $this->assertEquals($newUserWithUpdates->getNativeLocale()->getLanguageCode(), $updatedUser->getNativeLocale()->getLanguageCode());
-        $this->assertEquals($newUserWithUpdates->getNativeLocale()->getCountryCode(), $updatedUser->getNativeLocale()->getCountryCode());
+        $this->assertEquals(
+            $insertedUser->getNativeLocale()->getLanguageCode(),
+            $updatedUser->getNativeLocale()->getLanguageCode()
+        );
+        $this->assertEquals(
+            $insertedUser->getNativeLocale()->getCountryCode(),
+            $updatedUser->getNativeLocale()->getCountryCode()
+        );
         
-        $this->assertEquals($newUserWithUpdates->getNonce(), $updatedUser->getNonce());
-        $this->assertEquals($newUserWithUpdates->getPassword(), $updatedUser->getPassword());
+        $this->assertEquals($insertedUser->getNonce(), $updatedUser->getNonce());
+        $this->assertEquals($insertedUser->getPassword(), $updatedUser->getPassword());
     }
     
     public function testGetUser()
@@ -72,36 +80,54 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf("User", $insertedUser);
         $this->assertNotNull($insertedUser->getId());
         
-        $newUserWithUpdates = new User();
-        $newUserWithUpdates->setId($insertedUser->getId());
-        $newUserWithUpdates->setDisplayName("Updated DisplayName");
-        $newUserWithUpdates->setEmail("updatedEmail@test.com");
-        $newUserWithUpdates->setBiography("Updated Bio");
+        $insertedUser->setDisplayName("Updated DisplayName");
+        $insertedUser->setEmail("updatedEmail@test.com");
+        $insertedUser->setBiography("Updated Bio");
         
         $locale = new Locale();
         $locale->setLanguageCode("en");
         $locale->setCountryCode("IE");
-        $newUserWithUpdates->setNativeLocale($locale);
+        $insertedUser->setNativeLocale($locale);
         
-        $newUserWithUpdates->setNonce(123456789);
-        $newUserWithUpdates->setPassword(md5("derpymerpy"));
         
-        $updatedUser = UserDao::save($newUserWithUpdates);
+        $insertedUser->setNonce(123456789);
+        $insertedUser->setPassword(md5("derpymerpy"));
+        $updatedUser = UserDao::save($insertedUser);
         $this->assertInstanceOf("User", $updatedUser);
               
         // Success
         $getUpdatedUser = UserDao::getUser($updatedUser->getId());
         $this->assertInstanceOf("User", $getUpdatedUser[0]);
-        $this->assertEquals($newUserWithUpdates->getId(), $getUpdatedUser[0]->getId());
-        $this->assertEquals($newUserWithUpdates->getDisplayName(), $getUpdatedUser[0]->getDisplayName());
-        $this->assertEquals($newUserWithUpdates->getEmail(), $getUpdatedUser[0]->getEmail());
-        $this->assertEquals($newUserWithUpdates->getBiography(), $getUpdatedUser[0]->getBiography());
+        $this->assertEquals($insertedUser->getId(), $getUpdatedUser[0]->getId());
         
-        $this->assertEquals($newUserWithUpdates->getNativeLocale()->getLanguageCode(), $updatedUser->getNativeLocale()->getLanguageCode());
-        $this->assertEquals($newUserWithUpdates->getNativeLocale()->getCountryCode(), $updatedUser->getNativeLocale()->getCountryCode());
+        $this->assertEquals($insertedUser->getDisplayName(), $getUpdatedUser[0]->getDisplayName());
+        $this->assertEquals($insertedUser->getEmail(), $getUpdatedUser[0]->getEmail());
+        $this->assertEquals($insertedUser->getBiography(), $getUpdatedUser[0]->getBiography());
         
-        $this->assertEquals($newUserWithUpdates->getNonce(), $getUpdatedUser[0]->getNonce());
-        $this->assertEquals($newUserWithUpdates->getPassword(), $getUpdatedUser[0]->getPassword());   
+        $this->assertEquals(
+            $insertedUser->getNativeLocale()->getLanguageCode(),
+            $updatedUser->getNativeLocale()->getLanguageCode()
+        );
+        $this->assertEquals(
+            $insertedUser->getNativeLocale()->getCountryCode(),
+            $updatedUser->getNativeLocale()->getCountryCode()
+        );
+        
+        $this->assertEquals($insertedUser->getNonce(), $getUpdatedUser[0]->getNonce());
+        $this->assertEquals($insertedUser->getPassword(), $getUpdatedUser[0]->getPassword());
+    }
+    
+    public function testDeleteUser()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $insertedUser = UserDao::create("testuser@example.com", "testpw");
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getId());
+        
+        UserDao::deleteUser($insertedUser->getId());
+        $getDeletedUser = UserDao::getUser($insertedUser->getId());
+        $this->assertNull($getDeletedUser);
     }
     
     public function testChangePassword()
@@ -116,7 +142,70 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $userWithChangedPw = UserDao::changePassword($insertedUser->getId(), "New Password");
         $this->assertInstanceof("User", $userWithChangedPw);
         $this->assertNotEquals($insertedUser->getPassword(), $userWithChangedPw->getPassword());
-        $this->assertNotEquals($insertedUser->getNonce(), $userWithChangedPw->getNonce());        
+        $this->assertNotEquals($insertedUser->getNonce(), $userWithChangedPw->getNonce());
+    }
+    
+    public function testApiRegister()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $email = "foocoochoo@blah.com";
+        $pw = "password";
+        
+        $regUser = UserDao::apiRegister($email, $pw);
+        $this->assertInstanceOf("User", $regUser);
+        $this->assertEquals($email, $regUser->getEmail());
+        
+        //Get user's nonce and use it to generate the hashed password that is stored in $regUser and assert that this
+        //result does indeed match the password stored in $regUser
+        $nonce = $regUser->getNonce();
+        $hashpw = Authentication::hashPassword($pw, $nonce);
+        $this->assertEquals($regUser->getPassword(), $hashpw);
+    }
+    
+    public function testFinishRegistration()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $email = "foocoochoo@blah.com";
+        $pw = "password";
+        
+        $regUser = UserDao::apiRegister($email, $pw);
+        $this->assertInstanceOf("User", $regUser);
+        $this->assertEquals($email, $regUser->getEmail());
+        
+        //Get user's nonce and use it to generate the hashed password that is stored in $regUser and assert that this
+        //result does indeed match the password stored in $regUser
+        $nonce = $regUser->getNonce();
+        $hashpw = Authentication::hashPassword($pw, $nonce);
+        $this->assertEquals($regUser->getPassword(), $hashpw);
+        
+        $finishReg = UserDao::finishRegistration($regUser->getId());
+        $this->assertEquals("1", $finishReg);
+    }
+    
+    public function testIsUserVerified()
+    {
+        UnitTestHelper::teardownDb();
+    
+        $email = "foocoochoo@blah.com";
+        $pw = "password";
+    
+        $regUser = UserDao::apiRegister($email, $pw);
+        $this->assertInstanceOf("User", $regUser);
+        $this->assertEquals($email, $regUser->getEmail());
+    
+        //Get user's nonce and use it to generate the hashed password that is stored in $regUser and assert that this
+        //result does indeed match the password stored in $regUser
+        $nonce = $regUser->getNonce();
+        $hashpw = Authentication::hashPassword($pw, $nonce);
+        $this->assertEquals($regUser->getPassword(), $hashpw);
+    
+        $finishReg = UserDao::finishRegistration($regUser->getId());
+        $this->assertEquals("1", $finishReg);
+        
+        $isVerified = UserDao::isUserVerified($regUser->getId());
+        $this->assertEquals("1", $isVerified);
     }
     
     public function testFindOrganisationsUserBelongsTo()
@@ -138,7 +227,7 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $resultAcceptMembership = OrganisationDao::acceptMemRequest($insertedOrg->getId(), $insertedUser->getId());
         $this->assertEquals("1", $resultAcceptMembership);
         
-        $org2 = UnitTestHelper::createOrg(NULL, "Organisation 2", "Organisation 2 Bio", "http://www.organisation2.org");
+        $org2 = UnitTestHelper::createOrg(null, "Organisation 2", "Organisation 2 Bio", "http://www.organisation2.org");
         $insertedOrg2 = OrganisationDao::insertAndUpdate($org2);
         $this->assertInstanceOf("Organisation", $insertedOrg2);
         
@@ -152,7 +241,7 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         // Success
         $userOrgs = UserDao::findOrganisationsUserBelongsTo($insertedUser->getId());
         $this->assertCount(2, $userOrgs);
-        foreach($userOrgs as $org) {
+        foreach ($userOrgs as $org) {
             $this->assertInstanceOf("Organisation", $org);
         }
     }
@@ -163,7 +252,7 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         
         $insertedUser = UserDao::create("testuser@example.com", "testpw");
         $this->assertInstanceOf("User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());  
+        $this->assertNotNull($insertedUser->getId());
         $userId = $insertedUser->getId();
         
         $userBadges = UserDao::getUserBadges($userId);
@@ -174,18 +263,18 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         
         $userBadges1 = UserDao::getUserBadges($userId);
         $this->assertCount(1, $userBadges1);
-        foreach($userBadges1 as $badge) {
+        foreach ($userBadges1 as $badge) {
             $this->assertInstanceof("Badge", $badge);
-        }        
+        }
         
         $assignBadge1 = BadgeDao::assignBadge($userId, 4);
         $this->assertEquals(1, $assignBadge1);
         
         $userBadges2 = UserDao::getUserBadges($userId);
         $this->assertCount(2, $userBadges2);
-        foreach($userBadges2 as $badge) {
+        foreach ($userBadges2 as $badge) {
             $this->assertInstanceof("Badge", $badge);
-        }        
+        }
         
         $assignBadge2 = BadgeDao::assignBadge($userId, 5);
         $this->assertEquals(1, $assignBadge2);
@@ -193,14 +282,14 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         // Success
         $userBadges3 = UserDao::getUserBadges($userId);
         $this->assertCount(3, $userBadges3);
-        foreach($userBadges3 as $badge) {
+        foreach ($userBadges3 as $badge) {
             $this->assertInstanceof("Badge", $badge);
-        }        
+        }
     }
     
     public function testGetUserTags()
     {
-        UnitTestHelper::teardownDb();        
+        UnitTestHelper::teardownDb();
        
         $insertedUser = UserDao::create("testuser@example.com", "testpw");
         $this->assertInstanceOf("User", $insertedUser);
@@ -225,7 +314,7 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         // Success
         $oneUserTag = UserDao::getUserTags($userId);
         $this->assertCount(1, $oneUserTag);
-        foreach($oneUserTag as $tag) {
+        foreach ($oneUserTag as $tag) {
             $this->assertInstanceof("Tag", $tag);
         }
         
@@ -235,7 +324,7 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         // Success
         $twoUserTags = UserDao::getUserTags($userId);
         $this->assertCount(2, $twoUserTags);
-        foreach($twoUserTags as $tag) {
+        foreach ($twoUserTags as $tag) {
             $this->assertInstanceof("Tag", $tag);
         }
 
@@ -243,7 +332,7 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
     
     public function testGetUsersWithBadge()
     {
-        UnitTestHelper::teardownDb();    
+        UnitTestHelper::teardownDb();
         
         $insertedUser = UserDao::create("testuser@example.com", "testpw");
         $this->assertInstanceOf("User", $insertedUser);
@@ -253,7 +342,7 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $noUsersWithBadge = UserDao::getUsersWithBadge(3);
         $this->assertNull($noUsersWithBadge);
         
-        $assignBadge = BadgeDao::assignBadge($insertedUser->getId(), 3);        
+        $assignBadge = BadgeDao::assignBadge($insertedUser->getId(), 3);
         $this->assertEquals(1, $assignBadge);
         
         // Success
@@ -263,7 +352,7 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         
         $insertedUser2 = UserDao::create("testuser2@example.com", "testpw2");
         $this->assertInstanceOf("User", $insertedUser2);
-        $this->assertNotNull($insertedUser2->getId());        
+        $this->assertNotNull($insertedUser2->getId());
         
         $assignBadge2 = BadgeDao::assignBadge($insertedUser2->getId(), 3);
         $this->assertEquals(1, $assignBadge2);
@@ -271,14 +360,14 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         // Success
         $twoUsersWithBadge = UserDao::getUsersWithBadge(3);
         $this->assertCount(2, $twoUsersWithBadge);
-        foreach($twoUsersWithBadge as $user) {
+        foreach ($twoUsersWithBadge as $user) {
             $this->assertInstanceOf("User", $user);
         }
     }
     
     public function testLikeTag()
     {
-        UnitTestHelper::teardownDb();        
+        UnitTestHelper::teardownDb();
        
         $insertedUser = UserDao::create("testuser@example.com", "testpw");
         $this->assertInstanceOf("User", $insertedUser);
@@ -291,16 +380,16 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
        
         // Success
         $tagLiked = UserDao::likeTag($userId, $tag->getId());
-        $this->assertEquals("1", $tagLiked);   
+        $this->assertEquals("1", $tagLiked);
         
         // Failure
         $tagLikedFailure = UserDao::likeTag($userId, $tag->getId());
-        $this->assertEquals("0", $tagLikedFailure);   
+        $this->assertEquals("0", $tagLikedFailure);
     }
     
     public function testRemoveTag()
     {
-        UnitTestHelper::teardownDb();        
+        UnitTestHelper::teardownDb();
        
         $insertedUser = UserDao::create("testuser@example.com", "testpw");
         $this->assertInstanceOf("User", $insertedUser);
@@ -312,7 +401,7 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($tag->getId());
         
         $tagLiked = UserDao::likeTag($userId, $tag->getId());
-        $this->assertEquals("1", $tagLiked);        
+        $this->assertEquals("1", $tagLiked);
         
         // Success
         $removedTag = UserDao::removeTag($userId, $tag->getId());
@@ -320,7 +409,7 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         
         // Failure
         $removedTagFailure = UserDao::removeTag($userId, $tag->getId());
-        $this->assertEquals("0", $removedTagFailure);        
+        $this->assertEquals("0", $removedTagFailure);
     }
     
     public function testTrackTask()
@@ -335,24 +424,24 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $insertedOrg = OrganisationDao::insertAndUpdate($org);
         $this->assertInstanceOf("Organisation", $insertedOrg);
         
-        $project = UnitTestHelper::createProject($insertedOrg->getId());        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject); 
-        $this->assertNotNull($insertedProject->getId());   
+        $this->assertInstanceOf("Project", $insertedProject);
+        $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
-        
-        $insertedTask = TaskDao::create($task);
+        //following line was using TaskDao::create() which is nonexistant
+        $insertedTask = TaskDao::save($task);
         $this->assertInstanceOf("Task", $insertedTask);
         $this->assertNotNull($insertedTask->getId());
         
         // Success
         $trackTask = UserDao::trackTask($insertedUser->getId(), $insertedTask->getId());
-        $this->assertEquals("1", $trackTask); 
+        $this->assertEquals("1", $trackTask);
         
         // Failure
         $trackTaskFail = UserDao::trackTask($insertedUser->getId(), $insertedTask->getId());
-        $this->assertEquals("0", $trackTaskFail); 
+        $this->assertEquals("0", $trackTaskFail);
         
     }
     
@@ -368,27 +457,27 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $insertedOrg = OrganisationDao::insertAndUpdate($org);
         $this->assertInstanceOf("Organisation", $insertedOrg);
         
-        $project = UnitTestHelper::createProject($insertedOrg->getId());        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject); 
-        $this->assertNotNull($insertedProject->getId());   
+        $this->assertInstanceOf("Project", $insertedProject);
+        $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
         
-        $insertedTask = TaskDao::create($task);
+        $insertedTask = TaskDao::save($task);
         $this->assertInstanceOf("Task", $insertedTask);
         $this->assertNotNull($insertedTask->getId());
         
         $trackTask = UserDao::trackTask($insertedUser->getId(), $insertedTask->getId());
-        $this->assertEquals("1", $trackTask); 
+        $this->assertEquals("1", $trackTask);
         
         // Success
         $ignoreTask = UserDao::ignoreTask($insertedUser->getId(), $insertedTask->getId());
-        $this->assertEquals("1", $ignoreTask); 
+        $this->assertEquals("1", $ignoreTask);
         
         // Failure
         $ignoreTaskFail = UserDao::ignoreTask($insertedUser->getId(), $insertedTask->getId());
-        $this->assertEquals("0", $ignoreTaskFail); 
+        $this->assertEquals("0", $ignoreTaskFail);
     }
     
     public function testIsSubscribedToTask()
@@ -403,14 +492,14 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $insertedOrg = OrganisationDao::insertAndUpdate($org);
         $this->assertInstanceOf("Organisation", $insertedOrg);
         
-        $project = UnitTestHelper::createProject($insertedOrg->getId());        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject); 
-        $this->assertNotNull($insertedProject->getId());   
+        $this->assertInstanceOf("Project", $insertedProject);
+        $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
         
-        $insertedTask = TaskDao::create($task);
+        $insertedTask = TaskDao::save($task);
         $this->assertInstanceOf("Task", $insertedTask);
         $this->assertNotNull($insertedTask->getId());
         
@@ -425,7 +514,7 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $isTrackingTask = UserDao::isSubscribedToTask($insertedUser->getId(), $insertedTask->getId());
         $this->assertEquals("1", $isTrackingTask);
     }
-    
+    //TODO - retest function when issue is resolved
     public function testGetTrackedTasks()
     {
         UnitTestHelper::teardownDb();
@@ -438,14 +527,14 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $insertedOrg = OrganisationDao::insertAndUpdate($org);
         $this->assertInstanceOf("Organisation", $insertedOrg);
         
-        $project = UnitTestHelper::createProject($insertedOrg->getId());        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject); 
-        $this->assertNotNull($insertedProject->getId());   
+        $this->assertInstanceOf("Project", $insertedProject);
+        $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
         
-        $insertedTask = TaskDao::create($task);
+        $insertedTask = TaskDao::save($task);
         $this->assertInstanceOf("Task", $insertedTask);
         $this->assertNotNull($insertedTask->getId());
         
@@ -454,12 +543,14 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $this->assertNull($getNoTrackedTasks);
         
         $trackTask = UserDao::trackTask($insertedUser->getId(), $insertedTask->getId());
-        $this->assertEquals("1", $trackTask); 
+        $this->assertEquals("1", $trackTask);
         
         // Success
         $getTrackedTasks = UserDao::getTrackedTasks($insertedUser->getId());
         $this->assertCount(1, $getTrackedTasks);
         $this->assertInstanceOf("Task", $getTrackedTasks[0]);
+        $this->assertEquals($insertedTask->getId(), $getTrackedTasks[0]->getId());
+        $this->assertEquals($insertedTask->getTaskStatus(), $getTrackedTasks[0]->getTaskStatus());
     }
     
     public function testCreatePasswordResetRequest()
@@ -469,11 +560,32 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $user = UnitTestHelper::createUser();
         $insertedUser = UserDao::save($user);
         $this->assertInstanceOf("User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId()); 
+        $this->assertNotNull($insertedUser->getId());
         
         // Success
-        $createPwResetRequest = UserDao::addPasswordResetRequest("asfjkosagijo".$insertedUser->getId(), $insertedUser->getId());
+        $createPwResetRequest = UserDao::addPasswordResetRequest(
+            "asfjkosagijo".$insertedUser->getId(),
+            $insertedUser->getId()
+        );
         $this->assertEquals("1", $createPwResetRequest);
+    }
+    
+    public function testHasRequestedPasswordReset()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getId());
+        
+        $createPwResetRequest = UserDao::addPasswordResetRequest(
+            "asfjkosagijo".$insertedUser->getId(),
+            $insertedUser->getId()
+        );
+        $this->assertEquals("1", $createPwResetRequest);
+        $hasPwResetReq = UserDao::hasRequestedPasswordReset($insertedUser->getEmail());
+        $this->assertTrue($hasPwResetReq);
     }
     
     public function testRemovePasswordResetRequest()
@@ -483,18 +595,21 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $user = UnitTestHelper::createUser();
         $insertedUser = UserDao::save($user);
         $this->assertInstanceOf("User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId()); 
+        $this->assertNotNull($insertedUser->getId());
         
-        $createPwResetRequest = UserDao::addPasswordResetRequest("asfjkosagijo".$insertedUser->getId(), $insertedUser->getId());
-        $this->assertEquals("1", $createPwResetRequest);  
+        $createPwResetRequest = UserDao::addPasswordResetRequest(
+            "asfjkosagijo".$insertedUser->getId(),
+            $insertedUser->getId()
+        );
+        $this->assertEquals("1", $createPwResetRequest);
         
         // Success
         $removePwResetRequest = UserDao::removePasswordResetRequest($insertedUser->getId());
-        $this->assertEquals("1", $removePwResetRequest); 
+        $this->assertEquals("1", $removePwResetRequest);
         
         // Failure
         $removePwResetRequestFail = UserDao::removePasswordResetRequest($insertedUser->getId());
-        $this->assertEquals("0", $removePwResetRequestFail); 
+        $this->assertEquals("0", $removePwResetRequestFail);
     }
     
     public function testGetPasswordResetRequests()
@@ -504,17 +619,23 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $user = UnitTestHelper::createUser();
         $insertedUser = UserDao::save($user);
         $this->assertInstanceOf("User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId()); 
+        $this->assertNotNull($insertedUser->getId());
         
-        $createPwResetRequest = UserDao::addPasswordResetRequest("asfjkosagijo".$insertedUser->getId(), $insertedUser->getId());
+        $createPwResetRequest = UserDao::addPasswordResetRequest(
+            "asfjkosagijo".$insertedUser->getId(),
+            $insertedUser->getId()
+        );
         $this->assertEquals("1", $createPwResetRequest);
         
-        // Success        
-        $passwordResetRequest = UserDao::getPasswordResetRequests($insertedUser->getId());
-        $this->assertInstanceOf("PasswordResetRequest", $passwordResetRequest);        
+        // Success
+        $passwordResetRequest = UserDao::getPasswordResetRequests(
+            $insertedUser->getEmail(),
+            "asfjkosagijo".$insertedUser->getId()
+        );
+        $this->assertInstanceOf("PasswordResetRequest", $passwordResetRequest);
         
         $removePwResetRequest = UserDao::removePasswordResetRequest($insertedUser->getId());
-        $this->assertEquals("1", $removePwResetRequest); 
+        $this->assertEquals("1", $removePwResetRequest);
         
         // Failure
         $passwordResetRequestFailure = UserDao::getPasswordResetRequests($insertedUser->getId());
@@ -538,10 +659,10 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $trackProjectFailure = UserDao::trackProject(999, $insertedUser->getId());
         $this->assertNull($trackProjectFailure);
         
-        $project = UnitTestHelper::createProject($insertedOrg->getId());        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);   
-        $this->assertNotNull($insertedProject->getId());   
+        $this->assertInstanceOf("Project", $insertedProject);
+        $this->assertNotNull($insertedProject->getId());
         
         // Success
         $trackProject = UserDao::trackProject($insertedProject->getId(), $insertedUser->getId());
@@ -561,10 +682,10 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $insertedOrg = OrganisationDao::insertAndUpdate($org);
         $this->assertInstanceOf("Organisation", $insertedOrg);
         
-        $project = UnitTestHelper::createProject($insertedOrg->getId());        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);   
-        $this->assertNotNull($insertedProject->getId());  
+        $this->assertInstanceOf("Project", $insertedProject);
+        $this->assertNotNull($insertedProject->getId());
         
         // Failure
         $untrackProjectFailure = UserDao::unTrackProject($insertedProject->getId(), $insertedUser->getId());
@@ -591,15 +712,20 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $insertedOrg = OrganisationDao::insertAndUpdate($org);
         $this->assertInstanceOf("Organisation", $insertedOrg);
         
-        $project = UnitTestHelper::createProject($insertedOrg->getId());        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);   
-        $this->assertNotNull($insertedProject->getId()); 
+        $this->assertInstanceOf("Project", $insertedProject);
+        $this->assertNotNull($insertedProject->getId());
         
-        $project2 = UnitTestHelper::createProject($insertedOrg->getId(), null, "Project 2 Title", "Project 2 Description");
+        $project2 = UnitTestHelper::createProject(
+            $insertedOrg->getId(),
+            null,
+            "Project 2 Title",
+            "Project 2 Description"
+        );
         $insertedProject2 = ProjectDao::createUpdate($project2);
-        $this->assertInstanceOf("Project", $insertedProject2);   
-        $this->assertNotNull($insertedProject2->getId()); 
+        $this->assertInstanceOf("Project", $insertedProject2);
+        $this->assertNotNull($insertedProject2->getId());
         
         $trackProject = UserDao::trackProject($insertedProject->getId(), $insertedUser->getId());
         $this->assertEquals("1", $trackProject);
@@ -610,7 +736,7 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         // Success
         $trackedProjects = UserDao::getTrackedProjects($insertedUser->getId());
         $this->assertCount(2, $trackedProjects);
-        foreach($trackedProjects as $project) {
+        foreach ($trackedProjects as $project) {
             $this->assertInstanceOf("Project", $project);
         }
     }
@@ -629,13 +755,16 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $insertedOrg = OrganisationDao::insertAndUpdate($org);
         $this->assertInstanceOf("Organisation", $insertedOrg);
         
-        $project = UnitTestHelper::createProject($insertedOrg->getId());        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);   
-        $this->assertNotNull($insertedProject->getId()); 
+        $this->assertInstanceOf("Project", $insertedProject);
+        $this->assertNotNull($insertedProject->getId());
         
         // Failure
-        $isSubscribedToProjectFailure = UserDao::isSubscribedToProject($insertedUser->getId(), $insertedProject->getId());
+        $isSubscribedToProjectFailure = UserDao::isSubscribedToProject(
+            $insertedUser->getId(),
+            $insertedProject->getId()
+        );
         $this->assertEquals("0", $isSubscribedToProjectFailure);
         
         $trackProject = UserDao::trackProject($insertedProject->getId(), $insertedUser->getId());
@@ -645,6 +774,235 @@ class UserDaoTest extends PHPUnit_Framework_TestCase
         $isSubscribedToProject = UserDao::isSubscribedToProject($insertedUser->getId(), $insertedProject->getId());
         $this->assertEquals("1", $isSubscribedToProject);
     }
+    
+    public function testGetUserTaskStreamNotification()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getId());
+        
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("Organisation", $insertedOrg);
+        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());
+        $insertedProject = ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("Project", $insertedProject);
+        $this->assertNotNull($insertedProject->getId());
+        
+        $task = UnitTestHelper::createTask($insertedProject->getId());
+        $insertedTask = TaskDao::save($task);
+        $this->assertInstanceOf("Task", $insertedTask);
+        $this->assertNotNull($insertedTask->getId());
+        
+        $notification = new UserTaskStreamNotification();
+        $notification->setUserId($insertedUser->getId());
+        $notification->setInterval(NotificationIntervalEnum::DAILY);
+        $notification->setStrict(false);
+        UserDao::requestTaskStreamNotification($notification);
+        
+        $getTsn = UserDao::getUserTaskStreamNotification($insertedUser->getId());
+        $this->assertInstanceOf("UserTaskStreamNotification", $getTsn);
+        $this->assertEquals($insertedUser->getId(), $getTsn->getUserId());
+        $this->assertEquals(NotificationIntervalEnum::DAILY, $getTsn->getInterval());
+    }
+    
+    public function testRemoveTaskStreamNotification()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getId());
+        
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("Organisation", $insertedOrg);
+        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());
+        $insertedProject = ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("Project", $insertedProject);
+        $this->assertNotNull($insertedProject->getId());
+        
+        $task = UnitTestHelper::createTask($insertedProject->getId());
+        $insertedTask = TaskDao::save($task);
+        $this->assertInstanceOf("Task", $insertedTask);
+        $this->assertNotNull($insertedTask->getId());
+        
+        $notification = new UserTaskStreamNotification();
+        $notification->setUserId($insertedUser->getId());
+        $notification->setInterval(NotificationIntervalEnum::DAILY);
+        $notification->setStrict(false);
+        UserDao::requestTaskStreamNotification($notification);
+        
+        $getTsn = UserDao::getUserTaskStreamNotification($insertedUser->getId());
+        $this->assertInstanceOf("UserTaskStreamNotification", $getTsn);
+        $this->assertEquals($insertedUser->getId(), $getTsn->getUserId());
+        $this->assertEquals(NotificationIntervalEnum::DAILY, $getTsn->getInterval());
+        
+        $removeTsn = UserDao::removeTaskStreamNotification($insertedUser->getId());
+        $this->assertTrue($removeTsn);
+    }
+    
+    public function testCreatePersonalInfo()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getId());
+        
+        $userInfo = UnitTestHelper::createUserPersonalInfo($insertedUser->getId());
+        $insertedInfo = UserDao::createPersonalInfo($userInfo);
+        $this->assertInstanceOf("UserPersonalInformation", $insertedInfo);
+        $this->assertNotNull($insertedInfo->getId());
+    }
+    
+    public function testUpdatePersonalInfo()
+    {
+        UnitTestHelper::teardownDb();
+    
+        $user = UnitTestHelper::createUser();
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getId());
+    
+        $userInfo = UnitTestHelper::createUserPersonalInfo($insertedUser->getId());
+        $insertedInfo = UserDao::createPersonalInfo($userInfo);
+        $this->assertInstanceOf("UserPersonalInformation", $insertedInfo);
+        $this->assertNotNull($insertedInfo->getId());
+        
+        $insertedInfo->setFirstName("Roy");
+        $insertedInfo->setLastName("Jaeger");
+        $insertedInfo->setMobileNumber(55555221333);
+        $updatedInfo = UserDao::updatePersonalInfo($insertedInfo);
+        
+        //assert that updates were persisted to database
+        $this->assertEquals($insertedInfo->getFirstName(), $updatedInfo->getFirstName());
+        $this->assertEquals($insertedInfo->getLastName(), $updatedInfo->getLastName());
+        $this->assertEquals($insertedInfo->getMobileNumber(), $updatedInfo->getMobileNumber());
+    }
+    
+    public function testGetPersonalInfo()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getId());
+        
+        $userInfo = UnitTestHelper::createUserPersonalInfo($insertedUser->getId());
+        $insertedInfo = UserDao::createPersonalInfo($userInfo);
+        $this->assertInstanceOf("UserPersonalInformation", $insertedInfo);
+        $this->assertNotNull($insertedInfo->getId());
+        
+        $getInfo = UserDao::getPersonalInfo($insertedInfo->getId());
+        $this->assertInstanceOf("UserPersonalInformation", $getInfo);
+        $this->assertEquals($insertedInfo, $getInfo);
+    }
+    
+    public function testCreateSecondaryLanguage()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $user->getNativeLocale()->setLanguageCode("en");
+        $user->getNativeLocale()->setCountryCode("IE");
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getId());
+        
+        $locale = new Locale();
+        $locale->setLanguageCode("ja");
+        $locale->setCountryCode("JP");
+        
+        $afterCreate = UserDao::createSecondaryLanguage($insertedUser->getId(), $locale);
+        $this->assertInstanceOf("Locale", $afterCreate);
+        $this->assertEquals($locale->getLanguageCode(), $afterCreate->getLanguageCode());
+        $this->assertEquals($locale->getCountryCode(), $afterCreate->getCountryCode());
+    }
+    
+    public function testGetSecondaryLanguages()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $user->getNativeLocale()->setLanguageCode("en");
+        $user->getNativeLocale()->setCountryCode("IE");
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getId());
+        
+        $locale = new Locale();
+        $locale->setLanguageCode("ja");
+        $locale->setCountryCode("JP");
+        
+        $afterCreate = UserDao::createSecondaryLanguage($insertedUser->getId(), $locale);
+        $this->assertInstanceOf("Locale", $afterCreate);
+        $this->assertEquals($locale->getLanguageCode(), $afterCreate->getLanguageCode());
+        $this->assertEquals($locale->getCountryCode(), $afterCreate->getCountryCode());
+        
+        $locale2 = new Locale();
+        $locale2->setLanguageCode("ga");
+        $locale2->setCountryCode("IE");
+        
+        $afterCreate2 = UserDao::createSecondaryLanguage($insertedUser->getId(), $locale2);
+        $this->assertInstanceOf("Locale", $afterCreate2);
+        $this->assertEquals($locale2->getLanguageCode(), $afterCreate2->getLanguageCode());
+        $this->assertEquals($locale2->getCountryCode(), $afterCreate2->getCountryCode());
+        
+        $getSecondaryLangs = UserDao::getSecondaryLanguages($insertedUser->getId());
+        
+        $this->assertCount(2, $getSecondaryLangs);
+        foreach ($getSecondaryLangs as $lang) {
+            $this->assertInstanceOf("Locale", $lang);
+        }
+    }
+    
+    public function testDeleteSecondaryLanguage()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $user->getNativeLocale()->setLanguageCode("en");
+        $user->getNativeLocale()->setCountryCode("IE");
+        $insertedUser = UserDao::save($user);
+        $this->assertInstanceOf("User", $insertedUser);
+        $this->assertNotNull($insertedUser->getId());
+        
+        $locale = new Locale();
+        $locale->setLanguageCode("ja");
+        $locale->setCountryCode("JP");
+        
+        $afterCreate = UserDao::createSecondaryLanguage($insertedUser->getId(), $locale);
+        $this->assertInstanceOf("Locale", $afterCreate);
+        $this->assertEquals($locale->getLanguageCode(), $afterCreate->getLanguageCode());
+        $this->assertEquals($locale->getCountryCode(), $afterCreate->getCountryCode());
+        
+        $locale2 = new Locale();
+        $locale2->setLanguageCode("ga");
+        $locale2->setCountryCode("IE");
+        
+        $afterCreate2 = UserDao::createSecondaryLanguage($insertedUser->getId(), $locale2);
+        $this->assertInstanceOf("Locale", $afterCreate2);
+        $this->assertEquals($locale2->getLanguageCode(), $afterCreate2->getLanguageCode());
+        $this->assertEquals($locale2->getCountryCode(), $afterCreate2->getCountryCode());
+        
+        $afterDeleteLang = UserDao::deleteSecondaryLanguage($insertedUser->getId(), "ga", "IE");
+        //assert that delete worked
+        $this->assertEquals("1", $afterDeleteLang);
+        $tryRedeleteLang = UserDao::deleteSecondaryLanguage($insertedUser->getId(), "ga", "IE");
+        //assert that redelete attempt did nothing
+        $this->assertEquals("0", $tryRedeleteLang);
+        
+        $getLangs = UserDao::getSecondaryLanguages($insertedUser->getId());
+        $this->assertNotContains($locale2, $getLangs);
+        
+    }
 }
-
-?>

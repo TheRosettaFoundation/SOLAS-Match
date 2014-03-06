@@ -16,7 +16,7 @@ class UserDao
         // Test for token existance and validity
         try {
             $resource->isValid(true);
-            $parts =explode(" ", $_SERVER['HTTP_AUTHORIZATION']);
+            $parts = explode(" ", $_SERVER['HTTP_AUTHORIZATION']);
             return UserDao::getByOauthToken($parts[1]);
         } catch (League\OAuth2\Server\Exception\InvalidAccessTokenException $e) {
             //The access token is missing or invalid...
@@ -61,7 +61,8 @@ class UserDao
                 BadgeDao::assignBadge($user->getId(), BadgeTypes::NATIVE_LANGUAGE);
             }
         }
-        if ($user->getBiography() != '') {
+        //added "is not null check" to prevent errors
+        if (!is_null($userId) && $user->getBiography() != '') {
             BadgeDao::assignBadge($user->getId(), BadgeTypes::PROFILE_FILLER);
         }
         $args = PDOWrapper::cleanseNullOrWrapStr($user->getEmail())
@@ -72,7 +73,7 @@ class UserDao
                 .",".PDOWrapper::cleanseNullOrWrapStr($nativeLanguageCode)
                 .",".PDOWrapper::cleanseNullOrWrapStr($nativeCountryCode)
                 .",".PDOWrapper::cleanseNull($userId);
-        
+
         $result = PDOWrapper::call('userInsertAndUpdate', $args);
         if (!is_null($result)) {
             return ModelFactory::buildModel("User", $result[0]);
@@ -256,23 +257,6 @@ class UserDao
     public static function isLoggedIn()
     {
         return (!is_null(UserSession::getCurrentUserId()));
-    }
-
-    public static function belongsToRole($user, $role)
-    {
-        $ret = false;
-        if ($role == 'translator') {
-            $ret = true;
-        } elseif ($role == 'organisation_member') {
-            $user_found = $this->find(array(
-                    'user_id' => $user->getUserId(),
-                    'role' => 'organisation_member'
-            ));
-            if (is_object($user_found)) {
-                $ret = true;
-            }
-        }
-        return $ret;
     }
 
     public static function findOrganisationsUserBelongsTo($user_id)
@@ -514,7 +498,6 @@ class UserDao
             $ret = array();
             foreach ($result as $row) {
                 $task = ModelFactory::buildModel("Task", $row);
-                $task->setTaskStatus(TaskDao::getTaskStatus($task->getId()));
                 $ret[] = $task;
             }
         }

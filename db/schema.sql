@@ -750,7 +750,7 @@ CREATE TABLE IF NOT EXISTS `UserTaskScores` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table Solas-Match-Test.UserTaskScores
+-- Dumping structure for table Solas-Match-Test.UserTaskStreamNotifications
 CREATE TABLE IF NOT EXISTS `UserTaskStreamNotifications` (
   `user_id` int(11) unsigned NOT NULL,
   `interval` int(10) unsigned NOT NULL,
@@ -987,9 +987,9 @@ BEGIN
 		DELETE FROM Projects WHERE id=projectId;
 		
 		COMMIT;
-	    SELECT 1 AS archivedResult;
+	    SELECT 1 AS result;
    ELSE
-      SELECT 0 AS archivedResult;
+      SELECT 0 AS result;
    END IF;	
 	  
 END//
@@ -1127,7 +1127,7 @@ BEGIN
 	if adminComment='' then set adminComment=null;end if;
 	
 	IF NOT EXISTS (SELECT 1 FROM BannedUsers b WHERE b.user_id=userId) THEN
-		INSERT INTO BannedUsers (user_id,`user_id-admin`,`bannedtype_id`,`comment`,`banned-date`)
+		INSERT INTO BannedUsers (`user_id`,`user_id-admin`,`bannedtype_id`,`comment`,`banned-date`)
 		VALUES (userId, userIdAdmin, bannedTypeId, adminComment,NOW());
 	END IF;
 
@@ -1248,7 +1248,12 @@ DROP PROCEDURE IF EXISTS `deleteUser`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteUser`(IN `userId` INT)
 BEGIN
-	DELETE FROM Users WHERE id = userId;
+    if EXISTS (select 1 from Users where Users.id = userId) then
+	    delete from Users where Users.id = userId;
+        select 1 as result;
+    else
+        select 0 as result;
+    end if;
 END//
 DELIMITER ;
 
@@ -1396,23 +1401,33 @@ BEGIN
     set @lID=null;
     set @cID=null;
 
+    SELECT id INTO @lID FROM Languages WHERE code = lCode;
+    SELECT id INTO @cID FROM Countries WHERE code = cCode;
+
     SELECT p.id, p.title, p.description, p.impact, p.deadline, p.organisation_id, p.reference, p.`word-count`, p.created, 
-        (select code from Languages l where l.id = p.language_id) as language_id, 
-        (select code from Countries c where c.id = p.country_id) as country_id, 
+        (select `en-name` from Languages l where l.id = p.language_id) as sourceLanguageName,            
+        (select code from Languages l where l.id = p.language_id) as sourceLanguageCode,
+        (select `en-name` from Countries c where c.id = p.country_id) as sourceCountryName, 
+        (select code from Countries c where c.id = p.country_id) as sourceCountryCode, 
         m.`archived-date`, m.`user_id-archived` 
 
     FROM ArchivedProjects p JOIN ArchivedProjectsMetadata m ON p.id = m.archivedProject_id 
 
-    WHERE (p.id= projectId or projectId is null) 
-        and (p.title=titleText or titleText is null) 
-        and (p.description= descr or descr is null) 
-        and (p.impact=imp or imp is null)
-        and (p.deadline=deadlineTime or deadlineTime is null or deadlineTime='0000-00-00 00:00:00') 
-        and (p.organisation_id=orgId or orgId is null) and (p.reference=ref or ref is null)
-        and (p.`word-count`=wordCount or wordCount is null) and (p.created = createdTime or createdTime is null) 
-        and (p.language_id=@lID or @lID is null) and (p.country_id = @cID or @cID is null)
-        and (m.`archived-date`=archiveDate or archiveDate is null or archiveDate='0000-00-00 00:00:00') 
-        and (m.`user_id-archived`= archiverId or archiverId is null);
+    WHERE (projectId is null or p.id= projectId) 
+        and (titleText is null or p.title=titleText) 
+        and (descr is null or p.description= descr) 
+        and (imp is null or p.impact=imp)
+        and (deadlineTime is null or p.deadline=deadlineTime or deadlineTime='0000-00-00 00:00:00') 
+        and (orgId is null or p.organisation_id=orgId) 
+        and (ref is null or p.reference=ref)
+        and (wordCount is null or p.`word-count`=wordCount) 
+        and (createdTime is null or p.created = createdTime)
+        and (lCode is null or @lID=lCode)
+        and (cCode is null or @cID=cCode)
+        and (@lID is null or p.language_id=@lID)
+        and (@cID is null or p.country_id = @cID)
+        and (archiveDate is null or m.`archived-date`=archiveDate or archiveDate='0000-00-00 00:00:00') 
+        and (archiverId is null or m.`user_id-archived`= archiverId);
 
 END//
 DELIMITER ;
@@ -1506,8 +1521,8 @@ BEGIN
 	if bannedDate='' then set bannedDate=null;end if;
 
     SELECT b.org_id, b.`user_id-admin`, 
-            (SELECT t.type FROM BannedTypes t WHERE t.id = b.bannedtype_id) AS bannedType, 
-            b.`comment`, b.`banned-date` 
+           b.bannedtype_id, b.`comment`,
+           b.`banned-date` 
     	FROM BannedOrganisations b 
 	    WHERE isNullOrEqual(b.org_id,orgId) 
         and isNullOrEqual(b.`user_id-admin`,userIdAdmin) 
@@ -3663,113 +3678,103 @@ BEGIN
     if region='' then set region=null;end if;
 	
     -- if new user
-	if id is null and not exists(select * from Users u where u.email= email)then
+	if id is null and not exists(select * from Users u where u.email= email) then
 	-- set insert
-	set @countryID=null;
-	select c.id into @countryID from Countries c where c.code=region;
-	set @langID=null;
-	select l.id into @langID from Languages l where l.code=lang;
-        
+    	set @countryID=null;
+	    select c.id into @countryID from Countries c where c.code=region;
+    	set @langID=null;
+    	select l.id into @langID from Languages l where l.code=lang;
 	
-	insert into Users (email, nonce, password, `created-time`, `display-name`, biography, language_id, country_id) 
-              values (email, nonce, pass, NOW(), name, bio, @langID, @countryID);
-            call getUser(LAST_INSERT_ID(),null,null,null,null,null,null,null,null);
+        insert into Users (email, nonce, password, `created-time`, `display-name`, biography, language_id, country_id) 
+            values (email, nonce, pass, NOW(), name, bio, @langID, @countryID);
+        call getUser(LAST_INSERT_ID(),null,null,null,null,null,null,null,null);
 	
-        else 
-
-                if bio is not null 
-                and bio != (SELECT u.biography FROM Users u 
-                WHERE (id is null or u.id = id) and (email is null or u.email = email) )
-                
-                or (SELECT u.biography FROM Users u 
-                WHERE (id is null or u.id = id) and (email is null or u.email = email) ) is null
-
-                    then 
-                    update Users u set u.biography = bio
-                    WHERE (id is null or u.id = id) and (email is null or u.email = email);
-
+    else 
+        if bio is not null 
+            and bio != IFNULL(
+                (SELECT u.biography 
+                    FROM Users u 
+                    WHERE u.id = id),
+                '')
+        then 
+            update Users u 
+                set u.biography = bio
+                WHERE u.id = id;
 		end if;
                 
-
 		if lang is not null 
-                and (select l.id from Languages l where l.code=lang) != (SELECT u.language_id FROM Users u 
-                WHERE (id is null or u.id = id) and (email is null or u.email = email) )
-                
-                or (SELECT u.language_id FROM Users u 
-                WHERE (id is null or u.id = id) and (email is null or u.email = email) ) is null
-
-                    then update Users u set u.language_id = (select l.id from Languages l where l.code=lang)
-                    WHERE (id is null or u.id = id) and (email is null or u.email = email);
-
+            and (select l.id 
+                from Languages l 
+                where l.code=lang
+            ) != IFNULL(
+                (SELECT u.language_id 
+                    FROM Users u
+                    WHERE u.id = id),
+                '')
+        then 
+            update Users u 
+                set u.language_id = (select l.id from Languages l where l.code=lang)
+                WHERE u.id = id;
 		end if;
 
-
-                if region is not null 
-                and (select c.id from Countries c where c.code = region) != (SELECT u.country_id FROM Users u 
-                WHERE (id is null or u.id = id) and (email is null or u.email = email) )
-                
-                or (SELECT u.country_id FROM Users u 
-                WHERE (id is null or u.id = id) and (email is null or u.email = email) ) is null
-
-                    then update Users u set u.country_id = (select c.id from Countries c where c.code = region)
-                    WHERE (id is null or u.id = id) and (email is null or u.email = email);
-
+        if region is not null 
+            and (select c.id 
+                from Countries c 
+                where c.code = region
+            ) != IFNULL(
+                (SELECT u.country_id 
+                    FROM Users u 
+                    WHERE u.id = id),
+                '')
+        then 
+            update Users u 
+                set u.country_id = (select c.id from Countries c where c.code = region)
+                WHERE u.id = id;
 		end if;
 
-
-                if name is not null 
-                and name != (SELECT u.`display-name` FROM Users u 
-                WHERE (id is null or u.id = id) and (email is null or u.email = email) )
-                
-                or (SELECT u.`display-name` FROM Users u 
-                WHERE (id is null or u.id = id) and (email is null or u.email = email) ) is null
-
-                    then update Users u set u.`display-name` = name
-                    WHERE (id is null or u.id = id) and (email is null or u.email = email);
-
+        if name is not null 
+            and name != IFNULL(
+                (SELECT u.`display-name`
+                    FROM Users u 
+                    WHERE u.id = id),
+                '')
+        then 
+            update Users u 
+                set u.`display-name` = name
+                WHERE u.id = id;
 		end if;
 
-
-                if email is not null 
-                and email != (SELECT u.email FROM Users u 
-                WHERE (id is null or u.id = id))
-                
-                or (SELECT u.email FROM Users u 
-                WHERE (id is null or u.id = id)) is null
-
-                    then update Users u set u.email = email
-                    WHERE (id is null or u.id = id);
-
+        if email is not null 
+            and email != (SELECT u.email 
+                FROM Users u 
+                WHERE u.id = id)
+        then
+            update Users u 
+                set u.email = email
+                WHERE u.id = id;
 		end if;
 
-
-                if nonce is not null 
-                and nonce != (SELECT u.nonce FROM Users u 
-                WHERE (id is null or u.id = id) and (email is null or u.email = email) )
-                
-                or (SELECT u.nonce FROM Users u 
-                WHERE (id is null or u.id = id) and (email is null or u.email = email) ) is null
-
-                    then update Users u set u.nonce = nonce
-                    WHERE (id is null or u.id = id) and (email is null or u.email = email);
-
+        if nonce is not null 
+            and nonce != (SELECT u.nonce 
+                FROM Users u 
+                WHERE u.id = id)
+        then
+            update Users u
+                set u.nonce = nonce
+                WHERE u.id = id;
 		end if;
-
 		
-                if pass is not null 
-                and pass != (SELECT u.password FROM Users u 
-                WHERE (id is null or u.id = id) and (email is null or u.email = email) )
-                
-                or (SELECT u.password FROM Users u 
-                WHERE (id is null or u.id = id) and (email is null or u.email = email) ) is null
+        if pass is not null 
+            and pass != (SELECT u.password 
+                FROM Users u 
+                WHERE u.id = id)
+        then
+            update Users u
+                set u.password = pass
+                WHERE u.id = id;
+        end if;
 
-                    then update Users u set u.password = pass
-                    WHERE (id is null or u.id = id) and (email is null or u.email = email);
-
-                end if;
-
-   	call getUser(id,null,null,null,null,null,null,null,null);
-
+       	call getUser(id,null,null,null,null,null,null,null,null);
 	end if;
 END//
 DELIMITER ;
@@ -3976,7 +3981,7 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.userSecondaryLanguageInsert
+-- Dumping structure for procedure Solas-Match-Test.getUserSecondaryLanguages
 DROP PROCEDURE IF EXISTS `getUserSecondaryLanguages`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserSecondaryLanguages`(IN `userId` INT)

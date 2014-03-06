@@ -32,6 +32,7 @@ class ProjectDao
                 .",".PDOWrapper::cleanseNullOrWrapStr($project->getCreatedTime())
                 .",".PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode())
                 .",".PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode());
+        
         $result = PDOWrapper::call("projectInsertAndUpdate", $args);
         $project->setId($result[0]['id']);
 
@@ -103,11 +104,12 @@ class ProjectDao
     {
         $args = PDOWrapper::cleanseNull($projectId)
                 .",".PDOWrapper::cleanseNull($userId);
+        
         $result = PDOWrapper::call("archiveProject", $args);
         if ($result) {
-            return ModelFactory::buildModel("ArchivedProject", $result[0]);
+            return $result[0]['result'];
         } else {
-            return null;
+            return "0";
         }
     }
 
@@ -122,7 +124,9 @@ class ProjectDao
         $wordCount = null,
         $created = null,
         $archivedDate = null,
-        $userIdArchived = null
+        $userIdArchived = null,
+        $lCode = null,
+        $cCode = null
     ) {
         $projects = array();
         $args = PDOWrapper::cleanseNull($id)
@@ -135,7 +139,10 @@ class ProjectDao
                 .",".PDOWrapper::cleanseNullOrWrapStr($wordCount)
                 .",".PDOWrapper::cleanseWrapStr($created)
                 .",".PDOWrapper::cleanseNullOrWrapStr($archivedDate)
-                .",".PDOWrapper::cleanseNull($userIdArchived);
+                .",".PDOWrapper::cleanseNull($userIdArchived)
+                .",".PDOWrapper::cleanseNullOrWrapStr($lCode)
+                .",".PDOWrapper::cleanseNullOrWrapStr($cCode);
+                
         $result = PDOWrapper::call("getArchivedProject", $args);
         if ($result) {
             foreach ($result as $row) {
@@ -189,15 +196,6 @@ class ProjectDao
             return $result[0]['result'];
         } else {
             return null;
-        }
-    }
-
-    public static function removeAllProjectTags($projectId)
-    {
-        if ($tags = self::getTags($projectId)) {
-            foreach ($tags as $tag) {
-                self::removeProjectTag($projectId, $tag->getId());
-            }
         }
     }
 

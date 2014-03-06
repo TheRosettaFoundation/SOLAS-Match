@@ -378,17 +378,18 @@ class TaskDao
         $ret = false;
         $task = self::getTask($taskId);
         $task = $task[0];
+        
+        if(is_null($task)) {
+            return 0 ;
+        }
 
         $graphBuilder = new APIWorkflowBuilder();
         $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
 
         if ($graph) {
-
             $index = $graphBuilder->find($taskId, $graph);
             $node = $graph->getAllNodes($index);
-            $ret = self::archiveTaskNode($node, $graph, $userId);
-            
-       
+            $ret = self::archiveTaskNode($node, $graph, $userId);      
         }
 
         // UI is expecting output to be 0 or 1
@@ -426,7 +427,6 @@ class TaskDao
             $ret = self::archiveTask($node->getTaskId(), $userId);
             Notify::sendTaskArchivedNotifications($node->getTaskId(), $subscribedUsers);
         }
-        
 
         return $ret;
     }
