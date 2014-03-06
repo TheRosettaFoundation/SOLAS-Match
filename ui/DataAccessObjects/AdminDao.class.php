@@ -18,14 +18,14 @@ class AdminDao extends BaseDao
     public function getSiteAdmins()
     {
         $request = "{$this->siteApi}v0/admins";
-        $response = $this->client->call(array("User"), $request);
+        $response = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\User"), $request);
         return $response;
     }
     
     public function getOrgAdmins($orgId)
     {
         $request = "{$this->siteApi}v0/admins/getOrgAdmins/$orgId";
-        $response = $this->client->call(array("User"), $request);
+        $response = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\User"), $request);
         return $response;
     }
 
@@ -70,28 +70,28 @@ class AdminDao extends BaseDao
     public function getBannedUsers()
     {
         $request = "{$this->siteApi}v0/admins/getBannedUsers";
-        $response = $this->client->call(array("BannedUser"), $request);
+        $response = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\BannedUser"), $request);
         return $response;
     }
     
     public function getBannedUser($userId)
     {
         $request = "{$this->siteApi}v0/admins/getBannedUser/$userId";
-        $response = $this->client->call("BannedUser", $request);
+        $response = $this->client->call("\SolasMatch\Common\Protobufs\Models\BannedUser", $request);
         return $response;
     }
     
     public function getBannedOrgs()
     {
         $request = "{$this->siteApi}v0/admins/getBannedOrgs";
-        $response = $this->client->call(array("BannedOrganisation"), $request);
+        $response = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\BannedOrganisation"), $request);
         return $response;
     }
     
     public function getBannedOrg($orgId)
     {
         $request = "{$this->siteApi}v0/admins/getBannedOrg/$orgId";
-        $response = $this->client->call("BannedOrganisation", $request);
+        $response = $this->client->call("\SolasMatch\Common\Protobufs\Models\BannedOrganisation", $request);
         return $response;
     }
     

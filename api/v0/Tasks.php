@@ -42,7 +42,7 @@ class Tasks
             function ($format = ".json") {
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $data = $client->deserialize($data, "Task");
+                $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Task");
                 API\Dispatcher::sendResponse(null, DAO\TaskDao::save($data), null, $format);
             },
             'createTask',
@@ -61,7 +61,7 @@ class Tasks
                 }
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $data = $client->deserialize($data, "Task");
+                $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Task");
                 API\Dispatcher::sendResponse(null, DAO\TaskDao::save($data), null, $format);
             },
             'updateTask',
@@ -186,7 +186,7 @@ class Tasks
             function ($format = '.json') {
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $review = $client->deserialize($data, "TaskReview");
+                $review = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\TaskReview");
                 API\Dispatcher::sendResponse(null, DAO\TaskDao::submitReview($review), null, $format);
             },
             'submitReview',
@@ -210,7 +210,7 @@ class Tasks
             function ($taskId, $format = ".json") {
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $feedbackData = $client->deserialize($data, "OrgFeedback");
+                $feedbackData = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\OrgFeedback");
                 Lib\Notify::sendOrgFeedback($feedbackData);
                 API\Dispatcher::sendResponse(null, null, null, $format);
             },
@@ -225,7 +225,7 @@ class Tasks
             function ($taskId, $format = ".json") {
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $feedbackData = $client->deserialize($data, "UserFeedback");
+                $feedbackData = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\UserFeedback");
                 Lib\Notify::sendUserFeedback($feedbackData);
                 API\Dispatcher::sendResponse(null, null, null, $format);
             },

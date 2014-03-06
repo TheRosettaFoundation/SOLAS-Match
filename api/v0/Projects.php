@@ -35,7 +35,7 @@ class Projects
             function ($format = '.json') {
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $data = $client->deserialize($data, 'Project');
+                $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\Project');
                 $project = DAO\ProjectDao::createUpdate($data);
                 if (!is_null($project) && $project->getId() > 0) {
                     API\Dispatcher::sendResponse(null, $project, null, $format);
@@ -63,7 +63,7 @@ class Projects
                 }
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $data = $client->deserialize($data, 'Project');
+                $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\Project');
                 API\Dispatcher::sendResponse(null, DAO\ProjectDao::createUpdate($data), null, $format);
                 DAO\ProjectDao::calculateProjectDeadlines($data->getId());
             },

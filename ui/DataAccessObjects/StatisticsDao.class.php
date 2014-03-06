@@ -22,7 +22,7 @@ class StatisticsDao extends BaseDao
             Common\Enums\TimeToLiveEnum::HOUR,
             function ($args) {
                 $request = "{$args[1]}v0/stats";
-                return $args[0]->call(array("Statistic"), $request);
+                return $args[0]->call(array("\SolasMatch\Common\Protobufs\Models\Statistic"), $request);
             },
             array($this->client, $this->siteApi)
         );
@@ -33,7 +33,7 @@ class StatisticsDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/stats/$stat";
-        $ret = $this->client->call("Statistic", $request);
+        $ret = $this->client->call("\SolasMatch\Common\Protobufs\Models\Statistic", $request);
         return $ret;
     }
 }

@@ -20,7 +20,7 @@ class ProjectDao extends BaseDao
         $ret = null;
         $request = "{$this->siteApi}v0/projects/$id";
         if (!is_null($id)) {
-            $ret = $this->client->call("Project", $request);
+            $ret = $this->client->call("\SolasMatch\Common\Protobufs\Models\Project", $request);
             if ($tags = $this->getProjectTags($id)) {
                 foreach ($tags as $tag) {
                     $ret->addTag($tag);
@@ -35,7 +35,7 @@ class ProjectDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/projects/$projectId/tasks";
-        $ret = $this->client->call(array("Task"), $request);
+        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\Task"), $request);
         return $ret;
     }
 
@@ -43,7 +43,7 @@ class ProjectDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/projects/$projectId/reviews";
-        $ret = $this->client->call(array("TaskReview"), $request);
+        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\TaskReview"), $request);
         return $ret;
     }
 
@@ -51,7 +51,7 @@ class ProjectDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/projects/buildGraph/$projectId";
-        $ret = $this->client->call("WorkflowGraph", $request);
+        $ret = $this->client->call("\SolasMatch\Common\Protobufs\Models\WorkflowGraph", $request);
         return $ret;
     }
 
@@ -59,7 +59,7 @@ class ProjectDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/projects/$projectId/tags";
-        $ret = $this->client->call(array("Tag"), $request);
+        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\Tag"), $request);
         return $ret;
     }
 
@@ -67,7 +67,12 @@ class ProjectDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/projects";
-        $ret = $this->client->call("Project", $request, Common\Enums\HttpMethodEnum::POST, $project);
+        $ret = $this->client->call(
+            "\SolasMatch\Common\Protobufs\Models\Project",
+            $request,
+            Common\Enums\HttpMethodEnum::POST,
+            $project
+        );
         return $ret;
     }
     
@@ -83,7 +88,12 @@ class ProjectDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/projects/{$project->getId()}";
-        $ret = $this->client->call("Project", $request, Common\Enums\HttpMethodEnum::PUT, $project);
+        $ret = $this->client->call(
+            "\SolasMatch\Common\Protobufs\Models\Project",
+            $request,
+            Common\Enums\HttpMethodEnum::PUT,
+            $project
+        );
         return $ret;
     }
 
@@ -98,7 +108,11 @@ class ProjectDao extends BaseDao
     public function archiveProject($projectId, $userId)
     {
         $request = "{$this->siteApi}v0/projects/archiveProject/$projectId/user/$userId";
-        $ret = $this->client->call("ArchivedProject", $request, Common\Enums\HttpMethodEnum::PUT);
+        $ret = $this->client->call(
+            "\SolasMatch\Common\Protobufs\Models\ArchivedProject",
+            $request,
+            Common\Enums\HttpMethodEnum::PUT
+        );
         return $ret;
     }
 
@@ -106,7 +120,7 @@ class ProjectDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/archivedProjects/$id";
-        $ret = $this->client->call(array("ArchivedProject"), $request);
+        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\ArchivedProject"), $request);
 
         if (!is_null($id) && is_array($ret)) {
             $ret = $ret[0];
@@ -118,7 +132,7 @@ class ProjectDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/archivedProjects";
-        $ret = $this->client->call(array("ArchivedProject"), $request);
+        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\ArchivedProject"), $request);
         return $ret;
     }
     
@@ -156,7 +170,7 @@ class ProjectDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/projects/$project_id/info";
-        $ret = $this->client->call("ProjectFile", $request);
+        $ret = $this->client->call("\SolasMatch\Common\Protobufs\Models\ProjectFile", $request);
         return $ret;
     }
     

@@ -19,14 +19,14 @@ class TaskDao extends BaseDao
     public function getTask($id)
     {
         $request = "{$this->siteApi}v0/tasks/$id";
-        $response =$this->client->call("Task", $request);
+        $response =$this->client->call("\SolasMatch\Common\Protobufs\Models\Task", $request);
         return $response;
     }
     
     public function getTasks()
     {
         $request = "{$this->siteApi}v0/tasks";
-        $response =$this->client->call(array("Task"), $request);
+        $response =$this->client->call(array("\SolasMatch\Common\Protobufs\Models\Task"), $request);
         return $response;
     }
     
@@ -34,7 +34,7 @@ class TaskDao extends BaseDao
     public function getTaskPreReqs($taskId)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/prerequisites";
-        $response =$this->client->call(array("Task"), $request);
+        $response =$this->client->call(array("\SolasMatch\Common\Protobufs\Models\Task"), $request);
         return $response;
     }
 
@@ -48,14 +48,25 @@ class TaskDao extends BaseDao
         if ($offset != null) {
             $args['offset'] = $offset;
         }
-        $response = $this->client->call(array("Task"), $request, Common\Enums\HttpMethodEnum::GET, null, $args);
+        $response = $this->client->call(
+            array("\SolasMatch\Common\Protobufs\Models\Task"),
+            $request,
+            Common\Enums\HttpMethodEnum::GET,
+            null,
+            $args
+        );
         return $response;
     }
 
     public function getTaskTags($taskId, $limit = null)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/tags";
-        $response = $this->client->call(array("Tag"), $request, Common\Enums\HttpMethodEnum::GET, null);
+        $response = $this->client->call(
+            array("\SolasMatch\Common\Protobufs\Models\Tag"),
+            $request,
+            Common\Enums\HttpMethodEnum::GET,
+            null
+        );
         return $response;
     }
 
@@ -79,7 +90,13 @@ class TaskDao extends BaseDao
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/info";
         $args = array("version" => $version);
-        $response = $this->client->call("TaskMetaData", $request, Common\Enums\HttpMethodEnum::GET, null, $args);
+        $response = $this->client->call(
+            "\SolasMatch\Common\Protobufs\Models\TaskMetaData",
+            $request,
+            Common\Enums\HttpMethodEnum::GET,
+            null,
+            $args
+        );
         return $response;
     }
 
@@ -94,7 +111,7 @@ class TaskDao extends BaseDao
     public function getUserClaimedTask($taskId)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/user";
-        $response = $this->client->call("User", $request);
+        $response = $this->client->call("\SolasMatch\Common\Protobufs\Models\User", $request);
         return $response;
     }
 
@@ -102,21 +119,34 @@ class TaskDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/tasks/$taskId/reviews";
-        $ret = $this->client->call(array("TaskReview"), $request);
+        $ret = $this->client->call(
+            array("\SolasMatch\Common\Protobufs\Models\TaskReview"),
+            $request
+        );
         return $ret;
     }
 
     public function createTask($task)
     {
         $request = "{$this->siteApi}v0/tasks";
-        $response = $this->client->call("Task", $request, Common\Enums\HttpMethodEnum::POST, $task);
+        $response = $this->client->call(
+            "\SolasMatch\Common\Protobufs\Models\Task",
+            $request,
+            Common\Enums\HttpMethodEnum::POST,
+            $task
+        );
         return $response;
     }
 
     public function updateTask($task)
     {
         $request = "{$this->siteApi}v0/tasks/{$task->getId()}";
-        $response = $this->client->call("Task", $request, Common\Enums\HttpMethodEnum::PUT, $task);
+        $response = $this->client->call(
+            "\SolasMatch\Common\Protobufs\Models\Task",
+            $request,
+            Common\Enums\HttpMethodEnum::PUT,
+            $task
+        );
         return $response;
     }
 

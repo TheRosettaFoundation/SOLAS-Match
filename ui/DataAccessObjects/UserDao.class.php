@@ -7,7 +7,7 @@ use \SolasMatch\Common as Common;
 
 require_once __DIR__."/../../Common/Enums/HttpStatusEnum.class.php";
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
-require_once __DIR__."/../../Common/protobufs/models/OAuthResponce.php";
+require_once __DIR__."/../../Common/protobufs/models/OAuthResponse.php";
 require_once __DIR__."/BaseDao.php";
 
 class UserDao extends BaseDao
@@ -34,7 +34,7 @@ class UserDao extends BaseDao
             Common\Enums\TimeToLiveEnum::MINUTE,
             function ($args) {
                 $request = "{$args[2]}v0/users/$args[1]";
-                return $args[0]->call("User", $request);
+                return $args[0]->call("\SolasMatch\Common\Protobufs\Models\User", $request);
             },
             array($this->client, $userId, $this->siteApi)
         );
@@ -46,7 +46,7 @@ class UserDao extends BaseDao
         $ret = null;
         $request = "{$this->siteApi}v0/users/getByEmail/$email";
         $ret = $this->client->call(
-            "User",
+            "\SolasMatch\Common\Protobufs\Models\User",
             $request,
             Common\Enums\HttpMethodEnum::GET,
             null,
@@ -85,7 +85,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/orgs";
-        $ret = $this->client->call(array("Organisation"), $request);
+        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\Organisation"), $request);
         return $ret;
     }
 
@@ -93,7 +93,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/badges";
-        $ret = $this->client->call(array("Badge"), $request);
+        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\Badge"), $request);
         return $ret;
     }
 
@@ -106,7 +106,13 @@ class UserDao extends BaseDao
         if ($limit) {
             $args = array("limit" => $limit);
         }
-        $ret = $this->client->call(array("Tag"), $request, Common\Enums\HttpMethodEnum::GET, null, $args);
+        $ret = $this->client->call(
+            array("\SolasMatch\Common\Protobufs\Models\Tag"),
+            $request,
+            Common\Enums\HttpMethodEnum::GET,
+            null,
+            $args
+        );
         return $ret;
     }
 
@@ -114,7 +120,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tasks";
-        $ret = $this->client->call(array("Task"), $request);
+        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\Task"), $request);
         return $ret;
     }
 
@@ -122,7 +128,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tasks/$taskId/review";
-        $ret = $this->client->call("TaskReview", $request);
+        $ret = $this->client->call("\SolasMatch\Common\Protobufs\Models\TaskReview", $request);
         return $ret;
     }
 
@@ -130,7 +136,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/taskStreamNotification";
-        $ret = $this->client->call("UserTaskStreamNotification", $request);
+        $ret = $this->client->call("\SolasMatch\Common\Protobufs\Models\UserTaskStreamNotification", $request);
         return $ret;
     }
 
@@ -163,7 +169,13 @@ class UserDao extends BaseDao
 
         $args['strict'] = $strict;
 
-        $ret = $this->client->call(array("Task"), $request, Common\Enums\HttpMethodEnum::GET, null, $args);
+        $ret = $this->client->call(
+            array("\SolasMatch\Common\Protobufs\Models\Task"),
+            $request,
+            Common\Enums\HttpMethodEnum::GET,
+            null,
+            $args
+        );
         return $ret;
     }
 
@@ -177,7 +189,13 @@ class UserDao extends BaseDao
             $args = array("limit" => $limit);
         }
 
-        $ret = $this->client->call(array("ArchivedTask"), $request, Common\Enums\HttpMethodEnum::GET, null, $args);
+        $ret = $this->client->call(
+            array("\SolasMatch\Common\Protobufs\Models\ArchivedTask"),
+            $request,
+            Common\Enums\HttpMethodEnum::GET,
+            null,
+            $args
+        );
         return $ret;
     }
 
@@ -185,7 +203,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/trackedTasks";
-        $ret = $this->client->call(array("Task"), $request);
+        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\Task"), $request);
         return $ret;
     }
 
@@ -193,7 +211,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/projects";
-        $ret = $this->client->call(array("Project"), $request);
+        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\Project"), $request);
         return $ret;
     }
 
@@ -289,7 +307,12 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/{$user->getId()}";
-        $ret = $this->client->call("User", $request, Common\Enums\HttpMethodEnum::PUT, $user);
+        $ret = $this->client->call(
+            "\SolasMatch\Common\Protobufs\Models\User",
+            $request,
+            Common\Enums\HttpMethodEnum::PUT,
+            $user
+        );
         Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER.$user->getId());
         return $ret;
     }
@@ -376,7 +399,13 @@ class UserDao extends BaseDao
             'client_secret' => Common\Lib\Settings::get('oauth.client_secret')
         );
         try {
-            $ret = $this->client->call("User", $request, Common\Enums\HttpMethodEnum::POST, $login, $queryArgs);
+            $ret = $this->client->call(
+                "\SolasMatch\Common\Protobufs\Models\User",
+                $request,
+                Common\Enums\HttpMethodEnum::POST,
+                $login,
+                $queryArgs
+            );
         } catch (Common\Exceptions\SolasMatchException $e) {
             switch($e->getCode()) {
                 case Common\Enums\HttpStatusEnum::NOT_FOUND:
@@ -408,7 +437,10 @@ class UserDao extends BaseDao
         $headers = $this->client->getHeaders();
         if (isset($headers["X-Custom-Token"])) {
             Common\Lib\UserSession::setAccessToken(
-                $this->client->deserialize(base64_decode($headers["X-Custom-Token"]), 'OAuthResponce')
+                $this->client->deserialize(
+                    base64_decode($headers["X-Custom-Token"]),
+                    '\SolasMatch\Common\Protobufs\Models\OAuthResponse'
+                )
             );
         }
         return $ret;
@@ -451,11 +483,19 @@ class UserDao extends BaseDao
             "redirect_uri=$redirectUri&".
             "code=$authCode";
 
-        $user = $this->client->call('User', $request, Common\Enums\HttpMethodEnum::POST, $postArgs);
+        $user = $this->client->call(
+            '\SolasMatch\Common\Protobufs\Models\User',
+            $request,
+            Common\Enums\HttpMethodEnum::POST,
+            $postArgs
+        );
         $headers = $this->client->getHeaders();
         if (isset($headers["X-Custom-Token"])) {
             Common\Lib\UserSession::setAccessToken(
-                $this->client->deserialize(base64_decode($headers["X-Custom-Token"]), 'OAuthResponce')
+                $this->client->deserialize(
+                    base64_decode($headers["X-Custom-Token"]),
+                    '\SolasMatch\Common\Protobufs\Models\OAuthResponse'
+                )
             );
         }
 
@@ -466,7 +506,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/passwordReset/$key";
-        $ret = $this->client->call("PasswordResetRequest", $request);
+        $ret = $this->client->call("\SolasMatch\Common\Protobufs\Models\PasswordResetRequest", $request);
         return $ret;
     }
 
@@ -507,7 +547,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$registrationId/registered";
-        $ret = $this->client->call("User", $request);
+        $ret = $this->client->call("\SolasMatch\Common\Protobufs\Models\User", $request);
         return $ret;
     }
     
@@ -515,7 +555,12 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/personalInfo";
-        $ret = $this->client->call("UserPersonalInformation", $request, Common\Enums\HttpMethodEnum::POST, $personalInfo);
+        $ret = $this->client->call(
+            "\SolasMatch\Common\Protobufs\Models\UserPersonalInformation",
+            $request,
+            Common\Enums\HttpMethodEnum::POST,
+            $personalInfo
+        );
         return $ret;
     }
     
@@ -523,7 +568,12 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/personalInfo";
-        $ret = $this->client->call("UserPersonalInformation", $request, Common\Enums\HttpMethodEnum::PUT, $personalInfo);
+        $ret = $this->client->call(
+            "\SolasMatch\Common\Protobufs\Models\UserPersonalInformation",
+            $request,
+            Common\Enums\HttpMethodEnum::PUT,
+            $personalInfo
+        );
         return $ret;
     }
     
@@ -531,7 +581,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/personalInfo";
-        $ret = $this->client->call("UserPersonalInformation", $request);
+        $ret = $this->client->call("\SolasMatch\Common\Protobufs\Models\UserPersonalInformation", $request);
         return $ret;
     }
     
@@ -539,7 +589,12 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/secondaryLanguages";
-        $ret = $this->client->call("Locale", $request, Common\Enums\HttpMethodEnum::POST, $locale);
+        $ret = $this->client->call(
+            "\SolasMatch\Common\Protobufs\Models\Locale",
+            $request,
+            Common\Enums\HttpMethodEnum::POST,
+            $locale
+        );
         return $ret;
     }
     
@@ -547,7 +602,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/secondaryLanguages";
-        $ret = $this->client->call(array("Locale"), $request);
+        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\Locale"), $request);
         return $ret;
     }
     

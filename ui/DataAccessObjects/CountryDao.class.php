@@ -19,14 +19,14 @@ class CountryDao extends BaseDao
     public function getCountry($id)
     {
         $request="{$this->siteApi}v0/countries/$id";
-        $response=$this->client->call("Country", $request);
+        $response=$this->client->call("\SolasMatch\Common\Protobufs\Models\Country", $request);
         return $response;
     }
 
     public function getCountryByCode($code)
     {
         $request="{$this->siteApi}v0/countries/getByCode/$code";
-        $response=$this->client->call("Country", $request);
+        $response=$this->client->call("\SolasMatch\Common\Protobufs\Models\Country", $request);
         return $response;
     }
 
@@ -37,7 +37,7 @@ class CountryDao extends BaseDao
             Common\Enums\TimeToLiveEnum::MONTH,
             function ($args) {
                 $request = "{$args[1]}v0/countries";
-                return $args[0]->call(array("Country"), $request);
+                return $args[0]->call(array("\SolasMatch\Common\Protobufs\Models\Country"), $request);
             },
             array($this->client, $this->siteApi)
         );

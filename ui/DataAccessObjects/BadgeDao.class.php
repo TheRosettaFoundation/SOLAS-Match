@@ -18,14 +18,14 @@ class BadgeDao extends BaseDao
     public function getBadge($id = null, $title = null, $discription = null)
     {
         $request = "{$this->siteApi}v0/badges/$id";
-        $response =$this->client->call("Badge", $request);
+        $response = $this->client->call("\SolasMatch\Common\Protobufs\Models\Badge", $request);
         return $response;
     }
 
     public function getBadges()
     {
         $request = "{$this->siteApi}v0/badges";
-        $response =$this->client->call(array("Badge"), $request);
+        $response = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\Badge"), $request);
         return $response;
     }
 
@@ -33,28 +33,38 @@ class BadgeDao extends BaseDao
     {
         
         $request = "{$this->siteApi}v0/badges/$badgeId/users";
-        $response =$this->client->call(array("User"), $request);
+        $response = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\User"), $request);
         return $response;
     }
 
     public function createBadge($badge)
     {
         $request = "{$this->siteApi}v0/badges";
-        $response = $this->client->call("Badge", $request, Common\Enums\HttpMethodEnum::POST, $badge);
+        $response = $this->client->call(
+            "\SolasMatch\Common\Protobufs\Models\Badge",
+            $request,
+            Common\Enums\HttpMethodEnum::POST,
+            $badge
+        );
         return $response;
     }
 
     public function updateBadge($badge)
     {
         $request = "{$this->siteApi}v0/badges/{$badge->getId()}";
-        $response =$this->client->call("Badge", $request, Common\Enums\HttpMethodEnum::PUT, $badge);
+        $response = $this->client->call(
+            "\SolasMatch\Common\Protobufs\Models\Badge",
+            $request,
+            Common\Enums\HttpMethodEnum::PUT,
+            $badge
+        );
         return $response;
     }
 
     public function deleteBadge($badgeId)
     {
         $request = "{$this->siteApi}v0/badges/$badgeId";
-        $response =$this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
+        $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
         return $response;
     }
 }

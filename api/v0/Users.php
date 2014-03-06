@@ -13,7 +13,7 @@ use \SolasMatch\API as API;
  * @author sean
  */
 
-require_once __DIR__.'/../../Common/protobufs/models/OAuthResponce.php';
+require_once __DIR__.'/../../Common/protobufs/models/OAuthResponse.php';
 require_once __DIR__."/../../Common/protobufs/models/PasswordResetRequest.php";
 require_once __DIR__."/../../Common/protobufs/models/PasswordReset.php";
 require_once __DIR__."/../DataAccessObjects/UserDao.class.php";
@@ -105,7 +105,7 @@ class Users
             function ($format = ".json") {
                 $body = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $loginData = $client->deserialize($body, "Login");
+                $loginData = $client->deserialize($body, "\SolasMatch\Common\Protobufs\Models\Login");
                 $params = array();
                 $params['client_id'] = API\Dispatcher::clenseArgs('client_id', Common\Enums\HttpMethodEnum::GET, null);
                 $params['client_secret'] = API\Dispatcher::clenseArgs('client_secret', Common\Enums\HttpMethodEnum::GET, null);
@@ -114,7 +114,7 @@ class Users
                 try {
                     $server = API\Dispatcher::getOauthServer();
                     $response = $server->getGrantType('password')->completeFlow($params);
-                    $oAuthResponse = new \OAuthResponce();
+                    $oAuthResponse = new \OAuthResponse();
                     $oAuthResponse->setToken($response['access_token']);
                     $oAuthResponse->setTokenType($response['token_type']);
                     $oAuthResponse->setExpires($response['expires']);
@@ -183,7 +183,7 @@ class Users
                     $authCodeGrant = $server->getGrantType('authorization_code');
                     $accessToken = $authCodeGrant->completeFlow();
 
-                    $oAuthToken = new \OAuthResponce();
+                    $oAuthToken = new Common\Protobufs\Models\OAuthResponse();
                     $oAuthToken->setToken($accessToken['access_token']);
                     $oAuthToken->setTokenType($accessToken['token_type']);
                     $oAuthToken->setExpires($accessToken['expires']);
@@ -233,7 +233,7 @@ class Users
             function ($format = ".json") {
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $data = $client->deserialize($data, 'PasswordReset');
+                $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\PasswordReset');
                 $result = DAO\UserDao::passwordReset($data->getPassword(), $data->getKey());
                 API\Dispatcher::sendResponse(null, $result, null, $format);
             },
@@ -260,7 +260,7 @@ class Users
             function ($format = ".json") {
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $data = $client->deserialize($data, "Register");
+                $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Register");
                 $registered = DAO\UserDao::apiRegister($data->getEmail(), $data->getPassword());
                 API\Dispatcher::sendResponse(null, $registered, null, $format);
             },
@@ -446,7 +446,7 @@ class Users
             function ($userId, $format = ".json") {
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $data = $client->deserialize($data, 'Badge');
+                $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\Badge');
                 API\Dispatcher::sendResponse(null, DAO\BadgeDao::assignBadge($userId, $data->getId()), null, $format);
             },
             'addUserbadges'
@@ -541,7 +541,7 @@ class Users
             function ($userId, $format = ".json") {
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $data = $client->deserialize($data, 'UserTaskStreamNotification');
+                $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\UserTaskStreamNotification');
                 $ret = DAO\UserDao::requestTaskStreamNotification($data);
                 API\Dispatcher::sendResponse(null, $ret, null, $format);
             },
@@ -567,7 +567,7 @@ class Users
             function ($userId, $format = ".json") {
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $data = $client->deserialize($data, 'Task');
+                $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\Task');
                 API\Dispatcher::sendResponse(null, DAO\TaskDao::claimTask($data->getId(), $userId), null, $format);
                 Lib\Notify::notifyUserClaimedTask($userId, $data->getId());
                 Lib\Notify::notifyOrgClaimedTask($userId, $data->getId());
@@ -679,7 +679,7 @@ class Users
                 }
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $data = $client->deserialize($data, 'User');
+                $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\User');
                 $data->setId($userId);
                 $data = DAO\UserDao::save($data);
                 API\Dispatcher::sendResponse(null, $data, null, $format);
@@ -694,7 +694,7 @@ class Users
             function ($userId, $format = ".json") {
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $data = $client->deserialize($data, 'Tag');
+                $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\Tag');
                 $data = DAO\UserDao::likeTag($userId, $data->getId());
                 if (is_array($data)) {
                     $data = $data[0];
@@ -760,7 +760,7 @@ class Users
             function ($userId, $format = ".json") {
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $data = $client->deserialize($data, 'Task');
+                $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\Task');
                 $data = DAO\UserDao::trackTask($userId, $data->getId());
                 API\Dispatcher::sendResponse(null, $data, null, $format);
             },
@@ -909,7 +909,7 @@ class Users
                 }
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $data = $client->deserialize($data, "UserPersonalInformation");
+                $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\UserPersonalInformation");
                 API\Dispatcher::sendResponse(null, DAO\UserDao::createPersonalInfo($data), null, $format);
             },
             'createUserPersonalInfo',
@@ -927,7 +927,7 @@ class Users
                 }
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $data = $client->deserialize($data, 'UserPersonalInformation');
+                $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\UserPersonalInformation');
                 $data = DAO\UserDao::updatePersonalInfo($data);
                 API\Dispatcher::sendResponse(null, $data, null, $format);
             },
@@ -956,7 +956,7 @@ class Users
             function ($userId, $format = ".json") {
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $data = $client->deserialize($data, "Locale");
+                $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Locale");
                 API\Dispatcher::sendResponse(null, DAO\UserDao::createSecondaryLanguage($userId, $data), null, $format);
             },
             'createSecondaryLanguage',

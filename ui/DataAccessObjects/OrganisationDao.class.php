@@ -19,7 +19,7 @@ class OrganisationDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$id";
-        $ret = $this->client->call("Organisation", $request);
+        $ret = $this->client->call("\SolasMatch\Common\Protobufs\Models\Organisation", $request);
         return $ret;
     }
     
@@ -28,7 +28,7 @@ class OrganisationDao extends BaseDao
         $ret = null;
         $name = urlencode($name);
         $request = "{$this->siteApi}v0/orgs/getByName/$name";
-        $ret = $this->client->call("Organisation", $request);
+        $ret = $this->client->call("\SolasMatch\Common\Protobufs\Models\Organisation", $request);
         return $ret;
     }
     
@@ -36,7 +36,7 @@ class OrganisationDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/searchByName/$name";
-        $ret = $this->client->call(array("Organisation"), $request);
+        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\Organisation"), $request);
         return $ret;
     }
     
@@ -44,7 +44,7 @@ class OrganisationDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs";
-        $ret = $this->client->call(array("Organisation"), $request);
+        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\Organisation"), $request);
         return $ret;
     }
 
@@ -52,7 +52,7 @@ class OrganisationDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/projects";
-        $ret = $this->client->call(array("Project"), $request);
+        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\Project"), $request);
         return $ret;
     }
 
@@ -60,7 +60,7 @@ class OrganisationDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/archivedProjects";
-        $ret = $this->client->call(array("ArchivedProject"), $request);
+        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\ArchivedProject"), $request);
         return $ret;
     }
 
@@ -68,7 +68,7 @@ class OrganisationDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/badges";
-        $ret = $this->client->call(array("Badge"), $request);
+        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\Badge"), $request);
         return $ret;
     }
 
@@ -76,7 +76,7 @@ class OrganisationDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/members";
-        $ret = $this->client->call(array("User"), $request);
+        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\User"), $request);
         return $ret;
     }
 
@@ -84,7 +84,7 @@ class OrganisationDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/$orgId/requests";
-        $ret = $this->client->call(array("MembershipRequest"), $request);
+        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\MembershipRequest"), $request);
         return $ret;
     }
 
@@ -100,8 +100,12 @@ class OrganisationDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs";
-        $ret = $this->client->call("Organisation", $request, Common\Enums\HttpMethodEnum::POST, $org);
-        
+        $ret = $this->client->call(
+            "\SolasMatch\Common\Protobufs\Models\Organisation",
+            $request,
+            Common\Enums\HttpMethodEnum::POST,
+            $org
+        );
         $adminDao = new AdminDao();
         $adminDao->createOrgAdmin($userId, $ret->getId());
         return $ret;
@@ -111,7 +115,12 @@ class OrganisationDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/orgs/{$org->getId()}";
-        $ret = $this->client->call("Organisation", $request, Common\Enums\HttpMethodEnum::PUT, $org);
+        $ret = $this->client->call(
+            "\SolasMatch\Common\Protobufs\Models\Organisation",
+            $request,
+            Common\Enums\HttpMethodEnum::PUT,
+            $org
+        );
         return $ret;
     }
 

@@ -36,7 +36,7 @@ class Orgs
             function ($format = ".json") {
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $data = $client->deserialize($data, "Organisation");
+                $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Organisation");
                 $data->setId(null);
                 $org = DAO\OrganisationDao::insertAndUpdate($data);
                 $user = DAO\UserDao::getLoggedInUser();
@@ -67,7 +67,7 @@ class Orgs
                 }
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $data = $client->deserialize($data, "Organisation");
+                $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Organisation");
                 $data->setId($orgId);
                 API\Dispatcher::sendResponse(null, DAO\OrganisationDao::insertAndUpdate($data), null, $format);
             },

@@ -21,7 +21,7 @@ class LanguageDao extends BaseDao
     public function getLanguage($id)
     {
         $request = "{$this->siteApi}v0/languages/$id";
-        return $this->client->call("Language", $request);
+        return $this->client->call("\SolasMatch\Common\Protobufs\Models\Language", $request);
     }
     
     public function getLanguages()
@@ -31,7 +31,7 @@ class LanguageDao extends BaseDao
             Common\Enums\TimeToLiveEnum::MONTH,
             function ($args) {
                 $request = "{$args[1]}v0/languages";
-                return $args[0]->call(array("Language"), $request);
+                return $args[0]->call(array("\SolasMatch\Common\Protobufs\Models\Language"), $request);
             },
             array($this->client, $this->siteApi)
         );
@@ -42,7 +42,7 @@ class LanguageDao extends BaseDao
     {
         $languages = null;
         $request = "{$this->siteApi}v0/languages/getActiveLanguages";
-        $languages = $this->client->call(array('Language'), $request);
+        $languages = $this->client->call(array('\SolasMatch\Common\Protobufs\Models\Language'), $request);
         return $languages;
     }
     
@@ -50,7 +50,7 @@ class LanguageDao extends BaseDao
     {
         $languages = null;
         $request = "{$this->siteApi}v0/languages/getActiveSourceLanguages";
-        $languages = $this->client->call(array('Language'), $request);
+        $languages = $this->client->call(array('\SolasMatch\Common\Protobufs\Models\Language'), $request);
         return $languages;
     }
      
@@ -58,13 +58,13 @@ class LanguageDao extends BaseDao
     {
         $languages = null;
         $request = "{$this->siteApi}v0/languages/getActiveTargetLanguages";
-        $languages = $this->client->call(array('Language'), $request);
+        $languages = $this->client->call(array('\SolasMatch\Common\Protobufs\Models\Language'), $request);
         return $languages;
     }
     
     public function getLanguageByCode($code)
     {
         $request = "{$this->siteApi}v0/languages/getByCode/$code";
-        return $this->client->call("Language", $request);
+        return $this->client->call("\SolasMatch\Common\Protobufs\Models\Language", $request);
     }
 }

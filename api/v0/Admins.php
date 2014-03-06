@@ -192,7 +192,7 @@ class Admins
             function ($format = '.json') {
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $data = $client->deserialize($data, 'BannedUser');
+                $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\BannedUser');
                 DAO\AdminDao::saveBannedUser($data);
                 API\Dispatcher::sendResponse(null, null, null, $format);
                 Lib\Notify::sendBannedLoginEmail($data->getUserId());
@@ -207,7 +207,7 @@ class Admins
             function ($format = '.json') {
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $data = $client->deserialize($data, 'BannedOrganisation');
+                $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\BannedOrganisation');
                 DAO\AdminDao::saveBannedOrg($data);
                 API\Dispatcher::sendResponse(null, null, null, $format);
             },

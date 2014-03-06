@@ -33,7 +33,7 @@ class Badges
             function ($format = ".json") {
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $data = $client->deserialize($data, "Badge");
+                $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Badge");
                 $data->setId(null);
                 API\Dispatcher::sendResponse(null, DAO\BadgeDao::insertAndUpdateBadge($data), null, $format);
             },
@@ -52,7 +52,7 @@ class Badges
                 }
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $data = $client->deserialize($data, "Badge");
+                $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Badge");
                 API\Dispatcher::sendResponse(null, DAO\BadgeDao::insertAndUpdateBadge($data), null, $format);
             },
             'updateBadge',

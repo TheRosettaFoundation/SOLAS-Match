@@ -2,6 +2,8 @@
 
 namespace SolasMatch\Common\Lib;
 
+use \SolasMatch\Common\Protobufs\Models as Models;
+
 require_once __DIR__."/Serializer.class.php";
 
 class JSONSerializer extends Serializer
@@ -17,7 +19,7 @@ class JSONSerializer extends Serializer
         if (is_object($data)) {
             $ret = $data->serialize(new \DrSlump\Protobuf\Codec\Json());
         } elseif (is_array($data)) {
-            $ret = new \ProtoList();
+            $ret = new Models\ProtoList();
             foreach ($data as $obj) {
                 if (!is_null($obj)) {
                     $ret->addItem($obj->serialize(new \DrSlump\Protobuf\Codec\Json()));
@@ -40,7 +42,7 @@ class JSONSerializer extends Serializer
         }
         $result = null;
         if (is_array($type)) {
-            $ret = new \ProtoList();
+            $ret = new Models\ProtoList();
             $ret->parse($data, new \DrSlump\Protobuf\Codec\Json());
             $result = array();
             

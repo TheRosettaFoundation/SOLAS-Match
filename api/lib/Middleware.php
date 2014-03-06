@@ -100,7 +100,7 @@ class Middleware
             $task = $req->getBody();
             $format = $params['format'];
             $client = new Common\Lib\APIHelper($format);
-            $task = $client->deserialize($task, "Task");
+            $task = $client->deserialize($task, "\SolasMatch\Common\Protobufs\Models\Task");
             $projectId = $task->getProjectId();
             
             $project = null;
@@ -551,7 +551,7 @@ class Middleware
             $app = \Slim\Slim::getInstance();			
 			$req = $app->request;
 			$review = $req->getBody();
-            $review = $client->deserialize($review, "TaskReview");
+            $review = $client->deserialize($review, "\SolasMatch\Common\Protobufs\Models\TaskReview");
             
             $hasFollowupTask = false;
             /*
@@ -790,7 +790,7 @@ class Middleware
             $task = $req->getBody();
             $format = $params['format'];
             $client = new Common\Lib\APIHelper($format);
-            $task = $client->deserialize($task, "Task");
+            $task = $client->deserialize($task, "\SolasMatch\Common\Protobufs\Models\Task");
             
             $taskId = $task->getId();
          

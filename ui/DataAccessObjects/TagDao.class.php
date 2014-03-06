@@ -19,7 +19,13 @@ class TagDao extends BaseDao
     {
         $request = "{$this->siteApi}v0/tags/$id";
         $args = $limit ? array("limit" => $limit) : null;
-        $response = $this->client->call("Tag", $request, Common\Enums\HttpMethodEnum::GET, null, $args);
+        $response = $this->client->call(
+            "\SolasMatch\Common\Protobufs\Models\Tag",
+            $request,
+            Common\Enums\HttpMethodEnum::GET,
+            null,
+            $args
+        );
         return $response;
     }
 
@@ -27,7 +33,13 @@ class TagDao extends BaseDao
     {
         $request = "{$this->siteApi}v0/tags";
         $args = $limit ? array("limit" => $limit) : null;
-        $response = $this->client->call(array("Tag"), $request, Common\Enums\HttpMethodEnum::GET, null, $args);
+        $response = $this->client->call(
+            array("\SolasMatch\Common\Protobufs\Models\Tag"),
+            $request,
+            Common\Enums\HttpMethodEnum::GET,
+            null,
+            $args
+        );
         return $response;
     }
 
@@ -35,14 +47,20 @@ class TagDao extends BaseDao
     {
         $request = "{$this->siteApi}v0/tags/getByLabel/$label";
         $args = $limit ? array("limit" => $limit) : null;
-        $response = $this->client->call("Tag", $request, Common\Enums\HttpMethodEnum::GET, null, $args);
+        $response = $this->client->call(
+            "\SolasMatch\Common\Protobufs\Models\Tag",
+            $request,
+            Common\Enums\HttpMethodEnum::GET,
+            null,
+            $args
+        );
         return $response;
     }
 
     public function searchForTag($name)
     {
         $request = "{$this->siteApi}v0/tags/search/$name";
-        $ret = $this->client->call(array("Tag"), $request);
+        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\Tag"), $request);
         return $ret;
     }
 
@@ -54,7 +72,13 @@ class TagDao extends BaseDao
             Common\Enums\TimeToLiveEnum::QUARTER_HOUR,
             function ($args) {
                 $request = "{$args[2]}v0/tags/topTags";
-                return $args[1]->call(array("Tag"), $request, Common\Enums\HttpMethodEnum::GET, null, $args[0]);
+                return $args[1]->call(
+                    array("\SolasMatch\Common\Protobufs\Models\Tag"),
+                    $request,
+                    Common\Enums\HttpMethodEnum::GET,
+                    null,
+                    $args[0]
+                );
             },
             array($args, $this->client, $this->siteApi)
         );
@@ -65,21 +89,37 @@ class TagDao extends BaseDao
     {
         $args = $limit ? array("limit" => $limit) : null;
         $request = "{$this->siteApi}v0/tags/$tagId/tasks";
-        $response = $this->client->call(array("Task"), $request, Common\Enums\HttpMethodEnum::GET, null, $args);
+        $response = $this->client->call(
+            array("\SolasMatch\Common\Protobufs\Models\Task"),
+            $request,
+            Common\Enums\HttpMethodEnum::GET,
+            null,
+            $args
+        );
         return $response;
     }
 
     public function createTag($tag)
     {
         $request = "{$this->siteApi}v0/tags";
-        $response = $this->client->call("Tag", $request, Common\Enums\HttpMethodEnum::POST, $tag);
+        $response = $this->client->call(
+            "\SolasMatch\Common\Protobufs\Models\Tag",
+            $request,
+            Common\Enums\HttpMethodEnum::POST,
+            $tag
+        );
         return $response;
     }
 
     public function updateTag($tag)
     {
         $request = "{$this->siteApi}v0/tags/{$tag->getId()}";
-        $response = $this->client->call("Tag", $request, Common\Enums\HttpMethodEnum::PUT, $tag);
+        $response = $this->client->call(
+            "\SolasMatch\Common\Protobufs\Models\Tag",
+            $request,
+            Common\Enums\HttpMethodEnum::PUT,
+            $tag
+        );
         return $response;
     }
 

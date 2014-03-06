@@ -2,6 +2,8 @@
 
 namespace SolasMatch\Common\Lib;
 
+use \SolasMatch\Common as Common;
+
 include_once __DIR__."/../protobufs/models/WorkflowGraph.php";
 include_once __DIR__."/../protobufs/models/WorkflowNode.php";
 
@@ -58,11 +60,11 @@ abstract class WorkflowBuilder
      */
     public function parseAndBuild($graphArray)
     {
-        $graph = new \WorkflowGraph();
+        $graph = new Common\Protobufs\Models\WorkflowGraph();
         
         foreach ($graphArray as $taskId => $preReqIds) {
             if ($preReqIds == null || count($preReqIds) < 1) {
-                $node = new \WorkflowNode();
+                $node = new Common\Protobufs\Models\WorkflowNode();
                 $node->setTaskId($taskId);
                 $this->insertNode($node, $graph);
 
@@ -89,7 +91,7 @@ abstract class WorkflowBuilder
                         }
 
                         if (count($preReqIds) == 0) {
-                            $node = new \WorkflowNode();
+                            $node = new Common\Protobufs\Models\WorkflowNode();
                             $node->setTaskId($taskId);
 
                             foreach ($previousLayer as $pId) {
