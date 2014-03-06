@@ -769,4 +769,51 @@ class UserDao
         }
         return $ret;
     }
+
+    public static function trackOrganisation($userId, $organisationId)
+    {
+        $args = PDOWrapper::cleanse($userId)
+                .",".PDOWrapper::cleanse($organisationId);
+        if ($result = PDOWrapper::call("userTrackOrganisation", $args)) {
+            return $result[0]["result"];
+        }
+        return null;
+    }
+
+    public static function unTrackOrganisation($userId, $organisationId)
+    {
+        $args = PDOWrapper::cleanse($userId)
+                .",".PDOWrapper::cleanse($organisationId);
+        if ($result = PDOWrapper::call("userUnTrackOrganisation", $args)) {
+            return $result[0]["result"];
+        }
+        return null;
+    }
+
+    public static function getTrackedOrganisations($userId)
+    {
+        $args = PDOWrapper::cleanse($userId);
+        if ($result = PDOWrapper::call("getTrackedOrganisations", $args)) {
+            $ret = array();
+            foreach ($result as $row) {
+                $ret[] = ModelFactory::buildModel("Organisation", $row);
+            }
+            return $ret;
+        }
+        return null;
+    }
+
+	/*
+        returns true if the user has subscribed to the specified organisation
+    */
+    public static function isSubscribedToOrganisation($userId, $organisationId)
+    {
+        $args = PDOWrapper::cleanse($userId)
+                .",".PDOWrapper::cleanse($organisationId);
+        if ($result = PDOWrapper::call('userSubscribedToOrganisation', $args)) {
+            return $result[0]['result'];
+        } else {
+            return null;
+        }
+    }
 }

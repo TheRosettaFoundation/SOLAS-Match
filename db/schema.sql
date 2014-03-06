@@ -691,7 +691,6 @@ CREATE TABLE IF NOT EXISTS `Users` (
   CONSTRAINT `FK_user_language` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-
 DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
 CREATE PROCEDURE alterTable()
@@ -787,6 +786,16 @@ CREATE TABLE IF NOT EXISTS `UserTrackedTasks` (
 	CONSTRAINT `FK_UserTrackedTasks_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+-- Dumping structure for table Solas-Match-UserTrackedOrganisations
+CREATE TABLE IF NOT EXISTS `UserTrackedOrganisations` (
+    `user_id` INT(10) UNSIGNED NOT NULL,
+    `organisation_id` INT(10) UNSIGNED NOT NULL,
+    `created` datetime NOT NULL,
+    UNIQUE INDEX `user_id` (`user_id`, `organisation_id`),
+    INDEX `FK_UserTrackedOrganisations_Organisations` (`organisation_id`),
+    CONSTRAINT `FK_UserTrackedOrganisations_Organisations` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT `FK_UserTrackedOrganisations_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -4151,6 +4160,105 @@ BEGIN
 END//
 DELIMITER ;
 
+
+-- Dumping structure for procedure getTrackedOrganisations
+DROP PROCEDURE IF EXISTS `getTrackedOrganisations`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTrackedOrganisations`(IN `userId` INT)
+BEGIN
+    SELECT o.*
+        FROM Organisations o
+        JOIN UserTrackedOrganisations uto
+        ON o.id=uto.organisation_id
+        WHERE uto.user_id=userId;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure getUsersTrackingOrg
+DROP PROCEDURE IF EXISTS `getUsersTrackingOrg`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUsersTrackingOrg`(IN `orgId` INT)
+BEGIN
+    SELECT u.id,u.`display-name`, u.email, u.password, u.biography,
+        (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`,
+        (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`,
+        (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`,
+        (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`,
+        u.nonce, u.`created-time`
+        FROM Users u
+        JOIN UserTrackedOrganisations uto
+        ON u.id=uto.user_id
+        WHERE uto.organisation_id=orgId;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure userTrackOrganisation
+DROP PROCEDURE IF EXISTS `userTrackOrganisation`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userTrackOrganisation`(IN `userId` INT, IN `orgId` INT)
+    MODIFIES SQL DATA
+BEGIN
+    IF NOT EXISTS(SELECT 1
+        FROM UserTrackedOrganisations
+        WHERE user_id=userId
+        AND organisation_id=orgId) THEN
+
+           INSERT INTO UserTrackedOrganisations(user_id,organisation_id,created)
+           VALUES (userId, orgId, NOW());
+
+           SELECT 1 AS `result`;
+
+    ELSE
+
+        SELECT 0 AS `result`;
+
+    END IF;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure userUnTrackOrganisation
+DROP PROCEDURE IF EXISTS `userUnTrackOrganisation`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userUnTrackOrganisation`(IN `userId` INT, IN `orgId` INT)
+BEGIN
+    IF EXISTS(SELECT 1
+        FROM UserTrackedOrganisations
+        WHERE user_id=userId
+        AND organisation_id=orgId) THEN
+
+	    DELETE FROM UserTrackedOrganisations
+            WHERE user_id=userId AND organisation_id=orgId;
+
+	    SELECT 1 AS `result`;
+
+	ELSE
+
+	    SELECT 0 AS `result`;
+
+	END IF;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure userSubscribedToOrganisation
+DROP PROCEDURE IF EXISTS `userSubscribedToOrganisation`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userSubscribedToOrganisation`(IN `userId` INT, IN `orgId` INT)
+BEGIN
+    if EXISTS (SELECT organisation_id
+        FROM UserTrackedOrganisations
+        WHERE user_id = userId
+        AND organisation_id = orgId) THEN
+
+        SELECT 1 AS 'result';
+
+    ELSE
+
+    	SELECT 0 AS 'result';
+
+    END IF;
+END//
+DELIMITER ;
 /*---------------------------------------end of procs----------------------------------------------*/
 
 

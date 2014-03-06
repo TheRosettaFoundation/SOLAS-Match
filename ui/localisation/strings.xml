@@ -252,6 +252,12 @@
 	<string name="org_public_profile_an_organisation_of">An organisation of %s.</string>
 	<string name="org_public_profile_edit_organisation_details">Edit Organisation Details</string>
 	<string name="org_public_profile_request_membership">Request Membership</string>
+	<string name="org_public_profile_track_organisation">Track Organisation</string>
+	<string name="org_public_profile_untrack_organisation">Untrack Organisation</string>
+	<string name="org_public_profile_org_track_success">You are now tracking this organisation and will receive email notifications related to its activities.</string>
+    <string name="org_public_profile_org_track_error">Unable to register for notifications for this organisation.</string>
+    <string name="org_public_profile_org_untrack_success">You are no longer tracking this organisation and will receive no further emails.</string>
+    <string name="org_public_profile_org_untrack_error">Unable to untrack notifications for this organisation.</string>
 	<string name="org_public_profile_no_home_page_listed">No home page listed.</string>
 	<string name="org_public_profile_no_address_listed">No address listed.</string>
 	<string name="org_public_profile_no_city_listed">No city listed.</string>

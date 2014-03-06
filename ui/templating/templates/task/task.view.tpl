@@ -27,15 +27,32 @@
         {assign var="task_id" value=$task->getId()}
 
         <div class="pull-right">
-            {if $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM}
-                <a href="{urlFor name="task-claim-page" options="task_id.$task_id"}" class="btn btn-primary">
-                <i class="icon-download icon-white"></i> {Localisation::getTranslation('task_view_download_task')}</a>
-            {/if}
-
-            {if isset($isOrgMember)}
+            {if $isMember}
                 <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='btn btn-primary'>
                     <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('task_view_edit_task_details')}
                 </a>
+            {else}
+                {if isset($registered)}
+                    <form id="trackedOrganisationForm" method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                {else}
+                    <form id="trackedOrganisationForm" method="post" action="{urlFor name="task" options="task_id.$task_id"}">
+                {/if}
+                {if $userSubscribedToOrganisation}
+                    <input type="hidden" name="trackOrganisation" value="0" />
+                    <a class="btn btn-small btn-inverse" onclick="$('#trackedOrganisationForm').submit();" >
+                        <i class="icon-remove-circle icon-white"></i>{Localisation::getTranslation('org_public_profile_untrack_organisation')}
+                    </a>
+                {else}
+                    <input type="hidden" name="trackOrganisation" value="1" />
+                    <a class="btn btn-small" onclick="$('#trackedOrganisationForm').submit();" >
+                        <i class="icon-envelope icon-black"></i>{Localisation::getTranslation('org_public_profile_track_organisation')}
+                    </a>
+                {/if}
+                </form>
+            {/if}
+            {if $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM}
+                <a href="{urlFor name="task-claim-page" options="task_id.$task_id"}" class="btn btn-primary">
+                <i class="icon-download icon-white"></i> {Localisation::getTranslation('task_view_download_task')}</a>
             {/if}
         </div>
     </h1>

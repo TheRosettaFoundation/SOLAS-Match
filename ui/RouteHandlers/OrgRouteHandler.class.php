@@ -593,7 +593,7 @@ class OrgRouteHandler
                 $adminDao->createOrgAdmin($userId, $org_id);
             }
         }
-        
+
         $currentUser = $userDao->getUser(UserSession::getCurrentUserId());
         $isMember = false;
         $orgMemberList = $orgDao->getOrgMembers($org_id);
@@ -604,6 +604,27 @@ class OrgRouteHandler
                 }
             }
         }
+
+        if (isset($post['trackOrganisation'])) {
+            $user_id=$currentUser->getId();
+            if ($post['trackOrganisation']) {
+                $userTrackOrganisation = $userDao->trackOrganisation($user_id, $org_id);
+                if ($userTrackOrganisation) {
+                    $app->flashNow("success", Localisation::getTranslation('org_public_profile_org_track_success'));
+                } else {
+                    $app->flashNow("error", Localisation::getTranslation('org_public_profile_org_track_error'));
+                }
+                } else {
+                    $userUntrackOrganisation = $userDao->unTrackOrganisation($user_id, $org_id);
+                    if ($userUntrackOrganisation) {
+                        $app->flashNow("success", Localisation::getTranslation('org_public_profile_org_untrack_success'));
+                    } else {
+                        $app->flashNow("error", Localisation::getTranslation('org_public_profile_org_untrack_error'));
+                    }
+                }
+        }
+
+        $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($currentUser->getId(), $org_id);
 
         $adminAccess = false;
         if ($adminDao->isSiteAdmin($currentUser->getId()) == 1 ||
@@ -624,7 +645,7 @@ class OrgRouteHandler
             }
 
             $org_badges = $orgDao->getOrgBadges($org_id);
-        
+
             if ($orgMemberList) {
                 foreach ($orgMemberList as $orgMember) {
                     if ($adminDao->isOrgAdmin($org_id, $orgMember->getId())) {
@@ -643,9 +664,10 @@ class OrgRouteHandler
                 'adminAccess' => $adminAccess,
                 "org_badges" => $org_badges,
                 'siteName' => $siteName,
-                "membershipRequestUsers" => $user_list
+                "membershipRequestUsers" => $user_list,
+                'userSubscribedToOrganisation' => $userSubscribedToOrganisation
         ));
-        
+
         $app->render("org/org-public-profile.tpl");
     }
 

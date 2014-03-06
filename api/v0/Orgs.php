@@ -305,6 +305,17 @@ class Orgs
             'rejectMembershipRequests',
             'Middleware::authenticateOrgMember'
         );
+
+        Dispatcher::registerNamed(
+            HttpMethodEnum::GET,
+            '/v0/orgs/:orgId/trackingUsers(:format)/',
+            function ($organisationId, $format = ".json") {
+                $data = OrganisationDao::getUsersTrackingOrg($organisationId);
+                Dispatcher::sendResponce(null, $data, null, $format);
+            },
+            'getUsersTrackingOrg',
+            'Middleware::authenticateOrgMember'
+        );
     }
 }
 

@@ -799,6 +799,65 @@ class Users
             'deleteSecondaryLanguage',
             'Middleware::authUserOwnsResource'
         );
+
+        Dispatcher::registerNamed(
+            HttpMethodEnum::GET,
+            '/v0/users/:userId/organisations(:format)/',
+            function ($userId, $format = ".json") {
+                $data = UserDao::getTrackedOrganisations($userId);
+                Dispatcher::sendResponce(null, $data, null, $format);
+                },
+                'getUserTrackedOrganisations',
+                'Middleware::authUserOwnsResource'
+        );
+
+        Dispatcher::registerNamed(
+            HttpMethodEnum::PUT,
+            '/v0/users/:userId/organisations/:organisationId/',
+            function ($userId, $organisationId, $format = ".json") {
+                if (!is_numeric($organisationId) && strstr($organisationId, '.')) {
+                    $organisationId = explode('.', $organisationId);
+                    $format = '.'.$organisationId[1];
+                    $organisationId = $organisationId[0];
+                }
+                $data = UserDao::trackOrganisation($userId, $organisationId);
+                Dispatcher::sendResponce(null, $data, null, $format);
+            },
+            'userTrackOrganisation',
+            'Middleware::authUserOwnsResource'
+        );
+
+        Dispatcher::registerNamed(
+            HttpMethodEnum::DELETE,
+            '/v0/users/:userId/organisations/:organisationId/',
+            function ($userId, $organisationId, $format = ".json") {
+                if (!is_numeric($organisationId) && strstr($organisationId, '.')) {
+                    $organisationId = explode('.', $organisationId);
+                    $format = '.'.$organisationId[1];
+                    $organisationId = $organisationId[0];
+                }
+                $data = UserDao::unTrackOrganisation($userId, $organisationId);
+                Dispatcher::sendResponce(null, $data, null, $format);
+            },
+            'userUnTrackOrganisation',
+            'Middleware::authUserOwnsResource'
+        );
+
+        Dispatcher::registerNamed(
+            HttpMethodEnum::GET,
+            '/v0/users/subscribedToOrganisation/:userId/:organisationId/',
+            function ($userId, $organisationId, $format = ".json") {
+                if (!is_numeric($organisationId) && strstr($organisationId, '.')) {
+                    $organisationId = explode('.', $organisationId);
+                    $format = '.'.$organisationId[1];
+                    $organisationId = $organisationId[0];
+                }
+                Dispatcher::sendResponce(null,
+                    UserDao::isSubscribedToOrganisation($userId, $organisationId), null, $format);
+            },
+            'userSubscribedToOrganisation',
+            'Middleware::authUserOwnsResource'
+        );
     }
 }
 Users::init();

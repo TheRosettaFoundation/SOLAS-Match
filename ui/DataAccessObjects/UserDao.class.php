@@ -541,4 +541,36 @@ class UserDao extends BaseDao
         $ret = $this->client->call(null, $request);
         return $ret;
     }
+
+    public function trackOrganisation($userId, $organisationId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/$userId/organisations/$organisationId";
+        $ret = $this->client->call(null, $request, HttpMethodEnum::PUT);
+        return $ret;
+    }
+
+    public function untrackOrganisation($userId, $organisationId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/$userId/organisations/$organisationId";
+        $ret = $this->client->call(null, $request, HttpMethodEnum::DELETE);
+        return $ret;
+    }
+
+   public function getUserTrackedOrganisations($userId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/$userId/organisations";
+        $ret = $this->client->call(array("Organisation"), $request);
+        return $ret;
+    }
+
+    public function isSubscribedToOrganisation($userId, $organisationId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/subscribedToOrganisation/$userId/$organisationId";
+        $ret = $this->client->call(null, $request);
+        return $ret;
+    }
 }
