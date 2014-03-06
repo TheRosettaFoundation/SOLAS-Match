@@ -1,4 +1,6 @@
 *.swp
+*php~
+*~
 composer.phar
 vendor
 /nbproject/
