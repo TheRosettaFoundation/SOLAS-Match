@@ -3,6 +3,7 @@
 namespace SolasMatch\API\Lib;
 
 use \SolasMatch\API\DAO as DAO;
+use \SolasMatch\API\Lib as Lib;
 use \SolasMatch\Common as Common;
 
 require_once __DIR__."/MessagingClient.class.php";
@@ -31,7 +32,7 @@ class Notify
 {
     public static function sendBannedLoginEmail($userId)
     {
-        $messagingClient = new Common\Lib\MessagingClient();
+        $messagingClient = new Lib\MessagingClient();
         if ($messagingClient->init()) {
             $proto = new Common\Protobufs\Emails\BannedLogin();
             $proto->setUserId($userId);
@@ -46,7 +47,7 @@ class Notify
 
     public static function sendEmailVerification($userId)
     {
-        $messagingClient = new Common\Lib\MessagingClient();
+        $messagingClient = new Lib\MessagingClient();
         if ($messagingClient->init()) {
             $messageProto = new Common\Protobufs\Emails\EmailVerification();
             $messageProto->setUserId($userId);
@@ -61,7 +62,7 @@ class Notify
 
     public static function sendOrgFeedback($feedback)
     {
-        $messagingClient = new Common\Lib\MessagingClient();
+        $messagingClient = new Lib\MessagingClient();
         if ($messagingClient->init()) {
             $message = $messagingClient->createMessageFromProto($feedback);
             $messagingClient->sendTopicMessage(
@@ -74,7 +75,7 @@ class Notify
 
     public static function sendOrgCreatedNotifications($orgId)
     {
-        $client = new Common\Lib\MessagingClient();
+        $client = new Lib\MessagingClient();
         if ($client->init()) {
             $proto = new Common\Protobufs\Requests\OrgCreatedNotificationRequest();
             $proto->setOrgId($orgId);
@@ -89,7 +90,7 @@ class Notify
 
     public static function sendUserAssignedBadgeEmail($userId, $badgeId)
     {
-        $client = new Common\Lib\MessagingClient();
+        $client = new Lib\MessagingClient();
         if ($client->init()) {
             $proto = new Common\Protobufs\Emails\UserBadgeAwardedEmail();
             $proto->setUserId($userId);
@@ -105,7 +106,7 @@ class Notify
 
     public static function sendUserFeedback($feedback)
     {
-        $messagingClient = new Common\Lib\MessagingClient();
+        $messagingClient = new Lib\MessagingClient();
         if ($messagingClient->init()) {
             $message = $messagingClient->createMessageFromProto($feedback);
             $messagingClient->sendTopicMessage(
@@ -118,7 +119,7 @@ class Notify
 
     public static function notifyUserClaimedTask($userId, $taskId)
     {
-        $messagingClient = new Common\Lib\MessagingClient();
+        $messagingClient = new Lib\MessagingClient();
         if ($messagingClient->init()) {
             $message_type = new Common\Protobufs\Emails\UserTaskClaim();
             $message_type->user_id = $userId;
@@ -134,7 +135,7 @@ class Notify
 
     public static function sendPasswordResetEmail($user_id)
     {
-        $messagingClient = new Common\Lib\MessagingClient();
+        $messagingClient = new Lib\MessagingClient();
         if ($messagingClient->init()) {
             $message_type = new Common\Protobufs\Emails\PasswordResetEmail();
             $message_type->setUserId($user_id);
@@ -149,7 +150,7 @@ class Notify
 
     public static function notifyUserOrgMembershipRequest($userId, $orgId, $accepted)
     {
-        $messagingClient = new Common\Lib\MessagingClient();
+        $messagingClient = new Lib\MessagingClient();
         if ($messagingClient->init()) {
             if ($accepted) {
                 $message_type = new Common\Protobufs\Emails\OrgMembershipAccepted();
@@ -179,7 +180,7 @@ class Notify
     {
         $subscribed_users = DAO\TaskDao::getSubscribedUsers($taskId);
         if (count($subscribed_users) > 0) {
-            $messagingClient = new Common\Lib\MessagingClient();
+            $messagingClient = new Lib\MessagingClient();
             if ($messagingClient->init()) {
                 $message_type = new Common\Protobufs\Emails\TaskClaimed();
                 $message_type->task_id = $taskId;
@@ -199,7 +200,7 @@ class Notify
 
     public static function sendTaskUploadNotifications($taskId, $version)
     {
-        $messagingClient = new Common\Lib\MessagingClient();
+        $messagingClient = new Lib\MessagingClient();
         if ($messagingClient->init()) {
             $messageProto = new Common\Protobufs\Requests\TaskUploadNotificationRequest();
             $messageProto->setTaskId($taskId);
@@ -216,7 +217,7 @@ class Notify
     public static function sendTaskArchivedNotifications($taskId, $subscribedUsers)
     {
         if (count($subscribedUsers) > 0) {
-            $messagingClient = new Common\Lib\MessagingClient();
+            $messagingClient = new Lib\MessagingClient();
             if ($messagingClient->init()) {
                 $message_type = new Common\Protobufs\Emails\TaskArchived();
                 $message_type->task_id = $taskId;
@@ -235,7 +236,7 @@ class Notify
 
     public static function sendTaskRevokedNotifications($taskId, $claimantId)
     {
-        $client = new Common\Lib\MessagingClient();
+        $client = new Lib\MessagingClient();
         if ($client->init()) {
             $messageProto = new Common\Protobufs\Notifications\TaskRevokedNotification();
             $messageProto->setTaskId($taskId);
