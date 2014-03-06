@@ -297,7 +297,7 @@ class ProjectRouteHandler
                 }
             }
             
-            $sourceLocale = new \Locale();
+            $sourceLocale = new Common\Protobufs\Models\Locale();
             if (isset($post['sourceLanguage'])) {
                 $sourceLocale->setLanguageCode($post['sourceLanguage']);
             }

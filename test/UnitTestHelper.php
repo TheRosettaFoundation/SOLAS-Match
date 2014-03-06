@@ -1,6 +1,12 @@
 <?php
 
+namespace SolasMatch\Tests;
+
+use \SolasMatch\Common as Common;
+use \SolasMatch\API as API;
+
 require_once __DIR__.'/../Common/lib/Settings.class.php';
+require_once __DIR__.'/../Common/lib/ModelFactory.class.php';
 require_once __DIR__.'/../api/lib/PDOWrapper.class.php';
 require_once __DIR__.'/../Common/Enums/TaskTypeEnum.class.php';
 require_once __DIR__.'/../Common/Enums/TaskStatusEnum.class.php';
@@ -18,46 +24,52 @@ class UnitTestHelper
     
     public static function teardownDb()
     {
-        $dsn = "mysql:host=".Settings::get('unit_test.server').
-                ";port=".Settings::get('unit_test.port');
-        $dsn1 = "mysql:host=".Settings::get('database.server').";dbname=".Settings::get('database.database').
-                ";port=".Settings::get('database.server_port');
-        assert($dsn1 != $dsn && Settings::get('database.database') != Settings::get('unit_test.database'));
+        $dsn = "mysql:host=".Common\Lib\Settings::get('unit_test.server').
+            ";port=".Common\Lib\Settings::get('unit_test.port');
+        $dsn1 = "mysql:host=".Common\Lib\Settings::get('database.server').
+            ";dbname=".Common\Lib\Settings::get('database.database').
+            ";port=".Common\Lib\Settings::get('database.server_port');
+        assert(
+            $dsn1 != $dsn &&
+            Common\Lib\Settings::get('database.database') != Common\Lib\Settings::get('unit_test.database')
+        );
         $schemaFile = 'schema.sql';
         
-        PDOWrapper::$unitTesting = true;
-        $conn = new PDO(
+        API\Lib\PDOWrapper::$unitTesting = true;
+        $conn = new \PDO(
             $dsn,
-            Settings::get('unit_test.username'),
-            Settings::get('unit_test.password'),
-            array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
+            Common\Lib\Settings::get('unit_test.username'),
+            Common\Lib\Settings::get('unit_test.password'),
+            array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
         );
         unset($dsn);
         unset($dsn1);
         if (!self::$initalised) {
            
-            $result=$conn->exec("drop database `".Settings::get('unit_test.database')."`");
-            $result=$conn->exec(
-                "CREATE DATABASE `"
-                .Settings::get('unit_test.database')
-                ."` /*!40100 CHARACTER SET utf8 COLLATE 'utf8_unicode_ci' */"
+            $result = $conn->exec("drop database `".Common\Lib\Settings::get('unit_test.database')."`");
+            $result = $conn->exec(
+                "CREATE DATABASE `".
+                Common\Lib\Settings::get('unit_test.database').
+                "` /*!40100 CHARACTER SET utf8 COLLATE 'utf8_unicode_ci' */"
             );
-            $result=$conn->exec("use `".Settings::get('unit_test.database')."`");
+            $result = $conn->exec("use `".Common\Lib\Settings::get('unit_test.database')."`");
            
+            $schema = file_get_contents(__DIR__.'/../api/vendor/league/oauth2-server/sql/mysql.sql');
+            $result = $conn->exec($schema);
             $schema = file_get_contents(__DIR__.'/../db/'.$schemaFile);
             $schema = str_replace("DELIMITER //", "", $schema);
             $schema = str_replace("DELIMITER ;", "", $schema);
             $schema = str_replace("END//", "END;", $schema);
            
-            $result=$conn->exec($schema);
+            $result = $conn->exec($schema);
             $schema = file_get_contents(__DIR__.'/../db/languages.sql');
-            $result=$conn->exec($schema);
+            $result = $conn->exec($schema);
             $schema = file_get_contents(__DIR__.'/../db/country_codes.sql');
-            $result=$conn->exec($schema);
+            $result = $conn->exec($schema);
 
-            self::$initalised=true;
+            self::$initalised = true;
         } else {
-            $result=$conn->exec("use `".Settings::get('unit_test.database')."`");
+            $result = $conn->exec("use `".Common\Lib\Settings::get('unit_test.database')."`");
             $tables = $conn->query(
                 "SELECT t.TABLE_NAME FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA='Unit-Test'
                  AND t.TABLE_NAME NOT IN('Languages','Countries', 'TaskTypes', 'TaskStatus')"
@@ -67,17 +79,18 @@ class UnitTestHelper
                 $conn->exec("DELETE FROM $table[0]");
             }
 
+            $schema = file_get_contents(__DIR__.'/../api/vendor/league/oauth2-server/sql/mysql.sql');
+            $result = $conn->exec($schema);
             $schema = file_get_contents(__DIR__.'/../db/'.$schemaFile);
             $schema = str_replace("DELIMITER //", "", $schema);
             $schema = str_replace("DELIMITER ;", "", $schema);
             $schema = str_replace("END//", "END;", $schema);
            
-            $result=$conn->exec($schema);
+            $result = $conn->exec($schema);
             $schema = file_get_contents(__DIR__.'/../db/languages.sql');
-            $result=$conn->exec($schema);
+            $result = $conn->exec($schema);
             $schema = file_get_contents(__DIR__.'/../db/country_codes.sql');
-            $result=$conn->exec($schema);
-
+            $result = $conn->exec($schema);
         }
     }
     
@@ -89,16 +102,20 @@ class UnitTestHelper
         $description = "System Badge 1 Description",
         $ownerId = null
     ) {
-        $newBadge = new Badge();
+        $newBadge = new Common\Protobufs\Models\Badge();
         $newBadge->setId($id);
         $newBadge->setTitle($title);
         $newBadge->setDescription($description);
         $newBadge->setOwnerId($ownerId);
         return $newBadge;
     }
-    public static function createBannedUser($userId, $userIdAdmin, $banType = BanTypeEnum::DAY, $comment = "FOOOO")
-    {
-        $bannedUser = new BannedUser();
+    public static function createBannedUser(
+        $userId,
+        $userIdAdmin,
+        $banType = Common\Enums\BanTypeEnum::DAY,
+        $comment = "FOOOO"
+    ) {
+        $bannedUser = new Common\Protobufs\Models\BannedUser();
         $bannedUser->setUserId($userId);
         $bannedUser->setUserIdAdmin($userIdAdmin);
         $bannedUser->setBanType($banType);
@@ -107,9 +124,13 @@ class UnitTestHelper
         return $bannedUser;
     }
     
-    public static function createBannedOrg($orgId, $userIdAdmin, $banType = BanTypeEnum::DAY, $comment = "FOOOO")
-    {
-        $bannedOrg = new BannedOrganisation();
+    public static function createBannedOrg(
+        $orgId,
+        $userIdAdmin,
+        $banType = Common\Enums\BanTypeEnum::DAY,
+        $comment = "FOOOO"
+    ) {
+        $bannedOrg = new Common\Protobufs\Models\BannedOrganisation();
         $bannedOrg->setOrgId($orgId);
         $bannedOrg->setUserIdAdmin($userIdAdmin);
         $bannedOrg->setBanType($banType);
@@ -124,7 +145,7 @@ class UnitTestHelper
         $biography = "Organisation Biography 1",
         $homepage = "http://www.organisation1.org"
     ) {
-        $org = new Organisation();
+        $org = new Common\Protobufs\Models\Organisation();
         $org->setId($id);
         $org->setName($name);
         $org->setBiography($biography);
@@ -144,8 +165,8 @@ class UnitTestHelper
         $countryCode = null,
         $createdTime = null
     ) {
-        $locale = new Locale();
-        $user = new User();
+        $locale = new Common\Protobufs\Models\Locale();
+        $user = new Common\Protobufs\Models\User();
         
         $user->setId($userId);
         $user->setDisplayName($displayName);
@@ -176,7 +197,7 @@ class UnitTestHelper
         $city = "Lightless City",
         $country = "Forgotten Land"
     ) {
-        $userInfo = new UserPersonalInformation();
+        $userInfo = new Common\Protobufs\Models\UserPersonalInformation();
         
         $userInfo->setUserId($userId);
         $userInfo->setId($id);
@@ -209,8 +230,8 @@ class UnitTestHelper
         $tags = array("Project", "Tags"),
         $createdTime = null
     ) {
-        $sourceLocale = new Locale();
-        $project = new Project();
+        $sourceLocale = new Common\Protobufs\Models\Locale();
+        $project = new Common\Protobufs\Models\Project();
         
         $project->setId($id);
         $project->setTitle($title);
@@ -227,11 +248,11 @@ class UnitTestHelper
         //disabled tag related code to avoid issues arising from use of updateTags function
         $projectTagList = array();
         foreach ($tags as $tagLabel) {
-            $tag = new Tag();
+            $tag = new Common\Protobufs\Models\Tag();
             $tag->setLabel($tagLabel);
             $projectTagList[] = $tag;
         }
-        $projectTags = TagsDao::updateTags($project->getId(), $projectTagList);
+        $projectTags = API\DAO\TagsDao::updateTags($project->getId(), $projectTagList);
         
         foreach ($projectTags as $projectTag) {
             $project->addTag($projectTag);
@@ -251,8 +272,8 @@ class UnitTestHelper
         $deadline = "2020-03-29 16:30:00",
         $wordcount = 123456,
         $tags = null,
-        $type = TaskTypeEnum::TRANSLATION,
-        $status = TaskStatusEnum::PENDING_CLAIM,
+        $type = Common\Enums\TaskTypeEnum::TRANSLATION,
+        $status = Common\Enums\TaskStatusEnum::PENDING_CLAIM,
         $sourceCountryCode = "IE",
         $sourceLanguageCode = "en",
         $targetCountryCode = "FR",
@@ -260,7 +281,7 @@ class UnitTestHelper
         $published = 1,
         $createdTime = null
     ) {
-        $task = new Task();
+        $task = new Common\Protobufs\Models\Task();
         $task->setId($id);
         $task->setProjectId($projectId);
         $task->setTitle($title);
@@ -270,12 +291,12 @@ class UnitTestHelper
         $task->setTaskType($type);
         $task->setTaskStatus($status);
         
-        $sourceLocale = new Locale();
+        $sourceLocale = new Common\Protobufs\Models\Locale();
         $sourceLocale->setLanguageCode($sourceLanguageCode);
         $sourceLocale->setCountryCode($sourceCountryCode);
         $task->setSourceLocale($sourceLocale);
         
-        $targetLocale = new Locale();
+        $targetLocale = new Common\Protobufs\Models\Locale();
         $targetLocale->setLanguageCode($targetLanguageCode);
         $targetLocale->setCountryCode($targetCountryCode);
         $task->setTargetLocale($targetLocale);
@@ -285,7 +306,7 @@ class UnitTestHelper
     
         if (!is_null($tags)) {
             $i = 0;
-            $taskTag = new Tag();
+            $taskTag = new Common\Protobufs\Models\Tag();
             foreach ($tags as $tagLabel) {
                 $taskTag->setId($i+100);
                 $taskTag->setLabel($tagLabel[0]);
@@ -305,7 +326,7 @@ class UnitTestHelper
         $mime = "text/plain",
         $token = "createProjectFileTest.txt"
     ) {
-        $projectFile = new ProjectFile();
+        $projectFile = new Common\Protobufs\Models\ProjectFile();
         $projectFile->setUserId($userId);
         $projectFile->setProjectId($projectid);
         $projectFile->setFilename($filename);

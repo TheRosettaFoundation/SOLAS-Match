@@ -183,7 +183,7 @@ class TaskDao extends BaseDao
 
     public function sendOrgFeedback($taskId, $userId, $claimantId, $feedback)
     {
-        $feedbackData = new \OrgFeedback();
+        $feedbackData = new Common\Protobufs\Emails\OrgFeedback();
         $feedbackData->setTaskId($taskId);
         $feedbackData->setUserId($userId);
         $feedbackData->setClaimantId($claimantId);
@@ -194,7 +194,7 @@ class TaskDao extends BaseDao
 
     public function sendUserFeedback($taskId, $userId, $feedback)
     {
-        $feedbackData = new \UserFeedback();
+        $feedbackData = new Common\Protobufs\Emails\UserFeedback();
         $feedbackData->setTaskId($taskId);
         $feedbackData->setClaimantId($userId);
         $feedbackData->setFeedback($feedback);

@@ -1,5 +1,11 @@
 <?php
 
+namespace SolasMatch\Tests\API;
+
+use \SolasMatch\Tests\UnitTestHelper;
+use \SolasMatch\Common as Common;
+use \SolasMatch\API as API;
+
 require_once 'PHPUnit/Autoload.php';
 require_once __DIR__.'/../../api/vendor/autoload.php';
 \DrSlump\Protobuf::autoload();
@@ -8,36 +14,30 @@ require_once __DIR__.'/../../api/DataAccessObjects/OrganisationDao.class.php';
 require_once __DIR__.'/../../api/DataAccessObjects/ProjectDao.class.php';
 require_once __DIR__.'/../../api/DataAccessObjects/TaskDao.class.php';
 require_once __DIR__.'/../../api/DataAccessObjects/UserDao.class.php';
-require_once __DIR__.'/../../Common/lib/BadgeTypes.class.php';
-require_once __DIR__.'/../../Common/lib/ModelFactory.class.php';
+require_once __DIR__.'/../../Common/Enums/BadgeTypes.class.php';
 require_once __DIR__.'/../../Common/Enums/TaskTypeEnum.class.php';
 require_once __DIR__.'/../UnitTestHelper.php';
 
-class TaskDaoTest extends PHPUnit_Framework_TestCase
+class TaskDaoTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateTask()
     {
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
         // Success
-        $insertedTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $insertedTask);
+        $insertedTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $insertedTask);
         $this->assertNotNull($insertedTask->getId());
-        
-        //This test fails because the return is not null, rather the taskInsertAndUpdate procedure resorts to calling
-        //getTask
-        //$insertedTask2 = TaskDao::save($task);
-        //$this->assertNull($insertedTask2);
     }
     
     public function testUpdateTask()
@@ -45,19 +45,18 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
 
-        //was using missing create function, changed to save
-        $insertedTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $insertedTask);
+        $insertedTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $insertedTask);
         $this->assertNotNull($insertedTask->getId());
         
         $task->setId($insertedTask->getId());
@@ -66,31 +65,24 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         $task->setWordCount(334455);
         $task->setDeadline("2025-03-29 19:25:12");
         
-        $sourceLocale = new Locale();
+        $sourceLocale = new Common\Protobufs\Models\Locale();
         $sourceLocale->setLanguageCode("de");
         $sourceLocale->setCountryCode("DE");
         $task->setSourceLocale($sourceLocale);
                 
-        $targetLocale = new Locale();
+        $targetLocale = new Common\Protobufs\Models\Locale();
         $targetLocale->setLanguageCode("es");
         $targetLocale->setCountryCode("ES");
         $task->setTargetLocale($targetLocale);
         
         $task->setPublished(0);
-        
-        //$i = 0;
-        //foreach($insertedProject->getTag() as $tag) {
-        //  $task->setTag($tag, $i);
-        //  $i++;
-        //}
         $task->setTaskStatus(3);
         $task->setTaskType(3);
         $task->setCreatedTime("2030-07-14 12:24:02");
         
         // Success
-        //was using missing create function, changed to save
-        $updatedTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $updatedTask);
+        $updatedTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $updatedTask);
         $this->assertEquals($insertedTask->getId(), $task->getId());
         $this->assertEquals($task->getTitle(), $updatedTask->getTitle());
         $this->assertEquals($task->getComment(), $updatedTask->getComment());
@@ -121,23 +113,21 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
-       
-        //was using missing create function, changed to save
-        $insertedTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $insertedTask);
+        $insertedTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $insertedTask);
         $this->assertNotNull($insertedTask->getId());
         
         // Success
-        $retrievedTask = TaskDao::getTask(
+        $retrievedTask = API\DAO\TaskDao::getTask(
             $task->getId(),
             $task->getProjectId(),
             $task->getTitle(),
@@ -154,7 +144,7 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
             $task->getDeadline()
         );
         
-        $this->assertInstanceOf("Task", $retrievedTask[0]);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $retrievedTask[0]);
         $this->assertEquals($insertedTask->getId(), $retrievedTask[0]->getId());
         $this->assertEquals($task->getTitle(), $retrievedTask[0]->getTitle());
         $this->assertEquals($task->getComment(), $retrievedTask[0]->getComment());
@@ -180,9 +170,8 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($task->getPublished(), $retrievedTask[0]->getPublished());
         
-        
         // Failure
-        $nonExistantTask = TaskDao::getTask(999);
+        $nonExistantTask = API\DAO\TaskDao::getTask(999);
         $this->assertNull($nonExistantTask);
     }
     
@@ -192,27 +181,25 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
-
-        //was using missing create function, changed to save
-        $insertedTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $insertedTask);
+        $insertedTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $insertedTask);
         $this->assertNotNull($insertedTask->getId());
         
         // Success
-        $deletedTask = TaskDao::delete($insertedTask->getId());
+        $deletedTask = API\DAO\TaskDao::delete($insertedTask->getId());
         $this->assertEquals("1", $deletedTask);
         
         // Failure
-        $deleteNonExistantTask = TaskDao::delete(999);
+        $deleteNonExistantTask = API\DAO\TaskDao::delete(999);
         $this->assertEquals("0", $deleteNonExistantTask);
     }
     
@@ -221,12 +208,12 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask(
@@ -237,7 +224,7 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
             "2022-03-29 16:30:00",
             11111,
             null,
-            TaskTypeEnum::TRANSLATION
+            Common\Enums\TaskTypeEnum::TRANSLATION
         );
         $task2 = UnitTestHelper::createTask(
             $insertedProject->getId(),
@@ -247,22 +234,25 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
             "2021-03-29 16:30:00",
             22222,
             null,
-            TaskTypeEnum::PROOFREADING
+            Common\Enums\TaskTypeEnum::PROOFREADING
         );
 
         //was using missing create function, changed to save
-        $translationTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $translationTask);
+        $translationTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask);
         
-        $proofReadingTask = TaskDao::save($task2);
-        $this->assertInstanceOf("Task", $proofReadingTask);
+        $proofReadingTask = API\DAO\TaskDao::save($task2);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $proofReadingTask);
         
         // Success
-        $addTaskPreReq = TaskDao::addTaskPreReq($proofReadingTask->getId(), $translationTask->getId());
+        $addTaskPreReq = API\DAO\TaskDao::addTaskPreReq($proofReadingTask->getId(), $translationTask->getId());
         $this->assertEquals("1", $addTaskPreReq);
         
         // Failure
-        $addTaskPreReqDuplicate = TaskDao::addTaskPreReq($proofReadingTask->getId(), $translationTask->getId());
+        $addTaskPreReqDuplicate = API\DAO\TaskDao::addTaskPreReq(
+            $proofReadingTask->getId(),
+            $translationTask->getId()
+        );
         $this->assertEquals("0", $addTaskPreReqDuplicate);
     }
     
@@ -271,12 +261,12 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask(
@@ -287,7 +277,7 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
             "2022-03-29 16:30:00",
             11111,
             null,
-            TaskTypeEnum::TRANSLATION
+            Common\Enums\TaskTypeEnum::TRANSLATION
         );
         $task2 = UnitTestHelper::createTask(
             $insertedProject->getId(),
@@ -297,24 +287,27 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
             "2021-03-29 16:30:00",
             22222,
             null,
-            TaskTypeEnum::PROOFREADING
+            Common\Enums\TaskTypeEnum::PROOFREADING
         );
 
-        $translationTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $translationTask);
+        $translationTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask);
         
-        $proofReadingTask = TaskDao::save($task2);
-        $this->assertInstanceOf("Task", $proofReadingTask);
+        $proofReadingTask = API\DAO\TaskDao::save($task2);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $proofReadingTask);
         
-        $addTaskPreReq = TaskDao::addTaskPreReq($proofReadingTask->getId(), $translationTask->getId());
+        $addTaskPreReq = API\DAO\TaskDao::addTaskPreReq($proofReadingTask->getId(), $translationTask->getId());
         $this->assertEquals("1", $addTaskPreReq);
         
         // Success
-        $removeTaskPreReq = TaskDao::removeTaskPreReq($proofReadingTask->getId(), $translationTask->getId());
+        $removeTaskPreReq = API\DAO\TaskDao::removeTaskPreReq($proofReadingTask->getId(), $translationTask->getId());
         $this->assertEquals("1", $removeTaskPreReq);
         
         // Failure
-        $removeTaskPreReqDuplicate = TaskDao::removeTaskPreReq($proofReadingTask->getId(), $translationTask->getId());
+        $removeTaskPreReqDuplicate = API\DAO\TaskDao::removeTaskPreReq(
+            $proofReadingTask->getId(),
+            $translationTask->getId()
+        );
         $this->assertEquals("0", $removeTaskPreReqDuplicate);
     }
     
@@ -323,16 +316,16 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         // Failure
-        $taskPreReqsFailure = TaskDao::getTaskPreReqs(999);
+        $taskPreReqsFailure = API\DAO\TaskDao::getTaskPreReqs(999);
         $this->assertNull($taskPreReqsFailure);
         
         $task = UnitTestHelper::createTask(
@@ -343,7 +336,7 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
             "2021-03-29 16:30:00",
             11111,
             null,
-            TaskTypeEnum::TRANSLATION
+            Common\Enums\TaskTypeEnum::TRANSLATION
         );
         $task2 = UnitTestHelper::createTask(
             $insertedProject->getId(),
@@ -353,7 +346,7 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
             "2022-03-29 16:30:00",
             22222,
             null,
-            TaskTypeEnum::PROOFREADING
+            Common\Enums\TaskTypeEnum::PROOFREADING
         );
         $task3 = UnitTestHelper::createTask(
             $insertedProject->getId(),
@@ -363,29 +356,29 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
             "2023-03-29 16:30:00",
             33333,
             null,
-            TaskTypeEnum::TRANSLATION
+            Common\Enums\TaskTypeEnum::TRANSLATION
         );
 
-        $translationTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $translationTask);
+        $translationTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask);
         
-        $proofReadingTask = TaskDao::save($task2);
-        $this->assertInstanceOf("Task", $proofReadingTask);
+        $proofReadingTask = API\DAO\TaskDao::save($task2);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $proofReadingTask);
         $this->assertNotNull($proofReadingTask->getId());
         
-        $translationTask2 = TaskDao::save($task3);
-        $this->assertInstanceOf("Task", $translationTask2);
+        $translationTask2 = API\DAO\TaskDao::save($task3);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask2);
         
-        $addTaskPreReq = TaskDao::addTaskPreReq($proofReadingTask->getId(), $translationTask->getId());
+        $addTaskPreReq = API\DAO\TaskDao::addTaskPreReq($proofReadingTask->getId(), $translationTask->getId());
         $this->assertEquals("1", $addTaskPreReq);
-        $addTaskPreReq2 = TaskDao::addTaskPreReq($proofReadingTask->getId(), $translationTask2->getId());
+        $addTaskPreReq2 = API\DAO\TaskDao::addTaskPreReq($proofReadingTask->getId(), $translationTask2->getId());
         $this->assertEquals("1", $addTaskPreReq2);
         
         // Success
-        $taskPreReqs = TaskDao::getTaskPreReqs($proofReadingTask->getId());
+        $taskPreReqs = API\DAO\TaskDao::getTaskPreReqs($proofReadingTask->getId());
         $this->assertCount(2, $taskPreReqs);
         foreach ($taskPreReqs as $task) {
-            $this->assertInstanceOf("Task", $task);
+            $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $task);
         }
     }
     
@@ -394,16 +387,16 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         // Failure
-        $emptylatestTasks = TaskDao::getLatestAvailableTasks();
+        $emptylatestTasks = API\DAO\TaskDao::getLatestAvailableTasks();
         $this->assertNull($emptylatestTasks);
         
         $task = UnitTestHelper::createTask(
@@ -414,7 +407,7 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
             "2021-03-29 16:30:00",
             11111,
             null,
-            TaskTypeEnum::TRANSLATION
+            Common\Enums\TaskTypeEnum::TRANSLATION
         );
         $task2 = UnitTestHelper::createTask(
             $insertedProject->getId(),
@@ -424,20 +417,20 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
             "2022-03-29 16:30:00",
             22222,
             null,
-            TaskTypeEnum::TRANSLATION
+            Common\Enums\TaskTypeEnum::TRANSLATION
         );
         
-        $translationTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $translationTask);
+        $translationTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask);
         
-        $translationTask2 = TaskDao::save($task2);
-        $this->assertInstanceOf("Task", $translationTask2);
+        $translationTask2 = API\DAO\TaskDao::save($task2);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask2);
         
         // Success
-        $latestTasks = TaskDao::getLatestAvailableTasks();
+        $latestTasks = API\DAO\TaskDao::getLatestAvailableTasks();
         $this->assertCount(2, $latestTasks);
         foreach ($latestTasks as $task) {
-            $this->assertInstanceOf("Task", $task);
+            $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $task);
         }
     }
     
@@ -446,12 +439,12 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask(
@@ -462,7 +455,7 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
             "2021-03-29 16:30:00",
             11111,
             null,
-            TaskTypeEnum::TRANSLATION
+            Common\Enums\TaskTypeEnum::TRANSLATION
         );
         $task2 = UnitTestHelper::createTask(
             $insertedProject->getId(),
@@ -472,35 +465,33 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
             "2022-03-29 16:30:00",
             22222,
             null,
-            TaskTypeEnum::TRANSLATION
+            Common\Enums\TaskTypeEnum::TRANSLATION
         );
         
-        $translationTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $translationTask);
+        $translationTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask);
         
-        $translationTask2 = TaskDao::save($task2);
-        $this->assertInstanceOf("Task", $translationTask2);
+        $translationTask2 = API\DAO\TaskDao::save($task2);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask2);
         
         $user = UnitTestHelper::createUser();
-        $insertedUser = UserDao::save($user);
-        $this->assertInstanceOf("User", $insertedUser);
+        $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
         $this->assertNotNull($insertedUser->getId());
         
         // Success
-        //added additional 4 parameters that are required.
-        //Perhaps they were not used in the function when these tests were first made
-        $userTopTasks = TaskDao::getUserTopTasks(
+        $userTopTasks = API\DAO\TaskDao::getUserTopTasks(
             $insertedUser->getId(),
             false,
             30,
             0,
-            TaskTypeEnum::TRANSLATION,
+            Common\Enums\TaskTypeEnum::TRANSLATION,
             null,
             null
         );
         $this->assertCount(2, $userTopTasks);
         foreach ($userTopTasks as $task) {
-            $this->assertInstanceOf("Task", $task);
+            $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $task);
         }
     }
     
@@ -509,28 +500,27 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
-        
-        $translationTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $translationTask);
+        $translationTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask);
         $this->assertNotNull($translationTask->getId());
         
         $user = UnitTestHelper::createUser();
-        $insertedUser = UserDao::save($user);
-        $this->assertInstanceOf("User", $insertedUser);
+        $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
         $this->assertNotNull($insertedUser->getId());
         
         //create task file info for non existant file
         $fileInfo = UnitTestHelper::createTaskFileInfo($translationTask->getId(), $insertedUser->getId());
-        TaskDao::recordFileUpload(
+        API\DAO\TaskDao::recordFileUpload(
             $fileInfo['taskId'],
             $fileInfo['filename'],
             $fileInfo['contentType'],
@@ -539,11 +529,11 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         );
         
         // Success
-        $archiveTask = TaskDao::moveToArchiveById($translationTask->getId(), $insertedUser->getId());
+        $archiveTask = API\DAO\TaskDao::moveToArchiveById($translationTask->getId(), $insertedUser->getId());
         $this->assertEquals("1", $archiveTask);
 
         // Failure
-        $archiveTaskFailure = TaskDao::moveToArchiveById($translationTask->getId(), $insertedUser->getId());
+        $archiveTaskFailure = API\DAO\TaskDao::moveToArchiveById($translationTask->getId(), $insertedUser->getId());
         $this->assertEquals("0", $archiveTaskFailure);
     }
     
@@ -552,31 +542,31 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
         
-        $translationTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $translationTask);
+        $translationTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask);
         $this->assertNotNull($translationTask->getId());
         
         $user = UnitTestHelper::createUser();
-        $insertedUser = UserDao::save($user);
-        $this->assertInstanceOf("User", $insertedUser);
+        $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
         $this->assertNotNull($insertedUser->getId());
         
         // Success
-        $claimTask = TaskDao::claimTask($translationTask->getId(), $insertedUser->getId());
+        $claimTask = API\DAO\TaskDao::claimTask($translationTask->getId(), $insertedUser->getId());
         $this->assertEquals("1", $claimTask);
         
         // Failure
-        $claimTaskFailure = TaskDao::claimTask($translationTask->getId(), $insertedUser->getId());
+        $claimTaskFailure = API\DAO\TaskDao::claimTask($translationTask->getId(), $insertedUser->getId());
         $this->assertEquals("0", $claimTaskFailure);
     }
     
@@ -585,34 +575,34 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
         
-        $translationTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $translationTask);
+        $translationTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask);
         $this->assertNotNull($translationTask->getId());
         
         $user = UnitTestHelper::createUser();
-        $insertedUser = UserDao::save($user);
-        $this->assertInstanceOf("User", $insertedUser);
+        $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
         $this->assertNotNull($insertedUser->getId());
 
-        $claimTask = TaskDao::claimTask($translationTask->getId(), $insertedUser->getId());
+        $claimTask = API\DAO\TaskDao::claimTask($translationTask->getId(), $insertedUser->getId());
         $this->assertEquals("1", $claimTask);
         
         // Success
-        $unClaimTask = TaskDao::unClaimTask($translationTask->getId(), $insertedUser->getId());
+        $unClaimTask = API\DAO\TaskDao::unClaimTask($translationTask->getId(), $insertedUser->getId());
         $this->assertEquals("1", $unClaimTask);
         
         // Success
-        $unClaimTaskFailure = TaskDao::unClaimTask($translationTask->getId(), $insertedUser->getId());
+        $unClaimTaskFailure = API\DAO\TaskDao::unClaimTask($translationTask->getId(), $insertedUser->getId());
         $this->assertEquals("0", $unClaimTaskFailure);
     }
     
@@ -621,34 +611,37 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
         
-        $translationTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $translationTask);
+        $translationTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask);
         $this->assertNotNull($translationTask->getId());
         
         $user = UnitTestHelper::createUser();
-        $insertedUser = UserDao::save($user);
-        $this->assertInstanceOf("User", $insertedUser);
+        $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
         $this->assertNotNull($insertedUser->getId());
         
         // Failure
-        $hasUserClaimedTaskFailure = TaskDao::hasUserClaimedTask($insertedUser->getId(), $translationTask->getId());
+        $hasUserClaimedTaskFailure = API\DAO\TaskDao::hasUserClaimedTask(
+            $insertedUser->getId(),
+            $translationTask->getId()
+        );
         $this->assertEquals("0", $hasUserClaimedTaskFailure);
 
-        $claimTask = TaskDao::claimTask($translationTask->getId(), $insertedUser->getId());
+        $claimTask = API\DAO\TaskDao::claimTask($translationTask->getId(), $insertedUser->getId());
         $this->assertEquals("1", $claimTask);
         
         // Success
-        $hasUserClaimedTask = TaskDao::hasUserClaimedTask($insertedUser->getId(), $translationTask->getId());
+        $hasUserClaimedTask = API\DAO\TaskDao::hasUserClaimedTask($insertedUser->getId(), $translationTask->getId());
         $this->assertEquals("1", $hasUserClaimedTask);
     }
     
@@ -657,34 +650,34 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
         
-        $translationTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $translationTask);
+        $translationTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask);
         $this->assertNotNull($translationTask->getId());
         
         $user = UnitTestHelper::createUser();
-        $insertedUser = UserDao::save($user);
-        $this->assertInstanceOf("User", $insertedUser);
+        $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
         $this->assertNotNull($insertedUser->getId());
         
         // Failure
-        $taskIsNotClaimed = TaskDao::taskIsClaimed($translationTask->getId());
+        $taskIsNotClaimed = API\DAO\TaskDao::taskIsClaimed($translationTask->getId());
         $this->assertEquals("0", $taskIsNotClaimed);
 
-        $claimTask = TaskDao::claimTask($translationTask->getId(), $insertedUser->getId());
+        $claimTask = API\DAO\TaskDao::claimTask($translationTask->getId(), $insertedUser->getId());
         $this->assertEquals("1", $claimTask);
         
         // Success
-        $taskIsClaimed = TaskDao::taskIsClaimed($translationTask->getId());
+        $taskIsClaimed = API\DAO\TaskDao::taskIsClaimed($translationTask->getId());
         $this->assertEquals("1", $taskIsClaimed);
     }
     
@@ -693,35 +686,35 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
         
-        $translationTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $translationTask);
+        $translationTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask);
         $this->assertNotNull($translationTask->getId());
         
         $user = UnitTestHelper::createUser();
-        $insertedUser = UserDao::save($user);
-        $this->assertInstanceOf("User", $insertedUser);
+        $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
         $this->assertNotNull($insertedUser->getId());
         
         // Failure
-        $noTaskTranslator = TaskDao::getUserClaimedTask($translationTask->getId());
+        $noTaskTranslator = API\DAO\TaskDao::getUserClaimedTask($translationTask->getId());
         $this->assertNull($noTaskTranslator);
 
-        $claimTask = TaskDao::claimTask($translationTask->getId(), $insertedUser->getId());
+        $claimTask = API\DAO\TaskDao::claimTask($translationTask->getId(), $insertedUser->getId());
         $this->assertEquals("1", $claimTask);
         
         // Success
-        $taskTranslator = TaskDao::getUserClaimedTask($translationTask->getId());
-        $this->assertInstanceOf("User", $taskTranslator);
+        $taskTranslator = API\DAO\TaskDao::getUserClaimedTask($translationTask->getId());
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $taskTranslator);
         $this->assertNotNull($taskTranslator->getId());
         $this->assertEquals($insertedUser->getId(), $taskTranslator->getId());
     }
@@ -731,29 +724,32 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
-        $task->setTaskType(TaskTypeEnum::SEGMENTATION);
+        $task->setTaskType(Common\Enums\TaskTypeEnum::SEGMENTATION);
         
-        $translationTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $translationTask);
+        $translationTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask);
         $this->assertNotNull($translationTask->getId());
         
         $user = UnitTestHelper::createUser();
-        $insertedUser = UserDao::save($user);
-        $this->assertInstanceOf("User", $insertedUser);
+        $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
         $this->assertNotNull($insertedUser->getId());
         
-        $claimTask = TaskDao::claimTask($translationTask->getId(), $insertedUser->getId());
+        $claimTask = API\DAO\TaskDao::claimTask($translationTask->getId(), $insertedUser->getId());
         $this->assertEquals("1", $claimTask);
-        $hasClaimedSeg = TaskDao::hasUserClaimedSegmentationTask($insertedUser->getId(), $insertedProject->getId());
+        $hasClaimedSeg = API\DAO\TaskDao::hasUserClaimedSegmentationTask(
+            $insertedUser->getId(),
+            $insertedProject->getId()
+        );
         $this->assertEquals("1", $hasClaimedSeg);
     }
     
@@ -761,33 +757,30 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
     {
         UnitTestHelper::teardownDb();
         
-        UnitTestHelper::teardownDb();
-        
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
-        
-        $translationTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $translationTask);
+        $translationTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask);
         $this->assertNotNull($translationTask->getId());
         
         $user = UnitTestHelper::createUser();
-        $insertedUser = UserDao::save($user);
-        $this->assertInstanceOf("User", $insertedUser);
+        $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
         $this->assertNotNull($insertedUser->getId());
         
-        $claimTask = TaskDao::claimTask($translationTask->getId(), $insertedUser->getId());
+        $claimTask = API\DAO\TaskDao::claimTask($translationTask->getId(), $insertedUser->getId());
         $theTime = time();
         $this->assertEquals("1", $claimTask);
         
-        $getClaimedTime = TaskDao::getClaimedTime($translationTask->getId());
+        $getClaimedTime = API\DAO\TaskDao::getClaimedTime($translationTask->getId());
         //assert the times are equal, give or take 2 seconds
         //                  Expected    Actual               Failure message    Allowed difference
         $this->assertEquals($theTime, strtotime($getClaimedTime), "FAILUUUURRRE", 2);
@@ -798,21 +791,21 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         $user = UnitTestHelper::createUser();
-        $insertedUser = UserDao::save($user);
-        $this->assertInstanceOf("User", $insertedUser);
+        $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
         $this->assertNotNull($insertedUser->getId());
         
         // Failure
-        $userTasksFailure = TaskDao::getUserTasks($insertedUser->getId());
+        $userTasksFailure = API\DAO\TaskDao::getUserTasks($insertedUser->getId());
         $this->assertNull($userTasksFailure);
         
         $task = UnitTestHelper::createTask(
@@ -823,7 +816,7 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
             "2021-03-29 16:30:00",
             11111,
             null,
-            TaskTypeEnum::TRANSLATION
+            Common\Enums\TaskTypeEnum::TRANSLATION
         );
         $task2 = UnitTestHelper::createTask(
             $insertedProject->getId(),
@@ -833,26 +826,26 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
             "2022-03-29 16:30:00",
             22222,
             null,
-            TaskTypeEnum::TRANSLATION
+            Common\Enums\TaskTypeEnum::TRANSLATION
         );
         
-        $translationTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $translationTask);
+        $translationTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask);
         
-        $translationTask2 = TaskDao::save($task2);
-        $this->assertInstanceOf("Task", $translationTask2);
+        $translationTask2 = API\DAO\TaskDao::save($task2);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask2);
         
-        $claimTask = TaskDao::claimTask($translationTask->getId(), $insertedUser->getId());
+        $claimTask = API\DAO\TaskDao::claimTask($translationTask->getId(), $insertedUser->getId());
         $this->assertEquals("1", $claimTask);
         
-        $claimTask2 = TaskDao::claimTask($translationTask2->getId(), $insertedUser->getId());
+        $claimTask2 = API\DAO\TaskDao::claimTask($translationTask2->getId(), $insertedUser->getId());
         $this->assertEquals("1", $claimTask2);
         
         // Success
-        $userTasks = TaskDao::getUserTasks($insertedUser->getId());
+        $userTasks = API\DAO\TaskDao::getUserTasks($insertedUser->getId());
         $this->assertCount(2, $userTasks);
         foreach ($userTasks as $task) {
-            $this->assertInstanceOf("Task", $task);
+            $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $task);
         }
     }
     
@@ -861,21 +854,21 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         $user = UnitTestHelper::createUser();
-        $insertedUser = UserDao::save($user);
-        $this->assertInstanceOf("User", $insertedUser);
+        $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
         $this->assertNotNull($insertedUser->getId());
         
         // Failure
-        $userTasksFailure = TaskDao::getUserTasks($insertedUser->getId());
+        $userTasksFailure = API\DAO\TaskDao::getUserTasks($insertedUser->getId());
         $this->assertNull($userTasksFailure);
         
         $task = UnitTestHelper::createTask(
@@ -886,7 +879,7 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
             "2021-03-29 16:30:00",
             11111,
             null,
-            TaskTypeEnum::TRANSLATION
+            Common\Enums\TaskTypeEnum::TRANSLATION
         );
         $task2 = UnitTestHelper::createTask(
             $insertedProject->getId(),
@@ -896,22 +889,22 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
             "2022-03-29 16:30:00",
             22222,
             null,
-            TaskTypeEnum::TRANSLATION
+            Common\Enums\TaskTypeEnum::TRANSLATION
         );
         
-        $translationTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $translationTask);
+        $translationTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask);
         
-        $translationTask2 = TaskDao::save($task2);
-        $this->assertInstanceOf("Task", $translationTask2);
+        $translationTask2 = API\DAO\TaskDao::save($task2);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask2);
         
-        $claimTask = TaskDao::claimTask($translationTask->getId(), $insertedUser->getId());
+        $claimTask = API\DAO\TaskDao::claimTask($translationTask->getId(), $insertedUser->getId());
         $this->assertEquals("1", $claimTask);
         
-        $claimTask2 = TaskDao::claimTask($translationTask2->getId(), $insertedUser->getId());
+        $claimTask2 = API\DAO\TaskDao::claimTask($translationTask2->getId(), $insertedUser->getId());
         $this->assertEquals("1", $claimTask2);
         
-        $userTaskCount = TaskDao::getUserTasksCount($insertedUser->getId());
+        $userTaskCount = API\DAO\TaskDao::getUserTasksCount($insertedUser->getId());
         $this->assertEquals("2", $userTaskCount);
     }
     
@@ -920,31 +913,30 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         $user = UnitTestHelper::createUser();
-        $insertedUser = UserDao::save($user);
-        $this->assertInstanceOf("User", $insertedUser);
+        $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
         $this->assertNotNull($insertedUser->getId());
         
         // Failure
-        $userArchivedTasksFailure = TaskDao::getUserArchivedTasks($insertedUser->getId());
+        $userArchivedTasksFailure = API\DAO\TaskDao::getUserArchivedTasks($insertedUser->getId());
         $this->assertNull($userArchivedTasksFailure);
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
-
-        $translationTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $translationTask);
+        $translationTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask);
 
         //create task file info for non existant file
         $fileInfo = UnitTestHelper::createTaskFileInfo($translationTask->getId(), $insertedUser->getId());
-        TaskDao::recordFileUpload(
+        API\DAO\TaskDao::recordFileUpload(
             $fileInfo['taskId'],
             $fileInfo['filename'],
             $fileInfo['contentType'],
@@ -952,17 +944,17 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
             $fileInfo['version']
         );
         
-        $claimTask = TaskDao::claimTask($translationTask->getId(), $insertedUser->getId());
+        $claimTask = API\DAO\TaskDao::claimTask($translationTask->getId(), $insertedUser->getId());
         $this->assertEquals("1", $claimTask);
         
-        $archivedTask = TaskDao::moveToArchiveById($translationTask->getId(), $insertedUser->getId());
+        $archivedTask = API\DAO\TaskDao::moveToArchiveById($translationTask->getId(), $insertedUser->getId());
         $this->assertEquals("1", $archivedTask);
         
         // Success
-        $userArchivedTasks = TaskDao::getUserArchivedTasks($insertedUser->getId());
+        $userArchivedTasks = API\DAO\TaskDao::getUserArchivedTasks($insertedUser->getId());
         $archivedTask = $userArchivedTasks[0];
         $this->assertCount(1, $userArchivedTasks);
-        $this->assertInstanceOf("ArchivedTask", $archivedTask);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\ArchivedTask", $archivedTask);
         $this->assertEquals($translationTask->getProjectId(), $archivedTask->getProjectId());
         $this->assertEquals($translationTask->getTitle(), $archivedTask->getTitle());
         $this->assertEquals($translationTask->getComment(), $archivedTask->getComment());
@@ -986,7 +978,6 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($translationTask->getTaskType(), $archivedTask->getTaskType());
         $this->assertEquals(3, $archivedTask->getTaskStatus()); // Claimed the task, so status changes
         $this->assertEquals($translationTask->getPublished(), $archivedTask->getPublished());
-        //$this->assertNotNull($archivedTask->getArchiveUserId()); // This is not implemented (see issue #752)
         $this->assertNotNull($archivedTask->getArchivedDate());
     }
     
@@ -995,21 +986,20 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId(), null, "MY PROJECT");
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         $user = UnitTestHelper::createUser();
-        $insertedUser = UserDao::save($user);
-        $this->assertInstanceOf("User", $insertedUser);
+        $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
         $this->assertNotNull($insertedUser->getId());
         
-        // Function should fail (i.e. return null) so the assertNull should not fail
-        $getTasksWithTagFailure = TaskDao::getTasksWithTag(999);
+        $getTasksWithTagFailure = API\DAO\TaskDao::getTasksWithTag(999);
         $this->assertNull($getTasksWithTagFailure);
         
         $task = UnitTestHelper::createTask(
@@ -1020,7 +1010,7 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
             "2022-03-29 16:30:00",
             11111,
             null,
-            TaskTypeEnum::TRANSLATION
+            Common\Enums\TaskTypeEnum::TRANSLATION
         );
         $task2 = UnitTestHelper::createTask(
             $insertedProject->getId(),
@@ -1030,23 +1020,22 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
             "2021-03-29 16:30:00",
             22222,
             null,
-            TaskTypeEnum::TRANSLATION
+            Common\Enums\TaskTypeEnum::TRANSLATION
         );
-                          //was using missing create function, changed to save
-        $translationTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $translationTask);
+        $translationTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask);
         
-        $translationTask2 = TaskDao::save($task2);
-        $this->assertInstanceOf("Task", $translationTask2);
+        $translationTask2 = API\DAO\TaskDao::save($task2);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask2);
         
-        $tag = TagsDao::getTag(null, "Tags");
+        $tag = API\DAO\TagsDao::getTag(null, "Tags");
         $tag = $tag[0];
         
         // Success
-        $getTasksWithTag = TaskDao::getTasksWithTag($tag->getId());
+        $getTasksWithTag = API\DAO\TaskDao::getTasksWithTag($tag->getId());
         $this->assertCount(2, $getTasksWithTag);
         foreach ($getTasksWithTag as $task) {
-            $this->assertInstanceOf("Task", $task);
+            $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $task);
         }
     }
     
@@ -1055,22 +1044,21 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
-                          //was using missing create function, changed to save
-        $translationTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $translationTask);
+        $translationTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask);
         $this->assertNotNull($translationTask->getId());
         
         // Success
-        $checkTaskFileVersion = TaskDao::checkTaskFileVersion($translationTask->getId());
+        $checkTaskFileVersion = API\DAO\TaskDao::checkTaskFileVersion($translationTask->getId());
         $this->assertEquals(false, $checkTaskFileVersion);
     }
     
@@ -1079,27 +1067,26 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         $user = UnitTestHelper::createUser();
-        $insertedUser = UserDao::save($user);
-        $this->assertInstanceOf("User", $insertedUser);
+        $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
         $this->assertNotNull($insertedUser->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
-        //was using missing create function, changed to save
-        $translationTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $translationTask);
+        $translationTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask);
         $this->assertNotNull($translationTask->getId());
         
         // Success
-        $recordFileUpload = TaskDao::recordFileUpload(
+        $recordFileUpload = API\DAO\TaskDao::recordFileUpload(
             $translationTask->getId(),
             "examplefile",
             "text/plain",
@@ -1113,22 +1100,21 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
-        //was using missing create function, changed to save
-        $translationTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $translationTask);
+        $translationTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask);
         $this->assertNotNull($translationTask->getId());
         
         // Success
-        $latestFileVersion = TaskDao::getLatestFileVersion($translationTask->getId());
+        $latestFileVersion = API\DAO\TaskDao::getLatestFileVersion($translationTask->getId());
         $this->assertEquals(0, $latestFileVersion);
     }
     
@@ -1136,39 +1122,38 @@ class TaskDaoTest extends PHPUnit_Framework_TestCase
     {
         UnitTestHelper::teardownDb();
         
-        $insertedUser = UserDao::create("testuser@example.com", "testpw");
-        $this->assertInstanceOf("User", $insertedUser);
+        $insertedUser = API\DAO\UserDao::create("testuser@example.com", "testpw");
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
         $this->assertNotNull($insertedUser->getId());
         
-        $insertedUser2 = UserDao::create("bestuser@example.com", "testpw");
-        $this->assertInstanceOf("User", $insertedUser2);
+        $insertedUser2 = API\DAO\UserDao::create("bestuser@example.com", "testpw");
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser2);
         $this->assertNotNull($insertedUser2->getId());
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
-        
-        $insertedTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $insertedTask);
+        $insertedTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $insertedTask);
         $this->assertNotNull($insertedTask->getId());
         
-        $trackTask = UserDao::trackTask($insertedUser->getId(), $insertedTask->getId());
+        $trackTask = API\DAO\UserDao::trackTask($insertedUser->getId(), $insertedTask->getId());
         $this->assertEquals("1", $trackTask);
-        $trackTask2 = UserDao::trackTask($insertedUser2->getId(), $insertedTask->getId());
+        $trackTask2 = API\DAO\UserDao::trackTask($insertedUser2->getId(), $insertedTask->getId());
         $this->assertEquals("1", $trackTask2);
         
-        $subbedUsers = TaskDao::getSubscribedUsers($task->getId());
+        $subbedUsers = API\DAO\TaskDao::getSubscribedUsers($task->getId());
         $this->assertCount(2, $subbedUsers);
         
         foreach ($subbedUsers as $sub) {
-            $this->assertInstanceOf("User", $sub);
+            $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $sub);
         }
         $this->assertEquals($insertedUser->getId(), $subbedUsers[0]->getId());
         $this->assertEquals($insertedUser2->getId(), $subbedUsers[1]->getId());

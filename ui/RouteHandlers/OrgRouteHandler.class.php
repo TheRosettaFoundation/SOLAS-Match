@@ -959,7 +959,7 @@ class OrgRouteHandler
                 }
             }
             
-            $dummyTask = new \Task();        //Create a dummy task to hold the project info
+            $dummyTask = new Common\Protobufs\Models\Task();        //Create a dummy task to hold the project info
             $dummyTask->setProjectId($task->getProjectId());
             $dummyTask->setTitle($project->getTitle());
             $viewData['projectData'] = $dummyTask;

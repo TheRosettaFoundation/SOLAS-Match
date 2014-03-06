@@ -41,7 +41,7 @@ class AdminRouteHandler
             
             if (isset($post['banOrg']) && $post['orgName'] != '') {
                 $orgDao = new OrganisationDao();
-                $bannedOrg = new \BannedOrganisation();
+                $bannedOrg = new Common\Protobufs\Models\BannedOrganisation();
                 $org = $orgDao->getOrganisationByName(urlencode($post['orgName']));
                 
                 $bannedOrg->setOrgId($org->getId());
@@ -53,7 +53,7 @@ class AdminRouteHandler
                 $adminDao->banOrg($bannedOrg);
             }
             if (isset($post['banUser']) && $post['userEmail'] != '') {
-                $bannedUser = new \BannedUser();
+                $bannedUser = new Common\Protobufs\Models\BannedUser();
                 $user = $userDao->getUserByEmail(urlencode($post['userEmail']));
                 
                 $bannedUser->setUserId($user->getId());

@@ -621,7 +621,7 @@ class UserRouteHandler
                 if ($post['interval'] == 0) {
                     $success = $userDao->removeTaskStreamNotification($userId);
                 } else {
-                    $notifData = new \UserTaskStreamNotification();
+                    $notifData = new Common\Protobufs\Models\UserTaskStreamNotification();
                     $notifData->setUserId($userId);
                     $notifData->setInterval($post['interval']);
                     if (isset($post['strictMode']) && $post['strictMode'] == 'enabled') {

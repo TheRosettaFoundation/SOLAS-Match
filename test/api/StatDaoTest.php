@@ -1,5 +1,11 @@
 <?php
 
+namespace SolasMatch\Tests\API;
+
+use \SolasMatch\Tests\UnitTestHelper;
+use \SolasMatch\API as API;
+use \SolasMatch\Common as Common;
+
 require_once 'PHPUnit/Autoload.php';
 require_once __DIR__.'/../../api/vendor/autoload.php';
 \DrSlump\Protobuf::autoload();
@@ -8,10 +14,9 @@ require_once __DIR__.'/../../api/DataAccessObjects/ProjectDao.class.php';
 require_once __DIR__.'/../../api/DataAccessObjects/TaskDao.class.php';
 require_once __DIR__.'/../../api/DataAccessObjects/StatDao.class.php';
 require_once __DIR__.'/../../api/DataAccessObjects/UserDao.class.php';
-require_once __DIR__.'/../../Common/lib/ModelFactory.class.php';
 require_once __DIR__.'/../UnitTestHelper.php';
 
-class StatDaoTest extends PHPUnit_Framework_TestCase
+class StatDaoTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetStatistics()
     {
@@ -19,16 +24,16 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
         $this->callStatFuncs();
        
         // Success - Total 12 Statistics
-        $resultAllStatistics = StatDao::getStatistics(null);
+        $resultAllStatistics = API\DAO\StatDao::getStatistics(null);
         $this->assertCount(12, $resultAllStatistics);
         foreach ($resultAllStatistics as $stat) {
-            $this->assertInstanceOf("Statistic", $stat);
+            $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $stat);
         }
         
         // Success - Get a single statistic - Total Badges
-        $resultAllBadges = StatDao::getStatistics("Badges");
+        $resultAllBadges = API\DAO\StatDao::getStatistics("Badges");
         $this->assertCount(1, $resultAllBadges);
-        $this->assertInstanceOf("Statistic", $resultAllBadges[0]);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $resultAllBadges[0]);
         $this->assertEquals("Badges", $resultAllBadges[0]->getName());
         //Changed 3 to 7. There were only 3 badges when this test class was made?
         $this->assertEquals(7, $resultAllBadges[0]->getValue());
@@ -38,11 +43,11 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
     public function testUpdateArchivedProjects()
     {
         UnitTestHelper::teardownDb();
-        StatDao::updateArchivedProjects();
+        API\DAO\StatDao::updateArchivedProjects();
         
-        $totalArchivedProjects = StatDao::getStatistics("ArchivedProjects");
+        $totalArchivedProjects = API\DAO\StatDao::getStatistics("ArchivedProjects");
         $this->assertCount(1, $totalArchivedProjects);
-        $this->assertInstanceOf("Statistic", $totalArchivedProjects[0]);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $totalArchivedProjects[0]);
         $this->assertEquals("ArchivedProjects", $totalArchivedProjects[0]->getName());
         $this->assertEquals(0, $totalArchivedProjects[0]->getValue());
     }
@@ -50,11 +55,11 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
     public function testUpdateArchivedTasks()
     {
         UnitTestHelper::teardownDb();
-        StatDao::updateArchivedTasks();
+        API\DAO\StatDao::updateArchivedTasks();
         
-        $totalArchivedTasks = StatDao::getStatistics("ArchivedTasks");
+        $totalArchivedTasks = API\DAO\StatDao::getStatistics("ArchivedTasks");
         $this->assertCount(1, $totalArchivedTasks);
-        $this->assertInstanceOf("Statistic", $totalArchivedTasks[0]);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $totalArchivedTasks[0]);
         $this->assertEquals("ArchivedTasks", $totalArchivedTasks[0]->getName());
         $this->assertEquals(0, $totalArchivedTasks[0]->getValue());
     }
@@ -62,11 +67,11 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
     public function testUpdateBadges()
     {
         UnitTestHelper::teardownDb();
-        StatDao::updateBadges();
+        API\DAO\StatDao::updateBadges();
         
-        $totalBadges = StatDao::getStatistics("Badges");
+        $totalBadges = API\DAO\StatDao::getStatistics("Badges");
         $this->assertCount(1, $totalBadges);
-        $this->assertInstanceOf("Statistic", $totalBadges[0]);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $totalBadges[0]);
         $this->assertEquals("Badges", $totalBadges[0]->getName());
         $this->assertEquals(7, $totalBadges[0]->getValue());
     }
@@ -74,11 +79,11 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
     public function testUpdateClaimedTasks()
     {
         UnitTestHelper::teardownDb();
-        StatDao::updateClaimedTasks();
+        API\DAO\StatDao::updateClaimedTasks();
         
-        $totalClaimedTasks = StatDao::getStatistics("ClaimedTasks");
+        $totalClaimedTasks = API\DAO\StatDao::getStatistics("ClaimedTasks");
         $this->assertCount(1, $totalClaimedTasks);
-        $this->assertInstanceOf("Statistic", $totalClaimedTasks[0]);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $totalClaimedTasks[0]);
         $this->assertEquals("ClaimedTasks", $totalClaimedTasks[0]->getName());
         $this->assertEquals(0, $totalClaimedTasks[0]->getValue());
     }
@@ -86,11 +91,11 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
     public function testUpdateOrganisations()
     {
         UnitTestHelper::teardownDb();
-        StatDao::updateOrganisations();
+        API\DAO\StatDao::updateOrganisations();
         
-        $totalOrgs = StatDao::getStatistics("Organisations");
+        $totalOrgs = API\DAO\StatDao::getStatistics("Organisations");
         $this->assertCount(1, $totalOrgs);
-        $this->assertInstanceOf("Statistic", $totalOrgs[0]);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $totalOrgs[0]);
         $this->assertEquals("Organisations", $totalOrgs[0]->getName());
         $this->assertEquals(0, $totalOrgs[0]->getValue());
     }
@@ -98,11 +103,11 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
     public function testUpdateOrgMemberRequests()
     {
         UnitTestHelper::teardownDb();
-        StatDao::updateOrgMemberRequests();
+        API\DAO\StatDao::updateOrgMemberRequests();
         
-        $totalOrgMemberRequests = StatDao::getStatistics("OrgMembershipRequests");
+        $totalOrgMemberRequests = API\DAO\StatDao::getStatistics("OrgMembershipRequests");
         $this->assertCount(1, $totalOrgMemberRequests);
-        $this->assertInstanceOf("Statistic", $totalOrgMemberRequests[0]);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $totalOrgMemberRequests[0]);
         $this->assertEquals("OrgMembershipRequests", $totalOrgMemberRequests[0]->getName());
         $this->assertEquals(0, $totalOrgMemberRequests[0]->getValue());
     }
@@ -110,11 +115,11 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
     public function testUpdateProjects()
     {
         UnitTestHelper::teardownDb();
-        StatDao::updateProjects();
+        API\DAO\StatDao::updateProjects();
         
-        $totalProjects = StatDao::getStatistics("Projects");
+        $totalProjects = API\DAO\StatDao::getStatistics("Projects");
         $this->assertCount(1, $totalProjects);
-        $this->assertInstanceOf("Statistic", $totalProjects[0]);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $totalProjects[0]);
         $this->assertEquals("Projects", $totalProjects[0]->getName());
         $this->assertEquals(0, $totalProjects[0]->getValue());
     }
@@ -122,11 +127,11 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
     public function testUpdateTags()
     {
         UnitTestHelper::teardownDb();
-        StatDao::updateTags();
+        API\DAO\StatDao::updateTags();
         
-        $totalTags = StatDao::getStatistics("Tags");
+        $totalTags = API\DAO\StatDao::getStatistics("Tags");
         $this->assertCount(1, $totalTags);
-        $this->assertInstanceOf("Statistic", $totalTags[0]);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $totalTags[0]);
         $this->assertEquals("Tags", $totalTags[0]->getName());
         $this->assertEquals(0, $totalTags[0]->getValue());
     }
@@ -134,11 +139,11 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
     public function testUpdateTasks()
     {
         UnitTestHelper::teardownDb();
-        StatDao::updateTasks();
+        API\DAO\StatDao::updateTasks();
         
-        $totalTasks = StatDao::getStatistics("Tasks");
+        $totalTasks = API\DAO\StatDao::getStatistics("Tasks");
         $this->assertCount(1, $totalTasks);
-        $this->assertInstanceOf("Statistic", $totalTasks[0]);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $totalTasks[0]);
         $this->assertEquals("Tasks", $totalTasks[0]->getName());
         $this->assertEquals(0, $totalTasks[0]->getValue());
     }
@@ -146,11 +151,11 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
     public function testUpdateTasksWithPreReqs()
     {
         UnitTestHelper::teardownDb();
-        StatDao::updateTasksWithPreReqs();
+        API\DAO\StatDao::updateTasksWithPreReqs();
         
-        $totalTasksWithPreReqs = StatDao::getStatistics("TasksWithPreReqs");
+        $totalTasksWithPreReqs = API\DAO\StatDao::getStatistics("TasksWithPreReqs");
         $this->assertCount(1, $totalTasksWithPreReqs);
-        $this->assertInstanceOf("Statistic", $totalTasksWithPreReqs[0]);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $totalTasksWithPreReqs[0]);
         $this->assertEquals("TasksWithPreReqs", $totalTasksWithPreReqs[0]->getName());
         $this->assertEquals(0, $totalTasksWithPreReqs[0]->getValue());
     }
@@ -158,11 +163,11 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
     public function testUpdateUnclaimedTasks()
     {
         UnitTestHelper::teardownDb();
-        StatDao::updateUnclaimedTasks();
+        API\DAO\StatDao::updateUnclaimedTasks();
         
-        $totalUnclaimedTasks = StatDao::getStatistics("UnclaimedTasks");
+        $totalUnclaimedTasks = API\DAO\StatDao::getStatistics("UnclaimedTasks");
         $this->assertCount(1, $totalUnclaimedTasks);
-        $this->assertInstanceOf("Statistic", $totalUnclaimedTasks[0]);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $totalUnclaimedTasks[0]);
         $this->assertEquals("UnclaimedTasks", $totalUnclaimedTasks[0]->getName());
         $this->assertEquals(0, $totalUnclaimedTasks[0]->getValue());
     }
@@ -170,11 +175,11 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
     public function testUpdateUsers()
     {
         UnitTestHelper::teardownDb();
-        StatDao::updateUsers();
+        API\DAO\StatDao::updateUsers();
         
-        $totalUsers = StatDao::getStatistics("Users");
+        $totalUsers = API\DAO\StatDao::getStatistics("Users");
         $this->assertCount(1, $totalUsers);
-        $this->assertInstanceOf("Statistic", $totalUsers[0]);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $totalUsers[0]);
         $this->assertEquals("Users", $totalUsers[0]->getName());
         $this->assertEquals(0, $totalUsers[0]->getValue());
     }
@@ -182,17 +187,17 @@ class StatDaoTest extends PHPUnit_Framework_TestCase
     
     private function callStatFuncs()
     {
-        StatDao::updateArchivedProjects();
-        StatDao::updateArchivedTasks();
-        StatDao::updateBadges();
-        StatDao::updateClaimedTasks();
-        StatDao::updateOrganisations();
-        StatDao::updateOrgMemberRequests();
-        StatDao::updateProjects();
-        StatDao::updateTags();
-        StatDao::updateTasks();
-        StatDao::updateTasksWithPreReqs();
-        StatDao::updateUnclaimedTasks();
-        StatDao::updateUsers();
+        API\DAO\StatDao::updateArchivedProjects();
+        API\DAO\StatDao::updateArchivedTasks();
+        API\DAO\StatDao::updateBadges();
+        API\DAO\StatDao::updateClaimedTasks();
+        API\DAO\StatDao::updateOrganisations();
+        API\DAO\StatDao::updateOrgMemberRequests();
+        API\DAO\StatDao::updateProjects();
+        API\DAO\StatDao::updateTags();
+        API\DAO\StatDao::updateTasks();
+        API\DAO\StatDao::updateTasksWithPreReqs();
+        API\DAO\StatDao::updateUnclaimedTasks();
+        API\DAO\StatDao::updateUsers();
     }
 }

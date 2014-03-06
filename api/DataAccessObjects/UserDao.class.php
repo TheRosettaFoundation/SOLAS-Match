@@ -34,7 +34,7 @@ class UserDao
     {
         $nonce = Common\Lib\Authentication::generateNonce();
         $password = Common\Lib\Authentication::hashPassword($clear_password, $nonce);
-        $user = new \User();
+        $user = new Common\Protobufs\Models\User();
         $user->setEmail($email);
         $user->setNonce($nonce);
         $user->setPassword($password);
@@ -229,55 +229,6 @@ class UserDao
         return $ret;
     }
        
-    public static function openIdLogin($openid, $app)
-    {
-        if (!$openid->mode) {
-            try {
-                $openid->identity = $openid->data['openid_identifier'];
-                $openid->required = array('contact/email');
-                $url = $openid->authUrl();
-                $app->redirect($openid->authUrl());
-            } catch (ErrorException $e) {
-                echo $e->getMessage();
-            }
-        } elseif ($openid->mode == 'cancel') {
-            throw new \InvalidArgumentException('User has canceled authentication!');
-            return false;
-        } else {
-            $retvals = $openid->getAttributes();
-            if ($openid->validate()) {
-                $user = self::getUser(null, $retvals['contact/email']);
-                if (is_array($user)) {
-                    $user = $user[0];
-                }
-                if (!is_object($user)) {
-                    $user = self::create($retvals['contact/email'], md5($retvals['contact/email']));
-                }
-                Common\Lib\UserSession::setSession($user->getId());
-            }
-            return true;
-        }
-    }
-
-    public static function logout()
-    {
-        Common\Lib\UserSession::destroySession();
-    }
-
-    public static function getCurrentUser()
-    {
-        $ret = null;
-        if ($user_id = Common\Lib\UserSession::getCurrentUserId()) {
-                $ret = self::getUser($user_id);
-        }
-        return $ret;
-    }
-
-    public static function isLoggedIn()
-    {
-        return (!is_null(Common\Lib\UserSession::getCurrentUserId()));
-    }
-
     public static function findOrganisationsUserBelongsTo($user_id)
     {
         $ret = null;
@@ -615,7 +566,7 @@ class UserDao
     {
         $messagingClient = new Lib\MessagingClient();
         if ($messagingClient->init()) {
-            $request = new \UserReferenceEmail();
+            $request = new Common\Protobufs\Emails\UserReferenceEmail();
             $request->setUserId($userId);
             $message = $messagingClient->createMessageFromProto($request);
             $messagingClient->sendTopicMessage(

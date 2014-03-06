@@ -3,6 +3,7 @@
 namespace SolasMatch\API\Lib;
 
 use \SolasMatch\API\DAO as DAO;
+use \SolasMatch\Common as Common;
 
 require_once __DIR__."/MessagingClient.class.php";
 require_once __DIR__."/../../Common/lib/Settings.class.php";
@@ -30,9 +31,9 @@ class Notify
 {
     public static function sendBannedLoginEmail($userId)
     {
-        $messagingClient = new MessagingClient();
+        $messagingClient = new Common\Lib\MessagingClient();
         if ($messagingClient->init()) {
-            $proto = new \BannedLogin();
+            $proto = new Common\Protobufs\Emails\BannedLogin();
             $proto->setUserId($userId);
             $message = $messagingClient->createMessageFromProto($proto);
             $messagingClient->sendTopicMessage(
@@ -45,9 +46,9 @@ class Notify
 
     public static function sendEmailVerification($userId)
     {
-        $messagingClient = new MessagingClient();
+        $messagingClient = new Common\Lib\MessagingClient();
         if ($messagingClient->init()) {
-            $messageProto = new \EmailVerification();
+            $messageProto = new Common\Protobufs\Emails\EmailVerification();
             $messageProto->setUserId($userId);
             $message = $messagingClient->createMessageFromProto($messageProto);
             $messagingClient->sendTopicMessage(
@@ -60,7 +61,7 @@ class Notify
 
     public static function sendOrgFeedback($feedback)
     {
-        $messagingClient = new MessagingClient();
+        $messagingClient = new Common\Lib\MessagingClient();
         if ($messagingClient->init()) {
             $message = $messagingClient->createMessageFromProto($feedback);
             $messagingClient->sendTopicMessage(
@@ -73,9 +74,9 @@ class Notify
 
     public static function sendOrgCreatedNotifications($orgId)
     {
-        $client = new MessagingClient();
+        $client = new Common\Lib\MessagingClient();
         if ($client->init()) {
-            $proto = new \OrgCreatedNotificationRequest();
+            $proto = new Common\Protobufs\Requests\OrgCreatedNotificationRequest();
             $proto->setOrgId($orgId);
             $message = $client->createMessageFromProto($proto);
             $client->sendTopicMessage(
@@ -88,9 +89,9 @@ class Notify
 
     public static function sendUserAssignedBadgeEmail($userId, $badgeId)
     {
-        $client = new MessagingClient();
+        $client = new Common\Lib\MessagingClient();
         if ($client->init()) {
-            $proto = new \UserBadgeAwardedEmail();
+            $proto = new Common\Protobufs\Emails\UserBadgeAwardedEmail();
             $proto->setUserId($userId);
             $proto->setBadgeId($badgeId);
             $message = $client->createMessageFromProto($proto);
@@ -104,7 +105,7 @@ class Notify
 
     public static function sendUserFeedback($feedback)
     {
-        $messagingClient = new MessagingClient();
+        $messagingClient = new Common\Lib\MessagingClient();
         if ($messagingClient->init()) {
             $message = $messagingClient->createMessageFromProto($feedback);
             $messagingClient->sendTopicMessage(
@@ -117,9 +118,9 @@ class Notify
 
     public static function notifyUserClaimedTask($userId, $taskId)
     {
-        $messagingClient = new MessagingClient();
+        $messagingClient = new Common\Lib\MessagingClient();
         if ($messagingClient->init()) {
-            $message_type = new \UserTaskClaim();
+            $message_type = new Common\Protobufs\Emails\UserTaskClaim();
             $message_type->user_id = $userId;
             $message_type->task_id = $taskId;
             $message = $messagingClient->createMessageFromProto($message_type);
@@ -133,9 +134,9 @@ class Notify
 
     public static function sendPasswordResetEmail($user_id)
     {
-        $messagingClient = new MessagingClient();
+        $messagingClient = new Common\Lib\MessagingClient();
         if ($messagingClient->init()) {
-            $message_type = new \PasswordResetEmail();
+            $message_type = new Common\Protobufs\Emails\PasswordResetEmail();
             $message_type->setUserId($user_id);
             $message = $messagingClient->createMessageFromProto($message_type);
             $messagingClient->sendTopicMessage(
@@ -146,23 +147,14 @@ class Notify
         }
     }
 
-    public static function notifyUserOrgMembershipRequest($user_id, $org_id, $accepted)
+    public static function notifyUserOrgMembershipRequest($userId, $orgId, $accepted)
     {
-        $org_dao = new DAO\OrganisationDao();
-        $org = $org_dao->getOrg($org_id);
-        $org = $org[0];
-        
-        $user_dao = new DAO\UserDao();
-        $user = $user_dao->getUser($user_id);
-        $user = $user[0];
-
-
-        $messagingClient = new MessagingClient();
+        $messagingClient = new Common\Lib\MessagingClient();
         if ($messagingClient->init()) {
             if ($accepted) {
-                $message_type = new \OrgMembershipAccepted();
-                $message_type->user_id = $user->getId();
-                $message_type->org_id = $org->getId();
+                $message_type = new Common\Protobufs\Emails\OrgMembershipAccepted();
+                $message_type->user_id = $userId;
+                $message_type->org_id = $orgId;
                 $message = $messagingClient->createMessageFromProto($message_type);
                 $messagingClient->sendTopicMessage(
                     $message,
@@ -170,9 +162,9 @@ class Notify
                     $messagingClient->OrgMembershipAcceptedTopic
                 );
             } else {
-                $message_type = new \OrgMembershipRefused();
-                $message_type->user_id = $user->getId();
-                $message_type->org_id = $org->getId();
+                $message_type = new Common\Protobufs\Emails\OrgMembershipRefused();
+                $message_type->user_id = $userId;
+                $message_type->org_id = $orgId;
                 $message = $messagingClient->createMessageFromProto($message_type);
                 $messagingClient->sendTopicMessage(
                     $message,
@@ -187,9 +179,9 @@ class Notify
     {
         $subscribed_users = DAO\TaskDao::getSubscribedUsers($taskId);
         if (count($subscribed_users) > 0) {
-            $messagingClient = new MessagingClient();
+            $messagingClient = new Common\Lib\MessagingClient();
             if ($messagingClient->init()) {
-                $message_type = new \TaskClaimed();
+                $message_type = new Common\Protobufs\Emails\TaskClaimed();
                 $message_type->task_id = $taskId;
                 $message_type->translator_id = $userId;
                 foreach ($subscribed_users as $user) {
@@ -207,9 +199,9 @@ class Notify
 
     public static function sendTaskUploadNotifications($taskId, $version)
     {
-        $messagingClient = new MessagingClient();
+        $messagingClient = new Common\Lib\MessagingClient();
         if ($messagingClient->init()) {
-            $messageProto = new \TaskUploadNotificationRequest();
+            $messageProto = new Common\Protobufs\Requests\TaskUploadNotificationRequest();
             $messageProto->setTaskId($taskId);
             $messageProto->setFileVersion($version);
             $message = $messagingClient->createMessageFromProto($messageProto);
@@ -224,9 +216,9 @@ class Notify
     public static function sendTaskArchivedNotifications($taskId, $subscribedUsers)
     {
         if (count($subscribedUsers) > 0) {
-            $messagingClient = new MessagingClient();
+            $messagingClient = new Common\Lib\MessagingClient();
             if ($messagingClient->init()) {
-                $message_type = new \TaskArchived();
+                $message_type = new Common\Protobufs\Emails\TaskArchived();
                 $message_type->task_id = $taskId;
                 foreach ($subscribedUsers as $user) {
                     $message_type->user_id = $user->getId();
@@ -243,9 +235,9 @@ class Notify
 
     public static function sendTaskRevokedNotifications($taskId, $claimantId)
     {
-        $client = new MessagingClient();
+        $client = new Common\Lib\MessagingClient();
         if ($client->init()) {
-            $messageProto = new \TaskRevokedNotification();
+            $messageProto = new Common\Protobufs\Notifications\TaskRevokedNotification();
             $messageProto->setTaskId($taskId);
             $messageProto->setClaimantId($claimantId);
             $message = $client->createMessageFromProto($messageProto);

@@ -56,7 +56,7 @@ class ProjectDao
     {
         $messagingClient = new Lib\MessagingClient();
         if ($messagingClient->init()) {
-            $proto = new \CalculateProjectDeadlinesRequest();
+            $proto = new Common\Protobufs\Requests\CalculateProjectDeadlinesRequest();
             $proto->setProjectId($projectId);
             $message = $messagingClient->createMessageFromProto($proto);
             $messagingClient->sendTopicMessage(

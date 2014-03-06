@@ -390,7 +390,7 @@ class UserDao extends BaseDao
     public function login($email, $password)
     {
         $ret = null;
-        $login = new \Login();
+        $login = new Common\Protobufs\Models\Login();
         $login->setEmail($email);
         $login->setPassword($password);
         $request = "{$this->siteApi}v0/users/login";
@@ -513,7 +513,7 @@ class UserDao extends BaseDao
     public function resetPassword($password, $key)
     {
         $ret = null;
-        $passwordReset = new \PasswordReset();
+        $passwordReset = new Common\Protobufs\Models\PasswordReset();
         $passwordReset->setPassword($password);
         $passwordReset->setKey($key);
         $request = "{$this->siteApi}v0/users/passwordReset";
@@ -524,7 +524,7 @@ class UserDao extends BaseDao
     public function register($email, $password)
     {
         $ret = null;
-        $registerData = new \Register();
+        $registerData = new Common\Protobufs\Models\Register();
         $registerData->setEmail($email);
         $registerData->setPassword($password);
         $request = "{$this->siteApi}v0/users/register";

@@ -17,7 +17,7 @@ class PHPSerializer extends Serializer
         if (is_object($data)) {
             $ret = $data->serialize(new \DrSlump\Protobuf\Codec\PhpArray());
         } elseif (is_array($data)) {
-            $ret = new \ProtoList();
+            $ret = new \SolasMatch\Common\Protobufs\Models\ProtoList();
             foreach ($data as $obj) {
                 if (!is_null($obj)) {
                     $ret->addItem(serialize($obj->serialize(new \DrSlump\Protobuf\Codec\PhpArray())));
@@ -41,7 +41,7 @@ class PHPSerializer extends Serializer
         }
         $result = null;
         if (is_array($type)) {
-            $ret = new \ProtoList();
+            $ret = new \SolasMatch\Common\Protobufs\Models\ProtoList();
             $ret->parse($data, new \DrSlump\Protobuf\Codec\PhpArray());
             $result = array();
             

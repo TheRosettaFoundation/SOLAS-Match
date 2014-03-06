@@ -205,7 +205,7 @@ class TaskDao
         if (strcasecmp($use_backend, "y") == 0) {
             $mMessagingClient = new Lib\MessagingClient();
             if ($mMessagingClient->init()) {
-                $request = new \UserTaskScoreRequest();
+                $request = new Common\Protobufs\Requests\UserTaskScoreRequest();
                 $request->setTaskId($taskId);
                 $message = $mMessagingClient->createMessageFromProto($request);
                 $mMessagingClient->sendTopicMessage(

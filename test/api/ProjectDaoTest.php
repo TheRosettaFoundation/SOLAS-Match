@@ -1,5 +1,11 @@
 <?php
 
+namespace SolasMatch\Tests\API;
+
+use \SolasMatch\Tests\UnitTestHelper;
+use \SolasMatch\API as API;
+use \SolasMatch\Common as Common;
+
 require_once 'PHPUnit/Autoload.php';
 require_once __DIR__.'/../../api/vendor/autoload.php';
 \DrSlump\Protobuf::autoload();
@@ -8,26 +14,25 @@ require_once __DIR__.'/../../api/DataAccessObjects/OrganisationDao.class.php';
 require_once __DIR__.'/../../api/DataAccessObjects/ProjectDao.class.php';
 require_once __DIR__.'/../../api/DataAccessObjects/UserDao.class.php';
 require_once __DIR__.'/../../api/DataAccessObjects/TaskDao.class.php';
-require_once __DIR__.'/../../Common/lib/ModelFactory.class.php';
 require_once __DIR__.'/../UnitTestHelper.php';
 
 
-class ProjectDaoTest extends PHPUnit_Framework_TestCase
+class ProjectDaoTest extends \PHPUnit_Framework_TestCase
 {
     public function testProjectCreate()
     {
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         $this->assertNotNull($insertedOrg->getId());
                 
         $project = UnitTestHelper::createProject($insertedOrg->getId());
         
         // Success
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         $this->assertEquals($project->getTitle(), $insertedProject->getTitle());
         $this->assertEquals($project->getDescription(), $insertedProject->getDescription());
@@ -48,7 +53,7 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $projectTags = $insertedProject->getTagList();
         $this->assertCount(2, $projectTags);
         foreach ($projectTags as $tag) {
-            $this->assertInstanceOf("Tag", $tag);
+            $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Tag", $tag);
         }
         
         $this->assertEquals($project->getOrganisationId(), $insertedProject->getOrganisationId());
@@ -61,17 +66,17 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         $this->assertNotNull($insertedOrg->getId());
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         
         $org2 = UnitTestHelper::createOrg(null, "Organisation 2", "Organisation 2 Bio", "http://www.organisation2.org");
-        $insertedOrg2 = OrganisationDao::insertAndUpdate($org2);
-        $this->assertInstanceOf("Organisation", $insertedOrg2);
+        $insertedOrg2 = API\DAO\OrganisationDao::insertAndUpdate($org2);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg2);
         $this->assertNotNull($insertedOrg2->getId());
         
         $insertedProject->setTitle("Updated Title");
@@ -81,22 +86,22 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $insertedProject->setReference("Updated Reference");
         $insertedProject->setWordCount(654321);
         
-        $sourceLocale = new Locale();
+        $sourceLocale = new Common\Protobufs\Models\Locale();
         $sourceLocale->setCountryCode("AZ");
         $sourceLocale->setLanguageCode("agx");
         $insertedProject->setSourceLocale($sourceLocale);
         
         $newTags = array("Updated Project", "Updated Tags");
         foreach ($newTags as $tagLabel) {
-            $insertedProject->addTag(TagsDao::create($tagLabel));
+            $insertedProject->addTag(API\DAO\TagsDao::create($tagLabel));
         }
         
         $insertedProject->setOrganisationId($insertedOrg2->getId());
         $insertedProject->setCreatedTime("2030-06-20 00:00:00");
   
         // Success
-        $updatedProject = ProjectDao::createUpdate($insertedProject);
-        $this->assertInstanceOf("Project", $updatedProject);
+        $updatedProject = API\DAO\ProjectDao::createUpdate($insertedProject);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $updatedProject);
         $this->assertEquals($insertedProject->getTitle(), $updatedProject->getTitle());
         $this->assertEquals($insertedProject->getDescription(), $updatedProject->getDescription());
         $this->assertEquals($insertedProject->getDeadline(), $updatedProject->getDeadline());
@@ -116,7 +121,7 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $projectTagsAfterUpdate = $updatedProject->getTag();
         $this->assertCount(4, $projectTagsAfterUpdate);
         foreach ($projectTagsAfterUpdate as $tag) {
-            $this->assertInstanceOf("Tag", $tag);
+            $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Tag", $tag);
         }
         
         $this->assertEquals($insertedProject->getOrganisationId(), $updatedProject->getOrganisationId());
@@ -129,15 +134,15 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
 
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         
         // Success
-        $resultGetProject = ProjectDao::getProject(
+        $resultGetProject = API\DAO\ProjectDao::getProject(
             $insertedProject->getId(),
             $project->getTitle(),
             $project->getDescription(),
@@ -152,10 +157,10 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertCount(1, $resultGetProject);
-        $this->assertInstanceOf("Project", $resultGetProject[0]);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $resultGetProject[0]);
         
         // Failure
-        $resultGetProjectFailure = ProjectDao::getProject(99);
+        $resultGetProjectFailure = API\DAO\ProjectDao::getProject(99);
         $this->assertNull($resultGetProjectFailure);
     }
     
@@ -164,15 +169,15 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         $this->assertNotNull($insertedOrg->getId());
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
         
         // Success
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         $this->assertEquals($project->getTitle(), $insertedProject->getTitle());
         $this->assertEquals($project->getDescription(), $insertedProject->getDescription());
@@ -190,9 +195,9 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
             $insertedProject->getSourceLocale()->getCountryCode()
         );
         
-        $afterDelete = ProjectDao::delete($insertedProject->getId());
+        $afterDelete = API\DAO\ProjectDao::delete($insertedProject->getId());
         $this->assertEquals("1", $afterDelete);
-        $tryRedelete = ProjectDao::delete($insertedProject->getId());
+        $tryRedelete = API\DAO\ProjectDao::delete($insertedProject->getId());
         $this->assertEquals("0", $tryRedelete);
     }
     
@@ -201,24 +206,24 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $projectId = $insertedProject->getId();
     
         $user = UnitTestHelper::createUser();
-        $insertedUser = UserDao::save($user);
-        $this->assertInstanceOf("User", $insertedUser);
+        $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
-        $translationTask = TaskDao::save($task);
+        $translationTask = API\DAO\TaskDao::save($task);
         
         //create task file info for non existant file
         $fileInfo = UnitTestHelper::createTaskFileInfo($translationTask->getId(), $insertedUser->getId());
-        TaskDao::recordFileUpload(
+        API\DAO\TaskDao::recordFileUpload(
             $fileInfo['taskId'],
             $fileInfo['filename'],
             $fileInfo['contentType'],
@@ -226,12 +231,12 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
             $fileInfo['version']
         );
         
-        $this->assertInstanceOf("Task", $translationTask);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask);
         $this->assertNotNull($translationTask->getId());
         
         //create project file info for non existant file
         $file = UnitTestHelper::createProjectFile($insertedUser->getId(), $projectId);
-        ProjectDao::recordProjectFileInfo(
+        API\DAO\ProjectDao::recordProjectFileInfo(
             $file->getProjectId(),
             $file->getFilename(),
             $file->getUserId(),
@@ -239,11 +244,11 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         );
         
         // Success
-        $resultArchiveProject = ProjectDao::archiveProject($insertedProject->getId(), $insertedUser->getId());
+        $resultArchiveProject = API\DAO\ProjectDao::archiveProject($insertedProject->getId(), $insertedUser->getId());
         $this->assertEquals("1", $resultArchiveProject);
                 
         // Failure
-        $resultArchiveProjectFailure = ProjectDao::archiveProject($insertedProject->getId(), $insertedUser->getId());
+        $resultArchiveProjectFailure = API\DAO\ProjectDao::archiveProject($insertedProject->getId(), $insertedUser->getId());
         $this->assertEquals("0", $resultArchiveProjectFailure);
     }
     
@@ -253,25 +258,25 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $projectId = $insertedProject->getId();
     
         $user = UnitTestHelper::createUser();
-        $insertedUser = UserDao::save($user);
-        $this->assertInstanceOf("User", $insertedUser);
+        $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
         $this->assertNotNull($insertedUser->getId());
 
         $task = UnitTestHelper::createTask($insertedProject->getId());
-        $translationTask = TaskDao::save($task);
+        $translationTask = API\DAO\TaskDao::save($task);
         
         //create task file info for non existant file
         $fileInfo = UnitTestHelper::createTaskFileInfo($translationTask->getId(), $insertedUser->getId());
-        TaskDao::recordFileUpload(
+        API\DAO\TaskDao::recordFileUpload(
             $fileInfo['taskId'],
             $fileInfo['filename'],
             $fileInfo['contentType'],
@@ -281,18 +286,18 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         
         //create project file info for non existant file
         $file = UnitTestHelper::createProjectFile($insertedUser->getId(), $projectId);
-        ProjectDao::recordProjectFileInfo(
+        API\DAO\ProjectDao::recordProjectFileInfo(
             $file->getProjectId(),
             $file->getFilename(),
             $file->getUserId(),
             $file->getMime()
         );
                 
-        $resultArchiveProject = ProjectDao::archiveProject($insertedProject->getId(), $insertedUser->getId());
+        $resultArchiveProject = API\DAO\ProjectDao::archiveProject($insertedProject->getId(), $insertedUser->getId());
         $this->assertEquals("1", $resultArchiveProject);
         
         // Success
-        $resultGetArchivedProject = ProjectDao::getArchivedProject(
+        $resultGetArchivedProject = API\DAO\ProjectDao::getArchivedProject(
             $insertedProject->getId(),
             $insertedProject->getOrganisationId(),
             $insertedProject->getTitle(),
@@ -306,10 +311,8 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
             $insertedUser->getId()
         );
         
-        print_r($resultGetArchivedProject);
-        
         $this->assertCount(1, $resultGetArchivedProject);
-        $this->assertInstanceOf("ArchivedProject", $resultGetArchivedProject[0]);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\ArchivedProject", $resultGetArchivedProject[0]);
         $resultGetArchivedProject = $resultGetArchivedProject[0];
         $this->assertEquals($insertedProject->getTitle(), $resultGetArchivedProject->getTitle());
         $this->assertEquals($insertedProject->getDescription(), $resultGetArchivedProject->getDescription());
@@ -329,7 +332,7 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($resultGetArchivedProject->getUserIdArchived());
         
         // Failure
-        $resultGetArchivedProjectFailure = ProjectDao::getArchivedProject(99);
+        $resultGetArchivedProjectFailure = API\DAO\ProjectDao::getArchivedProject(99);
         $this->assertNull($resultGetArchivedProjectFailure);
     }
     
@@ -338,32 +341,32 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
 
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
         $task2 = UnitTestHelper::createTask($insertedProject->getId(), null, "Task 2", "Task 2 Comment");
 
-        $insertedTask = TaskDao::save($task);
-        $this->assertInstanceOf("Task", $insertedTask);
+        $insertedTask = API\DAO\TaskDao::save($task);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $insertedTask);
         
-        $insertedTask2 = TaskDao::save($task2);
-        $this->assertInstanceOf("Task", $insertedTask2);
+        $insertedTask2 = API\DAO\TaskDao::save($task2);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $insertedTask2);
         
         // Success
-        $resultGetProjectTasks = ProjectDao::getProjectTasks($insertedProject->getId());
+        $resultGetProjectTasks = API\DAO\ProjectDao::getProjectTasks($insertedProject->getId());
         $this->assertCount(2, $resultGetProjectTasks);
         foreach ($resultGetProjectTasks as $task) {
-            $this->assertInstanceOf("Task", $task);
+            $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $task);
         }
         
         // Failure
-        $resultGetProjectTasksFailure = ProjectDao::getProjectTasks(999);
+        $resultGetProjectTasksFailure = API\DAO\ProjectDao::getProjectTasks(999);
         $this->assertNull($resultGetProjectTasksFailure);
     }
     
@@ -372,28 +375,27 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         $this->assertNotNull($insertedOrg->getId());
 
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($project->getId());
 
-        $projectTag1 = TagsDao::create("New Project Tag");
-        $this->assertInstanceOf("Tag", $projectTag1);
+        $projectTag1 = API\DAO\TagsDao::create("New Project Tag");
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Tag", $projectTag1);
         $this->assertNotNull($projectTag1->getId());
         $this->assertEquals("New Project Tag", $projectTag1->getLabel());
         
         // Success
-        $resultAddProjectTag = ProjectDao::addProjectTag($project->getId(), $projectTag1->getId());
+        $resultAddProjectTag = API\DAO\ProjectDao::addProjectTag($project->getId(), $projectTag1->getId());
         $this->assertEquals("1", $resultAddProjectTag);
         
         // Failure
-        $resultAddProjectTagFailure = ProjectDao::addProjectTag($project->getId(), $projectTag1->getId());
+        $resultAddProjectTagFailure = API\DAO\ProjectDao::addProjectTag($project->getId(), $projectTag1->getId());
         $this->assertEquals("0", $resultAddProjectTagFailure);
-
     }
     
     
@@ -402,29 +404,32 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
 
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         $this->assertNotNull($insertedOrg->getId());
 
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($project->getId());
 
-        $projectTag1 = TagsDao::create("New Project Tag");
-        $this->assertInstanceOf("Tag", $projectTag1);
+        $projectTag1 = API\DAO\TagsDao::create("New Project Tag");
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Tag", $projectTag1);
         $this->assertNotNull($projectTag1->getId());
         $this->assertEquals("New Project Tag", $projectTag1->getLabel());
         
-        $addProjectTag = ProjectDao::addProjectTag($project->getId(), $projectTag1->getId());
+        $addProjectTag = API\DAO\ProjectDao::addProjectTag($project->getId(), $projectTag1->getId());
         $this->assertEquals("1", $addProjectTag);
         
         // Success
-        $resultRemoveProjectTag = ProjectDao::removeProjectTag($project->getId(), $projectTag1->getId());
+        $resultRemoveProjectTag = API\DAO\ProjectDao::removeProjectTag($project->getId(), $projectTag1->getId());
         $this->assertEquals("1", $resultRemoveProjectTag);
         
         // Failure
-        $resultRemoveProjectTagFailure = ProjectDao::removeProjectTag($project->getId(), $projectTag1->getId());
+        $resultRemoveProjectTagFailure = API\DAO\ProjectDao::removeProjectTag(
+            $project->getId(),
+            $projectTag1->getId()
+        );
         $this->assertEquals("0", $resultRemoveProjectTagFailure);
     }
     
@@ -434,19 +439,19 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         $this->assertNotNull($insertedOrg->getId());
 
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($project->getId());
         
-        $resultGetTags = ProjectDao::getTags($project->getId());
+        $resultGetTags = API\DAO\ProjectDao::getTags($project->getId());
         $this->assertCount(2, $resultGetTags);
         foreach ($resultGetTags as $projectTag) {
-            $this->assertInstanceOf("Tag", $projectTag);
+            $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Tag", $projectTag);
         }
     }
     
@@ -455,32 +460,32 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         $this->assertNotNull($insertedOrg->getId());
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($project->getId());
         
         //assert that there are tags associated with the project
-        $resultGetTags = ProjectDao::getTags($project->getId());
+        $resultGetTags = API\DAO\ProjectDao::getTags($project->getId());
         $this->assertCount(2, $resultGetTags);
         foreach ($resultGetTags as $projectTag) {
-            $this->assertInstanceOf("Tag", $projectTag);
+            $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Tag", $projectTag);
         }
         
         //assert that some project tags were deleted
-        $afterDeleteTags = ProjectDao::deleteProjectTags($project->getId());
+        $afterDeleteTags = API\DAO\ProjectDao::deleteProjectTags($project->getId());
         $this->assertEquals("1", $afterDeleteTags);
         
         //assert that there are no project tags left after deleting all
-        $getTagsAfterDelete = ProjectDao::getTags($project->getId());
+        $getTagsAfterDelete = API\DAO\ProjectDao::getTags($project->getId());
         $this->assertNull($getTagsAfterDelete);
         
         //assert that a second call to deleteProjectTags() changes nothing.
-        $tryRedelete = ProjectDao::deleteProjectTags($project->getId());
+        $tryRedelete = API\DAO\ProjectDao::deleteProjectTags($project->getId());
         $this->assertEquals("0", $tryRedelete);
     }
     
@@ -489,21 +494,21 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
     
         $user = UnitTestHelper::createUser();
-        $insertedUser = UserDao::save($user);
-        $this->assertInstanceOf("User", $insertedUser);
+        $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
         $this->assertNotNull($insertedUser->getId());
         
         // Success
-        $resultRecordProjectFileInfo = ProjectDao::recordProjectFileInfo(
+        $resultRecordProjectFileInfo = API\DAO\ProjectDao::recordProjectFileInfo(
             $insertedProject->getId(),
             "saveProjectFileTest.txt",
             $insertedUser->getId(),
@@ -512,7 +517,7 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($resultRecordProjectFileInfo);
         
         // Failure
-        $resultRecordProjectFileInfoFailure = ProjectDao::recordProjectFileInfo(
+        $resultRecordProjectFileInfoFailure = API\DAO\ProjectDao::recordProjectFileInfo(
             $insertedProject->getId(),
             "saveProjectFileTest.txt",
             $insertedUser->getId(),
@@ -526,20 +531,20 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
-        $insertedOrg = OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("Organisation", $insertedOrg);
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = ProjectDao::createUpdate($project);
-        $this->assertInstanceOf("Project", $insertedProject);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
    
         $user = UnitTestHelper::createUser();
-        $insertedUser = UserDao::save($user);
-        $this->assertInstanceOf("User", $insertedUser);
+        $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
         $this->assertNotNull($insertedUser->getId());
         
-        $resultRecordProjectFileInfo = ProjectDao::recordProjectFileInfo(
+        $resultRecordProjectFileInfo = API\DAO\ProjectDao::recordProjectFileInfo(
             $insertedProject->getId(),
             "saveProjectFileTest.txt",
             $insertedUser->getId(),
@@ -548,17 +553,17 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($resultRecordProjectFileInfo);
         
         // Success
-        $resultGetProjectFileInfoSuccess = ProjectDao::getProjectFileInfo(
+        $resultGetProjectFileInfoSuccess = API\DAO\ProjectDao::getProjectFileInfo(
             $insertedProject->getId(),
             $insertedUser->getId(),
             "saveProjectFileTest.txt",
             "saveProjectFileTest.txt",
             "text/plain"
         );
-        $this->assertInstanceOf("ProjectFile", $resultGetProjectFileInfoSuccess);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\ProjectFile", $resultGetProjectFileInfoSuccess);
         
         // Failure
-        $resultGetProjectFileInfoFailure = ProjectDao::getProjectFileInfo(
+        $resultGetProjectFileInfoFailure = API\DAO\ProjectDao::getProjectFileInfo(
             999,
             $insertedUser->getId(),
             "saveProjectFileTest.txt",
@@ -568,6 +573,3 @@ class ProjectDaoTest extends PHPUnit_Framework_TestCase
         $this->assertNull($resultGetProjectFileInfoFailure);
     }
 }
-
-$testCase = new ProjectDaoTest();
-$testCase->testGetArchivedProject();

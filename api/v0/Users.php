@@ -90,7 +90,7 @@ class Users
             Common\Enums\HttpMethodEnum::GET,
             '/v0/users/login(:format)/',
             function ($format = ".json") {
-                $data = new \Login();
+                $data = new Common\Protobufs\Models\Login();
                 $data->setEmail("sample@example.com");
                 $data->setPassword("sample_password");
                 API\Dispatcher::sendResponse(null, $data, null, $format);
@@ -114,7 +114,7 @@ class Users
                 try {
                     $server = API\Dispatcher::getOauthServer();
                     $response = $server->getGrantType('password')->completeFlow($params);
-                    $oAuthResponse = new \OAuthResponse();
+                    $oAuthResponse = new Common\Protobufs\Models\OAuthResponse();
                     $oAuthResponse->setToken($response['access_token']);
                     $oAuthResponse->setTokenType($response['token_type']);
                     $oAuthResponse->setExpires($response['expires']);
@@ -245,7 +245,7 @@ class Users
             Common\Enums\HttpMethodEnum::GET,
             '/v0/users/register(:format)/',
             function ($format = ".json") {
-                $data = new \Register();
+                $data = new Common\Protobufs\Models\Register();
                 $data->setPassword("test");
                 $data->setEmail("test@test.rog");
                 API\Dispatcher::sendResponse(null, $data, null, $format);

@@ -210,7 +210,7 @@ class Tasks
             function ($taskId, $format = ".json") {
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
-                $feedbackData = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\OrgFeedback");
+                $feedbackData = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Emails\OrgFeedback");
                 Lib\Notify::sendOrgFeedback($feedbackData);
                 API\Dispatcher::sendResponse(null, null, null, $format);
             },

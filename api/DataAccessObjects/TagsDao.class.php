@@ -27,7 +27,7 @@ class TagsDao
 
     public static function create($label)
     {
-        $tag = new \Tag();
+        $tag = new Common\Protobufs\Models\Tag();
         $tag->setLabel($label);
         return self::save($tag);
     }
@@ -91,27 +91,35 @@ class TagsDao
     public static function updateTags($projectId, $updatedProjectTagList)
     {
         if ($updatedProjectTagList) {
-            if (is_null($oldProjectTagList = \ProjectDao::getTags($projectId))) {
+            if (is_null($oldProjectTagList = ProjectDao::getTags($projectId))) {
                 $oldProjectTagList = array();
             }
             
-            $tagsToRemove = array_udiff($oldProjectTagList, $updatedProjectTagList, 'TagsDao::compareTo');
+            $tagsToRemove = array_udiff(
+                $oldProjectTagList,
+                $updatedProjectTagList,
+                '\SolasMatch\API\DAO\TagsDao::compareTo'
+            );
 
             if (!empty($tagsToRemove)) {
                 foreach ($tagsToRemove as $removedTag) {
-                    \ProjectDao::removeProjectTag($projectId, $removedTag->getId());
+                    ProjectDao::removeProjectTag($projectId, $removedTag->getId());
                 }
             }
 
-            $tagsToAdd = array_udiff($updatedProjectTagList, $oldProjectTagList, 'TagsDao::compareTo');
+            $tagsToAdd = array_udiff(
+                $updatedProjectTagList,
+                $oldProjectTagList,
+                '\SolasMatch\API\DAO\TagsDao::compareTo'
+            );
 
             if (!empty($tagsToAdd)) {
                 foreach ($tagsToAdd as $newTag) {
                     if ($tagExists = TagsDao::getTag(null, $newTag->getLabel())) {
-                        \ProjectDao::addProjectTag($projectId, $tagExists[0]->getId());
+                        ProjectDao::addProjectTag($projectId, $tagExists[0]->getId());
                     } else {
                         $tag = TagsDao::create($newTag->getLabel());
-                        \ProjectDao::addProjectTag($projectId, $tag->getId());
+                        ProjectDao::addProjectTag($projectId, $tag->getId());
                     }
                 }
             }

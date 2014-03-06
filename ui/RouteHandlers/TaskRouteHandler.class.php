@@ -654,7 +654,7 @@ class TaskRouteHandler
                     $task->setPublished(0);
                 }
             
-                $targetLocale = new \Locale();
+                $targetLocale = new Common\Protobufs\Models\Locale();
             
                 if (isset($post['target']) && $post['target'] != "") {
                     $targetLocale->setLanguageCode($post['target']);
@@ -925,7 +925,7 @@ class TaskRouteHandler
         $wordCountError = null;
         $deadlineError = null;
         $taskPreReqs = array();
-        $task = new \Task();
+        $task = new Common\Protobufs\Models\Task();
         $project = $projectDao->getProject($project_id);
         $projectTasks = $projectDao->getProjectTasks($project_id);
         $task->setProjectId($project_id);
@@ -943,13 +943,13 @@ class TaskRouteHandler
             }
             
             $projectSourceLocale = $project->getSourceLocale();
-            $taskSourceLocale = new \Locale();
+            $taskSourceLocale = new Common\Protobufs\Models\Locale();
             $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
             $taskSourceLocale->setCountryCode($projectSourceLocale->getCountryCode());
             $task->setSourceLocale($taskSourceLocale);
             $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
             
-            $taskTargetLocale = new \Locale();
+            $taskTargetLocale = new Common\Protobufs\Models\Locale();
             if (isset($post['targetLanguage'])) {
                 $taskTargetLocale->setLanguageCode($post['targetLanguage']);
             }
@@ -1148,7 +1148,7 @@ class TaskRouteHandler
                 for ($i=0; $i < $segmentationValue; $i++) {
                     try {
                         Lib\TemplateHelper::validateFileHasBeenSuccessfullyUploaded("segmentationUpload_".$i);
-                        $taskModel = new \Task();
+                        $taskModel = new Common\Protobufs\Models\Task();
                         $this->setTaskModelData($taskModel, $project, $task, $i, $segmentationValue);
                         if (isset($post["translation_0"])) {
                             $taskModel->setTaskType(Common\Enums\TaskTypeEnum::TRANSLATION);
@@ -1187,7 +1187,7 @@ class TaskRouteHandler
                 
                 if (!$upload_error) {
 
-                    $taskModel = new \Task();
+                    $taskModel = new Common\Protobufs\Models\Task();
                     $this->setTaskModelData($taskModel, $project, $task);
                     $taskModel->setWordCount($task->getWordCount());
                     $taskModel->setTaskType(Common\Enums\TaskTypeEnum::DESEGMENTATION);
@@ -1461,7 +1461,7 @@ class TaskRouteHandler
                 }
             }
 
-            $dummyTask = new \Task();        //Create a dummy task to hold the project info
+            $dummyTask = new Common\Protobufs\Models\Task();        //Create a dummy task to hold the project info
             $dummyTask->setProjectId($task->getProjectId());
             $dummyTask->setTitle($project->getTitle());
             $preReqTasks = array();
@@ -1486,7 +1486,7 @@ class TaskRouteHandler
                 $error = null;
                 while ($i < count($preReqTasks) && $error == null) {
                     $pTask = $preReqTasks[$i++];
-                    $review = new \TaskReview();
+                    $review = new Common\Protobufs\Models\TaskReview();
                     $id = $pTask->getId();
 
                     $review->setUserId($userId);

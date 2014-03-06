@@ -18,7 +18,7 @@ class ProtobufSerializer extends Serializer
         if (is_object($data)) {
             $ret = $data->serialize();
         } elseif (is_array($data)) {
-            $ret = new \ProtoList();
+            $ret = new \SolasMatch\Common\Protobufs\Models\ProtoList();
             foreach ($data as $obj) {
                 if (!is_null($obj)) {
                     $ret->addItem($obj->serialize());
@@ -41,7 +41,7 @@ class ProtobufSerializer extends Serializer
         }
         $result = null;
         if (is_array($type)) {
-            $ret = new \ProtoList();
+            $ret = new \SolasMatch\Common\Protobufs\Models\ProtoList();
             $ret->parse($data);
             $result = array();
             
