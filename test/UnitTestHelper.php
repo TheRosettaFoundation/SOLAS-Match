@@ -12,7 +12,7 @@ require_once __DIR__.'/../Common/Enums/TaskTypeEnum.class.php';
 require_once __DIR__.'/../Common/Enums/TaskStatusEnum.class.php';
 require_once __DIR__.'/../Common/Enums/BanTypeEnum.class.php';
 require_once __DIR__.'/../Common/protobufs/models/Locale.php';
-require_once __DIR__.'/../Common/Lib/APIHelper.class.php';
+require_once __DIR__.'/../Common/lib/APIHelper.class.php';
 
 class UnitTestHelper
 {
@@ -58,6 +58,11 @@ class UnitTestHelper
            
             $schema = file_get_contents(__DIR__.'/../api/vendor/league/oauth2-server/sql/mysql.sql');
             $result = $conn->exec($schema);
+            $conn->query("INSERT INTO oauth_clients (id, secret, name, auto_approve)
+                                   VALUES('KFL1j8Ah173Jd14L24OR2ImBK529o26T','xhWteRFwNZ56mRW5231fr926DMHt6FF3',
+                                    'aaron_solas',1");
+            $conn->query("INSERT INTO oauth_client_endpoints (client_id, redirect_uri)
+                            VALUES ('KFL1j8Ah173Jd14L24OR2ImBK529o26T', 'http://127.0.0.1/SolasMatch/login/'");
             $schema = file_get_contents(__DIR__.'/../db/'.$schemaFile);
             $schema = str_replace("DELIMITER //", "", $schema);
             $schema = str_replace("DELIMITER ;", "", $schema);
