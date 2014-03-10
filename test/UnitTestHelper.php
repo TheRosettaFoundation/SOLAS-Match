@@ -12,6 +12,7 @@ require_once __DIR__.'/../Common/Enums/TaskTypeEnum.class.php';
 require_once __DIR__.'/../Common/Enums/TaskStatusEnum.class.php';
 require_once __DIR__.'/../Common/Enums/BanTypeEnum.class.php';
 require_once __DIR__.'/../Common/protobufs/models/Locale.php';
+require_once __DIR__.'/../Common/Lib/APIHelper.class.php';
 
 class UnitTestHelper
 {
@@ -35,7 +36,8 @@ class UnitTestHelper
         );
         $schemaFile = 'schema.sql';
         
-        API\Lib\PDOWrapper::$unitTesting = true;
+        API\Lib\PDOWrapper::$unitTesting = true;        // For API testing
+        Common\Lib\APIHelper::$UNIT_TESTING = true;     // For UI testing
         $conn = new \PDO(
             $dsn,
             Common\Lib\Settings::get('unit_test.username'),
