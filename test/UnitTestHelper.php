@@ -4,6 +4,7 @@ namespace SolasMatch\Tests;
 
 use \SolasMatch\Common as Common;
 use \SolasMatch\API as API;
+use SolasMatch\Common\Lib\Settings;
 
 require_once __DIR__.'/../Common/lib/Settings.class.php';
 require_once __DIR__.'/../Common/lib/ModelFactory.class.php';
@@ -25,11 +26,12 @@ class UnitTestHelper
     
     public static function teardownDb()
     {
-        $dsn = "mysql:host=".Common\Lib\Settings::get('unit_test.server').
-            ";port=".Common\Lib\Settings::get('unit_test.port');
-        $dsn1 = "mysql:host=".Common\Lib\Settings::get('database.server').
-            ";dbname=".Common\Lib\Settings::get('database.database').
-            ";port=".Common\Lib\Settings::get('database.server_port');
+        $dsn = "mysql:dbname=".Common\Lib\Settings::get('unit_test.database').
+        ";host=".Common\Lib\Settings::get('unit_test.server').
+        ";port=".Common\Lib\Settings::get('unit_test.port');
+        $dsn1 = "mysql:dbname=".Common\Lib\Settings::get('database.database').
+        ";host=".Common\Lib\Settings::get('database.server').
+        ";port=".Common\Lib\Settings::get('database.server_port');
         assert(
             $dsn1 != $dsn &&
             Common\Lib\Settings::get('database.database') != Common\Lib\Settings::get('unit_test.database')
@@ -44,10 +46,14 @@ class UnitTestHelper
             Common\Lib\Settings::get('unit_test.password'),
             array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
         );
+        //Make PDO throw exceptions if they arise
+        $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         unset($dsn);
         unset($dsn1);
+        
+        $oauthClientId = Common\Lib\Settings::get('oauth.client_id');
+        $oauthClientSecret = Common\Lib\Settings::get('oauth.client_secret');
         if (!self::$initalised) {
-           
             $result = $conn->exec("drop database `".Common\Lib\Settings::get('unit_test.database')."`");
             $result = $conn->exec(
                 "CREATE DATABASE `".
@@ -58,12 +64,12 @@ class UnitTestHelper
            
             $schema = file_get_contents(__DIR__.'/../api/vendor/league/oauth2-server/sql/mysql.sql');
             $result = $conn->exec($schema);
-            $conn->query("INSERT INTO oauth_clients (id, secret, name, auto_approve)
-                                   VALUES('KFL1j8Ah173Jd14L24OR2ImBK529o26T','xhWteRFwNZ56mRW5231fr926DMHt6FF3',
-                                    'aaron_solas',1");
-            $conn->query("INSERT INTO oauth_client_endpoints (client_id, redirect_uri)
-                            VALUES ('KFL1j8Ah173Jd14L24OR2ImBK529o26T', 'http://127.0.0.1/SolasMatch/login/'");
-            $schema = file_get_contents(__DIR__.'/../db/'.$schemaFile);
+            $conn->exec("INSERT INTO oauth_clients (id, secret, name, auto_approve)".
+                    "VALUES('$oauthClientId', '$oauthClientSecret', 'test_user',1)");
+            $conn->exec("INSERT INTO oauth_client_endpoints (client_id, redirect_uri)".
+                    "VALUES ('$oauthClientId', 'http://127.0.0.1/SolasMatch/login/')");
+          
+             $schema = file_get_contents(__DIR__.'/../db/'.$schemaFile);
             $schema = str_replace("DELIMITER //", "", $schema);
             $schema = str_replace("DELIMITER ;", "", $schema);
             $schema = str_replace("END//", "END;", $schema);
@@ -72,10 +78,10 @@ class UnitTestHelper
             $schema = file_get_contents(__DIR__.'/../db/languages.sql');
             $result = $conn->exec($schema);
             $schema = file_get_contents(__DIR__.'/../db/country_codes.sql');
-            $result = $conn->exec($schema);
+            $result = $conn->exec($schema); 
 
             self::$initalised = true;
-        } else {
+         } else {
             $result = $conn->exec("use `".Common\Lib\Settings::get('unit_test.database')."`");
             $tables = $conn->query(
                 "SELECT t.TABLE_NAME FROM information_schema.`TABLES` t WHERE t.TABLE_SCHEMA='Unit-Test'
@@ -86,8 +92,12 @@ class UnitTestHelper
                 $conn->exec("DELETE FROM $table[0]");
             }
 
-            $schema = file_get_contents(__DIR__.'/../api/vendor/league/oauth2-server/sql/mysql.sql');
-            $result = $conn->exec($schema);
+            //$schema = file_get_contents(__DIR__.'/../api/vendor/league/oauth2-server/sql/mysql.sql');
+            //$result = $conn->exec($schema);
+            $conn->exec("INSERT INTO oauth_clients (id, secret, name, auto_approve)".
+                    "VALUES('$oauthClientId', '$oauthClientSecret', 'test_user',1)");
+            $conn->exec("INSERT INTO oauth_client_endpoints (client_id, redirect_uri)".
+                    "VALUES ('$oauthClientId', 'http://127.0.0.1/SolasMatch/login/')");
             $schema = file_get_contents(__DIR__.'/../db/'.$schemaFile);
             $schema = str_replace("DELIMITER //", "", $schema);
             $schema = str_replace("DELIMITER ;", "", $schema);
@@ -95,10 +105,10 @@ class UnitTestHelper
            
             $result = $conn->exec($schema);
             $schema = file_get_contents(__DIR__.'/../db/languages.sql');
-            $result = $conn->exec($schema);
+            //$result = $conn->exec($schema);
             $schema = file_get_contents(__DIR__.'/../db/country_codes.sql');
-            $result = $conn->exec($schema);
-        }
+            //$result = $conn->exec($schema);
+        } 
     }
     
    
