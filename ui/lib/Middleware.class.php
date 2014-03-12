@@ -63,18 +63,18 @@ class Middleware
     }
 
 
-    public function authUserForOrg(\Slim\Route $route) 
+    public function authUserForOrg(\Slim\Route $route)
     {
         if ($this->isSiteAdmin()) {
             return true;
         }
-		
+
         $userDao = new UserDao();
         $orgDao = new OrganisationDao();
 
         $user_id = UserSession::getCurrentUserID();
         $params = $route->getParams();
-	    if ($params !== null) {
+        if ($params !== null) {
             $org_id = $params['org_id'];
             if ($user_id) {
                 $user_orgs = $userDao->getUserOrgs($user_id);
@@ -96,7 +96,7 @@ class Middleware
      *  Used for altering task details
      */
 
-    public function authUserForOrgTask(\Slim\Route $route) 
+    public function authUserForOrgTask(\Slim\Route $route)
     {
         if ($this->isSiteAdmin()) {
             return true;
@@ -131,8 +131,8 @@ class Middleware
     }
     
 
-    public function authUserForOrgProject(\Slim\Route $route) 
-    {                        
+    public function authUserForOrgProject(\Slim\Route $route)
+    {
         if ($this->isSiteAdmin()) {
             return true;
         }
@@ -201,7 +201,7 @@ class Middleware
     {
         $adminDao = new AdminDao();
         if ($adminDao->isUserBanned(UserSession::getCurrentUserID())) {
-            $app = Slim::getInstance();
+            $app = \Slim\Slim::getInstance();
             UserSession::destroySession();
             $app->flash('error', Localisation::getTranslation('common_this_user_account_has_been_banned'));
             $app->redirect($app->urlFor('home'));
@@ -221,7 +221,7 @@ class Middleware
                 if ($isBlackListed) {
                     $taskDao = new TaskDao();
                     $task = $taskDao->getTask($taskId);
-                    $app = Slim::getInstance();
+                    $app = \Slim\Slim::getInstance();
                     $app->flash(
                         'error',
                         sprintf(

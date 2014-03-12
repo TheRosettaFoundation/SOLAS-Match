@@ -37,7 +37,7 @@ class UserDao
 
     public static function changePassword($user_id, $password)
     {
-        $user = self::getUser($user_id);
+        $user = self::getUsers($user_id);
 
         $nonce = Authentication::generateNonce();
         $pass = Authentication::hashPassword($password, $nonce);
@@ -91,7 +91,7 @@ class UserDao
 
     public static function login($email, $clear_password)
     {
-        $user = self::getUser(null, $email);
+        $user = self::getUsers(null, $email);
 
         if (!is_object($user)) {
             throw new InvalidArgumentException(
@@ -117,7 +117,7 @@ class UserDao
 
     public static function apiLogin($email, $clear_password)
     {
-        $user = self::getUser(null, $email);
+        $user = self::getUsers(null, $email);
         
         if (is_array($user)) {
             $user = $user[0];
@@ -150,7 +150,7 @@ class UserDao
 
     public static function apiRegister($email, $clear_password, $verificationRequired = true)
     {
-        $user = self::getUser(null, $email);
+        $user = self::getUsers(null, $email);
         
         if (is_array($user)) {
             $user = $user[0];
@@ -226,7 +226,7 @@ class UserDao
         } else {
             $retvals = $openid->getAttributes();
             if ($openid->validate()) {
-                $user = self::getUser(null, $retvals['contact/email']);
+                $user = self::getUsers(null, $retvals['contact/email']);
                 if (is_array($user)) {
                     $user = $user[0];
                 }
@@ -248,7 +248,7 @@ class UserDao
     {
         $ret = null;
         if ($user_id = UserSession::getCurrentUserId()) {
-                $ret = self::getUser($user_id);
+                $ret = self::getUsers($user_id);
         }
         return $ret;
     }
@@ -354,9 +354,37 @@ class UserDao
 
         return $ret;
     }
-    
 
-    public static function getUser(
+    /**
+     * Gets a single user by their id
+     * @param The id of a user
+     * @param The email of the user
+     * @return User
+     * @author Tadhg O'Flaherty
+     **/
+    public static function getUser($user_id = null, $email = null)
+    {
+        $ret = null;
+        $args = PDOWrapper::cleanseNull($user_id)
+                .","."null"
+                .",".PDOWrapper::cleanseNullOrWrapStr($email)
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null";
+        
+        if ($result = PDOWrapper::call("getUser", $args)) {
+            $ret = array();
+            foreach ($result as $row) {
+                $ret[] = ModelFactory::buildModel("User", $row);
+            }
+        }
+        return $ret[0];
+    }
+
+    public static function getUsers(
         $user_id = null,
         $email = null,
         $nonce = null,
@@ -529,7 +557,8 @@ class UserDao
             $ret = array();
             foreach ($result as $row) {
                 $task = ModelFactory::buildModel("Task", $row);
-                $task->setTaskStatus(TaskDao::getTaskStatus($task->getId()));
+                //$task->setTaskStatus(TaskDao::getTaskStatus($task->getId()));
+                //$task->setTaskStatus($task->getTaskStatus(($task->getId())));
                 $ret[] = $task;
             }
         }

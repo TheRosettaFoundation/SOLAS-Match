@@ -90,7 +90,7 @@ class Middleware
             $params = $route->getParams();
             
             $app = \Slim\Slim::getInstance();
-			$req = $app->request;
+            $req = $app->request;
             $task = $req->getBody();
             $format = $params['format'];
             $client = new APIHelper($format);
@@ -99,8 +99,8 @@ class Middleware
             
             $project = null;
             if ($projectId != null) {
-                $projects = ProjectDao::getProject($projectId);
-                $project = $projects[0];
+                $project = ProjectDao::getProject($projectId);
+                //$project = $projects[0];
             }
             $orgId = $project->getOrganisationId();
             
@@ -144,17 +144,17 @@ class Middleware
                 $taskId = explode('.', $taskId);
                 $format = '.'.$taskId[1];
                 $taskId = $taskId[0];
-            } 
+            }
             $task = null;
             if ($taskId != null) {
-                $tasks = TaskDao::getTask($taskId);
-                $task = $tasks[0];
+                $task = TaskDao::getTask($taskId);
+                //$task = $tasks[0];
             }
             $projectId = $task->getProjectId();
             $project = null;
             if ($projectId != null) {
-                $projects = ProjectDao::getProject($projectId);
-                $project = $projects[0];
+                $project = ProjectDao::getProject($projectId);
+                //$project = $projects[0];
             }
             $orgId = $project->getOrganisationId();
             if (OrganisationDao::isMember($orgId, $userId) || AdminDao::isAdmin($userId, $orgId)) {
@@ -344,8 +344,8 @@ class Middleware
             }
             $project = null;
             if ($projectId != null) {
-                $projects = ProjectDao::getProject($projectId);
-                $project = $projects[0];
+                $project = ProjectDao::getProject($projectId);
+                //$project = $projects[0];
             }
             
             $orgId = $project->getOrganisationId();
@@ -383,14 +383,14 @@ class Middleware
             
             $task = null;
             if ($taskId != null) {
-                $tasks = TaskDao::getTask($taskId);
-                $task = $tasks[0];
+                $task = TaskDao::getTask($taskId);
+                //$task = $tasks[0];
             }
             $projectId = $task->getProjectId();
             $project = null;
             if ($projectId != null) {
-                $projects = ProjectDao::getProject($projectId);
-                $project = $projects[0];
+                $project = ProjectDao::getProject($projectId);
+                //$project = $projects[0];
             }
             $orgId = $project->getOrganisationId();
             
@@ -431,14 +431,14 @@ class Middleware
             
             $task = null;
             if ($taskId != null) {
-                $tasks = TaskDao::getTask($taskId);
-                $task = $tasks[0];
+                $task = TaskDao::getTask($taskId);
+                //$task = $tasks[0];
             }
             $projectId = $task->getProjectId();
             $project = null;
             if ($projectId != null) {
-                $projects = ProjectDao::getProject($projectId);
-                $project = $projects[0];
+                $project = ProjectDao::getProject($projectId);
+                //$project = $projects[0];
             }
             $orgId = $project->getOrganisationId();
             
@@ -504,14 +504,14 @@ class Middleware
             
             $task = null;
             if ($taskId != null) {
-                $tasks = TaskDao::getTask($taskId);
-                $task = $tasks[0];
+                $task = TaskDao::getTask($taskId);
+                //$task = $tasks[0];
             }
             $projectId = $task->getProjectId();
             $project = null;
             if ($projectId != null) {
-                $projects = ProjectDao::getProject($projectId);
-                $project = $projects[0];
+                $project = ProjectDao::getProject($projectId);
+                //$project = $projects[0];
             }
             $orgId = $project->getOrganisationId();
             $hasTask = TaskDao::hasUserClaimedTask($userId, $taskId);
@@ -542,9 +542,9 @@ class Middleware
             
             $format = $params['format'];
             $client = new APIHelper($format);
-            $app = \Slim\Slim::getInstance();			
-			$req = $app->request;
-			$review = $req->getBody();
+            $app = \Slim\Slim::getInstance();
+            $req = $app->request;
+            $review = $req->getBody();
             $review = $client->deserialize($review, "TaskReview");
             
             $hasFollowupTask = false;
@@ -572,8 +572,8 @@ class Middleware
             }
             
             if ($review->getProjectId() != null) {
-                $projects = ProjectDao::getProject($review->getProjectId());
-                $project = $projects[0];
+                $project = ProjectDao::getProject($review->getProjectId());
+                //$project = $projects[0];
             }
             $orgId = $project->getOrganisationId();
             
@@ -620,8 +620,8 @@ class Middleware
                         
             $project = null;
             if ($projectId != null) {
-                $projects = ProjectDao::getProject($projectId);
-                $project = $projects[0];
+                $project = ProjectDao::getProject($projectId);
+                //$project = $projects[0];
             }
             
             $orgId = $project->getOrganisationId();
@@ -660,8 +660,8 @@ class Middleware
             
             $badge = null;
             if ($badgeId != null) {
-                $badges = BadgeDao::getBadge($badgeId);
-                $badge = $badges[0];
+                $badge = BadgeDao::getBadge($badgeId);
+                //$badge = $badges[0];
             }
             $orgId = $badge->getOwnerId();
                     
@@ -711,8 +711,8 @@ class Middleware
             
             $badge = null;
             if ($badgeId != null) {
-                $badges = BadgeDao::getBadge($badgeId);
-                $badge = $badges[0];
+                $badge = BadgeDao::getBadge($badgeId);
+                //$badge = $badges[0];
             }
             
             $orgId = $badge->getOwnerId();
@@ -780,7 +780,7 @@ class Middleware
             }
             $params = $route->getParams();
             $app = \Slim\Slim::getInstance();
-			$req = $app->request;
+            $req = $app->request;
             $task = $req->getBody();
             $format = $params['format'];
             $client = new APIHelper($format);

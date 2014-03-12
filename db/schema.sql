@@ -1523,7 +1523,6 @@ END//
 DELIMITER ;
 
 
-
 -- Dumping structure for procedure Solas-Match-Dev.getBadge
 DROP PROCEDURE IF EXISTS `getBadge`;
 DELIMITER //
@@ -2003,7 +2002,6 @@ DELIMITER ;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 
 
-
 -- Dumping structure for procedure Solas-Match-Test.getTag
 DROP PROCEDURE IF EXISTS `getTag`;
 DELIMITER //
@@ -2291,6 +2289,7 @@ BEGIN
         where utp.user_id=uID;
 END//
 DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Test.getUser
 DROP PROCEDURE IF EXISTS `getUser`;

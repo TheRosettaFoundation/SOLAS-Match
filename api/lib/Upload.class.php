@@ -229,7 +229,8 @@ class Upload
         $taskDao = new TaskDao();
         $builder = new APIWorkflowBuilder();
         $currentTask =  $taskDao->getTask($id);
-        $projectId = $currentTask[0]->getProjectId();
+        $projectId = $currentTask->getProjectId();
+        //$projectId = $currentTask[0]->getProjectId();
         $taskPreReqs = $builder->calculatePreReqArray($projectId);
 
         if (!empty($taskPreReqs) && !in_array($preReqId, $taskPreReqs[$id])) {
@@ -239,14 +240,14 @@ class Upload
                 $index = $builder->find($id, $graph);
                 $currentTaskNode = $graph->getAllNodes($index);
                 $task = $taskDao->getTask($id);
-                $task = $task[0];
+                //$task = $task[0];
                 $preReqTask = $taskDao->getTask($preReqId);
                 $taskDao->addTaskPreReq($id, $preReqId);
 
                 if ($task->getTaskType() != TaskTypeEnum::DESEGMENTATION) {
                     foreach ($currentTaskNode->getPreviousList() as $nodeId) {
                         $preReq = $taskDao->getTask($nodeId);
-                        $preReq = $preReq[0];
+                        //$preReq = $preReq[0];
                         if ($preReq->getTaskStatus() == TaskStatusEnum::COMPLETE
                                 && $preReq->getTaskType() != TaskTypeEnum::SEGMENTATION) {
                             Upload::copyOutputFile($id, $preReqId);
@@ -261,7 +262,7 @@ class Upload
     {
         $taskDao = new TaskDao();
         $task = $taskDao->getTask($id);
-        $task = $task[0];
+        //$task = $task[0];
         $taskDao->removeTaskPreReq($id, $preReqId);
         $taskPreReqs = $taskDao->getTaskPreReqs($id);
         
@@ -288,10 +289,10 @@ class Upload
     {
         $taskDao = new TaskDao();
         $task = $taskDao->getTask($id);
-        $task = $task[0];
+        //$task = $task[0];
         
         $preReqTask = $taskDao->getTask($preReqId);
-        $preReqTask = $preReqTask[0];
+        //$preReqTask = $preReqTask[0];
         
         $preReqlatestFileVersion = TaskDao::getLatestFileVersion($preReqId);
         $preReqFileName = TaskDao::getFilename($preReqId, $preReqlatestFileVersion);

@@ -13,11 +13,29 @@ class Projects
 {
     public static function init()
     {
+        /**
+         * Gets a single project object based on its id
+         */
+        Dispatcher::registerNamed(
+            HTTPMethodEnum::GET,
+            '/v0/projects/:projectId/',
+            function ($projectId, $format = '.json') {
+                if (!is_numeric($projectId) && strstr($projectId, '.')) {
+                    $projectId = explode('.', $projectId);
+                    $format = '.'.$projectId[1];
+                    $projectId = $projectId[0];
+                }
+                Dispatcher::sendResponce(null, ProjectDao::getProject($projectId), null, $format);
+            },
+            'getProject',
+            null
+        );
+
         Dispatcher::registerNamed(
             HTTPMethodEnum::GET,
             '/v0/projects(:format)/',
             function ($format = '.json') {
-                Dispatcher::sendResponce(null, ProjectDao::getProject(), null, $format);
+                Dispatcher::sendResponce(null, ProjectDao::getProjects(), null, $format);
             },
             'getProjects'
         );
@@ -62,25 +80,6 @@ class Projects
             },
             'updateProject',
             'Middleware::authenticateUserForOrgProject'
-        );
-        
-        Dispatcher::registerNamed(
-            HTTPMethodEnum::GET,
-            '/v0/projects/:projectId/',
-            function ($projectId, $format = '.json') {
-                if (!is_numeric($projectId) && strstr($projectId, '.')) {
-                    $projectId = explode('.', $projectId);
-                    $format = '.'.$projectId[1];
-                    $projectId = $projectId[0];
-                }
-                $data = ProjectDao::getProject($projectId);
-                if ($data && is_array($data)) {
-                    $data = $data[0];
-                }
-                Dispatcher::sendResponce(null, $data, null, $format);
-            },
-            'getProject',
-            null
         );
         
         Dispatcher::registerNamed(

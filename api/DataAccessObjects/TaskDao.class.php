@@ -20,7 +20,42 @@ include_once __DIR__."/../../Common/lib/SolasMatchException.php";
 
 class TaskDao
 {
-    public static function getTask(
+    /**
+     * Gets a single task by its id
+     * @param The id of a task
+     * @return Task
+     * @author Tadhg O'Flaherty
+     **/
+    public static function getTask($taskId)
+    {
+        $tasks = array();
+        $args = PDOWrapper::cleanseNull($taskId)
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null";
+        $result = PDOWrapper::call("getTask", $args);
+        if ($result) {
+            foreach ($result as $row) {
+                $tasks[] = ModelFactory::buildModel("Task", $row);
+            }
+        }
+        if (sizeof($tasks) == 0) {
+            $tasks=null;
+        }
+        return $tasks[0];
+    }
+
+    public static function getTasks(
         $taskId = null,
         $projectId = null,
         $title = null,
@@ -376,7 +411,7 @@ class TaskDao
     public static function moveToArchiveByID($taskId, $userId)
     {
         $ret = false;
-        $task = self::getTask($taskId);
+        $task = self::getTasks($taskId);
         $task = $task[0];
 
         $graphBuilder = new APIWorkflowBuilder();
@@ -405,12 +440,12 @@ class TaskDao
     private static function archiveTaskNode($node, $graph, $userId)
     {
         $ret = true;
-        $task = self::getTask($node->getTaskId());
+        $task = self::getTasks($node->getTaskId());
         $dependantNodes = $node->getNextList();
         if (count($dependantNodes) > 0) {
             $builder = new APIWorkflowBuilder();
             foreach ($dependantNodes as $dependantId) {
-                $dTask = self::getTask($dependantId);
+                $dTask = self::getTasks($dependantId);
                 $index = $builder->find($dependantId, $graph);
                 $dependant = $graph->getAllNodes($index);
                 $preReqs = $dependant->getPreviousList();
@@ -550,7 +585,7 @@ class TaskDao
 
     public static function downloadTask($taskId, $version = 0)
     {
-        $task = self::getTask($taskId);
+        $task = self::getTasks($taskId);
         $task=$task[0];
         if (!is_object($task)) {
             header('HTTP/1.0 500 Not Found');
@@ -568,7 +603,7 @@ class TaskDao
     
     public static function downloadConvertedTask($taskId, $version = 0)
     {
-        $task = self::getTask($taskId);
+        $task = self::getTasks($taskId);
 
         if (!is_object($task)) {
             header('HTTP/1.0 404 Not Found');
@@ -690,7 +725,7 @@ class TaskDao
             $index = $graphBuilder->find($task->getId(), $graph);
             $taskNode = $graph->getAllNodes($index);
             foreach ($taskNode->getNextList() as $nextTaskId) {
-                $result = TaskDao::getTask($nextTaskId);
+                $result = TaskDao::getTasks($nextTaskId);
                 $nextTask = $result[0];
                 self::uploadFile($nextTask, $convert, $file, 0, $userId, $filename);
             }

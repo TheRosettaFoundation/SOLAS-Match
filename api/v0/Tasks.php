@@ -19,11 +19,29 @@ class Tasks
 {
     public static function init()
     {
+        /**
+         * Get a single task object based on its id
+         */
+        Dispatcher::registerNamed(
+            HttpMethodEnum::GET,
+            '/v0/tasks/:taskId/',
+            function ($taskId, $format = ".json") {
+                if (!is_numeric($taskId) && strstr($taskId, '.')) {
+                    $taskId = explode('.', $taskId);
+                    $format = '.'.$taskId[1];
+                    $taskId = $taskId[0];
+                }
+                Dispatcher::sendResponce(null, TaskDao::getTask($taskId), null, $format);
+            },
+            'getTask',
+            null
+        );
+
         Dispatcher::registerNamed(
             HttpMethodEnum::GET,
             '/v0/tasks(:format)/',
             function ($format = ".json") {
-                Dispatcher::sendResponce(null, TaskDao::getTask(), null, $format);
+                Dispatcher::sendResponce(null, TaskDao::getTasks(), null, $format);
             },
             'getTasks',
             null
@@ -140,25 +158,6 @@ class Tasks
                 Dispatcher::sendResponce(null, TaskDao::getLatestAvailableTasks($limit, $offset), null, $format);
             },
             'getTopTasks',
-            null
-        );
-        
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
-            '/v0/tasks/:taskId/',
-            function ($taskId, $format = ".json") {
-                if (!is_numeric($taskId) && strstr($taskId, '.')) {
-                    $taskId = explode('.', $taskId);
-                    $format = '.'.$taskId[1];
-                    $taskId = $taskId[0];
-                }
-                $data = TaskDao::getTask($taskId);
-                if ($data && is_array($data)) {
-                    $data = $data[0];
-                }
-                Dispatcher::sendResponce(null, $data, null, $format);
-            },
-            'getTask',
             null
         );
 

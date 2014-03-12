@@ -12,6 +12,24 @@ class Tags
 {
     public static function init()
     {
+        /**
+         * Gets a single tag based on its id
+         */
+        Dispatcher::registerNamed(
+            HttpMethodEnum::GET,
+            '/v0/tags/:tagId/',
+            function ($tagId, $format = ".json") {
+                if (!is_numeric($tagId) && strstr($tagId, '.')) {
+                    $tagId = explode('.', $tagId);
+                    $format = '.'.$tagId[1];
+                    $tagId = $tagId[0];
+                }
+                Dispatcher::sendResponce(null, TagsDao::getTag($tagId), null, $format);
+            },
+            'getTag',
+            null
+        );
+
         Dispatcher::registerNamed(
             HttpMethodEnum::GET,
             '/v0/tags(:format)/',
@@ -21,7 +39,7 @@ class Tags
                 if ($topTags) {
                     Dispatcher::sendResponce(null, TagsDao::getTopTags($limit), null, $format);
                 } else {
-                    Dispatcher::sendResponce(null, TagsDao::getTag(null, null, $limit), null, $format);
+                    Dispatcher::sendResponce(null, TagsDao::getTags(null, null, $limit), null, $format);
                 }
             },
             'getTags',
@@ -58,10 +76,7 @@ class Tags
                         }
                     }
                 }
-                $data = TagsDao::getTag(null, $label);
-                if (is_array($data)) {
-                    $data = $data[0];
-                }
+                $data = TagsDao::getTag(null, $tagLabel);
                 Dispatcher::sendResponce(null, $data, null, $format);
             },
             'getTagByLabel',
@@ -102,26 +117,7 @@ class Tags
             'getTopTags',
             null
         );
-        
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
-            '/v0/tags/:tagId/',
-            function ($tagId, $format = ".json") {
-                if (!is_numeric($tagId) && strstr($tagId, '.')) {
-                    $tagId = explode('.', $tagId);
-                    $format = '.'.$tagId[1];
-                    $tagId = $tagId[0];
-                }
-                $data = TagsDao::getTag($tagId);
-                if (is_array($data)) {
-                    $data = $data[0];
-                }
-                Dispatcher::sendResponce(null, $data, null, $format);
-            },
-            'getTag',
-            null
-        );
-        
+
         Dispatcher::registerNamed(
             HttpMethodEnum::PUT,
             '/v0/tags/:tagId/',

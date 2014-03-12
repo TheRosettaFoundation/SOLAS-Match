@@ -14,11 +14,29 @@ class Orgs
 {
     public static function init()
     {
+        /**
+         * Gets a single organisation
+         */
+        Dispatcher::registerNamed(
+            HttpMethodEnum::GET,
+            '/v0/orgs/:orgId/',
+            function ($orgId, $format = ".json") {
+                if (!is_numeric($orgId) && strstr($orgId, '.')) {
+                    $orgId = explode('.', $orgId);
+                    $format = '.'.$orgId[1];
+                    $orgId = $orgId[0];
+                }
+                Dispatcher::sendResponce(null, OrganisationDao::getOrg($orgId), null, $format);
+            },
+            'getOrg',
+            null
+        );
+        
         Dispatcher::registerNamed(
             HttpMethodEnum::GET,
             '/v0/orgs(:format)/',
             function ($format = ".json") {
-                Dispatcher::sendResponce(null, OrganisationDao::getOrg(), null, $format);
+                Dispatcher::sendResponce(null, OrganisationDao::getOrgs(), null, $format);
             },
             'getOrgs'
         );
@@ -82,26 +100,7 @@ class Orgs
             'deleteOrg',
             'Middleware::authenticateOrgAdmin'
         );
-        
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
-            '/v0/orgs/:orgId/',
-            function ($orgId, $format = ".json") {
-                if (!is_numeric($orgId) && strstr($orgId, '.')) {
-                    $orgId = explode('.', $orgId);
-                    $format = '.'.$orgId[1];
-                    $orgId = $orgId[0];
-                }
-                $data = OrganisationDao::getOrg($orgId);
-                if (is_array($data)) {
-                    $data = $data[0];
-                }
-                Dispatcher::sendResponce(null, $data, null, $format);
-            },
-            'getOrg',
-            null
-        );
-        
+
         Dispatcher::registerNamed(
             HttpMethodEnum::GET,
             '/v0/orgs/isMember/:orgId/:userId/',
@@ -133,7 +132,7 @@ class Orgs
                         }
                     }
                 }
-                $data= OrganisationDao::getOrg(null, urldecode($name));
+                $data= OrganisationDao::getOrgs(null, urldecode($name));
                 $data = $data[0];
                 Dispatcher::sendResponce(null, $data, null, $format);
             },
@@ -171,7 +170,7 @@ class Orgs
             function ($orgId, $format = '.json') {
                 Dispatcher::sendResponce(
                     null,
-                    ProjectDao::getProject(null, null, null, null, null, $orgId),
+                    ProjectDao::getProjects(null, null, null, null, null, $orgId),
                     null,
                     $format
                 );

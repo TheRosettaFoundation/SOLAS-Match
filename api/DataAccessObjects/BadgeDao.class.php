@@ -5,7 +5,30 @@ require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 
 class BadgeDao
 {
-    public static function getBadge($badgeId = null, $title = null, $description = null, $ownerId = null)
+    /**
+     * Gets a single badge by its id
+     * @param The id of a badge
+     * @return Single badge object
+     * @author Tadhg O'Flaherty
+     **/
+    public static function getBadge($badgeId)
+    {
+        $args = PDOWrapper::cleanseNull($badgeId)
+                .","."null"
+                .","."null"
+                .","."null";
+        
+        if ($result = PDOWrapper::call("getBadge", $args)) {
+            $badges = array();
+            foreach ($result as $badge) {
+                $badges[] = ModelFactory::buildModel("Badge", $badge);
+            }
+            return $badges[0];
+        }
+        return null;
+    }
+
+    public static function getBadges($badgeId = null, $title = null, $description = null, $ownerId = null)
     {
         $args = PDOWrapper::cleanseNull($badgeId)
                 .",".PDOWrapper::cleanseNullOrWrapStr($title)

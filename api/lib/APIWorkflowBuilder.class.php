@@ -7,7 +7,7 @@ class APIWorkflowBuilder extends WorkflowBuilder
     protected function getProjectTasks($projectId)
     {
         $dao = new TaskDao();
-        return $dao->getTask(null, $projectId);
+        return $dao->getTasks(null, $projectId);
     }
 
     protected function getTaskPreReqs($taskId)

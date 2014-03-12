@@ -146,11 +146,11 @@ class Notify
     {
         $org_dao = new OrganisationDao();
         $org = $org_dao->getOrg($org_id);
-        $org = $org[0];
+        //$org = $org[0];
         
         $user_dao = new UserDao();
         $user = $user_dao->getUser($user_id);
-        $user = $user[0];
+        //$user = $user[0];
 
 
         $messagingClient = new MessagingClient();

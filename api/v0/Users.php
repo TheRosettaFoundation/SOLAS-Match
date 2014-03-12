@@ -26,7 +26,12 @@ class Users
             'getUsers',
             null
         );
-        
+
+        /**
+        * Gets a single user by their id
+        * @param The id of a badge
+        * @return Badge
+        **/
         Dispatcher::registerNamed(
             HttpMethodEnum::GET,
             '/v0/users/:userId/',
@@ -37,9 +42,6 @@ class Users
                     $userId = $userId[0];
                 }
                 $data = UserDao::getUser($userId);
-                if (is_array($data)) {
-                    $data = $data[0];
-                }
                 if (!is_null($data)) {
                     $data->setPassword(null);
                     $data->setNonce(null);
@@ -47,6 +49,31 @@ class Users
                 Dispatcher::sendResponce(null, $data, null, $format);
             },
             'getUser'
+        );
+        
+        Dispatcher::registerNamed(
+            HttpMethodEnum::GET,
+            '/v0/users/getByEmail/:email/',
+            function ($email, $format = ".json") {
+                if (!is_numeric($email) && strstr($email, '.')) {
+                    $temp = array();
+                    $temp = explode('.', $email);
+                    $lastIndex = sizeof($temp)-1;
+                    if ($lastIndex > 0) {
+                        $email = $temp[0];
+                        for ($i = 1; $i < $lastIndex; $i++) {
+                            $email = "{$email}.{$temp[$i]}";
+                        }
+                        if ($temp[$lastIndex] != "json") {
+                            $email = "{$email}.{$temp[$lastIndex]}";
+                        }
+                    }
+                }
+                $data = UserDao::getUser(null, $email);
+                Dispatcher::sendResponce(null, $data, null, $format);
+            },
+            'getUserByEmail',
+            "Middleware::registerValidation"
         );
         
         Dispatcher::registerNamed(
@@ -156,33 +183,7 @@ class Users
             "userRequestReference",
             'Middleware::authUserOwnsResource'
         );
-        
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
-            '/v0/users/getByEmail/:email/',
-            function ($email, $format = ".json") {
-                if (!is_numeric($email) && strstr($email, '.')) {
-                    $temp = array();
-                    $temp = explode('.', $email);
-                    $lastIndex = sizeof($temp)-1;
-                    if ($lastIndex > 1) {
-                        $format='.'.$temp[$lastIndex];
-                        $email = $temp[0];
-                        for ($i = 1; $i < $lastIndex; $i++) {
-                            $email = "{$email}.{$temp[$i]}";
-                        }
-                    }
-                }
-                $data = UserDao::getUser(null, $email);
-                if (is_array($data)) {
-                    $data = $data[0];
-                }
-                Dispatcher::sendResponce(null, $data, null, $format);
-            },
-            'getUserByEmail',
-            "Middleware::registerValidation"
-        );
-        
+
         Dispatcher::registerNamed(
             HttpMethodEnum::GET,
             '/v0/users/getClaimedTasksCount/:userId/',
@@ -284,10 +285,7 @@ class Users
                 }
                 $ret = false;
                 $user = UserDao::getUser(null, $email);
-                if (count($user) > 0) {
-                    $user = $user[0];
-                    $ret = BadgeDao::assignBadge($user->getId(), $badgeId);
-                }
+                $ret = BadgeDao::assignBadge($user->getId(), $badgeId);
                 Dispatcher::sendResponce(null, $ret, null, $format);
             },
             "assignBadge",
@@ -472,7 +470,7 @@ class Users
             },
             'getUserArchivedTasks'
         );
-        
+
         Dispatcher::registerNamed(
             HttpMethodEnum::GET,
             '/v0/users/:userId/archivedTasks/:taskId/archiveMetaData(:format)/',
@@ -563,16 +561,16 @@ class Users
             'deleteUserTagById',
             'Middleware::authUserOwnsResource'
         );
-        
+
         Dispatcher::registerNamed(
             HttpMethodEnum::GET,
             '/v0/users/:userId/trackedTasks(:format)/',
             function ($userId, $format = ".json") {
-                $data=UserDao::getTrackedTasks($userId);
+                $data = UserDao::getTrackedTasks($userId);
                 Dispatcher::sendResponce(null, $data, null, $format);
             },
             'getUserTrackedTasks',
-            'Middleware::authUserOwnsResource'
+            Middleware::authUserOwnsResource'
         );
         
         Dispatcher::registerNamed(
@@ -648,7 +646,7 @@ class Users
             '/v0/users/email/:email/passwordResetRequest(:format)/',
             function ($email, $format = ".json") {
                 $user = UserDao::getUser(null, $email);
-                $user = $user[0];
+                //$user = $user[0];
                 if ($user) {
                     Dispatcher::sendResponce(null, UserDao::createPasswordReset($user), null, $format);
                     Notify::sendPasswordResetEmail($user->getId());

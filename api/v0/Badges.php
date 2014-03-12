@@ -10,14 +10,31 @@ require_once __DIR__."/../DataAccessObjects/BadgeDao.class.php";
 
 class Badges
 {
-    
+
     public static function init()
     {
+        /**
+         * Gets a single badge object based on its $badgeId
+         **/
+        Dispatcher::registerNamed(
+            HttpMethodEnum::GET,
+            '/v0/badges/:badgeId/',
+            function ($badgeId, $format = ".json") {
+                if (!is_numeric($badgeId)&& strstr($badgeId, '.')) {
+                    $badgeId = explode('.', $badgeId);
+                    $format = '.'.$badgeId[1];
+                    $badgeId = $badgeId[0];
+                }
+                Dispatcher::sendResponce(null, BadgeDao::getBadge($badgeId), null, $format);
+            },
+            'getBadge'
+        );
+        
         Dispatcher::registerNamed(
             HttpMethodEnum::GET,
             '/v0/badges(:format)/',
             function ($format = ".json") {
-                Dispatcher::sendResponce(null, BadgeDao::getBadge(), null, $format);
+                Dispatcher::sendResponce(null, BadgeDao::getBadges(), null, $format);
             },
             'getBadges'
         );
@@ -67,24 +84,6 @@ class Badges
             },
             'deleteBadge',
             'Middleware::authenticateUserForOrgBadge'
-        );
-        
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
-            '/v0/badges/:badgeId/',
-            function ($badgeId, $format = ".json") {
-                if (!is_numeric($badgeId)&& strstr($badgeId, '.')) {
-                    $badgeId = explode('.', $badgeId);
-                    $format = '.'.$badgeId[1];
-                    $badgeId = $badgeId[0];
-                }
-                $data = BadgeDao::getBadge($badgeId, null, null, null);
-                if (is_array($data)) {
-                    $data = $data[0];
-                }
-                Dispatcher::sendResponce(null, $data, null, $format);
-            },
-            'getBadge'
         );
         
         Dispatcher::registerNamed(

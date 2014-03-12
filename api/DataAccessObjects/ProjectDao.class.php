@@ -62,7 +62,39 @@ class ProjectDao
         }
     }
     
-    public static function getProject(
+    /**
+     * Gets a single project by its id
+     * @param The id of a project
+     * @return Project
+     * @author Tadhg O'Flaherty
+     **/
+    public static function getProject($id)
+    {
+        $projects = array();
+        $args = PDOWrapper::cleanseNull($id)
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null";
+        $result = PDOWrapper::call("getProject", $args);
+        if ($result) {
+            foreach ($result as $row) {
+                $projects[] = ModelFactory::buildModel("Project", $row);
+            }
+        }
+        if (count($projects) == 0) {
+            $projects = null;
+        }
+        return $projects[0];
+    }
+
+    public static function getProjects(
         $id = null,
         $title = null,
         $description = null,
