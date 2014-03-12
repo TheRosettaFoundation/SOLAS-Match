@@ -2183,6 +2183,39 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Test.getArchivedTaskMetaData
+DROP PROCEDURE IF EXISTS `getArchivedTaskMetaData`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedTaskMetaData`(IN `archTaskID` INT, IN `verID` INT, IN `name` TEXT, IN `content` VARCHAR(255), IN `uploadTime` DATETIME, IN `userClaimedID` INT, IN `userArchivedID` INT, IN `preReq` VARCHAR(255), IN `userCreatorID` INT, IN `archTime` DATETIME)
+    READS SQL DATA
+BEGIN
+	if archTaskID = '' then set archTaskID = null; end if;
+	if verID = '' then set verID = null; end if;
+	if name = '' then set name = null; end if;
+	if content = '' then set content = null; end if;
+	if uploadTime = '' then set uploadTime = null; end if;
+	if userClaimedID = '' then set userClaimedID = null; end if;
+	if userArchivedID = '' then set userArchivedID = null; end if;
+	if preReq = '' then set preReq = null; end if;
+	if userCreatorID = '' then set userCreatorID = null; end if;
+	if archTime = '' then set archTime = null; end if;
+	
+    select archivedTask_id, version, filename, `content-type`, `upload-time`, `user_id-claimed`, `user_id-archived`, prerequisites, `user_id-taskCreator`, `archived-date` 
+        from ArchivedTasksMetadata t 
+        where (archTaskID is null or t.archivedTask_id = archTaskID)
+        and (verID is null or t.version = verID)
+        and (name is null or t.filename = name)
+        and (content is null or t.`content-type` = content)
+        and (uploadTime is null or uploadTime = '0000-00-00 00:00:00' or t.`upload-time` = uploadTime)
+        and (userClaimedID is null or t.`user_id-claimed` = userClaimedID)
+        and (userArchivedID is null or t.`user_id-archived` = userArchivedID)
+        and (preReq is null or t.prerequisites = preReq)
+        and (userCreatorID is null or t.`user_id-taskCreator` = userCreatorID)
+        and (archTime is null or archTime = '0000-00-00 00:00:00' or t.`archived-date` = archTime);
+	
+END//
+DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Test.getTaskPreReqs
 DROP PROCEDURE IF EXISTS `getTaskPreReqs`;
