@@ -35,7 +35,12 @@ class Users
             'getUsers',
             null
         );
-        
+
+        /**
+        * Gets a single user by their id
+        * @param The id of a badge
+        * @return Badge
+        **/
         API\Dispatcher::registerNamed(
             Common\Enums\HttpMethodEnum::GET,
             '/v0/users/:userId/',
@@ -46,9 +51,6 @@ class Users
                     $userId = $userId[0];
                 }
                 $data = DAO\UserDao::getUser($userId);
-                if (is_array($data)) {
-                    $data = $data[0];
-                }
                 if (!is_null($data)) {
                     $data->setPassword(null);
                     $data->setNonce(null);
@@ -56,6 +58,31 @@ class Users
                 API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'getUser'
+        );
+
+        API\Dispatcher::registerNamed(
+            Common\Enums\HttpMethodEnum::GET,
+            '/v0/users/getByEmail/:email/',
+            function ($email, $format = ".json") {
+                if (!is_numeric($email) && strstr($email, '.')) {
+                    $temp = array();
+                    $temp = explode('.', $email);
+                    $lastIndex = sizeof($temp)-1;
+                    if ($lastIndex > 0) {
+                        $email = $temp[0];
+                        for ($i = 1; $i < $lastIndex; $i++) {
+                            $email = "{$email}.{$temp[$i]}";
+                        }
+                        if ($temp[$lastIndex] != "json") {
+                            $email = "{$email}.{$temp[$lastIndex]}";
+                        }
+                    }
+                }
+                $data = UserDao::getUser(null, $email);
+                Dispatcher::sendResponce(null, $data, null, $format);
+            },
+            'getUserByEmail',
+            "Middleware::registerValidation"
         );
         
         API\Dispatcher::registerNamed(
@@ -338,32 +365,6 @@ class Users
         
         API\Dispatcher::registerNamed(
             Common\Enums\HttpMethodEnum::GET,
-            '/v0/users/getByEmail/:email/',
-            function ($email, $format = ".json") {
-                if (!is_numeric($email) && strstr($email, '.')) {
-                    $temp = array();
-                    $temp = explode('.', $email);
-                    $lastIndex = sizeof($temp)-1;
-                    if ($lastIndex > 1) {
-                        $format='.'.$temp[$lastIndex];
-                        $email = $temp[0];
-                        for ($i = 1; $i < $lastIndex; $i++) {
-                            $email = "{$email}.{$temp[$i]}";
-                        }
-                    }
-                }
-                $data = DAO\UserDao::getUser(null, $email);
-                if (is_array($data)) {
-                    $data = $data[0];
-                }
-                API\Dispatcher::sendResponse(null, $data, null, $format);
-            },
-            'getUserByEmail',
-            "\SolasMatch\API\Lib\Middleware::registerValidation"
-        );
-        
-        API\Dispatcher::registerNamed(
-            Common\Enums\HttpMethodEnum::GET,
             '/v0/users/getClaimedTasksCount/:userId/',
             function ($userId, $format = '.json') {
                 if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -463,11 +464,8 @@ class Users
                 }
                 $ret = false;
                 $user = DAO\UserDao::getUser(null, $email);
-                if (count($user) > 0) {
-                    $user = $user[0];
-                    $ret = DAO\BadgeDao::assignBadge($user->getId(), $badgeId);
-                }
-                API\Dispatcher::sendResponse(null, $ret, null, $format);
+                $ret = DAO\BadgeDao::assignBadge($user->getId(), $badgeId);
+                API\Dispatcher::sendResponce(null, $ret, null, $format);
             },
             "assignBadge",
             null
@@ -651,7 +649,7 @@ class Users
             },
             'getUserArchivedTasks'
         );
-        
+
         API\Dispatcher::registerNamed(
             Common\Enums\HttpMethodEnum::GET,
             '/v0/users/:userId/archivedTasks/:taskId/archiveMetaData(:format)/',
@@ -742,13 +740,13 @@ class Users
             'deleteUserTagById',
             '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
         );
-        
+
         API\Dispatcher::registerNamed(
             Common\Enums\HttpMethodEnum::GET,
             '/v0/users/:userId/trackedTasks(:format)/',
             function ($userId, $format = ".json") {
                 $data = DAO\UserDao::getTrackedTasks($userId);
-                API\Dispatcher::sendResponse(null, $data, null, $format);
+                API\Dispatcher::sendResponce(null, $data, null, $format);
             },
             'getUserTrackedTasks',
             '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'
@@ -827,7 +825,7 @@ class Users
             '/v0/users/email/:email/passwordResetRequest(:format)/',
             function ($email, $format = ".json") {
                 $user = DAO\UserDao::getUser(null, $email);
-                $user = $user[0];
+                //$user = $user[0];
                 if ($user) {
                     API\Dispatcher::sendResponse(null, DAO\UserDao::createPasswordReset($user), null, $format);
                     Lib\Notify::sendPasswordResetEmail($user->getId());

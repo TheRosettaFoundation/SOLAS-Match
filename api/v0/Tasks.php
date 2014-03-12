@@ -26,11 +26,29 @@ class Tasks
 {
     public static function init()
     {
+        /**
+         * Get a single task object based on its id
+         */
+        API\Dispatcher::registerNamed(
+            Common\Enums\HttpMethodEnum::GET,
+            '/v0/tasks/:taskId/',
+            function ($taskId, $format = ".json") {
+                if (!is_numeric($taskId) && strstr($taskId, '.')) {
+                    $taskId = explode('.', $taskId);
+                    $format = '.'.$taskId[1];
+                    $taskId = $taskId[0];
+                }
+                API\Dispatcher::sendResponce(null, DAO\TaskDao::getTask($taskId), null, $format);
+            },
+            'getTask',
+            null
+        );
+
         API\Dispatcher::registerNamed(
             Common\Enums\HttpMethodEnum::GET,
             '/v0/tasks(:format)/',
             function ($format = ".json") {
-                API\Dispatcher::sendResponse(null, DAO\TaskDao::getTask(), null, $format);
+                API\Dispatcher::sendResponce(null, DAO\TaskDao::getTasks(), null, $format);
             },
             'getTasks',
             null
@@ -147,25 +165,6 @@ class Tasks
                 API\Dispatcher::sendResponse(null, DAO\TaskDao::getLatestAvailableTasks($limit, $offset), null, $format);
             },
             'getTopTasks',
-            null
-        );
-        
-        API\Dispatcher::registerNamed(
-            Common\Enums\HttpMethodEnum::GET,
-            '/v0/tasks/:taskId/',
-            function ($taskId, $format = ".json") {
-                if (!is_numeric($taskId) && strstr($taskId, '.')) {
-                    $taskId = explode('.', $taskId);
-                    $format = '.'.$taskId[1];
-                    $taskId = $taskId[0];
-                }
-                $data = DAO\TaskDao::getTask($taskId);
-                if ($data && is_array($data)) {
-                    $data = $data[0];
-                }
-                API\Dispatcher::sendResponse(null, $data, null, $format);
-            },
-            'getTask',
             null
         );
 

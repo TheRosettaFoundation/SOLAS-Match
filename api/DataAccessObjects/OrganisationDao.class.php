@@ -22,8 +22,37 @@ class OrganisationDao
         }
         return $ret;
     }
-    
-    public static function getOrg(
+
+    /**
+     * Gets a single organisation by its id
+     * @param The id of an organisation
+     * @return A single organisation object
+     * @author Tadhg O'Flaherty
+     **/
+    public static function getOrg($id = null, $name = null)
+    {
+        $ret = array();
+        $args = PDOWrapper::cleanseNull($id)
+                .",".PDOWrapper::cleanseNullOrWrapStr($name)
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null";
+        $result = PDOWrapper::call("getOrg", $args);
+        if (is_array($result)) {
+            foreach ($result as $row) {
+                $ret[] = ModelFactory::buildModel("Organisation", $row);
+            }
+        } else {
+            $ret = null;
+        }
+        return $ret[0];
+    }
+
+    public static function getOrgs(
         $id = null,
         $name = null,
         $homepage = null,

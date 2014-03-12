@@ -13,6 +13,9 @@ class Admins
 {
     public static function init()
     {
+        /*
+         * Gets a list of all site admins.
+         */
         API\Dispatcher::registerNamed(
             Common\Enums\HttpMethodEnum::GET,
             '/v0/admins(:format)/',
@@ -22,6 +25,26 @@ class Admins
             'getSiteAdmins'
         );
         
+        /*
+         * Gets a single site admin associated with a given $userId.
+         */
+        API\Dispatcher::registerNamed(
+            Common\Enums\HttpMethodEnum::GET,
+            '/v0/admins/:userId/',
+            function ($userId, $format = ".json") {
+                if (!is_numeric($userId) && strstr($userId, '.')) {
+                    $userId = explode('.', $userId);
+                    $format = '.'.$userId[1];
+                    $userId = $userId[0];
+                }
+                Dispatcher::sendResponce(null, AdminDao::getAdmins($userId), null, $format);
+            },
+            'getSiteAdmin'
+        );
+        
+        /*
+         * Gets all org admins associated with a given $orgId.
+         */
         API\Dispatcher::registerNamed(
             Common\Enums\HttpMethodEnum::GET,
             '/v0/admins/getOrgAdmins/:orgId/',
@@ -31,9 +54,26 @@ class Admins
                     $format = '.'.$orgId[1];
                     $orgId = $orgId[0];
                 }
-                API\Dispatcher::sendResponse(null, DAO\AdminDao::getAdmins($orgId), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\AdminDao::getAdmins(null, $orgId), null, $format);
             },
             'getOrgAdmins'
+        );
+
+        /*
+         * Gets a single org admin associated with a given $userId and $orgId.
+         */
+        Dispatcher::registerNamed(
+            HttpMethodEnum::GET,
+            '/v0/admins/getOrgAdmin/:userId/:orgId/',
+            function ($userId, $orgId, $format = ".json") {
+                if (!is_numeric($orgId) && strstr($orgId, '.')) {
+                    $orgId = explode('.', $orgId);
+                    $format = '.'.$orgId[1];
+                    $orgId = $orgId[0];
+                }
+                Dispatcher::sendResponce(null, AdminDao::getAdmins($userId, $orgId), null, $format);
+            },
+            'getOrgAdmin'
         );
         
         API\Dispatcher::registerNamed(

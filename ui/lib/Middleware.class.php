@@ -68,18 +68,17 @@ class Middleware
     }
 
 
-    public function authUserForOrg(\Slim\Route $route) 
+    public function authUserForOrg(\Slim\Route $route)
     {
         if ($this->isSiteAdmin()) {
             return true;
         }
-		
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $params = $route->getParams();
-	    if ($params !== null) {
+        if ($params !== null) {
             $org_id = $params['org_id'];
             if ($user_id) {
                 $user_orgs = $userDao->getUserOrgs($user_id);
@@ -101,7 +100,7 @@ class Middleware
      *  Used for altering task details
      */
 
-    public function authUserForOrgTask(\Slim\Route $route) 
+    public function authUserForOrgTask(\Slim\Route $route)
     {
         if ($this->isSiteAdmin()) {
             return true;
@@ -136,8 +135,8 @@ class Middleware
     }
     
 
-    public function authUserForOrgProject(\Slim\Route $route) 
-    {                        
+    public function authUserForOrgProject(\Slim\Route $route)
+    {
         if ($this->isSiteAdmin()) {
             return true;
         }
