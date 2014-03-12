@@ -292,7 +292,7 @@ class Tasks
                 }
                 $projectFile = DAO\ProjectDao::getProjectFileInfo($task->getProjectId(), null, null, null, null);
                 $filename = $projectFile->getFilename();
-                $convert = API\Dispatcher::clenseArgs('convertFromXliff', HttpMethodEnum::GET, false);
+                $convert = API\Dispatcher::clenseArgs('convertFromXliff', Common\Enums\HttpMethodEnum::GET, false);
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 DAO\TaskDao::uploadOutputFile($task, $convert, $data, $userId, $filename);
             },

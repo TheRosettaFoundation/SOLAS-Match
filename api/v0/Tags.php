@@ -30,7 +30,7 @@ class Tags
                     $format = '.'.$tagId[1];
                     $tagId = $tagId[0];
                 }
-                Dispatcher::sendResponce(null, TagsDao::getTag($tagId), null, $format);
+                API\Dispatcher::sendResponce(null, TagsDao::getTag($tagId), null, $format);
             },
             'getTag',
             null

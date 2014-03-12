@@ -78,11 +78,11 @@ class Users
                         }
                     }
                 }
-                $data = UserDao::getUser(null, $email);
-                Dispatcher::sendResponce(null, $data, null, $format);
+                $data = DAO\UserDao::getUser(null, $email);
+                API\Dispatcher::sendResponce(null, $data, null, $format);
             },
             'getUserByEmail',
-            "Middleware::registerValidation"
+            '\SolasMatch\API\Lib\Middleware::registerValidation'
         );
         
         API\Dispatcher::registerNamed(

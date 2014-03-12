@@ -37,7 +37,7 @@ class Admins
                     $format = '.'.$userId[1];
                     $userId = $userId[0];
                 }
-                Dispatcher::sendResponce(null, AdminDao::getAdmins($userId), null, $format);
+                API\Dispatcher::sendResponce(null, AdminDao::getAdmins($userId), null, $format);
             },
             'getSiteAdmin'
         );
@@ -62,8 +62,8 @@ class Admins
         /*
          * Gets a single org admin associated with a given $userId and $orgId.
          */
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/admins/getOrgAdmin/:userId/:orgId/',
             function ($userId, $orgId, $format = ".json") {
                 if (!is_numeric($orgId) && strstr($orgId, '.')) {
@@ -71,7 +71,7 @@ class Admins
                     $format = '.'.$orgId[1];
                     $orgId = $orgId[0];
                 }
-                Dispatcher::sendResponce(null, AdminDao::getAdmins($userId, $orgId), null, $format);
+                API\Dispatcher::sendResponce(null, AdminDao::getAdmins($userId, $orgId), null, $format);
             },
             'getOrgAdmin'
         );

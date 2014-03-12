@@ -24,8 +24,8 @@ class Orgs
         /**
          * Gets a single organisation
          */
-        Dispatcher::registerNamed(
-            HttpMethodEnum::GET,
+        API\Dispatcher::registerNamed(
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/orgs/:orgId/',
             function ($orgId, $format = ".json") {
                 if (!is_numeric($orgId) && strstr($orgId, '.')) {
@@ -33,7 +33,7 @@ class Orgs
                     $format = '.'.$orgId[1];
                     $orgId = $orgId[0];
                 }
-                Dispatcher::sendResponce(null, OrganisationDao::getOrg($orgId), null, $format);
+                API\Dispatcher::sendResponce(null, OrganisationDao::getOrg($orgId), null, $format);
             },
             'getOrg',
             null
