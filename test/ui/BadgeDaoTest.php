@@ -33,12 +33,12 @@ class BadgeDaoTest extends \PHPUnit_Framework_TestCase
         $isRegistered = $userDao->register("blah@test.com", "password");
         $this->assertTrue($isRegistered);
         
-        $registerUser = API\DAO\UserDao::getUser(null,"blah@test.com");
+        $registerUser = API\DAO\UserDao::getUser(null, "blah@test.com");
         $registerUser = $registerUser[0];
         $this->assertNotNull($registerUser);
         $this->assertInstanceOf("User", $registerUser);
         API\DAO\UserDao::finishRegistration($registerUser->getId());
-        $loginUser = $userDao->login("blah@test.com","password");
+        $loginUser = $userDao->login("blah@test.com", "password");
         
         /* $badgeDao = new UI\DAO\BadgeDao();
         $badge = Tests\UnitTestHelper::createBadge();

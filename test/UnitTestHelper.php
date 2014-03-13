@@ -91,9 +91,7 @@ class UnitTestHelper
             foreach ($tables as $table) {
                 $conn->exec("DELETE FROM $table[0]");
             }
-
-            //$schema = file_get_contents(__DIR__.'/../api/vendor/league/oauth2-server/sql/mysql.sql');
-            //$result = $conn->exec($schema);
+            
             $conn->exec("INSERT INTO oauth_clients (id, secret, name, auto_approve)".
                     "VALUES('$oauthClientId', '$oauthClientSecret', 'test_user',1)");
             $conn->exec("INSERT INTO oauth_client_endpoints (client_id, redirect_uri)".
@@ -104,10 +102,6 @@ class UnitTestHelper
             $schema = str_replace("END//", "END;", $schema);
            
             $result = $conn->exec($schema);
-            $schema = file_get_contents(__DIR__.'/../db/languages.sql');
-            //$result = $conn->exec($schema);
-            $schema = file_get_contents(__DIR__.'/../db/country_codes.sql');
-            //$result = $conn->exec($schema);
         } 
     }
     
