@@ -96,7 +96,7 @@ class Middleware
             $params = $route->getParams();
             
             $app = \Slim\Slim::getInstance();
-			$req = $app->request;
+            $req = $app->request;
             $task = $req->getBody();
             $format = $params['format'];
             $client = new Common\Lib\APIHelper($format);
@@ -105,8 +105,8 @@ class Middleware
             
             $project = null;
             if ($projectId != null) {
-                $projects = DAO\ProjectDao::getProject($projectId);
-                $project = $projects[0];
+
+                $project = DAO\ProjectDao::getProject($projectId);
             }
             $orgId = $project->getOrganisationId();
             
@@ -150,17 +150,15 @@ class Middleware
                 $taskId = explode('.', $taskId);
                 $format = '.'.$taskId[1];
                 $taskId = $taskId[0];
-            } 
+            }
             $task = null;
             if ($taskId != null) {
-                $tasks = DAO\TaskDao::getTask($taskId);
-                $task = $tasks[0];
+                $task = DAO\TaskDao::getTask($taskId);
             }
             $projectId = $task->getProjectId();
             $project = null;
             if ($projectId != null) {
-                $projects = DAO\ProjectDao::getProject($projectId);
-                $project = $projects[0];
+                $project = DAO\ProjectDao::getProject($projectId);
             }
             $orgId = $project->getOrganisationId();
             if (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId)) {
@@ -317,7 +315,8 @@ class Middleware
                     $orgId = $orgId[0];
                 }
             }
-            if ($orgId != null && (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId))) {
+            if ($orgId != null && (DAO\OrganisationDao::isMember($orgId, $userId)
+                    || DAO\AdminDao::isAdmin($userId, $orgId))) {
                 return true;
             } else {
                 Dispatcher::getDispatcher()->halt(
@@ -350,12 +349,12 @@ class Middleware
             }
             $project = null;
             if ($projectId != null) {
-                $projects = DAO\ProjectDao::getProject($projectId);
-                $project = $projects[0];
+                $project = DAO\ProjectDao::getProject($projectId);
             }
             
             $orgId = $project->getOrganisationId();
-            if ($orgId != null && (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId))) {
+            if ($orgId != null && (DAO\OrganisationDao::isMember($orgId, $userId)
+                    || DAO\AdminDao::isAdmin($userId, $orgId))) {
                 return true;
             } else {
                 Dispatcher::getDispatcher()->halt(
@@ -389,18 +388,19 @@ class Middleware
             
             $task = null;
             if ($taskId != null) {
-                $tasks = DAO\TaskDao::getTask($taskId);
-                $task = $tasks[0];
+                $task = DAO\TaskDao::getTask($taskId);
+
             }
             $projectId = $task->getProjectId();
             $project = null;
             if ($projectId != null) {
-                $projects = DAO\ProjectDao::getProject($projectId);
-                $project = $projects[0];
+                $project = DAO\ProjectDao::getProject($projectId);
+
             }
             $orgId = $project->getOrganisationId();
             
-            if ($orgId != null && (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId))) {
+            if ($orgId != null && (DAO\OrganisationDao::isMember($orgId, $userId)
+                    || DAO\AdminDao::isAdmin($userId, $orgId))) {
                 return true;
             } else {
                 Dispatcher::getDispatcher()->halt(
@@ -437,14 +437,14 @@ class Middleware
             
             $task = null;
             if ($taskId != null) {
-                $tasks = DAO\TaskDao::getTask($taskId);
-                $task = $tasks[0];
+                $task = DAO\TaskDao::getTask($taskId);
+
             }
             $projectId = $task->getProjectId();
             $project = null;
             if ($projectId != null) {
-                $projects = DAO\ProjectDao::getProject($projectId);
-                $project = $projects[0];
+                $project = DAO\ProjectDao::getProject($projectId);
+
             }
             $orgId = $project->getOrganisationId();
             
@@ -510,14 +510,14 @@ class Middleware
             
             $task = null;
             if ($taskId != null) {
-                $tasks = DAO\TaskDao::getTask($taskId);
-                $task = $tasks[0];
+                $task = DAO\TaskDao::getTask($taskId);
+
             }
             $projectId = $task->getProjectId();
             $project = null;
             if ($projectId != null) {
-                $projects = DAO\ProjectDao::getProject($projectId);
-                $project = $projects[0];
+                $project = DAO\ProjectDao::getProject($projectId);
+
             }
             $orgId = $project->getOrganisationId();
             $hasTask = DAO\TaskDao::hasUserClaimedTask($userId, $taskId);
@@ -545,12 +545,12 @@ class Middleware
             
             $userId = $user->getId();
             $params = $route->getParams();
-            
+
             $format = $params['format'];
             $client = new Common\Lib\APIHelper($format);
-            $app = \Slim\Slim::getInstance();			
-			$req = $app->request;
-			$review = $req->getBody();
+            $app = \Slim\Slim::getInstance();
+            $req = $app->request;
+            $review = $req->getBody();
             $review = $client->deserialize($review, "\SolasMatch\Common\Protobufs\Models\TaskReview");
             
             $hasFollowupTask = false;
@@ -578,12 +578,13 @@ class Middleware
             }
             
             if ($review->getProjectId() != null) {
-                $projects = DAO\ProjectDao::getProject($review->getProjectId());
-                $project = $projects[0];
+                $project = DAO\ProjectDao::getProject($review->getProjectId());
+
             }
             $orgId = $project->getOrganisationId();
             
-            if ($hasFollowupTask || DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId)) {
+            if ($hasFollowupTask || DAO\OrganisationDao::isMember($orgId, $userId)
+                    || DAO\AdminDao::isAdmin($userId, $orgId)) {
                 return true;
             } else {
                 Dispatcher::getDispatcher()->halt(
@@ -626,8 +627,8 @@ class Middleware
                         
             $project = null;
             if ($projectId != null) {
-                $projects = DAO\ProjectDao::getProject($projectId);
-                $project = $projects[0];
+                $project = DAO\ProjectDao::getProject($projectId);
+
             }
             
             $orgId = $project->getOrganisationId();
@@ -666,15 +667,17 @@ class Middleware
             
             $badge = null;
             if ($badgeId != null) {
-                $badges = DAO\BadgeDao::getBadge($badgeId);
+                $badge = DAO\BadgeDao::getBadge($badgeId);
                 $badge = $badges[0];
+
             }
             $orgId = $badge->getOwnerId();
                     
             // cases where the orgId is null signify a system badge
             // badge ids 6, 7 and 8 refer to the user controlled system badges
             // maybe we could move them to a class as consts or a function
-            if ($orgId != null && (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId))) {
+            if ($orgId != null && (DAO\OrganisationDao::isMember($orgId, $userId)
+                    || DAO\AdminDao::isAdmin($userId, $orgId))) {
                 return true;
             } elseif ($orgId == null && in_array($badgeId, array(6, 7, 8))) {
                 return true;
@@ -717,8 +720,8 @@ class Middleware
             
             $badge = null;
             if ($badgeId != null) {
-                $badges = DAO\BadgeDao::getBadge($badgeId);
-                $badge = $badges[0];
+                $badge = DAO\BadgeDao::getBadge($badgeId);
+
             }
             
             $orgId = $badge->getOwnerId();
@@ -786,7 +789,7 @@ class Middleware
             }
             $params = $route->getParams();
             $app = \Slim\Slim::getInstance();
-			$req = $app->request;
+            $req = $app->request;
             $task = $req->getBody();
             $format = $params['format'];
             $client = new Common\Lib\APIHelper($format);

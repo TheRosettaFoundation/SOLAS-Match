@@ -16,6 +16,29 @@ require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 
 class BadgeDao
 {
+    /**
+     * Gets a single badge by its id
+     * @param The id of a badge
+     * @return Single badge object
+     * @author Tadhg O'Flaherty
+     **/
+    public static function getBadge($badgeId)
+    {
+        $args = Lib\PDOWrapper::cleanseNull($badgeId)
+                .","."null"
+                .","."null"
+                .","."null";
+        
+        if ($result = Lib\PDOWrapper::call("getBadge", $args)) {
+            $badges = array();
+            foreach ($result as $badge) {
+                $badges[] = Common\Lib\ModelFactory::buildModel("Badge", $badge);
+            }
+            return $badges[0];
+        }
+        return null;
+    }
+    
     //! Used to retieve Badge data from the database
     /*!
       Used to retrieve Badge data from the database. The parameters can be used to filter the list of badges that will
@@ -26,7 +49,7 @@ class BadgeDao
       @param int $ownerId is the id of the Organisation the Badge is associated with or null for system badges
       @return Returns a list of Badge objects or null if no Badge objects matching the parameters are found
     */
-    public static function getBadge($badgeId = null, $title = null, $description = null, $ownerId = null)
+    public static function getBadges($badgeId = null, $title = null, $description = null, $ownerId = null)
     {
         $args = Lib\PDOWrapper::cleanseNull($badgeId).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($title).",".

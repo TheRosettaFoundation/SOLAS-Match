@@ -20,11 +20,29 @@ class Projects
 {
     public static function init()
     {
+        /**
+         * Gets a single project object based on its id
+         */
+        API\Dispatcher::registerNamed(
+            Common\Enums\HttpMethodEnum::GET,
+            '/v0/projects/:projectId/',
+            function ($projectId, $format = '.json') {
+                if (!is_numeric($projectId) && strstr($projectId, '.')) {
+                    $projectId = explode('.', $projectId);
+                    $format = '.'.$projectId[1];
+                    $projectId = $projectId[0];
+                }
+                API\Dispatcher::sendResponse(null, DAO\ProjectDao::getProject($projectId), null, $format);
+            },
+            'getProject',
+            null
+        );
+
         API\Dispatcher::registerNamed(
             Common\Enums\HttpMethodEnum::GET,
             '/v0/projects(:format)/',
             function ($format = '.json') {
-                API\Dispatcher::sendResponse(null, DAO\ProjectDao::getProject(), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\ProjectDao::getProjects(), null, $format);
             },
             'getProjects'
         );
@@ -69,25 +87,6 @@ class Projects
             },
             'updateProject',
             '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgProject'
-        );
-        
-        API\Dispatcher::registerNamed(
-            Common\Enums\HttpMethodEnum::GET,
-            '/v0/projects/:projectId/',
-            function ($projectId, $format = '.json') {
-                if (!is_numeric($projectId) && strstr($projectId, '.')) {
-                    $projectId = explode('.', $projectId);
-                    $format = '.'.$projectId[1];
-                    $projectId = $projectId[0];
-                }
-                $data = DAO\ProjectDao::getProject($projectId);
-                if ($data && is_array($data)) {
-                    $data = $data[0];
-                }
-                API\Dispatcher::sendResponse(null, $data, null, $format);
-            },
-            'getProject',
-            null
         );
         
         API\Dispatcher::registerNamed(

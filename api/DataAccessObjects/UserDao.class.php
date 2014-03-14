@@ -43,7 +43,7 @@ class UserDao
 
     public static function changePassword($user_id, $password)
     {
-        $user = self::getUser($user_id);
+        $user = self::getUsers($user_id);
 
         $nonce = Common\Lib\Authentication::generateNonce();
         $pass = Common\Lib\Authentication::hashPassword($password, $nonce);
@@ -97,7 +97,7 @@ class UserDao
 
     public static function login($email, $clear_password)
     {
-        $user = self::getUser(null, $email);
+        $user = self::getUsers(null, $email);
 
         if (!is_object($user)) {
             throw new \InvalidArgumentException(
@@ -123,7 +123,7 @@ class UserDao
 
     public static function apiLogin($email, $clear_password)
     {
-        $user = self::getUser(null, $email);
+        $user = self::getUsers(null, $email);
         
         if (is_array($user)) {
             $user = $user[0];
@@ -228,7 +228,73 @@ class UserDao
         }
         return $ret;
     }
-       
+
+    public static function openIdLogin($openid, $app)
+    {
+        if (!$openid->mode) {
+            try {
+                $openid->identity = $openid->data['openid_identifier'];
+                $openid->required = array('contact/email');
+                $url = $openid->authUrl();
+                $app->redirect($openid->authUrl());
+            } catch (ErrorException $e) {
+                echo $e->getMessage();
+            }
+        } elseif ($openid->mode == 'cancel') {
+            throw new InvalidArgumentException('User has canceled authentication!');
+            return false;
+        } else {
+            $retvals = $openid->getAttributes();
+            if ($openid->validate()) {
+                $user = self::getUsers(null, $retvals['contact/email']);
+                if (is_array($user)) {
+                    $user = $user[0];
+                }
+                if (!is_object($user)) {
+                    $user = self::create($retvals['contact/email'], md5($retvals['contact/email']));
+                }
+                UserSession::setSession($user->getId());
+            }
+            return true;
+        }
+    }
+
+    public static function logout()
+    {
+        UserSession::destroySession();
+    }
+
+    public static function getCurrentUser()
+    {
+        $ret = null;
+        if ($user_id = UserSession::getCurrentUserId()) {
+                $ret = self::getUser($user_id);
+        }
+        return $ret;
+    }
+
+    public static function isLoggedIn()
+    {
+        return (!is_null(UserSession::getCurrentUserId()));
+    }
+
+    public static function belongsToRole($user, $role)
+    {
+        $ret = false;
+        if ($role == 'translator') {
+            $ret = true;
+        } elseif ($role == 'organisation_member') {
+            $user_found = $this->find(array(
+                    'user_id' => $user->getUserId(),
+                    'role' => 'organisation_member'
+            ));
+            if (is_object($user_found)) {
+                $ret = true;
+            }
+        }
+        return $ret;
+    }
+
     public static function findOrganisationsUserBelongsTo($user_id)
     {
         $ret = null;
@@ -306,8 +372,37 @@ class UserDao
         }
         return $ret;
     }
-    
-    public static function getUser(
+
+    /**
+     * Gets a single user by their id
+     * @param The id of a user
+     * @param The email of the user
+     * @return User
+     * @author Tadhg O'Flaherty
+     **/
+    public static function getUser($user_id = null, $email = null)
+    {
+        $ret = null;
+        $args = Lib\PDOWrapper::cleanseNull($user_id)
+                .","."null"
+                .",".Lib\PDOWrapper::cleanseNullOrWrapStr($email)
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null"
+                .","."null";
+        
+        if ($result = Lib\PDOWrapper::call("getUser", $args)) {
+            $ret = array();
+            foreach ($result as $row) {
+                $ret[] = Common\Lib\ModelFactory::buildModel("User", $row);
+            }
+        }
+        return $ret[0];
+    }
+
+    public static function getUsers(
         $user_id = null,
         $email = null,
         $nonce = null,
@@ -353,7 +448,22 @@ class UserDao
         }
         return $ret;
     }
-    
+
+    /*
+     * Checks if a user has a particular badge
+    */
+    public static function userHasBadge($badge_ID, $user_id)
+    {
+        $args = PDOWrapper::cleanse($badge_ID)
+                .",".PDOWrapper::cleanse($user_id);
+        
+        if ($result = PDOWrapper::call('userHasBadge', $args)) {
+            return $result[0]['result'];
+        } else {
+            return null;
+        }
+    }
+
     /*
         Add the tag to a list of the user's preferred tags
     */
@@ -465,6 +575,8 @@ class UserDao
             $ret = array();
             foreach ($result as $row) {
                 $task = Common\Lib\ModelFactory::buildModel("Task", $row);
+                //$task->setTaskStatus(TaskDao::getTaskStatus($task->getId()));
+                //$task->setTaskStatus($task->getTaskStatus(($task->getId())));
                 $ret[] = $task;
             }
         }

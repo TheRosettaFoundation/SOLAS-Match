@@ -20,12 +20,30 @@ require_once __DIR__."/../DataAccessObjects/ProjectDao.class.php";
 class Orgs
 {
     public static function init()
-    {
+    {      
+        /**
+         * Gets a single organisation
+         */
+        API\Dispatcher::registerNamed(
+            Common\Enums\HttpMethodEnum::GET,
+            '/v0/orgs/:orgId/',
+            function ($orgId, $format = ".json") {
+                if (!is_numeric($orgId) && strstr($orgId, '.')) {
+                    $orgId = explode('.', $orgId);
+                    $format = '.'.$orgId[1];
+                    $orgId = $orgId[0];
+                }
+                API\Dispatcher::sendResponse(null, DAO\OrganisationDao::getOrg($orgId), null, $format);
+            },
+            'getOrg',
+            null
+        );
+        
         API\Dispatcher::registerNamed(
             Common\Enums\HttpMethodEnum::GET,
             '/v0/orgs(:format)/',
             function ($format = ".json") {
-                API\Dispatcher::sendResponse(null, DAO\OrganisationDao::getOrg(), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\OrganisationDao::getOrgs(), null, $format);
             },
             'getOrgs'
         );
@@ -89,26 +107,7 @@ class Orgs
             'deleteOrg',
             '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin'
         );
-        
-        API\Dispatcher::registerNamed(
-            Common\Enums\HttpMethodEnum::GET,
-            '/v0/orgs/:orgId/',
-            function ($orgId, $format = ".json") {
-                if (!is_numeric($orgId) && strstr($orgId, '.')) {
-                    $orgId = explode('.', $orgId);
-                    $format = '.'.$orgId[1];
-                    $orgId = $orgId[0];
-                }
-                $data = DAO\OrganisationDao::getOrg($orgId);
-                if (is_array($data)) {
-                    $data = $data[0];
-                }
-                API\Dispatcher::sendResponse(null, $data, null, $format);
-            },
-            'getOrg',
-            null
-        );
-        
+
         API\Dispatcher::registerNamed(
             Common\Enums\HttpMethodEnum::GET,
             '/v0/orgs/isMember/:orgId/:userId/',
@@ -140,7 +139,7 @@ class Orgs
                         }
                     }
                 }
-                $data= DAO\OrganisationDao::getOrg(null, urldecode($name));
+                $data= DAO\OrganisationDao::getOrgs(null, urldecode($name));
                 $data = $data[0];
                 API\Dispatcher::sendResponse(null, $data, null, $format);
             },
@@ -178,7 +177,7 @@ class Orgs
             function ($orgId, $format = '.json') {
                 API\Dispatcher::sendResponse(
                     null,
-                    DAO\ProjectDao::getProject(null, null, null, null, null, $orgId),
+                    DAO\ProjectDao::getProjects(null, null, null, null, null, $orgId),
                     null,
                     $format
                 );
