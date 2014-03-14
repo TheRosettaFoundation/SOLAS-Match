@@ -32,7 +32,7 @@ class Projects
                     $format = '.'.$projectId[1];
                     $projectId = $projectId[0];
                 }
-                API\Dispatcher::sendResponce(null, DAO\ProjectDao::getProject($projectId), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\ProjectDao::getProject($projectId), null, $format);
             },
             'getProject',
             null

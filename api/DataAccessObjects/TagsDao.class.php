@@ -19,13 +19,13 @@ class TagsDao
     public static function getTag($id = null, $label = null)
     {
         $ret = null;
-        $args = PDOWrapper::cleanseNull($id)
-                .",".PDOWrapper::cleanseNullOrWrapStr($label)
+        $args = Lib\PDOWrapper::cleanseNull($id)
+                .",".Lib\PDOWrapper::cleanseNullOrWrapStr($label)
                 .","."null";
-        if ($result = PDOWrapper::call("getTag", $args)) {
+        if ($result = Lib\PDOWrapper::call("getTag", $args)) {
             $ret = array();
             foreach ($result as $tag) {
-                $ret[] = ModelFactory::buildModel("Tag", $tag);
+                $ret[] = Common\Lib\ModelFactory::buildModel("Tag", $tag);
             }
         }
         return $ret[0];

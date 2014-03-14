@@ -37,7 +37,7 @@ class Admins
                     $format = '.'.$userId[1];
                     $userId = $userId[0];
                 }
-                API\Dispatcher::sendResponce(null, AdminDao::getAdmins($userId), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\AdminDao::getAdmins($userId), null, $format);
             },
             'getSiteAdmin'
         );
@@ -71,7 +71,7 @@ class Admins
                     $format = '.'.$orgId[1];
                     $orgId = $orgId[0];
                 }
-                API\Dispatcher::sendResponce(null, AdminDao::getAdmins($userId, $orgId), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\AdminDao::getAdmins($userId, $orgId), null, $format);
             },
             'getOrgAdmin'
         );

@@ -169,7 +169,7 @@ class UserDao
     public static function apiRegister($email, $clear_password, $verificationRequired = true)
     {
         $ret = null;
-        $user = self::getUsers(null, $email);
+        $user = self::getUser(null, $email);
         if (is_array($user)) {
             $user = $user[0];
         }
@@ -268,7 +268,7 @@ class UserDao
     {
         $ret = null;
         if ($user_id = UserSession::getCurrentUserId()) {
-                $ret = self::getUsers($user_id);
+                $ret = self::getUser($user_id);
         }
         return $ret;
     }

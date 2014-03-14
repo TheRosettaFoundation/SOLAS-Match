@@ -32,8 +32,8 @@ class OrganisationDao
     public static function getOrg($id = null, $name = null)
     {
         $ret = array();
-        $args = PDOWrapper::cleanseNull($id)
-                .",".PDOWrapper::cleanseNullOrWrapStr($name)
+        $args = Lib\PDOWrapper::cleanseNull($id)
+                .",".Lib\PDOWrapper::cleanseNullOrWrapStr($name)
                 .","."null"
                 .","."null"
                 .","."null"
@@ -41,10 +41,10 @@ class OrganisationDao
                 .","."null"
                 .","."null"
                 .","."null";
-        $result = PDOWrapper::call("getOrg", $args);
+        $result = Lib\PDOWrapper::call("getOrg", $args);
         if (is_array($result)) {
             foreach ($result as $row) {
-                $ret[] = ModelFactory::buildModel("Organisation", $row);
+                $ret[] = Common\Lib\ModelFactory::buildModel("Organisation", $row);
             }
         } else {
             $ret = null;

@@ -2325,6 +2325,15 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Test.getTaskType
+DROP PROCEDURE IF EXISTS `getTaskType`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskType`(IN `tID` INT)
+BEGIN
+	select name from TaskTypes where id=tID;
+END//
+DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Test.getTopTags
 DROP PROCEDURE IF EXISTS `getTopTags`;

@@ -38,7 +38,7 @@ class Tasks
                     $format = '.'.$taskId[1];
                     $taskId = $taskId[0];
                 }
-                API\Dispatcher::sendResponce(null, DAO\TaskDao::getTask($taskId), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\TaskDao::getTask($taskId), null, $format);
             },
             'getTask',
             null
@@ -48,7 +48,7 @@ class Tasks
             Common\Enums\HttpMethodEnum::GET,
             '/v0/tasks(:format)/',
             function ($format = ".json") {
-                API\Dispatcher::sendResponce(null, DAO\TaskDao::getTasks(), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\TaskDao::getTasks(), null, $format);
             },
             'getTasks',
             null

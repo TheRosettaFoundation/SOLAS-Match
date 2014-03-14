@@ -24,15 +24,15 @@ class BadgeDao
      **/
     public static function getBadge($badgeId)
     {
-        $args = PDOWrapper::cleanseNull($badgeId)
+        $args = Lib\PDOWrapper::cleanseNull($badgeId)
                 .","."null"
                 .","."null"
                 .","."null";
         
-        if ($result = PDOWrapper::call("getBadge", $args)) {
+        if ($result = Lib\PDOWrapper::call("getBadge", $args)) {
             $badges = array();
             foreach ($result as $badge) {
-                $badges[] = ModelFactory::buildModel("Badge", $badge);
+                $badges[] = Common\Lib\ModelFactory::buildModel("Badge", $badge);
             }
             return $badges[0];
         }

@@ -29,8 +29,8 @@ class Tags
                     $tagId = explode('.', $tagId);
                     $format = '.'.$tagId[1];
                     $tagId = $tagId[0];
-                }
-                API\Dispatcher::sendResponce(null, TagsDao::getTag($tagId), null, $format);
+                }              
+                API\Dispatcher::sendResponse(null, DAO\TagsDao::getTag($tagId), null, $format);
             },
             'getTag',
             null
@@ -83,7 +83,7 @@ class Tags
                     }
                 }
                 $data = DAO\TagsDao::getTag(null, $tagLabel);
-                API\Dispatcher::sendResponce(null, $data, null, $format);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'getTagByLabel',
             null

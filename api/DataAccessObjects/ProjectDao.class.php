@@ -76,7 +76,7 @@ class ProjectDao
     public static function getProject($id)
     {
         $projects = array();
-        $args = PDOWrapper::cleanseNull($id)
+        $args = Lib\PDOWrapper::cleanseNull($id)
                 .","."null"
                 .","."null"
                 .","."null"
@@ -87,10 +87,10 @@ class ProjectDao
                 .","."null"
                 .","."null"
                 .","."null";
-        $result = PDOWrapper::call("getProject", $args);
+        $result = Lib\PDOWrapper::call("getProject", $args);
         if ($result) {
             foreach ($result as $row) {
-                $projects[] = ModelFactory::buildModel("Project", $row);
+                $projects[] = Common\Lib\ModelFactory::buildModel("Project", $row);
             }
         }
         if (count($projects) == 0) {

@@ -31,7 +31,7 @@ class TaskDao
     public static function getTask($taskId)
     {
         $tasks = array();
-        $args = PDOWrapper::cleanseNull($taskId)
+        $args = Lib\PDOWrapper::cleanseNull($taskId)
                 .","."null"
                 .","."null"
                 .","."null"
@@ -45,10 +45,10 @@ class TaskDao
                 .","."null"
                 .","."null"
                 .","."null";
-        $result = PDOWrapper::call("getTask", $args);
+        $result = Lib\PDOWrapper::call("getTask", $args);
         if ($result) {
             foreach ($result as $row) {
-                $tasks[] = ModelFactory::buildModel("Task", $row);
+                $tasks[] = Common\Lib\ModelFactory::buildModel("Task", $row);
             }
         }
         if (sizeof($tasks) == 0) {

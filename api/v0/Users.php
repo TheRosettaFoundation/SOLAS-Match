@@ -79,7 +79,7 @@ class Users
                     }
                 }
                 $data = DAO\UserDao::getUser(null, $email);
-                API\Dispatcher::sendResponce(null, $data, null, $format);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'getUserByEmail',
             '\SolasMatch\API\Lib\Middleware::registerValidation'
@@ -166,12 +166,10 @@ class Users
             '/v0/users/:email/auth/code(:format)/',
             function ($email, $format = '.json') {
                 $user = DAO\UserDao::getUser(null, $email);
-                if ($user) {
-                    $user = $user[0];
-                } else {
+                if (!$user) {
                     DAO\UserDao::apiRegister($email, md5($email), false);
                     $user = DAO\UserDao::getUser(null, $email);
-                    $user = $user[0];
+                    //$user = $user[0];
                     DAO\UserDao::finishRegistration($user->getId());
                 }
                 $params = array();
@@ -465,7 +463,7 @@ class Users
                 $ret = false;
                 $user = DAO\UserDao::getUser(null, $email);
                 $ret = DAO\BadgeDao::assignBadge($user->getId(), $badgeId);
-                API\Dispatcher::sendResponce(null, $ret, null, $format);
+                API\Dispatcher::sendResponse(null, $ret, null, $format);
             },
             "assignBadge",
             null
@@ -746,7 +744,7 @@ class Users
             '/v0/users/:userId/trackedTasks(:format)/',
             function ($userId, $format = ".json") {
                 $data = DAO\UserDao::getTrackedTasks($userId);
-                API\Dispatcher::sendResponce(null, $data, null, $format);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'getUserTrackedTasks',
             '\SolasMatch\API\Lib\Middleware::authUserOwnsResource'

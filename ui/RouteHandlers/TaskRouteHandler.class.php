@@ -529,7 +529,7 @@ class TaskRouteHandler
                 $projectFileType = pathinfo($projectFile->getFilename(), PATHINFO_EXTENSION);
                 
                 $fileUploadType = pathinfo($_FILES[$fieldName]["name"], PATHINFO_EXTENSION);
-                $fileUploadMime = \IO::detectMimeType(
+                $fileUploadMime = \SolasMatch\API\Lib\IO::detectMimeType(
                     file_get_contents(
                         $_FILES[$fieldName]["tmp_name"]
                     ),

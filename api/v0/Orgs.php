@@ -33,7 +33,7 @@ class Orgs
                     $format = '.'.$orgId[1];
                     $orgId = $orgId[0];
                 }
-                API\Dispatcher::sendResponce(null, OrganisationDao::getOrg($orgId), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\OrganisationDao::getOrg($orgId), null, $format);
             },
             'getOrg',
             null

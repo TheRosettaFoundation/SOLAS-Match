@@ -30,7 +30,7 @@ class Badges
                     $format = '.'.$badgeId[1];
                     $badgeId = $badgeId[0];
                 }
-                API\Dispatcher::sendResponce(null, BadgeDao::getBadge($badgeId), null, $format);
+                API\Dispatcher::sendResponse(null, DAO\BadgeDao::getBadge($badgeId), null, $format);
             },
             'getBadge'
         );
@@ -96,7 +96,7 @@ class Badges
             '/v0/badges/:badgeId/users(:format)/',
             function ($badgeId, $format = ".json") {
                 $data = UserDao::getUsersWithBadge($badgeId);
-                API\Dispatcher::sendResponce(null, $data, null, $format);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'getUsersWithBadge'
         );
@@ -117,7 +117,7 @@ class Badges
                 if (is_array($data)) {
                     $data = $data[0];
                 }
-                API\Dispatcher::sendResponce(null, $data, null, $format);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'userHasBadge'
         );
