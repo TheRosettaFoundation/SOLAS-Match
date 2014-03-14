@@ -51,10 +51,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $isRegistered = $userDao->register($userEmail, $userPw);
         $this->assertTrue($isRegistered);
         
-        //TODO Edit code to expect single value, not array when system is updated to
-        //remove unnecessary array returns
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
-        $registerUser = $registerUser[0];
         $this->assertNotNull($registerUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
@@ -72,10 +69,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $isRegistered = $userDao->register($userEmail, $userPw);
         $this->assertTrue($isRegistered);
         
-        //TODO Edit code to expect single value, not array when system is updated to
-        //remove unnecessary array returns
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
-        $registerUser = $registerUser[0];
         $this->assertNotNull($registerUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
@@ -97,10 +91,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $isRegistered = $userDao->register($userEmail, $userPw);
         $this->assertTrue($isRegistered);
         
-        //TODO Edit code to expect single value, not array when system is updated to
-        //remove unnecessary array returns
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
-        $registerUser = $registerUser[0];
         $this->assertNotNull($registerUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
@@ -141,10 +132,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $isRegistered = $userDao->register($userEmail, $userPw);
         $this->assertTrue($isRegistered);
         
-        //TODO Edit code to expect single value, not array when system is updated to
-        //remove unnecessary array returns
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
-        $registerUser = $registerUser[0];
         $this->assertNotNull($registerUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
@@ -168,10 +156,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $isRegistered = $userDao->register($userEmail, $userPw);
         $this->assertTrue($isRegistered);
     
-        //TODO Edit code to expect single value, not array when system is updated to
-        //remove unnecessary array returns
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
-        $registerUser = $registerUser[0];
         $this->assertNotNull($registerUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
@@ -181,10 +166,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $isRegistered2 = $userDao->register($user2Email, $userPw);
         $this->assertTrue($isRegistered2);
         
-        //TODO Edit code to expect single value, not array when system is updated to
-        //remove unnecessary array returns
         $user = API\DAO\UserDao::getUser(null, $user2Email);
-        $user = $user[0];
         $this->assertNotNull($user);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $user);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
@@ -225,10 +207,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $isRegistered = $userDao->register($userEmail, $userPw);
         $this->assertTrue($isRegistered);
     
-        //TODO Edit code to expect single value, not array when system is updated to
-        //remove unnecessary array returns
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
-        $registerUser = $registerUser[0];
         $this->assertNotNull($registerUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
@@ -238,10 +217,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $isRegistered2 = $userDao->register($user2Email, $userPw);
         $this->assertTrue($isRegistered2);
     
-        //TODO Edit code to expect single value, not array when system is updated to
-        //remove unnecessary array returns
         $user = API\DAO\UserDao::getUser(null, $user2Email);
-        $user = $user[0];
         $this->assertNotNull($user);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $user);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
@@ -278,11 +254,8 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $userPw = "password";
         $isRegistered = $userDao->register($userEmail, $userPw);
         $this->assertTrue($isRegistered);
-        
-        //TODO Edit code to expect single value, not array when system is updated to
-        //remove unnecessary array returns
+
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
-        $registerUser = $registerUser[0];
         $this->assertNotNull($registerUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
@@ -328,10 +301,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $isRegistered = $userDao->register($userEmail, $userPw);
         $this->assertTrue($isRegistered);
         
-        //TODO Edit code to expect single value, not array when system is updated to
-        //remove unnecessary array returns
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
-        $registerUser = $registerUser[0];
         $this->assertNotNull($registerUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
@@ -385,10 +355,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $isRegistered = $userDao->register($userEmail, $userPw);
         $this->assertTrue($isRegistered);
         
-        //TODO Edit code to expect single value, not array when system is updated to
-        //remove unnecessary array returns
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
-        $registerUser = $registerUser[0];
         $this->assertNotNull($registerUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
