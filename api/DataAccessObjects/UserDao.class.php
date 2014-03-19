@@ -704,7 +704,7 @@ class UserDao
         Lib\PDOWrapper::call("deleteUser", $args);
     }
     
-    private static function logLoginAttempt($userId, $email, $loginSuccess)
+    public static function logLoginAttempt($userId, $email, $loginSuccess)
     {
         $args = Lib\PDOWrapper::cleanseNull($userId).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($email).",".

@@ -5,6 +5,13 @@ namespace SolasMatch\API\DAO;
 use \SolasMatch\Common as Common;
 use \SolasMatch\API\Lib as Lib;
 
+//! The Task Data access Object for the API
+/*!
+  A class for setting and retrieving Task related data from the database. Used by the API Route Handlers to supply
+  info requested through the API and perform actions. All data is retrieved and input with direct access to the
+  database using stored procedures.
+*/
+
 require_once __DIR__."/../../Common/protobufs/Requests/UserTaskScoreRequest.php";
 require_once __DIR__."/../../Common/protobufs/models/Task.php";
 include_once __DIR__."/../../Common/lib/SolasMatchException.php";
@@ -13,15 +20,33 @@ require_once __DIR__."/../lib/Notify.class.php";
 require_once __DIR__."/../lib/APIWorkflowBuilder.class.php";
 require_once __DIR__."/../lib/Upload.class.php";
 
-/**
- * Task Document Access Object for manipulating tasks.
- *
- * @package default
- * @author eoin.oconchuir@ul.ie
- **/
-
 class TaskDao
 {
+    //! Retrieve Task objects from the database
+    /*!
+      Get a list of Task objects from the database. The list that is returned can be filtered by the input parameters.
+      If null is passed for any of the input parameters it will be ignored. If null is passed for all parameters then
+      every Task in the system will be returned.
+      @param int $taskId is the id of the requested Task
+      @param int $projectId is the id of the Project the requested Tasks belong to
+      @param string $title is the title of the requested Task
+      @param int $wordCount is the word count of the requested Task
+      @param string $sourceLanguageCode is the language code for the source language of the requested Task.
+      <b>Note:</b>This will be converted to a language id on the database
+      @param string $targetLanguageCode is the language code for the target language of the requested Task
+      <b>Note:</b>This will be converted to a language id on the database
+      @param string $createTime is the date and time that the requested Task was created in the format
+      "YYYY-MM-DD HH:MM:SS"
+      @param string $sourceCountryCode is the country code for the source language of the requested Task
+      <b>Note:</b>This will be converted to a country id on the database
+      @param string $targetCountryCode is the country code for the target language of the requested Task
+      <b>Note:</b>This will be converted to a country id on the database
+      @param string $comment is the comment made by the Organisation when creating the requested Task
+      @param TaskTypeEnum $taskTypeId is the type of the requested Task (e.g. translation, proofreading, etc.).
+      @param TaskStatusEnum $taskStatusId is the status of the requested Task (e.g. in progress).
+      @param int $published selects only published/unpublished tasks
+      @param string $deadline is the deadline of the requested Task in the format "YYYY-MM-DD HH:MM:SS"
+    */
     public static function getTask(
         $taskId = null,
         $projectId = null,
@@ -65,11 +90,15 @@ class TaskDao
         return $tasks;
     }
     
-    /**
-     * Save task object to database (either insert or update)
-     * @return Task
-     * @author 
-     **/
+    //! Save a Task to the database
+    /*!
+     Save a Task to the database. If the input Task does not have an id then a new Task will be created. If the input
+     Task does have an id then it will update that Task in the database with its new values. This trigger a User Task
+     score request for this Task.
+     @param Task $task is the Task being saved to the database.
+     <b>Note:</b> This is passed by reference.
+     @return Returns the updated/created Task object
+    */
     public static function save(&$task)
     {
         if (is_null($task->getId())) {
