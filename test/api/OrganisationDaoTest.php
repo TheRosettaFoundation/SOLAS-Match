@@ -430,4 +430,40 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         $deleteOrg = API\DAO\OrganisationDao::delete($orgId);
         $this->assertEquals("0", $deleteOrg); //failing to delete an org because it is not in DB should return 0
     }
+    
+    public function testGetUsersTrackingOrg()
+    {
+        UnitTestHelper::teardownDb();
+        
+        UnitTestHelper::teardownDb();
+        
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        $orgId = $insertedOrg->getId();
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertNotNull($insertedUser);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
+        $userId = $insertedUser->getId();
+        
+        $user2 = UnitTestHelper::createUser(null, "John Doe", null, "doejohn@com.com");
+        $insertedUser2 = API\DAO\UserDao::save($user2);
+        $this->assertNotNull($insertedUser2);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser2);
+        $user2Id = $insertedUser2->getId();
+        
+        $trackOrg = API\DAO\UserDao::trackOrganisation($userId, $orgId);
+        $this->assertEquals("1", $trackOrg);
+        $trackOrg2 = API\DAO\UserDao::trackOrganisation($user2Id, $orgId);
+        $this->assertEquals("1", $trackOrg2);
+        
+        $getTrackingUsers = API\DAO\OrganisationDao::getUsersTrackingOrg($orgId);
+        $this->assertCount(2, $getTrackingUsers);
+        foreach ($getTrackingUsers as $trackingUser) {
+            $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $trackingUser);
+        }
+    }
 }

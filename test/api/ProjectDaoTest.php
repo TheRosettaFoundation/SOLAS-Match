@@ -571,4 +571,48 @@ class ProjectDaoTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertNull($resultGetProjectFileInfoFailure);
     }
+    
+    public function testGetArchivedTask()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertNotNull($insertedProject);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
+        
+        $task = UnitTestHelper::createTask($insertedProject->getId(),null,"My Task");
+        $translationTask = API\DAO\TaskDao::save($task);
+        $this->assertNotNull($translationTask);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask);
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertNotNull($insertedUser);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
+        
+        //create task file info for non existant file
+        $fileInfo = UnitTestHelper::createTaskFileInfo($translationTask->getId(), $insertedUser->getId());
+        API\DAO\TaskDao::recordFileUpload(
+        $fileInfo['taskId'],
+        $fileInfo['filename'],
+        $fileInfo['contentType'],
+        $fileInfo['userId'],
+        $fileInfo['version']
+        );
+        
+        // Success
+        $archiveTask = API\DAO\TaskDao::moveToArchiveById($translationTask->getId(), $insertedUser->getId());
+        $this->assertEquals("1", $archiveTask);
+        
+        $getArchiveTask = API\DAO\ProjectDao::getArchivedTask($insertedProject->getId(),null,"My Task");
+        $this->assertNotNull($getArchiveTask[0]);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\ArchivedTask", $getArchiveTask[0]);
+        $this->assertEquals("My Task", $getArchiveTask[0]->getTitle());
+    }
 }

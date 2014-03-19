@@ -179,6 +179,55 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($nonExistantTask);
     }
     
+    public function testGetTasks()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertNotNull($insertedProject);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
+        
+        $task = UnitTestHelper::createTask(
+            $insertedProject->getId(),
+            null,
+            "Task 1",
+            "Task 1 Comment",
+            "2022-03-29 16:30:00",
+            11111,
+            null,
+            Common\Enums\TaskTypeEnum::TRANSLATION
+        );
+        $task2 = UnitTestHelper::createTask(
+            $insertedProject->getId(),
+            null,
+            "Task 2",
+            "Task 2 Comment",
+            "2021-03-29 16:30:00",
+            22222,
+            null,
+            Common\Enums\TaskTypeEnum::PROOFREADING
+        );
+
+        $translationTask = API\DAO\TaskDao::save($task);
+        $this->assertNotNull($translationTask);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $translationTask);
+        
+        $proofReadingTask = API\DAO\TaskDao::save($task2);
+        $this->assertNotNull($proofReadingTask);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $proofReadingTask);
+        
+        $getTasks = API\DAO\TaskDao::getTasks();
+        $this->assertCount(2, $getTasks);
+        foreach ($getTasks as $projTask) {
+            $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $projTask);
+        }
+    }
     
     public function testDeleteTask()
     {

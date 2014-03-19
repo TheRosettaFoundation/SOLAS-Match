@@ -122,6 +122,27 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($insertedUser->getPassword(), $getUpdatedUser->getPassword());
     }
     
+    public function testGetUsers()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertNotNull($insertedUser);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
+        
+        $user2 = UnitTestHelper::createUser(null,"Foo",null,"foofoo@com.com");
+        $insertedUser2 = API\DAO\UserDao::save($user2);
+        $this->assertNotNull($insertedUser2);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser2);
+        
+        $getUsers = API\DAO\UserDao::getUsers();
+        $this->assertCount(2, $getUsers);
+        foreach ($getUsers as $savedUser) {
+            $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $savedUser);
+        }
+    }
+    
     public function testDeleteUser()
     {
         UnitTestHelper::teardownDb();
@@ -1042,5 +1063,84 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         
         $getLangs = API\DAO\UserDao::getSecondaryLanguages($insertedUser->getId());
         $this->assertNotContains($locale2, $getLangs);
+    }
+    
+    public function testTrackOrganisation()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = API\DAO\UserDao::save($user);
+        $userId = $insertedUser->getId();
+        $this->assertNotNull($insertedUser);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
+        
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $orgId = $insertedOrg->getId();
+        $this->assertNotNull($insertedOrg);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        
+        $trackOrg = API\DAO\UserDao::trackOrganisation($userId, $orgId);
+        $this->assertEquals("1", $trackOrg);
+        $tryTrackOrgAgain = API\DAO\UserDao::trackOrganisation($userId, $orgId);
+        $this->assertEquals("0", $tryTrackOrgAgain);
+    }
+    
+    public function testUnTrackOrganisation()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = API\DAO\UserDao::save($user);
+        $userId = $insertedUser->getId();
+        $this->assertNotNull($insertedUser);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
+        
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $orgId = $insertedOrg->getId();
+        $this->assertNotNull($insertedOrg);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        
+        $trackOrg = API\DAO\UserDao::trackOrganisation($userId, $orgId);
+        $this->assertEquals("1", $trackOrg);
+        
+        $unTrackOrg = API\DAO\UserDao::unTrackOrganisation($userId, $orgId);
+        $this->assertEquals("1", $unTrackOrg);
+    }
+    
+    public function testGetTrackedOrganisations()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = API\DAO\UserDao::save($user);
+        $userId = $insertedUser->getId();
+        $this->assertNotNull($insertedUser);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
+        
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $orgId = $insertedOrg->getId();
+        $this->assertNotNull($insertedOrg);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        
+        $org2 = UnitTestHelper::createOrg(null,"Bunnyland");
+        $insertedOrg2 = API\DAO\OrganisationDao::insertAndUpdate($org2);
+        $orgId2 = $insertedOrg2->getId();
+        $this->assertNotNull($insertedOrg2);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg2);
+        
+        $trackOrg = API\DAO\UserDao::trackOrganisation($userId, $orgId);
+        $this->assertEquals("1", $trackOrg);
+        $trackOrg2 = API\DAO\UserDao::trackOrganisation($userId, $orgId2);
+        $this->assertEquals("1", $trackOrg2);
+        
+        $userTrackedOrgs = API\DAO\UserDao::getTrackedOrganisations($userId);
+        $this->assertCount(2, $userTrackedOrgs);
+        foreach ($userTrackedOrgs as $trackedOrg) {
+            $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $trackedOrg);
+        }
     }
 }
