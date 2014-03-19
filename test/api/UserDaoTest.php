@@ -28,8 +28,8 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         
         // Success
         $insertedUser = API\DAO\UserDao::create("testuser@example.com", "testpw");
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         $this->assertEquals("testuser@example.com", $insertedUser->getEmail());
         $this->assertNotNull($insertedUser->getPassword());
         $this->assertNotNull($insertedUser->getNonce());
@@ -40,8 +40,8 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $insertedUser = API\DAO\UserDao::create("testuser@example.com", "testpw");
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         
         $insertedUser->setDisplayName("Updated DisplayName");
         $insertedUser->setEmail("updatedEmail@test.com");
@@ -57,6 +57,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
       
         // Success
         $updatedUser = API\DAO\UserDao::save($insertedUser);
+        $this->assertNotNull($updatedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $updatedUser);
         $this->assertEquals($insertedUser->getId(), $updatedUser->getId());
         $this->assertEquals($insertedUser->getDisplayName(), $updatedUser->getDisplayName()); //Failure!!
@@ -81,8 +82,8 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $insertedUser = API\DAO\UserDao::create("testuser@example.com", "testpw");
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         
         $insertedUser->setDisplayName("Updated DisplayName");
         $insertedUser->setEmail("updatedEmail@test.com");
@@ -100,12 +101,13 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
               
         // Success
         $getUpdatedUser = API\DAO\UserDao::getUser($updatedUser->getId());
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $getUpdatedUser[0]);
-        $this->assertEquals($insertedUser->getId(), $getUpdatedUser[0]->getId());
+        $this->assertNotNull($getUpdatedUser);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $getUpdatedUser);
+        $this->assertEquals($insertedUser->getId(), $getUpdatedUser->getId());
         
-        $this->assertEquals($insertedUser->getDisplayName(), $getUpdatedUser[0]->getDisplayName());
-        $this->assertEquals($insertedUser->getEmail(), $getUpdatedUser[0]->getEmail());
-        $this->assertEquals($insertedUser->getBiography(), $getUpdatedUser[0]->getBiography());
+        $this->assertEquals($insertedUser->getDisplayName(), $getUpdatedUser->getDisplayName());
+        $this->assertEquals($insertedUser->getEmail(), $getUpdatedUser->getEmail());
+        $this->assertEquals($insertedUser->getBiography(), $getUpdatedUser->getBiography());
         
         $this->assertEquals(
             $insertedUser->getNativeLocale()->getLanguageCode(),
@@ -116,8 +118,8 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
             $updatedUser->getNativeLocale()->getCountryCode()
         );
         
-        $this->assertEquals($insertedUser->getNonce(), $getUpdatedUser[0]->getNonce());
-        $this->assertEquals($insertedUser->getPassword(), $getUpdatedUser[0]->getPassword());
+        $this->assertEquals($insertedUser->getNonce(), $getUpdatedUser->getNonce());
+        $this->assertEquals($insertedUser->getPassword(), $getUpdatedUser->getPassword());
     }
     
     public function testDeleteUser()
@@ -125,8 +127,8 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $insertedUser = API\DAO\UserDao::create("testuser@example.com", "testpw");
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         
         API\DAO\UserDao::deleteUser($insertedUser->getId());
         $getDeletedUser = API\DAO\UserDao::getUser($insertedUser->getId());
@@ -138,8 +140,8 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $insertedUser = API\DAO\UserDao::create("testuser@example.com", "testpw");
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         
         // Success
         $userWithChangedPw = API\DAO\UserDao::changePassword($insertedUser->getId(), "New Password");
@@ -159,7 +161,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('1', $result);
 
         $user = API\DAO\UserDao::getUser(null, $email);
-        $user = $user[0];
+        $this->assertNotNull($user);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $user);
         $this->assertEquals($email, $user->getEmail());
         
@@ -181,7 +183,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('1', $result);
 
         $user = API\DAO\UserDao::getUser(null, $email);
-        $user = $user[0];
+        $this->assertNotNull($user);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $user);
         $this->assertEquals($email, $user->getEmail());
         
@@ -206,7 +208,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('1', $result);
 
         $user = API\DAO\UserDao::getUser(null, $email);
-        $user = $user[0];
+        $this->assertNotNull($user);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $user);
         $this->assertEquals($email, $user->getEmail());
     
@@ -229,12 +231,12 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         
         $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         $this->assertNotNull($insertedOrg->getId());
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $insertedUser = API\DAO\UserDao::create("testuser@example.com", "testpw");
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         
         $resultRequestMembership = API\DAO\OrganisationDao::requestMembership(
             $insertedUser->getId(),
@@ -255,6 +257,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
             "http://www.organisation2.org"
         );
         $insertedOrg2 = API\DAO\OrganisationDao::insertAndUpdate($org2);
+        $this->assertNotNull($insertedOrg2);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg2);
         
         $resultRequestMembership2 = API\DAO\OrganisationDao::requestMembership(
@@ -282,8 +285,8 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $insertedUser = API\DAO\UserDao::create("testuser@example.com", "testpw");
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         $userId = $insertedUser->getId();
         
         $userBadges = API\DAO\UserDao::getUserBadges($userId);
@@ -323,8 +326,8 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
        
         $insertedUser = API\DAO\UserDao::create("testuser@example.com", "testpw");
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         $userId = $insertedUser->getId();
         
         // Failure
@@ -332,25 +335,24 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($noUserTags);
         
         $tag = API\DAO\TagsDao::create("English");
+        $this->assertNotNull($tag);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Tag", $tag);
-        $this->assertNotNull($tag->getId());
         
         $tag2 = API\DAO\TagsDao::create("French");
+        $this->assertNotNull($tag2);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Tag", $tag2);
-        $this->assertNotNull($tag2->getId());
         
         $tagLiked = API\DAO\UserDao::likeTag($userId, $tag->getId());
         $this->assertEquals("1", $tagLiked);
-        
         // Success
         $oneUserTag = API\DAO\UserDao::getUserTags($userId);
         $this->assertCount(1, $oneUserTag);
         foreach ($oneUserTag as $tag) {
             $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Tag", $tag);
         }
-        
-        $tag2Liked = API\DAO\UserDao::likeTag($userId, $tag2->getId());
-        $this->assertEquals("1", $tag2Liked);
+
+        $tagLiked2 = API\DAO\UserDao::likeTag($userId, $tag2->getId());
+        $this->assertEquals("1", $tagLiked2);
         
         // Success
         $twoUserTags = API\DAO\UserDao::getUserTags($userId);
@@ -365,8 +367,8 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $insertedUser = API\DAO\UserDao::create("testuser@example.com", "testpw");
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         
         // Failure
         $noUsersWithBadge = API\DAO\UserDao::getUsersWithBadge(3);
@@ -381,8 +383,8 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $oneUserWithBadge[0]);
         
         $insertedUser2 = API\DAO\UserDao::create("testuser2@example.com", "testpw2");
+        $this->assertNotNull($insertedUser2);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser2);
-        $this->assertNotNull($insertedUser2->getId());
         
         $assignBadge2 = API\DAO\BadgeDao::assignBadge($insertedUser2->getId(), 3);
         $this->assertEquals(1, $assignBadge2);
@@ -400,8 +402,8 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
        
         $insertedUser = API\DAO\UserDao::create("testuser@example.com", "testpw");
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         $userId = $insertedUser->getId();
         
         $tag = API\DAO\TagsDao::create("English");
@@ -422,8 +424,8 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
        
         $insertedUser = API\DAO\UserDao::create("testuser@example.com", "testpw");
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         $userId = $insertedUser->getId();
         
         $tag = API\DAO\TagsDao::create("English");
@@ -447,28 +449,27 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $insertedUser = API\DAO\UserDao::create("testuser@example.com", "testpw");
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         
         $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertNotNull($insertedProject);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
-        $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
         $insertedTask = API\DAO\TaskDao::save($task);
+        $this->assertNotNull($insertedTask);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $insertedTask);
-        $this->assertNotNull($insertedTask->getId());
         
-        // Success
         $trackTask = API\DAO\UserDao::trackTask($insertedUser->getId(), $insertedTask->getId());
         $this->assertEquals("1", $trackTask);
         
-        // Failure
         $trackTaskFail = API\DAO\UserDao::trackTask($insertedUser->getId(), $insertedTask->getId());
         $this->assertEquals("0", $trackTaskFail);
     }
@@ -478,31 +479,30 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $insertedUser = API\DAO\UserDao::create("testuser@example.com", "testpw");
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         
         $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertNotNull($insertedProject);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
-        $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
         $insertedTask = API\DAO\TaskDao::save($task);
+        $this->assertNotNull($insertedTask);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $insertedTask);
-        $this->assertNotNull($insertedTask->getId());
         
         $trackTask = API\DAO\UserDao::trackTask($insertedUser->getId(), $insertedTask->getId());
         $this->assertEquals("1", $trackTask);
         
-        // Success
         $ignoreTask = API\DAO\UserDao::ignoreTask($insertedUser->getId(), $insertedTask->getId());
         $this->assertEquals("1", $ignoreTask);
         
-        // Failure
         $ignoreTaskFail = API\DAO\UserDao::ignoreTask($insertedUser->getId(), $insertedTask->getId());
         $this->assertEquals("0", $ignoreTaskFail);
     }
@@ -512,31 +512,30 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $insertedUser = API\DAO\UserDao::create("testuser@example.com", "testpw");
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         
         $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertNotNull($insertedProject);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
-        $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
         $insertedTask = API\DAO\TaskDao::save($task);
+        $this->assertNotNull($insertedTask);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $insertedTask);
-        $this->assertNotNull($insertedTask->getId());
         
-        // Failure
         $isTrackingTaskFail = API\DAO\UserDao::isSubscribedToTask($insertedUser->getId(), $insertedTask->getId());
         $this->assertEquals("0", $isTrackingTaskFail);
         
         $trackTask = API\DAO\UserDao::trackTask($insertedUser->getId(), $insertedTask->getId());
         $this->assertEquals("1", $trackTask);
         
-        // Success
         $isTrackingTask = API\DAO\UserDao::isSubscribedToTask($insertedUser->getId(), $insertedTask->getId());
         $this->assertEquals("1", $isTrackingTask);
     }
@@ -546,31 +545,32 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $insertedUser = API\DAO\UserDao::create("testuser@example.com", "testpw");
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         
         $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertNotNull($insertedProject);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
-        $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
         $insertedTask = API\DAO\TaskDao::save($task);
+        $this->assertNotNull($insertedTask);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $insertedTask);
-        $this->assertNotNull($insertedTask->getId());
         
-        // Failure
+        //User has no tracked tasks, nothing is returned
         $getNoTrackedTasks = API\DAO\UserDao::getTrackedTasks($insertedUser->getId());
         $this->assertNull($getNoTrackedTasks);
         
         $trackTask = API\DAO\UserDao::trackTask($insertedUser->getId(), $insertedTask->getId());
         $this->assertEquals("1", $trackTask);
         
-        // Success
+        //User has tracked a task, something will be returned
         $getTrackedTasks = API\DAO\UserDao::getTrackedTasks($insertedUser->getId());
         $this->assertCount(1, $getTrackedTasks);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $getTrackedTasks[0]);
@@ -582,10 +582,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
     {
         UnitTestHelper::teardownDb();
         
-        $user = UnitTestHelper::createUser();
-        $insertedUser = API\DAO\UserDao::save($user);
+        $insertedUser = API\DAO\UserDao::create("testuser@example.com", "testpw");
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         
         // Success
         $createPwResetRequest = API\DAO\UserDao::addPasswordResetRequest(
@@ -599,10 +598,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
     {
         UnitTestHelper::teardownDb();
         
-        $user = UnitTestHelper::createUser();
-        $insertedUser = API\DAO\UserDao::save($user);
+        $insertedUser = API\DAO\UserDao::create("testuser@example.com", "testpw");
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         
         $createPwResetRequest = API\DAO\UserDao::addPasswordResetRequest(
             "asfjkosagijo".$insertedUser->getId(),
@@ -617,10 +615,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
     {
         UnitTestHelper::teardownDb();
         
-        $user = UnitTestHelper::createUser();
-        $insertedUser = API\DAO\UserDao::save($user);
+        $insertedUser = API\DAO\UserDao::create("testuser@example.com", "testpw");
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         
         $createPwResetRequest = API\DAO\UserDao::addPasswordResetRequest(
             "asfjkosagijo".$insertedUser->getId(),
@@ -643,8 +640,8 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         
         $user = UnitTestHelper::createUser();
         $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         
         $createPwResetRequest = API\DAO\UserDao::addPasswordResetRequest(
             "asfjkosagijo".$insertedUser->getId(),
@@ -673,11 +670,12 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         
         $user = UnitTestHelper::createUser();
         $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         
         $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         // Failure
@@ -686,8 +684,8 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertNotNull($insertedProject);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
-        $this->assertNotNull($insertedProject->getId());
         
         // Success
         $trackProject = API\DAO\UserDao::trackProject($insertedProject->getId(), $insertedUser->getId());
@@ -700,26 +698,27 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         
         $user = UnitTestHelper::createUser();
         $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         
         $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertNotNull($insertedProject);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
-        $this->assertNotNull($insertedProject->getId());
         
-        // Failure
+        //User has not already tracked the project, valid failure
         $untrackProjectFailure = API\DAO\UserDao::unTrackProject($insertedProject->getId(), $insertedUser->getId());
         $this->assertEquals("0", $untrackProjectFailure);
         
         $trackProject = API\DAO\UserDao::trackProject($insertedProject->getId(), $insertedUser->getId());
         $this->assertEquals("1", $trackProject);
         
-        // Success
+        //User has tracked the project, successful untracking
         $untrackProject = API\DAO\UserDao::unTrackProject($insertedProject->getId(), $insertedUser->getId());
         $this->assertEquals("1", $untrackProject);
     }
@@ -730,17 +729,18 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         
         $user = UnitTestHelper::createUser();
         $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         
         $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertNotNull($insertedProject);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
-        $this->assertNotNull($insertedProject->getId());
         
         $project2 = UnitTestHelper::createProject(
             $insertedOrg->getId(),
@@ -749,8 +749,8 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
             "Project 2 Description"
         );
         $insertedProject2 = API\DAO\ProjectDao::createUpdate($project2);
+        $this->assertNotNull($insertedProject2);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject2);
-        $this->assertNotNull($insertedProject2->getId());
         
         $trackProject = API\DAO\UserDao::trackProject($insertedProject->getId(), $insertedUser->getId());
         $this->assertEquals("1", $trackProject);
@@ -772,19 +772,20 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         
         $user = UnitTestHelper::createUser();
         $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         
         $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertNotNull($insertedProject);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
-        $this->assertNotNull($insertedProject->getId());
         
-        // Failure
+        //User is not subscribed
         $isSubscribedToProjectFailure = API\DAO\UserDao::isSubscribedToProject(
             $insertedUser->getId(),
             $insertedProject->getId()
@@ -794,7 +795,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $trackProject = API\DAO\UserDao::trackProject($insertedProject->getId(), $insertedUser->getId());
         $this->assertEquals("1", $trackProject);
         
-        // Success
+        //User is subscribed
         $isSubscribedToProject = API\DAO\UserDao::isSubscribedToProject(
             $insertedUser->getId(),
             $insertedProject->getId()
@@ -808,22 +809,23 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         
         $user = UnitTestHelper::createUser();
         $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         
         $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertNotNull($insertedProject);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
-        $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
         $insertedTask = API\DAO\TaskDao::save($task);
+        $this->assertNotNull($insertedTask);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $insertedTask);
-        $this->assertNotNull($insertedTask->getId());
         
         $notification = new Common\Protobufs\Models\UserTaskStreamNotification();
         $notification->setUserId($insertedUser->getId());
@@ -832,6 +834,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         API\DAO\UserDao::requestTaskStreamNotification($notification);
         
         $getTsn = API\DAO\UserDao::getUserTaskStreamNotification($insertedUser->getId());
+        $this->assertNotNull($getTsn);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\UserTaskStreamNotification", $getTsn);
         $this->assertEquals($insertedUser->getId(), $getTsn->getUserId());
         $this->assertEquals(Common\Enums\NotificationIntervalEnum::DAILY, $getTsn->getInterval());
@@ -843,22 +846,23 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         
         $user = UnitTestHelper::createUser();
         $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         
         $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertNotNull($insertedProject);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
-        $this->assertNotNull($insertedProject->getId());
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
         $insertedTask = API\DAO\TaskDao::save($task);
+        $this->assertNotNull($insertedTask);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $insertedTask);
-        $this->assertNotNull($insertedTask->getId());
         
         $notification = new Common\Protobufs\Models\UserTaskStreamNotification();
         $notification->setUserId($insertedUser->getId());
@@ -867,6 +871,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         API\DAO\UserDao::requestTaskStreamNotification($notification);
         
         $getTsn = API\DAO\UserDao::getUserTaskStreamNotification($insertedUser->getId());
+        $this->assertNotNull($getTsn);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\UserTaskStreamNotification", $getTsn);
         $this->assertEquals($insertedUser->getId(), $getTsn->getUserId());
         $this->assertEquals(Common\Enums\NotificationIntervalEnum::DAILY, $getTsn->getInterval());
@@ -881,13 +886,13 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         
         $user = UnitTestHelper::createUser();
         $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         
         $userInfo = UnitTestHelper::createUserPersonalInfo($insertedUser->getId());
         $insertedInfo = API\DAO\UserDao::createPersonalInfo($userInfo);
+        $this->assertNotNull($insertedInfo);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\UserPersonalInformation", $insertedInfo);
-        $this->assertNotNull($insertedInfo->getId());
     }
     
     public function testUpdatePersonalInfo()
@@ -896,18 +901,20 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
     
         $user = UnitTestHelper::createUser();
         $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
     
         $userInfo = UnitTestHelper::createUserPersonalInfo($insertedUser->getId());
         $insertedInfo = API\DAO\UserDao::createPersonalInfo($userInfo);
+        $this->assertNotNull($insertedInfo);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\UserPersonalInformation", $insertedInfo);
-        $this->assertNotNull($insertedInfo->getId());
         
         $insertedInfo->setFirstName("Roy");
         $insertedInfo->setLastName("Jaeger");
         $insertedInfo->setMobileNumber(55555221333);
         $updatedInfo = API\DAO\UserDao::updatePersonalInfo($insertedInfo);
+        $this->assertNotNull($updatedInfo);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\UserPersonalInformation", $updatedInfo);
         
         $this->assertEquals($insertedInfo->getFirstName(), $updatedInfo->getFirstName());
         $this->assertEquals($insertedInfo->getLastName(), $updatedInfo->getLastName());
@@ -920,15 +927,16 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         
         $user = UnitTestHelper::createUser();
         $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         
         $userInfo = UnitTestHelper::createUserPersonalInfo($insertedUser->getId());
         $insertedInfo = API\DAO\UserDao::createPersonalInfo($userInfo);
+        $this->assertNotNull($insertedInfo);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\UserPersonalInformation", $insertedInfo);
-        $this->assertNotNull($insertedInfo->getId());
         
         $getInfo = API\DAO\UserDao::getPersonalInfo($insertedInfo->getId());
+        $this->assertNotNull($getInfo);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\UserPersonalInformation", $getInfo);
         $this->assertEquals($insertedInfo, $getInfo);
     }
@@ -941,14 +949,15 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $user->getNativeLocale()->setLanguageCode("en");
         $user->getNativeLocale()->setCountryCode("IE");
         $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         
         $locale = new Common\Protobufs\Models\Locale();
         $locale->setLanguageCode("ja");
         $locale->setCountryCode("JP");
         
         $afterCreate = API\DAO\UserDao::createSecondaryLanguage($insertedUser->getId(), $locale);
+        $this->assertNotNull($afterCreate);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Locale", $afterCreate);
         $this->assertEquals($locale->getLanguageCode(), $afterCreate->getLanguageCode());
         $this->assertEquals($locale->getCountryCode(), $afterCreate->getCountryCode());
@@ -962,14 +971,15 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $user->getNativeLocale()->setLanguageCode("en");
         $user->getNativeLocale()->setCountryCode("IE");
         $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         
         $locale = new Common\Protobufs\Models\Locale();
         $locale->setLanguageCode("ja");
         $locale->setCountryCode("JP");
         
         $afterCreate = API\DAO\UserDao::createSecondaryLanguage($insertedUser->getId(), $locale);
+        $this->assertNotNull($afterCreate);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Locale", $afterCreate);
         $this->assertEquals($locale->getLanguageCode(), $afterCreate->getLanguageCode());
         $this->assertEquals($locale->getCountryCode(), $afterCreate->getCountryCode());
@@ -979,6 +989,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $locale2->setCountryCode("IE");
         
         $afterCreate2 = API\DAO\UserDao::createSecondaryLanguage($insertedUser->getId(), $locale2);
+        $this->assertNotNull($afterCreate2);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Locale", $afterCreate2);
         $this->assertEquals($locale2->getLanguageCode(), $afterCreate2->getLanguageCode());
         $this->assertEquals($locale2->getCountryCode(), $afterCreate2->getCountryCode());
@@ -999,14 +1010,15 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $user->getNativeLocale()->setLanguageCode("en");
         $user->getNativeLocale()->setCountryCode("IE");
         $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         
         $locale = new Common\Protobufs\Models\Locale();
         $locale->setLanguageCode("ja");
         $locale->setCountryCode("JP");
         
         $afterCreate = API\DAO\UserDao::createSecondaryLanguage($insertedUser->getId(), $locale);
+        $this->assertNotNull($afterCreate);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Locale", $afterCreate);
         $this->assertEquals($locale->getLanguageCode(), $afterCreate->getLanguageCode());
         $this->assertEquals($locale->getCountryCode(), $afterCreate->getCountryCode());
@@ -1016,6 +1028,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $locale2->setCountryCode("IE");
         
         $afterCreate2 = API\DAO\UserDao::createSecondaryLanguage($insertedUser->getId(), $locale2);
+        $this->assertNotNull($afterCreate2);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Locale", $afterCreate2);
         $this->assertEquals($locale2->getLanguageCode(), $afterCreate2->getLanguageCode());
         $this->assertEquals($locale2->getCountryCode(), $afterCreate2->getCountryCode());
