@@ -16,6 +16,27 @@ require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 
 class TagsDao
 {
+    //! Retrieve a single Tag from the database
+    /*!
+      Get a single Tag from the database. If a valid tag id is passed then that Tag will be returned. If a valid label
+      is passed then the Tag with that label will be returned. If both parameters are null then null will be returned.
+      @param int $tagId is the id of a Tag
+      @param String $label is the title of a Tag
+      @return Returns a single Tag object
+    */
+    public static function getTag($tagId = null, $label = null)
+    {
+        $ret = null;
+        if (!is_null($tagId) && !is_null($label)) {
+            $args = Lib\PDOWrapper::cleanseNull($tagId).", ".
+                Lib\PDOWrapper::cleanseNullOrWrapStr($label).", null";
+            if ($result = Lib\PDOWrapper::call("getTag", $args)) {
+                $ret = Common\Lib\ModelFactory::buildModel("Tag", $result[0]);
+            }
+        }
+        return $ret;
+    }
+
     //! Retrieve a Tag/Tags from the database
     /*!
       Retrieve a list of Tags from the database. The list can be filtered using the parameters. If null is passed for
@@ -26,7 +47,7 @@ class TagsDao
       @param int $limit is ued to limit the number of Tag objects returned.
       @return Returns a list of Tag objects as filtered by the input parameters or null.
     */
-    public static function getTag($id = null, $label = null, $limit = 30)
+    public static function getTags($id = null, $label = null, $limit = 30)
     {
         $ret = null;
         $args = Lib\PDOWrapper::cleanseNull($id).",".
@@ -173,7 +194,7 @@ class TagsDao
 
             if (!empty($tagsToAdd)) {
                 foreach ($tagsToAdd as $newTag) {
-                    if ($tagExists = TagsDao::getTag(null, $newTag->getLabel())) {
+                    if ($tagExists = TagsDao::getTags(null, $newTag->getLabel())) {
                         ProjectDao::addProjectTag($projectId, $tagExists[0]->getId());
                     } else {
                         $tag = TagsDao::create($newTag->getLabel());

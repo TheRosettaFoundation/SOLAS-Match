@@ -3,8 +3,9 @@
 namespace SolasMatch\API\V0;
 
 use \SolasMatch\Common as Common;
+use \SolasMatch\API as API;
 use \SolasMatch\API\DAO as DAO;
-use \SolasMatch\API\Dispatcher;
+use \SolasMatch\API\Dispatcher as Dispatcher;
 
 /**
  * Description of StaticAPI
@@ -13,6 +14,7 @@ use \SolasMatch\API\Dispatcher;
 
 require_once __DIR__."/../DataAccessObjects/StatDao.class.php";
 require_once __DIR__."/../../Common/lib/Settings.class.php";
+require_once __DIR__."/../lib/TipSelector.class.php";
 
 class StaticAPI
 {
@@ -97,7 +99,8 @@ class StaticAPI
             Common\Enums\HttpMethodEnum::GET,
             '/v0/tips(:format)/',
             function ($format = ".json") {
-                Dispatcher::sendResponse(null, Lib\TipSelector::selectTip(), null, $format);
+                $data = API\Lib\TipSelector::selectTip();
+                Dispatcher::sendResponse(null, $data, null, $format);
             },
             'getTip'
         );

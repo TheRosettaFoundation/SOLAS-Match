@@ -22,10 +22,11 @@ class AdminDao
       @param int $orgId is the id of the organisation the user is an admin of or null if site admin
       @return Returns a list of User objects or null
     */
-    public static function getAdmins($orgId = null)
+    public static function getAdmins($userId = null, $orgId = null)
     {
         $ret = null;
-        $args = Lib\PDOWrapper::cleanseNull($orgId);
+        $args = Lib\PDOWrapper::cleanseNullOrWrapStr($userId)
+                .",".Lib\PDOWrapper::cleanseNull($orgId);
         if ($result = Lib\PDOWrapper::call("getAdmin", $args)) {
             $ret = array();
             foreach ($result as $user) {

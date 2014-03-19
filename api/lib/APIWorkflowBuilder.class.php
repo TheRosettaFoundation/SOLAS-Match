@@ -11,7 +11,7 @@ class APIWorkflowBuilder extends WorkflowBuilder
     protected function getProjectTasks($projectId)
     {
         $dao = new \SolasMatch\API\DAO\TaskDao();
-        return $dao->getTask(null, $projectId);
+        return $dao->getTasks(null, $projectId);
     }
 
     protected function getTaskPreReqs($taskId)

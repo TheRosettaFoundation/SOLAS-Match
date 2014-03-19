@@ -67,7 +67,7 @@ Configure Apache
    <pre><code>sudo a2enmod rewrite</code></pre>
    
  * Enable X-Sendfile
-   <pre><code>sudo apt-get install libapache2-mod-xsendfile</code></pre>
+   <pre><code>sudo apt-get install libapache2-mod-xsendfile</code></pre>    
  
   Add path to upload directoy to your host apache2.conf,vHost or httpd.conf(recommended) eg
    

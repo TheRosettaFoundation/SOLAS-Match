@@ -22,6 +22,26 @@ require_once __DIR__."/../lib/Upload.class.php";
 
 class TaskDao
 {
+    //! Retrieve a single Task from the database
+    /*!
+      Gets a single task by its id. If taskId is null then null is returned
+      @param int $taskId is the id of a task
+      @return Returns a single Task object
+    */
+    public static function getTask($taskId)
+    {
+        $task = null;
+        if (!is_null($taskId)) {
+            $args = Lib\PDOWrapper::cleanseNull($taskId).
+                ", null, null, null, null, null, null, null, null, null, null, null, null, null";
+            $result = Lib\PDOWrapper::call("getTask", $args);
+            if ($result) {
+                $task = Common\Lib\ModelFactory::buildModel("Task", $result[0]);
+            }
+        }
+        return $task;
+    }
+
     //! Retrieve Task objects from the database
     /*!
       Get a list of Task objects from the database. The list that is returned can be filtered by the input parameters.
@@ -47,7 +67,7 @@ class TaskDao
       @param int $published selects only published/unpublished tasks
       @param string $deadline is the deadline of the requested Task in the format "YYYY-MM-DD HH:MM:SS"
     */
-    public static function getTask(
+    public static function getTasks(
         $taskId = null,
         $projectId = null,
         $title = null,
@@ -460,7 +480,7 @@ class TaskDao
     public static function moveToArchiveByID($taskId, $userId)
     {
         $ret = false;
-        $task = self::getTask($taskId);
+        $task = self::getTasks($taskId);
         $task = $task[0];
         
         if(is_null($task)) {
@@ -490,12 +510,12 @@ class TaskDao
     private static function archiveTaskNode($node, $graph, $userId)
     {
         $ret = true;
-        $task = self::getTask($node->getTaskId());
+        $task = self::getTasks($node->getTaskId());
         $dependantNodes = $node->getNextList();
         if (count($dependantNodes) > 0) {
             $builder = new Lib\APIWorkflowBuilder();
             foreach ($dependantNodes as $dependantId) {
-                $dTask = self::getTask($dependantId);
+                $dTask = self::getTasks($dependantId);
                 $index = $builder->find($dependantId, $graph);
                 $dependant = $graph->getAllNodes($index);
                 $preReqs = $dependant->getPreviousList();
@@ -666,6 +686,22 @@ class TaskDao
             return null;
         }
     }
+    
+    public static function getArchivedTaskMetaData($taskId)
+    {
+        $return = null;
+        $args = Lib\PDOWrapper::cleanse($taskId).", null, null, null, null, null, null, null, null, null";
+        if ($r = Lib\PDOWrapper::call("getArchivedTaskMetaData", $args)) {
+            $file_info = array();
+            foreach ($r[0] as $key => $value) {
+                if (!is_numeric($key)) {
+                    $file_info[$key] = $value;
+                }
+            }
+            $return = $file_info;
+        }
+        return $return;
+    }
 
     //! Get the list of Users that are subscribed to the specified Task
     /*
@@ -709,7 +745,7 @@ class TaskDao
     */
     public static function downloadTask($taskId, $version = 0)
     {
-        $task = self::getTask($taskId);
+        $task = self::getTasks($taskId);
         $task=$task[0];
         if (!is_object($task)) {
             header('HTTP/1.0 500 Not Found');
@@ -734,7 +770,7 @@ class TaskDao
     */
     public static function downloadConvertedTask($taskId, $version = 0)
     {
-        $task = self::getTask($taskId);
+        $task = self::getTasks($taskId);
 
         if (!is_object($task)) {
             header('HTTP/1.0 404 Not Found');
@@ -937,7 +973,7 @@ class TaskDao
             $index = $graphBuilder->find($task->getId(), $graph);
             $taskNode = $graph->getAllNodes($index);
             foreach ($taskNode->getNextList() as $nextTaskId) {
-                $result = TaskDao::getTask($nextTaskId);
+                $result = TaskDao::getTasks($nextTaskId);
                 $nextTask = $result[0];
                 self::uploadFile($nextTask, $convert, $file, 0, $userId, $filename);
             }

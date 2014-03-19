@@ -36,7 +36,34 @@ class OrganisationDao
         }
         return $ret;
     }
-    
+
+    //! Retrieve a single Organisation from the database
+    /*!
+      Gets a single Organisation object from the database. If a valid Organisation id is passed then that Organisation
+      will be returned. If a valid name is passed then the Organisation with that name will be returned. If both
+      parameters are null then this will return null.
+      @param int $orgId is the id of an organisation
+      @param String $name is the name of an Organisation
+      @return A single organisation object or null
+    */
+    public static function getOrg($orgId = null, $name = null)
+    {
+        $ret = null;
+
+        if (!is_null($orgId) && !is_null($name)) {
+            $args = Lib\PDOWrapper::cleanseNull($orgId).",".
+                Lib\PDOWrapper::cleanseNullOrWrapStr($name).",".
+                "null, null, null, null, null, null, null";
+
+            $result = Lib\PDOWrapper::call("getOrg", $args);
+            if (is_array($result)) {
+                $ret = Common\Lib\ModelFactory::buildModel("Organisation", $result[0]);
+            }
+        }
+
+        return $ret;
+    }
+
     //! Get an Organisation object from the database
     /*!
       Used to retrieve an Organisation from the database. It accepts a number of arguments that it uses to filter
@@ -53,7 +80,7 @@ class OrganisationDao
       @param string|null $regionalFocus is the area on which the Organisation is focused or null
       @return Returns an Array of Organisations or an empty array if none match
     */
-    public static function getOrg(
+    public static function getOrgs(
         $id = null,
         $name = null,
         $homepage = null,

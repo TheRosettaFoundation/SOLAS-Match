@@ -18,6 +18,23 @@ class Badges
 {
     public static function init()
     {
+        /**
+         * Gets a single badge object based on its $badgeId
+         **/
+        API\Dispatcher::registerNamed(
+            Common\Enums\HttpMethodEnum::GET,
+            '/v0/badges/:badgeId/',
+            function ($badgeId, $format = ".json") {
+                if (!is_numeric($badgeId)&& strstr($badgeId, '.')) {
+                    $badgeId = explode('.', $badgeId);
+                    $format = '.'.$badgeId[1];
+                    $badgeId = $badgeId[0];
+                }
+                API\Dispatcher::sendResponse(null, DAO\BadgeDao::getBadge($badgeId), null, $format);
+            },
+            'getBadge'
+        );
+        
         API\Dispatcher::registerNamed(
             Common\Enums\HttpMethodEnum::GET,
             '/v0/badges(:format)/',
@@ -73,34 +90,38 @@ class Badges
             'deleteBadge',
             '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgBadge'
         );
-        
+
         API\Dispatcher::registerNamed(
             Common\Enums\HttpMethodEnum::GET,
-            '/v0/badges/:badgeId/',
+            '/v0/badges/:badgeId/users(:format)/',
             function ($badgeId, $format = ".json") {
-                if (!is_numeric($badgeId)&& strstr($badgeId, '.')) {
-                    $badgeId = explode('.', $badgeId);
-                    $format = '.'.$badgeId[1];
-                    $badgeId = $badgeId[0];
+                $data = UserDao::getUsersWithBadge($badgeId);
+                API\Dispatcher::sendResponse(null, $data, null, $format);
+            },
+            'getUsersWithBadge'
+        );
+        
+        /*
+         * Checks if a user has a particular badge
+         */
+        API\Dispatcher::registerNamed(
+            Common\Enums\HttpMethodEnum::GET,
+            '/v0/badges/:badgeId/:userId/',
+            function ($badgeId, $userId, $format = ".json") {
+                if (!is_numeric($userId)&& strstr($userId, '.')) {
+                    $userId = explode('.', $userId);
+                    $format = '.'.$userId[1];
+                    $userId = $userId[0];
                 }
-                $data = DAO\BadgeDao::getBadge($badgeId, null, null, null);
+                $data = DAO\UserDao::userHasBadge($badgeId, $userId);
                 if (is_array($data)) {
                     $data = $data[0];
                 }
                 API\Dispatcher::sendResponse(null, $data, null, $format);
             },
-            'getBadge'
+            'userHasBadge'
         );
-        
-        API\Dispatcher::registerNamed(
-            Common\Enums\HttpMethodEnum::GET,
-            '/v0/badges/:badgeId/users(:format)/',
-            function ($badgeId, $format = ".json") {
-                $data = DAO\UserDao::getUsersWithBadge($badgeId);
-                API\Dispatcher::sendResponse(null, $data, null, $format);
-            },
-            'getUsersWithBadge'
-        );
+
     }
 }
 Badges::init();

@@ -12,3 +12,5 @@ ui/dart/deploy/web/conf/conf.json
 .directory
 .project
 .metadata/
+.buildpath
+/.settings

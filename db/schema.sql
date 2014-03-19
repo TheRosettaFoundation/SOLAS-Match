@@ -1378,13 +1378,13 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Dev.getAdmin
-DROP PROCEDURE IF EXISTS `getAdmin`;
+-- Dumping structure for procedure Solas-Match-Dev.getAdmins
+DROP PROCEDURE IF EXISTS `getAdmins`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getAdmin`(IN `orgId` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAdmins`(IN `orgId` INT)
 BEGIN
 
-	IF orgId = '' THEN SET orgId = NULL; END IF;	
+	IF orgId = null OR orgId = '' THEN SET orgId = NULL; END IF;	
 	
 	SELECT u.id,u.`display-name`,u.email,u.password,u.biography, 
             (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`, 
@@ -1399,6 +1399,58 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Dev.getAdmin
+DROP PROCEDURE IF EXISTS `getAdmin`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAdmin`(IN `userId` INT, IN `orgId` INT)
+BEGIN
+
+	IF userId = null OR userId = '' THEN SET userId = NULL; END IF;
+	IF orgId = null OR orgId = '' THEN SET orgId = NULL; END IF;	
+	
+	IF userId IS NOT null AND orgId IS NOT null THEN
+		SELECT u.id,u.`display-name`,u.email,u.password,u.biography, 
+		    (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`, 
+		    (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`, 
+		    (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`, 
+		    (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`, 
+		    u.nonce,u.`created-time` 
+
+		FROM Users u JOIN Admins a ON a.user_id = u.id 
+		WHERE a.user_id = userId AND a.organisation_id = orgId;
+	ELSEIF userId IS NOT null AND orgId IS null THEN
+		SELECT u.id,u.`display-name`,u.email,u.password,u.biography, 
+		    (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`, 
+		    (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`, 
+		    (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`, 
+		    (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`, 
+		    u.nonce,u.`created-time` 
+
+		FROM Users u JOIN Admins a ON a.user_id = u.id 
+		WHERE a.user_id = userId AND a.organisation_id is null;
+	ELSEIF userId IS null AND orgId IS NOT null THEN
+		SELECT u.id,u.`display-name`,u.email,u.password,u.biography, 
+		    (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`, 
+		    (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`, 
+		    (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`, 
+		    (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`, 
+		    u.nonce,u.`created-time` 
+
+		FROM Users u JOIN Admins a ON a.user_id = u.id 
+		WHERE a.organisation_id = orgId;
+	ELSEIF userId IS null AND orgId IS null THEN
+		SELECT u.id,u.`display-name`,u.email,u.password,u.biography, 
+		    (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`, 
+		    (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`, 
+		    (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`, 
+		    (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`, 
+		    u.nonce,u.`created-time` 
+
+		FROM Users u JOIN Admins a ON a.user_id = u.id 
+		WHERE (a.organisation_id is null or a.organisation_id = orgId);
+	END IF;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure trommonsUpdateTest.getArchivedProject
 DROP PROCEDURE IF EXISTS `getArchivedProject`;
@@ -1505,7 +1557,6 @@ BEGIN
 
 END//
 DELIMITER ;
-
 
 
 -- Dumping structure for procedure Solas-Match-Dev.getBadge
@@ -1979,7 +2030,6 @@ DELIMITER ;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 
 
-
 -- Dumping structure for procedure Solas-Match-Test.getTag
 DROP PROCEDURE IF EXISTS `getTag`;
 DELIMITER //
@@ -2125,6 +2175,39 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Test.getArchivedTaskMetaData
+DROP PROCEDURE IF EXISTS `getArchivedTaskMetaData`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedTaskMetaData`(IN `archTaskID` INT, IN `verID` INT, IN `name` TEXT, IN `content` VARCHAR(255), IN `uploadTime` DATETIME, IN `userClaimedID` INT, IN `userArchivedID` INT, IN `preReq` VARCHAR(255), IN `userCreatorID` INT, IN `archTime` DATETIME)
+    READS SQL DATA
+BEGIN
+	if archTaskID = '' then set archTaskID = null; end if;
+	if verID = '' then set verID = null; end if;
+	if name = '' then set name = null; end if;
+	if content = '' then set content = null; end if;
+	if uploadTime = '' then set uploadTime = null; end if;
+	if userClaimedID = '' then set userClaimedID = null; end if;
+	if userArchivedID = '' then set userArchivedID = null; end if;
+	if preReq = '' then set preReq = null; end if;
+	if userCreatorID = '' then set userCreatorID = null; end if;
+	if archTime = '' then set archTime = null; end if;
+	
+    select archivedTask_id, version, filename, `content-type`, `upload-time`, `user_id-claimed`, `user_id-archived`, prerequisites, `user_id-taskCreator`, `archived-date` 
+        from ArchivedTasksMetadata t 
+        where (archTaskID is null or t.archivedTask_id = archTaskID)
+        and (verID is null or t.version = verID)
+        and (name is null or t.filename = name)
+        and (content is null or t.`content-type` = content)
+        and (uploadTime is null or uploadTime = '0000-00-00 00:00:00' or t.`upload-time` = uploadTime)
+        and (userClaimedID is null or t.`user_id-claimed` = userClaimedID)
+        and (userArchivedID is null or t.`user_id-archived` = userArchivedID)
+        and (preReq is null or t.prerequisites = preReq)
+        and (userCreatorID is null or t.`user_id-taskCreator` = userCreatorID)
+        and (archTime is null or archTime = '0000-00-00 00:00:00' or t.`archived-date` = archTime);
+	
+END//
+DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Test.getTaskPreReqs
 DROP PROCEDURE IF EXISTS `getTaskPreReqs`;
@@ -2234,6 +2317,15 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure Solas-Match-Test.getTaskType
+DROP PROCEDURE IF EXISTS `getTaskType`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskType`(IN `tID` INT)
+BEGIN
+	select name from TaskTypes where id=tID;
+END//
+DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Test.getTopTags
 DROP PROCEDURE IF EXISTS `getTopTags`;
@@ -2267,6 +2359,7 @@ BEGIN
         where utp.user_id=uID;
 END//
 DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Test.getUser
 DROP PROCEDURE IF EXISTS `getUser`;
@@ -2620,6 +2713,23 @@ BEGIN
 	SELECT t.*
 	FROM UserTrackedTasks utt join Tasks t on utt.task_id=t.id
 	WHERE user_id = id;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.getUserWithBadge
+DROP PROCEDURE IF EXISTS `getUserWithBadge`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserWithBadge`(IN `id` INT)
+BEGIN
+	SELECT Users.id,Users.`display-name`,Users.email,Users.password,Users.biography, 
+		    (SELECT `en-name` FROM Languages l WHERE l.id = Users.`language_id`) AS `languageName`, 
+		    (SELECT code FROM Languages l WHERE l.id = Users.`language_id`) AS `languageCode`, 
+		    (SELECT `en-name` FROM Countries c WHERE c.id = Users.`country_id`) AS `countryName`, 
+		    (SELECT code FROM Countries c WHERE c.id = Users.`country_id`) AS `countryCode`, 
+		    Users.nonce,Users.`created-time`
+	    FROM Users JOIN UserBadges ON Users.id = UserBadges.user_id
+    	WHERE UserBadges.user_id = uID AND UserBadges.badge_id = bID;
 END//
 DELIMITER ;
 

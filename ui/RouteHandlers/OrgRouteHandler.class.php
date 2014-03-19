@@ -99,7 +99,7 @@ class OrgRouteHandler
         if ($post = $app->request()->post()) {
             $nameErr = null;
 
-            $org = new \Organisation();
+            $org = new Common\Protobufs\Models\Organisation();
 
             if (isset($post["orgName"]) && $post["orgName"] != '') {
                 $org->setName($post['orgName']);
