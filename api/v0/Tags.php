@@ -111,20 +111,6 @@ class Tags
             'searchForTag',
             null
         );
-        
-        error_log("Registering route");
-        API\Dispatcher::registerNamed(
-            Common\Enums\HttpMethodEnum::GET,
-            '/v0/tags/topTags(:format)/',
-            function ($format = ".json") {
-                error_log("I MADE IT");
-                //$limit = API\Dispatcher::clenseArgs('limit', Common\Enums\HttpMethodEnum::GET, 30);
-                //$data= DAO\TagsDao::getTopTags($limit);
-                //API\Dispatcher::sendResponse(null, $data, null, $format);
-            },
-            'getTopTags',
-            null
-        );
 
         API\Dispatcher::registerNamed(
             Common\Enums\HttpMethodEnum::PUT,

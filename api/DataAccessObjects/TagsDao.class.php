@@ -27,7 +27,7 @@ class TagsDao
     public static function getTag($tagId = null, $label = null)
     {
         $ret = null;
-        if (!is_null($tagId) && !is_null($label)) {
+        if (!is_null($tagId) || !is_null($label)) {
             $args = Lib\PDOWrapper::cleanseNull($tagId).", ".
                 Lib\PDOWrapper::cleanseNullOrWrapStr($label).", null";
             if ($result = Lib\PDOWrapper::call("getTag", $args)) {

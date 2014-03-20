@@ -48,20 +48,20 @@ class OrganisationDao
     */
     public static function getOrg($orgId = null, $name = null)
     {
-        $ret = null;
+        $org = null;
 
-        if (!is_null($orgId) && !is_null($name)) {
+        if (!is_null($orgId) || !is_null($name)) {
             $args = Lib\PDOWrapper::cleanseNull($orgId).",".
                 Lib\PDOWrapper::cleanseNullOrWrapStr($name).",".
                 "null, null, null, null, null, null, null";
 
             $result = Lib\PDOWrapper::call("getOrg", $args);
             if (is_array($result)) {
-                $ret = Common\Lib\ModelFactory::buildModel("Organisation", $result[0]);
+                $org = Common\Lib\ModelFactory::buildModel("Organisation", $result[0]);
             }
         }
 
-        return $ret;
+        return $org;
     }
 
     //! Get an Organisation object from the database

@@ -24,19 +24,18 @@ class BadgeDao
      **/
     public static function getBadge($badgeId)
     {
-        $args = Lib\PDOWrapper::cleanseNull($badgeId)
-                .","."null"
-                .","."null"
-                .","."null";
-        
-        if ($result = Lib\PDOWrapper::call("getBadge", $args)) {
-            $badges = array();
-            foreach ($result as $badge) {
-                $badges[] = Common\Lib\ModelFactory::buildModel("Badge", $badge);
+        $badge = null;
+        if (!is_null($badgeId)) {
+            $args = Lib\PDOWrapper::cleanseNull($badgeId)
+                    .","."null"
+                    .","."null"
+                    .","."null";
+            $result = Lib\PDOWrapper::call("getBadge", $args);
+            if ($result) {
+                $badge = Common\Lib\ModelFactory::buildModel("Badge", $result[0]);
             }
-            return $badges[0];
         }
-        return null;
+        return $badge;
     }
     
     //! Used to retieve Badge data from the database
