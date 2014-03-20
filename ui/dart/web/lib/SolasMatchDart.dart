@@ -26,6 +26,7 @@ part 'models/Tag.dart';
 part 'models/Task.dart';
 part 'models/User.dart';
 part 'models/UserPersonalInformation.dart';
+part 'models/Statistic.dart';
 
 // DAOs
 part '../DataAccessObjects/CountryDao.dart';
@@ -34,3 +35,4 @@ part '../DataAccessObjects/OrgDao.dart';
 part '../DataAccessObjects/ProjectDao.dart';
 part '../DataAccessObjects/TaskDao.dart';
 part '../DataAccessObjects/UserDao.dart';
+part '../DataAccessObjects/StatisticDao.dart';

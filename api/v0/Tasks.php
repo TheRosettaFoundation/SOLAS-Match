@@ -339,27 +339,6 @@ class Tasks
             'getTaskClaimed'
         );
         
-        //Consider Removing
-        API\Dispatcher::registerNamed(
-            Common\Enums\HttpMethodEnum::POST,
-            '/v0/tasks/addTarget/:languageCode/:countryCode/:userId/',
-            function ($languageCode, $countryCode, $userId, $format = ".json") {
-                if (!is_numeric($userId) && strstr($userId, '.')) {
-                    $userId = explode('.', $userId);
-                    $format = '.'.$userId[1];
-                    $userId = $userId[0];
-                }
-                $data = API\Dispatcher::getDispatcher()->request()->getBody();
-                $client = new Common\Lib\APIHelper($format);
-                $data = $client->deserializer($data);
-                $data = $client->cast("Task", $data);
-                $result = DAO\TaskDao::duplicateTaskForTarget($data, $languageCode, $countryCode, $userId);
-                API\Dispatcher::sendResponse(null, array("result" => $result), null, $format);
-            },
-            'addTarget',
-            '\SolasMatch\API\Lib\Middleware::authenticateUserMembership'
-        );
-        
         API\Dispatcher::registerNamed(
             Common\Enums\HttpMethodEnum::GET,
             '/v0/tasks/:taskId/user(:format)/',

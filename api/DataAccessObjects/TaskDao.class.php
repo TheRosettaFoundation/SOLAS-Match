@@ -5,6 +5,13 @@ namespace SolasMatch\API\DAO;
 use \SolasMatch\Common as Common;
 use \SolasMatch\API\Lib as Lib;
 
+//! The Task Data access Object for the API
+/*!
+  A class for setting and retrieving Task related data from the database. Used by the API Route Handlers to supply
+  info requested through the API and perform actions. All data is retrieved and input with direct access to the
+  database using stored procedures.
+*/
+
 require_once __DIR__."/../../Common/protobufs/Requests/UserTaskScoreRequest.php";
 require_once __DIR__."/../../Common/protobufs/models/Task.php";
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
@@ -13,50 +20,53 @@ require_once __DIR__."/../lib/Notify.class.php";
 require_once __DIR__."/../lib/APIWorkflowBuilder.class.php";
 require_once __DIR__."/../lib/Upload.class.php";
 
-/**
- * Task Document Access Object for manipulating tasks.
- *
- * @package default
- * @author eoin.oconchuir@ul.ie
- **/
-
 class TaskDao
 {
-    /**
-     * Gets a single task by its id
-     * @param The id of a task
-     * @return Task
-     * @author Tadhg O'Flaherty
-     **/
+    //! Retrieve a single Task from the database
+    /*!
+      Gets a single task by its id. If taskId is null then null is returned
+      @param int $taskId is the id of a task
+      @return Returns a single Task object
+    */
     public static function getTask($taskId)
     {
-        $tasks = array();
-        $args = Lib\PDOWrapper::cleanseNull($taskId)
-                .","."null"
-                .","."null"
-                .","."null"
-                .","."null"
-                .","."null"
-                .","."null"
-                .","."null"
-                .","."null"
-                .","."null"
-                .","."null"
-                .","."null"
-                .","."null"
-                .","."null";
-        $result = Lib\PDOWrapper::call("getTask", $args);
-        if ($result) {
-            foreach ($result as $row) {
-                $tasks[] = Common\Lib\ModelFactory::buildModel("Task", $row);
+        $task = null;
+        if (!is_null($taskId)) {
+            $args = Lib\PDOWrapper::cleanseNull($taskId).
+                ", null, null, null, null, null, null, null, null, null, null, null, null, null";
+            $result = Lib\PDOWrapper::call("getTask", $args);
+            if ($result) {
+                $task = Common\Lib\ModelFactory::buildModel("Task", $result[0]);
             }
         }
-        if (sizeof($tasks) == 0) {
-            $tasks=null;
-        }
-        return $tasks[0];
+        return $task;
     }
 
+    //! Retrieve Task objects from the database
+    /*!
+      Get a list of Task objects from the database. The list that is returned can be filtered by the input parameters.
+      If null is passed for any of the input parameters it will be ignored. If null is passed for all parameters then
+      every Task in the system will be returned.
+      @param int $taskId is the id of the requested Task
+      @param int $projectId is the id of the Project the requested Tasks belong to
+      @param string $title is the title of the requested Task
+      @param int $wordCount is the word count of the requested Task
+      @param string $sourceLanguageCode is the language code for the source language of the requested Task.
+      <b>Note:</b>This will be converted to a language id on the database
+      @param string $targetLanguageCode is the language code for the target language of the requested Task
+      <b>Note:</b>This will be converted to a language id on the database
+      @param string $createTime is the date and time that the requested Task was created in the format
+      "YYYY-MM-DD HH:MM:SS"
+      @param string $sourceCountryCode is the country code for the source language of the requested Task
+      <b>Note:</b>This will be converted to a country id on the database
+      @param string $targetCountryCode is the country code for the target language of the requested Task
+      <b>Note:</b>This will be converted to a country id on the database
+      @param string $comment is the comment made by the Organisation when creating the requested Task
+      @param TaskTypeEnum $taskTypeId is the type of the requested Task (e.g. translation, proofreading, etc.).
+      @param TaskStatusEnum $taskStatusId is the status of the requested Task (e.g. in progress).
+      @param int $published selects only published/unpublished tasks
+      @param string $deadline is the deadline of the requested Task in the format "YYYY-MM-DD HH:MM:SS"
+    */
     public static function getTasks(
         $taskId = null,
         $projectId = null,
@@ -100,11 +110,15 @@ class TaskDao
         return $tasks;
     }
     
-    /**
-     * Save task object to database (either insert or update)
-     * @return Task
-     * @author 
-     **/
+    //! Save a Task to the database
+    /*!
+     Save a Task to the database. If the input Task does not have an id then a new Task will be created. If the input
+     Task does have an id then it will update that Task in the database with its new values. This trigger a User Task
+     score request for this Task.
+     @param Task $task is the Task being saved to the database.
+     <b>Note:</b> This is passed by reference.
+     @return Returns the updated/created Task object
+    */
     public static function save(&$task)
     {
         if (is_null($task->getId())) {
@@ -117,6 +131,13 @@ class TaskDao
         return $task;
     }
 
+    //! Submit a Review of a Task
+    /*!
+      Provide a Review for a Task. Reviews can be used to help understand the quality of a volunteers work as well as
+      the quality of the source files uploaded by the Organisation.
+      @param TaskReview $review is a model that holds the details of the Task Review
+      @return Returns 1 if the review was submitted successfully, 0 otherwise
+    */
     public static function submitReview($review)
     {
         $ret = null;
@@ -136,6 +157,19 @@ class TaskDao
         return $ret;
     }
 
+    //! Retrieve TaskReview objects from the database
+    /*!
+      Retrieve a list of TaskReview objects. The resultant list can be filtered using the input arguments. If any of
+      the input args are null then they will be ignored.
+      @param int $projectId is the id of a Project
+      @param int $taskId is the id of a Task
+      @param int $userId is the id of a User
+      @param int $corrections is a value between 1 and 5 where 1 is poor and 5 is good
+      @param int $grammar is a value between 1 and 5 where 1 is poor and 5 is good
+      @param int $spelling is a value between 1 and 5 where 1 is poor and 5 is good
+      @param int $consistency is a value between 1 and 5 where 1 is poor and 5 is good
+      @param String $comment is the comment related to the requested TaskReview
+    */
     public static function getTaskReviews(
         $projectId = null,
         $taskId = null,
@@ -166,42 +200,6 @@ class TaskDao
         return $reviews;
     }
 
-    /*
-     * Add an identicle entry with a different ID and target Language
-     * Used for bulk uploads
-     */
-    public static function duplicateTaskForTarget($task, $languageCode, $countryCode, $userId)
-    {
-        //Get the file info for original task
-        $task_file_info = self::getTaskFileInfo($task->getId());
-        
-        //Get the file path to original upload
-        $old_file_path = Lib\Upload::absoluteFilePathForUpload($task, 0, $task_file_info['filename']);
-        
-        //Remove ID so a new one will be created
-        $task->setId(null);
-        $task->setTargetLanguageCode($languageCode);
-        $task->setTargetCountryCode($countryCode);
-        
-        //Save the new Task
-        self::save($task);
-        self::calculateTaskScore($task->getId());
-        
-        //Generate new file info and save it
-        self::recordFileUpload($task->getId(), $task_file_info['filename'], $task_file_info['content-type'], $userId);
-        $task_file_info['filename'] = '"'.$task_file_info['filename'].'"';
-        
-        //Get the new path the file can be found at
-        $file_info = self::getTaskFileInfo($task);
-        $new_file_path = Lib\Upload::absoluteFilePathForUpload($task, 0, $file_info['filename']);
-        Lib\Upload::createFolderPath($task);
-        if (!copy($old_file_path, $new_file_path)) {
-            $error = "Failed to copy file to new location";
-            return 0;
-        }
-        return 1;
-    }
-
     private static function update($task)
     {
         $sourceLocale = $task->getSourceLocale();
@@ -227,37 +225,43 @@ class TaskDao
         }
     }
     
-    public static function delete($TaskId)
+    //! Delete a Task from the database
+    /*!
+      Permanently delete a Task from the database.
+      @param int $taskId is the id of a Task
+      @return Returns 1 if the Task with id $taskId was deleted successfully, 0 otherwise
+    */
+    public static function delete($taskId)
     {
-        $args = Lib\PDOWrapper::cleanseNull($TaskId);
+        $args = Lib\PDOWrapper::cleanseNull($taskId);
         $result = Lib\PDOWrapper::call("deleteTask", $args);
         return $result[0]["result"];
     }
 
+    // Send a message to the backend to calculate the score all users and one task
     private static function calculateTaskScore($taskId)
     {
-        $use_backend = Common\Lib\Settings::get('site.backend');
-        if (strcasecmp($use_backend, "y") == 0) {
-            $mMessagingClient = new Lib\MessagingClient();
-            if ($mMessagingClient->init()) {
-                $request = new Common\Protobufs\Requests\UserTaskScoreRequest();
-                $request->setTaskId($taskId);
-                $message = $mMessagingClient->createMessageFromProto($request);
-                $mMessagingClient->sendTopicMessage(
-                    $message,
-                    $mMessagingClient->MainExchange,
-                    $mMessagingClient->TaskScoreTopic
-                );
-            } else {
-                echo "Failed to Initialize messaging client";
-            }
+        $mMessagingClient = new Lib\MessagingClient();
+        if ($mMessagingClient->init()) {
+            $request = new Common\Protobufs\Requests\UserTaskScoreRequest();
+            $request->setTaskId($taskId);
+            $message = $mMessagingClient->createMessageFromProto($request);
+            $mMessagingClient->sendTopicMessage(
+                $message,
+                $mMessagingClient->MainExchange,
+                $mMessagingClient->TaskScoreTopic
+            );
         } else {
-            //use the python script
-            $exec_path = __DIR__."/../scripts/calculate_scores.py $taskId";
-            echo shell_exec($exec_path . "> /dev/null 2>/dev/null &");
+            echo "Failed to Initialize messaging client";
         }
     }
     
+    //! Get the list of Tags associated with the specified Task
+    /*!
+      Get the list of Tags associated with the specified Task
+      @param int $taskId is the id of a Task
+      @return Returns a list of Tag objects
+    */
     public static function getTags($taskId)
     {
         $ret = null;
@@ -272,6 +276,7 @@ class TaskDao
         return $ret;
     }
 
+    // Insert a Task into the database (pass by reference so no return)
     private static function insert(&$task)
     {
         $sourceLocale = $task->getSourceLocale();
@@ -297,6 +302,7 @@ class TaskDao
         }
     }
 
+
     public static function getTaskPreReqs($taskId)
     {
         $ret = null;
@@ -310,6 +316,15 @@ class TaskDao
         return $ret;
     }
     
+    //! Get a list of Tasks that have the specified Task/Project as a prereq
+    /*!
+      If a valid taskId is passed then it will get all Tasks that have the specified Task as a prerequisite. If a valid
+      projectId is passed it will get all the root Tasks (all Tasks with no prereqs) for the specified Project. If they
+      are both valid it will select based on the $taskId.
+      @param int $taskId is the id of a Task
+      @param int $projectId is the id of a Project
+      @return Returns an array of Task objects
+    */
     public static function getTasksFromPreReq($taskId, $projectId)
     {
         $ret = null;
@@ -323,6 +338,14 @@ class TaskDao
         return $ret;
     }
 
+    //! Add a prerequisite to a Task
+    /*!
+      Adds a prerequisite to a Task. A prerequisite is a Task that must be completed before any Tasks dependant on it
+      can be claimed. This function will make the Task with id $taskId dependant on the Task with id $preReqId.
+      @param int $taskId is the id of a Task
+      @param int $preReqId is the id of a Task
+      @return Returns 1 if the prereq was added successfully, 0 otherwise
+    */
     public static function addTaskPreReq($taskId, $preReqId)
     {
         $args = Lib\PDOWrapper::cleanseNull($taskId).",".
@@ -331,6 +354,14 @@ class TaskDao
         return $result[0]["result"];
     }
 
+    //! Remove a prerequisite from a Task
+    /*!
+      Remove a prerequisite from a Task. This function will remove the dependency the Task with id $taskId has on the
+      Task with id $preReqId
+      @param int $taskId is the id of a Task
+      @param int $preReqId is the id of a Task
+      @return Returns 1 if the prereq was removed successfully, 0 otherwise
+    */
     public static function removeTaskPreReq($taskId, $preReqId)
     {
         $args = Lib\PDOWrapper::cleanseNull($taskId).",".
@@ -339,6 +370,15 @@ class TaskDao
         return $result[0]["result"];
     }
 
+    //! Get a list of the most recently created Tasks
+    /*!
+      Get a list of the most recently created Task objects. This will only return Task objects that are in the
+      unclaimed state. A limit and an offset can be used to return all available Tasks in batches. The limit
+      defaults to 15 and the offset defaults to 0.
+      @param int $limit is the number of Task objects that will be returned
+      @param int $offset is the index of the Task to start returning
+      @return Returns an array of Task objects
+    */
     public static function getLatestAvailableTasks($limit = 15, $offset = 0)
     {
         $ret = null;
@@ -354,9 +394,23 @@ class TaskDao
         return $ret;
     }
 
-    /*
-     * Returns an array of tasks ordered by the highest score related to the user
-     */
+    //! Get a list of Task objects ordered by their score for a given User
+    /*!
+      Get a list of the most relevant Tasks for a given User. The Task objects that are returned will be ordered by the
+      score they received from the UserTaskScore algorithm. If strict mode is enabled then only Tasks that match the
+      Users native and/or secondary languages for both their source and target will be returned. A limit and offset can
+      be used to return the list in batches (started at offset return limit Tasks). The list of returned tasks can be
+      further filtered by specifying a Task type, source Language or a target Language. These filter options will be
+      ignored if they are null.
+      @param int $userId is the id of a User
+      @param bool $strict is true to enable strict mode, false to disable it
+      @param int $limit is the max number of Tasks to be returned
+      @param int $offset is the offset from which to start returning Tasks
+      @param TaskTypeEnum $taskType is the Task type filter or null
+      @param String $sourceLanguageCode is a Language code or null
+      @param String $targetLanguageCode is a Language code or null
+      @return Returns a list of Task objects
+    */
     public static function getUserTopTasks(
         $userId,
         $strict,
@@ -392,7 +446,13 @@ class TaskDao
         return $ret;
     }
 
-        
+    //! Get Tasks with the specified Tag
+    /*!
+      Return a list of Task objects where each Task returned has the specified Tag.
+      @param int $tagId is the id of a Tag
+      @param int $limit is the max number of Tags to return
+      @return Returns an array of Task objects
+    */
     public static function getTasksWithTag($tagId, $limit = 15)
     {
         $ret = null;
@@ -408,6 +468,15 @@ class TaskDao
         return $ret;
     }
 
+    //! Archive a Task
+    /*!
+      Move a Task from the Tasks table to the ArchivedTasks table. This should only be done if the Task is complete
+      and the Organisation has downloaded all the files they need. The userId is used to track which User archived
+      the Task.
+      @param int $taskId is the id of a Task
+      @param int $userId is the id of a User
+      @return Returns 1 if the Task was archived successfully, 0 otherwise
+    */
     public static function moveToArchiveByID($taskId, $userId)
     {
         $ret = false;
@@ -477,7 +546,15 @@ class TaskDao
         }
         return $result[0]['result'];
     }
-        
+
+    //! Claim a Task for processing
+    /*!
+      A User claims a Task so they are the only ones working on it. It also allows them to upload new versions of the
+      Task. Adds a row to the TaskClaims table. This alters the Task status so that it is in progress.
+      @param int $taskId is the id of a Task
+      @param int $userId is the id of a User
+      @return Returns 1 on success, 0 otherwise
+    */
     public static function claimTask($taskId, $userId)
     {
         $args = Lib\PDOWrapper::cleanse($taskId).",".
@@ -486,6 +563,15 @@ class TaskDao
         return $ret[0]['result'];
     }
     
+    //! Unclaim a Task
+    /*!
+      This unclaims a Task for a User and adds that User to the TaskTranslatorBlacklist so they can not claim it again.
+      This could be called by an Organisation if they don't want a User to have claimed a Task or the User themselves
+      if they find they can not complete the Task. This changes the Task status back to unclaimed.
+      @param int $taskId is the id of a Task
+      @param int $userId is the id of the User
+      @return Returns 1 on success, 0 on failure
+    */
     public static function unClaimTask($taskId, $userId)
     {
         $args = Lib\PDOWrapper::cleanse($taskId).",".
@@ -494,6 +580,13 @@ class TaskDao
         return $ret[0]['result'];
     }
 
+    //! Determine if a User has claimed a Task
+    /*!
+      Determine if a User has claimed a Task
+      @param int $userId is the id of a User
+      @param int $taskId is the id of a Task
+      @return Returns 1 if the specified User has claimed the Task, 0 otherwise
+    */
     public static function hasUserClaimedTask($userId, $taskId)
     {
         $args = Lib\PDOWrapper::cleanse($taskId).",".
@@ -502,6 +595,15 @@ class TaskDao
         return $result[0]['result'];
     }
 
+    //! Determine if a specified User has claimed a Segmentation Task for the specified Project
+    /*!
+      Determine if the User has claimed a Segmentation Task as part of the specified Project. This can be used to
+      determine if the User should be able to create new Tasks for that project (even though they are not an Org
+      member).
+      @param int $userId is the id of a User
+      @param int $projectId is the id of a Project
+      @return Returns 1 if the User has claimed a segmentation Task in the specified Project, 0 otherwise
+    */
     public static function hasUserClaimedSegmentationTask($userId, $projectId)
     {
         $args = Lib\PDOWrapper::cleanse($userId).",".
@@ -510,6 +612,12 @@ class TaskDao
         return $result[0]['result'];
     }
     
+    //! Determine if a Task has already been claimed
+    /*!
+      Determine if a Task has already been claimed.
+      @param int $taskId is the id of a Task
+      @return Returns 1 if the Task is claimed, 0 otherwise
+    */
     public static function taskIsClaimed($taskId)
     {
         $args = Lib\PDOWrapper::cleanse($taskId);
@@ -517,6 +625,14 @@ class TaskDao
         return $result[0]['result'];
     }
     
+    //! Get a list of Tasks the User has claimed
+    /*!
+      Get a list of tasks claimed by the specified User. It is possible to return the Tasks in batches using the limit
+      and offset parameters.
+      @param int $limit is the max number of Tasks to be returned
+      @param int offset is the offset to start at
+      @return Returns an array of Task objects.
+    */
     public static function getUserTasks($userId, $limit = null, $offset = 0)
     {
         $args = Lib\PDOWrapper::cleanse($userId).', '.
@@ -534,6 +650,12 @@ class TaskDao
         }
     }
 
+    //! Get a count of the User's claimed Tasks
+    /*!
+      Get the number of Tasks a User has claimed
+      @param int $userId is the id of a User
+      @return Returns an int
+    */
     public static function getUserTasksCount($userId)
     {
         $args = Lib\PDOWrapper::cleanse($userId);
@@ -541,6 +663,14 @@ class TaskDao
         return $result[0]['result'];
     }
     
+    //! Get an array of ArchivedTasks that the User had claimed
+    /*!
+      Get the details of the ArchivedTasks the specified User had claimed. The total number of ArchivedTask objects
+      that will be returned can be manipulated using the limit param.
+      @param int $userId is the id of a User
+      @param int $limit is the max number of ArchivedTasks to be returned
+      @return Returns an array of ArchivedTask objects
+    */
     public static function getUserArchivedTasks($userId, $limit = 10)
     {
         $args = Lib\PDOWrapper::cleanse($userId).",".
@@ -573,8 +703,12 @@ class TaskDao
         return $return;
     }
 
+    //! Get the list of Users that are subscribed to the specified Task
     /*
-       Get User Notification List for this task
+       Get the list of Organisation members that are tracking the specified Task. This is mostly used for
+       notifications.
+       @param int $taskId is the id of a Task
+       @return Returns an array of User objects.
     */
     public static function getSubscribedUsers($taskId)
     {
@@ -589,14 +723,26 @@ class TaskDao
         return $ret;
     }
 
-    /*
-    * Check to see if a translation for this task has been uploaded before
+    //! Check if the specified User has uploaded a new version of a Task
+    /*!
+      Check if the specified User has uploaded an output file for a Task before.
+      @param int $taskId is the id of a Task
+      @param int $userId is the id of a User
+      @return Returns 1 if the User has uploaded an output file, 0 otherwise
     */
     public static function hasBeenUploaded($taskId, $userId)
     {
         return self::checkTaskFileVersion($taskId, $userId);
     }
 
+    //! Used to download a specific version of a Task file
+    /*!
+      Download a specific version of a file. By default it will trigger the download of the original Task file. This
+      uses XSendFile to trigger a file download when called.
+      @param int $taskId is the id of a Task
+      @param int $version is the version of the file being requested
+      @return No return as it triggers a download instead
+    */
     public static function downloadTask($taskId, $version = 0)
     {
         $task = self::getTasks($taskId);
@@ -615,6 +761,13 @@ class TaskDao
         Lib\IO::downloadFile($absolute_file_path, $file_content_type);
     }
     
+    //! Download an XLIFF version of a file
+    /*!
+      Same as downloadTask except it first converts the file to XLIFF before triggering the download.
+      @param int $taskId is the id of a Task
+      @param int $version is the version of the file being requested
+      @return No return as it triggers a download instead
+    */
     public static function downloadConvertedTask($taskId, $version = 0)
     {
         $task = self::getTasks($taskId);
@@ -635,6 +788,12 @@ class TaskDao
         Lib\IO::downloadConvertedFile($absolute_file_path, $file_content_type, $taskID);
     }
     
+    //! Get the User that claimed the specified Task
+    /*!
+      Get the User that claimed the specified Task.
+      @param int $taskId is the id of a Task
+      @return Returns a User object or null
+    */
     public static function getUserClaimedTask($taskId)
     {
         $ret = null;
@@ -645,6 +804,16 @@ class TaskDao
         return $ret;
     }
     
+    //! Get the latest version number for a specified Task
+    /*!
+      Used to get the version number for the last uploaded file for this Task. If a valid task id is passed then it
+      will find the latest version of that Task. If a valid user id is passed it will find the oldest version number
+      for all the files they uploaded. If both are valid it will return the biggest version number for the specified
+      Task that was uploaded by the specified User.
+      @param int $taskId is the id of a Task
+      @param int $userId is the id of a User
+      @return Returns an int
+    */
     public static function checkTaskFileVersion($taskId, $userId = null)
     {
         $args = Lib\PDOWrapper::cleanse($taskId).", ".
@@ -653,6 +822,17 @@ class TaskDao
         return $result[0]['latest_version'] > 0;
     }
     
+    //! Record a file upload
+    /*!
+      Used to save the details of a file to the DB. Previous versions can be overwritten by specifying the version. The
+      version defaults to the latest version + 1.
+      @param int $taskId is the id of a Task
+      @param String $filename is the name of the uploaded file.
+      @param String $content_type is the mime type for the file
+      @param int $userId is the id of the User that is uploading the file
+      @param int $version is the version of the file you are uploading.
+      @return Returns the version of the file uploaded on success, null on failure
+    */
     public static function recordFileUpload($taskId, $filename, $content_type, $userId, $version = null)
     {
         $args = Lib\PDOWrapper::cleanseNull($taskId).", ".
@@ -667,6 +847,21 @@ class TaskDao
         }
     }
 
+    //! Retrieve Task file information
+    /*!
+      Get the details of a Task file. The version can be specified but defaults to 0.
+      @param int $taskId is the if of a Task
+      @param int $version is the version of the file being requested
+      @return Returns an associative array in the form:
+      {
+        "task_id": <ID of the Task>,
+        "version_id": <The version number for the file>,
+        "filename": <The name of the file>,
+        "content-type": <The mime type for the file>,
+        "user_id": <The id of the User that uploaded the file>,
+        "upload-time": <The date and time that the file was uploaded>
+      }
+    */
     public static function getTaskFileInfo($taskId, $version = 0)
     {
         $ret = false;
@@ -684,6 +879,13 @@ class TaskDao
         return $ret;
     }
     
+    //! Get the name of a Task file
+    /*!
+      Get the name of a specified Task at a specified version.
+      @param int $taskId is the id of a Task
+      @param int $version is the version of the Task file
+      @return Returns a String
+    */
     public static function getFilename($taskId, $version)
     {
         $args = Lib\PDOWrapper::cleanse($taskId).", ".
@@ -695,6 +897,14 @@ class TaskDao
         }
     }
 
+    //! Get the latest version number for a Task file
+    /*!
+      Get the latest file version for a specified Task. If a valid userId is passed then it will only get the latest
+      version based on that User's uploads.
+      @param int $taskId is the id of a Task
+      @param int $userId is the id of a User or null
+      @retrun Retuns an int or null
+    */
     public static function getLatestFileVersion($taskId, $userId = null)
     {
         $args = Lib\PDOWrapper::cleanse($taskId).",".
@@ -708,6 +918,18 @@ class TaskDao
         return $ret;
     }
     
+    //! Upload a Task file
+    /*!
+      Used to store Task file upload details and save the file to the filesystem. If convert is true then the file will
+      be converted to XLIFF before being saved.
+      @param Task $task is a Task object
+      @param bool $convert determines if the file should be converted to XLIFF
+      @param String $file is the contents of the file (passed as reference)
+      @param int $version is the version of the file being uploaded
+      @param int $userId is the id of the User uploading the file
+      @param String $filename is the name of the uploaded file
+      @return No return
+    */
     public static function uploadFile($task, $convert, &$file, $version, $userId, $filename)
     {
         $success = null;
@@ -731,6 +953,17 @@ class TaskDao
         }
     }
     
+    //! Upload a new version of a Task file
+    /*!
+      This uploads a new version of a Task file. It also copies the uploaded file to version 0 of all Tasks that are
+      dependant on this Task.
+      @param Task $task is a Task object
+      @param bool $convert determines if the file should be converted to XLIFF before being saved
+      @param String $file is the contents of the uploaded file (passed as reference)
+      @param int $userId is the id of the User uploading the file
+      @param String filename is the name of the file
+      @return No Return
+    */
     public static function uploadOutputFile($task, $convert, &$file, $userId, $filename)
     {
         self::uploadFile($task, $convert, $file, null, $userId, $filename);
@@ -747,6 +980,12 @@ class TaskDao
         }
     }
     
+    //! Get the date and time at which the specified Task was claimed
+    /*!
+      Get the date and time at which the specified Task was claimed.
+      @param int $taskId is the id of a Task
+      @return Returns a String containing the datetime
+    */
     public static function getClaimedTime($taskId)
     {
         $ret = null;
