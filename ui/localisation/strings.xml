@@ -952,6 +952,7 @@
 	<string name="footer_community_forum">Community Forum</string>
     <string name="footer_feedback">Your <a href="%s">feedback</a> is appreciated.</string>
     <string name="footer_powered_by">Powered by <a href="%s">%s</a></string>
+    <string name="footer_maintained_by">Maintained by <a href="%s">%s</a></string>
 
 	<string name="header_home">Home</string>
 	<string name="header_dashboard">Dashboard</string>
