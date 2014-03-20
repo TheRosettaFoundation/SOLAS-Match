@@ -202,37 +202,6 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("1", $resultIsMember);
     }
     
-    public function testGetOrgByUser()
-    {
-        UnitTestHelper::teardownDb();
-
-        $org = UnitTestHelper::createOrg();
-        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
-        $this->assertNotNull($insertedOrg->getId());
-        $orgId = $insertedOrg->getId();
-
-        $user = UnitTestHelper::createUser();
-        $insertedUser = API\DAO\UserDao::save($user);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
-        $userId = $insertedUser->getId();
-        
-        $resultRequestMembership = API\DAO\OrganisationDao::requestMembership($userId, $orgId);
-        $this->assertEquals("1", $resultRequestMembership);
-        
-        $resultAcceptMembership = API\DAO\OrganisationDao::acceptMemRequest($orgId, $userId);
-        $this->assertEquals("1", $resultAcceptMembership);
-        
-        // Success
-        $resultFoundOrgByUser = API\DAO\OrganisationDao::getOrgByUser($userId);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $resultFoundOrgByUser);
-        
-        // Failure
-        $resultFoundOrgByUserFailure = API\DAO\OrganisationDao::getOrgByUser(999);
-        $this->assertNull($resultFoundOrgByUserFailure);
-    }
-    
     public function testGetOrgMembers()
     {
         UnitTestHelper::teardownDb();

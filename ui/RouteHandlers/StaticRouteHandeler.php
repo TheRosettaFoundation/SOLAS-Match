@@ -13,6 +13,7 @@ class StaticRouteHandeler
 
         $app = \Slim\Slim::getInstance(); 
 
+        $app->get('/static/statistics/', array($this, 'statistics'))->name("statistics");
         $app->get("/static/privacy/", array($this, "privacy"))->name("privacy");
         $app->get("/static/terms/", array($this, "terms"))->name("terms");
         $app->get("/static/faq/", array($this, "faq"))->name("faq");
@@ -23,6 +24,21 @@ class StaticRouteHandeler
         $app->get("/static/getUser/", array($this, "getUser"))->name("staticGetUser");
         $app->get("/static/getUserHash/", array($this, "getUserHash"))->name("staticGetUserHash");
         $app->notFound("\SolasMatch\UI\Lib\Middleware::notFound");
+    }
+
+    public function statistics()
+    {
+        $app = \Slim\Slim::getInstance();
+        $extraScripts = "
+<script type=\"text/javascript\" src=\"https://www.google.com/jsapi\"></script>
+<script type=\"application/dart\" src=\"{$app->urlFor("home")}ui/dart/web/Scripts/statistics.dart\"></script>
+<script src=\"{$app->urlFor("home")}ui/dart/build/packages/browser/dart.js\"></script>
+<script src=\"{$app->urlFor("home")}ui/dart/build/packages/browser/interop.js\"></script>
+        ";
+        $app->view()->appendData(array(
+            'extra_scripts' => $extraScripts
+        ));
+        $app->render("static/statistics.tpl");
     }
 
     public function privacy()

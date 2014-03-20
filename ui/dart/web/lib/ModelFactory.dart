@@ -53,6 +53,14 @@ class ModelFactory
     return project;
   }
   
+  static Statistic generateStatisticFromMap(Map statData)
+  {
+    Statistic stat = new Statistic();
+    stat.name = statData['name'];
+    stat.value = statData['value'];
+    return stat;
+  }
+  
   static Tag generateTagFromMap(Map tagData)
   {
     Tag tag = new Tag();

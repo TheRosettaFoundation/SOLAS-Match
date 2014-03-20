@@ -76,7 +76,7 @@ class TagsDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $insertedProject = API\DAO\ProjectDao::save($project);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
@@ -93,7 +93,7 @@ class TagsDaoTest extends \PHPUnit_Framework_TestCase
             "en",
             array("Project", "Tags", "Extra", "More")
         );
-        $insertedProject2 = API\DAO\ProjectDao::createUpdate($project2);
+        $insertedProject2 = API\DAO\ProjectDao::save($project2);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject2);
         $this->assertNotNull($insertedProject2->getId());
         
