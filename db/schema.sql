@@ -1729,6 +1729,21 @@ BEGIN
 END//
 DELIMITER ;
 
+
+-- Dumping structure for procedure Solas-Match-Dev.getLoginCount
+DROP PROCEDURE IF EXISTS `getLoginCount`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getLoginCount`(IN `startDate` DATETIME, IN `endDate` DATETIME)
+BEGIN
+    SELECT COUNT(1) as result
+        FROM UserLogins
+        WHERE success = 1
+        AND `login-time` >= startDate
+        AND `login-time` < endDate;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Test.getMembershipRequests
 DROP PROCEDURE IF EXISTS `getMembershipRequests`;
 DELIMITER //
@@ -1759,41 +1774,18 @@ BEGIN
 	
 	select * from Organisations o 
         where (id is null or o.id = id)
-            and (name is null or o.name = name)
-            and (url is null or o.`home-page` = url)
-            and (bio is null or o.biography = bio)
-            and (email is null or o.`e-mail` = email)
-            and (address is null or o.address = address) 
-            and (city is null or o.city = city)
-            and (country is null or o.country = country) 
-            and (regionalFocus is null or o.`regional-focus` = regionalFocus)
+        and (name is null or o.name = name)
+        and (url is null or o.`home-page` = url)
+        and (bio is null or o.biography = bio)
+        and (email is null or o.`e-mail` = email)
+        and (address is null or o.address = address) 
+        and (city is null or o.city = city)
+        and (country is null or o.country = country) 
+        and (regionalFocus is null or o.`regional-focus` = regionalFocus)
     	GROUP BY o.name;
-	
-
 END//
 DELIMITER ;
 
-
--- Dumping structure for procedure Solas-Match-Test.getOrgByUser
-DROP PROCEDURE IF EXISTS `getOrgByUser`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgByUser`(IN `id` INT)
-BEGIN
-	IF EXISTS (SELECT * FROM Admins a WHERE a.organisation_id is null and a.user_id=id) THEN
-		call getOrg(null,null,null,null,null,null,null,null,null);
-	ELSE		
-		SELECT o.*
-		FROM OrganisationMembers om join Organisations o on om.organisation_id=o.id
-		WHERE om.user_id = id
-		UNION
-		SELECT o.*
-		FROM Organisations o
-		JOIN Admins a ON
-		a.organisation_id=o.id
-		WHERE a.user_id=id;
-	END IF;
-END//
-DELIMITER ;
 
 -- Dumping structure for procedure big-merge.getOrgMembers
 DROP PROCEDURE IF EXISTS `getOrgMembers`;
@@ -3448,13 +3440,16 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.removeMembershipRequest
 DROP PROCEDURE IF EXISTS `removeMembershipRequest`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `removeMembershipRequest`(IN `uID` INT, IN `orgID` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeMembershipRequest`(IN `userId` INT, IN `orgId` INT)
 BEGIN
-	IF EXISTS (SELECT r.user_id and r.org_id FROM OrgRequests r WHERE r.user_id = uID and r.org_id = orgID)  THEN
-		DELETE FROM OrgRequests
-	   WHERE user_id=uID
-	   AND org_id=orgID;
-	   SELECT 1 AS result;
+	IF EXISTS (SELECT 1
+                FROM OrgRequests r
+                WHERE r.user_id = userId
+                AND r.org_id = orgId) THEN
+        DELETE FROM OrgRequests
+            WHERE user_id = userId
+            AND org_id = orgId;
+        SELECT 1 AS result;
 	ELSE
 		SELECT 0 AS result;
 	END IF;
@@ -3583,15 +3578,21 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.requestMembership
 DROP PROCEDURE IF EXISTS `requestMembership`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `requestMembership`(IN `uID` INT, IN `orgID` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `requestMembership`(IN `userId` INT, IN `orgId` INT)
     MODIFIES SQL DATA
 BEGIN
-if not exists (select 1 from OrgRequests where user_id=uID and org_id=orgID) AND NOT EXISTS (SELECT 1 FROM OrganisationMembers om WHERE om.user_id=uID AND om.organisation_id=orgID) then
-	INSERT INTO OrgRequests (user_id, org_id) VALUES (uID, orgID);
-	select 1 as result;
-else 
-	select 0 as result;
-end if;
+    if not exists (select 1
+                    from OrgRequests
+                    where user_id = userId and org_id=orgId)
+        AND NOT EXISTS (SELECT 1
+                    FROM OrganisationMembers om
+                    WHERE om.user_id = userId
+                    AND om.organisation_id = orgId) then
+        INSERT INTO OrgRequests (user_id, org_id) VALUES (userId, orgId);
+        select 1 as result;
+    else
+	    select 0 as result;
+    end if;
 END//
 DELIMITER ;
 
@@ -3599,10 +3600,15 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.revokeMembership
 DROP PROCEDURE IF EXISTS `revokeMembership`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `revokeMembership`(IN `uID` INT, IN `orgID` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `revokeMembership`(IN `userId` INT, IN `orgId` INT)
 BEGIN
-	if exists(select 1 from OrganisationMembers om where om.user_id=uID and om.organisation_id = orgID) then
-		delete from OrganisationMembers where user_id=uID and organisation_id = orgID;
+	if exists(select 1
+                from OrganisationMembers om
+                where om.user_id = userId
+                and om.organisation_id = orgId) then
+		delete from OrganisationMembers
+            where user_id = userId
+            and organisation_id = orgId;
 		select 1 as result;
 	else
 		select 0 as result;
@@ -3681,6 +3687,7 @@ BEGIN
 	CALL statsUpdateTasksWithPreReqs;
 	CALL statsUpdateUnclaimedTasks;
 	CALL statsUpdateUsers;
+    CALL statsUpdateCompleteTasks;
 END//
 DELIMITER ;
 
@@ -3707,6 +3714,22 @@ BEGIN
 	SELECT count(1) INTO @totalArchivedTasks FROM ArchivedTasks;
 	REPLACE INTO Statistics (name, value)
 	VALUES ('ArchivedTasks', @totalArchivedTasks);
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.statsUpdateCompleteTasks
+DROP PROCEDURE IF EXISTS `statsUpdateCompleteTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateCompleteTasks`()
+BEGIN
+	SET @totalCompleteTasks = 0;
+	SELECT count(1)
+        INTO @totalCompleteTasks
+        FROM Tasks
+        WHERE `task-status_id` = 4;
+	REPLACE INTO Statistics (name, value)
+	VALUES ('CompleteTasks', @totalCompleteTasks);
 END//
 DELIMITER ;
 

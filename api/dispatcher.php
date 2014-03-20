@@ -66,8 +66,17 @@ class Dispatcher {
         $path = $path[1];
         $providerNames = self::readProviders("$path/");
         self::autoRequire($providerNames,"$path/");
+        self::initUnitTests();
         self::initOAuth();
         self::getDispatcher()->run();  
+    }
+
+    private static function initUnitTests()
+    {
+        $headers = self::getDispatcher()->request()->headers;
+        if ($headers->get('X-UNIT-TESTING') == '1') {
+            Lib\PDOWrapper::$unitTesting = true;
+        }
     }
     
     private static function initOAuth() 

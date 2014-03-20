@@ -81,6 +81,22 @@ class StaticAPI
 
         Dispatcher::registerNamed(
             Common\Enums\HttpMethodEnum::GET,
+            '/v0/stats/getLoginCount/:startDate/:endDate/',
+            function ($startDate, $endDate, $format = '.json') {
+                if (strstr($endDate, '.')) {
+                    $endDate = explode('.', $endDate);
+                    $format = '.'.$endDate[1];
+                    $endDate = $endDate[0];
+                }
+                $data = DAO\StatDao::getLoginCount($startDate, $endDate);
+                Dispatcher::sendResponse(null, $data, null, $format);
+            },
+            'getLoginCount',
+            null
+        );
+
+        Dispatcher::registerNamed(
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/tips(:format)/',
             function ($format = ".json") {
                 $data = API\Lib\TipSelector::selectTip();

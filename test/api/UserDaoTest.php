@@ -455,7 +455,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $insertedProject = API\DAO\ProjectDao::save($project);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
@@ -486,7 +486,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $insertedProject = API\DAO\ProjectDao::save($project);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
@@ -520,7 +520,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $insertedProject = API\DAO\ProjectDao::save($project);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
@@ -554,7 +554,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $insertedProject = API\DAO\ProjectDao::save($project);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
@@ -685,7 +685,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($trackProjectFailure);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $insertedProject = API\DAO\ProjectDao::save($project);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
@@ -708,7 +708,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $insertedProject = API\DAO\ProjectDao::save($project);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
@@ -738,7 +738,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $insertedProject = API\DAO\ProjectDao::save($project);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
@@ -748,7 +748,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
             "Project 2 Title",
             "Project 2 Description"
         );
-        $insertedProject2 = API\DAO\ProjectDao::createUpdate($project2);
+        $insertedProject2 = API\DAO\ProjectDao::save($project2);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject2);
         $this->assertNotNull($insertedProject2->getId());
         
@@ -780,7 +780,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $insertedProject = API\DAO\ProjectDao::save($project);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
@@ -816,7 +816,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $insertedProject = API\DAO\ProjectDao::save($project);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         
@@ -851,7 +851,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $insertedProject = API\DAO\ProjectDao::save($project);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         $this->assertNotNull($insertedProject->getId());
         

@@ -182,6 +182,7 @@ class Users
                     $params = $authCodeGrant->checkAuthoriseParams();
                     $authCode = $authCodeGrant->newAuthoriseRequest('user', $user->getId(), $params);
                 } catch (\Exception $e) {
+                    DAO\UserDao::logLoginAttempt($user->getId(), $email, 0);
                     if (!isset($params['redirect_uri'])) {
                         API\Dispatcher::getDispatcher()->redirect(
                             API\Dispatcher::getDispatcher()->request()->getReferrer().
@@ -217,6 +218,9 @@ class Users
                     $user = DAO\UserDao::getLoggedInUser($accessToken['access_token']);
                     $user->setPassword(null);
                     $user->setNonce(null);
+
+                    DAO\UserDao::logLoginAttempt($user->getId(), $user->getEmail(), 1);
+
                     API\Dispatcher::sendResponse(null, $user, null, $format, $oAuthToken);
                 } catch (\Exception $e) {
                     API\Dispatcher::sendResponse(null, $e->getMessage(), Common\Enums\HttpStatusEnum::BAD_REQUEST, $format);
