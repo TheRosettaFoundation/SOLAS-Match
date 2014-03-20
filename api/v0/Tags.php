@@ -40,10 +40,10 @@ class Tags
             Common\Enums\HttpMethodEnum::GET,
             '/v0/tags(:format)/',
             function ($format = ".json") {
-                $limit = API\Dispatcher::clenseArgs('limit', Common\Enums\HttpMethodEnum::GET, 20);
+                $limit = API\Dispatcher::clenseArgs('limit', Common\Enums\HttpMethodEnum::GET, 30);
                 $topTags = API\Dispatcher::clenseArgs('topTags', Common\Enums\HttpMethodEnum::GET, false);
                 if ($topTags) {
-                    API\Dispatcher::sendResponse(null, DAO\TagsDao::getTopTags($limit), null, $format);
+                    API\Dispatcher::sendResponse(null, DAO\TagsDao::getTopTags(10), null, $format);
                 } else {
                     API\Dispatcher::sendResponse(null, DAO\TagsDao::getTags(null, null, $limit), null, $format);
                 }
@@ -112,13 +112,15 @@ class Tags
             null
         );
         
+        error_log("Registering route");
         API\Dispatcher::registerNamed(
             Common\Enums\HttpMethodEnum::GET,
             '/v0/tags/topTags(:format)/',
             function ($format = ".json") {
-                $limit = API\Dispatcher::clenseArgs('limit', Common\Enums\HttpMethodEnum::GET, 30);
-                $data= DAO\TagsDao::getTopTags($limit);
-                API\Dispatcher::sendResponse(null, $data, null, $format);
+                error_log("I MADE IT");
+                //$limit = API\Dispatcher::clenseArgs('limit', Common\Enums\HttpMethodEnum::GET, 30);
+                //$data= DAO\TagsDao::getTopTags($limit);
+                //API\Dispatcher::sendResponse(null, $data, null, $format);
             },
             'getTopTags',
             null

@@ -4,6 +4,7 @@ namespace SolasMatch\Common\Enums;
 
 class TimeToLiveEnum
 {
+    const SECOND        = 1;
     const MINUTE        = 60;
     const FIVE_MINUTES  = 300;
     const QUARTER_HOUR  = 900;

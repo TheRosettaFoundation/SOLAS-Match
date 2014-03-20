@@ -2345,11 +2345,13 @@ BEGIN
     -- if limit is null, set to maxBigInt unsigned
     if lim = '' or lim is null then set lim = ~0; end if;
 
-    SELECT t.label AS label,t.id as id, COUNT( pt.tag_id ) AS frequency
-        FROM ProjectTags AS pt 
-        JOIN Tags AS t on pt.tag_id = t.id
+    SELECT tag.label AS label,tag.id as id, COUNT( pt.tag_id ) AS frequency
+        FROM ProjectTags pt
+        JOIN Tags tag on pt.tag_id = tag.id
+        JOIN Tasks t on t.project_id = pt.project_id
+        WHERE t.`task-status_id` = 2
         GROUP BY pt.tag_id
-        ORDER BY frequency DESC, t.label
+        ORDER BY frequency DESC, tag.label
         LIMIT lim;
 
 END//
