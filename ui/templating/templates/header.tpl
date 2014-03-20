@@ -6,14 +6,7 @@
 
         <!-- css -->
         <title>{Settings::get('site.title')}</title>
-        
-        
-        
-        <meta name="description" content="Trommons is powered by SOLAS, a technology developed within the CNGL by the Localisation Research Centre of the University of Limerick (UL).">
-        <meta name="keywords" content="keyword1, keyword2, keyword3">
-        
-        
-        
+
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min.css"/>
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css"/>
         <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
@@ -85,9 +78,11 @@
                              <li {if isset($current_page) && $current_page == 'faq'}class="active" {/if}>
                                 <a href="{urlFor name="faq"}">{Localisation::getTranslation('common_faq')}</a>
                             </li>
-                             <li>
-                                <a href="http://forum.trommons.org/" target="_blank">{Localisation::getTranslation('common_forum')}</a>
-                            </li>
+                           	{if Settings::get('site.forum_enabled') == 'y'}
+	                            <li>
+	                                <a href="{Settings::get('site.forum_link')}" target="_blank">{Localisation::getTranslation('common_forum')}</a>
+	                            </li>
+                            {/if}
                     </ul>
                     <ul class="nav pull-right" style="max-height: 38px">
                         {if isset($userNotifications)}   
