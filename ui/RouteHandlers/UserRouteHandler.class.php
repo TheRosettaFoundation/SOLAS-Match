@@ -502,6 +502,12 @@ class UserRouteHandler
         $adminDao = new DAO\AdminDao();
         
         $app->view()->setData("isSiteAdmin", $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID()));
+        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
+        if (!is_null($loggedInUserId)) {
+            $app->view()->setData("isSiteAdmin", $adminDao->isSiteAdmin($loggedInUserId));
+        } else {
+            $app->view()->setData('isSiteAdmin', 0);
+        }
         $user=null;
         try {
             Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER.$user_id);
@@ -556,8 +562,9 @@ class UserRouteHandler
         $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
 
-        $app->view()->appendData(array("badges" => $badges,
-            "orgList"=> $orgList,
+        $app->view()->appendData(array(
+            "badges" => $badges,
+            "orgList" => $orgList,
             "user_orgs" => $user_orgs,
             "current_page" => "user-profile",
             "archivedJobs" => $archivedJobs,

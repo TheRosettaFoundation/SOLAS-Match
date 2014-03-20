@@ -321,9 +321,10 @@
                         </form>   
                     {/if}
                 {assign var="org_id" value=$badge->getOwnerId()}
+                {assign var="org" value=$orgList[$org_id]}
                 <h3>
                     <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                        {$orgList[$org_id]->getName()}</a> - {$badge->getTitle()}           
+                        {$org->getName()}</a> - {$badge->getTitle()}
                 </h3>
                 <p>{$badge->getDescription()}</p>    
             {else}
