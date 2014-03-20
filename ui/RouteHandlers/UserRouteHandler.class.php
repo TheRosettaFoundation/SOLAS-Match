@@ -57,6 +57,7 @@ class UserRouteHandler
 
         $app->get(
             "/:user_id/profile/",
+            array($middleware, 'authUserIsLoggedIn'),
             array($this, "userPublicProfile")
         )->via("POST")->name("user-public-profile");
 
@@ -512,8 +513,8 @@ class UserRouteHandler
             Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER.$user_id);
             $user = $userDao->getUser($user_id);
         } catch (Common\Exceptions\SolasMatchException $e) {
-             $app->flash('error', Lib\Localisation::getTranslation('common_login_required_to_access_page'));
-             $app->redirect($app->urlFor('login'));
+            $app->flash('error', Lib\Localisation::getTranslation('common_login_required_to_access_page'));
+            $app->redirect($app->urlFor('login'));
         }
         $userPersonalInfo=null;
         try {
