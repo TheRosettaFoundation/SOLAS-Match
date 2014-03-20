@@ -66,18 +66,20 @@ class TagDao extends BaseDao
 
     public function getTopTags($limit = null)
     {
-        $args = $limit ? array("limit" => $limit) : null;
+        $args = array();
+        $args['topTags'] = true;
+        $args['limit'] = $limit ? $limit : null;
         $topTags = Common\Lib\CacheHelper::getCached(
             Common\Lib\CacheHelper::TOP_TAGS,
             Common\Enums\TimeToLiveEnum::QUARTER_HOUR,
-            function ($args) {
-                $request = "{$args[2]}v0/tags/topTags";
-                return $args[1]->call(
+            function ($params) {
+                $request = "{$params[2]}v0/tags";
+                return $params[1]->call(
                     array("\SolasMatch\Common\Protobufs\Models\Tag"),
                     $request,
                     Common\Enums\HttpMethodEnum::GET,
                     null,
-                    $args[0]
+                    $params[0]
                 );
             },
             array($args, $this->client, $this->siteApi)

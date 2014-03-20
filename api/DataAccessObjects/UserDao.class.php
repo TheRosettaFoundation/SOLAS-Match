@@ -382,24 +382,23 @@ class UserDao
      **/
     public static function getUser($user_id = null, $email = null)
     {
-        $ret = null;
-        $args = Lib\PDOWrapper::cleanseNull($user_id)
-                .","."null"
-                .",".Lib\PDOWrapper::cleanseNullOrWrapStr($email)
-                .","."null"
-                .","."null"
-                .","."null"
-                .","."null"
-                .","."null"
-                .","."null";
-        
-        if ($result = Lib\PDOWrapper::call("getUser", $args)) {
-            $ret = array();
-            foreach ($result as $row) {
-                $ret[] = Common\Lib\ModelFactory::buildModel("User", $row);
+        $user = null;
+        if (!is_null($user_id) || !is_null($email)) {
+            $args = Lib\PDOWrapper::cleanseNull($user_id)
+                    .","."null"
+                    .",".Lib\PDOWrapper::cleanseNullOrWrapStr($email)
+                    .","."null"
+                    .","."null"
+                    .","."null"
+                    .","."null"
+                    .","."null"
+                    .","."null";
+            $result = Lib\PDOWrapper::call("getUser", $args);
+            if ($result) {
+                $user = Common\Lib\ModelFactory::buildModel("User", $result[0]);
             }
         }
-        return $ret[0];
+        return $user;
     }
 
     public static function getUsers(
