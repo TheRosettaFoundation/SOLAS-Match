@@ -10,7 +10,13 @@ use \SolasMatch\Common as Common;
  *
  * @author sean
  */
-include_once __DIR__."/../../api/lib/PDOWrapper.class.php";
+require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
+//! Statistcs Data Access Object for getting site statistics in the API
+/*!
+  The Statistics Data Access Object for retrieving data from the Database. It has direct Database access through the
+  use of the PDOWrapper. It is used by the API Route Handlers for retrieving data requested through the API. Statistics
+  hold information about the site like the number of registered Organisations, the number of active Tasks, etc.
+*/
 
 class StatDao
 {

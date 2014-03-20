@@ -5,14 +5,20 @@ namespace SolasMatch\API\DAO;
 use \SolasMatch\Common as Common;
 use \SolasMatch\API\Lib as Lib;
 
-include_once __DIR__."/TagsDao.class.php";
-include_once __DIR__."/../../api/lib/PDOWrapper.class.php";
-include_once __DIR__."/../../Common/lib/ModelFactory.class.php";
-include_once __DIR__."/../../Common/protobufs/models/Project.php";
-include_once __DIR__."/../../Common/protobufs/models/ArchivedProject.php";
-include_once __DIR__."/../lib/MessagingClient.class.php";
-include_once __DIR__."/../../Common/protobufs/Requests/CalculateProjectDeadlinesRequest.php";
-include_once __DIR__."/../../Common/lib/SolasMatchException.php";
+require_once __DIR__."/TagsDao.class.php";
+require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
+require_once __DIR__."/../../Common/lib/ModelFactory.class.php";
+require_once __DIR__."/../../Common/protobufs/models/Project.php";
+require_once __DIR__."/../../Common/protobufs/models/ArchivedProject.php";
+require_once __DIR__."/../lib/MessagingClient.class.php";
+require_once __DIR__."/../../Common/protobufs/Requests/CalculateProjectDeadlinesRequest.php";
+require_once __DIR__."/../../Common/lib/SolasMatchException.php";
+
+//! Project Data Access Object for setting getting data about Projects in the API
+/*!
+  The Project Data Access Object for manipulating data in the Database. It has direct Database access through the use
+  of the PDOWrapper. It is used by the API Route Handlers for retrieving and setting data requested through the API.
+*/
 
 class ProjectDao
 {
