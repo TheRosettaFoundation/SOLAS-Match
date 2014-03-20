@@ -11,7 +11,7 @@ use \SolasMatch\Common as Common;
   Used by the API Route Handlers to supply info requested through the API.
 */
 
-include_once __DIR__."/OrganisationDao.class.php";
+require_once __DIR__."/OrganisationDao.class.php";
 require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 
 class AdminDao

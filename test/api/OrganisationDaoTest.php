@@ -26,8 +26,8 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         
         // Success
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
-        $this->assertNotNull($insertedOrg->getId());
         $this->assertEquals($org->getName(), $insertedOrg->getName());
         $this->assertEquals($org->getBiography(), $insertedOrg->getBiography());
         $this->assertEquals($org->getHomePage(), $insertedOrg->getHomePage());
@@ -39,17 +39,16 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         
         $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
-        $this->assertNotNull($insertedOrg->getId());
-        
         $insertedOrg->setName("Updated Name");
         $insertedOrg->setBiography("Updated Bio");
         $insertedOrg->setHomePage("http://www.updatedhomepage.org");
         
         // Success
         $updatedOrg = API\DAO\OrganisationDao::insertAndUpdate($insertedOrg);
+        $this->assertNotNull($updatedOrg);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $updatedOrg);
-        $this->assertNotNull($updatedOrg->getId());
         $this->assertEquals($insertedOrg->getName(), $updatedOrg->getName());
         $this->assertEquals($insertedOrg->getBiography(), $updatedOrg->getBiography());
         $this->assertEquals($insertedOrg->getHomePage(), $updatedOrg->getHomePage());
@@ -62,69 +61,73 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         
         $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
-        $this->assertNotNull($insertedOrg->getId());
         $orgId = $insertedOrg->getId();
         
         // Success
-        $resultFoundOrg = API\DAO\OrganisationDao::getOrg($orgId, null, null, null);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $resultFoundOrg[0]);
+        $resultFoundOrg = API\DAO\OrganisationDao::getOrg($orgId);
+        $this->assertNotNull($resultFoundOrg);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $resultFoundOrg);
         
         // Failure
-        $resultFoundOrgFailure = API\DAO\OrganisationDao::getOrg(99, null, null, null);
+        $resultFoundOrgFailure = API\DAO\OrganisationDao::getOrg(99);
         $this->assertNull($resultFoundOrgFailure);
         
         // Success
-        $resultFoundOrgByName = API\DAO\OrganisationDao::getOrg($orgId, $org->getName(), null, null);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $resultFoundOrgByName[0]);
+        $resultFoundOrgByName = API\DAO\OrganisationDao::getOrg($orgId, $org->getName());
+        $this->assertNotNull($resultFoundOrgByName);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $resultFoundOrgByName);
         
         // Failure
-        $resultFoundOrgByNameFailure = API\DAO\OrganisationDao::getOrg($orgId, "x", null, null);
+        $resultFoundOrgByNameFailure = API\DAO\OrganisationDao::getOrg($orgId, "x");
         $this->assertNull($resultFoundOrgByNameFailure);
-        
-        $resultFoundOrgByBio = API\DAO\OrganisationDao::getOrg($orgId, null, null, $org->getBiography());
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $resultFoundOrgByBio[0]);
-        
-        $resultFoundOrgByHomePage = API\DAO\OrganisationDao::getOrg($orgId, null, $org->getHomePage(), null);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $resultFoundOrgByHomePage[0]);
-        
-        $resultFoundOrgByAll = API\DAO\OrganisationDao::getOrg(
-            $orgId,
-            $org->getName(),
-            $org->getHomePage(),
-            $org->getBiography()
-        );
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $resultFoundOrgByAll[0]);
         
         $org2 = UnitTestHelper::createOrg(null, "Organisation 2", "Organisation 2 Bio", "http://www.organisation2.org");
         $insertedOrg2 = API\DAO\OrganisationDao::insertAndUpdate($org2);
+        $this->assertNotNull($insertedOrg2);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg2);
+    }
+    
+    public function testGetOrgs()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        
+        $org2 = UnitTestHelper::createOrg(null, "Bunnyland");
+        $insertedOrg2 = API\DAO\OrganisationDao::insertAndUpdate($org2);
+        $this->assertNotNull($insertedOrg2);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg2);
         
-        $resultFoundAllOrgs = API\DAO\OrganisationDao::getOrg(null, null, null, null);
-        $this->assertCount(2, $resultFoundAllOrgs);
-        foreach ($resultFoundAllOrgs as $org) {
+        $getAllOrgs = API\DAO\OrganisationDao::getOrgs();
+        $this->assertCount(2, $getAllOrgs);
+        foreach ($getAllOrgs as $org) {
             $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $org);
         }
         
-        // Failure
-        $resultNoOrgFound = API\DAO\OrganisationDao::getOrg(99, null, null, null);
-        $this->assertNull($resultNoOrgFound);
+        //try to get orgs with city "Limerick", returns nothing
+        $getLimerickOrgs = API\DAO\OrganisationDao::getOrgs(null, null, null, null, null, null, "Limerick");
+        $this->assertNull($getLimerickOrgs);
     }
     
     public function testRequestMembership()
     {
         UnitTestHelper::teardownDb();
-
+        
         $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
-        $this->assertNotNull($insertedOrg->getId());
         $orgId = $insertedOrg->getId();
      
         $user = UnitTestHelper::createUser();
         $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         $userId = $insertedUser->getId();
         
         // Success
@@ -142,14 +145,14 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
 
         $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
-        $this->assertNotNull($insertedOrg->getId());
         $orgId = $insertedOrg->getId();
    
         $user = UnitTestHelper::createUser();
         $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         $userId = $insertedUser->getId();
         
         $resultRequestMembership = API\DAO\OrganisationDao::requestMembership($userId, $orgId);
@@ -161,8 +164,8 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         
         $user2 = UnitTestHelper::createUser(null, "User 2", "User 2 Bio", "user2@test.com");
         $insertedUser2 = API\DAO\UserDao::save($user2);
+        $this->assertNotNull($insertedUser2);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser2);
-        $this->assertNotNull($insertedUser2->getId());
         $userId2 = $insertedUser2->getId();
         
         //Assert that a user who did not request membership can be added to the org. This is valid, the example
@@ -177,14 +180,14 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         
         $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
-        $this->assertNotNull($insertedOrg->getId());
         $orgId = $insertedOrg->getId();
 
         $user = UnitTestHelper::createUser();
         $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         $userId = $insertedUser->getId();
       
         // Failure
@@ -202,20 +205,51 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("1", $resultIsMember);
     }
     
+    public function testGetOrgByUser()
+    {
+        UnitTestHelper::teardownDb();
+
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        $orgId = $insertedOrg->getId();
+
+        $user = UnitTestHelper::createUser();
+        $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertNotNull($insertedUser);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
+        $userId = $insertedUser->getId();
+        
+        $resultRequestMembership = API\DAO\OrganisationDao::requestMembership($userId, $orgId);
+        $this->assertEquals("1", $resultRequestMembership);
+        
+        $resultAcceptMembership = API\DAO\OrganisationDao::acceptMemRequest($orgId, $userId);
+        $this->assertEquals("1", $resultAcceptMembership);
+        
+        // Success
+        $resultFoundOrgByUser = API\DAO\OrganisationDao::getOrgByUser($userId);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $resultFoundOrgByUser);
+        
+        // Failure
+        $resultFoundOrgByUserFailure = API\DAO\OrganisationDao::getOrgByUser(999);
+        $this->assertNull($resultFoundOrgByUserFailure);
+    }
+    
     public function testGetOrgMembers()
     {
         UnitTestHelper::teardownDb();
         
         $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
-        $this->assertNotNull($insertedOrg->getId());
         $orgId = $insertedOrg->getId();
      
         $user = UnitTestHelper::createUser();
         $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         $userId = $insertedUser->getId();
         
         $resultRequestMembership = API\DAO\OrganisationDao::requestMembership($userId, $orgId);
@@ -226,8 +260,8 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         
         $user2 = UnitTestHelper::createUser(null, "User 2", "User 2 Bio", "user2@test.com");
         $insertedUser2 = API\DAO\UserDao::save($user2);
+        $this->assertNotNull($insertedUser2);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser2);
-        $this->assertNotNull($insertedUser2->getId());
         $userId2 = $insertedUser2->getId();
         
         $resultRequestMembership2 = API\DAO\OrganisationDao::requestMembership($userId2, $orgId);
@@ -255,10 +289,12 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         
         $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $org2 = UnitTestHelper::createOrg(null, "Organisation 2", "Organisation 2 Bio", "http://www.organisation2.org");
         $insertedOrg2 = API\DAO\OrganisationDao::insertAndUpdate($org2);
+        $this->assertNotNull($insertedOrg2);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg2);
         
         // Success
@@ -279,14 +315,14 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         
         $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
-        $this->assertNotNull($insertedOrg->getId());
         $orgId = $insertedOrg->getId();
     
         $user = UnitTestHelper::createUser();
         $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         $userId = $insertedUser->getId();
         
         $resultRequestMembership = API\DAO\OrganisationDao::requestMembership($userId, $orgId);
@@ -294,8 +330,8 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         
         $user2 = UnitTestHelper::createUser(null, "User 2", "User 2 Bio", "user2@test.com");
         $insertedUser2 = API\DAO\UserDao::save($user2);
+        $this->assertNotNull($insertedUser2);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser2);
-        $this->assertNotNull($insertedUser2->getId());
         $userId2 = $insertedUser2->getId();
         
         $resultRequestMembership2 = API\DAO\OrganisationDao::requestMembership($userId2, $orgId);
@@ -319,14 +355,14 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
 
         $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
-        $this->assertNotNull($insertedOrg->getId());
         $orgId = $insertedOrg->getId();
      
         $user = UnitTestHelper::createUser();
         $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         $userId = $insertedUser->getId();
         
         $resultRequestMembership = API\DAO\OrganisationDao::requestMembership($userId, $orgId);
@@ -347,14 +383,14 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         
         $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
-        $this->assertNotNull($insertedOrg->getId());
         $orgId = $insertedOrg->getId();
    
         $user = UnitTestHelper::createUser();
         $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertNotNull($insertedUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
-        $this->assertNotNull($insertedUser->getId());
         $userId = $insertedUser->getId();
         
         $resultRequestMembership = API\DAO\OrganisationDao::requestMembership($userId, $orgId);
@@ -378,8 +414,8 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         //create an organisation and save in DB
         $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
-        $this->assertNotNull($insertedOrg->getId());
         $orgId = $insertedOrg->getId();
         
         //delete the organisation that was just added
@@ -393,5 +429,41 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         //try to delete an org that is not in the DB
         $deleteOrg = API\DAO\OrganisationDao::delete($orgId);
         $this->assertEquals("0", $deleteOrg); //failing to delete an org because it is not in DB should return 0
+    }
+    
+    public function testGetUsersTrackingOrg()
+    {
+        UnitTestHelper::teardownDb();
+        
+        UnitTestHelper::teardownDb();
+        
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        $orgId = $insertedOrg->getId();
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = API\DAO\UserDao::save($user);
+        $this->assertNotNull($insertedUser);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
+        $userId = $insertedUser->getId();
+        
+        $user2 = UnitTestHelper::createUser(null, "John Doe", null, "doejohn@com.com");
+        $insertedUser2 = API\DAO\UserDao::save($user2);
+        $this->assertNotNull($insertedUser2);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser2);
+        $user2Id = $insertedUser2->getId();
+        
+        $trackOrg = API\DAO\UserDao::trackOrganisation($userId, $orgId);
+        $this->assertEquals("1", $trackOrg);
+        $trackOrg2 = API\DAO\UserDao::trackOrganisation($user2Id, $orgId);
+        $this->assertEquals("1", $trackOrg2);
+        
+        $getTrackingUsers = API\DAO\OrganisationDao::getUsersTrackingOrg($orgId);
+        $this->assertCount(2, $getTrackingUsers);
+        foreach ($getTrackingUsers as $trackingUser) {
+            $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $trackingUser);
+        }
     }
 }

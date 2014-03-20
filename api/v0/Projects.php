@@ -54,7 +54,7 @@ class Projects
                 $data = API\Dispatcher::getDispatcher()->request()->getBody();
                 $client = new Common\Lib\APIHelper($format);
                 $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\Project');
-                $project = DAO\ProjectDao::save($data);
+                $project = DAO\ProjectDao::createUpdate($data);
                 if (!is_null($project) && $project->getId() > 0) {
                     API\Dispatcher::sendResponse(null, $project, null, $format);
                 } else {

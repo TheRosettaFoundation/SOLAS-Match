@@ -14,7 +14,7 @@ use \SolasMatch\API\Lib as Lib;
 
 require_once __DIR__."/../../Common/protobufs/Requests/UserTaskScoreRequest.php";
 require_once __DIR__."/../../Common/protobufs/models/Task.php";
-include_once __DIR__."/../../Common/lib/SolasMatchException.php";
+require_once __DIR__."/../../Common/lib/SolasMatchException.php";
 require_once __DIR__."/../lib/PDOWrapper.class.php";
 require_once __DIR__."/../lib/Notify.class.php";
 require_once __DIR__."/../lib/APIWorkflowBuilder.class.php";
