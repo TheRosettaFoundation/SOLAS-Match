@@ -501,7 +501,6 @@ class UserRouteHandler
         $orgDao = new DAO\OrganisationDao();
         $adminDao = new DAO\AdminDao();
         
-        $app->view()->setData("isSiteAdmin", $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID()));
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
         if (!is_null($loggedInUserId)) {
             $app->view()->setData("isSiteAdmin", $adminDao->isSiteAdmin($loggedInUserId));
