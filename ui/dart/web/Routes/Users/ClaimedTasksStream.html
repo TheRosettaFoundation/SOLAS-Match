@@ -22,6 +22,10 @@
             <strong>{{task.targetLocale.languageName}} - {{task.targetLocale.countryName}}</strong>
           </p>
           <p>
+            {{localisation.getTranslation('common_status')}}:
+            <strong>{{taskStatuses[task.taskStatus]}}</strong>
+          </p>
+          <p>
             <template repeat="{{tag in taskTags[task.id]}}">
               <a href="{{siteAddress}}tag/{{tag.id}}" class="label"><span class="label">{{tag.label}}</span></a>
             </template>
