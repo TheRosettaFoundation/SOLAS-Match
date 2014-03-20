@@ -32,3 +32,35 @@ button.btn.btn-small, input.btn.btn-small[type="submit"] {
     visibility: hidden;
 }
 
+.donate-button {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	margin-left:auto;
+	margin-right:auto;
+	width: 205px;
+	text-align: center;
+	padding: 8px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	background-color: #ECB73C;
+	-webkit-box-shadow: #B3B3B3 2px 2px 2px;
+	-moz-box-shadow: #B3B3B3 2px 2px 2px;
+	box-shadow: #B3B3B3 2px 2px 2px;
+}
+
+#donate-trf-logo {
+	display: table-cell;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+.donate-button a {
+	color:#000000;
+}
+
+.donate-button a:hover {
+	color:#4B031A;
+}

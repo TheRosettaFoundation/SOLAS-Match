@@ -46,6 +46,32 @@
 
     <div class="row">
         <div class="span4 pull-right">
+            <section class="donate-block">
+                <p>
+                    Our site is a free service that is developed and maintained by the The Rosetta Foundation.
+                </p>
+                <a href="http://www.therosettafoundation.org" target="_blank">
+                    <img id="donate-trf-logo" src="ui/img/TheRosettaFoundationLogo.png" alt="The logo of The Rosetta Foundation" height="60"/>
+                </a>
+                <p>
+                    <strong>
+                        You can show your appreciation for Trommons and support future development by donating.
+                    </strong>
+                </p>
+                <div class="donate-button">
+                    <a id="donate" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&amp;business=Reinhard%2eSchaler%40ul%2eie&amp;item_name=Friend%20of%20The%20Rosetta%20Foundation&amp;src=1&amp;a3=5.00&amp;p3=1&amp;t3=M¤cy_code=EUR">
+                    "Friend of The Rosetta Foundation" <br> Donate <strong>€5/month.</strong> Cancel any time
+                    </a>
+                </div>
+                <p>
+                    <strong>Alternatively, contribute a
+                        <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=Reinhard%2eSchaler%40ul%2eie&amp;lc=US&amp;item_name=The%20Rosetta%20Foundation&amp;no_note=0¤cy_code=EUR">
+                        once-off donation</a> or set up
+                        <a href="http://www.therosettafoundation.org/participate/becomeafriend/" target="_blank"> a bank transfer.</a>
+                    </strong>
+                </p>
+            </section>
+
             {include file="tag/tags.user-tags.inc.tpl"}	
             {include file="tag/tags.top-list.inc.tpl"}
             {if isset($statsArray) && is_array($statsArray)}
