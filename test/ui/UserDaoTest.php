@@ -14,7 +14,9 @@ require_once __DIR__.'/../../Common/Enums/HttpMethodEnum.class.php';
 require_once __DIR__.'/../../Common/lib/ModelFactory.class.php';
 require_once __DIR__.'/../../Common/lib/SolasMatchException.php';
 require_once __DIR__.'/../../Common/lib/UserSession.class.php';
+require_once __DIR__.'/../../ui/DataAccessObjects/AdminDao.class.php';
 require_once __DIR__.'/../../ui/DataAccessObjects/BadgeDao.class.php';
+require_once __DIR__.'/../../ui/DataAccessObjects/OrganisationDao.class.php';
 require_once __DIR__.'/../../ui/DataAccessObjects/UserDao.class.php';
 require_once __DIR__.'/../../ui/lib/Localisation.php';
 require_once __DIR__.'/../UnitTestHelper.php';
@@ -37,13 +39,13 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $isRegistered = $userDao->register($userEmail, $userPw);
         $this->assertTrue($isRegistered);
         
-        /* $userDao->login($userEmail,$userPw);
-        $userDao->register("foo@web.com","passw"); */
+        $userDao->login($userEmail,$userPw);
+        $userDao->register("foo@web.com","passw");
     }
     
     public function testFinishRegistration()
     {
-        Tests\UnitTestHelper::teardownDb();
+        UnitTestHelper::teardownDb();
         
         $userDao = new UI\DAO\UserDao();
         $userEmail = "blah@test.com";
@@ -51,20 +53,18 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $isRegistered = $userDao->register($userEmail, $userPw);
         $this->assertTrue($isRegistered);
         
-        //TODO Edit code to expect single value, not array when system is updated to
-        //remove unnecessary array returns
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
-        $registerUser = $registerUser[0];
+        $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
-        $finishRegResult = API\DAO\UserDao::finishRegistration($registerUser->getId());
+        $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
     }
     
     public function testIsUserVerified()
     {
-        Tests\UnitTestHelper::teardownDb();
+        UnitTestHelper::teardownDb();
         
         $userDao = new UI\DAO\UserDao();
         $userEmail = "blah@test.com";
@@ -72,17 +72,15 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $isRegistered = $userDao->register($userEmail, $userPw);
         $this->assertTrue($isRegistered);
         
-        //TODO Edit code to expect single value, not array when system is updated to
-        //remove unnecessary array returns
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
-        $registerUser = $registerUser[0];
+        $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
-        $finishRegResult = API\DAO\UserDao::finishRegistration($registerUser->getId());
+        $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
         
-        $isVerified = $userDao->isUserVerified($registerUser->getId());
+        $isVerified = $userDao->isUserVerified($userId);
         //Perhaps should change to return true? returns 1 atm for true
         $this->assertEquals("1", $isVerified);
     }
@@ -97,14 +95,12 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $isRegistered = $userDao->register($userEmail, $userPw);
         $this->assertTrue($isRegistered);
         
-        //TODO Edit code to expect single value, not array when system is updated to
-        //remove unnecessary array returns
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
-        $registerUser = $registerUser[0];
+        $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
-        $finishRegResult = API\DAO\UserDao::finishRegistration($registerUser->getId());
+        $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
         
         //Try to update user while not logged in, fails
@@ -141,20 +137,18 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $isRegistered = $userDao->register($userEmail, $userPw);
         $this->assertTrue($isRegistered);
         
-        //TODO Edit code to expect single value, not array when system is updated to
-        //remove unnecessary array returns
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
-        $registerUser = $registerUser[0];
+        $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
-        $finishRegResult = API\DAO\UserDao::finishRegistration($registerUser->getId());
+        $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
         
         $loggedIn = $userDao->login($userEmail, $userPw);
         $this->assertNotNull($loggedIn);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $loggedIn);
-        $this->assertEquals($registerUser->getId(), $loggedIn->getId());
+        $this->assertEquals($userId, $loggedIn->getId());
     }
     
     public function testGetUser()
@@ -168,48 +162,38 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $isRegistered = $userDao->register($userEmail, $userPw);
         $this->assertTrue($isRegistered);
     
-        //TODO Edit code to expect single value, not array when system is updated to
-        //remove unnecessary array returns
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
-        $registerUser = $registerUser[0];
+        $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
-        $finishRegResult = API\DAO\UserDao::finishRegistration($registerUser->getId());
+        $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
         
         $isRegistered2 = $userDao->register($user2Email, $userPw);
         $this->assertTrue($isRegistered2);
         
-        //TODO Edit code to expect single value, not array when system is updated to
-        //remove unnecessary array returns
         $user = API\DAO\UserDao::getUser(null, $user2Email);
-        $user = $user[0];
+        $user2Id = $user->getId();
         $this->assertNotNull($user);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $user);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
-        $finishRegResult2 = API\DAO\UserDao::finishRegistration($user->getId());
+        $finishRegResult2 = API\DAO\UserDao::finishRegistration($user2Id);
         $this->assertEquals("1", $finishRegResult2);
         $userDao->login($user2Email, $userPw);
         
         //assert that user can be retrieved after registration is completed
         //User must have admin privileges?
-        try {
-            $getVerifiedUser = $userDao->getUser($user->getId());
-        } catch (Common\Exceptions\SolasMatchException $e) {
-            error_log("IN CATCH Block");
-            $error = $e->getMessage();
-            //TODO Correctly format this assertion
-            //$this->assertEquals("message",$error);
-        }
+        $getVerifiedUser = $userDao->getUser($user->getId());
+        
         //Add user "blah" as a site admin to test retrieving user
-        API\DAO\AdminDao::addSiteAdmin($registerUser->getId());
+        API\DAO\AdminDao::addSiteAdmin($userId);
         //$this->assertEquals("1", $addAdminResult);
         $loggedIn = $userDao->login($userEmail, $userPw);
         $this->assertNotNull($loggedIn);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $loggedIn);
         
-        $getUser = $userDao->getUser($registerUser->getId());
+        $getUser = $userDao->getUser($userId);
         $this->assertNotNull($getUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $getUser);
     }
@@ -225,23 +209,18 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $isRegistered = $userDao->register($userEmail, $userPw);
         $this->assertTrue($isRegistered);
     
-        //TODO Edit code to expect single value, not array when system is updated to
-        //remove unnecessary array returns
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
-        $registerUser = $registerUser[0];
+        $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
-        $finishRegResult = API\DAO\UserDao::finishRegistration($registerUser->getId());
+        $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
     
         $isRegistered2 = $userDao->register($user2Email, $userPw);
         $this->assertTrue($isRegistered2);
     
-        //TODO Edit code to expect single value, not array when system is updated to
-        //remove unnecessary array returns
         $user = API\DAO\UserDao::getUser(null, $user2Email);
-        $user = $user[0];
         $this->assertNotNull($user);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $user);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
@@ -258,13 +237,13 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
             //$this->assertEquals("message",$error);
         }
         //Add user "blah" as a site admin to test retrieving user
-        API\DAO\AdminDao::addSiteAdmin($registerUser->getId());
+        API\DAO\AdminDao::addSiteAdmin($userId);
         //$this->assertEquals("1", $addAdminResult);
         $loggedIn = $userDao->login($userEmail, $userPw);
         $this->assertNotNull($loggedIn);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $loggedIn);
     
-        $getUser = $userDao->getUserDart($registerUser->getId());
+        $getUser = $userDao->getUserDart($userId);
         $this->assertNotNull($getUser);
         $this->assertJson($getUser);
     }
@@ -278,21 +257,19 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $userPw = "password";
         $isRegistered = $userDao->register($userEmail, $userPw);
         $this->assertTrue($isRegistered);
-        
-        //TODO Edit code to expect single value, not array when system is updated to
-        //remove unnecessary array returns
+
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
-        $registerUser = $registerUser[0];
+        $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
-        $finishRegResult = API\DAO\UserDao::finishRegistration($registerUser->getId());
+        $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
         
-        $personalInfo = Tests\UnitTestHelper::createUserPersonalInfo($registerUser->getId());
+        $personalInfo = Tests\UnitTestHelper::createUserPersonalInfo($userId);
         //try to create personal info when not logged in, fails
         try {
-            $insertedInfo = $userDao->createPersonalInfo($registerUser->getId(), $personalInfo);
+            $insertedInfo = $userDao->createPersonalInfo($userId, $personalInfo);
         } catch (Common\Exceptions\SolasMatchException $e) {
             $error = $e->getMessage();
             $this->assertEquals(
@@ -303,7 +280,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         }
         
         $userDao->login($userEmail, $userPw);
-        $insertedInfo = $userDao->createPersonalInfo($registerUser->getId(), $personalInfo);
+        $insertedInfo = $userDao->createPersonalInfo($userId, $personalInfo);
         $this->assertNotNull($insertedInfo);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\UserPersonalInformation", $insertedInfo);
         $this->assertEquals($personalInfo->getUserId(), $insertedInfo->getUserId());
@@ -328,20 +305,18 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $isRegistered = $userDao->register($userEmail, $userPw);
         $this->assertTrue($isRegistered);
         
-        //TODO Edit code to expect single value, not array when system is updated to
-        //remove unnecessary array returns
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
-        $registerUser = $registerUser[0];
+        $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
-        $finishRegResult = API\DAO\UserDao::finishRegistration($registerUser->getId());
+        $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
         
-        $personalInfo = Tests\UnitTestHelper::createUserPersonalInfo($registerUser->getId());
+        $personalInfo = Tests\UnitTestHelper::createUserPersonalInfo($userId);
         //try to create personal info when not logged in, fails
         try {
-            $insertedInfo = $userDao->createPersonalInfo($registerUser->getId(), $personalInfo);
+            $insertedInfo = $userDao->createPersonalInfo($userId, $personalInfo);
         } catch (Common\Exceptions\SolasMatchException $e) {
             $error = $e->getMessage();
             $this->assertEquals(
@@ -352,7 +327,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         }
         
         $userDao->login($userEmail, $userPw);
-        $insertedInfo = $userDao->createPersonalInfo($registerUser->getId(), $personalInfo);
+        $insertedInfo = $userDao->createPersonalInfo($userId, $personalInfo);
         $this->assertNotNull($insertedInfo);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\UserPersonalInformation", $insertedInfo);
         $this->assertEquals($personalInfo->getUserId(), $insertedInfo->getUserId());
@@ -368,7 +343,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         
         $insertedInfo->setFirstName("Harry");
         $insertedInfo->setLastName("Harry");
-        $updatedInfo = $userDao->updatePersonalInfo($registerUser->getId(), $insertedInfo);
+        $updatedInfo = $userDao->updatePersonalInfo($userId, $insertedInfo);
         $this->assertNotNull($updatedInfo);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\UserPersonalInformation", $updatedInfo);
         $this->assertEquals($insertedInfo->getFirstName(), $updatedInfo->getFirstName());
@@ -385,20 +360,18 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $isRegistered = $userDao->register($userEmail, $userPw);
         $this->assertTrue($isRegistered);
         
-        //TODO Edit code to expect single value, not array when system is updated to
-        //remove unnecessary array returns
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
-        $registerUser = $registerUser[0];
+        $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
-        $finishRegResult = API\DAO\UserDao::finishRegistration($registerUser->getId());
+        $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
         
-        $personalInfo = Tests\UnitTestHelper::createUserPersonalInfo($registerUser->getId());
+        $personalInfo = Tests\UnitTestHelper::createUserPersonalInfo($userId);
         //try to create personal info when not logged in, fails
         try {
-            $insertedInfo = $userDao->createPersonalInfo($registerUser->getId(), $personalInfo);
+            $insertedInfo = $userDao->createPersonalInfo($userId, $personalInfo);
         } catch (Common\Exceptions\SolasMatchException $e) {
             $error = $e->getMessage();
             $this->assertEquals(
@@ -409,7 +382,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         }
         
         $userDao->login($userEmail, $userPw);
-        $insertedInfo = $userDao->createPersonalInfo($registerUser->getId(), $personalInfo);
+        $insertedInfo = $userDao->createPersonalInfo($userId, $personalInfo);
         $this->assertNotNull($insertedInfo);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\UserPersonalInformation", $insertedInfo);
         $this->assertEquals($personalInfo->getUserId(), $insertedInfo->getUserId());
@@ -423,9 +396,51 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($personalInfo->getCity(), $insertedInfo->getCity());
         $this->assertEquals($personalInfo->getCountry(), $insertedInfo->getCountry());
         
-        $getInfo = $userDao->getPersonalInfo($registerUser->getId());
+        $getInfo = $userDao->getPersonalInfo($userId);
         $this->assertNotNull($getInfo);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\UserPersonalInformation", $getInfo);
         $this->assertEquals($insertedInfo, $getInfo);
+    }
+    
+    public function testGetUserOrgs()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $userDao = new UI\DAO\UserDao();
+        $orgDao = new UI\DAO\OrganisationDao();
+        
+        $userEmail = "blah@test.com";
+        $userPw = "password";
+        $isRegistered = $userDao->register($userEmail, $userPw);
+        $this->assertTrue($isRegistered);
+        
+        $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
+        $userId = $registerUser->getId();
+        $this->assertNotNull($registerUser);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
+        $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
+        $this->assertEquals("1", $finishRegResult);
+        
+        $org = UnitTestHelper::createOrg();
+        try {
+            $insertedOrg = $orgDao->createOrg($org, $userId);
+        } catch (Common\Exceptions\SolasMatchException $e) {
+            $error = $e->getMessage();
+            $this->assertEquals(
+                    "The Authorization header does not match the current user or the user does not ".
+                    "have permission to access the current resource",
+                    $error
+            );
+        }
+        $userDao->login($userEmail, $userPw);
+        $insertedOrg = $orgDao->createOrg($org, $userId);
+        $this->assertNotNull($insertedOrg);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        
+        $userOrgs = $userDao->getUserOrgs($userId);
+        $this->assertCount(1, $userOrgs);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $userOrgs[0]);
+        $this->assertEquals($insertedOrg->getId(), $userOrgs[0]->getId());       
     }
 }

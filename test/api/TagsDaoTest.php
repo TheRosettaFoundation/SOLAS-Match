@@ -5,6 +5,7 @@ namespace SolasMatch\Tests\API;
 use \SolasMatch\Tests\UnitTestHelper;
 use \SolasMatch\Common as Common;
 use \SolasMatch\API as API;
+use SolasMatch\API\DAO\TagsDao;
 
 require_once 'PHPUnit/Autoload.php';
 require_once __DIR__.'/../../api/vendor/autoload.php';
@@ -18,14 +19,14 @@ require_once __DIR__.'/../UnitTestHelper.php';
 
 class TagsDaoTest extends \PHPUnit_Framework_TestCase
 {
-    public function testInsertTag()
+    public function testCreate()
     {
         UnitTestHelper::teardownDb();
         
         // Success
         $resultCreateTag = API\DAO\TagsDao::create("test");
+        $this->assertNotNull($resultCreateTag);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Tag", $resultCreateTag);
-        $this->assertNotNull($resultCreateTag->getId());
         $this->assertEquals("test", $resultCreateTag->getLabel());
         
         // Failure
@@ -42,19 +43,34 @@ class TagsDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($resultGetAllTagsFailure);
         
         $resultCreateTag = API\DAO\TagsDao::create("test");
+        $this->assertNotNull($resultCreateTag);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Tag", $resultCreateTag);
         
         $resultCreateTag2 = API\DAO\TagsDao::create("test2");
+        $this->assertNotNull($resultCreateTag2);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Tag", $resultCreateTag2);
         
         // Success - Single Tag
         $resultGetTag = API\DAO\TagsDao::getTag(null, "test");
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Tag", $resultGetTag[0]);
-        $this->assertNotNull($resultGetTag[0]->getId());
-        $this->assertEquals("test", $resultGetTag[0]->getLabel());
+        $this->assertNotNull($resultGetTag);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Tag", $resultGetTag);
+        $this->assertEquals("test", $resultGetTag->getLabel());
+    }
+    
+    public function testGetTags()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $resultCreateTag = API\DAO\TagsDao::create("test");
+        $this->assertNotNull($resultCreateTag);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Tag", $resultCreateTag);
+        
+        $resultCreateTag2 = API\DAO\TagsDao::create("test2");
+        $this->assertNotNull($resultCreateTag2);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Tag", $resultCreateTag2);
         
         // Success - All Tags
-        $resultGetAllTags = API\DAO\TagsDao::getTag();
+        $resultGetAllTags = API\DAO\TagsDao::getTags();
         $this->assertCount(2, $resultGetAllTags);
         foreach ($resultGetAllTags as $tag) {
             $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Tag", $tag);
@@ -73,12 +89,13 @@ class TagsDaoTest extends \PHPUnit_Framework_TestCase
         
         $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = API\DAO\ProjectDao::save($project);
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertNotNull($insertedProject);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
-        $this->assertNotNull($insertedProject->getId());
         
         $project2 = UnitTestHelper::createProject(
             $insertedOrg->getId(),
@@ -93,9 +110,9 @@ class TagsDaoTest extends \PHPUnit_Framework_TestCase
             "en",
             array("Project", "Tags", "Extra", "More")
         );
-        $insertedProject2 = API\DAO\ProjectDao::save($project2);
+        $insertedProject2 = API\DAO\ProjectDao::createUpdate($project2);
+        $this->assertNotNull($insertedProject2);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject2);
-        $this->assertNotNull($insertedProject2->getId());
         
         // Success
         $successTopTags = API\DAO\TagsDao::getTopTags();
@@ -112,8 +129,8 @@ class TagsDaoTest extends \PHPUnit_Framework_TestCase
         UnitTestHelper::teardownDb();
         
         $resultCreateTag = API\DAO\TagsDao::create("test");
+        $this->assertNotNull($resultCreateTag);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Tag", $resultCreateTag);
-        $this->assertNotNull($resultCreateTag->getId());
         
         // Success
         $resultDeleteTag = API\DAO\TagsDao::delete($resultCreateTag->getId());
@@ -122,5 +139,34 @@ class TagsDaoTest extends \PHPUnit_Framework_TestCase
         // Failure
         $resultDeleteTag2 = API\DAO\TagsDao::delete($resultCreateTag->getId());
         $this->assertEquals("0", $resultDeleteTag2);
+    }
+    
+    public function testUpdateTags()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
+        $this->assertNotNull($insertedOrg);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());
+        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $this->assertNotNull($insertedProject);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
+        
+        $tag = UnitTestHelper::createTag();
+        $tag2 = UnitTestHelper::createTag(null, "Projects");
+        $tagList = array($tag, $tag2);
+        API\DAO\TagsDao::updateTags($insertedProject->getId(), $tagList);
+        $updatedTagList = API\DAO\ProjectDao::getTags($insertedProject->getId());
+        
+        $this->assertCount(2, $updatedTagList);
+        foreach ($updatedTagList as $projTag) {
+            $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Tag", $projTag);
+        }
+        
+        $this->assertContains($tag->getLabel(), $updatedTagList[0]->getLabel());
+        $this->assertContains($tag2->getLabel(), $updatedTagList[1]->getLabel());
     }
 }
