@@ -57,6 +57,7 @@ class UserRouteHandler
 
         $app->get(
             "/:user_id/profile/",
+            array($middleware, 'authUserIsLoggedIn'),
             array($this, "userPublicProfile")
         )->via("POST")->name("user-public-profile");
 
@@ -120,10 +121,10 @@ class UserRouteHandler
         }
 
         $extra_scripts = "
-<script src=\"{$app->urlFor("home")}ui/dart/build/packages/shadow_dom/shadow_dom.debug.js\"></script>
-<script src=\"{$app->urlFor("home")}ui/dart/build/packages/custom_element/custom-elements.debug.js\"></script>
-<script src=\"{$app->urlFor("home")}ui/dart/build/packages/browser/interop.js\"></script>
-<script src=\"{$app->urlFor("home")}ui/dart/build/Routes/Users/home.dart.js\"></script>
+<script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/shadow_dom/shadow_dom.debug.js\"></script>
+<script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/custom_element/custom-elements.debug.js\"></script>
+<script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/browser/interop.js\"></script>
+<script src=\"{$app->urlFor("home")}ui/dart/build/web/Routes/Users/home.dart.js\"></script>
 <span class=\"hidden\">
 ";
         $extra_scripts .= file_get_contents("ui/dart/web/Routes/Users/TaskStream.html");
@@ -476,9 +477,9 @@ class UserRouteHandler
         }
 
         $extraScripts = "
-<script src=\"{$app->urlFor("home")}ui/dart/build/packages/custom_element/custom-elements.debug.js\"></script>
-<script src=\"{$app->urlFor("home")}ui/dart/build/packages/browser/interop.js\"></script>
-<script src=\"{$app->urlFor("home")}ui/dart/build/Routes/Users/UserPrivateProfile.dart.js\"></script>
+<script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/custom_element/custom-elements.debug.js\"></script>
+<script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/browser/interop.js\"></script>
+<script src=\"{$app->urlFor("home")}ui/dart/build/web/Routes/Users/UserPrivateProfile.dart.js\"></script>
 <span class=\"hidden\">
 ";
         $extraScripts .= file_get_contents("ui/dart/web/Routes/Users/UserPrivateProfileForm.html");
@@ -512,8 +513,8 @@ class UserRouteHandler
             Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER.$user_id);
             $user = $userDao->getUser($user_id);
         } catch (Common\Exceptions\SolasMatchException $e) {
-             $app->flash('error', Lib\Localisation::getTranslation('common_login_required_to_access_page'));
-             $app->redirect($app->urlFor('login'));
+            $app->flash('error', Lib\Localisation::getTranslation('common_login_required_to_access_page'));
+            $app->redirect($app->urlFor('login'));
         }
         $userPersonalInfo=null;
         try {
