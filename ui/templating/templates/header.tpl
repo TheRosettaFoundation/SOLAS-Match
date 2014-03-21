@@ -6,6 +6,8 @@
 
         <!-- css -->
         <title>{Settings::get('site.title')}</title>
+        <meta name="description" content="{Settings::get('site.meta_desc')}" />
+        <meta name="keywords" content="{Settings::get('site.meta_key')}" />
 
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min.css"/>
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css"/>
