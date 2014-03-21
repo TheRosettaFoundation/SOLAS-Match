@@ -4482,7 +4482,7 @@ DELIMITER ;
 -- Dumping structure for procedure big-merge.userPersonalInfoInsertAndUpdate
 DROP PROCEDURE IF EXISTS `userPersonalInfoInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `userPersonalInfoInsertAndUpdate`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` VARCHAR(128), IN `businessNumber` VARCHAR(128), IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userPersonalInfoInsertAndUpdate`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` VARCHAR(128), IN `businessNumber` VARCHAR(128), IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128), IN `receiveCredit` BIT(1))
 BEGIN
 	if id='' then set id=null;end if;
 	if userId='' then set userId=null;end if;
@@ -4495,80 +4495,87 @@ BEGIN
 	if address='' then set address=null;end if;
 	if city='' then set city=null;end if;
 	if country='' then set country=null;end if;
+    if receiveCredit = '' then set receiveCredit = null; end if;
 		
 	IF id IS NULL AND NOT EXISTS(select 1 FROM UserPersonalInformation p WHERE p.`user_id`=userId) THEN
-		INSERT INTO UserPersonalInformation (`user_id`,`first-name`,`last-name`,`mobile-number`,`business-number`,`sip`,`job-title`,`address`,`city`,`country`)
-		VALUES (userId,firstName,lastName,mobileNumber,businessNumber,sip,jobTitle,address,city,country);
-		CALL getUserPersonalInfo(LAST_INSERT_ID(),NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+		INSERT INTO UserPersonalInformation (`user_id`,`first-name`,`last-name`,`mobile-number`,`business-number`,`sip`,`job-title`,`address`,`city`,`country`, `receive_credit`)
+		VALUES (userId,firstName,lastName,mobileNumber,businessNumber,sip,jobTitle,address,city,country,receiveCredit);
+		CALL getUserPersonalInfo(LAST_INSERT_ID(),NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 	ELSE
-                if userId is not null 
+        if userId is not null 
                 and userId != (select p.`user_id` from UserPersonalInformation p WHERE p.id = id)
                 or (select p.`user_id` from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.`user_id` = userId WHERE p.id = id;
 		end if;
 
-                if firstName is not null 
+        if firstName is not null 
                 and firstName != (select p.`first-name` from UserPersonalInformation p WHERE p.id = id)
                 or (select p.`first-name` from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.`first-name` = firstName WHERE p.id = id;
 		end if;
 
-                if lastName is not null 
+        if lastName is not null 
                 and lastName != (select p.`last-name` from UserPersonalInformation p WHERE p.id = id)
                 or (select p.`last-name` from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.`last-name` = lastName WHERE p.id = id;
 		end if;
 
-                if mobileNumber is not null 
+        if mobileNumber is not null 
                 and mobileNumber != (select p.`mobile-number` from UserPersonalInformation p WHERE p.id = id)
                 or (select p.`mobile-number` from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.`mobile-number` = mobileNumber WHERE p.id = id;
 		end if;
 
-                if businessNumber is not null 
+        if businessNumber is not null 
                 and businessNumber != (select p.`business-number` from UserPersonalInformation p WHERE p.id = id)
                 or (select p.`business-number` from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.`business-number` = businessNumber WHERE p.id = id;
 		end if;
 
-                if sip is not null 
+        if sip is not null 
                 and sip != (select p.sip from UserPersonalInformation p WHERE p.id = id)
                 or (select p.sip from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.sip = sip WHERE p.id = id;
 		end if;
                 
-                if jobTitle is not null 
+        if jobTitle is not null 
                 and jobTitle != (select p.`job-title` from UserPersonalInformation p WHERE p.id = id)
                 or (select p.`job-title` from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.`job-title` = jobTitle WHERE p.id = id;
 		end if;
                 
-                if address is not null 
+        if address is not null 
                 and address != (select p.address from UserPersonalInformation p WHERE p.id = id)
                 or (select p.address from UserPersonalInformation p WHERE p.id = id) is null
                     then 
                             UPDATE UserPersonalInformation p SET p.address = address WHERE p.id = id;
 		end if;
 
-                if city is not null 
+        if city is not null 
                 and city != (select p.city from UserPersonalInformation p WHERE p.id = id)
                 or (select p.city from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.city = city WHERE p.id = id;
 		end if;
                 
-                if country is not null 
+        if country is not null 
                 and country != (select p.country from UserPersonalInformation p WHERE p.id = id)
                 or (select p.country from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.country = country WHERE p.id = id;
 		end if;
 
-                if country is not null 
+        if country is not null 
                 and country != (select p.country from UserPersonalInformation p WHERE p.id = id)
                 or (select p.country from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.country = country WHERE p.id = id;
 		end if;
 
-		CALL getUserPersonalInfo(id,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+        if receiveCredit is not null
+                and receiveCredit != (select p.receive_credit from UserPersonalInformation p WHERE p.id = id)
+                or (select p.receive_credit FROM UserPersonalInformation p WHERE p.id = id) is null
+                    then UPDATE UserPersonalInformation p SET p.receive_credit = receiveCredit WHERE p.id = id;
+        end if;
+
+		CALL getUserPersonalInfo(id,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
 	end if;
 END//
@@ -4577,7 +4584,7 @@ DELIMITER ;
 -- Dumping structure for procedure big-merge.getUserPersonalInfo
 DROP PROCEDURE IF EXISTS `getUserPersonalInfo`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserPersonalInfo`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` VARCHAR(128), IN `businessNumber` VARCHAR(128), IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserPersonalInfo`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` VARCHAR(128), IN `businessNumber` VARCHAR(128), IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128), IN `receiveCredit` BIT(1))
 BEGIN
 	if id='' then set id=null;end if;
 	if userId='' then set userId=null;end if;
@@ -4590,6 +4597,7 @@ BEGIN
 	if address='' then set address=null;end if;
 	if city='' then set city=null;end if;
 	if country='' then set country=null;end if;
+    if receiveCredit = '' then set receiveCredit = null; end if;
 	
 	select * from UserPersonalInformation p 
         
@@ -4603,7 +4611,8 @@ BEGIN
             and (jobTitle is null or p.`job-title` = jobTitle) 
             and (address is null or p.address = address) 
             and (city is null or p.city = city) 
-            and (country is null or p.country = country);
+            and (country is null or p.country = country)
+            and (receiveCredit is null or p.receive_credit = receiveCredit);
 	
 END//
 DELIMITER ;

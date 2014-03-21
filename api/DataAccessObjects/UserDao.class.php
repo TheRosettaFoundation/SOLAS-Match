@@ -731,7 +731,8 @@ class UserDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getJobTitle()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getAddress()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getCity()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getCountry());
+            Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getCountry()).','.
+            Lib\PDOWrapper::cleanseNull($userInfo->getReceiveCredit());
         if ($result = Lib\PDOWrapper::call("userPersonalInfoInsertAndUpdate", $args)) {
             $ret = Common\Lib\ModelFactory::buildModel("UserPersonalInformation", $result[0]);
         }
@@ -749,7 +750,8 @@ class UserDao
         $jobTitle = null,
         $address = null,
         $city = null,
-        $country = null
+        $country = null,
+        $receiveCredit = null
     ) {
         $ret = null;
         $args = Lib\PDOWrapper::cleanseNull($id).",".
@@ -762,7 +764,8 @@ class UserDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($jobTitle).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($address).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($city).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($country);
+            Lib\PDOWrapper::cleanseNullOrWrapStr($country).','.
+            Lib\PDOWrapper::cleanseNull($receiveCredit);
         if ($result = Lib\PDOWrapper::call("getUserPersonalInfo", $args)) {
             $ret = Common\Lib\ModelFactory::buildModel("UserPersonalInformation", $result[0]);
         }
