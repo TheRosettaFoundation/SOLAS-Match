@@ -5,14 +5,14 @@ namespace SolasMatch\API\DAO;
 use \SolasMatch\API\Lib as Lib;
 use \SolasMatch\Common as Common;
 
-//! Statistcs Data Access Object for getting site statistcs in the API
+require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
+
+//! Statistcs Data Access Object for getting site statistics in the API
 /*!
   The Statistics Data Access Object for retrieving data from the Database. It has direct Database access through the
   use of the PDOWrapper. It is used by the API Route Handlers for retrieving data requested through the API. Statistics
   hold information about the site like the number of registered Organisations, the number of active Tasks, etc.
 */
-
-include_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 
 class StatDao
 {
@@ -57,7 +57,7 @@ class StatDao
     {
         Lib\PDOWrapper::call("statsUpdateArchivedTasks", "");
     }
-
+    
     //! Update the Badge count Statistic in the Database
     /*!
       Recalculate the Badge count Statistic. <b>Note:</b> This is a direct call to the Database and occurs
@@ -79,7 +79,7 @@ class StatDao
     {
         Lib\PDOWrapper::call("statsUpdateClaimedTasks", "");
     }
-
+    
     //! Get a count of the successful logins
     /*!
       Count the number of successful login attempts starting at startDate up to but not including endDate.
@@ -91,11 +91,10 @@ class StatDao
     {
         $args = Lib\PDOWrapper::cleanseNullOrWrapStr($startDate).', '.
             Lib\PDOWrapper::cleanseNullOrWrapStr($endDate);
-        error_log("CALL getLoginCount($args);");
         $result = Lib\PDOWrapper::call('getLoginCount', $args);
         return $result[0]['result'];
     }
-    
+
     //! Update the Organisation count Statistic in the Database
     /*!
       Recalculate the Organisation count Statistic. <b>Note:</b> This is a direct call to the Database and occurs

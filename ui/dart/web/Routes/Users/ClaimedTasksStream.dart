@@ -26,6 +26,7 @@ class ClaimedTasksStream extends PolymerElement
   @observable Map<int, List<Tag>> taskTags;
   @observable Map<int, String> taskColours;
   @observable Map<int, String> taskTypes;
+  @observable Map<int, String> taskStatuses;
   @observable Localisation localisation;
   @observable int currentPage = 0;
   @observable int lastPage = 0;
@@ -40,6 +41,7 @@ class ClaimedTasksStream extends PolymerElement
     taskTags = toObservable(new Map<int, List<Tag>>());
     taskColours = toObservable(new Map<int, String>());
     taskTypes = toObservable(new Map<int, String>());
+    taskStatuses = toObservable(new Map<int, String>());
   }
   
   void enteredView()
@@ -55,6 +57,10 @@ class ClaimedTasksStream extends PolymerElement
     taskTypes[2] = localisation.getTranslation("common_translation");
     taskTypes[3] = localisation.getTranslation("common_proofreading");
     taskTypes[4] = localisation.getTranslation("common_desegmentation");
+    taskStatuses[1] = localisation.getTranslation("common_waiting");
+    taskStatuses[2] = localisation.getTranslation("common_unclaimed");
+    taskStatuses[3] = localisation.getTranslation("common_in_progress");
+    taskStatuses[4] = localisation.getTranslation("common_complete");
     List<Future<bool>> successList = new List<Future<bool>>();
     currentPage = 0;
     if (tasksperpage > 0) {

@@ -10,6 +10,25 @@
 /*!40101 SET NAMES utf8 */;
 SET FOREIGN_KEY_CHECKS=0;
 
+/*--------------------------------------------start of alter tables--------------------------------*/
+
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+    IF NOT EXISTS(SELECT 1
+                    FROM information_schema.`COLUMNS`
+                    WHERE TABLE_SCHEMA = database()
+                    AND TABLE_NAME = "UserPersonalInformation"
+                    AND COLUMN_NAME = "receive_credit") then
+        ALTER TABLE UserPersonalInformation
+            ADD receive_credit BIT(1) DEFAULT 0 NOT NULL;
+    END IF;
+END//
+DELIMITER ;
+CALL alterTable();
+DROP PROCEDURE alterTable;
+
 /*--------------------------------------------------start of tables--------------------------------*/
 
 -- Changing collation of OAuth tables to match ours
@@ -674,6 +693,7 @@ CREATE TABLE IF NOT EXISTS `UserPersonalInformation` (
   `address` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
   `city` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
   `country` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `receive_credit` BIT(1) DEFAULT 0 NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`user_id`),
   CONSTRAINT `FK_UserPersonalInformation_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -2538,6 +2558,25 @@ BEGIN
 	SELECT *
 	    FROM UserNotifications
     	WHERE user_id = id;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.getUserRealName
+DROP PROCEDURE IF EXISTS `getUserRealName`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserRealName`(IN `userId` INT)
+BEGIN
+	IF EXISTS(SELECT 1
+                FROM UserPersonalInformation
+                WHERE user_id = userId
+                AND receive_credit = 1) then
+        SELECT CONCAT(`first-name`, ' ', `last-name`) as real_name
+            FROM UserPersonalInformation
+            WHERE user_id = userId;
+    ELSE
+        SELECT '' as real_name;
+    END IF;
 END//
 DELIMITER ;
 

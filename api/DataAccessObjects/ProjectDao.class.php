@@ -5,20 +5,20 @@ namespace SolasMatch\API\DAO;
 use \SolasMatch\Common as Common;
 use \SolasMatch\API\Lib as Lib;
 
+require_once __DIR__."/TagsDao.class.php";
+require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
+require_once __DIR__."/../../Common/lib/ModelFactory.class.php";
+require_once __DIR__."/../../Common/protobufs/models/Project.php";
+require_once __DIR__."/../../Common/protobufs/models/ArchivedProject.php";
+require_once __DIR__."/../lib/MessagingClient.class.php";
+require_once __DIR__."/../../Common/protobufs/Requests/CalculateProjectDeadlinesRequest.php";
+require_once __DIR__."/../../Common/lib/SolasMatchException.php";
+
 //! Project Data Access Object for setting getting data about Projects in the API
 /*!
   The Project Data Access Object for manipulating data in the Database. It has direct Database access through the use
   of the PDOWrapper. It is used by the API Route Handlers for retrieving and setting data requested through the API.
 */
-
-include_once __DIR__."/TagsDao.class.php";
-include_once __DIR__."/../../api/lib/PDOWrapper.class.php";
-include_once __DIR__."/../../Common/lib/ModelFactory.class.php";
-include_once __DIR__."/../../Common/protobufs/models/Project.php";
-include_once __DIR__."/../../Common/protobufs/models/ArchivedProject.php";
-include_once __DIR__."/../lib/MessagingClient.class.php";
-include_once __DIR__."/../../Common/protobufs/Requests/CalculateProjectDeadlinesRequest.php";
-include_once __DIR__."/../../Common/lib/SolasMatchException.php";
 
 class ProjectDao
 {
@@ -31,7 +31,7 @@ class ProjectDao
       @param Project is the Project being updated/created
       @return Returns the updated Project object (with a new id if the Project was created)
     */
-    private static function save($project)
+    public static function save($project)
     {
         $tagList = $project->getTagList();
         $sourceLocale = $project->getSourceLocale();
@@ -46,6 +46,7 @@ class ProjectDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($project->getCreatedTime()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode());
+
         if ($result = Lib\PDOWrapper::call("projectInsertAndUpdate", $args)) {
             $project = Common\Lib\ModelFactory::buildModel("Project", $result[0]);
         }
@@ -64,7 +65,7 @@ class ProjectDao
 
     //! Used to automatically calculate the Deadlines for Project Tasks
     /*!
-      When this function is called it generates a CalculateProjectDeadlineRequest object and pushes it to RabbitMQ. 
+      When this function is called it generates a CalculateProjectDeadlineRequest object and pushes it to RabbitMQ.
       This gets picked up by the backend which then alters the deadlines of Tasks in the Project to give each volunteer
       enough time to complete their task. This is called when a Project is created or when a Project's deadline is
       updated.
@@ -118,7 +119,7 @@ class ProjectDao
       @param int $orgId is the id of the Organisation the request Project(s) belong to
       @param string $reference is the reference page of the requested Project
       @param int $wordCount is the word count of the requested Project
-      @param string $created is the date and time at which the requested Project was created in the format 
+      @param string $created is the date and time at which the requested Project was created in the format
       "YYYY-MM-DD HH:MM:SS"
       @param string $countryCode is the country code of the requested Project's source Locale (<b>NOTE</b>: This will
       get converted to a country id on the database)
@@ -199,7 +200,7 @@ class ProjectDao
       @param int $wordCount is the word count of the requested ArchivedProject
       @param string $created is the date and time requested ArchivedProject was created on in the format
       "YYYY-MM-DD HH:MM:SS"
-      @param string $archivedDate is the date and time the requested ArchivedProject was archived on in the format 
+      @param string $archivedDate is the date and time the requested ArchivedProject was archived on in the format
       "YYYY-MM-DD HH:MM:SS"
       @param int $userIdArchived is the id of the User that archived the requested ArchivedProject
       @param string $lCode is the language code of the source Locale for the requested ArchivedProject (<b>NOTE</b>:
@@ -395,15 +396,14 @@ class ProjectDao
         Lib\IO::downloadFile($source, $projectFileInfo->getMime());
     }
     
-    //! Save the Project file to the file system
+    //! Records a ProjectFile upload
     /*!
-      This function saves a ProjectFile to the file system. It also record the file upload in the ProjectFiles
-      table. It will only save the ProjectFile if the mime type of the given file matches that of the Project.
+      Used to keep track of Project files. Stores information about a project file upload so it can be retrieved later.
       @param int $projectId is the id of a Project
-      @param string $file is the contents of the file being uploaded
       @param string $filename is the name of the file being uploaded
       @param int $userId is the id of the user uploading the file
-      @return Returns the ProjectFile info of the recorded upload
+      @param string $mime is the mime type of the file being uploaded
+      @return Returns the ProjectFile info that was saved or null on failure.
     */
     public static function saveProjectFile($projectId, $file, $filename, $userId)
     {

@@ -4,7 +4,7 @@ namespace SolasMatch\API\Lib;
 
 use \SolasMatch\Common as Common;
 
-include_once __DIR__."/../../api/lib/PDOWrapper.class.php";
+require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 require_once __DIR__."/../../Common/protobufs/models/Language.php";
 require_once __DIR__."/../../Common/protobufs/models/Country.php";
 

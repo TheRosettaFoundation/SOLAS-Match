@@ -33,6 +33,7 @@ class StatDaoTest extends \PHPUnit_Framework_TestCase
         // Success - Get a single statistic - Total Badges
         $resultAllBadges = API\DAO\StatDao::getStatistics("Badges");
         $this->assertCount(1, $resultAllBadges);
+        $this->assertNotNull($resultAllBadges[0]);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $resultAllBadges[0]);
         $this->assertEquals("Badges", $resultAllBadges[0]->getName());
         //Changed 3 to 7. There were only 3 badges when this test class was made?
@@ -47,6 +48,7 @@ class StatDaoTest extends \PHPUnit_Framework_TestCase
         
         $totalArchivedProjects = API\DAO\StatDao::getStatistics("ArchivedProjects");
         $this->assertCount(1, $totalArchivedProjects);
+        $this->assertNotNull($totalArchivedProjects[0]);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $totalArchivedProjects[0]);
         $this->assertEquals("ArchivedProjects", $totalArchivedProjects[0]->getName());
         $this->assertEquals(0, $totalArchivedProjects[0]->getValue());
@@ -59,6 +61,7 @@ class StatDaoTest extends \PHPUnit_Framework_TestCase
         
         $totalArchivedTasks = API\DAO\StatDao::getStatistics("ArchivedTasks");
         $this->assertCount(1, $totalArchivedTasks);
+        $this->assertNotNull($totalArchivedTasks[0]);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $totalArchivedTasks[0]);
         $this->assertEquals("ArchivedTasks", $totalArchivedTasks[0]->getName());
         $this->assertEquals(0, $totalArchivedTasks[0]->getValue());
@@ -71,6 +74,7 @@ class StatDaoTest extends \PHPUnit_Framework_TestCase
         
         $totalBadges = API\DAO\StatDao::getStatistics("Badges");
         $this->assertCount(1, $totalBadges);
+        $this->assertNotNull($totalBadges[0]);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $totalBadges[0]);
         $this->assertEquals("Badges", $totalBadges[0]->getName());
         $this->assertEquals(7, $totalBadges[0]->getValue());
@@ -83,6 +87,7 @@ class StatDaoTest extends \PHPUnit_Framework_TestCase
         
         $totalClaimedTasks = API\DAO\StatDao::getStatistics("ClaimedTasks");
         $this->assertCount(1, $totalClaimedTasks);
+        $this->assertNotNull($totalClaimedTasks[0]);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $totalClaimedTasks[0]);
         $this->assertEquals("ClaimedTasks", $totalClaimedTasks[0]->getName());
         $this->assertEquals(0, $totalClaimedTasks[0]->getValue());
@@ -95,6 +100,7 @@ class StatDaoTest extends \PHPUnit_Framework_TestCase
         
         $totalOrgs = API\DAO\StatDao::getStatistics("Organisations");
         $this->assertCount(1, $totalOrgs);
+        $this->assertNotNull($totalOrgs[0]);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $totalOrgs[0]);
         $this->assertEquals("Organisations", $totalOrgs[0]->getName());
         $this->assertEquals(0, $totalOrgs[0]->getValue());
@@ -107,6 +113,7 @@ class StatDaoTest extends \PHPUnit_Framework_TestCase
         
         $totalOrgMemberRequests = API\DAO\StatDao::getStatistics("OrgMembershipRequests");
         $this->assertCount(1, $totalOrgMemberRequests);
+        $this->assertNotNull($totalOrgMemberRequests[0]);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $totalOrgMemberRequests[0]);
         $this->assertEquals("OrgMembershipRequests", $totalOrgMemberRequests[0]->getName());
         $this->assertEquals(0, $totalOrgMemberRequests[0]->getValue());
@@ -119,6 +126,7 @@ class StatDaoTest extends \PHPUnit_Framework_TestCase
         
         $totalProjects = API\DAO\StatDao::getStatistics("Projects");
         $this->assertCount(1, $totalProjects);
+        $this->assertNotNull($totalProjects[0]);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $totalProjects[0]);
         $this->assertEquals("Projects", $totalProjects[0]->getName());
         $this->assertEquals(0, $totalProjects[0]->getValue());
@@ -131,6 +139,7 @@ class StatDaoTest extends \PHPUnit_Framework_TestCase
         
         $totalTags = API\DAO\StatDao::getStatistics("Tags");
         $this->assertCount(1, $totalTags);
+        $this->assertNotNull($totalTags[0]);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $totalTags[0]);
         $this->assertEquals("Tags", $totalTags[0]->getName());
         $this->assertEquals(0, $totalTags[0]->getValue());
@@ -143,6 +152,7 @@ class StatDaoTest extends \PHPUnit_Framework_TestCase
         
         $totalTasks = API\DAO\StatDao::getStatistics("Tasks");
         $this->assertCount(1, $totalTasks);
+        $this->assertNotNull($totalTasks[0]);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $totalTasks[0]);
         $this->assertEquals("Tasks", $totalTasks[0]->getName());
         $this->assertEquals(0, $totalTasks[0]->getValue());
@@ -155,6 +165,7 @@ class StatDaoTest extends \PHPUnit_Framework_TestCase
         
         $totalTasksWithPreReqs = API\DAO\StatDao::getStatistics("TasksWithPreReqs");
         $this->assertCount(1, $totalTasksWithPreReqs);
+        $this->assertNotNull($totalTasksWithPreReqs[0]);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $totalTasksWithPreReqs[0]);
         $this->assertEquals("TasksWithPreReqs", $totalTasksWithPreReqs[0]->getName());
         $this->assertEquals(0, $totalTasksWithPreReqs[0]->getValue());
@@ -167,6 +178,7 @@ class StatDaoTest extends \PHPUnit_Framework_TestCase
         
         $totalUnclaimedTasks = API\DAO\StatDao::getStatistics("UnclaimedTasks");
         $this->assertCount(1, $totalUnclaimedTasks);
+        $this->assertNotNull($totalUnclaimedTasks[0]);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $totalUnclaimedTasks[0]);
         $this->assertEquals("UnclaimedTasks", $totalUnclaimedTasks[0]->getName());
         $this->assertEquals(0, $totalUnclaimedTasks[0]->getValue());
@@ -179,6 +191,7 @@ class StatDaoTest extends \PHPUnit_Framework_TestCase
         
         $totalUsers = API\DAO\StatDao::getStatistics("Users");
         $this->assertCount(1, $totalUsers);
+        $this->assertNotNull($totalUsers[0]);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $totalUsers[0]);
         $this->assertEquals("Users", $totalUsers[0]->getName());
         $this->assertEquals(0, $totalUsers[0]->getValue());

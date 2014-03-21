@@ -274,6 +274,14 @@ class UnitTestHelper
         return $project;
     }
     
+    public static function createTag($id = null, $label = "I'm a tag")
+    {
+        $tag = new Common\Protobufs\Models\Tag();
+        $tag->setLabel($label);
+        
+        return $tag;
+    }
+    
     public static function createTask
        (
         $projectId,
