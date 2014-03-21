@@ -946,7 +946,7 @@
 	<string name="user_task_stream_notification_edit_weekly">Weekly</string>
 	<string name="user_task_stream_notification_edit_monthly">Monthly</string>
 
-        <string name="footer_0">Unless otherwise stated, all works contributed are licensed under the <a href="%s">Creative Commons Attribution 3.0 Ireland License</a> in accordance with the <a href="%s">Terms and Conditons</a>.</string>
+    <string name="footer_0">Unless otherwise stated, all works contributed are licensed under the <a href="%s">Creative Commons Attribution 3.0 Ireland License</a> in accordance with the <a href="%s">Terms and Conditons</a>.</string>
 	<string name="footer_terms_and_conditons">Terms and Conditons</string>
 	<string name="footer_privacy_policy">Privacy Policy</string>
 	<string name="footer_community_forum">Community Forum</string>
@@ -978,6 +978,10 @@
     <string name="index_load_more">Load More</string>
     <string name="index_8">Internet Explorer is not a supported browser. Please use a supported browser, for example Firefox or Chrome.</string>
     <string name="index_dont_use_ie">Internet Explorer is not a supported browser, please use Firefox or Google Chrome.</string>
+	<string name="index_donate_free_service">Our site is a free service that is developed and maintained by the The Rosetta Foundation.</string>
+	<string name="index_donate_support_us">You can show your appreciation for Trommons and support future development by donating.</string>
+	<string name="index_donate_every_month"><a id="%1$s" href="%2$s">"Friend of The Rosetta Foundation" <br /> Donate <strong>€5/month.</strong> Cancel any time </a></string>
+	<string name="index_donate_once_off"><strong>Alternatively, contribute a <a href="%1$s">once-off donation</a> or set up <a href="%2$s" target="%3$s"> a bank transfer.</a></strong></string>
 
 	<string name="pagination_page_of">Page %s of %s</string>
 	<string name="index_9">If you wish to continue using Internet Explorer we suggest installing <a href = "http://www.google.com/chromeframe">chrome frame</a>.</string>
