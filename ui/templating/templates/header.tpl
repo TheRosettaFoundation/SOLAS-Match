@@ -109,19 +109,21 @@
                         {/if}
                         <li>
                        
-                            <div class="languageForm">
-                                <form id="languageListForm" method="post" action="{urlFor name="siteLanguage"}">
-                                    <select id="languageList" name="language" onchange="jQuery('#languageListForm').submit();">
-                                        {foreach $locs as $loc}
-                                            {if $loc->getCode() == {UserSession::getUserLanguage()}}
-                                                <option value="{$loc->getCode()}" selected>{$loc->getName()}</option>
-                                            {else}
-                                                <option value="{$loc->getCode()}">{$loc->getName()}</option>
-                                            {/if}
-                                        {/foreach}
-                                    </select>
-                                </form>
-                            </div>
+                            {if isset($locs)}
+                                <div class="languageForm">
+                                    <form id="languageListForm" method="post" action="{urlFor name="siteLanguage"}">
+                                        <select id="languageList" name="language" onchange="jQuery('#languageListForm').submit();">
+                                            {foreach $locs as $loc}
+                                                {if $loc->getCode() == {UserSession::getUserLanguage()}}
+                                                    <option value="{$loc->getCode()}" selected>{$loc->getName()}</option>
+                                                {else}
+                                                    <option value="{$loc->getCode()}">{$loc->getName()}</option>
+                                                {/if}
+                                            {/foreach}
+                                        </select>
+                                    </form>
+                                </div>
+                            {/if}
                         </li>
                         {if isset($user)}
                             <li>
