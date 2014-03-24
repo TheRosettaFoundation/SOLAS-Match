@@ -659,6 +659,7 @@
     <string name="task_simple_upload_6">The <strong>contents</strong> of the file you are uploading is not a valid <strong>(.%s)</strong> If you are having problems opening and working in <strong>(.%s) format</strong>, consider using <a href="http://www.libreoffice.org/download/?nodetect" target="_blank">LibreOffice</a>.</string>
     <string name="task_simple_upload_7">File error:</string>
     <string name="task_simple_upload_8">This organisation will be able to use it for their benefit.</string>
+    <string name="task_simple_upload_clean_upload">Please upload a 'clean version' of the text, i.e. accept all tracked changes.</string>
 
 	<string name="task_alter_alter_task_details_here">Alter task details here.</string>
 	<string name="task_alter_view_task_details">View Task Details</string>
