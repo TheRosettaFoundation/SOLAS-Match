@@ -321,6 +321,16 @@ class UserDao
         return $ret;
     }
 
+    public static function getUserRealName($userId)
+    {
+        $ret = '';
+        $args = Lib\PDOWrapper::cleanse($userId);
+        if ($result = Lib\PDOWrapper::call("getUserRealName", $args)) {
+            $ret = $result[0]['real_name'];
+        }
+        return $ret;
+    }
+
     public static function getUserTaskStreamNotification($userId)
     {
         $ret = null;

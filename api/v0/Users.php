@@ -62,6 +62,16 @@ class Users
 
         API\Dispatcher::registerNamed(
             Common\Enums\HttpMethodEnum::GET,
+            '/v0/users/:userId/realName(:format)/',
+            function ($userId, $format = '.json') {
+                API\Dispatcher::sendResponse(null, DAO\UserDao::getUserRealName($userId), null, $format);
+            },
+            'getUserRealName',
+            '\SolasMatch\API\Lib\Middleware::authenticateUserMembership'
+        );
+
+        API\Dispatcher::registerNamed(
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/users/getByEmail/:email/',
             function ($email, $format = ".json") {
                 if (!is_numeric($email) && strstr($email, '.')) {
