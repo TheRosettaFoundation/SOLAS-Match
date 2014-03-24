@@ -2751,7 +2751,16 @@ DROP PROCEDURE IF EXISTS `getUserTrackedTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTrackedTasks`(IN `id` INT)
 BEGIN
-	SELECT t.*
+	SELECT t.id, t.project_id, t.title, `word-count`,
+            (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`,
+            (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`,
+            (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`,
+            (select code from Languages l where l.id = t.`language_id-target`) as `targetLanguageCode`,
+            (select `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`,
+            (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`,
+            (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`,
+            (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`,
+            comment, `task-type_id`, `task-status_id`, published, deadline, `created-time`
 	FROM UserTrackedTasks utt join Tasks t on utt.task_id=t.id
 	WHERE user_id = id;
 END//
