@@ -1350,7 +1350,8 @@ if(J.xZ(J.m4(y),0)===!0&&J.xZ(J.m4(x),0)===!0){a.J6.gZR().syo(J.on(J.UQ(a.x7,J.m
 a.J6.gZR().swD(J.on(J.UQ(a.ZU,J.m4(y))))}else{if(!(J.xZ(J.m4(y),0)===!0&&J.de(J.m4(x),0)))p=J.de(J.m4(y),0)&&J.xZ(J.m4(x),0)===!0
 else p=!0
 if(p){z=a.OL.nN("user_private_profile_native_language_blanks")
-throw H.b(new P.AT(z))}}w=H.K6([],[[P.b8,J.kn]])
+throw H.b(new P.AT(z))}}if(a.qp.gxy()===!0)if(J.de(a.qp.gSz(),"")||J.de(a.qp.gdq(),"")){z=a.OL.nN("user_private_profile_7")
+throw H.b(new P.AT(z))}w=H.K6([],[[P.b8,J.kn]])
 v=H.K6([],[R.PK])
 for(u=0;J.u6(u,a.SF);u=J.WB(u,1)){p="#secondary_language_"+H.d(u)
 t=document.querySelector(p)

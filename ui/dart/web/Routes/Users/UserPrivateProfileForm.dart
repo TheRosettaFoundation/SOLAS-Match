@@ -307,6 +307,12 @@ class UserPrivateProfileForm extends PolymerElement
         throw new ArgumentError(localisation.getTranslation("user_private_profile_native_language_blanks"));
       }
       
+      if (userInfo.receiveCredit) {
+        if (userInfo.firstName == "" || userInfo.lastName == "") {
+          throw new ArgumentError(localisation.getTranslation("user_private_profile_7"));
+        }
+      }
+
       List<Future<bool>> updated = new List<Future<bool>>();
       
       List<Locale> currentSecondaryLocales = new List<Locale>();

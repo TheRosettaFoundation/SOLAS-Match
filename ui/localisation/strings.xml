@@ -893,6 +893,7 @@
     <string name="user_private_profile_secondary_languages_failed">Failed to save some data. Please make sure that your secondary languages have both a language and country selected, any blank entries will be ignored.</string>
     <string name="user_private_profile_native_language_blanks">When setting your native language make sure to select a language and a country.</string>
     <string name="user_private_profile_receive_credit">Receive Credit</string>
+	<string name="user_private_profile_7">If you would like to receive credit for your work by name you will have to fill out the first name and last name fields.</string>
 
 	<string name="user_public_profile_0">Overview of your account details.</string>
 	<string name="user_public_profile_1">By creating an organisation, you confirm that its activities are not in conflict with the general terms and conditions for the use of this site.</string>
