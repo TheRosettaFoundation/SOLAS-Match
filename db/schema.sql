@@ -10,26 +10,7 @@
 /*!40101 SET NAMES utf8 */;
 SET FOREIGN_KEY_CHECKS=0;
 
-/*--------------------------------------------start of alter tables--------------------------------*/
-
-DROP PROCEDURE IF EXISTS alterTable;
-DELIMITER //
-CREATE PROCEDURE alterTable()
-BEGIN
-    IF NOT EXISTS(SELECT 1
-                    FROM information_schema.`COLUMNS`
-                    WHERE TABLE_SCHEMA = database()
-                    AND TABLE_NAME = "UserPersonalInformation"
-                    AND COLUMN_NAME = "receive_credit") then
-        ALTER TABLE UserPersonalInformation
-            ADD receive_credit BIT(1) DEFAULT 0 NOT NULL;
-    END IF;
-END//
-DELIMITER ;
-CALL alterTable();
-DROP PROCEDURE alterTable;
-
-/*--------------------------------------------------start of tables--------------------------------*/
+/*--------------------------------------------start of alter tables (OAuth)--------------------------------*/
 
 -- Changing collation of OAuth tables to match ours
 ALTER TABLE oauth_clients CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
@@ -42,6 +23,8 @@ ALTER TABLE oauth_session_refresh_tokens CONVERT TO character SET utf8 COLLATE u
 ALTER TABLE oauth_scopes CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
 ALTER TABLE oauth_session_token_scopes CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
 ALTER TABLE oauth_session_authcode_scopes CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
+
+/*--------------------------------------------------start of tables--------------------------------*/
 
 -- Dumping structure for table Solas-Match-Test.Admins
 CREATE TABLE IF NOT EXISTS `Admins` (
@@ -699,6 +682,22 @@ CREATE TABLE IF NOT EXISTS `UserPersonalInformation` (
   CONSTRAINT `FK_UserPersonalInformation_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+    IF NOT EXISTS(SELECT 1
+                    FROM information_schema.`COLUMNS`
+                    WHERE TABLE_SCHEMA = database()
+                    AND TABLE_NAME = "UserPersonalInformation"
+                    AND COLUMN_NAME = "receive_credit") then
+        ALTER TABLE UserPersonalInformation
+            ADD receive_credit BIT(1) DEFAULT 0 NOT NULL;
+    END IF;
+END//
+DELIMITER ;
+CALL alterTable();
+DROP PROCEDURE alterTable;
 
 -- Data exporting was unselected.
 

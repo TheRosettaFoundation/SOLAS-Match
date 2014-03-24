@@ -914,6 +914,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $insertedInfo = API\DAO\UserDao::createPersonalInfo($userInfo);
         $this->assertNotNull($insertedInfo);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\UserPersonalInformation", $insertedInfo);
+        $this->assertEquals($userInfo->getReceiveCredit(), $insertedInfo->getReceiveCredit());
     }
     
     public function testUpdatePersonalInfo()

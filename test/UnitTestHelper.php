@@ -206,7 +206,8 @@ class UnitTestHelper
         $jobTitle = "Derp",
         $address = "This is a real place",
         $city = "Lightless City",
-        $country = "Forgotten Land"
+        $country = "Forgotten Land",
+        $receiveCredit = 0
     ) {
         $userInfo = new Common\Protobufs\Models\UserPersonalInformation();
         
@@ -221,6 +222,7 @@ class UnitTestHelper
         $userInfo->setAddress($address);
         $userInfo->setCity($city);
         $userInfo->setCountry($country);
+        $userInfo->setReceiveCredit($receiveCredit);
         
         return $userInfo ;
     }

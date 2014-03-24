@@ -371,7 +371,7 @@ class ProjectDaoTest extends \PHPUnit_Framework_TestCase
     {
         UnitTestHelper::teardownDb();
         
-         $org = UnitTestHelper::createOrg();
+        $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
         $this->assertNotNull($insertedOrg);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
@@ -381,20 +381,19 @@ class ProjectDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($insertedProject);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
 
-        $projectTag1 = API\DAO\TagsDao::create("New Project Tag");
+        $projectTag1 = API\DAO\TagsDao::create("Tag3");
         $this->assertNotNull($projectTag1);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Tag", $projectTag1);
-        $this->assertEquals("New Project Tag", $projectTag1->getLabel());
+        $this->assertEquals("Tag3", $projectTag1->getLabel());
         
         //Try to add tag, succeeds
-        $resultAddProjectTag = API\DAO\ProjectDao::addProjectTag($project->getId(), $projectTag1->getId());
-        $this->assertEquals("1", $resultAddProjectTag);
+        $resultAddProjectTag = API\DAO\ProjectDao::addProjectTag($insertedProject->getId(), $projectTag1->getId());
+        $this->assertEquals(1, $resultAddProjectTag);
         
         //Try to add same tag again, fails
-        $resultAddProjectTagFailure = API\DAO\ProjectDao::addProjectTag($project->getId(), $projectTag1->getId());
+        $resultAddProjectTagFailure = API\DAO\ProjectDao::addProjectTag($insertedProject->getId(), $projectTag1->getId());
         $this->assertEquals("0", $resultAddProjectTagFailure);
     }
-    
     
     public function testRemoveProjectTag()
     {
@@ -410,10 +409,10 @@ class ProjectDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($insertedProject);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
 
-        $projectTag1 = API\DAO\TagsDao::create("New Project Tag");
+        $projectTag1 = API\DAO\TagsDao::create("NewProjectTag");
         $this->assertNotNull($projectTag1);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Tag", $projectTag1);
-        $this->assertEquals("New Project Tag", $projectTag1->getLabel());
+        $this->assertEquals("NewProjectTag", $projectTag1->getLabel());
         
         $addProjectTag = API\DAO\ProjectDao::addProjectTag($project->getId(), $projectTag1->getId());
         $this->assertEquals("1", $addProjectTag);
