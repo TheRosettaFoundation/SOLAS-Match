@@ -8,7 +8,22 @@
         <title>{Settings::get('site.title')}</title>
         <meta name="description" content="{Settings::get('site.meta_desc')}" />
         <meta name="keywords" content="{Settings::get('site.meta_key')}" />
-
+        
+        <!-- Open Graph data (Facebook and Google+) -->
+        <meta property="og:title" content="{Settings::get('openGraph.title')}"/>    
+        <meta property="og:type" content="{Settings::get('openGraph.type')}" />
+        <meta property="og:image" content="{Settings::get('openGraph.image')}"/>
+        <meta property="og:site_name" content="{Settings::get('openGraph.site_name')}"/>
+        <meta property="og:description" content="{Settings::get('openGraph.description')}"/>
+        
+        <!-- Twitter Card data -->
+        <meta name="twitter:card" content="{Settings::get('twitter.card')}">
+        <meta name="twitter:site" content="{Settings::get('twitter.site')}">
+        <meta name="twitter:title" content="{Settings::get('twitter.title')}">
+        <meta name="twitter:description" content="{Settings::get('twitter.description')}">
+        <meta name="twitter:image" content="{Settings::get('twitter.image')}">
+        
+        
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min.css"/>
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css"/>
         <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
