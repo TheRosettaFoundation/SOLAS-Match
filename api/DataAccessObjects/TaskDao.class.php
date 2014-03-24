@@ -686,22 +686,6 @@ class TaskDao
         }
     }
     
-    public static function getArchivedTaskMetaData($taskId)
-    {
-        $return = null;
-        $args = Lib\PDOWrapper::cleanse($taskId).", null, null, null, null, null, null, null, null, null";
-        if ($r = Lib\PDOWrapper::call("getArchivedTaskMetaData", $args)) {
-            $file_info = array();
-            foreach ($r[0] as $key => $value) {
-                if (!is_numeric($key)) {
-                    $file_info[$key] = $value;
-                }
-            }
-            $return = $file_info;
-        }
-        return $return;
-    }
-
     //! Get the list of Users that are subscribed to the specified Task
     /*
        Get the list of Organisation members that are tracking the specified Task. This is mostly used for

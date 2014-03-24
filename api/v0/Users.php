@@ -663,22 +663,6 @@ class Users
         );
 
         API\Dispatcher::registerNamed(
-            Common\Enums\HttpMethodEnum::GET,
-            '/v0/users/:userId/archivedTasks/:taskId/archiveMetaData(:format)/',
-            function ($userId, $taskId, $format = ".json") {
-                if (!is_numeric($taskId) && strstr($taskId, '.')) {
-                    $taskId = explode('.', $taskId);
-                    $format = '.'.$taskId[1];
-                    $taskId = $taskId[0];
-                }
-                $data = DAO\TaskDao::getArchivedTaskMetaData($taskId);
-                API\Dispatcher::sendResponse(null, $data, null, $format);
-            },
-            'getUserArchivedTaskMetaData',
-            '\SolasMatch\API\Lib\Middleware::authUserOrOrgForTask'
-        );
-        
-        API\Dispatcher::registerNamed(
             Common\Enums\HttpMethodEnum::PUT,
             '/v0/users/:userId/',
             function ($userId, $format = ".json") {

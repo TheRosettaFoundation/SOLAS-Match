@@ -1547,7 +1547,7 @@ BEGIN
 	if taskStatusId='' then set taskStatusId=null; end if;
 	if published='' then set published=null; end if;
 
-	SELECT t.id, t.project_id, t.title, t.`comment`, t.deadline, t.`word-count`, t.`created-time`, 
+    SELECT t.id, t.project_id, t.title, t.`comment`, t.deadline, t.`word-count`, t.`created-time`,
             (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`, 
             (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
             (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
@@ -1556,7 +1556,8 @@ BEGIN
             (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
             (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
             (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, 
-        t.`taskType_id`, t.`taskStatus_id`, t.published, tm.version, tm.filename, tm.`content-type`, tm.`upload-time`, tm.`user_id-claimed`, tm.`user_id-archived`, tm.prerequisites, tm.`user_id-taskCreator`, tm.`archived-date` 
+        t.`taskType_id`, t.`taskStatus_id`, t.published, tm.version, tm.filename, tm.`content-type`, tm.`upload-time`,
+        tm.`user_id-claimed`, tm.`user_id-archived`, tm.prerequisites, tm.`user_id-taskCreator`, tm.`archived-date`
 
         FROM ArchivedTasks t JOIN ArchivedTasksMetadata tm ON t.id = tm.archivedTask_id 
 
@@ -1570,7 +1571,7 @@ BEGIN
             and (sourceLanguageId is null or t.`language_id-source` = sourceLanguageId) 
             and (targetLanguageId is null or t.`language_id-target` = targetLanguageId)
             and (sourceCountryId is null or t.`country_id-source` = sourceCountryId)
-	    and (targetCountryId is null or t.`country_id-target` = targetCountryId)
+            and (targetCountryId is null or t.`country_id-target` = targetCountryId)
             and (taskTypeId is null or t.`taskType_id` = taskTypeId)
             and (taskStatusId is null or t.`taskStatus_id` = taskStatusId)
             and (published is null or t.`published` = published);
@@ -2191,39 +2192,6 @@ BEGIN
         and (content is null or t.`content-type` = content)
         and (uID is null or t.user_id = uID)
         and (uTime is null or uTime = '0000-00-00 00:00:00' or t.`upload-time` = uTime);
-	
-END//
-DELIMITER ;
-
--- Dumping structure for procedure Solas-Match-Test.getArchivedTaskMetaData
-DROP PROCEDURE IF EXISTS `getArchivedTaskMetaData`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedTaskMetaData`(IN `archTaskID` INT, IN `verID` INT, IN `name` TEXT, IN `content` VARCHAR(255), IN `uploadTime` DATETIME, IN `userClaimedID` INT, IN `userArchivedID` INT, IN `preReq` VARCHAR(255), IN `userCreatorID` INT, IN `archTime` DATETIME)
-    READS SQL DATA
-BEGIN
-	if archTaskID = '' then set archTaskID = null; end if;
-	if verID = '' then set verID = null; end if;
-	if name = '' then set name = null; end if;
-	if content = '' then set content = null; end if;
-	if uploadTime = '' then set uploadTime = null; end if;
-	if userClaimedID = '' then set userClaimedID = null; end if;
-	if userArchivedID = '' then set userArchivedID = null; end if;
-	if preReq = '' then set preReq = null; end if;
-	if userCreatorID = '' then set userCreatorID = null; end if;
-	if archTime = '' then set archTime = null; end if;
-	
-    select archivedTask_id, version, filename, `content-type`, `upload-time`, `user_id-claimed`, `user_id-archived`, prerequisites, `user_id-taskCreator`, `archived-date` 
-        from ArchivedTasksMetadata t 
-        where (archTaskID is null or t.archivedTask_id = archTaskID)
-        and (verID is null or t.version = verID)
-        and (name is null or t.filename = name)
-        and (content is null or t.`content-type` = content)
-        and (uploadTime is null or uploadTime = '0000-00-00 00:00:00' or t.`upload-time` = uploadTime)
-        and (userClaimedID is null or t.`user_id-claimed` = userClaimedID)
-        and (userArchivedID is null or t.`user_id-archived` = userArchivedID)
-        and (preReq is null or t.prerequisites = preReq)
-        and (userCreatorID is null or t.`user_id-taskCreator` = userCreatorID)
-        and (archTime is null or archTime = '0000-00-00 00:00:00' or t.`archived-date` = archTime);
 	
 END//
 DELIMITER ;
