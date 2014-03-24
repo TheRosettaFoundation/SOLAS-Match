@@ -742,7 +742,7 @@ class UserDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getAddress()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getCity()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getCountry()).','.
-            Lib\PDOWrapper::cleanseNull($userInfo->getReceiveCredit());
+            Lib\PDOWrapper::cleanseNull($userInfo->getReceiveCredit() ? 1 : 0);
         if ($result = Lib\PDOWrapper::call("userPersonalInfoInsertAndUpdate", $args)) {
             $ret = Common\Lib\ModelFactory::buildModel("UserPersonalInformation", $result[0]);
         }

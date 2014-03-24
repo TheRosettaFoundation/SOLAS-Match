@@ -4495,7 +4495,6 @@ BEGIN
 	if address='' then set address=null;end if;
 	if city='' then set city=null;end if;
 	if country='' then set country=null;end if;
-    if receiveCredit = '' then set receiveCredit = null; end if;
 		
 	IF id IS NULL AND NOT EXISTS(select 1 FROM UserPersonalInformation p WHERE p.`user_id`=userId) THEN
 		INSERT INTO UserPersonalInformation (`user_id`,`first-name`,`last-name`,`mobile-number`,`business-number`,`sip`,`job-title`,`address`,`city`,`country`, `receive_credit`)
@@ -4569,8 +4568,7 @@ BEGIN
                     then UPDATE UserPersonalInformation p SET p.country = country WHERE p.id = id;
 		end if;
 
-        if receiveCredit is not null
-                and receiveCredit != (select p.receive_credit from UserPersonalInformation p WHERE p.id = id)
+        if receiveCredit != (select p.receive_credit from UserPersonalInformation p WHERE p.id = id)
                 or (select p.receive_credit FROM UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.receive_credit = receiveCredit WHERE p.id = id;
         end if;

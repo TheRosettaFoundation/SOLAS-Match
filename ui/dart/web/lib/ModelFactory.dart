@@ -133,6 +133,7 @@ class ModelFactory
     userInfo.address = userData['address'];
     userInfo.city = userData['city'];
     userInfo.country = userData['country'];
+    userInfo.receiveCredit = userData['receive_credit'];
     return userInfo;
   }
   
