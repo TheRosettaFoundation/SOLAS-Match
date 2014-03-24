@@ -116,10 +116,9 @@ class TaskDao
      Task does have an id then it will update that Task in the database with its new values. This trigger a User Task
      score request for this Task.
      @param Task $task is the Task being saved to the database.
-     <b>Note:</b> This is passed by reference.
      @return Returns the updated/created Task object
     */
-    public static function save(&$task)
+    public static function save($task)
     {
         if (is_null($task->getId())) {
             self::insert($task);
