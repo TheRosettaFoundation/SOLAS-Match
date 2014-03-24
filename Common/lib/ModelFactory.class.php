@@ -798,6 +798,9 @@ class ModelFactory
         if (isset($modelData['country'])) {
             $ret->setCountry($modelData['country']);
         }
+        if (isset($modelData['receive_credit'])) {
+            $ret->setReceiveCredit($modelData['receive_credit']);
+        }
         
         return $ret;
     }
