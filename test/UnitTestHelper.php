@@ -150,6 +150,22 @@ class UnitTestHelper
         return $bannedOrg;
     }
     
+    public static function createLocale(
+        $langName = "French",
+        $langCode = "fr",
+        $countryName = "FRANCE",
+        $countryCode = "FR"
+    ) {
+        $locale = new Common\Protobufs\Models\Locale();
+        
+        $locale->setLanguageName($langName);
+        $locale->setLanguageCode($langCode);
+        $locale->setCountryName($countryName);
+        $locale->setCountryCode($countryCode);
+        
+        return $locale;
+    }
+    
     public static function createOrg(
         $id = null,
         $name = "Organisation 1",

@@ -19,6 +19,9 @@ require_once __DIR__.'/../UnitTestHelper.php';
 
 class ProjectDaoTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @covers API\DAO\ProjectDao::insertAndUpdate
+     */
     public function testProjectCreate()
     {
         UnitTestHelper::teardownDb();
@@ -59,6 +62,9 @@ class ProjectDaoTest extends \PHPUnit_Framework_TestCase
 
     }
     
+    /**
+     * @covers API\DAO\ProjectDao::insertAndUpdate
+     */
     public function testProjectUpdate()
     {
         UnitTestHelper::teardownDb();
@@ -130,6 +136,9 @@ class ProjectDaoTest extends \PHPUnit_Framework_TestCase
         
     }
     
+    /**
+     * @covers API\DAO\ProjectDao::getProject
+     */
     public function testGetProject()
     {
         UnitTestHelper::teardownDb();
@@ -154,6 +163,9 @@ class ProjectDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($resultGetProjectFailure);
     }
     
+    /**
+     * @covers API\DAO\ProjectDao::delete
+     */
     public function testDelete()
     {
         UnitTestHelper::teardownDb();
@@ -189,6 +201,9 @@ class ProjectDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $tryRedelete);
     }
     
+    /**
+     * @covers API\DAO\ProjectDao::archiveProject
+     */
     public function testArchiveProject()
     {
         UnitTestHelper::teardownDb();
@@ -242,7 +257,9 @@ class ProjectDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $resultArchiveProjectFailure);
     }
     
-    
+    /**
+     * @covers API\DAO\ProjectDao::getArchivedProject
+     */
     public function testGetArchivedProject()
     {
         UnitTestHelper::teardownDb();
@@ -330,6 +347,9 @@ class ProjectDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($resultGetArchivedProjectFailure);
     }
     
+    /**
+     * @covers API\DAO\ProjectDao::getProjectTasks
+     */
     public function testGetProjectTasks()
     {
         UnitTestHelper::teardownDb();
@@ -367,6 +387,9 @@ class ProjectDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($resultGetProjectTasksFailure);
     }
     
+    /**
+     * @covers API\DAO\ProjectDao::addProjectTag
+     */
     public function testAddProjectTag()
     {
         UnitTestHelper::teardownDb();
@@ -395,6 +418,9 @@ class ProjectDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $resultAddProjectTagFailure);
     }
     
+    /**
+     * @covers API\DAO\ProjectDao::removeProjectTag
+     */
     public function testRemoveProjectTag()
     {
         UnitTestHelper::teardownDb();
@@ -414,11 +440,11 @@ class ProjectDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Tag", $projectTag1);
         $this->assertEquals("NewProjectTag", $projectTag1->getLabel());
         
-        $addProjectTag = API\DAO\ProjectDao::addProjectTag($project->getId(), $projectTag1->getId());
+        $addProjectTag = API\DAO\ProjectDao::addProjectTag($insertedProject->getId(), $projectTag1->getId());
         $this->assertEquals("1", $addProjectTag);
         
         //try to remove tag, succeeds
-        $resultRemoveProjectTag = API\DAO\ProjectDao::removeProjectTag($project->getId(), $projectTag1->getId());
+        $resultRemoveProjectTag = API\DAO\ProjectDao::removeProjectTag($insertedProject->getId(), $projectTag1->getId());
         $this->assertEquals("1", $resultRemoveProjectTag);
         
         //try to remove already deleted tag, fails
@@ -429,7 +455,9 @@ class ProjectDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $resultRemoveProjectTagFailure);
     }
     
-    
+    /**
+     * @covers API\DAO\ProjectDao::getTags()
+     */
     public function testGetTags()
     {
         UnitTestHelper::teardownDb();
@@ -444,13 +472,16 @@ class ProjectDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($insertedProject);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         
-        $resultGetTags = API\DAO\ProjectDao::getTags($project->getId());
+        $resultGetTags = API\DAO\ProjectDao::getTags($insertedProject->getId());
         $this->assertCount(2, $resultGetTags);
         foreach ($resultGetTags as $projectTag) {
             $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Tag", $projectTag);
         }
     }
     
+    /**
+     * @covers API\DAO\ProjectDao::deleteProjectTags
+     */
     public function testDeleteProjectTags()
     {
         UnitTestHelper::teardownDb();
@@ -466,25 +497,28 @@ class ProjectDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         
         //assert that there are tags associated with the project
-        $resultGetTags = API\DAO\ProjectDao::getTags($project->getId());
+        $resultGetTags = API\DAO\ProjectDao::getTags($insertedProject->getId());
         $this->assertCount(2, $resultGetTags);
         foreach ($resultGetTags as $projectTag) {
             $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Tag", $projectTag);
         }
         
         //assert that some project tags were deleted
-        $afterDeleteTags = API\DAO\ProjectDao::deleteProjectTags($project->getId());
+        $afterDeleteTags = API\DAO\ProjectDao::deleteProjectTags($insertedProject->getId());
         $this->assertEquals("1", $afterDeleteTags);
         
         //assert that there are no project tags left after deleting all
-        $getTagsAfterDelete = API\DAO\ProjectDao::getTags($project->getId());
+        $getTagsAfterDelete = API\DAO\ProjectDao::getTags($insertedProject->getId());
         $this->assertNull($getTagsAfterDelete);
         
         //assert that a second call to deleteProjectTags() changes nothing.
-        $tryRedelete = API\DAO\ProjectDao::deleteProjectTags($project->getId());
+        $tryRedelete = API\DAO\ProjectDao::deleteProjectTags($insertedProject->getId());
         $this->assertEquals("0", $tryRedelete);
     }
     
+    /**
+     * @covers API\DAO\ProjectDao::recordProjectFileInfo
+     */
     public function testRecordProjectFileInfo()
     {
         UnitTestHelper::teardownDb();
@@ -523,6 +557,9 @@ class ProjectDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($resultRecordProjectFileInfoFailure);
     }
     
+    /**
+     * @covers API\DAO\ProjectDao::getProjectFileInfo
+     */
     public function testGetProjectFileInfo()
     {
         UnitTestHelper::teardownDb();
@@ -571,6 +608,9 @@ class ProjectDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($resultGetProjectFileInfoFailure);
     }
     
+    /**
+     * @covers API\DAO\ProjectDao::getArchivedTask
+     */
     public function testGetArchivedTask()
     {
         UnitTestHelper::teardownDb();

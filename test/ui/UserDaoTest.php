@@ -709,4 +709,31 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $isSubbed = $userDao->isSubscribedToTask($userId, $insertedTask->getId());
         $this->assertEquals("1", $isSubbed);
     }
+    
+    public function testCreateSecondaryLanguage()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $userDao = new UI\DAO\UserDao();
+        
+        $userEmail = "blah@test.com";
+        $userPw = "password";
+        $isRegistered = $userDao->register($userEmail, $userPw);
+        $this->assertTrue($isRegistered);
+        
+        $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
+        $userId = $registerUser->getId();
+        $this->assertNotNull($registerUser);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
+        $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
+        $this->assertEquals("1", $finishRegResult);
+        
+        $userDao->login($userEmail, $userPw);
+        $locale = UnitTestHelper::createLocale();
+        $userLang = $userDao->createSecondaryLanguage($userId, $locale);
+        $this->assertNotNull($userLang);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Locale", $userLang);
+        $this->assertEquals($locale, $userLang);
+    }
 }
