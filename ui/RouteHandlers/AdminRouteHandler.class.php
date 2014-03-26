@@ -40,7 +40,7 @@ class AdminRouteHandler
             }
             
             if (isset($post['banOrg']) && $post['orgName'] != '') {
-                $orgDao = new OrganisationDao();
+                $orgDao = new DAO\OrganisationDao();
                 $bannedOrg = new Common\Protobufs\Models\BannedOrganisation();
                 $org = $orgDao->getOrganisationByName(urlencode($post['orgName']));
                 
