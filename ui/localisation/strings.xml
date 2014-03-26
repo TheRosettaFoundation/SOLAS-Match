@@ -976,11 +976,9 @@
 	<string name="index_6">Help us match you with the most suitable translation tasks.</string>
 	<string name="index_register_now"><a href="%s">Register now</a> to find the translation tasks best suited to you.</string>
     <string name="index_load_more">Load More</string>
-    <string name="index_8">Internet Explorer is not a supported browser. Please use a supported browser, for example Firefox or Chrome.</string>
-    <string name="index_dont_use_ie">Internet Explorer is not a supported browser, please use Firefox or Google Chrome.</string>
-
+    <string name="index_dont_use_ie">The site is best viewed with Firefox or Google Chrome, not all features are avaliable with Internet Explorer</string>
+    <string name="index_still_using_ie">If you wish to continue using Internet Explorer we suggest installing <a href = "http://www.google.com/chromeframe">chrome frame</a>.</string>
 	<string name="pagination_page_of">Page %s of %s</string>
-	<string name="index_9">If you wish to continue using Internet Explorer we suggest installing <a href = "http://www.google.com/chromeframe">chrome frame</a>.</string>
 
 	<string name="statistics_statistics">Statistics:</string>
 	<string name="statistics_users">Users:</string>
