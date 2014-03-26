@@ -6,62 +6,72 @@ use \SolasMatch\Common as Common;
 use \SolasMatch\API\Lib as Lib;
 use \SolasMatch\API as API;
 
-/**
- * Description of Languages
- *
- * @author sean
- */
-
 require_once __DIR__.'/../lib/Languages.class.php';
 
 class Countries
 {
     public static function init()
     {
-        API\Dispatcher::registerNamed(
-            Common\Enums\HttpMethodEnum::GET,
-            '/v0/countries(:format)/',
-            function ($format = ".json") {
-                API\Dispatcher::sendResponse(null, Lib\Languages::getCountryList(), null, $format);
-            },
-            'getCountries'
-        );
-        
-        API\Dispatcher::registerNamed(
-            Common\Enums\HttpMethodEnum::GET,
-            '/v0/countries/:countryId/',
-            function ($countryId, $format = ".json") {
-                if (!is_numeric($countryId) && strstr($countryId, '.')) {
-                    $countryId = explode('.', $countryId);
-                    $format = '.'.$countryId[1];
-                    $countryId = $countryId[0];
-                }
-                $data = Lib\Languages::getCountry($countryId, null, null);
-                if (is_array($data) && is_array($data[0])) {
-                    $data = $data[0];
-                }
-                API\Dispatcher::sendResponse(null, $data, null, $format);
-            },
-            'getCountry'
-        );
-        
-        API\Dispatcher::registerNamed(
-            Common\Enums\HttpMethodEnum::GET,
-            '/v0/countries/getByCode/:code/',
-            function ($code, $format = ".json") {
-                if (!is_numeric($code) && strstr($code, '.')) {
-                    $code = explode('.', $code);
-                    $format = '.'.$code[1];
-                    $code = $code[0];
-                }
-                $data = Lib\Languages::getCountry(null, $code, null);
-                if (is_array($data) && is_array($data[0])) {
-                    $data = $data[0];
-                }
-                API\Dispatcher::sendResponse(null, $data, null, $format);
-            },
-            'getCountryByCode'
-        );
+        $app = \Slim\Slim::getInstance();
+
+        $app->group('/v0', function () use ($app) {
+            $app->group('/countries', function () use ($app) {
+
+                /* Routes starting /v0/countries */
+                $app->get(
+                    '/getByCode/:code/',
+                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
+                    '\SolasMatch\API\V0\Countries::getCountryByCode'
+                );
+
+                $app->get(
+                    '/:countryId/',
+                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
+                    '\SolasMatch\API\V0\Countries::getCountry'
+                );
+            });
+
+            /* Routes starting /v0 */
+            $app->get(
+                '/countries(:format)/',
+                '\SolasMatch\API\Lib\Middleware::isloggedIn',
+                '\SolasMatch\API\V0\Countries::getCountries'
+            );
+        });
+    }
+
+    public static function getCountryByCode($code, $format = ".json")
+    {
+        if (!is_numeric($code) && strstr($code, '.')) {
+            $code = explode('.', $code);
+            $format = '.'.$code[1];
+            $code = $code[0];
+        }
+        $data = Lib\Languages::getCountry(null, $code, null);
+        if (is_array($data) && is_array($data[0])) {
+            $data = $data[0];
+        }
+        API\Dispatcher::sendResponse(null, $data, null, $format);
+    }
+
+    public static function getCountry($countryId, $format = ".json")
+    {
+        if (!is_numeric($countryId) && strstr($countryId, '.')) {
+            $countryId = explode('.', $countryId);
+            $format = '.'.$countryId[1];
+            $countryId = $countryId[0];
+        }
+        $data = Lib\Languages::getCountry($countryId, null, null);
+        if (is_array($data) && is_array($data[0])) {
+            $data = $data[0];
+        }
+        API\Dispatcher::sendResponse(null, $data, null, $format);
+    }
+
+    public static function getCountries($format = ".json")
+    {
+        API\Dispatcher::sendResponse(null, Lib\Languages::getCountryList(), null, $format);
     }
 }
+
 Countries::init();
