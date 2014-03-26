@@ -116,10 +116,9 @@ class TaskDao
      Task does have an id then it will update that Task in the database with its new values. This trigger a User Task
      score request for this Task.
      @param Task $task is the Task being saved to the database.
-     <b>Note:</b> This is passed by reference.
      @return Returns the updated/created Task object
     */
-    public static function save(&$task)
+    public static function save($task)
     {
         if (is_null($task->getId())) {
             self::insert($task);
@@ -687,22 +686,6 @@ class TaskDao
         }
     }
     
-    public static function getArchivedTaskMetaData($taskId)
-    {
-        $return = null;
-        $args = Lib\PDOWrapper::cleanse($taskId).", null, null, null, null, null, null, null, null, null";
-        if ($r = Lib\PDOWrapper::call("getArchivedTaskMetaData", $args)) {
-            $file_info = array();
-            foreach ($r[0] as $key => $value) {
-                if (!is_numeric($key)) {
-                    $file_info[$key] = $value;
-                }
-            }
-            $return = $file_info;
-        }
-        return $return;
-    }
-
     //! Get the list of Users that are subscribed to the specified Task
     /*
        Get the list of Organisation members that are tracking the specified Task. This is mostly used for

@@ -13,6 +13,7 @@ class UserPersonalInformation
   String address;
   String city;
   String country;
+  bool receiveCredit;
   
   dynamic toJson()
   {
@@ -27,7 +28,8 @@ class UserPersonalInformation
       "jobTitle" : jobTitle,
       "address" : address,
       "city" : city,
-      "country" : country
+      "country" : country,
+      "receive_credit" : receiveCredit
     };
   }
 }

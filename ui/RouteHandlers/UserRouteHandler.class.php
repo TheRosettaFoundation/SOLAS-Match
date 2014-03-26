@@ -337,7 +337,7 @@ class UserRouteHandler
     public function logout()
     {
         $app = \Slim\Slim::getInstance();
-        Common\Lib\UserSession::destroySession();    //TODO revisit when oauth is in place
+        Common\Lib\UserSession::destroySession();
         $app->redirect($app->urlFor("home"));
     }
 

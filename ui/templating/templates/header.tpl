@@ -6,7 +6,24 @@
 
         <!-- css -->
         <title>{Settings::get('site.title')}</title>
-
+        <meta name="description" content="{Settings::get('site.meta_desc')}" />
+        <meta name="keywords" content="{Settings::get('site.meta_key')}" />
+        
+        <!-- Open Graph data (Facebook and Google+) -->
+        <meta property="og:title" content="{Settings::get('openGraph.title')}"/>    
+        <meta property="og:type" content="{Settings::get('openGraph.type')}" />
+        <meta property="og:image" content="{Settings::get('openGraph.image')}"/>
+        <meta property="og:site_name" content="{Settings::get('openGraph.site_name')}"/>
+        <meta property="og:description" content="{Settings::get('openGraph.description')}"/>
+        
+        <!-- Twitter Card data -->
+        <meta name="twitter:card" content="{Settings::get('twitter.card')}">
+        <meta name="twitter:site" content="{Settings::get('twitter.site')}">
+        <meta name="twitter:title" content="{Settings::get('twitter.title')}">
+        <meta name="twitter:description" content="{Settings::get('twitter.description')}">
+        <meta name="twitter:image" content="{Settings::get('twitter.image')}">
+        
+        
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min.css"/>
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css"/>
         <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
@@ -92,19 +109,21 @@
                         {/if}
                         <li>
                        
-                            <div class="languageForm">
-                                <form id="languageListForm" method="post" action="{urlFor name="siteLanguage"}">
-                                    <select id="languageList" name="language" onchange="jQuery('#languageListForm').submit();">
-                                        {foreach $locs as $loc}
-                                            {if $loc->getCode() == {UserSession::getUserLanguage()}}
-                                                <option value="{$loc->getCode()}" selected>{$loc->getName()}</option>
-                                            {else}
-                                                <option value="{$loc->getCode()}">{$loc->getName()}</option>
-                                            {/if}
-                                        {/foreach}
-                                    </select>
-                                </form>
-                            </div>
+                            {if isset($locs)}
+                                <div class="languageForm">
+                                    <form id="languageListForm" method="post" action="{urlFor name="siteLanguage"}">
+                                        <select id="languageList" name="language" onchange="jQuery('#languageListForm').submit();">
+                                            {foreach $locs as $loc}
+                                                {if $loc->getCode() == {UserSession::getUserLanguage()}}
+                                                    <option value="{$loc->getCode()}" selected>{$loc->getName()}</option>
+                                                {else}
+                                                    <option value="{$loc->getCode()}">{$loc->getName()}</option>
+                                                {/if}
+                                            {/foreach}
+                                        </select>
+                                    </form>
+                                </div>
+                            {/if}
                         </li>
                         {if isset($user)}
                             <li>

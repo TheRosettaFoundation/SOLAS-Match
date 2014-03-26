@@ -62,6 +62,16 @@ class Users
 
         API\Dispatcher::registerNamed(
             Common\Enums\HttpMethodEnum::GET,
+            '/v0/users/:userId/realName(:format)/',
+            function ($userId, $format = '.json') {
+                API\Dispatcher::sendResponse(null, DAO\UserDao::getUserRealName($userId), null, $format);
+            },
+            'getUserRealName',
+            '\SolasMatch\API\Lib\Middleware::authenticateUserMembership'
+        );
+
+        API\Dispatcher::registerNamed(
+            Common\Enums\HttpMethodEnum::GET,
             '/v0/users/getByEmail/:email/',
             function ($email, $format = ".json") {
                 if (!is_numeric($email) && strstr($email, '.')) {
@@ -652,22 +662,6 @@ class Users
             'getUserArchivedTasks'
         );
 
-        API\Dispatcher::registerNamed(
-            Common\Enums\HttpMethodEnum::GET,
-            '/v0/users/:userId/archivedTasks/:taskId/archiveMetaData(:format)/',
-            function ($userId, $taskId, $format = ".json") {
-                if (!is_numeric($taskId) && strstr($taskId, '.')) {
-                    $taskId = explode('.', $taskId);
-                    $format = '.'.$taskId[1];
-                    $taskId = $taskId[0];
-                }
-                $data = DAO\TaskDao::getArchivedTaskMetaData($taskId);
-                API\Dispatcher::sendResponse(null, $data, null, $format);
-            },
-            'getUserArchivedTaskMetaData',
-            '\SolasMatch\API\Lib\Middleware::authUserOrOrgForTask'
-        );
-        
         API\Dispatcher::registerNamed(
             Common\Enums\HttpMethodEnum::PUT,
             '/v0/users/:userId/',

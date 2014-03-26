@@ -12,6 +12,7 @@ class UserSession
     public static function destroySession()
     {
         unset($_SESSION['user_id']);
+        self::clearAccessToken();
     }
 
     public static function getCurrentUserID()

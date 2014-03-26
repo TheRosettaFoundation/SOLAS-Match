@@ -48,6 +48,7 @@
             <h3>{sprintf(Localisation::getTranslation('task_simple_upload_0'), {$filename})}</h3>
         {else}
             <h3>{sprintf(Localisation::getTranslation('task_simple_upload_0_proofreading'), {$filename})}</h3>
+            <p>{Localisation::getTranslation('task_simple_upload_clean_upload')}</p>
         {/if}   
         <form class="well" method="post" action="{urlFor name="task-simple-upload" options="task_id.$task_id"}" enctype="multipart/form-data">
                 <input type="hidden" name="task_id" value="{$task->getId()}"/>

@@ -321,6 +321,16 @@ class UserDao
         return $ret;
     }
 
+    public static function getUserRealName($userId)
+    {
+        $ret = '';
+        $args = Lib\PDOWrapper::cleanse($userId);
+        if ($result = Lib\PDOWrapper::call("getUserRealName", $args)) {
+            $ret = $result[0]['real_name'];
+        }
+        return $ret;
+    }
+
     public static function getUserTaskStreamNotification($userId)
     {
         $ret = null;
@@ -731,7 +741,8 @@ class UserDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getJobTitle()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getAddress()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getCity()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getCountry());
+            Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getCountry()).','.
+            Lib\PDOWrapper::cleanseNull($userInfo->getReceiveCredit() ? 1 : 0);
         if ($result = Lib\PDOWrapper::call("userPersonalInfoInsertAndUpdate", $args)) {
             $ret = Common\Lib\ModelFactory::buildModel("UserPersonalInformation", $result[0]);
         }
@@ -749,7 +760,8 @@ class UserDao
         $jobTitle = null,
         $address = null,
         $city = null,
-        $country = null
+        $country = null,
+        $receiveCredit = null
     ) {
         $ret = null;
         $args = Lib\PDOWrapper::cleanseNull($id).",".
@@ -762,7 +774,8 @@ class UserDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($jobTitle).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($address).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($city).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($country);
+            Lib\PDOWrapper::cleanseNullOrWrapStr($country).','.
+            Lib\PDOWrapper::cleanseNull($receiveCredit);
         if ($result = Lib\PDOWrapper::call("getUserPersonalInfo", $args)) {
             $ret = Common\Lib\ModelFactory::buildModel("UserPersonalInformation", $result[0]);
         }

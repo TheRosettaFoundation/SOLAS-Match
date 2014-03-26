@@ -10,6 +10,25 @@
 /*!40101 SET NAMES utf8 */;
 SET FOREIGN_KEY_CHECKS=0;
 
+/*--------------------------------------------start of alter tables--------------------------------*/
+
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+    IF NOT EXISTS(SELECT 1
+                    FROM information_schema.`COLUMNS`
+                    WHERE TABLE_SCHEMA = database()
+                    AND TABLE_NAME = "UserPersonalInformation"
+                    AND COLUMN_NAME = "receive_credit") then
+        ALTER TABLE UserPersonalInformation
+            ADD receive_credit BIT(1) DEFAULT 0 NOT NULL;
+    END IF;
+END//
+DELIMITER ;
+CALL alterTable();
+DROP PROCEDURE alterTable;
+
 /*--------------------------------------------------start of tables--------------------------------*/
 
 -- Changing collation of OAuth tables to match ours
@@ -674,6 +693,7 @@ CREATE TABLE IF NOT EXISTS `UserPersonalInformation` (
   `address` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
   `city` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
   `country` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `receive_credit` BIT(1) DEFAULT 0 NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`user_id`),
   CONSTRAINT `FK_UserPersonalInformation_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -1527,7 +1547,7 @@ BEGIN
 	if taskStatusId='' then set taskStatusId=null; end if;
 	if published='' then set published=null; end if;
 
-	SELECT t.id, t.project_id, t.title, t.`comment`, t.deadline, t.`word-count`, t.`created-time`, 
+    SELECT t.id, t.project_id, t.title, t.`comment`, t.deadline, t.`word-count`, t.`created-time`,
             (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`, 
             (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
             (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
@@ -1536,7 +1556,8 @@ BEGIN
             (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
             (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
             (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, 
-        t.`taskType_id`, t.`taskStatus_id`, t.published, tm.version, tm.filename, tm.`content-type`, tm.`upload-time`, tm.`user_id-claimed`, tm.`user_id-archived`, tm.prerequisites, tm.`user_id-taskCreator`, tm.`archived-date` 
+        t.`taskType_id`, t.`taskStatus_id`, t.published, tm.version, tm.filename, tm.`content-type`, tm.`upload-time`,
+        tm.`user_id-claimed`, tm.`user_id-archived`, tm.prerequisites, tm.`user_id-taskCreator`, tm.`archived-date`
 
         FROM ArchivedTasks t JOIN ArchivedTasksMetadata tm ON t.id = tm.archivedTask_id 
 
@@ -1550,7 +1571,7 @@ BEGIN
             and (sourceLanguageId is null or t.`language_id-source` = sourceLanguageId) 
             and (targetLanguageId is null or t.`language_id-target` = targetLanguageId)
             and (sourceCountryId is null or t.`country_id-source` = sourceCountryId)
-	    and (targetCountryId is null or t.`country_id-target` = targetCountryId)
+            and (targetCountryId is null or t.`country_id-target` = targetCountryId)
             and (taskTypeId is null or t.`taskType_id` = taskTypeId)
             and (taskStatusId is null or t.`taskStatus_id` = taskStatusId)
             and (published is null or t.`published` = published);
@@ -2175,39 +2196,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.getArchivedTaskMetaData
-DROP PROCEDURE IF EXISTS `getArchivedTaskMetaData`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedTaskMetaData`(IN `archTaskID` INT, IN `verID` INT, IN `name` TEXT, IN `content` VARCHAR(255), IN `uploadTime` DATETIME, IN `userClaimedID` INT, IN `userArchivedID` INT, IN `preReq` VARCHAR(255), IN `userCreatorID` INT, IN `archTime` DATETIME)
-    READS SQL DATA
-BEGIN
-	if archTaskID = '' then set archTaskID = null; end if;
-	if verID = '' then set verID = null; end if;
-	if name = '' then set name = null; end if;
-	if content = '' then set content = null; end if;
-	if uploadTime = '' then set uploadTime = null; end if;
-	if userClaimedID = '' then set userClaimedID = null; end if;
-	if userArchivedID = '' then set userArchivedID = null; end if;
-	if preReq = '' then set preReq = null; end if;
-	if userCreatorID = '' then set userCreatorID = null; end if;
-	if archTime = '' then set archTime = null; end if;
-	
-    select archivedTask_id, version, filename, `content-type`, `upload-time`, `user_id-claimed`, `user_id-archived`, prerequisites, `user_id-taskCreator`, `archived-date` 
-        from ArchivedTasksMetadata t 
-        where (archTaskID is null or t.archivedTask_id = archTaskID)
-        and (verID is null or t.version = verID)
-        and (name is null or t.filename = name)
-        and (content is null or t.`content-type` = content)
-        and (uploadTime is null or uploadTime = '0000-00-00 00:00:00' or t.`upload-time` = uploadTime)
-        and (userClaimedID is null or t.`user_id-claimed` = userClaimedID)
-        and (userArchivedID is null or t.`user_id-archived` = userArchivedID)
-        and (preReq is null or t.prerequisites = preReq)
-        and (userCreatorID is null or t.`user_id-taskCreator` = userCreatorID)
-        and (archTime is null or archTime = '0000-00-00 00:00:00' or t.`archived-date` = archTime);
-	
-END//
-DELIMITER ;
-
 
 -- Dumping structure for procedure Solas-Match-Test.getTaskPreReqs
 DROP PROCEDURE IF EXISTS `getTaskPreReqs`;
@@ -2542,6 +2530,25 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Test.getUserRealName
+DROP PROCEDURE IF EXISTS `getUserRealName`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserRealName`(IN `userId` INT)
+BEGIN
+	IF EXISTS(SELECT 1
+                FROM UserPersonalInformation
+                WHERE user_id = userId
+                AND receive_credit = 1) then
+        SELECT CONCAT(`first-name`, ' ', `last-name`) as real_name
+            FROM UserPersonalInformation
+            WHERE user_id = userId;
+    ELSE
+        SELECT '' as real_name;
+    END IF;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Test.getUsersWithBadge
 DROP PROCEDURE IF EXISTS `getUsersWithBadge`;
 DELIMITER //
@@ -2712,7 +2719,16 @@ DROP PROCEDURE IF EXISTS `getUserTrackedTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTrackedTasks`(IN `id` INT)
 BEGIN
-	SELECT t.*
+	SELECT t.id, t.project_id, t.title, `word-count`,
+            (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`,
+            (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`,
+            (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`,
+            (select code from Languages l where l.id = t.`language_id-target`) as `targetLanguageCode`,
+            (select `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`,
+            (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`,
+            (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`,
+            (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`,
+            comment, `task-type_id`, `task-status_id`, published, deadline, `created-time`
 	FROM UserTrackedTasks utt join Tasks t on utt.task_id=t.id
 	WHERE user_id = id;
 END//
@@ -4443,7 +4459,7 @@ DELIMITER ;
 -- Dumping structure for procedure big-merge.userPersonalInfoInsertAndUpdate
 DROP PROCEDURE IF EXISTS `userPersonalInfoInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `userPersonalInfoInsertAndUpdate`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` VARCHAR(128), IN `businessNumber` VARCHAR(128), IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userPersonalInfoInsertAndUpdate`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` VARCHAR(128), IN `businessNumber` VARCHAR(128), IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128), IN `receiveCredit` BIT(1))
 BEGIN
 	if id='' then set id=null;end if;
 	if userId='' then set userId=null;end if;
@@ -4458,78 +4474,83 @@ BEGIN
 	if country='' then set country=null;end if;
 		
 	IF id IS NULL AND NOT EXISTS(select 1 FROM UserPersonalInformation p WHERE p.`user_id`=userId) THEN
-		INSERT INTO UserPersonalInformation (`user_id`,`first-name`,`last-name`,`mobile-number`,`business-number`,`sip`,`job-title`,`address`,`city`,`country`)
-		VALUES (userId,firstName,lastName,mobileNumber,businessNumber,sip,jobTitle,address,city,country);
-		CALL getUserPersonalInfo(LAST_INSERT_ID(),NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+		INSERT INTO UserPersonalInformation (`user_id`,`first-name`,`last-name`,`mobile-number`,`business-number`,`sip`,`job-title`,`address`,`city`,`country`, `receive_credit`)
+		VALUES (userId,firstName,lastName,mobileNumber,businessNumber,sip,jobTitle,address,city,country,receiveCredit);
+		CALL getUserPersonalInfo(LAST_INSERT_ID(),NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 	ELSE
-                if userId is not null 
+        if userId is not null 
                 and userId != (select p.`user_id` from UserPersonalInformation p WHERE p.id = id)
                 or (select p.`user_id` from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.`user_id` = userId WHERE p.id = id;
 		end if;
 
-                if firstName is not null 
+        if firstName is not null 
                 and firstName != (select p.`first-name` from UserPersonalInformation p WHERE p.id = id)
                 or (select p.`first-name` from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.`first-name` = firstName WHERE p.id = id;
 		end if;
 
-                if lastName is not null 
+        if lastName is not null 
                 and lastName != (select p.`last-name` from UserPersonalInformation p WHERE p.id = id)
                 or (select p.`last-name` from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.`last-name` = lastName WHERE p.id = id;
 		end if;
 
-                if mobileNumber is not null 
+        if mobileNumber is not null 
                 and mobileNumber != (select p.`mobile-number` from UserPersonalInformation p WHERE p.id = id)
                 or (select p.`mobile-number` from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.`mobile-number` = mobileNumber WHERE p.id = id;
 		end if;
 
-                if businessNumber is not null 
+        if businessNumber is not null 
                 and businessNumber != (select p.`business-number` from UserPersonalInformation p WHERE p.id = id)
                 or (select p.`business-number` from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.`business-number` = businessNumber WHERE p.id = id;
 		end if;
 
-                if sip is not null 
+        if sip is not null 
                 and sip != (select p.sip from UserPersonalInformation p WHERE p.id = id)
                 or (select p.sip from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.sip = sip WHERE p.id = id;
 		end if;
                 
-                if jobTitle is not null 
+        if jobTitle is not null 
                 and jobTitle != (select p.`job-title` from UserPersonalInformation p WHERE p.id = id)
                 or (select p.`job-title` from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.`job-title` = jobTitle WHERE p.id = id;
 		end if;
                 
-                if address is not null 
+        if address is not null 
                 and address != (select p.address from UserPersonalInformation p WHERE p.id = id)
                 or (select p.address from UserPersonalInformation p WHERE p.id = id) is null
                     then 
                             UPDATE UserPersonalInformation p SET p.address = address WHERE p.id = id;
 		end if;
 
-                if city is not null 
+        if city is not null 
                 and city != (select p.city from UserPersonalInformation p WHERE p.id = id)
                 or (select p.city from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.city = city WHERE p.id = id;
 		end if;
                 
-                if country is not null 
+        if country is not null 
                 and country != (select p.country from UserPersonalInformation p WHERE p.id = id)
                 or (select p.country from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.country = country WHERE p.id = id;
 		end if;
 
-                if country is not null 
+        if country is not null 
                 and country != (select p.country from UserPersonalInformation p WHERE p.id = id)
                 or (select p.country from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.country = country WHERE p.id = id;
 		end if;
 
-		CALL getUserPersonalInfo(id,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+        if receiveCredit != (select p.receive_credit from UserPersonalInformation p WHERE p.id = id)
+                or (select p.receive_credit FROM UserPersonalInformation p WHERE p.id = id) is null
+                    then UPDATE UserPersonalInformation p SET p.receive_credit = receiveCredit WHERE p.id = id;
+        end if;
+
+		CALL getUserPersonalInfo(id,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
 	end if;
 END//
@@ -4538,7 +4559,7 @@ DELIMITER ;
 -- Dumping structure for procedure big-merge.getUserPersonalInfo
 DROP PROCEDURE IF EXISTS `getUserPersonalInfo`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserPersonalInfo`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` VARCHAR(128), IN `businessNumber` VARCHAR(128), IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserPersonalInfo`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` VARCHAR(128), IN `businessNumber` VARCHAR(128), IN `sip` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128), IN `receiveCredit` BIT(1))
 BEGIN
 	if id='' then set id=null;end if;
 	if userId='' then set userId=null;end if;
@@ -4551,6 +4572,7 @@ BEGIN
 	if address='' then set address=null;end if;
 	if city='' then set city=null;end if;
 	if country='' then set country=null;end if;
+    if receiveCredit = '' then set receiveCredit = null; end if;
 	
 	select * from UserPersonalInformation p 
         
@@ -4564,7 +4586,8 @@ BEGIN
             and (jobTitle is null or p.`job-title` = jobTitle) 
             and (address is null or p.address = address) 
             and (city is null or p.city = city) 
-            and (country is null or p.country = country);
+            and (country is null or p.country = country)
+            and (receiveCredit is null or p.receive_credit = receiveCredit);
 	
 END//
 DELIMITER ;

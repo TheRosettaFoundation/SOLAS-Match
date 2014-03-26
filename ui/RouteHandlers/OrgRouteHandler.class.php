@@ -810,16 +810,23 @@ class OrgRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $taskDao = new DAO\TaskDao();
+        $userDao = new DAO\UserDao();
+        $userName = '';
         $claimant = $taskDao->getUserClaimedTask($taskId);
         $claimantProfile = "";
         if ($claimant != null) {
             $claimantProfile = $app->urlFor("user-public-profile", array('user_id' => $claimant->getId()));
+            $userName = $userDao->getUserRealName($claimant->getId());
+            if (is_null($userName) || $userName == '') {
+                $userName = $claimant->getDisplayName();
+            }
         }
 
         $task = $taskDao->getTask($taskId);
         $viewData = array(
                 "task"              => $task,
                 'claimant'          => $claimant,
+                'userName'          => $userName,
                 'claimantProfile'   => $claimantProfile,
                 "orgId"             => $orgId
         );

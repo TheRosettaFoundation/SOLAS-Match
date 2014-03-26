@@ -57,6 +57,13 @@
     
               <label for='country'><strong>{{localisation.getTranslation("common_country")}}:</strong></label>
               <input type='text' value="{{userInfo.country}}" style="width: 80%" />
+
+              <label for="receiveCredit">
+                <strong>
+                  {{localisation.getTranslation("user_private_profile_receive_credit")}}:
+                </strong>
+              </label>
+              <input type="checkbox" checked="{{userInfo.receiveCredit}}" />
             </td>
           </tr>
           <tr>
