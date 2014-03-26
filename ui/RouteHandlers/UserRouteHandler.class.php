@@ -119,19 +119,26 @@ class UserRouteHandler
         if ($current_user_id == null) {
             $app->flashNow('info', Lib\Localisation::getTranslation('index_dont_use_ie'));
         }
-
-        $extra_scripts = "
-<script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/shadow_dom/shadow_dom.debug.js\"></script>
-<script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/custom_element/custom-elements.debug.js\"></script>
-<script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/browser/interop.js\"></script>
-<script src=\"{$app->urlFor("home")}ui/dart/build/web/Routes/Users/home.dart.js\"></script>
-<span class=\"hidden\">
-";
-        $extra_scripts .= file_get_contents("ui/dart/web/Routes/Users/TaskStream.html");
-        $extra_scripts .= "</span>";
-
-        $viewData['extra_scripts'] = $extra_scripts;
-
+        
+        /*
+         * Turning off DART specific scripts if the users browser is Internet Explorer
+         */
+        $browserData = get_browser(null, true);
+        if (!is_null($browserData) && isset($browserData['browser'])) {
+            $browser = $browserData['browser'];
+            if ($browser != 'IE') {
+                $extra_scripts = "
+                    <script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/shadow_dom/shadow_dom.debug.js\"></script>
+                    <script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/custom_element/custom-elements.debug.js\"></script>
+                    <script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/browser/interop.js\"></script>
+                    <script src=\"{$app->urlFor("home")}ui/dart/build/web/Routes/Users/home.dart.js\"></script>
+                    <span class=\"hidden\">
+                    ";
+                $extra_scripts .= file_get_contents("ui/dart/web/Routes/Users/TaskStream.html");
+                $extra_scripts .= "</span>";
+                $viewData['extra_scripts'] = $extra_scripts;
+            }
+        }
         $app->view()->appendData($viewData);
         $app->render("index.tpl");
     }
@@ -153,9 +160,9 @@ class UserRouteHandler
         if (isset($use_openid)) {
             if ($use_openid == "y" || $use_openid == "h") {
                 $extra_scripts = "
-<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-jquery.js\"></script>
-<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-en.js\"></script>
-<link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/openid.css\" />";
+                    <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-jquery.js\"></script>
+                    <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-en.js\"></script>
+                    <link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/openid.css\" />";
                 $app->view()->appendData(array("extra_scripts" => $extra_scripts));
             }
         }
@@ -207,7 +214,7 @@ class UserRouteHandler
             if ($browser == 'IE') {
                 $app->flashNow(
                     "info",
-                    Lib\Localisation::getTranslation('index_8').Lib\Localisation::getTranslation('index_9')
+                    Lib\Localisation::getTranslation('index_dont_use_ie').Lib\Localisation::getTranslation('index_9')
                 );
             }
         }
@@ -425,7 +432,7 @@ class UserRouteHandler
             if ($browser == 'IE') {
                 $app->flashNow(
                     "info",
-                    Lib\Localisation::getTranslation('index_8').Lib\Localisation::getTranslation('index_9')
+                    Lib\Localisation::getTranslation('index_dont_use_ie').Lib\Localisation::getTranslation('index_9')
                 );
             }
         }
