@@ -233,8 +233,7 @@ class Orgs
         }
         $ret = false;
         $user = DAO\UserDao::getUser(null, $email);
-        if (count($user) > 0) {
-            $user = $user[0];
+        if (!is_null($user)) {
             $ret = DAO\OrganisationDao::acceptMemRequest($orgId, $user->getId());
         }
         API\Dispatcher::sendResponse(null, $ret, null, $format);
