@@ -4,6 +4,7 @@ namespace SolasMatch\API\DAO;
 
 use \SolasMatch\Common as Common;
 use \SolasMatch\API\Lib as Lib;
+use Exception;
 
 require_once __DIR__."/TagsDao.class.php";
 require_once __DIR__."/../../api/lib/PDOWrapper.class.php";

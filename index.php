@@ -3,6 +3,7 @@
 namespace SolasMatch\UI;
 
 use \SolasMatch\Common as Common;
+use Exception;
 
 mb_internal_encoding("UTF-8");
 
@@ -130,7 +131,7 @@ require_once 'ui/RouteHandlers/ProjectRouteHandler.class.php';
 require_once 'ui/RouteHandlers/StaticRouteHandeler.php';
 
 //Custom Slim Errors
-$app->error(function (\Exception $e) use ($app) {
+$app->error(function (Exception $e) use ($app) {
     $extra_scripts = "<script type='text/javascript' src='{$app->urlFor("home")}ui/js/slimError.showHide.js'></script>";
     $trace = str_replace('#', '<br \>', $e->getTraceAsString());
 	

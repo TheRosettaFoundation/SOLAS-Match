@@ -4,6 +4,7 @@ namespace SolasMatch\API\DAO;
 
 use \SolasMatch\Common as Common;
 use \SolasMatch\API\Lib as Lib;
+use Exception;
 
 //! The Task Data access Object for the API
 /*!
@@ -736,7 +737,7 @@ class TaskDao
         }
         $task_file_info = self::getTaskFileInfo($taskId, $version);
         if (empty($task_file_info)) {
-            throw new \Exception("Task file info not set for.");
+            throw new Exception("Task file info not set for.");
         }
 
         $absolute_file_path = Lib\Upload::absoluteFilePathForUpload($task, $version, $task_file_info['filename']);
@@ -763,7 +764,7 @@ class TaskDao
         $task_file_info = self::getTaskFileInfo($taskID, $version);
 
         if (empty($task_file_info)) {
-            throw new \Exception("Task file info not set for.");
+            throw new Exception("Task file info not set for.");
         }
 
         $absolute_file_path = Lib\Upload::absoluteFilePathForUpload($task, $version, $task_file_info['filename']);
