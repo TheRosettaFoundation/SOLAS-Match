@@ -668,8 +668,6 @@ class Middleware
             $badge = null;
             if ($badgeId != null) {
                 $badge = DAO\BadgeDao::getBadge($badgeId);
-                $badge = $badges[0];
-
             }
             $orgId = $badge->getOwnerId();
                     
