@@ -790,7 +790,7 @@ class TaskRouteHandler
             }
         }
         
-        $graphBuilder = new UIWorkflowBuilder();
+        $graphBuilder = new Lib\UIWorkflowBuilder();
         //Maybe replace with an API call
         $graph = $graphBuilder->parseAndBuild($taskPreReqIds);
                 
