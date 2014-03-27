@@ -50,7 +50,7 @@ button.btn.btn-small, input.btn.btn-small[type="submit"] {
 }
 
 #donate-trf-logo {
-	display: table-cell;
+	display: block;
 	margin-top: 5px;
 	margin-bottom: 5px;
 	margin-left:auto;
@@ -63,4 +63,10 @@ button.btn.btn-small, input.btn.btn-small[type="submit"] {
 
 .donate-button a:hover {
 	color:#4B031A;
+}
+
+#footer-menu
+{
+	text-align:center;
+	margin-top:10px;
 }
