@@ -10,8 +10,8 @@
     </section>
         
     <section>
-            <h1>What now? <small>{Localisation::getTranslation('task_claimed_translation_we_need_your_translation')}</small></h1>
-            <p>{Localisation::getTranslation('common_this_this_what_you_need_to_do_as_soon_as_possible')}</p>
+            <h1>{Localisation::getTranslation('common_what_happens_now')}<small>{Localisation::getTranslation('task_claimed_translation_we_need_your_translation')}</small></h1>
+            <p>{Localisation::getTranslation('common_this_is_what_you_need_to_do_as_soon_as_possible')}</p>
             <ol>
                 <li>{Localisation::getTranslation('common_can_you_open_file')}</li>
                 <li>{sprintf(Localisation::getTranslation('task_claimed_translation_translate_the_file_to'), {TemplateHelper::getLanguage($task->getTargetLocale())})}</li>

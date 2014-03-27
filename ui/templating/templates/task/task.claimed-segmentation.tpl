@@ -12,7 +12,7 @@
 
     <section>
             <h1>{Localisation::getTranslation('common_what_happens_now')}</h1>
-            <p>{Localisation::getTranslation('common_this_this_what_you_need_to_do_as_soon_as_possible')}</p>
+            <p>{Localisation::getTranslation('common_this_is_what_you_need_to_do_as_soon_as_possible')}</p>
             <ol>
                 <li>{Localisation::getTranslation('task_claimed_segmentation_5')}</li>
                 <li>{Localisation::getTranslation('task_claimed_segmentation_segment_the_file')}</li>
