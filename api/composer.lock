@@ -22,23 +22,22 @@
         },
         {
             "name": "league/oauth2-server",
-            "version": "3.1.1",
+            "version": "3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/oauth2-server.git",
-                "reference": "f59213499c23b850c9c95d112e5281589d02b23b"
+                "reference": "54ffa58e7b4553a16e889ef15b29b0c1e0323b24"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/oauth2-server/zipball/f59213499c23b850c9c95d112e5281589d02b23b",
-                "reference": "f59213499c23b850c9c95d112e5281589d02b23b",
+                "url": "https://api.github.com/repos/thephpleague/oauth2-server/zipball/54ffa58e7b4553a16e889ef15b29b0c1e0323b24",
+                "reference": "54ffa58e7b4553a16e889ef15b29b0c1e0323b24",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4.0"
             },
             "replace": {
-                "league/oauth2server": "*",
                 "lncd/oauth2": "*"
             },
             "require-dev": {
@@ -64,7 +63,6 @@
                 }
             ],
             "description": "A lightweight and powerful OAuth 2.0 authorization and resource server library with support for all the core specification grants. This library will allow you to secure your API with OAuth and allow your applications users to approve apps that want to access their data from your API.",
-            "homepage": "https://github.com/php-loep/oauth2-server",
             "keywords": [
                 "Authentication",
                 "api",
@@ -77,7 +75,7 @@
                 "secure",
                 "server"
             ],
-            "time": "2013-12-05 21:09:43"
+            "time": "2014-02-26 23:15:37"
         },
         {
             "name": "slim/slim",
@@ -368,16 +366,16 @@
         },
         {
             "name": "phpunit/php-token-stream",
-            "version": "1.2.1",
+            "version": "1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-token-stream.git",
-                "reference": "5220af2a7929aa35cf663d97c89ad3d50cf5fa3e"
+                "reference": "ad4e1e23ae01b483c16f600ff1bebec184588e32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/5220af2a7929aa35cf663d97c89ad3d50cf5fa3e",
-                "reference": "5220af2a7929aa35cf663d97c89ad3d50cf5fa3e",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/ad4e1e23ae01b483c16f600ff1bebec184588e32",
+                "reference": "ad4e1e23ae01b483c16f600ff1bebec184588e32",
                 "shasum": ""
             },
             "require": {
@@ -414,7 +412,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2013-09-13 04:58:23"
+            "time": "2014-03-03 05:10:30"
         },
         {
             "name": "phpunit/phpunit",

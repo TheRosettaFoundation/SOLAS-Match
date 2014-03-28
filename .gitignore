@@ -14,5 +14,3 @@ ui/dart/deploy/web/conf/conf.json
 .metadata/
 .buildpath
 /.settings
-ui/composer.lock
-api/composer.lock
