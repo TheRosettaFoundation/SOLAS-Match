@@ -4,7 +4,7 @@ namespace SolasMatch\API\DAO;
 
 use \SolasMatch\Common as Common;
 use \SolasMatch\API\Lib as Lib;
-use Exception;
+
 
 require_once __DIR__."/TagsDao.class.php";
 require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
@@ -423,7 +423,7 @@ class ProjectDao
         $token = self::recordProjectFileInfo($projectId, $filename, $userId, $mime);
         try {
             file_put_contents($destination.$token, $file);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $message = "You cannot upload a project file for project ($projectId), as one already exists.";
             throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::CONFLICT);
         }

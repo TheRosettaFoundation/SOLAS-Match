@@ -5,7 +5,7 @@ namespace SolasMatch\UI\RouteHandlers;
 use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
 use \SolasMatch\Common as Common;
-use Exception;
+
 
 require_once __DIR__.'/../../api/lib/IO.class.php';
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
@@ -451,7 +451,7 @@ class TaskRouteHandler
             $uploadError = false;
             try {
                 Lib\TemplateHelper::validateFileHasBeenSuccessfullyUploaded($fieldName);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $uploadError = true;
                 $errorMessage = $e->getMessage();
             }
@@ -460,7 +460,7 @@ class TaskRouteHandler
                 try {
                     $filedata = file_get_contents($_FILES[$fieldName]['tmp_name']);
                     $taskDao->saveTaskFile($taskId, $userId, $filedata);
-                } catch (Exception  $e) {
+                } catch (\Exception  $e) {
                     $uploadError = true;
                     $errorMessage = $e->getMessage();
                 }
@@ -538,12 +538,12 @@ class TaskRouteHandler
                 );
 
                 if (strcasecmp($fileUploadType, $projectFileType) != 0) {
-                    throw new Exception(sprintf(
+                    throw new \Exception(sprintf(
                         Lib\Localisation::getTranslation('task_simple_upload_5'),
                         $projectFileType
                     ));
                 } elseif ($fileUploadMime != $projectFileMimeType) {
-                    throw new Exception(
+                    throw new \Exception(
                         sprintf(
                             Lib\Localisation::getTranslation('task_simple_upload_6'),
                             $projectFileType,
@@ -551,7 +551,7 @@ class TaskRouteHandler
                         )
                     );
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $errorMessage = $e->getMessage();
             }
         
@@ -565,7 +565,7 @@ class TaskRouteHandler
                         $taskDao->uploadOutputFile($taskId, $userId, $filedata);
                     }
                 
-                } catch (Exception  $e) {
+                } catch (\Exception  $e) {
                     $errorMessage = Lib\Localisation::getTranslation('task_simple_upload_7') . $e->getMessage();
                 }
             }
@@ -1075,7 +1075,7 @@ class TaskRouteHandler
                         $user_id,
                         $projectDao->getProjectFile($project_id)
                     );
-                } catch (Exception  $e) {
+                } catch (\Exception  $e) {
                     $upload_error = Lib\Localisation::getTranslation('task_simple_upload_7') . $e->getMessage();
                 }
                 
@@ -1237,7 +1237,7 @@ class TaskRouteHandler
                             try {
                                 $filedata = file_get_contents($_FILES['segmentationUpload_'.$i]['tmp_name']);
                                 $taskDao->saveTaskFile($createdTranslation->getId(), $user_id, $filedata);
-                            } catch (Exception  $e) {
+                            } catch (\Exception  $e) {
                                 $upload_error = true;
                                 $errors["transTask$i"] = "<strong>File #$i:</strong> {$e->getMessage()}";
                             }
@@ -1252,13 +1252,13 @@ class TaskRouteHandler
                             try {
                                 $filedata = file_get_contents($_FILES['segmentationUpload_'.$i]['tmp_name']);
                                 $taskDao->saveTaskFile($createdProofReading->getId(), $user_id, $filedata);
-                            } catch (Exception  $e) {
+                            } catch (\Exception  $e) {
                                 $upload_error = true;
                                 $errors["proofTask$i"] = "<strong>File #$i:</strong> {$e->getMessage()}";
                                 $taskDao->deleteTask($createdProofReading->getId());
                             }
                         }
-                    } catch (Exception $e) {
+                    } catch (\Exception $e) {
                         $upload_error = true;
                         $error_message = $e->getMessage();
                     }
