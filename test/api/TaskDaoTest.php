@@ -20,6 +20,9 @@ require_once __DIR__.'/../UnitTestHelper.php';
 
 class TaskDaoTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @covers API\DAO\TaskDao::save
+     */
     public function testCreateTask()
     {
         UnitTestHelper::teardownDb();
@@ -41,6 +44,9 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($insertedTask->getId());
     }
     
+    /**
+     * @covers API\DAO\TaskDao::save
+     */
     public function testUpdateTask()
     {
         UnitTestHelper::teardownDb();
@@ -110,6 +116,9 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($task->getPublished(), $updatedTask->getPublished());
     }
     
+    /**
+     * @covers API\DAO\TaskDao::getTask
+     */
     public function testGetTask()
     {
         UnitTestHelper::teardownDb();
@@ -179,6 +188,9 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($nonExistantTask);
     }
     
+    /**
+     * @covers API\DAO\TaskDao::getTasks
+     */
     public function testGetTasks()
     {
         UnitTestHelper::teardownDb();
@@ -229,6 +241,9 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         }
     }
     
+    /**
+     * @covers API\DAO\TaskDao::deleteTask
+     */
     public function testDeleteTask()
     {
         UnitTestHelper::teardownDb();
@@ -257,6 +272,9 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $deleteNonExistantTask);
     }
     
+    /**
+     * @covers API\DAO\TaskDao::addTaskPreReq
+     */
     public function testAddTaskPreReq()
     {
         UnitTestHelper::teardownDb();
@@ -313,6 +331,9 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $addTaskPreReqDuplicate);
     }
     
+    /**
+     * @covers API\DAO\TaskDao::removeTaskPreReq
+     */
     public function testRemoveTaskPreReq()
     {
         UnitTestHelper::teardownDb();
@@ -371,6 +392,9 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $removeTaskPreReqDuplicate);
     }
     
+    /**
+     * @covers API\DAO\TaskDao::getTaskPreReqs
+     */
     public function testGetTaskPreReqs()
     {
         UnitTestHelper::teardownDb();
@@ -445,6 +469,9 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         }
     }
     
+    /**
+     * @covers API\DAO\TaskDao::getLatestAvailableTasks
+     */
     public function testGetLatestAvailableTasks()
     {
         UnitTestHelper::teardownDb();
@@ -500,6 +527,9 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         }
     }
     
+    /**
+     * @covers API\DAO\TaskDao::getUserTopTasks
+     */
     public function testGetUserTopTasks()
     {
         UnitTestHelper::teardownDb();
@@ -564,6 +594,9 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         }
     }
     
+    /**
+     * @covers API\DAO\TaskDao::moveToArchiveById
+     */
     public function testArchiveTask()
     {
         UnitTestHelper::teardownDb();
@@ -607,6 +640,9 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $archiveTaskFailure);
     }
     
+    /**
+     * @covers API\DAO\TaskDao::claimTask
+     */
     public function testClaimTask()
     {
         UnitTestHelper::teardownDb();
@@ -640,6 +676,9 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $claimTaskFailure);
     }
     
+    /**
+     * @covers API\DAO\TaskDao::unClaimTask
+     */
     public function testUnClaimTask()
     {
         UnitTestHelper::teardownDb();
@@ -676,6 +715,9 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $unClaimTaskFailure);
     }
     
+    /**
+     * @covers API\DAO\TaskDao::hasUserClaimedTask
+     */
     public function hasUserClaimedTask()
     {
         UnitTestHelper::teardownDb();
@@ -715,6 +757,9 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("1", $hasUserClaimedTask);
     }
     
+    /**
+     * @covers API\DAO\TaskDao::taskIsClaimed
+     */
     public function testTaskIsClaimed()
     {
         UnitTestHelper::teardownDb();
@@ -751,6 +796,9 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("1", $taskIsClaimed);
     }
     
+    /**
+     * @covers API\DAO\TaskDao::getUserClaimedTask
+     */
     public function testGetUserClaimedTask()
     {
         UnitTestHelper::teardownDb();
@@ -789,6 +837,9 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($insertedUser->getId(), $taskTranslator->getId());
     }
     
+    /**
+     * @covers API\DAO\TaskDao::hasUserClaimedSegmentationTask
+     */
     public function testHasUserClaimedSegmentationTask()
     {
         UnitTestHelper::teardownDb();
@@ -823,6 +874,9 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("1", $hasClaimedSeg);
     }
     
+    /**
+     * @covers API\DAO\TaskDao::getClaimedTime
+     */
     public function testGetClaimedTime()
     {
         UnitTestHelper::teardownDb();
@@ -857,6 +911,9 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($theTime, strtotime($getClaimedTime), "FAILUUUURRRE", 2);
     }
     
+    /**
+     * @covers API\DAO\TaskDao::getUserTasks
+     */
     public function testGetUserTasks()
     {
         UnitTestHelper::teardownDb();
@@ -923,6 +980,9 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         }
     }
     
+    /**
+     * @covers API\DAO\TaskDao::getUserTasksCount
+     */
     public function testGetUserTasksCount()
     {
         UnitTestHelper::teardownDb();
@@ -985,6 +1045,9 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("2", $userTaskCount);
     }
     
+    /**
+     * @covers API\DAO\TaskDao::getUserArchivedTasks
+     */
     public function testGetUserArchivedTasks()
     {
         UnitTestHelper::teardownDb();
@@ -1061,6 +1124,9 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($archivedTask->getArchivedDate());
     }
     
+    /**
+     * @covers API\DAO\TaskDao::getTasksWithTag
+     */
     public function testGetTasksWithTag()
     {
         UnitTestHelper::teardownDb();
@@ -1121,6 +1187,9 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         }
     }
     
+    /**
+     * @covers API\DAO\TaskDao::checkTaskFileVersion
+     */
     public function testCheckTaskFileVersion()
     {
         UnitTestHelper::teardownDb();
@@ -1145,6 +1214,9 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(false, $checkTaskFileVersion);
     }
     
+    /**
+     * @covers API\DAO\TaskDao::recordFileUpload
+     */
     public function testRecordFileUpload()
     {
         UnitTestHelper::teardownDb();
@@ -1179,6 +1251,9 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($recordFileUpload);
     }
     
+    /**
+     * @covers API\DAO\TaskDao::getLatestFileVersion
+     */
     public function testGetLatestFileVersion()
     {
         UnitTestHelper::teardownDb();
@@ -1203,6 +1278,9 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $latestFileVersion);
     }
     
+    /**
+     * @covers API\DAO\TaskDao::getSubscribedUsers
+     */
     public function testGetSubscribedUsers()
     {
         UnitTestHelper::teardownDb();

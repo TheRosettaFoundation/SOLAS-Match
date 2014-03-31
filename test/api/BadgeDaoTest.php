@@ -18,8 +18,12 @@ require_once __DIR__.'/../UnitTestHelper.php';
 
 class BadgeDaoTest extends \PHPUnit_Framework_TestCase
 {
+    //number of badges in the system by default. Correct as of 31st March 2014
     const BADGE_COUNT = 7 ;
     
+    /**
+     * @covers API\DAO\BadgeDao::insertAndUpdateBadge
+     */
     public function testCreateBadge()
     {
         UnitTestHelper::teardownDb();
@@ -36,6 +40,9 @@ class BadgeDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($systemBadge->getOwnerId(), $insertedBadge->getOwnerId());
     }
     
+    /**
+     * @covers API\DAO\BadgeDao::insertAndUpdateBadge
+     */
     public function testUpdateBadge()
     {
         UnitTestHelper::teardownDb();
@@ -64,6 +71,9 @@ class BadgeDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($updatedBadge->getOwnerId(), $insertedBadge->getOwnerId());
     }
     
+    /**
+     * @covers API\DAO\BadgeDao::getBadge
+     */
     public function testGetBadge()
     {
         UnitTestHelper::teardownDb();
@@ -81,6 +91,9 @@ class BadgeDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($insertedBadge, $getBadge);
     }
     
+    /**
+     * @covers API\DAO\BadgeDao::getBadges
+     */
     public function testGetBadges()
     {
         UnitTestHelper::teardownDb();
@@ -115,6 +128,9 @@ class BadgeDaoTest extends \PHPUnit_Framework_TestCase
         }
     }
     
+    /**
+     * @covers API\DAO\BadgeDao::getOrgBadges
+     */
     public function testGetOrgBadges()
     {
         UnitTestHelper::teardownDb();
@@ -153,6 +169,9 @@ class BadgeDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($orgBadgesFailure);
     }
     
+    /**
+     * @covers API\DAO\BadgeDao::assignBadge
+     */
     public function testAssignBadge()
     {
         UnitTestHelper::teardownDb();
@@ -174,6 +193,9 @@ class BadgeDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("1", $resultAssignBadge);
     }
     
+    /**
+     * @covers API\DAO\BadgeDao::removeUserBadge
+     */
     public function testRemoveUserBadge()
     {
         UnitTestHelper::teardownDb();
@@ -212,6 +234,9 @@ class BadgeDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $resultRemoveFailure);
     }
     
+    /**
+     * @covers API\DAO\BadgeDao::deleteBadge
+     */
     public function testDeleteBadge()
     {
         UnitTestHelper::teardownDb();
@@ -230,6 +255,9 @@ class BadgeDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $resultDeleteFailure);
     }
     
+    /**
+     * @covers API\DAO\BadgeDao::validateUserBadge
+     */
     public function testValidateUserBadge()
     {
         UnitTestHelper::teardownDb();

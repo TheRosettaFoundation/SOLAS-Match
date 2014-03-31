@@ -20,6 +20,9 @@ require_once __DIR__.'/../UnitTestHelper.php';
 
 class TagsDaoTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @covers API\DAO\TagsDao::create
+     */
     public function testCreate()
     {
         UnitTestHelper::teardownDb();
@@ -35,6 +38,9 @@ class TagsDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($resultCreateTag2);
     }
     
+    /**
+     * @covers API\DAO\TagsDao::getTag
+     */
     public function testGetTag()
     {
         UnitTestHelper::teardownDb();
@@ -58,6 +64,9 @@ class TagsDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("test", $resultGetTag->getLabel());
     }
     
+    /**
+     * @covers API\DAO\TagsDao::getTags
+     */
     public function testGetTags()
     {
         UnitTestHelper::teardownDb();
@@ -80,6 +89,9 @@ class TagsDaoTest extends \PHPUnit_Framework_TestCase
         }
     }
     
+    /**
+     * @covers API\DAO\TagsDao::getTopTags
+     */
     public function testGetTopTags()
     {
         UnitTestHelper::teardownDb();
@@ -134,6 +146,9 @@ class TagsDaoTest extends \PHPUnit_Framework_TestCase
         }
     }
     
+    /**
+     * @covers API\DAO\TagsDao::delete
+     */
     public function testDeleteTag()
     {
         UnitTestHelper::teardownDb();
@@ -151,6 +166,9 @@ class TagsDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $resultDeleteTag2);
     }
     
+    /**
+     * @covers API\DAO\TagsDao::updateTags
+     */
     public function testUpdateTags()
     {
         UnitTestHelper::teardownDb();

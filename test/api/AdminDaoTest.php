@@ -19,6 +19,9 @@ require_once __DIR__.'/../UnitTestHelper.php';
 
 class AdminDaoTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @covers API\DAO\AdminDao::addSiteAdmin
+     */
     public function testAddSiteAdmin()
     {
         UnitTestHelper::teardownDb();
@@ -35,6 +38,9 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($userId, $admins[0]->getId());
     }
     
+    /**
+     * @covers API\DAO\AdminDao::removeAdmin
+     */
     public function testRemoveAdmin()
     {
         UnitTestHelper::teardownDb();
@@ -55,6 +61,9 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($admins);
     }
 
+    /**
+     * @covers API\DAO\AdminDao::addOrgAdmin
+     */
     public function testAddOrgAdmin()
     {
         UnitTestHelper::teardownDb();
@@ -79,6 +88,9 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($userId, $adminsReturned[0]->getId());
     }
     
+    /**
+     * @covers API\DAO\AdminDao::removeOrgAdmin
+     */
     public function testRemoveOrgAdmin()
     {
         UnitTestHelper::teardownDb();
@@ -106,6 +118,9 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($admins);
     }
 
+    /**
+     * @covers API\DAO\AdminDao::saveBannedUser
+     */
     public function testSaveBannedUser()
     {
         UnitTestHelper::teardownDb();
@@ -133,6 +148,9 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("1", $isBanned);
     }
     
+    /**
+     * @covers API\DAO\AdminDao::getBannedUser
+     */
     public function testGetBannedUser()
     {
         UnitTestHelper::teardownDb();
@@ -166,6 +184,9 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($bannedUser->getComment(), $getBannedUser[0]->getComment());
     }
     
+    /**
+     * @covers API\DAO\AdminDao::unBanUser
+     */
     public function testUnBanUser()
     {
         UnitTestHelper::teardownDb();
@@ -197,6 +218,9 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $isBanned);
     }
     
+    /**
+     * @covers API\DAO\AdminDao::saveBannedOrg
+     */
     public function testSaveBannedOrg()
     {
         UnitTestHelper::teardownDb();
@@ -224,6 +248,9 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("1", $isBanned);
     }
     
+    /**
+     * @covers API\DAO\AdminDao::getBannedOrg
+     */
     public function testGetBannedOrg()
     {
         UnitTestHelper::teardownDb();
@@ -257,6 +284,9 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($bannedOrg->getComment(), $getBannedOrg[0]->getComment());
     }
     
+    /**
+     * @covers API\DAO\AdminDao::unBanOrg
+     */
     public function testUnBanOrg()
     {
         UnitTestHelper::teardownDb();
@@ -286,7 +316,10 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
         $isBanned = API\DAO\AdminDao::isOrgBanned($orgId);
         $this->assertEquals("0", $isBanned);
     }
-    
+
+    /**
+     * @covers API\DAO\AdminDao::isAdmin
+     */
     public function testIsAdmin()
     {
         UnitTestHelper::teardownDb();

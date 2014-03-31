@@ -22,6 +22,10 @@ require_once __DIR__.'/../UnitTestHelper.php';
 
 class UserDaoTest extends \PHPUnit_Framework_TestCase
 {
+    
+    /**
+     * @covers API\DAO\UserDao::create
+     */
     public function testCreateUser()
     {
         UnitTestHelper::teardownDb();
@@ -35,6 +39,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($insertedUser->getNonce());
     }
     
+    /**
+     * @covers API\DAO\UserDao::save
+     */
     public function testUpdateUser()
     {
         UnitTestHelper::teardownDb();
@@ -77,6 +84,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($insertedUser->getPassword(), $updatedUser->getPassword());
     }
     
+    /**
+     * @covers API\DAO\UserDao::getUser
+     */
     public function testGetUser()
     {
         UnitTestHelper::teardownDb();
@@ -122,6 +132,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($insertedUser->getPassword(), $getUpdatedUser->getPassword());
     }
     
+    /**
+     * @covers API\DAO\UserDao::getUsers
+     */
     public function testGetUsers()
     {
         UnitTestHelper::teardownDb();
@@ -143,6 +156,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         }
     }
     
+    /**
+     * @covers API\DAO\UserDao::deleteUser
+     */
     public function testDeleteUser()
     {
         UnitTestHelper::teardownDb();
@@ -156,6 +172,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($getDeletedUser);
     }
     
+    /**
+     * @covers API\DAO\UserDao::changePassword
+     */
     public function testChangePassword()
     {
         UnitTestHelper::teardownDb();
@@ -171,6 +190,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEquals($insertedUser->getNonce(), $userWithChangedPw->getNonce());
     }
     
+    /**
+     * @covers API\DAO\UserDao::apiRegister
+     */
     public function testApiRegister()
     {
         UnitTestHelper::teardownDb();
@@ -193,6 +215,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($user->getPassword(), $hashpw);
     }
     
+    /**
+     * @covers API\DAO\UserDao::finishRegistration
+     */
     public function testFinishRegistration()
     {
         UnitTestHelper::teardownDb();
@@ -218,6 +243,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("1", $finishReg);
     }
     
+    /**
+     * @covers API\DAO\UserDao::isUserVerified
+     */
     public function testIsUserVerified()
     {
         UnitTestHelper::teardownDb();
@@ -246,6 +274,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("1", $isVerified);
     }
     
+    /**
+     * @covers API\DAO\UserDao::findOrganisationUserBelongsTo
+     */
     public function testFindOrganisationsUserBelongsTo()
     {
         UnitTestHelper::teardownDb();
@@ -301,6 +332,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         }
     }
     
+    /**
+     * @covers API\DAO\UserDao::getUserBadges
+     */
     public function testGetUserBadges()
     {
         UnitTestHelper::teardownDb();
@@ -342,6 +376,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         }
     }
     
+    /**
+     * @covers API\DAO\UserDao::getUserTags
+     */
     public function testGetUserTags()
     {
         UnitTestHelper::teardownDb();
@@ -383,6 +420,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         }
     }
     
+    /**
+     * @covers API\DAO\UserDao::getUsersWithBadge
+     */
     public function testGetUsersWithBadge()
     {
         UnitTestHelper::teardownDb();
@@ -418,6 +458,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         }
     }
     
+    /**
+     * @covers API\DAO\UserDao::likeTag
+     */
     public function testLikeTag()
     {
         UnitTestHelper::teardownDb();
@@ -440,6 +483,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $tagLikedFailure);
     }
     
+    /**
+     * @covers API\DAO\UserDao::removeTag
+     */
     public function testRemoveTag()
     {
         UnitTestHelper::teardownDb();
@@ -465,6 +511,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $removedTagFailure);
     }
     
+    /**
+     * @covers API\DAO\UserDao::trackTask
+     */
     public function testTrackTask()
     {
         UnitTestHelper::teardownDb();
@@ -495,6 +544,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $trackTaskFail);
     }
     
+    /**
+     * @covers API\DAO\UserDao::ignoreTask
+     */
     public function testIgnoreTask()
     {
         UnitTestHelper::teardownDb();
@@ -528,6 +580,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $ignoreTaskFail);
     }
     
+    /**
+     * @covers API\DAO\UserDao::isSubscribedToTask
+     */
     public function testIsSubscribedToTask()
     {
         UnitTestHelper::teardownDb();
@@ -561,6 +616,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("1", $isTrackingTask);
     }
 
+    /**
+     * @covers API\DAO\UserDao::getTrackedTasks
+     */
     public function testGetTrackedTasks()
     {
         UnitTestHelper::teardownDb();
@@ -599,6 +657,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($insertedTask->getTaskStatus(), $getTrackedTasks[0]->getTaskStatus());
     }
     
+    /**
+     * @covers API\DAO\UserDao::createPasswordResetRequest
+     */
     public function testCreatePasswordResetRequest()
     {
         UnitTestHelper::teardownDb();
@@ -615,6 +676,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("1", $createPwResetRequest);
     }
     
+    /**
+     * @covers API\DAO\UserDao::hasRequestedPasswordReset
+     */
     public function testHasRequestedPasswordReset()
     {
         UnitTestHelper::teardownDb();
@@ -632,6 +696,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($hasPwResetReq);
     }
     
+    /**
+     * @covers API\DAO\UserDao::removePasswordResetRequest
+     */
     public function testRemovePasswordResetRequest()
     {
         UnitTestHelper::teardownDb();
@@ -655,6 +722,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $removePwResetRequestFail);
     }
     
+    /**
+     * @covers API\DAO\UserDao::getPasswordResetRequests
+     */
     public function testGetPasswordResetRequests()
     {
         UnitTestHelper::teardownDb();
@@ -685,6 +755,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($passwordResetRequestFailure);
     }
     
+    /**
+     * @covers API\DAO\UserDao::trackProject
+     */
     public function testTrackProject()
     {
         UnitTestHelper::teardownDb();
@@ -713,6 +786,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("1", $trackProject);
     }
     
+    /**
+     * @covers API\DAO\UserDao::unTrackProject
+     */
     public function testUnTrackProject()
     {
         UnitTestHelper::teardownDb();
@@ -744,6 +820,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("1", $untrackProject);
     }
     
+    /**
+     * @covers API\DAO\UserDao::getTrackedProjects
+     */
     public function testGetTrackedProjects()
     {
         UnitTestHelper::teardownDb();
@@ -787,6 +866,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         }
     }
     
+    /**
+     * @covers API\DAO\UserDao::isSubscribedToProject
+     */
     public function testIsSubscribedToProject()
     {
         UnitTestHelper::teardownDb();
@@ -824,6 +906,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("1", $isSubscribedToProject);
     }
     
+    /**
+     * @covers API\DAO\UserDao::getUserTaskStreamNotification
+     */
     public function testGetUserTaskStreamNotification()
     {
         UnitTestHelper::teardownDb();
@@ -861,6 +946,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Common\Enums\NotificationIntervalEnum::DAILY, $getTsn->getInterval());
     }
     
+    /**
+     * @covers API\DAO\UserDao::removeTaskStreamNotification
+     */
     public function testRemoveTaskStreamNotification()
     {
         UnitTestHelper::teardownDb();
@@ -901,6 +989,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($removeTsn);
     }
     
+    /**
+     * @covers API\DAO\UserDao::createPersonalInfo
+     */
     public function testCreatePersonalInfo()
     {
         UnitTestHelper::teardownDb();
@@ -917,6 +1008,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($userInfo->getReceiveCredit(), $insertedInfo->getReceiveCredit());
     }
     
+    /**
+     * @covers API\DAO\UserDao::updatePersonalInfo
+     */
     public function testUpdatePersonalInfo()
     {
         UnitTestHelper::teardownDb();
@@ -943,6 +1037,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($insertedInfo->getMobileNumber(), $updatedInfo->getMobileNumber());
     }
     
+    /**
+     * @covers API\DAO\UserDao::getPersonalInfo
+     */
     public function testGetPersonalInfo()
     {
         UnitTestHelper::teardownDb();
@@ -963,6 +1060,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($insertedInfo, $getInfo);
     }
     
+    /**
+     * @covers API\DAO\UserDao::createSecondaryLanguage
+     */
     public function testCreateSecondaryLanguage()
     {
         UnitTestHelper::teardownDb();
@@ -985,6 +1085,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($locale->getCountryCode(), $afterCreate->getCountryCode());
     }
     
+    /**
+     * @covers API\DAO\UserDao::getSecondaryLanguages
+     */
     public function testGetSecondaryLanguages()
     {
         UnitTestHelper::teardownDb();
@@ -1024,6 +1127,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         }
     }
     
+    /**
+     * @covers API\DAO\UserDao::deleteSecondaryLanguage
+     */
     public function testDeleteSecondaryLanguage()
     {
         UnitTestHelper::teardownDb();
@@ -1066,6 +1172,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNotContains($locale2, $getLangs);
     }
     
+    /**
+     * @covers API\DAO\UserDao::trackOrganisation
+     */
     public function testTrackOrganisation()
     {
         UnitTestHelper::teardownDb();
@@ -1088,6 +1197,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $tryTrackOrgAgain);
     }
     
+    /**
+     * @covers API\DAO\UserDao::unTrackOrganisation
+     */
     public function testUnTrackOrganisation()
     {
         UnitTestHelper::teardownDb();
@@ -1111,6 +1223,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("1", $unTrackOrg);
     }
     
+    /**
+     * @covers API\DAO\UserDao::getTrackedOrganisations
+     */
     public function testGetTrackedOrganisations()
     {
         UnitTestHelper::teardownDb();
@@ -1143,5 +1258,28 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         foreach ($userTrackedOrgs as $trackedOrg) {
             $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $trackedOrg);
         }
+    }
+    
+    /**
+     * @covers API\DAO\UserDao::getUserRealName
+     */
+    public function testGetUserRealName()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $user = UnitTestHelper::createUser();
+        $insertedUser = API\DAO\UserDao::save($user);
+        $userId = $insertedUser->getId();
+        $this->assertNotNull($insertedUser);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
+        
+        $userInfo = UnitTestHelper::createUserPersonalInfo($insertedUser->getId());
+        $userInfo->setReceiveCredit(1);
+        $insertedInfo = API\DAO\UserDao::createPersonalInfo($userInfo);
+        $this->assertNotNull($insertedInfo);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\UserPersonalInformation", $insertedInfo);
+        $getName = API\DAO\UserDao::getUserRealName($userId);
+        $infoName = $insertedInfo->getFirstName()." ".$insertedInfo->getLastName();
+        $this->assertEquals($infoName, $getName);
     }
 }

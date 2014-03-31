@@ -18,6 +18,9 @@ require_once __DIR__.'/../UnitTestHelper.php';
 
 class StatDaoTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @covers API\DAO\StatDao::getStatistics
+     */
     public function testGetStatistics()
     {
         UnitTestHelper::teardownDb();
@@ -36,7 +39,6 @@ class StatDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($resultAllBadges[0]);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Statistic", $resultAllBadges[0]);
         $this->assertEquals("Badges", $resultAllBadges[0]->getName());
-        //Changed 3 to 7. There were only 3 badges when this test class was made?
         $this->assertEquals(7, $resultAllBadges[0]->getValue());
     }
 

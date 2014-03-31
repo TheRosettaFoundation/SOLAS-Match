@@ -17,7 +17,9 @@ require_once __DIR__.'/../UnitTestHelper.php';
 
 class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
 {
-    
+    /**
+     * @covers API\DAO\OrganisationDao::createOrg
+     */
     public function testInsertOrg()
     {
         UnitTestHelper::teardownDb();
@@ -33,6 +35,9 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($org->getHomePage(), $insertedOrg->getHomePage());
     }
     
+    /**
+     * @covers API\DAO\OrganisationDao::insertAndUpdate
+     */
     public function testUpdateOrg()
     {
         UnitTestHelper::teardownDb();
@@ -55,6 +60,9 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         
     }
     
+    /**
+     * @covers API\DAO\OrganisationDao::getOrg
+     */
     public function testGetOrg()
     {
         UnitTestHelper::teardownDb();
@@ -89,6 +97,9 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg2);
     }
     
+    /**
+     * @covers API\DAO\OrganisationDao::getOrgs
+     */
     public function testGetOrgs()
     {
         UnitTestHelper::teardownDb();
@@ -114,6 +125,9 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($getLimerickOrgs);
     }
     
+    /**
+     * @covers API\DAO\OrganisationDao::requestMembership
+     */
     public function testRequestMembership()
     {
         UnitTestHelper::teardownDb();
@@ -139,6 +153,9 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $resultRequestMembershipFail);
     }
     
+    /**
+     * @covers API\DAO\OrganisationDao::acceptMembershipRequest
+     */
     public function testAcceptMembershipRequest()
     {
         UnitTestHelper::teardownDb();
@@ -174,6 +191,9 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("1", $resultAcceptMembershipNoReq);
     }
     
+    /**
+     * @covers API\DAO\OrganisationDao::isMember
+     */
     public function testIsMember()
     {
         UnitTestHelper::teardownDb();
@@ -205,6 +225,9 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("1", $resultIsMember);
     }
     
+    /**
+     * @covers API\DAO\OrganisationDao::getOrgByUser
+     */
     public function testGetOrgByUser()
     {
         UnitTestHelper::teardownDb();
@@ -236,6 +259,9 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($resultFoundOrgByUserFailure);
     }
     
+    /**
+     * @covers API\DAO\OrganisationDao::getOrgMembers
+     */
     public function testGetOrgMembers()
     {
         UnitTestHelper::teardownDb();
@@ -282,7 +308,9 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($resultOrgMembersFailure);
     }
     
-
+    /**
+     * @covers API\DAO\OrganisationDao::searchForOrg
+     */
     public function testSearchForOrg()
     {
         UnitTestHelper::teardownDb();
@@ -309,6 +337,9 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($resultFoundOrgsFailure);
     }
     
+    /**
+     * @covers API\DAO\OrganisationDao::getMembershipRequests
+     */
     public function testGetMembershipRequests()
     {
         UnitTestHelper::teardownDb();
@@ -349,6 +380,9 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($resultGetMembershipRequestsFailure);
     }
 
+    /**
+     * @covers API\DAO\OrganisationDao::refuseMembershipRequest
+     */
     public function testRefuseMembershipRequest()
     {
         UnitTestHelper::teardownDb();
@@ -377,6 +411,9 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $resultRefuseMembershipFailure);
     }
     
+    /**
+     * @covers API\DAO\OrganisationDao::revokeMembership
+     */
     public function testRevokeMembership()
     {
         UnitTestHelper::teardownDb();
@@ -407,6 +444,9 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $resultRevokeMembershipFailure);
     }
     
+    /**
+     * @covers API\DAO\OrganisationDao::delete
+     */
     public function testDelete()
     {
         UnitTestHelper::teardownDb();
@@ -431,6 +471,9 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $deleteOrg); //failing to delete an org because it is not in DB should return 0
     }
     
+    /**
+     * @covers API\DAO\OrganisationDao::getUsersTrackingOrg
+     */
     public function testGetUsersTrackingOrg()
     {
         UnitTestHelper::teardownDb();
