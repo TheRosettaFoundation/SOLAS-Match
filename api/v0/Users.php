@@ -102,6 +102,12 @@ class Users
                             '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
                             '\SolasMatch\API\V0\Users::userUnTrackProject'
                         );
+
+                        $app->put(
+                            '/:projectId/',
+                            '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+                            '\SolasMatch\API\V0\Users::userTrackProject'
+                        );
                     });
 
                     $app->group('/organisations', function () use ($app) {
