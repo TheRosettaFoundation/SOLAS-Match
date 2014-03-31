@@ -150,6 +150,22 @@ class UnitTestHelper
         return $bannedOrg;
     }
     
+    public static function createLocale(
+        $langName = "French",
+        $langCode = "fr",
+        $countryName = "FRANCE",
+        $countryCode = "FR"
+    ) {
+        $locale = new Common\Protobufs\Models\Locale();
+        
+        $locale->setLanguageName($langName);
+        $locale->setLanguageCode($langCode);
+        $locale->setCountryName($countryName);
+        $locale->setCountryCode($countryCode);
+        
+        return $locale;
+    }
+    
     public static function createOrg(
         $id = null,
         $name = "Organisation 1",
@@ -206,7 +222,8 @@ class UnitTestHelper
         $jobTitle = "Derp",
         $address = "This is a real place",
         $city = "Lightless City",
-        $country = "Forgotten Land"
+        $country = "Forgotten Land",
+        $receiveCredit = 0
     ) {
         $userInfo = new Common\Protobufs\Models\UserPersonalInformation();
         
@@ -221,6 +238,7 @@ class UnitTestHelper
         $userInfo->setAddress($address);
         $userInfo->setCity($city);
         $userInfo->setCountry($country);
+        $userInfo->setReceiveCredit($receiveCredit);
         
         return $userInfo ;
     }

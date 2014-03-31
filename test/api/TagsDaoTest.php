@@ -6,6 +6,7 @@ use \SolasMatch\Tests\UnitTestHelper;
 use \SolasMatch\Common as Common;
 use \SolasMatch\API as API;
 use SolasMatch\API\DAO\TagsDao;
+use SolasMatch\API\DAO\TaskDao;
 
 require_once 'PHPUnit/Autoload.php';
 require_once __DIR__.'/../../api/vendor/autoload.php';
@@ -93,7 +94,7 @@ class TagsDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $insertedProject = API\DAO\ProjectDao::save($project);
         $this->assertNotNull($insertedProject);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         
@@ -110,12 +111,21 @@ class TagsDaoTest extends \PHPUnit_Framework_TestCase
             "en",
             array("Project", "Tags", "Extra", "More")
         );
-        $insertedProject2 = API\DAO\ProjectDao::createUpdate($project2);
+        $insertedProject2 = API\DAO\ProjectDao::save($project2);
         $this->assertNotNull($insertedProject2);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject2);
         
+        //There is no task created for the project yet, so no tags will be returned
+        $getTopTagsFailNoTask = API\DAO\TagsDao::getTopTags(10);
+        $this->assertNull($getTopTagsFailNoTask);
+        
+        $task = UnitTestHelper::createTask($insertedProject2->getId());
+        $insertedTask = API\DAO\TaskDao::save($task);
+        $this->assertNotNull($insertedTask);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $insertedTask);
+        
         // Success
-        $successTopTags = API\DAO\TagsDao::getTopTags();
+        $successTopTags = API\DAO\TagsDao::getTopTags(10);
         $this->assertCount(4, $successTopTags);
         foreach ($successTopTags as $tag) {
             $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Tag", $tag);
@@ -151,7 +161,7 @@ class TagsDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
-        $insertedProject = API\DAO\ProjectDao::createUpdate($project);
+        $insertedProject = API\DAO\ProjectDao::save($project);
         $this->assertNotNull($insertedProject);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
         

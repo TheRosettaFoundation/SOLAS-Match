@@ -115,7 +115,9 @@ class TagsDao
     {
         $ret = null;
         $args = Lib\PDOWrapper::cleanseNull($limit);
-        if ($result = Lib\PDOWrapper::call("getTopTags", $args)) {
+        
+        $result = Lib\PDOWrapper::call("getTopTags", $args);
+        if ($result) {
             $ret = array();
             foreach ($result as $row) {
                 $ret[] = Common\Lib\ModelFactory::buildModel("Tag", $row);
