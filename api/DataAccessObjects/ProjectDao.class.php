@@ -47,8 +47,8 @@ class ProjectDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($project->getCreatedTime()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode());
-
-        if ($result = Lib\PDOWrapper::call("projectInsertAndUpdate", $args)) {
+        $result = Lib\PDOWrapper::call("projectInsertAndUpdate", $args);
+        if ($result) {
             $project = Common\Lib\ModelFactory::buildModel("Project", $result[0]);
         }
 
@@ -289,7 +289,9 @@ class ProjectDao
     public static function getTags($project_id)
     {
         $ret = null;
-        if ($result = Lib\PDOWrapper::call("getProjectTags", Lib\PDOWrapper::cleanseNull($project_id))) {
+        $args = Lib\PDOWrapper::cleanseNull($project_id);
+        $result = Lib\PDOWrapper::call("getProjectTags", $args);
+        if ($result) {
             $ret = array();
             foreach ($result as $row) {
                 $ret[] = Common\Lib\ModelFactory::buildModel("Tag", $row);
@@ -468,7 +470,8 @@ class ProjectDao
         $args = "null, ".Lib\PDOWrapper::cleanseNull($projectId).",".
             "null, null, null, null, null, null, null, null, null, null, null, null";
         $ret = null;
-        if ($result = Lib\PDOWrapper::call("getArchivedTask", $args)) {
+        $result = Lib\PDOWrapper::call("getArchivedTask", $args);
+        if ($result) {
             $ret = array();
             foreach ($result as $row) {
                 $ret[] = Common\Lib\ModelFactory::buildModel("ArchivedTask", $row);
@@ -487,7 +490,8 @@ class ProjectDao
     public static function deleteProjectTags($projectId)
     {
         $args = Lib\PDOWrapper::cleanseNull($projectId);
-        if ($result = Lib\PDOWrapper::call("deleteProjectTags", $args)) {
+        $result = Lib\PDOWrapper::call("deleteProjectTags", $args);
+        if ($result) {
             return $result[0]['result'];
         } else {
             return null;
@@ -503,7 +507,8 @@ class ProjectDao
     public static function delete($projectId)
     {
         $args = Lib\PDOWrapper::cleanseNull($projectId);
-        if ($result = Lib\PDOWrapper::call("deleteProject", $args)) {
+        $result = Lib\PDOWrapper::call("deleteProject", $args);
+        if ($result) {
             return $result[0]['result'];
         } else {
             return null;

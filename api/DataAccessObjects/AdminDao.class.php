@@ -27,7 +27,8 @@ class AdminDao
         $ret = null;
         $args = Lib\PDOWrapper::cleanseNullOrWrapStr($userId)
                 .",".Lib\PDOWrapper::cleanseNull($orgId);
-        if ($result = Lib\PDOWrapper::call("getAdmin", $args)) {
+        $result = Lib\PDOWrapper::call("getAdmin", $args);
+        if ($result) {
             $ret = array();
             foreach ($result as $user) {
                 $ret[] = Common\Lib\ModelFactory::buildModel("User", $user);
@@ -47,8 +48,8 @@ class AdminDao
         $ret = null;
         $args = Lib\PDOWrapper::cleanseNull($userId)
                 .",".Lib\PDOWrapper::cleanseNullOrWrapStr(null);
-        
-        if ($result = Lib\PDOWrapper::call("addAdmin", $args)) {
+        $result = Lib\PDOWrapper::call("addAdmin", $args);
+        if ($result) {
             $ret = $result[0]['result'];
         }
         
@@ -66,8 +67,8 @@ class AdminDao
         $ret = null;
         $args = Lib\PDOWrapper::cleanseNull($userId)
                 .",".Lib\PDOWrapper::cleanseNullOrWrapStr(null);
-        
-        if ($result = Lib\PDOWrapper::call("removeAdmin", $args)) {
+        $result = Lib\PDOWrapper::call("removeAdmin", $args);
+        if ($result) {
             $ret = $result[0]['result'];
         }
         
@@ -89,8 +90,8 @@ class AdminDao
         OrganisationDao::acceptMemRequest($orgId, $userId);
         $args = Lib\PDOWrapper::cleanseNull($userId)
                 .",".Lib\PDOWrapper::cleanseNull($orgId);
-        
-        if ($result = Lib\PDOWrapper::call("addAdmin", $args)) {
+        $result = Lib\PDOWrapper::call("addAdmin", $args);
+        if ($result) {
             $ret = $result[0]['result'];
         }
         
@@ -110,8 +111,8 @@ class AdminDao
         $ret = null;
         $args = Lib\PDOWrapper::cleanseNull($userId)
                 .",".Lib\PDOWrapper::cleanseNull($orgId);
-        
-        if ($result = Lib\PDOWrapper::call("removeAdmin", $args)) {
+        $result = Lib\PDOWrapper::call("removeAdmin", $args);
+        if ($result) {
             $ret = $result[0]['result'];
         }
         
@@ -178,8 +179,8 @@ class AdminDao
             Lib\PDOWrapper::cleanseNull($bannedTypeId).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($adminComment).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($bannedDate);
-        
-        if ($result = Lib\PDOWrapper::call("getBannedUser", $args)) {
+        $result = Lib\PDOWrapper::call("getBannedUser", $args);
+        if ($result) {
             $ret = array();
             foreach ($result as $bannedUser) {
                 $ret[] = Common\Lib\ModelFactory::buildModel("BannedUser", $bannedUser);
@@ -249,8 +250,8 @@ class AdminDao
             Lib\PDOWrapper::cleanseNull($bannedTypeId).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($adminComment).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($bannedDate);
-        
-        if ($result = Lib\PDOWrapper::call("getBannedOrg", $args)) {
+        $result = Lib\PDOWrapper::call("getBannedOrg", $args);
+        if ($result) {
             $ret = array();
             foreach ($result as $bannedOrg) {
                 $ret[] = Common\Lib\ModelFactory::buildModel("BannedOrganisation", $bannedOrg);
@@ -271,8 +272,8 @@ class AdminDao
     {
         $ret = null;
         $args = Lib\PDOWrapper::cleanseNull($userId);
-        
-        if ($result = Lib\PDOWrapper::call("isUserBanned", $args)) {
+        $result = Lib\PDOWrapper::call("isUserBanned", $args);
+        if ($result) {
             $ret = $result[0]['result'];
         }
         
@@ -289,8 +290,8 @@ class AdminDao
     {
         $ret = null;
         $args = Lib\PDOWrapper::cleanseNull($orgId);
-        
-        if ($result = Lib\PDOWrapper::call("isOrgBanned", $args)) {
+        $result = Lib\PDOWrapper::call("isOrgBanned", $args);
+        if ($result) {
             $ret = $result[0]['result'];
         }
         
@@ -310,7 +311,8 @@ class AdminDao
     {
         $ret = false;
         $args = Lib\PDOWrapper::cleanse($userId).",".Lib\PDOWrapper::cleanseNullOrWrapStr($orgId);
-        if ($result = Lib\PDOWrapper::call("isAdmin", $args)) {
+        $result = Lib\PDOWrapper::call("isAdmin", $args);
+        if ($result) {
             $ret = $result[0]['result'];
         }
         return $ret;

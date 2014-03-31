@@ -31,7 +31,8 @@ class OrganisationDao
         $ret = null;
         $args = Lib\PDOWrapper::cleanseNull($orgId).",".
             Lib\PDOWrapper::cleanseNull($userId);
-        if ($result = Lib\PDOWrapper::call("orgHasMember", $args)) {
+        $result = Lib\PDOWrapper::call("orgHasMember", $args);
+        if ($result) {
             $ret = $result[0]['result'];
         }
         return $ret;
@@ -124,7 +125,8 @@ class OrganisationDao
     {
         $ret = null;
         $args = Lib\PDOWrapper::cleanseWrapStr($orgName);
-        if ($result = Lib\PDOWrapper::call("searchForOrg", $args)) {
+        $result = Lib\PDOWrapper::call("searchForOrg", $args);
+        if ($result) {
             $ret = array();
             foreach ($result as $row) {
                 $ret[] = Common\Lib\ModelFactory::buildModel("Organisation", $row);
@@ -144,7 +146,8 @@ class OrganisationDao
     {
         $ret = null;
         $args = Lib\PDOWrapper::cleanseNull($orgId);
-        if ($result = Lib\PDOWrapper::call("getOrgMembers", $args)) {
+        $result = Lib\PDOWrapper::call("getOrgMembers", $args);
+        if ($result) {
             foreach ($result as $user) {
                 $ret[]= Common\Lib\ModelFactory::buildModel("User", $user);
             }
@@ -180,7 +183,8 @@ class OrganisationDao
     {
         $ret = null;
         $args = Lib\PDOWrapper::cleanse($orgId);
-        if ($results = Lib\PDOWrapper::call("getMembershipRequests", $args)) {
+        $results = Lib\PDOWrapper::call("getMembershipRequests", $args);
+        if ($results) {
             foreach ($results as $result) {
                 $ret[] = Common\Lib\ModelFactory::buildModel("MembershipRequest", $result);
             }
@@ -291,7 +295,8 @@ class OrganisationDao
     {
         $ret = null;
         $args = Lib\PDOWrapper::cleanse($orgId);
-        if ($result = Lib\PDOWrapper::call("getUsersTrackingOrg", $args)) {
+        $result = Lib\PDOWrapper::call("getUsersTrackingOrg", $args);
+        if ($result) {
             $ret = array();
             foreach ($result as $row) {
                 $ret[] = Common\Lib\ModelFactory::buildModel("User", $row);

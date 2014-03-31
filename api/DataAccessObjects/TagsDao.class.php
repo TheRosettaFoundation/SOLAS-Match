@@ -30,7 +30,8 @@ class TagsDao
         if (!is_null($tagId) || !is_null($label)) {
             $args = Lib\PDOWrapper::cleanseNull($tagId).", ".
                 Lib\PDOWrapper::cleanseNullOrWrapStr($label).", null";
-            if ($result = Lib\PDOWrapper::call("getTag", $args)) {
+            $result = Lib\PDOWrapper::call("getTag", $args);
+            if ($result) {
                 $ret = Common\Lib\ModelFactory::buildModel("Tag", $result[0]);
             }
         }
@@ -53,7 +54,8 @@ class TagsDao
         $args = Lib\PDOWrapper::cleanseNull($id).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($label).",".
             Lib\PDOWrapper::cleanseNull($limit);
-        if ($result = Lib\PDOWrapper::call("getTag", $args)) {
+        $result = Lib\PDOWrapper::call("getTag", $args);
+        if ($result) {
             $ret = array();
             foreach ($result as $tag) {
                 $ret[] = Common\Lib\ModelFactory::buildModel("Tag", $tag);
@@ -135,7 +137,8 @@ class TagsDao
     public static function delete($id)
     {
         $args = Lib\PDOWrapper::cleanseNull($id);
-        if ($result = Lib\PDOWrapper::call("deleteTag", $args)) {
+        $result = Lib\PDOWrapper::call("deleteTag", $args);
+        if ($result) {
             return $result[0]['result'];
         }
         return null;
@@ -152,7 +155,8 @@ class TagsDao
     {
         $ret = array();
         $args = Lib\PDOWrapper::cleanseNullOrWrapStr($name);
-        if ($result = Lib\PDOWrapper::call("searchForTag", $args)) {
+        $result = Lib\PDOWrapper::call("searchForTag", $args);
+        if ($result) {
             $ret = array();
             foreach ($result as $row) {
                 $ret[] = Common\Lib\ModelFactory::buildModel("Tag", $row);

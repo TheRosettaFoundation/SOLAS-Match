@@ -266,8 +266,8 @@ class TaskDao
     {
         $ret = null;
         $args = Lib\PDOWrapper::cleanseNull($taskId);
-        
-        if ($result = Lib\PDOWrapper::call("getTaskTags", $args)) {
+        $result = Lib\PDOWrapper::call("getTaskTags", $args);
+        if ($result) {
             $ret = array();
             foreach ($result as $row) {
                 $ret[] = Common\Lib\ModelFactory::buildModel("Tag", $row);
@@ -307,7 +307,8 @@ class TaskDao
     {
         $ret = null;
         $args = Lib\PDOWrapper::cleanseNull($taskId);
-        if ($result = Lib\PDOWrapper::call("getTaskPreReqs", $args)) {
+        $result = Lib\PDOWrapper::call("getTaskPreReqs", $args);
+        if ($result) {
             $ret = array();
             foreach ($result as $row) {
                 $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
@@ -329,7 +330,8 @@ class TaskDao
     {
         $ret = null;
         $args = Lib\PDOWrapper::cleanseNull($taskId).",".Lib\PDOWrapper::cleanseNull($projectId);
-        if ($result = Lib\PDOWrapper::call("getTasksFromPreReq", $args)) {
+        $result = Lib\PDOWrapper::call("getTasksFromPreReq", $args);
+        if ($result) {
             $ret = array();
             foreach ($result as $row) {
                 $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
@@ -384,10 +386,10 @@ class TaskDao
         $ret = null;
         $args = Lib\PDOWrapper::cleanseNull($limit).', '.
                 Lib\PDOWrapper::cleanseNull($offset);
-        
-        if ($r = Lib\PDOWrapper::call("getLatestAvailableTasks", $args)) {
+        $result = Lib\PDOWrapper::call("getLatestAvailableTasks", $args);
+        if ($result) {
             $ret = array();
-            foreach ($r as $row) {
+            foreach ($result as $row) {
                 $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
             }
         }
@@ -435,8 +437,8 @@ class TaskDao
         $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
         $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
         $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
-
-        if ($result = Lib\PDOWrapper::call("getUserTopTasks", $args)) {
+        $result = Lib\PDOWrapper::call("getUserTopTasks", $args);
+        if ($result) {
 
             $ret = array();
             foreach ($result as $row) {
@@ -458,8 +460,8 @@ class TaskDao
         $ret = null;
         $args = Lib\PDOWrapper::cleanse($tagId).",".
             Lib\PDOWrapper::cleanse($limit);
-                
-        if ($result = Lib\PDOWrapper::call("getTaggedTasks", $args)) {
+        $result = Lib\PDOWrapper::call("getTaggedTasks", $args);
+        if ($result) {
             $ret = array();
             foreach ($result as $row) {
                     $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
@@ -824,7 +826,8 @@ class TaskDao
             Lib\PDOWrapper::cleanseWrapStr($content_type).", ".
             Lib\PDOWrapper::cleanseNull($userId).', '.
             Lib\PDOWrapper::cleanseNull($version);
-        if ($result = Lib\PDOWrapper::call("recordFileUpload", $args)) {
+        $result = Lib\PDOWrapper::call("recordFileUpload", $args);
+        if ($result) {
             return $result[0]['version'];
         } else {
             return null;
@@ -851,9 +854,10 @@ class TaskDao
         $ret = false;
         $args = Lib\PDOWrapper::cleanse($taskId).", ".
             Lib\PDOWrapper::cleanse($version).", null, null, null, null";
-        if ($r = Lib\PDOWrapper::call("getTaskFileMetaData", $args)) {
+        $result = Lib\PDOWrapper::call("getTaskFileMetaData", $args);
+        if ($result) {
             $file_info = array();
-            foreach ($r[0] as $key => $value) {
+            foreach ($result[0] as $key => $value) {
                 if (!is_numeric($key)) {
                     $file_info[$key] = $value;
                 }
@@ -874,8 +878,9 @@ class TaskDao
     {
         $args = Lib\PDOWrapper::cleanse($taskId).", ".
             Lib\PDOWrapper::cleanse($version).", null, null, null, null";
-        if ($r = Lib\PDOWrapper::call("getTaskFileMetaData", $args)) {
-            return $r[0]['filename'];
+        $result = Lib\PDOWrapper::call("getTaskFileMetaData", $args);
+        if ($result) {
+            return $result[0]['filename'];
         } else {
             return null;
         }
@@ -894,7 +899,8 @@ class TaskDao
         $args = Lib\PDOWrapper::cleanse($taskId).",".
             Lib\PDOWrapper::cleanseNull($userId);
         $ret = null;
-        if ($result = Lib\PDOWrapper::call("getLatestFileVersion", $args)) {
+        $result = Lib\PDOWrapper::call("getLatestFileVersion", $args);
+        if ($result) {
             if (is_numeric($result[0]['latest_version'])) {
                 $ret = intval($result[0]['latest_version']);
             }
@@ -974,7 +980,8 @@ class TaskDao
     {
         $ret = null;
         $args = Lib\PDOWrapper::cleanse($taskId);
-        if ($result = Lib\PDOWrapper::call('getTaskClaimedTime', $args)) {
+        $result = Lib\PDOWrapper::call('getTaskClaimedTime', $args);
+        if ($result) {
             $ret = $result[0]['result'];
         }
         return $ret;
