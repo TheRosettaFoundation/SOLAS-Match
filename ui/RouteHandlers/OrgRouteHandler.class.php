@@ -468,7 +468,7 @@ class OrgRouteHandler
                 if ($post['title'] == "" || $post['description'] == "") {
                     $app->flash("error", sprintf(Lib\Localisation::getTranslation('org_public_profile_19')));
                 } else {
-                    $badge = new Badge();
+                    $badge = new Common\Protobufs\Models\Badge();
                     $badge->setId($post['badge_id']);
                     $badge->setTitle($post['title']);
                     $badge->setDescription($post['description']);
@@ -750,7 +750,7 @@ class OrgRouteHandler
             if ($post['title'] == "" || $post['description'] == "") {
                 $app->flashNow("error", Lib\Localisation::getTranslation('common_all_fields'));
             } else {
-                $badge = new Badge();
+                $badge = new Common\Protobufs\Models\Badge();
                 $badge->setTitle($post['title']);
                 $badge->setDescription($post['description']);
                 $badge->setOwnerId($org_id);
@@ -848,7 +848,7 @@ class OrgRouteHandler
             $post = $app->request()->post();
 
             if (isset($post['submitReview'])) {
-                $review = new TaskReview();
+                $review = new Common\Protobufs\Models\TaskReview();
                 $review->setUserId($userId);
                 $review->setTaskId($taskId);
                 $review->setProjectId($task->getProjectId());

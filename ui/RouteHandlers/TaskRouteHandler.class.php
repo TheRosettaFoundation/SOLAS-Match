@@ -473,7 +473,7 @@ class TaskRouteHandler
             }
         }
 
-        $graphBuilder = new UIWorkflowBuilder();
+        $graphBuilder = new Lib\UIWorkflowBuilder();
         $graph = $projectDao->getProjectGraph($task->getProjectId());
         $index = $graphBuilder->find($task->getId(), $graph);
         $node = $graph->getAllNodes($index);
@@ -754,7 +754,7 @@ class TaskRouteHandler
                     }
                 }
                 $taskPreReqIds[$task->getId()] = $thisTaskPreReqs;
-                $graphBuilder = new UIWorkflowBuilder();
+                $graphBuilder = new Lib\UIWorkflowBuilder();
                 $graph = $graphBuilder->parseAndBuild($taskPreReqIds);
                 
                 if ($graph) {

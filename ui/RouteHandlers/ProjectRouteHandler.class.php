@@ -333,7 +333,7 @@ class ProjectRouteHandler
                 if ($tagLabels) {
                     $project->clearTag();
                     foreach ($tagLabels as $tagLabel) {
-                        $newTag = new Tag();
+                        $newTag = new Common\Protobufs\Models\Tag();
                         $newTag->setLabel($tagLabel);
                         $project->addTag($newTag);
                     }

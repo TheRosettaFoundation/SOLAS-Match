@@ -3,6 +3,7 @@
 namespace SolasMatch\UI\Lib;
 
 use \SolasMatch\Common as Common;
+use \SolasMatch\UI\DAO as DAO;
 
 class TemplateHelper
 {
@@ -240,7 +241,7 @@ class TemplateHelper
 
     public static function languageNameFromId($languageID)
     {
-        $languageDao = new \SolasMatch\UI\DAO\LanguageDao();
+        $languageDao = new DAO\LanguageDao();
         $result = $languageDao->getLanguage($languageID);
         return self::cleanse($result->getName());
     }
@@ -248,7 +249,7 @@ class TemplateHelper
     public static function languageNameFromCode($languageCode)
     {
         $ret = "";
-        $langDao = new \SolasMatch\UI\DAO\LanguageDao();
+        $langDao = new DAO\LanguageDao();
         $lang = $langDao->getLanguageByCode($languageCode);
         if ($lang) {
             $ret = self::cleanse($lang->getName());
@@ -258,21 +259,21 @@ class TemplateHelper
 
     public static function orgNameFromId($orgID)
     {
-        $orgDao = new \SolasMatch\UI\DAO\OrganisationDao();
+        $orgDao = new DAO\OrganisationDao();
         $result = $orgDao->getOrganisation($orgID);
         return self::cleanse($result->getName());
     }
 
     public static function countryNameFromId($cID)
     {
-        $countryDao = new \SolasMatch\UI\DAO\CountryDao();
+        $countryDao = new DAO\CountryDao();
         $result = $countryDao->getCountry($cID);
         return self::cleanse($result->getName());
     }
     
     public static function countryNameFromCode($cc)
     {
-        $countryDao = new \SolasMatch\UI\DAO\CountryDao();
+        $countryDao = new DAO\CountryDao();
         $result = $countryDao->getCountryByCode($cc);
         return self::cleanse($result->getName());
     }
@@ -280,7 +281,7 @@ class TemplateHelper
     public static function getLanguageList()
     {
         $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
-        $langDao = new \SolasMatch\UI\DAO\LanguageDao();
+        $langDao = new DAO\LanguageDao();
         $languages = $langDao->getLanguages();
        
         foreach ($languages as $lang) {
@@ -298,7 +299,7 @@ class TemplateHelper
     public static function getCountryList()
     {
         $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
-        $countryDao = new \SolasMatch\UI\DAO\CountryDao();
+        $countryDao = new DAO\CountryDao();
         $countries = $countryDao->getCountries();
 
         foreach ($countries as $country) {
@@ -319,7 +320,7 @@ class TemplateHelper
 
     public static function saveLanguage($languageCode)
     {
-        $langDao = new \SolasMatch\UI\DAO\LanguageDao();
+        $langDao = new DAO\LanguageDao();
         $language = $langDao->getLanguageByCode($languageCode);
         if (is_null(($language))) {
             throw new InvalidArgumentException(
