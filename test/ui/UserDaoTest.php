@@ -234,8 +234,11 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
             $getVerifiedUser = $userDao->getUser($user->getId());
         } catch (Common\Exceptions\SolasMatchException $e) {
             $error = $e->getMessage();
-            //TODO Correctly format this assertion
-            //$this->assertEquals("message",$error);
+            $this->assertEquals(
+                "The Authorization header does not match the current user or the user does not ".
+                "have permission to access the current resource",
+                $error
+            );
         }
         //Add user "blah" as a site admin to test retrieving user
         API\DAO\AdminDao::addSiteAdmin($userId);

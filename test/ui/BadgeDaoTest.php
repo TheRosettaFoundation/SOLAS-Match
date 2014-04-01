@@ -30,27 +30,28 @@ class BadgeDaoTest extends \PHPUnit_Framework_TestCase
         Tests\UnitTestHelper::teardownDb();
         
         $userDao = new UI\DAO\UserDao();
+        $badgeDao = new UI\DAO\BadgeDao();
+        $orgDao = new UI\DAO\OrganisationDao();
+        
         $isRegistered = $userDao->register("blah@test.com", "password");
         $this->assertTrue($isRegistered);
         
         $registerUser = API\DAO\UserDao::getUser(null, "blah@test.com");
-        $registerUser = $registerUser[0];
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("User", $registerUser);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
         API\DAO\UserDao::finishRegistration($registerUser->getId());
         $loginUser = $userDao->login("blah@test.com", "password");
         
-        /* $badgeDao = new UI\DAO\BadgeDao();
         $badge = Tests\UnitTestHelper::createBadge();
         $insertedBadge = $badgeDao->createBadge($badge);
         $this->assertInstanceOf("Badge",$insertedBadge);
-        $this->assertEquals($badge,$insertedBadge); */
+        $this->assertEquals($badge,$insertedBadge);
     }
     
     /* public function testGetBadge()
     {
        UnitTestHelper::teardownDb();
        
-       $badgeDao = new BadgeDao();
+       $badgeDao = new UI\DAO\BadgeDao();
     } */
 }
