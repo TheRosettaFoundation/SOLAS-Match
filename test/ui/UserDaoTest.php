@@ -33,6 +33,9 @@ use SolasMatch\Tests\UnitTestHelper;
 
 class UserDaoTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @covers UI\DAO\UserDao::register
+     */
     public function testRegister()
     {
         Tests\UnitTestHelper::teardownDb();
@@ -44,6 +47,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($isRegistered);
     }
     
+    /**
+     * @covers UI\DAO\UserDao::finishRegistration
+     */
     public function testFinishRegistration()
     {
         UnitTestHelper::teardownDb();
@@ -63,6 +69,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("1", $finishRegResult);
     }
     
+    /**
+     * @covers UI\DAO\UserDao::isUserVerified
+     */
     public function testIsUserVerified()
     {
         UnitTestHelper::teardownDb();
@@ -86,6 +95,36 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("1", $isVerified);
     }
     
+    /**
+     * @covers UI\DAO\UserDao::login
+     */
+    public function testLogin()
+    {
+        Tests\UnitTestHelper::teardownDb();
+    
+        $userDao = new UI\DAO\UserDao();
+        $userEmail = "blah@test.com";
+        $userPw = "password";
+        $isRegistered = $userDao->register($userEmail, $userPw);
+        $this->assertTrue($isRegistered);
+    
+        $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
+        $userId = $registerUser->getId();
+        $this->assertNotNull($registerUser);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
+        $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
+        $this->assertEquals("1", $finishRegResult);
+    
+        $loggedIn = $userDao->login($userEmail, $userPw);
+        $this->assertNotNull($loggedIn);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $loggedIn);
+        $this->assertEquals($userId, $loggedIn->getId());
+    }
+    
+    /**
+     * @covers UI\DAO\UserDao::updateUser
+     */
     public function testUpdateUser()
     {
         Tests\UnitTestHelper::teardownDb();
@@ -128,30 +167,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($registerUser->getBiography(), $updatedUser->getBiography());
     }
     
-    public function testLogin()
-    {
-        Tests\UnitTestHelper::teardownDb();
-        
-        $userDao = new UI\DAO\UserDao();
-        $userEmail = "blah@test.com";
-        $userPw = "password";
-        $isRegistered = $userDao->register($userEmail, $userPw);
-        $this->assertTrue($isRegistered);
-        
-        $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
-        $userId = $registerUser->getId();
-        $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
-        //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
-        $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
-        $this->assertEquals("1", $finishRegResult);
-        
-        $loggedIn = $userDao->login($userEmail, $userPw);
-        $this->assertNotNull($loggedIn);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $loggedIn);
-        $this->assertEquals($userId, $loggedIn->getId());
-    }
-    
+    /**
+     * @covers UI\DAO\UserDao::getUser
+     */
     public function testGetUser()
     {
         Tests\UnitTestHelper::teardownDb();
@@ -199,6 +217,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $getUser);
     }
     
+    /**
+     * @covers UI\DAO\UserDao::getUserDart
+     */
     public function testGetUserDart()
     {
         Tests\UnitTestHelper::teardownDb();
@@ -252,6 +273,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertJson($getUser);
     }
     
+    /**
+     * @covers UI\DAO\UserDao::createPersonalInfo
+     */
     public function testCreatePersonalInfo()
     {
         Tests\UnitTestHelper::teardownDb();
@@ -299,6 +323,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($personalInfo->getCountry(), $insertedInfo->getCountry());
     }
     
+    /**
+     * @covers UI\DAO\UserDao::updatePersonalInfo
+     */
     public function testUpdatePersonalInfo()
     {
         Tests\UnitTestHelper::teardownDb();
@@ -354,6 +381,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($insertedInfo->getLastName(), $updatedInfo->getLastName());
     }
     
+    /**
+     * @covers UI\DAO\UserDao::getPersonalInfo
+     */
     public function testGetPersonalInfo()
     {
         Tests\UnitTestHelper::teardownDb();
@@ -406,6 +436,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($insertedInfo, $getInfo);
     }
     
+    /**
+     * @covers UI\DAO\UserDao::getUserOrgs
+     */
     public function testGetUserOrgs()
     {
         UnitTestHelper::teardownDb();
@@ -448,6 +481,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($insertedOrg->getId(), $userOrgs[0]->getId());       
     }
     
+    /**
+     * @covers UI\DAO\UserDao::trackProject
+     */
     public function testTrackProject()
     {
         UnitTestHelper::teardownDb();
@@ -487,6 +523,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $retrackProject);
     }
     
+    /**
+     * @covers UI\DAO\UserDao::unTrackProject
+     */
     public function testUntrackProject()
     {
         UnitTestHelper::teardownDb();
@@ -531,6 +570,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $reuntrackProject);
     }
     
+    /**
+     * @covers UI\DAO\UserDao::isSubscribedToProject
+     */
     public function testIsSubscribedToProject()
     {
         UnitTestHelper::teardownDb();
@@ -573,6 +615,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("1", $isSubbed);
     }
     
+    /**
+     * @covers UI\DAO\UserDao::trackTask
+     */
     public function testTrackTask()
     {
         UnitTestHelper::teardownDb();
@@ -617,6 +662,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $retrackTask);
     }
     
+    /**
+     * @covers UI\DAO\UserDao::unTrackTask
+     */
     public function testUntrackTask()
     {
         UnitTestHelper::teardownDb();
@@ -666,6 +714,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("0", $reUntracktask);
     }
     
+    /**
+     * @covers UI\DAO\UserDao::isSubscribedToTask
+     */
     public function testIsSubscribedToTask()
     {
         UnitTestHelper::teardownDb();
@@ -713,6 +764,9 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("1", $isSubbed);
     }
     
+    /**
+     * @covers UI\DAO\UserDao::createSecondaryLanguage
+     */
     public function testCreateSecondaryLanguage()
     {
         UnitTestHelper::teardownDb();
@@ -739,4 +793,80 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Locale", $userLang);
         $this->assertEquals($locale, $userLang);
     }
+    
+    /**
+     * @covers UI\DAO\UserDao::getSecondaryLanguages
+     */
+    public function testGetSecondaryLanguages()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $userDao = new UI\DAO\UserDao();
+        
+        $userEmail = "blah@test.com";
+        $userPw = "password";
+        $isRegistered = $userDao->register($userEmail, $userPw);
+        $this->assertTrue($isRegistered);
+        
+        $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
+        $userId = $registerUser->getId();
+        $this->assertNotNull($registerUser);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
+        $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
+        $this->assertEquals("1", $finishRegResult);
+        
+        $userDao->login($userEmail, $userPw);
+        $locale = UnitTestHelper::createLocale();
+        $userLang = $userDao->createSecondaryLanguage($userId, $locale);
+        $this->assertNotNull($userLang);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Locale", $userLang);
+        $this->assertEquals($locale, $userLang);
+        $locale2 = UnitTestHelper::createLocale("Japanese", "ja", "JAPAN", "JP");
+        $userLang2 = $userDao->createSecondaryLanguage($userId, $locale2);
+        $this->assertNotNull($userLang2);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Locale", $userLang2);
+        $this->assertEquals($locale2, $userLang2);
+        
+        $getLangs = $userDao->getSecondaryLanguages($userId);
+        $this->assertCount(2, $getLangs);
+        foreach ($getLangs as $lang) {
+            $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Locale", $lang);
+        }
+    }
+    
+    /**
+     * @covers UI\DAO\UserDao::deleteSecondaryLanguage
+     */
+    public function testDeleteSecondaryLanguage() 
+    {
+        UnitTestHelper::teardownDb();
+        
+        $userDao = new UI\DAO\UserDao();
+        
+        $userEmail = "blah@test.com";
+        $userPw = "password";
+        $isRegistered = $userDao->register($userEmail, $userPw);
+        $this->assertTrue($isRegistered);
+        
+        $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
+        $userId = $registerUser->getId();
+        $this->assertNotNull($registerUser);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
+        $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
+        $this->assertEquals("1", $finishRegResult);
+        
+        $userDao->login($userEmail, $userPw);
+        $locale = UnitTestHelper::createLocale();
+        $userLang = $userDao->createSecondaryLanguage($userId, $locale);
+        $this->assertNotNull($userLang);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Locale", $userLang);
+        $this->assertEquals($locale, $userLang);
+        
+        $deleteResult = $userDao->deleteSecondaryLanguage($userId, $locale);
+        $this->assertEquals("1", $deleteResult);
+        $redeleteResult = $userDao->deleteSecondaryLanguage($userId, $locale);
+        $this->assertEquals("0", $redeleteResult);
+    } 
 }

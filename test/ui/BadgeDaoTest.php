@@ -13,39 +13,52 @@ require_once __DIR__.'/../../Common/Enums/HttpMethodEnum.class.php';
 require_once __DIR__.'/../../Common/lib/ModelFactory.class.php';
 require_once __DIR__.'/../../Common/lib/SolasMatchException.php';
 require_once __DIR__.'/../../Common/lib/UserSession.class.php';
+require_once __DIR__.'/../../ui/DataAccessObjects/AdminDao.class.php';
 require_once __DIR__.'/../../ui/DataAccessObjects/BadgeDao.class.php';
+require_once __DIR__.'/../../ui/DataAccessObjects/OrganisationDao.class.php';
 require_once __DIR__.'/../../ui/DataAccessObjects/UserDao.class.php';
 require_once __DIR__.'/../../ui/lib/Localisation.php';
 require_once __DIR__.'/../UnitTestHelper.php';
 
 use \SolasMatch\UI as UI;
 use \SolasMatch\API as API;
-use \SolasMatch\Tests as Tests;
+use \SolasMatch\Tests\UnitTestHelper;
 
 class BadgeDaoTest extends \PHPUnit_Framework_TestCase
 {
 
+    /**
+     * @covers UI\DAO\BadgeDao::createBadge
+     */
     public function testCreateBadge()
     {
-        Tests\UnitTestHelper::teardownDb();
+        UnitTestHelper::teardownDb();
         
         $userDao = new UI\DAO\UserDao();
         $badgeDao = new UI\DAO\BadgeDao();
         $orgDao = new UI\DAO\OrganisationDao();
         
-        $isRegistered = $userDao->register("blah@test.com", "password");
+        $userEmail = "blah@test.com";
+        $userPw = "password";
+        $isRegistered = $userDao->register($userEmail, $userPw);
         $this->assertTrue($isRegistered);
         
-        $registerUser = API\DAO\UserDao::getUser(null, "blah@test.com");
+        $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
+        $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
         API\DAO\UserDao::finishRegistration($registerUser->getId());
         $loginUser = $userDao->login("blah@test.com", "password");
         
-        $badge = Tests\UnitTestHelper::createBadge();
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = $orgDao->createOrg($org, $userId);
+        $this->assertNotNull($insertedOrg);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        
+        $badge = UnitTestHelper::createBadge();
         $insertedBadge = $badgeDao->createBadge($badge);
-        $this->assertInstanceOf("Badge",$insertedBadge);
-        $this->assertEquals($badge,$insertedBadge);
+        $this->assertNotNull($insertedBadge);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Badge", $insertedBadge);
     }
     
     /* public function testGetBadge()

@@ -28,6 +28,9 @@ use SolasMatch\Tests\UnitTestHelper;
 
 class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @covers UI\DAO\OrganisationDao::createOrg
+     */
     public function testCreateOrg()
     {
         UnitTestHelper::teardownDb();
@@ -65,6 +68,9 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
     }
     
+    /**
+     * @covers UI\DAO\OrganisationDao::updateOrg
+     */
     public function testUpdateOrg()
     {
         UnitTestHelper::teardownDb();
