@@ -799,13 +799,6 @@ class Middleware
                     $taskId = $taskId[0];
                 }
             }
-            /* $req = $app->request;
-            $task = $req->getBody();
-            $format = $params['format'];
-            $client = new Common\Lib\APIHelper($format);
-            $task = $client->deserialize($task, "\SolasMatch\Common\Protobufs\Models\Task");
-            
-            $taskId = $task->getId(); */
          
             $TaskIsUnclaimed = false;
             $possibleUser = DAO\TaskDao::getUserClaimedTask($taskId);
