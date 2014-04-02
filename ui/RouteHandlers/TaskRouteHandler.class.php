@@ -284,7 +284,7 @@ class TaskRouteHandler
         $task = $taskDao->getTask($taskId);
         if ($app->request()->isPost()) {
             $user_id = Common\Lib\UserSession::getCurrentUserID();
-            $userDao->claimTask($user_id, $task);
+            $userDao->claimTask($user_id, $taskId);
             $app->redirect($app->urlFor("task-claimed", array(
                 "task_id" => $taskId
             )));

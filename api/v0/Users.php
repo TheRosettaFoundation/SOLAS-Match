@@ -64,7 +64,13 @@ class Users
                             '\SolasMatch\API\Lib\Middleware::authUserOrOrgForTask',
                             '\SolasMatch\API\V0\Users::getUserTaskReview'
                         );
-
+                        
+                        $app->post(
+                                '/:taskId/',
+                                '\SolasMatch\API\Lib\Middleware::authenticateTaskNotClaimed',
+                                '\SolasMatch\API\V0\Users::userClaimTask'
+                        );
+                        
                         $app->delete(
                             '/:taskId/',
                             '\SolasMatch\API\Lib\Middleware::authUserOrOrgForTask',
@@ -196,13 +202,7 @@ class Users
                         '/tasks(:format)/',
                         '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
                         '\SolasMatch\API\V0\Users::getUserTasks'
-                    );
-
-                    $app->post(
-                        '/tasks(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::authenticateTaskNotClaimed',
-                        '\SolasMatch\API\V0\Users::userClaimTask'
-                    );
+                    );    
 
                     $app->get(
                         '/topTasks(:format)/',
@@ -648,14 +648,16 @@ class Users
         API\Dispatcher::sendResponse(null, DAO\TaskDao::getUserTasks($userId, $limit, $offset), null, $format);
     }
 
-    public static function userClaimTask($userId, $format = ".json")
+    public static function userClaimTask($userId, $taskId, $format = ".json")
     {
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
-        $client = new Common\Lib\APIHelper($format);
-        $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\Task');
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::claimTask($data->getId(), $userId), null, $format);
-        Lib\Notify::notifyUserClaimedTask($userId, $data->getId());
-        Lib\Notify::notifyOrgClaimedTask($userId, $data->getId());
+        if (!is_numeric($taskId) && strstr($taskId, '.')) {
+            $taskId = explode('.', $taskId);
+            $format = '.'.$taskId[1];
+            $taskId = $taskId[0];
+        }
+        API\Dispatcher::sendResponse(null, DAO\TaskDao::claimTask($taskId, $userId), null, $format);
+        Lib\Notify::notifyUserClaimedTask($userId, $taskId);
+        Lib\Notify::notifyOrgClaimedTask($userId, $taskId);
     }
 
     public static function getUserTopTasks($userId, $format = ".json")

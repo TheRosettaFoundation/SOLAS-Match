@@ -295,11 +295,11 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function claimTask($userId, $task)
+    public function claimTask($userId, $taskId)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/tasks";
-        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST, $task);
+        $request = "{$this->siteApi}v0/users/$userId/tasks/$taskId";
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
         return $ret;
     }
 

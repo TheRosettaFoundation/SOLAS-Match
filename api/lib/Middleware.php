@@ -787,13 +787,25 @@ class Middleware
             }
             $params = $route->getParams();
             $app = \Slim\Slim::getInstance();
-            $req = $app->request;
+            
+            $params = $route->getParams();
+            
+            $taskId = null;
+            if ($params != null) {
+                $taskId = $params['taskId'];
+                if (!is_numeric($taskId)&& strstr($taskId, '.')) {
+                    $taskId = explode('.', $taskId);
+                    $format = '.'.$taskId[1];
+                    $taskId = $taskId[0];
+                }
+            }
+            /* $req = $app->request;
             $task = $req->getBody();
             $format = $params['format'];
             $client = new Common\Lib\APIHelper($format);
             $task = $client->deserialize($task, "\SolasMatch\Common\Protobufs\Models\Task");
             
-            $taskId = $task->getId();
+            $taskId = $task->getId(); */
          
             $TaskIsUnclaimed = false;
             $possibleUser = DAO\TaskDao::getUserClaimedTask($taskId);
