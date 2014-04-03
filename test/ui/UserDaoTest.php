@@ -13,6 +13,7 @@ require_once __DIR__.'/../../api/DataAccessObjects/UserDao.class.php';
 require_once __DIR__.'/../../api/lib/Notify.class.php';
 require_once __DIR__.'/../../Common/Enums/BadgeTypes.class.php';
 require_once __DIR__.'/../../Common/Enums/HttpMethodEnum.class.php';
+require_once __DIR__.'/../../Common/Enums/NotificationIntervalEnum.class.php';
 require_once __DIR__.'/../../Common/lib/ModelFactory.class.php';
 require_once __DIR__.'/../../Common/lib/SolasMatchException.php';
 require_once __DIR__.'/../../Common/lib/UserSession.class.php';
@@ -457,6 +458,122 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $userOrgs);
         $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $userOrgs[0]);
         $this->assertEquals($insertedOrg->getId(), $userOrgs[0]->getId());       
+    }
+    
+    /**
+     * @covers UI\DAO\UserDao::trackOrganisation
+     */
+    public function testTrackOrganisation()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $userDao = new UI\DAO\UserDao();
+        $orgDao = new UI\DAO\OrganisationDao();
+        
+        $userEmail = "blah@test.com";
+        $userPw = "password";
+        $isRegistered = $userDao->register($userEmail, $userPw);
+        $this->assertTrue($isRegistered);
+        
+        $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
+        $userId = $registerUser->getId();
+        $this->assertNotNull($registerUser);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
+        $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
+        $this->assertEquals("1", $finishRegResult);
+        
+        $userDao->login($userEmail, $userPw);
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = $orgDao->createOrg($org, $userId);
+        $this->assertNotNull($insertedOrg);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation",$insertedOrg);
+        
+        $trackResult = $userDao->trackOrganisation($userId, $insertedOrg->getId());
+        $this->assertEquals("1", $trackResult);
+        $retrackResult = $userDao->trackOrganisation($userId, $insertedOrg->getId());
+        $this->assertEquals("0", $retrackResult);
+    }
+    
+    /**
+     * @covers UI\UserDao::untrackOrganisation
+     */
+    public function testUntrackOrganisation()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $userDao = new UI\DAO\UserDao();
+        $orgDao = new UI\DAO\OrganisationDao();
+        
+        $userEmail = "blah@test.com";
+        $userPw = "password";
+        $isRegistered = $userDao->register($userEmail, $userPw);
+        $this->assertTrue($isRegistered);
+        
+        $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
+        $userId = $registerUser->getId();
+        $this->assertNotNull($registerUser);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
+        $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
+        $this->assertEquals("1", $finishRegResult);
+        
+        $userDao->login($userEmail, $userPw);
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = $orgDao->createOrg($org, $userId);
+        $this->assertNotNull($insertedOrg);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation",$insertedOrg);
+        
+        $trackResult = $userDao->trackOrganisation($userId, $insertedOrg->getId());
+        $this->assertEquals("1", $trackResult);
+        $retrackResult = $userDao->trackOrganisation($userId, $insertedOrg->getId());
+        $this->assertEquals("0", $retrackResult);
+        
+        $untrackResult = $userDao->untrackOrganisation($userId, $insertedOrg->getId());
+        $this->assertEquals("1", $untrackResult);
+        $reuntrackResult = $userDao->untrackOrganisation($userId, $insertedOrg->getId());
+        $this->assertEquals("0", $reuntrackResult);
+    }
+    
+    /**
+     * @covers UI\DAO\UserDao::isSubscribedToOrganisation
+     */
+    public function testIsSubscribedToOrganisation()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $userDao = new UI\DAO\UserDao();
+        $orgDao = new UI\DAO\OrganisationDao();
+        
+        $userEmail = "blah@test.com";
+        $userPw = "password";
+        $isRegistered = $userDao->register($userEmail, $userPw);
+        $this->assertTrue($isRegistered);
+        
+        $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
+        $userId = $registerUser->getId();
+        $this->assertNotNull($registerUser);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
+        $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
+        $this->assertEquals("1", $finishRegResult);
+        
+        $userDao->login($userEmail, $userPw);
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = $orgDao->createOrg($org, $userId);
+        $this->assertNotNull($insertedOrg);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation",$insertedOrg);
+        
+        $trackResult = $userDao->trackOrganisation($userId, $insertedOrg->getId());
+        $this->assertEquals("1", $trackResult);
+        $retrackResult = $userDao->trackOrganisation($userId, $insertedOrg->getId());
+        $this->assertEquals("0", $retrackResult);
+        
+        $isSubbed = $userDao->isSubscribedToOrganisation($userId, $insertedOrg->getId());
+        $this->assertEquals("1", $isSubbed);
+        $userDao->untrackOrganisation($userId, $insertedOrg->getId());
+        $isNotSubbed = $userDao->isSubscribedToOrganisation($userId, $insertedOrg->getId());
+        $this->assertEquals("0", $isNotSubbed);
     }
     
     /**
@@ -946,8 +1063,12 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         
         $claimResult = $userDao->claimTask($userId, $insertedTask->getId());
         $this->assertEquals("1", $claimResult);
-        $reclaimResult = $userDao->claimTask($userId, $insertedTask->getId());
-        $this->assertEquals("0", $reclaimResult);
+        try {
+            $reclaimResult = $userDao->claimTask($userId, $insertedTask->getId());
+        } catch (Common\Exceptions\SolasMatchException $e) {
+            $error = $e->getMessage();
+            $this->assertEquals("Unable to claim task. This Task has been claimed by another user", $error);
+        }
     }
     
     /**
@@ -993,12 +1114,118 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         
         $claimResult = $userDao->claimTask($userId, $insertedTask->getId());
         $this->assertEquals("1", $claimResult);
-        $reclaimResult = $userDao->claimTask($userId, $insertedTask->getId());
-        $this->assertEquals("0", $reclaimResult);
+        try {
+            $reclaimResult = $userDao->claimTask($userId, $insertedTask->getId());
+        } catch (Common\Exceptions\SolasMatchException $e) {
+            $error = $e->getMessage();
+            $this->assertEquals("Unable to claim task. This Task has been claimed by another user", $error);
+        }
         
         $unclaimResult = $userDao->unclaimTask($userId, $insertedTask->getId());
         $this->assertEquals("1", $unclaimResult);
         $reunclaimResult = $userDao->unclaimTask($userId, $insertedTask->getId());
         $this->assertEquals("0", $reunclaimResult);
+    }
+    
+    /**
+     * @covers UI\DAO\UserDao::requestTaskStreamNotification
+     */
+    public function testRequestTaskStreamNotification()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $userDao = new UI\DAO\UserDao();
+        $orgDao = new UI\DAO\OrganisationDao();
+        $projectDao = new UI\DAO\ProjectDao();
+        $taskDao = new UI\DAO\TaskDao();
+        
+        $userEmail = "blah@test.com";
+        $userPw = "password";
+        $isRegistered = $userDao->register($userEmail, $userPw);
+        $this->assertTrue($isRegistered);
+        
+        $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
+        $userId = $registerUser->getId();
+        $this->assertNotNull($registerUser);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
+        $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
+        $this->assertEquals("1", $finishRegResult);
+        
+        $userDao->login($userEmail, $userPw);
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = $orgDao->createOrg($org, $userId);
+        $this->assertNotNull($insertedOrg);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());
+        $insertedProject = $projectDao->createProject($project);
+        $this->assertNotNull($insertedProject);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
+        
+        $task = UnitTestHelper::createTask($insertedProject->getId());
+        $insertedTask = $taskDao->createTask($task);
+        $this->assertNotNull($insertedTask);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $insertedTask);
+        
+        $notification = new Common\Protobufs\Models\UserTaskStreamNotification();
+        $notification->setUserId($registerUser->getId());
+        $notification->setInterval(Common\Enums\NotificationIntervalEnum::DAILY);
+        $notification->setStrict(false);
+        
+        $notifReq = $userDao->requestTaskStreamNotification($notification);
+        $this->assertEquals("1",$notifReq);
+    }
+    
+    /**
+     * @covers UI\DAO\UserDao::removeTaskStreamNotification
+     */
+    public function testRemoveTaskStreamNotification()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $userDao = new UI\DAO\UserDao();
+        $orgDao = new UI\DAO\OrganisationDao();
+        $projectDao = new UI\DAO\ProjectDao();
+        $taskDao = new UI\DAO\TaskDao();
+        
+        $userEmail = "blah@test.com";
+        $userPw = "password";
+        $isRegistered = $userDao->register($userEmail, $userPw);
+        $this->assertTrue($isRegistered);
+        
+        $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
+        $userId = $registerUser->getId();
+        $this->assertNotNull($registerUser);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
+        $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
+        $this->assertEquals("1", $finishRegResult);
+        
+        $userDao->login($userEmail, $userPw);
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = $orgDao->createOrg($org, $userId);
+        $this->assertNotNull($insertedOrg);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());
+        $insertedProject = $projectDao->createProject($project);
+        $this->assertNotNull($insertedProject);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
+        
+        $task = UnitTestHelper::createTask($insertedProject->getId());
+        $insertedTask = $taskDao->createTask($task);
+        $this->assertNotNull($insertedTask);
+        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $insertedTask);
+        
+        $notification = new Common\Protobufs\Models\UserTaskStreamNotification();
+        $notification->setUserId($registerUser->getId());
+        $notification->setInterval(Common\Enums\NotificationIntervalEnum::DAILY);
+        $notification->setStrict(false);
+        
+        $notifReq = $userDao->requestTaskStreamNotification($notification);
+        $this->assertEquals("1",$notifReq);
+        $removeNotif = $userDao->removeTaskStreamNotification($userId);
+        $this->assertTrue($removeNotif);
     }
 }
