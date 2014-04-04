@@ -3509,7 +3509,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeTaskPreReq`(IN `taskId` INT, IN `preReqId` INT)
     MODIFIES SQL DATA
 BEGIN
-	if exists( select 1 from TaskPrerequisites tp where tp.task_id=taskID and tp.`task_id-prerequisite`= preReqId) then
+	if exists(select 1 from TaskPrerequisites tp where tp.task_id=taskID and tp.`task_id-prerequisite`= preReqId) then
       DELETE FROM TaskPrerequisites
         WHERE task_id = taskId
         AND `task_id-prerequisite` = preReqId;
@@ -3527,9 +3527,13 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeTaskStreamNotification`(IN `userId` INT)
     MODIFIES SQL DATA
 BEGIN
-    DELETE FROM UserTaskStreamNotifications
+    if exists(select 1 from UserTaskStreamNotifications utsn where utsn.user_id=userId) then
+      DELETE FROM UserTaskStreamNotifications
         WHERE user_id = userId;
-    SELECT 1 as 'result';
+    select 1 as 'result';
+   else
+    select 0 as 'result';
+   end if;
 END//
 DELIMITER ;
 
