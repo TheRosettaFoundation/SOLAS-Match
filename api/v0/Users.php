@@ -290,7 +290,7 @@ class Users
                     /* Routes starting /v0/users/email/:email */
                     $app->get(
                         '/passwordResetRequest/time(:format)/',
-                        '\SolasMatch\API\V0\Users::PasswordResetRequestTime'
+                        '\SolasMatch\API\V0\Users::getPasswordResetRequestTime'
                     );
 
                     $app->get(
@@ -801,7 +801,7 @@ class Users
         }
     }
 
-    public static function PasswordResetRequestTime($email, $format = ".json")
+    public static function getPasswordResetRequestTime($email, $format = ".json")
     {
         $resetRequest = DAO\UserDao::getPasswordResetRequests($email);
         API\Dispatcher::sendResponse(null, $resetRequest->getRequestTime(), null, $format);
