@@ -250,7 +250,7 @@ var $$={}
                     globalObject]);
   }
 })
-([["","file:///home/spaceindaver/workspace/SOLAS-Match/ui/dart/web/Routes/Projects/ProjectCreateForm.dart",,K,{
+([["","file:///home/aaronm/workspace/SOLAS-Match/ui/dart/web/Routes/Projects/ProjectCreateForm.dart",,K,{
 "^":"",
 iB9:{
 "^":["LPc;dW%-2562,vQ%-2562,rG%-2562,oa%-2562,JA%-2563,VG%-2563,an%-2563,Da%-5547,Jw%-5547,ZS%-2563,pv%-3405,FB%-3405,U2%-2802,OZ%-3405,GN%-3405,GM%-3405,I0%-2562,Ye%-2562,y4%-2562,eq%-2562,km%-2562,Uo%-2563,tW%-2580,RA%-2580,q4%-2580,i5%-5548,I7%-5549,AC%-5550,Mj%-2562,v3%-2563,qI%-5551,qP%-2563,JZ%-2563,Pw%-2563,BF%-2563,Cu%-2563,Ly%-2563,AP-5552,fn-5553,AP-5552,fn-5553,nV-5554,dn-5555,HX-2580,JF-5556,Fj-5557,MK-5558,Wm-542,pM-5559",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,function(){return[C.P8Q]}],
@@ -536,20 +536,16 @@ Fd:[function(a){var z,y,x,w,v,u,t,s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d,c,b
 z={}
 y=H.K6(new P.Zf(P.Dt(null)),[null])
 z.a=!0
-if(J.de(J.lK(a.i5),"")){j=a.qI.nN("project_create_31")
+if(J.de(J.lK(a.i5),"")){j=a.qI.nN("project_create_error_title_not_set")
 a.qP=this.ct(a,C.vi,a.qP,j)
-P.rT(C.ny,new K.nj(a))
-z.a=!1}if(J.xZ(J.q8(J.lK(a.i5)),110)===!0){j=a.qI.nN("project_create_23")
+z.a=!1}if(J.xZ(J.q8(J.lK(a.i5)),110)===!0){j=a.qI.nN("project_create_error_title_too_long")
 a.qP=this.ct(a,C.vi,a.qP,j)
-P.rT(C.ny,new K.y2(a))
 z.a=!1}if(J.de(J.zg(a.i5),"")){j=a.qI.nN("project_create_33")
 a.JZ=this.ct(a,C.Q2,a.JZ,j)
-P.rT(C.ny,new K.aF(a))
 z.a=!1}if(J.de(a.i5.gSx(),"")){j=a.qI.nN("project_create_26")
 a.Cu=this.ct(a,C.cl,a.Cu,j)
-P.rT(C.ny,new K.fuJ(a))
 z.a=!1}j=a.an
-if(j!=null&&!J.de(j,"")){a.i5.sLY(H.Lx(a.an,null,new K.Tcf(z,a)))
+if(j!=null&&!J.de(j,"")){a.i5.sLY(H.Lx(a.an,null,new K.nj(z,a)))
 if(J.xZ(a.i5.gLY(),5000)===!0){i=0
 h=!1
 while(!0){j=a.Mj
@@ -557,7 +553,6 @@ if(typeof j!=="number")return H.s(j)
 if(!(i<j&&!h))break
 if(J.Hf((a.shadowRoot||a.webkitShadowRoot).querySelector("#segmentation_"+i))!==!0)h=!0;++i}if(h&&window.confirm(a.qI.nN("project_create_22"))!==!0)z.a=!1}}else{j=a.qI.nN("project_create_27")
 a.Pw=this.ct(a,C.Qy,a.Pw,j)
-P.rT(C.ny,new K.njK(a))
 z.a=!1}g=P.Ia(J.UQ(a.FB,a.I0),J.WB(a.Ye,1),J.WB(a.y4,1),a.eq,a.km,0,0,!1)
 if(J.xZ(g.rq,P.Lg().rq)===!0){f=C.jn.bu(H.NS(g))
 if(f.length===1)f="0"+f
@@ -569,7 +564,6 @@ c=C.jn.bu(H.ch(g))
 if(c.length<2)c="0"+c
 a.i5.sj5(C.jn.bu(H.tJ(g))+"-"+f+"-"+e+" "+d+":"+c+":00")}else{j=a.qI.nN("project_create_25")
 a.BF=this.ct(a,C.Y8,a.BF,j)
-P.rT(C.ny,new K.y2w(a))
 z.a=!1}try{x=H.K6([],[R.Rp])
 w=H.K6([],[R.Gn])
 for(v=0;J.u6(v,a.Mj);v=J.WB(v,1)){u=(a.shadowRoot||a.webkitShadowRoot).querySelector("#segmentation_"+H.d(v))
@@ -578,14 +572,16 @@ s=(a.shadowRoot||a.webkitShadowRoot).querySelector("#translation_"+H.d(v))
 r=J.Hf(s)
 q=(a.shadowRoot||a.webkitShadowRoot).querySelector("#proofreading_"+H.d(v))
 p=J.Hf(q)
-if(t!==!0&&r!==!0&&p!==!0){z=a.qI.nN("project_create_29")
-throw H.b(z)}o=(a.shadowRoot||a.webkitShadowRoot).querySelector("#target_language_"+H.d(v))
+if(t!==!0&&r!==!0&&p!==!0){z.a=!1
+j=a.qI.nN("project_create_29")
+throw H.b(j)}o=(a.shadowRoot||a.webkitShadowRoot).querySelector("#target_language_"+H.d(v))
 n=(a.shadowRoot||a.webkitShadowRoot).querySelector("#target_country_"+H.d(v))
 m=J.UQ(a.I7,J.m4(o))
 l=J.UQ(a.AC,J.m4(n))
-if((J.kE(x,m)&&J.kE(w,l))===!0){z=a.qI.nN("project_create_28")
-throw H.b(z)}else{J.hv(x,m)
-J.hv(w,l)}}J.oA(this.Jq(a),new K.yFy(z,y))}catch(b){z=H.Ru(b)
+if((J.kE(x,m)&&J.kE(w,l))===!0){z.a=!1
+j=a.qI.nN("project_create_28")
+throw H.b(j)}else{J.hv(x,m)
+J.hv(w,l)}}J.oA(this.Jq(a),new K.y2(z,y))}catch(b){z=H.Ru(b)
 k=z
 y.pm(k)}return y.gMM()},"call$0","gWkJ",0,0,356,"validateInput"],
 Jq:[function(a){var z,y,x,w,v,u,t,s
@@ -1298,142 +1294,21 @@ call$1:[function(a){this.f.pm(a)},"call$1",null,2,0,389,414,[],"call"],
 $isPe:true},
 "+ProjectCreateForm_loadProjectFile_closure":[5577],
 nj:{
-"^":"Tp:290;b-542",
-call$0:[function(){var z,y,x,w
-z=this.b
-y=(z.shadowRoot||z.webkitShadowRoot).querySelector("#title_error_top")
-x=J.YE(y)
-x.gwd(y).V1(0)
-w=J.YE(z)
-x.Ty(y,"beforeend",w.gqP(z))
-y=(z.shadowRoot||z.webkitShadowRoot).querySelector("#title_error_btm")
-x=J.YE(y)
-x.gwd(y).V1(0)
-x.Ty(y,"beforeend",w.gqP(z))},"call$0",null,0,0,290,"call"],
-$isPe:true},
-"+ProjectCreateForm_validateInput_closure":[5577],
-y2:{
-"^":"Tp:290;c-542",
-call$0:[function(){var z,y,x,w
-z=this.c
-y=(z.shadowRoot||z.webkitShadowRoot).querySelector("#title_error_top")
-x=J.YE(y)
-x.gwd(y).V1(0)
-w=J.YE(z)
-x.Ty(y,"beforeend",w.gqP(z))
-y=(z.shadowRoot||z.webkitShadowRoot).querySelector("#title_error_btm")
-x=J.YE(y)
-x.gwd(y).V1(0)
-x.Ty(y,"beforeend",w.gqP(z))},"call$0",null,0,0,290,"call"],
-$isPe:true},
-"+ProjectCreateForm_validateInput_closure":[5577],
-aF:{
-"^":"Tp:290;d-542",
-call$0:[function(){var z,y,x,w
-z=this.d
-y=(z.shadowRoot||z.webkitShadowRoot).querySelector("#description_error_top")
-x=J.YE(y)
-x.gwd(y).V1(0)
-w=J.YE(z)
-x.Ty(y,"beforeend",w.gJZ(z))
-y=(z.shadowRoot||z.webkitShadowRoot).querySelector("#description_error_btm")
-x=J.YE(y)
-x.gwd(y).V1(0)
-x.Ty(y,"beforeend",w.gJZ(z))},"call$0",null,0,0,290,"call"],
-$isPe:true},
-"+ProjectCreateForm_validateInput_closure":[5577],
-fuJ:{
-"^":"Tp:290;e-542",
-call$0:[function(){var z,y,x,w
-z=this.e
-y=(z.shadowRoot||z.webkitShadowRoot).querySelector("#impact_error_top")
-x=J.YE(y)
-x.gwd(y).V1(0)
-w=J.YE(z)
-x.Ty(y,"beforeend",w.gCu(z))
-y=(z.shadowRoot||z.webkitShadowRoot).querySelector("#impact_error_btm")
-x=J.YE(y)
-x.gwd(y).V1(0)
-x.Ty(y,"beforeend",w.gCu(z))},"call$0",null,0,0,290,"call"],
-$isPe:true},
-"+ProjectCreateForm_validateInput_closure":[5577],
-Tcf:{
-"^":"Tp:453;a-542,f-542",
+"^":"Tp:453;a-542,b-542",
 call$1:[function(a){var z,y,x
-z=this.f
+z=this.b
 y=J.YE(z)
 x=y.gqI(z).nN("project_create_27")
 y.sPw(z,y.ct(z,C.Qy,y.gPw(z),x))
-P.rT(C.ny,new K.J8(z))
 this.a.a=!1
 return 0},"call$1",null,2,0,453,5595,[],"call"],
 $isPe:true},
 "+ProjectCreateForm_validateInput_closure":[5577],
-J8:{
-"^":"Tp:290;UI-542",
-call$0:[function(){var z,y,x,w
-z=this.UI
-y=(z.shadowRoot||z.webkitShadowRoot).querySelector("#word_count_error_top")
-x=J.YE(y)
-x.gwd(y).V1(0)
-w=J.YE(z)
-x.Ty(y,"beforeend",w.gPw(z))
-y=(z.shadowRoot||z.webkitShadowRoot).querySelector("#word_count_error_btm")
-x=J.YE(y)
-x.gwd(y).V1(0)
-x.Ty(y,"beforeend",w.gPw(z))},"call$0",null,0,0,290,"call"],
-$isPe:true},
-"+ProjectCreateForm_validateInput__closure":[5577],
-njK:{
-"^":"Tp:290;bK-542",
-call$0:[function(){var z,y,x,w
-z=this.bK
-y=(z.shadowRoot||z.webkitShadowRoot).querySelector("#word_count_error_top")
-x=J.YE(y)
-x.gwd(y).V1(0)
-w=J.YE(z)
-x.Ty(y,"beforeend",w.gPw(z))
-y=(z.shadowRoot||z.webkitShadowRoot).querySelector("#word_count_error_btm")
-x=J.YE(y)
-x.gwd(y).V1(0)
-x.Ty(y,"beforeend",w.gPw(z))},"call$0",null,0,0,290,"call"],
-$isPe:true},
-"+ProjectCreateForm_validateInput_closure":[5577],
-y2w:{
-"^":"Tp:290;Gq-542",
-call$0:[function(){var z,y,x,w
-z=this.Gq
-y=(z.shadowRoot||z.webkitShadowRoot).querySelector("#deadline_error_top")
-x=J.YE(y)
-x.gwd(y).V1(0)
-w=J.YE(z)
-x.Ty(y,"beforeend",w.gBF(z))
-y=(z.shadowRoot||z.webkitShadowRoot).querySelector("#deadline_error_btm")
-x=J.YE(y)
-x.gwd(y).V1(0)
-x.Ty(y,"beforeend",w.gBF(z))},"call$0",null,0,0,290,"call"],
-$isPe:true},
-"+ProjectCreateForm_validateInput_closure":[5577],
-dFd:{
-"^":"Tp:290;Rm-542",
-call$0:[function(){var z,y,x,w
-z=this.Rm
-y=(z.shadowRoot||z.webkitShadowRoot).querySelector("#deadline_error_top")
-x=J.YE(y)
-x.gwd(y).V1(0)
-w=J.YE(z)
-x.Ty(y,"beforeend",w.gBF(z))
-y=(z.shadowRoot||z.webkitShadowRoot).querySelector("#deadline_error_btm")
-x=J.YE(y)
-x.gwd(y).V1(0)
-x.Ty(y,"beforeend",w.gBF(z))},"call$0",null,0,0,290,"call"],
-$isPe:true},
-"+ProjectCreateForm_validateInput_closure":[5577],
-yFy:{
-"^":"Tp:740;a-542,w3-5593",
+y2:{
+"^":"Tp:740;a-542,c-5593",
 call$1:[function(a){var z,y
 z=this.a.a===!0&&a===!0
-y=this.w3
+y=this.c
 if(z){if(y.gMM().gXB()!==!0)H.vh(new P.lj("Future already completed"))
 y.gMM().OH(!0)}else{if(y.gMM().gXB()!==!0)H.vh(new P.lj("Future already completed"))
 y.gMM().OH(!1)}},"call$1",null,2,0,740,5596,[],"call"],
@@ -1453,7 +1328,7 @@ x=J.YE(y)
 x.gwd(y).V1(0)
 x.Ty(y,"beforeend",J.wd(z))},"call$0",null,0,0,290,"call"],
 $isPe:true},
-"+ProjectCreateForm_createProjectErrorChanged_closure":[5577]}],["SolasMatchDart","file:///home/spaceindaver/workspace/SOLAS-Match/ui/dart/web/lib/SolasMatchDart.dart",,R,{
+"+ProjectCreateForm_createProjectErrorChanged_closure":[5577]}],["SolasMatchDart","file:///home/aaronm/workspace/SOLAS-Match/ui/dart/web/lib/SolasMatchDart.dart",,R,{
 "^":"",
 ec:{
 "^":"a;",
@@ -4800,7 +4675,7 @@ vYC:function(a,b,c,d){return this.M.call$3(b,c,d)},
 xkC:function(a,b){return this.M.call$1(b)},
 $isOd:true},
 "+StringMatch":[0,5742],
-"^":"vtu<-2563,myq<-542,Plv<-542,lKz<-542,PqM<-542,CEp<-542,S62<-542,j0D<-542,GhV<-542,Hxn<-542,Bv@-542,UtK<-542,fap<-542,T1h<-542,DXO<-542,j7q<-542,vv@-542,q4@-542,x7@-5662,TX@-5662,nw@-5662"}],["app_bootstrap","file:///home/spaceindaver/workspace/SOLAS-Match/ui/dart/web/Routes/Projects/ProjectCreate.dart",,E,{
+"^":"vtu<-2563,myq<-542,Plv<-542,lKz<-542,PqM<-542,CEp<-542,S62<-542,j0D<-542,GhV<-542,Hxn<-542,Bv@-542,UtK<-542,fap<-542,T1h<-542,DXO<-542,j7q<-542,vv@-542,q4@-542,x7@-5662,TX@-5662,nw@-5662"}],["app_bootstrap","file:///home/aaronm/workspace/SOLAS-Match/ui/dart/web/Routes/Projects/ProjectCreate.dart",,E,{
 "^":"",
 E24:[function(){$.x2=["ProjectCreateForm.dart"]
 $.uP=!1
@@ -26827,7 +26702,7 @@ obt:[function(){return document.createElement("h6",null)},"call$0",null,0,0,1254
 F44:[function(a){a.toString
 C.HcO.ZL(a)
 return a},null,null,0,0,290,"new HeadingElement$created"],
-dFH:[function(){return!!window.history.pushState},null,null,1,0,584,"supportsState"],
+aF:[function(){return!!window.history.pushState},null,null,1,0,584,"supportsState"],
 uaI:[function(){throw H.b(P.f("Not supported"))},"call$0",null,0,0,1256,"new History$_"],
 eZx:[function(){throw H.b(P.f("Not supported"))},"call$0",null,0,0,1257,"new HmacKeyParams$_"],
 aZW:[function(){throw H.b(P.f("Not supported"))},"call$0",null,0,0,1258,"new HmacParams$_"],
@@ -26870,7 +26745,7 @@ if(g!=null)x.send(g)
 else x.send()
 return y.MM},"call$8$method$mimeType$onProgress$requestHeaders$responseType$sendData$withCredentials","etc",2,15,1269,542,542,542,542,542,542,542,1207,[],1270,[],1271,[],1265,[],1267,[],1268,[],1272,[],1204,[],"request"],
 nXG:[function(){return"onprogress" in new XMLHttpRequest()},null,null,1,0,584,"supportsProgressEvent"],
-GRW:[function(){return"withCredentials" in new XMLHttpRequest()},null,null,1,0,584,"supportsCrossOrigin"],
+Br:[function(){return"withCredentials" in new XMLHttpRequest()},null,null,1,0,584,"supportsCrossOrigin"],
 Ymt:[function(){return"onloadend" in new XMLHttpRequest()},null,null,1,0,584,"supportsLoadEndEvent"],
 y4S:[function(){return"overrideMimeType" in new XMLHttpRequest()},null,null,1,0,584,"supportsOverrideMimeType"],
 iiu:[function(a,b,c){var z,y,x
@@ -39654,10 +39529,10 @@ gES:[function(){return J.UQ(this.vI,3)},null,null,1,0,995,"w"],
 gY6y:[function(){var z,y,x,w,v,u
 z=this.vI
 y=J.U6(z)
-x=J.Br(J.mQ(y.t(z,0),2147483648),31)
-w=J.Br(J.mQ(y.t(z,1),2147483648),31)
-v=J.Br(J.mQ(y.t(z,2),2147483648),31)
-u=J.Br(J.mQ(y.t(z,3),2147483648),31)
+x=J.J8(J.mQ(y.t(z,0),2147483648),31)
+w=J.J8(J.mQ(y.t(z,1),2147483648),31)
+v=J.J8(J.mQ(y.t(z,2),2147483648),31)
+u=J.J8(J.mQ(y.t(z,3),2147483648),31)
 return J.hG(J.hG(J.hG(x,J.Eh(w,1)),J.Eh(v,2)),J.Eh(u,3))},null,null,1,0,995,"signMask"],
 k9:[function(a,b){var z,y,x
 z=J.St(b)
@@ -46647,7 +46522,6 @@ J.AG=function(a){return J.x(a).bu(a)}
 J.Ah2=function(a){return J.YE(a).Zi(a)}
 J.Avy=function(a,b){return J.YE(a).VT(a,b)}
 J.BB=function(a,b){return J.w1(a).IC(a,b)}
-J.Br=function(a,b){return J.St(a).m(a,b)}
 J.Bt=function(a){return J.YE(a).gxS(a)}
 J.Bx=function(a,b){return J.rY(a).R4(a,b)}
 J.C1=function(a){return J.YE(a).ha(a)}
@@ -46710,6 +46584,7 @@ J.J1=function(a){return J.YE(a).gN8(a)}
 J.J4=function(a){return J.YE(a).gjM(a)}
 J.J5=function(a,b){if(typeof a=="number"&&typeof b=="number")return a>=b
 return J.St(a).F(a,b)}
+J.J8=function(a,b){return J.St(a).m(a,b)}
 J.JA=function(a,b,c){return J.rY(a).h8(a,b,c)}
 J.Je=function(a){return J.YE(a).gWr(a)}
 J.Jj=function(a,b,c,d){return J.YE(a).Z1(a,b,c,d)}

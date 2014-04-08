@@ -1,5 +1,6 @@
 import "package:polymer/polymer.dart";
 import "dart:async";
+import "dart:convert";
 import "dart:html";
 
 import "package:sprintf/sprintf.dart";
@@ -669,79 +670,24 @@ class ProjectCreateForm extends PolymerElement
     bool success = true;
     //Validate Text Inputs
     if (project.title == '') {
-      titleError = localisation.getTranslation("project_create_31");
-      
-      Timer.run(() {
-        LIElement li;
-        li = this.shadowRoot.querySelector("#title_error_top");
-        li.children.clear();
-        li.appendHtml(titleError);
-        li = this.shadowRoot.querySelector("#title_error_btm");
-        li.children.clear();
-        li.appendHtml(titleError);
-      });
-      
+      titleError = localisation.getTranslation("project_create_error_title_not_set");
       success = false;
     }
     if (project.title.length > 110) {
-      titleError = localisation.getTranslation("project_create_23");
-      
-      Timer.run(() {
-        LIElement li;
-        li = this.shadowRoot.querySelector("#title_error_top");
-        li.children.clear();
-        li.appendHtml(titleError);
-        li = this.shadowRoot.querySelector("#title_error_btm");
-        li.children.clear();
-        li.appendHtml(titleError);
-      });
-      
+      titleError = localisation.getTranslation("project_create_error_title_too_long");
       success = false;
     }
     if (project.description == '') {
       descriptionError = localisation.getTranslation("project_create_33");
-
-      Timer.run(() {
-        LIElement li;
-        li = this.shadowRoot.querySelector("#description_error_top");
-        li.children.clear();
-        li.appendHtml(descriptionError);
-        li = this.shadowRoot.querySelector("#description_error_btm");
-        li.children.clear();
-        li.appendHtml(descriptionError);
-      });
-      
       success = false;
     }
     if (project.impact == '') {
       impactError = localisation.getTranslation("project_create_26");
-
-      Timer.run(() {
-        LIElement li;
-        li = this.shadowRoot.querySelector("#impact_error_top");
-        li.children.clear();
-        li.appendHtml(impactError);
-        li = this.shadowRoot.querySelector("#impact_error_btm");
-        li.children.clear();
-        li.appendHtml(impactError);
-      });
-      
       success = false;
     }
     if (wordCountInput != null && wordCountInput != '') {
       project.wordCount = int.parse(wordCountInput, onError: (String wordCountString) {
         wordCountError = localisation.getTranslation("project_create_27");
-
-        Timer.run(() {
-          LIElement li;
-          li = this.shadowRoot.querySelector("#word_count_error_top");
-          li.children.clear();
-          li.appendHtml(wordCountError);
-          li = this.shadowRoot.querySelector("#word_count_error_btm");
-          li.children.clear();
-          li.appendHtml(wordCountError);
-        });
-        
         success = false;
         return 0;
       });
@@ -762,17 +708,6 @@ class ProjectCreateForm extends PolymerElement
       }
     } else {
       wordCountError = localisation.getTranslation("project_create_27");
-
-      Timer.run(() {
-        LIElement li;
-        li = this.shadowRoot.querySelector("#word_count_error_top");
-        li.children.clear();
-        li.appendHtml(wordCountError);
-        li = this.shadowRoot.querySelector("#word_count_error_btm");
-        li.children.clear();
-        li.appendHtml(wordCountError);
-      });
-      
       success = false;
     }
     
@@ -791,32 +726,10 @@ class ProjectCreateForm extends PolymerElement
             + " " + hourAsString + ":" + minuteAsString + ":00";
       } else {
         deadlineError = localisation.getTranslation("project_create_25");
-
-        Timer.run(() {
-          LIElement li;
-          li = this.shadowRoot.querySelector("#deadline_error_top");
-          li.children.clear();
-          li.appendHtml(deadlineError);
-          li = this.shadowRoot.querySelector("#deadline_error_btm");
-          li.children.clear();
-          li.appendHtml(deadlineError);
-        });
-        
         success = false;
       }
     } else {
       deadlineError = localisation.getTranslation("project_create_32");
-
-      Timer.run(() {
-        LIElement li;
-        li = this.shadowRoot.querySelector("#deadline_error_top");
-        li.children.clear();
-        li.appendHtml(deadlineError);
-        li = this.shadowRoot.querySelector("#deadline_error_btm");
-        li.children.clear();
-        li.appendHtml(deadlineError);
-      });
-      
       success = false;
     }
     
@@ -832,8 +745,8 @@ class ProjectCreateForm extends PolymerElement
         CheckboxInputElement proofreadingCheckbox = this.shadowRoot.querySelector("#proofreading_$i");
         bool proofreadingRequired = proofreadingCheckbox.checked;
         if (!segmentationRequired && !translationRequired && !proofreadingRequired) {
-          throw localisation.getTranslation("project_create_29");
           success = false;
+          throw localisation.getTranslation("project_create_29");
         }
         
         SelectElement targetLanguageSelect = this.shadowRoot.querySelector("#target_language_$i");
@@ -841,8 +754,8 @@ class ProjectCreateForm extends PolymerElement
         Language targetLang = languages[targetLanguageSelect.selectedIndex];
         Country targetCountry = countries[targetCountrySelect.selectedIndex];
         if (targetLanguages.contains(targetLang) && targetCountries.contains(targetCountry)) {
-          throw localisation.getTranslation("project_create_28");
           success = false;
+          throw localisation.getTranslation("project_create_28");
         } else {
           targetLanguages.add(targetLang);
           targetCountries.add(targetCountry);

@@ -11,19 +11,19 @@
                   <h3>{{localisation.getTranslation("common_please_fill_in_all_required_fields")}}:</h3>
                   <ol>
                     <template if="{{titleError != null}}">
-                      <li id="title_error_top"></li>
+                      <li id="title_error_top">{{titleError}}</li>
                     </template>
                     <template if="{{descriptionError != null}}">
-                      <li id="description_error_top"></li>
+                      <li id="description_error_top">{{descriptionError}}</li>
                     </template>
                     <template if="{{wordCountError != null}}">
-                      <li id="word_count_error_top"></li>
+                      <li id="word_count_error_top">{{wordCountError}}</li>
                     </template>
                     <template if="{{deadlineError != null}}">
-                      <li id="deadline_error_top"></li>
+                      <li id="deadline_error_top">{{deadlineError}}</li>
                     </template>
                     <template if="{{impactError != null}}">
-                      <li id="impact_error_top"></li>
+                      <li id="impact_error_top">{{impactError}}</li>
                     </template>
                   </ol>
                 </div>
@@ -197,19 +197,19 @@
                     <h3>{{localisation.getTranslation("common_please_fill_in_all_required_fields")}}:</h3>
                     <ol>
                       <template if="{{titleError != null}}">
-                        <li id="title_error_btm"></li>
+                        <li id="title_error_btm">{{titleError}}</li>
                       </template>
                       <template if="{{descriptionError != null}}">
-                        <li id="description_error_btm"></li>
+                        <li id="description_error_btm">{{descriptionError}}</li>
                       </template>
                       <template if="{{wordCountError != null}}">
-                        <li id="word_count_error_btm"></li>
+                        <li id="word_count_error_btm">{{wordCountError}}</li>
                       </template>
                       <template if="{{deadlineError != null}}">
-                        <li id="deadline_error_btm"></li>
+                        <li id="deadline_error_btm">{{deadlineError}}</li>
                       </template>
                       <template if="{{impactError != null}}">
-                        <li id="impact_error_btm"></li>
+                        <li id="impact_error_btm">{{impactError}}</li>
                       </template>
                     </ol>
                   </template>
