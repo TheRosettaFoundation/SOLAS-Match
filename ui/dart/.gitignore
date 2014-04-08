@@ -1,4 +1,6 @@
 .buildlog
+.dart.js.map
+.dart.precompiled.js
 web/conf/conf.json
 web/out/
 /packages
