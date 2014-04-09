@@ -1167,7 +1167,7 @@ class TaskRouteHandler
         $taskTypeColours = array();
         
         for ($i=1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Settings::get("ui.task_{$i}_colour");
+            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
     
         $language_list = Lib\TemplateHelper::getLanguageList();
