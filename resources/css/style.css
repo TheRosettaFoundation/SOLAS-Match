@@ -70,3 +70,11 @@ button.btn.btn-small, input.btn.btn-small[type="submit"] {
 	text-align:center;
 	margin-top:10px;
 }
+
+a.faq-anchor
+{
+   display: block;
+   position: relative;
+   top: -50px;
+   visibility: hidden;
+}
