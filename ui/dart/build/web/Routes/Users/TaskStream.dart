@@ -32,6 +32,7 @@ class TaskStream extends PolymerElement with ChangeNotifier
   @reflectable @observable List<int> get taskTypeIndexes => __$taskTypeIndexes; List<int> __$taskTypeIndexes; @reflectable set taskTypeIndexes(List<int> value) { __$taskTypeIndexes = notifyPropertyChange(#taskTypeIndexes, __$taskTypeIndexes, value); }
   @reflectable @observable Map<int, List<Tag>> get taskTags => __$taskTags; Map<int, List<Tag>> __$taskTags; @reflectable set taskTags(Map<int, List<Tag>> value) { __$taskTags = notifyPropertyChange(#taskTags, __$taskTags, value); }
   
+  
   TaskStream.created() : super.created()
   {
     currentDateTime = new DateTime.now();
