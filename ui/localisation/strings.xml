@@ -377,6 +377,8 @@
 	<string name="project_create_0">Provide as much information as possible.</string>
 	<string name="project_create_source_text">Source Text</string>
 	<string name="project_create_1">Provide a meaningful title for the project.</string>
+	<string name="project_create_1_warning">Title cannot be greater than 100 characters.</string>
+	<string name="project_create_target_language_increase">Please note that creation of more than five tasks may take a while to complete.  Please do not click the Create Project button more than once and do not navigate away from this page.</string>
 	<string name="project_create_2">A brief summary of the project.</string>
 	<string name="project_create_3">Who or what will benefit from contributions to this project.</string>
 	<string name="project_create_4">This will be read by volunteers considering assigning themselves to your project.</string>

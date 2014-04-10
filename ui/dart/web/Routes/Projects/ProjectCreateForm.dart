@@ -250,6 +250,11 @@ class ProjectCreateForm extends PolymerElement
       }
       
       targetCount++;
+      if (targetCount == 5) {
+        window.alert(localisation.getTranslation("project_create_target_language_increase"));
+      }
+
+
       if (targetCount >= maxTargetLanguages) {
         maxTargetsReached = localisation.getTranslation("project_create_11");
         ButtonElement addBtn = this.shadowRoot.querySelector("#addTargetLanguageBtn");
