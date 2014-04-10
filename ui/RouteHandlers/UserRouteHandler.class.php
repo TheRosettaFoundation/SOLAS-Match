@@ -458,7 +458,7 @@ class UserRouteHandler
             $url = $openid->authUrl();
             $app->redirect($openid->authUrl());
         } elseif ($openid->mode == "cancel") {
-            throw new InvalidArgumentException(Lib\Localisation::getTranslation('login_2'));
+            throw new \InvalidArgumentException(Lib\Localisation::getTranslation('login_2'));
         } else {
             $retvals = $openid->getAttributes();
             if ($openid->validate()) {
