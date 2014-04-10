@@ -1,0 +1,242 @@
+<polymer-element name="project-create-form">
+  <template>
+    <div class="well">
+      <table>
+        <tbody>
+          <template if="{{titleError != null || descriptionError != null || wordCountError != null || 
+                        deadlineError != null || impactError != null}}">
+            <tr> 
+              <td colspan="2">
+                <div class="alert alert-error">
+                  <h3>{{localisation.getTranslation("common_please_fill_in_all_required_fields")}}:</h3>
+                  <ol>
+                    <template if="{{titleError != null}}">
+                      <li id="title_error_top">{{titleError}}</li>
+                    </template>
+                    <template if="{{descriptionError != null}}">
+                      <li id="description_error_top">{{descriptionError}}</li>
+                    </template>
+                    <template if="{{wordCountError != null}}">
+                      <li id="word_count_error_top">{{wordCountError}}</li>
+                    </template>
+                    <template if="{{deadlineError != null}}">
+                      <li id="deadline_error_top">{{deadlineError}}</li>
+                    </template>
+                    <template if="{{impactError != null}}">
+                      <li id="impact_error_top">{{impactError}}</li>
+                    </template>
+                  </ol>
+                </div>
+              </td>
+            </tr>
+          </template>
+          <tr valign="middle">
+            <td width="493" align="center" valign="middle">
+              <h2>{{localisation.getTranslation("common_title")}}: <span style="color: red">*</span></h2>
+              <p class="desc">{{localisation.getTranslation("project_create_1")}}</p>
+              <textarea wrap="soft" cols="1" rows="3" style="width: 400px" value="{{project.title}}"></textarea>
+              <p style="margin-bottom:40px;"></p>
+  
+              <h2>{{localisation.getTranslation("common_description")}}: <span style="color: red">*</span></h2>
+              <p class="desc">{{localisation.getTranslation("project_create_2")}}</p>
+              <textarea wrap="soft" cols="1" rows="8" style="width: 400px" value="{{project.description}}"></textarea>
+              <p style="margin-bottom:37.5px;"></p>
+  
+              <h2>{{localisation.getTranslation("common_impact")}}: <span style="color: red">*</span></h2>
+              <p class="desc">
+                {{localisation.getTranslation("project_create_3")}}<br/> {{localisation.getTranslation("project_create_4")}}
+              </p>
+              <textarea wrap="soft" cols="1" rows="3" style="width: 400px" value="{{project.impact}}"></textarea>
+              <p style="margin-bottom:37.5px;"></p>
+  
+              <h2>{{localisation.getTranslation("common_reference")}}:</h2>
+              <p class="desc">{{localisation.getTranslation("project_create_5")}}</p>
+              <input type="text" style="width: 400px" value="{{project.reference}}" />
+            </td>
+            <td width="493" align="center" valign="middle">
+              <div style="margin-bottom:25px;">
+                <h2>{{localisation.getTranslation("project_create_source_text")}}: <span style="color: red">*</span></h2>
+                <p id="source_text_desc" class="desc"></p>
+                <input type="file" id="projectFile" />
+              </div>
+              <div style="margin-bottom: 25px;">
+                <h2>{{localisation.getTranslation("common_word_count")}}: <span style="color: red">*</span></h2>
+                <p class="desc">{{localisation.getTranslation("common_approximate_or_use_a_website_such_as")}}
+                  <a href="http://wordcounttool.net/" target="_blank">{{localisation.getTranslation("task_create_word_count_tool")}}</a>
+                </p>
+                <input type="text"  maxlength="6" value="{{wordCountInput}}" style="width: 400px"/>
+              </div>
+              <div style="margin-bottom:25px;">
+                <h2>{{localisation.getTranslation("common_deadline")}}: <span style="color: red">*</span></h2>
+                <p class="desc">{{localisation.getTranslation("project_create_7")}}</p>
+                <p>
+                  {{localisation.getTranslation("common_day")}}:
+                  <select selectedIndex="{{selectedDay}}" style="width: 3.5em">
+                    <option template repeat="{{day in days}}">{{day}}</option>
+                  </select>
+                  {{localisation.getTranslation("common_month")}}:
+                  <select selectedIndex="{{selectedMonth}}" style="width: 7.3em">
+                    <option template repeat="{{month in months}}">{{month}}</option>
+                  </select>
+                  {{localisation.getTranslation("common_year")}}:
+                  <select selectedIndex="{{selectedYear}}" style="width: 4.5em">
+                    <option template repeat="{{year in years}}">{{year}}</option>
+                  </select>
+                </p>
+                <p>
+                  {{localisation.getTranslation("common_hour")}}:
+                  <select selectedIndex="{{selectedHour}}" style="width: 3.5em">
+                    <option template repeat="{{hour in hours}}">{{hour}}</option>
+                  </select>
+                  {{localisation.getTranslation("common_minute")}}:
+                  <select selectedIndex="{{selectedMinute}}" style="width: 3.5em">
+                    <option template repeat="{{minute in minutes}}">{{minute}}</option>
+                  </select>
+              </div>
+              <div style="margin-bottom:25px;">
+                <h2>{{localisation.getTranslation("common_tags")}}:</h2>
+                <p class="desc">
+                  {{localisation.getTranslation("project_create_8")}}
+                  <br />
+                  {{localisation.getTranslation("project_create_separated_by")}} <strong>spaces</strong>. 
+                  {{localisation.getTranslation("project_create_for_multiword_tags_joinwithhyphens")}}
+                </p>
+                <input value="{{tagList}}" style="width: 400px" />
+              </div>
+              <div style="margin-bottom:25px;">
+                <h2>{{localisation.getTranslation("project_create_publish_tasks")}}:</h2>
+                <p class="desc">
+                  {{localisation.getTranslation("common_if_checked_tasks_will_appear_in_the_tasks_stream")}}
+                </p>
+                <input type="checkbox" checked="{{publish}}"/>
+              </div>
+              <div style="margin-bottom:25px;">
+                <h2>{{localisation.getTranslation("common_track_project")}}:</h2>
+                <p class="desc">{{localisation.getTranslation("project_create_12")}}</p>
+                <input type="checkbox" checked="{{trackProject}}"/>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <hr/>
+            </td>
+          </tr>
+          <tr>
+            <td align="left" valign="top">
+              <div>
+                <template if="{{!loaded}}">
+                  <p>{{localisation.getTranslation("common_loading")}}</p>
+                </template>
+              </div>
+              <div id="sourceLanguageDiv"></div>
+            </td>
+            <td align="center" valign="middle">
+              <h2>{{localisation.getTranslation("common_task_type")}}: <span style="color: red">*</span></h2>
+              <p class="desc">{{localisation.getTranslation("project_create_9")}}</p>
+            </td>
+          </tr>
+          <tr id="targetLanguageTitle">
+            <td>
+              <h2>{{localisation.getTranslation("project_create_target_languages")}}: <span style="color: red">*</span></h2>
+              <br />
+            </td>
+            <td valign="center">
+              <table border="0" width="100%">
+                <tr align="center">
+                  <td width="33%" title="{{localisation.getTranslation('project_create_10')}}">
+                    <strong>{{localisation.getTranslation("common_segmentation")}}</strong>
+                  </td>
+                  <td width="33%" title="{{localisation.getTranslation('common_create_a_translation_task_for_volunteer_translators_to_pick_up')}}">
+                    <strong>{{localisation.getTranslation("common_translation")}}</strong>
+                  </td>
+                  <td width="33%" title="{{localisation.getTranslation('common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer')}}">
+                    <strong>{{localisation.getTranslation("common_proofreading")}}</strong>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr id="horizontalLine_0">
+            <td colspan="2"><hr/></td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <template if="{{maxTargetsReached != null}}">
+                <div class="alert alert-info" style="text-align: center">
+                  {{maxTargetsReached}}
+                </div>
+              </template> 
+              <button on-click="{{addMoreTargetLanguages}}" class="btn btn-success" id="addTargetLanguageBtn">
+                <i class="icon-upload icon-white"></i> 
+                {{localisation.getTranslation("project_create_add_more_target_languages")}}
+              </button>
+              <button on-click="{{removeTargetLanguage}}" class="btn btn-inverse" id="removeBottomTargetBtn" disabled="true">
+                <i class="icon-fire icon-white"></i> 
+                {{localisation.getTranslation("common_remove")}}
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <hr/>
+            </td>
+          </tr>
+          <template if="{{titleError != null || descriptionError != null || wordCountError != null || 
+                        deadlineError != null || impactError != null || createProjectError != null}}">
+            <tr> 
+              <td colspan="2">
+                <div class="alert alert-error">
+                  <template if="{{createProjectError != null}}">
+                    <p>
+                      <span id="project_create_error"></span>
+                    </p>
+                  </template>
+                  <template if="{{titleError != null || descriptionError != null || wordCountError != null ||
+                                deadlineError != null || impactError != null}}">
+                    <h3>{{localisation.getTranslation("common_please_fill_in_all_required_fields")}}:</h3>
+                    <ol>
+                      <template if="{{titleError != null}}">
+                        <li id="title_error_btm">{{titleError}}</li>
+                      </template>
+                      <template if="{{descriptionError != null}}">
+                        <li id="description_error_btm">{{descriptionError}}</li>
+                      </template>
+                      <template if="{{wordCountError != null}}">
+                        <li id="word_count_error_btm">{{wordCountError}}</li>
+                      </template>
+                      <template if="{{deadlineError != null}}">
+                        <li id="deadline_error_btm">{{deadlineError}}</li>
+                      </template>
+                      <template if="{{impactError != null}}">
+                        <li id="impact_error_btm">{{impactError}}</li>
+                      </template>
+                    </ol>
+                  </template>
+                </div>
+              </td>
+            </tr>
+          </template>
+          <tr align="center">
+            <td>
+              <p style="margin-bottom:20px;"></p>
+                <a href='{{orgDashboardLink}}' class='btn btn-danger'>
+                  <i class="icon-ban-circle icon-white"></i>
+                  {{localisation.getTranslation("common_cancel")}}
+                </a>
+              <p style="margin-bottom:20px;"></p>
+            </td>
+            <td>
+              <p style="margin-bottom:20px;"></p>
+              <button on-click="{{submitForm}}" class="btn btn-success">
+                <i class="icon-upload icon-white"></i> {{localisation.getTranslation("common_create_project")}}
+              </button>
+              <p style="margin-bottom:20px;"></p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </template>
+  <script type="application/dart" src="ProjectCreateForm.dart"></script>
+</polymer-element>

@@ -1,0 +1,97 @@
+<polymer-element name="task-stream">
+  <template>
+    <template if="{{!loaded}}">
+      <p>Loading</p>
+    </template>
+    <template if="{{loaded}}">
+      <template if="{{userid > 0}}">
+        <h3>{{localisation.getTranslation("index_filter_available_tasks")}}</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>{{localisation.getTranslation("common_task_type")}}</th>
+              <th>{{localisation.getTranslation("common_source_language")}}<span style="color: red">*</span></th>
+              <th>{{localisation.getTranslation("common_target_language")}}<span style="color: red">*</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <select name="taskTypes" selectedIndex="{{selectedTaskTypeFilter}}"> 
+                  <option template repeat="{{key in taskTypeIndexes}}" value="{{key.toString()}}">
+                    {{taskTypes[key]}}
+                  </option>
+                </select>
+              </td>
+              <td>
+                <select name="sourceLanguage" selectedIndex="{{selectedSourceFilter}}">
+                    <option template repeat="{{language in activeSourceLanguages}}" value="{{language.code}}">
+                      {{language.name}}
+                    </option>
+                </select>
+              </td>
+              <td>
+                <select name="targetLanguage" selectedIndex="{{selectedTargetFilter}}">
+                  <option template repeat="{{language in activeTargetLanguages}}" value="{{language.code}}">
+                    {{language.name}}
+                  </option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <button value="Filter" class="btn btn-primary" on-click="{{filterStream}}">
+                  <i class="icon-refresh icon-white"></i> {{localisation.getTranslation("index_filter_task_stream")}}
+                </button>
+              </td>
+            </tr>
+          </tbody>  
+        </table>
+        <hr />
+      </template>
+      <template if="{{tasks.length > 0}}">
+        <template repeat="{{task in tasks}}">
+          <div class="task" style="word-break: break-all; overflow-wrap: break-word;">
+            <h2>
+              <a id="task-{{task.id}}" href="{{siteAddress}}task/{{task.id}}/id">
+                {{task.title}}
+              </a>
+            </h2>
+            <p>{{localisation.getTranslation("common_type")}}:
+              <span class="label label-info" style="background-color: {{taskColours[task.taskType]}}">
+                {{taskTypes[task.taskType]}}
+              </span>
+            </p>
+            <p>
+              {{localisation.getTranslation("common_from")}}: <strong>{{task.sourceLocale.languageName}} - {{task.sourceLocale.countryName}} </strong>
+            </p>
+            <p>
+              {{localisation.getTranslation("common_to")}}: <strong>{{task.targetLocale.languageName}} - {{task.targetLocale.countryName}}</strong>
+            </p>
+            <p>
+              <template repeat="{{tag in taskTags[task.id]}}">
+                <a href="{{siteAddress}}tag/{{tag.id}}" class="label"><span class="label">{{tag.label}}</span></a>
+              </template>
+            </p>
+            <p>
+              {{localisation.getTranslation("common_word_count")}}: <strong>{{task.wordCount}}</strong>
+            </p>
+            <p id="task_age_{{task.id}}" class="task_details"></p>
+            <p id="deadline_{{task.id}}"></p>
+            <p id="parents_{{task.id}}"></p>
+            <br />
+          </div>
+        </template>
+        <template if="{{moreTasks}}">
+          <button on-click="{{addTasks}}">{{localisation.getTranslation("index_load_more")}}</button>
+        </template>
+      </template>
+      <template if="{{!(tasks.length > 0)}}">
+        <p>{{localisation.getTranslation("index_no_tasks_available")}}</p>
+      </template>
+      <br />
+    </template>
+  </template>
+  
+  <script type="application/dart" src="TaskStream.dart"></script>
+</polymer-element>
