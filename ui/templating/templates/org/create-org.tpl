@@ -16,9 +16,9 @@
                 <tr>
                     <td colspan="2">
                         <div class="alert alert-error">
-                            <h3>{Localisation::getTranslation('common_please_fill_in_all_required_fields')}</h3>
+                            <h3>{Localisation::getTranslation('common_please_correct_errors')}</h3>
                             <ol>
-                                <li>{$nameErr}</li>
+                                <li>{$nameErr} {Localisation::getTranslation('common_invalid_characters')}</li>
                             </ol>
                         </div> 
                     </td>

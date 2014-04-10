@@ -20,12 +20,23 @@
 
 {include file="handle-flash-messages.tpl"}
 
+{if isset($nameErr)}
+    <tr>
+        <td colspan="2">
+            <div class="alert alert-error">
+                <h3>{Localisation::getTranslation('common_please_correct_errors')}</h3>
+                    <ol>
+                        <li>{$nameErr} {Localisation::getTranslation('common_invalid_characters')}</li>
+                    </ol>
+            </div> 
+        </td>
+    </tr>
+{/if}
 {assign var="org_id" value=$org->getId()}
     <form method='post' action='{urlFor name='org-private-profile' options="org_id.$org_id"}' class='well' accept-charset="utf-8">
         <table>
             <tr valign="top" align="center"> 
-                <td width="50%">
-                    
+                <td width="50%">         
                     <label for='displayName'><strong>{Localisation::getTranslation('common_display_name')}</strong></label>
                     <input type='text' name='displayName' id='displayName' style="width: 80%"
                     {if $org->getName() != ''}

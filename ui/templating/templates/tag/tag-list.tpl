@@ -22,6 +22,18 @@
     <hr />
 {/if}
 
+{if isset($nameErr)}
+    <tr>
+        <td colspan="2">
+            <div class="alert alert-error">
+                <h3>{Localisation::getTranslation('common_please_correct_errors')}</h3>
+                    <ol>
+                        <li>{$nameErr} {Localisation::getTranslation('common_invalid_characters')}</li>
+                    </ol>
+            </div> 
+        </td>
+    </tr>
+{/if}
 <h2>{Localisation::getTranslation('tag_list_tag_search')} <small>{Localisation::getTranslation('tag_list_1')}</small></h2>
 <form method="post" action="{urlFor name="tags-list"}" class="well" accept-charset="utf-8">
     <p>{Localisation::getTranslation('tag_list_2')}</p>

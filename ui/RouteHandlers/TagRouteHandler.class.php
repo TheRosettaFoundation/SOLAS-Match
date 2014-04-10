@@ -42,13 +42,18 @@ class TagRouteHandler
         $user_tags = $userDao->getUserTags($user_id);
         $foundTags = null;
         $name = "";
+        $nameErr = null;
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
 
             if (isset($post['search'])) {
                 $name = $post['searchName'];
-                $foundTags = $tagDao->searchForTag($name);
+                if (Lib\Validator::filterSpecialChars($name) == true) {
+                    $foundTags = $tagDao->searchForTag($name);
+                } else {
+                    $nameErr = Lib\Localisation::getTranslation('tag_list_invalid_search');
+                }
             }
 
             if (isset($post['listAll'])) {
@@ -56,12 +61,19 @@ class TagRouteHandler
             }
         }
         
-        $app->view()->appendData(array(
-            "user_tags" => $user_tags,
-            "foundTags" => $foundTags,
-            'searchedText'  => $name
-        ));
-        
+        if(is_null($nameErr)) {
+            $app->view()->appendData(array(
+                "user_tags" => $user_tags,
+                "foundTags" => $foundTags,
+                'searchedText'  => $name
+            ));
+        } else {
+            $app->view()->appendData(array(
+                    "user_tags" => $user_tags,
+                    "foundTags" => $foundTags,
+                    "nameErr"  => $nameErr
+            ));
+        }
         $app->render("tag/tag-list.tpl");
     }
 

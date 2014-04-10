@@ -72,6 +72,7 @@
 	<string name="common_proofreading_task">Proofreading Task</string>
 	<string name="common_desegmentation_task">Desegmentation Task</string>
 	<string name="common_please_fill_in_all_required_fields">Please fill in all required fields</string>
+    <string name="common_please_correct_errors">Please correct the following errors.</string>
 	<string name="common_provide_feedback">Provide Feedback</string>
 	<string name="common_here">here</string>
 	<string name="common_create_a_translation_task_for_volunteer_translators_to_pick_up">Create a translation task for volunteer translators to pick up.</string>
@@ -158,6 +159,7 @@
     <string name="common_assign_badge">Assign Badge</string>        
     <string name="common_successfully_added_member">Successfully added %s as a member of %s.</string>
     <string name="common_invalid_userid">Invalid User ID: %s</string>
+    <string name="common_invalid_characters">Invalid characters are: '/', '\', " and '@'</string>
     <string name="common_no_valid_email">You did not enter a valid email address.</string>
     <string name="common_all_fields">All fields must be filled out.</string>
     <string name="common_error_upload_1">The contents of the file you are uploading is not valid. Please ensure you upload a valid (<strong>.%s</strong>) file with a valid content type of (<strong>%s</strong>).</string>
@@ -233,6 +235,7 @@
 
 	<string name="create_org_create_an_organisation">Create an Organisation</string>
 	<string name="create_org_create_your_own_organisation">Create your own organisation.</string>
+    <string name="create_org_invalid_name">Organisation names cannot contain invalid characters.</string>
     <string name="create_org_1"><strong>Organisation name</strong> must be set.</string>
     <string name="create_org_2">The organisation <strong>%s</strong> has been created.</string>
     <string name="create_org_3">Unable to create Organisation.</string>
@@ -585,6 +588,7 @@
 	<string name="tag_list_tag_search">Tag Search</string>
 	<string name="tag_list_1">Search for tags in the system.</string>
 	<string name="tag_list_2">Enter text to search for tags:</string>
+    <string name="tag_list_invalid_search">Please remove any invalid characters from your search string.</string>
 	<string name="tag_list_search">Search</string>
 	<string name="tag_list_successfully_found">Successfully found %s tags!</string>
 	<string name="tag_list_3">Found no tags that match the keyword <strong>%s.</strong></string>

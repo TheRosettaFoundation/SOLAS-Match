@@ -6,6 +6,8 @@ use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
 use \SolasMatch\Common as Common;
 
+require_once __DIR__."/../lib/Validator.php";
+
 class OrgRouteHandler
 {
     public function init()
@@ -102,7 +104,12 @@ class OrgRouteHandler
             $org = new Common\Protobufs\Models\Organisation();
 
             if (isset($post["orgName"]) && $post["orgName"] != '') {
-                $org->setName($post['orgName']);
+                
+                if (Lib\Validator::filterSpecialChars($post["orgName"]) == true) { 
+                    $org->setName($post['orgName']);
+                } else {
+                    $nameErr = Lib\Localisation::getTranslation('create_org_invalid_name');
+                }
             } else {
                 $nameErr = Lib\Localisation::getTranslation('create_org_1');
             }
@@ -366,11 +373,17 @@ class OrgRouteHandler
         $orgDao = new DAO\OrganisationDao();
         $org = $orgDao->getOrganisation($org_id);
         $userId = Common\Lib\UserSession::getCurrentUserId();
+        $nameErr = null;
         if ($post = $app->request()->post()) {
 
             if (isset($post['updateOrgDetails'])) {
                 if (isset($post['displayName'])) {
-                    $org->setName($post['displayName']);
+                    //Check if new org title has forbidden characters
+                    if (Lib\Validator::filterSpecialChars($post["displayName"]) == true) {
+                        $org->setName($post['displayName']);
+                    } else {
+                        $nameErr = Lib\Localisation::getTranslation('create_org_invalid_name');
+                    }
                 }
                 if (isset($post['homepage'])) {
                     $org->setHomePage($post['homepage']);
@@ -414,9 +427,16 @@ class OrgRouteHandler
                 if (!empty($regionalFocus)) {
                     $org->setRegionalFocus(implode(",", $regionalFocus));
                 }
-
-                $orgDao->updateOrg($org);
-                $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org->getId())));
+                
+                if (!is_null($nameErr)) {
+                    $app->view()->appendData(array(
+                    "org"     => $org,
+                    "nameErr" => $nameErr
+                ));
+                } else {
+                    $orgDao->updateOrg($org);
+                    $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org->getId())));
+                }
             }
 
             if (isset($post['deleteId'])) {
