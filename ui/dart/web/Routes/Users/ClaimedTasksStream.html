@@ -1,5 +1,8 @@
 <polymer-element name="claimed-tasks-stream" lightdom>
   <template>
+  <link rel="stylesheet"  href="./resources/bootstrap/css/bootstrap.min.css"/>
+  <link rel="stylesheet" type="text/css" media="all" href="./resources/css/style.1.css"/>
+  <link rel="stylesheet" href="./resources/css/jquery-ui.css"/>
     <template if="{{tasks.length > 0}}">
       <template repeat="{{task in tasks}}">
         <div class="task" style="word-break: break-all; overflow-wrap: break-word;">

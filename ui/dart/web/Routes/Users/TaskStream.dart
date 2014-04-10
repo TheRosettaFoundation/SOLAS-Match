@@ -32,6 +32,7 @@ class TaskStream extends PolymerElement
   @observable List<int> taskTypeIndexes;
   @observable Map<int, List<Tag>> taskTags;
   
+  
   TaskStream.created() : super.created()
   {
     currentDateTime = new DateTime.now();
