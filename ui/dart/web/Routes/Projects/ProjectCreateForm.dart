@@ -195,7 +195,9 @@ class ProjectCreateForm extends PolymerElement
       targetCountrySelect.id = "target_country_$targetCount";
       TableCellElement targetTaskTypes = new TableCellElement()
       ..attributes["valign"] = "middle";
+
       TableElement targetTaskTypesTable = new TableElement();
+      targetTaskTypesTable.style.width="100%";
       TableRowElement taskTypesRow = new TableRowElement()
       ..attributes["align"] = "center";
       TableCellElement segmentationRequired = new TableCellElement()
