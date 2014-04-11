@@ -847,7 +847,7 @@ init.mangledNames = {$add: "+:1:0", $and: "&:1:0", $ge: ">=:1:0", $gt: ">:1:0", 
     }, null, null, 1, 0, 301, "hashCode"],
     $add: [function(receiver, other) {
       if (typeof other !== "number")
-        throw H.wrapException(P.ArgumentError$(other));
+        throw H.wrapException(new P.ArgumentError(other));
       return receiver + other;
     }, "call$1", "get$+", 2, 0, 328, 254, "+"],
     $sub: [function(receiver, other) {
@@ -971,7 +971,7 @@ init.mangledNames = {$add: "+:1:0", $and: "&:1:0", $ge: ">=:1:0", $gt: ">:1:0", 
     }, "call$1", "get$codeUnitAt", 2, 0, 308, 69, "codeUnitAt"],
     $add: [function(receiver, other) {
       if (typeof other !== "string")
-        throw H.wrapException(P.ArgumentError$(other));
+        throw H.wrapException(new P.ArgumentError(other));
       return receiver + other;
     }, "call$1", "get$+", 2, 0, 100, 254, "+"],
     replaceAll$2: [function(receiver, from, to) {
@@ -3069,7 +3069,9 @@ init.mangledNames = {$add: "+:1:0", $and: "&:1:0", $ge: ">=:1:0", $gt: ">:1:0", 
     }, "call$1", "get$parameterName", 2, 0, 229, 371, "parameterName"],
     defaultValue$1: [function(_, parameter) {
       var t1 = this.requiredParameterCount;
-      if (J.$lt$n(parameter, t1) === true)
+      if (typeof parameter !== "number")
+        return parameter.$lt();
+      if (parameter < t1)
         return;
       return this.data[3 + parameter - t1];
     }, "call$1", "get$defaultValue", 2, 0, 308, 371, "defaultValue"],
@@ -3533,13 +3535,10 @@ init.mangledNames = {$add: "+:1:0", $and: "&:1:0", $ge: ">=:1:0", $gt: ">:1:0", 
       f.call$1(t1._current);
   }, "call$2", "IterableMixinWorkaround_forEach$closure", 4, 0, 145, 144, 146, "forEach"],
   IterableMixinWorkaround_toStringIterable: [function(iterable, leftDelimiter, rightDelimiter) {
-    var result, i, t1, t2;
-    for (i = 0; t1 = $.get$IterableMixinWorkaround__toStringList(), i < t1.length; ++i) {
-      t1 = t1[i];
-      t2 = iterable;
-      if (t1 == null ? t2 == null : t1 === t2)
+    var result, i, t1;
+    for (i = 0; t1 = $.get$IterableMixinWorkaround__toStringList(), i < t1.length; ++i)
+      if (t1[i] === iterable)
         return H.S(leftDelimiter) + "..." + H.S(rightDelimiter);
-    }
     result = P.StringBuffer$("");
     try {
       $.get$IterableMixinWorkaround__toStringList().push(iterable);
@@ -5636,7 +5635,7 @@ init.mangledNames = {$add: "+:1:0", $and: "&:1:0", $ge: ">=:1:0", $gt: ">:1:0", 
     return t1._contents;
   }, "call$1", "_iterableToString$closure", 2, 0, 209, 144, "_iterableToString"],
   _iterablePartsToStrings: [function(iterable, parts) {
-    var it, $length, count, next, ultimateString, penultimateString, penultimate, ultimate, ultimate0, t1, elision;
+    var it, $length, count, next, ultimateString, penultimateString, penultimate, ultimate, ultimate0, elision;
     it = iterable.get$iterator(iterable);
     $length = 0;
     count = 0;
@@ -5684,10 +5683,7 @@ init.mangledNames = {$add: "+:1:0", $and: "&:1:0", $ge: ">=:1:0", $gt: ">:1:0", 
                 break;
               if (0 >= parts.length)
                 return H.ioore(parts, 0);
-              t1 = J.$add$ns(J.get$length$asx(parts.pop()), 2);
-              if (typeof t1 !== "number")
-                return H.iae(t1);
-              $length -= t1;
+              $length -= parts.pop().length + 2;
               --count;
             }
             parts.push("...");
@@ -5709,10 +5705,7 @@ init.mangledNames = {$add: "+:1:0", $and: "&:1:0", $ge: ">=:1:0", $gt: ">:1:0", 
         break;
       if (0 >= parts.length)
         return H.ioore(parts, 0);
-      t1 = J.$add$ns(J.get$length$asx(parts.pop()), 2);
-      if (typeof t1 !== "number")
-        return H.iae(t1);
-      $length -= t1;
+      $length -= parts.pop().length + 2;
       if (elision == null) {
         $length += 5;
         elision = "...";
@@ -5738,14 +5731,11 @@ init.mangledNames = {$add: "+:1:0", $and: "&:1:0", $ge: ">=:1:0", $gt: ">:1:0", 
     }, this.$receiver, "LinkedHashSet");
   }, 118, 118, 118, 206, 207, 208, "new LinkedHashSet"],
   Maps_mapToString: [function(m) {
-    var t1, result, i, t2, t3;
+    var t1, result, i, t2;
     t1 = {};
-    for (i = 0; t2 = $.get$Maps__toStringList(), i < t2.length; ++i) {
-      t2 = t2[i];
-      t3 = m;
-      if (t2 == null ? t3 == null : t2 === t3)
+    for (i = 0; t2 = $.get$Maps__toStringList(), i < t2.length; ++i)
+      if (t2[i] === m)
         return "{...}";
-    }
     result = P.StringBuffer$("");
     try {
       $.get$Maps__toStringList().push(m);
@@ -7762,7 +7752,7 @@ init.mangledNames = {$add: "+:1:0", $and: "&:1:0", $ge: ">=:1:0", $gt: ">:1:0", 
         t3 = t2.$shr($byte, 4);
         if (t3 >>> 0 !== t3 || t3 >= 8)
           return H.ioore(canonicalTable, t3);
-        t3 = !J.$eq(J.$and$n(canonicalTable[t3], C.JSInt_methods._shlPositive$1(1, t2.$and($byte, 15))), 0);
+        t3 = (canonicalTable[t3] & C.JSInt_methods._shlPositive$1(1, t2.$and($byte, 15))) !== 0;
       } else
         t3 = false;
       if (t3) {

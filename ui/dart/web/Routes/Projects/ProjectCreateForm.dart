@@ -776,6 +776,8 @@ class ProjectCreateForm extends PolymerElement
         } else {
           validationCompleter.complete(false);
         }
+      }).catchError((e) {//catch error in file input validation
+        validationCompleter.completeError(e);
       });
     } catch (e) {
       validationCompleter.completeError(e);
@@ -896,17 +898,5 @@ class ProjectCreateForm extends PolymerElement
       }
     }
     return ret;
-  }
-  
-  /*
-   * Automatically bound to changes on createProjectError
-   */
-  void createProjectErrorChanged(String oldValue)
-  {
-    Timer.run(() {
-      SpanElement span = this.shadowRoot.querySelector("#project_create_error");
-      span.children.clear();
-      span.appendHtml(createProjectError);
-    });
   }
 }

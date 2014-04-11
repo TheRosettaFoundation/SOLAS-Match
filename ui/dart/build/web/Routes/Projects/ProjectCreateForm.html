@@ -1,13 +1,13 @@
 <polymer-element name="project-create-form">
   <template>
-  <link rel="stylesheet"  href="./resources/bootstrap/css/bootstrap.min.css"/>
-  <link rel="stylesheet" type="text/css" media="all" href="./resources/css/style.1.css"/>
-  <link rel="stylesheet" href="./resources/css/jquery-ui.css"/>
+  <link rel="stylesheet"  href="../../../resources/bootstrap/css/bootstrap.min.css"/>
+  <link rel="stylesheet" type="text/css" media="all" href="../../../resources/css/style.1.css"/>
+  <link rel="stylesheet" href="../../../resources/css/jquery-ui.css"/>
     <div class="well">
       <table>
         <tbody>
           <template if="{{titleError != null || descriptionError != null || wordCountError != null || 
-                        deadlineError != null || impactError != null}}">
+                        deadlineError != null || impactError != null || createProjectError != null}}">
             <tr> 
               <td colspan="2">
                 <div class="alert alert-error">
@@ -18,6 +18,9 @@
                     </template>
                     <template if="{{descriptionError != null}}">
                       <li id="description_error_top">{{descriptionError}}</li>
+                    </template>
+                    <template if="{{createProjectError != null}}">
+                      <li id="create_project_error_top">{{createProjectError}}</li>
                     </template>
                     <template if="{{wordCountError != null}}">
                       <li id="word_count_error_top">{{wordCountError}}</li>
@@ -191,11 +194,6 @@
             <tr> 
               <td colspan="2">
                 <div class="alert alert-error">
-                  <template if="{{createProjectError != null}}">
-                    <p>
-                      <span id="project_create_error"></span>
-                    </p>
-                  </template>
                   <template if="{{titleError != null || descriptionError != null || wordCountError != null ||
                                 deadlineError != null || impactError != null}}">
                     <h3>{{localisation.getTranslation("common_please_fill_in_all_required_fields")}}:</h3>
@@ -205,6 +203,9 @@
                       </template>
                       <template if="{{descriptionError != null}}">
                         <li id="description_error_btm">{{descriptionError}}</li>
+                      </template>
+                      <template if="{{createProjectError != null}}">
+                        <li id="create_project_error_btm">{{createProjectError}}</li>
                       </template>
                       <template if="{{wordCountError != null}}">
                         <li id="word_count_error_btm">{{wordCountError}}</li>

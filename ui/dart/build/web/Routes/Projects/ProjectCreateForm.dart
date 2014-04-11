@@ -195,7 +195,9 @@ class ProjectCreateForm extends PolymerElement with ChangeNotifier
       targetCountrySelect.id = "target_country_$targetCount";
       TableCellElement targetTaskTypes = new TableCellElement()
       ..attributes["valign"] = "middle";
+
       TableElement targetTaskTypesTable = new TableElement();
+      targetTaskTypesTable.style.width="100%";
       TableRowElement taskTypesRow = new TableRowElement()
       ..attributes["align"] = "center";
       TableCellElement segmentationRequired = new TableCellElement()
@@ -253,8 +255,8 @@ class ProjectCreateForm extends PolymerElement with ChangeNotifier
       if (targetCount == 5) {
         window.alert(localisation.getTranslation("project_create_target_language_increase"));
       }
-      
-      
+
+
       if (targetCount >= maxTargetLanguages) {
         maxTargetsReached = localisation.getTranslation("project_create_11");
         ButtonElement addBtn = this.shadowRoot.querySelector("#addTargetLanguageBtn");
@@ -774,6 +776,8 @@ class ProjectCreateForm extends PolymerElement with ChangeNotifier
         } else {
           validationCompleter.complete(false);
         }
+      }).catchError((e) {//catch error in file input validation
+        validationCompleter.completeError(e);
       });
     } catch (e) {
       validationCompleter.completeError(e);
@@ -894,17 +898,5 @@ class ProjectCreateForm extends PolymerElement with ChangeNotifier
       }
     }
     return ret;
-  }
-  
-  /*
-   * Automatically bound to changes on createProjectError
-   */
-  void createProjectErrorChanged(String oldValue)
-  {
-    Timer.run(() {
-      SpanElement span = this.shadowRoot.querySelector("#project_create_error");
-      span.children.clear();
-      span.appendHtml(createProjectError);
-    });
   }
 }
