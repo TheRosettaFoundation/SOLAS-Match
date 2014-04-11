@@ -18,12 +18,17 @@
                         <div class="alert alert-error">
                             <h3>{Localisation::getTranslation('common_please_correct_errors')}</h3>
                             <ol>
-                                <li>{$nameErr} {Localisation::getTranslation('common_invalid_characters')}</li>
+                                {if isset($nameErr[0])}
+                                    <li>{$nameErr[0]}</li>
+                                {/if}
+                                {if isset($nameErr[1])}
+                                    <li>{$nameErr[1]} {Localisation::getTranslation('common_invalid_characters')}</li>
+                                {/if}
                             </ol>
                         </div> 
                     </td>
                 </tr>
-             {/if}
+           {/if}
             <tr valign="top" align="center"> 
                 <td width="50%">
                     

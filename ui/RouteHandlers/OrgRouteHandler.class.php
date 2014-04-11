@@ -94,7 +94,7 @@ class OrgRouteHandler
         )->name("org-task-reviews");
     }
 
-    public function createOrg()
+public function createOrg()
     {
        $app = \Slim\Slim::getInstance(); 
         
@@ -104,14 +104,14 @@ class OrgRouteHandler
             $org = new Common\Protobufs\Models\Organisation();
 
             if (isset($post["orgName"]) && $post["orgName"] != '') {
-                
-                if (Lib\Validator::filterSpecialChars($post["orgName"]) == true) { 
+                if(Lib\Validator::filterSpecialChars($post["orgName"]) == true) {
                     $org->setName($post['orgName']);
                 } else {
-                    $nameErr = Lib\Localisation::getTranslation('create_org_invalid_name');
+                    $nameErr = array();
+                    $nameErr[1] = Lib\Localisation::getTranslation('create_org_invalid_name');
                 }
             } else {
-                $nameErr = Lib\Localisation::getTranslation('create_org_1');
+                $nameErr[0] = Lib\Localisation::getTranslation('create_org_1');
             }
             
             if (isset($post["homepage"])) {
@@ -172,8 +172,11 @@ class OrgRouteHandler
                         $app->flashNow("error", Lib\Localisation::getTranslation('create_org_3'));
                     }
                 } else {
+                    error_log("ORG WITH SAME NAME EXISTS - TRY TO FLASH ERROR");
+                    $app->flashKeep();
                     $org_name = $org->getName();
-                    $app->flashNow("error", sprintf(Lib\Localisation::getTranslation('create_org_4'), $org_name));
+                    $app->flash("error", sprintf(Lib\Localisation::getTranslation('create_org_4'), $org_name));
+                    $app->redirect($app->urlFor("org-dashboard"));
                 }
             } else {
                 $app->view()->appendData(array(
@@ -430,9 +433,9 @@ class OrgRouteHandler
                 
                 if (!is_null($nameErr)) {
                     $app->view()->appendData(array(
-                    "org"     => $org,
-                    "nameErr" => $nameErr
-                ));
+                        "org"     => $org,
+                        "nameErr" => $nameErr
+                    ));
                 } else {
                     $orgDao->updateOrg($org);
                     $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org->getId())));

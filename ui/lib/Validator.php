@@ -7,10 +7,10 @@ class Validator
     public static function filterSpecialChars($title)
     {
         $pattern = '/((\/)|(@)|(\\\\)|(")|(.))/';
-        
-        if (preg_match($pattern, $title)) {
+        $result = preg_match($pattern, $title);
+        if ($result === 1) {
             return false;
-        } else {
+        } else if (result === 0) {
             return true;
         }
     }
