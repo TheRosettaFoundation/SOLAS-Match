@@ -20,14 +20,14 @@
 
 {include file="handle-flash-messages.tpl"}
 
-{if isset($nameErr)}
+{if isset($errorOccured)}
     <tr>
         <td colspan="2">
             <div class="alert alert-error">
                 <h3>{Localisation::getTranslation('common_please_correct_errors')}</h3>
-                    <ol>
-                        <li>{$nameErr} {Localisation::getTranslation('common_invalid_characters')}</li>
-                    </ol>
+                {foreach from=$errorList item=error}
+                    <li>{$error}</li>
+                {/foreach}
             </div> 
         </td>
     </tr>

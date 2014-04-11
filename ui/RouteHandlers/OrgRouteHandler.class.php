@@ -99,23 +99,32 @@ class OrgRouteHandler
        $app = \Slim\Slim::getInstance(); 
         
         if ($post = $app->request()->post()) {
-            $nameErr = null;
+            $errorOccured = null;
+            $errorList=array();
 
             $org = new Common\Protobufs\Models\Organisation();
 
             if (isset($post["orgName"]) && $post["orgName"] != '') {
                 
-                if (Lib\Validator::filterSpecialChars($post["orgName"]) == true) { 
+                if (Lib\Validator::filterSpecialChars($post["orgName"])) { 
                     $org->setName($post['orgName']);
                 } else {
-                    $nameErr = Lib\Localisation::getTranslation('create_org_invalid_name');
+                    $errorOccured = true; 
+                    array_push($errorList, Lib\Localisation::getTranslation('create_org_invalid_name')." "
+                    .Lib\Localisation::getTranslation('common_invalid_characters'));
                 }
             } else {
-                $nameErr = Lib\Localisation::getTranslation('create_org_1');
+                $errorOccured = true;
+                array_push($errorList, Lib\Localisation::getTranslation('create_org_1'));
             }
             
             if (isset($post["homepage"])) {
-                $org->setHomePage($post["homepage"]);
+                if (Lib\Validator::validateURL($post["homepage"])) { 
+                    $org->setHomePage($post["homepage"]);
+                } else {
+                    $errorOccured = true; 
+                    array_push($errorList, Lib\Localisation::getTranslation('common_invalid_url'));
+                }
             }
             if (isset($post["biography"])) {
                 $org->setBiography($post["biography"]);
@@ -157,7 +166,7 @@ class OrgRouteHandler
                 $org->setRegionalFocus(implode(",", $regionalFocus));
             }
             
-            if (is_null($nameErr)) {
+            if (is_null($errorOccured)) {
                 $user_id = Common\Lib\UserSession::getCurrentUserID();
                 $orgDao = new DAO\OrganisationDao();
                 $organisation = $orgDao->getOrganisationByName($org->getName());
@@ -173,12 +182,14 @@ class OrgRouteHandler
                     }
                 } else {
                     $org_name = $org->getName();
-                    $app->flashNow("error", sprintf(Lib\Localisation::getTranslation('create_org_4'), $org_name));
+                    $app->flash("error", sprintf(Lib\Localisation::getTranslation('create_org_4'), $org_name));
+                    $app->redirect($app->urlFor("home"));
                 }
             } else {
                 $app->view()->appendData(array(
                     "org"     => $org,
-                    "nameErr" => $nameErr
+                    "errorOccured" => $errorOccured,
+                    "errorList" => $errorList
                 ));
             }
         }
@@ -373,20 +384,30 @@ class OrgRouteHandler
         $orgDao = new DAO\OrganisationDao();
         $org = $orgDao->getOrganisation($org_id);
         $userId = Common\Lib\UserSession::getCurrentUserId();
-        $nameErr = null;
+        
+        $errorOccured = null;
+        $errorList=array();
+        
         if ($post = $app->request()->post()) {
 
             if (isset($post['updateOrgDetails'])) {
                 if (isset($post['displayName'])) {
                     //Check if new org title has forbidden characters
-                    if (Lib\Validator::filterSpecialChars($post["displayName"]) == true) {
+                    if (Lib\Validator::filterSpecialChars($post["displayName"])) {
                         $org->setName($post['displayName']);
                     } else {
-                        $nameErr = Lib\Localisation::getTranslation('create_org_invalid_name');
+                        $errorOccured = true;
+                        array_push($errorList, Lib\Localisation::getTranslation('create_org_invalid_name')." "
+                        .Lib\Localisation::getTranslation('common_invalid_characters'));
                     }
                 }
                 if (isset($post['homepage'])) {
-                    $org->setHomePage($post['homepage']);
+                    if (Lib\Validator::validateURL($post["homepage"])) { 
+                        $org->setHomePage($post["homepage"]);
+                    } else {
+                        $errorOccured = true; 
+                        array_push($errorList, Lib\Localisation::getTranslation('common_invalid_url'));
+                    }
                 }
                 if (isset($post['biography'])) {
                     $org->setBiography($post['biography']);
@@ -428,10 +449,11 @@ class OrgRouteHandler
                     $org->setRegionalFocus(implode(",", $regionalFocus));
                 }
                 
-                if (!is_null($nameErr)) {
+                if (!is_null($errorOccured)) {
                     $app->view()->appendData(array(
                     "org"     => $org,
-                    "nameErr" => $nameErr
+                    "errorOccured" => $errorOccured,
+                    "errorList" => $errorList
                 ));
                 } else {
                     $orgDao->updateOrg($org);
