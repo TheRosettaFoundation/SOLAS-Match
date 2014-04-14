@@ -51,6 +51,7 @@ class ProjectCreateForm extends PolymerElement with ChangeNotifier
   @reflectable @observable String get deadlineError => __$deadlineError; String __$deadlineError; @reflectable set deadlineError(String value) { __$deadlineError = notifyPropertyChange(#deadlineError, __$deadlineError, value); }
   @reflectable @observable String get impactError => __$impactError; String __$impactError; @reflectable set impactError(String value) { __$impactError = notifyPropertyChange(#impactError, __$impactError, value); }
   @reflectable @observable String get createProjectError => __$createProjectError; String __$createProjectError; @reflectable set createProjectError(String value) { __$createProjectError = notifyPropertyChange(#createProjectError, __$createProjectError, value); }
+  @reflectable @observable String get tagsError => __$tagsError; String __$tagsError; @reflectable set tagsError(String value) { __$tagsError = notifyPropertyChange(#tagsError, __$tagsError, value); }
   
   ProjectCreateForm.created() : super.created() 
   {
@@ -302,6 +303,7 @@ class ProjectCreateForm extends PolymerElement with ChangeNotifier
     wordCountError = null;
     deadlineError = null;
     impactError = null;
+    tagsError = null;
     maxTargetsReached = null;
     
     validateInput().then((bool success) {
@@ -718,6 +720,11 @@ class ProjectCreateForm extends PolymerElement with ChangeNotifier
       success = false;
     }
     
+    if(validateTagList(tagList) == false) {
+      tagsError = localisation.getTranslation('project_create_invalid_tags');
+      success = false;
+    }
+    
     DateTime projectDeadline = parseDeadline();
     if (projectDeadline != null) {
       if (projectDeadline.isAfter(new DateTime.now())) {
@@ -833,6 +840,15 @@ class ProjectCreateForm extends PolymerElement with ChangeNotifier
     }
     
     return completer.future;
+  }
+  
+  bool validateTagList(String tagList)
+  {
+    if (tagList.indexOf(new RegExp(r'[^a-z0-9\-\s]')) != -1) {
+      return false;
+    } else {
+      return true;
+    }
   }
   
   DateTime parseDeadline()

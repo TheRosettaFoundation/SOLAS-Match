@@ -51,6 +51,7 @@ class ProjectCreateForm extends PolymerElement
   @observable String deadlineError;
   @observable String impactError;
   @observable String createProjectError;
+  @observable String tagsError;
   
   ProjectCreateForm.created() : super.created() 
   {
@@ -302,6 +303,7 @@ class ProjectCreateForm extends PolymerElement
     wordCountError = null;
     deadlineError = null;
     impactError = null;
+    tagsError = null;
     maxTargetsReached = null;
     
     validateInput().then((bool success) {
@@ -718,6 +720,11 @@ class ProjectCreateForm extends PolymerElement
       success = false;
     }
     
+    if(validateTagList(tagList) == false) {
+      tagsError = localisation.getTranslation('project_create_invalid_tags');
+      success = false;
+    }
+    
     DateTime projectDeadline = parseDeadline();
     if (projectDeadline != null) {
       if (projectDeadline.isAfter(new DateTime.now())) {
@@ -833,6 +840,15 @@ class ProjectCreateForm extends PolymerElement
     }
     
     return completer.future;
+  }
+  
+  bool validateTagList(String tagList)
+  {
+    if (tagList.indexOf(new RegExp(r'[^a-z0-9\-\s]')) != -1) {
+      return false;
+    } else {
+      return true;
+    }
   }
   
   DateTime parseDeadline()

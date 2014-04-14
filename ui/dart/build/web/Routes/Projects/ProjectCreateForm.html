@@ -7,7 +7,8 @@
       <table>
         <tbody>
           <template if="{{titleError != null || descriptionError != null || wordCountError != null || 
-                        deadlineError != null || impactError != null || createProjectError != null}}">
+                        deadlineError != null || impactError != null || createProjectError != null ||
+                        tagsError != null}}">
             <tr> 
               <td colspan="2">
                 <div class="alert alert-error">
@@ -27,6 +28,9 @@
                     </template>
                     <template if="{{deadlineError != null}}">
                       <li id="deadline_error_top">{{deadlineError}}</li>
+                    </template>
+                    <template if="{{tagsError != null}}">
+                      <li id="tags_error_top">{{tagsError}}</li>
                     </template>
                     <template if="{{impactError != null}}">
                       <li id="impact_error_top">{{impactError}}</li>
@@ -190,7 +194,8 @@
             </td>
           </tr>
           <template if="{{titleError != null || descriptionError != null || wordCountError != null || 
-                        deadlineError != null || impactError != null || createProjectError != null}}">
+                        deadlineError != null || impactError != null || createProjectError != null ||
+                        tagsError != null}}">
             <tr> 
               <td colspan="2">
                 <div class="alert alert-error">
@@ -213,6 +218,9 @@
                       <template if="{{deadlineError != null}}">
                         <li id="deadline_error_btm">{{deadlineError}}</li>
                       </template>
+                      <template if="{{tagsError != null}}">
+                      <li id="tags_error_btm">{{tagsError}}</li>
+                    </template>
                       <template if="{{impactError != null}}">
                         <li id="impact_error_btm">{{impactError}}</li>
                       </template>
