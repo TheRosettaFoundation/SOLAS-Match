@@ -159,7 +159,8 @@
     <string name="common_assign_badge">Assign Badge</string>        
     <string name="common_successfully_added_member">Successfully added %s as a member of %s.</string>
     <string name="common_invalid_userid">Invalid User ID: %s</string>
-    <string name="common_invalid_characters">Invalid characters are: '/', '\', " and '@'</string>
+    <string name="common_invalid_characters">Invalid characters are: '/', '\', ';', '#','~', '|', '&lt;', '&gt;', " and '@'</string>
+    <string name="common_invalid_url">URL entered is not valid.</string>
     <string name="common_no_valid_email">You did not enter a valid email address.</string>
     <string name="common_all_fields">All fields must be filled out.</string>
     <string name="common_error_upload_1">The contents of the file you are uploading is not valid. Please ensure you upload a valid (<strong>.%s</strong>) file with a valid content type of (<strong>%s</strong>).</string>

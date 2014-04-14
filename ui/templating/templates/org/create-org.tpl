@@ -12,18 +12,15 @@
 
     <form method='post' action="{urlFor name="create-org"}" class='well' accept-charset="utf-8">
         <table>
-            {if isset($nameErr)}
+            {if isset($errorOccured)}
                 <tr>
                     <td colspan="2">
                         <div class="alert alert-error">
                             <h3>{Localisation::getTranslation('common_please_correct_errors')}</h3>
                             <ol>
-                                {if isset($nameErr[0])}
-                                    <li>{$nameErr[0]}</li>
-                                {/if}
-                                {if isset($nameErr[1])}
-                                    <li>{$nameErr[1]} {Localisation::getTranslation('common_invalid_characters')}</li>
-                                {/if}
+                            {foreach from=$errorList item=error}
+                                <li>{$error}</li>
+                            {/foreach}
                             </ol>
                         </div> 
                     </td>

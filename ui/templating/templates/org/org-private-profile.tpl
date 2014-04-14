@@ -20,14 +20,16 @@
 
 {include file="handle-flash-messages.tpl"}
 
-{if isset($nameErr)}
+{if isset($errorOccured)}
     <tr>
         <td colspan="2">
             <div class="alert alert-error">
                 <h3>{Localisation::getTranslation('common_please_correct_errors')}</h3>
-                    <ol>
-                        <li>{$nameErr} {Localisation::getTranslation('common_invalid_characters')}</li>
-                    </ol>
+                <ol>
+                {foreach from=$errorList item=error}
+                    <li>{$error}</li>
+                {/foreach}
+                </ol>
             </div> 
         </td>
     </tr>
@@ -47,8 +49,8 @@
                     />
                     
                     <label for='address'><strong>{Localisation::getTranslation('common_address')}</strong></label>
-                    <textarea name='address' cols='40' rows='7' style="width: 80%"
-                    >{if $org->getAddress() != ''} {TemplateHelper::uiCleanseNewlineAndTabs($org->getAddress())} {/if}</textarea>
+                    <textarea name='address' cols='40' rows='7' style="width: 80%">
+                    {if $org->getAddress() != ''}{TemplateHelper::uiCleanseNewlineAndTabs($org->getAddress())}{/if}</textarea>
                     
                     <label for='city'><strong>{Localisation::getTranslation('common_city')}</strong></label>
                     <input type='text' name='city' id='city' style="width: 80%"

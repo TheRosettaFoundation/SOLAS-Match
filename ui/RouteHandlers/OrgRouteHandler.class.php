@@ -99,23 +99,31 @@ public function createOrg()
        $app = \Slim\Slim::getInstance(); 
         
         if ($post = $app->request()->post()) {
-            $nameErr = null;
+            $errorOccured = null;
+            $errorList=array();
 
             $org = new Common\Protobufs\Models\Organisation();
 
             if (isset($post["orgName"]) && $post["orgName"] != '') {
-                if(Lib\Validator::filterSpecialChars($post["orgName"]) == true) {
+                if (Lib\Validator::filterSpecialChars($post["orgName"])) { 
                     $org->setName($post['orgName']);
                 } else {
-                    $nameErr = array();
-                    $nameErr[1] = Lib\Localisation::getTranslation('create_org_invalid_name');
+                    $errorOccured = true; 
+                    array_push($errorList, Lib\Localisation::getTranslation('create_org_invalid_name')." "
+                    .Lib\Localisation::getTranslation('common_invalid_characters'));
                 }
             } else {
-                $nameErr[0] = Lib\Localisation::getTranslation('create_org_1');
+                $errorOccured = true;
+                array_push($errorList, Lib\Localisation::getTranslation('create_org_1'));
             }
             
             if (isset($post["homepage"])) {
-                $org->setHomePage($post["homepage"]);
+                if (Lib\Validator::validateURL($post["homepage"])) { 
+                    $org->setHomePage($post["homepage"]);
+                } else {
+                    $errorOccured = true; 
+                    array_push($errorList, Lib\Localisation::getTranslation('common_invalid_url'));
+                }
             }
             if (isset($post["biography"])) {
                 $org->setBiography($post["biography"]);
@@ -130,7 +138,12 @@ public function createOrg()
                 $org->setCountry($post["country"]);
             }
             if (isset($post["email"])) {
-                $org->setEmail($post["email"]);
+                if (Lib\Validator::validateEmail($post["email"])) { 
+                    $org->setEmail($post["email"]);
+                } else {
+                    $errorOccured = true; 
+                    array_push($errorList, Lib\Localisation::getTranslation('user_reset_password_4'));
+                }
             }
 
             $regionalFocus = array();
@@ -157,7 +170,7 @@ public function createOrg()
                 $org->setRegionalFocus(implode(",", $regionalFocus));
             }
             
-            if (is_null($nameErr)) {
+            if (is_null($errorOccured)) {
                 $user_id = Common\Lib\UserSession::getCurrentUserID();
                 $orgDao = new DAO\OrganisationDao();
                 $organisation = $orgDao->getOrganisationByName($org->getName());
@@ -172,16 +185,15 @@ public function createOrg()
                         $app->flashNow("error", Lib\Localisation::getTranslation('create_org_3'));
                     }
                 } else {
-                    error_log("ORG WITH SAME NAME EXISTS - TRY TO FLASH ERROR");
-                    $app->flashKeep();
                     $org_name = $org->getName();
                     $app->flash("error", sprintf(Lib\Localisation::getTranslation('create_org_4'), $org_name));
-                    $app->redirect($app->urlFor("org-dashboard"));
+                    $app->redirect($app->urlFor("home"));
                 }
             } else {
                 $app->view()->appendData(array(
                     "org"     => $org,
-                    "nameErr" => $nameErr
+                    "errorOccured" => $errorOccured,
+                    "errorList" => $errorList
                 ));
             }
         }
@@ -376,20 +388,30 @@ public function createOrg()
         $orgDao = new DAO\OrganisationDao();
         $org = $orgDao->getOrganisation($org_id);
         $userId = Common\Lib\UserSession::getCurrentUserId();
-        $nameErr = null;
+        
+        $errorOccured = null;
+        $errorList=array();
+        
         if ($post = $app->request()->post()) {
 
             if (isset($post['updateOrgDetails'])) {
                 if (isset($post['displayName'])) {
                     //Check if new org title has forbidden characters
-                    if (Lib\Validator::filterSpecialChars($post["displayName"]) == true) {
+                    if (Lib\Validator::filterSpecialChars($post["displayName"])) {
                         $org->setName($post['displayName']);
                     } else {
-                        $nameErr = Lib\Localisation::getTranslation('create_org_invalid_name');
+                        $errorOccured = true;
+                        array_push($errorList, Lib\Localisation::getTranslation('create_org_invalid_name')." "
+                        .Lib\Localisation::getTranslation('common_invalid_characters'));
                     }
                 }
                 if (isset($post['homepage'])) {
-                    $org->setHomePage($post['homepage']);
+                    if (Lib\Validator::validateURL($post["homepage"])) { 
+                        $org->setHomePage($post["homepage"]);
+                    } else {
+                        $errorOccured = true; 
+                        array_push($errorList, Lib\Localisation::getTranslation('common_invalid_url'));
+                    }
                 }
                 if (isset($post['biography'])) {
                     $org->setBiography($post['biography']);
@@ -403,8 +425,13 @@ public function createOrg()
                 if (isset($post['country'])) {
                     $org->setCountry($post['country']);
                 }
-                if (isset($post['email'])) {
-                    $org->setEmail($post['email']);
+                if (isset($post["email"])) {
+                    if (Lib\Validator::validateEmail($post["email"])) { 
+                        $org->setEmail($post["email"]);
+                    } else {
+                    $errorOccured = true; 
+                    array_push($errorList, Lib\Localisation::getTranslation('user_reset_password_4'));
+                    }
                 }
 
                 $regionalFocus = array();
@@ -431,19 +458,32 @@ public function createOrg()
                     $org->setRegionalFocus(implode(",", $regionalFocus));
                 }
                 
-                if (!is_null($nameErr)) {
+                if (!is_null($errorOccured)) {
                     $app->view()->appendData(array(
-                        "org"     => $org,
-                        "nameErr" => $nameErr
-                    ));
+                    "org"     => $org,
+                    "errorOccured" => $errorOccured,
+                    "errorList" => $errorList
+                ));
                 } else {
-                    $orgDao->updateOrg($org);
-                    $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org->getId())));
+                    $orgDao = new DAO\OrganisationDao();
+                    $organisation = $orgDao->getOrganisationByName($org->getName());
+                    if (!$organisation) {
+                       $orgDao->updateOrg($org);
+                       $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org->getId())));
+                    } else {
+                        if ($organisation->getId()==$org_id) {
+                            $orgDao->updateOrg($org);
+                            $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org->getId())));
+                        } else{
+                           $org_name = $org->getName();
+                           $app->flashNow("error", sprintf(Lib\Localisation::getTranslation('create_org_4'), $org_name));
+                        }
+                        
+                    }
                 }
             }
 
             if (isset($post['deleteId'])) {
-
                 $deleteId = $post["deleteId"];
                 if ($deleteId) {
                     if ($orgDao->deleteOrg($org->getId())) {
