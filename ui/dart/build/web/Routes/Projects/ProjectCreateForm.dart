@@ -395,13 +395,12 @@ class ProjectCreateForm extends PolymerElement with ChangeNotifier
             project.id = null;
           });
         }).catchError((e) {
-          createProjectError = sprintf(
-              localisation.getTranslation("project_create_failed_to_create_project"), e.toString());
+          titleError = localisation.getTranslation("project_create_title_conflict");
         });
       } else {
         print("Invalid form input");
       }
-    }).catchError((e) {
+    }).catchError((e) { //catches errors from validateInput
       createProjectError = e;
     });
   }
@@ -681,10 +680,17 @@ class ProjectCreateForm extends PolymerElement with ChangeNotifier
     if (project.title == '') {
       titleError = localisation.getTranslation("project_create_error_title_not_set");
       success = false;
-    }
-    if (project.title.length > 110) {
+    } else if (project.title.length > 110) {
       titleError = localisation.getTranslation("project_create_error_title_too_long");
       success = false;
+    } else {
+      ProjectDao.getProjectByName(project.title).then((Project checkExist) {
+        if (checkExist != null) {
+          print("CHECKING IF TITLE IS IN USE");
+          titleError = localisation.getTranslation("project_create_title_conflict");
+          success = false;
+        }
+      });
     }
     if (project.description == '') {
       descriptionError = localisation.getTranslation("project_create_33");

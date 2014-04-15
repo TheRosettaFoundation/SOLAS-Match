@@ -27,6 +27,26 @@ class ProjectDao
     return project;
   }
   
+  static Future<Project> getProjectByName(String title)
+    {
+      APIHelper client = new APIHelper(".json");
+      Future<Project> project = client.call("Project", 
+          "v0/projects/" + title, "GET")
+            .then((HttpRequest response) {
+        Project pro = null;
+        if (response.status < 400) {
+          if (response.responseText != '') {
+            Map jsonParsed = JSON.decode(response.responseText);
+            pro = ModelFactory.generateProjectFromMap(jsonParsed);
+          }
+        } else {
+          print("Error: getProject returned " + response.status.toString() + " " + response.statusText);
+        }
+        return pro;
+      });
+      return project;
+    }
+  
   static Future<bool> calculateProjectDeadlines(int projectId)
   {
     APIHelper client = new APIHelper(".json");

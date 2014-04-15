@@ -402,7 +402,8 @@
     <string name="project_create_15">Failed to create proofreading task</string>
     <string name="project_create_16">No project file uploaded.</string>
     <string name="project_create_17">The project file you uploaded is empty.</string>
-    <string name="project_create_failed_to_create_project"><strong>Failed to create project</strong></string>
+    <string name="project_create_failed_to_create_project"><strong>Failed to create project</strong>: %s</string>
+    <string name="project_create_title_conflict">Your organisation already has a project created with the title you entered.</string>
     <string name="project_create_18">The file extension has been changed to lower case.</string>
 	<string name="project_create_target_languages">Target Language(s)</string>
     <string name="project_create_19">The file you uploaded is in PDF format. PDF files are difficult to work with, are you sure you want to upload a PDF?</string>
