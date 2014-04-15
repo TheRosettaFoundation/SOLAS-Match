@@ -104,6 +104,11 @@ class Projects
                     '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgProject',
                     '\SolasMatch\API\V0\Projects::deleteProject'
                 );
+                
+                $app->get(
+                    '/:title/',
+                    '\SolasMatch\API\V0\Projects::getProjectByName'
+                );
             });
 
             /* Routes starting /v0 */
@@ -228,6 +233,23 @@ class Projects
             $projectId = $projectId[0];
         }
         API\Dispatcher::sendResponse(null, DAO\ProjectDao::getProject($projectId), null, $format);
+    }
+    
+    public static function getProjectByName($title, $format = ".json")
+    {
+        if (!is_numeric($title) && strstr($title, '.')) {
+            $temp = explode('.', $title);
+            $lastIndex = sizeof($temp)-1;
+            if ($lastIndex > 0) {
+                $format = '.'.$temp[$lastIndex];
+                $title = $temp[0];
+                for ($i = 1; $i < $lastIndex; $i++) {
+                    $title = "{$title}.{$temp[$i]}";
+                }
+            }
+        }
+        $data = DAO\ProjectDao::getProjectByName(urldecode($name));
+        API\Dispatcher::sendResponse(null, $data, null, $format);
     }
 
     public static function updateProject($projectId, $format = '.json')

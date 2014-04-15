@@ -107,6 +107,25 @@ class ProjectDao
         return $project;
     }
 
+    //! Retrieve a single Project from the database
+    /*!
+     Get a single project by its id. If null is passed for the id then this function will return null.
+    @param int $id is the id of a project
+    @return Returns a Project object
+    */
+    public static function getProjectByName($name)
+    {
+        $project = null;
+        if (!is_null($name)) {
+            $args = "null, ".Lib\PDOWrapper::cleanseNull($name).", null, null, null, null, null, null, null, null, null";
+            $result = Lib\PDOWrapper::call("getProjects", $args);
+            if ($result) {
+                $project = Common\Lib\ModelFactory::buildModel("Project", $result[0]);
+            }
+        }
+        return $project;
+    }
+    
     //! Get a Project from the database
     /*!
       Used to retrieve a specific Project(s) from the database. All arguments for this function default to null. if
