@@ -119,6 +119,22 @@ class UserRouteHandler
         if ($current_user_id == null) {
             $app->flashNow('info', Lib\Localisation::getTranslation('index_dont_use_ie'));
         }
+
+        $maintenance_msg = Common\Lib\Settings::get("maintenance.maintenance_msg");
+        if ($maintenance_msg == 'y') {
+             $maintenanceDate = Common\Lib\Settings::get("maintenance.maintenance_date");
+             $maintenanceTime = Common\Lib\Settings::get("maintenance.maintenance_time");
+             $maintenanceDuration = Common\Lib\Settings::get("maintenance.maintenance_duration");
+             $maintenanceCustomMsg = Common\Lib\Settings::get("maintenance.maintenance_custom_msg");
+             if ($maintenanceCustomMsg=='n') {
+                 $msg = sprintf(Lib\Localisation::getTranslation('common_maintenance_message'),$maintenanceDate, $maintenanceTime, $maintenanceDuration);
+             } else if ($maintenanceCustomMsg=='y') {
+                 $maintenanceCustomMessage = Common\Lib\Settings::get("maintenance.maintenance_custom_message");
+                 $msg = $maintenanceCustomMessage;
+             }
+             $app->flashNow('warning', $msg);
+        }
+                
         
         /*
          * Turning off DART specific scripts if the users browser is Internet Explorer

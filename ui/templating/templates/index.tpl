@@ -35,6 +35,12 @@
     </div>
 {/if}
 
+{if isset($flash['warning'])}
+    <div class="alert alert-warning">
+        <p><strong>{$flash['warning']}</strong></p>
+    </div>
+{/if}
+
     <div class="page-header">
         <h1>
             {Localisation::getTranslation('index_translation_tasks')} <small>{Localisation::getTranslation('index_1')}</small>

@@ -159,7 +159,8 @@
     <string name="common_assign_badge">Assign Badge</string>        
     <string name="common_successfully_added_member">Successfully added %s as a member of %s.</string>
     <string name="common_invalid_userid">Invalid User ID: %s</string>
-    <string name="common_invalid_characters">Invalid characters are: '/', '\', " and '@'</string>
+    <string name="common_invalid_characters">Invalid characters are: '/', '\', ';', '#','~', '|', '&lt;', '&gt;', " and '@'</string>
+    <string name="common_invalid_url">URL entered is not valid.</string>
     <string name="common_no_valid_email">You did not enter a valid email address.</string>
     <string name="common_all_fields">All fields must be filled out.</string>
     <string name="common_error_upload_1">The contents of the file you are uploading is not valid. Please ensure you upload a valid (<strong>.%s</strong>) file with a valid content type of (<strong>%s</strong>).</string>
@@ -195,6 +196,10 @@
     <string name="common_october">October</string>
     <string name="common_november">November</string>
     <string name="common_december">December</string>
+    <string name="common_maintenance_message">Please note that our site will undergo scheduled maintenance on %1$s at %2$s (GMT). We expect this process to take only %3$s hours.</string>
+    <string name="common_sitewide_maintenance">Trommons is currently down for maintenance.</string>
+    <string name="common_sitewide_maintenance_msg">Service will resume in approx. %s hours. We thank you for your patience.</string>
+    
     
 	<string name="admin_banned_orgs_list_all_banned_organisations_of">All banned Organisations of %s.</string>
 	<string name="admin_banned_orgs_list_0">Are you sure you want to unban this Organisation and its members?</string>
