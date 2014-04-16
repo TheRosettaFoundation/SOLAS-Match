@@ -13,8 +13,7 @@ class Settings
   }
     
   Future<bool> loadConf()
-  {
-    //Future<bool> ret = HttpRequest.getString("../conf/conf.json")
+  {  
     Future<bool> ret = HttpRequest.getString(querySelector("#ConfFileLocation").attributes['value'])
                .then((String data) {
                  _instance._conf = new JsonObject.fromJsonString(data);
@@ -23,6 +22,24 @@ class Settings
                  print("Error loading conf file: $e");
                  return false;
                });
+    return ret;
+  }
+  
+  //(not quite working) potential replacement implementation of loadConf.
+  //will allow for deletion of hidden field for dart conf in header and
+  //of the dart conf file itself
+  Future<bool> loadConfFuture()
+  {
+    var path = 'api/v0/static/dart/conf.json';
+    Future<bool> ret = HttpRequest.getString(path)
+               .then((String fileContents) {
+                 _instance._conf = new JsonObject.fromJsonString(fileContents);
+                 return true;
+                }).catchError((Error error) {
+                  print("Error loading conf file: $error");
+                return false;
+                });
+    
     return ret;
   }
   

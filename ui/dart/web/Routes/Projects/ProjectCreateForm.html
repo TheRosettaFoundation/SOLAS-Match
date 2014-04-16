@@ -10,7 +10,7 @@
             <tr> 
               <td colspan="2">
                 <div class="alert alert-error">
-                  <h3>{{localisation.getTranslation("common_please_fill_in_all_required_fields")}}:</h3>
+                  <h3>{{localisation.getTranslation("common_please_correct_errors")}}:</h3>
                   <ol>
                     <template if="{{titleError != null}}">
                       <li id="title_error_top">{{titleError}}</li>
@@ -201,7 +201,7 @@
                   <template if="{{titleError != null || descriptionError != null || wordCountError != null ||
                                 deadlineError != null || impactError != null || createProjectError != null}}">
                     
-                    <h3>{{localisation.getTranslation("common_please_fill_in_all_required_fields")}}:</h3>
+                    <h3>{{localisation.getTranslation("common_please_correct_errors")}}:</h3>
                     <ol>
                       <template if="{{titleError != null}}">
                         <li id="title_error_btm">{{titleError}}</li>
