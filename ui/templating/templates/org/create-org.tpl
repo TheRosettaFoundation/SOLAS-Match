@@ -45,13 +45,30 @@
                 <td width="50%">
                     
                     <label for='homepage'><strong>{Localisation::getTranslation('common_home_page')}</strong></label>
-                    <input type='text' name='homepage' id='homepage' style="width: 80%" {if isset($org)} value="{$org->getHomePage()}" {/if}/> 
+                    <input type='text' name='homepage' id='homepage' style="width: 80%" 
+                    {if isset($org)}
+                        value="{$org->getHomePage()}"
+                    {else}
+                        placeholder='http://'
+                    {/if} /> 
                     
                     <label for='email'><strong>{Localisation::getTranslation('common_email')}</strong></label>
-                    <input type='text' name='email' id='email' style="width: 80%"{if isset($org)} value="{$org->getEmail()}" {/if}/>   
+                    <input type='text' name='email' id='email' style="width: 80%"
+                    {if isset($org)} 
+                    	value="{$org->getEmail()}"
+                    {else}
+                        placeholder='{Localisation::getTranslation('org_private_profile_organisationexamplecom')}'
+                    {/if}/>   
                     
                     <label for='biography'><strong>{Localisation::getTranslation('common_biography')}</strong></label>
-                    <textarea name='biography' cols='40' rows='10' style="width: 80%">{if isset($org)} {TemplateHelper::uiCleanseNewlineAndTabs($org->getBiography())} {/if}</textarea>
+                    <textarea name='biography' cols='40' rows='10' style="width: 80%"
+                    {if !isset($org)}
+                        placeholder="{Localisation::getTranslation('org_private_profile_enter_organisation_biography_here')}"
+                    {/if}>
+                        {if isset($org)}
+                            {TemplateHelper::uiCleanseNewlineAndTabs($org->getBiography())}
+                        {/if}
+                    </textarea>
                     
                 </td>
             </tr>

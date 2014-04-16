@@ -533,4 +533,30 @@ class ProjectDao
             return null;
         }
     }
+
+    //! Update word counts in Projects and Tasks tables
+    /*!
+      This function updates the word count of a given Project and Tasks. Before updating it checks
+      1) whether the project has no tasks, if so update the project's word count to new word count
+      2) whether the project has segmentation or desegmentation tasks, if so return 2 and do not perform any updates;
+      3) whether the word-count of all the tasks of the project are unique, if not return 2
+      4) whether the word-count of all the tasks of the project are unique, if so update the word counts of tasks and the project and return 1
+      The status 2 indicates that either the project has (de)segmentation tasks associated with it or tasks have different word-counts
+      therefore automated update cannot be performed.
+      @param int $projectId is the id of the Project.
+      @param int $newWordCount is the new word count that needs to be set
+      @return Returns '1' if the word counts were successfully updated, '2' if project has segmentation tasks or individual tasks have different
+       word counts, '0' otherwise (i.e. if an error occurs during the update)
+    */
+    public static function updateProjectWordCount($projectId, $newWordCount)
+    {
+        $args = Lib\PDOWrapper::cleanseNull($projectId).",".
+            Lib\PDOWrapper::cleanseNull($newWordCount);
+        $result = Lib\PDOWrapper::call("updateProjectWordCount", $args);
+        if ($result) {
+            return $result[0]['result'];
+        } else {
+            return "0";
+        }
+    }
 }

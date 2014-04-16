@@ -118,11 +118,14 @@ public function createOrg()
             }
             
             if (isset($post["homepage"])) {
-                if (Lib\Validator::validateURL($post["homepage"])) { 
-                    $org->setHomePage($post["homepage"]);
-                } else {
+                if (trim($post["homepage"])!="")
+                {
+                    if (Lib\Validator::validateURL($post["homepage"])) { 
+                        $org->setHomePage($post["homepage"]);
+                    } else {
                     $errorOccured = true; 
                     array_push($errorList, Lib\Localisation::getTranslation('common_invalid_url'));
+                    }
                 }
             }
             if (isset($post["biography"])) {
@@ -138,11 +141,14 @@ public function createOrg()
                 $org->setCountry($post["country"]);
             }
             if (isset($post["email"])) {
-                if (Lib\Validator::validateEmail($post["email"])) { 
-                    $org->setEmail($post["email"]);
-                } else {
-                    $errorOccured = true; 
-                    array_push($errorList, Lib\Localisation::getTranslation('user_reset_password_4'));
+                if (trim($post["email"])!="")
+                {
+                    if (Lib\Validator::validateEmail($post["email"])) { 
+                        $org->setEmail($post["email"]);
+                    } else {
+                        $errorOccured = true; 
+                        array_push($errorList, Lib\Localisation::getTranslation('user_reset_password_4'));
+                    }
                 }
             }
 
@@ -406,11 +412,14 @@ public function createOrg()
                     }
                 }
                 if (isset($post['homepage'])) {
-                    if (Lib\Validator::validateURL($post["homepage"])) { 
-                        $org->setHomePage($post["homepage"]);
-                    } else {
-                        $errorOccured = true; 
-                        array_push($errorList, Lib\Localisation::getTranslation('common_invalid_url'));
+                    if (trim($post["homepage"])!="")
+                    {
+                        if (Lib\Validator::validateURL($post["homepage"])) { 
+                            $org->setHomePage($post["homepage"]);
+                        } else {
+                            $errorOccured = true; 
+                            array_push($errorList, Lib\Localisation::getTranslation('common_invalid_url'));
+                        }
                     }
                 }
                 if (isset($post['biography'])) {
@@ -426,11 +435,13 @@ public function createOrg()
                     $org->setCountry($post['country']);
                 }
                 if (isset($post["email"])) {
-                    if (Lib\Validator::validateEmail($post["email"])) { 
-                        $org->setEmail($post["email"]);
-                    } else {
-                    $errorOccured = true; 
-                    array_push($errorList, Lib\Localisation::getTranslation('user_reset_password_4'));
+                    if (trim($post["email"])!="") {
+                        if (Lib\Validator::validateEmail($post["email"])) { 
+                            $org->setEmail($post["email"]);
+                        } else {
+                        $errorOccured = true; 
+                        array_push($errorList, Lib\Localisation::getTranslation('user_reset_password_4'));
+                        }
                     }
                 }
 

@@ -177,4 +177,12 @@ class ProjectDao extends BaseDao
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
         return $ret;
     }
+
+    public function updateProjectWordCount($project_id, $newWordCount)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/projects/$project_id/updateWordCount/$newWordCount";
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
+        return $ret;
+    }
 }

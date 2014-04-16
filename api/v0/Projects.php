@@ -28,6 +28,12 @@ class Projects
                         '\SolasMatch\API\V0\Projects::saveProjectFile'
                     );
 
+                    $app->put(
+                        '/updateWordCount/:newWordCount/',
+                        '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
+                        '\SolasMatch\API\V0\Projects::updateProjectWordCount'
+                    );
+
                     $app->post(
                         '/calculateDeadlines(:format)/',
                         '\SolasMatch\API\Lib\Middleware::isloggedIn',
@@ -152,6 +158,19 @@ class Projects
         } catch (Exception $e) {
             API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
         }
+    }
+
+    public static function updateProjectWordCount($projectId, $newWordCount, $format = ".json")
+    {
+        if (!is_numeric($newWordCount) && strstr($newWordCount, '.')) {
+            $newWordCount = explode('.', $newWordCount);
+            $format = '.'.$newWordCount[1];
+            $newWordCount = $newWordCount[0];
+        }
+
+        $ret = null;
+        $ret = DAO\ProjectDao::updateProjectWordCount($projectId,$newWordCount);
+        API\Dispatcher::sendResponse(null, $ret, null, $format);
     }
         
     public static function calculateProjectDeadlines($projectId, $format = '.json')

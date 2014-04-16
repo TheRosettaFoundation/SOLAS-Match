@@ -4709,6 +4709,41 @@ BEGIN
     END IF;
 END//
 DELIMITER ;
+
+-- Dumping structure for procedure updateProjectWordCount
+DROP PROCEDURE IF EXISTS `updateProjectWordCount`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateProjectWordCount`(IN `pID` INT, IN `newWordCount` INT)
+    MODIFIES SQL DATA
+BEGIN
+ set @distinctTaskWordCount = -1;
+ set @segmentationTaskCount =0;
+
+ if (pID is not null) and  (newWordCount is not null ) then
+      if not exists (select 1 from Tasks where project_id=pID) then
+        UPDATE Projects SET `word-count`=newWordCount WHERE id=pID;
+        select 1 as result;
+      else
+      select count(*) into @segmentationTaskCount from Tasks where project_id=pID and (`task-type_id`=4 or `task-type_id`=1);
+	if  @segmentationTaskCount  > 0 then
+   	    select 2 as result;
+        else
+           select count(distinct `word-count`) into @distinctTaskWordCount from Tasks where project_id=pID;
+ 	       if @distinctTaskWordCount = 1 then
+                   UPDATE Projects SET `word-count` = newWordCount WHERE id=pID;
+                   UPDATE Tasks SET `word-count` = newWordCount WHERE project_id=pID;
+                   select 1 as result;
+               else
+                   select 2 as result;
+               end if;
+	end if;
+      end if;
+ else
+  select 0 as result;
+ end if;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 

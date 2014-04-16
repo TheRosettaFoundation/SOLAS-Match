@@ -304,6 +304,19 @@ class ProjectRouteHandler
             if (isset($post['description'])) {
                 $project->setDescription($post['description']);
             }
+
+            if (isset($post['word-count'])) {
+                 $result=$projectDao->updateProjectWordCount($project_id, $post['word-count']);
+                 if ($result==1)
+                 {
+                    $project->setWordCount($post['word-count']);
+                 } elseif ($result==2) {
+                   $app->flash("error", Lib\Localisation::getTranslation('project_alter_word_count_error_1'));
+                 } else {
+                   $app->flash("error", Lib\Localisation::getTranslation('project_alter_word_count_error_2'));
+                 }
+            }
+
             if (isset($post['impact'])) {
                 $project->setImpact($post['impact']);
             }
@@ -377,13 +390,21 @@ class ProjectRouteHandler
             </script>"
             .file_get_contents(__DIR__."/../js/tags-autocomplete.js");
         
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
+        $adminDao = new DAO\AdminDao();
+        $isAdmin = $adminDao->isSiteAdmin($user_id);
+        
+        
+        $word_count= $project->getWordCount();
         $app->view()->appendData(array(
                               "project"         => $project,
                               "languages"       => $languages,
                               "countries"       => $countries,
                               "tag_list"        => $tag_list,
                               "deadlineError"   => $deadlineError,
-                              "extra_scripts"   => $extra_scripts
+                              "extra_scripts"   => $extra_scripts,
+                              "isAdmin" => $isAdmin,
+                              "word_count"   => $word_count
         ));
         
         $app->render("project/project.alter.tpl");
