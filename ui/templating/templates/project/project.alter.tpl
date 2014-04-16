@@ -24,6 +24,10 @@
                     
                     <label for="impact" style="font-size: large"><strong>{Localisation::getTranslation('common_impact')}</strong></label>
                     <textarea wrap="soft" cols="1" rows="4" name="impact" style="width: 400px; margin-bottom: 40px">{$project->getImpact()}</textarea>
+                    {if $isAdmin}
+                       <label for="word-count" style="font-size: large"><strong>{Localisation::getTranslation('common_word_count')}</strong></label>
+                       <input id="word-count" name="word-count" value="{$word_count}" style="width: 400px;  margin-bottom: 20px"/>
+                    {/if}
                 </td>
                 <td>
                     <label for="tags" style="font-size: large"><strong>{Localisation::getTranslation('common_tags')}</strong></label>
