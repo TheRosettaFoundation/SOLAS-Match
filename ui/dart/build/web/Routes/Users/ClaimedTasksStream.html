@@ -1,0 +1,68 @@
+<polymer-element name="claimed-tasks-stream" lightdom>
+  <template>
+    <template if="{{tasks.length > 0}}">
+      <template repeat="{{task in tasks}}">
+        <div class="task" style="word-break: break-all; overflow-wrap: break-word;">
+          <h2>
+            <a href="{{siteAddress}}task/{{task.id}}/id">
+              {{task.title}}
+            </a>
+          </h2>
+          <p>{{localisation.getTranslation("common_type")}}:
+            <span class="label label-info" style="background-color: {{taskColours[task.taskType]}}">
+              {{taskTypes[task.taskType]}}
+            </span>
+          </p>
+          <p>
+            {{localisation.getTranslation("common_from")}}: 
+            <strong>{{task.sourceLocale.languageName}} - {{task.sourceLocale.countryName}} </strong>
+          </p>
+          <p>
+            {{localisation.getTranslation("common_to")}}: 
+            <strong>{{task.targetLocale.languageName}} - {{task.targetLocale.countryName}}</strong>
+          </p>
+          <p>
+            <template repeat="{{tag in taskTags[task.id]}}">
+              <a href="{{siteAddress}}tag/{{tag.id}}" class="label"><span class="label">{{tag.label}}</span></a>
+            </template>
+          </p>
+          <p>
+            {{localisation.getTranslation("common_word_count")}}: <strong>{{task.wordCount}}</strong>
+          </p>
+          <p id="task_age_{{task.id}}"></p>
+          <p id="deadline_{{task.id}}"></p>
+          <p id="parent_{{task.id}}"></p>
+          <p>
+            <a href="{{siteAddress}}user/task/{{task.id}}/reviews" class="btn btn-small btn-primary">
+              {{localisation.getTranslation("claimed_tasks_task_reviews")}}
+            </a>
+          </p>
+          <br />
+        </div>
+      </template>
+    </template>
+    <template if="{{tasks.length == 0}}">
+      <p>{{localisation.getTranslation("index_no_tasks_available")}}</p>
+    </template>
+    <div class="pagination pagination-centered">
+      <ul>
+        <li>
+          <a id="firstPage" title="First">&lt;&lt;</a>
+        </li>
+        <li>
+          <a id="previousPage" title="Previous">&lt;</a>
+        </li>
+        <li>
+          <a id="pagination_pages"></a>
+        </li>
+        <li>
+          <a id="nextPage" title="Next">&gt;</a>
+        </li>
+        <li>
+          <a id="lastPage" title="Last">&gt;&gt;</a>
+        </li>
+      </ul>
+    </div>
+  </template>
+  <script type="application/dart" src="ClaimedTasksStream.dart"></script>
+</polymer-element>
