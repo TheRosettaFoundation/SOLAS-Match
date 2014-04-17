@@ -88,13 +88,13 @@ class UserRouteHandler
         }
 
         $extra_scripts = "
-            <script src=\"{$app->urlFor("home")}ui/dart/build/packages/shadow_dom/shadow_dom.debug.js\"></script>
-            <script src=\"{$app->urlFor("home")}ui/dart/build/packages/custom_element/custom-elements.debug.js\"></script>
-            <script src=\"{$app->urlFor("home")}ui/dart/build/packages/browser/interop.js\"></script>
-            <script src=\"{$app->urlFor("home")}ui/dart/build/Routes/Users/home.dart.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/shadow_dom/shadow_dom.debug.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/custom_element/custom-elements.debug.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/browser/interop.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/dart/build/web/Routes/Users/home.dart.js\"></script>
             ";
         $extra_scripts .= file_get_contents("ui/dart/web/Routes/Users/TaskStream.html");
-
+        
         $viewData['extra_scripts'] = $extra_scripts;
 
 		$app->view()->appendData($viewData);
@@ -393,9 +393,9 @@ class UserRouteHandler
         }
 
         $extraScripts = "
-            <script src=\"{$app->urlFor("home")}ui/dart/build/packages/custom_element/custom-elements.debug.js\"></script>
-            <script src=\"{$app->urlFor("home")}ui/dart/build/packages/browser/interop.js\"></script>
-            <script src=\"{$app->urlFor("home")}ui/dart/build/Routes/Users/UserPrivateProfile.dart.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/custom_element/custom-elements.debug.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/browser/interop.js\"></script>
+            <script src=\"{$app->urlFor("home")}ui/dart/build/web/Routes/Users/UserPrivateProfile.dart.js\"></script>
             ";
         $extraScripts .= file_get_contents("ui/dart/web/Routes/Users/UserPrivateProfileForm.html");
 
