@@ -361,7 +361,7 @@ class ProjectCreateForm extends PolymerElement with ChangeNotifier
               trackProjectSuccess.complete(true);
             }).catchError((e) {
               trackProjectSuccess.completeError(
-                  sprintf(localisation.getTranslation("project_create_failed_project_track"), e.toString()));
+                  sprintf(localisation.getTranslation("project_create_failed_project_track"), [e.toString()]));
             });
           }
           
@@ -372,7 +372,7 @@ class ProjectCreateForm extends PolymerElement with ChangeNotifier
                   + project.id.toString() + "/view");
             }).catchError((error) {
               createProjectError = sprintf(
-                  localisation.getTranslation("project_create_failed_project_deadlines"), error.toString());
+                  localisation.getTranslation("project_create_failed_project_deadlines"), [error.toString()]);
               
               ProjectDao.deleteProject(project.id);
               project.id = null;
@@ -386,7 +386,7 @@ class ProjectCreateForm extends PolymerElement with ChangeNotifier
           });
         }).catchError((e) {
           createProjectError = sprintf(
-              localisation.getTranslation("project_create_failed_to_create_project"), e.toString());
+              localisation.getTranslation("project_create_failed_to_create_project"), [e.toString()]);
         });
       } else {
         print("Invalid form input");
