@@ -1,5 +1,6 @@
 import "package:polymer/polymer.dart";
 import "dart:async";
+import "dart:convert";
 import "dart:html";
 
 import "package:sprintf/sprintf.dart";
@@ -50,6 +51,7 @@ class ProjectCreateForm extends PolymerElement
   @observable String deadlineError;
   @observable String impactError;
   @observable String createProjectError;
+  @observable String tagsError;
   
   ProjectCreateForm.created() : super.created() 
   {
@@ -194,7 +196,9 @@ class ProjectCreateForm extends PolymerElement
       targetCountrySelect.id = "target_country_$targetCount";
       TableCellElement targetTaskTypes = new TableCellElement()
       ..attributes["valign"] = "middle";
+
       TableElement targetTaskTypesTable = new TableElement();
+      targetTaskTypesTable.style.width="100%";
       TableRowElement taskTypesRow = new TableRowElement()
       ..attributes["align"] = "center";
       TableCellElement segmentationRequired = new TableCellElement()
@@ -249,6 +253,11 @@ class ProjectCreateForm extends PolymerElement
       }
       
       targetCount++;
+      if (targetCount == 5) {
+        window.alert(localisation.getTranslation("project_create_target_language_increase"));
+      }
+
+
       if (targetCount >= maxTargetLanguages) {
         maxTargetsReached = localisation.getTranslation("project_create_11");
         ButtonElement addBtn = this.shadowRoot.querySelector("#addTargetLanguageBtn");
@@ -294,6 +303,7 @@ class ProjectCreateForm extends PolymerElement
     wordCountError = null;
     deadlineError = null;
     impactError = null;
+    tagsError = null;
     maxTargetsReached = null;
     
     validateInput().then((bool success) {
@@ -361,7 +371,7 @@ class ProjectCreateForm extends PolymerElement
               trackProjectSuccess.complete(true);
             }).catchError((e) {
               trackProjectSuccess.completeError(
-                  sprintf(localisation.getTranslation("project_create_failed_project_track"), [e.toString()]));
+                  sprintf(localisation.getTranslation("project_create_failed_project_track"), e.toString()));
             });
           }
           
@@ -372,7 +382,7 @@ class ProjectCreateForm extends PolymerElement
                   + project.id.toString() + "/view");
             }).catchError((error) {
               createProjectError = sprintf(
-                  localisation.getTranslation("project_create_failed_project_deadlines"), [error.toString()]);
+                  localisation.getTranslation("project_create_failed_project_deadlines"), error.toString());
               
               ProjectDao.deleteProject(project.id);
               project.id = null;
@@ -385,13 +395,12 @@ class ProjectCreateForm extends PolymerElement
             project.id = null;
           });
         }).catchError((e) {
-          createProjectError = sprintf(
-              localisation.getTranslation("project_create_failed_to_create_project"), [e.toString()]);
+          titleError = localisation.getTranslation("project_create_title_conflict");
         });
       } else {
         print("Invalid form input");
       }
-    }).catchError((e) {
+    }).catchError((e) { //catches errors from validateInput
       createProjectError = e;
     });
   }
@@ -669,79 +678,31 @@ class ProjectCreateForm extends PolymerElement
     bool success = true;
     //Validate Text Inputs
     if (project.title == '') {
-      titleError = localisation.getTranslation("project_create_31");
-      
-      Timer.run(() {
-        LIElement li;
-        li = this.shadowRoot.querySelector("#title_error_top");
-        li.children.clear();
-        li.appendHtml(titleError);
-        li = this.shadowRoot.querySelector("#title_error_btm");
-        li.children.clear();
-        li.appendHtml(titleError);
-      });
-      
+      titleError = localisation.getTranslation("project_create_error_title_not_set");
       success = false;
-    }
-    if (project.title.length > 110) {
-      titleError = localisation.getTranslation("project_create_23");
-      
-      Timer.run(() {
-        LIElement li;
-        li = this.shadowRoot.querySelector("#title_error_top");
-        li.children.clear();
-        li.appendHtml(titleError);
-        li = this.shadowRoot.querySelector("#title_error_btm");
-        li.children.clear();
-        li.appendHtml(titleError);
-      });
-      
+    } else if (project.title.length > 110) {
+      titleError = localisation.getTranslation("project_create_error_title_too_long");
       success = false;
+    } else {
+      ProjectDao.getProjectByName(project.title).then((Project checkExist) {
+        if (checkExist != null) {
+          print("CHECKING IF TITLE IS IN USE");
+          titleError = localisation.getTranslation("project_create_title_conflict");
+          success = false;
+        }
+      });
     }
     if (project.description == '') {
       descriptionError = localisation.getTranslation("project_create_33");
-
-      Timer.run(() {
-        LIElement li;
-        li = this.shadowRoot.querySelector("#description_error_top");
-        li.children.clear();
-        li.appendHtml(descriptionError);
-        li = this.shadowRoot.querySelector("#description_error_btm");
-        li.children.clear();
-        li.appendHtml(descriptionError);
-      });
-      
       success = false;
     }
     if (project.impact == '') {
       impactError = localisation.getTranslation("project_create_26");
-
-      Timer.run(() {
-        LIElement li;
-        li = this.shadowRoot.querySelector("#impact_error_top");
-        li.children.clear();
-        li.appendHtml(impactError);
-        li = this.shadowRoot.querySelector("#impact_error_btm");
-        li.children.clear();
-        li.appendHtml(impactError);
-      });
-      
       success = false;
     }
     if (wordCountInput != null && wordCountInput != '') {
       project.wordCount = int.parse(wordCountInput, onError: (String wordCountString) {
         wordCountError = localisation.getTranslation("project_create_27");
-
-        Timer.run(() {
-          LIElement li;
-          li = this.shadowRoot.querySelector("#word_count_error_top");
-          li.children.clear();
-          li.appendHtml(wordCountError);
-          li = this.shadowRoot.querySelector("#word_count_error_btm");
-          li.children.clear();
-          li.appendHtml(wordCountError);
-        });
-        
         success = false;
         return 0;
       });
@@ -762,17 +723,11 @@ class ProjectCreateForm extends PolymerElement
       }
     } else {
       wordCountError = localisation.getTranslation("project_create_27");
-
-      Timer.run(() {
-        LIElement li;
-        li = this.shadowRoot.querySelector("#word_count_error_top");
-        li.children.clear();
-        li.appendHtml(wordCountError);
-        li = this.shadowRoot.querySelector("#word_count_error_btm");
-        li.children.clear();
-        li.appendHtml(wordCountError);
-      });
-      
+      success = false;
+    }
+    
+    if(validateTagList(tagList) == false) {
+      tagsError = localisation.getTranslation('project_create_invalid_tags');
       success = false;
     }
     
@@ -791,32 +746,10 @@ class ProjectCreateForm extends PolymerElement
             + " " + hourAsString + ":" + minuteAsString + ":00";
       } else {
         deadlineError = localisation.getTranslation("project_create_25");
-
-        Timer.run(() {
-          LIElement li;
-          li = this.shadowRoot.querySelector("#deadline_error_top");
-          li.children.clear();
-          li.appendHtml(deadlineError);
-          li = this.shadowRoot.querySelector("#deadline_error_btm");
-          li.children.clear();
-          li.appendHtml(deadlineError);
-        });
-        
         success = false;
       }
     } else {
       deadlineError = localisation.getTranslation("project_create_32");
-
-      Timer.run(() {
-        LIElement li;
-        li = this.shadowRoot.querySelector("#deadline_error_top");
-        li.children.clear();
-        li.appendHtml(deadlineError);
-        li = this.shadowRoot.querySelector("#deadline_error_btm");
-        li.children.clear();
-        li.appendHtml(deadlineError);
-      });
-      
       success = false;
     }
     
@@ -832,8 +765,8 @@ class ProjectCreateForm extends PolymerElement
         CheckboxInputElement proofreadingCheckbox = this.shadowRoot.querySelector("#proofreading_$i");
         bool proofreadingRequired = proofreadingCheckbox.checked;
         if (!segmentationRequired && !translationRequired && !proofreadingRequired) {
-          throw localisation.getTranslation("project_create_29");
           success = false;
+          throw localisation.getTranslation("project_create_29");
         }
         
         SelectElement targetLanguageSelect = this.shadowRoot.querySelector("#target_language_$i");
@@ -841,8 +774,8 @@ class ProjectCreateForm extends PolymerElement
         Language targetLang = languages[targetLanguageSelect.selectedIndex];
         Country targetCountry = countries[targetCountrySelect.selectedIndex];
         if (targetLanguages.contains(targetLang) && targetCountries.contains(targetCountry)) {
-          throw localisation.getTranslation("project_create_28");
           success = false;
+          throw localisation.getTranslation("project_create_28");
         } else {
           targetLanguages.add(targetLang);
           targetCountries.add(targetCountry);
@@ -856,6 +789,8 @@ class ProjectCreateForm extends PolymerElement
         } else {
           validationCompleter.complete(false);
         }
+      }).catchError((e) {//catch error in file input validation
+        validationCompleter.completeError(e);
       });
     } catch (e) {
       validationCompleter.completeError(e);
@@ -911,6 +846,15 @@ class ProjectCreateForm extends PolymerElement
     }
     
     return completer.future;
+  }
+  
+  bool validateTagList(String tagList)
+  {
+    if (tagList.indexOf(new RegExp(r'[^a-z0-9\-\s]')) != -1) {
+      return false;
+    } else {
+      return true;
+    }
   }
   
   DateTime parseDeadline()
@@ -976,17 +920,5 @@ class ProjectCreateForm extends PolymerElement
       }
     }
     return ret;
-  }
-  
-  /*
-   * Automatically bound to changes on createProjectError
-   */
-  void createProjectErrorChanged(String oldValue)
-  {
-    Timer.run(() {
-      SpanElement span = this.shadowRoot.querySelector("#project_create_error");
-      span.children.clear();
-      span.appendHtml(createProjectError);
-    });
   }
 }

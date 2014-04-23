@@ -1,29 +1,37 @@
 <polymer-element name="project-create-form">
   <template>
+  
     <div class="well">
       <table>
         <tbody>
           <template if="{{titleError != null || descriptionError != null || wordCountError != null || 
-                        deadlineError != null || impactError != null}}">
+                        deadlineError != null || impactError != null || createProjectError != null ||
+                        tagsError != null}}">
             <tr> 
               <td colspan="2">
                 <div class="alert alert-error">
-                  <h3>{{localisation.getTranslation("common_please_fill_in_all_required_fields")}}:</h3>
+                  <h3>{{localisation.getTranslation("common_please_correct_errors")}}:</h3>
                   <ol>
                     <template if="{{titleError != null}}">
-                      <li id="title_error_top"></li>
+                      <li id="title_error_top">{{titleError}}</li>
                     </template>
                     <template if="{{descriptionError != null}}">
-                      <li id="description_error_top"></li>
+                      <li id="description_error_top">{{descriptionError}}</li>
+                    </template>
+                    <template if="{{createProjectError != null}}">
+                      <li id="create_project_error_top">{{createProjectError}}</li>
                     </template>
                     <template if="{{wordCountError != null}}">
-                      <li id="word_count_error_top"></li>
+                      <li id="word_count_error_top">{{wordCountError}}</li>
                     </template>
                     <template if="{{deadlineError != null}}">
-                      <li id="deadline_error_top"></li>
+                      <li id="deadline_error_top">{{deadlineError}}</li>
+                    </template>
+                    <template if="{{tagsError != null}}">
+                      <li id="tags_error_top">{{tagsError}}</li>
                     </template>
                     <template if="{{impactError != null}}">
-                      <li id="impact_error_top"></li>
+                      <li id="impact_error_top">{{impactError}}</li>
                     </template>
                   </ol>
                 </div>
@@ -34,6 +42,7 @@
             <td width="493" align="center" valign="middle">
               <h2>{{localisation.getTranslation("common_title")}}: <span style="color: red">*</span></h2>
               <p class="desc">{{localisation.getTranslation("project_create_1")}}</p>
+              <p class="desc">{{localisation.getTranslation("project_create_1_warning")}}</p>
               <textarea wrap="soft" cols="1" rows="3" style="width: 400px" value="{{project.title}}"></textarea>
               <p style="margin-bottom:40px;"></p>
   
@@ -183,33 +192,37 @@
             </td>
           </tr>
           <template if="{{titleError != null || descriptionError != null || wordCountError != null || 
-                        deadlineError != null || impactError != null || createProjectError != null}}">
+                        deadlineError != null || impactError != null || createProjectError != null ||
+                        tagsError != null}}">
             <tr> 
               <td colspan="2">
                 <div class="alert alert-error">
-                  <template if="{{createProjectError != null}}">
-                    <p>
-                      <span id="project_create_error"></span>
-                    </p>
-                  </template>
+
                   <template if="{{titleError != null || descriptionError != null || wordCountError != null ||
-                                deadlineError != null || impactError != null}}">
-                    <h3>{{localisation.getTranslation("common_please_fill_in_all_required_fields")}}:</h3>
+                                deadlineError != null || impactError != null || createProjectError != null}}">
+                    
+                    <h3>{{localisation.getTranslation("common_please_correct_errors")}}:</h3>
                     <ol>
                       <template if="{{titleError != null}}">
-                        <li id="title_error_btm"></li>
+                        <li id="title_error_btm">{{titleError}}</li>
                       </template>
                       <template if="{{descriptionError != null}}">
-                        <li id="description_error_btm"></li>
+                        <li id="description_error_btm">{{descriptionError}}</li>
+                      </template>
+                      <template if="{{createProjectError != null}}">
+                        <li id="create_project_error_top">{{createProjectError}}</li>
                       </template>
                       <template if="{{wordCountError != null}}">
-                        <li id="word_count_error_btm"></li>
+                        <li id="word_count_error_btm">{{wordCountError}}</li>
                       </template>
                       <template if="{{deadlineError != null}}">
-                        <li id="deadline_error_btm"></li>
+                        <li id="deadline_error_btm">{{deadlineError}}</li>
                       </template>
+                      <template if="{{tagsError != null}}">
+                      <li id="tags_error_btm">{{tagsError}}</li>
+                    </template>
                       <template if="{{impactError != null}}">
-                        <li id="impact_error_btm"></li>
+                        <li id="impact_error_btm">{{impactError}}</li>
                       </template>
                     </ol>
                   </template>
