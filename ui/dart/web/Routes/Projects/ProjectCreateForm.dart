@@ -673,131 +673,127 @@ class ProjectCreateForm extends PolymerElement
   }
   
   Future<bool> validateInput()
-  {
-    Completer<bool> validationCompleter = new Completer();
-    bool success = true;
-    //Validate Text Inputs
-    if (project.title == '') {
-      titleError = localisation.getTranslation("project_create_error_title_not_set");
-      success = false;
-    } else if (project.title.length > 110) {
-      titleError = localisation.getTranslation("project_create_error_title_too_long");
-      success = false;
-    } else {
-      ProjectDao.getProjectByName(project.title).then((Project checkExist) {
-        if (checkExist != null) {
-          print("CHECKING IF TITLE IS IN USE");
-          titleError = localisation.getTranslation("project_create_title_conflict");
-          success = false;
-        }
-      });
-    }
-    if (project.description == '') {
-      descriptionError = localisation.getTranslation("project_create_33");
-      success = false;
-    }
-    if (project.impact == '') {
-      impactError = localisation.getTranslation("project_create_26");
-      success = false;
-    }
-    if (wordCountInput != null && wordCountInput != '') {
-      project.wordCount = int.parse(wordCountInput, onError: (String wordCountString) {
-        wordCountError = localisation.getTranslation("project_create_27");
-        success = false;
-        return 0;
-      });
-      if (project.wordCount > 5000) {
-        int i = 0;
-        bool segmentationMissing = false;
-        CheckboxInputElement segmentationCheckbox; 
-        while (i < targetCount && !segmentationMissing) {
-          segmentationCheckbox = this.shadowRoot.querySelector("#segmentation_$i");
-          if (!segmentationCheckbox.checked) {
-            segmentationMissing = true;
+    {
+      //Validate Text Inputs
+      return new Future((){
+        if (project.title == '') {
+            titleError = localisation.getTranslation("project_create_error_title_not_set");
+            return false;
+          } else if (project.title.length > 110) {
+            titleError = localisation.getTranslation("project_create_error_title_too_long");
+            return false;
+          } else {
+            return ProjectDao.getProjectByName(project.title).then((Project checkExist) {
+              if (checkExist != null) {
+                print("CHECKING IF TITLE IS IN USE");
+                titleError = localisation.getTranslation("project_create_title_conflict");
+                return false;
+              }else{
+                return true;
+              }
+            });
           }
-          i++;
-        }
-        if (segmentationMissing && !window.confirm(localisation.getTranslation("project_create_22"))) {
+      }).then((bool success){
+        if (project.description == '') {
+          descriptionError = localisation.getTranslation("project_create_33");
           success = false;
         }
-      }
-    } else {
-      wordCountError = localisation.getTranslation("project_create_27");
-      success = false;
-    }
-    
-    if(validateTagList(tagList) == false) {
-      tagsError = localisation.getTranslation('project_create_invalid_tags');
-      success = false;
-    }
-    
-    DateTime projectDeadline = parseDeadline();
-    if (projectDeadline != null) {
-      if (projectDeadline.isAfter(new DateTime.now())) {
-        String monthAsString = projectDeadline.month.toString();
-        monthAsString = monthAsString.length == 1 ? "0$monthAsString" : monthAsString;
-        String dayAsString = projectDeadline.day.toString();
-        dayAsString = dayAsString.length == 1 ? "0$dayAsString" : dayAsString;
-        String hourAsString = projectDeadline.hour.toString();
-        hourAsString = hourAsString.length > 2 ? "0$hourAsString" : hourAsString;
-        String minuteAsString = projectDeadline.minute.toString();
-        minuteAsString = minuteAsString.length < 2 ? "0$minuteAsString" : minuteAsString;
-        project.deadline = projectDeadline.year.toString() + "-" + monthAsString + "-" + dayAsString
-            + " " + hourAsString + ":" + minuteAsString + ":00";
-      } else {
-        deadlineError = localisation.getTranslation("project_create_25");
-        success = false;
-      }
-    } else {
-      deadlineError = localisation.getTranslation("project_create_32");
-      success = false;
-    }
-    
-    try {
-      //Validate targets
-      List<Language> targetLanguages = new List<Language>();
-      List<Country> targetCountries = new List<Country>();
-      for (int i = 0; i < targetCount; i++) {
-        CheckboxInputElement segmentationCheckbox = this.shadowRoot.querySelector("#segmentation_$i");
-        bool segmentationRequired = segmentationCheckbox.checked;
-        CheckboxInputElement translationCheckbox = this.shadowRoot.querySelector("#translation_$i");
-        bool translationRequired = translationCheckbox.checked;
-        CheckboxInputElement proofreadingCheckbox = this.shadowRoot.querySelector("#proofreading_$i");
-        bool proofreadingRequired = proofreadingCheckbox.checked;
-        if (!segmentationRequired && !translationRequired && !proofreadingRequired) {
+        if (project.impact == '') {
+          impactError = localisation.getTranslation("project_create_26");
           success = false;
-          throw localisation.getTranslation("project_create_29");
         }
-        
-        SelectElement targetLanguageSelect = this.shadowRoot.querySelector("#target_language_$i");
-        SelectElement targetCountrySelect = this.shadowRoot.querySelector("#target_country_$i");
-        Language targetLang = languages[targetLanguageSelect.selectedIndex];
-        Country targetCountry = countries[targetCountrySelect.selectedIndex];
-        if (targetLanguages.contains(targetLang) && targetCountries.contains(targetCountry)) {
-          success = false;
-          throw localisation.getTranslation("project_create_28");
+        if (wordCountInput != null && wordCountInput != '') {
+          project.wordCount = int.parse(wordCountInput, onError: (String wordCountString) {
+            wordCountError = localisation.getTranslation("project_create_27");
+            success = false;
+            return 0;
+          });
+          if (project.wordCount > 5000) {
+            int i = 0;
+            bool segmentationMissing = false;
+            CheckboxInputElement segmentationCheckbox;
+            while (i < targetCount && !segmentationMissing) {
+              segmentationCheckbox = this.shadowRoot.querySelector("#segmentation_$i");
+              if (!segmentationCheckbox.checked) {
+                segmentationMissing = true;
+              }
+              i++;
+            }
+            if (segmentationMissing && !window.confirm(localisation.getTranslation("project_create_22"))) {
+              success = false;
+            }
+          }
         } else {
-          targetLanguages.add(targetLang);
-          targetCountries.add(targetCountry);
+          wordCountError = localisation.getTranslation("project_create_27");
+          success = false;
         }
-      }
-      
-      //Validate file input
-      validateFileInput().then((bool valid) {
-        if (success && valid) {
-          validationCompleter.complete(true);
+       
+        if(validateTagList(tagList) == false) {
+          tagsError = localisation.getTranslation('project_create_invalid_tags');
+          success = false;
+        }
+       
+        DateTime projectDeadline = parseDeadline();
+        if (projectDeadline != null) {
+          if (projectDeadline.isAfter(new DateTime.now())) {
+            String monthAsString = projectDeadline.month.toString();
+            monthAsString = monthAsString.length == 1 ? "0$monthAsString" : monthAsString;
+            String dayAsString = projectDeadline.day.toString();
+            dayAsString = dayAsString.length == 1 ? "0$dayAsString" : dayAsString;
+            String hourAsString = projectDeadline.hour.toString();
+            hourAsString = hourAsString.length > 2 ? "0$hourAsString" : hourAsString;
+            String minuteAsString = projectDeadline.minute.toString();
+            minuteAsString = minuteAsString.length < 2 ? "0$minuteAsString" : minuteAsString;
+            project.deadline = projectDeadline.year.toString() + "-" + monthAsString + "-" + dayAsString
+                + " " + hourAsString + ":" + minuteAsString + ":00";
+          } else {
+            deadlineError = localisation.getTranslation("project_create_25");
+            success = false;
+          }
         } else {
-          validationCompleter.complete(false);
+          deadlineError = localisation.getTranslation("project_create_32");
+          success = false;
         }
-      }).catchError((e) {//catch error in file input validation
-        validationCompleter.completeError(e);
+        return success;
+      }).then((bool success){
+        //Validate targets
+        List<Language> targetLanguages = new List<Language>();
+        List<Country> targetCountries = new List<Country>();
+        for (int i = 0; i < targetCount; i++) {
+          CheckboxInputElement segmentationCheckbox = this.shadowRoot.querySelector("#segmentation_$i");
+          bool segmentationRequired = segmentationCheckbox.checked;
+          CheckboxInputElement translationCheckbox = this.shadowRoot.querySelector("#translation_$i");
+          bool translationRequired = translationCheckbox.checked;
+          CheckboxInputElement proofreadingCheckbox = this.shadowRoot.querySelector("#proofreading_$i");
+          bool proofreadingRequired = proofreadingCheckbox.checked;
+          if (!segmentationRequired && !translationRequired && !proofreadingRequired) {
+            success = false;
+            throw localisation.getTranslation("project_create_29");
+          }
+         
+          SelectElement targetLanguageSelect = this.shadowRoot.querySelector("#target_language_$i");
+          SelectElement targetCountrySelect = this.shadowRoot.querySelector("#target_country_$i");
+          Language targetLang = languages[targetLanguageSelect.selectedIndex];
+          Country targetCountry = countries[targetCountrySelect.selectedIndex];
+          if (targetLanguages.contains(targetLang) && targetCountries.contains(targetCountry)) {
+            success = false;
+            throw localisation.getTranslation("project_create_28");
+          } else {
+            targetLanguages.add(targetLang);
+            targetCountries.add(targetCountry);
+          }
+        }
+       
+        //Validate file input
+        return validateFileInput().then((bool valid) {
+          if (success && valid) {
+            return true;
+          } else {
+            return false;
+          }
+        });
       });
-    } catch (e) {
-      validationCompleter.completeError(e);
     }
-    
-    return validationCompleter.future;
-  }
   
   Future<bool> validateFileInput()
   {
