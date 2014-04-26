@@ -15,14 +15,16 @@ class Settings
 
   Future<bool> loadConf()
   {
-    Future<bool> ret = HttpRequest.getString(CONF_API_ROUTE)
-               .then((String fileContents) {
-                 _instance._conf = new JsonObject.fromJsonString(fileContents);
-                 return true;
-                }).catchError((error) {
-                  print("Error loading conf file: $error");
-                return false;
-                });
+    //Future<bool> ret = HttpRequest.getString(CONF_API_ROUTE)
+    Future<bool> ret = HttpRequest.getString(querySelector("#ConfFileLocation").attributes['value'])
+       .then((String fileContents) {
+        
+         _instance._conf = new JsonObject.fromJsonString(fileContents);
+         return true;
+        }).catchError((error) {
+          print("Error loading conf file: $error");
+        return false;
+        });
     
     return ret;
   }

@@ -10,30 +10,31 @@
         <meta name="keywords" content="{Settings::get('site.meta_key')}" />
         
         <!-- Open Graph data (Facebook and Google+) -->
-        <meta property="og:title" content="{Settings::get('openGraph.title')}"/>    
+        <meta property="og:title" content="{Settings::get('openGraph.title')}"/>
         <meta property="og:type" content="{Settings::get('openGraph.type')}" />
         <meta property="og:image" content="{Settings::get('openGraph.image')}"/>
         <meta property="og:site_name" content="{Settings::get('openGraph.site_name')}"/>
         <meta property="og:description" content="{Settings::get('openGraph.description')}"/>
-        
+
         <!-- Twitter Card data -->
-        <meta name="twitter:card" content="{Settings::get('twitter.card')}">
-        <meta name="twitter:site" content="{Settings::get('twitter.site')}">
-        <meta name="twitter:title" content="{Settings::get('twitter.title')}">
-        <meta name="twitter:description" content="{Settings::get('twitter.description')}">
-        <meta name="twitter:image" content="{Settings::get('twitter.image')}">
-        
-        
+        <meta name="twitter:card" content="{Settings::get('twitter.card')}"/>
+        <meta name="twitter:site" content="{Settings::get('twitter.site')}"/>
+        <meta name="twitter:title" content="{Settings::get('twitter.title')}"/>
+        <meta name="twitter:description" content="{Settings::get('twitter.description')}"/>
+        <meta name="twitter:image" content="{Settings::get('twitter.image')}"/>
+
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min.css"/>
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css"/>
         <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
-        
-        
-        <!-- extra styles-->        
+
+        <!-- dart conf file location -->
+        <input type="hidden" id="ConfFileLocation" value="{urlFor name="home"}ui/dart/web/conf/conf.json" />
+
+        <!-- extra styles-->
         {if isset($extra_styles)}
             {$extra_styles}
         {/if}
-        
+
         <!-- style overrides-->
         <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas.css"/>
 
@@ -44,7 +45,7 @@
         <script type="text/javascript" src="{urlFor name="home"}ui/js/ByteBuffer.min.js"></script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/ProtoBuf.min.js">var ProtoBuf = dcodeIO.ProtoBuf;</script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/ProtoClasses.js"></script>
-        
+
         <!-- google analytics -->
         <script type="text/javascript" src="{urlFor name="home"}ui/js/tracking.js"></script>
 
