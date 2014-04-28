@@ -3,4 +3,5 @@
 *.dart.precompiled.js
 web/conf/conf.json
 web/out/
+/build/web/packages
 /packages

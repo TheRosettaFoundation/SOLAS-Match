@@ -1,6 +1,5 @@
 import "package:polymer/polymer.dart";
 import "dart:async";
-import "dart:convert";
 import "dart:html";
 
 import "package:sprintf/sprintf.dart";
@@ -395,7 +394,7 @@ class ProjectCreateForm extends PolymerElement
             project.id = null;
           });
         }).catchError((e) {
-          titleError = localisation.getTranslation("project_create_title_conflict");
+          createProjectError = e;
         });
       } else {
         print("Invalid form input");
@@ -676,13 +675,20 @@ class ProjectCreateForm extends PolymerElement
     {
       //Validate Text Inputs
       return new Future((){
+        //title is empty
         if (project.title == '') {
             titleError = localisation.getTranslation("project_create_error_title_not_set");
             return false;
+          //title too long
           } else if (project.title.length > 110) {
             titleError = localisation.getTranslation("project_create_error_title_too_long");
             return false;
+          //Is the project title simply a number? Don't allow this, thus avoiding Slim route mismatch,
+          //calling route for getProject when it should be getProjectByName
+          } else if (project.title.indexOf(new RegExp(r'^\d+$')) != -1) {
+            titleError = localisation.getTranslation("project_create_title_cannot_be_number");
           } else {
+            //has the title already been used?
             return ProjectDao.getProjectByName(project.title).then((Project checkExist) {
               if (checkExist != null) {
                 print("CHECKING IF TITLE IS IN USE");

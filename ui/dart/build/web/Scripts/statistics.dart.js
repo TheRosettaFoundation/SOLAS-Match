@@ -250,7 +250,7 @@ var $$={}
                     globalObject]);
   }
 })
-([["SolasMatchDart","file:///home/spaceindaver/workspace/SOLAS-Match/ui/dart/web/lib/SolasMatchDart.dart",,R,{
+([["SolasMatchDart","file:///home/aaronm/workspace/SOLAS-Match/ui/dart/web/lib/SolasMatchDart.dart",,R,{
 "^":"",
 rD:[function(a){var z=new R.bl(null)
 z.pO=".json"
@@ -293,24 +293,21 @@ $isEH:true},
 "+ bh":0,
 bl:{
 "^":"a:311;pO-",
-call$5:[function(a,b,c,d,e){var z,y,x,w,v
+call$5:[function(a,b,c,d,e){var z,y,x,w
 z={}
 z.a=b
 y=W.zU
 x=H.VM(new P.Zf(P.Dt(y)),[y])
-w=P.L5(null,null,null,J.O,J.O)
-y=$.o8
-if(y!=null)w.u(0,"Authorization",C.xB.g("Bearer ",y))
 b=J.WB(J.WB(J.WB($.iW().d5.gR3().gun(),z.a),this.pO),"/")
 z.a=b
 if(e!=null){z.a=J.WB(b,"?")
-J.kH(e.gvc(),new R.P9(z,e))}v=new XMLHttpRequest()
-C.W3.EP(v,c,z.a)
+J.kH(e.gvc(),new R.P9(z,e))}w=new XMLHttpRequest()
+C.W3.EP(w,c,z.a)
 z=$.o8
-if(z!=null)v.setRequestHeader("Authorization",C.xB.g("Bearer ",z))
-z=H.VM(new W.RO(v,C.tF.Ph,!1),[null])
-H.VM(new W.Ov(0,z.uv,z.Ph,W.aF(new R.Jr(x,v)),z.Sg),[H.Kp(z,0)]).Zz()
-v.send(d)
+if(z!=null)w.setRequestHeader("Authorization",C.xB.g("Bearer ",z))
+z=H.VM(new W.RO(w,C.tF.Ph,!1),[null])
+H.VM(new W.Ov(0,z.uv,z.Ph,W.aF(new R.Jr(x,w)),z.Sg),[H.Kp(z,0)]).Zz()
+w.send(d)
 return x.MM},function(a,b,c,d){return this.call$5(a,b,c,d,null)},"call$4",function(a,b,c){return this.call$5(a,b,c,"",null)},"call$3","call$5",null,null,"gKu",6,4,311,249,118,312,267,271,284,313,"call"],
 $isEH:true,
 static:{"^":"o8-,Pf-",Tu:[function(){return W.lt(J.WB($.iW().d5.gR3().gXG(),"static/getUserHash/"),"GET",null,null,null,null,null,!0).ml(new R.Tw())},"call$0","PE",0,0,5,"init"]}},
@@ -5325,7 +5322,7 @@ LA:{
 "^":"a;O9-",
 bu:[function(a){return"JsonObjectException: "+this.O9},"call$0","gAY",0,0,21,"toString"],
 static:{mo:[function(a){return new E.LA(a)},null,null,0,2,244,118,27,"new JsonObjectException"]}},
-"+JsonObjectException":0}],["","file:///home/spaceindaver/workspace/SOLAS-Match/ui/dart/web/Scripts/statistics.dart",,M,{
+"+JsonObjectException":0}],["","file:///home/aaronm/workspace/SOLAS-Match/ui/dart/web/Scripts/statistics.dart",,M,{
 "^":"",
 QL:[function(){R.VE().ml(new M.em())},"call$0","HA",0,0,139,"main"],
 jI:{

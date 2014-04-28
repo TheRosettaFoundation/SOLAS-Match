@@ -28,10 +28,6 @@ class APIHelper
                       [dynamic data = '', Map queryArgs = null])
   {
     Completer<HttpRequest> complete = new Completer<HttpRequest>();
-    Map<String, String> headers = new Map<String, String>();
-    if (UserHash != null) {
-      headers["Authorization"] = "Bearer "+UserHash;
-    }
     Settings settings = new Settings();
     url = settings.conf.urls.SOLASMatch + url + format + "/";
 
@@ -41,7 +37,7 @@ class APIHelper
         url += key + "=" + queryArgs[key] + "&";
       });
     }
-    
+    //start of code to refactor
     HttpRequest request = new HttpRequest();
     request.open(method, url);
     if (UserHash != null) {
@@ -53,14 +49,7 @@ class APIHelper
     request.send(data);
     
     return complete.future;
-  }
-  
-  dynamic getJSProtoContext()
-  {
-    if (SolasMatch == null) {
-      //SolasMatch = js.context._root;
-    }
-    return SolasMatch;
+    //end
   }
   
   String encodeAsString(dynamic proto)
