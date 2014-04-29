@@ -1,3 +1,4 @@
+
 import "package:polymer/polymer.dart";
 import "dart:async";
 import "dart:html";
@@ -295,114 +296,81 @@ class ProjectCreateForm extends PolymerElement
   }
   
   void submitForm()
-  {
-    createProjectError = null;
-    titleError = null;
-    descriptionError = null;
-    wordCountError = null;
-    deadlineError = null;
-    impactError = null;
-    tagsError = null;
-    maxTargetsReached = null;
-    
-    validateInput().then((bool success) {
-      if (success) {
-        project.organisationId = orgid;
-        SelectElement sourceLangSelect = this.shadowRoot.querySelector("#sourceLanguageSelect");
-        SelectElement sourceCountrySelect = this.shadowRoot.querySelector("#sourceCountrySelect");
-        Language sourceLang = languages[sourceLangSelect.selectedIndex];
-        Country sourceCountry = countries[sourceCountrySelect.selectedIndex];
-        Locale sourceLocale = new Locale();
-        sourceLocale.languageName = sourceLang.name;
-        sourceLocale.languageCode = sourceLang.code;
-        sourceLocale.countryName = sourceCountry.name;
-        sourceLocale.countryCode = sourceCountry.code;
-        project.sourceLocale = sourceLocale;
-        project.organisationId = orgid;
-        
-        List<String> projectTags = new List<String>();
-        if (tagList.length > 0) {
-          projectTags = separateTags(tagList);
-        }
-        if (projectTags.length > 0) {
-          projectTags.forEach((String tagName) {
-            Tag tag = new Tag();
-            tag.label = tagName;
-            project.tag.add(tag);
-          });
-        }
-        
-        ProjectDao.createProject(project).then((Project pro) {
-          project.id = pro.id;
-          
-          List<Future<bool>> successList = new List<Future<bool>>();
-          Completer projectUploaded = new Completer();
-          successList.add(projectUploaded.future);
-          uploadProjectFile().then((bool success) {
-            Completer projectTasksSuccess = new Completer();
-            createProjectTasks().then((bool success) {
-              projectTasksSuccess.complete(true);
-            }).catchError((e) {
-              projectTasksSuccess.completeError(e);
-            });
-            
-            projectTasksSuccess.future.then((bool s) {
-              projectUploaded.complete(true);
-            }).catchError((e) {
-              projectUploaded.completeError(e);
-            });
-          }).catchError((e) {
-            projectUploaded.completeError(e);
-          });
-          
-          /*Completer projectTasksSuccess = new Completer();
-          successList.add(projectTasksSuccess.future);
-          createProjectTasks().then((bool success) {
-            projectTasksSuccess.complete(true);
-          }).catchError((e) {
-            projectTasksSuccess.completeError(e);
-          });*/
-          
-          if (trackProject) {
-            Completer trackProjectSuccess = new Completer();
-            successList.add(trackProjectSuccess.future);
-            ProjectDao.trackProject(project.id, userid).then((bool success) {
-              trackProjectSuccess.complete(true);
-            }).catchError((e) {
-              trackProjectSuccess.completeError(
-                  sprintf(localisation.getTranslation("project_create_failed_project_track"), e.toString()));
+    {
+      createProjectError = null;
+      titleError = null;
+      descriptionError = null;
+      wordCountError = null;
+      deadlineError = null;
+      impactError = null;
+      tagsError = null;
+      maxTargetsReached = null;
+     
+      validateInput().then((bool success) {
+        if (success) {
+          project.organisationId = orgid;
+          SelectElement sourceLangSelect = this.shadowRoot.querySelector("#sourceLanguageSelect");
+          SelectElement sourceCountrySelect = this.shadowRoot.querySelector("#sourceCountrySelect");
+          Language sourceLang = languages[sourceLangSelect.selectedIndex];
+          Country sourceCountry = countries[sourceCountrySelect.selectedIndex];
+          Locale sourceLocale = new Locale();
+          sourceLocale.languageName = sourceLang.name;
+          sourceLocale.languageCode = sourceLang.code;
+          sourceLocale.countryName = sourceCountry.name;
+          sourceLocale.countryCode = sourceCountry.code;
+          project.sourceLocale = sourceLocale;
+          project.organisationId = orgid;
+         
+          List<String> projectTags = new List<String>();
+          if (tagList.length > 0) {
+            projectTags = separateTags(tagList);
+          }
+          if (projectTags.length > 0) {
+            projectTags.forEach((String tagName) {
+              Tag tag = new Tag();
+              tag.label = tagName;
+              project.tag.add(tag);
             });
           }
-          
-          Future.wait(successList).then((List<bool> s) {
-            ProjectDao.calculateProjectDeadlines(project.id).then((bool deadlinesCalculated) {
-              Settings settings = new Settings();
-              window.location.assign(settings.conf.urls.SiteLocation + "project/" 
-                  + project.id.toString() + "/view");
-            }).catchError((error) {
-              createProjectError = sprintf(
-                  localisation.getTranslation("project_create_failed_project_deadlines"), error.toString());
-              
-              ProjectDao.deleteProject(project.id);
-              project.id = null;
+         
+          ProjectDao.createProject(project)
+            .then((Project pro) {
+            project.id = pro.id;
+           
+            List<Future<bool>> successList = new List<Future<bool>>();
+            successList.add(uploadProjectFile()
+              .then((_) => createProjectTasks()));
+           
+            if (trackProject) {
+              successList.add(ProjectDao.trackProject(project.id, userid)
+                .catchError((e) {
+                  throw
+                    sprintf(localisation.getTranslation("project_create_failed_project_track"), e.toString());
+              }));
+            }
+           
+            return Future.wait(successList).then((_) {
+              return ProjectDao.calculateProjectDeadlines(project.id).then((bool deadlinesCalculated) {
+                Settings settings = new Settings();
+                window.location.assign(settings.conf.urls.SiteLocation + "project/"
+                    + project.id.toString() + "/view");
+              }).catchError((error) {
+                throw sprintf(
+                    localisation.getTranslation("project_create_failed_project_deadlines"), error.toString());
+              });
             });
-          }).catchError((e) {
+          }).catchError(( _ ){
             print("Something went wrong, deleting project");
-            createProjectError = e;
-            
             ProjectDao.deleteProject(project.id);
             project.id = null;
           });
-        }).catchError((e) {
-          createProjectError = e;
-        });
-      } else {
-        print("Invalid form input");
-      }
-    }).catchError((e) { //catches errors from validateInput
-      createProjectError = e;
-    });
-  }
+        } else {
+          print("Invalid form input");
+        }
+      }).catchError((e) { //catches errors from validateInput
+        createProjectError = e;
+      });
+    }
   
   Future<bool> createProjectTasks()
   {
@@ -633,18 +601,15 @@ class ProjectCreateForm extends PolymerElement
   
   Future<bool> uploadProjectFile()
   {
-    Completer<bool> completer = new Completer<bool>();
-    loadProjectFile().then((bool fileLoaded) {
+    //Completer<bool> completer = new Completer<bool>();
+    return loadProjectFile().then((bool fileLoaded) {
       ProjectDao.uploadProjectFile(project.id, userid, filename, projectFileText)
-        .then((bool success) {
-          completer.complete(success);
+        .then((bool success) => success);
         }).catchError((e) {
-          completer.completeError(sprintf(
+          throw sprintf(
               localisation.getTranslation("project_create_failed_upload_file"),
-              [localisation.getTranslation("common_project"), e]));
+              [localisation.getTranslation("common_project"), e]);
         });
-    });
-    return completer.future;
   }
   
   Future<bool> loadProjectFile()

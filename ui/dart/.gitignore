@@ -4,4 +4,5 @@
 web/conf/conf.json
 web/out/
 /build/web/packages
+/build/web/conf
 /packages
