@@ -323,7 +323,7 @@ class TemplateHelper
         $langDao = new DAO\LanguageDao();
         $language = $langDao->getLanguageByCode($languageCode);
         if (is_null(($language))) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 Localisation::getTranslation('common_error_language_code_expected')
             );
         }
@@ -367,7 +367,7 @@ class TemplateHelper
     {
         if (!self::isUploadedWithoutError($field_name)) {
             $error_message = self::fileUploadErrorMessage($_FILES[$field_name]["error"]);
-            throw new Exception(
+            throw new \Exception(
                 sprintf(
                     Localisation::getTranslation('common_error_unable_to_upload'),
                     $error_message
