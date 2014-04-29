@@ -374,7 +374,6 @@ class ProjectCreateForm extends PolymerElement
   
   Future<bool> createProjectTasks()
   {
-    Completer createProjectTasksComplete = new Completer();
     List<Task> createdTasks = new List<Task>();
     List<Future<bool>> successList = new List<Future<bool>>();
     Task templateTask = new Task();
@@ -408,195 +407,149 @@ class ProjectCreateForm extends PolymerElement
       bool proofreadingRequired = proofreadingCheckbox.checked;
       
       if (segmentationRequired) {
-        Completer segCreated = new Completer();
-        successList.add(segCreated.future);
         templateTask.taskType = TaskTypeEnum.SEGMENTATION.value;
-        TaskDao.createTask(templateTask).then((Task segTask) {
+        successList.add(TaskDao.createTask(templateTask)
+        .then((Task segTask) {
           createdTasks.add(segTask);
           List<Future<bool>> segSuccess = new List<Future<bool>>();
-          Completer fileUploaded = new Completer();
-          segSuccess.add(fileUploaded.future);
-          TaskDao.saveTaskFile(segTask.id, userid, projectFileText).then((bool success) {
-            fileUploaded.complete(true);
-          }).catchError((e) {
-            fileUploaded.completeError(sprintf(
-                         localisation.getTranslation("project_create_failed_upload_file"), 
-                         [localisation.getTranslation("common_segmentation"), e.toString()]));
-          });
+          segSuccess.add(TaskDao.saveTaskFile(segTask.id, userid, projectFileText)
+          .then((_) => true)
+          .catchError((e) {
+            throw sprintf(
+                   localisation.getTranslation("project_create_failed_upload_file"), 
+                   [localisation.getTranslation("common_segmentation"), e.toString()]);
+          }));
           
           if (trackProject) {
-            Completer trackingComplete = new Completer();
-            segSuccess.add(trackingComplete.future);
-            TaskDao.trackTask(segTask.id, userid).then((bool success) {
-              trackingComplete.complete(true);
-            }).catchError((e) {
-              trackingComplete.completeError(sprintf(
+            //Track seg task
+            segSuccess.add(TaskDao.trackTask(segTask.id, userid)
+            .then((_) => true)
+            .catchError((e) {
+              throw sprintf(
                   localisation.getTranslation("project_create_failed_track_task"),
-                  [localisation.getTranslation("common_segmentation"), e.toString()]));
-            });
+                  [localisation.getTranslation("common_segmentation"), e.toString()]);
+            }));
           }
           
-          Future.wait(segSuccess).then((List<bool> success) {
-            segCreated.complete(true);
-          }).catchError((e) {
-            segCreated.completeError(e.toString());
+          return Future.wait(segSuccess)
+          .then((_) => true)
+          .catchError((e) {
+            throw e.toString();
           });
           
         }).catchError((e) {
-          segCreated.completeError(localisation.getTranslation("project_create_13") + e.toString());
-        });
+          throw localisation.getTranslation("project_create_13") + e.toString();
+        }));
       } else {
         if (translationRequired) {
-          Completer transCreated = new Completer();
-          successList.add(transCreated.future);
-          
-          templateTask.taskType = TaskTypeEnum.TRANSLATION.value;
-          TaskDao.createTask(templateTask).then((Task transTask) {
-            createdTasks.add(transTask);
-            
-            List<Future<bool>> transSuccess = new List<Future<bool>>();
-            Completer fileUploaded = new Completer();
-            transSuccess.add(fileUploaded.future);
-            
-            TaskDao.saveTaskFile(transTask.id, userid, projectFileText).then((bool success) {
-              fileUploaded.complete(true);
-            }).catchError((e) {
-              fileUploaded.completeError(sprintf(
-                      localisation.getTranslation("project_create_failed_upload_file"), 
-                      [localisation.getTranslation("common_translation"), e.toString()]));
-            });
-            
-            if (trackProject) {
-              Completer trackingSuccess = new Completer();
-              transSuccess.add(trackingSuccess.future);
-              
-              TaskDao.trackTask(transTask.id, userid).then((bool success) {
-                trackingSuccess.complete(true);
-              }).catchError((e) {
-                trackingSuccess.completeError(sprintf(
-                    localisation.getTranslation("project_create_failed_track_task"),
-                    [localisation.getTranslation("common_translation"), e.toString()]));
-              });
-            }
-            
-            if (proofreadingRequired) {
-              Completer proofCreated = new Completer();
-              transSuccess.add(proofCreated.future);
-              templateTask.taskType = TaskTypeEnum.PROOFREADING.value;
-              templateTask.targetLocale = transTask.targetLocale;
-              TaskDao.createTask(templateTask).then((Task proofTask) {
-                createdTasks.add(proofTask);
-                
-                List<Future<bool>> proofSuccess = new List<Future<bool>>();
-                Completer proofUploaded = new Completer();
-                proofSuccess.add(proofUploaded.future);
-                
-                TaskDao.saveTaskFile(proofTask.id, userid, projectFileText).then((bool success) {
-                  proofUploaded.complete(true);
-                }).catchError((e) {
-                  proofUploaded.completeError(sprintf(
-                      localisation.getTranslation("project_create_failed_upload_file"), 
-                      [localisation.getTranslation("common_proofreading"), e.toString()]));
-                });
-                
-                if (trackProject) {
-                  Completer trackingProof = new Completer();
-                  proofSuccess.add(trackingProof.future);
+                  templateTask.taskType = TaskTypeEnum.TRANSLATION.value;
                   
-                  TaskDao.trackTask(proofTask.id, userid).then((bool success) {
-                    trackingProof.complete(true);
+                  successList.add(TaskDao.createTask(templateTask).then((Task transTask) {
+                    createdTasks.add(transTask);
+                    
+                    List<Future<bool>> transSuccess = new List<Future<bool>>();
+                    
+                    transSuccess.add(TaskDao.saveTaskFile(transTask.id, userid, projectFileText)
+                    .catchError((e) {
+                      throw sprintf(
+                              localisation.getTranslation("project_create_failed_upload_file"), 
+                              [localisation.getTranslation("common_translation"), e.toString()]);
+                    }));
+                    
+                    if (trackProject) {
+                      transSuccess.add(TaskDao.trackTask(transTask.id, userid)
+                      .catchError((e) {
+                        throw sprintf(
+                            localisation.getTranslation("project_create_failed_track_task"),
+                            [localisation.getTranslation("common_translation"), e.toString()]);
+                      }));
+                    }
+                    
+                    if (proofreadingRequired) {
+                      templateTask.taskType = TaskTypeEnum.PROOFREADING.value;
+                      templateTask.targetLocale = transTask.targetLocale;
+                      
+                      transSuccess.add(TaskDao.createTask(templateTask).then((Task proofTask) {
+                        createdTasks.add(proofTask);
+                        
+                        List<Future<bool>> proofSuccess = new List<Future<bool>>();
+                        
+                        proofSuccess.add(TaskDao.saveTaskFile(proofTask.id, userid, projectFileText)
+                        .catchError((e) {
+                          throw sprintf(
+                              localisation.getTranslation("project_create_failed_upload_file"), 
+                              [localisation.getTranslation("common_proofreading"), e.toString()]);
+                        }));
+                        
+                        if (trackProject) {
+                          proofSuccess.add(TaskDao.trackTask(proofTask.id, userid)
+                          .catchError((e) {
+                            throw sprintf(
+                                localisation.getTranslation("project_create_failed_track_task"),
+                                [localisation.getTranslation("common_proofreading"), e.toString()]);
+                          }));
+                        }
+                        
+                        proofSuccess.add(TaskDao.addTaskPreReq(proofTask.id, transTask.id)
+                        .catchError((e) {
+                          throw sprintf(
+                              localisation.getTranslation("project_create_failed_add_prereq"), [e.toString()]);
+                        }));
+                        
+                        return Future.wait(proofSuccess).then(( _ ) => true);
+                      }).catchError((e) {
+                        throw localisation.getTranslation("project_create_15") + e.toString();
+                      }));
+                    }
+                    
+                    return Future.wait(transSuccess)
+                      .then(( _ ) => true);
                   }).catchError((e) {
-                    trackingProof.completeError(sprintf(
-                        localisation.getTranslation("project_create_failed_track_task"),
-                        [localisation.getTranslation("common_proofreading"), e.toString()]));
-                  });
-                }
-                
-                Completer preReqSuccess = new Completer();
-                proofSuccess.add(preReqSuccess.future);
-                TaskDao.addTaskPreReq(proofTask.id, transTask.id).then((bool success) {
-                  preReqSuccess.complete(true);
-                }).catchError((e) {
-                  preReqSuccess.completeError(sprintf(
-                      localisation.getTranslation("project_create_failed_add_prereq"), [e.toString()]));
-                });
-                
-                Future.wait(proofSuccess).then((List<bool> s) {
-                  proofCreated.complete(true);
-                }).catchError((e) {
-                  proofCreated.completeError(e.toString());
-                });
-              }).catchError((e) {
-                proofCreated.completeError(localisation.getTranslation("project_create_15") + e.toString());
-              });
-            }
-            
-            Future.wait(transSuccess).then((List<bool> s) {
-              transCreated.complete(true);
-            }).catchError((e) {
-              transCreated.completeError(e.toString());
-            });
-          }).catchError((e) {
-            transCreated.completeError(localisation.getTranslation("project_create_14") + e.toString());
-          });
+                    throw localisation.getTranslation("project_create_14") + e.toString();
+                  }));
         } else if (!translationRequired && proofreadingRequired) {
+          //start
           templateTask.taskType = TaskTypeEnum.PROOFREADING.value;
           
-          Completer proofCreated = new Completer();
-          successList.add(proofCreated.future);
-          TaskDao.createTask(templateTask).then((Task proofTask) {
+          successList.add(TaskDao.createTask(templateTask)
+          .then((Task proofTask) {
             createdTasks.add(proofTask);
             
             List<Future<bool>> proofSuccess = new List<Future<bool>>();
-            Completer proofUploaded = new Completer();
-            proofSuccess.add(proofUploaded.future);
-            
-            TaskDao.saveTaskFile(proofTask.id, userid, projectFileText).then((bool success) {
-              proofUploaded.complete(true);
-            }).catchError((e) {
-              proofUploaded.completeError(sprintf(
-                  localisation.getTranslation("project_create_failed_upload_file"), 
-                  [localisation.getTranslation("common_proofreading"), e.toString()]));
-            });
+
+            //Upload proofreading task
+            proofSuccess.add(TaskDao.saveTaskFile(proofTask.id, userid, projectFileText)
+            .then((_) => true)
+            .catchError((e) {
+              throw sprintf(
+                localisation.getTranslation("project_create_failed_upload_file"), 
+                [localisation.getTranslation("common_proofreading"), e.toString()]);
+            }));
             
             if (trackProject) {
-              Completer trackingProof = new Completer();
-              proofSuccess.add(trackingProof.future);
-              TaskDao.trackTask(proofTask.id, userid).then((bool success) {
-                trackingProof.complete(true);
-              }).catchError((e) {
-                trackingProof.completeError(sprintf(
+              //Track proofreading task
+              proofSuccess.add(TaskDao.trackTask(proofTask.id, userid)
+              .then((_) => true)
+              .catchError((e) {
+                throw sprintf(
                     localisation.getTranslation("project_create_failed_track_task"),
-                    [localisation.getTranslation("common_proofreading"), e.toString()]));
-              });
+                    [localisation.getTranslation("common_proofreading"), e.toString()]);
+              }));
             }
             
-            Future.wait(proofSuccess).then((List<bool> s) {
-              proofCreated.complete(true);
-            }).catchError((e) {
-              proofCreated.completeError(e.toString());
-            });
+            return Future.wait(proofSuccess)
+            .then((_) => true);
           }).catchError((e) {
-            proofCreated.completeError(localisation.getTranslation("project_create_15") + e.toString());
-          });
+            throw localisation.getTranslation("project_create_15") + e.toString();
+          }));
+          //end
         }
       }
     }
     
-    Future.wait(successList).then((List<bool> createdList) {
-      bool ret = true;
-      createdList.forEach((bool created) {
-        if (!created) {
-          print("Something failed while creating project tasks");
-          ret = false;
-        }
-      });
-      createProjectTasksComplete.complete(ret);
-    }).catchError((e) {
-      createProjectTasksComplete.completeError(e.toString());
-    });
-    
-    return createProjectTasksComplete.future;
+    return Future.wait(successList).then((List<bool> createdList) {
+          return createdList.every((created) => created == true);
+        });
   }
   
   Future<bool> uploadProjectFile()
