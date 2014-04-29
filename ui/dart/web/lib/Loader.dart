@@ -4,25 +4,17 @@ class Loader
 {
   static Future<bool> load()
   {
-    Future<bool> loaded;
     Settings settings = new Settings();
-    loaded = settings.loadConf().then((bool success) {
-      List<Future<bool>> progressList = new List<Future<bool>>();
+    // First load config.
+    return settings.loadConf().then((bool success) {
       if (success) {
-        progressList.add(Localisation.loadFile());
-        progressList.add(APIHelper.init());
+        // Then load localisation and initialize APIHelper in parallel.
+        return Future.wait([Localisation.loadFile(), APIHelper.init()])
+            .then((List<bool> status)
+                => status.every((bool success) => success == true)); 
+      }else {
+        return false;
       }
-      Future<bool> complete = Future.wait(progressList).then((List<bool> status) {
-        bool worked = true;
-        status.forEach((bool stat) {
-          if (!stat) {
-            worked = false;
-          }
-        });
-        return worked;
-      }); 
-      return complete;
     });
-    return loaded;
   }
 }
