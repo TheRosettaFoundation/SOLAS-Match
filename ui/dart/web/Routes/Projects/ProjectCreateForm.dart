@@ -553,17 +553,15 @@ class ProjectCreateForm extends PolymerElement
   }
   
   Future<bool> uploadProjectFile()
-  {
-    //Completer<bool> completer = new Completer<bool>();
-    return loadProjectFile().then((bool fileLoaded) {
-      ProjectDao.uploadProjectFile(project.id, userid, filename, projectFileText)
-        .then((bool success) => success);
-        }).catchError((e) {
-          throw sprintf(
-              localisation.getTranslation("project_create_failed_upload_file"),
-              [localisation.getTranslation("common_project"), e]);
-        });
-  }
+    {
+      return loadProjectFile().then((_) {
+        return ProjectDao.uploadProjectFile(project.id, userid, filename, projectFileText);
+      }).catchError((e) {
+            throw sprintf(
+                localisation.getTranslation("project_create_failed_upload_file"),
+                [localisation.getTranslation("common_project"), e]);
+          });
+    }
   
   Future<bool> loadProjectFile()
   {

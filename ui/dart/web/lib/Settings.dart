@@ -2,7 +2,6 @@ part of SolasMatchDart;
 
 class Settings
 {
-  static const CONF_API_ROUTE = '/SOLAS-Match/api/v0/static/dart/conf.json';
   static final Settings _instance = new Settings._internal();
   
   JsonObject _conf;
@@ -15,8 +14,7 @@ class Settings
 
   Future<bool> loadConf()
   {
-    //Future<bool> ret = HttpRequest.getString(CONF_API_ROUTE)
-    Future<bool> ret = HttpRequest.getString(querySelector("#ConfFileLocation").attributes['value'])
+    Future<bool> ret = HttpRequest.getString((querySelector("link[rel=dart-conf]") as LinkElement).href)
        .then((String fileContents) {
         
          _instance._conf = new JsonObject.fromJsonString(fileContents);

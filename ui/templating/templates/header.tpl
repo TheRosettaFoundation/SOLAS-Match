@@ -28,7 +28,7 @@
         <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
 
         <!-- dart conf file location -->
-        <input type="hidden" id="ConfFileLocation" value="{urlFor name="home"}ui/dart/web/conf/conf.json" />
+        <link rel="dart-conf" href="{urlFor name="home"}api/v0/static/dart/conf.json">
 
         <!-- extra styles-->
         {if isset($extra_styles)}
