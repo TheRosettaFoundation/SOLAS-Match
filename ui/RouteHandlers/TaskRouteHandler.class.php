@@ -179,12 +179,20 @@ class TaskRouteHandler
             $bottom = count($archived_tasks) - 1;
         }
         
+        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
+        $taskTypeColours = array();
+
+        for ($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
+        }
+        
         $app->view()->setData("archived_tasks", $archived_tasks);
         $app->view()->appendData(array(
                                     "page_no" => $page_no,
                                     "last" => $total_pages,
                                     "top" => $top,
-                                    "bottom" => $bottom
+                                    "bottom" => $bottom,
+                                    "taskTypeColours" => $taskTypeColours
         ));
         $app->render("task/archived-tasks.tpl");
     }
