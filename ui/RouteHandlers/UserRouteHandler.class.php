@@ -584,6 +584,13 @@ class UserRouteHandler
             
         $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
+        
+        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
+        $taskTypeColours = array();
+
+        for ($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
+        }
 
         $app->view()->appendData(array(
             "badges" => $badges,
@@ -596,7 +603,8 @@ class UserRouteHandler
             "extra_scripts" => $extra_scripts,
             "org_creation" => $org_creation,
             "userPersonalInfo" => $userPersonalInfo,
-            "secondaryLanguages" => $secondaryLanguages
+            "secondaryLanguages" => $secondaryLanguages,
+            "taskTypeColours" => $taskTypeColours
         ));
                 
         if (Common\Lib\UserSession::getCurrentUserID() == $user_id) {
