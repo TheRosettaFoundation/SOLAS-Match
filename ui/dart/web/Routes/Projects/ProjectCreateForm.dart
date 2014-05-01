@@ -508,7 +508,6 @@ class ProjectCreateForm extends PolymerElement
                     throw localisation.getTranslation("project_create_14") + e.toString();
                   }));
         } else if (!translationRequired && proofreadingRequired) {
-          //start
           templateTask.taskType = TaskTypeEnum.PROOFREADING.value;
           
           successList.add(TaskDao.createTask(templateTask)
@@ -542,7 +541,6 @@ class ProjectCreateForm extends PolymerElement
           }).catchError((e) {
             throw localisation.getTranslation("project_create_15") + e.toString();
           }));
-          //end
         }
       }
     }
@@ -564,28 +562,25 @@ class ProjectCreateForm extends PolymerElement
     }
   
   Future<bool> loadProjectFile()
-  {
-    Completer<bool> completer = new Completer<bool>();
-    File projectFile = null;
-    InputElement fileInput = this.shadowRoot.querySelector("#projectFile");
-    FileList files = fileInput.files;
-    if (!files.isEmpty) {
-      projectFile = files[0];
-    }
-    
-    validateFileInput().then((bool success) {
-      FileReader reader = new FileReader();
-      reader.onLoadEnd.listen((e) {
-        projectFileText = e.target.result;
-        completer.complete(true);
+    {
+      File projectFile = null;
+      InputElement fileInput = this.shadowRoot.querySelector("#projectFile");
+      FileList files = fileInput.files;
+      if (!files.isEmpty) {
+        projectFile = files[0];
+      }
+      
+      return validateFileInput().then((bool success) {
+        Completer fileIsDone = new Completer();
+        FileReader reader = new FileReader();
+        reader.onLoadEnd.listen((e) {
+          projectFileText = e.target.result;
+          fileIsDone.complete(true);
+        });
+        reader.readAsArrayBuffer(projectFile);
+        return fileIsDone.future;
       });
-      reader.readAsArrayBuffer(projectFile);
-    }).catchError((e) {
-      completer.completeError(e);
-    });
-    
-    return completer.future;
-  }
+    }
   
   Future<bool> validateInput()
     {
@@ -719,51 +714,50 @@ class ProjectCreateForm extends PolymerElement
   
   Future<bool> validateFileInput()
   {
-    Completer<bool> completer = new Completer<bool>();
-    File projectFile = null;
-    InputElement fileInput = this.shadowRoot.querySelector("#projectFile");
-    FileList files = fileInput.files;
-    if (!files.isEmpty) {
-      projectFile = files[0];
-    }
+    return new Future(() {
+      File projectFile = null;
+      InputElement fileInput = this.shadowRoot.querySelector("#projectFile");
+      FileList files = fileInput.files;
+      if (!files.isEmpty) {
+        projectFile = files[0];
+      }
     
-    if (projectFile != null) {
-      if (projectFile.size > 0) {
-        if (projectFile.size < maxfilesize) {
-          int extensionStartIndex = projectFile.name.lastIndexOf(".");
-          if (extensionStartIndex >= 0) {
-            filename = projectFile.name;
-            String extension = filename.substring(extensionStartIndex + 1);
-            if (extension != extension.toLowerCase()) {
-              extension = extension.toLowerCase();
-              filename = filename.substring(0, extensionStartIndex + 1) + extension;
-              window.alert(localisation.getTranslation("project_create_18"));
-            }
-            bool finished = false;
-            if (extension == "pdf") {
-              if (!window.confirm(localisation.getTranslation("project_create_19"))) {
-                finished = true;
-                completer.complete(false);
+      if (projectFile != null) {
+        if (projectFile.size > 0) {
+          if (projectFile.size < maxfilesize) {
+            int extensionStartIndex = projectFile.name.lastIndexOf(".");
+            if (extensionStartIndex >= 0) {
+              filename = projectFile.name;
+              String extension = filename.substring(extensionStartIndex + 1);
+              if (extension != extension.toLowerCase()) {
+                extension = extension.toLowerCase();
+                filename = filename.substring(0, extensionStartIndex + 1) + extension;
+                window.alert(localisation.getTranslation("project_create_18"));
               }
-            }
+              bool finished = false;
+              if (extension == "pdf") {
+                if (!window.confirm(localisation.getTranslation("project_create_19"))) {
+                  finished = true;
+                  return false;
+                }
+              }
             
-            if (!finished) {
-              completer.complete(true);
+              if (!finished) {
+                return true;
+              }
+            } else {
+              throw localisation.getTranslation("project_create_20");
             }
           } else {
-            completer.completeError(localisation.getTranslation("project_create_20"));
+            throw localisation.getTranslation("project_create_21");
           }
         } else {
-          completer.completeError(localisation.getTranslation("project_create_21"));
+          throw localisation.getTranslation("project_create_17");
         }
       } else {
-        completer.completeError(localisation.getTranslation("project_create_17"));
+        throw localisation.getTranslation("project_create_16");
       }
-    } else {
-      completer.completeError(localisation.getTranslation("project_create_16"));
-    }
-    
-    return completer.future;
+    });
   }
   
   bool validateTagList(String tagList)
