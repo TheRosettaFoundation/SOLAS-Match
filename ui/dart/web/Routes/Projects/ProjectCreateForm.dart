@@ -53,6 +53,9 @@ class ProjectCreateForm extends PolymerElement
   @observable String createProjectError;
   @observable String tagsError;
   
+  /**
+   * The constructor for ProjectCreateForm, handling intialisation and setup of various things.
+   */
   ProjectCreateForm.created() : super.created() 
   {
     project = new Project();
@@ -62,6 +65,7 @@ class ProjectCreateForm extends PolymerElement
     languages = toObservable(new List<Language>());
     countries = toObservable(new List<Country>());
     DateTime currentDate = new DateTime.now();
+    //Setup information about dates
     years = toObservable(new List<int>.generate(10, (int index) => index + currentDate.year, growable: false));
     months = toObservable([localisation.getTranslation("common_january"), 
                            localisation.getTranslation("common_february"), 
@@ -105,6 +109,9 @@ class ProjectCreateForm extends PolymerElement
     maxTargetLanguages = 10;
   }
   
+  /**
+   * Called when by the DOM when the ProjectCreateForm element has been inserted into the "live document".
+   */
   void enteredView()
   {
     Settings settings = new Settings();
@@ -137,6 +144,9 @@ class ProjectCreateForm extends PolymerElement
     });
   }
   
+  /**
+   * This method is used by enteredView() to add the elements of the source and target locales to the page.
+   */
   void constructDynamicElements()
   {
     langSelect = new SelectElement();
@@ -182,6 +192,9 @@ class ProjectCreateForm extends PolymerElement
     loaded = true;
   }
   
+  /**
+   * This method is used to add target languages to the form.
+   */
   void addMoreTargetLanguages()
   {
     if (targetCount < maxTargetLanguages) {
@@ -257,7 +270,7 @@ class ProjectCreateForm extends PolymerElement
         window.alert(localisation.getTranslation("project_create_target_language_increase"));
       }
 
-
+      //If maximum amount of target languages has been reached, display message to notify user.
       if (targetCount >= maxTargetLanguages) {
         maxTargetsReached = localisation.getTranslation("project_create_11");
         ButtonElement addBtn = this.shadowRoot.querySelector("#addTargetLanguageBtn");
@@ -275,6 +288,9 @@ class ProjectCreateForm extends PolymerElement
     }
   }
   
+  /**
+   * This method is used to remove target languages
+   */
   void removeTargetLanguage()
   {
     if (targetCount > 1) {
@@ -295,6 +311,16 @@ class ProjectCreateForm extends PolymerElement
     }
   }
   
+  /**
+   * This is the core function of this class, called when "Submit form" button is clicked, triggering validation
+   * of all the input and, if there is no invalid input or errors in the process, creation of the new project.
+   * The work is divided into various subfunctions:
+   * createProjectTasks(),
+   * validateInput(),
+   * uploadProjectFile()
+   * 
+   * These each do some work and throw back errors, should they arise.
+   */
   void submitForm()
     {
       createProjectError = null;
@@ -306,8 +332,10 @@ class ProjectCreateForm extends PolymerElement
       tagsError = null;
       maxTargetsReached = null;
      
+      //Validate form input and then check for success
       validateInput().then((bool success) {
         if (success) {
+          //If the validation has succeeded, then begin setting up Project object of new project.
           project.organisationId = orgid;
           SelectElement sourceLangSelect = this.shadowRoot.querySelector("#sourceLanguageSelect");
           SelectElement sourceCountrySelect = this.shadowRoot.querySelector("#sourceCountrySelect");
@@ -333,47 +361,64 @@ class ProjectCreateForm extends PolymerElement
             });
           }
          
+          //Using DAO function request Project creation
           ProjectDao.createProject(project)
             .then((Project pro) {
+            //If no errors have occurred, then we can get the ID assigned to the newly created project
             project.id = pro.id;
            
+            //Success list used to wait on result of uploading project file and tracking project
             List<Future<bool>> successList = new List<Future<bool>>();
+            //upload the file and then create tasks
             successList.add(uploadProjectFile()
               .then((_) => createProjectTasks()));
            
             if (trackProject) {
+              //track project via DAO if user selected that option
               successList.add(ProjectDao.trackProject(project.id, userid)
                 .catchError((e) {
                   throw
-                    sprintf(localisation.getTranslation("project_create_failed_project_track"), e.toString());
+                    sprintf(localisation.getTranslation("project_create_failed_project_track"), [e.toString()]);
               }));
             }
            
             return Future.wait(successList).then((_) {
+              //wait for project file to have been uploaded (and by extension tasks created) and project tracked
+              //and then calculate project deadlines
               return ProjectDao.calculateProjectDeadlines(project.id).then((bool deadlinesCalculated) {
+                //Once deadlines have been calculated, make the app progress to the "view project" page.
                 Settings settings = new Settings();
                 window.location.assign(settings.conf.urls.SiteLocation + "project/"
                     + project.id.toString() + "/view");
               }).catchError((error) {
                 throw sprintf(
-                    localisation.getTranslation("project_create_failed_project_deadlines"), error.toString());
+                    localisation.getTranslation("project_create_failed_project_deadlines"), [error.toString()]);
               });
             });
+            //catch any as yet uncaught error that occurred while creating the project or in the subsequent
+            //.then() and delete the project.
           }).catchError(( _ ){
             print("Something went wrong, deleting project");
             ProjectDao.deleteProject(project.id);
             project.id = null;
           });
+        //If validation failed, print message to console.
         } else {
           print("Invalid form input");
         }
-      }).catchError((e) { //catches errors from validateInput
+        //catch any as yet uncaught errors from validateInput or the subsequent .then() and set
+        //createProjectError to that error.
+      }).catchError((e) {
         createProjectError = e;
       });
     }
   
+  /**
+   * This function is called from submitForm() to create all the project's tasks.
+   */
   Future<bool> createProjectTasks()
   {
+    //Initialise some variables, and gather task info from form
     List<Task> createdTasks = new List<Task>();
     List<Future<bool>> successList = new List<Future<bool>>();
     Task templateTask = new Task();
@@ -388,7 +433,9 @@ class ProjectCreateForm extends PolymerElement
     } else {
       templateTask.published = false;
     }
+    //Loop up to the number of targets, create task(s) for each
     for (int i = 0; i < targetCount; i++) {
+      //Get task info from the form
       SelectElement targetLanguageSelect = this.shadowRoot.querySelector("#target_language_$i");
       SelectElement targetCountrySelect = this.shadowRoot.querySelector("#target_country_$i");
       Language targetLang = languages[targetLanguageSelect.selectedIndex];
@@ -399,6 +446,7 @@ class ProjectCreateForm extends PolymerElement
       targetLocale.countryName = targetCountry.name;
       targetLocale.countryCode = targetCountry.code;
       templateTask.targetLocale = targetLocale;
+      //Determine from the form which task types are selected
       CheckboxInputElement segmentationCheckbox = this.shadowRoot.querySelector("#segmentation_$i");
       bool segmentationRequired = segmentationCheckbox.checked;
       CheckboxInputElement translationCheckbox = this.shadowRoot.querySelector("#translation_$i");
@@ -406,15 +454,20 @@ class ProjectCreateForm extends PolymerElement
       CheckboxInputElement proofreadingCheckbox = this.shadowRoot.querySelector("#proofreading_$i");
       bool proofreadingRequired = proofreadingCheckbox.checked;
       
+      //Create segmentation task if necessary
       if (segmentationRequired) {
         templateTask.taskType = TaskTypeEnum.SEGMENTATION.value;
+        //Add result of entire segmentation task creation process to successList
+        //Create task and then add to the created tasks list
         successList.add(TaskDao.createTask(templateTask)
         .then((Task segTask) {
           createdTasks.add(segTask);
+          //Save the file
           List<Future<bool>> segSuccess = new List<Future<bool>>();
           segSuccess.add(TaskDao.saveTaskFile(segTask.id, userid, projectFileText)
           .then((_) => true)
           .catchError((e) {
+            //Catch error in saving file
             throw sprintf(
                    localisation.getTranslation("project_create_failed_upload_file"), 
                    [localisation.getTranslation("common_segmentation"), e.toString()]);
@@ -436,21 +489,25 @@ class ProjectCreateForm extends PolymerElement
           .catchError((e) {
             throw e.toString();
           });
-          
+        //Catch as yet uncaught errors from process of creating seg task  
         }).catchError((e) {
           throw localisation.getTranslation("project_create_13") + e.toString();
         }));
-      } else {
+      } else {//Not a seg task, so translation and/or proofreading will be created.
+        //Create translation task if necessary
         if (translationRequired) {
                   templateTask.taskType = TaskTypeEnum.TRANSLATION.value;
-                  
-                  successList.add(TaskDao.createTask(templateTask).then((Task transTask) {
+                  //Add result of entire translation task creation process to successList
+                  //Create task and then add to the created tasks list
+                  successList.add(TaskDao.createTask(templateTask)
+                  .then((Task transTask) {
                     createdTasks.add(transTask);
                     
                     List<Future<bool>> transSuccess = new List<Future<bool>>();
-                    
+                    //Save the file
                     transSuccess.add(TaskDao.saveTaskFile(transTask.id, userid, projectFileText)
                     .catchError((e) {
+                      //Catch error from saving file
                       throw sprintf(
                               localisation.getTranslation("project_create_failed_upload_file"), 
                               [localisation.getTranslation("common_translation"), e.toString()]);
@@ -464,18 +521,19 @@ class ProjectCreateForm extends PolymerElement
                             [localisation.getTranslation("common_translation"), e.toString()]);
                       }));
                     }
-                    
+                    //Create proofreading task with translation task if necessary
                     if (proofreadingRequired) {
                       templateTask.taskType = TaskTypeEnum.PROOFREADING.value;
                       templateTask.targetLocale = transTask.targetLocale;
-                      
+                      //Create task and then add to the created tasks list
                       transSuccess.add(TaskDao.createTask(templateTask).then((Task proofTask) {
                         createdTasks.add(proofTask);
                         
                         List<Future<bool>> proofSuccess = new List<Future<bool>>();
-                        
+                        //Save file
                         proofSuccess.add(TaskDao.saveTaskFile(proofTask.id, userid, projectFileText)
                         .catchError((e) {
+                          //Catch error from saving file
                           throw sprintf(
                               localisation.getTranslation("project_create_failed_upload_file"), 
                               [localisation.getTranslation("common_proofreading"), e.toString()]);
@@ -490,6 +548,7 @@ class ProjectCreateForm extends PolymerElement
                           }));
                         }
                         
+                        //Add the translation task as a prerequisite to the proofreading task
                         proofSuccess.add(TaskDao.addTaskPreReq(proofTask.id, transTask.id)
                         .catchError((e) {
                           throw sprintf(
@@ -507,9 +566,11 @@ class ProjectCreateForm extends PolymerElement
                   }).catchError((e) {
                     throw localisation.getTranslation("project_create_14") + e.toString();
                   }));
-        } else if (!translationRequired && proofreadingRequired) {
+        } else if (!translationRequired && proofreadingRequired) {//Only a proofreading task to be created
           templateTask.taskType = TaskTypeEnum.PROOFREADING.value;
           
+          //Add result of entire proofreading task creation process to successList
+          //Create task and then add to the created tasks list
           successList.add(TaskDao.createTask(templateTask)
           .then((Task proofTask) {
             createdTasks.add(proofTask);
