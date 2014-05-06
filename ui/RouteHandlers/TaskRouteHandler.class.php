@@ -213,9 +213,9 @@ class TaskRouteHandler
         }
 
         $extra_scripts = "
-<script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/custom_element/custom-elements.debug.js\"></script>
-<script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/browser/interop.js\"></script>
-<script src=\"{$app->urlFor("home")}ui/dart/build/web/Routes/Users/ClaimedTasks.dart.js\"></script>
+<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/custom_element/custom-elements.debug.js\"></script>
+<script \"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/browser/interop.js\"></script>
+<script \"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/Routes/Users/ClaimedTasks.dart.js\"></script>
 <span class=\"hidden\">
 ";
 

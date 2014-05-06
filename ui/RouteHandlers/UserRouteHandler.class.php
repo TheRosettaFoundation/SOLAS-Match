@@ -500,9 +500,9 @@ class UserRouteHandler
         }
 
         $extraScripts = "
-<script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/custom_element/custom-elements.debug.js\"></script>
-<script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/browser/interop.js\"></script>
-<script src=\"{$app->urlFor("home")}ui/dart/build/web/Routes/Users/UserPrivateProfile.dart.js\"></script>
+<script \"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/custom_element/custom-elements.debug.js\"></script>
+<script \"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/browser/interop.js\"></script>
+<script \"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/Routes/Users/UserPrivateProfile.dart.js\"></script>
 <span class=\"hidden\">
 ";
         $extraScripts .= file_get_contents("ui/dart/web/Routes/Users/UserPrivateProfileForm.html");
