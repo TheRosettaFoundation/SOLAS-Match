@@ -688,7 +688,7 @@ class Middleware
         }
     }
 
-    //Does the user id match the current user or is the current
+    //Does the user id (given to through the route) match the current user or is the current
     //user a member of the Organisation who created the Badge in question
     public static function authenticateUserOrOrgForOrgBadge(\Slim\Route $route)
     {
@@ -722,12 +722,13 @@ class Middleware
 
             }
             
+            $loggedInId = $user->getId();
             $orgId = $badge->getOwnerId();
                     
             if ($userId == $user->getId()) {
                 return true;
-            } elseif ($orgId != null &&
-                    (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId))) {
+            } else if ($orgId != null &&
+                    (DAO\OrganisationDao::isMember($orgId, $loggedInId) || DAO\AdminDao::isAdmin($loggedInId, $orgId))) {
                 /*
                  * currently this checks if the orgId is not Null
                  * cases where the orgId is null signify a system badge
