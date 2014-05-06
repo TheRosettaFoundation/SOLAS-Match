@@ -145,7 +145,7 @@ class ProjectCreateForm extends PolymerElement
   }
   
   /**
-   * This method is used by enteredView() to add the elements of the source and target locales to the page.
+   * This function is used by enteredView() to add the elements of the source and target locales to the page.
    */
   void constructDynamicElements()
   {
@@ -193,7 +193,7 @@ class ProjectCreateForm extends PolymerElement
   }
   
   /**
-   * This method is used to add target languages to the form.
+   * This function is used to add target languages to the form.
    */
   void addMoreTargetLanguages()
   {
@@ -289,7 +289,7 @@ class ProjectCreateForm extends PolymerElement
   }
   
   /**
-   * This method is used to remove target languages
+   * This function is used to remove target languages
    */
   void removeTargetLanguage()
   {
@@ -611,8 +611,12 @@ class ProjectCreateForm extends PolymerElement
         });
   }
   
+  /**
+   * This function is called to upload the project file.
+   */
   Future<bool> uploadProjectFile()
     {
+      //Load the file and then call the API to upload it
       return loadProjectFile().then((_) {
         return ProjectDao.uploadProjectFile(project.id, userid, filename, projectFileText);
       }).catchError((e) {
@@ -622,6 +626,9 @@ class ProjectCreateForm extends PolymerElement
           });
     }
   
+  /**
+   * This function loads the content of the file and validates the file details.
+   */
   Future<bool> loadProjectFile()
     {
       File projectFile = null;
@@ -630,7 +637,7 @@ class ProjectCreateForm extends PolymerElement
       if (!files.isEmpty) {
         projectFile = files[0];
       }
-      
+      //Validate the file details and then load its content.
       return validateFileInput().then((bool success) {
         Completer fileIsDone = new Completer();
         FileReader reader = new FileReader();
@@ -643,9 +650,13 @@ class ProjectCreateForm extends PolymerElement
       });
     }
   
+  /**
+   * This function validates the form input and sets various error messages if needed fields are not set or
+   * invalid data is given.
+   */
   Future<bool> validateInput()
     {
-      //Validate Text Inputs
+      //Validate textual form input and deadline info
       return new Future((){
         //title is empty
         if (project.title == '') {
@@ -672,20 +683,25 @@ class ProjectCreateForm extends PolymerElement
             });
           }
       }).then((bool success){
+        //Project title not set
         if (project.description == '') {
           descriptionError = localisation.getTranslation("project_create_33");
           success = false;
         }
+        //Project impact not set
         if (project.impact == '') {
           impactError = localisation.getTranslation("project_create_26");
           success = false;
         }
         if (wordCountInput != null && wordCountInput != '') {
+          //If word count is set, ensure it is a valid natural number
           project.wordCount = int.parse(wordCountInput, onError: (String wordCountString) {
             wordCountError = localisation.getTranslation("project_create_27");
             success = false;
             return 0;
           });
+          //If word count is greater than 5000, and segmentation is not selected, display warning message
+          //to user.
           if (project.wordCount > 5000) {
             int i = 0;
             bool segmentationMissing = false;
@@ -702,15 +718,18 @@ class ProjectCreateForm extends PolymerElement
             }
           }
         } else {
+          //Word count is not set, set error message
           wordCountError = localisation.getTranslation("project_create_27");
           success = false;
         }
        
         if(validateTagList(tagList) == false) {
+          //Invalid tags detected, set error message
           tagsError = localisation.getTranslation('project_create_invalid_tags');
           success = false;
         }
        
+        //Parse project deadline info
         DateTime projectDeadline = parseDeadline();
         if (projectDeadline != null) {
           if (projectDeadline.isAfter(new DateTime.now())) {
@@ -725,16 +744,19 @@ class ProjectCreateForm extends PolymerElement
             project.deadline = projectDeadline.year.toString() + "-" + monthAsString + "-" + dayAsString
                 + " " + hourAsString + ":" + minuteAsString + ":00";
           } else {
+            //Deadline is not a date in the future, set error message
             deadlineError = localisation.getTranslation("project_create_25");
             success = false;
           }
         } else {
+          //Deadline is not set (can this even happen in current code?)
           deadlineError = localisation.getTranslation("project_create_32");
           success = false;
         }
         return success;
+        //Textual input and deadline info have been validated, validate target languages
       }).then((bool success){
-        //Validate targets
+        
         List<Language> targetLanguages = new List<Language>();
         List<Country> targetCountries = new List<Country>();
         for (int i = 0; i < targetCount; i++) {
@@ -744,6 +766,7 @@ class ProjectCreateForm extends PolymerElement
           bool translationRequired = translationCheckbox.checked;
           CheckboxInputElement proofreadingCheckbox = this.shadowRoot.querySelector("#proofreading_$i");
           bool proofreadingRequired = proofreadingCheckbox.checked;
+          //If no task type is set, display error message
           if (!segmentationRequired && !translationRequired && !proofreadingRequired) {
             success = false;
             throw localisation.getTranslation("project_create_29");
@@ -753,6 +776,7 @@ class ProjectCreateForm extends PolymerElement
           SelectElement targetCountrySelect = this.shadowRoot.querySelector("#target_country_$i");
           Language targetLang = languages[targetLanguageSelect.selectedIndex];
           Country targetCountry = countries[targetCountrySelect.selectedIndex];
+          //If a duplicate locale is encountered, throw error message
           if (targetLanguages.contains(targetLang) && targetCountries.contains(targetCountry)) {
             success = false;
             throw localisation.getTranslation("project_create_28");
@@ -773,6 +797,9 @@ class ProjectCreateForm extends PolymerElement
       });
     }
   
+  /**
+   * This function is used to validate the details of the project file provided.
+   */
   Future<bool> validateFileInput()
   {
     return new Future(() {
@@ -783,10 +810,14 @@ class ProjectCreateForm extends PolymerElement
         projectFile = files[0];
       }
     
+      //Ensure projectFile is not null
       if (projectFile != null) {
+        //Check if file is empty
         if (projectFile.size > 0) {
+          //Check that file does not exceed the maximum allowed file size
           if (projectFile.size < maxfilesize) {
             int extensionStartIndex = projectFile.name.lastIndexOf(".");
+            //Check that file has an extension
             if (extensionStartIndex >= 0) {
               filename = projectFile.name;
               String extension = filename.substring(extensionStartIndex + 1);
@@ -797,6 +828,7 @@ class ProjectCreateForm extends PolymerElement
               }
               bool finished = false;
               if (extension == "pdf") {
+                //If file is a pdf, warn user that PDFs are difficult to work with
                 if (!window.confirm(localisation.getTranslation("project_create_19"))) {
                   finished = true;
                   return false;
@@ -807,20 +839,27 @@ class ProjectCreateForm extends PolymerElement
                 return true;
               }
             } else {
+              //File has no extension, throw error
               throw localisation.getTranslation("project_create_20");
             }
           } else {
+            //File is too big, throw error
             throw localisation.getTranslation("project_create_21");
           }
         } else {
+          //File is empty, throw error
           throw localisation.getTranslation("project_create_17");
         }
       } else {
+        //No file provided, throw error
         throw localisation.getTranslation("project_create_16");
       }
     });
   }
   
+  /**
+   * This function is called by validateInput to validate the project tags provided.
+   */
   bool validateTagList(String tagList)
   {
     if (tagList.indexOf(new RegExp(r'[^a-z0-9\-\s]')) != -1) {
@@ -830,17 +869,27 @@ class ProjectCreateForm extends PolymerElement
     }
   }
   
+  /**
+   * This is a simple function to parse the deadline provided for the project.
+   */
   DateTime parseDeadline()
   {
     DateTime ret = new DateTime(years[selectedYear], selectedMonth + 1, selectedDay + 1, selectedHour, selectedMinute);
     return ret;
   }
   
+  /**
+   * This is a simple function to parse the project tags from the text input.
+   */
   List<String> separateTags(String tags)
   {
     return tags.split(" ");
   }
   
+  /**
+   * This function is called when the segmentation checkbox is clicked for a target language, disabling the
+   * translation and proofreading checkboxes.
+   */
   void segmentationClicked(InputElement target)
   {
     int index = int.parse(target.id.substring(target.id.indexOf("_") + 1));
@@ -857,7 +906,7 @@ class ProjectCreateForm extends PolymerElement
     }
   }
   
-  /*
+  /**
    * Automatically bound to changes on selectedYear
    */
   void selectedYearChanged(int oldValue)
@@ -874,7 +923,7 @@ class ProjectCreateForm extends PolymerElement
     }
   }
   
-  /*
+  /**
    * Automatically bound to changes on selectedMonth
    */
   void selectedMonthChanged(int oldValue)
@@ -882,6 +931,9 @@ class ProjectCreateForm extends PolymerElement
     days = new List<int>.generate(monthLengths[selectedMonth], (int index) => index + 1);
   }
   
+  /**
+   * This is a simple function to check if a year is a leap year or not.
+   */
   bool isLeapYear(int year)
   {
     bool ret = true;
