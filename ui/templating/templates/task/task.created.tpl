@@ -23,7 +23,7 @@
     <ol>
             <li>{Localisation::getTranslation('task_created_2')}</li>
             <li>{Localisation::getTranslation('task_created_3')}</li>
-            <li>{Localisation::getTranslation('task_created_4')}</li>
+            <li>{Localisation::getTranslation('common_this_may_take_days_weeks')}</li>
     </ol>
     <p style="margin-bottom:20px;"/>
 
