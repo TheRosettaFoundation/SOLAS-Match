@@ -148,13 +148,13 @@ class TaskStream extends PolymerElement
     DateTime taskTime = DateTime.parse(task.createdTime);
     Duration dur = currentDateTime.difference(taskTime);
     if (dur.inDays > 0) {
-      taskAges[task.id] = sprintf(localisation.getTranslation("common_added"), [dur.inDays.toString() + " day(s)"]);
+      taskAges[task.id] = sprintf(localisation.getTranslation("common_added_days"), [dur.inDays.toString()]);
     } else if (dur.inHours > 0) {
-      taskAges[task.id] = sprintf(localisation.getTranslation("common_added"), [dur.inHours.toString() + " hour(s)"]);
+      taskAges[task.id] = sprintf(localisation.getTranslation("common_added_hours"), [dur.inHours.toString()]);
     } else if (dur.inMinutes > 0) {
-      taskAges[task.id] = sprintf(localisation.getTranslation("common_added"), [dur.inMinutes.toString() + " minutes(s)"]);
+      taskAges[task.id] = sprintf(localisation.getTranslation("common_added_minutes"), [dur.inMinutes.toString()]);
     } else {
-      taskAges[task.id] = sprintf(localisation.getTranslation("common_added"), [dur.inSeconds.toString() + " second(s)"]);
+      taskAges[task.id] = sprintf(localisation.getTranslation("common_added_seconds"), [dur.inSeconds.toString()]);
     }
     taskTags[task.id] = new List<Tag>();
     TaskDao.getTaskTags(task.id).then((List<Tag> tags) {

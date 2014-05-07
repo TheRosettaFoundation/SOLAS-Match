@@ -8,17 +8,14 @@ import "package:polymer/polymer.dart";
 @CustomTag("claimed-tasks-stream")
 class ClaimedTasksStream extends PolymerElement
 {
-  int taskTypeCount = 4;
+  //fields to store current DateTime and site address
   DateTime currentDateTime;
   String siteAddress;
-  String taskOneColour;
-  String taskTwoColour;
-  String taskThreeColour;
-  String taskFourColour;
   
   @published int userid = 0;
   @published int tasksperpage = 10;
   
+  //observable variables to store info about tasks, how to display them, etc
   @observable List<Task> tasks;
   @observable Map<int, String> taskAges;
   @observable Map<int, Project> projectMap;
@@ -31,6 +28,9 @@ class ClaimedTasksStream extends PolymerElement
   @observable int currentPage = 0;
   @observable int lastPage = 0;
 
+  /**
+   * The constructor for ClaimedTasksStream, handling initialisation of variables.
+   */
   ClaimedTasksStream.created() : super.created()
   {
     currentDateTime = new DateTime.now();
@@ -44,8 +44,13 @@ class ClaimedTasksStream extends PolymerElement
     taskStatuses = toObservable(new Map<int, String>());
   }
   
+  /**
+   * Called when by the DOM when the ClaimedTaskStream element has been inserted into the "live document".
+   */
   void enteredView()
   {
+    //initialise localisation object and load various info from strings file via it, and other info
+    //from conf file
     localisation = new Localisation();
     Settings settings = new Settings();
     siteAddress = settings.conf.urls.SiteLocation;
@@ -62,8 +67,10 @@ class ClaimedTasksStream extends PolymerElement
     taskStatuses[3] = localisation.getTranslation("common_in_progress");
     taskStatuses[4] = localisation.getTranslation("common_complete");
     List<Future<bool>> successList = new List<Future<bool>>();
+    //start on the first page
     currentPage = 0;
     if (tasksperpage > 0) {
+      //Check how many claimed tasks the user has and then set up pagination appropriately.
       successList.add(UserDao.getUserClaimedTasksCount(userid)
       .then((int count) {
         bool success = false;
@@ -82,6 +89,7 @@ class ClaimedTasksStream extends PolymerElement
         return success;
       }));
     }
+    //Get the tasks to be displayed
     successList.add(this.getClaimedTasks());
     Future.wait(successList)
       .then((List<bool> successes) {
@@ -117,6 +125,9 @@ class ClaimedTasksStream extends PolymerElement
     return ret;
   }
   
+  /**
+   * This function is used to add tasks to the task list.
+   */
   Future<bool> addTasks()
   {
     int offset = currentPage * tasksperpage;
@@ -149,13 +160,13 @@ class ClaimedTasksStream extends PolymerElement
     DateTime taskTime = DateTime.parse(task.createdTime);
     Duration dur = currentDateTime.difference(taskTime);
     if (dur.inDays > 0) {
-      taskAges[task.id] = sprintf(localisation.getTranslation("common_added"), [dur.inDays.toString() + " day(s)"]);
+      taskAges[task.id] = sprintf(localisation.getTranslation("common_added_days"), [dur.inDays.toString()]);
     } else if (dur.inHours > 0) {
-      taskAges[task.id] = sprintf(localisation.getTranslation("common_added"), [dur.inHours.toString() + " hour(s)"]);
+      taskAges[task.id] = sprintf(localisation.getTranslation("common_added_hours"), [dur.inHours.toString()]);
     } else if (dur.inMinutes > 0) {
-      taskAges[task.id] = sprintf(localisation.getTranslation("common_added"), [dur.inMinutes.toString() + " minutes(s)"]);
+      taskAges[task.id] = sprintf(localisation.getTranslation("common_added_minutes"), [dur.inMinutes.toString()]);
     } else {
-      taskAges[task.id] = sprintf(localisation.getTranslation("common_added"), [dur.inSeconds.toString() + " second(s)"]);
+      taskAges[task.id] = sprintf(localisation.getTranslation("common_added_seconds"), [dur.inSeconds.toString()]);
     }
     taskTags[task.id] = new List<Tag>();
     TaskDao.getTaskTags(task.id).then((List<Tag> tags) {
