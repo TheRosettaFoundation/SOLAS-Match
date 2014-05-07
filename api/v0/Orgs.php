@@ -15,7 +15,7 @@ require_once __DIR__."/../DataAccessObjects/ProjectDao.class.php";
 class Orgs
 {
     public static function init()
-    {      
+    {
         $app = \Slim\Slim::getInstance();
 
         $app->group('/v0', function () use ($app) {
@@ -326,6 +326,11 @@ class Orgs
         $client = new Common\Lib\APIHelper($format);
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Organisation");
         $data->setId($orgId);
+        
+        $organisation = DAO\OrganisationDao::getOrg(null, $data->getName());
+        if ($organisation != null && $organisation->getId() != $data->getId()) {
+            API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CONFLICT);
+        }
         API\Dispatcher::sendResponse(null, DAO\OrganisationDao::insertAndUpdate($data), null, $format);
     }
 
@@ -350,6 +355,12 @@ class Orgs
         $client = new Common\Lib\APIHelper($format);
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Organisation");
         $data->setId(null);
+        
+        $name = $data->getName();
+        //Is org name already in use?
+        if (DAO\OrganisationDao::getOrg(null, $name) != null) {
+            API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CONFLICT);
+        }
         $org = DAO\OrganisationDao::insertAndUpdate($data);
         $user = DAO\UserDao::getLoggedInUser();
         if (!is_null($org) && $org->getId() > 0) {

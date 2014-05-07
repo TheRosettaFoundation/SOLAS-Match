@@ -106,9 +106,19 @@ class OrganisationDao extends BaseDao
             Common\Enums\HttpMethodEnum::POST,
             $org
         );
-        $adminDao = new AdminDao();
-        $adminDao->createOrgAdmin($userId, $ret->getId());
-        return $ret;
+        switch($this->client->getResponseCode()) {
+        
+            default:
+                $adminDao = new AdminDao();
+                $adminDao->createOrgAdmin($userId, $ret->getId());
+                return $ret;
+        
+            case Common\Enums\HttpStatusEnum::CONFLICT:
+                throw new Common\Exceptions\SolasMatchException($ret, $this->client->getResponseCode());
+                break;
+        }
+        
+        
     }
 
     public function updateOrg($org)
@@ -121,7 +131,16 @@ class OrganisationDao extends BaseDao
             Common\Enums\HttpMethodEnum::PUT,
             $org
         );
-        return $ret;
+        
+        switch($this->client->getResponseCode()) {
+        
+            default:
+                return $ret;
+        
+            case Common\Enums\HttpStatusEnum::CONFLICT:
+                throw new Common\Exceptions\SolasMatchException($ret, $this->client->getResponseCode());
+                break;
+        }
     }
 
     public function deleteOrg($orgId)

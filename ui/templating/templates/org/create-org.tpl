@@ -10,6 +10,8 @@
     </small>
 </h1>
 
+{include file="handle-flash-messages.tpl"}
+
     <form method='post' action="{urlFor name="create-org"}" class='well' accept-charset="utf-8">
         <table>
             {if isset($errorOccured)}
