@@ -786,8 +786,6 @@ class Middleware
             if (self::isSiteAdmin($user->getId())) {
                 return true;
             }
-            $params = $route->getParams();
-            $app = \Slim\Slim::getInstance();
             
             $params = $route->getParams();
             

@@ -16,6 +16,7 @@
 {/if}
 
 {if isset($flash['error'])}
+    <br>
     <div class="alert alert-error">
         <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
         <p><strong>{Localisation::getTranslation('common_warning')}! </strong>{$flash['error']}</p>
