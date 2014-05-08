@@ -164,5 +164,8 @@ table{
 }
 
 #trackedOrganisationForm {
-	display:inline;
+   float: right;
+   margin-right: 10px;
+   margin-top: -6px;
+}
 }
