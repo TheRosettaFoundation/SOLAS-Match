@@ -69,7 +69,7 @@ Configure Apache
  * Enable X-Sendfile
    <pre><code>sudo apt-get install libapache2-mod-xsendfile</code></pre>    
  
-  Add path to upload directoy to your host apache2.conf,vHost or httpd.conf(recommended) eg
+  Add path to upload directory to your host apache2.conf,vHost or httpd.conf(recommended) eg
    
   <pre><code>
   &lt;Directory /var/www/&gt;
@@ -91,9 +91,9 @@ Configure Apache
   </code></pre>
 
 
-Alternitive Configure Lighttpd
+Alternative - Configure Lighttpd
 ------------------------------
-* Ensure that url rewritting is enabled.
+* Ensure that url rewriting is enabled.
     server.modules += ("mod_rewrite")
 
 * update lighttpd.conf with the following rewite rules
@@ -128,9 +128,11 @@ Install Solas Match Dependencies
 
  * In Ubuntu:
    
-   If subversion is not install run:
+   If subversion is not installed run:
     
         $ sudo apt-get install subversion
+   If curl is not installed run:
+        $ sudo apt-get install curl
 
 	In api/ and ui/ do the following:
 
@@ -145,16 +147,18 @@ Set up the MySQL database
 
 1. Set up a MySQL database.
 2. Create a user with all permissions.
-3. Import ./api/vendor/league/oauth2-server/sql/mysql.sql (using phpMyAdmin, for example.)
-4. Import ./app/db/schema.sql (using phpMyAdmin, for example.)
-5. Import ./app/db/languages.sql (using phpMyAdmin, for example.)
-6. Import ./app/db/country_codes.sql (using phpMyAdmin, for example.)
+3. Import ./api/vendor/league/oauth2-server/sql/mysql.sql (using phpMyAdmin, for example. This MUST be the first import as our schema.sql executes alter table statements on some oauth tables.)
+4. Import path/to/repo/db/schema.sql (using phpMyAdmin, for example.)
+5. Import path/to/repo/db/languages.sql (using phpMyAdmin, for example.)
+6. Import path/to/repo/db/country_codes.sql (using phpMyAdmin, for example.)
 7. Add the a new entry to the oauth_clients table for your web client using the client_id and client_secret defined in the conf file.
 8. Add an entry to the client_endpoints table with the redirect_uri set to the login page URL for this instalation.
-    
+
+<code>
 GRANT EXECUTE, PROCESS, SELECT, SHOW DATABASES, SHOW VIEW, DELETE, INSERT, UPDATE, LOCK TABLES  ON *.* TO 'tester'@'localhost';
 FLUSH PRIVILEGES;
 SHOW GRANTS FOR 'tester'@'localhost';
+</code>
 
 Configuration file
 ------------------
@@ -166,17 +170,11 @@ Configuration file
        1. Under the site section, you can choose to either set openid to 'y','n' or 'h'.
 	    - setting openid='y' will configure the application to use openid as the login mechanisium.
 	    - setting openid='n' will configure the applicataion to fall back to its internal login mechanisium.
-	    - setting openid='h' will enable hybrid login.(both login options will be avaiable to the user).
+	    - setting openid='h' will enable hybrid login.(both login options will be available to the user).
        2. for more reliable openid support install php5-curl. sudo apt-get install php5-curl(fixes issue with google/yahoo connection reset).
 5.  Under session, enter a long random string in the site_key field.
 6.  Under Files changes upload_path to 'uploads/'
 7.  Under oauth generate two random strings for the web client id and secret
-
-DART Configuration file
------------------------
-
-1.  Copy /ui/dart/web/conf/conf.template.json to /ui/dart/web/conf/conf.json
-2.  Change "SOLASMatch" and "SiteLocation" to point to your own setup
 
 Git Pre-Commit Hook
 -------------------
@@ -207,24 +205,24 @@ Configure PHP
 Set file/folder permissions
 ---------------------------
 
-    chmod 777 ./uploads
-    chmod 777 ./ui/templating/templates_compiled
-    chmod 777 ./ui/templating/cache
+    chmod 777 path/to/repo/uploads
+    chmod 777 path/to/repo/ui/templating/templates_compiled
+    chmod 777 path/to/repo/ui/templating/cache
     
 
 Install 960.css Grid System
 ---------------------------
 
 This step is probably redundant, being replaced by Twitter Bootstrap. If you're working
-through these instructions, please review the generaly header template and correct these
-nstructions as appropricate.
+through these instructions, please review the general header template and correct these
+instructions as appropriate.
 
 1. Download 960 Grid System from http://960.gs/
 2. Extract just the file 960.css to ./resources/css/
 
-Install solas Match Backend
+Install Solas Match Backend
 ---------------------------
-The solas match front-end sould now be fully configured.
+The Solas Match frontend sould now be fully configured.
 To install the Solas Match Backend please follow the instructions at 
 https://github.com/TheRosettaFoundation/SOLAS-Match-Backend/blob/master/README.md
 
@@ -235,7 +233,7 @@ Create an Org Account
 
 Create a user by registering with the app. This can be done  by supplying a valid email and a password.
 Once a user has been created you can create an organisation and begin to create projects and tasks.
-For more infomation see the videos tab in thw web ui.
+For more infomation see the videos tab in the web UI.
 
 
 
