@@ -203,7 +203,7 @@
     <string name="common_sitewide_maintenance">Trommons is currently down for maintenance.</string>
     <string name="common_sitewide_maintenance_msg">Service will resume in approx. %s hours. We thank you for your patience.</string>
     <string name="common_this_may_take_days_weeks">This may take several days or weeks, depending on the tasks.</string>
-    
+    <string name="common_task_file_extension_mismatch">The file <strong>extension</strong> differs from the originally downloaded file. Please upload a <strong>(.%s)!</strong></string>
     
 	<string name="admin_banned_orgs_list_all_banned_organisations_of">All banned Organisations of %s.</string>
 	<string name="admin_banned_orgs_list_0">Are you sure you want to unban this Organisation and its members?</string>
@@ -674,7 +674,6 @@
     <string name="task_simple_upload_original_project_file">Click <a href="%s">here</a> to download the <strong>original project file</strong>.</string>
 	<string name="task_simple_upload_latest_uploaded_file">Click <a href="%s">here</a> to download the <strong>latest uploaded file</strong>.</string>
 	<string name="task_simple_upload_as_xliff">(XLIFF .xlf format)</string>
-    <string name="task_simple_upload_5">The file <strong>extension</strong> differs from the originally downloaded file. Please upload a <strong>(.%s)!</strong></string>
     <string name="task_simple_upload_6">The <strong>contents</strong> of the file you are uploading is not a valid <strong>(.%s)</strong> If you are having problems opening and working in <strong>(.%s) format</strong>, consider using <a href="http://www.libreoffice.org/download/?nodetect" target="_blank">LibreOffice</a>.</string>
     <string name="task_simple_upload_7">File error:</string>
     <string name="task_simple_upload_8">This organisation will be able to use it for their benefit.</string>

@@ -547,7 +547,7 @@ class TaskRouteHandler
 
                 if (strcasecmp($fileUploadType, $projectFileType) != 0) {
                     throw new \Exception(sprintf(
-                        Lib\Localisation::getTranslation('task_simple_upload_5'),
+                        Lib\Localisation::getTranslation('common_task_file_extension_mismatch'),
                         $projectFileType
                     ));
                 } elseif ($fileUploadMime != $projectFileMimeType) {
@@ -1196,8 +1196,7 @@ class TaskRouteHandler
                 $extension = strtolower($extension[count($extension)-1]);
                 if ($extension != $canonicalExtension) {
                     $errors["incorrectExtension"] = sprintf(
-                        Lib\Localisation::getTranslation("task_segmentation_extension_mismatch"),
-                        $extension,
+                        Lib\Localisation::getTranslation("common_task_file_extension_mismatch"),
                         $canonicalExtension
                     );
                     break;
