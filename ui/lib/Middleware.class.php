@@ -221,14 +221,24 @@ class Middleware
                 $userDao = new DAO\UserDao();
                 $isBlackListed = $userDao->isBlacklistedForTask(Common\Lib\UserSession::getCurrentUserID(), $taskId);
                 
+                //Is the user blacklisted for the task?
                 if ($isBlackListed) {
                     $taskDao = new DAO\TaskDao();
                     $task = $taskDao->getTask($taskId);
                     $app = \Slim\Slim::getInstance();
+                    $message = null;
+                    
+                    //If it is a desegmentation task, user must have been blacklisted for it because they
+                    //have worked on a prerequisite task for it.
+                    if($task->getTaskType() == Common\Enums\TaskTypeEnum::DESEGMENTATION) {
+                       $message = Localisation::getTranslation("common_error_cannot_claim_desegmentation");
+                    } else {
+                        $message = Localisation::getTranslation('common_error_cannot_reclaim');
+                    }
                     $app->flash(
                         'error',
                         sprintf(
-                            Localisation::getTranslation('common_error_cannot_reclaim'),
+                            $message,
                             $app->urlFor("task-claimed", array("task_id" => $taskId)),
                             $task->getTitle()
                         )

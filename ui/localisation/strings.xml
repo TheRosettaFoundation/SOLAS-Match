@@ -172,6 +172,7 @@
     <string name="common_error_login_2">Sorry, this user account has not been verified. Please check your e-mail.</string>
     <string name="common_error_not_exist">You do not have sufficient privileges to access this page or the page does not exist.</string>
     <string name="common_error_already_claimed">This task has been claimed by another user.</string>
+    <string name="common_error_cannot_claim_desegmentation">You cannot claim the desegmentation task <a href="%s">%s</a>, because you have worked on one of its prerequisite tasks.</string>
     <string name="common_error_cannot_reclaim">You cannot reclaim the task <a href="%s">%s</a>, because you have previously unclaimed it.</string>        
     <string name="common_error_unknown_task_type">Unknown task type.</string>
     <string name="common_error_language_code_expected">A valid language code was expected.</string>
@@ -1000,7 +1001,7 @@
     <string name="index_still_using_ie">If you wish to continue using Internet Explorer we suggest installing <a href = "http://www.google.com/chromeframe">chrome frame</a>.</string>
 	<string name="index_donate_free_service"><strong>Trommons is an open space maintained by the The Rosetta Foundation.</strong></string>
 	<string name="index_donate_support_us">You can show your appreciation for Trommons and support future development by donating.</string>
-	<string name="index_donate_every_month"><a id="%1$s" href="%2$s">"Friend of The Rosetta Foundation" <br /> Donate <strong>€5/month.</strong> Cancel any time. </a></string>
+	<string name="index_donate_every_month"><a id="%1$s" href="%2$s">"Friend of The Rosetta Foundation" <br /> Donate <strong>$5/month.</strong> Cancel any time. </a></string>
 	<string name="index_donate_once_off"><strong>Alternatively, contribute a <a href="%1$s">once-off donation</a> or set up a bank transfer.</strong></string>
 
 	<string name="pagination_page_of">Page %s of %s</string>
