@@ -998,10 +998,10 @@
     <string name="index_load_more">Load More</string>
     <string name="index_dont_use_ie">The site is best viewed with Firefox or Google Chrome, not all features are avaliable with Internet Explorer</string>
     <string name="index_still_using_ie">If you wish to continue using Internet Explorer we suggest installing <a href = "http://www.google.com/chromeframe">chrome frame</a>.</string>
-	<string name="index_donate_free_service">Our site is an open space maintained by the The Rosetta Foundation.</string>
+	<string name="index_donate_free_service"><strong>Trommons is an open space maintained by the The Rosetta Foundation.</strong></string>
 	<string name="index_donate_support_us">You can show your appreciation for Trommons and support future development by donating.</string>
-	<string name="index_donate_every_month"><a id="%1$s" href="%2$s">"Friend of The Rosetta Foundation" <br /> Donate <strong>€5/month.</strong> Cancel any time </a></string>
-	<string name="index_donate_once_off"><strong>Alternatively, contribute a <a href="%1$s">once-off donation</a> or set up <a href="%2$s" target="%3$s"> a bank transfer.</a></strong></string>
+	<string name="index_donate_every_month"><a id="%1$s" href="%2$s">"Friend of The Rosetta Foundation" <br /> Donate <strong>€5/month.</strong> Cancel any time. </a></string>
+	<string name="index_donate_once_off"><strong>Alternatively, contribute a <a href="%1$s">once-off donation</a> or set up a bank transfer.</strong></string>
 
 	<string name="pagination_page_of">Page %s of %s</string>
 
