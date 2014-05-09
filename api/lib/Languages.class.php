@@ -110,6 +110,16 @@ class Languages
         }
         return $countries;
     }
+    
+    public static function getCountriesByPattern($pattern)
+    {
+        $countries = array();
+        $result = PDOWrapper::call("getCountriesByPattern", $pattern);
+        foreach($result as $country) {
+            $countries[] = Common\Lib\ModelFactory::buildModel('Country', $country);
+        }
+        return $countries;
+    }
 
     public static function getlcid($lang, $country)
     {

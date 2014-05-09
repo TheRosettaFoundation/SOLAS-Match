@@ -1657,6 +1657,16 @@ SELECT  `en-name` as country, code, id FROM Countries order by `en-name`;
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getCountriesByPattern`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getCountriesByPattern`(IN `pattern` VARCHAR(64))
+BEGIN
+SELECT  `en-name`, code, id FROM Countries
+WHERE   `en-name` LIKE CONCAT(`pattern`,'%')
+order by `en-name`;
+END//
+DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Dev.getCountry
 DROP PROCEDURE IF EXISTS `getCountry`;

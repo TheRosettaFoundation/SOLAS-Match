@@ -23,6 +23,11 @@ class Countries
                     '\SolasMatch\API\Lib\Middleware::isloggedIn',
                     '\SolasMatch\API\V0\Countries::getCountryByCode'
                 );
+                
+                $app->get(
+	                '/getByPattern/:pattern(:format)/',
+                    '\SolasMatch\API\V0\Countries::getCountriesByPattern'
+                );
 
                 $app->get(
                     '/:countryId/',
@@ -71,6 +76,11 @@ class Countries
     public static function getCountries($format = ".json")
     {
         API\Dispatcher::sendResponse(null, Lib\Languages::getCountryList(), null, $format);
+    }
+    
+    public static function getCountriesByPattern($pattern, $format = ".json")
+    {
+        API\Dispatcher::sendResponse(null, Lib\Languages::getCountriesByPattern($pattern), null, $format);
     }
 }
 
