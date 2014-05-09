@@ -165,7 +165,10 @@ table{
 
 #trackedOrganisationForm {
    float: right;
-   margin-right: 10px;
    margin-top: -6px;
 }
+
+.fixMargin {
+    margin-right: 10px;
 }
+

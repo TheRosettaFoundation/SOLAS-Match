@@ -34,6 +34,9 @@
                     {/if}
                     {if !$isMember}
                         <form id="trackedOrganisationForm" method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+                            <a href="{urlFor name="org-request-membership" options="org_id.$org_id"}" class='btn btn-primary'>
+                                <i class="icon-ok-circle icon-white"></i> {Localisation::getTranslation('org_public_profile_request_membership')}
+                            </a>
                             {if $userSubscribedToOrganisation}
                                 <input type="hidden" name="trackOrganisation" value="0" />
                                 <a class="btn btn-small btn-inverse" onclick="$('#trackedOrganisationForm').submit();" >
@@ -46,9 +49,7 @@
                                 </a>
                             {/if}
                         </form>
-                        <a href="{urlFor name="org-request-membership" options="org_id.$org_id"}" class='btn btn-primary'>
-                            <i class="icon-ok-circle icon-white"></i> {Localisation::getTranslation('org_public_profile_request_membership')}
-                        </a>
+                        
                     {/if}
                 </div>
             {/if}

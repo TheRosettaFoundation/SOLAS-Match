@@ -13,7 +13,7 @@
                 </a> 
             {/if}
             {if (!$isOrgMember)}
-                <form id="trackedOrganisationForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                <form class="fixMargin" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                     {if ($userSubscribedToOrganisation)}
                         <input type="hidden" name="trackOrganisation" value="0" />
                         <a class="btn btn-small btn-inverse" onclick="$('#trackedOrganisationForm').submit();" >
