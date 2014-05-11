@@ -7,7 +7,7 @@ What is this?
 
 The Rosetta Foundation SOLAS Match is a web application. It
 is designed to be accessed by two groups: NGOs seeking to have content
-translated, and volunteer transators who may complete such tasks.
+translated, and volunteer translators who may complete such tasks.
 Accessed through the browser, the application displays a list of
 translation tasks previously uploaded to the system. A task may have
 one resource file attached to it which can be downloaded, translated,
@@ -69,7 +69,7 @@ Configure Apache
  * Enable X-Sendfile
    <pre><code>sudo apt-get install libapache2-mod-xsendfile</code></pre>    
  
-  Add path to upload directory to your host apache2.conf,vHost or httpd.conf(recommended) eg
+  Add path to upload directory to your host apache2.conf,vHost or httpd.conf(recommended) e.g.
    
   <pre><code>
   &lt;Directory /var/www/&gt;
@@ -93,10 +93,10 @@ Configure Apache
 
 Alternative - Configure Lighttpd
 ------------------------------
-* Ensure that url rewriting is enabled.
+* Ensure that URL rewriting is enabled.
     server.modules += ("mod_rewrite")
 
-* update lighttpd.conf with the following rewite rules
+* update lighttpd.conf with the following rewrite rules
 where deployDir is the path under the web root where Solas Match is deployed.
 
    <pre><code>
@@ -152,7 +152,7 @@ Set up the MySQL database
 5. Import path/to/repo/db/languages.sql (using phpMyAdmin, for example.)
 6. Import path/to/repo/db/country_codes.sql (using phpMyAdmin, for example.)
 7. Add the a new entry to the oauth_clients table for your web client using the client_id and client_secret defined in the conf file.
-8. Add an entry to the client_endpoints table with the redirect_uri set to the login page URL for this instalation.
+8. Add an entry to the client_endpoints table with the redirect_uri set to the login page URL for this installation.
 
 <code>
 GRANT EXECUTE, PROCESS, SELECT, SHOW DATABASES, SHOW VIEW, DELETE, INSERT, UPDATE, LOCK TABLES  ON *.* TO 'tester'@'localhost';
@@ -168,8 +168,8 @@ Configuration file
 3.  Under database, enter your MySQL connection settings.
 4.  Under the site section, enter the URL of the installation.
        1. Under the site section, you can choose to either set openid to 'y','n' or 'h'.
-	    - setting openid='y' will configure the application to use openid as the login mechanisium.
-	    - setting openid='n' will configure the applicataion to fall back to its internal login mechanisium.
+	    - setting openid='y' will configure the application to use openid as the login mechanisim.
+	    - setting openid='n' will configure the applicataion to fall back to its internal login mechanisim.
 	    - setting openid='h' will enable hybrid login.(both login options will be available to the user).
        2. for more reliable openid support install php5-curl. sudo apt-get install php5-curl(fixes issue with google/yahoo connection reset).
 5.  Under session, enter a long random string in the site_key field.
