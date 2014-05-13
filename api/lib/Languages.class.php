@@ -114,7 +114,9 @@ class Languages
     public static function getCountriesByPattern($pattern)
     {
         $countries = array();
-        $result = PDOWrapper::call("getCountriesByPattern", $pattern);
+
+        $args = PDOWrapper::cleanseNullOrWrapStr($pattern);
+        $result = PDOWrapper::call("getCountriesByPattern", $args);
         foreach($result as $country) {
             $countries[] = Common\Lib\ModelFactory::buildModel('Country', $country);
         }

@@ -80,6 +80,11 @@ class Countries
     
     public static function getCountriesByPattern($pattern, $format = ".json")
     {
+        if (strstr($pattern, '.')) {
+            $pattern = explode('.', $pattern);
+            $format = '.'.$pattern[1];
+            $pattern = $pattern[0];
+        }
         API\Dispatcher::sendResponse(null, Lib\Languages::getCountriesByPattern($pattern), null, $format);
     }
 }

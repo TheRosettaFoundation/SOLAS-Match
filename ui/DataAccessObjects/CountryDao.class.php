@@ -18,15 +18,15 @@ class CountryDao extends BaseDao
 
     public function getCountry($id)
     {
-        $request="{$this->siteApi}v0/countries/$id";
-        $response=$this->client->call("\SolasMatch\Common\Protobufs\Models\Country", $request);
+        $request = "{$this->siteApi}v0/countries/$id";
+        $response = $this->client->call("\SolasMatch\Common\Protobufs\Models\Country", $request);
         return $response;
     }
 
     public function getCountryByCode($code)
     {
-        $request="{$this->siteApi}v0/countries/getByCode/$code";
-        $response=$this->client->call("\SolasMatch\Common\Protobufs\Models\Country", $request);
+        $request = "{$this->siteApi}v0/countries/getByCode/$code";
+        $response = $this->client->call("\SolasMatch\Common\Protobufs\Models\Country", $request);
         return $response;
     }
 
