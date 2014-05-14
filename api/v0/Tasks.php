@@ -204,7 +204,7 @@ class Tasks
     {
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper($format);
-        $feedbackData = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\UserFeedback");
+        $feedbackData = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Emails\UserFeedback");
         Lib\Notify::sendUserFeedback($feedbackData);
         API\Dispatcher::sendResponse(null, null, null, $format);
     }
