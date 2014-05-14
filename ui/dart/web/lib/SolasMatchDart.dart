@@ -5,6 +5,7 @@ import 'dart:async';
 import 'dart:html';
 import "package:json_object/json_object.dart";
 import "dart:convert";
+import 'package:polymer/polymer.dart';
 
 // libs
 part 'APIHelper.dart';
@@ -36,3 +37,6 @@ part '../DataAccessObjects/ProjectDao.dart';
 part '../DataAccessObjects/TaskDao.dart';
 part '../DataAccessObjects/UserDao.dart';
 part '../DataAccessObjects/StatisticDao.dart';
+
+//Other
+part '../Scripts/autocomplete.dart';

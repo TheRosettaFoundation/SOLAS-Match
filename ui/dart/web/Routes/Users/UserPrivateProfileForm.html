@@ -1,4 +1,5 @@
 <polymer-element name="user-private-profile-form" lightdom>
+  <link rel="import" href="/SOLAS-Match/ui/dart/web/Scripts/autocomplete.html">
   <template>
   <template if="{{isLoaded}}">
       <template if="{{alert != ''}}">
@@ -56,7 +57,7 @@
               <input type='text' value="{{userInfo.city}}" style="width: 80%" />
     
               <label for='country'><strong>{{localisation.getTranslation("common_country")}}:</strong></label>
-              <input type='text' value="{{userInfo.country}}" style="width: 80%" />
+              <auto-complete value="{{userInfo.country}}" style="width: 80%"></auto-complete>
 
               <label for="receiveCredit">
                 <strong>

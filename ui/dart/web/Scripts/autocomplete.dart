@@ -1,31 +1,28 @@
-
-import 'package:polymer/polymer.dart';
-import 'dart:html';
-import "../lib/SolasMatchDart.dart";
+part of SolasMatchDart;
 
 @CustomTag('auto-complete')
-class AutoCompleteElement extends PolymerElement {
+class AutoCompleteElement extends PolymerElement 
+{
   @observable String search;
-  final List<String> results = toObservable([]);
+  @observable final List<String> results = toObservable([]);
   final List<String> haystack = [];
   bool skipSearch = false;
   int keyboardSelect = -1;
 
-  AutoCompleteElement.created() : super.created() {
-    
-    Loader.load()
-    .then((_) {
-      onPropertyChange(this, #search, _performSearch);
-    });
+  AutoCompleteElement.created() : super.created() 
+  {
+    onPropertyChange(this, #search, _performSearch);
   }
 
-  void select(Event e, var detail, Node target) {
+  void select(Event e, var detail, Node target) 
+  {
     search = target.text;
     _reset();
     skipSearch = true;
   }
 
-  _performSearch() {
+  _performSearch() 
+  {
     if (skipSearch) {
       skipSearch = false;
       return;
@@ -33,7 +30,6 @@ class AutoCompleteElement extends PolymerElement {
     results.clear();
     if (search.trim().isEmpty) return;
     
-    String lower = search.toLowerCase();
     CountryDao.getCountriesByPattern(search)
     .then((List<String> countries) {
       results.addAll(countries);
@@ -41,7 +37,8 @@ class AutoCompleteElement extends PolymerElement {
     
   }
 
-  keyup(KeyboardEvent e, var detail, Node target) {
+  keyup(KeyboardEvent e, var detail, Node target) 
+  {
     switch (new KeyEvent.wrap(e).keyCode) {
       case KeyCode.ESC:
         _clear();
@@ -58,14 +55,16 @@ class AutoCompleteElement extends PolymerElement {
     }
   }
 
-  _moveDown() {
+  _moveDown() 
+  {
     List<Element> lis = shadowRoot.querySelectorAll('ul li');
     if (keyboardSelect >= 0) lis[keyboardSelect].classes.remove('selecting');
     keyboardSelect = ++keyboardSelect == lis.length ? 0 : keyboardSelect;
     lis[keyboardSelect].classes.add('selecting');
   }
 
-  _moveUp() {
+  _moveUp() 
+  {
     List<Element> lis = shadowRoot.querySelectorAll('ul li');
     if (keyboardSelect >= 0) lis[keyboardSelect].classes.remove('selecting');
     if (keyboardSelect == -1) keyboardSelect = lis.length;
@@ -73,20 +72,23 @@ class AutoCompleteElement extends PolymerElement {
     lis[keyboardSelect].classes.add('selecting');
   }
 
-  _clear() {
+  _clear() 
+  {
     _reset();
     search = '';
     skipSearch = true;
   }
 
-  _select() {
+  _select() 
+  {
     List<Element> lis = shadowRoot.querySelectorAll('ul li');
     search = lis[keyboardSelect].text;
     skipSearch = true;
     _reset();
   }
 
-  _reset() {
+  _reset() 
+  {
     keyboardSelect = -1;
     results.clear();
   }
