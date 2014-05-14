@@ -1001,7 +1001,7 @@
     <string name="index_still_using_ie">If you wish to continue using Internet Explorer we suggest installing <a href = "http://www.google.com/chromeframe">chrome frame</a>.</string>
 	<string name="index_donate_free_service"><strong>Trommons is an open space maintained by</strong></string>
 	<string name="index_donate_support_us">You can show your appreciation and support future development by  becoming a Friend of The Rosetta Foundation or by making a once-off donation.</string>
-	<string name="index_donate_support_trommons"><a id="%1$s" href="%2$s" target="%3$s">Support Trommons</a></string>
+	<string name="index_donate_support_trommons">Support Trommons</string>
 
 	<string name="pagination_page_of">Page %s of %s</string>
 
