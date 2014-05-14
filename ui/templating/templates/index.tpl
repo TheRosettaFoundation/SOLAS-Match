@@ -61,9 +61,14 @@
                 <p>
                     <strong>{Localisation::getTranslation('index_donate_support_us')}</strong>
                 </p>
+
+
+                <a id="donate" href="http://www.therosettafoundation.org/participate/becomeafriend/" target="_blank">
                 <div class="donate-button">
-                	{sprintf(Localisation::getTranslation('index_donate_support_trommons'), "donate", "http://www.therosettafoundation.org/participate/becomeafriend/","_blank")}
+                    {Localisation::getTranslation('index_donate_support_trommons')}
                 </div>
+                </a>
+
             </section>
 
             {include file="tag/tags.user-tags.inc.tpl"}	

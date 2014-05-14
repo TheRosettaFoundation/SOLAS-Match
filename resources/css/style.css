@@ -57,11 +57,11 @@ button.btn.btn-small, input.btn.btn-small[type="submit"] {
 	margin-right:auto;
 }
 
-.donate-button a {
+#donate{
 	color:#000000;
 }
 
-.donate-button a:hover {
+#donate:hover {
 	color:#4B031A;
 }
 
