@@ -184,6 +184,7 @@
     <string name="common_error_server_failed_write_disk">Server failed to write the file to disk.</string>
     <string name="common_error_file_stopped_by_extension">File upload stopped by extension.</string>
     <string name="common_error_file_invalid_empty">Please make sure the file you are trying to upload is valid and not empty.</string>
+    <string name="common_error_org_name_not_set"><strong>Organisation name</strong> must be set.</string>
     <string name="common_can_you_open_file">Can you open the file on your computer?</string>
     <string name="common_part_of_for">Part of <a href="%s">%s</a> for <a href="%s">%s</a></string> 
     <string name="common_what_type_of_emails">What type of e-mails am I receiving?</string>
@@ -246,7 +247,6 @@
 	<string name="create_org_create_an_organisation">Create an Organisation</string>
 	<string name="create_org_create_your_own_organisation">Create your own organisation.</string>
     <string name="create_org_invalid_name">Organisation names cannot contain invalid characters.</string>
-    <string name="create_org_1"><strong>Organisation name</strong> must be set.</string>
     <string name="create_org_2">The organisation <strong>%s</strong> has been created.</string>
     <string name="create_org_3">Unable to create Organisation.</string>
     <string name="create_org_4">An organisation named <strong>%s</strong> is already registered. Please use a different name.</string>

@@ -97,10 +97,9 @@ class OrgRouteHandler
     public function createOrg()
     {
         $app = \Slim\Slim::getInstance();
-        
+        $errorOccured = null;
+        $errorList = array();
         if ($post = $app->request()->post()) {
-            $errorOccured = null;
-            $errorList=array();
 
             $org = new Common\Protobufs\Models\Organisation();
 
@@ -108,16 +107,15 @@ class OrgRouteHandler
                 if (Lib\Validator::filterSpecialChars($post["orgName"])) {
                     $org->setName($post['orgName']);
                 } else {
-                    $errorOccured = true;
-                    array_push(
-                        $errorList, Lib\Localisation::getTranslation('create_org_invalid_name')
+                    $errorMsg = Lib\Localisation::getTranslation('create_org_invalid_name')
                         ." "
-                        .Lib\Localisation::getTranslation('common_invalid_characters')
-                    );
+                        .Lib\Localisation::getTranslation('common_invalid_characters');
+                    $errorList[] = $errorMsg;
+                    $errorOccured = true;
                 }
             } else {
                 $errorOccured = true;
-                array_push($errorList, Lib\Localisation::getTranslation('create_org_1'));
+                array_push($errorList, Lib\Localisation::getTranslation('common_error_org_name_not_set'));
             }
             
             if (isset($post["homepage"])) {
@@ -190,7 +188,8 @@ class OrgRouteHandler
                     }
                 } catch (Common\Exceptions\SolasMatchException $ex) {
                     $org_name = $org->getName();
-                    $app->flash("error", sprintf(Lib\Localisation::getTranslation('create_org_4'), $org_name));
+                    $errorList[] = sprintf(Lib\Localisation::getTranslation('create_org_4'), $org_name);
+                    $errorOccured = true;
                 }
 
                 $app->view()->appendData(array(
@@ -201,7 +200,9 @@ class OrgRouteHandler
             }
         }
         $app->view()->appendData(array(
-            "org"     => null
+            "org"     => null,
+            "errorOccured" => $errorOccured,
+            "errorList" => $errorList
         ));
         $app->render("org/create-org.tpl");
     }
@@ -398,7 +399,7 @@ class OrgRouteHandler
         if ($post = $app->request()->post()) {
 
             if (isset($post['updateOrgDetails'])) {
-                if (isset($post['displayName'])) {
+                if (isset($post['displayName']) && $post['displayName'] != '') {
                     //Check if new org title has forbidden characters
                     if (Lib\Validator::filterSpecialChars($post["displayName"])) {
                         $org->setName($post['displayName']);
@@ -411,6 +412,10 @@ class OrgRouteHandler
                             .Lib\Localisation::getTranslation('common_invalid_characters')
                         );
                     }
+                //Name is not set
+                } else {
+                    $errorOccured = true;
+                    $errorList[] = Lib\Localisation::getTranslation('common_error_org_name_not_set');
                 }
                 if (isset($post['homepage'])) {
                     if (trim($post["homepage"])!="") {
