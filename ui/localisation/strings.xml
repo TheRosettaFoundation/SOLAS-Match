@@ -90,6 +90,7 @@
     <string name="common_download_the_file">Download the <a href="%s">file</a> and save it to your desktop.</string>
 	<string name="common_from">From</string>
 	<string name="common_to">To</string>
+	<string name="common_added">Added <strong>%s</strong> ago</string>
     <string name="common_added_days">Added <strong>%s day(s)</strong> ago</string>
     <string name="common_added_hours">Added <strong>%s hour(s)</strong> ago</string>
     <string name="common_added_minutes">Added <strong>%s minute(s)</strong> ago</string>
