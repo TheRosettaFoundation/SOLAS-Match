@@ -500,11 +500,15 @@ class UserRouteHandler
         }
 
         $extraScripts = "
+<script \"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/shadow_dom/shadow_dom.debug.js\"></script>
 <script \"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/custom_element/custom-elements.debug.js\"></script>
 <script \"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/browser/interop.js\"></script>
 <script \"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/Routes/Users/UserPrivateProfile.dart.js\"></script>
 <span class=\"hidden\">
 ";
+        $extraScripts .= file_get_contents("ui/dart/web/Scripts/autocomplete.html");
+        $extraScripts .= "</span>
+<span class=\"hidden\">";
         $extraScripts .= file_get_contents("ui/dart/web/Routes/Users/UserPrivateProfileForm.html");
         $extraScripts .= "</span>";
 

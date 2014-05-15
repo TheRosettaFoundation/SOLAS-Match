@@ -1,5 +1,7 @@
-part of SolasMatchDart;
-
+//part of SolasMatchDart;
+import 'package:polymer/polymer.dart';
+import 'dart:html';
+import "../lib/SolasMatchDart.dart";
 @CustomTag('auto-complete')
 class AutoCompleteElement extends PolymerElement 
 {

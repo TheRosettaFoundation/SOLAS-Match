@@ -1,14 +1,54 @@
-<!DOCTYPE html><html><head>
+<!DOCTYPE html><html><head><script src="packages/shadow_dom/shadow_dom.debug.js"></script>
+<script src="packages/custom_element/custom-elements.debug.js"></script>
+<script src="packages/browser/interop.js"></script>
+
     <title>Auto-complete Demo</title>
     <!-- dart conf file location -->
     <link rel="dart-conf" href="/SOLAS-Match/api/v0/static/dart/conf.json">
     
-    <link rel="import" href="autocomplete.html">
-    <script type="application/dart" src="testpage.html.0.dart"></script>
-    <script src="packages/browser/dart.js"></script>
+    
+    <script src="testpage.html_bootstrap.dart.js"></script>
+    
   </head>
  
-  <body>
+  <body><polymer-element name="auto-complete">
+  <template>
+    <style>
+      ul {
+        border: 1px solid gray;
+        list-style: none;
+        padding: 10px 0 10px 0;
+        margin: 0;
+        width: 300px;
+        z-index: 9999;
+        position: absolute;
+        background-color: white;
+      }
+      
+      li {
+        padding: 5px 0 5px 0;
+        cursor: pointer;
+      }
+      
+      li:hover {
+        background-color: #CCC;
+      }
+      
+      li.selecting {
+        background-color: #CCC;
+      }
+    </style>
+    <input type="text" value="{{search}}" on-keyup="{{keyup}}">
+    <template if="{{results.length > 0}}">
+      <ul>
+        <template repeat="{{result in results}}">
+          <li on-click="{{select}}">{{result}}</li>
+        </template>
+      </ul>
+    </template>
+  </template>
+  
+</polymer-element>
     <auto-complete>
  
 </auto-complete>

@@ -12,6 +12,8 @@ dependencies:
 transformers:
 - polymer:
     entry_points:
+    - web/Scripts/testpage.html
+    - web/Scripts/autocomplete.dart
     - web/Routes/Users/home.dart
     - web/Routes/Users/UserPrivateProfile.dart
     - web/Routes/Users/ClaimedTasks.dart
