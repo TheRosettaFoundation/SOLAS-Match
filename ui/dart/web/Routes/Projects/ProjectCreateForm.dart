@@ -417,199 +417,194 @@ class ProjectCreateForm extends PolymerElement
    * This function is called from submitForm() to create all the project's tasks.
    */
   Future<bool> createProjectTasks()
-  {
-    //Initialise some variables, and gather task info from form
-    List<Task> createdTasks = new List<Task>();
-    List<Future<bool>> successList = new List<Future<bool>>();
-    Task templateTask = new Task();
-    templateTask.title = project.title;
-    templateTask.projectId = project.id;
-    templateTask.deadline = project.deadline;
-    templateTask.wordCount = project.wordCount;
-    templateTask.sourceLocale = project.sourceLocale;
-    templateTask.taskStatus = TaskStatusEnum.PENDING_CLAIM.value;
-    if (publish) {
-      templateTask.published = true;
-    } else {
-      templateTask.published = false;
-    }
-    //Loop up to the number of targets, create task(s) for each
-    for (int i = 0; i < targetCount; i++) {
-      //Get task info from the form
-      SelectElement targetLanguageSelect = this.shadowRoot.querySelector("#target_language_$i");
-      SelectElement targetCountrySelect = this.shadowRoot.querySelector("#target_country_$i");
-      Language targetLang = languages[targetLanguageSelect.selectedIndex];
-      Country targetCountry = countries[targetCountrySelect.selectedIndex];
-      Locale targetLocale = new Locale();
-      targetLocale.languageName = targetLang.name;
-      targetLocale.languageCode = targetLang.code;
-      targetLocale.countryName = targetCountry.name;
-      targetLocale.countryCode = targetCountry.code;
-      templateTask.targetLocale = targetLocale;
-      //Determine from the form which task types are selected
-      CheckboxInputElement segmentationCheckbox = this.shadowRoot.querySelector("#segmentation_$i");
-      bool segmentationRequired = segmentationCheckbox.checked;
-      CheckboxInputElement translationCheckbox = this.shadowRoot.querySelector("#translation_$i");
-      bool translationRequired = translationCheckbox.checked;
-      CheckboxInputElement proofreadingCheckbox = this.shadowRoot.querySelector("#proofreading_$i");
-      bool proofreadingRequired = proofreadingCheckbox.checked;
-      
-      //Create segmentation task if necessary
-      if (segmentationRequired) {
-        templateTask.taskType = TaskTypeEnum.SEGMENTATION.value;
-        //Add result of entire segmentation task creation process to successList
-        //Create task and then add to the created tasks list
-        successList.add(TaskDao.createTask(templateTask)
-        .then((Task segTask) {
-          createdTasks.add(segTask);
-          //Save the file
-          List<Future<bool>> segSuccess = new List<Future<bool>>();
-          segSuccess.add(TaskDao.saveTaskFile(segTask.id, userid, projectFileText)
-          .then((_) => true)
-          .catchError((e) {
-            //Catch error in saving file
-            throw sprintf(
-                   localisation.getTranslation("project_create_failed_upload_file"), 
-                   [localisation.getTranslation("common_segmentation"), e.toString()]);
-          }));
-          
-          if (trackProject) {
-            //Track seg task
-            segSuccess.add(TaskDao.trackTask(segTask.id, userid)
-            .then((_) => true)
-            .catchError((e) {
-              throw sprintf(
-                  localisation.getTranslation("project_create_failed_track_task"),
-                  [localisation.getTranslation("common_segmentation"), e.toString()]);
-            }));
-          }
-          
-          return Future.wait(segSuccess)
-          .then((_) => true)
-          .catchError((e) {
-            throw e.toString();
-          });
-        //Catch as yet uncaught errors from process of creating seg task  
-        }).catchError((e) {
-          throw localisation.getTranslation("project_create_13") + e.toString();
-        }));
-      } else {//Not a seg task, so translation and/or proofreading will be created.
-        //Create translation task if necessary
-        if (translationRequired) {
-                  templateTask.taskType = TaskTypeEnum.TRANSLATION.value;
-                  //Add result of entire translation task creation process to successList
-                  //Create task and then add to the created tasks list
-                  successList.add(TaskDao.createTask(templateTask)
-                  .then((Task transTask) {
-                    createdTasks.add(transTask);
-                    
-                    List<Future<bool>> transSuccess = new List<Future<bool>>();
-                    //Save the file
-                    transSuccess.add(TaskDao.saveTaskFile(transTask.id, userid, projectFileText)
-                    .catchError((e) {
-                      //Catch error from saving file
-                      throw sprintf(
-                              localisation.getTranslation("project_create_failed_upload_file"), 
-                              [localisation.getTranslation("common_translation"), e.toString()]);
-                    }));
-                    
-                    if (trackProject) {
-                      transSuccess.add(TaskDao.trackTask(transTask.id, userid)
-                      .catchError((e) {
-                        throw sprintf(
-                            localisation.getTranslation("project_create_failed_track_task"),
-                            [localisation.getTranslation("common_translation"), e.toString()]);
-                      }));
-                    }
-                    //Create proofreading task with translation task if necessary
-                    if (proofreadingRequired) {
-                      templateTask.taskType = TaskTypeEnum.PROOFREADING.value;
-                      templateTask.targetLocale = transTask.targetLocale;
-                      //Create task and then add to the created tasks list
-                      transSuccess.add(TaskDao.createTask(templateTask).then((Task proofTask) {
-                        createdTasks.add(proofTask);
-                        
-                        List<Future<bool>> proofSuccess = new List<Future<bool>>();
-                        //Save file
-                        proofSuccess.add(TaskDao.saveTaskFile(proofTask.id, userid, projectFileText)
-                        .catchError((e) {
-                          //Catch error from saving file
-                          throw sprintf(
-                              localisation.getTranslation("project_create_failed_upload_file"), 
-                              [localisation.getTranslation("common_proofreading"), e.toString()]);
-                        }));
-                        
-                        if (trackProject) {
-                          proofSuccess.add(TaskDao.trackTask(proofTask.id, userid)
-                          .catchError((e) {
-                            throw sprintf(
-                                localisation.getTranslation("project_create_failed_track_task"),
-                                [localisation.getTranslation("common_proofreading"), e.toString()]);
-                          }));
-                        }
-                        
-                        //Add the translation task as a prerequisite to the proofreading task
-                        proofSuccess.add(TaskDao.addTaskPreReq(proofTask.id, transTask.id)
-                        .catchError((e) {
-                          throw sprintf(
-                              localisation.getTranslation("project_create_failed_add_prereq"), [e.toString()]);
-                        }));
-                        
-                        return Future.wait(proofSuccess).then(( _ ) => true);
-                      }).catchError((e) {
-                        throw localisation.getTranslation("project_create_15") + e.toString();
-                      }));
-                    }
-                    
-                    return Future.wait(transSuccess)
-                      .then(( _ ) => true);
-                  }).catchError((e) {
-                    throw localisation.getTranslation("project_create_14") + e.toString();
-                  }));
-        } else if (!translationRequired && proofreadingRequired) {//Only a proofreading task to be created
-          templateTask.taskType = TaskTypeEnum.PROOFREADING.value;
-          
-          //Add result of entire proofreading task creation process to successList
+    {
+      //Initialise some variables, and gather task info from form
+      List<Task> createdTasks = new List<Task>();
+      Task templateTask = new Task();
+      templateTask.title = project.title;
+      templateTask.projectId = project.id;
+      templateTask.deadline = project.deadline;
+      templateTask.wordCount = project.wordCount;
+      templateTask.sourceLocale = project.sourceLocale;
+      templateTask.taskStatus = TaskStatusEnum.PENDING_CLAIM.value;
+      if (publish) {
+        templateTask.published = true;
+      } else {
+        templateTask.published = false;
+      }
+      //Loop up to the number of targets, create task(s) for each
+      return Future.forEach(new List.generate(targetCount, (int i) => i), (int i) {
+        //Get task info from the form
+        SelectElement targetLanguageSelect = this.shadowRoot.querySelector("#target_language_$i");
+        SelectElement targetCountrySelect = this.shadowRoot.querySelector("#target_country_$i");
+        Language targetLang = languages[targetLanguageSelect.selectedIndex];
+        Country targetCountry = countries[targetCountrySelect.selectedIndex];
+        Locale targetLocale = new Locale();
+        targetLocale.languageName = targetLang.name;
+        targetLocale.languageCode = targetLang.code;
+        targetLocale.countryName = targetCountry.name;
+        targetLocale.countryCode = targetCountry.code;
+        templateTask.targetLocale = targetLocale;
+        //Determine from the form which task types are selected
+        CheckboxInputElement segmentationCheckbox = this.shadowRoot.querySelector("#segmentation_$i");
+        bool segmentationRequired = segmentationCheckbox.checked;
+        CheckboxInputElement translationCheckbox = this.shadowRoot.querySelector("#translation_$i");
+        bool translationRequired = translationCheckbox.checked;
+        CheckboxInputElement proofreadingCheckbox = this.shadowRoot.querySelector("#proofreading_$i");
+        bool proofreadingRequired = proofreadingCheckbox.checked;
+        
+        //Create segmentation task if necessary
+        if (segmentationRequired) {
+          templateTask.taskType = TaskTypeEnum.SEGMENTATION.value;
+          //Add result of entire segmentation task creation process to successList
           //Create task and then add to the created tasks list
-          successList.add(TaskDao.createTask(templateTask)
-          .then((Task proofTask) {
-            createdTasks.add(proofTask);
-            
-            List<Future<bool>> proofSuccess = new List<Future<bool>>();
-
-            //Upload proofreading task
-            proofSuccess.add(TaskDao.saveTaskFile(proofTask.id, userid, projectFileText)
+          return TaskDao.createTask(templateTask)
+          .then((Task segTask) {
+            createdTasks.add(segTask);
+            //Save the file
+            List<Future<bool>> segSuccess = new List<Future<bool>>();
+            segSuccess.add(TaskDao.saveTaskFile(segTask.id, userid, projectFileText)
             .then((_) => true)
             .catchError((e) {
+              //Catch error in saving file
               throw sprintf(
-                localisation.getTranslation("project_create_failed_upload_file"), 
-                [localisation.getTranslation("common_proofreading"), e.toString()]);
+                     localisation.getTranslation("project_create_failed_upload_file"), 
+                     [localisation.getTranslation("common_segmentation"), e.toString()]);
             }));
             
             if (trackProject) {
-              //Track proofreading task
-              proofSuccess.add(TaskDao.trackTask(proofTask.id, userid)
+              //Track seg task
+              segSuccess.add(TaskDao.trackTask(segTask.id, userid)
               .then((_) => true)
               .catchError((e) {
                 throw sprintf(
                     localisation.getTranslation("project_create_failed_track_task"),
-                    [localisation.getTranslation("common_proofreading"), e.toString()]);
+                    [localisation.getTranslation("common_segmentation"), e.toString()]);
               }));
             }
             
-            return Future.wait(proofSuccess)
-            .then((_) => true);
+            return Future.wait(segSuccess)
+            .then((_) => true)
+            .catchError((e) {
+              throw e.toString();
+            });
+          //Catch as yet uncaught errors from process of creating seg task  
           }).catchError((e) {
-            throw localisation.getTranslation("project_create_15") + e.toString();
-          }));
+            throw localisation.getTranslation("project_create_13") + e.toString();
+          });
+        } else {//Not a seg task, so translation and/or proofreading will be created.
+          //Create translation task if necessary
+          if (translationRequired) {
+                    templateTask.taskType = TaskTypeEnum.TRANSLATION.value;
+                    //Add result of entire translation task creation process to successList
+                    //Create task and then add to the created tasks list
+                    return TaskDao.createTask(templateTask)
+                    .then((Task transTask) {
+                      createdTasks.add(transTask);
+                      
+                      List<Future<bool>> transSuccess = new List<Future<bool>>();
+                      //Save the file
+                      transSuccess.add(TaskDao.saveTaskFile(transTask.id, userid, projectFileText)
+                      .catchError((e) {
+                        //Catch error from saving file
+                        throw sprintf(
+                                localisation.getTranslation("project_create_failed_upload_file"), 
+                                [localisation.getTranslation("common_translation"), e.toString()]);
+                      }));
+                      
+                      if (trackProject) {
+                        transSuccess.add(TaskDao.trackTask(transTask.id, userid)
+                        .catchError((e) {
+                          throw sprintf(
+                              localisation.getTranslation("project_create_failed_track_task"),
+                              [localisation.getTranslation("common_translation"), e.toString()]);
+                        }));
+                      }
+                      //Create proofreading task with translation task if necessary
+                      if (proofreadingRequired) {
+                        templateTask.taskType = TaskTypeEnum.PROOFREADING.value;
+                        templateTask.targetLocale = transTask.targetLocale;
+                        //Create task and then add to the created tasks list
+                        transSuccess.add(TaskDao.createTask(templateTask).then((Task proofTask) {
+                          createdTasks.add(proofTask);
+                          
+                          List<Future<bool>> proofSuccess = new List<Future<bool>>();
+                          //Save file
+                          proofSuccess.add(TaskDao.saveTaskFile(proofTask.id, userid, projectFileText)
+                          .catchError((e) {
+                            //Catch error from saving file
+                            throw sprintf(
+                                localisation.getTranslation("project_create_failed_upload_file"), 
+                                [localisation.getTranslation("common_proofreading"), e.toString()]);
+                          }));
+                          
+                          if (trackProject) {
+                            proofSuccess.add(TaskDao.trackTask(proofTask.id, userid)
+                            .catchError((e) {
+                              throw sprintf(
+                                  localisation.getTranslation("project_create_failed_track_task"),
+                                  [localisation.getTranslation("common_proofreading"), e.toString()]);
+                            }));
+                          }
+                          
+                          //Add the translation task as a prerequisite to the proofreading task
+                          proofSuccess.add(TaskDao.addTaskPreReq(proofTask.id, transTask.id)
+                          .catchError((e) {
+                            throw sprintf(
+                                localisation.getTranslation("project_create_failed_add_prereq"), [e.toString()]);
+                          }));
+                          
+                          return Future.wait(proofSuccess).then(( _ ) => true);
+                        }).catchError((e) {
+                          throw localisation.getTranslation("project_create_15") + e.toString();
+                        }));
+                      }
+                      
+                      return Future.wait(transSuccess)
+                        .then(( _ ) => true);
+                    }).catchError((e) {
+                      throw localisation.getTranslation("project_create_14") + e.toString();
+                    });
+          } else if (!translationRequired && proofreadingRequired) {//Only a proofreading task to be created
+            templateTask.taskType = TaskTypeEnum.PROOFREADING.value;
+            
+            //Add result of entire proofreading task creation process to successList
+            //Create task and then add to the created tasks list
+            return TaskDao.createTask(templateTask)
+            .then((Task proofTask) {
+              createdTasks.add(proofTask);
+              
+              List<Future<bool>> proofSuccess = new List<Future<bool>>();
+
+              //Upload proofreading task
+              proofSuccess.add(TaskDao.saveTaskFile(proofTask.id, userid, projectFileText)
+              .then((_) => true)
+              .catchError((e) {
+                throw sprintf(
+                  localisation.getTranslation("project_create_failed_upload_file"), 
+                  [localisation.getTranslation("common_proofreading"), e.toString()]);
+              }));
+              
+              if (trackProject) {
+                //Track proofreading task
+                proofSuccess.add(TaskDao.trackTask(proofTask.id, userid)
+                .then((_) => true)
+                .catchError((e) {
+                  throw sprintf(
+                      localisation.getTranslation("project_create_failed_track_task"),
+                      [localisation.getTranslation("common_proofreading"), e.toString()]);
+                }));
+              }
+              
+              return Future.wait(proofSuccess)
+              .then((_) => true);
+            }).catchError((e) {
+              throw localisation.getTranslation("project_create_15") + e.toString();
+            });
+          }
         }
-      }
+      });
     }
-    
-    return Future.wait(successList).then((List<bool> createdList) {
-          return createdList.every((created) => created == true);
-        });
-  }
   
   /**
    * This function is called to upload the project file.
