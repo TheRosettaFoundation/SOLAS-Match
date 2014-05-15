@@ -230,7 +230,7 @@ class UserRouteHandler
             if ($browser == 'IE') {
                 $app->flashNow(
                     "info",
-                    Lib\Localisation::getTranslation('index_dont_use_ie').Lib\Localisation::getTranslation('index_9')
+                    Lib\Localisation::getTranslation('index_dont_use_ie').Lib\Localisation::getTranslation('index_still_using_ie')
                 );
             }
         }
@@ -448,7 +448,7 @@ class UserRouteHandler
             if ($browser == 'IE') {
                 $app->flashNow(
                     "info",
-                    Lib\Localisation::getTranslation('index_dont_use_ie').Lib\Localisation::getTranslation('index_9')
+                    Lib\Localisation::getTranslation('index_dont_use_ie').Lib\Localisation::getTranslation('index_still_using_ie')
                 );
             }
         }

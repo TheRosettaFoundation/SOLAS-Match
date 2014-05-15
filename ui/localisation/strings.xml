@@ -90,6 +90,7 @@
     <string name="common_download_the_file">Download the <a href="%s">file</a> and save it to your desktop.</string>
 	<string name="common_from">From</string>
 	<string name="common_to">To</string>
+	<string name="common_added">Added <strong>%s</strong> ago</string>
     <string name="common_added_days">Added <strong>%s day(s)</strong> ago</string>
     <string name="common_added_hours">Added <strong>%s hour(s)</strong> ago</string>
     <string name="common_added_minutes">Added <strong>%s minute(s)</strong> ago</string>
@@ -491,7 +492,7 @@
     <string name="faq_v_q5">I am having trouble downloading the file. What do I do?</string>
     <string name="faq_v_q6">Why does my language not appear on %s?</string>
     <string name="faq_v_q7">There are no tasks for my language pair(s).</string>        
-    <string name="faq_v_a1">The original file can be downloaded from the upload page. At the bottom of this page you will find 3 different options: download the original project file, the original task file or the latest uploaded file.</string>
+    <string name="faq_v_a1">The original project file can be downloaded on the 'Download Task' page. Here, you will see a checklist. Click on option 4 to download the original project file.</string>
     <string name="faq_v_a2">If you have any queries, please contact %s. The aim of %s is to reduce intervention levels. Therefore, there are no Project Managers assigned to projects. Any queries can be submitted to the email previously mentioned.</string>
     <string name="faq_v_a3">If you find that you need more time on a task, please contact %s. They will be able to tell you whether the deadline is strict or not.</string>
     <string name="faq_v_a4">To unclaim a task, please consult the relevant task page. At the bottom of the page you will see a box for user feedback. In this box you should give your reason for unclaiming the task and then click the 'Revoke Task and Submit Feedback' button.</string>
@@ -1001,7 +1002,7 @@
     <string name="index_still_using_ie">If you wish to continue using Internet Explorer we suggest installing <a href = "http://www.google.com/chromeframe">chrome frame</a>.</string>
 	<string name="index_donate_free_service"><strong>Trommons is an open space maintained by</strong></string>
 	<string name="index_donate_support_us">You can show your appreciation and support future development by  becoming a Friend of The Rosetta Foundation or by making a once-off donation.</string>
-	<string name="index_donate_support_trommons"><a id="%1$s" href="%2$s" target="%3$s">Support Trommons</a></string>
+	<string name="index_donate_support_trommons">Support Trommons</string>
 
 	<string name="pagination_page_of">Page %s of %s</string>
 
