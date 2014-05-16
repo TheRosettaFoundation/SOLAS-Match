@@ -236,7 +236,7 @@ class TaskDao extends BaseDao
                 $projectMime = $projectFile->getMime();
                 throw new Common\Exceptions\SolasMatchException(
                     sprintf(
-                        Lib\Localisation::getTranslation('common_error_upload_1'),
+                        Lib\Localisation::getTranslation('common_error_upload_invalid_content'),
                         $projectFileExtension,
                         $projectMime
                     ),
@@ -245,7 +245,7 @@ class TaskDao extends BaseDao
                 break;
             case Common\Enums\HttpStatusEnum::INTERNAL_SERVER_ERROR:
                 throw new Common\Exceptions\SolasMatchException(
-                    Lib\Localisation::getTranslation('common_error_upload_2'),
+                    Lib\Localisation::getTranslation('common_error_upload_internal_server_error'),
                     $this->client->getResponseCode()
                 );
                 break;

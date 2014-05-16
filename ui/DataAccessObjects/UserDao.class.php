@@ -418,13 +418,13 @@ class UserDao extends BaseDao
             switch($e->getCode()) {
                 case Common\Enums\HttpStatusEnum::NOT_FOUND:
                     throw new Common\Exceptions\SolasMatchException(
-                        Lib\Localisation::getTranslation('common_error_login_1')
+                        Lib\Localisation::getTranslation('common_error_login_incorrect')
                     );
                     break;
                 case Common\Enums\HttpStatusEnum::UNAUTHORIZED:
                     // TODO: Resend verification email
                     throw new Common\Exceptions\SolasMatchException(
-                        Lib\Localisation::getTranslation('common_error_login_2')
+                        Lib\Localisation::getTranslation('common_error_login_unverified')
                     );
                     break;
                 case Common\Enums\HttpStatusEnum::FORBIDDEN:

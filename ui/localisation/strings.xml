@@ -167,10 +167,10 @@
     <string name="common_invalid_url">URL entered is not valid.</string>
     <string name="common_no_valid_email">You did not enter a valid email address.</string>
     <string name="common_all_fields">All fields must be filled out.</string>
-    <string name="common_error_upload_1">The contents of the file you are uploading is not valid. Please ensure you upload a valid (<strong>.%s</strong>) file with a valid content type of (<strong>%s</strong>).</string>
-    <string name="common_error_upload_2">Internal server error. Please contact the administrators.</string>
-    <string name="common_error_login_1">Sorry, the username or password entered is incorrect. Please check the credentials used and try again.</string>
-    <string name="common_error_login_2">Sorry, this user account has not been verified. Please check your e-mail.</string>
+    <string name="common_error_upload_invalid_content">The contents of the file you are uploading is not valid. Please ensure you upload a valid (<strong>.%s</strong>) file with a valid content type of (<strong>%s</strong>).</string>
+    <string name="common_error_upload_internal_server_error">Internal server error. Please contact the administrators.</string>
+    <string name="common_error_login_incorrect">Sorry, the username or password entered is incorrect. Please check the credentials used and try again.</string>
+    <string name="common_error_login_unverified">Sorry, this user account has not been verified. Please check your e-mail.</string>
     <string name="common_error_not_exist">You do not have sufficient privileges to access this page or the page does not exist.</string>
     <string name="common_error_already_claimed">This task has been claimed by another user.</string>
     <string name="common_error_cannot_claim_desegmentation">You cannot claim the desegmentation task <a href="%s">%s</a>, because you have worked on one of its prerequisite tasks.</string>
@@ -186,6 +186,8 @@
     <string name="common_error_file_stopped_by_extension">File upload stopped by extension.</string>
     <string name="common_error_file_invalid_empty">Please make sure the file you are trying to upload is valid and not empty.</string>
     <string name="common_error_org_name_not_set"><strong>Organisation name</strong> must be set.</string>
+    <string name="common_error_org_name_in_use">An organisation named <strong>%s</strong> is already registered. Please use a different name.</string>    
+
     <string name="common_can_you_open_file">Can you open the file on your computer?</string>
     <string name="common_part_of_for">Part of <a href="%s">%s</a> for <a href="%s">%s</a></string> 
     <string name="common_what_type_of_emails">What type of e-mails am I receiving?</string>
@@ -209,37 +211,37 @@
     <string name="common_task_file_extension_mismatch">The file <strong>extension</strong> differs from the originally downloaded file. Please upload a <strong>(.%s)!</strong></string>
     
 	<string name="admin_banned_orgs_list_all_banned_organisations_of">All banned Organisations of %s.</string>
-	<string name="admin_banned_orgs_list_0">Are you sure you want to unban this Organisation and its members?</string>
+	<string name="admin_banned_orgs_list_confirm_unban">Are you sure you want to unban this Organisation and its members?</string>
 
 	<string name="admin_banned_users_list_all_banned_users_of">All banned Users of %s.</string>
 	<string name="admin_banned_users_list_user_display_name">User Display Name</string>
-	<string name="admin_banned_users_list_0">Are you sure you want to unban this User?</string>
+	<string name="admin_banned_users_list_confirm_unban">Are you sure you want to unban this User?</string>
 
 	<string name="admin_site_admins_list_all_current_administrators_of">All current Administrators of %s.</string>
 	<string name="admin_site_admins_list_display_name">Display Name</string>
 	<string name="admin_site_admins_list_revoke_administrator_rights">Revoke Administrator Rights</string>
 	<string name="admin_site_admins_list_revoke">Revoke</string>
-	<string name="admin_site_admins_list_0">Are you sure you want to revoke this user's administrator privileges?</string>
+	<string name="admin_site_admins_list_confirm_revoke">Are you sure you want to revoke this user's administrator privileges?</string>
 
 	<string name="site_admin_dashboard_administration_dashboard">Administration Dashboard</string>
 	<string name="site_admin_dashboard_the_site_administrators_dashboard">The site administrator's dashboard.</string>
-    <string name="site_admin_dashboard_0">Add new site administrator to %s.</string>
-	<string name="site_admin_dashboard_1">User e-mail address goes here.</string>
+    <string name="site_admin_dashboard_add_new_admin">Add new site administrator to %s.</string>
+	<string name="site_admin_dashboard_email_here">User e-mail address goes here.</string>
 	<string name="site_admin_dashboard_add_admin">Add Admin</string>
-	<string name="site_admin_dashboard_2">Apply a site-wide ban to an organisation.</string>
-	<string name="site_admin_dashboard_3">All organisation members will be banned!</string>
+	<string name="site_admin_dashboard_sitewide_user_ban">Apply a site-wide ban to a user.</string>
+	<string name="site_admin_dashboard_sitewide_org_ban">Apply a site-wide ban to an organisation.</string>
+	<string name="site_admin_dashboard_will_ban_all_members">All organisation members will be banned!</string>
 	<string name="site_admin_dashboard_organisation_name_goes_here">Organisation name goes here.</string>
 	<string name="site_admin_dashboard_ban_reason">Ban Reason</string>
 	<string name="site_admin_dashboard_ban_user">Ban User</string>
-	<string name="site_admin_dashboard_4">Apply a site-wide ban to a user.</string>
 	<string name="site_admin_dashboard_user_email_address">User E-Mail Address</string>
 	<string name="site_admin_dashboard_ban_duration">Ban Duration</string>
 	<string name="site_admin_dashboard_delete_user">Delete User</string>
 	<string name="site_admin_dashboard_permanently"><strong>Permanently</strong> delete a user from %s.</string>
-	<string name="site_admin_dashboard_5">Are you sure you want to permanently delete this user? You will not be able to reverse this action.</string>
+	<string name="site_admin_dashboard_confirm_delete_user">Are you sure you want to permanently delete this user? You will not be able to reverse this action.</string>
     <string name="site_admin_dashboard_successfully_deleted_user">Successfully deleted user.</string>
-    <string name="site_admin_dashboard_6">User not found, the provided email address does not correspond to an account on our system.</string>
-    <string name="site_admin_dashboard_7">Only add trusted users!</string>
+    <string name="site_admin_dashboard_user_not_found">User not found, the provided email address does not correspond to an account on our system.</string>
+    <string name="site_admin_dashboard_only_add_trusted">Only add trusted users!</string>
 
 	<string name="badge_list_badge_list">Badge List</string>
 	<string name="badge_list_all_available_badges_of">All available badges of %s.</string>
@@ -248,10 +250,7 @@
 	<string name="create_org_create_an_organisation">Create an Organisation</string>
 	<string name="create_org_create_your_own_organisation">Create your own organisation.</string>
     <string name="create_org_invalid_name">Organisation names cannot contain invalid characters.</string>
-    <string name="create_org_2">The organisation <strong>%s</strong> has been created.</string>
-    <string name="create_org_3">Unable to create Organisation.</string>
-    <string name="create_org_4">An organisation named <strong>%s</strong> is already registered. Please use a different name.</string>
-        
+    <string name="create_org_created">The organisation <strong>%s</strong> has been created.</string>
 
 	<string name="org_private_profile_0">Alter your organisation's profile here.</string>
 	<string name="org_private_profile_public_profile">Public Profile</string>

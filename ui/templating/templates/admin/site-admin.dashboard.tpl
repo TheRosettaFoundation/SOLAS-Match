@@ -19,13 +19,13 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <p>{sprintf(Localisation::getTranslation('site_admin_dashboard_0'), $siteName)}</p>
-                    <p><strong>{Localisation::getTranslation('site_admin_dashboard_7')}</strong></p>
+                    <p>{sprintf(Localisation::getTranslation('site_admin_dashboard_add_new_admin'), $siteName)}</p>
+                    <p><strong>{Localisation::getTranslation('site_admin_dashboard_only_add_trusted')}</strong></p>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <input type="text" name="userEmail" placeholder="{Localisation::getTranslation('site_admin_dashboard_1')}" style="width: 95%"/>
+                    <input type="text" name="userEmail" placeholder="{Localisation::getTranslation('site_admin_dashboard_email_here')}" style="width: 95%"/>
                 </td>
                 <td valign="top">
                     <button class="btn btn-success" type="submit" name="addAdmin" value="1">
@@ -52,8 +52,8 @@
             </tr>
             <tr>
                 <td colspan="3" style="padding-bottom: 20px">
-                    <p>{Localisation::getTranslation('site_admin_dashboard_2')}</p>
-                    <p><strong>{Localisation::getTranslation('site_admin_dashboard_3')}</strong></p>
+                    <p>{Localisation::getTranslation('site_admin_dashboard_sitewide_org_ban')}</p>
+                    <p><strong>{Localisation::getTranslation('site_admin_dashboard_will_ban_all_members')}</strong></p>
                 </td>
             </tr>
             <tr style="font-weight: bold">
@@ -100,7 +100,7 @@
             </tr>
             <tr>
                 <td colspan="3" style="padding-bottom: 20px">
-                    {Localisation::getTranslation('site_admin_dashboard_4')}
+                    {Localisation::getTranslation('site_admin_dashboard_sitewide_user_ban')}
                 </td>
             </tr>
             <tr style="font-weight: bold">
@@ -109,7 +109,7 @@
             </tr>
             <tr>
                 <td width="40%">
-                    <input type="text" name="userEmail" placeholder="{Localisation::getTranslation('site_admin_dashboard_1')}" style="width: 96%"/>
+                    <input type="text" name="userEmail" placeholder="{Localisation::getTranslation('site_admin_dashboard_email_here')}" style="width: 96%"/>
                 </td>
                 <td width="25%">
                     <select name="banTypeUser" style="width: 96%">
@@ -166,10 +166,11 @@
             </tr>
             <tr>
                 <td>
-                    <input type="text" name="userEmail" placeholder="{Localisation::getTranslation('site_admin_dashboard_1')}" style="width: 95%"/>
+                    <input type="text" name="userEmail" placeholder="{Localisation::getTranslation('site_admin_dashboard_email_here')}" style="width: 95%"/>
                 </td>
                 <td valign="top">
-                    <button class="btn btn-inverse" type="submit" name="deleteUser" value="1" onclick="return confirm('{Localisation::getTranslation('site_admin_dashboard_5')}')"/>
+                    <button class="btn btn-inverse" type="submit" name="deleteUser" value="1" onclick="return confirm(
+                                        '{Localisation::getTranslation('site_admin_dashboard_confirm_delete_user')}')"/>
                         <i class="icon-fire icon-white"></i> {Localisation::getTranslation('site_admin_dashboard_delete_user')}
                     </button>
                 </td>

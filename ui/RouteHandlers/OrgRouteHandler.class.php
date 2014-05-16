@@ -183,12 +183,18 @@ class OrgRouteHandler
                     $new_org = $orgDao->createOrg($org, $user_id);
                     if ($new_org) {
                         $org_name = $org->getName();
-                        $app->flash("success", sprintf(Lib\Localisation::getTranslation('create_org_2'), $org_name));
+                        $app->flash(
+                            "success",
+                            sprintf(Lib\Localisation::getTranslation('create_org_created'), $org_name)
+                        );
                         $app->redirect($app->urlFor("org-dashboard"));
                     }
                 } catch (Common\Exceptions\SolasMatchException $ex) {
                     $org_name = $org->getName();
-                    $errorList[] = sprintf(Lib\Localisation::getTranslation('create_org_4'), $org_name);
+                    $errorList[] = sprintf(
+                        Lib\Localisation::getTranslation('common_error_org_name_in_use'),
+                        $org_name
+                    );
                     $errorOccured = true;
                 }
 
@@ -490,7 +496,7 @@ class OrgRouteHandler
                         $app->flashNow(
                             "error",
                             sprintf(
-                                Lib\Localisation::getTranslation('create_org_4'),
+                                Lib\Localisation::getTranslation('common_error_org_name_in_use'),
                                 $org_name
                             )
                         );

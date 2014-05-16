@@ -41,7 +41,7 @@
                             <i class="icon-upload icon-white" style="position:relative; right:-25px; top:1px;"></i>
                             <input type="hidden" name="userId" value="{$bannedUser->getUserId()}" />
                             <input type="submit" class='btn btn-primary' name="unBanUser" value="    {Localisation::getTranslation('common_restore')}" 
-                           onclick="return confirm('{Localisation::getTranslation('admin_banned_users_list_0')}')"/>
+                           onclick="return confirm('{Localisation::getTranslation('admin_banned_users_list_confirm_unban')}')"/>
                         </form> 
                     </td>
                 </tr>

@@ -12,9 +12,9 @@ class AdminRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $middleware = new Lib\Middleware();
-				          
+                          
         $app->get(
-            "/admin/", 
+            "/admin/",
             array($middleware, "isSiteAdmin"),
             array($this, "adminDashboard")
         )->via("POST")->name("site-admin-dashboard");
@@ -80,7 +80,10 @@ class AdminRouteHandler
                         Lib\Localisation::getTranslation('site_admin_dashboard_successfully_deleted_user')
                     );
                 } else {
-                    $app->flashNow("deleteError", Lib\Localisation::getTranslation('site_admin_dashboard_6'));
+                    $app->flashNow(
+                        "deleteError",
+                        Lib\Localisation::getTranslation('site_admin_dashboard_user_not_found')
+                    );
                 }
             }
         }

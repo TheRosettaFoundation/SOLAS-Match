@@ -17,7 +17,7 @@
                         <i class="icon-fire icon-white" style="position:relative; right:-25px; top:1px;"></i>
                         <input type="hidden" name="userId" value="{$admin->getId()}" />
                         <input type="submit" class='btn btn-inverse' name="revokeAdmin" value="    {Localisation::getTranslation('admin_site_admins_list_revoke')}" 
-                       onclick="return confirm('{Localisation::getTranslation('admin_site_admins_list_0')}')"/>
+                       onclick="return confirm('{Localisation::getTranslation('admin_site_admins_list_confirm_revoke')}')"/>
                     </form> 
                 </td>
             </tr>
