@@ -170,9 +170,13 @@ class AdminDao
       @param DateTime $bannedDate is the date and time of the requested ban
       @return Returns a list of BannedUser objects or null if none found with the specified criteria
     */
-    public static function
-    getBannedUser($userId = null, $userIdAdmin = null, $bannedTypeId = null, $adminComment = null, $bannedDate = null)
-    {
+    public static function getBannedUser(
+        $userId = null,
+        $userIdAdmin = null,
+        $bannedTypeId = null,
+        $adminComment = null,
+        $bannedDate = null
+    ) {
         $ret = null;
         $args = Lib\PDOWrapper::cleanseNull($userId).",".
             Lib\PDOWrapper::cleanseNull($userIdAdmin).",".

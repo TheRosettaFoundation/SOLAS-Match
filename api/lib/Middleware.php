@@ -727,8 +727,9 @@ class Middleware
                     
             if ($userId == $user->getId()) {
                 return true;
-            } else if ($orgId != null &&
-                    (DAO\OrganisationDao::isMember($orgId, $loggedInId) || DAO\AdminDao::isAdmin($loggedInId, $orgId))) {
+            } elseif ($orgId != null &&
+                    (DAO\OrganisationDao::isMember($orgId, $loggedInId)
+                    || DAO\AdminDao::isAdmin($loggedInId, $orgId))) {
                 /*
                  * currently this checks if the orgId is not Null
                  * cases where the orgId is null signify a system badge
@@ -813,6 +814,26 @@ class Middleware
                     "Unable to claim task. This Task has been claimed by another user"
                 );
             }
+        }
+    }
+    
+    public static function authenticateIsUserBanned(\Slim\Route $route)
+    {
+        $params = $route->getParams();
+        
+        if ($params != null) {
+            $userEmail = $params['email'];
+        }
+        $user = DAO\UserDao::getUser(null, $userEmail);
+        $userId = $user->getId();
+        
+        if (DAO\AdminDao::isUserBanned($userId) == true) {
+            return true;
+        } else {
+            Dispatcher::getDispatcher()->halt(
+                Common\Enums\HttpStatusEnum::FORBIDDEN,
+                "User is not banned. Unable to fetch banned comment."
+            );
         }
     }
 }

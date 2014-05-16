@@ -429,12 +429,12 @@ class UserDao extends BaseDao
                     break;
                 case Common\Enums\HttpStatusEnum::FORBIDDEN:
                     $userDao = new UserDao();
-                    $user = $userDao->getUserByEmail($email);
-                    $adminDao = new AdminDao();
-                    $bannedUser = $adminDao->getBannedUser($user->getId());
+                    $banComment = $userDao->getBannedComment($email);
                     throw new Common\Exceptions\SolasMatchException(
-                        Lib\Localisation::getTranslation("common_this_user_account_has_been_banned").' '.
-                        $bannedUser->getComment()
+                        sprintf(
+                            Lib\Localisation::getTranslation("common_this_user_account_has_been_banned"),
+                            $banComment
+                        )
                     );
                     break;
                 default:
@@ -593,6 +593,14 @@ class UserDao extends BaseDao
         return $ret;
     }
     
+    public function getBannedComment($email)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/email/$email/getBannedComment";
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::GET);
+        return $ret;
+    }
+    
     public function createSecondaryLanguage($userId, $locale)
     {
         $ret = null;
@@ -653,7 +661,7 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-   public function getUserTrackedOrganisations($userId)
+    public function getUserTrackedOrganisations($userId)
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/organisations";

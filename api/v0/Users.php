@@ -6,6 +6,7 @@ use \SolasMatch\Common as Common;
 use \SolasMatch\API\DAO as DAO;
 use \SolasMatch\API\Lib as Lib;
 use \SolasMatch\API as API;
+use SolasMatch\API\DAO\AdminDao;
 
 require_once __DIR__.'/../../Common/protobufs/models/OAuthResponse.php';
 require_once __DIR__."/../../Common/protobufs/models/PasswordResetRequest.php";
@@ -66,9 +67,9 @@ class Users
                         );
                         
                         $app->post(
-                                '/:taskId/',
-                                '\SolasMatch\API\Lib\Middleware::authenticateTaskNotClaimed',
-                                '\SolasMatch\API\V0\Users::userClaimTask'
+                            '/:taskId/',
+                            '\SolasMatch\API\Lib\Middleware::authenticateTaskNotClaimed',
+                            '\SolasMatch\API\V0\Users::userClaimTask'
                         );
                         
                         $app->delete(
@@ -202,7 +203,7 @@ class Users
                         '/tasks(:format)/',
                         '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
                         '\SolasMatch\API\V0\Users::getUserTasks'
-                    );    
+                    );
 
                     $app->get(
                         '/topTasks(:format)/',
@@ -296,6 +297,12 @@ class Users
                     $app->get(
                         '/passwordResetRequest(:format)/',
                         '\SolasMatch\API\V0\Users::hasUserRequestedPasswordReset'
+                    );
+                    
+                    $app->get(
+                        '/getBannedComment(:format)/',
+                        '\SolasMatch\API\Lib\Middleware::authenticateIsUserBanned',
+                        '\SolasMatch\API\V0\Users::getBannedComment'
                     );
 
                     $app->post(
@@ -844,7 +851,9 @@ class Users
         }
         API\Dispatcher::sendResponse(
             null,
-            DAO\UserDao::isSubscribedToOrganisation($userId, $organisationId), null, $format
+            DAO\UserDao::isSubscribedToOrganisation($userId, $organisationId),
+            null,
+            $format
         );
     }
 
@@ -1125,6 +1134,20 @@ class Users
     public static function getUsers($format = ".json")
     {
         API\Dispatcher::sendResponse(null, "display all users", null, $format);
+    }
+    
+    public static function getBannedComment($email, $format = ".json")
+    {
+        //$data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $client = new Common\Lib\APIHelper($format);
+        
+        $user = DAO\UserDao::getUser(null, $email);
+        $userId = $user->getId();
+        $bannedUser = AdminDao::getBannedUser($userId);
+        $bannedUser = $bannedUser[0];
+        $comment = $bannedUser->getComment();
+        
+        API\Dispatcher::sendResponse(null, $comment, null, $format);
     }
 }
 

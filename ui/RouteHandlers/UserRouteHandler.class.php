@@ -126,12 +126,17 @@ class UserRouteHandler
              $maintenanceTime = Common\Lib\Settings::get("maintenance.maintenance_time");
              $maintenanceDuration = Common\Lib\Settings::get("maintenance.maintenance_duration");
              $maintenanceCustomMsg = Common\Lib\Settings::get("maintenance.maintenance_custom_msg");
-             if ($maintenanceCustomMsg=='n') {
-                 $msg = sprintf(Lib\Localisation::getTranslation('common_maintenance_message'),$maintenanceDate, $maintenanceTime, $maintenanceDuration);
-             } else if ($maintenanceCustomMsg=='y') {
-                 $maintenanceCustomMessage = Common\Lib\Settings::get("maintenance.maintenance_custom_message");
-                 $msg = $maintenanceCustomMessage;
-             }
+            if ($maintenanceCustomMsg=='n') {
+                $msg = sprintf(
+                    Lib\Localisation::getTranslation('common_maintenance_message'),
+                    $maintenanceDate,
+                    $maintenanceTime,
+                    $maintenanceDuration
+                );
+            } elseif ($maintenanceCustomMsg=='y') {
+                $maintenanceCustomMessage = Common\Lib\Settings::get("maintenance.maintenance_custom_message");
+                $msg = $maintenanceCustomMessage;
+            }
              $app->flashNow('warning', $msg);
         }
                 
@@ -230,7 +235,8 @@ class UserRouteHandler
             if ($browser == 'IE') {
                 $app->flashNow(
                     "info",
-                    Lib\Localisation::getTranslation('index_dont_use_ie').Lib\Localisation::getTranslation('index_still_using_ie')
+                    Lib\Localisation::getTranslation('index_dont_use_ie').
+                    Lib\Localisation::getTranslation('index_still_using_ie')
                 );
             }
         }
@@ -374,7 +380,7 @@ class UserRouteHandler
                 $user = null;
                 try {
                     $user = $userDao->login($post['email'], $post['password']);
-                } catch (\Exception $e) {
+                } catch (Common\Exceptions\SolasMatchException $e) {
                     $error = sprintf(
                         Lib\Localisation::getTranslation('login_1'),
                         $app->urlFor("login"),
@@ -448,7 +454,8 @@ class UserRouteHandler
             if ($browser == 'IE') {
                 $app->flashNow(
                     "info",
-                    Lib\Localisation::getTranslation('index_dont_use_ie').Lib\Localisation::getTranslation('index_still_using_ie')
+                    Lib\Localisation::getTranslation('index_dont_use_ie')
+                    .Lib\Localisation::getTranslation('index_still_using_ie')
                 );
             }
         }

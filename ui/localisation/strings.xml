@@ -159,7 +159,7 @@
     <string name="common_track_task">Track Task</string>
     <string name="common_error">Error</string>
     <string name="common_login_required_to_access_page">Login required to access page.</string>
-    <string name="common_this_user_account_has_been_banned">This user account has been banned.</string>
+    <string name="common_this_user_account_has_been_banned">This user account has been banned. The administrator has given the following comment: %s</string>
     <string name="common_assign_badge">Assign Badge</string>        
     <string name="common_successfully_added_member">Successfully added %s as a member of %s.</string>
     <string name="common_invalid_userid">Invalid User ID: %s</string>
@@ -875,7 +875,7 @@
 	<string name="login_0">Find out <a href='%s'>more about OpenID</a> and <a href='%s'>how to get an OpenID enabled account</a>.</string>
 	<string name="login_signin">Sign-In</string>
     <string name="login_1"><p>Unable to log in. Please check your email and password. <a href="%s">Try logging in again</a> or <a href="%s">register</a> for an account.</p><p><strong>%s</strong></p></string>
-    <string name="login_2">Oops! It looks like you have cancelled the authentication. Please return to the login page to reselect your account provider.</string>
+    <string name="login_2">Oops! It looks like you have cancelled the authentication. Please reselect your account provider below.</string>
 
 	<string name="password_reset_password_reset">Password Reset</string>
 	<string name="password_reset_reset_your_password_here">Reset your password here</string>
