@@ -195,7 +195,7 @@
     <p style="margin-bottom: 60px" />         
     <h1 class="page-header">
         {Localisation::getTranslation('common_badges')}
-        <small>{Localisation::getTranslation('org_public_profile_0')}</small>
+        <small>{Localisation::getTranslation('org_public_profile_badge_overview')}</small>
 
         {if isset($user)}
 
@@ -246,7 +246,7 @@
                         <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
                             <input type="hidden" name="badge_id" value="{$badge_id}" />
                             <input type="submit" class='btn btn-inverse' name="deleteBadge" value="    {Localisation::getTranslation('org_public_profile_delete_badge')}"
-                              onclick="return confirm('{Localisation::getTranslation('org_public_profile_1')}')" />                                 
+                              onclick="return confirm('{Localisation::getTranslation('org_public_profile_confirm_delete_badge')}')" />                                 
                         </form> 
                         <i class="icon-fire icon-white" style="position:relative; right:44px; top:-40px;"></i> 
                     </td>  
@@ -258,7 +258,7 @@
 <br />
 {else}
     <p class="alert alert-info">
-        {Localisation::getTranslation('org_public_profile_2')}
+        {Localisation::getTranslation('org_public_profile_no_badges_associated')}
     </p>
     <p style="margin-bottom:20px;"></p>
 {/if}
@@ -268,7 +268,7 @@
      <p style="margin-bottom: 40px" />         
      <h1 class="page-header">
          {Localisation::getTranslation('org_public_profile_membership_requests')}
-         <small>{Localisation::getTranslation('org_public_profile_3')}</small>
+         <small>{Localisation::getTranslation('org_public_profile_membership_request_overview')}</small>
 
              <a href="{urlFor name="org-request-queue" options="org_id.$org_id"}" class='pull-right btn btn-success'>
                  <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_add_user')}
@@ -319,7 +319,7 @@
          </table>   
      {else}
          <p class="alert alert-info">
-             {Localisation::getTranslation('org_public_profile_5')}
+             {Localisation::getTranslation('org_public_profile_no_membership_requests_associated')}
          </p>
      {/if}
      <p style="margin-bottom: 40px" />               
@@ -329,7 +329,7 @@
 {if $isMember || $adminAccess}
     <h1 class="page-header">
         {Localisation::getTranslation('org_public_profile_organisation_members')}
-        <small>{Localisation::getTranslation('org_public_profile_6')}</small>
+        <small>{Localisation::getTranslation('org_public_profile_member_list')}</small>
     </h1>
     {if isset($orgMembers) && count($orgMembers) > 0}
         <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
@@ -358,19 +358,19 @@
                         {if $adminAccess}
                             <td>
                                 <button type="submit" name="revokeUser" value="{$member->getId()}" class="btn btn-inverse" 
-                                        onclick="return confirm('{Localisation::getTranslation('org_public_profile_7')}')">
+                                        onclick="return confirm('{Localisation::getTranslation('org_public_profile_confirm_revoke_membership')}')">
                                     <i class="icon-fire icon-white"></i> {Localisation::getTranslation('org_public_profile_revoke_membership')}
                                 </button>
                             </td>
                             <td>
                                 {if $member['orgAdmin']}
                                     <button type="submit" name="revokeOrgAdmin" value="{$member->getId()}" class="btn btn-inverse" 
-                                            onclick="return confirm('{Localisation::getTranslation('org_public_profile_8')}')">
+                                            onclick="return confirm('{Localisation::getTranslation('org_public_profile_confirm_revoke_admin')}')">
                                             <i class="icon-fire icon-white"></i> {Localisation::getTranslation('org_public_profile_revoke_administrator')}
                                     </button>
                                 {else}
                                     <button type="submit" name="makeOrgAdmin" value="{$member->getId()}" class="btn btn-success" 
-                                            onclick="return confirm('{Localisation::getTranslation('org_public_profile_10')}')"> 
+                                            onclick="return confirm('{Localisation::getTranslation('org_public_profile_confirm_make_admin')}')"> 
                                             <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_create_administrator')}
                                     </button>
                                 {/if}
@@ -382,7 +382,7 @@
             </table>
         </form>
     {else}
-        <p class="alert alert-info">{Localisation::getTranslation('org_public_profile_9')}</p>
+        <p class="alert alert-info">{Localisation::getTranslation('org_public_profile_no_members')}</p>
     {/if}
 {/if}
 
