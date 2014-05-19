@@ -9,7 +9,6 @@
 
 {if isset($archivedTasks) && $archivedTasksCount > 0}
     {for $count=$top to $bottom}
-        <h1>mmmmm</h1>
         {assign var="task" value=$archivedTasks[$count]}
         {include file="task/task.profile-display.tpl" task=$task}
     {/for}
