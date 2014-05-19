@@ -320,8 +320,9 @@ class OrgRouteHandler
                 $app->flash("success", Lib\Localisation::getTranslation('org_public_profile_membership_requested'));
             } else {
                 $app->flash(
-                "error",
-                Lib\Localisation::getTranslation('org_public_profile_membership_already_requested'));
+                    "error",
+                    Lib\Localisation::getTranslation('org_public_profile_membership_already_requested')
+                );
             }
         } else {
             $app->flash("error", Lib\Localisation::getTranslation('org_public_profile_13'));
@@ -513,8 +514,9 @@ class OrgRouteHandler
                         $app->flash(
                             "success",
                             sprintf(
-                                Lib\Localisation::getTranslation('org_private_profile_delete_success'), 
-                                $org->getName())
+                                Lib\Localisation::getTranslation('org_private_profile_delete_success'),
+                                $org->getName()
+                            )
                         );
                         $app->redirect($app->urlFor("home"));
                     } else {

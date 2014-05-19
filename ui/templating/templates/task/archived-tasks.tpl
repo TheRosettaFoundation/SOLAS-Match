@@ -7,9 +7,10 @@
     </h1>
 </div>
 
-{if isset($archived_tasks) && count($archived_tasks) > 0}
+{if isset($archivedTasks) && $archivedTasksCount > 0}
     {for $count=$top to $bottom}
-        {assign var="task" value=$archived_tasks[$count]}
+        <h1>mmmmm</h1>
+        {assign var="task" value=$archivedTasks[$count]}
         {include file="task/task.profile-display.tpl" task=$task}
     {/for}
     {include file="pagination.tpl" url_name="archived-tasks" current_page=$page_no last_page=$last}

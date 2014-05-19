@@ -151,32 +151,35 @@ class TaskRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
-        $user_id = Common\Lib\UserSession::getCurrentUserID();
+        $userId = Common\Lib\UserSession::getCurrentUserID();
         
-        $user = $userDao->getUser($user_id);
-        $archived_tasks = $userDao->getUserArchivedTasks($user_id, 10);
-        $tasks_per_page = 10;
-        $total_pages = ceil(count($archived_tasks) / $tasks_per_page);
+        $user = $userDao->getUser($userId);
+        $tasksPerPage = 10;
+        $archivedTasksCount = $userDao->getUserArchivedTasksCount($userId);
+
+        $offset = $tasksPerPage * ($page_no - 1) ;
+        $archivedTasks = $userDao->getUserArchivedTasks($userId, $tasksPerPage, $offset);
+        $totalPages = ceil($archivedTasksCount / $tasksPerPage);
         
         if ($page_no < 1) {
             $page_no = 1;
-        } elseif ($page_no > $total_pages) {
-            $page_no = $total_pages;
+        } elseif ($page_no > $totalPages) {
+            $page_no = $totalPages;
         }
         
-        $top = (($page_no - 1) * $tasks_per_page);
-        $bottom = $top + $tasks_per_page - 1;
+        $top = (($page_no - 1) * $tasksPerPage);
+        $bottom = $top + $tasksPerPage - 1;
         
         if ($top < 0) {
             $top = 0;
-        } elseif ($top > count($archived_tasks) - 1) {
-            $top = count($archived_tasks) - 1;
+        } elseif ($top > $archivedTasksCount  - 1) {
+            $top = $archivedTasksCount  - 1;
         }
         
         if ($bottom < 0) {
             $bottom = 0;
-        } elseif ($bottom > count($archived_tasks) - 1) {
-            $bottom = count($archived_tasks) - 1;
+        } elseif ($bottom > $archivedTasksCount  - 1) {
+            $bottom = $archivedTasksCount - 1;
         }
         
         $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
@@ -186,13 +189,14 @@ class TaskRouteHandler
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
         
-        $app->view()->setData("archived_tasks", $archived_tasks);
+        $app->view()->setData("archivedTasks", $archivedTasks);
         $app->view()->appendData(array(
                                     "page_no" => $page_no,
-                                    "last" => $total_pages,
+                                    "last" => $totalPages,
                                     "top" => $top,
                                     "bottom" => $bottom,
-                                    "taskTypeColours" => $taskTypeColours
+                                    "taskTypeColours" => $taskTypeColours,
+                                    "archivedTasksCount" => $archivedTasksCount
         ));
         $app->render("task/archived-tasks.tpl");
     }
@@ -246,7 +250,7 @@ class TaskRouteHandler
         $taskDao = new DAO\TaskDao();
 
         $task = $taskDao->getTask($task_id);
-        $user_id = Common\Lib\UserSession::getCurrentUserID();
+        $userId = Common\Lib\UserSession::getCurrentUserID();
         
         $taskType = Lib\TemplateHelper::getTaskTypeFromId($task->getTaskType());
         if ($result = $taskDao->archiveTask($task_id, $user_id)) {

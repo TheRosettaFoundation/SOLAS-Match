@@ -187,22 +187,30 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function getUserArchivedTasks($userId, $limit = null)
+    public function getUserArchivedTasks($userId, $limit = 10, $offset)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/archivedTasks";
-
-        $args = null;
-        if ($limit) {
-            $args = array("limit" => $limit);
-        }
+        $request = "{$this->siteApi}v0/users/$userId/archivedTasks/$limit/$offset";
 
         $ret = $this->client->call(
             array("\SolasMatch\Common\Protobufs\Models\ArchivedTask"),
             $request,
             Common\Enums\HttpMethodEnum::GET,
-            null,
-            $args
+            null
+        );
+        return $ret;
+    }
+    
+    public function getUserArchivedTasksCount($userId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/$userId/archivedTasksCount";
+    
+        $ret = $this->client->call(
+                null,
+                $request,
+                Common\Enums\HttpMethodEnum::GET,
+                null
         );
         return $ret;
     }

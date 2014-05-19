@@ -673,10 +673,11 @@ class TaskDao
       @param int $limit is the max number of ArchivedTasks to be returned
       @return Returns an array of ArchivedTask objects
     */
-    public static function getUserArchivedTasks($userId, $limit = 10)
+    public static function getUserArchivedTasks($userId, $limit = 10, $offset = 0)
     {
         $args = Lib\PDOWrapper::cleanse($userId).",".
-            Lib\PDOWrapper::cleanse($limit);
+                Lib\PDOWrapper::cleanse($limit).",".
+                Lib\PDOWrapper::cleanse($offset);
         $result = Lib\PDOWrapper::call("getUserArchivedTasks", $args);
         if ($result) {
             $tasks = array();
@@ -684,6 +685,17 @@ class TaskDao
                 $tasks[] = Common\Lib\ModelFactory::buildModel("ArchivedTask", $taskData);
             }
             return $tasks;
+        } else {
+            return null;
+        }
+    }
+    
+    public static function getUserArchivedTasksCount($userId)
+    {
+        $args = Lib\PDOWrapper::cleanse($userId);
+        $result = Lib\PDOWrapper::call("getUserArchivedTasksCount", $args);
+        if ($result) {
+            return $result[0]['count'];
         } else {
             return null;
         }

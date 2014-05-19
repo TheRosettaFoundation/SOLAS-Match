@@ -551,7 +551,7 @@ class UserRouteHandler
         try {
             $userPersonalInfo = $userDao->getPersonalInfo($user_id);
         } catch (Common\Exceptions\SolasMatchException $e) {
-            // should handle the error here or at least error_log it
+            error_log("Error getting user personal info: $e");
         }
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
@@ -572,7 +572,7 @@ class UserRouteHandler
             }
         }
                     
-        $archivedJobs = $userDao->getUserArchivedTasks($user_id, 10);
+        $archivedJobs = $userDao->getUserArchivedTasks($user_id, 10, 0);
         $user_tags = $userDao->getUserTags($user_id);
         $user_orgs = $userDao->getUserOrgs($user_id);
         $badges = $userDao->getUserBadges($user_id);

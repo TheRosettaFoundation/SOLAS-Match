@@ -212,9 +212,15 @@ class Users
                     );
 
                     $app->get(
-                        '/archivedTasks(:format)/',
+                        '/archivedTasks/:limit/:offset(:format)/',
                         '\SolasMatch\API\Lib\Middleware::isloggedIn',
                         '\SolasMatch\API\V0\Users::getUserArchivedTasks'
+                    );
+                    
+                    $app->get(
+	                    '/archivedTasksCount(:format)/',
+                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
+                        '\SolasMatch\API\V0\Users::getUserArchivedTasksCount'
                     );
 
                     $app->get(
@@ -700,10 +706,21 @@ class Users
         API\Dispatcher::sendResponse(null, $data, null, $format);
     }
 
-    public static function getUserArchivedTasks($userId, $format = ".json")
+    public static function getUserArchivedTasks($userId, $limit, $offset, $format = ".json")
     {
-        $limit = API\Dispatcher::clenseArgs('limit', Common\Enums\HttpMethodEnum::GET, 5);
-        $data = DAO\TaskDao::getUserArchivedTasks($userId, $limit);
+        if (!is_numeric($offset) && strstr($offset, '.')) {
+            $offset = explode('.', $offset);
+            $format = '.'.$offset[1];
+            $offset = $offset[0];
+        }
+        
+        $data = DAO\TaskDao::getUserArchivedTasks($userId, $limit, $offset);
+        API\Dispatcher::sendResponse(null, $data, null, $format);
+    }
+    
+    public static function getUserArchivedTasksCount($userId, $format = ".json")
+    {
+        $data = DAO\TaskDao::getUserArchivedTasksCount($userId);
         API\Dispatcher::sendResponse(null, $data, null, $format);
     }
 

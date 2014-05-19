@@ -2401,9 +2401,10 @@ DELIMITER ;
 -- Dumping structure for procedure debug-test.getUserArchivedTasks
 DROP PROCEDURE IF EXISTS `getUserArchivedTasks`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserArchivedTasks`(IN `uID` INT, IN `lim` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserArchivedTasks`(IN `uID` INT, IN `lim` INT, IN `offset` INT)
 BEGIN
     if lim = '' or lim is null then set lim = ~0; end if;
+    if offset='' or offset is null then set offset = 0; end if;
 
     SELECT id,project_id,title,`word-count`, 
             (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, 
@@ -2419,10 +2420,23 @@ BEGIN
 	    JOIN ArchivedTasksMetadata am
     	ON t.id=am.archivedTask_id
     	WHERE am.`user_id-claimed` = uID
-        LIMIT lim;
+        LIMIT offset, lim;
 END//
 DELIMITER ;
 
+-- Procedure getUserArchivedTasksCount
+DROP PROCEDURE IF EXISTS `getUserArchivedTasksCount`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserArchivedTasksCount`(IN `userId` INT)
+BEGIN
+    SELECT COUNT(*) as "count"
+	FROM ArchivedTasks t 
+    JOIN ArchivedTasksMetadata am
+	ON t.id=am.archivedTask_id
+	WHERE am.`user_id-claimed` = `userId`;
+
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.getUserBadges
 DROP PROCEDURE IF EXISTS `getUserBadges`;
