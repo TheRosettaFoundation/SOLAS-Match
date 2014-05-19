@@ -317,9 +317,11 @@ class OrgRouteHandler
         if (is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
             $requestMembership = $orgDao->createMembershipRequest($org_id, $userId);
             if ($requestMembership) {
-                $app->flash("success", Lib\Localisation::getTranslation('org_public_profile_11'));
+                $app->flash("success", Lib\Localisation::getTranslation('org_public_profile_membership_requested'));
             } else {
-                $app->flash("error", Lib\Localisation::getTranslation('org_public_profile_12'));
+                $app->flash(
+                "error",
+                Lib\Localisation::getTranslation('org_public_profile_membership_already_requested'));
             }
         } else {
             $app->flash("error", Lib\Localisation::getTranslation('org_public_profile_13'));
@@ -510,11 +512,13 @@ class OrgRouteHandler
                     if ($orgDao->deleteOrg($org->getId())) {
                         $app->flash(
                             "success",
-                            sprintf(Lib\Localisation::getTranslation('org_private_profile_17'), $org->getName())
+                            sprintf(
+                                Lib\Localisation::getTranslation('org_private_profile_delete_success'), 
+                                $org->getName())
                         );
                         $app->redirect($app->urlFor("home"));
                     } else {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('org_private_profile_18'));
+                        $app->flashNow("error", Lib\Localisation::getTranslation('org_private_profile_delete_fail'));
                     }
                 }
             }
@@ -1006,8 +1010,7 @@ class OrgRouteHandler
             }
 
             if (isset($post['skip'])) {
-                $app->redirect($app->urlFor("project-view", array(
-                                'project_id' => $task->getProjectId())));
+                $app->redirect($app->urlFor("project-view", array('project_id' => $task->getProjectId())));
             }
         }
 

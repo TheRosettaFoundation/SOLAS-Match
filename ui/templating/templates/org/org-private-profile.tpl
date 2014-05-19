@@ -7,7 +7,7 @@
     {else}
         {Localisation::getTranslation('common_organisation_profile')}
     {/if}
-    <small>{Localisation::getTranslation('org_private_profile_0')}</small>
+    <small>{Localisation::getTranslation('org_private_profile_alter_profile_here')}</small>
     {assign var="org_id" value=$org->getId()}
         <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}" class="pull-right btn btn-primary">
             <i class="icon-list icon-white"></i> {Localisation::getTranslation('org_private_profile_public_profile')}
@@ -135,7 +135,7 @@
                     </button>
                     {if isset($orgAdmin)}
                         <button type="submit" class="btn btn-inverse" value="{$org_id}" name="deleteId"
-                                onclick="return confirm('{Localisation::getTranslation('org_private_profile_1')}');"> 
+                                onclick="return confirm('{Localisation::getTranslation('org_private_profile_confirm_delete')}');"> 
                             <i class="icon-fire icon-white"></i> {Localisation::getTranslation('org_private_profile_delete_organisation')}
                         </button>
                     {/if}
