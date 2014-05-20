@@ -154,7 +154,7 @@ class TaskRouteHandler
         $userId = Common\Lib\UserSession::getCurrentUserID();
         
         $user = $userDao->getUser($userId);
-        $tasksPerPage = 10;
+        $tasksPerPage = 3;
         $archivedTasksCount = $userDao->getUserArchivedTasksCount($userId);
 
         $offset = $tasksPerPage * ($page_no - 1) ;
@@ -164,16 +164,17 @@ class TaskRouteHandler
         if ($page_no < 1) {
             $page_no = 1;
         } elseif ($page_no > $totalPages) {
-            $page_no = $totalPages;
+            header('HTTP/1.0 404 Not Found');
         }
         
-        $top = (($page_no - 1) * $tasksPerPage);
-        $bottom = $top + $tasksPerPage - 1;
-        
-        if ($top < 0) {
-            $top = 0;
-        } elseif ($top > $archivedTasksCount  - 1) {
-            $top = $archivedTasksCount  - 1;
+        $top = 0;
+        //If tasksPerPage divides into the task count with a remainder then last page will have
+        //less than $tasksPerPage tasks.
+        $modulus = $archivedTasksCount % $tasksPerPage;
+        if ( $modulus > 0 && $page_no == $totalPages) {
+            $bottom = $modulus - 1;
+        } else {
+            $bottom = $top + $tasksPerPage - 1;
         }
         
         if ($bottom < 0) {
