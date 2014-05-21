@@ -149,8 +149,8 @@ class UserRouteHandler
             $browser = $browserData['browser'];
             if ($browser != 'IE') {
                 $extra_scripts = "
-                    <script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/shadow_dom/shadow_dom.debug.js\"></script>
-                    <script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/custom_element/custom-elements.debug.js\"></script>
+                    <script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/platform.js\"></script>
+                    <script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/dart_support.js\"></script>
                     <script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/browser/interop.js\"></script>
                     <script src=\"{$app->urlFor("home")}ui/dart/build/web/Routes/Users/home.dart.js\"></script>
                     <span class=\"hidden\">
