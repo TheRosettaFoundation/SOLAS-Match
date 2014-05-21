@@ -149,7 +149,6 @@ class UserRouteHandler
             $browser = $browserData['browser'];
             if ($browser != 'IE') {
                 $extra_scripts = "
-                    <script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/platform.js\"></script>
                     <script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/dart_support.js\"></script>
                     <script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/browser/interop.js\"></script>
                     <script src=\"{$app->urlFor("home")}ui/dart/build/web/Routes/Users/home.dart.js\"></script>
@@ -157,6 +156,8 @@ class UserRouteHandler
                     ";
                 $extra_scripts .= file_get_contents("ui/dart/web/Routes/Users/TaskStream.html");
                 $extra_scripts .= "</span>";
+                $viewData['platformJS'] = "
+                        <script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/platform.js\"></script>";
                 $viewData['extra_scripts'] = $extra_scripts;
             }
         }
