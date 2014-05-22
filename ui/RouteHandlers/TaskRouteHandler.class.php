@@ -154,7 +154,7 @@ class TaskRouteHandler
         $userId = Common\Lib\UserSession::getCurrentUserID();
         
         $user = $userDao->getUser($userId);
-        $tasksPerPage = 3;
+        $tasksPerPage = 10;
         $archivedTasksCount = $userDao->getUserArchivedTasksCount($userId);
 
         $offset = $tasksPerPage * ($page_no - 1) ;
