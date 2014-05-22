@@ -416,20 +416,22 @@ class ProjectRouteHandler
         $user_id = Common\Lib\UserSession::getCurrentUserID();
 
         $extraScripts = "
-<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/shadow_dom/shadow_dom.debug.js\"></script>
-<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/custom_element/custom-elements.debug.js\"></script>
+<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/dart_support.js\"></script>
 <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/browser/interop.js\"></script>
 <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/Routes/Projects/ProjectCreate.dart.js\"></script>
 <span class=\"hidden\">
 ";
         $extraScripts .= file_get_contents("ui/dart/web/Routes/Projects/ProjectCreateForm.html");
         $extraScripts .= "</span>";
+        $platformJS = 
+        "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/platform.js\"></script>";
 
         $app->view()->appendData(array(
             "maxFileSize"   => Lib\TemplateHelper::maxFileSizeBytes(),
             "org_id"        => $org_id,
             "user_id"       => $user_id,
-            "extra_scripts" => $extraScripts
+            "extra_scripts" => $extraScripts,
+            "platformJS"    => $platformJS
         ));
         $app->render("project/project.create.tpl");
     }
