@@ -50,7 +50,7 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -59,17 +59,17 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         $org = UnitTestHelper::createOrg();
         $insertedOrg = $orgDao->createOrg($org, $userId);
         $this->assertNotNull($insertedOrg);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG, $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = $projectDao->createProject($project);
         $this->assertNotNull($insertedProject);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_PROJECT, $insertedProject);
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
         $insertedTask = $taskDao->createTask($task);
         $this->assertNotNull($insertedTask);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $insertedTask);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_TASK, $insertedTask);
     }
     
     /**
@@ -92,7 +92,7 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -101,21 +101,21 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         $org = UnitTestHelper::createOrg();
         $insertedOrg = $orgDao->createOrg($org, $userId);
         $this->assertNotNull($insertedOrg);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG, $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = $projectDao->createProject($project);
         $this->assertNotNull($insertedProject);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_PROJECT, $insertedProject);
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
         $insertedTask = $taskDao->createTask($task);
         $this->assertNotNull($insertedTask);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $insertedTask);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_TASK, $insertedTask);
         
         $getTask = $taskDao->getTask($insertedTask->getId());
         $this->assertNotNull($getTask);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $getTask);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_TASK, $getTask);
         $this->assertEquals($insertedTask, $getTask);
     }
 }
