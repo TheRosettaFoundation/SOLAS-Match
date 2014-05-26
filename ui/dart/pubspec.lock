@@ -60,11 +60,11 @@ packages:
   path:
     description: path
     source: hosted
-    version: "1.1.0"
+    version: "1.2.0"
   petitparser:
     description: petitparser
     source: hosted
-    version: "1.1.2"
+    version: "1.1.3"
   polymer:
     description: polymer
     source: hosted
@@ -88,7 +88,7 @@ packages:
   stack_trace:
     description: stack_trace
     source: hosted
-    version: "0.9.3+1"
+    version: "0.9.3+2"
   template_binding:
     description: template_binding
     source: hosted
@@ -104,12 +104,12 @@ packages:
   web_components:
     description: web_components
     source: hosted
-    version: "0.3.3"
+    version: "0.3.4"
   xml:
     description: xml
     source: hosted
-    version: "2.0.0"
+    version: "2.1.1"
   yaml:
     description: yaml
     source: hosted
-    version: "0.9.0"
+    version: "0.9.0+2"

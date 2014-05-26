@@ -272,7 +272,7 @@ init.mangledNames = {$add: "+:1:0", $gt: ">:1:0", $index: "[]:1:0", $indexSet: "
     libraries.push([name, uri, classes, functions, metadata, fields, isRoot, globalObject]);
   }
 })([
-["SolasMatchDart", "../lib/SolasMatchDart.dart", , R, {
+["SolasMatchDart", "file:///home/aaronm/workspace/SOLAS-Match/ui/dart/web/lib/SolasMatchDart.dart", , R, {
   "^": "",
   StatisticDao_getStatistic: [function(statName) {
     var client = new R.APIHelper(null);
@@ -10615,7 +10615,7 @@ init.mangledNames = {$add: "+:1:0", $gt: ">:1:0", $index: "[]:1:0", $indexSet: "
   },
   "+JsonObjectException": 0
 }],
-["", "statistics.dart", , M, {
+["", "file:///home/aaronm/workspace/SOLAS-Match/ui/dart/web/Scripts/statistics.dart", , M, {
   "^": "",
   main: [function() {
     R.Loader_load().then$1(new M.main_closure());
@@ -12222,6 +12222,3 @@ function init() {
   };
 }
 })()
-
-//# sourceMappingURL=statistics.dart.js.map
-//@ sourceMappingURL=statistics.dart.js.map

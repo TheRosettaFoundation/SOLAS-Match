@@ -60,7 +60,7 @@ class ProjectCreateForm extends PolymerElement
   {
     project = new Project();
     project.tag = new List<Tag>();
-    projectFileText = "";
+    projectFileData = "";
     localisation = new Localisation();
     languages = toObservable(new List<Language>());
     countries = toObservable(new List<Country>());
