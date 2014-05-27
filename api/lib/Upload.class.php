@@ -165,7 +165,6 @@ class Upload
         $upload_folder = self::absoluteFolderPathForUpload($task, $version);
 
         self::saveSubmittedFileToFs($task, $file_name, $file_tmp_name, $version);
-        //$task_dao->recordFileUpload($task, $file_name, $_FILES[$form_file_field]['type'], $user_id);
 
         return true;
     }
@@ -239,12 +238,11 @@ class Upload
     
     public static function addTaskPreReq($id, $preReqId)
     {
-        $taskDao = new DAO\TaskDao();
         $builder = new APIWorkflowBuilder();
-        $currentTask =  $taskDao->getTask($id);
+        $currentTask =  DAO\TaskDao::getTask($id);
         $projectId = $currentTask->getProjectId();
-        //$projectId = $currentTask[0]->getProjectId();
         $taskPreReqs = $builder->calculatePreReqArray($projectId);
+        $ret = null;
 
         if (!empty($taskPreReqs) && !in_array($preReqId, $taskPreReqs[$id])) {
             $taskPreReqs[$id][] = $preReqId;
@@ -252,13 +250,13 @@ class Upload
             if ($graph = $builder->parseAndBuild($taskPreReqs)) {
                 $index = $builder->find($id, $graph);
                 $currentTaskNode = $graph->getAllNodes($index);
-                $task = $taskDao->getTask($id);
-                $preReqTask = $taskDao->getTask($preReqId);
-                $taskDao->addTaskPreReq($id, $preReqId);
+                $task = DAO\TaskDao::getTask($id);
+                $preReqTask = DAO\TaskDao::getTask($preReqId);
+                $ret = DAO\TaskDao::addTaskPreReq($id, $preReqId);
 
                 if ($task->getTaskType() != Common\Enums\TaskTypeEnum::DESEGMENTATION) {
                     foreach ($currentTaskNode->getPreviousList() as $nodeId) {
-                        $preReq = $taskDao->getTask($nodeId);
+                        $preReq = DAO\TaskDao::getTask($nodeId);
                         if ($preReq->getTaskStatus() == Common\Enums\TaskStatusEnum::COMPLETE
                                 && $preReq->getTaskType() != Common\Enums\TaskTypeEnum::SEGMENTATION) {
                             Upload::copyOutputFile($id, $preReqId);
@@ -267,15 +265,14 @@ class Upload
                 }
             }
         }
+        return $ret;
     }
     
     public static function removeTaskPreReq($id, $preReqId)
     {
-        $taskDao = new DAO\TaskDao();
-        $task = $taskDao->getTask($id);
-        $taskDao->removeTaskPreReq($id, $preReqId);
-        $taskPreReqs = $taskDao->getTaskPreReqs($id);
-        
+        $task = DAO\TaskDao::getTask($id);
+        $ret = DAO\TaskDao::removeTaskPreReq($id, $preReqId);
+        $taskPreReqs = DAO\TaskDao::getTaskPreReqs($id);
         if (is_array($taskPreReqs) && count($taskPreReqs > 0)) {
             foreach ($taskPreReqs as $taskPreReq) {
                 if ($taskPreReq->getTaskStatus() == Common\Enums\TaskStatusEnum::COMPLETE) {
@@ -283,10 +280,9 @@ class Upload
                 }
             }
         } else {
-            $projectDao = new DAO\ProjectDao();
             $projectId = $task->getProjectId();
-            $projectFile = $projectDao->getProjectFile($projectId);
-            $projectFileInfo = $projectDao->getProjectFileInfo($projectId, null, null, null, null);
+            $projectFile = DAO\ProjectDao::getProjectFile($projectId);
+            $projectFileInfo = DAO\ProjectDao::getProjectFileInfo($projectId, null, null, null, null);
 
             file_put_contents(
                 Common\Lib\Settings::get(
@@ -296,16 +292,14 @@ class Upload
                 $projectFile
             );
         }
+        return $ret;
     }
     
     private static function copyOutputFile($id, $preReqId)
     {
-        $taskDao = new DAO\TaskDao();
-        $task = $taskDao->getTask($id);
-        //$task = $task[0];
+        $task = DAO\TaskDao::getTask($id);
         
-        $preReqTask = $taskDao->getTask($preReqId);
-        //$preReqTask = $preReqTask[0];
+        $preReqTask = DAO\TaskDao::getTask($preReqId);
         
         $preReqlatestFileVersion = DAO\TaskDao::getLatestFileVersion($preReqId);
         $preReqFileName = DAO\TaskDao::getFilename($preReqId, $preReqlatestFileVersion);

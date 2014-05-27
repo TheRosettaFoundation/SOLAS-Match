@@ -596,8 +596,6 @@ class UserDao
             $ret = array();
             foreach ($result as $row) {
                 $task = Common\Lib\ModelFactory::buildModel("Task", $row);
-                //$task->setTaskStatus(TaskDao::getTaskStatus($task->getId()));
-                //$task->setTaskStatus($task->getTaskStatus(($task->getId())));
                 $ret[] = $task;
             }
         }

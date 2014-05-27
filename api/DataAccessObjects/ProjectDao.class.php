@@ -415,7 +415,8 @@ class ProjectDao
         $projectFileInfo = self::getProjectFileInfo($projectId, null, null, null, null);
         $filename = $projectFileInfo->getFilename();
         $source = Common\Lib\Settings::get("files.upload_path")."proj-$projectId/$filename";
-        Lib\IO::downloadFile($source, $projectFileInfo->getMime());
+        
+        return Lib\IO::downloadFile($source/*, $projectFileInfo->getMime()*/);
     }
     
     //! Records a ProjectFile upload

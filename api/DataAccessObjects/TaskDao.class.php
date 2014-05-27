@@ -743,10 +743,9 @@ class TaskDao
     */
     public static function downloadTask($taskId, $version = 0)
     {
-        $task = self::getTasks($taskId);
-        $task=$task[0];
+        $task = self::getTask($taskId);
         if (!is_object($task)) {
-            header('HTTP/1.0 500 Not Found');
+            header('HTTP/1.0 404 Not Found');
             die;
         }
         $task_file_info = self::getTaskFileInfo($taskId, $version);

@@ -83,8 +83,8 @@ class TaskDaoTest extends \PHPUnit_Framework_TestCase
         $task->setTargetLocale($targetLocale);
         
         $task->setPublished(0);
-        $task->setTaskStatus(3);
-        $task->setTaskType(3);
+        $task->setTaskStatus(Common\Enums\TaskStatusEnum::IN_PROGRESS);
+        $task->setTaskType(Common\Enums\TaskTypeEnum::PROOFREADING);
         $task->setCreatedTime("2030-07-14 12:24:02");
         
         // Success

@@ -159,19 +159,22 @@ class TaskDao extends BaseDao
     public function addTaskPreReq($taskId, $preReqId)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/prerequisites/$preReqId";
-        $response =$this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
+        $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
+        return $response;
     }
 
     public function removeTaskPreReq($taskId, $preReqId)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/prerequisites/$preReqId";
-        $response =$this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
+        $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
+        error_log("REMOVE PREREQ (UI-DAO) RETURNS: $response");
+        return $response;
     }
 
     public function archiveTask($taskId, $userId)
     {
         $request = "{$this->siteApi}v0/tasks/archiveTask/$taskId/user/$userId";
-        $response =$this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
+        $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
         return $response;
     }
 

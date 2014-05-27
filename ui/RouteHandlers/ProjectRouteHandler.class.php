@@ -476,8 +476,14 @@ class ProjectRouteHandler
     public function downloadProjectFile($projectId)
     {
         $app = \Slim\Slim::getInstance();
-        $siteApi = Common\Lib\Settings::get("site.api");
-        $app->redirect("{$siteApi}v0/projects/$projectId/file/");
+        $projectDao = new DAO\ProjectDao();
+        $helper = new Common\Lib\APIHelper(".json");
+        
+        $fileInfo = $projectDao->getProjectFileInfo($projectId);
+        $fileName = $fileInfo->getFilename();
+        $absoluteFilePath = Common\Lib\Settings::get("files.upload_path")."proj-$projectId/$fileName";
+        
+        $helper->triggerFileDownload($app, $absoluteFilePath, $fileInfo->getMime());
     }
 }
 

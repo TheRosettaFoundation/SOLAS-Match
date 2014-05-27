@@ -132,11 +132,11 @@ class ProjectDao extends BaseDao
         return $ret;
     }
     
-    public function saveProjectFile($id, $data, $filename, $userId)
+    public function saveProjectFile($projectId, $data, $filename, $userId)
     {
         $ret = null;
         $filename = urlencode($filename);
-        $url = "{$this->siteApi}v0/projects/$id/file/$filename/$userId";
+        $url = "{$this->siteApi}v0/projects/$projectId/file/$filename/$userId";
         $ret = $this->client->call(null, $url, Common\Enums\HttpMethodEnum::PUT, null, null, $data);
         
         switch($this->client->getResponseCode()) {
