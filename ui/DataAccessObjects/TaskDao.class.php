@@ -274,4 +274,24 @@ class TaskDao extends BaseDao
         $ret = $this->client->call(null, $request);
         return $ret;
     }
+    
+    public function downloadTaskVersion($taskId, $version, $convert)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/io/download/task/$taskId";
+        $args = array();
+        $args['version'] = $version;
+        if ($convert) {
+            $args['convertToXliff'] = $convert;
+        }
+        
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::GET, null, $args);
+        switch ($this->client->getResponseCode()) {
+        	default:
+        	    return $ret;
+        	case Common\Enums\HttpStatusEnum::NOT_FOUND:
+        	    throw new Common\Exceptions\SolasMatchException("File not found!");
+        	    break; 
+        }
+    }
 }

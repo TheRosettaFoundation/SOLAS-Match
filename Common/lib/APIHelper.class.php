@@ -204,7 +204,7 @@ class APIHelper
     // http://stackoverflow.com/a/1147952
     private function systemExtensionMimeTypes()
     {
-        # Returns the system MIME type mapping of extensions to MIME types, as defined in /etc/mime.types.
+        //Returns the system MIME type mapping of extensions to MIME types, as defined in /etc/mime.types.
         $out = array();
         $file = fopen('/etc/mime.types', 'r');
         while (($line = fgets($file)) !== false) {
@@ -255,20 +255,6 @@ class APIHelper
         $extension =  strtolower($extension[count($extension)-1]);
 
         return array_key_exists($extension, $mimeMap)? $mimeMap[$extension] : $this->getMimeTypeFromSystem($extension);
-    }
-    
-    public function triggerFileDownload(\Slim\Slim $app, $absoluteFilePath, $mime)
-    {
-        $fsize = filesize($absoluteFilePath);
-        $path_parts = pathinfo($absoluteFilePath);
-        
-        $app->response->headers->set('Content-type', $mime);
-        $app->response->headers->set("Content-Disposition", "attachment; filename='".$path_parts["basename"]."'");
-        $app->response->headers->set("Content-length", $fsize);
-        $app->response->headers->set("X-Frame-Options", "ALLOWALL");
-        $app->response->headers->set("Pragma", "public");
-        $app->response->headers->set("Cache-control", "private"); //See http://goo.gl/3fdIVm
-        $app->response->headers->set("X-Sendfile", realpath($absoluteFilePath));
     }
 }
 

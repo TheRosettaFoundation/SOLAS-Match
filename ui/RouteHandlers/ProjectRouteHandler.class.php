@@ -477,13 +477,18 @@ class ProjectRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $projectDao = new DAO\ProjectDao();
-        $helper = new Common\Lib\APIHelper(".json");
         
-        $fileInfo = $projectDao->getProjectFileInfo($projectId);
-        $fileName = $fileInfo->getFilename();
-        $absoluteFilePath = Common\Lib\Settings::get("files.upload_path")."proj-$projectId/$fileName";
-        
-        $helper->triggerFileDownload($app, $absoluteFilePath, $fileInfo->getMime());
+        try {
+            $headArr = $projectDao->downloadProjectFile($projectId);
+            $foo = print_r($headArr, true);
+            //Convert header data to array and set headers appropriately
+            $headArr = json_decode($headArr);
+            foreach ($headArr as $key=>$val) {
+                $app->response->headers->set($key, $val);
+            }
+        } catch (Common\Exceptions\SolasMatchException $e) {
+            //TODO handle 404 response
+        }
     }
 }
 

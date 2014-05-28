@@ -185,4 +185,18 @@ class ProjectDao extends BaseDao
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
         return $ret;
     }
+    
+    public function downloadProjectFile($projectId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}/v0/io/download/project/$projectId";
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::GET);
+        
+        switch ($this->client->getResponseCode()) {
+        	default:
+        	    return $ret;
+        	case Common\Enums\HttpStatusEnum::NOT_FOUND:
+        	    throw new Common\Exceptions\SolasMatchException("No file!");
+        }
+    }
 }

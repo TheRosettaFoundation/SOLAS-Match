@@ -277,11 +277,17 @@ class TaskRouteHandler
         $app->redirect($ref = $app->request()->getReferrer());
     }
 
-    public function downloadTask($task_id)
+    public function downloadTask($taskId)
     {
         $app = \Slim\Slim::getInstance();
         $convert = $app->request()->get("convertToXliff");
-        $this->downloadTaskVersion($task_id, 0, $convert);
+        
+        try {
+            error_log("IN ROUTEHANDLER TRYING TO DOWNLOAD TASK");
+            $this->downloadTaskVersion($taskId, 0, $convert);
+        } catch (Common\Exceptions\SolasMatchException $e) {
+            //TODO handle 404
+        }
     }
 
     /*
@@ -326,8 +332,9 @@ class TaskRouteHandler
                     "targetLanguage"=> $targetLanguage,
                     "taskMetadata"  => $taskMetaData
         ));
-       
+        
         $app->render("task/task.claim.tpl");
+        $this->downloadTask($taskId);
     }
 
     public function taskClaimed($task_id)
@@ -340,11 +347,16 @@ class TaskRouteHandler
         $app->render("task/task.claimed.tpl");
     }
 
-    public function downloadTaskVersion($task_id, $version, $convert = 0)
+    public function downloadTaskVersion($taskId, $version, $convert = 0)
     {
         $app = \Slim\Slim::getInstance();
-        $siteApi = Common\Lib\Settings::get("site.api");
-        $app->redirect("{$siteApi}v0/tasks/$task_id/file/?version=$version&convertToXliff=$convert");
+        $taskDao = new DAO\TaskDao();
+        
+        $headerArr = $taskDao->downloadTaskVersion($taskId, $version, $convert);
+        $headerArr = json_decode($headerArr);
+        foreach ($headerArr as $key => $val) {
+            $app->response->headers->set($key, $val);
+        }
     }
 
     public function task($task_id)

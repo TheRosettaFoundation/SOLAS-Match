@@ -18,14 +18,19 @@ class JSONSerializer extends Serializer
         $ret = null;
         if (is_object($data)) {
             $ret = $data->serialize(new \DrSlump\Protobuf\Codec\Json());
+            //if the data is an associative array just json_encode it.
         } elseif (is_array($data)) {
-            $ret = new Models\ProtoList();
-            foreach ($data as $obj) {
-                if (!is_null($obj)) {
-                    $ret->addItem($obj->serialize(new \DrSlump\Protobuf\Codec\Json()));
+            if ($this->isAssocArr($data)) {
+                $ret = json_encode($data);
+            } else {
+                $ret = new Models\ProtoList();
+                foreach ($data as $obj) {
+                    if (!is_null($obj)) {
+                        $ret->addItem($obj->serialize(new \DrSlump\Protobuf\Codec\Json()));
+                    }
                 }
-            }
-            $ret = $ret->serialize(new \DrSlump\Protobuf\Codec\Json());
+                $ret = $ret->serialize(new \DrSlump\Protobuf\Codec\Json());
+             }
         } else {
             $ret = (is_null($data) || $data == "null") ? null : $data;
         }
@@ -64,5 +69,14 @@ class JSONSerializer extends Serializer
     public function getContentType()
     {
         return 'application/json; charset=utf-8';
+    }
+    
+    /*
+     * Checks if an array is associative
+     * Credit to http://stackoverflow.com/a/4254008/1799985
+     */
+    private function isAssocArr($array)
+    {
+        return (bool)count(array_filter(array_keys($array), 'is_string'));
     }
 }
