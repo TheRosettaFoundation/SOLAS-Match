@@ -482,7 +482,6 @@ class ProjectRouteHandler
         
         try {
             $headArr = $projectDao->downloadProjectFile($projectId);
-            $foo = print_r($headArr, true);
             //Convert header data to array and set headers appropriately
             $headArr = json_decode($headArr);
             foreach ($headArr as $key=>$val) {

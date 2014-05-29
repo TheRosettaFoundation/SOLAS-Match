@@ -408,7 +408,7 @@ class ProjectDao
     /*!
       This function returns the contents of the ProjectFile in the body of the HTTP Response.
       @param int $projectId is the id of a Project
-      @return No return but triggers the HTTP Response with the ProjectFile contents in the body.
+      @return Returns the project file content.
     */
     public static function getProjectFile($projectId)
     {

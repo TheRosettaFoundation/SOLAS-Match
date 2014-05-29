@@ -335,9 +335,8 @@ class TaskRouteHandler
                     "targetLanguage"=> $targetLanguage,
                     "taskMetadata"  => $taskMetaData
         ));
-        
-        $app->render("task/task.claim.tpl");
-        $this->downloadTask($taskId);
+       
+        $app->render("task/task.claim.tpl");        
     }
 
     public function taskClaimed($task_id)
@@ -362,7 +361,7 @@ class TaskRouteHandler
         }
     }
 
-    public function task($task_id)
+    public function task($taskId)
     {
         $app = \Slim\Slim::getInstance();
         $taskDao = new DAO\TaskDao();
@@ -371,12 +370,12 @@ class TaskRouteHandler
         $orgDao = new DAO\OrganisationDao();
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
-        $task = $taskDao->getTask($task_id);
+        $task = $taskDao->getTask($taskId);
         if (is_null($task)) {
-            $app->flash("error", sprintf(Lib\Localisation::getTranslation('task_view_5'), $task_id));
+            $app->flash("error", sprintf(Lib\Localisation::getTranslation('task_view_5'), $taskId));
             $app->redirect($app->urlFor("home"));
         }
-        $taskClaimed = $taskDao->isTaskClaimed($task_id);
+        $taskClaimed = $taskDao->isTaskClaimed($taskId);
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
@@ -417,14 +416,14 @@ class TaskRouteHandler
             $app->flashKeep();
             switch ($task->getTaskType()) {
                 case Common\Enums\TaskTypeEnum::DESEGMENTATION:
-                    $app->redirect($app->urlFor("task-desegmentation", array("task_id" => $task_id)));
+                    $app->redirect($app->urlFor("task-desegmentation", array("task_id" => $taskId)));
                     break;
                 case Common\Enums\TaskTypeEnum::TRANSLATION:
                 case Common\Enums\TaskTypeEnum::PROOFREADING:
-                    $app->redirect($app->urlFor("task-simple-upload", array("task_id" => $task_id)));
+                    $app->redirect($app->urlFor("task-simple-upload", array("task_id" => $taskId)));
                     break;
                 case Common\Enums\TaskTypeEnum::SEGMENTATION:
-                    $app->redirect($app->urlFor("task-segmentation", array("task_id" => $task_id)));
+                    $app->redirect($app->urlFor("task-segmentation", array("task_id" => $taskId)));
                     break;
             }
         } else {
@@ -444,9 +443,9 @@ class TaskRouteHandler
         
             $converter = Common\Lib\Settings::get("converter.converter_enabled");
         
-            $task_file_info = $taskDao->getTaskInfo($task_id);
-            $siteApi = Common\Lib\Settings::get("site.api");
-            $file_path= "{$siteApi}v0/tasks/$task_id/file";
+            $task_file_info = $taskDao->getTaskInfo($taskId);
+            $siteLocation = Common\Lib\Settings::get("site.location");
+            $file_path = "{$siteLocation}task/$taskId/download-file-user/";
 
             $app->view()->appendData(array(
                 "taskTypeColours" => $taskTypeColours,
@@ -895,8 +894,8 @@ class TaskRouteHandler
             ));
         }
         $task_file_info = $taskDao->getTaskInfo($task_id, 0);
-        $siteApi = Common\Lib\Settings::get("site.api");
-        $file_path= "{$siteApi}v0/tasks/$task_id/file";
+        $siteLocation = Common\Lib\Settings::get("site.location");
+        $file_path= "{$siteLocation}task/$task_id/download-file-user/";
        
         $app->view()->appendData(array(
             "file_preview_path" => $file_path,

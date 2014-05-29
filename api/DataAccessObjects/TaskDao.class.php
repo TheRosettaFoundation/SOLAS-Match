@@ -732,58 +732,6 @@ class TaskDao
     {
         return self::checkTaskFileVersion($taskId, $userId);
     }
-
-    //! Used to download a specific version of a Task file
-    /*!
-      Download a specific version of a file. By default it will trigger the download of the original Task file. This
-      uses XSendFile to trigger a file download when called.
-      @param int $taskId is the id of a Task
-      @param int $version is the version of the file being requested
-      @return No return as it triggers a download instead
-    */
-    public static function downloadTask($taskId, $version = 0)
-    {
-        $task = self::getTask($taskId);
-        if (!is_object($task)) {
-            header('HTTP/1.0 404 Not Found');
-            die;
-        }
-        $task_file_info = self::getTaskFileInfo($taskId, $version);
-        if (empty($task_file_info)) {
-            throw new \Exception("Task file info not set for.");
-        }
-
-        $absolute_file_path = Lib\Upload::absoluteFilePathForUpload($task, $version, $task_file_info['filename']);
-        $file_content_type = $task_file_info['content-type'];
-        Lib\IO::downloadFile($absolute_file_path, $file_content_type);
-    }
-    
-    //! Download an XLIFF version of a file
-    /*!
-      Same as downloadTask except it first converts the file to XLIFF before triggering the download.
-      @param int $taskId is the id of a Task
-      @param int $version is the version of the file being requested
-      @return No return as it triggers a download instead
-    */
-    public static function downloadConvertedTask($taskId, $version = 0)
-    {
-        $task = self::getTasks($taskId);
-
-        if (!is_object($task)) {
-            header('HTTP/1.0 404 Not Found');
-            die;
-        }
-        
-        $task_file_info = self::getTaskFileInfo($taskID, $version);
-
-        if (empty($task_file_info)) {
-            throw new \Exception("Task file info not set for.");
-        }
-
-        $absolute_file_path = Lib\Upload::absoluteFilePathForUpload($task, $version, $task_file_info['filename']);
-        $file_content_type = $task_file_info['content-type'];
-        Lib\IO::downloadConvertedFile($absolute_file_path, $file_content_type, $taskID);
-    }
     
     //! Get the User that claimed the specified Task
     /*!

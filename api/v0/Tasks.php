@@ -72,11 +72,6 @@ class Tasks
                     );
 
                     $app->get(
-                        '/file(:format)/',
-                        '\SolasMatch\API\V0\Tasks::getTaskFile'
-                    );
-
-                    $app->get(
                         '/version(:format)/',
                         '\SolasMatch\API\Lib\Middleware::isloggedIn',
                         '\SolasMatch\API\V0\Tasks::getTaskVersion'
@@ -223,17 +218,6 @@ class Tasks
     public static function getTasksTags($taskId, $format = ".json")
     {
         API\Dispatcher::sendResponse(null, DAO\TaskDao::getTags($taskId), null, $format);
-    }
-
-    public static function getTaskFile($taskId, $format = ".json")
-    {
-        $version = API\Dispatcher::clenseArgs('version', Common\Enums\HttpMethodEnum::GET, 0);
-        $convert = API\Dispatcher::clenseArgs('convertToXliff', Common\Enums\HttpMethodEnum::GET, false);
-        if ($convert && $convert !== "") {
-            DAO\TaskDao::downloadConvertedTask($taskId, $version);
-        } else {
-            DAO\TaskDao::downloadTask($taskId, $version);
-        }
     }
 
     public static function getTaskVersion($taskId, $format = ".json")

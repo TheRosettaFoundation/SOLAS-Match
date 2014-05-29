@@ -70,15 +70,6 @@ class TaskDao extends BaseDao
         return $response;
     }
 
-    // this is wrong fix
-    public function getTaskFile($taskId, $version = 0, $convertToXliff = false)
-    {
-        $request = "{$this->siteApi}v0/tasks/$taskId/file";
-        $args = array("version" => $version,"convertToXliff"=>$convertToXliff);
-        $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::GET, null, $args);
-        return $response;
-    }
-
     public function getTaskVersion($taskId)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/version";

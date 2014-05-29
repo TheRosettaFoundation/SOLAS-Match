@@ -36,7 +36,7 @@
         {/foreach}
         <p>
             You can download the <strong>original project file</strong> 
-            <a href="{urlFor name="home"}api/v0/projects/{$task->getProjectId()}/file">here</a>.
+            <a href="{urlFor name="home"}project/{$task->getProjectId()}/file">here</a>.
         </p>
         <p style="margin-bottom: 40px"/>
 

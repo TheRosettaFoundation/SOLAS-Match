@@ -65,7 +65,7 @@
                                 <a href="{urlFor name="download-task" options="task_id.$task_id"}">{Localisation::getTranslation('common_here')}</a>.
 
                                 {Localisation::getTranslation('task_segmentation_6')}
-                                <a href="{urlFor name="home"}api/v0/projects/{$task->getProjectId()}/file">{Localisation::getTranslation('common_here')}</a>.
+                                <a href="{urlFor name="home"}project/{$task->getProjectId()}/file">{Localisation::getTranslation('common_here')}</a>.
                             </p>
     
                             <hr/>
