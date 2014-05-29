@@ -21,7 +21,7 @@ class ProjectCreateForm extends PolymerElement
   String wordCountInput;
   SelectElement langSelect;
   SelectElement countrySelect;
-  String projectFileText;
+  var projectFileData;
   List<int> monthLengths;
   @observable List<int> years;
   @observable List<String> months;
@@ -60,7 +60,7 @@ class ProjectCreateForm extends PolymerElement
   {
     project = new Project();
     project.tag = new List<Tag>();
-    projectFileText = "";
+    projectFileData = "";
     localisation = new Localisation();
     languages = toObservable(new List<Language>());
     countries = toObservable(new List<Country>());
@@ -377,8 +377,8 @@ class ProjectCreateForm extends PolymerElement
               //track project via DAO if user selected that option
               successList.add(ProjectDao.trackProject(project.id, userid)
                 .catchError((e) {
-                  throw
-                    sprintf(localisation.getTranslation("project_create_failed_project_track"), [e.toString()]);
+                  return new Future.error(
+                    sprintf(localisation.getTranslation("project_create_failed_project_track"), [e.toString()]));
               }));
             }
            
@@ -397,10 +397,17 @@ class ProjectCreateForm extends PolymerElement
             });
             //catch any as yet uncaught error that occurred while creating the project or in the subsequent
             //.then() and delete the project.
-          }).catchError(( _ ){
+          }).catchError((e, stack){
             print("Something went wrong, deleting project");
-            ProjectDao.deleteProject(project.id);
-            project.id = null;
+            print("Error was:");
+            print(e);
+            print("Stack Trace is:");
+            print(stack);
+            return ProjectDao.deleteProject(project.id)
+            .then((_) {
+              project.id = null;
+              return new Future.error(e, stack);
+            });
           });
         //If validation failed, print message to console.
         } else {
@@ -408,8 +415,9 @@ class ProjectCreateForm extends PolymerElement
         }
         //catch any as yet uncaught errors from validateInput or the subsequent .then() and set
         //createProjectError to that error.
-      }).catchError((e) {
+      }).catchError((e, stack) {
         createProjectError = e;
+        print(stack);
       });
     }
   
@@ -463,7 +471,7 @@ class ProjectCreateForm extends PolymerElement
             createdTasks.add(segTask);
             //Save the file
             List<Future<bool>> segSuccess = new List<Future<bool>>();
-            segSuccess.add(TaskDao.saveTaskFile(segTask.id, userid, projectFileText)
+            segSuccess.add(TaskDao.saveTaskFile(segTask.id, userid, projectFileData)
             .then((_) => true)
             .catchError((e) {
               //Catch error in saving file
@@ -504,7 +512,7 @@ class ProjectCreateForm extends PolymerElement
                       
                       List<Future<bool>> transSuccess = new List<Future<bool>>();
                       //Save the file
-                      transSuccess.add(TaskDao.saveTaskFile(transTask.id, userid, projectFileText)
+                      transSuccess.add(TaskDao.saveTaskFile(transTask.id, userid, projectFileData)
                       .catchError((e) {
                         //Catch error from saving file
                         throw sprintf(
@@ -530,7 +538,7 @@ class ProjectCreateForm extends PolymerElement
                           
                           List<Future<bool>> proofSuccess = new List<Future<bool>>();
                           //Save file
-                          proofSuccess.add(TaskDao.saveTaskFile(proofTask.id, userid, projectFileText)
+                          proofSuccess.add(TaskDao.saveTaskFile(proofTask.id, userid, projectFileData)
                           .catchError((e) {
                             //Catch error from saving file
                             throw sprintf(
@@ -577,7 +585,7 @@ class ProjectCreateForm extends PolymerElement
               List<Future<bool>> proofSuccess = new List<Future<bool>>();
 
               //Upload proofreading task
-              proofSuccess.add(TaskDao.saveTaskFile(proofTask.id, userid, projectFileText)
+              proofSuccess.add(TaskDao.saveTaskFile(proofTask.id, userid, projectFileData)
               .then((_) => true)
               .catchError((e) {
                 throw sprintf(
@@ -613,7 +621,7 @@ class ProjectCreateForm extends PolymerElement
     {
       //Load the file and then call the API to upload it
       return loadProjectFile().then((_) {
-        return ProjectDao.uploadProjectFile(project.id, userid, filename, projectFileText);
+        return ProjectDao.uploadProjectFile(project.id, userid, filename, projectFileData);
       }).catchError((e) {
             throw sprintf(
                 localisation.getTranslation("project_create_failed_upload_file"),
@@ -637,7 +645,7 @@ class ProjectCreateForm extends PolymerElement
         Completer fileIsDone = new Completer();
         FileReader reader = new FileReader();
         reader.onLoadEnd.listen((e) {
-          projectFileText = e.target.result;
+          projectFileData = e.target.result;
           fileIsDone.complete(true);
         });
         reader.readAsArrayBuffer(projectFile);

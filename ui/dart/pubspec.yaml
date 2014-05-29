@@ -8,6 +8,7 @@ dependencies:
   json_object: any
   polymer: any
   sprintf: any
+  web_components: any
   xml: any
 transformers:
 - polymer:
@@ -16,3 +17,6 @@ transformers:
     - web/Routes/Users/UserPrivateProfile.dart
     - web/Routes/Users/ClaimedTasks.dart
     - web/Routes/Projects/ProjectCreate.dart
+- $dart2js:
+    checked: true
+    minify: false

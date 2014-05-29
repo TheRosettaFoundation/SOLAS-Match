@@ -149,14 +149,15 @@ class UserRouteHandler
             $browser = $browserData['browser'];
             if ($browser != 'IE') {
                 $extra_scripts = "
-                    <script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/shadow_dom/shadow_dom.debug.js\"></script>
-                    <script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/custom_element/custom-elements.debug.js\"></script>
+                    <script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/dart_support.js\"></script>
                     <script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/browser/interop.js\"></script>
                     <script src=\"{$app->urlFor("home")}ui/dart/build/web/Routes/Users/home.dart.js\"></script>
                     <span class=\"hidden\">
                     ";
                 $extra_scripts .= file_get_contents("ui/dart/web/Routes/Users/TaskStream.html");
                 $extra_scripts .= "</span>";
+                $viewData['platformJS'] = "
+                        <script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/platform.js\"></script>";
                 $viewData['extra_scripts'] = $extra_scripts;
             }
         }
@@ -508,19 +509,23 @@ class UserRouteHandler
         }
 
         $extraScripts = "
-<script \"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/custom_element/custom-elements.debug.js\"></script>
+<script \"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/dart_support.js\"></script>
 <script \"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/browser/interop.js\"></script>
 <script \"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/Routes/Users/UserPrivateProfile.dart.js\"></script>
 <span class=\"hidden\">
 ";
         $extraScripts .= file_get_contents("ui/dart/web/Routes/Users/UserPrivateProfileForm.html");
         $extraScripts .= "</span>";
+        //Including for polymer
+        $platformJS = 
+        "<script \"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/platform.js\"></script>";
 
         $app->view()->appendData(array(
             "user"              => $loggedInuser,
             "profileUser"       => $user,
             "private_access"    => true,
-            'extra_scripts'     => $extraScripts
+            'extra_scripts'     => $extraScripts,
+            'platformJS'        => $platformJS
         ));
        
         $app->render("user/user-private-profile.tpl");

@@ -38,6 +38,9 @@
         <!-- style overrides-->
         <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas.css"/>
 
+        {if isset($platformJS)}
+            {$platformJS}
+        {/if}
         <!-- javascript -->
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-1.9.0.min.js"></script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-ui.js"></script>

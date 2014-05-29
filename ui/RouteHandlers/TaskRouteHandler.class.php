@@ -218,7 +218,7 @@ class TaskRouteHandler
         }
 
         $extra_scripts = "
-<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/custom_element/custom-elements.debug.js\"></script>
+<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/dart_support.js\"></script>
 <script \"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/browser/interop.js\"></script>
 <script \"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/Routes/Users/ClaimedTasks.dart.js\"></script>
 <span class=\"hidden\">
@@ -227,9 +227,12 @@ class TaskRouteHandler
         $extra_scripts .= file_get_contents("ui/dart/web/Routes/Users/ClaimedTasksStream.html");
         $extra_scripts .= "</span>";
 
+        $platformJS = 
+        "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/platform.js\"></script>";
         $viewData = array('thisUser' => $user);
         $viewData['extra_scripts'] = $extra_scripts;
         $viewData['current_page'] = 'claimed-tasks';
+        $viewData['platformJS'] = $platformJS;
 
         $app->view()->appendData($viewData);
         $app->render("task/claimed-tasks.tpl");
