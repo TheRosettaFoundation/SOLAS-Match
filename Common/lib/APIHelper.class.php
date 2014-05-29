@@ -204,7 +204,7 @@ class APIHelper
     // http://stackoverflow.com/a/1147952
     private function systemExtensionMimeTypes()
     {
-        # Returns the system MIME type mapping of extensions to MIME types, as defined in /etc/mime.types.
+        //Returns the system MIME type mapping of extensions to MIME types, as defined in /etc/mime.types.
         $out = array();
         $file = fopen('/etc/mime.types', 'r');
         while (($line = fgets($file)) !== false) {

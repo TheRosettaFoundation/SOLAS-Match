@@ -33,7 +33,7 @@ class BadgeDaoTest extends \PHPUnit_Framework_TestCase
         // Success
         $insertedBadge = API\DAO\BadgeDao::insertAndUpdateBadge($systemBadge);
         $this->assertNotNull($insertedBadge);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Badge", $insertedBadge);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_BADGE, $insertedBadge);
         
         $this->assertEquals($systemBadge->getTitle(), $insertedBadge->getTitle());
         $this->assertEquals($systemBadge->getDescription(), $insertedBadge->getDescription());
@@ -51,7 +51,7 @@ class BadgeDaoTest extends \PHPUnit_Framework_TestCase
      
         $insertedBadge = API\DAO\BadgeDao::insertAndUpdateBadge($newBadge);
         $this->assertNotNull($insertedBadge);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Badge", $insertedBadge);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_BADGE, $insertedBadge);
         
         $this->assertEquals($newBadge->getTitle(), $insertedBadge->getTitle());
         $this->assertEquals($newBadge->getDescription(), $insertedBadge->getDescription());
@@ -64,7 +64,7 @@ class BadgeDaoTest extends \PHPUnit_Framework_TestCase
         // Success
         $updatedBadge = API\DAO\BadgeDao::insertAndUpdateBadge($insertedBadge);
         $this->assertNotNull($updatedBadge);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Badge", $updatedBadge);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_BADGE, $updatedBadge);
         
         $this->assertEquals($updatedBadge->getTitle(), $insertedBadge->getTitle());
         $this->assertEquals($updatedBadge->getDescription(), $insertedBadge->getDescription());
@@ -83,11 +83,11 @@ class BadgeDaoTest extends \PHPUnit_Framework_TestCase
         // Success
         $insertedBadge = API\DAO\BadgeDao::insertAndUpdateBadge($systemBadge);
         $this->assertNotNull($insertedBadge);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Badge", $insertedBadge);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_BADGE, $insertedBadge);
         
         $getBadge = API\DAO\BadgeDao::getBadge($insertedBadge->getId());
         $this->assertNotNull($getBadge);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Badge", $getBadge);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_BADGE, $getBadge);
         $this->assertEquals($insertedBadge, $getBadge);
     }
     
@@ -102,12 +102,12 @@ class BadgeDaoTest extends \PHPUnit_Framework_TestCase
         // Success
         $insertedBadge = API\DAO\BadgeDao::insertAndUpdateBadge($systemBadge);
         $this->assertNotNull($insertedBadge);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Badge", $insertedBadge);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_BADGE, $insertedBadge);
         
         $badge = UnitTestHelper::createBadge(null, "Polybadge");
         $insertedBadge = API\DAO\BadgeDao::insertAndUpdateBadge($systemBadge);
         $this->assertNotNull($insertedBadge);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Badge", $insertedBadge);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_BADGE, $insertedBadge);
         
         $getBadges = API\DAO\BadgeDao::getBadges(null, "Polybadge");
         $this->assertCount(2, $getBadges);
@@ -124,7 +124,7 @@ class BadgeDaoTest extends \PHPUnit_Framework_TestCase
         //So, the number existing should always be at least this.
         $this->assertGreaterThanOrEqual($this::BADGE_COUNT, count($allBadges));
         foreach ($allBadges as $badge) {
-            $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Badge", $badge);
+            $this->assertInstanceOf(UnitTestHelper::PROTO_BADGE, $badge);
         }
     }
     
@@ -138,7 +138,7 @@ class BadgeDaoTest extends \PHPUnit_Framework_TestCase
         $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
         $this->assertNotNull($insertedOrg);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG, $insertedOrg);
         $orgId = $insertedOrg->getId();
                 
         $orgBadge1 = UnitTestHelper::createBadge(null, "Org Badge 1", "Org Badge 1 Description", $orgId);
@@ -146,22 +146,22 @@ class BadgeDaoTest extends \PHPUnit_Framework_TestCase
         
         $insertedBadge1 = API\DAO\BadgeDao::insertAndUpdateBadge($orgBadge1);
         $this->assertNotNull($insertedBadge1);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Badge", $insertedBadge1);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_BADGE, $insertedBadge1);
         $insertedBadge2 = API\DAO\BadgeDao::insertAndUpdateBadge($orgBadge2);
         $this->assertNotNull($insertedBadge2);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Badge", $insertedBadge2);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_BADGE, $insertedBadge2);
 
         // Success
         $orgBadges = API\DAO\BadgeDao::getOrgBadges($orgId);
         $this->assertCount(2, $orgBadges);
         foreach ($orgBadges as $badge) {
-            $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Badge", $badge);
+            $this->assertInstanceOf(UnitTestHelper::PROTO_BADGE, $badge);
         }
         
         $org2 = UnitTestHelper::createOrg(null, "Organisation 2", "Organisation 2 Bio", "http://www.organisation2.org");
         $insertedOrg2 = API\DAO\OrganisationDao::insertAndUpdate($org2);
         $this->assertNotNull($insertedOrg2->getId());
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg2);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG, $insertedOrg2);
         $orgId2 = $insertedOrg2->getId();
         
         // Failure
@@ -180,13 +180,13 @@ class BadgeDaoTest extends \PHPUnit_Framework_TestCase
 
         $insertedUser = API\DAO\UserDao::save($user);
         $this->assertNotNull($insertedUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $insertedUser);
         $userID = $insertedUser->getId();
         
         $badge = UnitTestHelper::createBadge();
         $insertedBadge = API\DAO\BadgeDao::insertAndUpdateBadge($badge);
         $this->assertNotNull($insertedBadge);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Badge", $insertedBadge);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_BADGE, $insertedBadge);
         
         // Success
         $resultAssignBadge = API\DAO\BadgeDao::assignBadge($insertedUser->getId(), $insertedBadge->getId());
@@ -203,18 +203,18 @@ class BadgeDaoTest extends \PHPUnit_Framework_TestCase
         $org = UnitTestHelper::createOrg();
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
         $this->assertNotNull($insertedOrg);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG, $insertedOrg);
         
         $user = UnitTestHelper::createUser();
         $insertedUser = API\DAO\UserDao::save($user);
         $this->assertNotNull($insertedUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $insertedUser);
         $userId = $insertedUser->getId();
 
         $badge = UnitTestHelper::createBadge(null, "Test Remove Badge", "Testing Remove badge", $insertedOrg->getId());
         $insertedBadge = API\DAO\BadgeDao::insertAndUpdateBadge($badge);
         $this->assertNotNull($insertedBadge);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Badge", $insertedBadge);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_BADGE, $insertedBadge);
         $badgeId = $insertedBadge->getId();
 
         $resultAssign = API\DAO\BadgeDao::assignBadge($userId, $badgeId);
@@ -227,7 +227,7 @@ class BadgeDaoTest extends \PHPUnit_Framework_TestCase
         $badge2 = UnitTestHelper::createBadge(null, "Test Remove Badge 2", "Testing Remove badge 2", null);
         $insertedBadge2 = API\DAO\BadgeDao::insertAndUpdateBadge($badge2);
         $this->assertNotNull($insertedBadge2);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Badge", $insertedBadge2);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_BADGE, $insertedBadge2);
         
         // Failure
         $resultRemoveFailure = API\DAO\BadgeDao::removeUserBadge($userId, $insertedBadge2->getId());
@@ -244,7 +244,7 @@ class BadgeDaoTest extends \PHPUnit_Framework_TestCase
         $badge = UnitTestHelper::createBadge();
         $insertedBadge = API\DAO\BadgeDao::insertAndUpdateBadge($badge);
         $this->assertNotNull($insertedBadge);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Badge", $insertedBadge);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_BADGE, $insertedBadge);
         
         // Success
         $resultDelete = API\DAO\BadgeDao::deleteBadge($insertedBadge->getId());
@@ -265,12 +265,12 @@ class BadgeDaoTest extends \PHPUnit_Framework_TestCase
         $user = UnitTestHelper::createUser();
         $insertedUser = API\DAO\UserDao::save($user);
         $this->assertNotNull($insertedUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $insertedUser);
         
         $badge = UnitTestHelper::createBadge();
         $insertedBadge = API\DAO\BadgeDao::insertAndUpdateBadge($badge);
         $this->assertNotNull($insertedBadge->getId());
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Badge", $insertedBadge);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_BADGE, $insertedBadge);
         
         $userAssignedBadge = API\DAO\BadgeDao::assignBadge($insertedUser->getId(), $insertedBadge->getId());
         $this->assertEquals("1", $userAssignedBadge);

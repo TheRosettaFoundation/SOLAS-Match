@@ -159,19 +159,22 @@ class TaskDao extends BaseDao
     public function addTaskPreReq($taskId, $preReqId)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/prerequisites/$preReqId";
-        $response =$this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
+        $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
+        return $response;
     }
 
     public function removeTaskPreReq($taskId, $preReqId)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/prerequisites/$preReqId";
-        $response =$this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
+        $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
+        error_log("REMOVE PREREQ (UI-DAO) RETURNS: $response");
+        return $response;
     }
 
     public function archiveTask($taskId, $userId)
     {
         $request = "{$this->siteApi}v0/tasks/archiveTask/$taskId/user/$userId";
-        $response =$this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
+        $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
         return $response;
     }
 
@@ -270,5 +273,25 @@ class TaskDao extends BaseDao
         $request = "{$this->siteApi}v0/tasks/$taskId/timeClaimed";
         $ret = $this->client->call(null, $request);
         return $ret;
+    }
+    
+    public function downloadTaskVersion($taskId, $version, $convert)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/io/download/task/$taskId";
+        $args = array();
+        $args['version'] = $version;
+        if ($convert) {
+            $args['convertToXliff'] = $convert;
+        }
+        
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::GET, null, $args);
+        switch ($this->client->getResponseCode()) {
+        	default:
+        	    return $ret;
+        	case Common\Enums\HttpStatusEnum::NOT_FOUND:
+        	    throw new Common\Exceptions\SolasMatchException("File not found!");
+        	    break; 
+        }
     }
 }

@@ -132,11 +132,11 @@ class ProjectDao extends BaseDao
         return $ret;
     }
     
-    public function saveProjectFile($id, $data, $filename, $userId)
+    public function saveProjectFile($projectId, $data, $filename, $userId)
     {
         $ret = null;
         $filename = urlencode($filename);
-        $url = "{$this->siteApi}v0/projects/$id/file/$filename/$userId";
+        $url = "{$this->siteApi}v0/projects/$projectId/file/$filename/$userId";
         $ret = $this->client->call(null, $url, Common\Enums\HttpMethodEnum::PUT, null, null, $data);
         
         switch($this->client->getResponseCode()) {
@@ -184,5 +184,19 @@ class ProjectDao extends BaseDao
         $request = "{$this->siteApi}v0/projects/$project_id/updateWordCount/$newWordCount";
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
         return $ret;
+    }
+    
+    public function downloadProjectFile($projectId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}/v0/io/download/project/$projectId";
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::GET);
+        
+        switch ($this->client->getResponseCode()) {
+        	default:
+        	    return $ret;
+        	case Common\Enums\HttpStatusEnum::NOT_FOUND:
+        	    throw new Common\Exceptions\SolasMatchException("No file!");
+        }
     }
 }

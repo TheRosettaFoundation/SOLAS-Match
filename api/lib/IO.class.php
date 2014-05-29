@@ -107,21 +107,11 @@ class IO {
     /*
      * Pass a requested file back to the browser
      */
-    public static function downloadFile($absoluteFilePath, $contentType)
+    public static function downloadFile($absoluteFilePath/*, $contentType*/)
     {
         if (file_exists($absoluteFilePath)) {
-            $fsize = filesize($absoluteFilePath);
-            $path_parts = pathinfo($absoluteFilePath);
-            header('Content-type: '.$contentType);
-            header('Content-Disposition: attachment; filename="'.$path_parts["basename"].'"');
-            header("Content-length: $fsize");
-            header("X-Frame-Options: ALLOWALL");
-            header("Cache-control: private"); //use this to open files directly
-            header("X-Sendfile: ".realpath($absoluteFilePath));
-            // TODO -> this die is to get around Slim's $app->reponse() header/body response.
-            // Is there a cleaner way to download files?
+            return file_get_contents($absoluteFilePath);
         }
-        die;
     }
     
     

@@ -5,6 +5,8 @@ namespace SolasMatch\Tests\UI;
 require_once 'PHPUnit/Autoload.php';
 require_once __DIR__.'/../../api/vendor/autoload.php';
 \DrSlump\Protobuf::autoload();
+require_once __DIR__.'/../../Common/protobufs/models/WorkflowGraph.php'; //Why does this have to be required?
+require_once __DIR__.'/../../Common/protobufs/models/WorkflowNode.php';
 require_once __DIR__.'/../../api/DataAccessObjects/AdminDao.class.php';
 require_once __DIR__.'/../../api/DataAccessObjects/BadgeDao.class.php';
 require_once __DIR__.'/../../api/DataAccessObjects/ProjectDao.class.php';
@@ -52,7 +54,7 @@ class ProjectDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -61,12 +63,214 @@ class ProjectDaoTest extends \PHPUnit_Framework_TestCase
         $org = UnitTestHelper::createOrg();
         $insertedOrg = $orgDao->createOrg($org, $userId);
         $this->assertNotNull($insertedOrg);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation",$insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG,$insertedOrg);
     
         $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = $projectDao->createProject($project);
         $this->assertNotNull($insertedProject);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_PROJECT, $insertedProject);
     
+    }
+    
+    /**
+     * @covers UI\DAO\ProjectDao::getProject
+     */
+    public function testGetProject()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $userDao = new UI\DAO\UserDao();
+        $orgDao = new UI\DAO\OrganisationDao();
+        $projectDao = new UI\DAO\ProjectDao();
+        $taskDao = new UI\DAO\TaskDao();
+        
+        $userEmail = "blah@test.com";
+        $userPw = "password";
+        $isRegistered = $userDao->register($userEmail, $userPw);
+        $this->assertTrue($isRegistered);
+        
+        $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
+        $userId = $registerUser->getId();
+        $this->assertNotNull($registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
+        //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
+        $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
+        $this->assertEquals("1", $finishRegResult);
+        
+        $userDao->login($userEmail, $userPw);
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = $orgDao->createOrg($org, $userId);
+        $this->assertNotNull($insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG,$insertedOrg);
+        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());
+        $insertedProject = $projectDao->createProject($project);
+        $this->assertNotNull($insertedProject);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_PROJECT, $insertedProject);
+        
+        $getProject = $projectDao->getProject($insertedProject->getId());
+        $this->assertNotNull($getProject);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_PROJECT, $getProject);
+        $this->assertEquals($insertedProject, $getProject);
+    }
+    
+    /**
+     * @covers UI\DAO\ProjectDao::getProjectTasks
+     */
+    public function testGetProjectTasks()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $userDao = new UI\DAO\UserDao();
+        $orgDao = new UI\DAO\OrganisationDao();
+        $projectDao = new UI\DAO\ProjectDao();
+        $taskDao = new UI\DAO\TaskDao();
+        
+        $userEmail = "blah@test.com";
+        $userPw = "password";
+        $isRegistered = $userDao->register($userEmail, $userPw);
+        $this->assertTrue($isRegistered);
+        
+        $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
+        $userId = $registerUser->getId();
+        $this->assertNotNull($registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
+        //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
+        $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
+        $this->assertEquals("1", $finishRegResult);
+        
+        $userDao->login($userEmail, $userPw);
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = $orgDao->createOrg($org, $userId);
+        $this->assertNotNull($insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG, $insertedOrg);
+        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());
+        $insertedProject = $projectDao->createProject($project);
+        $this->assertNotNull($insertedProject);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_PROJECT, $insertedProject);
+        
+        $task = UnitTestHelper::createTask($insertedProject->getId());
+        $insertedTask = $taskDao->createTask($task);
+        $this->assertNotNull($insertedTask);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_TASK, $insertedTask);
+        $task2 = UnitTestHelper::createTask($insertedProject->getId(), null, "Task 2");
+        $insertedTask2 = $taskDao->createTask($task2);
+        $this->assertNotNull($insertedTask2);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_TASK, $insertedTask2);
+        
+        $projectTasks = $projectDao->getProjectTasks($insertedProject->getId());
+        $this->assertNotNull($projectTasks);
+        $this->assertCount(2, $projectTasks);
+        
+        foreach ($projectTasks as $projTask) {
+            $this->assertInstanceOf(UnitTestHelper::PROTO_TASK, $projTask);
+        }
+    }
+    
+    /**
+     * @covers UI\DAO::getProjectGraph
+     */
+    public function testGetProjectGraph()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $userDao = new UI\DAO\UserDao();
+        $orgDao = new UI\DAO\OrganisationDao();
+        $projectDao = new UI\DAO\ProjectDao();
+        $taskDao = new UI\DAO\TaskDao();
+        
+        $userEmail = "blah@test.com";
+        $userPw = "password";
+        $isRegistered = $userDao->register($userEmail, $userPw);
+        $this->assertTrue($isRegistered);
+        
+        $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
+        $userId = $registerUser->getId();
+        $this->assertNotNull($registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
+        //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
+        $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
+        $this->assertEquals("1", $finishRegResult);
+        
+        $userDao->login($userEmail, $userPw);
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = $orgDao->createOrg($org, $userId);
+        $this->assertNotNull($insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG, $insertedOrg);
+        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());
+        $insertedProject = $projectDao->createProject($project);
+        $this->assertNotNull($insertedProject);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_PROJECT, $insertedProject);
+        
+        $task = UnitTestHelper::createTask($insertedProject->getId());
+        $insertedTask = $taskDao->createTask($task);
+        $this->assertNotNull($insertedTask);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_TASK, $insertedTask);
+        $task2 = UnitTestHelper::createTask($insertedProject->getId(), null, "Task 2");
+        $insertedTask2 = $taskDao->createTask($task2);
+        $this->assertNotNull($insertedTask2);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_TASK, $insertedTask2);
+        
+        $projectTasks = $projectDao->getProjectTasks($insertedProject->getId());
+        $this->assertNotNull($projectTasks);
+        $this->assertCount(2, $projectTasks);
+        
+        foreach ($projectTasks as $projTask) {
+            $this->assertInstanceOf(UnitTestHelper::PROTO_TASK, $projTask);
+        }
+        
+        $graph = $projectDao->getProjectGraph($insertedProject->getId());
+        $this->assertNotNull($graph);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_WORKFLOW_GRAPH, $graph);
+    }
+    
+    /**
+     * @covers UI\ProjectDao::getProjectTags
+     */
+    public function testGetProjectTags()
+    {
+        UnitTestHelper::teardownDb();
+        
+        $userDao = new UI\DAO\UserDao();
+        $orgDao = new UI\DAO\OrganisationDao();
+        $projectDao = new UI\DAO\ProjectDao();
+        $taskDao = new UI\DAO\TaskDao();
+        
+        $userEmail = "blah@test.com";
+        $userPw = "password";
+        $isRegistered = $userDao->register($userEmail, $userPw);
+        $this->assertTrue($isRegistered);
+        
+        $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
+        $userId = $registerUser->getId();
+        $this->assertNotNull($registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
+        //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
+        $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
+        $this->assertEquals("1", $finishRegResult);
+        
+        $userDao->login($userEmail, $userPw);
+        $org = UnitTestHelper::createOrg();
+        $insertedOrg = $orgDao->createOrg($org, $userId);
+        $this->assertNotNull($insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG, $insertedOrg);
+        
+        $project = UnitTestHelper::createProject($insertedOrg->getId());
+        $insertedProject = $projectDao->createProject($project);
+        $this->assertNotNull($insertedProject);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_PROJECT, $insertedProject);
+        
+        $task = UnitTestHelper::createTask($insertedProject->getId());
+        $insertedTask = $taskDao->createTask($task);
+        $this->assertNotNull($insertedTask);
+        
+        $getTags = $projectDao->getProjectTags($insertedProject->getId());
+        $this->assertNotNull($getTags);
+        $this->assertCount(2, $getTags); //UnitTestHelper gives a project 2 tags by default
+        foreach ($getTags as $tag) {
+            $this->assertInstanceOf(UnitTestHelper::PROTO_TAG, $tag);
+        }
     }
 }

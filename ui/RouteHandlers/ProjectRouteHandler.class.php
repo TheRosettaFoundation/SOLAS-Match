@@ -476,8 +476,19 @@ class ProjectRouteHandler
     public function downloadProjectFile($projectId)
     {
         $app = \Slim\Slim::getInstance();
-        $siteApi = Common\Lib\Settings::get("site.api");
-        $app->redirect("{$siteApi}v0/projects/$projectId/file/");
+        $projectDao = new DAO\ProjectDao();
+        
+        try {
+            $headArr = $projectDao->downloadProjectFile($projectId);
+            $foo = print_r($headArr, true);
+            //Convert header data to array and set headers appropriately
+            $headArr = json_decode($headArr);
+            foreach ($headArr as $key=>$val) {
+                $app->response->headers->set($key, $val);
+            }
+        } catch (Common\Exceptions\SolasMatchException $e) {
+            //TODO handle 404 response
+        }
     }
 }
 
