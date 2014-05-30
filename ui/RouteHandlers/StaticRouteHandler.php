@@ -6,7 +6,7 @@ use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
 use \SolasMatch\Common as Common;
 
-class StaticRouteHandeler
+class StaticRouteHandler
 {
     public function init()
     {
