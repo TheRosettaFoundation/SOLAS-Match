@@ -158,7 +158,6 @@ class TaskDao extends BaseDao
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/prerequisites/$preReqId";
         $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
-        error_log("REMOVE PREREQ (UI-DAO) RETURNS: $response");
         return $response;
     }
 
@@ -277,6 +276,7 @@ class TaskDao extends BaseDao
         }
         
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::GET, null, $args);
+
         switch ($this->client->getResponseCode()) {
         	default:
         	    return $ret;

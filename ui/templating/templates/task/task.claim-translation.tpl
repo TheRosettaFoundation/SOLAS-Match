@@ -20,6 +20,8 @@
 
     <section>
         <form class="well" method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
+            <a href="{urlFor name="download-task" options="task_id.$task_id"}" class=" btn btn-primary">
+                <i class="icon-download icon-white"></i> {Localisation::getTranslation('common_download_file')}</a>
             <h3>{Localisation::getTranslation('common_it_is_time_to_decide')}</h3>
             <p>
                 {Localisation::getTranslation('task_claim_translation_0')} {Localisation::getTranslation('task_claim_translation_4')}
@@ -34,5 +36,4 @@
             </p>
         </form>
     </section>
-
-    <iframe src="{urlFor name="download-task" options="task_id.$task_id"}" width="1" height="1" frameborder="no"></iframe>
+    

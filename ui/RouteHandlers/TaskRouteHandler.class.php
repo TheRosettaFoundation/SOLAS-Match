@@ -245,7 +245,18 @@ class TaskRouteHandler
 
         $task = $taskDao->getTask($task_id);
         $latest_version = $taskDao->getTaskVersion($task_id);
-        $this->downloadTaskVersion($task_id, $latest_version);
+        try {
+            $this->downloadTaskVersion($task_id, $latest_version);
+        } catch (Common\Exceptions\SolasMatchException $e) {
+            $app->flash(
+                    "error",
+                    sprintf(
+                            Lib\Localisation::getTranslation('common_error_file_not_found'),
+                            Lib\Localisation::getTranslation('common_latest_task_file_version'),
+                            Common\Lib\Settings::get("site.system_email_address"))
+            );
+            $app->redirect($app->urlFor('home'));
+        }
     }
 
     public function archiveTask($task_id)
@@ -286,10 +297,16 @@ class TaskRouteHandler
         $convert = $app->request()->get("convertToXliff");
         
         try {
-            error_log("IN ROUTEHANDLER TRYING TO DOWNLOAD TASK");
             $this->downloadTaskVersion($taskId, 0, $convert);
         } catch (Common\Exceptions\SolasMatchException $e) {
-            //TODO handle 404
+            $app->flash(
+                    "error",
+                    sprintf(
+                            Lib\Localisation::getTranslation('common_error_file_not_found'), 
+                            Lib\Localisation::getTranslation('common_original_task_file'),
+                            Common\Lib\Settings::get("site.system_email_address"))
+                );
+            $app->redirect($app->urlFor('home'));
         }
     }
 
@@ -325,8 +342,9 @@ class TaskRouteHandler
         $targetLanguage = $languageDao->getLanguageByCode($targetLocale->getLanguageCode());
         $taskMetaData = $taskDao->getTaskInfo($taskId);
 
-        // Used in proofreading page
-        $projectFileDownload = $app->urlFor("home")."api/v0/projects/".$task->getProjectId()."/file";
+        // Used in proofreading page, link to original project file
+        $projectFileDownload = $app->urlFor("home")."project/".$task->getProjectId()."/file";
+        
         
         $app->view()->appendData(array(
                     "projectFileDownload" => $projectFileDownload,

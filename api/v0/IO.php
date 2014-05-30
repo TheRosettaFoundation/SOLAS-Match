@@ -74,7 +74,6 @@ class IO
                             "proj-$projectId/task-$taskId/v-$version/$fileName";
         $mime = $helper->getCanonicalMime($fileName);
         if (file_exists($absoluteFilePath)) {
-            error_log("FILE FOR TASK EXISTS");
             API\Dispatcher::sendResponse(null, self::setDownloadHeaders($absoluteFilePath, $mime), null, $format);
         } else {
             API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::NOT_FOUND);
@@ -82,10 +81,7 @@ class IO
     }
     
     private static function setDownloadHeaders($absoluteFilePath, $mime)
-    {
-        error_log("AFP IS: $absoluteFilePath, MIME IS: $mime");
-        $app = \Slim\Slim::getInstance();
-        
+    {        
         $fsize = filesize($absoluteFilePath);
         $path_parts = pathinfo($absoluteFilePath);
         $headerArray = array();

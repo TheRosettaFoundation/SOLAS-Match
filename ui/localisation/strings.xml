@@ -186,8 +186,14 @@
     <string name="common_error_file_stopped_by_extension">File upload stopped by extension.</string>
     <string name="common_error_file_invalid_empty">Please make sure the file you are trying to upload is valid and not empty.</string>
     <string name="common_error_org_name_not_set"><strong>Organisation name</strong> must be set.</string>
-    <string name="common_error_org_name_in_use">An organisation named <strong>%s</strong> is already registered. Please use a different name.</string>    
+    <string name="common_error_org_name_in_use">An organisation named <strong>%s</strong> is already registered. Please use a different name.</string>
+    <string name="common_error_file_not_found">We could not find the requested file on our system. Requested file type: %s. Please contact us at %s with details of this problem.</string>
+    <!-- The 3 strings below are used for the error above -->
+    <string name="common_original_project_file">original project file</string>
+    <string name="common_original_task_file">original task file</string>
+    <string name="common_latest_task_file_version">latest task file version</string>
 
+    <string name="common_download_file">Download File</string>
     <string name="common_can_you_open_file">Can you open the file on your computer?</string>
     <string name="common_part_of_for">Part of <a href="%s">%s</a> for <a href="%s">%s</a></string> 
     <string name="common_what_type_of_emails">What type of e-mails am I receiving?</string>

@@ -488,7 +488,14 @@ class ProjectRouteHandler
                 $app->response->headers->set($key, $val);
             }
         } catch (Common\Exceptions\SolasMatchException $e) {
-            //TODO handle 404 response
+            $app->flash(
+                    "error",
+                    sprintf(
+                            Lib\Localisation::getTranslation('common_error_file_not_found'), 
+                            Lib\Localisation::getTranslation('common_original_project_file'),
+                            Common\Lib\Settings::get("site.system_email_address"))
+                );
+            $app->redirect($app->urlFor('home'));
         }
     }
 }
