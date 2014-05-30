@@ -517,7 +517,7 @@ class UserRouteHandler
         $extraScripts .= file_get_contents("ui/dart/web/Routes/Users/UserPrivateProfileForm.html");
         $extraScripts .= "</span>";
         //Including for polymer
-        $platformJS = 
+        $platformJS =
         "<script \"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/platform.js\"></script>";
 
         $app->view()->appendData(array(

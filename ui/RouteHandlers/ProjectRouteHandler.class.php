@@ -200,16 +200,28 @@ class ProjectRouteHandler
                 if ($post['trackOrganisation']) {
                     $userTrackOrganisation = $userDao->trackOrganisation($user_id, $project->getOrganisationId());
                     if ($userTrackOrganisation) {
-                        $app->flashNow("success", Lib\Localisation::getTranslation('org_public_profile_org_track_success'));
+                        $app->flashNow(
+                            "success",
+                            Lib\Localisation::getTranslation('org_public_profile_org_track_success')
+                        );
                     } else {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('org_public_profile_org_track_error'));
+                        $app->flashNow(
+                            "error",
+                            Lib\Localisation::getTranslation('org_public_profile_org_track_error')
+                        );
                     }
                 } else {
                     $userUntrackOrganisation = $userDao->unTrackOrganisation($user_id, $project->getOrganisationId());
                     if ($userUntrackOrganisation) {
-                        $app->flashNow("success", Lib\Localisation::getTranslation('org_public_profile_org_untrack_success'));
+                        $app->flashNow(
+                            "success",
+                            Lib\Localisation::getTranslation('org_public_profile_org_untrack_success')
+                        );
                     } else {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('org_public_profile_org_untrack_error'));
+                        $app->flashNow(
+                            "error",
+                            Lib\Localisation::getTranslation('org_public_profile_org_untrack_error')
+                        );
                     }
                 }
             }
@@ -307,14 +319,13 @@ class ProjectRouteHandler
 
             if (isset($post['word-count'])) {
                  $result=$projectDao->updateProjectWordCount($project_id, $post['word-count']);
-                 if ($result==1)
-                 {
+                if ($result==1) {
                     $project->setWordCount($post['word-count']);
-                 } elseif ($result==2) {
-                   $app->flash("error", Lib\Localisation::getTranslation('project_alter_word_count_error_1'));
-                 } else {
-                   $app->flash("error", Lib\Localisation::getTranslation('project_alter_word_count_error_2'));
-                 }
+                } elseif ($result==2) {
+                    $app->flash("error", Lib\Localisation::getTranslation('project_alter_word_count_error_1'));
+                } else {
+                    $app->flash("error", Lib\Localisation::getTranslation('project_alter_word_count_error_2'));
+                }
             }
 
             if (isset($post['impact'])) {
@@ -423,7 +434,7 @@ class ProjectRouteHandler
 ";
         $extraScripts .= file_get_contents("ui/dart/web/Routes/Projects/ProjectCreateForm.html");
         $extraScripts .= "</span>";
-        $platformJS = 
+        $platformJS =
         "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/platform.js\"></script>";
 
         $app->view()->appendData(array(
@@ -484,17 +495,18 @@ class ProjectRouteHandler
             $headArr = $projectDao->downloadProjectFile($projectId);
             //Convert header data to array and set headers appropriately
             $headArr = json_decode($headArr);
-            foreach ($headArr as $key=>$val) {
+            foreach ($headArr as $key => $val) {
                 $app->response->headers->set($key, $val);
             }
         } catch (Common\Exceptions\SolasMatchException $e) {
             $app->flash(
-                    "error",
-                    sprintf(
-                            Lib\Localisation::getTranslation('common_error_file_not_found'), 
-                            Lib\Localisation::getTranslation('common_original_project_file'),
-                            Common\Lib\Settings::get("site.system_email_address"))
-                );
+                "error",
+                sprintf(
+                    Lib\Localisation::getTranslation('common_error_file_not_found'),
+                    Lib\Localisation::getTranslation('common_original_project_file'),
+                    Common\Lib\Settings::get("site.system_email_address")
+                )
+            );
             $app->redirect($app->urlFor('home'));
         }
     }

@@ -22,15 +22,15 @@ class IO
             /* Routes starting with /v0/io */
             $app->group('/io', function () use ($app) {
                 $app->get(
-	               '/download/project/:projectId(:format)/',
-                   '\SolasMatch\API\Lib\Middleware::isLoggedIn',
-                   '\SolasMatch\API\V0\IO::downloadProjectFile'
+                    '/download/project/:projectId(:format)/',
+                    '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+                    '\SolasMatch\API\V0\IO::downloadProjectFile'
                 );
                 
                 $app->get(
                     '/download/task/:taskId(:format)/',
                     '\SolasMatch\API\Lib\Middleware::isLoggedIn',
-                    '\SolasMatch\API\V0\IO::downloadTaskFile'        
+                    '\SolasMatch\API\V0\IO::downloadTaskFile'
                 );
             });
         });
@@ -81,7 +81,7 @@ class IO
     }
     
     private static function setDownloadHeaders($absoluteFilePath, $mime)
-    {        
+    {
         $fsize = filesize($absoluteFilePath);
         $path_parts = pathinfo($absoluteFilePath);
         $headerArray = array();

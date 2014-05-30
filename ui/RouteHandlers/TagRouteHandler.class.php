@@ -61,7 +61,7 @@ class TagRouteHandler
             }
         }
         
-        if(is_null($nameErr)) {
+        if (is_null($nameErr)) {
             $app->view()->appendData(array(
                 "user_tags" => $user_tags,
                 "foundTags" => $foundTags,

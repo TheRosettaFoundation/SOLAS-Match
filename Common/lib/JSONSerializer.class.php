@@ -30,7 +30,7 @@ class JSONSerializer extends Serializer
                     }
                 }
                 $ret = $ret->serialize(new \DrSlump\Protobuf\Codec\Json());
-             }
+            }
         } else {
             $ret = (is_null($data) || $data == "null") ? null : $data;
         }

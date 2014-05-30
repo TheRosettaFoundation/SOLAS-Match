@@ -6,7 +6,6 @@ use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
 use \SolasMatch\Common as Common;
 
-
 require_once __DIR__.'/../../api/lib/IO.class.php';
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
 
@@ -171,7 +170,7 @@ class TaskRouteHandler
         //If tasksPerPage divides into the task count with a remainder then last page will have
         //less than $tasksPerPage tasks.
         $modulus = $archivedTasksCount % $tasksPerPage;
-        if ( $modulus > 0 && $page_no == $totalPages) {
+        if ($modulus > 0 && $page_no == $totalPages) {
             $bottom = $modulus - 1;
         } else {
             $bottom = $top + $tasksPerPage - 1;
@@ -227,7 +226,7 @@ class TaskRouteHandler
         $extra_scripts .= file_get_contents("ui/dart/web/Routes/Users/ClaimedTasksStream.html");
         $extra_scripts .= "</span>";
 
-        $platformJS = 
+        $platformJS =
         "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/platform.js\"></script>";
         $viewData = array('thisUser' => $user);
         $viewData['extra_scripts'] = $extra_scripts;
@@ -249,11 +248,12 @@ class TaskRouteHandler
             $this->downloadTaskVersion($task_id, $latest_version);
         } catch (Common\Exceptions\SolasMatchException $e) {
             $app->flash(
-                    "error",
-                    sprintf(
-                            Lib\Localisation::getTranslation('common_error_file_not_found'),
-                            Lib\Localisation::getTranslation('common_latest_task_file_version'),
-                            Common\Lib\Settings::get("site.system_email_address"))
+                "error",
+                sprintf(
+                    Lib\Localisation::getTranslation('common_error_file_not_found'),
+                    Lib\Localisation::getTranslation('common_latest_task_file_version'),
+                    Common\Lib\Settings::get("site.system_email_address")
+                )
             );
             $app->redirect($app->urlFor('home'));
         }
@@ -300,12 +300,13 @@ class TaskRouteHandler
             $this->downloadTaskVersion($taskId, 0, $convert);
         } catch (Common\Exceptions\SolasMatchException $e) {
             $app->flash(
-                    "error",
-                    sprintf(
-                            Lib\Localisation::getTranslation('common_error_file_not_found'), 
-                            Lib\Localisation::getTranslation('common_original_task_file'),
-                            Common\Lib\Settings::get("site.system_email_address"))
-                );
+                "error",
+                sprintf(
+                    Lib\Localisation::getTranslation('common_error_file_not_found'),
+                    Lib\Localisation::getTranslation('common_original_task_file'),
+                    Common\Lib\Settings::get("site.system_email_address")
+                )
+            );
             $app->redirect($app->urlFor('home'));
         }
     }
@@ -354,7 +355,7 @@ class TaskRouteHandler
                     "taskMetadata"  => $taskMetaData
         ));
        
-        $app->render("task/task.claim.tpl");        
+        $app->render("task/task.claim.tpl");
     }
 
     public function taskClaimed($task_id)
@@ -450,7 +451,7 @@ class TaskRouteHandler
 
             /*Metadata required for Tracking Organisations*/
             $org_id = $project->getOrganisationId();
-            $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id , $org_id);
+            $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id, $org_id);
             $isMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
 
             $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
@@ -1024,7 +1025,7 @@ class TaskRouteHandler
         if ($isOrgMember || $isSiteAdmin) {
             $app->view()->appendData(array("isOrgMember" => $isOrgMember));
         }
-        $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id , $project->getOrganisationId());
+        $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id, $project->getOrganisationId());
 
         $app->view()->appendData(array(
                 "org" => $org,
@@ -1195,7 +1196,6 @@ class TaskRouteHandler
     }
     
     public function taskSegmentation($task_id)
-
     {
         $app = \Slim\Slim::getInstance();
 

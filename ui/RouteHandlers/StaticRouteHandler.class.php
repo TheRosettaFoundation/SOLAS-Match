@@ -11,7 +11,7 @@ class StaticRouteHandler
     public function init()
     {
 
-        $app = \Slim\Slim::getInstance(); 
+        $app = \Slim\Slim::getInstance();
 
         $app->get('/static/statistics/', array($this, 'statistics'))->name("statistics");
         $app->get("/static/privacy/", array($this, "privacy"))->name("privacy");
@@ -70,7 +70,7 @@ class StaticRouteHandler
     public function siteLanguage()
     {
 
-        $app = \Slim\Slim::getInstance(); 
+        $app = \Slim\Slim::getInstance();
         if ($post = $app->request()->post()) {
             if (isset($post['language'])) {
                 Common\Lib\UserSession::setUserLanguage($post['language']);
