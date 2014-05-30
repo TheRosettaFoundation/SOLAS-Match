@@ -42,7 +42,7 @@
             {$platformJS}
         {/if}
         <!-- javascript -->
-        <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-1.9.0.min.js"></script>
+        <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-1.9.0.js"></script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-ui.js"></script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/Long.min.js"></script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/ByteBuffer.min.js"></script>
