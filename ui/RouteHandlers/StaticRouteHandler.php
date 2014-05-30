@@ -108,6 +108,6 @@ class StaticRouteHandler
     }
 }
 
-$route_handler = new StaticRouteHandeler();
+$route_handler = new StaticRouteHandler();
 $route_handler->init();
 unset ($route_handler);
