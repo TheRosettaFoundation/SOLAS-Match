@@ -18,5 +18,5 @@ transformers:
     - web/Routes/Users/ClaimedTasks.dart
     - web/Routes/Projects/ProjectCreate.dart
 - $dart2js:
-    checked: true
+    checked: false 
     minify: false
