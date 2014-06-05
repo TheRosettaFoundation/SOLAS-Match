@@ -10,20 +10,6 @@
 /*!40101 SET NAMES utf8 */;
 SET FOREIGN_KEY_CHECKS=0;
 
-/*--------------------------------------------start of alter tables (OAuth)--------------------------------*/
-
--- Changing collation of OAuth tables to match ours
-ALTER TABLE oauth_clients CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE oauth_client_endpoints CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE oauth_sessions CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE oauth_session_access_tokens CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE oauth_session_authcodes CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE oauth_session_redirects CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE oauth_session_refresh_tokens CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE oauth_scopes CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE oauth_session_token_scopes CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE oauth_session_authcode_scopes CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
-
 /*--------------------------------------------------start of tables--------------------------------*/
 
 -- Dumping structure for table Solas-Match-Test.Admins
@@ -191,7 +177,6 @@ CREATE TABLE IF NOT EXISTS `BannedUsers` (
   CONSTRAINT `FK_BannedUsers_Users_2` FOREIGN KEY (`user_id-admin`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-
 -- Dumping data for table Solas-Match-Test.Badges: ~4 rows (approximately)
 /*!40000 ALTER TABLE `Badges` DISABLE KEYS */;
 REPLACE INTO `Badges` (`id`, `owner_id`, `title`, `description`) VALUES
@@ -239,24 +224,6 @@ REPLACE INTO `NotificationIntervals` (`id`, `name`) VALUES
 	(1, "Daily"),
 	(2, "Weekly"),
 	(3, "Monthly");
-
-DROP PROCEDURE IF EXISTS alterTable;
-DELIMITER //
-CREATE PROCEDURE alterTable()
-BEGIN
-    if EXISTS(select 1 from information_schema.`COLUMNS` i 
-                    where i.TABLE_SCHEMA = database() and i.TABLE_NAME = 'Users') then
-        if NOT EXISTS (select 1 from information_schema.`COLUMNS` i 
-                        where i.TABLE_SCHEMA = database() and i.TABLE_NAME = 'Users'
-                        and i.COLUMN_KEY != '' and i.COLUMN_NAME = 'password' ) then
-                ALTER TABLE `Users` ADD KEY `user_pass` (`password`);
-        end if;
-    end if;
-END//
-DELIMITER ;
-CALL alterTable();
-DROP PROCEDURE alterTable;
-
 
 -- Dumping structure for table Solas-Match-Test.OrganisationMembers
 CREATE TABLE IF NOT EXISTS `OrganisationMembers` (
@@ -620,25 +587,7 @@ CREATE TABLE IF NOT EXISTS `UserPersonalInformation` (
   CONSTRAINT `FK_UserPersonalInformation_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-DROP PROCEDURE IF EXISTS alterTable;
-DELIMITER //
-CREATE PROCEDURE alterTable()
-BEGIN
-    IF NOT EXISTS(SELECT 1
-                    FROM information_schema.`COLUMNS`
-                    WHERE TABLE_SCHEMA = database()
-                    AND TABLE_NAME = "UserPersonalInformation"
-                    AND COLUMN_NAME = "receive_credit") then
-        ALTER TABLE UserPersonalInformation
-            ADD receive_credit BIT(1) DEFAULT 0 NOT NULL;
-    END IF;
-END//
-DELIMITER ;
-CALL alterTable();
-DROP PROCEDURE alterTable;
-
 -- Data exporting was unselected.
-
 
 -- Dumping structure for table Solas-Match-Test.Users
 CREATE TABLE IF NOT EXISTS `Users` (
@@ -660,19 +609,6 @@ CREATE TABLE IF NOT EXISTS `Users` (
   CONSTRAINT `FK_user_language` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-DROP PROCEDURE IF EXISTS alterTable;
-DELIMITER //
-CREATE PROCEDURE alterTable()
-BEGIN
-    if NOT EXISTS (select 1 from information_schema.`COLUMNS` i 
-                    where i.TABLE_SCHEMA = database() and i.TABLE_NAME = 'Users'
-                    and i.COLUMN_KEY != '' and i.COLUMN_NAME = 'password' ) then
-            ALTER TABLE `Users` ADD KEY `user_pass` (`password`);
-    end if;
-END//
-DELIMITER ;
-CALL alterTable();
-DROP PROCEDURE alterTable;
 -- Data exporting was unselected.
 
 -- Dumping structure for table Solas-Match-Test.UserSecondaryLanguages
