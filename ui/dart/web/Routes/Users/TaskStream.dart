@@ -72,8 +72,9 @@ class TaskStream extends PolymerElement
     taskColours[4] = settings.conf.task_colours.colour_4;
     
     //import css into polymer element
+    String location = settings.conf.urls.SiteLocation;
     if (css != null) {
-      css.split(' ').map((path) => new StyleElement()..text = "@import '${path}';").forEach(shadowRoot.append);
+      css.split(' ').map((path) => new StyleElement()..text = "@import '$location${path}';").forEach(shadowRoot.append);
     }
   }
   

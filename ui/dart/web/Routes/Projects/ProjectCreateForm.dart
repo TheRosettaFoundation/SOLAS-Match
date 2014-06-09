@@ -117,10 +117,10 @@ class ProjectCreateForm extends PolymerElement
   {
     Settings settings = new Settings();
     orgDashboardLink = settings.conf.urls.SiteLocation + "org/dashboard";
-    
+    String location = settings.conf.urls.SiteLocation;
     //import css into polymer element
     if (css != null) {
-      css.split(' ').map((path) => new StyleElement()..text = "@import '${path}';").forEach(shadowRoot.append);
+      css.split(' ').map((path) => new StyleElement()..text = "@import '$location${path}';").forEach(shadowRoot.append);
     }
     
     ParagraphElement p = this.shadowRoot.querySelector("#source_text_desc");
