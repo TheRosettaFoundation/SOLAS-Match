@@ -18,6 +18,7 @@ class TaskStream extends PolymerElement
   Map<int, Project> projectMap;
   Map<int, Organisation> orgMap;
   @published int userid = 0;
+  @published String css;
   @observable bool loaded = false;
   @observable Localisation localisation;
   @observable bool moreTasks = true;
@@ -69,6 +70,11 @@ class TaskStream extends PolymerElement
     taskTypeIndexes.add(4);
     taskTypes[4] = localisation.getTranslation("common_desegmentation");
     taskColours[4] = settings.conf.task_colours.colour_4;
+    
+    //import css into polymer element
+    if (css != null) {
+      css.split(' ').map((path) => new StyleElement()..text = "@import '${path}';").forEach(shadowRoot.append);
+    }
   }
   
   void loadActiveLanguages()

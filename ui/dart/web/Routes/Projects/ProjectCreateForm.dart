@@ -13,6 +13,7 @@ class ProjectCreateForm extends PolymerElement
   @published int userid;
   @published int orgid;
   @published int maxfilesize;
+  @published String css;
   
   // Other
   int maxTargetLanguages;
@@ -116,6 +117,11 @@ class ProjectCreateForm extends PolymerElement
   {
     Settings settings = new Settings();
     orgDashboardLink = settings.conf.urls.SiteLocation + "org/dashboard";
+    
+    //import css into polymer element
+    if (css != null) {
+      css.split(' ').map((path) => new StyleElement()..text = "@import '${path}';").forEach(shadowRoot.append);
+    }
     
     ParagraphElement p = this.shadowRoot.querySelector("#source_text_desc");
     p.children.clear();
@@ -390,23 +396,20 @@ class ProjectCreateForm extends PolymerElement
                 Settings settings = new Settings();
                 window.location.assign(settings.conf.urls.SiteLocation + "project/"
                     + project.id.toString() + "/view");
-              }).catchError((error) {
-                throw sprintf(
-                    localisation.getTranslation("project_create_failed_project_deadlines"), [error.toString()]);
+              }).catchError((error, stack) {
+                return new Future.error(sprintf(
+                    localisation.getTranslation("project_create_failed_project_deadlines"), [error.toString()]),
+                    stack);
               });
             });
             //catch any as yet uncaught error that occurred while creating the project or in the subsequent
             //.then() and delete the project.
-          }).catchError((e, stack){
+          }).catchError((e){
             print("Something went wrong, deleting project");
-            print("Error was:");
-            print(e);
-            print("Stack Trace is:");
-            print(stack);
             return ProjectDao.deleteProject(project.id)
             .then((_) {
               project.id = null;
-              return new Future.error(e, stack);
+              throw e;
             });
           });
         //If validation failed, print message to console.
@@ -460,7 +463,6 @@ class ProjectCreateForm extends PolymerElement
         bool translationRequired = translationCheckbox.checked;
         CheckboxInputElement proofreadingCheckbox = this.shadowRoot.querySelector("#proofreading_$i");
         bool proofreadingRequired = proofreadingCheckbox.checked;
-        
         //Create segmentation task if necessary
         if (segmentationRequired) {
           templateTask.taskType = TaskTypeEnum.SEGMENTATION.value;
