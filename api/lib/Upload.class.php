@@ -134,64 +134,12 @@ class Upload
         Notify::sendTaskUploadNotifications($task->getId(), $version);
         return $ret;
     }
-        
-    /*
-     * For a named filename, save file that have been uploaded by form submission.
-     * The file has been specified in a form element <input type="file" name="myfile">
-     * We access that file through PHP's $_FILES array.
-     */
-    public static function saveSubmittedFile($form_file_field, $task, $user_id)
-    {
-        /*
-         * Right now we're assuming that there's one file, but I think it can also be
-         * an array of multiple files.
-         */
-        if ($_FILES[$form_file_field]['error'] == UPLOAD_ERR_FORM_SIZE) {
-            throw new \Exception(
-                'Sorry, the file you tried uploading is too large. Please choose a smaller file, '.
-                'or break the file into sub-parts.'
-            );
-        }
-
-        $file_name = $_FILES[$form_file_field]['name'];
-        $file_tmp_name = $_FILES[$form_file_field]['tmp_name'];
-        $version = DAO\TaskDao::recordFileUpload(
-            $task->getId(),
-            $file_name,
-            $_FILES[$form_file_field]['type'],
-            $user_id
-        );
-        $version = $version[0]['version'];
-        $upload_folder = self::absoluteFolderPathForUpload($task, $version);
-
-        self::saveSubmittedFileToFs($task, $file_name, $file_tmp_name, $version);
-
-        return true;
-    }
 
     public static function createFolderPath($task, $version = 0)
     {
         $upload_folder = self::absoluteFolderPathForUpload($task, $version);
         if (!self::folderPathForUploadExists($task, $version)) {
                 self::createFolderForUpload($task, $version);
-        }
-    }
-
-    /*
-     * $files_file is the name of the parameter of the file we want to access
-     * in the $_FILES global array.
-     */
-    private static function saveSubmittedFileToFs($task, $file_name, $file_tmp_name, $version)
-    {
-        $upload_folder = self::absoluteFolderPathForUpload($task, $version);
-
-        if (!self::folderPathForUploadExists($task, $version)) {
-            self::createFolderForUpload($task, $version);
-        }
-
-        $destination_path = self::absoluteFilePathForUpload($task, $version, $file_name);
-        if (move_uploaded_file($file_tmp_name, $destination_path) == false) {
-            throw new \Exception('Could not save uploaded file.');
         }
     }
 
