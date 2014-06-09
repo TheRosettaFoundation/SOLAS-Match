@@ -11,39 +11,6 @@ require_once __DIR__."/Notify.class.php";
 
 class Upload
 {
-    public static function maxFileSizeBytes()
-    {
-        $display_max_size = self::maxUploadSizeFromPHPSettings();
-
-        switch (substr($display_max_size, -1)) {
-            case 'G':
-                $display_max_size = $display_max_size * 1024;
-                // no break
-            case 'M':
-                $display_max_size = $display_max_size * 1024;
-                // no break
-            case 'K':
-                $display_max_size = $display_max_size * 1024;
-                break;
-        }
-        return $display_max_size;
-    }
-
-    /**
-     * Return an integer value of the max file size that can be uploaded to the system,
-     * denominated in megabytes.
-     */
-    public static function maxFileSizeMB()
-    {
-        $bytes = self::maxFileSizeBytes();
-        return round(($bytes/1024)/1024, 1);
-    }
-
-    private static function maxUploadSizeFromPHPSettings()
-    {
-        return ini_get('upload_max_filesize');
-    }
-
     public static function validateFileHasBeenSuccessfullyUploaded($field_name)
     {
         if (self::isPostTooLarge()) {

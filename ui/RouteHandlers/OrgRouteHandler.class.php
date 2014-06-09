@@ -341,7 +341,7 @@ class OrgRouteHandler
             $post = $app->request()->post();
             
             if (isset($post['email'])) {
-                if (Lib\TemplateHelper::isValidEmail($post['email'])) {
+                if (Lib\Validator::validateEmail($post['email'])) {
                     $success = $orgDao->addMember($post['email'], $org_id);
                     if ($success) {
                         $app->flashNow(
@@ -569,7 +569,7 @@ class OrgRouteHandler
             }
             
             if (isset($post['email'])) {
-                if (Lib\TemplateHelper::isValidEmail($post['email'])) {
+                if (Lib\Validator::validateEmail($post['email'])) {
                     $user = $userDao->getUserByEmail($post['email']);
                 
                     if (!is_null($user)) {
@@ -792,7 +792,7 @@ class OrgRouteHandler
             $post = $app->request()->post();
             
             if (isset($post['email']) && $post['email'] != "") {
-                if (Lib\TemplateHelper::isValidEmail($post['email'])) {
+                if (Lib\Validator::validateEmail($post['email'])) {
                     $success = $userDao->assignBadge($post['email'], $badge->getId());
                     if ($success) {
                         $app->flashNow(

@@ -194,7 +194,7 @@ class UserRouteHandler
             $post = $app->request()->post();
             $temp = md5($post['email'].substr(Common\Lib\Settings::get("session.site_key"), 0, 20));
             Common\Lib\UserSession::clearCurrentUserID();
-            if (!Lib\TemplateHelper::isValidEmail($post['email'])) {
+            if (!Lib\Validator::validateEmail($post['email'])) {
                 $error = Lib\Localisation::getTranslation('register_1');
             } elseif (!Lib\TemplateHelper::isValidPassword($post['password'])) {
                 $error = Lib\Localisation::getTranslation('register_2');

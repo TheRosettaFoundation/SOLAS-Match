@@ -14,7 +14,7 @@ class Validator
     
     public static function filterSpecialChars($title)
     {
-        //modify common_invalid_character in strings.xml to reflect  changes here
+        //modify common_invalid_character in strings.xml to reflect changes here
         $pattern = '/((\/)|(@)|(\\\\)|(\")|(\;))|(\#)|(\<)|(\>)|(\|)|(\~)/';
         if (preg_match($pattern, $title)) {
             return false;
