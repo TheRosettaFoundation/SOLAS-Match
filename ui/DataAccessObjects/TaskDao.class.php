@@ -204,7 +204,7 @@ class TaskDao extends BaseDao
 
     public function saveTaskFile($taskId, $userId, $fileData, $version = null, $convert = null)
     {
-        $request = "{$this->siteApi}v0/tasks/saveFile/$taskId/$userId";
+        $request = "{$this->siteApi}v0/io/upload/task/$taskId/$userId";
         $args = array();
         if (!is_null($version)) {
             $args["version"] = $version;
@@ -247,7 +247,7 @@ class TaskDao extends BaseDao
 
     public function uploadOutputFile($taskId, $userId, $fileData, $convert = false)
     {
-        $request = "{$this->siteApi}v0/tasks/uploadOutputFile/$taskId/$userId";
+        $request = "{$this->siteApi}v0/io/upload/taskOutput/$taskId/$userId";
 
         $args = null;
         if ($convert) {

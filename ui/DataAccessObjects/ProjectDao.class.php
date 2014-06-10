@@ -154,6 +154,14 @@ class ProjectDao extends BaseDao
         }
     }
     
+    public function getProjectFile($project_id)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/projects/$project_id/file";
+        $response = $this->client->call(null, $request);
+        return $response;
+    }
+    
     public function getProjectFileInfo($project_id)
     {
         $ret = null;

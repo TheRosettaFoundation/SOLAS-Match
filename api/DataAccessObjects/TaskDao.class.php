@@ -867,67 +867,9 @@ class TaskDao
         return $ret;
     }
     
-    //! Upload a Task file
-    /*!
-      Used to store Task file upload details and save the file to the filesystem. If convert is true then the file will
-      be converted to XLIFF before being saved.
-      @param Task $task is a Task object
-      @param bool $convert determines if the file should be converted to XLIFF
-      @param String $file is the contents of the file (passed as reference)
-      @param int $version is the version of the file being uploaded
-      @param int $userId is the id of the User uploading the file
-      @param String $filename is the name of the uploaded file
-      @return No return
-    */
-    public static function uploadFile($task, $convert, &$file, $version, $userId, $filename)
-    {
-        $success = null;
-        if ($convert) {
-            $success = Lib\Upload::apiSaveFile(
-                $task,
-                $userId,
-                Lib\FormatConverter::convertFromXliff($file),
-                $filename,
-                $version
-            );
-        } else {
-            //touch this and you will die painfully sinisterly sean :)
-            $success = Lib\Upload::apiSaveFile($task, $userId, $file, $filename, $version);
-        }
-        if (!$success) {
-            throw new Common\Exceptions\SolasMatchException(
-                "Failed to write file data.",
-                Common\Enums\HttpStatusEnum::INTERNAL_SERVER_ERROR
-            );
-        }
-    }
     
-    //! Upload a new version of a Task file
-    /*!
-      This uploads a new version of a Task file. It also copies the uploaded file to version 0 of all Tasks that are
-      dependant on this Task.
-      @param Task $task is a Task object
-      @param bool $convert determines if the file should be converted to XLIFF before being saved
-      @param String $file is the contents of the uploaded file (passed as reference)
-      @param int $userId is the id of the User uploading the file
-      @param String filename is the name of the file
-      @return No Return
-    */
-    public static function uploadOutputFile($task, $convert, &$file, $userId, $filename)
-    {
-        self::uploadFile($task, $convert, $file, null, $userId, $filename);
-        $graphBuilder = new Lib\APIWorkflowBuilder();
-        $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
-        if ($graph) {
-            $index = $graphBuilder->find($task->getId(), $graph);
-            $taskNode = $graph->getAllNodes($index);
-            foreach ($taskNode->getNextList() as $nextTaskId) {
-                $result = TaskDao::getTasks($nextTaskId);
-                $nextTask = $result[0];
-                self::uploadFile($nextTask, $convert, $file, 0, $userId, $filename);
-            }
-        }
-    }
+    
+    
     
     //! Get the date and time at which the specified Task was claimed
     /*!
