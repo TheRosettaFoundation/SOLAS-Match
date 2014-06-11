@@ -428,40 +428,6 @@ class ProjectDao
       @param string $mime is the mime type of the file being uploaded
       @return Returns the ProjectFile info that was saved or null on failure.
     */
-    public static function saveProjectFile($projectId, $file, $filename, $userId)
-    {
-        $destination = Common\Lib\Settings::get("files.upload_path")."proj-$projectId/";
-        if (!file_exists($destination)) {
-            mkdir($destination);
-        }
-        $mime = Lib\IO::detectMimeType($file, $filename);
-        $apiHelper = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
-        $canonicalMime = $apiHelper->getCanonicalMime($filename);
-        if (!is_null($canonicalMime) && $mime != $canonicalMime) {
-            $message = "The content type ($mime) of the file you are trying to upload does not";
-            $message .= " match the content type ($canonicalMime) expected from its extension.";
-            throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::BAD_REQUEST);
-        }
-        $token = self::recordProjectFileInfo($projectId, $filename, $userId, $mime);
-        try {
-            file_put_contents($destination.$token, $file);
-        } catch (\Exception $e) {
-            $message = "You cannot upload a project file for project ($projectId), as one already exists.";
-            throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::CONFLICT);
-        }
-
-        return $token;
-    }
-    
-    //! Records a ProjectFile upload
-    /*!
-      Used to keep track of Project files. Stores information about a project file upload so it can be retrieved later.
-      @param int $projectId is the id of a Project
-      @param string $filename is the name of the file being uploaded
-      @param int $userId is the id of the user uploading the file
-      @param string $mime is the mime type of the file being uploaded
-      @return Returns the ProjectFile info that was saved or null on failure.
-    */
     public static function recordProjectFileInfo($projectId, $filename, $userId, $mime)
     {
         $token = $filename;//generate guid in future.

@@ -114,7 +114,6 @@ class IO {
         }
     }
     
-    
     public static function downloadConvertedFile($absoluteFilePath, $contentType, $taskID)
     {
         if ($fd = fopen($absoluteFilePath, "r")) {
@@ -133,37 +132,5 @@ class IO {
         }
         fclose($fd);
         return;
-    }
-    
-    public static function detectMimeType($file, $filename)
-    {
-        $result = null;
-        
-        $mimeMap = array(
-             "xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            ,"xltx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.template"
-            ,"potx" => "application/vnd.openxmlformats-officedocument.presentationml.template"
-            ,"ppsx" => "application/vnd.openxmlformats-officedocument.presentationml.slideshow"
-            ,"pptx" => "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-            ,"sldx" => "application/vnd.openxmlformats-officedocument.presentationml.slide"
-            ,"docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-            ,"dotx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.template"
-            ,"xlam" => "application/vnd.ms-excel.addin.macroEnabled.12"
-            ,"xlsb" => "application/vnd.ms-excel.sheet.binary.macroEnabled.12"
-            ,"xlf"  => "application/xliff+xml"
-        );
-        
-        $finfo = new \finfo(FILEINFO_MIME_TYPE);
-        $mime = $finfo->buffer($file);
-        
-        $extension = explode(".", $filename);
-        $extension = $extension[count($extension)-1];
-        
-        if (($mime == "application/zip" || ($extension == "xlf")) && array_key_exists($extension, $mimeMap)) {
-            $result = $mimeMap[$extension];
-        } else {
-            $result = $mime;
-        }
-        return $result;
     }
 }

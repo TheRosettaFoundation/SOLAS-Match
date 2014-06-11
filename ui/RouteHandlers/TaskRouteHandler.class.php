@@ -5,6 +5,7 @@ namespace SolasMatch\UI\RouteHandlers;
 use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
 use \SolasMatch\Common as Common;
+use SolasMatch\Common\Lib\APIHelper;
 
 require_once __DIR__.'/../../api/lib/IO.class.php';
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
@@ -576,13 +577,16 @@ class TaskRouteHandler
                 $projectFileType = pathinfo($projectFile->getFilename(), PATHINFO_EXTENSION);
                 
                 $fileUploadType = pathinfo($_FILES[$fieldName]["name"], PATHINFO_EXTENSION);
-                $fileUploadMime = \SolasMatch\API\Lib\IO::detectMimeType(
-                    file_get_contents(
-                        $_FILES[$fieldName]["tmp_name"]
-                    ),
-                    $_FILES[$fieldName]["name"]
-                );
-
+                
+                //Call API to determine MIME type of file contents
+                $helper = new Common\Lib\APIHelper(Common\Lib\Settings::get('ui.api_format'));
+                $siteApi = Common\Lib\Settings::get("site.api");
+                $filename = $_FILES[$fieldName]["name"];
+                $request = $siteApi."v0/io/contentMime/$filename";
+                error_log("REQUEST IS: $request");
+                $data = file_get_contents($_FILES[$fieldName]["tmp_name"]);
+                $fileUploadMime = $helper->call(null, $request, Common\Enums\HttpMethodEnum::GET, null, null, $data);
+                error_log("Got mime from calling API");
                 if (strcasecmp($fileUploadType, $projectFileType) != 0) {
                     throw new \Exception(sprintf(
                         Lib\Localisation::getTranslation('common_task_file_extension_mismatch'),
@@ -599,6 +603,7 @@ class TaskRouteHandler
                 }
             } catch (\Exception $e) {
                 $errorMessage = $e->getMessage();
+                error_log("caught generic exception with error message: $errorMessage");
             }
         
             if (is_null($errorMessage)) {

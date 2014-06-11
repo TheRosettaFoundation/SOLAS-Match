@@ -20,6 +20,13 @@ class IO
     
         $app->group('/v0', function () use ($app) {
             $app->group('/io', function () use ($app) {
+                /* Routes starting with v0/io */
+                $app->get(
+                    '/contentMime/:filename(:format)',
+                    '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+                    '\SolasMatch\API\V0\IO::getMimeFromFileContent'
+                );
+                
                 /* Routes starting with /v0/io/download */
                 $app->group('/download', function () use ($app) {
                     $app->get(
@@ -37,6 +44,12 @@ class IO
                 /* Routes starting with /v0/io/upload */
                 $app->group('/upload', function () use ($app) {
                     $app->put(
+	                    '/project/:projectId/file/:filename/:userId(:format)',
+                        '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+                        '\SolasMatch\API\V0\IO::saveProjectFile'
+                    );
+                    
+                    $app->put(
                         '/task/:taskId/:userId(:format)/',
                         '\SolasMatch\API\Lib\Middleware::isLoggedIn',
                         '\SolasMatch\API\V0\IO::saveTaskFile'
@@ -50,6 +63,18 @@ class IO
                 });
             });
         });
+    }
+    
+    public static function getMimeFromFileContent($filename, $format = ".json")
+    {
+        if (strstr($filename, '.')) {
+            $filename = explode('.', $filename);
+            $format = '.'.$filename[1];
+            $filename = $filename[0];
+        }
+        $fileContent = API\Dispatcher::getDispatcher()->request()->getBody();
+        
+        API\Dispatcher::sendResponse(null, self::detectMimeType($fileContent, $filename), null, $format);
     }
     
     public static function downloadProjectFile($projectId, $format = ".json")
@@ -149,6 +174,22 @@ class IO
         self::uploadOutputFile($task, $convert, $data, $userId, $filename);
     }
     
+    public static function saveProjectFile($projectId, $filename, $userId, $format = ".json")
+    {
+        if (!is_numeric($userId) && strstr($userId, '.')) {
+            $userId = explode('.', $userId);
+            $format = '.'.$userId[1];
+            $userId = $userId[0];
+        }
+        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        try {
+            $token = self::saveProjectFileToFs($projectId, $data, urldecode($filename), $userId);
+            API\Dispatcher::sendResponse(null, $token, Common\Enums\HttpStatusEnum::CREATED, $format);
+        } catch (Exception $e) {
+            API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
+        }
+    }
+    
     //! Upload a Task file
     /*!
      Used to store Task file upload details and save the file to the filesystem. If convert is true then the file will
@@ -171,14 +212,14 @@ class IO
                 Lib\FormatConverter::convertFromXliff($file),
                 $filename,
                 $version
-             );
+            );
         } else {
             $success = self::saveTaskFileToFs($task, $userId, $file, $filename, $version);
         }
         if (!$success) {
             throw new Common\Exceptions\SolasMatchException(
-            "Failed to write file data.",
-            Common\Enums\HttpStatusEnum::INTERNAL_SERVER_ERROR
+                "Failed to write file data.",
+                Common\Enums\HttpStatusEnum::INTERNAL_SERVER_ERROR
             );
         }
     }
@@ -208,6 +249,40 @@ class IO
                 self::uploadFile($nextTask, $convert, $file, 0, $userId, $filename);
             }
         }
+    }
+    
+    //! Records a ProjectFile upload
+    /*!
+     Used to keep track of Project files. Stores information about a project file upload so it can be retrieved later.
+    @param int $projectId is the id of a Project
+    @param string $filename is the name of the file being uploaded
+    @param int $userId is the id of the user uploading the file
+    @param string $mime is the mime type of the file being uploaded
+    @return Returns the ProjectFile info that was saved or null on failure.
+    */
+    private static function saveProjectFileToFs($projectId, $file, $filename, $userId)
+    {
+        $destination = Common\Lib\Settings::get("files.upload_path")."proj-$projectId/";
+        if (!file_exists($destination)) {
+            mkdir($destination, 0755);
+        }
+        $mime = self::detectMimeType($file, $filename);
+        $apiHelper = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
+        $canonicalMime = $apiHelper->getCanonicalMime($filename);
+        if (!is_null($canonicalMime) && $mime != $canonicalMime) {
+            $message = "The content type ($mime) of the file you are trying to upload does not";
+            $message .= " match the content type ($canonicalMime) expected from its extension.";
+            throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::BAD_REQUEST);
+        }
+            $token = DAO\ProjectDao::recordProjectFileInfo($projectId, $filename, $userId, $mime);
+        try {
+            file_put_contents($destination.$token, $file);
+        } catch (\Exception $e) {
+            $message = "You cannot upload a project file for project ($projectId), as one already exists.";
+            throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::CONFLICT);
+        }
+    
+        return $token;
     }
     
     private static function saveTaskFileToFs($task, $userId, $file, $filename, $version = null)
