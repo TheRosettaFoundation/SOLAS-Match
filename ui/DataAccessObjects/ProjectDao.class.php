@@ -132,28 +132,6 @@ class ProjectDao extends BaseDao
         return $ret;
     }
     
-    public function saveProjectFile($projectId, $data, $filename, $userId)
-    {
-        $ret = null;
-        $filename = urlencode($filename);
-        $url = "{$this->siteApi}v0/projects/$projectId/file/$filename/$userId";
-        $ret = $this->client->call(null, $url, Common\Enums\HttpMethodEnum::PUT, null, null, $data);
-        
-        switch($this->client->getResponseCode()) {
-            
-            default:
-                return $ret;
-                
-            case Common\Enums\HttpStatusEnum::BAD_REQUEST:
-                throw new Common\Exceptions\SolasMatchException($ret, $this->client->getResponseCode());
-                break;
-            
-            case Common\Enums\HttpStatusEnum::CONFLICT:
-                throw new Common\Exceptions\SolasMatchException($ret, $this->client->getResponseCode());
-                break;
-        }
-    }
-    
     public function getProjectFile($project_id)
     {
         $ret = null;

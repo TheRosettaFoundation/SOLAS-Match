@@ -103,16 +103,6 @@ class IO {
         }
         return $print;
     }
-
-    /*
-     * Pass a requested file back to the browser
-     */
-    public static function downloadFile($absoluteFilePath/*, $contentType*/)
-    {
-        if (file_exists($absoluteFilePath)) {
-            return file_get_contents($absoluteFilePath);
-        }
-    }
     
     public static function downloadConvertedFile($absoluteFilePath, $contentType, $taskID)
     {

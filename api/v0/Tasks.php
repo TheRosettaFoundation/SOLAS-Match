@@ -109,18 +109,6 @@ class Tasks
                     '\SolasMatch\API\V0\Tasks::archiveTask'
                 );
 
-                $app->put(
-                    '/uploadOutputFile/:taskId/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Tasks::uploadOutputFile'
-                );
-
-                $app->put(
-                    '/saveFile/:taskId/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Tasks::saveTaskFile'
-                );
-
                 $app->post(
                     '/reviews(:format)/',
                     '\SolasMatch\API\Lib\Middleware::authenticateUserToSubmitReview',
@@ -268,43 +256,6 @@ class Tasks
             $userId = $userId[0];
         }
         API\Dispatcher::sendResponse(null, DAO\TaskDao::moveToArchiveByID($taskId, $userId), null, $format);
-    }
-
-    public static function uploadOutputFile($taskId, $userId, $format = ".json")
-    {
-        if (!is_numeric($userId) && strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
-        $task = DAO\TaskDao::getTask($taskId);
-        $projectFile = DAO\ProjectDao::getProjectFileInfo($task->getProjectId(), null, null, null, null);
-        $filename = $projectFile->getFilename();
-        $convert = API\Dispatcher::clenseArgs('convertFromXliff', Common\Enums\HttpMethodEnum::GET, false);
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
-        DAO\TaskDao::uploadOutputFile($task, $convert, $data, $userId, $filename);
-    }
-
-    public static function saveTaskFile($taskId, $userId, $format = ".json")
-    {
-        if (!is_numeric($userId) && strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
-        $task = DAO\TaskDao::getTask($taskId);
-        $version = API\Dispatcher::clenseArgs('version', Common\Enums\HttpMethodEnum::GET, null);
-        $convert = API\Dispatcher::clenseArgs('convertFromXliff', Common\Enums\HttpMethodEnum::GET, false);
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
-        $projectFile = DAO\ProjectDao::getProjectFileInfo($task->getProjectId(), null, null, null, null);
-        $filename = $projectFile->getFilename();
-        try {
-            DAO\TaskDao::uploadFile($task, $convert, $data, $version, $userId, $filename);
-        } catch (Common\Exceptions\SolasMatchException $e) {
-            API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
-            return;
-        }
-        API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CREATED);
     }
 
     public static function submitReview($format = '.json')
