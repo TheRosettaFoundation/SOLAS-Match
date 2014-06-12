@@ -25,7 +25,7 @@ class Countries
                 );
                 
                 $app->get(
-	                '/getByPattern/:pattern(:format)/',
+                    '/getByPattern/:pattern(:format)/',
                     '\SolasMatch\API\V0\Countries::getCountriesByPattern'
                 );
 

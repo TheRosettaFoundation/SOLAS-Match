@@ -916,7 +916,7 @@ class UserDao
         return null;
     }
 
-	/*
+    /*
         returns true if the user has subscribed to the specified organisation
     */
     public static function isSubscribedToOrganisation($userId, $organisationId)

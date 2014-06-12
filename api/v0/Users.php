@@ -218,7 +218,7 @@ class Users
                     );
                     
                     $app->get(
-	                    '/archivedTasksCount(:format)/',
+                        '/archivedTasksCount(:format)/',
                         '\SolasMatch\API\Lib\Middleware::isloggedIn',
                         '\SolasMatch\API\V0\Users::getUserArchivedTasksCount'
                     );

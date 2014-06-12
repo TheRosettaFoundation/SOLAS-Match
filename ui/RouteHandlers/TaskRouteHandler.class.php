@@ -158,7 +158,7 @@ class TaskRouteHandler
         $archivedTasksCount = $userDao->getUserArchivedTasksCount($userId);
 
         $offset = $tasksPerPage * ($page_no - 1) ;
-        $archivedTasks = $userDao->getUserArchivedTasks($userId, $tasksPerPage, $offset);
+        $archivedTasks = $userDao->getUserArchivedTasks($userId, $offset, $tasksPerPage);
         $totalPages = ceil($archivedTasksCount / $tasksPerPage);
         
         if ($page_no < 1) {

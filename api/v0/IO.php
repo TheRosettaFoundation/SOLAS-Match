@@ -44,7 +44,7 @@ class IO
                 /* Routes starting with /v0/io/upload */
                 $app->group('/upload', function () use ($app) {
                     $app->put(
-	                    '/project/:projectId/file/:filename/:userId(:format)',
+                        '/project/:projectId/file/:filename/:userId(:format)',
                         '\SolasMatch\API\Lib\Middleware::isLoggedIn',
                         '\SolasMatch\API\V0\IO::saveProjectFile'
                     );

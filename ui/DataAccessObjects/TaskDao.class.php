@@ -278,11 +278,11 @@ class TaskDao extends BaseDao
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::GET, null, $args);
 
         switch ($this->client->getResponseCode()) {
-        	default:
-        	    return $ret;
-        	case Common\Enums\HttpStatusEnum::NOT_FOUND:
-        	    throw new Common\Exceptions\SolasMatchException("File not found!");
-        	    break; 
+            default:
+                return $ret;
+            case Common\Enums\HttpStatusEnum::NOT_FOUND:
+                throw new Common\Exceptions\SolasMatchException("File not found!");
+                break;
         }
     }
 }

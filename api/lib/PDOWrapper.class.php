@@ -33,7 +33,8 @@ class PDOWrapper
         // Set up the connection
         $this->logging = (strlen($this->logfile)>0) ? true : false;
         if ($this->logging) {
-            $this->logfile = Common\Lib\Settings::get('database.log_file'); // full path to debug logfile. Use only in debug mode!
+            // full path to debug logfile. Use only in debug mode!
+            $this->logfile = Common\Lib\Settings::get('database.log_file');
         }
         $this->show_errors = (Common\Lib\Settings::get('database.show_errors') == 'y') ? true : false;
         $this->show_sql = (Common\Lib\Settings::get('database.show_sql') == 'y') ? true : false;

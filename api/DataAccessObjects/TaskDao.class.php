@@ -5,7 +5,6 @@ namespace SolasMatch\API\DAO;
 use \SolasMatch\Common as Common;
 use \SolasMatch\API\Lib as Lib;
 
-
 //! The Task Data access Object for the API
 /*!
   A class for setting and retrieving Task related data from the database. Used by the API Route Handlers to supply
@@ -485,7 +484,7 @@ class TaskDao
         $task = self::getTasks($taskId);
         $task = $task[0];
         
-        if(is_null($task)) {
+        if (is_null($task)) {
             return 0 ;
         }
 
@@ -495,7 +494,7 @@ class TaskDao
         if ($graph) {
             $index = $graphBuilder->find($taskId, $graph);
             $node = $graph->getAllNodes($index);
-            $ret = self::archiveTaskNode($node, $graph, $userId);      
+            $ret = self::archiveTaskNode($node, $graph, $userId);
         }
 
         // UI is expecting output to be 0 or 1

@@ -147,7 +147,7 @@ class Projects
         }
 
         $ret = null;
-        $ret = DAO\ProjectDao::updateProjectWordCount($projectId,$newWordCount);
+        $ret = DAO\ProjectDao::updateProjectWordCount($projectId, $newWordCount);
         API\Dispatcher::sendResponse(null, $ret, null, $format);
     }
         

@@ -230,8 +230,8 @@ class Middleware
                     
                     //If it is a desegmentation task, user must have been blacklisted for it because they
                     //have worked on a prerequisite task for it.
-                    if($task->getTaskType() == Common\Enums\TaskTypeEnum::DESEGMENTATION) {
-                       $message = Localisation::getTranslation("common_error_cannot_claim_desegmentation");
+                    if ($task->getTaskType() == Common\Enums\TaskTypeEnum::DESEGMENTATION) {
+                        $message = Localisation::getTranslation("common_error_cannot_claim_desegmentation");
                     } else {
                         $message = Localisation::getTranslation('common_error_cannot_reclaim');
                     }

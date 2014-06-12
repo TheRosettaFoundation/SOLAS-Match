@@ -117,7 +117,7 @@ class Languages
 
         $args = PDOWrapper::cleanseNullOrWrapStr($pattern);
         $result = PDOWrapper::call("getCountriesByPattern", $args);
-        foreach($result as $country) {
+        foreach ($result as $country) {
             $countries[] = Common\Lib\ModelFactory::buildModel('Country', $country);
         }
         return $countries;

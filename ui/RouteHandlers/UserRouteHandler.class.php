@@ -577,7 +577,7 @@ class UserRouteHandler
             }
         }
                     
-        $archivedJobs = $userDao->getUserArchivedTasks($user_id, 10, 0);
+        $archivedJobs = $userDao->getUserArchivedTasks($user_id, 0, 10);
         $user_tags = $userDao->getUserTags($user_id);
         $user_orgs = $userDao->getUserOrgs($user_id);
         $badges = $userDao->getUserBadges($user_id);

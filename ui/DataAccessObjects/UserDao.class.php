@@ -187,7 +187,7 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function getUserArchivedTasks($userId, $limit = 10, $offset)
+    public function getUserArchivedTasks($userId, $offset = 0, $limit = 10)
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/archivedTasks/$limit/$offset";
@@ -207,10 +207,10 @@ class UserDao extends BaseDao
         $request = "{$this->siteApi}v0/users/$userId/archivedTasksCount";
     
         $ret = $this->client->call(
-                null,
-                $request,
-                Common\Enums\HttpMethodEnum::GET,
-                null
+            null,
+            $request,
+            Common\Enums\HttpMethodEnum::GET,
+            null
         );
         return $ret;
     }

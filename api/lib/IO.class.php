@@ -6,7 +6,8 @@ namespace SolasMatch\API\Lib;
  * Input/Output including parsing input, and formatting output for URLs.
  */
 
-class IO {
+class IO
+{
 
     public function __construct()
     {
