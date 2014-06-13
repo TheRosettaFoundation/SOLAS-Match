@@ -82,6 +82,7 @@ class UnitTestHelper
         
         $oauthClientId = Common\Lib\Settings::get('oauth.client_id');
         $oauthClientSecret = Common\Lib\Settings::get('oauth.client_secret');
+        $redirectUri = Settings::get('site.location')."login/";
         if (!self::$initalised) {
             $result = $conn->exec("drop database `".Common\Lib\Settings::get('unit_test.database')."`");
             $result = $conn->exec(
@@ -95,8 +96,9 @@ class UnitTestHelper
             $result = $conn->exec($schema);
             $conn->exec("INSERT INTO oauth_clients (id, secret, name, auto_approve)".
                     "VALUES('$oauthClientId', '$oauthClientSecret', 'test_user',1)");
+            
             $conn->exec("INSERT INTO oauth_client_endpoints (client_id, redirect_uri)".
-                    "VALUES ('$oauthClientId', 'http://127.0.0.1/SolasMatch/login/')");
+                    "VALUES ('$oauthClientId', '$redirectUri')");
           
              $schema = file_get_contents(__DIR__.'/../db/'.$schemaFile);
             $schema = str_replace("DELIMITER //", "", $schema);
@@ -124,7 +126,7 @@ class UnitTestHelper
             $conn->exec("INSERT INTO oauth_clients (id, secret, name, auto_approve)".
                     "VALUES('$oauthClientId', '$oauthClientSecret', 'test_user',1)");
             $conn->exec("INSERT INTO oauth_client_endpoints (client_id, redirect_uri)".
-                    "VALUES ('$oauthClientId', 'http://127.0.0.1/SolasMatch/login/')");
+                    "VALUES ('$oauthClientId', '$redirectUri')");
             $schema = file_get_contents(__DIR__.'/../db/'.$schemaFile);
             $schema = str_replace("DELIMITER //", "", $schema);
             $schema = str_replace("DELIMITER ;", "", $schema);
