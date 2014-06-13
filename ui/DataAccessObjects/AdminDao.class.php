@@ -132,4 +132,11 @@ class AdminDao extends BaseDao
         $response = $this->client->call(null, $request);
         return $response;
     }
+    
+    public function revokeTaskFromUser($taskId, $userId)
+    {
+        //$request = "api route"
+        //$response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
+        //return $response;
+    }
 }

@@ -130,6 +130,12 @@ class Admins
                     '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
                     '\SolasMatch\API\V0\Admins::deleteSiteAdmin'
                 );
+                
+                $app->delete(
+	                '/revokeTask/:taskId/:userId(:format)/',
+                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
+                    '\SolasMatch\API\V0\Admins::revokeTaskFromUser'
+                );
             });
 
             /* Routes starting /v0 */
@@ -338,6 +344,17 @@ class Admins
     public static function getSiteAdmins($format = '.json')
     {
         API\Dispatcher::sendResponse(null, DAO\AdminDao::getAdmins(), null, $format);
+    }
+    
+    public static function revokeTaskFromUser($taskId, $userId)
+    {
+        if (!is_numeric($userId) && strstr($userId, '.')) {
+            $userId = explode('.', $userId);
+            $format = '.'.$userId[1];
+            $userId = $userId[0];
+        }
+        
+        DAO\TaskDao::unClaimTask($taskId, $userId, true);
     }
 }
 

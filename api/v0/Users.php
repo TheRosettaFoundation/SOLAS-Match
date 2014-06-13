@@ -1052,9 +1052,13 @@ class Users
         $loginData = $client->deserialize($body, "\SolasMatch\Common\Protobufs\Models\Login");
         $params = array();
         $params['client_id'] = API\Dispatcher::clenseArgs('client_id', Common\Enums\HttpMethodEnum::GET, null);
+        error_log("client_id IS {$params['client_id']}");
         $params['client_secret'] = API\Dispatcher::clenseArgs('client_secret', Common\Enums\HttpMethodEnum::GET, null);
+        error_log("client_secret IS {$params['client_secret']}");
         $params['username'] = $loginData->getEmail();
+        error_log("username IS {$params['username']}");
         $params['password'] = $loginData->getPassword();
+        error_log("password IS {$params['password']}");
         try {
             $server = API\Dispatcher::getOauthServer();
             $response = $server->getGrantType('password')->completeFlow($params);

@@ -86,6 +86,20 @@ class AdminRouteHandler
                     );
                 }
             }
+            if (isset($post['revokeTask']) && $post['revokeTask'] != '') {
+                $taskId = filter_var($post['taskId'], FILTER_VALIDATE_INT);
+                $userToRevokeFrom = $userDao->getUserByEmail(urlencode($post['userEmail']));
+                if ($taskId && !is_null($userToRevokeFrom)) {
+                    $taskDao = new DAO\TaskDao();
+                    $task = $taskDao->getTask($taskId);
+                    $claimantId = $taskDao->getUserClaimedTask($taskId);
+                    if ($claimantId != $userToRevokeFrom->getId()) {
+                        //user specified did not claim task specified, handle error
+                    } else {
+                        //revoke task from user
+                    }
+                } 
+            }
         }
         
         $adminDao = new DAO\AdminDao();
