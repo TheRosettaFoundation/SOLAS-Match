@@ -29,6 +29,7 @@ class AdminRouteHandler
         if ($post = $app->request()->post()) {
             $userDao = new DAO\UserDao();
             $adminDao = new DAO\AdminDao();
+            $taskDao = new DAO\TaskDao();
             if (isset($post['addAdmin'])) {
                 $user = $userDao->getUserByEmail($post['userEmail']);
                 if (is_object($user)) {
@@ -90,15 +91,26 @@ class AdminRouteHandler
                 $taskId = filter_var($post['taskId'], FILTER_VALIDATE_INT);
                 $userToRevokeFrom = $userDao->getUserByEmail(urlencode($post['userEmail']));
                 if ($taskId && !is_null($userToRevokeFrom)) {
-                    $taskDao = new DAO\TaskDao();
                     $task = $taskDao->getTask($taskId);
-                    $claimantId = $taskDao->getUserClaimedTask($taskId);
+                    $claimantId = $taskDao->getUserClaimedTask($taskId)->getId();
                     if ($claimantId != $userToRevokeFrom->getId()) {
-                        //user specified did not claim task specified, handle error
+                        //user specified did not claim the task specified
+                        $app->flashNow(
+                            "revokeTaskError",
+                            Lib\Localisation::getTranslation('site_admin_dashboard_revoke_task_error_no_claim')
+                        );
                     } else {
-                        //revoke task from user
+                        $adminDao->revokeTaskFromUser($taskId, $userId);
+                        $app->flashNow(
+                            "revokeTaskSuccess",
+                            Lib\Localisation::getTranslation('site_admin_dashboard_revoke_task_error_invalid'));
                     }
-                } 
+                } else {
+                    //Invalid input supplied for user email and/or task id
+                    $app->flashNow(
+                        "revokeTaskError",
+                        Lib\Localisation::getTranslation('site_admin_dashboard_revoke_task_error_invalid'));
+                }
             }
         }
         

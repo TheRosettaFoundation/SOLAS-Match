@@ -346,15 +346,14 @@ class Admins
         API\Dispatcher::sendResponse(null, DAO\AdminDao::getAdmins(), null, $format);
     }
     
-    public static function revokeTaskFromUser($taskId, $userId)
+    public static function revokeTaskFromUser($taskId, $userId, $format = ".json")
     {
         if (!is_numeric($userId) && strstr($userId, '.')) {
             $userId = explode('.', $userId);
             $format = '.'.$userId[1];
             $userId = $userId[0];
         }
-        
-        DAO\TaskDao::unClaimTask($taskId, $userId, true);
+        API\Dispatcher::sendResponse(null, DAO\TaskDao::unClaimTask($taskId, $userId, true), null, $format);
     }
 }
 

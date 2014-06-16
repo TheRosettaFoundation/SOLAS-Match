@@ -113,7 +113,6 @@ class APIHelper
 
         
         curl_close($re);
-        
         if (in_array($this->responseCode, $success)) {
             $response_data = $this->serializer->deserialize($res, $destination);
         } else {

@@ -358,6 +358,12 @@ class Users
                     '\SolasMatch\API\Lib\Middleware::isloggedIn',
                     '\SolasMatch\API\V0\Users::isBlacklistedForTask'
                 );
+                
+                $app->get(
+                        '/isBlacklistedForTaskByAdmin/:userId/:taskId/',
+                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
+                        '\SolasMatch\API\V0\Users::isBlacklistedForTaskByAdmin'
+                );
 
                 $app->put(
                     '/assignBadge/:email/:badgeId/',
@@ -949,6 +955,16 @@ class Users
             $taskId = $taskId[0];
         }
         API\Dispatcher::sendResponse(null, DAO\UserDao::isBlacklistedForTask($userId, $taskId), null, $format);
+    }
+    
+    public static function isBlacklistedForTaskByAdmin($userId, $taskId, $format = ".json")
+    {
+        if (!is_numeric($taskId) && strstr($taskId, '.')) {
+            $taskId = explode('.', $taskId);
+            $format = '.'.$taskId[1];
+            $taskId = $taskId[0];
+        }
+        API\Dispatcher::sendResponse(null, DAO\UserDao::isBlacklistedForTaskByAdmin($userId, $taskId), null, $format);
     }
 
     public static function assignBadge($email, $badgeId, $format = ".json")

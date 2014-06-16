@@ -512,6 +512,23 @@ CREATE TABLE IF NOT EXISTS `TaskTranslatorBlacklist` (
   CONSTRAINT `FK_TaskTranslatorBlacklist_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+    IF NOT EXISTS(SELECT 1
+                    FROM information_schema.`COLUMNS`
+                    WHERE TABLE_SCHEMA = database()
+                    AND TABLE_NAME = "TaskTranslatorBlacklist"
+                    AND COLUMN_NAME = "revoked_by_admin") then
+        ALTER TABLE TaskTranslatorBlacklist
+            ADD revoked_by_admin BIT(1) DEFAULT 0 NOT NULL;
+    END IF;
+END//
+DELIMITER ;
+CALL alterTable();
+DROP PROCEDURE alterTable;
+
 -- Data exporting was unselected.
 
 
@@ -2774,6 +2791,17 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `isUserBlacklistedForTaskByAdmin`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserBlacklistedForTaskByAdmin`(IN `userId` INT, IN `taskId` INT)
+BEGIN
+	IF EXISTS(SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.task_id = taskId AND t.user_id = userId AND t.revoked_by_admin = 1) THEN
+		SELECT 1 as result;
+	ELSE
+		SELECT 0 as result;
+	END IF;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.logFileDownload
 DROP PROCEDURE IF EXISTS `logFileDownload`;

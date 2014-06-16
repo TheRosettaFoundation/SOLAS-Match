@@ -183,7 +183,6 @@
         <table style="width: 40%">
             <tr>
                 <td colspan="2">
-<!-- IMPORTANT! Add strings to localisation file later -->
                     <label for="revokeTask"><h2>Revoke Task</h2></label>
                 </td>
             </tr>
@@ -203,17 +202,17 @@
             {/if}
             <tr>
                 <td colspan="2">
-                    Revoke a task from a user.
+                    {Localisation::getTranslation('site_admin_dashboard_revoke_task_from_user')}
                 </td>
             </tr>
             <tr>
                 <td>
                     <input type="text" name="userEmail" placeholder="{Localisation::getTranslation('site_admin_dashboard_email_here')}" style="width: 95%"/>
-                    <input type="text" name="taskId" placeholder="Task ID goes here." style="width: 95%"/>
+                    <input type="text" name="taskId" placeholder="{Localisation::getTranslation('site_admin_dashboard_task_id_here')}" style="width: 95%"/>
                 </td>
                 <td valign="top">
                     <button class="btn btn-inverse" type="submit" name="revokeTask" value="1" onclick="return confirm(
-                                        'Are you sure you want to revoke the task?')"/>
+                                        '{Localisation::getTranslation('site_admin_dashboard_confirm_revoke_task')}')"/>
                         <i class="icon-fire icon-white"></i> Revoke Task
                     </button>
                 </td>

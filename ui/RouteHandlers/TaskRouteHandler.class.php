@@ -583,10 +583,8 @@ class TaskRouteHandler
                 $siteApi = Common\Lib\Settings::get("site.api");
                 $filename = $_FILES[$fieldName]["name"];
                 $request = $siteApi."v0/io/contentMime/$filename";
-                error_log("REQUEST IS: $request");
                 $data = file_get_contents($_FILES[$fieldName]["tmp_name"]);
                 $fileUploadMime = $helper->call(null, $request, Common\Enums\HttpMethodEnum::GET, null, null, $data);
-                error_log("Got mime from calling API");
                 if (strcasecmp($fileUploadType, $projectFileType) != 0) {
                     throw new \Exception(sprintf(
                         Lib\Localisation::getTranslation('common_task_file_extension_mismatch'),
@@ -603,7 +601,6 @@ class TaskRouteHandler
                 }
             } catch (\Exception $e) {
                 $errorMessage = $e->getMessage();
-                error_log("caught generic exception with error message: $errorMessage");
             }
         
             if (is_null($errorMessage)) {
