@@ -36,12 +36,6 @@ class Admins
                     '\SolasMatch\API\V0\Admins::createOrgAdmin'
                 );
 
-                $app->delete(
-                    '/removeOrgAdmin/:orgId/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin',
-                    '\SolasMatch\API\V0\Admins::deleteOrgAdmin'
-                );
-
                 $app->get(
                     '/isOrgAdmin/:orgId/:userId/',
                     '\SolasMatch\API\Lib\Middleware::isloggedIn',
@@ -75,18 +69,6 @@ class Admins
                     '/isOrgBanned/:orgId/',
                     '\SolasMatch\API\Lib\Middleware::isloggedIn',
                     '\SolasMatch\API\V0\Admins::isOrgBanned'
-                );
-
-                $app->delete(
-                    '/unBanUser/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
-                    '\SolasMatch\API\V0\Admins::unBanUser'
-                );
-
-                $app->delete(
-                    '/unBanOrg/:orgId/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
-                    '\SolasMatch\API\V0\Admins::unBanOrg'
                 );
 
                 $app->get(
@@ -126,15 +108,33 @@ class Admins
                 );
 
                 $app->delete(
-                    '/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
-                    '\SolasMatch\API\V0\Admins::deleteSiteAdmin'
+                        '/removeOrgAdmin/:orgId/:userId(:format)/',
+                        '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin',
+                        '\SolasMatch\API\V0\Admins::deleteOrgAdmin'
                 );
                 
                 $app->delete(
-	                '/revokeTask/:taskId/:userId(:format)/',
+                        '/revokeTask/:taskId/:userId(:format)/',
+                        '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
+                        '\SolasMatch\API\V0\Admins::revokeTaskFromUser'
+                );
+                
+                $app->delete(
+                        '/unBanUser/:userId(:format)/',
+                        '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
+                        '\SolasMatch\API\V0\Admins::unBanUser'
+                );
+                
+                $app->delete(
+                        '/unBanOrg/:orgId(:format)/',
+                        '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
+                        '\SolasMatch\API\V0\Admins::unBanOrg'
+                );
+                
+                $app->delete(
+                    '/:userId(:format)/',
                     '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
-                    '\SolasMatch\API\V0\Admins::revokeTaskFromUser'
+                    '\SolasMatch\API\V0\Admins::deleteSiteAdmin'
                 );
             });
 
