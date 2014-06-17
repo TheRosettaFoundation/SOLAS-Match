@@ -398,7 +398,6 @@
 	<string name="project_create_0">Provide as much information as possible.</string>
 	<string name="project_create_source_text">Source Text</string>
 	<string name="project_create_1">Provide a meaningful title for the project.</string>
-	<string name="project_create_1_warning">Title cannot be greater than 100 characters.</string>
 	<string name="project_create_target_language_increase">Please note that creation of more than five tasks may take a while to complete. Please do not click the Create Project button more than once and do not navigate away from this page.</string>
 	<string name="project_create_2">A brief summary of the project.</string>
 	<string name="project_create_3">Who or what will benefit from contributions to this project.</string>
@@ -430,6 +429,9 @@
     <string name="project_create_21">The file you uploaded is too large, please check the maximum file upload size under the Source Text header.</string>
     <string name="project_create_22">Please note that the word count of your file is excessively high - the recommended limit is 3000 words. We suggest you create a segmentation task instead. Are you sure you want to continue?</string>
     <string name="project_create_error_title_too_long">Project title is too long, please use one hundred characters or less.</string>
+    <string name="project_create_error_description_too_long">Project description is too long, please use 4096 characters or less.</string>
+    <string name="project_create_error_impact_too_long">Project impact is too long, please use 4096 characters or less.</string>
+    <string name="project_create_error_reference_too_long">Project reference URL is too long, it must be 128 characters or less. Consider using a URL shortening tool such as <a href="https://bitly.com/">bitly</a>.</string>
     <string name="project_create_invalid_tags">Tags can only contain lowercase letters, numbers and hyphens.</string>
     <string name="project_create_25">Deadline must be some date in the future.</string>
     <string name="project_create_26">Project Impact must be set.</string>

@@ -53,6 +53,7 @@ class ProjectCreateForm extends PolymerElement
   @observable String impactError;
   @observable String createProjectError;
   @observable String tagsError;
+  @observable String referenceError;
   
   /**
    * The constructor for ProjectCreateForm, handling intialisation and setup of various things.
@@ -688,16 +689,49 @@ class ProjectCreateForm extends PolymerElement
             });
           }
       }).then((bool success){
-        //Project title not set
+        //Project description not set
         if (project.description == '') {
           descriptionError = localisation.getTranslation("project_create_33");
           success = false;
+        } else if (project.description.length > 4096) {
+          //Project description is too long
+          descriptionError = localisation.getTranslation("project_create_error_description_too_long");
+          success = false;
         }
+        
         //Project impact not set
         if (project.impact == '') {
           impactError = localisation.getTranslation("project_create_26");
           success = false;
+        } else if (project.impact.length > 4096) {
+          //Project impact is too long
+          impactError = localisation.getTranslation("project_create_error_impact_too_long");
+          success = false;
         }
+        
+        if(project.reference != null && project.reference != '') {
+          if(project.reference.length > 128) {
+            //Project reference is too long
+            referenceError = localisation.getTranslation("project_create_error_reference_too_long");
+            Timer.run(() {
+              LIElement referenceErrTop = this.shadowRoot.querySelector("#reference_error_top");
+              LIElement referenceErrBtm = this.shadowRoot.querySelector("#reference_error_btm");
+              referenceErrTop.setInnerHtml(
+                referenceError,
+                validator : new NodeValidatorBuilder()
+                  ..allowHtml5()
+                  ..allowElement('a', attributes: ['href'])
+              );
+              referenceErrBtm.setInnerHtml(
+                referenceError,
+                validator : new NodeValidatorBuilder()
+                  ..allowHtml5()
+                  ..allowElement('a', attributes: ['href'])
+              );
+            });
+          }
+        }
+        
         if (wordCountInput != null && wordCountInput != '') {
           //If word count is set, ensure it is a valid natural number
           project.wordCount = int.parse(wordCountInput, onError: (String wordCountString) {

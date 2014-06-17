@@ -6,7 +6,7 @@
         <tbody>
           <template if="{{titleError != null || descriptionError != null || wordCountError != null || 
                         deadlineError != null || impactError != null || createProjectError != null ||
-                        tagsError != null}}">
+                        tagsError != null || referenceError != null}}">
             <tr> 
               <td colspan="2">
                 <div class="alert alert-error">
@@ -32,6 +32,9 @@
                     </template>
                     <template if="{{impactError != null}}">
                       <li id="impact_error_top">{{impactError}}</li>
+                    </template>
+                    <template if="{{referenceError != null}}">
+                      <li id="reference_error_top"></li>
                     </template>
                   </ol>
                 </div>
@@ -193,7 +196,7 @@
           </tr>
           <template if="{{titleError != null || descriptionError != null || wordCountError != null || 
                         deadlineError != null || impactError != null || createProjectError != null ||
-                        tagsError != null}}">
+                        tagsError != null || referenceError != null}}">
             <tr> 
               <td colspan="2">
                 <div class="alert alert-error">
@@ -223,6 +226,9 @@
                     </template>
                       <template if="{{impactError != null}}">
                         <li id="impact_error_btm">{{impactError}}</li>
+                      </template>
+                      <template if="{{referenceError != null}}">
+                        <li id="reference_error_btm"></li>
                       </template>
                     </ol>
                   </template>
