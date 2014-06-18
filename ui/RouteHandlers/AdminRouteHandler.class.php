@@ -29,6 +29,7 @@ class AdminRouteHandler
         if ($post = $app->request()->post()) {
             $userDao = new DAO\UserDao();
             $adminDao = new DAO\AdminDao();
+            $taskDao = new DAO\TaskDao();
             if (isset($post['addAdmin'])) {
                 $user = $userDao->getUserByEmail($post['userEmail']);
                 if (is_object($user)) {
@@ -84,6 +85,31 @@ class AdminRouteHandler
                         "deleteError",
                         Lib\Localisation::getTranslation('site_admin_dashboard_user_not_found')
                     );
+                }
+            }
+            if (isset($post['revokeTask']) && $post['revokeTask'] != '') {
+                $taskId = filter_var($post['taskId'], FILTER_VALIDATE_INT);
+                $userToRevokeFrom = $userDao->getUserByEmail(urlencode($post['userEmail']));
+                if ($taskId && !is_null($userToRevokeFrom)) {
+                    $task = $taskDao->getTask($taskId);
+                    $claimantId = $taskDao->getUserClaimedTask($taskId)->getId();
+                    if ($claimantId != $userToRevokeFrom->getId()) {
+                        //user specified did not claim the task specified
+                        $app->flashNow(
+                            "revokeTaskError",
+                            Lib\Localisation::getTranslation('site_admin_dashboard_revoke_task_error_no_claim')
+                        );
+                    } else {
+                        $adminDao->revokeTaskFromUser($taskId, $userId);
+                        $app->flashNow(
+                            "revokeTaskSuccess",
+                            Lib\Localisation::getTranslation('site_admin_dashboard_revoke_task_success'));
+                    }
+                } else {
+                    //Invalid input supplied for user email and/or task id
+                    $app->flashNow(
+                        "revokeTaskError",
+                        Lib\Localisation::getTranslation('site_admin_dashboard_revoke_task_error_invalid'));
                 }
             }
         }

@@ -177,6 +177,48 @@
             </tr>
         </table> 
     </form>
+    <hr/>
+
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.$adminUserId"}" accept-charset="utf-8">
+        <table style="width: 40%">
+            <tr>
+                <td colspan="2">
+                    <label for="revokeTask"><h2>Revoke Task</h2></label>
+                </td>
+            </tr>
+            {if isset($flash['revokeTaskError'])}
+                <tr>
+                    <td colspan="2">
+                        <p class="alert alert-error">{$flash['revokeTaskError']}</p>
+                    </td>
+                </tr>
+            {/if}
+            {if isset($flash['revokeTaskSuccess'])}
+                <tr>
+                    <td colspan="2">
+                        <p class="alert alert-success">{$flash['revokeTaskSuccess']}</p>
+                    </td>
+                </tr>
+            {/if}
+            <tr>
+                <td colspan="2">
+                    {Localisation::getTranslation('site_admin_dashboard_revoke_task_from_user')}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" name="userEmail" placeholder="{Localisation::getTranslation('site_admin_dashboard_email_here')}" style="width: 95%"/>
+                    <input type="text" name="taskId" placeholder="{Localisation::getTranslation('site_admin_dashboard_task_id_here')}" style="width: 95%"/>
+                </td>
+                <td valign="top">
+                    <button class="btn btn-inverse" type="submit" name="revokeTask" value="1" onclick="return confirm(
+                                        '{Localisation::getTranslation('site_admin_dashboard_confirm_revoke_task')}')"/>
+                        <i class="icon-fire icon-white"></i> Revoke Task
+                    </button>
+                </td>
+            </tr>
+        </table> 
+    </form>
 </div>
 
 {include file='footer.tpl'}

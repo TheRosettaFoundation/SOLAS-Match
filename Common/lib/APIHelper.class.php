@@ -111,7 +111,6 @@ class APIHelper
         $success = array(200,201,202,203,204,301,303);
         $this->responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
 
-        
         curl_close($re);
         
         if (in_array($this->responseCode, $success)) {

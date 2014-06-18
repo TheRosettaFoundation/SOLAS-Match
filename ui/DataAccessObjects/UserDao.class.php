@@ -652,6 +652,14 @@ class UserDao extends BaseDao
         $ret = $this->client->call(null, $request);
         return $ret;
     }
+    
+    public function isBlacklistedForTaskByAdmin($userId, $taskId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/isBlacklistedForTaskByAdmin/$userId/$taskId";
+        $ret = $this->client->call(null, $request);
+        return $ret;
+    }
 
     public function trackOrganisation($userId, $organisationId)
     {

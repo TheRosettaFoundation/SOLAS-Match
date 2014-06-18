@@ -174,7 +174,8 @@
     <string name="common_error_not_exist">You do not have sufficient privileges to access this page or the page does not exist.</string>
     <string name="common_error_already_claimed">This task has been claimed by another user.</string>
     <string name="common_error_cannot_claim_desegmentation">You cannot claim the desegmentation task <a href="%s">%s</a>, because you have worked on one of its prerequisite tasks.</string>
-    <string name="common_error_cannot_reclaim">You cannot reclaim the task <a href="%s">%s</a>, because you have previously unclaimed it.</string>        
+    <string name="common_error_cannot_reclaim">You cannot reclaim the task <a href="%s">%s</a>, because you have previously unclaimed it.</string>
+    <string name="common_error_cannot_reclaim_admin_revoked">You cannot reclaim the task <a href="%s">%s</a>, because an administrator has previously revoked it from you.</string>      
     <string name="common_error_unknown_task_type">Unknown task type.</string>
     <string name="common_error_language_code_expected">A valid language code was expected.</string>
     <string name="common_error_unable_to_upload">Sorry, we were not able to upload your file. %s</string>
@@ -248,6 +249,12 @@
     <string name="site_admin_dashboard_successfully_deleted_user">Successfully deleted user.</string>
     <string name="site_admin_dashboard_user_not_found">User not found, the provided email address does not correspond to an account on our system.</string>
     <string name="site_admin_dashboard_only_add_trusted">Only add trusted users!</string>
+    <string name="site_admin_dashboard_task_id_here">Task ID goes here.</string>
+    <string name="site_admin_dashboard_revoke_task_from_user">Revoke a task from a user.</string>
+    <string name="site_admin_dashboard_confirm_revoke_task">Are you sure you want to revoke the task?</string>
+    <string name="site_admin_dashboard_revoke_task_success">Successfully revoked task from user.</string>
+    <string name="site_admin_dashboard_revoke_task_error_no_claim">The user you specified has not claimed the task you specified.</string>
+    <string name="site_admin_dashboard_revoke_task_error_invalid">Invalid user email or task id provided.</string>
 
 	<string name="badge_list_badge_list">Badge List</string>
 	<string name="badge_list_all_available_badges_of">All available badges of %s.</string>

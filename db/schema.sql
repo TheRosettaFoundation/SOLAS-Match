@@ -505,11 +505,29 @@ REPLACE INTO `TaskStatus` (`id`, `name`) VALUES
 CREATE TABLE IF NOT EXISTS `TaskTranslatorBlacklist` (
   `task_id` bigint(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
+  `revoked_by_admin` BIT(1) DEFAULT 0 NOT NULL,
   UNIQUE KEY `task_id` (`task_id`,`user_id`),
   KEY `FK_TaskTranslatorBlacklist_Users` (`user_id`),
   CONSTRAINT `FK_TaskTranslatorBlacklist_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_TaskTranslatorBlacklist_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+    IF NOT EXISTS(SELECT 1
+                    FROM information_schema.`COLUMNS`
+                    WHERE TABLE_SCHEMA = database()
+                    AND TABLE_NAME = "TaskTranslatorBlacklist"
+                    AND COLUMN_NAME = "revoked_by_admin") then
+        ALTER TABLE TaskTranslatorBlacklist
+            ADD revoked_by_admin BIT(1) DEFAULT 0 NOT NULL;
+    END IF;
+END//
+DELIMITER ;
+CALL alterTable();
+DROP PROCEDURE alterTable;
 
 -- Data exporting was unselected.
 
@@ -2773,6 +2791,17 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `isUserBlacklistedForTaskByAdmin`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserBlacklistedForTaskByAdmin`(IN `userId` INT, IN `taskId` INT)
+BEGIN
+	IF EXISTS(SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.task_id = taskId AND t.user_id = userId AND t.revoked_by_admin = 1) THEN
+		SELECT 1 as result;
+	ELSE
+		SELECT 0 as result;
+	END IF;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.logFileDownload
 DROP PROCEDURE IF EXISTS `logFileDownload`;
@@ -3987,12 +4016,12 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.unClaimTask
 DROP PROCEDURE IF EXISTS `unClaimTask`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `unClaimTask`(IN `tID` INT, IN `uID` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `unClaimTask`(IN `tID` INT, IN `uID` INT, IN `unclaimByAdmin` BIT(1))
 BEGIN
 	if EXISTS(select 1 from TaskClaims tc where tc.task_id=tID and tc.user_id=uID) then
 		START TRANSACTION;
       delete from TaskClaims where task_id=tID and user_id=uID;
-      insert into TaskTranslatorBlacklist (task_id,user_id) values (tID,uID);
+      insert into TaskTranslatorBlacklist (task_id,user_id, revoked_by_admin) values (tID,uID,unclaimByAdmin);
       update Tasks set `task-status_id`=2 where id = tID;
       COMMIT;
 		select 1 as result;
