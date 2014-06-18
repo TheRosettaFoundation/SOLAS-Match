@@ -154,9 +154,14 @@ class ClaimedTasksStream extends PolymerElement
     return ret;
   }
   
+  /**
+   * This function is called by addTasks() to process the addition of each individual task's data to the task stream.
+   */
   void addTask(Task task)
   {
+    //add the task to the class-level task list.
     tasks.add(task);
+    //Determine how long ago the task was added, and set text appropriately
     DateTime taskTime = DateTime.parse(task.createdTime);
     Duration dur = currentDateTime.difference(taskTime);
     if (dur.inDays > 0) {
@@ -168,15 +173,21 @@ class ClaimedTasksStream extends PolymerElement
     } else {
       taskAges[task.id] = sprintf(localisation.getTranslation("common_added_seconds"), [dur.inSeconds.toString()]);
     }
+    
+    //Begin processing task tag data
     taskTags[task.id] = new List<Tag>();
+    //Get all the tags of the task and store the resulting list in the taskTags map.
     TaskDao.getTaskTags(task.id).then((List<Tag> tags) {
       taskTags[task.id] = tags;
     });
     if (!projectMap.containsKey(task.projectId)) {
+      //If the project map does not contain a key for the current task's project, retreive the data and set it up.
       ProjectDao.getProject(task.projectId).then((Project proj) {
         projectMap[proj.id] = proj;
+        //Get the data of the task's project's org and then add it to the orgMap.
         OrgDao.getOrg(proj.organisationId).then((Organisation org) {
           orgMap[org.id] = org;
+          //Set up the text with states the task's project and org
           Timer.run(() {
             ParagraphElement p;
             p = querySelector("#parent_" + task.id.toString());
@@ -190,6 +201,8 @@ class ClaimedTasksStream extends PolymerElement
         });
       });
     } else {
+      //The projectMap already has the task's project data, no extra DAO calls needed.
+      //Set up the text with states the task's project and org
       Timer.run(() {
         ParagraphElement p;
         p = querySelector("#parent_" + task.id.toString());
@@ -201,7 +214,7 @@ class ClaimedTasksStream extends PolymerElement
                               orgMap[projectMap[task.projectId].organisationId].name]));
       });
     }
-    
+    //Set up the text stating task age and deadline.
     Timer.run(() {
       ParagraphElement p;
       p = querySelector("#task_age_" + task.id.toString());
@@ -213,6 +226,10 @@ class ClaimedTasksStream extends PolymerElement
     });
   }
   
+  /**
+   * This function is used to disable the page buttons of the claimed task stream whenever they should not
+   * be clicked.
+   */
   void updatePagination()
   {
     if (currentPage < 1) {
@@ -244,6 +261,9 @@ class ClaimedTasksStream extends PolymerElement
     }
   }
   
+  /**
+   * Page navigation function bound to first page button
+   */
   void goToFirstPage()
   {
     if (currentPage != 0) {
@@ -252,6 +272,9 @@ class ClaimedTasksStream extends PolymerElement
     }
   }
   
+  /**
+   * Page navigation function bound to "previous page" button
+   */
   void goToPreviousPage()
   {
     if (currentPage > 0) {
@@ -260,6 +283,9 @@ class ClaimedTasksStream extends PolymerElement
     }
   }
   
+  /**
+   * Page navigation function bound to "next page" button
+   */
   void goToNextPage()
   {
     if (currentPage < lastPage - 1) {
@@ -268,6 +294,9 @@ class ClaimedTasksStream extends PolymerElement
     }
   }
   
+  /**
+   * Page navigation function bound to "last page" button
+   */
   void goToLastPage()
   {
     if (currentPage < lastPage - 1) {
