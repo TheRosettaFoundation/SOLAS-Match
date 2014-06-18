@@ -34,7 +34,7 @@
                       <li id="impact_error_top">{{impactError}}</li>
                     </template>
                     <template if="{{referenceError != null}}">
-                      <li id="reference_error_top"></li>
+                      <li id="reference_error_top">{{referenceError}}</li>
                     </template>
                   </ol>
                 </div>
@@ -201,7 +201,8 @@
                 <div class="alert alert-error">
 
                   <template if="{{titleError != null || descriptionError != null || wordCountError != null ||
-                                deadlineError != null || impactError != null || createProjectError != null}}">
+                                deadlineError != null || impactError != null || createProjectError != null ||
+                                tagsError != null || referenceError != null}}">
                     
                     <h3>{{localisation.getTranslation("common_please_correct_errors")}}:</h3>
                     <ol>
@@ -227,7 +228,7 @@
                         <li id="impact_error_btm">{{impactError}}</li>
                       </template>
                       <template if="{{referenceError != null}}">
-                        <li id="reference_error_btm"></li>
+                        <li id="reference_error_btm">{{referenceError}}</li>
                       </template>
                     </ol>
                   </template>

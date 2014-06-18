@@ -330,6 +330,7 @@ class ProjectCreateForm extends PolymerElement
    */
   void submitForm()
     {
+      //reset error variables, clearing any previously displayed errors.
       createProjectError = null;
       titleError = null;
       descriptionError = null;
@@ -337,6 +338,7 @@ class ProjectCreateForm extends PolymerElement
       deadlineError = null;
       impactError = null;
       tagsError = null;
+      referenceError = null;
       maxTargetsReached = null;
      
       //Validate form input and then check for success
@@ -358,7 +360,7 @@ class ProjectCreateForm extends PolymerElement
          
           List<String> projectTags = new List<String>();
           if (tagList.length > 0) {
-            projectTags = separateTags(tagList);
+            projectTags = _separateTags(tagList);
           }
           if (projectTags.length > 0) {
             projectTags.forEach((String tagName) {
@@ -644,7 +646,7 @@ class ProjectCreateForm extends PolymerElement
         projectFile = files[0];
       }
       //Validate the file details and then load its content.
-      return validateFileInput().then((bool success) {
+      return _validateFileInput().then((bool success) {
         Completer fileIsDone = new Completer();
         FileReader reader = new FileReader();
         reader.onLoadEnd.listen((e) {
@@ -713,15 +715,16 @@ class ProjectCreateForm extends PolymerElement
           if(project.reference.length > 128) {
             //Project reference is too long
             referenceError = localisation.getTranslation("project_create_error_reference_too_long");
+            success = false;
             Timer.run(() {
               LIElement referenceErrTop = this.shadowRoot.querySelector("#reference_error_top");
-              LIElement referenceErrBtm = this.shadowRoot.querySelector("#reference_error_btm");
               referenceErrTop.setInnerHtml(
                 referenceError,
                 validator : new NodeValidatorBuilder()
                   ..allowHtml5()
                   ..allowElement('a', attributes: ['href'])
               );
+              LIElement referenceErrBtm = this.shadowRoot.querySelector("#reference_error_btm");
               referenceErrBtm.setInnerHtml(
                 referenceError,
                 validator : new NodeValidatorBuilder()
@@ -729,6 +732,9 @@ class ProjectCreateForm extends PolymerElement
                   ..allowElement('a', attributes: ['href'])
               );
             });
+          } else if (_validateReferenceURL(project.reference) == false) {
+            referenceError = localisation.getTranslation("project_create_error_reference_invalid");
+            success = false;
           }
         }
         
@@ -762,14 +768,25 @@ class ProjectCreateForm extends PolymerElement
           success = false;
         }
        
-        if(validateTagList(tagList) == false) {
+        if (_validateTagList(tagList) == false) {
           //Invalid tags detected, set error message
           tagsError = localisation.getTranslation('project_create_invalid_tags');
           success = false;
+        } else {
+          List<String> list = tagList.split(" ");
+          int listLen = list.length;
+          for (int i = 0; i < listLen; i++) {
+            if (list.elementAt(i).length > 50) {
+              //One of the tags is too long, set error message
+              tagsError = localisation.getTranslation("project_create_error_tags_too_long");
+              success = false;
+              break;
+            }
+          }
         }
        
         //Parse project deadline info
-        DateTime projectDeadline = parseDeadline();
+        DateTime projectDeadline = _parseDeadline();
         if (projectDeadline != null) {
           if (projectDeadline.isAfter(new DateTime.now())) {
             String monthAsString = projectDeadline.month.toString();
@@ -826,7 +843,7 @@ class ProjectCreateForm extends PolymerElement
         }
        
         //Validate file input
-        return validateFileInput().then((bool valid) {
+        return _validateFileInput().then((bool valid) {
           if (success && valid) {
             return true;
           } else {
@@ -839,7 +856,7 @@ class ProjectCreateForm extends PolymerElement
   /**
    * This function is used to validate the details of the project file provided.
    */
-  Future<bool> validateFileInput()
+  Future<bool> _validateFileInput()
   {
     return new Future(() {
       File projectFile = null;
@@ -899,7 +916,7 @@ class ProjectCreateForm extends PolymerElement
   /**
    * This function is called by validateInput to validate the project tags provided.
    */
-  bool validateTagList(String tagList)
+  bool _validateTagList(String tagList)
   {
     if (tagList.indexOf(new RegExp(r'[^a-z0-9\-\s]')) != -1) {
       return false;
@@ -909,9 +926,33 @@ class ProjectCreateForm extends PolymerElement
   }
   
   /**
+   * Uses a regular expression to validate the the reference URL for a project (if one is provided) actually is
+   * a URL.
+   * Credit to http://stackoverflow.com/a/24058129/1799985
+   * 
+   * Returns true if the provided URL is valid, false otherwise.
+   */
+  bool _validateReferenceURL(String url)
+  {
+    //Spread out the regular expression string on 3 lines and concatenate it together for better presentation
+    //of code
+    String regExp = 
+        r'(([\w]+:)?//)?(([\d\w]|%[a-fA-f\d]{2,2})+(:([\d\w]|%[a-fA-f\d]{2,2})+)?@)?([\d\w][-\d\w]{0,' +
+        r'253}[\d\w]\.)+[\w]{2,13}(:[\d]+)?(/([-+_~.\d\w]|%[a-fA-f\d]{2,2})*)*(\?(&?([-+_~.\d\w]|%[a-' +
+        r'fA-f\d]{2,2})=?)*)?(#([-+_~.\d\w]|%[a-fA-f\d]{2,2})*)?';
+    if (url.indexOf(new RegExp(regExp)) == -1) {
+      //String did not match pattern, it is not a URL
+      return false;
+    } else {
+      //String matched, it is a URL
+      return true;
+    }
+  }
+  
+  /**
    * This is a simple function to parse the deadline provided for the project.
    */
-  DateTime parseDeadline()
+  DateTime _parseDeadline()
   {
     DateTime ret = new DateTime(years[selectedYear], selectedMonth + 1, selectedDay + 1, selectedHour, selectedMinute);
     return ret;
@@ -920,7 +961,7 @@ class ProjectCreateForm extends PolymerElement
   /**
    * This is a simple function to parse the project tags from the text input.
    */
-  List<String> separateTags(String tags)
+  List<String> _separateTags(String tags)
   {
     return tags.split(" ");
   }
@@ -950,7 +991,7 @@ class ProjectCreateForm extends PolymerElement
    */
   void selectedYearChanged(int oldValue)
   {
-    if (this.isLeapYear(years[selectedYear])) {
+    if (this._isLeapYear(years[selectedYear])) {
       monthLengths[1] = 29;
     } else {
       monthLengths[1] = 28;
@@ -973,7 +1014,7 @@ class ProjectCreateForm extends PolymerElement
   /**
    * This is a simple function to check if a year is a leap year or not.
    */
-  bool isLeapYear(int year)
+  bool _isLeapYear(int year)
   {
     bool ret = true;
     if (year % 4 != 0) {

@@ -34,7 +34,7 @@
                       <li id="impact_error_top">{{impactError}}</li>
                     </template>
                     <template if="{{referenceError != null}}">
-                      <li id="reference_error_top"></li>
+                      <li id="reference_error_top">{{referenceError}}</li>
                     </template>
                   </ol>
                 </div>
@@ -45,7 +45,6 @@
             <td width="493" align="center" valign="middle">
               <h2>{{localisation.getTranslation("common_title")}}: <span style="color: red">*</span></h2>
               <p class="desc">{{localisation.getTranslation("project_create_1")}}</p>
-              <p class="desc">{{localisation.getTranslation("project_create_1_warning")}}</p>
               <textarea wrap="soft" cols="1" rows="3" style="width: 400px" value="{{project.title}}"></textarea>
               <p style="margin-bottom:40px;"></p>
   
@@ -202,7 +201,8 @@
                 <div class="alert alert-error">
 
                   <template if="{{titleError != null || descriptionError != null || wordCountError != null ||
-                                deadlineError != null || impactError != null || createProjectError != null}}">
+                                deadlineError != null || impactError != null || createProjectError != null ||
+                                tagsError != null || referenceError != null}}">
                     
                     <h3>{{localisation.getTranslation("common_please_correct_errors")}}:</h3>
                     <ol>
@@ -228,7 +228,7 @@
                         <li id="impact_error_btm">{{impactError}}</li>
                       </template>
                       <template if="{{referenceError != null}}">
-                        <li id="reference_error_btm"></li>
+                        <li id="reference_error_btm">{{referenceError}}</li>
                       </template>
                     </ol>
                   </template>

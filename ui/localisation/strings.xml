@@ -438,7 +438,9 @@
     <string name="project_create_error_title_too_long">Project title is too long, please use one hundred characters or less.</string>
     <string name="project_create_error_description_too_long">Project description is too long, please use 4096 characters or less.</string>
     <string name="project_create_error_impact_too_long">Project impact is too long, please use 4096 characters or less.</string>
+    <string name="project_create_error_reference_invalid">Project reference must be a valid URL.</string>    
     <string name="project_create_error_reference_too_long">Project reference URL is too long, it must be 128 characters or less. Consider using a URL shortening tool such as <a href="https://bitly.com/">bitly</a>.</string>
+    <string name="project_create_error_tags_too_long">Each project tag must be at most 50 characters long.</string>
     <string name="project_create_invalid_tags">Tags can only contain lowercase letters, numbers and hyphens.</string>
     <string name="project_create_25">Deadline must be some date in the future.</string>
     <string name="project_create_26">Project Impact must be set.</string>
