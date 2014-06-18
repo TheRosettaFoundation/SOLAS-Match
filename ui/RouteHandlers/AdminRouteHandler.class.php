@@ -103,7 +103,7 @@ class AdminRouteHandler
                         $adminDao->revokeTaskFromUser($taskId, $userId);
                         $app->flashNow(
                             "revokeTaskSuccess",
-                            Lib\Localisation::getTranslation('site_admin_dashboard_revoke_task_error_invalid'));
+                            Lib\Localisation::getTranslation('site_admin_dashboard_revoke_task_success'));
                     }
                 } else {
                     //Invalid input supplied for user email and/or task id
