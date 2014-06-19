@@ -10,20 +10,6 @@
 /*!40101 SET NAMES utf8 */;
 SET FOREIGN_KEY_CHECKS=0;
 
-/*--------------------------------------------start of alter tables (OAuth)--------------------------------*/
-
--- Changing collation of OAuth tables to match ours
-ALTER TABLE oauth_clients CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE oauth_client_endpoints CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE oauth_sessions CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE oauth_session_access_tokens CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE oauth_session_authcodes CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE oauth_session_redirects CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE oauth_session_refresh_tokens CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE oauth_scopes CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE oauth_session_token_scopes CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE oauth_session_authcode_scopes CONVERT TO character SET utf8 COLLATE utf8_unicode_ci;
-
 /*--------------------------------------------------start of tables--------------------------------*/
 
 -- Dumping structure for table Solas-Match-Test.Admins
@@ -191,7 +177,6 @@ CREATE TABLE IF NOT EXISTS `BannedUsers` (
   CONSTRAINT `FK_BannedUsers_Users_2` FOREIGN KEY (`user_id-admin`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-
 -- Dumping data for table Solas-Match-Test.Badges: ~4 rows (approximately)
 /*!40000 ALTER TABLE `Badges` DISABLE KEYS */;
 REPLACE INTO `Badges` (`id`, `owner_id`, `title`, `description`) VALUES
@@ -214,19 +199,6 @@ CREATE TABLE IF NOT EXISTS `Countries` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-
--- Dumping structure for table Solas-Match-Test.DefaultGlobalPermissions
-CREATE TABLE IF NOT EXISTS `DefaultGlobalPermissions` (
-	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-	`permissiongroup_id` INT(10) UNSIGNED NOT NULL,
-	`permission_id` INT(10) UNSIGNED NOT NULL,
-	PRIMARY KEY (`id`),
-	UNIQUE INDEX `permissiongroup_id` (`permissiongroup_id`, `permission_id`),
-	INDEX `FK_DefaultGlobalPermissions_Permissions` (`permission_id`),
-	CONSTRAINT `FK_DefaultGlobalPermissions_PermissionGroups` FOREIGN KEY (`permissiongroup_id`) REFERENCES `PermissionGroups` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `FK_DefaultGlobalPermissions_Permissions` FOREIGN KEY (`permission_id`) REFERENCES `Permissions` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 
 -- Dumping structure for table Solas-Match-Test.Languages
 CREATE TABLE IF NOT EXISTS `Languages` (
@@ -253,24 +225,6 @@ REPLACE INTO `NotificationIntervals` (`id`, `name`) VALUES
 	(2, "Weekly"),
 	(3, "Monthly");
 
-DROP PROCEDURE IF EXISTS alterTable;
-DELIMITER //
-CREATE PROCEDURE alterTable()
-BEGIN
-    if EXISTS(select 1 from information_schema.`COLUMNS` i 
-                    where i.TABLE_SCHEMA = database() and i.TABLE_NAME = 'Users') then
-        if NOT EXISTS (select 1 from information_schema.`COLUMNS` i 
-                        where i.TABLE_SCHEMA = database() and i.TABLE_NAME = 'Users'
-                        and i.COLUMN_KEY != '' and i.COLUMN_NAME = 'password' ) then
-                ALTER TABLE `Users` ADD KEY `user_pass` (`password`);
-        end if;
-    end if;
-END//
-DELIMITER ;
-CALL alterTable();
-DROP PROCEDURE alterTable;
-
-
 -- Dumping structure for table Solas-Match-Test.OrganisationMembers
 CREATE TABLE IF NOT EXISTS `OrganisationMembers` (
   `user_id` int(10) unsigned NOT NULL,
@@ -283,22 +237,6 @@ CREATE TABLE IF NOT EXISTS `OrganisationMembers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-
--- Dumping structure for table Solas-Match-Test.OrganisationPermissions
-CREATE TABLE IF NOT EXISTS `OrganisationPermissions` (
-	`id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-	`organisation_id` INT(10) UNSIGNED NOT NULL,
-	`permissiongroup_id` INT(10) UNSIGNED NOT NULL,
-	`permission_id` INT(10) UNSIGNED NOT NULL,
-	PRIMARY KEY (`id`),
-	UNIQUE INDEX `organisation_id` (`organisation_id`, `permissiongroup_id`, `permission_id`),
-	INDEX `FK_OrganisationPermissions_PermissionGroups` (`permissiongroup_id`),
-	INDEX `FK_OrganisationPermissions_Permissions` (`permission_id`),
-	CONSTRAINT `FK_OrganisationPermissions_PermissionGroups` FOREIGN KEY (`permissiongroup_id`) REFERENCES `PermissionGroups` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `FK_OrganisationPermissions_Permissions` FOREIGN KEY (`permission_id`) REFERENCES `Permissions` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `FK_OrganisationPermissions_Organisations` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 
 -- Dumping structure for table Solas-Match-Test.Organisations
 CREATE TABLE IF NOT EXISTS `Organisations` (
@@ -359,23 +297,6 @@ CREATE TABLE IF NOT EXISTS `PasswordResetRequests` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-
--- Dumping structure for table Solas-Match-Test.PermissionGroups
-CREATE TABLE IF NOT EXISTS `PermissionGroups` (
-	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-	`name` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
-	PRIMARY KEY (`id`),
-	UNIQUE INDEX `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- Dumping structure for table Solas-Match-Test.Permissions
-CREATE TABLE IF NOT EXISTS `Permissions` (
-	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-	`name` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
-	PRIMARY KEY (`id`),
-	UNIQUE INDEX `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 
 -- Dumping structure for table Solas-Match-Test.ProjectFiles
 CREATE TABLE IF NOT EXISTS `ProjectFiles` (
@@ -584,11 +505,29 @@ REPLACE INTO `TaskStatus` (`id`, `name`) VALUES
 CREATE TABLE IF NOT EXISTS `TaskTranslatorBlacklist` (
   `task_id` bigint(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
+  `revoked_by_admin` BIT(1) DEFAULT 0 NOT NULL,
   UNIQUE KEY `task_id` (`task_id`,`user_id`),
   KEY `FK_TaskTranslatorBlacklist_Users` (`user_id`),
   CONSTRAINT `FK_TaskTranslatorBlacklist_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_TaskTranslatorBlacklist_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+    IF NOT EXISTS(SELECT 1
+                    FROM information_schema.`COLUMNS`
+                    WHERE TABLE_SCHEMA = database()
+                    AND TABLE_NAME = "TaskTranslatorBlacklist"
+                    AND COLUMN_NAME = "revoked_by_admin") then
+        ALTER TABLE TaskTranslatorBlacklist
+            ADD revoked_by_admin BIT(1) DEFAULT 0 NOT NULL;
+    END IF;
+END//
+DELIMITER ;
+CALL alterTable();
+DROP PROCEDURE alterTable;
 
 -- Data exporting was unselected.
 
@@ -647,22 +586,6 @@ CREATE TABLE IF NOT EXISTS `UserNotifications` (
   CONSTRAINT `FK_user_notifications_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping structure for table Solas-Match-Test.UserOrganisationPermissions
-CREATE TABLE IF NOT EXISTS `UserOrganisationPermissions` (
-	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-	`organisation_id` INT(10) UNSIGNED NOT NULL,
-	`user_id` INT(10) UNSIGNED NOT NULL,
-	`permission_id` INT(10) UNSIGNED NOT NULL,
-	PRIMARY KEY (`id`),
-	UNIQUE INDEX `organisation_id` (`organisation_id`, `user_id`, `permission_id`),
-	INDEX `FK_UserOrganisationPermissions_Users` (`user_id`),
-	INDEX `FK_UserOrganisationPermissions_Permissions` (`permission_id`),
-	CONSTRAINT `FK_UserOrganisationPermissions_Organisations` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `FK_UserOrganisationPermissions_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-	CONSTRAINT `FK_UserOrganisationPermissions_Permissions` FOREIGN KEY (`permission_id`) REFERENCES `Permissions` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-
 -- Dumping structure for table big-merge.UserPersonalInformation
 CREATE TABLE IF NOT EXISTS `UserPersonalInformation` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -682,25 +605,7 @@ CREATE TABLE IF NOT EXISTS `UserPersonalInformation` (
   CONSTRAINT `FK_UserPersonalInformation_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-DROP PROCEDURE IF EXISTS alterTable;
-DELIMITER //
-CREATE PROCEDURE alterTable()
-BEGIN
-    IF NOT EXISTS(SELECT 1
-                    FROM information_schema.`COLUMNS`
-                    WHERE TABLE_SCHEMA = database()
-                    AND TABLE_NAME = "UserPersonalInformation"
-                    AND COLUMN_NAME = "receive_credit") then
-        ALTER TABLE UserPersonalInformation
-            ADD receive_credit BIT(1) DEFAULT 0 NOT NULL;
-    END IF;
-END//
-DELIMITER ;
-CALL alterTable();
-DROP PROCEDURE alterTable;
-
 -- Data exporting was unselected.
-
 
 -- Dumping structure for table Solas-Match-Test.Users
 CREATE TABLE IF NOT EXISTS `Users` (
@@ -722,19 +627,6 @@ CREATE TABLE IF NOT EXISTS `Users` (
   CONSTRAINT `FK_user_language` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-DROP PROCEDURE IF EXISTS alterTable;
-DELIMITER //
-CREATE PROCEDURE alterTable()
-BEGIN
-    if NOT EXISTS (select 1 from information_schema.`COLUMNS` i 
-                    where i.TABLE_SCHEMA = database() and i.TABLE_NAME = 'Users'
-                    and i.COLUMN_KEY != '' and i.COLUMN_NAME = 'password' ) then
-            ALTER TABLE `Users` ADD KEY `user_pass` (`password`);
-    end if;
-END//
-DELIMITER ;
-CALL alterTable();
-DROP PROCEDURE alterTable;
 -- Data exporting was unselected.
 
 -- Dumping structure for table Solas-Match-Test.UserSecondaryLanguages
@@ -2899,6 +2791,17 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `isUserBlacklistedForTaskByAdmin`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserBlacklistedForTaskByAdmin`(IN `userId` INT, IN `taskId` INT)
+BEGIN
+	IF EXISTS(SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.task_id = taskId AND t.user_id = userId AND t.revoked_by_admin = 1) THEN
+		SELECT 1 as result;
+	ELSE
+		SELECT 0 as result;
+	END IF;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.logFileDownload
 DROP PROCEDURE IF EXISTS `logFileDownload`;
@@ -4113,12 +4016,12 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.unClaimTask
 DROP PROCEDURE IF EXISTS `unClaimTask`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `unClaimTask`(IN `tID` INT, IN `uID` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `unClaimTask`(IN `tID` INT, IN `uID` INT, IN `unclaimByAdmin` BIT(1))
 BEGIN
 	if EXISTS(select 1 from TaskClaims tc where tc.task_id=tID and tc.user_id=uID) then
 		START TRANSACTION;
       delete from TaskClaims where task_id=tID and user_id=uID;
-      insert into TaskTranslatorBlacklist (task_id,user_id) values (tID,uID);
+      insert into TaskTranslatorBlacklist (task_id,user_id, revoked_by_admin) values (tID,uID,unclaimByAdmin);
       update Tasks set `task-status_id`=2 where id = tID;
       COMMIT;
 		select 1 as result;

@@ -34,6 +34,9 @@ class UserPrivateProfileForm extends PolymerElement
   SelectElement langSelect;
   SelectElement countrySelect;
   
+  /**
+   * The constructor for UserPrivateProfileForm, handling initialisation of variables
+   */
   UserPrivateProfileForm.created() : super.created()
   {
     secondaryLanguageLimit = 10;
@@ -49,14 +52,20 @@ class UserPrivateProfileForm extends PolymerElement
     alert = "";
   }
   
+  /**
+   * Called when by the DOM when the UserPrivateProfileForm element has been inserted into the "live document".
+   */
   void enteredView()
   {
     localisation = new Localisation();
     List<Future<bool>> dataLoaded = new List<Future<bool>>();
+    //Get the user's personal info and then store it in the bound variable userInfo
     UserDao.getUserPersonalInfo(userid).then((UserPersonalInformation info) {
       userInfo = info;
     });
     
+    //Get the data of the badges assigned to the user and store it in the bound variable badges.
+    //Also check to see if they have translator, proofreader and interpreter badges.
     UserDao.getUserBadges(userid).then((List<Badge> userBadges) {
       badges = userBadges;
       badges.forEach((Badge badge) {
@@ -70,16 +79,19 @@ class UserPrivateProfileForm extends PolymerElement
       });
     });
       
+    //get user data
     dataLoaded.add(UserDao.getUser(userid).then((User u) {
       user = u;
       return true;
     }));
     
+    //get data of user's secondary languages
     dataLoaded.add(UserDao.getSecondaryLanguages(userid).then((List<Locale> locales) {
       userSecondaryLanguages.addAll(locales);
       return true;
     }));
     
+    //get data of all languages
     dataLoaded.add(LanguageDao.getAllLanguages().then((List<Language> langs) {
       Language lang = new Language();
       lang.name = "";
@@ -89,6 +101,7 @@ class UserPrivateProfileForm extends PolymerElement
       return true;
     }));
     
+    //get data of all countries
     dataLoaded.add(CountryDao.getAllCountries().then((List<Country> regions) {
       Country any = new Country();
       any.name = "";
@@ -98,12 +111,16 @@ class UserPrivateProfileForm extends PolymerElement
       return true;
     }));
    
+    //Wait for all data to load and the report that the data has loaded by updating bound variable isLoaded
     Future.wait(dataLoaded).then((List<bool> successList) {
       setDefaults(successList);
     });
     isLoaded = true;
   }
   
+  /**
+   * This function sets up default values of elements of the form.
+   */
   void setDefaults(List<bool> successList)
   {
     successList.forEach((bool success) {
@@ -237,6 +254,9 @@ class UserPrivateProfileForm extends PolymerElement
     }
   }
   
+  /**
+   * This function is used to add another secondary language selector to the page.
+   */
   void addSecondaryLanguage([int languageSelected = 0, int countrySelected = 0])
   {
     if (secondaryLanguageCount < secondaryLanguageLimit) {
@@ -270,6 +290,9 @@ class UserPrivateProfileForm extends PolymerElement
     }
   }
   
+  /**
+   * This function is used to remove a secondary language selector from the page.
+   */
   void removeSecondaryLanguage()
   {
     if (secondaryLanguageCount > 0) {

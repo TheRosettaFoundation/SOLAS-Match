@@ -70,11 +70,6 @@ class TemplateHelper
                 return Localisation::getTranslation('common_error_unknown_task_type');
         }
     }
-
-    public static function isValidEmail($email)
-    {
-        return filter_var($email, FILTER_VALIDATE_EMAIL);
-    }
     
     public static function isValidDateTime($dateTime)
     {
@@ -98,13 +93,9 @@ class TemplateHelper
         return $ret;
     }
 
-    private static function emailContainsCharacter($email, $character)
-    {
-        return (strpos($email, $character) !== false);
-    }
-
     public static function isValidPassword($password)
     {
+        $password = trim($password);
         return (strlen($password) > 0);
     }
 
@@ -316,18 +307,6 @@ class TemplateHelper
             
         }
         return $countries;
-    }
-
-    public static function saveLanguage($languageCode)
-    {
-        $langDao = new DAO\LanguageDao();
-        $language = $langDao->getLanguageByCode($languageCode);
-        if (is_null(($language))) {
-            throw new \InvalidArgumentException(
-                Localisation::getTranslation('common_error_language_code_expected')
-            );
-        }
-        return $language->getId();
     }
     
     public static function maxFileSizeBytes()

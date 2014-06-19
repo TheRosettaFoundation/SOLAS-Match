@@ -79,7 +79,7 @@
         <h3>{Localisation::getTranslation('task_simple_upload_3')} <small>{Localisation::getTranslation('task_simple_upload_4')}</small></h3>
         <br />
         <p>             
-            {sprintf(Localisation::getTranslation('task_simple_upload_original_project_file'), {"{urlFor name="home"}api/v0/projects/{$task->getProjectId()}/file"})}
+            {sprintf(Localisation::getTranslation('task_simple_upload_original_project_file'), {"{urlFor name="home"}project/{$task->getProjectId()}/file/"})}
         </p>
         
         <p>

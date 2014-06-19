@@ -218,8 +218,9 @@ class Middleware
             $params = $route->getParams();
             if (!is_null($params)) {
                 $taskId = $params['task_id'];
+                $userId = Common\Lib\UserSession::getCurrentUserID();
                 $userDao = new DAO\UserDao();
-                $isBlackListed = $userDao->isBlacklistedForTask(Common\Lib\UserSession::getCurrentUserID(), $taskId);
+                $isBlackListed = $userDao->isBlacklistedForTask($userId, $taskId);
                 
                 //Is the user blacklisted for the task?
                 if ($isBlackListed) {
@@ -228,12 +229,18 @@ class Middleware
                     $app = \Slim\Slim::getInstance();
                     $message = null;
                     
-                    //If it is a desegmentation task, user must have been blacklisted for it because they
-                    //have worked on a prerequisite task for it.
-                    if($task->getTaskType() == Common\Enums\TaskTypeEnum::DESEGMENTATION) {
-                       $message = Localisation::getTranslation("common_error_cannot_claim_desegmentation");
+                    $isBlackListedByAdmin = $userDao->isBlacklistedForTaskByAdmin($userId, $taskId);
+                    if (!$isBlackListedByAdmin) {
+                        //If it is a desegmentation task, user must have been blacklisted for it because they
+                        //have worked on a prerequisite task for it.
+                        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::DESEGMENTATION) {
+                            $message = Localisation::getTranslation("common_error_cannot_claim_desegmentation");
+                        } else {
+                            $message = Localisation::getTranslation('common_error_cannot_reclaim');
+                        }
                     } else {
-                        $message = Localisation::getTranslation('common_error_cannot_reclaim');
+                        //An admin has previously revoked this task from the user.
+                        $message = Localisation::getTranslation('common_error_cannot_reclaim_admin_revoked');
                     }
                     $app->flash(
                         'error',

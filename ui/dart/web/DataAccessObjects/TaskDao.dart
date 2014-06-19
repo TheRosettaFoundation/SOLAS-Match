@@ -122,7 +122,7 @@ class TaskDao
   static Future<bool> saveTaskFile(int taskId, int userId, String fileData)
   {
     APIHelper client = new APIHelper(".json");
-    Future<bool> ret = client.call("", "v0/tasks/saveFile/$taskId/$userId", "PUT", fileData)
+    Future<bool> ret = client.call("", "v0/io/upload/task/$taskId/$userId", "PUT", fileData)
         .then((HttpRequest response) {
       if (response.status < 400) {
         return true;

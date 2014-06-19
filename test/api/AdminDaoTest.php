@@ -29,7 +29,7 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
         $user = UnitTestHelper::createUser(null, "Bob", "blah", "foo@coo.com");
         $insertedUser = API\DAO\UserDao::save($user);
         $this->assertNotNull($insertedUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $insertedUser);
         $userId = $insertedUser->getId();
 
         API\DAO\AdminDao::addSiteAdmin($userId);
@@ -48,7 +48,7 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
         $user = UnitTestHelper::createUser(null, "Bob", "blah", "foo@coo.com");
         $insertedUser = API\DAO\UserDao::save($user);
         $this->assertNotNull($insertedUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $insertedUser);
         $userId = $insertedUser->getId();
 
         API\DAO\AdminDao::addSiteAdmin($userId);
@@ -71,12 +71,12 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
         $user = UnitTestHelper::createUser(null, "Bob", "blah", "foo@coo.com");
         $insertedUser = API\DAO\UserDao::save($user);
         $this->assertNotNull($insertedUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $insertedUser);
         $userId = $insertedUser->getId();
 
         $org = UnitTestHelper::createOrg(null, "Bunnyland");
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG, $insertedOrg);
         $this->assertNotNull($insertedOrg);
         $orgId = $insertedOrg->getId();
         API\DAO\OrganisationDao::requestMembership($userId, $orgId);
@@ -98,12 +98,12 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
         $user = UnitTestHelper::createUser(null, "Bob", "blah", "foo@coo.com");
         $insertedUser = API\DAO\UserDao::save($user);
         $this->assertNotNull($insertedUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $insertedUser);
         $userId = $insertedUser->getId();
         
         $org = UnitTestHelper::createOrg(null, "Bunnyland");
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG, $insertedOrg);
         $this->assertNotNull($insertedOrg);
         $orgId = $insertedOrg->getId();
         API\DAO\OrganisationDao::requestMembership($userId, $orgId);
@@ -128,7 +128,7 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
         $user = UnitTestHelper::createUser(null, "Bob", "blah", "foo@coo.com");
         $insertedUser = API\DAO\UserDao::save($user);
         $this->assertNotNull($insertedUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $insertedUser);
         $userId = $insertedUser->getId();
         API\DAO\AdminDao::addSiteAdmin($userId);
         $admins = API\DAO\AdminDao::getAdmins();
@@ -137,7 +137,7 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
 
         $user2 = UnitTestHelper::createUser(null, "John", "blah", " blah@coo.com");
         $insertedUser2 = API\DAO\UserDao::save($user);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser2);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $insertedUser2);
         $this->assertNotNull($insertedUser2);
         $user2Id = $insertedUser2->getId();
 
@@ -158,7 +158,7 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
         $user = UnitTestHelper::createUser(null, "Bob", "blah", "foo@coo.com");
         $insertedUser = API\DAO\UserDao::save($user);
         $this->assertNotNull($insertedUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $insertedUser);
         $userId = $insertedUser->getId();
         API\DAO\AdminDao::addSiteAdmin($userId);
         $admins = API\DAO\AdminDao::getAdmins();
@@ -167,7 +167,7 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
         
         $user2 = UnitTestHelper::createUser(null, "John", "blah", " blah@coo.com");
         $insertedUser2 = API\DAO\UserDao::save($user);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser2);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $insertedUser2);
         $this->assertNotNull($insertedUser2);
         $user2Id = $insertedUser2->getId();
         
@@ -177,7 +177,7 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("1", $isBanned);
         
         $getBannedUser = API\DAO\AdminDao::getBannedUser($user2Id, $userId);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\BannedUser", $getBannedUser[0]);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_BANNED_USER, $getBannedUser[0]);
         $this->assertEquals($bannedUser->getUserId(), $getBannedUser[0]->getUserId());
         $this->assertEquals($bannedUser->getUserIdAdmin(), $getBannedUser[0]->getUserIdAdmin());
         $this->assertEquals($bannedUser->getBanType(), $getBannedUser[0]->getBanType());
@@ -194,7 +194,7 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
         $user = UnitTestHelper::createUser(null, "Bob", "blah", "foo@coo.com");
         $insertedUser = API\DAO\UserDao::save($user);
         $this->assertNotNull($insertedUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $insertedUser);
         $userId = $insertedUser->getId();
         API\DAO\AdminDao::addSiteAdmin($userId);
         $admins = API\DAO\AdminDao::getAdmins();
@@ -203,7 +203,7 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
         
         $user2 = UnitTestHelper::createUser(null, "John", "blah", " blah@coo.com");
         $insertedUser2 = API\DAO\UserDao::save($user);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser2);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $insertedUser2);
         $this->assertNotNull($insertedUser2);
         $user2Id = $insertedUser2->getId();
         
@@ -228,7 +228,7 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
         $user = UnitTestHelper::createUser(null, "Bob", "blah", "foo@coo.com");
         $insertedUser = API\DAO\UserDao::save($user);
         $this->assertNotNull($insertedUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $insertedUser);
         $userId = $insertedUser->getId();
         
         API\DAO\AdminDao::addSiteAdmin($userId);
@@ -238,7 +238,7 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
         
         $org = UnitTestHelper::createOrg(null, "Bunnyland");
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG, $insertedOrg);
         $this->assertNotNull($insertedOrg);
         $orgId = $insertedOrg->getId();
         
@@ -267,7 +267,7 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
         
         $org = UnitTestHelper::createOrg(null, "Bunnyland");
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG, $insertedOrg);
         $this->assertNotNull($insertedOrg);
         $orgId = $insertedOrg->getId();
         
@@ -277,7 +277,7 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("1", $isBanned);
         
         $getBannedOrg = API\DAO\AdminDao::getBannedOrg($orgId, $userId);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\BannedOrganisation", $getBannedOrg[0]);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_BANNED_ORG, $getBannedOrg[0]);
         $this->assertEquals($bannedOrg->getOrgId(), $getBannedOrg[0]->getOrgId());
         $this->assertEquals($bannedOrg->getUserIdAdmin(), $getBannedOrg[0]->getUserIdAdmin());
         $this->assertEquals($bannedOrg->getBanType(), $getBannedOrg[0]->getBanType());
@@ -303,7 +303,7 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
         
         $org = UnitTestHelper::createOrg(null, "Bunnyland");
         $insertedOrg = API\DAO\OrganisationDao::insertAndUpdate($org);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG, $insertedOrg);
         $this->assertNotNull($insertedOrg);
         $orgId = $insertedOrg->getId();
         
@@ -326,7 +326,7 @@ class AdminDaoTest extends \PHPUnit_Framework_TestCase
 
         $user = UnitTestHelper::createUser(null, "John", "blah", " blah@coo.com");
         $insertedUser = API\DAO\UserDao::save($user);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $insertedUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $insertedUser);
         $this->assertNotNull($insertedUser);
         $userId = $insertedUser->getId();
         API\DAO\AdminDao::addSiteAdmin($userId);

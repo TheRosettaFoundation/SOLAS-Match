@@ -174,7 +174,8 @@
     <string name="common_error_not_exist">You do not have sufficient privileges to access this page or the page does not exist.</string>
     <string name="common_error_already_claimed">This task has been claimed by another user.</string>
     <string name="common_error_cannot_claim_desegmentation">You cannot claim the desegmentation task <a href="%s">%s</a>, because you have worked on one of its prerequisite tasks.</string>
-    <string name="common_error_cannot_reclaim">You cannot reclaim the task <a href="%s">%s</a>, because you have previously unclaimed it.</string>        
+    <string name="common_error_cannot_reclaim">You cannot reclaim the task <a href="%s">%s</a>, because you have previously unclaimed it.</string>
+    <string name="common_error_cannot_reclaim_admin_revoked">You cannot reclaim the task <a href="%s">%s</a>, because an administrator has previously revoked it from you.</string>      
     <string name="common_error_unknown_task_type">Unknown task type.</string>
     <string name="common_error_language_code_expected">A valid language code was expected.</string>
     <string name="common_error_unable_to_upload">Sorry, we were not able to upload your file. %s</string>
@@ -186,8 +187,14 @@
     <string name="common_error_file_stopped_by_extension">File upload stopped by extension.</string>
     <string name="common_error_file_invalid_empty">Please make sure the file you are trying to upload is valid and not empty.</string>
     <string name="common_error_org_name_not_set"><strong>Organisation name</strong> must be set.</string>
-    <string name="common_error_org_name_in_use">An organisation named <strong>%s</strong> is already registered. Please use a different name.</string>    
+    <string name="common_error_org_name_in_use">An organisation named <strong>%s</strong> is already registered. Please use a different name.</string>
+    <string name="common_error_file_not_found">We could not find the requested file on our system. Requested file type: %s. Please contact us at %s with details of this problem.</string>
+    <!-- The 3 strings below are used for the error above -->
+    <string name="common_original_project_file">original project file</string>
+    <string name="common_original_task_file">original task file</string>
+    <string name="common_latest_task_file_version">latest task file version</string>
 
+    <string name="common_download_file">Download File</string>
     <string name="common_can_you_open_file">Can you open the file on your computer?</string>
     <string name="common_part_of_for">Part of <a href="%s">%s</a> for <a href="%s">%s</a></string> 
     <string name="common_what_type_of_emails">What type of e-mails am I receiving?</string>
@@ -242,6 +249,12 @@
     <string name="site_admin_dashboard_successfully_deleted_user">Successfully deleted user.</string>
     <string name="site_admin_dashboard_user_not_found">User not found, the provided email address does not correspond to an account on our system.</string>
     <string name="site_admin_dashboard_only_add_trusted">Only add trusted users!</string>
+    <string name="site_admin_dashboard_task_id_here">Task ID goes here.</string>
+    <string name="site_admin_dashboard_revoke_task_from_user">Revoke a task from a user.</string>
+    <string name="site_admin_dashboard_confirm_revoke_task">Are you sure you want to revoke the task?</string>
+    <string name="site_admin_dashboard_revoke_task_success">Successfully revoked task from user.</string>
+    <string name="site_admin_dashboard_revoke_task_error_no_claim">The user you specified has not claimed the task you specified.</string>
+    <string name="site_admin_dashboard_revoke_task_error_invalid">Invalid user email or task id provided.</string>
 
 	<string name="badge_list_badge_list">Badge List</string>
 	<string name="badge_list_all_available_badges_of">All available badges of %s.</string>
@@ -392,7 +405,6 @@
 	<string name="project_create_0">Provide as much information as possible.</string>
 	<string name="project_create_source_text">Source Text</string>
 	<string name="project_create_1">Provide a meaningful title for the project.</string>
-	<string name="project_create_1_warning">Title cannot be greater than 100 characters.</string>
 	<string name="project_create_target_language_increase">Please note that creation of more than five tasks may take a while to complete. Please do not click the Create Project button more than once and do not navigate away from this page.</string>
 	<string name="project_create_2">A brief summary of the project.</string>
 	<string name="project_create_3">Who or what will benefit from contributions to this project.</string>
@@ -424,6 +436,11 @@
     <string name="project_create_21">The file you uploaded is too large, please check the maximum file upload size under the Source Text header.</string>
     <string name="project_create_22">Please note that the word count of your file is excessively high - the recommended limit is 3000 words. We suggest you create a segmentation task instead. Are you sure you want to continue?</string>
     <string name="project_create_error_title_too_long">Project title is too long, please use one hundred characters or less.</string>
+    <string name="project_create_error_description_too_long">Project description is too long, please use 4096 characters or less.</string>
+    <string name="project_create_error_impact_too_long">Project impact is too long, please use 4096 characters or less.</string>
+    <string name="project_create_error_reference_invalid">Project reference must be a valid URL.</string>    
+    <string name="project_create_error_reference_too_long">Project reference URL is too long, it must be 128 characters or less. Consider using a URL shortening tool such as <a href="https://bitly.com/">bitly</a>.</string>
+    <string name="project_create_error_tags_too_long">Each project tag must be at most 50 characters long.</string>
     <string name="project_create_invalid_tags">Tags can only contain lowercase letters, numbers and hyphens.</string>
     <string name="project_create_25">Deadline must be some date in the future.</string>
     <string name="project_create_26">Project Impact must be set.</string>

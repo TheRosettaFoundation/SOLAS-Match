@@ -5,7 +5,7 @@ namespace SolasMatch\UI\RouteHandlers;
 use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
 use \SolasMatch\Common as Common;
-
+use SolasMatch\Common\Lib\APIHelper;
 
 require_once __DIR__.'/../../api/lib/IO.class.php';
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
@@ -158,7 +158,7 @@ class TaskRouteHandler
         $archivedTasksCount = $userDao->getUserArchivedTasksCount($userId);
 
         $offset = $tasksPerPage * ($page_no - 1) ;
-        $archivedTasks = $userDao->getUserArchivedTasks($userId, $tasksPerPage, $offset);
+        $archivedTasks = $userDao->getUserArchivedTasks($userId, $offset, $tasksPerPage);
         $totalPages = ceil($archivedTasksCount / $tasksPerPage);
         
         if ($page_no < 1) {
@@ -171,7 +171,7 @@ class TaskRouteHandler
         //If tasksPerPage divides into the task count with a remainder then last page will have
         //less than $tasksPerPage tasks.
         $modulus = $archivedTasksCount % $tasksPerPage;
-        if ( $modulus > 0 && $page_no == $totalPages) {
+        if ($modulus > 0 && $page_no == $totalPages) {
             $bottom = $modulus - 1;
         } else {
             $bottom = $top + $tasksPerPage - 1;
@@ -218,7 +218,7 @@ class TaskRouteHandler
         }
 
         $extra_scripts = "
-<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/custom_element/custom-elements.debug.js\"></script>
+<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/dart_support.js\"></script>
 <script \"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/browser/interop.js\"></script>
 <script \"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/Routes/Users/ClaimedTasks.dart.js\"></script>
 <span class=\"hidden\">
@@ -227,9 +227,12 @@ class TaskRouteHandler
         $extra_scripts .= file_get_contents("ui/dart/web/Routes/Users/ClaimedTasksStream.html");
         $extra_scripts .= "</span>";
 
+        $platformJS =
+        "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/platform.js\"></script>";
         $viewData = array('thisUser' => $user);
         $viewData['extra_scripts'] = $extra_scripts;
         $viewData['current_page'] = 'claimed-tasks';
+        $viewData['platformJS'] = $platformJS;
 
         $app->view()->appendData($viewData);
         $app->render("task/claimed-tasks.tpl");
@@ -242,7 +245,19 @@ class TaskRouteHandler
 
         $task = $taskDao->getTask($task_id);
         $latest_version = $taskDao->getTaskVersion($task_id);
-        $this->downloadTaskVersion($task_id, $latest_version);
+        try {
+            $this->downloadTaskVersion($task_id, $latest_version);
+        } catch (Common\Exceptions\SolasMatchException $e) {
+            $app->flash(
+                "error",
+                sprintf(
+                    Lib\Localisation::getTranslation('common_error_file_not_found'),
+                    Lib\Localisation::getTranslation('common_latest_task_file_version'),
+                    Common\Lib\Settings::get("site.system_email_address")
+                )
+            );
+            $app->redirect($app->urlFor('home'));
+        }
     }
 
     public function archiveTask($task_id)
@@ -277,11 +292,24 @@ class TaskRouteHandler
         $app->redirect($ref = $app->request()->getReferrer());
     }
 
-    public function downloadTask($task_id)
+    public function downloadTask($taskId)
     {
         $app = \Slim\Slim::getInstance();
         $convert = $app->request()->get("convertToXliff");
-        $this->downloadTaskVersion($task_id, 0, $convert);
+        
+        try {
+            $this->downloadTaskVersion($taskId, 0, $convert);
+        } catch (Common\Exceptions\SolasMatchException $e) {
+            $app->flash(
+                "error",
+                sprintf(
+                    Lib\Localisation::getTranslation('common_error_file_not_found'),
+                    Lib\Localisation::getTranslation('common_original_task_file'),
+                    Common\Lib\Settings::get("site.system_email_address")
+                )
+            );
+            $app->redirect($app->urlFor('home'));
+        }
     }
 
     /*
@@ -316,8 +344,9 @@ class TaskRouteHandler
         $targetLanguage = $languageDao->getLanguageByCode($targetLocale->getLanguageCode());
         $taskMetaData = $taskDao->getTaskInfo($taskId);
 
-        // Used in proofreading page
-        $projectFileDownload = $app->urlFor("home")."api/v0/projects/".$task->getProjectId()."/file";
+        // Used in proofreading page, link to original project file
+        $projectFileDownload = $app->urlFor("home")."project/".$task->getProjectId()."/file";
+        
         
         $app->view()->appendData(array(
                     "projectFileDownload" => $projectFileDownload,
@@ -340,14 +369,19 @@ class TaskRouteHandler
         $app->render("task/task.claimed.tpl");
     }
 
-    public function downloadTaskVersion($task_id, $version, $convert = 0)
+    public function downloadTaskVersion($taskId, $version, $convert = 0)
     {
         $app = \Slim\Slim::getInstance();
-        $siteApi = Common\Lib\Settings::get("site.api");
-        $app->redirect("{$siteApi}v0/tasks/$task_id/file/?version=$version&convertToXliff=$convert");
+        $taskDao = new DAO\TaskDao();
+        
+        $headerArr = $taskDao->downloadTaskVersion($taskId, $version, $convert);
+        $headerArr = json_decode($headerArr);
+        foreach ($headerArr as $key => $val) {
+            $app->response->headers->set($key, $val);
+        }
     }
 
-    public function task($task_id)
+    public function task($taskId)
     {
         $app = \Slim\Slim::getInstance();
         $taskDao = new DAO\TaskDao();
@@ -356,12 +390,12 @@ class TaskRouteHandler
         $orgDao = new DAO\OrganisationDao();
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
-        $task = $taskDao->getTask($task_id);
+        $task = $taskDao->getTask($taskId);
         if (is_null($task)) {
-            $app->flash("error", sprintf(Lib\Localisation::getTranslation('task_view_5'), $task_id));
+            $app->flash("error", sprintf(Lib\Localisation::getTranslation('task_view_5'), $taskId));
             $app->redirect($app->urlFor("home"));
         }
-        $taskClaimed = $taskDao->isTaskClaimed($task_id);
+        $taskClaimed = $taskDao->isTaskClaimed($taskId);
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
@@ -402,14 +436,14 @@ class TaskRouteHandler
             $app->flashKeep();
             switch ($task->getTaskType()) {
                 case Common\Enums\TaskTypeEnum::DESEGMENTATION:
-                    $app->redirect($app->urlFor("task-desegmentation", array("task_id" => $task_id)));
+                    $app->redirect($app->urlFor("task-desegmentation", array("task_id" => $taskId)));
                     break;
                 case Common\Enums\TaskTypeEnum::TRANSLATION:
                 case Common\Enums\TaskTypeEnum::PROOFREADING:
-                    $app->redirect($app->urlFor("task-simple-upload", array("task_id" => $task_id)));
+                    $app->redirect($app->urlFor("task-simple-upload", array("task_id" => $taskId)));
                     break;
                 case Common\Enums\TaskTypeEnum::SEGMENTATION:
-                    $app->redirect($app->urlFor("task-segmentation", array("task_id" => $task_id)));
+                    $app->redirect($app->urlFor("task-segmentation", array("task_id" => $taskId)));
                     break;
             }
         } else {
@@ -418,7 +452,7 @@ class TaskRouteHandler
 
             /*Metadata required for Tracking Organisations*/
             $org_id = $project->getOrganisationId();
-            $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id , $org_id);
+            $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id, $org_id);
             $isMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
 
             $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
@@ -429,9 +463,9 @@ class TaskRouteHandler
         
             $converter = Common\Lib\Settings::get("converter.converter_enabled");
         
-            $task_file_info = $taskDao->getTaskInfo($task_id);
-            $siteApi = Common\Lib\Settings::get("site.api");
-            $file_path= "{$siteApi}v0/tasks/$task_id/file";
+            $task_file_info = $taskDao->getTaskInfo($taskId);
+            $siteLocation = Common\Lib\Settings::get("site.location");
+            $file_path = "{$siteLocation}task/$taskId/download-file-user/";
 
             $app->view()->appendData(array(
                 "taskTypeColours" => $taskTypeColours,
@@ -543,13 +577,14 @@ class TaskRouteHandler
                 $projectFileType = pathinfo($projectFile->getFilename(), PATHINFO_EXTENSION);
                 
                 $fileUploadType = pathinfo($_FILES[$fieldName]["name"], PATHINFO_EXTENSION);
-                $fileUploadMime = \SolasMatch\API\Lib\IO::detectMimeType(
-                    file_get_contents(
-                        $_FILES[$fieldName]["tmp_name"]
-                    ),
-                    $_FILES[$fieldName]["name"]
-                );
-
+                
+                //Call API to determine MIME type of file contents
+                $helper = new Common\Lib\APIHelper(Common\Lib\Settings::get('ui.api_format'));
+                $siteApi = Common\Lib\Settings::get("site.api");
+                $filename = $_FILES[$fieldName]["name"];
+                $request = $siteApi."v0/io/contentMime/$filename";
+                $data = file_get_contents($_FILES[$fieldName]["tmp_name"]);
+                $fileUploadMime = $helper->call(null, $request, Common\Enums\HttpMethodEnum::GET, null, null, $data);
                 if (strcasecmp($fileUploadType, $projectFileType) != 0) {
                     throw new \Exception(sprintf(
                         Lib\Localisation::getTranslation('common_task_file_extension_mismatch'),
@@ -880,8 +915,8 @@ class TaskRouteHandler
             ));
         }
         $task_file_info = $taskDao->getTaskInfo($task_id, 0);
-        $siteApi = Common\Lib\Settings::get("site.api");
-        $file_path= "{$siteApi}v0/tasks/$task_id/file";
+        $siteLocation = Common\Lib\Settings::get("site.location");
+        $file_path= "{$siteLocation}task/$task_id/download-file-user/";
        
         $app->view()->appendData(array(
             "file_preview_path" => $file_path,
@@ -992,7 +1027,7 @@ class TaskRouteHandler
         if ($isOrgMember || $isSiteAdmin) {
             $app->view()->appendData(array("isOrgMember" => $isOrgMember));
         }
-        $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id , $project->getOrganisationId());
+        $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id, $project->getOrganisationId());
 
         $app->view()->appendData(array(
                 "org" => $org,
@@ -1163,7 +1198,6 @@ class TaskRouteHandler
     }
     
     public function taskSegmentation($task_id)
-
     {
         $app = \Slim\Slim::getInstance();
 

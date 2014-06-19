@@ -11,39 +11,6 @@ require_once __DIR__."/Notify.class.php";
 
 class Upload
 {
-    public static function maxFileSizeBytes()
-    {
-        $display_max_size = self::maxUploadSizeFromPHPSettings();
-
-        switch (substr($display_max_size, -1)) {
-            case 'G':
-                $display_max_size = $display_max_size * 1024;
-                // no break
-            case 'M':
-                $display_max_size = $display_max_size * 1024;
-                // no break
-            case 'K':
-                $display_max_size = $display_max_size * 1024;
-                break;
-        }
-        return $display_max_size;
-    }
-
-    /**
-     * Return an integer value of the max file size that can be uploaded to the system,
-     * denominated in megabytes.
-     */
-    public static function maxFileSizeMB()
-    {
-        $bytes = self::maxFileSizeBytes();
-        return round(($bytes/1024)/1024, 1);
-    }
-
-    private static function maxUploadSizeFromPHPSettings()
-    {
-        return ini_get('upload_max_filesize');
-    }
-
     public static function validateFileHasBeenSuccessfullyUploaded($field_name)
     {
         if (self::isPostTooLarge()) {
@@ -106,145 +73,14 @@ class Upload
     {
         return $_FILES[$field_name]['error'] == UPLOAD_ERR_OK;
     }
-
-    public static function apiSaveFile($task, $user_id, $file, $filename, $version = null)
-    {
-        $taskFileMime = IO::detectMimeType($file, $filename);
-        $projectFileInfo = DAO\ProjectDao::getProjectFileInfo($task->getProjectId());
-        $projectFileMime = $projectFileInfo->getMime();
-        
-        if ($taskFileMime != $projectFileMime) {
-            throw new Common\Exceptions\SolasMatchException(
-                "Invalid file content.",
-                Common\Enums\HttpStatusEnum::BAD_REQUEST
-            );
-        }
-       
-        if (is_null($version)) {
-            $version = DAO\TaskDao::recordFileUpload($task->getId(), $filename, $taskFileMime, $user_id);
-        } else {
-            $version = DAO\TaskDao::recordFileUpload($task->getId(), $filename, $taskFileMime, $user_id, $version);
-        }
-        $upload_folder = self::absoluteFolderPathForUpload($task, $version);
-        if (!self::folderPathForUploadExists($task, $version)) {
-            self::createFolderForUpload($task, $version);
-        }
-        $destination_path = self::absoluteFilePathForUpload($task, $version, $filename);
-        $ret = file_put_contents($destination_path, $file) ? 1 : 0;
-        Notify::sendTaskUploadNotifications($task->getId(), $version);
-        return $ret;
-    }
-        
-    /*
-     * For a named filename, save file that have been uploaded by form submission.
-     * The file has been specified in a form element <input type="file" name="myfile">
-     * We access that file through PHP's $_FILES array.
-     */
-    public static function saveSubmittedFile($form_file_field, $task, $user_id)
-    {
-        /*
-         * Right now we're assuming that there's one file, but I think it can also be
-         * an array of multiple files.
-         */
-        if ($_FILES[$form_file_field]['error'] == UPLOAD_ERR_FORM_SIZE) {
-            throw new \Exception(
-                'Sorry, the file you tried uploading is too large. Please choose a smaller file, '.
-                'or break the file into sub-parts.'
-            );
-        }
-
-        $file_name = $_FILES[$form_file_field]['name'];
-        $file_tmp_name = $_FILES[$form_file_field]['tmp_name'];
-        $version = DAO\TaskDao::recordFileUpload(
-            $task->getId(),
-            $file_name,
-            $_FILES[$form_file_field]['type'],
-            $user_id
-        );
-        $version = $version[0]['version'];
-        $upload_folder = self::absoluteFolderPathForUpload($task, $version);
-
-        self::saveSubmittedFileToFs($task, $file_name, $file_tmp_name, $version);
-        //$task_dao->recordFileUpload($task, $file_name, $_FILES[$form_file_field]['type'], $user_id);
-
-        return true;
-    }
-
-    public static function createFolderPath($task, $version = 0)
-    {
-        $upload_folder = self::absoluteFolderPathForUpload($task, $version);
-        if (!self::folderPathForUploadExists($task, $version)) {
-                self::createFolderForUpload($task, $version);
-        }
-    }
-
-    /*
-     * $files_file is the name of the parameter of the file we want to access
-     * in the $_FILES global array.
-     */
-    private static function saveSubmittedFileToFs($task, $file_name, $file_tmp_name, $version)
-    {
-        $upload_folder = self::absoluteFolderPathForUpload($task, $version);
-
-        if (!self::folderPathForUploadExists($task, $version)) {
-            self::createFolderForUpload($task, $version);
-        }
-
-        $destination_path = self::absoluteFilePathForUpload($task, $version, $file_name);
-        if (move_uploaded_file($file_tmp_name, $destination_path) == false) {
-            throw new \Exception('Could not save uploaded file.');
-        }
-    }
-
-    private static function folderPathForUploadExists($task, $version)
-    {
-        $folder = self::absoluteFolderPathForUpload($task, $version);
-        return is_dir($folder);
-    }
-
-    private static function createFolderForUpload($task, $version)
-    {
-        $upload_folder = self::absoluteFolderPathForUpload($task, $version);
-        mkdir($upload_folder, 0755, true);
-
-        if (self::folderPathForUploadExists($task, $version)) {
-            return true;
-        } else {
-            throw new \Exception('Could not create the folder for the file upload. Check permissions.');
-        }
-    }
-
-    public static function absoluteFilePathForUpload($task, $version, $file_name)
-    {
-        $folder = self::absoluteFolderPathForUpload($task, $version);
-        return $folder . DIRECTORY_SEPARATOR . basename($file_name);
-    }
-
-    public static function absoluteFolderPathForUpload($task, $version)
-    {
-        if (!is_numeric($version) || $version < 0) {
-            throw new \InvalidArgumentException(
-                "Cannot give an upload folder path as the version number was not specified.version = $version"
-            );
-        }
-
-        $uploads_folder = Common\Lib\Settings::get('files.upload_path');
-        $project_folder = 'proj-' . $task->getProjectId();
-        $task_folder = 'task-' . $task->getId();
-        $version_folder = 'v-' . $version;
-
-        return $uploads_folder.$project_folder.DIRECTORY_SEPARATOR.
-                $task_folder.DIRECTORY_SEPARATOR.$version_folder;
-    }
     
     public static function addTaskPreReq($id, $preReqId)
     {
-        $taskDao = new DAO\TaskDao();
         $builder = new APIWorkflowBuilder();
-        $currentTask =  $taskDao->getTask($id);
+        $currentTask =  DAO\TaskDao::getTask($id);
         $projectId = $currentTask->getProjectId();
-        //$projectId = $currentTask[0]->getProjectId();
         $taskPreReqs = $builder->calculatePreReqArray($projectId);
+        $ret = null;
 
         if (!empty($taskPreReqs) && !in_array($preReqId, $taskPreReqs[$id])) {
             $taskPreReqs[$id][] = $preReqId;
@@ -252,13 +88,13 @@ class Upload
             if ($graph = $builder->parseAndBuild($taskPreReqs)) {
                 $index = $builder->find($id, $graph);
                 $currentTaskNode = $graph->getAllNodes($index);
-                $task = $taskDao->getTask($id);
-                $preReqTask = $taskDao->getTask($preReqId);
-                $taskDao->addTaskPreReq($id, $preReqId);
+                $task = DAO\TaskDao::getTask($id);
+                $preReqTask = DAO\TaskDao::getTask($preReqId);
+                $ret = DAO\TaskDao::addTaskPreReq($id, $preReqId);
 
                 if ($task->getTaskType() != Common\Enums\TaskTypeEnum::DESEGMENTATION) {
                     foreach ($currentTaskNode->getPreviousList() as $nodeId) {
-                        $preReq = $taskDao->getTask($nodeId);
+                        $preReq = DAO\TaskDao::getTask($nodeId);
                         if ($preReq->getTaskStatus() == Common\Enums\TaskStatusEnum::COMPLETE
                                 && $preReq->getTaskType() != Common\Enums\TaskTypeEnum::SEGMENTATION) {
                             Upload::copyOutputFile($id, $preReqId);
@@ -267,15 +103,14 @@ class Upload
                 }
             }
         }
+        return $ret;
     }
     
     public static function removeTaskPreReq($id, $preReqId)
     {
-        $taskDao = new DAO\TaskDao();
-        $task = $taskDao->getTask($id);
-        $taskDao->removeTaskPreReq($id, $preReqId);
-        $taskPreReqs = $taskDao->getTaskPreReqs($id);
-        
+        $task = DAO\TaskDao::getTask($id);
+        $ret = DAO\TaskDao::removeTaskPreReq($id, $preReqId);
+        $taskPreReqs = DAO\TaskDao::getTaskPreReqs($id);
         if (is_array($taskPreReqs) && count($taskPreReqs > 0)) {
             foreach ($taskPreReqs as $taskPreReq) {
                 if ($taskPreReq->getTaskStatus() == Common\Enums\TaskStatusEnum::COMPLETE) {
@@ -283,10 +118,9 @@ class Upload
                 }
             }
         } else {
-            $projectDao = new DAO\ProjectDao();
             $projectId = $task->getProjectId();
-            $projectFile = $projectDao->getProjectFile($projectId);
-            $projectFileInfo = $projectDao->getProjectFileInfo($projectId, null, null, null, null);
+            $projectFile = DAO\ProjectDao::getProjectFile($projectId);
+            $projectFileInfo = DAO\ProjectDao::getProjectFileInfo($projectId, null, null, null, null);
 
             file_put_contents(
                 Common\Lib\Settings::get(
@@ -296,16 +130,14 @@ class Upload
                 $projectFile
             );
         }
+        return $ret;
     }
     
     private static function copyOutputFile($id, $preReqId)
     {
-        $taskDao = new DAO\TaskDao();
-        $task = $taskDao->getTask($id);
-        //$task = $task[0];
+        $task = DAO\TaskDao::getTask($id);
         
-        $preReqTask = $taskDao->getTask($preReqId);
-        //$preReqTask = $preReqTask[0];
+        $preReqTask = DAO\TaskDao::getTask($preReqId);
         
         $preReqlatestFileVersion = DAO\TaskDao::getLatestFileVersion($preReqId);
         $preReqFileName = DAO\TaskDao::getFilename($preReqId, $preReqlatestFileVersion);

@@ -596,8 +596,6 @@ class UserDao
             $ret = array();
             foreach ($result as $row) {
                 $task = Common\Lib\ModelFactory::buildModel("Task", $row);
-                //$task->setTaskStatus(TaskDao::getTaskStatus($task->getId()));
-                //$task->setTaskStatus($task->getTaskStatus(($task->getId())));
                 $ret[] = $task;
             }
         }
@@ -870,6 +868,18 @@ class UserDao
         return $ret;
     }
     
+    public static function isBlacklistedForTaskByAdmin($userId, $taskId)
+    {
+        $ret = null;
+        $args = Lib\PDOWrapper::cleanseNull($userId).",".
+                Lib\PDOWrapper::cleanseNull($taskId);
+        $result = Lib\PDOWrapper::call("isUserBlacklistedForTaskByAdmin", $args);
+        if ($result) {
+            return $result[0]['result'];
+        }
+        return $ret;
+    }
+    
     public static function getByOAuthToken($token)
     {
         $ret = null;
@@ -881,7 +891,6 @@ class UserDao
         return $ret;
     }
 
-    //TODO: Add tests for these in Unit Tests
     public static function trackOrganisation($userId, $organisationId)
     {
         $args = Lib\PDOWrapper::cleanse($userId).",".
@@ -918,7 +927,7 @@ class UserDao
         return null;
     }
 
-	/*
+    /*
         returns true if the user has subscribed to the specified organisation
     */
     public static function isSubscribedToOrganisation($userId, $organisationId)

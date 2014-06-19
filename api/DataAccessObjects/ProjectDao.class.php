@@ -5,7 +5,6 @@ namespace SolasMatch\API\DAO;
 use \SolasMatch\Common as Common;
 use \SolasMatch\API\Lib as Lib;
 
-
 require_once __DIR__."/TagsDao.class.php";
 require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 require_once __DIR__."/../../Common/lib/ModelFactory.class.php";
@@ -117,7 +116,9 @@ class ProjectDao
     {
         $project = null;
         if (!is_null($name)) {
-            $args = "null, ".Lib\PDOWrapper::cleanseNull($name).", null, null, null, null, null, null, null, null, null";
+            $args = "null, "
+                    .Lib\PDOWrapper::cleanseNull($name).
+                    ", null, null, null, null, null, null, null, null, null";
             $result = Lib\PDOWrapper::call("getProjects", $args);
             if ($result) {
                 $project = Common\Lib\ModelFactory::buildModel("Project", $result[0]);
@@ -408,48 +409,17 @@ class ProjectDao
     /*!
       This function returns the contents of the ProjectFile in the body of the HTTP Response.
       @param int $projectId is the id of a Project
-      @return No return but triggers the HTTP Response with the ProjectFile contents in the body.
+      @return Returns the project file content.
     */
     public static function getProjectFile($projectId)
     {
         $projectFileInfo = self::getProjectFileInfo($projectId, null, null, null, null);
         $filename = $projectFileInfo->getFilename();
         $source = Common\Lib\Settings::get("files.upload_path")."proj-$projectId/$filename";
-        Lib\IO::downloadFile($source, $projectFileInfo->getMime());
-    }
-    
-    //! Records a ProjectFile upload
-    /*!
-      Used to keep track of Project files. Stores information about a project file upload so it can be retrieved later.
-      @param int $projectId is the id of a Project
-      @param string $filename is the name of the file being uploaded
-      @param int $userId is the id of the user uploading the file
-      @param string $mime is the mime type of the file being uploaded
-      @return Returns the ProjectFile info that was saved or null on failure.
-    */
-    public static function saveProjectFile($projectId, $file, $filename, $userId)
-    {
-        $destination = Common\Lib\Settings::get("files.upload_path")."proj-$projectId/";
-        if (!file_exists($destination)) {
-            mkdir($destination);
+        
+        if (file_exists($absoluteFilePath)) {
+            return file_get_contents($absoluteFilePath);
         }
-        $mime = Lib\IO::detectMimeType($file, $filename);
-        $apiHelper = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
-        $canonicalMime = $apiHelper->getCanonicalMime($filename);
-        if (!is_null($canonicalMime) && $mime != $canonicalMime) {
-            $message = "The content type ($mime) of the file you are trying to upload does not";
-            $message .= " match the content type ($canonicalMime) expected from its extension.";
-            throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::BAD_REQUEST);
-        }
-        $token = self::recordProjectFileInfo($projectId, $filename, $userId, $mime);
-        try {
-            file_put_contents($destination.$token, $file);
-        } catch (\Exception $e) {
-            $message = "You cannot upload a project file for project ($projectId), as one already exists.";
-            throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::CONFLICT);
-        }
-
-        return $token;
     }
     
     //! Records a ProjectFile upload
@@ -540,12 +510,15 @@ class ProjectDao
       1) whether the project has no tasks, if so update the project's word count to new word count
       2) whether the project has segmentation or desegmentation tasks, if so return 2 and do not perform any updates;
       3) whether the word-count of all the tasks of the project are unique, if not return 2
-      4) whether the word-count of all the tasks of the project are unique, if so update the word counts of tasks and the project and return 1
-      The status 2 indicates that either the project has (de)segmentation tasks associated with it or tasks have different word-counts
+      4) whether the word-count of all the tasks of the project are unique, if so update the word counts 
+         of tasks and the project and return 1
+      The status 2 indicates that either the project has (de)segmentation tasks associated with it
+      or tasks have different word-counts
       therefore automated update cannot be performed.
       @param int $projectId is the id of the Project.
       @param int $newWordCount is the new word count that needs to be set
-      @return Returns '1' if the word counts were successfully updated, '2' if project has segmentation tasks or individual tasks have different
+      @return Returns '1' if the word counts were successfully updated,
+      '2' if project has segmentation tasks or individual tasks have different
        word counts, '0' otherwise (i.e. if an error occurs during the update)
     */
     public static function updateProjectWordCount($projectId, $newWordCount)

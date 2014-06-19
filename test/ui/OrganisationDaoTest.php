@@ -46,7 +46,7 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($registerUser->getId());
         $this->assertEquals("1", $finishRegResult);
@@ -65,7 +65,7 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         $userDao->login($userEmail, $userPw);
         $insertedOrg = $orgDao->createOrg($org, $userId);
         $this->assertNotNull($insertedOrg);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG, $insertedOrg);
     }
     
     /**
@@ -86,7 +86,7 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($registerUser->getId());
         $this->assertEquals("1", $finishRegResult);
@@ -95,12 +95,12 @@ class OrganisationDaoTest extends \PHPUnit_Framework_TestCase
         $userDao->login($userEmail, $userPw);
         $insertedOrg = $orgDao->createOrg($org, $userId);
         $this->assertNotNull($insertedOrg);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG, $insertedOrg);
         $insertedOrg->setName("Updated");
         $insertedOrg->setHomepage("http://www.null.net");
         $updatedOrg = $orgDao->updateOrg($insertedOrg);
         $this->assertNotNull($updatedOrg);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $updatedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG, $updatedOrg);
         $this->assertEquals($insertedOrg->getName(), $updatedOrg->getName());
         $this->assertEquals($insertedOrg->getHomepage(), $updatedOrg->getHomepage());
     }

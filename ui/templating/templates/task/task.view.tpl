@@ -85,7 +85,7 @@
         </thead>
         <tbody>
             <tr>
-                <td align="center"><iframe src="http://docs.google.com/viewer?url={urlencode($file_preview_path)}&embedded=true" width="800" height="780" style="border: none;"></iframe></td>
+                <td align="center"><iframe src="http://docs.google.com/viewer?url={$file_preview_path}&embedded=true" width="800" height="780" style="border: none;"></iframe></td>
             </tr>
         </tbody>
     </table>

@@ -111,7 +111,6 @@ class APIHelper
         $success = array(200,201,202,203,204,301,303);
         $this->responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
 
-        
         curl_close($re);
         
         if (in_array($this->responseCode, $success)) {
@@ -204,7 +203,7 @@ class APIHelper
     // http://stackoverflow.com/a/1147952
     private function systemExtensionMimeTypes()
     {
-        # Returns the system MIME type mapping of extensions to MIME types, as defined in /etc/mime.types.
+        //Returns the system MIME type mapping of extensions to MIME types, as defined in /etc/mime.types.
         $out = array();
         $file = fopen('/etc/mime.types', 'r');
         while (($line = fgets($file)) !== false) {

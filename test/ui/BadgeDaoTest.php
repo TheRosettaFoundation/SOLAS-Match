@@ -46,19 +46,19 @@ class BadgeDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         API\DAO\UserDao::finishRegistration($registerUser->getId());
         $loginUser = $userDao->login("blah@test.com", "password");
         
         $org = UnitTestHelper::createOrg();
         $insertedOrg = $orgDao->createOrg($org, $userId);
         $this->assertNotNull($insertedOrg);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG, $insertedOrg);
         
         $badge = UnitTestHelper::createBadge();
         $insertedBadge = $badgeDao->createBadge($badge);
         $this->assertNotNull($insertedBadge);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Badge", $insertedBadge);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_BADGE, $insertedBadge);
     }
     
     /* public function testGetBadge()

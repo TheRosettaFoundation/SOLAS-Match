@@ -64,7 +64,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -90,14 +90,14 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
     
         $loggedIn = $userDao->login($userEmail, $userPw);
         $this->assertNotNull($loggedIn);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $loggedIn);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $loggedIn);
         $this->assertEquals($userId, $loggedIn->getId());
     }
     
@@ -117,7 +117,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -141,7 +141,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser->setBiography("Rada rada rada");
         $updatedUser = $userDao->updateUser($registerUser);
         $this->assertNotNull($updatedUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $updatedUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $updatedUser);
         $this->assertEquals($registerUser->getEmail(), $updatedUser->getEmail());
         $this->assertEquals($registerUser->getBiography(), $updatedUser->getBiography());
     }
@@ -163,7 +163,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -174,7 +174,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $user = API\DAO\UserDao::getUser(null, $user2Email);
         $user2Id = $user->getId();
         $this->assertNotNull($user);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $user);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $user);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult2 = API\DAO\UserDao::finishRegistration($user2Id);
         $this->assertEquals("1", $finishRegResult2);
@@ -189,11 +189,11 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         //$this->assertEquals("1", $addAdminResult);
         $loggedIn = $userDao->login($userEmail, $userPw);
         $this->assertNotNull($loggedIn);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $loggedIn);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $loggedIn);
         
         $getUser = $userDao->getUser($userId);
         $this->assertNotNull($getUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $getUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $getUser);
     }
     
     /**
@@ -213,7 +213,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -223,7 +223,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
     
         $user = API\DAO\UserDao::getUser(null, $user2Email);
         $this->assertNotNull($user);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $user);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $user);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult2 = API\DAO\UserDao::finishRegistration($user->getId());
         $this->assertEquals("1", $finishRegResult2);
@@ -245,7 +245,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         //$this->assertEquals("1", $addAdminResult);
         $loggedIn = $userDao->login($userEmail, $userPw);
         $this->assertNotNull($loggedIn);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $loggedIn);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $loggedIn);
     
         $getUser = $userDao->getUserDart($userId);
         $this->assertNotNull($getUser);
@@ -268,7 +268,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -289,7 +289,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $userDao->login($userEmail, $userPw);
         $insertedInfo = $userDao->createPersonalInfo($userId, $personalInfo);
         $this->assertNotNull($insertedInfo);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\UserPersonalInformation", $insertedInfo);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER_INFO, $insertedInfo);
         $this->assertEquals($personalInfo->getUserId(), $insertedInfo->getUserId());
         $this->assertEquals($personalInfo->getFirstName(), $insertedInfo->getFirstName());
         $this->assertEquals($personalInfo->getLastName(), $insertedInfo->getLastName());
@@ -318,7 +318,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -339,7 +339,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $userDao->login($userEmail, $userPw);
         $insertedInfo = $userDao->createPersonalInfo($userId, $personalInfo);
         $this->assertNotNull($insertedInfo);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\UserPersonalInformation", $insertedInfo);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER_INFO, $insertedInfo);
         $this->assertEquals($personalInfo->getUserId(), $insertedInfo->getUserId());
         $this->assertEquals($personalInfo->getFirstName(), $insertedInfo->getFirstName());
         $this->assertEquals($personalInfo->getLastName(), $insertedInfo->getLastName());
@@ -355,7 +355,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $insertedInfo->setLastName("Harry");
         $updatedInfo = $userDao->updatePersonalInfo($userId, $insertedInfo);
         $this->assertNotNull($updatedInfo);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\UserPersonalInformation", $updatedInfo);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER_INFO, $updatedInfo);
         $this->assertEquals($insertedInfo->getFirstName(), $updatedInfo->getFirstName());
         $this->assertEquals($insertedInfo->getLastName(), $updatedInfo->getLastName());
     }
@@ -376,7 +376,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -397,7 +397,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $userDao->login($userEmail, $userPw);
         $insertedInfo = $userDao->createPersonalInfo($userId, $personalInfo);
         $this->assertNotNull($insertedInfo);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\UserPersonalInformation", $insertedInfo);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER_INFO, $insertedInfo);
         $this->assertEquals($personalInfo->getUserId(), $insertedInfo->getUserId());
         $this->assertEquals($personalInfo->getFirstName(), $insertedInfo->getFirstName());
         $this->assertEquals($personalInfo->getLastName(), $insertedInfo->getLastName());
@@ -411,7 +411,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         
         $getInfo = $userDao->getPersonalInfo($userId);
         $this->assertNotNull($getInfo);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\UserPersonalInformation", $getInfo);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER_INFO, $getInfo);
         $this->assertEquals($insertedInfo, $getInfo);
     }
     
@@ -433,7 +433,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -452,11 +452,11 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $userDao->login($userEmail, $userPw);
         $insertedOrg = $orgDao->createOrg($org, $userId);
         $this->assertNotNull($insertedOrg);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG, $insertedOrg);
         
         $userOrgs = $userDao->getUserOrgs($userId);
         $this->assertCount(1, $userOrgs);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $userOrgs[0]);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG, $userOrgs[0]);
         $this->assertEquals($insertedOrg->getId(), $userOrgs[0]->getId());       
     }
     
@@ -478,7 +478,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -487,7 +487,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $org = UnitTestHelper::createOrg();
         $insertedOrg = $orgDao->createOrg($org, $userId);
         $this->assertNotNull($insertedOrg);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation",$insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG,$insertedOrg);
         
         $trackResult = $userDao->trackOrganisation($userId, $insertedOrg->getId());
         $this->assertEquals("1", $trackResult);
@@ -513,7 +513,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -522,7 +522,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $org = UnitTestHelper::createOrg();
         $insertedOrg = $orgDao->createOrg($org, $userId);
         $this->assertNotNull($insertedOrg);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation",$insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG,$insertedOrg);
         
         $trackResult = $userDao->trackOrganisation($userId, $insertedOrg->getId());
         $this->assertEquals("1", $trackResult);
@@ -553,7 +553,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -562,7 +562,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $org = UnitTestHelper::createOrg();
         $insertedOrg = $orgDao->createOrg($org, $userId);
         $this->assertNotNull($insertedOrg);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation",$insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG,$insertedOrg);
         
         $trackResult = $userDao->trackOrganisation($userId, $insertedOrg->getId());
         $this->assertEquals("1", $trackResult);
@@ -596,7 +596,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -605,12 +605,12 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $org = UnitTestHelper::createOrg();
         $insertedOrg = $orgDao->createOrg($org, $userId);
         $this->assertNotNull($insertedOrg);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation",$insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG,$insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = $projectDao->createProject($project);
         $this->assertNotNull($insertedProject);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_PROJECT, $insertedProject);
         
         $trackProject = $userDao->trackProject($userId, $insertedProject->getId());
         $this->assertEquals("1", $trackProject);
@@ -638,7 +638,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -647,12 +647,12 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $org = UnitTestHelper::createOrg();
         $insertedOrg = $orgDao->createOrg($org, $userId);
         $this->assertNotNull($insertedOrg);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation",$insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG,$insertedOrg);
     
         $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = $projectDao->createProject($project);
         $this->assertNotNull($insertedProject);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_PROJECT, $insertedProject);
     
         $trackProject = $userDao->trackProject($userId, $insertedProject->getId());
         $this->assertEquals("1", $trackProject);
@@ -685,7 +685,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -694,12 +694,12 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $org = UnitTestHelper::createOrg();
         $insertedOrg = $orgDao->createOrg($org, $userId);
         $this->assertNotNull($insertedOrg);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation",$insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG,$insertedOrg);
     
         $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = $projectDao->createProject($project);
         $this->assertNotNull($insertedProject);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_PROJECT, $insertedProject);
     
         $notSubbed = $userDao->isSubscribedToProject($userId, $insertedProject->getId());
         $this->assertEquals("0", $notSubbed);
@@ -730,7 +730,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -739,17 +739,17 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $org = UnitTestHelper::createOrg();
         $insertedOrg = $orgDao->createOrg($org, $userId);
         $this->assertNotNull($insertedOrg);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation",$insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG,$insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = $projectDao->createProject($project);
         $this->assertNotNull($insertedProject);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_PROJECT, $insertedProject);
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
         $insertedTask = $taskDao->createTask($task);
         $this->assertNotNull($insertedTask);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $insertedTask);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_TASK, $insertedTask);
         
         $trackTask = $userDao->trackTask($userId, $insertedTask->getId());
         $this->assertEquals("1", $trackTask);
@@ -777,7 +777,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -786,17 +786,17 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $org = UnitTestHelper::createOrg();
         $insertedOrg = $orgDao->createOrg($org, $userId);
         $this->assertNotNull($insertedOrg);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation",$insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG,$insertedOrg);
     
         $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = $projectDao->createProject($project);
         $this->assertNotNull($insertedProject);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_PROJECT, $insertedProject);
     
         $task = UnitTestHelper::createTask($insertedProject->getId());
         $insertedTask = $taskDao->createTask($task);
         $this->assertNotNull($insertedTask);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $insertedTask);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_TASK, $insertedTask);
     
         $trackTask = $userDao->trackTask($userId, $insertedTask->getId());
         $this->assertEquals("1", $trackTask);
@@ -829,7 +829,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -838,17 +838,17 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $org = UnitTestHelper::createOrg();
         $insertedOrg = $orgDao->createOrg($org, $userId);
         $this->assertNotNull($insertedOrg);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation",$insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG,$insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = $projectDao->createProject($project);
         $this->assertNotNull($insertedProject);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_PROJECT, $insertedProject);
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
         $insertedTask = $taskDao->createTask($task);
         $this->assertNotNull($insertedTask);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $insertedTask);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_TASK, $insertedTask);
         
         $notSubbed = $userDao->isSubscribedToTask($userId, $insertedTask->getId());
         $this->assertEquals("0", $notSubbed);
@@ -876,7 +876,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -885,7 +885,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $locale = UnitTestHelper::createLocale();
         $userLang = $userDao->createSecondaryLanguage($userId, $locale);
         $this->assertNotNull($userLang);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Locale", $userLang);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_LOCALE, $userLang);
         $this->assertEquals($locale, $userLang);
     }
     
@@ -906,7 +906,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -915,18 +915,18 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $locale = UnitTestHelper::createLocale();
         $userLang = $userDao->createSecondaryLanguage($userId, $locale);
         $this->assertNotNull($userLang);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Locale", $userLang);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_LOCALE, $userLang);
         $this->assertEquals($locale, $userLang);
         $locale2 = UnitTestHelper::createLocale("Japanese", "ja", "JAPAN", "JP");
         $userLang2 = $userDao->createSecondaryLanguage($userId, $locale2);
         $this->assertNotNull($userLang2);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Locale", $userLang2);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_LOCALE, $userLang2);
         $this->assertEquals($locale2, $userLang2);
         
         $getLangs = $userDao->getSecondaryLanguages($userId);
         $this->assertCount(2, $getLangs);
         foreach ($getLangs as $lang) {
-            $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Locale", $lang);
+            $this->assertInstanceOf(UnitTestHelper::PROTO_LOCALE, $lang);
         }
     }
     
@@ -947,7 +947,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -956,7 +956,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $locale = UnitTestHelper::createLocale();
         $userLang = $userDao->createSecondaryLanguage($userId, $locale);
         $this->assertNotNull($userLang);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Locale", $userLang);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_LOCALE, $userLang);
         $this->assertEquals($locale, $userLang);
         
         $deleteResult = $userDao->deleteSecondaryLanguage($userId, $locale);
@@ -982,7 +982,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -1009,7 +1009,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -1017,7 +1017,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         API\DAO\UserDao::addPasswordResetRequest("gooog", $userId);
         $getReq = $userDao->getPasswordResetRequest("gooog");
         $this->assertNotNull($getReq);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\PasswordResetRequest", $getReq);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_PASSWORD_RESET_REQ, $getReq);
     }
     
     /**
@@ -1040,7 +1040,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -1049,17 +1049,17 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $org = UnitTestHelper::createOrg();
         $insertedOrg = $orgDao->createOrg($org, $userId);
         $this->assertNotNull($insertedOrg);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG, $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = $projectDao->createProject($project);
         $this->assertNotNull($insertedProject);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_PROJECT, $insertedProject);
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
         $insertedTask = $taskDao->createTask($task);
         $this->assertNotNull($insertedTask);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $insertedTask);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_TASK, $insertedTask);
         
         $claimResult = $userDao->claimTask($userId, $insertedTask->getId());
         $this->assertEquals("1", $claimResult);
@@ -1091,7 +1091,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -1100,17 +1100,17 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $org = UnitTestHelper::createOrg();
         $insertedOrg = $orgDao->createOrg($org, $userId);
         $this->assertNotNull($insertedOrg);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG, $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = $projectDao->createProject($project);
         $this->assertNotNull($insertedProject);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_PROJECT, $insertedProject);
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
         $insertedTask = $taskDao->createTask($task);
         $this->assertNotNull($insertedTask);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $insertedTask);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_TASK, $insertedTask);
         
         $claimResult = $userDao->claimTask($userId, $insertedTask->getId());
         $this->assertEquals("1", $claimResult);
@@ -1147,7 +1147,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -1156,17 +1156,17 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $org = UnitTestHelper::createOrg();
         $insertedOrg = $orgDao->createOrg($org, $userId);
         $this->assertNotNull($insertedOrg);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG, $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = $projectDao->createProject($project);
         $this->assertNotNull($insertedProject);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_PROJECT, $insertedProject);
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
         $insertedTask = $taskDao->createTask($task);
         $this->assertNotNull($insertedTask);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $insertedTask);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_TASK, $insertedTask);
         
         $notification = new Common\Protobufs\Models\UserTaskStreamNotification();
         $notification->setUserId($registerUser->getId());
@@ -1197,7 +1197,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $registerUser = API\DAO\UserDao::getUser(null, $userEmail);
         $userId = $registerUser->getId();
         $this->assertNotNull($registerUser);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\User", $registerUser);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $registerUser);
         //Use API DAO because UI one requires UUID which we cannot retrieve (it would be emailed to the user)
         $finishRegResult = API\DAO\UserDao::finishRegistration($userId);
         $this->assertEquals("1", $finishRegResult);
@@ -1206,17 +1206,17 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $org = UnitTestHelper::createOrg();
         $insertedOrg = $orgDao->createOrg($org, $userId);
         $this->assertNotNull($insertedOrg);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Organisation", $insertedOrg);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_ORG, $insertedOrg);
         
         $project = UnitTestHelper::createProject($insertedOrg->getId());
         $insertedProject = $projectDao->createProject($project);
         $this->assertNotNull($insertedProject);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Project", $insertedProject);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_PROJECT, $insertedProject);
         
         $task = UnitTestHelper::createTask($insertedProject->getId());
         $insertedTask = $taskDao->createTask($task);
         $this->assertNotNull($insertedTask);
-        $this->assertInstanceOf("\SolasMatch\Common\Protobufs\Models\Task", $insertedTask);
+        $this->assertInstanceOf(UnitTestHelper::PROTO_TASK, $insertedTask);
         
         $notification = new Common\Protobufs\Models\UserTaskStreamNotification();
         $notification->setUserId($registerUser->getId());

@@ -5,7 +5,6 @@ namespace SolasMatch\API\DAO;
 use \SolasMatch\Common as Common;
 use \SolasMatch\API\Lib as Lib;
 
-
 //! The Task Data access Object for the API
 /*!
   A class for setting and retrieving Task related data from the database. Used by the API Route Handlers to supply
@@ -485,7 +484,7 @@ class TaskDao
         $task = self::getTasks($taskId);
         $task = $task[0];
         
-        if(is_null($task)) {
+        if (is_null($task)) {
             return 0 ;
         }
 
@@ -495,7 +494,7 @@ class TaskDao
         if ($graph) {
             $index = $graphBuilder->find($taskId, $graph);
             $node = $graph->getAllNodes($index);
-            $ret = self::archiveTaskNode($node, $graph, $userId);      
+            $ret = self::archiveTaskNode($node, $graph, $userId);
         }
 
         // UI is expecting output to be 0 or 1
@@ -574,10 +573,15 @@ class TaskDao
       @param int $userId is the id of the User
       @return Returns 1 on success, 0 on failure
     */
-    public static function unClaimTask($taskId, $userId)
+    public static function unClaimTask($taskId, $userId, $revokeByAdmin = false)
     {
         $args = Lib\PDOWrapper::cleanse($taskId).",".
             Lib\PDOWrapper::cleanse($userId);
+        if ($revokeByAdmin) {
+            $args .= ",1";
+        } else {
+            $args .= ",0";
+        }
         $ret = Lib\PDOWrapper::call("unClaimTask", $args);
         return $ret[0]['result'];
     }
@@ -732,59 +736,6 @@ class TaskDao
     {
         return self::checkTaskFileVersion($taskId, $userId);
     }
-
-    //! Used to download a specific version of a Task file
-    /*!
-      Download a specific version of a file. By default it will trigger the download of the original Task file. This
-      uses XSendFile to trigger a file download when called.
-      @param int $taskId is the id of a Task
-      @param int $version is the version of the file being requested
-      @return No return as it triggers a download instead
-    */
-    public static function downloadTask($taskId, $version = 0)
-    {
-        $task = self::getTasks($taskId);
-        $task=$task[0];
-        if (!is_object($task)) {
-            header('HTTP/1.0 500 Not Found');
-            die;
-        }
-        $task_file_info = self::getTaskFileInfo($taskId, $version);
-        if (empty($task_file_info)) {
-            throw new \Exception("Task file info not set for.");
-        }
-
-        $absolute_file_path = Lib\Upload::absoluteFilePathForUpload($task, $version, $task_file_info['filename']);
-        $file_content_type = $task_file_info['content-type'];
-        Lib\IO::downloadFile($absolute_file_path, $file_content_type);
-    }
-    
-    //! Download an XLIFF version of a file
-    /*!
-      Same as downloadTask except it first converts the file to XLIFF before triggering the download.
-      @param int $taskId is the id of a Task
-      @param int $version is the version of the file being requested
-      @return No return as it triggers a download instead
-    */
-    public static function downloadConvertedTask($taskId, $version = 0)
-    {
-        $task = self::getTasks($taskId);
-
-        if (!is_object($task)) {
-            header('HTTP/1.0 404 Not Found');
-            die;
-        }
-        
-        $task_file_info = self::getTaskFileInfo($taskID, $version);
-
-        if (empty($task_file_info)) {
-            throw new \Exception("Task file info not set for.");
-        }
-
-        $absolute_file_path = Lib\Upload::absoluteFilePathForUpload($task, $version, $task_file_info['filename']);
-        $file_content_type = $task_file_info['content-type'];
-        Lib\IO::downloadConvertedFile($absolute_file_path, $file_content_type, $taskID);
-    }
     
     //! Get the User that claimed the specified Task
     /*!
@@ -920,67 +871,9 @@ class TaskDao
         return $ret;
     }
     
-    //! Upload a Task file
-    /*!
-      Used to store Task file upload details and save the file to the filesystem. If convert is true then the file will
-      be converted to XLIFF before being saved.
-      @param Task $task is a Task object
-      @param bool $convert determines if the file should be converted to XLIFF
-      @param String $file is the contents of the file (passed as reference)
-      @param int $version is the version of the file being uploaded
-      @param int $userId is the id of the User uploading the file
-      @param String $filename is the name of the uploaded file
-      @return No return
-    */
-    public static function uploadFile($task, $convert, &$file, $version, $userId, $filename)
-    {
-        $success = null;
-        if ($convert) {
-            $success = Lib\Upload::apiSaveFile(
-                $task,
-                $userId,
-                Lib\FormatConverter::convertFromXliff($file),
-                $filename,
-                $version
-            );
-        } else {
-            //touch this and you will die painfully sinisterly sean :)
-            $success = Lib\Upload::apiSaveFile($task, $userId, $file, $filename, $version);
-        }
-        if (!$success) {
-            throw new Common\Exceptions\SolasMatchException(
-                "Failed to write file data.",
-                Common\Enums\HttpStatusEnum::INTERNAL_SERVER_ERROR
-            );
-        }
-    }
     
-    //! Upload a new version of a Task file
-    /*!
-      This uploads a new version of a Task file. It also copies the uploaded file to version 0 of all Tasks that are
-      dependant on this Task.
-      @param Task $task is a Task object
-      @param bool $convert determines if the file should be converted to XLIFF before being saved
-      @param String $file is the contents of the uploaded file (passed as reference)
-      @param int $userId is the id of the User uploading the file
-      @param String filename is the name of the file
-      @return No Return
-    */
-    public static function uploadOutputFile($task, $convert, &$file, $userId, $filename)
-    {
-        self::uploadFile($task, $convert, $file, null, $userId, $filename);
-        $graphBuilder = new Lib\APIWorkflowBuilder();
-        $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
-        if ($graph) {
-            $index = $graphBuilder->find($task->getId(), $graph);
-            $taskNode = $graph->getAllNodes($index);
-            foreach ($taskNode->getNextList() as $nextTaskId) {
-                $result = TaskDao::getTasks($nextTaskId);
-                $nextTask = $result[0];
-                self::uploadFile($nextTask, $convert, $file, 0, $userId, $filename);
-            }
-        }
-    }
+    
+    
     
     //! Get the date and time at which the specified Task was claimed
     /*!

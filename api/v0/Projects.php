@@ -23,12 +23,6 @@ class Projects
 
                     /* Routes starting /v0/projects/:projectId */
                     $app->put(
-                        '/file/:filename/:userId/',
-                        '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgProject',
-                        '\SolasMatch\API\V0\Projects::saveProjectFile'
-                    );
-
-                    $app->put(
                         '/updateWordCount/:newWordCount/',
                         '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
                         '\SolasMatch\API\V0\Projects::updateProjectWordCount'
@@ -144,22 +138,6 @@ class Projects
         });
     }
 
-    public static function saveProjectFile($projectId, $filename, $userId, $format = ".json")
-    {
-        if (!is_numeric($userId) && strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
-        try {
-            $token = DAO\ProjectDao::saveProjectFile($projectId, $data, urldecode($filename), $userId);
-            API\Dispatcher::sendResponse(null, $token, Common\Enums\HttpStatusEnum::CREATED, $format);
-        } catch (Exception $e) {
-            API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
-        }
-    }
-
     public static function updateProjectWordCount($projectId, $newWordCount, $format = ".json")
     {
         if (!is_numeric($newWordCount) && strstr($newWordCount, '.')) {
@@ -169,7 +147,7 @@ class Projects
         }
 
         $ret = null;
-        $ret = DAO\ProjectDao::updateProjectWordCount($projectId,$newWordCount);
+        $ret = DAO\ProjectDao::updateProjectWordCount($projectId, $newWordCount);
         API\Dispatcher::sendResponse(null, $ret, null, $format);
     }
         

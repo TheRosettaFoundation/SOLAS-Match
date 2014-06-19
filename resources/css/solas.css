@@ -132,7 +132,7 @@ table{
 
 .hero-unit {
     margin-top: 20px;
-   background-color: rgba(99,99,99,0.2);
+   background-color: rgba(99,99,99,0.2) !important;
  
 
 }

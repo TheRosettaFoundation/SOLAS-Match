@@ -132,28 +132,6 @@ class ProjectDao extends BaseDao
         return $ret;
     }
     
-    public function saveProjectFile($id, $data, $filename, $userId)
-    {
-        $ret = null;
-        $filename = urlencode($filename);
-        $url = "{$this->siteApi}v0/projects/$id/file/$filename/$userId";
-        $ret = $this->client->call(null, $url, Common\Enums\HttpMethodEnum::PUT, null, null, $data);
-        
-        switch($this->client->getResponseCode()) {
-            
-            default:
-                return $ret;
-                
-            case Common\Enums\HttpStatusEnum::BAD_REQUEST:
-                throw new Common\Exceptions\SolasMatchException($ret, $this->client->getResponseCode());
-                break;
-            
-            case Common\Enums\HttpStatusEnum::CONFLICT:
-                throw new Common\Exceptions\SolasMatchException($ret, $this->client->getResponseCode());
-                break;
-        }
-    }
-    
     public function getProjectFile($project_id)
     {
         $ret = null;
@@ -184,5 +162,19 @@ class ProjectDao extends BaseDao
         $request = "{$this->siteApi}v0/projects/$project_id/updateWordCount/$newWordCount";
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
         return $ret;
+    }
+    
+    public function downloadProjectFile($projectId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}/v0/io/download/project/$projectId";
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::GET);
+        
+        switch ($this->client->getResponseCode()) {
+            default:
+                return $ret;
+            case Common\Enums\HttpStatusEnum::NOT_FOUND:
+                throw new Common\Exceptions\SolasMatchException("No file!");
+        }
     }
 }

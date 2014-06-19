@@ -25,13 +25,14 @@ require_once __DIR__."/../Common/lib/UserSession.class.php";
 require_once __DIR__."/../Common/Enums/HttpMethodEnum.class.php";
 require_once __DIR__."/../Common/Enums/HttpStatusEnum.class.php";
 
-class Dispatcher {
+class Dispatcher
+{
     
     private static $apiDispatcher = null;
-    private static $oauthServer = null; 
+    private static $oauthServer = null;
     private static $oauthRequest = null;
             
-    public static function  getDispatcher()
+    public static function getDispatcher()
     {
         if (self::$apiDispatcher == null) {
             self::$apiDispatcher = new \Slim\Slim(array(
@@ -65,10 +66,10 @@ class Dispatcher {
         $path = explode("/", $path);
         $path = $path[1];
         $providerNames = self::readProviders("$path/");
-        self::autoRequire($providerNames,"$path/");
+        self::autoRequire($providerNames, "$path/");
         self::initUnitTests();
         self::initOAuth();
-        self::getDispatcher()->run();  
+        self::getDispatcher()->run();
     }
 
     private static function initUnitTests()
@@ -79,7 +80,7 @@ class Dispatcher {
         }
     }
     
-    private static function initOAuth() 
+    private static function initOAuth()
     {
         self::$oauthRequest = new \League\OAuth2\Server\Util\Request();
         self::$oauthServer = new \League\OAuth2\Server\Authorization(
@@ -99,7 +100,7 @@ class Dispatcher {
         return self::$oauthServer;
     }
     
-    public static function sendResponse($headers, $body, $code = 200, $format = ".json",$oauthToken=null)
+    public static function sendResponse($headers, $body, $code = 200, $format = ".json", $oauthToken = null)
     {
         header('Access-Control-Allow-Origin: *');
         $response = self::getDispatcher()->response();
@@ -118,31 +119,28 @@ class Dispatcher {
             $response->status($code);
         }
         
-        $response->body($body);        
+        $response->body($body);
     }
     
     public static function register($httpMethod, $url, $function, $middleware = null)
-    {        
+    {
         switch ($httpMethod) {
-            case Common\Enums\HttpMethodEnum::DELETE: {
-                self::getDispatcher()->delete($url,$middleware, $function);
+            case Common\Enums\HttpMethodEnum::DELETE:
+                self::getDispatcher()->delete($url, $middleware, $function);
                 break;
-            }
             
-            case Common\Enums\HttpMethodEnum::GET: {
-                self::getDispatcher()->get($url,$middleware, $function);
+            case Common\Enums\HttpMethodEnum::GET:
+                self::getDispatcher()->get($url, $middleware, $function);
                 break;
-            }
+
             
-            case Common\Enums\HttpMethodEnum::POST: {
-                self::getDispatcher()->post($url,$middleware, $function);
+            case Common\Enums\HttpMethodEnum::POST:
+                self::getDispatcher()->post($url, $middleware, $function);
                 break;
-            }
             
-            case Common\Enums\HttpMethodEnum::PUT: {
-                self::getDispatcher()->put($url,$middleware, $function);
+            case Common\Enums\HttpMethodEnum::PUT:
+                self::getDispatcher()->put($url, $middleware, $function);
                 break;
-            }
         }
     }
     
@@ -154,65 +152,57 @@ class Dispatcher {
         $middleware = "\SolasMatch\API\Lib\Middleware::isloggedIn"
     ) {
         switch ($httpMethod) {
-            case Common\Enums\HttpMethodEnum::DELETE: {
-                if($middleware!=null) {
-                	self::getDispatcher()->delete($url, $middleware, $function)->name($name);	
+            case Common\Enums\HttpMethodEnum::DELETE:
+                if ($middleware!=null) {
+                       self::getDispatcher()->delete($url, $middleware, $function)->name($name);
                 } else {
                     self::getDispatcher()->delete($url, $function)->name($name);
                 }
                 
                 break;
-            }
             
-            case Common\Enums\HttpMethodEnum::GET: {
-                if($middleware!=null) {
-                	self::getDispatcher()->get($url,  $middleware, $function)->name($name);
-				} else {
-					self::getDispatcher()->get($url,  $function)->name($name);
-				}
+            case Common\Enums\HttpMethodEnum::GET:
+                if ($middleware!=null) {
+                       self::getDispatcher()->get($url, $middleware, $function)->name($name);
+                } else {
+                                   self::getDispatcher()->get($url, $function)->name($name);
+                }
                 break;
-            }
             
-            case Common\Enums\HttpMethodEnum::POST: {
-                if($middleware!=null) {
-                	self::getDispatcher()->post($url,  $middleware, $function)->name($name);
-				} else {
-					self::getDispatcher()->post($url,  $function)->name($name);
-				}
+            case Common\Enums\HttpMethodEnum::POST:
+                if ($middleware!=null) {
+                       self::getDispatcher()->post($url, $middleware, $function)->name($name);
+                } else {
+                                   self::getDispatcher()->post($url, $function)->name($name);
+                }
                 break;
-            }
             
-            case Common\Enums\HttpMethodEnum::PUT: {
-                if($middleware!=null) {	
-                	self::getDispatcher()->put($url,  $middleware, $function)->name($name);
-				} else {
-					self::getDispatcher()->put($url,  $function)->name($name);
-				}
+            case Common\Enums\HttpMethodEnum::PUT:
+                if ($middleware!=null) {
+                       self::getDispatcher()->put($url, $middleware, $function)->name($name);
+                } else {
+                                   self::getDispatcher()->put($url, $function)->name($name);
+                }
                 break;
-            }
         }
     }
     
-    public static function clenseArgs($index, $httpMethod=null, $default=null)
+    public static function clenseArgs($index, $httpMethod = null, $default = null)
     {
         $req = self::getDispatcher()->request();
         switch ($httpMethod){
-            case Common\Enums\HttpMethodEnum::GET : {
+            case Common\Enums\HttpMethodEnum::GET :
                  $result = $req->get($index);
-                 return is_null($result) ? $default : $result; 
-            }
-            case Common\Enums\HttpMethodEnum::POST : {
+                 return is_null($result) ? $default : $result;
+            case Common\Enums\HttpMethodEnum::POST :
                 $result = $req->post($index);
-                return is_null($result) ? $default : $result; 
-            }
-            case Common\Enums\HttpMethodEnum::PUT : {
-               $result = $req->put($index);
-               return is_null($result) ? $default : $result; 
-            }
-            default: {
-               $result = $req->params($index);
-               return is_null($result) ? $default : $result; 
-            }
+                return is_null($result) ? $default : $result;
+            case Common\Enums\HttpMethodEnum::PUT :
+                $result = $req->put($index);
+                return is_null($result) ? $default : $result;
+            default:
+                $result = $req->params($index);
+                return is_null($result) ? $default : $result;
         }
     }
     
@@ -234,6 +224,5 @@ class Dispatcher {
         }
         return $ret;
     }
-
 }
 Dispatcher::init();

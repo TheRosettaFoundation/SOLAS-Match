@@ -6,7 +6,8 @@ namespace SolasMatch\API\Lib;
  * Input/Output including parsing input, and formatting output for URLs.
  */
 
-class IO {
+class IO
+{
 
     public function __construct()
     {
@@ -103,27 +104,6 @@ class IO {
         }
         return $print;
     }
-
-    /*
-     * Pass a requested file back to the browser
-     */
-    public static function downloadFile($absoluteFilePath, $contentType)
-    {
-        if (file_exists($absoluteFilePath)) {
-            $fsize = filesize($absoluteFilePath);
-            $path_parts = pathinfo($absoluteFilePath);
-            header('Content-type: '.$contentType);
-            header('Content-Disposition: attachment; filename="'.$path_parts["basename"].'"');
-            header("Content-length: $fsize");
-            header("X-Frame-Options: ALLOWALL");
-            header("Cache-control: private"); //use this to open files directly
-            header("X-Sendfile: ".realpath($absoluteFilePath));
-            // TODO -> this die is to get around Slim's $app->reponse() header/body response.
-            // Is there a cleaner way to download files?
-        }
-        die;
-    }
-    
     
     public static function downloadConvertedFile($absoluteFilePath, $contentType, $taskID)
     {
@@ -143,37 +123,5 @@ class IO {
         }
         fclose($fd);
         return;
-    }
-    
-    public static function detectMimeType($file, $filename)
-    {
-        $result = null;
-        
-        $mimeMap = array(
-             "xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            ,"xltx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.template"
-            ,"potx" => "application/vnd.openxmlformats-officedocument.presentationml.template"
-            ,"ppsx" => "application/vnd.openxmlformats-officedocument.presentationml.slideshow"
-            ,"pptx" => "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-            ,"sldx" => "application/vnd.openxmlformats-officedocument.presentationml.slide"
-            ,"docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-            ,"dotx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.template"
-            ,"xlam" => "application/vnd.ms-excel.addin.macroEnabled.12"
-            ,"xlsb" => "application/vnd.ms-excel.sheet.binary.macroEnabled.12"
-            ,"xlf"  => "application/xliff+xml"
-        );
-        
-        $finfo = new \finfo(FILEINFO_MIME_TYPE);
-        $mime = $finfo->buffer($file);
-        
-        $extension = explode(".", $filename);
-        $extension = $extension[count($extension)-1];
-        
-        if (($mime == "application/zip" || ($extension == "xlf")) && array_key_exists($extension, $mimeMap)) {
-            $result = $mimeMap[$extension];
-        } else {
-            $result = $mime;
-        }
-        return $result;
     }
 }

@@ -218,7 +218,7 @@ class Users
                     );
                     
                     $app->get(
-	                    '/archivedTasksCount(:format)/',
+                        '/archivedTasksCount(:format)/',
                         '\SolasMatch\API\Lib\Middleware::isloggedIn',
                         '\SolasMatch\API\V0\Users::getUserArchivedTasksCount'
                     );
@@ -357,6 +357,12 @@ class Users
                     '/isBlacklistedForTask/:userId/:taskId/',
                     '\SolasMatch\API\Lib\Middleware::isloggedIn',
                     '\SolasMatch\API\V0\Users::isBlacklistedForTask'
+                );
+                
+                $app->get(
+                        '/isBlacklistedForTaskByAdmin/:userId/:taskId/',
+                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
+                        '\SolasMatch\API\V0\Users::isBlacklistedForTaskByAdmin'
                 );
 
                 $app->put(
@@ -950,6 +956,16 @@ class Users
         }
         API\Dispatcher::sendResponse(null, DAO\UserDao::isBlacklistedForTask($userId, $taskId), null, $format);
     }
+    
+    public static function isBlacklistedForTaskByAdmin($userId, $taskId, $format = ".json")
+    {
+        if (!is_numeric($taskId) && strstr($taskId, '.')) {
+            $taskId = explode('.', $taskId);
+            $format = '.'.$taskId[1];
+            $taskId = $taskId[0];
+        }
+        API\Dispatcher::sendResponse(null, DAO\UserDao::isBlacklistedForTaskByAdmin($userId, $taskId), null, $format);
+    }
 
     public static function assignBadge($email, $badgeId, $format = ".json")
     {
@@ -1052,9 +1068,13 @@ class Users
         $loginData = $client->deserialize($body, "\SolasMatch\Common\Protobufs\Models\Login");
         $params = array();
         $params['client_id'] = API\Dispatcher::clenseArgs('client_id', Common\Enums\HttpMethodEnum::GET, null);
+        error_log("client_id IS {$params['client_id']}");
         $params['client_secret'] = API\Dispatcher::clenseArgs('client_secret', Common\Enums\HttpMethodEnum::GET, null);
+        error_log("client_secret IS {$params['client_secret']}");
         $params['username'] = $loginData->getEmail();
+        error_log("username IS {$params['username']}");
         $params['password'] = $loginData->getPassword();
+        error_log("password IS {$params['password']}");
         try {
             $server = API\Dispatcher::getOauthServer();
             $response = $server->getGrantType('password')->completeFlow($params);

@@ -18,6 +18,35 @@ require_once __DIR__.'/../Common/lib/APIHelper.class.php';
 class UnitTestHelper
 {
     private static $initalised = false;
+    const PROTO_ADMIN = "\SolasMatch\Common\Protobufs\Models\Admin";
+    const PROTO_ARCHIVED_PROJECT = "\SolasMatch\Common\Protobufs\Models\ArchivedProject";
+    const PROTO_ARCHIVED_TASK = "\SolasMatch\Common\Protobufs\Models\ArchivedTask";
+    const PROTO_BADGE = "\SolasMatch\Common\Protobufs\Models\Badge";
+    const PROTO_BANNED_ORG = "\SolasMatch\Common\Protobufs\Models\BannedOrganisation";
+    const PROTO_BANNED_USER = "\SolasMatch\Common\Protobufs\Models\BannedUser";
+    const PROTO_COUNTRY = "\SolasMatch\Common\Protobufs\Models\Country";
+    const PROTO_LANGUAGE = "\SolasMatch\Common\Protobufs\Models\Language";
+    const PROTO_LOCALE = "\SolasMatch\Common\Protobufs\Models\Locale";
+    const PROTO_LOGIN = "\SolasMatch\Common\Protobufs\Models\Login";
+    const PROTO_MEMBERSHIP_REQ = "\SolasMatch\Common\Protobufs\Models\MembershipRequest";
+    const PROTO_OAUTH_RESPONSE = "\SolasMatch\Common\Protobufs\Models\OAuthResponse";
+    const PROTO_ORG = "\SolasMatch\Common\Protobufs\Models\Organisation";
+    const PROTO_PASSWORD_RESET = "\SolasMatch\Common\Protobufs\Models\PasswordReset";
+    const PROTO_PASSWORD_RESET_REQ = "\SolasMatch\Common\Protobufs\Models\PasswordResetRequest";
+    const PROTO_PROJECT = "\SolasMatch\Common\Protobufs\Models\Project";
+    const PROTO_PROJECT_FILE = "\SolasMatch\Common\Protobufs\Models\ProjectFile";
+    const PROTO_REGISTER = "\SolasMatch\Common\Protobufs\Models\Register";
+    const PROTO_STATISTIC = "\SolasMatch\Common\Protobufs\Models\Statistic";
+    const PROTO_TAG = "\SolasMatch\Common\Protobufs\Models\Tag";
+    const PROTO_TASK = "\SolasMatch\Common\Protobufs\Models\Task";
+    const PROTO_TASK_METADATA = "\SolasMatch\Common\Protobufs\Models\TaskMetadata";
+    const PROTO_TASK_REVIEW = "\SolasMatch\Common\Protobufs\Models\TaskReview";
+    const PROTO_USER = "\SolasMatch\Common\Protobufs\Models\User";
+    const PROTO_USER_INFO = "\SolasMatch\Common\Protobufs\Models\UserPersonalInformation";
+    const PROTO_USER_TSN = "\SolasMatch\Common\Protobufs\Models\UserTaskStreamNotification";
+    const PROTO_WORKFLOW_GRAPH = "\SolasMatch\Common\Protobufs\Models\WorkflowGraph";
+    const PROTO_WORKFLOW_NODE = "\SolasMatch\Common\Protobufs\Models\WorkflowNode";
+    
     
     private function __constuct()
     {
@@ -53,6 +82,7 @@ class UnitTestHelper
         
         $oauthClientId = Common\Lib\Settings::get('oauth.client_id');
         $oauthClientSecret = Common\Lib\Settings::get('oauth.client_secret');
+        $redirectUri = Settings::get('site.location')."login/";
         if (!self::$initalised) {
             $result = $conn->exec("drop database `".Common\Lib\Settings::get('unit_test.database')."`");
             $result = $conn->exec(
@@ -66,8 +96,9 @@ class UnitTestHelper
             $result = $conn->exec($schema);
             $conn->exec("INSERT INTO oauth_clients (id, secret, name, auto_approve)".
                     "VALUES('$oauthClientId', '$oauthClientSecret', 'test_user',1)");
+            
             $conn->exec("INSERT INTO oauth_client_endpoints (client_id, redirect_uri)".
-                    "VALUES ('$oauthClientId', 'http://127.0.0.1/SolasMatch/login/')");
+                    "VALUES ('$oauthClientId', '$redirectUri')");
           
              $schema = file_get_contents(__DIR__.'/../db/'.$schemaFile);
             $schema = str_replace("DELIMITER //", "", $schema);
@@ -95,7 +126,7 @@ class UnitTestHelper
             $conn->exec("INSERT INTO oauth_clients (id, secret, name, auto_approve)".
                     "VALUES('$oauthClientId', '$oauthClientSecret', 'test_user',1)");
             $conn->exec("INSERT INTO oauth_client_endpoints (client_id, redirect_uri)".
-                    "VALUES ('$oauthClientId', 'http://127.0.0.1/SolasMatch/login/')");
+                    "VALUES ('$oauthClientId', '$redirectUri')");
             $schema = file_get_contents(__DIR__.'/../db/'.$schemaFile);
             $schema = str_replace("DELIMITER //", "", $schema);
             $schema = str_replace("DELIMITER ;", "", $schema);

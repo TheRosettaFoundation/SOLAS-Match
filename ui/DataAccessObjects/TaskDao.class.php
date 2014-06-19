@@ -70,15 +70,6 @@ class TaskDao extends BaseDao
         return $response;
     }
 
-    // this is wrong fix
-    public function getTaskFile($taskId, $version = 0, $convertToXliff = false)
-    {
-        $request = "{$this->siteApi}v0/tasks/$taskId/file";
-        $args = array("version" => $version,"convertToXliff"=>$convertToXliff);
-        $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::GET, null, $args);
-        return $response;
-    }
-
     public function getTaskVersion($taskId)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/version";
@@ -159,19 +150,21 @@ class TaskDao extends BaseDao
     public function addTaskPreReq($taskId, $preReqId)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/prerequisites/$preReqId";
-        $response =$this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
+        $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
+        return $response;
     }
 
     public function removeTaskPreReq($taskId, $preReqId)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/prerequisites/$preReqId";
-        $response =$this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
+        $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
+        return $response;
     }
 
     public function archiveTask($taskId, $userId)
     {
         $request = "{$this->siteApi}v0/tasks/archiveTask/$taskId/user/$userId";
-        $response =$this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
+        $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
         return $response;
     }
 
@@ -211,7 +204,7 @@ class TaskDao extends BaseDao
 
     public function saveTaskFile($taskId, $userId, $fileData, $version = null, $convert = null)
     {
-        $request = "{$this->siteApi}v0/tasks/saveFile/$taskId/$userId";
+        $request = "{$this->siteApi}v0/io/upload/task/$taskId/$userId";
         $args = array();
         if (!is_null($version)) {
             $args["version"] = $version;
@@ -254,7 +247,7 @@ class TaskDao extends BaseDao
 
     public function uploadOutputFile($taskId, $userId, $fileData, $convert = false)
     {
-        $request = "{$this->siteApi}v0/tasks/uploadOutputFile/$taskId/$userId";
+        $request = "{$this->siteApi}v0/io/upload/taskOutput/$taskId/$userId";
 
         $args = null;
         if ($convert) {
@@ -270,5 +263,26 @@ class TaskDao extends BaseDao
         $request = "{$this->siteApi}v0/tasks/$taskId/timeClaimed";
         $ret = $this->client->call(null, $request);
         return $ret;
+    }
+    
+    public function downloadTaskVersion($taskId, $version, $convert)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/io/download/task/$taskId";
+        $args = array();
+        $args['version'] = $version;
+        if ($convert) {
+            $args['convertToXliff'] = $convert;
+        }
+        
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::GET, null, $args);
+
+        switch ($this->client->getResponseCode()) {
+            default:
+                return $ret;
+            case Common\Enums\HttpStatusEnum::NOT_FOUND:
+                throw new Common\Exceptions\SolasMatchException("File not found!");
+                break;
+        }
     }
 }
