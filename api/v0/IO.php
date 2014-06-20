@@ -22,7 +22,7 @@ class IO
             $app->group('/io', function () use ($app) {
                 /* Routes starting with v0/io */
                 $app->get(
-                    '/contentMime/:filename(:format)',
+                    '/contentMime/:filename(:format)/',
                     '\SolasMatch\API\Lib\Middleware::isLoggedIn',
                     '\SolasMatch\API\V0\IO::getMimeFromFileContent'
                 );
