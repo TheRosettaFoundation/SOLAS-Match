@@ -11,11 +11,15 @@ class ClaimedTasksStream extends PolymerElement
   //fields to store current DateTime and site address
   DateTime currentDateTime;
   String siteAddress;
+  String filter;
+  bool isFiltered = false;
+  int taskCount = 0;
   
   @published int userid = 0;
   @published int tasksperpage = 10;
   
   //observable variables to store info about tasks, how to display them, etc
+  List<Task> filteredTasks;
   @observable List<Task> tasks;
   @observable Map<int, String> taskAges;
   @observable Map<int, Project> projectMap;
@@ -23,8 +27,13 @@ class ClaimedTasksStream extends PolymerElement
   @observable Map<int, List<Tag>> taskTags;
   @observable Map<int, String> taskColours;
   @observable Map<int, String> taskTypes;
+  @observable Map<int, String> statusFilters;
   @observable Map<int, String> taskStatuses;
+  @observable List<int> statusFilterIndexes;
+  @observable List<int> taskTypeIndexes;
   @observable Localisation localisation;
+  @observable int selectedTaskTypeFilter;
+  @observable int selectedStatusFilter;
   @observable int currentPage = 0;
   @observable int lastPage = 0;
 
@@ -41,7 +50,10 @@ class ClaimedTasksStream extends PolymerElement
     taskTags = toObservable(new Map<int, List<Tag>>());
     taskColours = toObservable(new Map<int, String>());
     taskTypes = toObservable(new Map<int, String>());
+    statusFilters = toObservable(new Map<int, String>());
     taskStatuses = toObservable(new Map<int, String>());
+    taskTypeIndexes = toObservable(new List<int>());
+    statusFilterIndexes = toObservable(new List<int>());
   }
   
   /**
@@ -58,14 +70,30 @@ class ClaimedTasksStream extends PolymerElement
     taskColours[2] = settings.conf.task_colours.colour_2;
     taskColours[3] = settings.conf.task_colours.colour_3;
     taskColours[4] = settings.conf.task_colours.colour_4;
+    
+    taskTypeIndexes.add(0);
+    taskTypes[0] = localisation.getTranslation("index_any_task_type");
+    taskTypeIndexes.add(1);
     taskTypes[1] = localisation.getTranslation("common_segmentation");
+    taskTypeIndexes.add(2);
     taskTypes[2] = localisation.getTranslation("common_translation");
+    taskTypeIndexes.add(3);
     taskTypes[3] = localisation.getTranslation("common_proofreading");
+    taskTypeIndexes.add(4);
     taskTypes[4] = localisation.getTranslation("common_desegmentation");
+    
     taskStatuses[1] = localisation.getTranslation("common_waiting");
     taskStatuses[2] = localisation.getTranslation("common_unclaimed");
     taskStatuses[3] = localisation.getTranslation("common_in_progress");
     taskStatuses[4] = localisation.getTranslation("common_complete");
+    
+    statusFilters[0] = localisation.getTranslation("common_any_task_status");
+    statusFilterIndexes.add(0);
+    statusFilters[1] = localisation.getTranslation("common_in_progress");
+    statusFilterIndexes.add(1);
+    statusFilters[2] = localisation.getTranslation("common_complete");
+    statusFilterIndexes.add(2);
+    
     List<Future<bool>> successList = new List<Future<bool>>();
     //start on the first page
     currentPage = 0;
@@ -131,6 +159,7 @@ class ClaimedTasksStream extends PolymerElement
   Future<bool> addTasks()
   {
     int offset = currentPage * tasksperpage;
+    //Get the user's claimed tasks for the current page and then clear the old page data from bound variables
     Future<bool> ret = UserDao.getUserTasks(userid, offset, tasksperpage)
       .then((List<Task> userTasks) {
         tasks.clear();
@@ -152,6 +181,21 @@ class ClaimedTasksStream extends PolymerElement
     a.appendHtml(sprintf(localisation.getTranslation("pagination_page_of"), ["${currentPage + 1}", "$lastPage"]));
     
     return ret;
+  }
+  
+  void addFilteredTasks(int currentPage, int limit)
+  {
+    int offset = currentPage * limit;
+    List<Task> subset = filteredTasks.sublist(offset, offset + limit);
+    tasks.clear();
+    projectMap.clear();
+    orgMap.clear();
+    taskAges.clear();
+    taskTags.clear();
+    
+    subset.forEach((Task task) {
+      this.addTask(task);
+    });
   }
   
   /**
@@ -266,10 +310,14 @@ class ClaimedTasksStream extends PolymerElement
    */
   void goToFirstPage()
   {
-    if (currentPage != 0) {
-      currentPage = 0;
-      this.addTasks();
-    }
+      if (currentPage != 0) {
+        currentPage = 0;
+        if (!isFiltered) {
+          this.addTasks();
+        } else {
+          this.addFilteredTasks(currentPage, tasksperpage);
+        }
+      }
   }
   
   /**
@@ -279,7 +327,11 @@ class ClaimedTasksStream extends PolymerElement
   {
     if (currentPage > 0) {
       currentPage--;
-      this.addTasks();
+      if (!isFiltered) {
+        this.addTasks();
+      } else {
+        this.addFilteredTasks(currentPage, tasksperpage);
+      }
     }
   }
   
@@ -290,7 +342,11 @@ class ClaimedTasksStream extends PolymerElement
   {
     if (currentPage < lastPage - 1) {
       currentPage++;
-      this.addTasks();
+      if (!isFiltered) {
+        this.addTasks();
+      } else {
+        this.addFilteredTasks(currentPage, tasksperpage);
+      }
     }
   }
   
@@ -301,7 +357,31 @@ class ClaimedTasksStream extends PolymerElement
   {
     if (currentPage < lastPage - 1) {
       currentPage = lastPage - 1;
-      this.addTasks();
+      if (!isFiltered) {
+        this.addTasks();
+      } else {
+        this.addFilteredTasks(currentPage, tasksperpage);
+      }
     }
+  }
+  
+  void filterStream()
+  {
+    print("Entered filterStream");
+    filter = "";
+    if (isFiltered) {
+      filteredTasks.clear();
+    }
+    
+    if (selectedTaskTypeFilter > 0) {
+      filter += "taskType:" + selectedTaskTypeFilter.toString() + ";";                
+    }
+    
+    UserDao.getUserTasks(userid, taskCount)
+      .then((List<Task> userTasks) {
+        filteredTasks = userTasks;
+        isFiltered = true;
+        goToFirstPage();
+    });
   }
 }

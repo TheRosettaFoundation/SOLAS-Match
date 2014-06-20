@@ -117,6 +117,10 @@ class UserDao
     return ret;
   }
   
+  /**
+   * Returns a list of Tasks, up to a maximum of [limit] (default 0) that the user identified by [userId], starting from
+   * the specified [offset] (default 0).
+   */
   static Future<List<Task>> getUserTasks(int userId, [int offset = 0, int limit = 0])
   {
     APIHelper client = new APIHelper(".json");

@@ -1,5 +1,49 @@
 <polymer-element name="claimed-tasks-stream" lightdom>
   <template>
+    <h3>{{localisation.getTranslation("index_filter_available_tasks")}}</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>{{localisation.getTranslation("common_task_type")}}</th>
+              <th>{{localisation.getTranslation("common_task_status")}}</th>
+              <th>{{localisation.getTranslation("common_target_language")}}<span style="color: red">*</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <select name="taskTypes" selectedIndex="{{selectedTaskTypeFilter}}"> 
+                  <option template repeat="{{key in taskTypeIndexes}}" value="{{key.toString()}}">
+                    {{taskTypes[key]}}
+                  </option>
+                </select>
+              </td>
+              <td>
+                <select name="taskStatusFilter" selectedIndex="{{selectedStatusFilter}}">
+                    <option template repeat="{{key in statusFilterIndexes}}" value="{{key.toString()}}">
+                      {{statusFilters[key]}}
+                    </option>
+                </select>
+              </td>
+              <td>
+                <select name="targetLanguage" selectedIndex="{{selectedTargetFilter}}">
+                  <option template repeat="{{language in activeTargetLanguages}}" value="{{language.code}}">
+                    {{language.name}}
+                  </option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <button value="Filter" class="btn btn-primary" on-click="{{filterStream}}">
+                  <i class="icon-refresh icon-white"></i> {{localisation.getTranslation("index_filter_task_stream")}}
+                </button>
+              </td>
+            </tr>
+          </tbody>  
+        </table>
+      <hr/>
+     <!-- <br/><br/><br/><br/><br/><br/><br/> -->
     <template if="{{tasks.length > 0}}">
       <template repeat="{{task in tasks}}">
         <div class="task" style="word-break: break-all; overflow-wrap: break-word;">

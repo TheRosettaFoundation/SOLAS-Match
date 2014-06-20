@@ -44,6 +44,7 @@
 	<string name="common_archive">Archive</string>
     <string name="common_archived_tasks">Archived Tasks</string>
 	<string name="common_add_user">Add User</string>
+    <string name="common_any_task_status">Any Task Status</string>
 	<string name="common_impact">Impact</string>
 	<string name="common_tags">Tags</string>
 	<string name="common_source_language">Source Language</string>
