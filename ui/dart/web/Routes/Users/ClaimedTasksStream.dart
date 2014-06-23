@@ -20,6 +20,7 @@ class ClaimedTasksStream extends PolymerElement
   
   //observable variables to store info about tasks, how to display them, etc
   List<Task> filteredTasks;
+  List<Task> filteredTasksBackup;
   @observable List<Task> tasks;
   @observable Map<int, String> taskAges;
   @observable Map<int, Project> projectMap;
@@ -44,6 +45,8 @@ class ClaimedTasksStream extends PolymerElement
   {
     currentDateTime = new DateTime.now();
     tasks = toObservable(new List<Task>());
+    filteredTasks = new List<Task>();
+    filteredTasksBackup = new List<Task>();
     taskAges = toObservable(new Map<int, String>());
     projectMap = toObservable(new Map<int, Project>());
     orgMap = toObservable(new Map<int, Organisation>());
@@ -371,17 +374,29 @@ class ClaimedTasksStream extends PolymerElement
     filter = "";
     if (isFiltered) {
       filteredTasks.clear();
+      filteredTasks.addAll(filteredTasksBackup);
+    }
+    
+    if (filteredTasksBackup.length == 0) {
+      UserDao.getUserTasks(userid, taskCount)
+        .then((List<Task> userTasks) {
+          filteredTasks = userTasks;
+          filteredTasksBackup = userTasks;
+          isFiltered = true;
+      });
     }
     
     if (selectedTaskTypeFilter > 0) {
-      filter += "taskType:" + selectedTaskTypeFilter.toString() + ";";                
+      //Remove all tasks but those of the selected type
+      filteredTasks.removeWhere((task) => task.taskType != selectedTaskTypeFilter);
     }
     
-    UserDao.getUserTasks(userid, taskCount)
-      .then((List<Task> userTasks) {
-        filteredTasks = userTasks;
-        isFiltered = true;
-        goToFirstPage();
-    });
+    if (selectedStatusFilter > 0) {
+      //Remove all tasks but those with the selected status
+      //The + 2 is to adjust the values so that they match correctly; task status 3 and 4 are in progress and
+      //complete, respectively, but on the UI filter they are the 2nd and 3rd options (hence index 1 and 2).
+      filteredTasks.removeWhere((task) => task.taskStatus != selectedStatusFilter + 2);
+    }
+    goToFirstPage();
   }
 }

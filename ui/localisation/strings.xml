@@ -195,6 +195,7 @@
     <string name="common_original_task_file">original task file</string>
     <string name="common_latest_task_file_version">latest task file version</string>
 
+    <string name="common_task_status">Task Status</string>
     <string name="common_download_file">Download File</string>
     <string name="common_can_you_open_file">Can you open the file on your computer?</string>
     <string name="common_part_of_for">Part of <a href="%s">%s</a> for <a href="%s">%s</a></string> 

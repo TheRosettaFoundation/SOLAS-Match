@@ -5,7 +5,7 @@
           <thead>
             <tr>
               <th>{{localisation.getTranslation("common_task_type")}}</th>
-              <th>Task Status<span style="color: red">*</span></th>
+              <th>{{localisation.getTranslation("common_task_status")}}</th>
               <th>{{localisation.getTranslation("common_target_language")}}<span style="color: red">*</span></th>
             </tr>
           </thead>
@@ -43,7 +43,6 @@
           </tbody>  
         </table>
       <hr/>
-     <!-- <br/><br/><br/><br/><br/><br/><br/> -->
     <template if="{{tasks.length > 0}}">
       <template repeat="{{task in tasks}}">
         <div class="task" style="word-break: break-all; overflow-wrap: break-word;">
