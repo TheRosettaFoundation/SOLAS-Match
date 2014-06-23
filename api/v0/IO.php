@@ -22,7 +22,7 @@ class IO
             $app->group('/io', function () use ($app) {
                 /* Routes starting with v0/io */
                 $app->get(
-                    '/contentMime/:filename(:format)',
+                    '/contentMime/:filename(:format)/',
                     '\SolasMatch\API\Lib\Middleware::isLoggedIn',
                     '\SolasMatch\API\V0\IO::getMimeFromFileContent'
                 );
@@ -244,7 +244,7 @@ class IO
             $index = $graphBuilder->find($task->getId(), $graph);
             $taskNode = $graph->getAllNodes($index);
             foreach ($taskNode->getNextList() as $nextTaskId) {
-                $result = TaskDao::getTasks($nextTaskId);
+                $result = DAO\TaskDao::getTasks($nextTaskId);
                 $nextTask = $result[0];
                 self::uploadFile($nextTask, $convert, $file, 0, $userId, $filename);
             }
