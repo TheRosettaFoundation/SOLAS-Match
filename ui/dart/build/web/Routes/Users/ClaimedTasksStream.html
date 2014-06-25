@@ -1,4 +1,4 @@
-<polymer-element name="claimed-tasks-stream" lightdom>
+<polymer-element name="claimed-tasks-stream" css="resources/bootstrap/css/bootstrap.min.css resources/css/solas.css">
   <template>
     <h3>{{localisation.getTranslation("index_filter_available_tasks")}}</h3>
         <table>
@@ -89,7 +89,7 @@
       </template>
     </template>
     <template if="{{tasks.length == 0}}">
-      <p>{{localisation.getTranslation("index_no_tasks_available")}}</p>
+      <p id='noTaskText'>{{localisation.getTranslation("index_no_tasks_available")}}</p>
     </template>
     <div class="pagination pagination-centered">
       <ul>

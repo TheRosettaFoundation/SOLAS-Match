@@ -17,6 +17,7 @@ class ClaimedTasksStream extends PolymerElement
   
   @published int userid = 0;
   @published int tasksperpage = 10;
+  @published String css;
   
   //observable variables to store info about tasks, how to display them, etc
   List<Task> filteredTasks;
@@ -33,8 +34,8 @@ class ClaimedTasksStream extends PolymerElement
   @observable List<int> statusFilterIndexes;
   @observable List<int> taskTypeIndexes;
   @observable Localisation localisation;
-  @observable int selectedTaskTypeFilter;
-  @observable int selectedStatusFilter;
+  @observable int selectedTaskTypeFilter = 0;
+  @observable int selectedStatusFilter = 0;
   @observable int currentPage = 0;
   @observable int lastPage = 0;
 
@@ -69,6 +70,11 @@ class ClaimedTasksStream extends PolymerElement
     localisation = new Localisation();
     Settings settings = new Settings();
     siteAddress = settings.conf.urls.SiteLocation;
+    //import css into polymer element
+    if (css != null) {
+      css.split(' ').map((path) => new StyleElement()..text = "@import '$siteAddress${path}';").forEach(shadowRoot.append);
+    }
+    
     taskColours[1] = settings.conf.task_colours.colour_1;
     taskColours[2] = settings.conf.task_colours.colour_2;
     taskColours[3] = settings.conf.task_colours.colour_3;
@@ -112,7 +118,7 @@ class ClaimedTasksStream extends PolymerElement
         }
         
         Timer.run(() {
-          AnchorElement a = querySelector("#pagination_pages");
+          AnchorElement a = this.shadowRoot.querySelector("#pagination_pages");
           a.children.clear();
           a.appendHtml(sprintf(localisation.getTranslation("pagination_page_of"), ["${currentPage + 1}", "$lastPage"]));
         });
@@ -134,13 +140,13 @@ class ClaimedTasksStream extends PolymerElement
           print("Something failed");
         }
         AnchorElement button;
-        button = querySelector("#firstPage");
+        button = this.shadowRoot.querySelector("#firstPage");
         button.onClick.listen((e) => this.goToFirstPage());
-        button = querySelector("#previousPage");
+        button = this.shadowRoot.querySelector("#previousPage");
         button.onClick.listen((e) => this.goToPreviousPage());
-        button = querySelector("#nextPage");
+        button = this.shadowRoot.querySelector("#nextPage");
         button.onClick.listen((e) => this.goToNextPage());
-        button = querySelector("#lastPage");
+        button = this.shadowRoot.querySelector("#lastPage");
         button.onClick.listen((e) => this.goToLastPage());
       });
   }
@@ -179,7 +185,7 @@ class ClaimedTasksStream extends PolymerElement
         return true;
       });
     
-    AnchorElement a = querySelector("#pagination_pages");
+    AnchorElement a = this.shadowRoot.querySelector("#pagination_pages");
     a.children.clear();
     a.appendHtml(sprintf(localisation.getTranslation("pagination_page_of"), ["${currentPage + 1}", "$lastPage"]));
     
@@ -188,21 +194,69 @@ class ClaimedTasksStream extends PolymerElement
   
   void addFilteredTasks(int currentPage, int limit)
   {
+    print("Entered addFilteredTasks");
     int offset = currentPage * limit;
-    List<Task> subset = filteredTasks.sublist(offset, offset + limit);
-    tasks.clear();
-    projectMap.clear();
-    orgMap.clear();
-    taskAges.clear();
-    taskTags.clear();
+    print("OFFSET IS $offset AND LIMIT IS $limit");
+    List<Task> subset;
     
-    subset.forEach((Task task) {
-      this.addTask(task);
+    //Check how many claimed tasks (matching the filter options selected) the user has and then set up
+    //pagination appropriately.
+    UserDao.getUserClaimedTasksCount(userid)
+      .then((int count) {
+        if (count > 0) {
+          if (filteredTasks.length >= limit) {
+            num tmp = filteredTasks.length / limit;
+            lastPage = tmp.ceil();
+          } else {
+            //Handle single page result set
+            lastPage = currentPage;
+          }
+          
+          //Avoid RangeError when the number of tasks post-filtering is less than tasksPerPage OR not 
+          //a multiple of tasksPerPage.
+          int modulus = filteredTasks.length % limit; 
+          print("CURPAGE IS $currentPage AND LASTPAGE IS $lastPage");
+          if (modulus > 0 && currentPage == lastPage) {
+            subset = filteredTasks.sublist(offset, modulus);
+          } else {
+            print("Entered else for subset");
+            print("filterTasks LENGTH IS ${filteredTasks.length}");
+            print("OFFSET + LIMIT IS ${offset + limit}");
+            int end = offset + limit;
+            if (end > count) {
+              end = count;
+            }
+            subset = filteredTasks.sublist(offset, end);
+          }
+          
+          tasks.clear();
+          projectMap.clear();
+          orgMap.clear();
+          taskAges.clear();
+          taskTags.clear();
+          
+          subset.forEach((Task task) {
+            this.addTask(task);
+          });
+          this.updatePagination();
+          Timer.run(() {
+            AnchorElement a = this.shadowRoot.querySelector("#pagination_pages");
+            a.children.clear();
+            a.appendHtml(
+              sprintf(localisation.getTranslation("pagination_page_of"),
+              ["${currentPage + 1}", "$lastPage"])
+            );
+          });
+        } else {
+          ParagraphElement pElem = this.shadowRoot.querySelector('#noTaskText');
+          pElem.text = localisation.getTranslation("claimed_tasks_no_tasks_matching_filters");
+        }        
     });
   }
   
   /**
-   * This function is called by addTasks() to process the addition of each individual task's data to the task stream.
+   * This function is called by addTasks() to process the addition of each individual task's data
+   * to the task stream.
    */
   void addTask(Task task)
   {
@@ -237,7 +291,7 @@ class ClaimedTasksStream extends PolymerElement
           //Set up the text with states the task's project and org
           Timer.run(() {
             ParagraphElement p;
-            p = querySelector("#parent_" + task.id.toString());
+            p = this.shadowRoot.querySelector("#parent_" + task.id.toString());
             p.children.clear();
             p.appendHtml(sprintf(localisation.getTranslation("common_part_of_for"), 
                                  ["${siteAddress}project/${task.projectId}/view",
@@ -252,7 +306,7 @@ class ClaimedTasksStream extends PolymerElement
       //Set up the text with states the task's project and org
       Timer.run(() {
         ParagraphElement p;
-        p = querySelector("#parent_" + task.id.toString());
+        p = this.shadowRoot.querySelector("#parent_" + task.id.toString());
         p.children.clear();
         p.appendHtml(sprintf(localisation.getTranslation("common_part_of_for"), 
                              ["${siteAddress}project/${task.projectId}/view",
@@ -264,10 +318,10 @@ class ClaimedTasksStream extends PolymerElement
     //Set up the text stating task age and deadline.
     Timer.run(() {
       ParagraphElement p;
-      p = querySelector("#task_age_" + task.id.toString());
+      p = this.shadowRoot.querySelector("#task_age_" + task.id.toString());
       p.children.clear();
       p.appendHtml(taskAges[task.id]);
-      p = querySelector("#deadline_" + task.id.toString());
+      p = this.shadowRoot.querySelector("#deadline_" + task.id.toString());
       p.children.clear();
       p.appendHtml(sprintf(localisation.getTranslation("common_due_by"), [task.deadline]));
     });
@@ -281,29 +335,29 @@ class ClaimedTasksStream extends PolymerElement
   {
     if (currentPage < 1) {
       AnchorElement button;
-      button = querySelector("#firstPage");
+      button = this.shadowRoot.querySelector("#firstPage");
       button.parent.classes.add("disabled");
-      button = querySelector("#previousPage");
+      button = this.shadowRoot.querySelector("#previousPage");
       button.parent.classes.add("disabled");
     } else {
       AnchorElement button;
-      button = querySelector("#firstPage");
+      button = this.shadowRoot.querySelector("#firstPage");
       button.parent.classes.remove("disabled");
-      button = querySelector("#previousPage");
+      button = this.shadowRoot.querySelector("#previousPage");
       button.parent.classes.remove("disabled");
     }
     
     if (currentPage >= lastPage - 1) {
       AnchorElement button;
-      button = querySelector("#nextPage");
+      button = this.shadowRoot.querySelector("#nextPage");
       button.parent.classes.add("disabled");
-      button = querySelector("#lastPage");
+      button = this.shadowRoot.querySelector("#lastPage");
       button.parent.classes.add("disabled");
     } else {
       AnchorElement button;
-      button = querySelector("#nextPage");
+      button = this.shadowRoot.querySelector("#nextPage");
       button.parent.classes.remove("disabled");
-      button = querySelector("#lastPage");
+      button = this.shadowRoot.querySelector("#lastPage");
       button.parent.classes.remove("disabled");
     }
   }
@@ -320,6 +374,8 @@ class ClaimedTasksStream extends PolymerElement
         } else {
           this.addFilteredTasks(currentPage, tasksperpage);
         }
+      } else if (isFiltered) {
+        this.addFilteredTasks(currentPage, tasksperpage);
       }
   }
   
@@ -370,11 +426,9 @@ class ClaimedTasksStream extends PolymerElement
   
   void filterStream()
   {
-    print("Entered filterStream");
     filter = "";
     if (isFiltered) {
       filteredTasks.clear();
-      filteredTasks.addAll(filteredTasksBackup);
     }
     
     if (filteredTasksBackup.length == 0) {
@@ -383,20 +437,20 @@ class ClaimedTasksStream extends PolymerElement
           filteredTasks = userTasks;
           filteredTasksBackup = userTasks;
           isFiltered = true;
+          
+          if (selectedTaskTypeFilter > 0) {
+            //Remove all tasks but those of the selected type
+            filteredTasks.removeWhere((task) => task.taskType != selectedTaskTypeFilter);
+          }
+              
+          if (selectedStatusFilter > 0) {
+            //Remove all tasks but those with the selected status
+            //The + 2 is to adjust the values so that they match correctly; task status 3 and 4 are in progress and
+            //complete, respectively, but on the UI filter they are the 2nd and 3rd options (hence index 1 and 2).
+            filteredTasks.removeWhere((task) => task.taskStatus != selectedStatusFilter + 2);
+          }
+          goToFirstPage();
       });
     }
-    
-    if (selectedTaskTypeFilter > 0) {
-      //Remove all tasks but those of the selected type
-      filteredTasks.removeWhere((task) => task.taskType != selectedTaskTypeFilter);
-    }
-    
-    if (selectedStatusFilter > 0) {
-      //Remove all tasks but those with the selected status
-      //The + 2 is to adjust the values so that they match correctly; task status 3 and 4 are in progress and
-      //complete, respectively, but on the UI filter they are the 2nd and 3rd options (hence index 1 and 2).
-      filteredTasks.removeWhere((task) => task.taskStatus != selectedStatusFilter + 2);
-    }
-    goToFirstPage();
   }
 }

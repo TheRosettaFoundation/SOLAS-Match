@@ -655,6 +655,7 @@
 	<string name="claimed_tasks_0">A list of tasks you are currently working on.</string>
     <string name="claimed_tasks_task_reviews">Task Reviews</string>
 	<string name="claimed_tasks_no_active_tasks_available">No Active Tasks available!</string>
+    <string name="claimed_tasks_no_tasks_matching_filters">You do not have any claimed tasks which match the filter options you selected.</string>
 
 	<string name="task_desegmentation_desegmentation_task_details">Desegmentation task details.</string>
 	<string name="task_desegmentation_download">Download</string>
