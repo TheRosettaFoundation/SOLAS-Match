@@ -984,8 +984,8 @@
 	<string name="user_task_stream_notification_edit_weekly">Weekly</string>
 	<string name="user_task_stream_notification_edit_monthly">Monthly</string>
 
-    <string name="footer_0">Unless otherwise stated, all works contributed are licensed under the <a href="%s">Creative Commons Attribution 3.0 Ireland License</a> in accordance with the <a href="%s">Terms and Conditons</a>.</string>
-	<string name="footer_terms_and_conditons">Terms and Conditons</string>
+    <string name="footer_0">Unless otherwise stated, all works contributed are licensed under the <a href="%s">Creative Commons Attribution 3.0 Ireland License</a> in accordance with the <a href="%s">Terms and Conditions</a>.</string>
+	<string name="footer_terms_and_conditons">Terms and Conditions</string>
 	<string name="footer_privacy_policy">Privacy Policy</string>
 	<string name="footer_community_forum">Community Forum</string>
     <string name="footer_feedback">Your <a href="%s">feedback</a> is appreciated.</string>
