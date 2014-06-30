@@ -143,6 +143,34 @@ class UserDao
         });
   }
   
+  static Future<List<Task>> getFilteredUserClaimedTasks(int userId, [int orderBy = 0, int limit = 10,
+                                                        int offset = 0, int taskType = 0, int taskStatus = 0])
+  {
+    APIHelper client = new APIHelper(".json");
+    Future<List<Task>> tasks = client.call(
+        "Task",
+        "v0/users/$userId/filteredClaimedTasks/$orderBy/$limit/$offset/$taskType/$taskStatus", 
+        'GET')
+      .then((HttpRequest response) {
+        List<Task> userTasks = new List<Task>();
+        if (response.status < 400) {
+          if (response.responseText.length > 0) {
+            Map jsonParsed = JSON.decode(response.responseText);
+            if (jsonParsed.length > 0) {
+              jsonParsed['item'].forEach((String data) {
+                Map task = JSON.decode(data);
+                userTasks.add(ModelFactory.generateTaskFromMap(task));
+              });
+            }
+          }
+        } else {
+          print("Error: getFilteredUserClaimedTasks returned: " + response.status.toString() + " " + response.statusText);
+        }
+        return userTasks;
+      });
+    return tasks;
+  }
+  
   static Future<bool> saveUserDetails(User user)
   {
     APIHelper client = new APIHelper(".json");

@@ -6,7 +6,7 @@
             <tr>
               <th>{{localisation.getTranslation("common_task_type")}}</th>
               <th>{{localisation.getTranslation("common_task_status")}}</th>
-              <th>{{localisation.getTranslation("common_target_language")}}<span style="color: red">*</span></th>
+              <th>{{localisation.getTranslation("claimed_tasks_ordering")}}</th>
             </tr>
           </thead>
           <tbody>
@@ -26,9 +26,9 @@
                 </select>
               </td>
               <td>
-                <select name="targetLanguage" selectedIndex="{{selectedTargetFilter}}">
-                  <option template repeat="{{language in activeTargetLanguages}}" value="{{language.code}}">
-                    {{language.name}}
+                <select name="ordering" selectedIndex="{{selectedOrder}}">
+                  <option template repeat="{{key in taskOrderingIndexes}}" value="{{key.toString()}}">
+                    {{taskOrderings[key]}}
                   </option>
                 </select>
               </td>

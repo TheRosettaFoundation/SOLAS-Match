@@ -31,11 +31,14 @@ class ClaimedTasksStream extends PolymerElement
   @observable Map<int, String> taskTypes;
   @observable Map<int, String> statusFilters;
   @observable Map<int, String> taskStatuses;
+  @observable Map<int, String> taskOrderings;
   @observable List<int> statusFilterIndexes;
   @observable List<int> taskTypeIndexes;
+  @observable List<int> taskOrderingIndexes;
   @observable Localisation localisation;
   @observable int selectedTaskTypeFilter = 0;
   @observable int selectedStatusFilter = 0;
+  @observable int selectedOrder = 0;
   @observable int currentPage = 0;
   @observable int lastPage = 0;
 
@@ -56,8 +59,10 @@ class ClaimedTasksStream extends PolymerElement
     taskTypes = toObservable(new Map<int, String>());
     statusFilters = toObservable(new Map<int, String>());
     taskStatuses = toObservable(new Map<int, String>());
+    taskOrderings = toObservable(new Map<int, String>());
     taskTypeIndexes = toObservable(new List<int>());
     statusFilterIndexes = toObservable(new List<int>());
+    taskOrderingIndexes = toObservable(new List<int>());
   }
   
   /**
@@ -102,6 +107,19 @@ class ClaimedTasksStream extends PolymerElement
     statusFilterIndexes.add(1);
     statusFilters[2] = localisation.getTranslation("common_complete");
     statusFilterIndexes.add(2);
+    
+    taskOrderings[0] = localisation.getTranslation("claimed_tasks_ordering_created_asc");
+    taskOrderingIndexes.add(0);
+    taskOrderings[1] = localisation.getTranslation("claimed_tasks_ordering_created_desc");
+    taskOrderingIndexes.add(1);
+    taskOrderings[2] = localisation.getTranslation("claimed_tasks_ordering_deadline_asc");
+    taskOrderingIndexes.add(2);
+    taskOrderings[3] = localisation.getTranslation("claimed_tasks_ordering_deadline_desc");
+    taskOrderingIndexes.add(3);
+    taskOrderings[4] = localisation.getTranslation("claimed_tasks_ordering_title_asc");
+    taskOrderingIndexes.add(4);
+    taskOrderings[5] = localisation.getTranslation("claimed_tasks_ordering_title_desc");
+    taskOrderingIndexes.add(5);
     
     List<Future<bool>> successList = new List<Future<bool>>();
     //start on the first page
@@ -194,64 +212,42 @@ class ClaimedTasksStream extends PolymerElement
   
   void addFilteredTasks(int currentPage, int limit)
   {
-    print("Entered addFilteredTasks");
+    int len = filteredTasks.length;
     int offset = currentPage * limit;
-    print("OFFSET IS $offset AND LIMIT IS $limit");
-    List<Task> subset;
     
-    //Check how many claimed tasks (matching the filter options selected) the user has and then set up
-    //pagination appropriately.
-    UserDao.getUserClaimedTasksCount(userid)
-      .then((int count) {
-        if (count > 0) {
-          if (filteredTasks.length >= limit) {
-            num tmp = filteredTasks.length / limit;
-            lastPage = tmp.ceil();
-          } else {
-            //Handle single page result set
-            lastPage = currentPage;
-          }
-          
-          //Avoid RangeError when the number of tasks post-filtering is less than tasksPerPage OR not 
-          //a multiple of tasksPerPage.
-          int modulus = filteredTasks.length % limit; 
-          print("CURPAGE IS $currentPage AND LASTPAGE IS $lastPage");
-          if (modulus > 0 && currentPage == lastPage) {
-            subset = filteredTasks.sublist(offset, modulus);
-          } else {
-            print("Entered else for subset");
-            print("filterTasks LENGTH IS ${filteredTasks.length}");
-            print("OFFSET + LIMIT IS ${offset + limit}");
-            int end = offset + limit;
-            if (end > count) {
-              end = count;
-            }
-            subset = filteredTasks.sublist(offset, end);
-          }
-          
-          tasks.clear();
-          projectMap.clear();
-          orgMap.clear();
-          taskAges.clear();
-          taskTags.clear();
-          
-          subset.forEach((Task task) {
-            this.addTask(task);
-          });
-          this.updatePagination();
-          Timer.run(() {
-            AnchorElement a = this.shadowRoot.querySelector("#pagination_pages");
-            a.children.clear();
-            a.appendHtml(
-              sprintf(localisation.getTranslation("pagination_page_of"),
-              ["${currentPage + 1}", "$lastPage"])
-            );
-          });
-        } else {
-          ParagraphElement pElem = this.shadowRoot.querySelector('#noTaskText');
-          pElem.text = localisation.getTranslation("claimed_tasks_no_tasks_matching_filters");
-        }        
-    });
+    List<Task> subset;
+    tasks.clear();
+    projectMap.clear();
+    orgMap.clear();
+    taskAges.clear();
+    taskTags.clear();
+
+    if (len > 0) {
+      if (len > limit) {
+        lastPage = (len / limit).ceil();
+      } else {
+        //Handle single page result set
+        lastPage = currentPage;
+      }
+
+      subset = filteredTasks.skip(offset).take(limit).toList();
+      //Add each task to the list tasks so that it will display on UI.
+      subset.forEach((Task task) {
+        this.addTask(task);
+      });
+      this.updatePagination();
+      Timer.run(() {
+        AnchorElement a = this.shadowRoot.querySelector("#pagination_pages");
+        a.children.clear();
+        a.appendHtml(
+          sprintf(localisation.getTranslation("pagination_page_of"),
+          ["${currentPage + 1}", "$lastPage"])
+        );
+      });
+    } else {
+      ParagraphElement pElem = this.shadowRoot.querySelector('#noTaskText');
+      pElem.text = localisation.getTranslation("claimed_tasks_no_tasks_matching_filters");
+    }
   }
   
   /**
@@ -426,31 +422,24 @@ class ClaimedTasksStream extends PolymerElement
   
   void filterStream()
   {
-    filter = "";
     if (isFiltered) {
       filteredTasks.clear();
     }
     
-    if (filteredTasksBackup.length == 0) {
-      UserDao.getUserTasks(userid, taskCount)
+      //Get all tasks matching the filter options, store them in and then filteredTasks and go to the first page
+      //of the ClaimedTasksStream
+      UserDao.getFilteredUserClaimedTasks(
+          userid,
+          selectedOrder,
+          0,
+          0,
+          selectedTaskTypeFilter, 
+          selectedStatusFilter)
         .then((List<Task> userTasks) {
           filteredTasks = userTasks;
-          filteredTasksBackup = userTasks;
           isFiltered = true;
           
-          if (selectedTaskTypeFilter > 0) {
-            //Remove all tasks but those of the selected type
-            filteredTasks.removeWhere((task) => task.taskType != selectedTaskTypeFilter);
-          }
-              
-          if (selectedStatusFilter > 0) {
-            //Remove all tasks but those with the selected status
-            //The + 2 is to adjust the values so that they match correctly; task status 3 and 4 are in progress and
-            //complete, respectively, but on the UI filter they are the 2nd and 3rd options (hence index 1 and 2).
-            filteredTasks.removeWhere((task) => task.taskStatus != selectedStatusFilter + 2);
-          }
           goToFirstPage();
       });
     }
-  }
 }

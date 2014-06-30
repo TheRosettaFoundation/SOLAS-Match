@@ -2630,8 +2630,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `getFilteredUserClaimedTasks`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getFilteredUserClaimedTasks`(IN `userID` INT, IN `lim` INT, IN `offset` INT, IN `taskType` INT, IN `taskStatus` INT,
-IN `orderBy` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getFilteredUserClaimedTasks`(IN `userID` INT, IN `lim` INT, IN `offset` INT, IN `taskType` INT, IN `taskStatus` INT, IN `orderBy` INT)
 
     READS SQL DATA
 
@@ -2640,8 +2639,8 @@ BEGIN
     if lim = '' or lim is null then set lim = ~0; end if;
     if offset='' or offset is null then set offset = 0; end if;
 
-    if taskType = '' then set taskType = null; end if;
-    if taskStatus = '' then set taskStatus = null; end if;
+    if taskType = 0 then set taskType = null; end if;
+    if taskStatus = 0 then set taskStatus = null; end if;
 
     (SELECT id,project_id,title,`word-count`,
             (SELECT `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`,
@@ -2658,7 +2657,7 @@ BEGIN
         AND (taskType is null or t.`task-type_id` = taskType)
         AND (taskStatus is null or t.`task-status_id` = taskStatus)
         ORDER BY
-            CASE 
+            CASE
              WHEN orderBy = 0 THEN `created-time`
              WHEN orderBy = 2 THEN deadline
              WHEN orderBy = 4 THEN title

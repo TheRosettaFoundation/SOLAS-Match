@@ -665,14 +665,14 @@ class TaskDao
     ) {
         $ret = null;
         
-        $args = Lib\PDOWrapper::cleanse($userId).', '
+        $args = Lib\PDOWrapper::cleanse($userId).', ';
         $args .= Lib\PDOWrapper::cleanseNull($limit).', ';
         $args .= Lib\PDOWrapper::cleanse($offset).', ';
         $args .= Lib\PDOWrapper::cleanseNull($taskType).', ';
         $args .= Lib\PDOWrapper::cleanseNull($taskStatus).', ';
-        $args .= Lib\PDOWrapper::cleanse($orderBy).', ';
+        $args .= Lib\PDOWrapper::cleanse($orderBy);
         
-        $result = Lib\PDOWrapper::call("getFilterUserClaimedTasks", $args);
+        $result = Lib\PDOWrapper::call("getFilteredUserClaimedTasks", $args);
         if ($result) {
             $ret = array();
             foreach ($result as $row) {

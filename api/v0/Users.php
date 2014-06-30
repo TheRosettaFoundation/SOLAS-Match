@@ -134,6 +134,12 @@ class Users
                     });
 
                     /* Routes starting /v0/users/:userId */
+                    $app->get(
+                        '/filteredClaimedTasks/:orderBy/:limit/:offset/:taskType/:taskStatus(:format)/',
+                        '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+                        '\SolasMatch\API\V0\Users::getFilteredUserClaimedTasks'
+                    );
+                    
                     $app->put(
                         '/requestReference(:format)/',
                         '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
@@ -710,6 +716,36 @@ class Users
             $targetLanguageCode
         );
         API\Dispatcher::sendResponse(null, $data, null, $format);
+    }
+    
+    public static function getFilteredUserClaimedTasks(
+            $userId,
+            $orderBy,
+            $limit,
+            $offset,
+            $taskType,
+            $taskStatus,
+            $format = ".json"
+    ) {
+        if (!is_numeric($taskStatus) && strstr($taskStatus, '.')) {
+            $taskStatus = explode('.', $taskStatus);
+            $format = '.'.$taskStatus[1];
+            $taskStatus = $taskStatus[0];
+        }
+    
+        API\Dispatcher::sendResponse(
+            null,
+            DAO\TaskDao::getFilteredUserClaimedTasks(
+                $userId,
+                $orderBy,
+                $limit,
+                $offset,
+                $taskType,
+                $taskStatus
+            ),
+            null,
+            $format
+        );
     }
 
     public static function getUserArchivedTasks($userId, $limit, $offset, $format = ".json")
