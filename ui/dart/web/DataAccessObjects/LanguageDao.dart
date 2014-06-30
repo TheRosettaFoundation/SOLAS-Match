@@ -1,7 +1,15 @@
 part of SolasMatchDart;
 
+/**
+ * Class containing methods to access [Language]-related data through the API.
+ */
 class LanguageDao
 {
+  /**
+   * Calls the API to get a list of all Languages.
+   * 
+   * Returns a [Future] whose value will be a [List] of [Language] objects on successful completion.
+   */
   static Future<List<Language>> getAllLanguages()
   {
     APIHelper client = new APIHelper(".json");
@@ -24,23 +32,19 @@ class LanguageDao
     return ret;
   }
   
+  /**
+   * Calls the API to get a list of "active" languages. Active languages are defined as languages for which
+   * there are currently tasks available.
+   * 
+   * Returns a [Future] whose value will be a [List] of [Language] objects representing the active
+   * languages on successful completion. 
+   */
+  //TODO: This doesn't need to be List<dynamic>, does it?
   static Future<List<dynamic>> getActiveLanguages()
   {
     APIHelper client = new APIHelper(".json");
     Future<List<dynamic>> languages = client.call("Language", "v0/languages/getActiveLanguages", 
       "GET", "", new Map())
-      /*.then((String proto) {
-      List<dynamic> activeLangs = new List<dynamic>();
-      var SolasMatch = client.getJSProtoContext();
-      var protoList;
-      try {
-        protoList = SolasMatch.ProtoList.decode(proto);  //This doesn't work
-      } catch (e) {
-        print("ERROR: " + e.toString());
-      }
-      protoList.forEach((String protoLang) {
-        activeLangs.add(SolasMatch.Language.decode(protoLang));
-      });*/
       .then((HttpRequest response) {
       List<Language> activeLangs = new List<Language>();
       if (response.status < 400) {
@@ -61,6 +65,13 @@ class LanguageDao
     return languages;
   }
   
+  /**
+   * Calls the API to get a list of active source languages; languages which are source languages of currently
+   * available tasks.
+   * 
+   * Returns a [Future] whose value will be a [List] of [Language] objects representing the active source
+   * languages.
+   */
   static Future<List<Language>> getActiveSourceLanguages()
   {
     APIHelper client = new APIHelper(".json");
@@ -86,6 +97,13 @@ class LanguageDao
     return languages;
   }
   
+  /**
+   * Calls the API to get a list of active target languages; languages which are target languages of currently
+   * available tasks.
+   * 
+   * Returns a [Future] whose value will be a [List] of [Language] objects representing the active target
+   * languages.
+   */
   static Future<List<Language>> getActiveTargetLanguages()
   {
     APIHelper client = new APIHelper(".json");
@@ -110,18 +128,4 @@ class LanguageDao
         });
     return languages;
   }
-  
-  // This works
-  /*static Future<dynamic> getLanguage(int id)
-  {
-    APIHelper client = new APIHelper(".proto");
-    Future<dynamic> language = client.call("Language", "v0/languages/$id", "GET")
-        .then((String proto)
-            {
-              var SolasMatch = client.getJSProtoContext();
-              var lang = SolasMatch.Language.decode(proto);
-              return lang;
-            });
-    return language;
-  }*/
 }

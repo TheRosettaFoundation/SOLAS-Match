@@ -1,7 +1,15 @@
 part of SolasMatchDart;
 
+/**
+ * Class containing methods to access [Organisation]-related data through the API.
+ */
 class OrgDao
 {
+  /**
+   * Calls the API to get the [Organisation] object corresponding to the given [id].
+   * 
+   * Returns a [Future] whose value will be an [Organisation] object with the given [id].
+   */
   static Future<Organisation> getOrg(int id)
   {
     APIHelper client = new APIHelper(".json");
