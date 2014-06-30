@@ -1065,7 +1065,7 @@
 	<string name="faq_74">After this, volunteers can claim any of the segments you have uploaded!</string>
     <string name="faq_75">I have finished proofreading the translation. Do I upload a clean file or one with track changes?</string>
     <string name="faq_76">Once you have finished proofreading the translated text, you can upload a clean file on Trommons.</string>
-	<string name="faq_77">To make suggestions/comments, please use the ‘provide a review’ function on the project upload page.</string>
+	<string name="faq_77">To make suggestions/comments, please use the ‘provide feedback’ function on the project upload page.</string>
     <string name="faq_terms_list">Solas Match Terminology</string>
     <string name="faq_task">Task:</string>
     <string name="faq_78">A task is a piece of work to be carried out within a project.</string>
