@@ -19,4 +19,6 @@
 <claimed-tasks-stream userid="{$thisUser->getId()}" tasksperpage="10"></claimed-tasks-stream>
 </div>
 <br/>
+<div style="float:left">
 {include file='footer.tpl'}
+</div>

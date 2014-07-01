@@ -214,8 +214,9 @@ class ClaimedTasksStream extends PolymerElement
   {
     int len = filteredTasks.length;
     int offset = currentPage * limit;
-    
+    DivElement paginationDiv = this.shadowRoot.querySelector('#paginationDiv');
     List<Task> subset;
+    
     tasks.clear();
     projectMap.clear();
     orgMap.clear();
@@ -236,6 +237,8 @@ class ClaimedTasksStream extends PolymerElement
         this.addTask(task);
       });
       this.updatePagination();
+      //Display pagination buttons again if they were previously hidden.
+      paginationDiv.style.display = 'block';
       Timer.run(() {
         AnchorElement a = this.shadowRoot.querySelector("#pagination_pages");
         a.children.clear();
@@ -245,8 +248,12 @@ class ClaimedTasksStream extends PolymerElement
         );
       });
     } else {
-      ParagraphElement pElem = this.shadowRoot.querySelector('#noTaskText');
-      pElem.text = localisation.getTranslation("claimed_tasks_no_tasks_matching_filters");
+      Timer.run(() {
+        ParagraphElement pElem = this.shadowRoot.querySelector('#noTaskText');
+        pElem.text = localisation.getTranslation("claimed_tasks_no_tasks_matching_filters");
+        //There are no tasks showing, ergo no need to show pagination buttons.
+        paginationDiv.style.display = 'none';
+      });
     }
   }
   
