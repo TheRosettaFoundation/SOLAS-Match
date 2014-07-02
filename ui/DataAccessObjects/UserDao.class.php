@@ -311,11 +311,12 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function unclaimTask($userId, $taskId)
+    public function unclaimTask($userId, $taskId, $feedback)
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tasks/$taskId";
-        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE, $feedback);
+        error_log("IN UI DAO RET IS $ret .... AND FEEDBACK IS $feedback");
         return $ret;
     }
 

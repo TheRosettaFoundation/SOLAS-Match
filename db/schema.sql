@@ -396,7 +396,6 @@ CREATE TABLE IF NOT EXISTS `TaskClaims` (
 
 -- Data exporting was unselected.
 
-
 -- Dumping structure for table SolasMatch.TaskFileVersions
 
 CREATE TABLE IF NOT EXISTS `TaskFileVersions` (
@@ -447,7 +446,6 @@ CREATE TABLE IF NOT EXISTS `TaskReviews` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-
 
 -- Dumping structure for table Solas-Match-Test.Tasks
 CREATE TABLE IF NOT EXISTS `Tasks` (
@@ -546,7 +544,20 @@ REPLACE INTO `TaskTypes` (`id`, `name`) VALUES
 	(3, "Proofreading"),
 	(4, "Desegmentation");
 
-
+-- Structure of table TaskUnclaims
+CREATE TABLE IF NOT EXISTS `TaskUnclaims` (
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `task_id` BIGINT(20) UNSIGNED NOT NULL,
+  `user_id` INT(11) UNSIGNED NOT NULL,
+  `unclaim-comment` VARCHAR(4096),
+  `unclaimed-time` DATETIME NOT NULL,
+  `task_is_archived` BIT(1) DEFAULT 0 NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `Tasks` (`task_id`, `user_id`, `unclaimed-time`),
+  KEY `FK_task_unclaim_user` (`user_id`),
+  CONSTRAINT `FK_task_unclaim_task` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  CONSTRAINT `FK_task_unclaim_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Dumping structure for table Solas-Match-Test.UserBadges
 CREATE TABLE IF NOT EXISTS `UserBadges` (
@@ -961,6 +972,9 @@ BEGIN
 	
 			VALUES
 			(tID, @`version`,@`filename`,@`contentType`,@`userIdClaimed`,uID,@`prerequisites`,@`userIdTaskCreator`,@`uploadTime`,NOW());
+            IF EXISTS(SELECT 1 FROM TaskUnclaims WHERE task_id = tID) THEN
+                UPDATE TaskUnclaims tuc SET tuc.task_is_archived = 1 WHERE tuc.task_id = tID;
+            END IF;
 		COMMIT;
 	   select 1 as result;
    else
@@ -4057,12 +4071,13 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.unClaimTask
 DROP PROCEDURE IF EXISTS `unClaimTask`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `unClaimTask`(IN `tID` INT, IN `uID` INT, IN `unclaimByAdmin` BIT(1))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `unClaimTask`(IN `tID` INT, IN `uID` INT, IN `userFeedback` VARCHAR(4096), IN `unclaimByAdmin` BIT(1))
 BEGIN
 	if EXISTS(select 1 from TaskClaims tc where tc.task_id=tID and tc.user_id=uID) then
 		START TRANSACTION;
       delete from TaskClaims where task_id=tID and user_id=uID;
       insert into TaskTranslatorBlacklist (task_id,user_id, revoked_by_admin) values (tID,uID,unclaimByAdmin);
+      INSERT INTO TaskUnclaims (id, task_id, user_id, `unclaim-comment`, `unclaimed-time`) VALUES (NULL, tID, uID, userFeedback, NOW());
       update Tasks set `task-status_id`=2 where id = tID;
       COMMIT;
 		select 1 as result;

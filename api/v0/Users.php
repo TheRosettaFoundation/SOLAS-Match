@@ -73,7 +73,7 @@ class Users
                         );
                         
                         $app->delete(
-                            '/:taskId/',
+                            '/:taskId(:format)/',
                             '\SolasMatch\API\Lib\Middleware::authUserOrOrgForTask',
                             '\SolasMatch\API\V0\Users::userUnClaimTask'
                         );
@@ -535,12 +535,14 @@ class Users
 
     public static function userUnClaimTask($userId, $taskId, $format = ".json")
     {
-        if (!is_numeric($taskId) && strstr($taskId, '.')) {
+        if (strstr($taskId, '.')) {
             $taskId = explode('.', $taskId);
             $format = '.'.$taskId[1];
             $taskId = $taskId[0];
         }
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::unClaimTask($taskId, $userId), null, $format);
+        $feedback = API\Dispatcher::getDispatcher()->request()->getBody();
+        error_log("In V0 API FEEDBACK IS: $feedback");
+        API\Dispatcher::sendResponse(null, DAO\TaskDao::unClaimTask($taskId, $userId, $feedback), null, $format);
         Lib\Notify::sendTaskRevokedNotifications($taskId, $userId);
     }
 

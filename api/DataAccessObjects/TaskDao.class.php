@@ -572,14 +572,15 @@ class TaskDao
       @param int $userId is the id of the User
       @return Returns 1 on success, 0 on failure
     */
-    public static function unClaimTask($taskId, $userId, $revokeByAdmin = false)
+    public static function unClaimTask($taskId, $userId, $userFeedback = null, $revokeByAdmin = false)
     {
-        $args = Lib\PDOWrapper::cleanse($taskId).",".
-            Lib\PDOWrapper::cleanse($userId);
+        $args = Lib\PDOWrapper::cleanse($taskId).", ".
+            Lib\PDOWrapper::cleanse($userId).", ".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($userFeedback);
         if ($revokeByAdmin) {
-            $args .= ",1";
+            $args .= ", 1";
         } else {
-            $args .= ",0";
+            $args .= ", 0";
         }
         $ret = Lib\PDOWrapper::call("unClaimTask", $args);
         return $ret[0]['result'];

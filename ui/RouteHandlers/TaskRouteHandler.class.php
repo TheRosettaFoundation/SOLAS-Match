@@ -1488,7 +1488,7 @@ class TaskRouteHandler
                 if ($post['feedback'] != '') {
                     $taskDao->sendUserFeedback($task_id, $claimant->getId(), $post['feedback']);
                     if (isset($post['revokeTask']) && $post['revokeTask']) {
-                        $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id);
+                        $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id, $post['feedback']);
                         if ($taskRevoke) {
                             $app->flash(
                                 "success",
