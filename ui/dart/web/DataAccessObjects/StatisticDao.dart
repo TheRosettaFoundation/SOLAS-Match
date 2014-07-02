@@ -1,7 +1,16 @@
 part of SolasMatchDart;
 
+/**
+ * Class containing methods to access [Statistic]-related data through the API.
+ */
 class StatisticDao
 {
+  /**
+   * Calls the API to get a [Statistic] object corresponding to the given [statName].
+   * 
+   * Returns a [Future] whose value will be a [Statistic] object representing to the statistic corresponding to
+   * [statName].
+   */
   static Future<Statistic> getStatistic(String statName)
   {
     APIHelper client = new APIHelper(".json");
@@ -20,6 +29,11 @@ class StatisticDao
     return ret;
   }
   
+  /**
+   * Calls the API to get a count of the successful logins from [startDate] to [endDate].
+   * 
+   * Returns a [Future] whose value will be an [int] storing the login count.
+   */
   static Future<int> getLoginCount(String startDate, String endDate)
   {
     APIHelper client = new APIHelper('.json');
