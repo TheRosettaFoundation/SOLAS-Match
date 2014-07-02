@@ -2,6 +2,9 @@
 
 {assign var="task_id" value=$task->getId()}
 
+    <div class="alert alert-info" style="margin-top:20px">
+        {Localisation::getTranslation('task_user_feedback_provide_direct_feedback')} {Localisation::getTranslation('task_user_feedback_if_accidental_claim')}
+    </div>
     <h1 class="page-header">   
         {if $task->getTitle() != ''}
             {$task->getTitle()}
@@ -114,11 +117,11 @@
         <strong>{Localisation::getTranslation('task_user_feedback_organisation_feedback')}</strong><hr/>    
         <form id="taskUserFeedback" enctype="application/x-www-form-urlencoded" method="post" 
                 action="{urlFor name="task-user-feedback" options="task_id.{$task->getId()}"}" accept-charset="utf-8">
-            <textarea wrap="soft" style="width: 99%" maxlength="4096" rows="10" name="feedback" placeholder="{Localisation::getTranslation('task_user_feedback_0')} {Localisation::getTranslation('task_user_feedback_1')}."></textarea>
+            <textarea wrap="soft" style="width: 99%" maxlength="4096" rows="8" name="feedback"></textarea>
             <p style="margin-bottom:30px;"/> 
 
             <span style="float: left; position: relative;">
-                <button type="submit" value="1" name="revokeTask" class="btn btn-inverse">
+                <button type="submit" value="1" name="revokeTask" class="btn btn-primary">
                     <i class="icon-remove icon-white"></i> {Localisation::getTranslation('task_user_feedback_2')}
                 </button>
             </span>

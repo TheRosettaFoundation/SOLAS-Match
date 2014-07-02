@@ -651,8 +651,8 @@
 	<string name="archived_tasks_0">A list of tasks you have worked on in the past.</string>
 
 	<string name="claimed_tasks_claimed_tasks">Claimed Tasks</string>
-    <string name="claimed_tasks_claimed_tasks_2">%s's Claimed Tasks</string>
-	<string name="claimed_tasks_0">A list of tasks you are currently working on.</string>
+    <string name="claimed_tasks_users_claimed_tasks">%s's Claimed Tasks</string>
+	<string name="claimed_tasks_a_list_of_tasks">A list of tasks you are currently working on.</string>
     <string name="claimed_tasks_ordering">Ordering</string>
     <!-- Strings for ordering selection in claimed tasks filter -->
     <string name="claimed_tasks_ordering_created_asc">Created Time, Newest First</string>
@@ -663,6 +663,8 @@
     <string name="claimed_tasks_ordering_title_desc">Task Title (Z-A)</string>
     <!-- End ordering selection strings -->
     <string name="claimed_tasks_task_reviews">Task Reviews</string>
+    <string name="claimed_tasks_unclaim_task">Unclaim Task</string>
+    <string name="claimed_tasks_submit_completed_task">Submit Completed Task</string>
 	<string name="claimed_tasks_no_active_tasks_available">No Active Tasks available!</string>
     <string name="claimed_tasks_no_tasks_matching_filters">You do not have any claimed tasks which match the filter options you selected.</string>
 
@@ -864,8 +866,8 @@
 	<string name="task_uploaded_find_a_new_task">Find A New Task</string>
 
 	<string name="task_user_feedback_organisation_feedback">Organisation Feedback</string>
-	<string name="task_user_feedback_0">You can provide direct feedback to the organisation who owns this task here.</string>
-	<string name="task_user_feedback_1">If you have accidentally claimed this task or are unable to complete it, you can also provide the reasons for this decision in this form</string>
+	<string name="task_user_feedback_provide_direct_feedback">You can provide direct feedback to the organisation who owns this task here.</string>
+	<string name="task_user_feedback_if_accidental_claim"> Alternatively, if you have accidentally claimed this task or are unable to complete it, you can also provide the reasons for this decision and unclaim the task in this form.</string>
 	<string name="task_user_feedback_2">Unclaim Task and Submit Feedback</string>
     <string name="task_user_feedback_3">The task <a href="%s">%s</a> has been successfully unclaimed. The organisation will be notified by e-mail and provided with your feedback.</string>
     <string name="task_user_feedback_4">Unable to unclaim the task <a href="%s">%s</a>. Please try again later.</string>
