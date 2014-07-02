@@ -21,7 +21,6 @@ class ClaimedTasksStream extends PolymerElement
   
   //observable variables to store info about tasks, how to display them, etc
   List<Task> filteredTasks;
-  List<Task> filteredTasksBackup;
   @observable List<Task> tasks;
   @observable Map<int, String> taskAges;
   @observable Map<int, Project> projectMap;
@@ -50,7 +49,6 @@ class ClaimedTasksStream extends PolymerElement
     currentDateTime = new DateTime.now();
     tasks = toObservable(new List<Task>());
     filteredTasks = new List<Task>();
-    filteredTasksBackup = new List<Task>();
     taskAges = toObservable(new Map<int, String>());
     projectMap = toObservable(new Map<int, Project>());
     orgMap = toObservable(new Map<int, Organisation>());
@@ -228,7 +226,7 @@ class ClaimedTasksStream extends PolymerElement
         lastPage = (len / limit).ceil();
       } else {
         //Handle single page result set
-        lastPage = currentPage;
+        lastPage = currentPage + 1;
       }
 
       subset = filteredTasks.skip(offset).take(limit).toList();

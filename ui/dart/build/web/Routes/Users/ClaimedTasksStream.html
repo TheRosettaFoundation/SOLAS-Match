@@ -76,9 +76,29 @@
           <p id="deadline_{{task.id}}"></p>
           <p id="parent_{{task.id}}"></p>
           <p>
+            <template if="{{task.taskStatus == 3 && (task.taskType == 3 || task.taskType == 2) }}">
+              <a href="{{siteAddress}}task/{{task.id}}/simple-upload" class="btn btn-small btn-primary">
+                {{localisation.getTranslation("claimed_tasks_submit_completed_task")}}
+              </a>
+            </template>
+            <template if="{{task.taskStatus == 3 && task.taskType == 1}}">
+              <a href="{{siteAddress}}task/{{task.id}}/segmentation" class="btn btn-small btn-primary">
+                {{localisation.getTranslation("claimed_tasks_submit_completed_task")}}
+              </a>
+            </template>
+            <template if="{{task.taskStatus == 3 && task.taskType == 4}}">
+              <a href="{{siteAddress}}task/{{task.id}}/desegmentation" class="btn btn-small btn-primary">
+                {{localisation.getTranslation("claimed_tasks_submit_completed_task")}}
+              </a>
+            </template>    
             <a href="{{siteAddress}}user/task/{{task.id}}/reviews" class="btn btn-small btn-primary">
               {{localisation.getTranslation("claimed_tasks_task_reviews")}}
             </a>
+            <template if="{{task.taskStatus == 3}}">
+              <a href="{{siteAddress}}task/{{task.id}}/user-feedback" class="btn btn-small btn-primary">
+                {{localisation.getTranslation("claimed_tasks_unclaim_task")}}
+              </a>
+            </template>
           </p>
           <br/>
         </div>
