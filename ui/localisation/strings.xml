@@ -44,6 +44,7 @@
 	<string name="common_archive">Archive</string>
     <string name="common_archived_tasks">Archived Tasks</string>
 	<string name="common_add_user">Add User</string>
+    <string name="common_any_task_status">Any Task Status</string>
 	<string name="common_impact">Impact</string>
 	<string name="common_tags">Tags</string>
 	<string name="common_source_language">Source Language</string>
@@ -194,6 +195,7 @@
     <string name="common_original_task_file">original task file</string>
     <string name="common_latest_task_file_version">latest task file version</string>
 
+    <string name="common_task_status">Task Status</string>
     <string name="common_download_file">Download File</string>
     <string name="common_can_you_open_file">Can you open the file on your computer?</string>
     <string name="common_part_of_for">Part of <a href="%s">%s</a> for <a href="%s">%s</a></string> 
@@ -651,8 +653,18 @@
 	<string name="claimed_tasks_claimed_tasks">Claimed Tasks</string>
     <string name="claimed_tasks_claimed_tasks_2">%s's Claimed Tasks</string>
 	<string name="claimed_tasks_0">A list of tasks you are currently working on.</string>
+    <string name="claimed_tasks_ordering">Ordering</string>
+    <!-- Strings for ordering selection in claimed tasks filter -->
+    <string name="claimed_tasks_ordering_created_asc">Created Time, Newest First</string>
+    <string name="claimed_tasks_ordering_created_desc">Created Time, Oldest First</string>
+    <string name="claimed_tasks_ordering_deadline_asc">Deadline, Soonest First</string>
+    <string name="claimed_tasks_ordering_deadline_desc">Deadline, Latest First</string>
+    <string name="claimed_tasks_ordering_title_asc">Task Title (A-Z)</string>
+    <string name="claimed_tasks_ordering_title_desc">Task Title (Z-A)</string>
+    <!-- End ordering selection strings -->
     <string name="claimed_tasks_task_reviews">Task Reviews</string>
 	<string name="claimed_tasks_no_active_tasks_available">No Active Tasks available!</string>
+    <string name="claimed_tasks_no_tasks_matching_filters">You do not have any claimed tasks which match the filter options you selected.</string>
 
 	<string name="task_desegmentation_desegmentation_task_details">Desegmentation task details.</string>
 	<string name="task_desegmentation_download">Download</string>

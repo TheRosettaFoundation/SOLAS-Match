@@ -15,6 +15,10 @@
     </h1>
 </div>
 
+<div style="max-width: 70%; overflow-wrap: break-word; word-break:break-all;">
 <claimed-tasks-stream userid="{$thisUser->getId()}" tasksperpage="10"></claimed-tasks-stream>
-
+</div>
+<br/>
+<div style="float:left">
 {include file='footer.tpl'}
+</div>

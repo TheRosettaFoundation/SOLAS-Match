@@ -1,5 +1,44 @@
-<polymer-element name="claimed-tasks-stream" lightdom>
+<polymer-element name="claimed-tasks-stream" css="resources/bootstrap/css/bootstrap.min.css resources/css/solas.css">
   <template>
+    <h3>{{localisation.getTranslation("index_filter_available_tasks")}}</h3>
+    <div id="filter-container" style="font-weight:bold; vertical-align:middle">
+      <div class="filter-block">
+        <div class="filter-title">{{localisation.getTranslation("common_task_type")}}</div>
+        <div class="filter-options">
+          <select name="taskTypes" selectedIndex="{{selectedTaskTypeFilter}}"> 
+            <option template repeat="{{key in taskTypeIndexes}}" value="{{key.toString()}}">
+              {{taskTypes[key]}}
+            </option>
+          </select>
+        </div>
+      </div>
+            
+      <div class="filter-block">
+        <div class="filter-title">{{localisation.getTranslation("common_task_status")}}</div>
+        <div class="filter-options">
+          <select name="taskStatusFilter" selectedIndex="{{selectedStatusFilter}}">
+            <option template repeat="{{key in statusFilterIndexes}}" value="{{key.toString()}}">
+              {{statusFilters[key]}}
+            </option>
+          </select>
+        </div>
+      </div>
+            
+      <div class="filter-block">
+        <div class="filter-title">{{localisation.getTranslation("claimed_tasks_ordering")}}</div>
+        <div class="filter-options">
+          <select name="ordering" selectedIndex="{{selectedOrder}}">
+            <option template repeat="{{key in taskOrderingIndexes}}" value="{{key.toString()}}">
+              {{taskOrderings[key]}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <button value="Filter" class="btn btn-primary" on-click="{{filterStream}}">
+        <i class="icon-refresh icon-white"></i> {{localisation.getTranslation("index_filter_task_stream")}}
+      </button>
+    </div>
+    <div id="claimed-tasks">
     <template if="{{tasks.length > 0}}">
       <template repeat="{{task in tasks}}">
         <div class="task" style="word-break: break-all; overflow-wrap: break-word;">
@@ -41,14 +80,14 @@
               {{localisation.getTranslation("claimed_tasks_task_reviews")}}
             </a>
           </p>
-          <br />
+          <br/>
         </div>
       </template>
     </template>
     <template if="{{tasks.length == 0}}">
-      <p>{{localisation.getTranslation("index_no_tasks_available")}}</p>
+      <p id='noTaskText'>{{localisation.getTranslation("index_no_tasks_available")}}</p>
     </template>
-    <div class="pagination pagination-centered">
+    <div id="paginationDiv" class="pagination pagination-centered">
       <ul>
         <li>
           <a id="firstPage" title="First">&lt;&lt;</a>
@@ -66,6 +105,7 @@
           <a id="lastPage" title="Last">&gt;&gt;</a>
         </li>
       </ul>
+    </div>
     </div>
   </template>
   <script type="application/dart" src="ClaimedTasksStream.dart"></script>

@@ -2596,7 +2596,7 @@ BEGIN
     if sourceLanguage = '' then set sourceLanguage = null; end if;
     if targetLanguage = '' then set targetLanguage = null; end if;
 
-    (SELECT id,project_id,title,`word-count`, 
+    (SELECT id,project_id,title,`word-count`,
             (SELECT `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`, 
             (SELECT code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
             (SELECT `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
@@ -2615,7 +2615,7 @@ BEGIN
         AND (taskType is null or t.`task-type_id` = taskType)
         AND (sourceLanguage is null or t.`language_id-source` = (SELECT l.id FROM Languages l WHERE l.code = sourceLanguage))
         AND (targetLanguage is null or t.`language_id-target` = (SELECT l.id FROM Languages l WHERE l.code = targetLanguage))
-        AND (strict = 0 
+        AND (strict = 0
             OR ((t.`language_id-source` IN 
                         (SELECT language_id FROM Users WHERE id =  uID)
                     OR t.`language_id-source` IN 
@@ -2628,6 +2628,47 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getFilteredUserClaimedTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getFilteredUserClaimedTasks`(IN `userID` INT, IN `lim` INT, IN `offset` INT, IN `taskType` INT, IN `taskStatus` INT, IN `orderBy` INT)
+
+    READS SQL DATA
+
+BEGIN
+    -- if limit is null, set to maxBigInt unsigned
+    if lim = '' or lim is null then set lim = ~0; end if;
+    if offset='' or offset is null then set offset = 0; end if;
+
+    if taskType = 0 then set taskType = null; end if;
+    if taskStatus = 0 then set taskStatus = null; end if;
+
+    (SELECT id,project_id,title,`word-count`,
+            (SELECT `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`,
+            (SELECT code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`,
+            (SELECT `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`,
+            (SELECT code from Languages l where l.id = t.`language_id-target`) as `targetLanguageCode`,
+            (SELECT `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`,
+            (SELECT code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`,
+            (SELECT `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`,
+            (SELECT code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`,
+            comment, `task-type_id`, `task-status_id`, published, deadline, `created-time`
+        FROM Tasks t
+        WHERE t.id IN (SELECT tc.task_id FROM TaskClaims tc)
+        AND (taskType is null or t.`task-type_id` = taskType)
+        AND (taskStatus is null or t.`task-status_id` = taskStatus)
+        ORDER BY
+            CASE
+             WHEN orderBy = 0 THEN `created-time`
+             WHEN orderBy = 2 THEN deadline
+             WHEN orderBy = 4 THEN title
+            END ASC
+          , CASE
+             WHEN orderBy = 1 THEN `created-time`
+             WHEN orderBy = 3 THEN deadline
+             WHEN orderBy = 5 THEN title
+            END DESC);
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.getUserTrackedTasks
 DROP PROCEDURE IF EXISTS `getUserTrackedTasks`;

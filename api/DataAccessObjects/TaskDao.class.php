@@ -438,7 +438,6 @@ class TaskDao
         $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
         $result = Lib\PDOWrapper::call("getUserTopTasks", $args);
         if ($result) {
-
             $ret = array();
             foreach ($result as $row) {
                  $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
@@ -656,6 +655,32 @@ class TaskDao
         }
     }
 
+    public static function getFilteredUserClaimedTasks(
+            $userId,
+            $orderBy,
+            $limit = null,
+            $offset = 0,
+            $taskType = null,
+            $taskStatus = null
+    ) {
+        $ret = null;
+        
+        $args = Lib\PDOWrapper::cleanse($userId).', ';
+        $args .= Lib\PDOWrapper::cleanseNull($limit).', ';
+        $args .= Lib\PDOWrapper::cleanse($offset).', ';
+        $args .= Lib\PDOWrapper::cleanseNull($taskType).', ';
+        $args .= Lib\PDOWrapper::cleanseNull($taskStatus).', ';
+        $args .= Lib\PDOWrapper::cleanse($orderBy);
+        
+        $result = Lib\PDOWrapper::call("getFilteredUserClaimedTasks", $args);
+        if ($result) {
+            $ret = array();
+            foreach ($result as $row) {
+                $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
+            }
+        }
+        return $ret;
+    }
     //! Get a count of the User's claimed Tasks
     /*!
       Get the number of Tasks a User has claimed
