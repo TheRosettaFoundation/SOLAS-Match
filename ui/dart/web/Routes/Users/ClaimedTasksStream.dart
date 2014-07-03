@@ -99,9 +99,9 @@ class ClaimedTasksStream extends PolymerElement
     taskStatuses[3] = localisation.getTranslation("common_in_progress");
     taskStatuses[4] = localisation.getTranslation("common_complete");
     
-    statusFilters[0] = localisation.getTranslation("common_any_task_status");
+    statusFilters[0] = localisation.getTranslation("common_in_progress");
     statusFilterIndexes.add(0);
-    statusFilters[1] = localisation.getTranslation("common_in_progress");
+    statusFilters[1] = localisation.getTranslation("common_any_task_status");
     statusFilterIndexes.add(1);
     statusFilters[2] = localisation.getTranslation("common_complete");
     statusFilterIndexes.add(2);
@@ -432,14 +432,23 @@ class ClaimedTasksStream extends PolymerElement
     }
     
       //Get all tasks matching the filter options, store them in and then filteredTasks and go to the first page
-      //of the ClaimedTasksStream
+      //of the ClaimedTasksStream. The switch statement maps the UI filter values to the values the API expects.
+      int taskStatus;
+      switch (selectedStatusFilter) {
+        case 0 : taskStatus = 3;
+        break;
+        case 1 : taskStatus = 0;
+        break;
+        case 2 : taskStatus = 4;
+        break;
+      }
       UserDao.getFilteredUserClaimedTasks(
           userid,
           selectedOrder,
           0,
           0,
           selectedTaskTypeFilter, 
-          selectedStatusFilter)
+          taskStatus)
         .then((List<Task> userTasks) {
           filteredTasks = userTasks;
           isFiltered = true;
