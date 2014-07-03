@@ -1,7 +1,17 @@
 part of SolasMatchDart;
 
+/**
+ * Class containing methods for modifying and accessing [User]-related data.
+ */
 class UserDao
 {
+  /**
+   * Calls the API to get the [User] identified by the given [id].
+   * 
+   * Returns a [Future] whose value will be a [User] object representing the user identified by [id] if the
+   * API sent back a response code less than 400, otherwise prints a [String] to the browser console 
+   * showing the response code and status text.
+   */
   static Future<User> getUser(int id)
   {
     APIHelper client = new APIHelper(".json");
@@ -21,6 +31,13 @@ class UserDao
     return ret;
   }
   
+  /**
+   * Calls the API to delete the user with the given [userId] from the database.
+   * 
+   * Returns a [Future] whose value will be a [bool], true if the API sent back a response code less than 400,
+   * false otherwise, coupled with a print to the browser console of a [String] showing the response code
+   * and status text.
+   */
   static Future<bool> deleteUser(int userId)
   {
     APIHelper client = new APIHelper(".json");
@@ -35,6 +52,13 @@ class UserDao
         });
   }
   
+  /**
+   * Calls the API to get the [UserPersonalInformation] of the user identified by [userId].
+   * 
+   * Returns a [Future] whose value will be the [UserPersonalInformation] of the user identified by [userId]
+   * if the API sent back a response code less than 400, otherwise prints a [String] to the browser console
+   * showing the response code and status text.
+   */
   static Future<UserPersonalInformation> getUserPersonalInfo(int userId)
   {
     APIHelper client = new APIHelper(".json");
@@ -56,6 +80,14 @@ class UserDao
     return ret;
   }
   
+  /**
+   * Calls the API to get a [List] of the secondary languages of the user identified by [userId], as [Locale]
+   * objects.
+   * 
+   * Returns a [Future] whose value will be a [List] of [Locale] objects, representing the user's secondary
+   * languages if the API sent back a response code less than 400, otherwise prints a [String] to the 
+   * browser console showing the response code and status text.
+   */
   static Future<List<Locale>> getSecondaryLanguages(int userId)
   {
     APIHelper client = new APIHelper(".json");
@@ -78,6 +110,13 @@ class UserDao
     return ret;
   }
   
+  /**
+   * Calls the API to get a [List] of the [Badge]s the user identified by [userId] has been assigned.
+   * 
+   * Returns a [Future] whose value will be a [List] of the user's badges if the API sent back a 
+   * response code less than 400, otherwise prints a [String] to the browser console showing the
+   * response code and status text.
+   */
   static Future<List<Badge>> getUserBadges(int userId)
   {
     APIHelper client = new APIHelper(".json");
@@ -100,6 +139,13 @@ class UserDao
     return ret;
   }
   
+  /**
+   * Calls the API to get a count of the [Task]s the user identified by [userId] has claimed.
+   * 
+   * Returns a [Future] whose value will be an [int] storing the count of the user's claimed tasks. If for some
+   * reason the value returned from the API cannot be parsed as an [int] then a failure message will be printed
+   * to the browser console and the count will be returned as 0.
+   */
   static Future<int> getUserClaimedTasksCount(int userId)
   {
     APIHelper client = new APIHelper(".json");
@@ -118,8 +164,11 @@ class UserDao
   }
   
   /**
-   * Returns a list of Tasks, up to a maximum of [limit] (default 0) that the user identified by [userId], starting from
-   * the specified [offset] (default 0).
+   * Calls the API to get a [List] of [Task]s that have been claimed by the user identified by [userId].
+   * 
+   * Returns a [Future] whose value will be a [List] of [Task]s, optionally limited by [limit] (default 0), that 
+   * the user identified by [userId] has claimed, starting from the specified [offset] (default 0) if the 
+   * API sent back a response code less than 400.
    */
   static Future<List<Task>> getUserTasks(int userId, [int offset = 0, int limit = 0])
   {
@@ -143,6 +192,16 @@ class UserDao
         });
   }
   
+  /**
+   * Calls the API to get a [List] of [Task]s that have been claimed by the user identified by [userId],
+   * filtered by [taskType] and [taskStatus], ordering determined by [orderBy], starting from specified
+   * [offset] (default 0) and optionally limited by [limit] (default 10).
+   * 
+   * Returns a [Future] whose value will be a [List] of [Task]s that are the tasks the user has claimed which
+   * match the values provided for the aforementioned filters and other parameters if the API sent back a 
+   * response code less than 400, otherwise prints a [String] to the browser console showing the
+   * response code and status text.
+   */
   static Future<List<Task>> getFilteredUserClaimedTasks(int userId, [int orderBy = 0, int limit = 10,
                                                         int offset = 0, int taskType = 0, int taskStatus = 0])
   {
@@ -171,6 +230,14 @@ class UserDao
     return tasks;
   }
   
+  /**
+   * Calls the API to update stored information about the [User] represented by [user]; information that is 
+   * not stored as part of [UserPersonalInformation], e.g. display name.
+   * 
+   * Returns a [Future] whose value will be a [bool], true if the API sent back a response code less than 400,
+   * false otherwise, coupled with a print to the browser console of a [String] showing the response code
+   * and status text.
+   */
   static Future<bool> saveUserDetails(User user)
   {
     APIHelper client = new APIHelper(".json");
@@ -185,6 +252,13 @@ class UserDao
       });
   }
   
+  /**
+   * Calls the API to save a the data of the [UserPersonalInformation] object [userInfo].
+   * 
+   * Returns a [Future] whose value will be a [bool], true if the API sent back a response code less than 400,
+   * false otherwise, coupled with a print to the browser console of a [String] showing the response code
+   * and status text.
+   */
   static Future<bool> saveUserInfo(UserPersonalInformation userInfo)
   {
     APIHelper client = new APIHelper(".json");
@@ -199,6 +273,14 @@ class UserDao
       });
   }
   
+  /**
+   * Calls the API to save data recording that the user identified by [userId] has been assigned the [Badge]
+   * identified by [badgeId].
+   * 
+   * Returns a [Future] whose value will be a [bool], true if the API sent back a response code less than 400,
+   * false otherwise, coupled with a print to the browser console of a [String] showing the response code
+   * and status text.
+   */  
   static Future<bool> addUserBadge(int userId, int badgeId)
   {
     APIHelper client = new APIHelper(".json");
@@ -213,6 +295,14 @@ class UserDao
       });
   }
   
+  /**
+   * Calls the API to delete the data recording that the user identified by [userId] had been assigned 
+   * the [Badge] identified by [badgeId].
+   * 
+   * Returns a [Future] whose value will be a [bool], true if the API sent back a response code less than 400,
+   * false otherwise, coupled with a print to the browser console of a [String] showing the response code
+   * and status text.
+   */ 
   static Future<bool> removeUserBadge(int userId, int badgeId)
   {
     APIHelper client = new APIHelper(".json");
@@ -227,6 +317,14 @@ class UserDao
         });
   }
   
+  /**
+   * Calls the API to record that the user identified by [userId] has added the language represented by the
+   * [Locale] object [locale] as a secondary language on their profile.
+   * 
+   * Returns a [Future] whose value will be a [bool], true if the API sent back a response code less than 400,
+   * false otherwise, coupled with a print to the browser console of a [String] showing the response code
+   * and status text.
+   */ 
   static Future<bool> addSecondaryLanguage(int userId, Locale locale)
   {
     APIHelper client = new APIHelper(".json");
@@ -241,6 +339,14 @@ class UserDao
       });
   }
   
+  /**
+   * Calls the API to delete data, reflecting that the user identified by [userId] has removed the 
+   * language represented by the String pair [languageCode] and [countryCode] from their profile.
+   * 
+   * Returns a [Future] whose value will be a [bool], true if the API sent back a response code less than 400,
+   * false otherwise, coupled with a print to the browser console of a [String] showing the response code
+   * and status text.
+   */ 
   static Future<bool> removeSecondaryLanguage(int userId, String languageCode, String countryCode)
   {
     APIHelper client = new APIHelper(".json");
@@ -255,6 +361,10 @@ class UserDao
         });
   }
   
+  /**
+   * Destroys the current user session, logging the user out. This is presently only used in the event that a
+   * user decides to delete their account.
+   */
   static void destroyUserSession()
   {
     String name = "slim_session";
