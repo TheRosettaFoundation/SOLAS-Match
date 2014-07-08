@@ -73,7 +73,7 @@
 	<string name="common_proofreading_task">Proofreading Task</string>
 	<string name="common_desegmentation_task">Desegmentation Task</string>
 	<string name="common_please_fill_in_all_required_fields">Please fill in all required fields</string>
-    <string name="common_please_correct_errors">Please correct the following errors.</string>
+    <string name="common_please_correct_errors">Please correct the following errors</string>
 	<string name="common_provide_feedback">Provide Feedback</string>
 	<string name="common_here">here</string>
 	<string name="common_create_a_translation_task_for_volunteer_translators_to_pick_up">Create a translation task for volunteer translators to pick up.</string>

@@ -205,37 +205,35 @@ class ProjectCreateForm extends PolymerElement
   void addMoreTargetLanguages()
   {
     if (targetCount < maxTargetLanguages) {
-      TableRowElement targetLanguageRow = new TableRowElement()
-      ..id = "target_row_$targetCount";
-      TableCellElement targetLanguageCell = new TableCellElement();
+      DivElement targetLanguageRow = new DivElement()
+      ..id = "target_row_$targetCount"
+      ..classes.addAll(["target-row", "bottom-line-border"]);
+      DivElement targetLanguageCell = new DivElement()
+      ..classes.addAll(["pull-left", "width-50"]);
       SelectElement targetLanguageSelect = langSelect.clone(true);
       targetLanguageSelect.style.width = "400px";
       targetLanguageSelect.id = "target_language_$targetCount";
       SelectElement targetCountrySelect = countrySelect.clone(true);
       targetCountrySelect.style.width = "400px";
       targetCountrySelect.id = "target_country_$targetCount";
-      TableCellElement targetTaskTypes = new TableCellElement()
-      ..attributes["valign"] = "middle";
 
-      TableElement targetTaskTypesTable = new TableElement();
-      targetTaskTypesTable.style.width="100%";
-      TableRowElement taskTypesRow = new TableRowElement()
-      ..attributes["align"] = "center";
-      TableCellElement segmentationRequired = new TableCellElement()
-      ..attributes["valign"] = "middle";
+      DivElement taskTypesRow = new DivElement()
+      ..id = "task-type-checkboxes"
+      ..classes.addAll(["pull-left", "width-50"]);
+      DivElement segmentationRequired = new DivElement()
+      ..classes.addAll(["pull-left", "proj-task-type-checkbox"]);
       InputElement segmentationCheckbox = new InputElement(type: "checkbox")
       ..title = localisation.getTranslation("project_create_10")
       ..id = "segmentation_$targetCount"
       ..onClick.listen((event) => segmentationClicked(event.target));
-      TableCellElement translationRequired = new TableCellElement()
-      ..attributes["valign"] = "middle";
+      DivElement translationRequired = new DivElement()
+      ..classes.addAll(["pull-left", "proj-task-type-checkbox"]);
       InputElement translationCheckbox = new InputElement(type: "checkbox")
       ..title = localisation.getTranslation("common_create_a_translation_task_for_volunteer_translators_to_pick_up")
       ..id = "translation_$targetCount"
       ..checked = true;
-      translationCheckbox.id ="translation_$targetCount"; 
-      TableCellElement proofreadingRequired = new TableCellElement()
-      ..attributes["valign"] = "middle";
+      DivElement proofreadingRequired = new DivElement()
+      ..classes.addAll(["pull-left", "proj-task-type-checkbox"]);
       InputElement proofreadingCheckbox = new InputElement(type: "checkbox")
       ..title = localisation.getTranslation("common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer")
       ..id = "proofreading_$targetCount"
@@ -250,27 +248,10 @@ class ProjectCreateForm extends PolymerElement
       taskTypesRow.children.add(segmentationRequired);
       taskTypesRow.children.add(translationRequired);
       taskTypesRow.children.add(proofreadingRequired);
-      targetTaskTypesTable.children.add(taskTypesRow);
-      targetTaskTypes.children.add(targetTaskTypesTable);
-      targetLanguageRow.children.add(targetTaskTypes);
-      
-      TableRowElement hrRow = new TableRowElement()
-      ..id = "hr_$targetCount";
-      TableCellElement td = new TableCellElement()
-        ..colSpan = 2;
-      HRElement hr = new HRElement();
-      td.children.add(hr);
-      hrRow.children.add(td);
-      
-      if (targetCount > 0) {
-        TableRowElement lastTarget = this.shadowRoot.querySelector("#target_row_" + (targetCount - 1).toString());
-        lastTarget.parent.insertBefore(targetLanguageRow, lastTarget.nextElementSibling);
-        lastTarget.parent.insertBefore(hrRow, lastTarget.nextElementSibling);
-      } else {
-        TableRowElement targetTitleRow = this.shadowRoot.querySelector("#targetLanguageTitle");
-        targetTitleRow.parent.insertBefore(targetLanguageRow, targetTitleRow.nextElementSibling);
-        targetTitleRow.parent.insertBefore(hrRow, targetTitleRow.nextElementSibling);
-      }
+      targetLanguageRow.children.add(taskTypesRow);
+
+      DivElement targetLangDiv = this.shadowRoot.querySelector("#targetLangSelectDiv")
+      ..children.add(targetLanguageRow);
       
       targetCount++;
       if (targetCount == 5) {
@@ -302,10 +283,8 @@ class ProjectCreateForm extends PolymerElement
   {
     if (targetCount > 1) {
       targetCount--;
-      TableRowElement targetLanguageRow = this.shadowRoot.querySelector("#target_row_$targetCount");
-      TableRowElement hrElement = this.shadowRoot.querySelector("#hr_$targetCount");
+      DivElement targetLanguageRow = this.shadowRoot.querySelector("#target_row_$targetCount");
       targetLanguageRow.remove();
-      hrElement.remove();
       maxTargetsReached = null;
       if (targetCount == 1) {
         ButtonElement removeButton = this.shadowRoot.querySelector("#removeBottomTargetBtn");

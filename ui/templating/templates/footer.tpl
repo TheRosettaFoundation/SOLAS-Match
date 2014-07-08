@@ -1,5 +1,5 @@
             <br/><br/>
-            <div class="well">
+            <div class="well pull-left">
                 <footer>
                     <table>
                         <tr>

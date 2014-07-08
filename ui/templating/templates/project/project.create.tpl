@@ -10,10 +10,8 @@
             </h1>
         </div>           
     </div>  
-    <p style="margin-bottom:20px;"/>
 
     <project-create-form userid="{$user_id}" orgid="{$org_id}" maxfilesize="{$maxFileSize}">
     </project-create-form>
-    <p style="margin-bottom:20px;"></p>
     
 {include file="footer.tpl"}

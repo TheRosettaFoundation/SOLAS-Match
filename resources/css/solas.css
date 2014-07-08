@@ -172,6 +172,99 @@ table{
     margin-right: 10px;
 }
 
+/* Start of CSS related to Project Create page (including loading animation) */
+
+.loadAnim {
+    background-color: rgba(0,0,0,0.5);
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: fixed; 
+    z-index: 10;
+}
+
+.projLoadingSpinner {
+    width: 500px;
+    height: 300px;
+    z-index: 15;
+}
+
+#projFormTop {
+    float: left;
+    width: 100%;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #999996;
+}
+
+#projFormBottom {
+    float: left;
+    width: 100%;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #999996;
+}
+
+#targetLangContainer {
+    float: left;
+    border-bottom: 1px solid #999996;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    padding-bottom: 20px;
+}
+
+#targetLangSelectDiv {
+    width: 100%;
+}
+.projFormTopBlock {
+    float: left;
+    width: 50%;
+}
+
+#projFormBottomBlockLeft {
+    float: left;
+    width: 50%;
+    text-align: left;
+}
+
+#projFormBottomBlockRight {
+    float: left;
+    width: 50%;
+    margin-top: 15px;
+    text-align: center;  
+}
+
+#error-box-top, #error-box-btm {
+    width: 100%;
+    padding: 5px 0px 0px 5px;
+}
+
+.target-row {
+    width: 100%;
+    height: 80px;
+    margin-top: 20px;
+}
+
+#task-type-checkboxes {
+    margin-top: 25px;
+    text-align: center;
+}
+.projFormInput {
+    text-align: center;
+}
+
+.proj-task-type-checkbox, .proj-task-type-text {
+    width: 33.333%;
+}
+.width-50 {
+    width: 50%;
+}
+
+.bottom-line-border {
+    border-bottom: 1px solid #999996;
+}
+/*End of Project Create CSS */
+
 #filter-container {
     width: 100%;
     float: left;
@@ -189,5 +282,4 @@ table{
     width: 33.33333%;
     float: left;
 }
-
 
