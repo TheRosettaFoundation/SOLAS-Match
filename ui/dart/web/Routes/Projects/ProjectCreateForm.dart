@@ -152,7 +152,7 @@ class ProjectCreateForm extends PolymerElement
   }
   
   /**
-   * This function is used by enteredView() to add the elements of the source and target locales to the page.
+   * This method is used by enteredView() to add the elements of the source and target locales to the page.
    */
   void constructDynamicElements()
   {
@@ -200,16 +200,21 @@ class ProjectCreateForm extends PolymerElement
   }
   
   /**
-   * This function is used to add target languages to the form.
+   * This method is used to add target languages to the form.
    */
   void addMoreTargetLanguages()
   {
+    //Unless the targetCount is less than the maxTargetLanguages, don't do anything.
+    //On the UI this shouldn't be an issue anyway because this method will disable the add button when
+    //adding a language pushes the targetCount to the max, so this is an extra safeguard.
     if (targetCount < maxTargetLanguages) {
-      DivElement targetLanguageRow = new DivElement()
-      ..id = "target_row_$targetCount"
+      //Prepare the div elements that will make up the new target language section.
+      DivElement targetLanguageRow = new DivElement() //The main div, subdivided into the language/country 
+     ..id = "target_row_$targetCount"                 //selects and task type checkboxes
       ..classes.addAll(["target-row", "bottom-line-border"]);
-      DivElement targetLanguageCell = new DivElement()
+      DivElement targetLanguageCell = new DivElement() //Sub-div for select elements
       ..classes.addAll(["pull-left", "width-50"]);
+      //Create the select elements by cloning the preexisting langSelect and countrySelect
       SelectElement targetLanguageSelect = langSelect.clone(true);
       targetLanguageSelect.style.width = "400px";
       targetLanguageSelect.id = "target_language_$targetCount";
@@ -217,8 +222,8 @@ class ProjectCreateForm extends PolymerElement
       targetCountrySelect.style.width = "400px";
       targetCountrySelect.id = "target_country_$targetCount";
 
-      DivElement taskTypesRow = new DivElement()
-      ..id = "task-type-checkboxes"
+      DivElement taskTypesRow = new DivElement() //Sub-div for task type checkboxes, holds individual divs for
+      ..id = "task-type-checkboxes"              //each checkox
       ..classes.addAll(["pull-left", "width-50"]);
       DivElement segmentationRequired = new DivElement()
       ..classes.addAll(["pull-left", "proj-task-type-checkbox"]);
@@ -239,17 +244,24 @@ class ProjectCreateForm extends PolymerElement
       ..id = "proofreading_$targetCount"
       ..checked = true;
       
+      //Put the SelectElements into their div
       targetLanguageCell.children.add(targetLanguageSelect);
       targetLanguageCell.children.add(targetCountrySelect);
+      //Put the SelectElements' div into the main div
       targetLanguageRow.children.add(targetLanguageCell);
+      //Put the checkbox InputElements into their own divs
       segmentationRequired.children.add(segmentationCheckbox);
       translationRequired.children.add(translationCheckbox);
       proofreadingRequired.children.add(proofreadingCheckbox);
+      //Put each checkbox div into the div that is to contain them all
       taskTypesRow.children.add(segmentationRequired);
       taskTypesRow.children.add(translationRequired);
       taskTypesRow.children.add(proofreadingRequired);
+      //Put the div encompassing the three checkboxes into the main div
       targetLanguageRow.children.add(taskTypesRow);
 
+      //Add the completed target language "row" to the div containing all previously added target 
+      //language "rows."
       DivElement targetLangDiv = this.shadowRoot.querySelector("#targetLangSelectDiv")
       ..children.add(targetLanguageRow);
       
@@ -267,6 +279,7 @@ class ProjectCreateForm extends PolymerElement
       
       ButtonElement removeButton = this.shadowRoot.querySelector("#removeBottomTargetBtn");
       if (removeButton != null) {
+        //Disable the remove button if there is only 1 target language on the form.
         if (targetCount > 1) {
           removeButton.disabled = false;
         } else {
@@ -277,7 +290,7 @@ class ProjectCreateForm extends PolymerElement
   }
   
   /**
-   * This function is used to remove target languages
+   * This method is used to remove target languages
    */
   void removeTargetLanguage()
   {
@@ -298,9 +311,9 @@ class ProjectCreateForm extends PolymerElement
   }
   
   /**
-   * This is the core function of this class, called when "Submit form" button is clicked, triggering validation
+   * This is the core method of this class, called when "Submit form" button is clicked, triggering validation
    * of all the input and, if there is no invalid input or errors in the process, creation of the new project.
-   * The work is divided into various subfunctions:
+   * The work is divided into various submethods:
    * createProjectTasks(),
    * validateInput(),
    * uploadProjectFile()
@@ -349,7 +362,7 @@ class ProjectCreateForm extends PolymerElement
             });
           }
          
-          //Using DAO function request Project creation
+          //Using DAO method request Project creation
           ProjectDao.createProject(project)
             .then((Project pro) {
             //If no errors have occurred, then we can get the ID assigned to the newly created project
@@ -407,7 +420,7 @@ class ProjectCreateForm extends PolymerElement
     }
   
   /**
-   * This function is called from submitForm() to create all the project's tasks.
+   * This method is called from submitForm() to create all the project's tasks.
    */
   Future<bool> createProjectTasks()
     {
@@ -599,7 +612,7 @@ class ProjectCreateForm extends PolymerElement
     }
   
   /**
-   * This function is called to upload the project file.
+   * This method is called to upload the project file.
    */
   Future<bool> uploadProjectFile()
     {
@@ -614,7 +627,7 @@ class ProjectCreateForm extends PolymerElement
     }
   
   /**
-   * This function loads the content of the file and validates the file details.
+   * This method loads the content of the file and validates the file details.
    */
   Future<bool> loadProjectFile()
     {
@@ -638,7 +651,7 @@ class ProjectCreateForm extends PolymerElement
     }
   
   /**
-   * This function validates the form input and sets various error messages if needed fields are not set or
+   * This method validates the form input and sets various error messages if needed fields are not set or
    * invalid data is given.
    */
   Future<bool> validateInput()
@@ -833,7 +846,7 @@ class ProjectCreateForm extends PolymerElement
     }
   
   /**
-   * This function is used to validate the details of the project file provided.
+   * This method is used to validate the details of the project file provided.
    */
   Future<bool> _validateFileInput()
   {
@@ -893,7 +906,7 @@ class ProjectCreateForm extends PolymerElement
   }
   
   /**
-   * This function is called by validateInput to validate the project tags provided.
+   * This method is called by validateInput to validate the project tags provided.
    */
   bool _validateTagList(String tagList)
   {
@@ -929,7 +942,7 @@ class ProjectCreateForm extends PolymerElement
   }
   
   /**
-   * This is a simple function to parse the deadline provided for the project.
+   * This is a simple method to parse the deadline provided for the project.
    */
   DateTime _parseDeadline()
   {
@@ -938,7 +951,7 @@ class ProjectCreateForm extends PolymerElement
   }
   
   /**
-   * This is a simple function to parse the project tags from the text input.
+   * This is a simple method to parse the project tags from the text input.
    */
   List<String> _separateTags(String tags)
   {
@@ -946,7 +959,7 @@ class ProjectCreateForm extends PolymerElement
   }
   
   /**
-   * This function is called when the segmentation checkbox is clicked for a target language, disabling the
+   * This method is called when the segmentation checkbox is clicked for a target language, disabling the
    * translation and proofreading checkboxes.
    */
   void segmentationClicked(InputElement target)
@@ -991,7 +1004,7 @@ class ProjectCreateForm extends PolymerElement
   }
   
   /**
-   * This is a simple function to check if a year is a leap year or not.
+   * This is a simple method to check if a year is a leap year or not.
    */
   bool _isLeapYear(int year)
   {

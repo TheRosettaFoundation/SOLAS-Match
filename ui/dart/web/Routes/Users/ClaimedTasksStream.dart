@@ -179,7 +179,7 @@ class ClaimedTasksStream extends PolymerElement
   }
   
   /**
-   * This function is used to add tasks to the task list.
+   * This method is used to add tasks to the task list.
    */
   Future<bool> addTasks()
   {
@@ -256,7 +256,7 @@ class ClaimedTasksStream extends PolymerElement
   }
   
   /**
-   * This function is called by addTasks() to process the addition of each individual task's data
+   * This method is called by addTasks() to process the addition of each individual task's data
    * to the task stream.
    */
   void addTask(Task task)
@@ -329,7 +329,7 @@ class ClaimedTasksStream extends PolymerElement
   }
   
   /**
-   * This function is used to disable the page buttons of the claimed task stream whenever they should not
+   * This method is used to disable the page buttons of the claimed task stream whenever they should not
    * be clicked.
    */
   void updatePagination()
@@ -364,7 +364,7 @@ class ClaimedTasksStream extends PolymerElement
   }
   
   /**
-   * Page navigation function bound to first page button
+   * Page navigation method bound to first page button
    */
   void goToFirstPage()
   {
@@ -381,7 +381,7 @@ class ClaimedTasksStream extends PolymerElement
   }
   
   /**
-   * Page navigation function bound to "previous page" button
+   * Page navigation method bound to "previous page" button
    */
   void goToPreviousPage()
   {
@@ -396,7 +396,7 @@ class ClaimedTasksStream extends PolymerElement
   }
   
   /**
-   * Page navigation function bound to "next page" button
+   * Page navigation method bound to "next page" button
    */
   void goToNextPage()
   {
@@ -411,7 +411,7 @@ class ClaimedTasksStream extends PolymerElement
   }
   
   /**
-   * Page navigation function bound to "last page" button
+   * Page navigation method bound to "last page" button
    */
   void goToLastPage()
   {

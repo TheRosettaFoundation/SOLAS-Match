@@ -119,7 +119,7 @@ class UserPrivateProfileForm extends PolymerElement
   }
   
   /**
-   * This function sets up default values of elements of the form.
+   * This method sets up default values of elements of the form.
    */
   void setDefaults(List<bool> successList)
   {
@@ -255,7 +255,7 @@ class UserPrivateProfileForm extends PolymerElement
   }
   
   /**
-   * This function is used to add another secondary language selector to the page.
+   * This method is used to add another secondary language selector to the page.
    */
   void addSecondaryLanguage([int languageSelected = 0, int countrySelected = 0])
   {
@@ -291,7 +291,7 @@ class UserPrivateProfileForm extends PolymerElement
   }
   
   /**
-   * This function is used to remove a secondary language selector from the page.
+   * This method is used to remove a secondary language selector from the page.
    */
   void removeSecondaryLanguage()
   {
