@@ -64,7 +64,7 @@ class ClaimedTasksStream extends PolymerElement
   }
   
   /**
-   * Called when by the DOM when the ClaimedTaskStream element has been inserted into the "live document".
+   * Called by the DOM when the ClaimedTaskStream element has been inserted into the "live document".
    */
   void enteredView()
   {
@@ -83,6 +83,7 @@ class ClaimedTasksStream extends PolymerElement
     taskColours[3] = settings.conf.task_colours.colour_3;
     taskColours[4] = settings.conf.task_colours.colour_4;
     
+    //Set up the options for the claimed tasks filter
     taskTypeIndexes.add(0);
     taskTypes[0] = localisation.getTranslation("index_any_task_type");
     taskTypeIndexes.add(1);
@@ -155,6 +156,7 @@ class ClaimedTasksStream extends PolymerElement
         if (!finished) {
           print("Something failed");
         }
+        //Bind the page navigation methods to their respective buttons.
         AnchorElement button;
         button = this.shadowRoot.querySelector("#firstPage");
         button.onClick.listen((e) => this.goToFirstPage());
@@ -208,6 +210,10 @@ class ClaimedTasksStream extends PolymerElement
     return ret;
   }
   
+  /**
+   * This method is used to add a subset of filtered tasks (after the user has clicked the filter button on
+   * the UI) to the list of tasks to display. It will display those for the [currentPage], at most [limit] tasks.
+   */
   void addFilteredTasks(int currentPage, int limit)
   {
     int len = filteredTasks.length;
@@ -215,13 +221,14 @@ class ClaimedTasksStream extends PolymerElement
     DivElement paginationDiv = this.shadowRoot.querySelector('#paginationDiv');
     List<Task> subset;
     
+    //Clear the observable variables that are used to display task info
     tasks.clear();
     projectMap.clear();
     orgMap.clear();
     taskAges.clear();
     taskTags.clear();
 
-    if (len > 0) {
+    if (len > 0) { //If there is at least one task to display, set things up to display it.
       if (len > limit) {
         lastPage = (len / limit).ceil();
       } else {
@@ -245,7 +252,7 @@ class ClaimedTasksStream extends PolymerElement
           ["${currentPage + 1}", "$lastPage"])
         );
       });
-    } else {
+    } else { //No tasks to show matching the filter, inform user.
       Timer.run(() {
         ParagraphElement pElem = this.shadowRoot.querySelector('#noTaskText');
         pElem.text = localisation.getTranslation("claimed_tasks_no_tasks_matching_filters");
@@ -425,6 +432,10 @@ class ClaimedTasksStream extends PolymerElement
     }
   }
   
+  /**
+   * This method is bound to the filter button on the UI. Calling it will trigger an API call to retrieve all
+   * tasks matching the filter options the user selected.
+   */
   void filterStream()
   {
     if (isFiltered) {

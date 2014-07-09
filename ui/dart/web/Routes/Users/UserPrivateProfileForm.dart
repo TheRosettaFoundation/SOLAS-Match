@@ -53,7 +53,7 @@ class UserPrivateProfileForm extends PolymerElement
   }
   
   /**
-   * Called when by the DOM when the UserPrivateProfileForm element has been inserted into the "live document".
+   * Called by the DOM when the UserPrivateProfileForm element has been inserted into the "live document".
    */
   void enteredView()
   {

@@ -33,7 +33,9 @@ class TaskStream extends PolymerElement
   @observable List<int> taskTypeIndexes;
   @observable Map<int, List<Tag>> taskTags;
   
-  
+  /**
+   * The constructor for TaskStream, handling initialisation of variables.
+   */
   TaskStream.created() : super.created()
   {
     currentDateTime = new DateTime.now();
@@ -49,6 +51,9 @@ class TaskStream extends PolymerElement
     taskTags = toObservable(new Map<int, List<Tag>>());
   }
   
+  /**
+   * Called by the DOM when the [TaskStream] element has been inserted into "live document".
+   */
   void enteredView()
   {
     localisation = new Localisation();
@@ -78,6 +83,10 @@ class TaskStream extends PolymerElement
     }
   }
   
+  /**
+   * Uses API calls to populate the the source and target language select elements with only "active languages";
+   * languages for which there are currently unclaimed tasks.
+   */
   void loadActiveLanguages()
   {
     Language anySource = new Language();
@@ -98,6 +107,10 @@ class TaskStream extends PolymerElement
     });
   }
   
+  /**
+   * Calls API to get tasks to add to the list of tasks to be displayed; customised for the logged in user
+   * using the system's Task score algorithm if there is a user logged in.
+   */
   void addTasks()
   {
     int offset = taskCount;
@@ -110,6 +123,10 @@ class TaskStream extends PolymerElement
     }
   }
   
+  /**
+   * Processes [newTasks] to add those [Task]s to the list of tasks to display, and sets up other data about
+   * those tasks; how long ago it was added, etc.
+   */
   void processTaskList(List<Task> newTasks)
   {
     if (newTasks.length > 0) {
@@ -135,7 +152,7 @@ class TaskStream extends PolymerElement
         p = this.shadowRoot.querySelector("#deadline_" + task.id.toString());
         p.children.clear();
         p.appendHtml(sprintf(localisation.getTranslation("common_due_by"), [task.deadline]));
-        if (projectMap.containsKey(task.projectId)){
+        if (projectMap.containsKey(task.projectId)) {
           ParagraphElement p;
           p = this.shadowRoot.querySelector("#parents_" + task.id.toString());
           p.children.clear();
@@ -149,6 +166,9 @@ class TaskStream extends PolymerElement
     });
   }
   
+  /**
+   * Adds the [Task] object [task] to the list of tasks to be displayed.
+   */
   void addTask(Task task)
   {
     tasks.add(task);
@@ -188,6 +208,10 @@ class TaskStream extends PolymerElement
     } 
   }
   
+  /**
+   * Used to filter the task stream based on the selected filter options. Each selected option adds some text
+   * to a filter string which is the passed to the API, where the filtering occurs.
+   */
   void filterStream()
   {
     filter = "";

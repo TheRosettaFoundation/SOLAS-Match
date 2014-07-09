@@ -112,7 +112,7 @@ class ProjectCreateForm extends PolymerElement
   }
   
   /**
-   * Called when by the DOM when the ProjectCreateForm element has been inserted into the "live document".
+   * Called by the DOM when the ProjectCreateForm element has been inserted into the "live document".
    */
   void enteredView()
   {
