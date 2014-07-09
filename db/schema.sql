@@ -2672,12 +2672,12 @@ BEGIN
         AND (taskStatus is null or t.`task-status_id` = taskStatus)
         ORDER BY
             CASE
-             WHEN orderBy = 0 THEN `created-time`
+             WHEN orderBy = 1 THEN `created-time`
              WHEN orderBy = 2 THEN deadline
              WHEN orderBy = 4 THEN title
             END ASC
           , CASE
-             WHEN orderBy = 1 THEN `created-time`
+             WHEN orderBy = 0 THEN `created-time`
              WHEN orderBy = 3 THEN deadline
              WHEN orderBy = 5 THEN title
             END DESC);

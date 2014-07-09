@@ -273,6 +273,10 @@ table{
     margin-bottom: 20px;
 }
 
+.filter-title {
+    font-weight: bold;
+}
+
 #claimed-tasks {
     width: 100%;
     float: left;
