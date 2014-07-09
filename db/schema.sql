@@ -4168,7 +4168,7 @@ BEGIN
 		end if;
 
         if name is not null 
-            and name != IFNULL(
+            and name NOT LIKE BINARY IFNULL(
                 (SELECT u.`display-name`
                     FROM Users u 
                     WHERE u.id = id),
