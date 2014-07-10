@@ -19,10 +19,7 @@
         {foreach $reviews as $review}
             <h2>Review #{$count}</h2>
             <p>
-                {Localisation::getTranslation('task_review_form_0')}
-                <a href="{urlFor name="download-task-latest-version" options="task_id.$id"}">
-                    {Localisation::getTranslation('common_here')}
-                </a>.
+                {sprintf({Localisation::getTranslation('task_review_form_0')}, {urlFor name="download-task-latest-version" options="task_id.$id"})}
             </p>
 
             <h3>
