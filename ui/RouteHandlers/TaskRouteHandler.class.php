@@ -1421,7 +1421,7 @@ class TaskRouteHandler
                     if (isset($post['revokeTask']) && $post['revokeTask']) {
                         $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
                         $taskDao->updateTask($task);
-                        $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id);
+                        $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id, null);
                         if ($taskRevoke) {
                             $app->flash(
                                 "taskSuccess",

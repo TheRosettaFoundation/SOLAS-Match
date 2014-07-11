@@ -541,8 +541,12 @@ class Users
             $taskId = $taskId[0];
         }
         $feedback = API\Dispatcher::getDispatcher()->request()->getBody();
-        error_log("In V0 API FEEDBACK IS: $feedback");
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::unClaimTask($taskId, $userId, $feedback), null, $format);
+        $feedback = trim($feedback);
+        if ($feedback != '') {
+            API\Dispatcher::sendResponse(null, DAO\TaskDao::unClaimTask($taskId, $userId, $feedback), null, $format);
+        } else {
+            API\Dispatcher::sendResponse(null, DAO\TaskDao::unClaimTask($taskId, $userId), null, $format);
+        }
         Lib\Notify::sendTaskRevokedNotifications($taskId, $userId);
     }
 
