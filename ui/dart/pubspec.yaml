@@ -19,4 +19,4 @@ transformers:
     - web/Routes/Projects/ProjectCreate.dart
 - $dart2js:
     checked: false 
-    minify: false
+    minify: true

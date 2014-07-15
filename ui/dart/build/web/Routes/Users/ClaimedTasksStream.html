@@ -1,38 +1,32 @@
 <polymer-element name="claimed-tasks-stream" css="resources/bootstrap/css/bootstrap.min.css resources/css/solas.css">
   <template>
     <h3>{{localisation.getTranslation("index_filter_available_tasks")}}</h3>
-    <div id="filter-container" style="font-weight:bold; vertical-align:middle">
+    <div id="filter-container">
       <div class="filter-block">
         <div class="filter-title">{{localisation.getTranslation("common_task_type")}}</div>
-        <div class="filter-options">
-          <select name="taskTypes" selectedIndex="{{selectedTaskTypeFilter}}"> 
-            <option template repeat="{{key in taskTypeIndexes}}" value="{{key.toString()}}">
-              {{taskTypes[key]}}
-            </option>
-          </select>
-        </div>
+        <select name="taskTypes" selectedIndex="{{selectedTaskTypeFilter}}"> 
+          <option template repeat="{{key in taskTypeIndexes}}" value="{{key.toString()}}">
+            {{taskTypes[key]}}
+          </option>
+        </select>
       </div>
             
       <div class="filter-block">
         <div class="filter-title">{{localisation.getTranslation("common_task_status")}}</div>
-        <div class="filter-options">
-          <select name="taskStatusFilter" selectedIndex="{{selectedStatusFilter}}">
-            <option template repeat="{{key in statusFilterIndexes}}" value="{{key.toString()}}">
-              {{statusFilters[key]}}
-            </option>
-          </select>
-        </div>
+        <select name="taskStatusFilter" selectedIndex="{{selectedStatusFilter}}">
+          <option template repeat="{{key in statusFilterIndexes}}" value="{{key.toString()}}">
+            {{statusFilters[key]}}
+          </option>
+        </select>
       </div>
             
       <div class="filter-block">
         <div class="filter-title">{{localisation.getTranslation("claimed_tasks_ordering")}}</div>
-        <div class="filter-options">
-          <select name="ordering" selectedIndex="{{selectedOrder}}">
-            <option template repeat="{{key in taskOrderingIndexes}}" value="{{key.toString()}}">
-              {{taskOrderings[key]}}
-            </option>
-          </select>
-        </div>
+        <select name="ordering" selectedIndex="{{selectedOrder}}">
+          <option template repeat="{{key in taskOrderingIndexes}}" value="{{key.toString()}}">
+            {{taskOrderings[key]}}
+          </option>
+        </select>
       </div>
       <button value="Filter" class="btn btn-primary" on-click="{{filterStream}}">
         <i class="icon-refresh icon-white"></i> {{localisation.getTranslation("index_filter_task_stream")}}
