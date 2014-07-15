@@ -1112,7 +1112,7 @@
     <string name="faq_answer_uploaded_tasks_1">You will find a list of your uploaded tasks on your Claimed Tasks (minus Archived Tasks which appear on your Profile page).</string>
     <string name="faq_answer_uploaded_tasks_2">On each of these tasks you will see a Tag (beside the task type), which will let you know whether the task has been completed or is still in progress.</string>
     <string name="faq_question_work_be_credited">Will my work be credited?</string>
-    <string name="faq_answer_work_be_credited_1">We ask all partner organisations to credit the volunteer’s work. If you would like your first and last name to be used, please set these on your profile.</string>
+    <string name="faq_answer_work_be_credited_1">We ask all partner organisations to credit the volunteer’s work. If you would like your first and last name to be used, please set these on your profile and tick the RECEIVE CREDIT box.</string>
     <string name="faq_answer_work_be_credited_2">If your first and last name is not set, the organisation will have to use your display name. This is also the case for the reference letter, which can be requested via your profile.</string>
     
 	<string name="slim_error_Oops_there_has">Oops! there has been a technical problem.</string>
