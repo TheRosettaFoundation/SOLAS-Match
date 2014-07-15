@@ -213,7 +213,7 @@
     <string name="common_october">October</string>
     <string name="common_november">November</string>
     <string name="common_december">December</string>
-    <string name="common_maintenance_message">Please note that our site will undergo scheduled maintenance on %1$s at %2$s (GMT). We expect this process to take only %3$s hours.</string>
+    <string name="common_maintenance_message">Please note that our site will undergo scheduled maintenance on %1$s at %2$s. We expect this process to take only %3$s hours.</string>
     <string name="common_sitewide_maintenance">Trommons is currently down for maintenance.</string>
     <string name="common_sitewide_maintenance_msg">Service will resume in approx. %s hours. We thank you for your patience.</string>
     <string name="common_this_may_take_days_weeks">This may take several days or weeks, depending on the tasks.</string>
