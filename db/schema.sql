@@ -555,7 +555,6 @@ CREATE TABLE IF NOT EXISTS `TaskUnclaims` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `Tasks` (`task_id`, `user_id`, `unclaimed-time`),
   KEY `FK_task_unclaim_user` (`user_id`),
-  CONSTRAINT `FK_task_unclaim_task` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `FK_task_unclaim_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -965,7 +964,7 @@ BEGIN
 	
 		START TRANSACTION;
 			INSERT INTO `ArchivedTasks` (`id`, `project_id`, `title`, `word-count`, `language_id-source`, `language_id-target`, `country_id-source`, `country_id-target`, `created-time`, `deadline`, `comment`, `taskType_id`, `taskStatus_id`, `published`)
-				SELECT t.* FROM Tasks t WHERE t.id = tID;
+			SELECT t.* FROM Tasks t WHERE t.id = tID;
 			
 			INSERT INTO ArchivedTasksMetadata 
 			(`archivedTask_id`,`version`,`filename`,`content-type`,`user_id-claimed`,`user_id-archived`,`prerequisites`,`user_id-taskCreator`,`upload-time`,`archived-date`) 

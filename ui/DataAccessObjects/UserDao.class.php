@@ -316,7 +316,6 @@ class UserDao extends BaseDao
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tasks/$taskId";
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE, $feedback);
-        error_log("IN UI DAO RET IS $ret .... AND FEEDBACK IS $feedback");
         return $ret;
     }
 

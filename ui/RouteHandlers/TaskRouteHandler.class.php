@@ -269,7 +269,8 @@ class TaskRouteHandler
         $userId = Common\Lib\UserSession::getCurrentUserID();
         
         $taskType = Lib\TemplateHelper::getTaskTypeFromId($task->getTaskType());
-        if ($result = $taskDao->archiveTask($task_id, $user_id)) {
+        $result = $taskDao->archiveTask($task_id, $userId);
+        if ($result) {
             $app->flash(
                 "success",
                 sprintf(
