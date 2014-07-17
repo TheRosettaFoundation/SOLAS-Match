@@ -10,6 +10,477 @@
 /*!40101 SET NAMES utf8 */;
 SET FOREIGN_KEY_CHECKS=0;
 
+/*--------------------START OF ALTER TABLES TO NORMALISE DATA LENGTHS/TYPES -----------------------*/
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "OrgRequests"
+                                        AND COLUMN_NAME = "user_id"
+                                        AND DATA_TYPE = 'INT'
+                                        AND NUMERIC_PRECISION = 11) then
+                    ALTER TABLE OrgRequests CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "PasswordResetRequests"
+                                        AND COLUMN_NAME = "user_id"
+                                        AND DATA_TYPE = 'INT'
+                                        AND NUMERIC_PRECISION = 11) then
+                    ALTER TABLE PasswordResetRequests CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "TaskClaims"
+                                        AND COLUMN_NAME = "user_id"
+                                        AND DATA_TYPE = 'INT'
+                                        AND NUMERIC_PRECISION = 11) then
+                    ALTER TABLE TaskClaims CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "TaskFileVersions"
+                                        AND COLUMN_NAME = "user_id"
+                                        AND DATA_TYPE = 'INT'
+                                        AND NUMERIC_PRECISION = 11) then
+                    ALTER TABLE TaskFileVersions CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "TaskUnclaims"
+                                        AND COLUMN_NAME = "user_id"
+                                        AND DATA_TYPE = 'INT'
+                                        AND NUMERIC_PRECISION = 11) then
+                    ALTER TABLE TaskUnclaims CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "UserBadges"
+                                        AND COLUMN_NAME = "user_id"
+                                        AND DATA_TYPE = 'INT'
+                                        AND NUMERIC_PRECISION = 11) then
+                    ALTER TABLE UserBadges CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "UserNotifications"
+                                        AND COLUMN_NAME = "user_id"
+                                        AND DATA_TYPE = 'INT'
+                                        AND NUMERIC_PRECISION = 11) then
+                    ALTER TABLE UserNotifications CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "UserTags"
+                                        AND COLUMN_NAME = "user_id"
+                                        AND DATA_TYPE = 'INT'
+                                        AND NUMERIC_PRECISION = 11) then
+                    ALTER TABLE UserTags CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "UserTaskScores"
+                                        AND COLUMN_NAME = "user_id"
+                                        AND DATA_TYPE = 'INT'
+                                        AND NUMERIC_PRECISION = 11) then
+                    ALTER TABLE UserTaskScores CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "UserTaskStreamNotifications"
+                                        AND COLUMN_NAME = "user_id"
+                                        AND DATA_TYPE = 'INT'
+                                        AND NUMERIC_PRECISION = 11) then
+                    ALTER TABLE UserTaskStreamNotifications CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "ArchivedTasks"
+                                        AND COLUMN_NAME = "country_id-source"
+                                        AND DATA_TYPE = 'INT'
+                                        AND NUMERIC_PRECISION = 11) then
+                    ALTER TABLE ArchivedTasks CHANGE `country_id-source` `country_id-source` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "ArchivedTasks"
+                                        AND COLUMN_NAME = "country_id-target"
+                                        AND DATA_TYPE = 'INT'
+                                        AND NUMERIC_PRECISION = 11) then
+                    ALTER TABLE ArchivedTasks CHANGE `country_id-target` `country_id-target` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "Tasks"
+                                        AND COLUMN_NAME = "country_id-source"
+                                        AND DATA_TYPE = 'INT'
+                                        AND NUMERIC_PRECISION = 11) then
+                    ALTER TABLE Tasks CHANGE `country_id-source` `country_id-source` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "Tasks"
+                                        AND COLUMN_NAME = "country_id-target"
+                                        AND DATA_TYPE = 'INT'
+                                        AND NUMERIC_PRECISION = 11) then
+                    ALTER TABLE Tasks CHANGE `country_id-target` `country_id-target` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "TaskTranslatorBlacklist"
+                                        AND COLUMN_NAME = "task_id"
+                                        AND DATA_TYPE = 'BIGINT'
+                                        AND NUMERIC_PRECISION = 10) then
+                    ALTER TABLE TaskTranslatorBlacklist CHANGE `task_id` `task_id` BIGINT(20) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "UserNotifications"
+                                        AND COLUMN_NAME = "task_id"
+                                        AND DATA_TYPE = 'BIGINT'
+                                        AND NUMERIC_PRECISION = 11) then
+                    ALTER TABLE UserNotifications CHANGE `task_id` `task_id` BIGINT(20) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "UserTaskScores"
+                                        AND COLUMN_NAME = "task_id"
+                                        AND DATA_TYPE = 'BIGINT'
+                                        AND NUMERIC_PRECISION = 11) then
+                    ALTER TABLE UserTaskScores CHANGE `task_id` `task_id` BIGINT(20) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "UserTrackedTasks"
+                                        AND COLUMN_NAME = "task_id"
+                                        AND DATA_TYPE = 'BIGINT'
+                                        AND NUMERIC_PRECISION = 10) then
+                    ALTER TABLE UserTrackedTasks CHANGE `task_id` `task_id` BIGINT(20) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "ArchivedTasks"
+                                        AND COLUMN_NAME = "language_id-source"
+                                        AND DATA_TYPE = 'INT'
+                                        AND NUMERIC_PRECISION = 11) then
+                    ALTER TABLE ArchivedTasks CHANGE `language_id-source` `language_id-source` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "ArchivedTasks"
+                                        AND COLUMN_NAME = "language_id-target"
+                                        AND DATA_TYPE = 'INT'
+                                        AND NUMERIC_PRECISION = 11) then
+                    ALTER TABLE ArchivedTasks CHANGE `language_id-target` `language_id-target` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "Tasks"
+                                        AND COLUMN_NAME = "language_id-source"
+                                        AND DATA_TYPE = 'INT'
+                                        AND NUMERIC_PRECISION = 11) then
+                    ALTER TABLE Tasks CHANGE `language_id-source` `language_id-source` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "Tasks"
+                                        AND COLUMN_NAME = "language_id-target"
+                                        AND DATA_TYPE = 'INT'
+                                        AND NUMERIC_PRECISION = 11) then
+                    ALTER TABLE Tasks CHANGE `language_id-target` `language_id-target` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "OrgRequests"
+                                        AND COLUMN_NAME = "org_id"
+                                        AND DATA_TYPE = 'INT'
+                                        AND NUMERIC_PRECISION = 11) then
+                    ALTER TABLE OrgRequests CHANGE `org_id` `org_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "ArchivedTasks"
+                                        AND COLUMN_NAME = "project_id"
+                                        AND DATA_TYPE = 'INT'
+                                        AND NUMERIC_PRECISION = 20) then
+                    ALTER TABLE ArchivedTasks CHANGE `project_id` `project_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "Tasks"
+                                        AND COLUMN_NAME = "project_id"
+                                        AND DATA_TYPE = 'INT'
+                                        AND NUMERIC_PRECISION = 20) then
+                    ALTER TABLE Tasks CHANGE `project_id` `project_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF NOT EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "UserTags"
+                                        AND COLUMN_NAME = "tag_id"
+                                        AND DATA_TYPE = 'INT'
+                                        AND NUMERIC_PRECISION = 11) then
+                    ALTER TABLE UserTags CHANGE `tag_id` `tag_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+/*-------------------------------------------END OF ALTER TABLES-----------------------------------*/
+
 /*--------------------------------------------------start of tables--------------------------------*/
 
 -- Dumping structure for table Solas-Match-Test.Admins
@@ -67,16 +538,16 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjectsMetadata` (
 -- Dumping structure for table debug-test.ArchivedTasks
 CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
   `id` bigint(20) unsigned NOT NULL,
-  `project_id` int(20) unsigned NOT NULL,
+  `project_id` int(10) unsigned NOT NULL,
   `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `comment` varchar(4096) COLLATE utf8_unicode_ci DEFAULT NULL,
   `deadline` datetime NOT NULL,
   `word-count` int(11) NOT NULL,
   `created-time` datetime NOT NULL,
-  `language_id-source` int(11) unsigned NOT NULL,
-  `language_id-target` int(11) unsigned NOT NULL,
-  `country_id-source` int(11) unsigned NOT NULL,
-  `country_id-target` int(11) unsigned NOT NULL,
+  `language_id-source` int(10) unsigned NOT NULL,
+  `language_id-target` int(10) unsigned NOT NULL,
+  `country_id-source` int(10) unsigned NOT NULL,
+  `country_id-target` int(10) unsigned NOT NULL,
   `taskType_id` int(11) unsigned NOT NULL,
   `taskStatus_id` int(11) unsigned NOT NULL,
   `published` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
@@ -261,8 +732,8 @@ CREATE TABLE IF NOT EXISTS `Organisations` (
 -- Dumping structure for table Solas-Match-Test.OrgRequests
 CREATE TABLE IF NOT EXISTS `OrgRequests` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) unsigned NOT NULL,
-  `org_id` int(11) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `org_id` int(10) unsigned NOT NULL,
   `request-datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `userRequest` (`user_id`,`org_id`),
@@ -272,7 +743,6 @@ CREATE TABLE IF NOT EXISTS `OrgRequests` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-
 
 -- Dumping structure for table Solas-Match-Test.OrgTranslatorBlacklist
 CREATE TABLE IF NOT EXISTS `OrgTranslatorBlacklist` (
@@ -290,13 +760,14 @@ CREATE TABLE IF NOT EXISTS `OrgTranslatorBlacklist` (
 -- Dumping structure for table Solas-Match-Test.PasswordResetRequests
 CREATE TABLE IF NOT EXISTS `PasswordResetRequests` (
   `uid` char(40) COLLATE utf8_unicode_ci NOT NULL,
-  `user_id` int(11) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
   `request-time` datetime DEFAULT NULL,
   UNIQUE KEY `user_id` (`user_id`),
   CONSTRAINT `FK_password_reset_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
 
 -- Dumping structure for table Solas-Match-Test.ProjectFiles
 CREATE TABLE IF NOT EXISTS `ProjectFiles` (
@@ -385,7 +856,7 @@ CREATE TABLE IF NOT EXISTS `Tags` (
 CREATE TABLE IF NOT EXISTS `TaskClaims` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `task_id` bigint(20) unsigned NOT NULL,
-  `user_id` int(11) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
   `claimed-time` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `Tasks` (`task_id`,`user_id`),
@@ -404,7 +875,7 @@ CREATE TABLE IF NOT EXISTS `TaskFileVersions` (
   `version_id` int(11) NOT NULL COMMENT 'Gets incremented within the code',
   `filename` text COLLATE utf8_unicode_ci NOT NULL,
   `content-type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `user_id` int(11) unsigned NOT NULL COMMENT 'Null while we don''t have logging in',
+  `user_id` int(10) unsigned NOT NULL COMMENT 'Null while we don''t have logging in',
   `upload-time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `taskFile` (`task_id`,`version_id`,`user_id`),
@@ -450,13 +921,13 @@ CREATE TABLE IF NOT EXISTS `TaskReviews` (
 -- Dumping structure for table Solas-Match-Test.Tasks
 CREATE TABLE IF NOT EXISTS `Tasks` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `project_id` int(20) unsigned NOT NULL,
+  `project_id` int(10) unsigned NOT NULL,
   `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `word-count` int(11) DEFAULT NULL,
-  `language_id-source` int(11) unsigned NOT NULL,
-  `language_id-target` int(11) unsigned NOT NULL,
-  `country_id-source` int(11) unsigned NOT NULL,
-  `country_id-target` int(11) unsigned NOT NULL,
+  `language_id-source` int(10) unsigned NOT NULL,
+  `language_id-target` int(10) unsigned NOT NULL,
+  `country_id-source` int(10) unsigned NOT NULL,
+  `country_id-target` int(10) unsigned NOT NULL,
   `created-time` datetime NOT NULL,
   `deadline` datetime NOT NULL,
   `comment` varchar(4096) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -501,7 +972,7 @@ REPLACE INTO `TaskStatus` (`id`, `name`) VALUES
 
 -- Dumping structure for table Solas-Match-Test.TaskTranslatorBlacklist
 CREATE TABLE IF NOT EXISTS `TaskTranslatorBlacklist` (
-  `task_id` bigint(10) unsigned NOT NULL,
+  `task_id` bigint(20) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
   `revoked_by_admin` BIT(1) DEFAULT 0 NOT NULL,
   UNIQUE KEY `task_id` (`task_id`,`user_id`),
@@ -509,23 +980,6 @@ CREATE TABLE IF NOT EXISTS `TaskTranslatorBlacklist` (
   CONSTRAINT `FK_TaskTranslatorBlacklist_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_TaskTranslatorBlacklist_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-DROP PROCEDURE IF EXISTS alterTable;
-DELIMITER //
-CREATE PROCEDURE alterTable()
-BEGIN
-    IF NOT EXISTS(SELECT 1
-                    FROM information_schema.`COLUMNS`
-                    WHERE TABLE_SCHEMA = database()
-                    AND TABLE_NAME = "TaskTranslatorBlacklist"
-                    AND COLUMN_NAME = "revoked_by_admin") then
-        ALTER TABLE TaskTranslatorBlacklist
-            ADD revoked_by_admin BIT(1) DEFAULT 0 NOT NULL;
-    END IF;
-END//
-DELIMITER ;
-CALL alterTable();
-DROP PROCEDURE alterTable;
 
 -- Data exporting was unselected.
 
@@ -548,7 +1002,7 @@ REPLACE INTO `TaskTypes` (`id`, `name`) VALUES
 CREATE TABLE IF NOT EXISTS `TaskUnclaims` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `task_id` BIGINT(20) UNSIGNED NOT NULL,
-  `user_id` INT(11) UNSIGNED NOT NULL,
+  `user_id` INT(10) UNSIGNED NOT NULL,
   `unclaim-comment` VARCHAR(4096),
   `unclaimed-time` DATETIME NOT NULL,
   `task_is_archived` BIT(1) DEFAULT 0 NOT NULL,
@@ -560,7 +1014,7 @@ CREATE TABLE IF NOT EXISTS `TaskUnclaims` (
 
 -- Dumping structure for table Solas-Match-Test.UserBadges
 CREATE TABLE IF NOT EXISTS `UserBadges` (
-  `user_id` int(11) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
   `badge_id` int(11) NOT NULL,
   PRIMARY KEY (`user_id`,`badge_id`),
   UNIQUE KEY `userBadge` (`user_id`,`badge_id`),
@@ -586,8 +1040,8 @@ CREATE TABLE IF NOT EXISTS `UserLogins` (
 -- Dumping structure for table Solas-Match-Test.UserNotifications
 CREATE TABLE IF NOT EXISTS `UserNotifications` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) unsigned NOT NULL,
-  `task_id` bigint(11) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `task_id` bigint(20) unsigned NOT NULL,
   `created-time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id_task_id` (`user_id`,`task_id`),
@@ -656,8 +1110,8 @@ CREATE TABLE IF NOT EXISTS `UserSecondaryLanguages` (
 -- Dumping structure for table Solas-Match-Test.UserTags
 CREATE TABLE IF NOT EXISTS `UserTags` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) unsigned NOT NULL,
-  `tag_id` int(11) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `tag_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `userTag` (`user_id`,`tag_id`),
   KEY `FK_user_tag_user1` (`tag_id`),
@@ -670,8 +1124,8 @@ CREATE TABLE IF NOT EXISTS `UserTags` (
 
 -- Dumping structure for table Solas-Match-Test.UserTaskScores
 CREATE TABLE IF NOT EXISTS `UserTaskScores` (
-  `user_id` int(11) unsigned NOT NULL,
-  `task_id` bigint(11) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `task_id` bigint(20) unsigned NOT NULL,
   `score` int(11) NOT NULL DEFAULT '-1',
   PRIMARY KEY (`user_id`,`task_id`),
   UNIQUE KEY `taskScore` (`task_id`,`user_id`),
@@ -684,7 +1138,7 @@ CREATE TABLE IF NOT EXISTS `UserTaskScores` (
 
 -- Dumping structure for table Solas-Match-Test.UserTaskStreamNotifications
 CREATE TABLE IF NOT EXISTS `UserTaskStreamNotifications` (
-  `user_id` int(11) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
   `interval` int(10) unsigned NOT NULL,
   `strict` int(1) NOT NULL DEFAULT '0',
   `last-sent` DATETIME DEFAULT NULL,
@@ -712,7 +1166,7 @@ CREATE TABLE IF NOT EXISTS `UserTrackedProjects` (
 -- Dumping structure for table Solas-Match-Test.UserTrackedTasks
 CREATE TABLE IF NOT EXISTS `UserTrackedTasks` (
 	`user_id` INT(10) UNSIGNED NOT NULL,
-	`task_id` BIGINT(10) UNSIGNED NOT NULL,
+	`task_id` BIGINT(20) UNSIGNED NOT NULL,
 	UNIQUE INDEX `user_id` (`user_id`, `task_id`),
 	INDEX `FK_UserTrackedTasks_Tasks` (`task_id`),
 	CONSTRAINT `FK_UserTrackedTasks_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
