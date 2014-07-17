@@ -37,7 +37,6 @@ class IO
                 
                     $app->get(
                         '/task/:taskId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isLoggedIn',
                         '\SolasMatch\API\V0\IO::downloadTaskFile'
                     );
                 });
