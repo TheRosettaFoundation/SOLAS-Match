@@ -66,11 +66,14 @@ class IO
     
     public static function getMimeFromFileContent($filename, $format = ".json")
     {
-        if (strstr($filename, '.')) {
-            $filename = explode('.', $filename);
-            $format = '.'.$filename[1];
-            $filename = $filename[0];
+        error_log("UNPARSED FILENAME IS: $filename");
+        if (!is_null($format) && $format != '') {
+            $dotPos = strrpos($filename, '.');
+            $format = substr($filename, $dotPos + 1);
+            $filename = substr($filename, 0, $dotPos);
         }
+
+        error_log("*******IN IO::getMimeFromFileContent, PARSED FILENAME IS: $filename, FORMAT IS $format   ***********");
         $fileContent = API\Dispatcher::getDispatcher()->request()->getBody();
         
         API\Dispatcher::sendResponse(null, self::detectMimeType($fileContent, $filename), null, $format);

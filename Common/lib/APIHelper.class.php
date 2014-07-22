@@ -66,6 +66,7 @@ class APIHelper
             }
         }
         $re = curl_init($url);
+        error_log("URL BEING CALLED NOW IS $url");
         curl_setopt($re, CURLOPT_CUSTOMREQUEST, $method);
         $length = 0;
         if (!is_null($data) && "null" != $data) {
@@ -123,7 +124,7 @@ class APIHelper
         
         if (in_array($this->responseCode, $success)) {
             $response_data = $this->serializer->deserialize($res, $destination);
-            error_log("RESPONSE DATA to be returned is: $response_data");
+            //error_log("RESPONSE DATA to be returned is: $response_data");
         } else {
             throw new Exceptions\SolasMatchException($res, $this->responseCode);
         }
