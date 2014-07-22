@@ -29,7 +29,7 @@
                         </tr>
                     </table>
                     <div id="footer-menu">
-                        {mailto address={Settings::get("site.system_email_address")} encode='hex' text='Contact Us'} |
+                        {mailto address={Settings::get("site.system_email_address")} encode='hex' text={Localisation::getTranslation("footer_contact_us")}} |
                         <a href="{urlFor name='terms'}">
                             {Localisation::getTranslation('footer_terms_and_conditons')}
                         </a> |

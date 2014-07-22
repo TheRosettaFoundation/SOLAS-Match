@@ -1005,6 +1005,7 @@
     <string name="footer_feedback">Your <a href="%s">feedback</a> is appreciated.</string>
     <string name="footer_powered_by">Powered by <a href="%s">%s</a></string>
     <string name="footer_maintained_by">Maintained by <a href="%s">%s</a></string>
+    <string name="footer_contact_us">Contact Us</string>
 
 	<string name="header_home">Home</string>
 	<string name="header_dashboard">Dashboard</string>
