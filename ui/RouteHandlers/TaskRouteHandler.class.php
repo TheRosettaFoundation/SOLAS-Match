@@ -575,6 +575,7 @@ class TaskRouteHandler
                 $projectFile = $projectDao->getProjectFileInfo($project->getId());
                 $projectFileMimeType = $projectFile->getMime();
                 $projectFileType = pathinfo($projectFile->getFilename(), PATHINFO_EXTENSION);
+                error_log("PROJECT file type is: $projectFileType");
                 
                 $fileUploadType = pathinfo($_FILES[$fieldName]["name"], PATHINFO_EXTENSION);
                 
@@ -584,7 +585,9 @@ class TaskRouteHandler
                 $filename = $_FILES[$fieldName]["name"];
                 $request = $siteApi."v0/io/contentMime/$filename";
                 $data = file_get_contents($_FILES[$fieldName]["tmp_name"]);
+                error_log("FILE DATA IS: $data");
                 $fileUploadMime = $helper->call(null, $request, Common\Enums\HttpMethodEnum::GET, null, null, $data);
+                error_log("FILE MIME CALL RETURNED: $fileUploadMime");
                 if (strcasecmp($fileUploadType, $projectFileType) != 0) {
                     throw new \Exception(sprintf(
                         Lib\Localisation::getTranslation('common_task_file_extension_mismatch'),

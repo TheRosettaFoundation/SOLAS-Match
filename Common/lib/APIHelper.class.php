@@ -75,7 +75,9 @@ class APIHelper
         }
         
         if (!is_null($file)) {
+            error_log("IN APIHELPER, FILE IS: $file");
             $length = strlen($file);
+            error_log("IN APIHELPER, file length is: $length");
             curl_setopt($re, CURLOPT_POSTFIELDS, $file);
         }
 
@@ -100,21 +102,28 @@ class APIHelper
         if (!is_null($headers)) {
             $httpHeaders = array_merge($httpHeaders, $headers);
         }
+        $blah = print_r($httpHeaders, true);
+        error_log("Logging headers from array...");
+        error_log($blah);
         curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
         curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($re, CURLOPT_HEADER, true);
         $res = curl_exec($re);
+        error_log("RES, result of curl_exec() is: $res");
         $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
+        error_log("IN APIHELPER, HEADER SIZE IS $header_size");
         $header = substr($res, 0, $header_size);
         $this->outputHeaders = http_parse_headers($header);
         $res = substr($res, $header_size);
         $success = array(200,201,202,203,204,301,303);
         $this->responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
+        error_log("In APIHelper, RESPONSE CODE IS: {$this->responseCode}");
 
         curl_close($re);
         
         if (in_array($this->responseCode, $success)) {
             $response_data = $this->serializer->deserialize($res, $destination);
+            error_log("RESPONSE DATA to be returned is: $response_data");
         } else {
             throw new Exceptions\SolasMatchException($res, $this->responseCode);
         }

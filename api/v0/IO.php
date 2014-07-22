@@ -324,6 +324,7 @@ class IO
     {
         $result = null;
     
+        error_log("IN IO::detectMimeType, FILE IS: $file AND FILENAME IS: $filename");
         $mimeMap = array(
                 "xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                 ,"xltx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.template"
@@ -343,12 +344,14 @@ class IO
     
         $extension = explode(".", $filename);
         $extension = $extension[count($extension)-1];
+        error_log("IN IO::detectMimeType, MIME IS $mime AND EXTENSION IS $extension");
     
         if (($mime == "application/zip" || ($extension == "xlf")) && array_key_exists($extension, $mimeMap)) {
             $result = $mimeMap[$extension];
         } else {
             $result = $mime;
         }
+        error_log("IN IO::detectMimeType, RESULT TO be returned IS: $result");
         return $result;
     }
 }
