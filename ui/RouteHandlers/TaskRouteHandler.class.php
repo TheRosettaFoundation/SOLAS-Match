@@ -43,7 +43,6 @@ class TaskRouteHandler
 
         $app->get(
             "/task/:task_id/download-file-user/",
-            array($middleware, "authUserIsLoggedIn"),
             array($this, "downloadTask")
         )->name("download-task");
 
