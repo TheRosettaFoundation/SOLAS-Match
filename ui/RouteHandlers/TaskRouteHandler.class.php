@@ -581,10 +581,10 @@ class TaskRouteHandler
                 //Call API to determine MIME type of file contents
                 $helper = new Common\Lib\APIHelper(Common\Lib\Settings::get('ui.api_format'));
                 $siteApi = Common\Lib\Settings::get("site.api");
-                $filename = $_FILES[$fieldName]["name"];
+                $filename = urlencode($_FILES[$fieldName]["name"]);
                 $request = $siteApi."v0/io/contentMime/$filename";
                 $data = file_get_contents($_FILES[$fieldName]["tmp_name"]);
-                $fileUploadMime = $helper->call(null, $request, Common\Enums\HttpMethodEnum::GET, null, null, $data);
+                $fileUploadMime = $helper->call(null, $request, Common\Enums\HttpMethodEnum::POST, null, null, $data);
                 if (strcasecmp($fileUploadType, $projectFileType) != 0) {
                     throw new \Exception(sprintf(
                         Lib\Localisation::getTranslation('common_task_file_extension_mismatch'),
