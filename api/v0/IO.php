@@ -21,7 +21,7 @@ class IO
         $app->group('/v0', function () use ($app) {
             $app->group('/io', function () use ($app) {
                 /* Routes starting with v0/io */
-                $app->get(
+                $app->post(
                     '/contentMime/:filename(:format)/',
                     '\SolasMatch\API\Lib\Middleware::isLoggedIn',
                     '\SolasMatch\API\V0\IO::getMimeFromFileContent'
@@ -66,6 +66,8 @@ class IO
     
     public static function getMimeFromFileContent($filename, $format = ".json")
     {
+        $filename = urldecode($filename);
+        
         if (strstr($filename, '.')) {
             $filename = explode('.', $filename);
             $format = '.'.$filename[1];
