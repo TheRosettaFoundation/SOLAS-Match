@@ -11,10 +11,14 @@
         <input type="text" name="search_name" id="search_name" style="height: 20px" 
                 value="{if isset($searchedText)}{$searchedText}{/if}" />
         <br />
-        <input type="submit" name="submit" value="    {Localisation::getTranslation('org_search_search')}" class="btn btn-primary" />
-        <i class="icon-search icon-white" style="position:relative; right:75px; top:2px;"></i>
-        <input type="submit" name="allOrgs" value="    {Localisation::getTranslation('common_list_all')}" class="btn btn-inverse" />
-        <i class="icon-list icon-white" style="position:relative; right:75px; top:2px;"></i>
+                
+        <button type="submit" name="submit" class="btn btn-primary">
+  		    <i class="icon-search icon-white"></i> {Localisation::getTranslation('org_search_search')}
+		</button>
+		
+		<button type="submit" name="allOrgs" class="btn btn-inverse">
+  		   <i class="icon-list icon-white"></i> {Localisation::getTranslation('common_list_all')}
+		</button>
     </form>
 
 {if isset($foundOrgs)}

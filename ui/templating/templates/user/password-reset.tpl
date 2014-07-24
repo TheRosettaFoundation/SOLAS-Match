@@ -35,10 +35,11 @@
         <label for="cPassword">{Localisation::getTranslation('password_reset_confirm_new_password')}</label>
         <input type="password" name="confirmation_password" />
 
-        <p>
-            <input type="submit" class="btn btn-primary" value="    {Localisation::getTranslation('password_reset_change_password')}"/>
-            <i class="icon-check icon-white" style="position:relative; right:138px;top:2px;"></i>
-        </p>
+        <div>
+            <button type="submit" class="btn btn-primary">
+  			    <i class="icon-share icon-white"></i> {Localisation::getTranslation('password_reset_change_password')}
+			</button>
+        </div>
     </form>
     
 {include file="footer.tpl"}
