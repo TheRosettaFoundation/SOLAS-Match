@@ -68,10 +68,10 @@ class IO
     {
         $filename = urldecode($filename);
         
-        if (strstr($filename, '.')) {
-            $filename = explode('.', $filename);
-            $format = '.'.$filename[1];
-            $filename = $filename[0];
+        if (!is_null($format) && $format != '') {  
+            $dotPos = strrpos($filename, '.');  
+            $format = substr($filename, $dotPos);  
+            $filename = substr($filename, 0, $dotPos);
         }
         $fileContent = API\Dispatcher::getDispatcher()->request()->getBody();
         
