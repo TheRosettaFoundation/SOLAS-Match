@@ -31,7 +31,6 @@ class IO
                 $app->group('/download', function () use ($app) {
                     $app->get(
                         '/project/:projectId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isLoggedIn',
                         '\SolasMatch\API\V0\IO::downloadProjectFile'
                     );
                 
