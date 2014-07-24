@@ -252,6 +252,7 @@
     <string name="site_admin_dashboard_user_not_found">User not found, the provided email address does not correspond to an account on our system.</string>
     <string name="site_admin_dashboard_only_add_trusted">Only add trusted users!</string>
     <string name="site_admin_dashboard_task_id_here">Task ID goes here.</string>
+    <string name="site_admin_dashboard_revoke_task">Revoke Task</string>
     <string name="site_admin_dashboard_revoke_task_from_user">Revoke a task from a user.</string>
     <string name="site_admin_dashboard_confirm_revoke_task">Are you sure you want to revoke the task?</string>
     <string name="site_admin_dashboard_revoke_task_success">Successfully revoked task from user.</string>

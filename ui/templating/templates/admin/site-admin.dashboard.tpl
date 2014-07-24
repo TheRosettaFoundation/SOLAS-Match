@@ -183,7 +183,7 @@
         <table style="width: 40%">
             <tr>
                 <td colspan="2">
-                    <label for="revokeTask"><h2>Revoke Task</h2></label>
+                    <label for="revokeTask"><h2>{Localisation::getTranslation('site_admin_dashboard_revoke_task')}</h2></label>
                 </td>
             </tr>
             {if isset($flash['revokeTaskError'])}
@@ -213,7 +213,7 @@
                 <td valign="top">
                     <button class="btn btn-inverse" type="submit" name="revokeTask" value="1" onclick="return confirm(
                                         '{Localisation::getTranslation('site_admin_dashboard_confirm_revoke_task')}')"/>
-                        <i class="icon-fire icon-white"></i> Revoke Task
+                        <i class="icon-fire icon-white"></i> {Localisation::getTranslation('site_admin_dashboard_revoke_task')}
                     </button>
                 </td>
             </tr>
