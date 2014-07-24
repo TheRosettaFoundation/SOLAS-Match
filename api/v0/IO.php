@@ -336,19 +336,22 @@ class IO
                 ,"xlam" => "application/vnd.ms-excel.addin.macroEnabled.12"
                 ,"xlsb" => "application/vnd.ms-excel.sheet.binary.macroEnabled.12"
                 ,"xlf"  => "application/xliff+xml"
+                ,"doc"  => "application/msword"
         );
     
         $finfo = new \finfo(FILEINFO_MIME_TYPE);
         $mime = $finfo->buffer($file);
-    
+        
         $extension = explode(".", $filename);
         $extension = $extension[count($extension)-1];
-    
-        if (($mime == "application/zip" || ($extension == "xlf")) && array_key_exists($extension, $mimeMap)) {
+      
+        if (($mime == "application/octet-stream" || $mime == "application/zip" || $extension == "doc" || $extension == "xlf") 
+            && (array_key_exists($extension, $mimeMap))) {
             $result = $mimeMap[$extension];
         } else {
             $result = $mime;
         }
+
         return $result;
     }
 }
