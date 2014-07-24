@@ -60,7 +60,7 @@ class TaskRouteHandler
 
         $app->get(
             "/task/:task_id/download-file/v/:version/",
-            array($middleware, "authUserForTaskDownload"),
+            array($middleware, "authUserIsLoggedIn"),
             array($middleware, "authUserForTaskDownload"),
             array($this, "downloadTaskVersion")
         )->name("download-task-version");
