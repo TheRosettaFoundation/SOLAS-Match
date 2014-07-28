@@ -106,6 +106,7 @@ class IO
             $format = '.'.$taskId[1];
             $taskId = $taskId[0];
         }
+        
         $helper = new Common\Lib\APIHelper(".json");
         
         $version = API\Dispatcher::clenseArgs('version', Common\Enums\HttpMethodEnum::GET, 0);
@@ -115,6 +116,7 @@ class IO
         $projectId = $task->getProjectId();
         $absoluteFilePath = Common\Lib\Settings::get("files.upload_path").
                             "proj-$projectId/task-$taskId/v-$version/$fileName";
+        
         $mime = $helper->getCanonicalMime($fileName);
         if (file_exists($absoluteFilePath)) {
             API\Dispatcher::sendResponse(null, self::setDownloadHeaders($absoluteFilePath, $mime), null, $format);
@@ -129,7 +131,7 @@ class IO
         $path_parts = pathinfo($absoluteFilePath);
         $headerArray = array();
         $headerArray['Content-type'] = $mime;
-        $headerArray['Content-Disposition'] = "attachment; filename='".$path_parts["basename"]."'";
+        $headerArray['Content-Disposition'] = "attachment; filename=\"".trim($path_parts["basename"],'"')."\"";
         $headerArray['Content-length'] = $fsize;
         $headerArray['X-Frame-Options'] = "ALLOWALL";
         $headerArray['Pragma'] = "public";
