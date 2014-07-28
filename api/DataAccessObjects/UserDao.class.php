@@ -732,17 +732,7 @@ class UserDao
         return null;
     }
     
-    public static function createPersonalInfo($userInfo)
-    {
-        return self::savePersonalInfo($userInfo);
-    }
-            
-    public static function updatePersonalInfo($userInfo)
-    {
-        return self::savePersonalInfo($userInfo);
-    }
-    
-    private static function savePersonalInfo($userInfo)
+    public static function savePersonalInfo($userInfo)
     {
         $ret = null;
         $args = Lib\PDOWrapper::cleanseNull($userInfo->getId()).",".

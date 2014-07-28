@@ -814,7 +814,7 @@ class Users
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper($format);
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\UserPersonalInformation");
-        API\Dispatcher::sendResponse(null, DAO\UserDao::createPersonalInfo($data), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\UserDao::savePersonalInfo($data), null, $format);
     }
 
     public static function updateUserPersonalInfo($userId, $format = ".json")
@@ -827,7 +827,7 @@ class Users
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper($format);
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\UserPersonalInformation');
-        $data = DAO\UserDao::updatePersonalInfo($data);
+        $data = DAO\UserDao::savePersonalInfo($data);
         API\Dispatcher::sendResponse(null, $data, null, $format);
     }
 
