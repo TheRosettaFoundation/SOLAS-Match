@@ -127,7 +127,7 @@ class IO
         $path_parts = pathinfo($absoluteFilePath);
         $headerArray = array();
         $headerArray['Content-type'] = $mime;
-        $headerArray['Content-Disposition'] = "attachment; filename='".$path_parts["basename"]."'";
+        $headerArray['Content-Disposition'] = "attachment; filename=\"".trim($path_parts["basename"],'"')."\"";
         $headerArray['Content-length'] = $fsize;
         $headerArray['X-Frame-Options'] = "ALLOWALL";
         $headerArray['Pragma'] = "public";
