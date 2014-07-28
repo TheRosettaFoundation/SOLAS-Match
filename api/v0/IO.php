@@ -73,7 +73,7 @@ class IO
             $format = substr($filename, $dotPos);
             $filename = substr($filename, 0, $dotPos);
         }
-        error_log("FILENAME IS $filename AND FORMAT IS $format");
+        
         $fileContent = API\Dispatcher::getDispatcher()->request()->getBody();
         
         API\Dispatcher::sendResponse(null, self::detectMimeType($fileContent, $filename), null, $format);
