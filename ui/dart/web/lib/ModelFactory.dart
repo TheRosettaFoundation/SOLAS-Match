@@ -128,7 +128,6 @@ class ModelFactory
     userInfo.lastName = userData['lastName'];
     userInfo.mobileNumber = userData['mobileNumber'];
     userInfo.businessNumber = userData['businessNumber'];
-    userInfo.sip = userData['sip'];
     userInfo.jobTitle = userData['jobTitle'];
     userInfo.address = userData['address'];
     userInfo.city = userData['city'];

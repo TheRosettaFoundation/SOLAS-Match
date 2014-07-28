@@ -116,7 +116,6 @@ CREATE TABLE `NGOContacts` (
 	`lastName` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
 	`mobileNumber` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
 	`businessNumber` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`sip` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
 	`jobTitle` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
 	`address` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
 	`city` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
@@ -325,7 +324,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP VIEW IF EXISTS `NGOContacts`;
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `NGOContacts`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `NGOContacts` AS select `up`.`user_id` AS `userId`,`up`.`first-name` AS `firstName`,`up`.`last-name` AS `lastName`,`up`.`mobile-number` AS `mobileNumber`,`up`.`business-number` AS `businessNumber`,`up`.`sip` AS `sip`,`up`.`job-title` AS `jobTitle`,`up`.`address` AS `address`,`up`.`city` AS `city`,`up`.`country` AS `country`,`om`.`organisation_id` AS `NGOId`,`u`.`id` AS `id`,`u`.`display-name` AS `displayName`,`u`.`email` AS `email`,`u`.`biography` AS `biography`,`u`.`language_id` AS `languageID`,`u`.`country_id` AS `countryID`,`u`.`created-time` AS `createdtime` from ((`SolasMatch`.`OrganisationMembers` `om` left join `SolasMatch`.`UserPersonalInformation` `up` on((`up`.`user_id` = `om`.`user_id`))) join `SolasMatch`.`Users` `u` on((`om`.`user_id` = `u`.`id`)));
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `NGOContacts` AS select `up`.`user_id` AS `userId`,`up`.`first-name` AS `firstName`,`up`.`last-name` AS `lastName`,`up`.`mobile-number` AS `mobileNumber`,`up`.`business-number` AS `businessNumber`,`up`.`job-title` AS `jobTitle`,`up`.`address` AS `address`,`up`.`city` AS `city`,`up`.`country` AS `country`,`om`.`organisation_id` AS `NGOId`,`u`.`id` AS `id`,`u`.`display-name` AS `displayName`,`u`.`email` AS `email`,`u`.`biography` AS `biography`,`u`.`language_id` AS `languageID`,`u`.`country_id` AS `countryID`,`u`.`created-time` AS `createdtime` from ((`SolasMatch`.`OrganisationMembers` `om` left join `SolasMatch`.`UserPersonalInformation` `up` on((`up`.`user_id` = `om`.`user_id`))) join `SolasMatch`.`Users` `u` on((`om`.`user_id` = `u`.`id`)));
 
 
 -- Dumping structure for view Reporting.NGOs

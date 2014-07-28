@@ -295,7 +295,6 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($personalInfo->getLastName(), $insertedInfo->getLastName());
         $this->assertEquals($personalInfo->getMobileNumber(), $insertedInfo->getMobileNumber());
         $this->assertEquals($personalInfo->getBusinessNumber(), $insertedInfo->getBusinessNumber());
-        $this->assertEquals($personalInfo->getSip(), $insertedInfo->getSip());
         $this->assertEquals($personalInfo->getJobTitle(), $insertedInfo->getJobTitle());
         $this->assertEquals($personalInfo->getAddress(), $insertedInfo->getAddress());
         $this->assertEquals($personalInfo->getCity(), $insertedInfo->getCity());
@@ -345,7 +344,6 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($personalInfo->getLastName(), $insertedInfo->getLastName());
         $this->assertEquals($personalInfo->getMobileNumber(), $insertedInfo->getMobileNumber());
         $this->assertEquals($personalInfo->getBusinessNumber(), $insertedInfo->getBusinessNumber());
-        $this->assertEquals($personalInfo->getSip(), $insertedInfo->getSip());
         $this->assertEquals($personalInfo->getJobTitle(), $insertedInfo->getJobTitle());
         $this->assertEquals($personalInfo->getAddress(), $insertedInfo->getAddress());
         $this->assertEquals($personalInfo->getCity(), $insertedInfo->getCity());
@@ -403,7 +401,6 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($personalInfo->getLastName(), $insertedInfo->getLastName());
         $this->assertEquals($personalInfo->getMobileNumber(), $insertedInfo->getMobileNumber());
         $this->assertEquals($personalInfo->getBusinessNumber(), $insertedInfo->getBusinessNumber());
-        $this->assertEquals($personalInfo->getSip(), $insertedInfo->getSip());
         $this->assertEquals($personalInfo->getJobTitle(), $insertedInfo->getJobTitle());
         $this->assertEquals($personalInfo->getAddress(), $insertedInfo->getAddress());
         $this->assertEquals($personalInfo->getCity(), $insertedInfo->getCity());

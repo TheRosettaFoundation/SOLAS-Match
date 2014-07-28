@@ -195,21 +195,6 @@
                                 <td style="padding-bottom: 10px"/>
                             </tr>
                         {/if}
-                        {if $userPersonalInfo->getSip() != null}
-                            <tr>
-                                <td>
-                                    <h3>Session Initiation Protocol (SIP):</h3>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    {$userPersonalInfo->getSip()}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding-bottom: 10px"/>
-                            </tr>
-                        {/if}
                         {if $userPersonalInfo->getJobTitle() != null}
                             <tr>
                                 <td>

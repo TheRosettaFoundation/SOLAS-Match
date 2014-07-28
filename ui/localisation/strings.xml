@@ -154,7 +154,6 @@
     <string name="common_claimed_date">Claimed Date</string>
     <string name="common_claimed_by">Claimed By</string>
     <string name="common_loading">Loading...</string>
-    <string name="common_sip">Session Initiation Protocol (SIP)</string>
     <string name="common_track_project">Track Project</string>
     <string name="common_untrack_task">Untrack Task</string>
     <string name="common_track_task">Track Task</string>

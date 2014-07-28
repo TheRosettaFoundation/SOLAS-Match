@@ -8,7 +8,6 @@ class UserPersonalInformation
   String lastName;
   String mobileNumber;
   String businessNumber;
-  String sip;
   String jobTitle;
   String address;
   String city;
@@ -24,7 +23,6 @@ class UserPersonalInformation
       "lastName" : lastName,
       "mobileNumber" : mobileNumber,
       "businessNumber" : businessNumber,
-      "sip" : sip,
       "jobTitle" : jobTitle,
       "address" : address,
       "city" : city,
