@@ -2666,7 +2666,7 @@ BEGIN
             (SELECT code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`,
             comment, `task-type_id`, `task-status_id`, published, deadline, `created-time`
         FROM Tasks t
-        WHERE t.id IN (SELECT tc.task_id FROM TaskClaims tc)
+        WHERE t.id IN (SELECT tc.task_id FROM TaskClaims tc WHERE tc.user_id = userID)
         AND (taskType is null or t.`task-type_id` = taskType)
         AND (taskStatus is null or t.`task-status_id` = taskStatus)
         ORDER BY
