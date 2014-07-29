@@ -249,6 +249,7 @@ class UnitTestHelper
         $lastName = "Doe",
         $mobileNumber = 333444666,
         $businessNumber = 42,
+        $langPref = 1785, //Current ID for English in database
         $jobTitle = "Derp",
         $address = "This is a real place",
         $city = "Lightless City",
@@ -263,6 +264,7 @@ class UnitTestHelper
         $userInfo->setLastName($lastName);
         $userInfo->setMobileNumber($mobileNumber);
         $userInfo->setBusinessNumber($businessNumber);
+        $userInfo->setLanguagePreference($langPref);
         $userInfo->setJobTitle($jobTitle);
         $userInfo->setAddress($address);
         $userInfo->setCity($city);
