@@ -1068,6 +1068,7 @@ CREATE TABLE IF NOT EXISTS `UserPersonalInformation` (
   `last-name` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
   `mobile-number` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
   `business-number` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `language-preference` INT(10) UNSIGNED DEFAULT NULL,
   `job-title` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
   `address` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
   `city` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -1075,7 +1076,8 @@ CREATE TABLE IF NOT EXISTS `UserPersonalInformation` (
   `receive_credit` BIT(1) DEFAULT 0 NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`user_id`),
-  CONSTRAINT `FK_UserPersonalInformation_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `FK_UserPersonalInformation_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_UserPersonalInformation_Languages` FOREIGN KEY (`language-preference`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP PROCEDURE IF EXISTS alterTable;
@@ -1089,6 +1091,22 @@ BEGIN
               AND DATA_TYPE = 'VARCHAR'
               AND CHARACTER_MAXIMUM_LENGTH = 128) THEN
         ALTER TABLE UserPersonalInformation DROP COLUMN sip;
+    END IF;
+END//
+DELIMITER ;
+CALL alterTable();
+DROP PROCEDURE alterTable;
+
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM information_schema.`COLUMNS`
+              WHERE TABLE_SCHEMA = database()
+              AND TABLE_NAME = "UserPersonalInformation"
+              AND COLUMN_NAME = "language-preference") THEN
+        ALTER TABLE UserPersonalInformation ADD `language-preference` INT(10) UNSIGNED DEFAULT NULL;
+        ALTER TABLE UserPersonalInformation ADD CONSTRAINT `FK_UserPersonalInformation_Languages` FOREIGN KEY (`language-preference`) REFERENCES `Languages` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
     END IF;
 END//
 DELIMITER ;
