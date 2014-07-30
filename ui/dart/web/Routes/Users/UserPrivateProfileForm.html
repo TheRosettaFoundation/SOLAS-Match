@@ -27,7 +27,13 @@
               <label for='biography'><strong>{{localisation.getTranslation("common_biography")}}:</strong></label>
               <textarea value="{{user.biography}}" cols='40' rows='7' style="width: 80%">
               </textarea>
-    
+              
+              <div id="siteLangSelectDiv">
+              <label for='languagePreference' style="margin-top:6px;"'><strong>{{localisation.getTranslation("common_language_preference")}}:</strong></label>
+                <template if="{{!isLoaded}}">
+                  <p><i>{{localisation.getTranslation("common_loading")}}</i></p> 
+                </template>
+              </div>
             </td>
             <td width="50%">
               <label for='firstName'><strong>{{localisation.getTranslation("common_first_name")}}:</strong></label>
@@ -41,7 +47,7 @@
     
               <label for='businessNumber'><strong>{{localisation.getTranslation("common_business_number")}}:</strong></label>
               <input type='text' value="{{userInfo.businessNumber}}" style="width: 80%" />
-    
+          
               <label for='jobTitle'><strong>{{localisation.getTranslation("common_job_title")}}:</strong></label>
               <input type='text' value="{{userInfo.jobTitle}}" style="width: 80%" />
     

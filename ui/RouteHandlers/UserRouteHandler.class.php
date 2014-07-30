@@ -537,6 +537,7 @@ class UserRouteHandler
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
         $adminDao = new DAO\AdminDao();
+        $langDao = new DAO\LanguageDao();
         
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
         if (!is_null($loggedInUserId)) {
@@ -605,6 +606,10 @@ class UserRouteHandler
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
 
+        //Get user's language preference
+        $langPref = $langDao->getLanguage($userPersonalInfo->getLanguagePreference());
+        $langPrefName = $langPref->getName();
+        
         $app->view()->appendData(array(
             "badges" => $badges,
             "orgList" => $orgList,
@@ -616,6 +621,7 @@ class UserRouteHandler
             "extra_scripts" => $extra_scripts,
             "org_creation" => $org_creation,
             "userPersonalInfo" => $userPersonalInfo,
+            "langPrefName" => $langPrefName,
             "secondaryLanguages" => $secondaryLanguages,
             "taskTypeColours" => $taskTypeColours
         ));

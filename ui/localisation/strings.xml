@@ -217,6 +217,7 @@
     <string name="common_sitewide_maintenance_msg">Service will resume in approx. %s hours. We thank you for your patience.</string>
     <string name="common_this_may_take_days_weeks">This may take several days or weeks, depending on the tasks.</string>
     <string name="common_task_file_extension_mismatch">The file <strong>extension</strong> differs from the originally downloaded file. Please upload a <strong>(.%s)!</strong></string>
+    <string name="common_language_preference">Language Preference</string>
     
 	<string name="admin_banned_orgs_list_all_banned_organisations_of">All banned Organisations of %s.</string>
 	<string name="admin_banned_orgs_list_confirm_unban">Are you sure you want to unban this Organisation and its members?</string>
@@ -944,6 +945,7 @@
     <string name="user_private_profile_native_language_blanks">When setting your native language make sure to select a language and a country.</string>
     <string name="user_private_profile_receive_credit">Receive Credit</string>
 	<string name="user_private_profile_7">If you would like to receive credit for your work by name you will have to fill out the first name and last name fields.</string>
+    <string name="user_private_profile_language_preference_updated">Your language preference has been updated. The site will be displayed in your preferred language the next time you log in.</string>
 
 	<string name="user_public_profile_0">Overview of your account details.</string>
 	<string name="user_public_profile_1">By creating an organisation, you confirm that its activities are not in conflict with the general terms and conditions for the use of this site.</string>

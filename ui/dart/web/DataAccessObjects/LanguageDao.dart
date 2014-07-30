@@ -128,4 +128,32 @@ class LanguageDao
         });
     return languages;
   }
+  
+  /**
+   * [docs pending]
+   */
+  static Future<List<Language>> getSiteLanguages()
+  {
+    APIHelper client = new APIHelper(".json");
+        Future<List<Language>> languages = client.call("Language", "v0/localisation/siteLanguages", "GET")
+            .then((HttpRequest response) {
+              List<Language> ret = new List<Language>();
+              if (response.status < 400) {
+                if (response.responseText != '') {
+                  Map jsonParsed = JSON.decode(response.responseText);
+                  if (jsonParsed.length > 0) {
+                    jsonParsed['item'].forEach((String data) {
+                      Map lang = JSON.decode(data);
+                      ret.add(ModelFactory.generateLanguageFromMap(lang));
+                    });
+                  }
+                }
+              } else {
+                print("Error: getActiveTargetLanguages returned " + 
+                    response.status.toString() + " " + response.statusText);
+              }
+              return ret;
+            });
+        return languages;
+  }
 }

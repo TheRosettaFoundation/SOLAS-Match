@@ -8,6 +8,7 @@ class UserPersonalInformation
   String lastName;
   String mobileNumber;
   String businessNumber;
+  int languagePreference;
   String jobTitle;
   String address;
   String city;
@@ -23,6 +24,7 @@ class UserPersonalInformation
       "lastName" : lastName,
       "mobileNumber" : mobileNumber,
       "businessNumber" : businessNumber,
+      "languagePreference" : languagePreference,
       "jobTitle" : jobTitle,
       "address" : address,
       "city" : city,

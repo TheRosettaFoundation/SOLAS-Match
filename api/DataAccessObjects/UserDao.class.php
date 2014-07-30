@@ -741,6 +741,7 @@ class UserDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getLastName()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getMobileNumber()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getBusinessNumber()).",".
+            Lib\PDOWrapper::cleanseNull($userInfo->getLanguagePreference()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getJobTitle()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getAddress()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getCity()).",".
@@ -760,6 +761,7 @@ class UserDao
         $lastName = null,
         $mobileNumber = null,
         $businessNumber = null,
+        $langPref = null,
         $jobTitle = null,
         $address = null,
         $city = null,
@@ -773,6 +775,7 @@ class UserDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($lastName).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($mobileNumber).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($businessNumber).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($langPref).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($jobTitle).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($address).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($city).",".
