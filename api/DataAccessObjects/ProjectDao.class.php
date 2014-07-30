@@ -415,8 +415,8 @@ class ProjectDao
     {
         $projectFileInfo = self::getProjectFileInfo($projectId, null, null, null, null);
         $filename = $projectFileInfo->getFilename();
-        $source = Common\Lib\Settings::get("files.upload_path")."proj-$projectId/$filename";
-        
+        $absoluteFilePath = Common\Lib\Settings::get("files.upload_path")."proj-$projectId/$filename";
+
         if (file_exists($absoluteFilePath)) {
             return file_get_contents($absoluteFilePath);
         }
