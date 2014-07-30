@@ -2129,6 +2129,20 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure getLatestAvailableTasksCount
+DROP PROCEDURE IF EXISTS `getLatestAvailableTasksCount`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasksCount`()
+BEGIN
+    SELECT count(*) as result
+        FROM Tasks t 
+        WHERE NOT exists (SELECT 1 
+                            FROM TaskClaims 
+                            WHERE TaskClaims.task_id = t.id) 
+        AND t.published = 1 
+        AND t.`task-status_id` = 2;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Dev.getLatestFileVersion
 DROP PROCEDURE IF EXISTS `getLatestFileVersion`;
@@ -3118,6 +3132,40 @@ BEGIN
                     OR t.`language_id-target` IN 
                         (SELECT language_id FROM UserSecondaryLanguages WHERE user_id = uID))))
              ORDER BY uts.score DESC limit offset, lim);
+END//
+DELIMITER ;
+
+-- Dumping structure for getUserTopTasksCount
+DROP PROCEDURE IF EXISTS `getUserTopTasksCount`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasksCount` (IN `uID` INT, IN `strict` INT, IN `taskType` INT, IN `sourceLanguage` VARCHAR(3), IN `targetLanguage` VARCHAR(3))
+
+    READS SQL DATA
+
+BEGIN
+    if taskType = ''       then set taskType = null; end if;
+    if sourceLanguage = '' then set sourceLanguage = null; end if;
+    if targetLanguage = '' then set targetLanguage = null; end if;
+
+    (SELECT count(*) as `result`
+        FROM Tasks t LEFT JOIN (SELECT * FROM UserTaskScores u WHERE u.user_id = uID ) AS uts 
+        ON t.id = uts.task_id 
+        WHERE t.id NOT IN ( SELECT t.task_id FROM TaskClaims t)
+        AND t.published = 1 
+        AND t.`task-status_id` = 2 
+        AND not exists( SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id = uID AND t.task_id = t.id)
+        AND (taskType is null or t.`task-type_id` = taskType)
+        AND (sourceLanguage is null or t.`language_id-source` = (SELECT l.id FROM Languages l WHERE l.code = sourceLanguage))
+        AND (targetLanguage is null or t.`language_id-target` = (SELECT l.id FROM Languages l WHERE l.code = targetLanguage))
+        AND (strict = 0
+            OR ((t.`language_id-source` IN 
+                        (SELECT language_id FROM Users WHERE id =  uID)
+                    OR t.`language_id-source` IN 
+                        (SELECT language_id FROM UserSecondaryLanguages WHERE user_id =  uID))
+                AND (t.`language_id-target` IN 
+                        (SELECT language_id FROM Users WHERE id = uID)
+                    OR t.`language_id-target` IN 
+                        (SELECT language_id FROM UserSecondaryLanguages WHERE user_id = uID)))));
 END//
 DELIMITER ;
 

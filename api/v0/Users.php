@@ -212,11 +212,17 @@ class Users
                     );
 
                     $app->get(
+                        '/topTasksCount(:format)/',
+                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
+                        '\SolasMatch\API\V0\Users::getUserTopTasksCount'
+                    );
+                    
+                    $app->get(
                         '/topTasks(:format)/',
                         '\SolasMatch\API\Lib\Middleware::isloggedIn',
                         '\SolasMatch\API\V0\Users::getUserTopTasks'
                     );
-
+                    
                     $app->get(
                         '/archivedTasks/:limit/:offset(:format)/',
                         '\SolasMatch\API\Lib\Middleware::isloggedIn',
@@ -723,6 +729,37 @@ class Users
         );
         API\Dispatcher::sendResponse(null, $data, null, $format);
     }
+
+    public static function getUserTopTasksCount($userId, $format = ".json")
+    {
+        error_log("in the function");
+        $filter = API\Dispatcher::clenseArgs('filter', Common\Enums\HttpMethodEnum::GET, '');
+        $strict = API\Dispatcher::clenseArgs('strict', Common\Enums\HttpMethodEnum::GET, false);
+        $filters = Common\Lib\APIHelper::parseFilterString($filter);
+        $filter = "";
+        $taskType = '';
+        $sourceLanguageCode = '';
+        $targetLanguageCode = '';
+        if (isset($filters['taskType']) && $filters['taskType'] != '') {
+            $taskType = $filters['taskType'];
+        }
+        if (isset($filters['sourceLanguage']) && $filters['sourceLanguage'] != '') {
+            $sourceLanguageCode = $filters['sourceLanguage'];
+        }
+        if (isset($filters['targetLanguage']) && $filters['targetLanguage'] != '') {
+            $targetLanguageCode = $filters['targetLanguage'];
+        }
+        $dao = new DAO\TaskDao();
+        $data = $dao->getUserTopTasksCount(
+            $userId,
+            $strict,
+            $taskType,
+            $sourceLanguageCode,
+            $targetLanguageCode
+        );
+        API\Dispatcher::sendResponse(null, $data, null, $format);
+    }
+    
     
     public static function getFilteredUserClaimedTasks(
             $userId,

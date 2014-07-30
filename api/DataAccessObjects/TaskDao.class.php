@@ -395,6 +395,21 @@ class TaskDao
         return $ret;
     }
 
+    //! Get the count of most recently created Tasks
+    /*!
+      Get the count  of the most recently created Task objects. 
+      @return Returns an integer
+    */
+    public static function getLatestAvailableTasksCount()
+    {
+        $result = Lib\PDOWrapper::call("getLatestAvailableTasksCount", "");
+        if ($result) {
+            return $result[0]['result'];
+        } else {
+            return null;
+        }
+    }
+    
     //! Get a list of Task objects ordered by their score for a given User
     /*!
       Get a list of the most relevant Tasks for a given User. The Task objects that are returned will be ordered by the
@@ -444,6 +459,47 @@ class TaskDao
             }
         }
         return $ret;
+    }
+    
+    //! Get the count of Task objects for a given User
+    /*!
+      Get the count of Task objects for a given User. If strict mode is enabled then only Tasks that match the
+      Users native and/or secondary languages for both their source and target will be returned. 
+      The list of returned tasks can be further filtered by specifying a Task type, source Language or a 
+      target Language. These filter options will be ignored if they are null.
+      @param int $userId is the id of a User
+      @param bool $strict is true to enable strict mode, false to disable it
+      @param TaskTypeEnum $taskType is the Task type filter or null
+      @param String $sourceLanguageCode is a Language code or null
+      @param String $targetLanguageCode is a Language code or null
+      @return Returns the count of Task objects
+    */
+    public static function getUserTopTasksCount(
+        $userId,
+        $strict,
+        $taskType,
+        $sourceLanguageCode,
+        $targetLanguageCode
+    ) {
+        $args = Lib\PDOWrapper::cleanse($userId).", ";
+
+        if ($strict) {
+            $args .= "1, ";
+        } else {
+            $args .= "0, ";
+        }
+        
+        $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($taskType).', ';
+        $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLanguageCode).', ';
+        $args .=  Lib\PDOWrapper::cleanseNullOrWrapStr($targetLanguageCode);
+        $result = Lib\PDOWrapper::call("getUserTopTasksCount", $args);
+   
+        if ($result) {
+            return $result[0]['result'];
+        } else {
+            return null;
+        }
+   
     }
 
     //! Get Tasks with the specified Tag
