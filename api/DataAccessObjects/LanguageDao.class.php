@@ -27,8 +27,9 @@ class LanguageDao
     public static function getLanguageList()
     {
         $languages = array();
-        foreach (Lib\PDOWrapper::call("getLanguages", "") as $lcid) {
-            $languages[] = Common\Lib\ModelFactory::buildModel("Language", $lcid);
+        $result = Lib\PDOWrapper::call("getLanguages", "");
+        foreach ($result as $lang) {
+            $languages[] = Common\Lib\ModelFactory::buildModel("Language", $lang);
         }
 
         return $languages;
@@ -37,7 +38,8 @@ class LanguageDao
     public static function getActiveLanguages()
     {
         $languages = null;
-        if ($result = Lib\PDOWrapper::call("getActiveLanguages", "")) {
+        $result = Lib\PDOWrapper::call("getActiveLanguages", "");
+        if ($result) {
             $languages = array();
             foreach ($result as $row) {
                 $languages[] = Common\Lib\ModelFactory::buildModel("Language", $row);
@@ -49,7 +51,8 @@ class LanguageDao
     public static function getActiveSourceLanguages()
     {
         $languages = null;
-        if ($result = Lib\PDOWrapper::call("getActiveSourceLanguages", "")) {
+        $result  = Lib\PDOWrapper::call("getActiveSourceLanguages", "");
+        if ($result) {
             $languages = array();
             foreach ($result as $row) {
                 $languages[] = Common\Lib\ModelFactory::buildModel("Language", $row);
@@ -61,7 +64,8 @@ class LanguageDao
     public static function getActiveTargetLanguages()
     {
         $languages = null;
-        if ($result = Lib\PDOWrapper::call("getActiveTargetLanguages", "")) {
+        $result = Lib\PDOWrapper::call("getActiveTargetLanguages", "");
+        if ($result) {
             $languages = array();
             foreach ($result as $row) {
                 $languages[] = Common\Lib\ModelFactory::buildModel("Language", $row);

@@ -23,8 +23,9 @@ class CountryDao
     public static function getCountryList()
     {
         $countries = array();
-        foreach (Lib\PDOWrapper::call("getCountries", "") as $lcid) {
-            $countries[] = Common\Lib\ModelFactory::buildModel('Country', $lcid);
+        $result = Lib\PDOWrapper::call("getCountries", "");
+        foreach ($result as $country) {
+            $countries[] = Common\Lib\ModelFactory::buildModel('Country', $country);
         }
         return $countries;
     }
