@@ -6,7 +6,7 @@
         <th>{Localisation::getTranslation('common_created')}</th>
         <th>{Localisation::getTranslation('common_task_deadline')}</th>
         <th>{Localisation::getTranslation('common_word_count')}</th>
-        {if isset($isOrgMember)}<th>{Localisation::getTranslation('common_status')}</th>{/if}
+        {if isset($isMember)}<th>{Localisation::getTranslation('common_status')}</th>{/if}
     </thead>
     <tbody>
         <tr>
@@ -38,7 +38,7 @@
                     -
                 {/if}
             </td>
-            {if isset($isOrgMember)}
+            {if isset($isMember)}
                 <td>
                     {assign var="status_id" value=$task->getTaskStatus()}
                     {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
