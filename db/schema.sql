@@ -517,6 +517,8 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
   `created` datetime NOT NULL,
   `language_id` int(10) unsigned NOT NULL,
   `country_id` int(10) unsigned NOT NULL,
+  `image_uploaded` BIT(1) DEFAULT 0 NOT NULL,
+  `image_approved` BIT(1) DEFAULT 0 NOT NULL,
   UNIQUE KEY `id` (`id`),
   KEY `organisation_id` (`organisation_id`,`language_id`,`country_id`),
   KEY `FK_ArchivedProjects_Languages` (`language_id`),
@@ -525,6 +527,41 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
   CONSTRAINT `FK_ArchivedProjects_Languages` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ArchivedProjects_Countries` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP PROCEDURE IF EXISTS alterTable;
+ DELIMITER //
+ CREATE PROCEDURE alterTable()
+ BEGIN
+     IF NOT EXISTS(SELECT 1
+                     FROM information_schema.`COLUMNS`
+                     WHERE TABLE_SCHEMA = database()
+                     AND TABLE_NAME = "ArchivedProjects"
+                     AND COLUMN_NAME = "image_uploaded") then
+         ALTER TABLE ArchivedProjects
+             ADD `image_uploaded` BIT(1) DEFAULT 0 NOT NULL;
+     END IF;
+ END//
+ DELIMITER ;
+ CALL alterTable();
+ DROP PROCEDURE alterTable;
+
+ 
+ DROP PROCEDURE IF EXISTS alterTable;
+ DELIMITER //
+ CREATE PROCEDURE alterTable()
+ BEGIN
+     IF NOT EXISTS(SELECT 1
+                     FROM information_schema.`COLUMNS`
+                     WHERE TABLE_SCHEMA = database()
+                     AND TABLE_NAME = "ArchivedProjects"
+                     AND COLUMN_NAME = "image_approved") then
+         ALTER TABLE ArchivedProjects
+             ADD `image_approved` BIT(1) DEFAULT 0 NOT NULL;
+     END IF;
+ END//
+ DELIMITER ;
+ CALL alterTable();
+ DROP PROCEDURE alterTable;
 
 -- Dumping structure for table debug-test.ArchivedProjectsMetadata
 CREATE TABLE IF NOT EXISTS `ArchivedProjectsMetadata` (
@@ -808,6 +845,8 @@ CREATE TABLE IF NOT EXISTS `Projects` (
 	`created` DATETIME NOT NULL,
 	`language_id` INT(10) UNSIGNED NOT NULL,
 	`country_id` INT(10) UNSIGNED NOT NULL,
+    `image_uploaded` BIT(1) DEFAULT 0 NOT NULL,
+    `image_approved` BIT(1) DEFAULT 0 NOT NULL,
 	PRIMARY KEY (`id`),
 	UNIQUE INDEX `organisation_id` (`organisation_id`, `title`, `language_id`, `country_id`),
 	INDEX `FK_Projects_Languages` (`language_id`),
@@ -817,6 +856,39 @@ CREATE TABLE IF NOT EXISTS `Projects` (
 	CONSTRAINT `FK_project_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+DROP PROCEDURE IF EXISTS alterTable;
+ DELIMITER //
+ CREATE PROCEDURE alterTable()
+ BEGIN
+     IF NOT EXISTS(SELECT 1
+                     FROM information_schema.`COLUMNS`
+                     WHERE TABLE_SCHEMA = database()
+                     AND TABLE_NAME = "Projects"
+                     AND COLUMN_NAME = "image_uploaded") then
+         ALTER TABLE Projects
+             ADD `image_uploaded` BIT(1) DEFAULT 0 NOT NULL;
+     END IF;
+ END//
+ DELIMITER ;
+ CALL alterTable();
+ DROP PROCEDURE alterTable;
+
+DROP PROCEDURE IF EXISTS alterTable;
+ DELIMITER //
+ CREATE PROCEDURE alterTable()
+ BEGIN
+     IF NOT EXISTS(SELECT 1
+                     FROM information_schema.`COLUMNS`
+                     WHERE TABLE_SCHEMA = database()
+                     AND TABLE_NAME = "Projects"
+                     AND COLUMN_NAME = "image_approved") then
+         ALTER TABLE Projects
+             ADD `image_approved` BIT(1) DEFAULT 0 NOT NULL;
+     END IF;
+ END//
+ DELIMITER ;
+ CALL alterTable();
+ DROP PROCEDURE alterTable;
 -- Data exporting was unselected.
 
 
@@ -1393,7 +1465,7 @@ BEGIN
 		SELECT GROUP_CONCAT(t.label) INTO @`projectTags` FROM Tags t JOIN ProjectTags pt ON t.id = pt.tag_id WHERE pt.project_id=projectId;
 			
 		START TRANSACTION;
-		INSERT INTO `ArchivedProjects` (id, title, description, impact, deadline, organisation_id, reference, `word-count`, created,language_id, country_id)
+		INSERT INTO `ArchivedProjects` (id, title, description, impact, deadline, organisation_id, reference, `word-count`, created,language_id, country_id, image_uploaded, image_approved)
 		SELECT *
 		FROM Projects p
 		WHERE p.id=projectId;
@@ -1877,7 +1949,7 @@ DELIMITER ;
 -- Dumping structure for procedure trommonsUpdateTest.getArchivedProject
 DROP PROCEDURE IF EXISTS `getArchivedProject`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `imp` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `archiveDate` DATETIME, IN `archiverId` INT, IN `lCode` VARCHAR(3), IN `cCode` VARCHAR(2))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `imp` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `archiveDate` DATETIME, IN `archiverId` INT, IN `lCode` VARCHAR(3), IN `cCode` VARCHAR(2), IN imageUploaded BIT(1), IN imageApproved)
     READS SQL DATA
 BEGIN
     if projectId='' then set projectId=null;end if;
@@ -1893,6 +1965,8 @@ BEGIN
     if archiverId='' then set archiverId=null;end if;
     if lCode='' then set lCode=null;end if;
     if cCode='' then set cCode=null;end if;
+    if imageUploaded='' then set imageUploaded=null;end if;
+    if imageApproved='' then set imageApproved=null;end if;
     set @lID=null;
     set @cID=null;
 
@@ -1922,7 +1996,9 @@ BEGIN
         and (@lID is null or p.language_id=@lID)
         and (@cID is null or p.country_id = @cID)
         and (archiveDate is null or m.`archived-date`=archiveDate or archiveDate='0000-00-00 00:00:00') 
-        and (archiverId is null or m.`user_id-archived`= archiverId);
+        and (archiverId is null or m.`user_id-archived`= archiverId)
+        AND (imageUploaded IS NULL OR p.image_uploaded = imageUploaded)
+        AND (imageApproved IS NULL OR p.image_approved = imageApproved);
 
 END//
 DELIMITER ;
@@ -2295,7 +2371,7 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getProject
 DROP PROCEDURE IF EXISTS `getProject`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `impactText` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `sCC` VARCHAR(3), IN `sCode` VARCHAR(3))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `impactText` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `sourceCountryCode` VARCHAR(3), IN `sourceLanguageCode` VARCHAR(3), IN imageUploaded BIT(1), IN imageApproved BIT(1))
     READS SQL DATA
 BEGIN
     if projectId='' then set projectId=null;end if;
@@ -2307,8 +2383,10 @@ BEGIN
     if ref='' then set ref=null;end if;
     if wordCount='' then set wordCount=null;end if;
     if createdTime='' then set createdTime=null;end if;
-    if sCC="" then set sCC=null; end if;
-    if sCode="" then set sCode=null; end if;
+    if sourceCountryCode="" then set sourceCountryCode=null; end if;
+    if sourceLanguageCode="" then set sourceLanguageCode=null; end if;
+    if imageUploaded="" then set imageUploaded=null; end if;
+    if imageApproved="" then set imageApproved=null; end if;
 
     SELECT id, title, description, impact, deadline,organisation_id,reference,`word-count`, created,
 
@@ -2333,8 +2411,10 @@ BEGIN
         AND (ref is null or p.reference = ref)
         AND (wordCount is null or p.`word-count`= wordCount)
         AND (createdTime is null or createdTime = '0000-00-00 00:00:00' or p.created = createdTime)
-        AND (sCC is null or p.country_id = (select c.id from Countries c where c.code = sCC))
-        AND (sCode is null or p.language_id=(select l.id from Languages l where l.code = sCode));
+        AND (sourceCountryCode is null or p.country_id = (select c.id from Countries c where c.code = sourceCountryCode))
+        AND (sourceLanguageCode is null or p.language_id=(select l.id from Languages l where l.code = sourceLanguageCode))
+        AND (imageUploaded IS NULL OR p.image_uploaded = imageUploaded)
+        AND (imageApproved IS NULL OR p.image_approved = imageApproved);
 END//
 DELIMITER ;
 
@@ -3767,20 +3847,21 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.projectInsertAndUpdate
 DROP PROCEDURE IF EXISTS `projectInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `projectInsertAndUpdate`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `impactText` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `sCC` VARCHAR(3), IN `sCode` VARCHAR(3))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `projectInsertAndUpdate`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `impactText` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `sourceCountryCode` VARCHAR(3), IN `sourceLanguageCode` VARCHAR(3), IN imageUploaded BIT(1), IN imageApproved BIT(1))
 BEGIN
     if projectId="" then set projectId=null; end if;
     if deadlineTime="" then set deadlineTime=null; end if;
     if orgId="" then set orgId=null; end if;
     if wordCount="" then set wordCount=null; end if;
     if createdTime="" then set createdTime=null; end if;
-    if sCC="" then set sCC=null; end if;
-    if sCode="" then set sCode=null; end if;
+    if sourceCountryCode="" then set sourceCountryCode=null; end if;
+    if sourceLanguageCode="" then set sourceLanguageCode=null; end if;
     if titleText="" then set titleText=null; end if;
     if descr="" then set descr=null; end if;
     if impactText="" then set impactText=null; end if;
     if ref="" then set ref=null; end if;
-
+    if imageUploaded="" then set imageUploaded=null; end if;
+    if imageApproved="" then set imageApproved=null; end if;
 
     if projectId is null then
 
@@ -3788,14 +3869,14 @@ BEGIN
         then set deadlineTime = DATE_ADD(now(),INTERVAL 14 DAY); end if;
 
         	set @scID=null;
-			select c.id into @scID from Countries c where c.code=sCC;
+			select c.id into @scID from Countries c where c.code=sourceCountryCode;
 			set @sID=null;
-			select l.id into @sID from Languages l where l.code=sCode;
+			select l.id into @sID from Languages l where l.code=sourceLanguageCode;
 	
-        INSERT INTO Projects (title, description, impact, deadline, organisation_id, reference, `word-count`, created,language_id,country_id) 
-        VALUES (titleText, descr, impactText, deadlineTime, orgId, ref, wordCount, NOW(),@sID,@scID);
+        INSERT INTO Projects (title, description, impact, deadline, organisation_id, reference, `word-count`, created,language_id,country_id, image_uploaded, image_approved) 
+        VALUES (titleText, descr, impactText, deadlineTime, orgId, ref, wordCount, NOW(),@sID,@scID,imageUploaded, imageApproved);
 
-         call getProject(LAST_INSERT_ID(), NULL, NULL, NULL, NULL, NULL,NULL, NULL, NULL,NULL,NULL);
+         call getProject(LAST_INSERT_ID(), NULL, NULL, NULL, NULL, NULL,NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
     elseif EXISTS (select 1 FROM Projects p WHERE p.id = projectId) then
 
@@ -3853,18 +3934,18 @@ BEGIN
             then update Projects p set p.`word-count` = wordCount WHERE p.id = projectId;
         end if;
 
-        if sCC is not null 
-        and ((select c.id from Countries c where c.code = sCC) != (select p.`country_id` from Projects p WHERE p.id = projectId))
+        if sourceCountryCode is not null 
+        and ((select c.id from Countries c where c.code = sourceCountryCode) != (select p.`country_id` from Projects p WHERE p.id = projectId))
         or (select p.`country_id` from Projects p WHERE p.id = projectId) is null
 
-            then update Projects p set p.`country_id` = (select c.id from Countries c where c.code = sCC) WHERE p.id = projectId;
+            then update Projects p set p.`country_id` = (select c.id from Countries c where c.code = sourceCountryCode) WHERE p.id = projectId;
         end if;
 
-        if sCode is not null 
-        and ((select l.id from Languages l where l.code=sCode) != (select p.`language_id` from Projects p WHERE p.id = projectId))
+        if sourceLanguageCode is not null 
+        and ((select l.id from Languages l where l.code=sourceLanguageCode) != (select p.`language_id` from Projects p WHERE p.id = projectId))
         or (select p.`language_id` from Projects p WHERE p.id = projectId) is null
 
-            then update Projects p set p.`language_id` = (select l.id from Languages l where l.code=sCode) WHERE p.id = projectId;
+            then update Projects p set p.`language_id` = (select l.id from Languages l where l.code=sourceLanguageCode) WHERE p.id = projectId;
         end if;
         
         if createdTime is not null 
@@ -3874,8 +3955,16 @@ BEGIN
 
             then update Projects p set p.created = createdTime WHERE p.id = projectId;
         end if;
+        
+        IF imageUploaded IS NOT NULL
+            THEN UPDATE Projects p SET p.image_uploaded = imageUploaded WHERE p.id = projectId;
+        END IF;
 
-        call getProject(projectId, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+        IF imageApproved IS NOT NULL
+            THEN UPDATE Projects p SET p.image_approved = imageApproved WHERE p.id = projectId;
+        END IF;
+
+        CALL getProject(projectId, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
     end if;
 END//
 DELIMITER ;
