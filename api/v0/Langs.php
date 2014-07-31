@@ -5,8 +5,9 @@ namespace SolasMatch\API\V0;
 use \SolasMatch\Common as Common;
 use \SolasMatch\API\Lib as Lib;
 use \SolasMatch\API as API;
+use \SolasMatch\API\DAO as DAO;
 
-require_once __DIR__.'/../lib/Languages.class.php';
+require_once __DIR__.'/../DataAccessObjects/LanguageDao.class.php';
 
 class Langs
 {
@@ -54,17 +55,17 @@ class Langs
 
     public static function getActiveLanguages($format = '.json')
     {
-        API\Dispatcher::sendResponse(null, Lib\Languages::getActiveLanguages(), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\LanguageDao::getActiveLanguages(), null, $format);
     }
 
     public static function getActiveSourceLanguages($format = '.json')
     {
-        API\Dispatcher::sendResponse(null, Lib\Languages::getActiveSourceLanguages(), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\LanguageDao::getActiveSourceLanguages(), null, $format);
     }
 
     public static function getActiveTargetLanguages($format = '.json')
     {
-        API\Dispatcher::sendResponse(null, Lib\Languages::getActiveTargetLanguages(), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\LanguageDao::getActiveTargetLanguages(), null, $format);
     }
 
     public static function getLanguageByCode($code, $format = ".json")
@@ -74,7 +75,7 @@ class Langs
             $format = '.'.$code[1];
             $code = $code[0];
         }
-        $data = Lib\Languages::getLanguage(null, $code, null);
+        $data = DAO\LanguageDao::getLanguage(null, $code);
         if (is_array($data) && is_array($data[0])) {
             $data = $data[0];
         }
@@ -88,7 +89,7 @@ class Langs
             $format = '.'.$languageId[1];
             $languageId = $languageId[0];
         }
-        $data = Lib\Languages::getLanguage($languageId, null, null);
+        $data = DAO\LanguageDao::getLanguage($languageId, null);
         if (is_array($data)) {
             $data = $data[0];
         }
@@ -97,7 +98,7 @@ class Langs
 
     public static function getLanguages($format = ".json")
     {
-        $data = Lib\Languages::getLanguageList();
+        $data = DAO\LanguageDao::getLanguageList();
         $result = null;
         API\Dispatcher::sendResponse(null, $data, null, $format);
     }
