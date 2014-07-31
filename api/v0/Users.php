@@ -732,7 +732,6 @@ class Users
 
     public static function getUserTopTasksCount($userId, $format = ".json")
     {
-        error_log("in the function");
         $filter = API\Dispatcher::clenseArgs('filter', Common\Enums\HttpMethodEnum::GET, '');
         $strict = API\Dispatcher::clenseArgs('strict', Common\Enums\HttpMethodEnum::GET, false);
         $filters = Common\Lib\APIHelper::parseFilterString($filter);
