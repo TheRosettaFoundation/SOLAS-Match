@@ -176,6 +176,7 @@ class UserRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
+        $langDao = new DAO\LanguageDao();
         
         $use_openid = Common\Lib\Settings::get("site.openid");
         $app->view()->setData("openid", $use_openid);
@@ -368,6 +369,7 @@ class UserRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
+        $langDao = new DAO\LanguageDao();
         
         $error = null;
         $openid = new \LightOpenID("http://".$_SERVER["HTTP_HOST"].$app->urlFor("home"));
@@ -394,6 +396,17 @@ class UserRouteHandler
                     Common\Lib\UserSession::setSession($user->getId());
                     $request = Common\Lib\UserSession::getReferer();
                     Common\Lib\UserSession::clearReferer();
+                    //Set site language to user's preferred language if it is not already
+                    $currentSiteLang = $langDao->getLanguageByCode(Common\Lib\UserSession::getUserLanguage());
+                    $userInfo = $userDao->getPersonalInfo($user->getId());
+                    $langPrefId = $userInfo->getLanguagePreference();
+                    $preferredLang = $langDao->getLanguage($langPrefId);
+                    if ($currentSiteLang != $preferredLang) {
+                        Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
+                    }
+                    
+                    //Redirect to homepage, or the page the page user was previously on e.g. if their
+                    //session timed out and they are logging in again.
                     if ($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
                         $app->redirect($request);
                     } else {
@@ -435,6 +448,15 @@ class UserRouteHandler
                 Common\Lib\UserSession::setSession($user->getId());
                 $request = Common\Lib\UserSession::getReferer();
                 Common\Lib\UserSession::clearReferer();
+                //Set site language to user's preferred language if it is not already
+                $currentSiteLang = $langDao->getLanguageByCode(Common\Lib\UserSession::getUserLanguage());
+                $userInfo = $userDao->getPersonalInfo($user->getId());
+                $langPrefId = $userInfo->getLanguagePreference();
+                $preferredLang = $langDao->getLanguage($langPrefId);
+                if ($currentSiteLang != $preferredLang) {
+                    Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
+                }
+                
                 if ($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
                     $app->redirect($request);
                 } else {
@@ -447,7 +469,7 @@ class UserRouteHandler
             }
         }
 
-        // Added check to display info message to users on IE borwsers
+        // Added check to display info message to users on IE browsers
         $browserData = get_browser(null, true);
         if (!is_null($browserData) && isset($browserData['browser'])) {
             $browser = $browserData['browser'];

@@ -138,7 +138,6 @@ class StaticAPI
         $locales = array();
         
         $filePaths = glob(__DIR__."/../../ui/localisation/strings_*.xml");
-        $locales[] = Languages::getLanguage(null, Common\Lib\Settings::get('site.default_site_language_code'), null);
         foreach ($filePaths as $filePath) {
             preg_match('/_(.*)\.xml/', realpath($filePath), $matches);
             $lang = Common\Lib\CacheHelper::getCached(

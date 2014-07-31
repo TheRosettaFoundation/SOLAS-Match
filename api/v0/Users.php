@@ -1198,6 +1198,14 @@ class Users
         $client = new Common\Lib\APIHelper($format);
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Register");
         $registered = DAO\UserDao::apiRegister($data->getEmail(), $data->getPassword());
+        //Set new user's personal info to show their preferred language as English.
+        $newUser = DAO\UserDao::getUser(null, $data->getEmail());
+        $userInfo = new Common\Protobufs\Models\UserPersonalInformation();
+        $english = Lib\Languages::getLanguage(null, "en", null);
+        $userInfo->setUserId($newUser->getId());
+        $userInfo->setLanguagePreference($english->getId());
+        DAO\UserDao::savePersonalInfo($userInfo);
+        
         API\Dispatcher::sendResponse(null, $registered, null, $format);
     }
 

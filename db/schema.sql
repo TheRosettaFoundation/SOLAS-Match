@@ -5005,8 +5005,8 @@ BEGIN
 	if country='' then set country=null;end if;
 		
 	IF id IS NULL AND NOT EXISTS(select 1 FROM UserPersonalInformation p WHERE p.`user_id`=userId) THEN
-		INSERT INTO UserPersonalInformation (`user_id`,`first-name`,`last-name`,`mobile-number`,`business-number`,`job-title`,`address`,`city`,`country`, `receive_credit`)
-		VALUES (userId,firstName,lastName,mobileNumber,businessNumber,jobTitle,address,city,country,receiveCredit);
+		INSERT INTO UserPersonalInformation (`user_id`,`first-name`,`last-name`,`mobile-number`,`business-number`, `language-preference`, `job-title`,`address`,`city`,`country`, `receive_credit`)
+		VALUES (userId,firstName,lastName,mobileNumber,businessNumber,languagePreference,jobTitle,address,city,country,receiveCredit);
 		CALL getUserPersonalInfo(LAST_INSERT_ID(),NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 	ELSE
         if userId is not null 
@@ -5040,8 +5040,8 @@ BEGIN
 		end if;
         
         IF languagePreference IS NOT NULL
-            AND languagePreference != (SELECT p.`language-preference` FROM UserPersonalInformation p WHERE p.`language-preference` = languagePreference)
-            OR (SELECT p.`language-preference` FROM UserPersonalInformation p WHERE p.`language-preference` = languagePreference) IS NULL
+            AND languagePreference != (SELECT p.`language-preference` FROM UserPersonalInformation p WHERE p.`id` = id)
+            OR (SELECT p.`language-preference` FROM UserPersonalInformation p WHERE p.`id` = id) IS NULL
         THEN UPDATE UserPersonalInformation p SET p.`language-preference` = languagePreference WHERE p.id = id;
         END IF;
 

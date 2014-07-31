@@ -376,7 +376,6 @@ class UserPrivateProfileForm extends PolymerElement
         window.alert(localisation.getTranslation("user_private_profile_language_preference_updated"));
       }
       userInfo.languagePreference = preferredLang.id;
-      var foo = userInfo.languagePreference;
       
       if (userInfo.receiveCredit) {
         if (userInfo.firstName == "" || userInfo.lastName == "") {
