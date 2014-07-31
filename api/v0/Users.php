@@ -979,6 +979,13 @@ class Users
             DAO\UserDao::apiRegister($email, md5($email), false);
             $user = DAO\UserDao::getUser(null, $email);
             DAO\UserDao::finishRegistration($user->getId());
+            //Set new user's personal info to show their preferred language as English.
+            $newUser = DAO\UserDao::getUser(null, $user->getEmail());
+            $userInfo = new Common\Protobufs\Models\UserPersonalInformation();
+            $english = Lib\Languages::getLanguage(null, "en", null);
+            $userInfo->setUserId($newUser->getId());
+            $userInfo->setLanguagePreference($english->getId());
+            DAO\UserDao::savePersonalInfo($userInfo);
         }
         $params = array();
         try {
