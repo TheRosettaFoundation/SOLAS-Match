@@ -6,10 +6,13 @@ use \SolasMatch\Common as Common;
 use \SolasMatch\API as API;
 use \SolasMatch\API\DAO as DAO;
 use \SolasMatch\API\Dispatcher as Dispatcher;
+use SolasMatch\API\Lib\Languages;
 
 require_once __DIR__."/../DataAccessObjects/StatDao.class.php";
 require_once __DIR__."/../../Common/lib/Settings.class.php";
 require_once __DIR__."/../lib/TipSelector.class.php";
+require_once __DIR__."/../../Common/lib/CacheHelper.class.php";
+require_once __DIR__."/../../Common/Enums/TimeToLiveEnum.class.php";
 
 class StaticAPI
 {
@@ -47,6 +50,12 @@ class StaticAPI
             });
 
             /* Routes starting /v0 */
+            $app->get(
+                '/localisation/siteLanguages(:format)/',
+                '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+                '\SolasMatch\API\V0\StaticAPI::getSiteLanguagesDart'
+            );
+            
             $app->get(
                 '/stats(:format)/',
                 '\SolasMatch\API\V0\StaticAPI::getStatistics'
@@ -121,6 +130,26 @@ class StaticAPI
     {
         $data = API\Lib\TipSelector::selectTip();
         Dispatcher::sendResponse(null, $data, null, $format);
+    }
+    
+    public static function getSiteLanguagesDart($format = ".json")
+    {
+        $matches = array();
+        $locales = array();
+        
+        $filePaths = glob(__DIR__."/../../ui/localisation/strings_*.xml");
+        $locales[] = Languages::getLanguage(null, Common\Lib\Settings::get('site.default_site_language_code'), null);
+        foreach ($filePaths as $filePath) {
+            preg_match('/_(.*)\.xml/', realpath($filePath), $matches);
+            $lang = Common\Lib\CacheHelper::getCached(
+                Common\Lib\CacheHelper::LOADED_LANGUAGES."_$matches[1]",
+                Common\Enums\TimeToLiveEnum::QUARTER_HOUR,
+                '\SolasMatch\API\Lib\Languages:getLanguage',
+                array(null, $matches[1], null)
+            );
+            $locales[] = $lang;
+        }
+        API\Dispatcher::sendResponse(null, $locales, null, $format);
     }
 }
 

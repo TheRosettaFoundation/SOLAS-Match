@@ -783,6 +783,9 @@ class ModelFactory
         if (isset($modelData['business-number'])) {
             $ret->setBusinessNumber($modelData['business-number']);
         }
+        if (isset($modelData['language-preference'])) {
+            $ret->setLanguagePreference($modelData['language-preference']);
+        }
         if (isset($modelData['job-title'])) {
             $ret->setJobTitle($modelData['job-title']);
         }

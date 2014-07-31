@@ -23,6 +23,7 @@ class UserPrivateProfileForm extends PolymerElement
   @observable List<int> secondaryLanguageArray;
   @observable List<Locale> userSecondaryLanguages;
   @observable List<Language> languages;
+  @observable List<Language> siteLanguages;
   @observable List<Country> countries;
   @observable String alert;
   @observable Localisation localisation;
@@ -32,6 +33,7 @@ class UserPrivateProfileForm extends PolymerElement
   List<String> randomWords;
   List<Badge> badges;
   SelectElement langSelect;
+  SelectElement siteLangSelect;
   SelectElement countrySelect;
   
   /**
@@ -42,6 +44,7 @@ class UserPrivateProfileForm extends PolymerElement
     secondaryLanguageLimit = 10;
     userSecondaryLanguages = toObservable(new List<Locale>());
     languages = toObservable(new List<Language>());
+    siteLanguages = toObservable(new List<Language>());
     countries = toObservable(new List<Country>());
     secondaryLanguageArray = toObservable(new List<int>());
     badges = new List<Badge>();
@@ -110,6 +113,12 @@ class UserPrivateProfileForm extends PolymerElement
       countries.addAll(regions);
       return true;
     }));
+    
+    //get data of all site languages, i.e. the languages the site is translated into
+    dataLoaded.add(LanguageDao.getSiteLanguages().then((List<Language> langs) {
+      siteLanguages.addAll(langs);
+      return true;
+    }));
    
     //Wait for all data to load and the report that the data has loaded by updating bound variable isLoaded
     Future.wait(dataLoaded).then((List<bool> successList) {
@@ -144,6 +153,7 @@ class UserPrivateProfileForm extends PolymerElement
     List<int> secondaryCountryIndex = new List<int>(secLangLength);
     
     langSelect = new SelectElement();
+    
     langSelect.style.width = "82%";
     for (int i = 0; i < languages.length; i++) {
       OptionElement option = new OptionElement();
@@ -167,6 +177,28 @@ class UserPrivateProfileForm extends PolymerElement
         }
       }
     }
+    
+    //set up list of site languages
+    siteLangSelect = new SelectElement()
+    ..id = 'langPrefSelect';
+    for (int i = 0; i < siteLanguages.length; i++) {
+      OptionElement option = new OptionElement();
+      option.value = siteLanguages[i].code;
+      option.text = siteLanguages[i].name;
+      siteLangSelect.children.add(option);
+    }
+    siteLangSelect.style..width = '80%';
+    Language currentPref = languages.firstWhere((Language lang) {
+      return userInfo.languagePreference == lang.id;
+      });
+    String currentPrefCode = currentPref.code;
+    //Get the index of the OptionElement with the same code, used later to set selection on UI
+    int siteLanguageIndex = siteLangSelect.options.indexOf(
+        siteLangSelect.options.firstWhere((OptionElement opt) {
+          return opt.value == currentPrefCode;
+    }));
+    //Set the selected language to be the user's current preference
+    siteLangSelect.selectedIndex = siteLanguageIndex;
     
     if (userSecondaryLanguages.length == 0) {
       secondaryLanguageIndex[0] = 0;
@@ -252,6 +284,10 @@ class UserPrivateProfileForm extends PolymerElement
     } else {
       this.addSecondaryLanguage(0, 0);
     }
+    
+    //Add site language select to the page
+    DivElement siteLangSelectDiv = querySelector("#siteLangSelectDiv");
+    siteLangSelectDiv.children.add(siteLangSelect);
   }
   
   /**
@@ -315,7 +351,7 @@ class UserPrivateProfileForm extends PolymerElement
   void submitForm()
   {
     this.alert = "";
-    
+
     try {
       if (user.display_name == "") {
         throw new ArgumentError(localisation.getTranslation("user_private_profile_2"));
@@ -329,6 +365,18 @@ class UserPrivateProfileForm extends PolymerElement
                 (nativeLanguageSelect.selectedIndex == 0 && nativeCountrySelect.selectedIndex > 0)) {
         throw new ArgumentError(localisation.getTranslation("user_private_profile_native_language_blanks"));
       }
+      //Get data of user language preference to save
+      SelectElement langPrefSelect = querySelector("#langPrefSelect");
+      String selectedLangCode = langPrefSelect.value;
+      Language preferredLang = languages.firstWhere((Language lang) {
+         return lang.code == selectedLangCode ;
+      });
+      //Check if the user has changed their language preference
+      if (userInfo.languagePreference != preferredLang.id) {
+        window.alert(localisation.getTranslation("user_private_profile_language_preference_updated"));
+      }
+      userInfo.languagePreference = preferredLang.id;
+      var foo = userInfo.languagePreference;
       
       if (userInfo.receiveCredit) {
         if (userInfo.firstName == "" || userInfo.lastName == "") {

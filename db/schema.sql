@@ -1068,6 +1068,7 @@ CREATE TABLE IF NOT EXISTS `UserPersonalInformation` (
   `last-name` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
   `mobile-number` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
   `business-number` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `language-preference` INT(10) UNSIGNED DEFAULT NULL,
   `job-title` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
   `address` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
   `city` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -1075,7 +1076,8 @@ CREATE TABLE IF NOT EXISTS `UserPersonalInformation` (
   `receive_credit` BIT(1) DEFAULT 0 NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`user_id`),
-  CONSTRAINT `FK_UserPersonalInformation_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `FK_UserPersonalInformation_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_UserPersonalInformation_Languages` FOREIGN KEY (`language-preference`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP PROCEDURE IF EXISTS alterTable;
@@ -1089,6 +1091,22 @@ BEGIN
               AND DATA_TYPE = 'VARCHAR'
               AND CHARACTER_MAXIMUM_LENGTH = 128) THEN
         ALTER TABLE UserPersonalInformation DROP COLUMN sip;
+    END IF;
+END//
+DELIMITER ;
+CALL alterTable();
+DROP PROCEDURE alterTable;
+
+DROP PROCEDURE IF EXISTS alterTable;
+DELIMITER //
+CREATE PROCEDURE alterTable()
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM information_schema.`COLUMNS`
+              WHERE TABLE_SCHEMA = database()
+              AND TABLE_NAME = "UserPersonalInformation"
+              AND COLUMN_NAME = "language-preference") THEN
+        ALTER TABLE UserPersonalInformation ADD `language-preference` INT(10) UNSIGNED DEFAULT NULL;
+        ALTER TABLE UserPersonalInformation ADD CONSTRAINT `FK_UserPersonalInformation_Languages` FOREIGN KEY (`language-preference`) REFERENCES `Languages` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
     END IF;
 END//
 DELIMITER ;
@@ -4972,7 +4990,7 @@ DELIMITER ;
 -- Dumping structure for procedure big-merge.userPersonalInfoInsertAndUpdate
 DROP PROCEDURE IF EXISTS `userPersonalInfoInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `userPersonalInfoInsertAndUpdate`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` VARCHAR(128), IN `businessNumber` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128), IN `receiveCredit` BIT(1))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `userPersonalInfoInsertAndUpdate`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` VARCHAR(128), IN `businessNumber` VARCHAR(128), IN `languagePreference` INT, IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128), IN `receiveCredit` BIT(1))
 BEGIN
 	if id='' then set id=null;end if;
 	if userId='' then set userId=null;end if;
@@ -4980,6 +4998,7 @@ BEGIN
 	if lastName='' then set lastName=null;end if;
 	if mobileNumber='' then set mobileNumber=null;end if;
 	if businessNumber='' then set businessNumber=null;end if;
+    if languagePreference='' then set languagePreference=null;end if;
 	if jobTitle='' then set jobTitle=null;end if;
 	if address='' then set address=null;end if;
 	if city='' then set city=null;end if;
@@ -5019,7 +5038,13 @@ BEGIN
                 or (select p.`business-number` from UserPersonalInformation p WHERE p.id = id) is null
                     then UPDATE UserPersonalInformation p SET p.`business-number` = businessNumber WHERE p.id = id;
 		end if;
-                
+        
+        IF languagePreference IS NOT NULL
+            AND languagePreference != (SELECT p.`language-preference` FROM UserPersonalInformation p WHERE p.`language-preference` = languagePreference)
+            OR (SELECT p.`language-preference` FROM UserPersonalInformation p WHERE p.`language-preference` = languagePreference) IS NULL
+        THEN UPDATE UserPersonalInformation p SET p.`language-preference` = languagePreference WHERE p.id = id;
+        END IF;
+
         if jobTitle is not null 
                 and jobTitle != (select p.`job-title` from UserPersonalInformation p WHERE p.id = id)
                 or (select p.`job-title` from UserPersonalInformation p WHERE p.id = id) is null
@@ -5065,7 +5090,7 @@ DELIMITER ;
 -- Dumping structure for procedure big-merge.getUserPersonalInfo
 DROP PROCEDURE IF EXISTS `getUserPersonalInfo`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserPersonalInfo`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` VARCHAR(128), IN `businessNumber` VARCHAR(128), IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128), IN `receiveCredit` BIT(1))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserPersonalInfo`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` VARCHAR(128), IN `businessNumber` VARCHAR(128), IN `languagePreference` INT, IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128), IN `receiveCredit` BIT(1))
 BEGIN
 	if id='' then set id=null;end if;
 	if userId='' then set userId=null;end if;
@@ -5073,6 +5098,7 @@ BEGIN
 	if lastName='' then set lastName=null;end if;
 	if mobileNumber='' then set mobileNumber=null;end if;
 	if businessNumber='' then set businessNumber=null;end if;
+    if languagePreference='' then set languagePreference=null;end if;
 	if jobTitle='' then set jobTitle=null;end if;
 	if address='' then set address=null;end if;
 	if city='' then set city=null;end if;
@@ -5087,6 +5113,7 @@ BEGIN
             and (lastName is null or p.`last-name` = lastName)
             and (mobileNumber is null or p.`mobile-number` = mobileNumber)
             and (businessNumber is null or p.`business-number` = businessNumber)
+            AND (languagePreference IS NULL OR p.`language-preference` = languagePreference)
             and (jobTitle is null or p.`job-title` = jobTitle) 
             and (address is null or p.address = address) 
             and (city is null or p.city = city) 
