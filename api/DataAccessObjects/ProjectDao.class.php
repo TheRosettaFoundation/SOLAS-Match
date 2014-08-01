@@ -45,7 +45,10 @@ class ProjectDao
             Lib\PDOWrapper::cleanseNull($project->getWordCount()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($project->getCreatedTime()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode());
+            Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode()).",".
+            Lib\PDOWrapper::cleanseNull($project->getImageUploaded()).",".
+            Lib\PDOWrapper::cleanseNull($project->getImageApproved());
+            
         $result = Lib\PDOWrapper::call("projectInsertAndUpdate", $args);
         if ($result) {
             $project = Common\Lib\ModelFactory::buildModel("Project", $result[0]);
@@ -97,7 +100,7 @@ class ProjectDao
     {
         $project = null;
         if (!is_null($id)) {
-            $args = Lib\PDOWrapper::cleanseNull($id).", null, null, null, null, null, null, null, null, null, null";
+            $args = Lib\PDOWrapper::cleanseNull($id).", null, null, null, null, null, null, null, null, null, null, null, null";
             $result = Lib\PDOWrapper::call("getProject", $args);
             if ($result) {
                 $project = Common\Lib\ModelFactory::buildModel("Project", $result[0]);
@@ -118,7 +121,7 @@ class ProjectDao
         if (!is_null($name)) {
             $args = "null, "
                     .Lib\PDOWrapper::cleanseNull($name).
-                    ", null, null, null, null, null, null, null, null, null";
+                    ", null, null, null, null, null, null, null, null, null, null, null";
             $result = Lib\PDOWrapper::call("getProjects", $args);
             if ($result) {
                 $project = Common\Lib\ModelFactory::buildModel("Project", $result[0]);
@@ -146,6 +149,8 @@ class ProjectDao
       get converted to a country id on the database)
       @param string $languageCode is the language code of the requested Project's source Locale (<b>NOTE</b>: This will
       get converted to a language id on the database)
+      @param bit $imageUploaded represents whether a project image has been uploaded or not for the requested Project
+      @param bit $imageApproved represents whether an uploaded project image has been approved by admins or not for the requested Project
       @return Returns an array of Project objects as filtered by the input arguments
     */
     public static function getProjects(
@@ -159,7 +164,9 @@ class ProjectDao
         $wordCount = null,
         $created = null,
         $countryCode = null,
-        $languageCode = null
+        $languageCode = null,
+        $imageUploaded = null,
+        $imageApproved = null
     ) {
         $projects = array();
         $args = Lib\PDOWrapper::cleanseNull($id).",".
@@ -172,7 +179,9 @@ class ProjectDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($wordCount).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($created).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($countryCode).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($languageCode);
+            Lib\PDOWrapper::cleanseNullOrWrapStr($languageCode).",".
+            Lib\PDOWrapper::cleanseNull($imageUploaded).",".
+            Lib\PDOWrapper::cleanseNull($imageApproved);
         $result = Lib\PDOWrapper::call("getProject", $args);
         if ($result) {
             foreach ($result as $row) {
@@ -228,6 +237,8 @@ class ProjectDao
       This will get converted to a language id on the database).
       @param string $cCode is the country code of the source Locale for the requested ArchivedProject (<b>NOTE</b>:
       This will get converted to a country id on the database).
+      @param bit $imageUploaded represents whether a project image has been uploaded or not for the requested ArchivedProject
+      @param bit $imageApproved represents whether an uploaded project image has been approved by admins or not for the requested ArchivedProject
       @return Returns a list of ArchivedProject objects filtered by the input parameters or null
     */
     public static function getArchivedProject(
@@ -243,7 +254,9 @@ class ProjectDao
         $archivedDate = null,
         $userIdArchived = null,
         $lCode = null,
-        $cCode = null
+        $cCode = null,
+        $imageUploaded = null,
+        $imageApproved = null
     ) {
         $projects = array();
         $args = Lib\PDOWrapper::cleanseNull($id).",".
@@ -258,7 +271,9 @@ class ProjectDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($archivedDate).",".
             Lib\PDOWrapper::cleanseNull($userIdArchived).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($lCode).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($cCode);
+            Lib\PDOWrapper::cleanseNullOrWrapStr($cCode).",".
+            Lib\PDOWrapper::cleanseNull($imageUploaded).",".
+            Lib\PDOWrapper::cleanseNull($imageApproved);
         $result = Lib\PDOWrapper::call("getArchivedProject", $args);
         if ($result) {
             foreach ($result as $row) {
