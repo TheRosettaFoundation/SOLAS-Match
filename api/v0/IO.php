@@ -49,6 +49,12 @@ class IO
                     );
                     
                     $app->put(
+                        '/project/:projectId/image/:filename/:userId(:format)/',
+                        '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+                        '\SolasMatch\API\V0\IO::saveProjectImageFile'
+                    );
+                    
+                    $app->put(
                         '/task/:taskId/:userId(:format)/',
                         '\SolasMatch\API\Lib\Middleware::isLoggedIn',
                         '\SolasMatch\API\V0\IO::saveTaskFile'
@@ -194,6 +200,22 @@ class IO
         }
     }
     
+    public static function saveProjectImageFile($projectId, $filename, $userId, $format = ".json")
+    {
+        if (!is_numeric($userId) && strstr($userId, '.')) {
+            $userId = explode('.', $userId);
+            $format = '.'.$userId[1];
+            $userId = $userId[0];
+        }
+        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        try {
+            $token = self::saveProjectImageFileToFs($projectId, $data, urldecode($filename), $userId);
+            API\Dispatcher::sendResponse(null, $token, Common\Enums\HttpStatusEnum::CREATED, $format);
+        } catch (Exception $e) {
+            API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
+        }
+    }
+    
     //! Upload a Task file
     /*!
      Used to store Task file upload details and save the file to the filesystem. If convert is true then the file will
@@ -289,6 +311,44 @@ class IO
         return $token;
     }
     
+    //! Records a ProjectImageFile upload
+    /*!
+     Used to keep track of Project Image files. Stores information about a project image file upload so it can be retrieved later.
+    @param int $projectId is the id of a Project
+    @param string $filename is the name of the image file being uploaded
+    @param int $userId is the id of the user uploading the file
+    @param string $mime is the mime type of the image file being uploaded
+    @return Returns the ProjectImageFile info that was saved or null on failure.
+    */
+    private static function saveProjectImageFileToFs($projectId, $file, $filename, $userId)
+    {
+        $destination = Common\Lib\Settings::get("files.upload_path")."proj-$projectId/image";
+        if (!file_exists($destination)) {
+            mkdir($destination, 0755);
+        }
+        $mime = self::detectMimeType($file, $filename);
+        $apiHelper = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
+        $canonicalMime = $apiHelper->getCanonicalMime($filename);
+        if (!is_null($canonicalMime) && $mime != $canonicalMime) {
+            $message = "The content type ($mime) of the image file you are trying to upload does not";
+            $message .= " match the content type ($canonicalMime) expected from its extension.";
+            throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::BAD_REQUEST);
+        }
+        
+        $project = DAO\ProjectDao::getProject($projectId);
+        $project->setImageUploaded(1);
+        $project = DAO\ProjectDao::save($project);
+            
+        try {
+            file_put_contents($destination.$token, $file);
+        } catch (\Exception $e) {
+            $message = "You cannot upload an image file for project ($projectId), as one already exists.";
+            throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::CONFLICT);
+        }
+    
+        return $token;
+    }
+
     private static function saveTaskFileToFs($task, $userId, $file, $filename, $version = null)
     {
         $taskId = $task->getId();
