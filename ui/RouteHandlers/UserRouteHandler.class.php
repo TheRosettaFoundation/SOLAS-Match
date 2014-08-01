@@ -641,8 +641,14 @@ class UserRouteHandler
         }
 
         //Get user's language preference
-        $langPref = $langDao->getLanguage($userPersonalInfo->getLanguagePreference());
-        $langPrefName = $langPref->getName();
+        if (is_object($userPersonalInfo) && !is_null($userPersonalInfo->getLanguagePreference()))
+        {
+            $langPref = $langDao->getLanguage($userPersonalInfo->getLanguagePreference());
+            $langPrefName = $langPref->getName();
+        }   else {
+            $defaultLang=$langDao->getLanguageByCode(Common\Lib\Settings::get('site.default_site_language_code'));
+            $langPrefName = $defaultLang->getName();
+        }
         
         $app->view()->appendData(array(
             "badges" => $badges,
