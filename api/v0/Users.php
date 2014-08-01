@@ -982,7 +982,7 @@ class Users
             //Set new user's personal info to show their preferred language as English.
             $newUser = DAO\UserDao::getUser(null, $user->getEmail());
             $userInfo = new Common\Protobufs\Models\UserPersonalInformation();
-            $english = Lib\Languages::getLanguage(null, "en", null);
+            $english = DAO\LanguageDao::getLanguage(null, "en");
             $userInfo->setUserId($newUser->getId());
             $userInfo->setLanguagePreference($english->getId());
             DAO\UserDao::savePersonalInfo($userInfo);
@@ -1208,7 +1208,7 @@ class Users
         //Set new user's personal info to show their preferred language as English.
         $newUser = DAO\UserDao::getUser(null, $data->getEmail());
         $userInfo = new Common\Protobufs\Models\UserPersonalInformation();
-        $english = Lib\Languages::getLanguage(null, "en", null);
+        $english = DAO\LanguageDao::getLanguage(null, "en");
         $userInfo->setUserId($newUser->getId());
         $userInfo->setLanguagePreference($english->getId());
         DAO\UserDao::savePersonalInfo($userInfo);
