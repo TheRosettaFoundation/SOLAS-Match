@@ -1,5 +1,6 @@
 
 import "package:polymer/polymer.dart";
+import "package:image/image.dart";
 import "dart:async";
 import "dart:html";
 
@@ -18,11 +19,13 @@ class ProjectCreateForm extends PolymerElement
   // Other
   int maxTargetLanguages;
   String filename;
+  String imageFilename;
   String tagList;
   String wordCountInput;
   SelectElement langSelect;
   SelectElement countrySelect;
   var projectFileData;
+  var projectImageData;
   List<int> monthLengths;
   @observable List<int> years;
   @observable List<String> months;
@@ -54,6 +57,7 @@ class ProjectCreateForm extends PolymerElement
   @observable String createProjectError;
   @observable String tagsError;
   @observable String referenceError;
+  @observable String imageError;
   
   /**
    * The constructor for ProjectCreateForm, handling intialisation and setup of various things.
@@ -129,6 +133,10 @@ class ProjectCreateForm extends PolymerElement
     p.appendHtml(localisation.getTranslation("project_create_6") + " " +
         sprintf(localisation.getTranslation("common_maximum_file_size_is"), ["${maxfilesize / 1024 / 1024}"]));
     
+    ParagraphElement p2 = this.shadowRoot.querySelector("#image_file_text");
+        p2.children.clear();
+        p2.appendHtml("<image section text>" + " " +
+            sprintf(localisation.getTranslation("common_maximum_file_size_is"), ["${maxfilesize / 1024 / 1024}"]));
     List<Future<bool>> loadedList = new List<Future<bool>>();
     
     loadedList.add(LanguageDao.getAllLanguages().then((List<Language> langs) {
@@ -331,6 +339,7 @@ class ProjectCreateForm extends PolymerElement
       impactError = null;
       tagsError = null;
       referenceError = null;
+      imageError = null;
       maxTargetsReached = null;
      
       //Validate form input and then check for success
@@ -372,7 +381,8 @@ class ProjectCreateForm extends PolymerElement
             List<Future<bool>> successList = new List<Future<bool>>();
             //upload the file and then create tasks
             successList.add(uploadProjectFile()
-              .then((_) => createProjectTasks()));
+                .then((_) => uploadProjectImage()
+                .then((_) => createProjectTasks())));
            
             if (trackProject) {
               //track project via DAO if user selected that option
@@ -626,6 +636,15 @@ class ProjectCreateForm extends PolymerElement
           });
     }
   
+  Future<bool> uploadProjectImage()
+  {
+    return loadProjectImageFile()
+      .then((_) => ProjectDao.uploadProjectImage(project.id, userid, imageFilename, projectImageData))
+      .catchError((e) {
+        throw sprintf(localisation.getTranslation("project_create_failed_upload_image"), e);
+      });
+  }
+  
   /**
    * This method loads the content of the file and validates the file details.
    */
@@ -650,6 +669,36 @@ class ProjectCreateForm extends PolymerElement
       });
     }
   
+  Future<bool> loadProjectImageFile()
+  {
+    File imageFile = null;
+    InputElement fileInput = this.shadowRoot.querySelector("#projectImageFile");
+    Image image;
+    FileList files = fileInput.files;
+    if (!files.isEmpty) {
+      imageFile = files[0];
+    }
+    
+    return _validateImageFileInput().then((bool success) {
+     Completer fileIsDone = new Completer();
+     FileReader reader = new FileReader();
+     var imageFileData = null;
+     reader.onLoadEnd.listen((e) {
+       imageFileData = e.target.result;
+       image = decodeImage(imageFileData);
+       if (image.width > 200 && image.height > 200) {
+         image = copyResize(image, 200, 200);
+         projectImageData = encodeNamedImage(image, "imgname");
+       } else {
+         projectImageData = imageFileData;
+       }
+       fileIsDone.complete(true);
+     });
+     reader.readAsArrayBuffer(imageFile);
+     return fileIsDone.future;
+   });
+  }
+  
   /**
    * This method validates the form input and sets various error messages if needed fields are not set or
    * invalid data is given.
@@ -670,6 +719,7 @@ class ProjectCreateForm extends PolymerElement
           //calling route for getProject when it should be getProjectByName
           } else if (project.title.indexOf(new RegExp(r'^\d+$')) != -1) {
             titleError = localisation.getTranslation("project_create_title_cannot_be_number");
+            return false;
           } else {
             //has the title already been used?
             return ProjectDao.getProjectByName(project.title).then((Project checkExist) {
@@ -836,11 +886,13 @@ class ProjectCreateForm extends PolymerElement
        
         //Validate file input
         return _validateFileInput().then((bool valid) {
-          if (success && valid) {
-            return true;
-          } else {
-            return false;
-          }
+          return _validateImageFileInput().then((bool imageIsValid) {
+            if (success && valid && imageIsValid) {
+              return true;
+            } else {
+              return false;
+            }
+          });
         });
       });
     }
@@ -902,6 +954,58 @@ class ProjectCreateForm extends PolymerElement
         //No file provided, throw error
         throw localisation.getTranslation("project_create_16");
       }
+    });
+  }
+  
+  Future<bool> _validateImageFileInput()
+  {
+    bool success = true;
+    return new Future(() {
+      File imageFile = null;
+      InputElement fileInput = this.shadowRoot.querySelector("#projectImageFile");
+      FileList files = fileInput.files;
+      if (!files.isEmpty) {
+        imageFile = files[0];
+      }
+      if (imageFile != null) {
+        if (imageFile.size > 0) {
+          //Check that file does not exceed the maximum allowed file size
+          if (imageFile.size < maxfilesize) {
+            int extensionStartIndex = imageFile.name.lastIndexOf(".");
+            //Check that file has an extension
+            if (extensionStartIndex >= 0) {
+              filename = imageFile.name;
+              String extension = filename.substring(extensionStartIndex + 1);
+              if (extension != extension.toLowerCase()) {
+                extension = extension.toLowerCase();
+                filename = filename.substring(0, extensionStartIndex + 1) + extension;
+                window.alert(localisation.getTranslation("project_create_18"));
+              }
+              //Check that the file extension is valid for an image
+              if (["jpeg", "jpg", "png"].contains(extension) == false) {
+                imageError = sprintf(
+                        localisation.getTranslation("project_create_please_upload_valid_image_file"),
+                        [".$extension"]
+                      );
+                success = false;
+              }
+            } else {
+              //File has no extension, set error TODO: use new variant string
+              imageError = localisation.getTranslation("project_create_20");
+              success = false;
+            }
+          } else {
+            //File is too big, throw error TODO: use new variant string
+            imageError = localisation.getTranslation("project_create_21");
+            success = false;
+          } 
+        } else {
+          //File is empty, set error
+          imageError = localisation.getTranslation("project_create_image_file_empty");
+          success = false;
+        }
+      }
+      return success;
     });
   }
   

@@ -4,6 +4,7 @@ description: The Dart Framework for UI work in SOLAS Match
 dependencies:
   browser: any
   crypto: any
+  image: any
   js: any
   json_object: any
   polymer: any
@@ -19,4 +20,4 @@ transformers:
     - web/Routes/Projects/ProjectCreate.dart
 - $dart2js:
     checked: false 
-    minify: true
+    minify: false

@@ -153,6 +153,21 @@ class ProjectDao
     return ret;
   }
   
+  static Future<bool> uploadProjectImage(int projectId, int userId, String filename, String data)
+    {
+      APIHelper client = new APIHelper(".json");
+      filename = Uri.encodeComponent(filename);
+      Future<bool> ret = client.call("", "v0/io/upload/project/$projectId/image/$filename/$userId", "PUT", data)//TODO Add real route url when possible
+          .then((HttpRequest response) {
+            if (response.status < 400) {
+              return true;
+            } else {
+              throw "Error #" + response.status.toString() + " - " + response.statusText;
+            }
+          });
+      return ret;
+    }
+  
   /**
    * Calls the API to record that the [User] with id of [userId] is tracking the [Project] with the given 
    * [projectId], meaning that they will get email updates about it.

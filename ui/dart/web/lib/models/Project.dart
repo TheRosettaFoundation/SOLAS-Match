@@ -14,6 +14,8 @@ class Project
   String status;
   Locale sourceLocale;
   List<Tag> tag;
+  bool imageUploaded;
+  bool imageApproved;
   
   Project()
   {
@@ -25,11 +27,13 @@ class Project
     createdTime = "";
     status = "";
     tag = new List<Tag>();
+    imageUploaded = false;
+    imageApproved = false;
   }
   
-  dynamic toJson()
+  toJson()
   {
-    dynamic ret = {
+    var ret = {
       "id":id,
       "title":title,
       "description" : description,
@@ -40,7 +44,9 @@ class Project
       "wordCount" : wordCount,
       "createdTime" : createdTime,
       "status" : status,
-      "sourceLocale" : sourceLocale
+      "sourceLocale" : sourceLocale,
+      "imageUploaded" : imageUploaded,
+      "imageApproved" : imageApproved
     };
     if (tag != null && tag.length > 0) {
       ret["tag"] = tag;

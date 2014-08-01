@@ -50,6 +50,8 @@ class ModelFactory
     project.createdTime = projectData['createdTime'];
     project.status = projectData['status'];
     project.sourceLocale = ModelFactory.generateLocaleFromMap(projectData['sourceLocale']);
+    project.imageUploaded = projectData['imageUploaded'];
+    project.imageApproved = projectData['imageApproved'];
     return project;
   }
   

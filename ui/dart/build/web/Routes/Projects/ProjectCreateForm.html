@@ -3,7 +3,7 @@
     <div class="well pull-left" style="margin-bottom: 50px">
       <template if="{{titleError != null || descriptionError != null || wordCountError != null || 
                     deadlineError != null || impactError != null || createProjectError != null ||
-                    tagsError != null || referenceError != null}}">
+                    tagsError != null || referenceError != null || imageError != null}}">
         <div id="error-box-top" class="alert alert-error pull-left">
           <h3>{{localisation.getTranslation("common_please_correct_errors")}}:</h3>
           <ol>
@@ -30,6 +30,9 @@
             </template>
             <template if="{{referenceError != null}}">
               <li id="reference_error_top">{{referenceError}}</li>
+            </template>
+            <template if="{{imageError != null}}">
+              <li id="image_error_top">{{imageError}}</li>
             </template>
           </ol>
         </div>
@@ -67,8 +70,15 @@
               <div class="projFormInput">
                 <div style="margin-bottom:25px;">
                   <h2>{{localisation.getTranslation("project_create_source_text")}}: <span style="color: red">*</span></h2>
-                  <p id="source_text_desc" class="desc"></p>
+                  <p id="image_file_text" class="desc"></p>
                   <input type="file" id="projectFile" />
+                </div>
+              </div>
+              <div class="projFormInput">
+                <div style="margin-bottom:25px;">
+                  <h2>Project Image</h2>
+                  <p id="source_text_desc" class="desc"></p>
+                  <input type="file" id="projectImageFile" />
                 </div>
               </div>
               <div class="projFormInput">  
@@ -186,12 +196,12 @@
             </div>
           <template if="{{titleError != null || descriptionError != null || wordCountError != null || 
                         deadlineError != null || impactError != null || createProjectError != null ||
-                        tagsError != null || referenceError != null}}">
+                        tagsError != null || referenceError != null || imageError != null}}">
           <div id="error-box-btm" class="alert alert-error pull-left">
 
             <template if="{{titleError != null || descriptionError != null || wordCountError != null ||
                           deadlineError != null || impactError != null || createProjectError != null ||
-                          tagsError != null || referenceError != null}}">
+                          tagsError != null || referenceError != null || imageError != null}}">
               
               <h3>{{localisation.getTranslation("common_please_correct_errors")}}:</h3>
               <ol>
@@ -218,6 +228,9 @@
                 </template>
                 <template if="{{referenceError != null}}">
                   <li id="reference_error_btm">{{referenceError}}</li>
+                </template>
+                <template if="{{imageError != null}}">
+                  <li id="image_error_btm">{{imageError}}</li>
                 </template>
               </ol>
             </template>
