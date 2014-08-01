@@ -5092,6 +5092,7 @@ BEGIN
 	if address='' then set address=null;end if;
 	if city='' then set city=null;end if;
 	if country='' then set country=null;end if;
+    if receiveCredit IS NULL THEN SET receiveCredit = 0; END IF;
 		
 	IF id IS NULL AND NOT EXISTS(select 1 FROM UserPersonalInformation p WHERE p.`user_id`=userId) THEN
 		INSERT INTO UserPersonalInformation (`user_id`,`first-name`,`last-name`,`mobile-number`,`business-number`, `language-preference`, `job-title`,`address`,`city`,`country`, `receive_credit`)
@@ -5209,6 +5210,32 @@ BEGIN
             and (country is null or p.country = country)
             and (receiveCredit is null or p.receive_credit = receiveCredit);
 	
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `setDefaultUserLanguagePref`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `setDefaultUserLanguagePref`()
+BEGIN
+
+DECLARE userId INT DEFAULT 0;
+DECLARE done INT DEFAULT FALSE;
+DECLARE createDefaultLangPref CURSOR  FOR SELECT u.id FROM Users u WHERE u.id NOT IN (SELECT user_id FROM UserPersonalInformation);
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+SET @englishID = NULL;
+SELECT id INTO @englishID FROM Languages WHERE code = "en";
+
+UPDATE UserPersonalInformation SET `language-preference` = @englishID WHERE `language-preference` IS NULL;
+OPEN createDefaultLangPref;
+		read_loop: LOOP
+		FETCH createDefaultLangPref INTO userId;
+		IF done THEN
+	        LEAVE read_loop;
+	    END IF;
+		CALL userPersonalInfoInsertAndUpdate(NULL,userId,NULL,NULL,NULL,NULL,@englishID,NULL,NULL,NULL,NULL,NULL);
+		END LOOP;
+CLOSE createDefaultLangPref;
 END//
 DELIMITER ;
 
