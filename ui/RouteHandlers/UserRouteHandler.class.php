@@ -641,7 +641,7 @@ class UserRouteHandler
         }
 
         //Get user's language preference
-        if (is_object($userPersonalInfo) && !is_null($userPersonalInfo->getLanguagePreference()))
+        if (is_object($userPersonalInfo))
         {
             $langPref = $langDao->getLanguage($userPersonalInfo->getLanguagePreference());
             $langPrefName = $langPref->getName();
