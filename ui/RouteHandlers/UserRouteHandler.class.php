@@ -399,16 +399,10 @@ class UserRouteHandler
                     //Set site language to user's preferred language if it is not already
                     $currentSiteLang = $langDao->getLanguageByCode(Common\Lib\UserSession::getUserLanguage());
                     $userInfo = $userDao->getPersonalInfo($user->getId());
-                    if (is_object($userInfo) and !is_null($userInfo))
-                    {
-                        $langPrefId = $userInfo->getLanguagePreference();
-                        $preferredLang = $langDao->getLanguage($langPrefId);
-                        if ($currentSiteLang != $preferredLang) {
-                            Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
-                        }
-                    } else {
-                         $defaultLang=$langDao->getLanguageByCode(Common\Lib\Settings::get('site.default_site_language_code'));
-                         Common\Lib\UserSession::setUserLanguage($defaultLang->getCode());
+                    $langPrefId = $userInfo->getLanguagePreference();
+                    $preferredLang = $langDao->getLanguage($langPrefId);
+                    if ($currentSiteLang != $preferredLang) {
+                        Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
                     }
                     
                     //Redirect to homepage, or the page the page user was previously on e.g. if their
@@ -457,16 +451,10 @@ class UserRouteHandler
                 //Set site language to user's preferred language if it is not already
                 $currentSiteLang = $langDao->getLanguageByCode(Common\Lib\UserSession::getUserLanguage());
                 $userInfo = $userDao->getPersonalInfo($user->getId());
-                if (is_object($userInfo) and !is_null($userInfo))
-                {
-                    $langPrefId = $userInfo->getLanguagePreference();
-                    $preferredLang = $langDao->getLanguage($langPrefId);
-                    if ($currentSiteLang != $preferredLang) {
-                        Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
-                    }
-                } else {
-                    $defaultLang=$langDao->getLanguageByCode(Common\Lib\Settings::get('site.default_site_language_code'));
-                    Common\Lib\UserSession::setUserLanguage($defaultLang->getCode());
+                $langPrefId = $userInfo->getLanguagePreference();
+                $preferredLang = $langDao->getLanguage($langPrefId);
+                if ($currentSiteLang != $preferredLang) {
+                    Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
                 }
                 
                 if ($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
@@ -640,15 +628,8 @@ class UserRouteHandler
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
 
-        //Get user's language preference
-        if (is_object($userPersonalInfo))
-        {
-            $langPref = $langDao->getLanguage($userPersonalInfo->getLanguagePreference());
-            $langPrefName = $langPref->getName();
-        }   else {
-            $defaultLang=$langDao->getLanguageByCode(Common\Lib\Settings::get('site.default_site_language_code'));
-            $langPrefName = $defaultLang->getName();
-        }
+        $langPref = $langDao->getLanguage($userPersonalInfo->getLanguagePreference());
+        $langPrefName = $langPref->getName();
         
         $app->view()->appendData(array(
             "badges" => $badges,
