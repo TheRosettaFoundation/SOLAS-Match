@@ -52,6 +52,12 @@ class ProjectRouteHandler
             array($middleware, "authUserIsLoggedIn"),
             array($this, "downloadProjectFile")
         )->name("download-project-file");
+        
+        $app->get(
+            "/project/:project_id/image/",
+            array($middleware, "authUserForProjectImage"),
+            array($this, "downloadProjectImageFile")
+        )->name("download-project-image");
 
         $app->get("/project/:project_id/test/", array($this, "test"));
     }
@@ -510,6 +516,32 @@ class ProjectRouteHandler
             $app->redirect($app->urlFor('home'));
         }
     }
+    
+    public function downloadProjectImageFile($projectId)
+    {
+        $app = \Slim\Slim::getInstance();
+        $projectDao = new DAO\ProjectDao();
+        
+        try {
+            $headArr = $projectDao->downloadProjectImageFile($projectId);
+            //Convert header data to array and set headers appropriately
+            $headArr = json_decode($headArr);
+            foreach ($headArr as $key => $val) {
+                $app->response->headers->set($key, $val);
+            }
+        } catch (Common\Exceptions\SolasMatchException $e) {
+            $app->flash(
+                "error",
+                sprintf(
+                    Lib\Localisation::getTranslation('common_error_file_not_found'),
+                    Lib\Localisation::getTranslation('common_project_image_file'),
+                    Common\Lib\Settings::get("site.system_email_address")
+                )
+            );
+            $app->redirect($app->urlFor('home'));
+        }
+    }
+    
 }
 
 $route_handler = new ProjectRouteHandler();

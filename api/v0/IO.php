@@ -29,6 +29,13 @@ class IO
                 
                 /* Routes starting with /v0/io/download */
                 $app->group('/download', function () use ($app) {
+
+                    $app->get(
+                        '/projectImage/:projectId(:format)/',
+                        '\SolasMatch\API\Lib\Middleware::authUserForProjectImage', 
+                        '\SolasMatch\API\V0\IO::downloadProjectImageFile'
+                    );
+                                            
                     $app->get(
                         '/project/:projectId(:format)/',
                         '\SolasMatch\API\Lib\Middleware::isLoggedIn',
@@ -83,6 +90,26 @@ class IO
         $fileContent = API\Dispatcher::getDispatcher()->request()->getBody();
         
         API\Dispatcher::sendResponse(null, self::detectMimeType($fileContent, $filename), null, $format);
+    }
+    
+    public static function downloadProjectImageFile ($projectId, $format = ".json")
+    {
+        if (!is_numeric($projectId) && strstr($projectId, '.')) {
+            $projectId = explode('.', $projectId);
+            $format = '.'.$projectId[1];
+            $projectId = $projectId[0];
+        }
+        $imageFileList = glob(Common\Lib\Settings::get("files.upload_path")."proj-$projectId/image/image.*");
+        if (isset($imageFileList[0]))
+        {
+            $imageFilePath=$imageFileList[0];
+            $finfo = finfo_open(FILEINFO_MIME_TYPE); // return mime type ala mimetype extension
+            $mime = finfo_file($finfo, $imageFilePath);
+            finfo_close($finfo);
+            API\Dispatcher::sendResponse(null, self::setDownloadHeaders($imageFilePath, $mime), null, $format);    
+        } else {
+            API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::NOT_FOUND);
+        }
     }
     
     public static function downloadProjectFile($projectId, $format = ".json")

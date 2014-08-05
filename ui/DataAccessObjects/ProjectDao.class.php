@@ -177,4 +177,18 @@ class ProjectDao extends BaseDao
                 throw new Common\Exceptions\SolasMatchException("No file!");
         }
     }
+    
+    public function downloadProjectImageFile($projectId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}/v0/io/download/projectImage/$projectId";
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::GET);
+        
+        switch ($this->client->getResponseCode()) {
+            default:
+                return $ret;
+            case Common\Enums\HttpStatusEnum::NOT_FOUND:
+                throw new Common\Exceptions\SolasMatchException("No file!");
+        }
+    }
 }
