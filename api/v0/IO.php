@@ -208,9 +208,10 @@ class IO
             $userId = $userId[0];
         }
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        
         try {
-            $token = self::saveProjectImageFileToFs($projectId, $data, urldecode($filename), $userId);
-            API\Dispatcher::sendResponse(null, $token, Common\Enums\HttpStatusEnum::CREATED, $format);
+            self::saveProjectImageFileToFs($projectId, $data, urldecode($filename), $userId);
+            API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CREATED, $format);
         } catch (Exception $e) {
             API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
         }
@@ -340,13 +341,12 @@ class IO
         $project = DAO\ProjectDao::save($project);
             
         try {
-            file_put_contents($destination.$token, $file);
+            $ext = pathinfo($filename, PATHINFO_EXTENSION);
+            file_put_contents($destination."/image.$ext", $file);
         } catch (\Exception $e) {
             $message = "You cannot upload an image file for project ($projectId), as one already exists.";
             throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::CONFLICT);
         }
-    
-        return $token;
     }
 
     private static function saveTaskFileToFs($task, $userId, $file, $filename, $version = null)

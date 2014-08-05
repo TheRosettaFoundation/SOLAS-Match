@@ -157,7 +157,7 @@ class ProjectDao
     {
       APIHelper client = new APIHelper(".json");
       filename = Uri.encodeComponent(filename);
-      Future<bool> ret = client.call("", "v0/io/upload/project/$projectId/image/$filename/$userId", "PUT", data)//TODO Add real route url when possible
+      Future<bool> ret = client.call("", "v0/io/upload/project/$projectId/image/$filename/$userId", "PUT", data)
           .then((HttpRequest response) {
             if (response.status < 400) {
               return true;

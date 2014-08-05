@@ -381,7 +381,7 @@ class ProjectCreateForm extends PolymerElement
             List<Future<bool>> successList = new List<Future<bool>>();
             //upload the file and then create tasks
             successList.add(uploadProjectFile()
-                .then((_) => uploadProjectImage()
+                .then((_) => uploadProjectImage() 
                 .then((_) => createProjectTasks())));
            
             if (trackProject) {
@@ -639,9 +639,13 @@ class ProjectCreateForm extends PolymerElement
   Future<bool> uploadProjectImage()
   {
     return loadProjectImageFile()
-      .then((_) => ProjectDao.uploadProjectImage(project.id, userid, imageFilename, projectImageData))
+      .then((_) { 
+        if (projectImageData != null) {
+          ProjectDao.uploadProjectImage(project.id, userid, imageFilename, projectImageData);
+        }
+      })
       .catchError((e) {
-        throw sprintf(localisation.getTranslation("project_create_failed_upload_image"), e);
+        throw sprintf(localisation.getTranslation("project_create_failed_upload_image"), [e]);
       });
   }
   
@@ -686,9 +690,9 @@ class ProjectCreateForm extends PolymerElement
      reader.onLoadEnd.listen((e) {
        imageFileData = e.target.result;
        image = decodeImage(imageFileData);
-       if (image.width > 200 && image.height > 200) {
-         image = copyResize(image, 200, 200);
-         projectImageData = encodeNamedImage(image, "imgname");
+       if (image.width > 290 && image.height > 180) {
+         image = copyResize(image, 290, 180);
+         projectImageData = encodeNamedImage(image, "imgname.jpg");
        } else {
          projectImageData = imageFileData;
        }
@@ -724,7 +728,6 @@ class ProjectCreateForm extends PolymerElement
             //has the title already been used?
             return ProjectDao.getProjectByName(project.title).then((Project checkExist) {
               if (checkExist != null) {
-                print("CHECKING IF TITLE IS IN USE");
                 titleError = localisation.getTranslation("project_create_title_conflict");
                 return false;
               }else{
@@ -732,7 +735,9 @@ class ProjectCreateForm extends PolymerElement
               }
             });
           }
-      }).then((bool success){
+      }).then((bool success) {
+        if (success) {
+        }
         //Project description not set
         if (project.description == '') {
           descriptionError = localisation.getTranslation("project_create_33");
@@ -853,7 +858,7 @@ class ProjectCreateForm extends PolymerElement
         }
         return success;
         //Textual input and deadline info have been validated, validate target languages
-      }).then((bool success){
+      }).then((bool success) {
         
         List<Language> targetLanguages = new List<Language>();
         List<Country> targetCountries = new List<Country>();
@@ -974,11 +979,11 @@ class ProjectCreateForm extends PolymerElement
             int extensionStartIndex = imageFile.name.lastIndexOf(".");
             //Check that file has an extension
             if (extensionStartIndex >= 0) {
-              filename = imageFile.name;
-              String extension = filename.substring(extensionStartIndex + 1);
+              imageFilename = imageFile.name;
+              String extension = imageFilename.substring(extensionStartIndex + 1);
               if (extension != extension.toLowerCase()) {
                 extension = extension.toLowerCase();
-                filename = filename.substring(0, extensionStartIndex + 1) + extension;
+                imageFilename = imageFilename.substring(0, extensionStartIndex + 1) + extension;
                 window.alert(localisation.getTranslation("project_create_18"));
               }
               //Check that the file extension is valid for an image
