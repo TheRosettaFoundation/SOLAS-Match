@@ -191,6 +191,7 @@
     <string name="common_error_file_not_found">We could not find the requested file on our system. Requested file type: %s. Please contact us at %s with details of this problem.</string>
     <!-- The 3 strings below are used for the error above -->
     <string name="common_original_project_file">original project file</string>
+    <string name="common_project_image_file">project image file</string>
     <string name="common_original_task_file">original task file</string>
     <string name="common_latest_task_file_version">latest task file version</string>
 
@@ -501,6 +502,8 @@
     <string name="project_view_16">The task %s has been archived.</string>
     <string name="project_view_17">You have successfully archived the <strong>%s %s</strong>.</string>
     <string name="project_view_18">There was an error archiving the <strong>%s %s</strong>.</string>
+    <string name="project_view_image_approve">Approve Image</string>
+    <string name="project_view_image_approve">Disapprove Image</string>
         
     <string name="faq_faq">FAQ - Frequently Asked Questions</string>
     <string name="faq_quicklinks">QuickLinks</string>

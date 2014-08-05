@@ -163,6 +163,28 @@ class Middleware
         self::notFound();
     }
 
+    public function authUserForProjectImage(\Slim\Route $route)
+    {
+        if ($this->isSiteAdmin()) {
+            return true;
+        }
+        
+        $params = $route->getParams();
+        $userDao = new DAO\UserDao();
+        $projectDao = new DAO\ProjectDao();
+        
+        if ($params != null) {
+            $project_id = $params['project_id'];
+            $project = $projectDao->getProject($project_id);
+            $projectImageApproved = $project->getImageApproved();
+            
+            if ($projectImageApproved) {
+                return true;
+            }
+        }
+        self::notFound();
+    }
+
     public function authUserForTaskDownload(\Slim\Route $route)
     {
         if ($this->isSiteAdmin()) {
