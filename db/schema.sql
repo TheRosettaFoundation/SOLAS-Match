@@ -3860,8 +3860,8 @@ BEGIN
     if descr="" then set descr=null; end if;
     if impactText="" then set impactText=null; end if;
     if ref="" then set ref=null; end if;
-    if imageUploaded="" then set imageUploaded=null; end if;
-    if imageApproved="" then set imageApproved=null; end if;
+    if imageUploaded="" OR imageUploaded= NULL then set imageUploaded=0; end if;
+    if imageApproved="" OR imageApproved= NULL then set imageApproved=0; end if;
 
     if projectId is null then
 
@@ -3956,11 +3956,12 @@ BEGIN
             then update Projects p set p.created = createdTime WHERE p.id = projectId;
         end if;
         
-        IF imageUploaded IS NOT NULL
+       
+        IF imageUploaded != (SELECT p.image_uploaded FROM Projects p WHERE p.id = projectId)
             THEN UPDATE Projects p SET p.image_uploaded = imageUploaded WHERE p.id = projectId;
         END IF;
 
-        IF imageApproved IS NOT NULL
+        IF imageApproved != (SELECT p.image_approved FROM Projects p WHERE p.id = projectId)
             THEN UPDATE Projects p SET p.image_approved = imageApproved WHERE p.id = projectId;
         END IF;
 

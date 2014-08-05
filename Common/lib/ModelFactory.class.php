@@ -644,6 +644,14 @@ class ModelFactory
         }
 
         $ret->setSourceLocale($sourceLocale);
+        
+        if (isset($modelData['imageUploaded'])) {
+            $ret->setImageUploaded($modelData['imageUploaded']);
+        }
+        
+        if (isset($modelData['imageApproved'])) {
+            $ret->setImageApproved($modelData['imageApproved']);
+        }
 
         return $ret;
     }
