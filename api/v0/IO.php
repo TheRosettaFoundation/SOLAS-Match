@@ -32,7 +32,7 @@ class IO
 
                     $app->get(
                         '/projectImage/:projectId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::authUserForProjectImage', 
+                        //'\SolasMatch\API\Lib\Middleware::authUserForProjectImage', 
                         '\SolasMatch\API\V0\IO::downloadProjectImageFile'
                     );
                                             
