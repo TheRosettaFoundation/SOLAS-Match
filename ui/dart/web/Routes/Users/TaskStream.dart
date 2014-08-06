@@ -171,6 +171,7 @@ class TaskStream extends PolymerElement
    */
   void addTask(Task task)
   {
+    Settings settings = new Settings();
     tasks.add(task);
     DateTime taskTime = DateTime.parse(task.createdTime);
     Duration dur = currentDateTime.difference(taskTime);
@@ -204,8 +205,31 @@ class TaskStream extends PolymerElement
                               orgMap[projectMap[task.projectId].organisationId].name]));
           });
         });
+        var foo = task.projectId;
+        print("Task Project ID IS $foo");
+        if (projectMap[task.projectId].imageApproved && projectMap[task.projectId].imageUploaded) {
+          ImageElement img = new ImageElement();
+          DivElement imgDiv = this.shadowRoot.querySelector("#img_" + task.id.toString());
+          int projectId = task.projectId;
+          String siteLocation = settings.conf.urls.SiteLocation;
+          img.src = siteLocation + "project/$projectId/image";
+          imgDiv.children.clear();
+          imgDiv.children.add(img);
+        }
       });
-    } 
+    } else {
+      //var foo = task.projectId;
+      //print("Task Project ID IS $foo");
+      if (projectMap[task.projectId].imageApproved && projectMap[task.projectId].imageUploaded) {
+        ImageElement img = new ImageElement();
+        DivElement imgDiv = this.shadowRoot.querySelector("#img_" + task.id.toString());;
+        int projectId = task.projectId;
+        String siteLocation = settings.conf.urls.SiteLocation;
+        img.src = siteLocation + "project/$projectId/image";
+        imgDiv.children.clear();
+        imgDiv.children.add(img);
+      }
+    }
   }
   
   /**

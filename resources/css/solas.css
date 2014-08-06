@@ -298,3 +298,11 @@ table{
  	width:290px;	
 }
 
+.task-stream-img {
+    width: 35%;
+    text-align: right;
+}
+
+.task {
+    width: 65%;
+}

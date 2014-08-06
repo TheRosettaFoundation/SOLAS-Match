@@ -135,7 +135,7 @@
                     <td></td>
                     <td style = "text-align:center;">
                     	{if $project->getImageUploaded()}
-                    		<img class="project-image" src="http://127.0.0.1/solas-match/project/{$project->getId()}/image"/>
+                    		<img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}"/>
                     	
 	                        {if $isAdmin}
 		                        {if !$project->getImageApproved()}

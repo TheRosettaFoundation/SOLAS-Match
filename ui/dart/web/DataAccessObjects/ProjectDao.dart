@@ -153,6 +153,15 @@ class ProjectDao
     return ret;
   }
   
+  /**
+   * Calls the API to upload an image file for the project with the given [projectId]. [userId] is the id 
+   * of the [User] uploading the file (and by extension creating the project).
+   * [data] stores the file contents.
+   * 
+   * Returns a [Future] whose value will be true on successful uploading of the project. If a response code
+   * greater than or equal to 400 is sent back from the API a [String] is thrown showing the response code
+   * and status text. 
+   */
   static Future<bool> uploadProjectImage(int projectId, int userId, String filename, String data)
     {
       APIHelper client = new APIHelper(".json");
