@@ -17,7 +17,6 @@
           <tbody>
             <tr>
               <td>
-              <!-- <img class="project-image" src="http://127.0.0.1/SOLAS-Match/project/238/image"/> -->
                 <select name="taskTypes" selectedIndex="{{selectedTaskTypeFilter}}"> 
                   <option template repeat="{{key in taskTypeIndexes}}" value="{{key.toString()}}">
                     {{taskTypes[key]}}
@@ -52,7 +51,7 @@
       </template>
       <template if="{{tasks.length > 0}}">
         <template repeat="{{task in tasks}}">
-          <div class="task pull-left" style="word-break: break-all; overflow-wrap: break-word;">
+          <div class="task pull-left" id="task_{{task.id}}" style="word-break: break-all; overflow-wrap: break-word;">
             <h2>
               <a id="task-{{task.id}}" href="{{siteAddress}}task/{{task.id}}/id">
                 {{task.title}}
