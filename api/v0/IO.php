@@ -342,6 +342,8 @@ class IO
     //! Records a ProjectImageFile upload
     /*!
      Used to keep track of Project Image files. Stores information about a project image file upload so it can be retrieved later.
+     if an image already exists in the image folder, it will make a backup of the old image by renaming it  
+     with a timestamp.
     @param int $projectId is the id of a Project
     @param string $filename is the name of the image file being uploaded
     @param int $userId is the id of the user uploading the file
@@ -368,6 +370,16 @@ class IO
         $project = DAO\ProjectDao::save($project);
             
         try {
+             $imageFileList = glob(Common\Lib\Settings::get("files.upload_path")."proj-32/image/image.*");
+                if (count($imageFileList)>0)
+                {
+                    $currentImageFile = $imageFileList[0];
+                    $currentfileName = pathinfo($currentImageFile, PATHINFO_FILENAME);
+                    $currentfileExt = pathinfo($currentImageFile, PATHINFO_EXTENSION);
+                    $currentfileDir = pathinfo($currentImageFile, PATHINFO_DIRNAME);
+                    $date = date('-d-m-Y-h-i-s-a', time());
+                    rename($currentImageFile,$currentfileDir."/".$currentfileName.$date.".".$currentfileExt);
+                }
             $ext = pathinfo($filename, PATHINFO_EXTENSION);
             file_put_contents($destination."/image.$ext", $file);
         } catch (\Exception $e) {
