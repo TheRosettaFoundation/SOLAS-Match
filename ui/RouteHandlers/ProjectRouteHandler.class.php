@@ -231,6 +231,40 @@ class ProjectRouteHandler
                     }
                 }
             }
+
+            if (isset($post['imageApprove'])) {
+                if (!$post['imageApprove']) {
+                    $project->setImageApproved(1);
+                    $savedProject = $projectDao->updateProject($project);
+                    if ($savedProject)
+                    {
+                        $app->flashNow(
+                            "success",
+                            Lib\Localisation::getTranslation('project_view_image_approve_success')
+                        );
+                    } else {
+                        $app->flashNow(
+                            "error",
+                            Lib\Localisation::getTranslation('project_view_image_approve_failed')
+                        );
+                    }
+                } else {
+                    $project->setImageApproved(0);
+                    $savedProject = $projectDao->updateProject($project);
+                    if ($savedProject)
+                    {
+                        $app->flashNow(
+                            "success",
+                            Lib\Localisation::getTranslation('project_view_image_disapprove_success')
+                        );
+                    } else {
+                        $app->flashNow(
+                            "error",
+                            Lib\Localisation::getTranslation('project_view_image_approve_failed')
+                        );
+                    }
+                }
+            }
         }
 
         $org = $orgDao->getOrganisation($project->getOrganisationId());

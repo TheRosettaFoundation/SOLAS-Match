@@ -504,6 +504,9 @@
     <string name="project_view_18">There was an error archiving the <strong>%s %s</strong>.</string>
     <string name="project_view_image_approve">Approve Image</string>
     <string name="project_view_image_disapprove">Disapprove Image</string>
+    <string name="project_view_image_approve_success">Image successfully approved.</string>
+    <string name="project_view_image_approve_failed">An error occurred while trying to update the image status.</string>
+    <string name="project_view_image_disapprove_success">Image has been disapproved. This image will no longer be displayed.</string>
         
     <string name="faq_faq">FAQ - Frequently Asked Questions</string>
     <string name="faq_quicklinks">QuickLinks</string>

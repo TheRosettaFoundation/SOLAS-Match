@@ -140,11 +140,13 @@
 	                        {if $isAdmin}
 		                        {if !$project->getImageApproved()}
 		                        	<form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+		                       			<input type="hidden" name="imageApprove" value="0" />
 		                        		<a class="image-approve-btn btn btn-success" onclick="$('#projectImageApproveForm').submit();">
 		            					<i class="icon-check icon-white"></i> {Localisation::getTranslation('project_view_image_approve')}</a>
 		            				</form>
 		            			{else}   
 		            				 <form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+		            				 	<input type="hidden" name="imageApprove" value="1" />
 		                        		<a class="image-approve-btn btn btn-inverse" onclick="$('#projectImageApproveForm').submit();"">
 		            					<i class="icon-check icon-white"></i> {Localisation::getTranslation('project_view_image_disapprove')}</a>
 		            				 </form>
