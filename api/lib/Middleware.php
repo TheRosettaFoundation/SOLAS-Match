@@ -182,7 +182,7 @@ class Middleware
         }
     }
     
-    public function authUserForProjectImage(\Slim\Route $route)
+    public static function authUserForProjectImage(\Slim\Route $route)
     {
             
         if (self::isloggedIn()) {

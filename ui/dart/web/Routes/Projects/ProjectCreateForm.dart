@@ -133,9 +133,9 @@ class ProjectCreateForm extends PolymerElement
     p.appendHtml(localisation.getTranslation("project_create_6") + " " +
         sprintf(localisation.getTranslation("common_maximum_file_size_is"), ["${maxfilesize / 1024 / 1024}"]));
     
-    ParagraphElement p2 = this.shadowRoot.querySelector("#image_file_text");
+    ParagraphElement p2 = this.shadowRoot.querySelector("#image_file_desc");
         p2.children.clear();
-        p2.appendHtml("<image section text>" + " " +
+        p2.appendHtml(localisation.getTranslation("project_create_upload_project_image") + " " +
             sprintf(localisation.getTranslation("common_maximum_file_size_is"), ["${maxfilesize / 1024 / 1024}"]));
     List<Future<bool>> loadedList = new List<Future<bool>>();
     
@@ -681,26 +681,28 @@ class ProjectCreateForm extends PolymerElement
     FileList files = fileInput.files;
     if (!files.isEmpty) {
       imageFile = files[0];
-    }
     
-    return _validateImageFileInput().then((bool success) {
-     Completer fileIsDone = new Completer();
-     FileReader reader = new FileReader();
-     var imageFileData = null;
-     reader.onLoadEnd.listen((e) {
-       imageFileData = e.target.result;
-       image = decodeImage(imageFileData);
-       if (image.width > 290 && image.height > 180) {
-         image = copyResize(image, 290, 180);
-         projectImageData = encodeNamedImage(image, "imgname.jpg");
-       } else {
-         projectImageData = imageFileData;
-       }
-       fileIsDone.complete(true);
-     });
-     reader.readAsArrayBuffer(imageFile);
-     return fileIsDone.future;
-   });
+      return _validateImageFileInput().then((bool validImgExists) {
+        Completer fileIsDone = new Completer();
+        FileReader reader = new FileReader();
+        var imageFileData = null;
+        reader.onLoadEnd.listen((e) {
+          imageFileData = e.target.result;
+          image = decodeImage(imageFileData);
+          if (image.width > 290 && image.height > 180) {
+            image = copyResize(image, 290, 180);
+            projectImageData = encodeNamedImage(image, "imgname.jpg");
+          } else {
+            projectImageData = imageFileData;
+          }
+          fileIsDone.complete(true);
+       });
+       reader.readAsArrayBuffer(imageFile);
+       return fileIsDone.future;
+       });
+    }
+    //Just return true if an image was not processed.
+    return new Future.value(true);
   }
   
   /**

@@ -119,7 +119,7 @@
             <thead>
             <th align="left" width="48%">{Localisation::getTranslation('common_description')}<hr/></th>
             <th></th>
-            <th align="left" width="48%">Project Image<hr/></th>
+            <th align="left" width="48%">{Localisation::getTranslation('common_project_image')}<hr/></th>
             </thead>
             <tbody>
                 <tr valign="top">

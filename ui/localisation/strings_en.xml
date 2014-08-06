@@ -219,6 +219,7 @@
     <string name="common_this_may_take_days_weeks">This may take several days or weeks, depending on the tasks.</string>
     <string name="common_task_file_extension_mismatch">The file <strong>extension</strong> differs from the originally downloaded file. Please upload a <strong>(.%s)!</strong></string>
     <string name="common_language_preference">Language Preference</string>
+    <string name="common_project_image">Project Image</string>
     
 	<string name="admin_banned_orgs_list_all_banned_organisations_of">All banned Organisations of %s.</string>
 	<string name="admin_banned_orgs_list_confirm_unban">Are you sure you want to unban this Organisation and its members?</string>
@@ -462,6 +463,7 @@
     <string name="project_create_failed_add_prereq"><strong>Failed to add prerequisite to proofreading task:</strong> %s</string>
     <string name="project_create_please_upload_valid_image_file">If you are uploading a project image, please upload a valid image file. %s files are not images.</string>
     <string name="project_create_image_file_empty">The image file you uploaded is empty.</string>
+    <string name="project_create_upload_project_image">Optionally, you can upload an image to be associated with your project.</string>
 
 	<string name="project_created_project_is_now_live">Project is now live!</string>
     <string name="project_created_success"><strong>Success</strong> - Your project has been uploaded.</string>
