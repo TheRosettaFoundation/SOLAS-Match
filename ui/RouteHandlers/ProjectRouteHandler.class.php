@@ -55,7 +55,7 @@ class ProjectRouteHandler
         
         $app->get(
             "/project/:project_id/image/",
-            //array($middleware, "authUserForProjectImage"),
+            array($middleware, "authUserForProjectImage"),
             array($this, "downloadProjectImageFile")
         )->name("download-project-image");
 

@@ -182,6 +182,30 @@ class Middleware
         }
     }
     
+    public function authUserForProjectImage(\Slim\Route $route)
+    {
+            
+        if (self::isloggedIn()) {
+            $user = DAO\UserDao::getLoggedInUser();
+            if (self::isSiteAdmin($user->getId())) {
+                return true;
+            }
+        }
+        
+        $params = $route->getParams();
+        $project_id = $params['project_id'];
+        
+        if ($params != null) {
+            $project = DAO\ProjectDao::getProject($project_id);    
+            $projectImageUploadedAndApproved = $project->getImageApproved() && $project->getImageUploaded() ;
+            if ($projectImageUploadedAndApproved) {
+                return true;
+            }
+        }
+        self::notFound();
+    }
+    
+    
     /*
      * Does the user Id match the Id of the resources owner
      * Or is it matching the Id of the organisations admin

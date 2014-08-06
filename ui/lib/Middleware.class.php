@@ -176,9 +176,9 @@ class Middleware
         if ($params != null) {
             $project_id = $params['project_id'];
             $project = $projectDao->getProject($project_id);
-            $projectImageApproved = $project->getImageApproved();
+            $projectImageApprovedAndUploaded = $project->getImageApproved() && $project->getImageUploaded();
             
-            if ($projectImageApproved) {
+            if ($projectImageApprovedAndUploaded) {
                 return true;
             }
         }

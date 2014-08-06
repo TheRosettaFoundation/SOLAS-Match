@@ -503,7 +503,7 @@
     <string name="project_view_17">You have successfully archived the <strong>%s %s</strong>.</string>
     <string name="project_view_18">There was an error archiving the <strong>%s %s</strong>.</string>
     <string name="project_view_image_approve">Approve Image</string>
-    <string name="project_view_image_approve">Disapprove Image</string>
+    <string name="project_view_image_disapprove">Disapprove Image</string>
         
     <string name="faq_faq">FAQ - Frequently Asked Questions</string>
     <string name="faq_quicklinks">QuickLinks</string>

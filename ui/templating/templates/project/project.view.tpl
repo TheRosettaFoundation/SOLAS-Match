@@ -135,10 +135,10 @@
                     <td></td>
                     <td style = "text-align:center;">
                     	{if $project->getImageUploaded()}
-                    		<img class="project-image" src="http://127.0.0.1/solas-match/project/$project->getId()}/image"/>
+                    		<img class="project-image" src="http://127.0.0.1/solas-match/project/{$project->getId()}/image"/>
                     	
 	                        {if $isAdmin}
-		                        {if $project->getImageApproved()}
+		                        {if !$project->getImageApproved()}
 		                        	<form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
 		                        		<a class="image-approve-btn btn btn-success" onclick="$('#projectImageApproveForm').submit();">
 		            					<i class="icon-check icon-white"></i> {Localisation::getTranslation('project_view_image_approve')}</a>

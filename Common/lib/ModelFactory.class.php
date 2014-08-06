@@ -645,12 +645,12 @@ class ModelFactory
 
         $ret->setSourceLocale($sourceLocale);
         
-        if (isset($modelData['imageUploaded'])) {
-            $ret->setImageUploaded($modelData['imageUploaded']);
+        if (isset($modelData['image_uploaded'])) {
+            $ret->setImageUploaded($modelData['image_uploaded'] == "\x01" ? 1 : 0);
         }
         
-        if (isset($modelData['imageApproved'])) {
-            $ret->setImageApproved($modelData['imageApproved']);
+        if (isset($modelData['image_approved'])) {
+            $ret->setImageApproved($modelData['image_approved']  == "\x01" ? 1 : 0);
         }
 
         return $ret;
@@ -724,6 +724,14 @@ class ModelFactory
         }
         if (isset($modelData['tags'])) {
             $ret->setTags($modelData['tags']);
+        }
+
+        if (isset($modelData['image_uploaded'])) {
+            $ret->setImageUploaded($modelData['image_uploaded'] == "\x01" ? 1 : 0);
+        }
+        
+        if (isset($modelData['image_approved'])) {
+            $ret->setImageApproved($modelData['image_approved']  == "\x01" ? 1 : 0);
         }
 
         return $ret;

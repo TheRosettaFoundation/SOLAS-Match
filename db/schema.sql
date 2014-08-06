@@ -1978,7 +1978,7 @@ BEGIN
         (select code from Languages l where l.id = p.language_id) as sourceLanguageCode,
         (select `en-name` from Countries c where c.id = p.country_id) as sourceCountryName, 
         (select code from Countries c where c.id = p.country_id) as sourceCountryCode, 
-        m.`archived-date`, m.`user_id-archived` 
+        m.`archived-date`, m.`user_id-archived`, p.image_uploaded, p.image_approved
 
     FROM ArchivedProjects p JOIN ArchivedProjectsMetadata m ON p.id = m.archivedProject_id 
 
@@ -2400,7 +2400,7 @@ BEGIN
         (select code from Countries c where c.id = p.`country_id`) as `targetCountryCode`, 
         (select sum(tsk.`task-status_id`) / (count(tsk.`task-status_id`) *4) 
 
-    from Tasks tsk where tsk.project_id = p.id) as 'status'  FROM Projects p 
+    from Tasks tsk where tsk.project_id = p.id) as 'status', image_uploaded, image_approved FROM Projects p
     
     WHERE (projectId is null or p.id = projectId)
         AND (titleText is null or p.title = titleText)
