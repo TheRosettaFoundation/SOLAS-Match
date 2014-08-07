@@ -51,7 +51,7 @@
       </template>
       <template if="{{tasks.length > 0}}">
         <template repeat="{{task in tasks}}">
-          <div class="task pull-left" id="task_{{task.id}}" style="word-break: break-all; overflow-wrap: break-word;">
+          <div style="width:100%" class="pull-left" id="task_{{task.id}}" style="word-break: break-all; overflow-wrap: break-word;">
             <h2>
               <a id="task-{{task.id}}" href="{{siteAddress}}task/{{task.id}}/id">
                 {{task.title}}
@@ -81,7 +81,7 @@
             <p id="parents_{{task.id}}"></p>
             <br />
           </div>
-          <div id="img_{{task.id}}" class="pull-right task-stream-img"></div>
+          <div id="img_{{task.id}}" class="pull-right task-stream-img" style="text-align:right"></div>
         </template>
         <template if="{{moreTasks}}">
         <div style="width:100%" class="pull-left">
