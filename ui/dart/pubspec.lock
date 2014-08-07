@@ -44,7 +44,7 @@ packages:
   image:
     description: image
     source: hosted
-    version: "1.1.21"
+    version: "1.1.22"
   js:
     description: js
     source: hosted
