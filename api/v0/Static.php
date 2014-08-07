@@ -99,6 +99,11 @@ class StaticAPI
         $task_2_colour = Common\Lib\Settings::get('ui.task_2_colour');
         $task_3_colour = Common\Lib\Settings::get('ui.task_3_colour');
         $task_4_colour = Common\Lib\Settings::get('ui.task_4_colour');
+        $projImageSize = Common\Lib\Settings::get('projectImages.max_image_size');
+        $projImageWidth = Common\Lib\Settings::get('projectImages.max_width');
+        $projImageHeight = Common\Lib\Settings::get('projectImages.max_height');
+        $projImageFormats = Common\Lib\Settings::get('projectImages.supported_formats');
+        
         $arr = array(
             'urls' => array(
                 'SOLASMatch' => $siteAPI,
@@ -109,6 +114,12 @@ class StaticAPI
                 'colour_2' => $task_2_colour,
                 'colour_3' => $task_3_colour,
                 'colour_4' => $task_4_colour
+            ),
+            'project_images' => array (
+            	'max_size' => $projImageSize,
+                'max_width' => $projImageWidth,
+                'max_height' => $projImageHeight,
+                'supported_formats' => $projImageFormats
             )
         );
         $data = json_encode($arr, JSON_UNESCAPED_SLASHES);

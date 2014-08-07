@@ -60,6 +60,12 @@ class ProjectCreateForm extends PolymerElement
   @observable String referenceError;
   @observable String imageError;
   
+  //Project image related values that are retrieved from conf.
+  int imageMaxFileSize;
+  int imageMaxWidth;
+  int imageMaxHeight;
+  List<String> supportedImageFormats;
+  
   /**
    * The constructor for ProjectCreateForm, handling intialisation and setup of various things.
    */
@@ -124,6 +130,14 @@ class ProjectCreateForm extends PolymerElement
     Settings settings = new Settings();
     orgDashboardLink = settings.conf.urls.SiteLocation + "org/dashboard";
     String location = settings.conf.urls.SiteLocation;
+    
+    //Get project image related data from conf
+    imageMaxFileSize = settings.conf.project_images.max_size;
+    imageMaxWidth = settings.conf.project_images.max_width;
+    imageMaxHeight = settings.conf.project_images.max_height;
+    //Image format string is comma separated, split it into a list
+    supportedImageFormats = (settings.conf.project_images.supported_formats as String).split(",");
+    
     //import css into polymer element
     if (css != null) {
       css.split(' ').map((path) => new StyleElement()..text = "@import '$location${path}';").forEach(shadowRoot.append);
@@ -135,9 +149,13 @@ class ProjectCreateForm extends PolymerElement
         sprintf(localisation.getTranslation("common_maximum_file_size_is"), ["${maxfilesize / 1024 / 1024}"]));
     
     ParagraphElement p2 = this.shadowRoot.querySelector("#image_file_desc");
-        p2.children.clear();
-        p2.appendHtml(localisation.getTranslation("project_create_upload_project_image") + " " +
-            sprintf(localisation.getTranslation("common_maximum_file_size_is"), ["${maxfilesize / 1024 / 1024}"]));
+    p2.children.clear();
+    p2.appendHtml(localisation.getTranslation("project_create_upload_project_image") + " " +
+      sprintf(
+        localisation.getTranslation("common_maximum_file_size_is"),
+        [imageMaxFileSize]
+      )
+    );
     List<Future<bool>> loadedList = new List<Future<bool>>();
     
     loadedList.add(LanguageDao.getAllLanguages().then((List<Language> langs) {
@@ -990,7 +1008,7 @@ class ProjectCreateForm extends PolymerElement
                 window.alert(localisation.getTranslation("project_create_18"));
               }
               //Check that the file extension is valid for an image
-              if (["jpeg", "jpg", "png"].contains(extension) == false) {
+              if (supportedImageFormats.contains(extension) == false) {
                 imageError = sprintf(
                         localisation.getTranslation("project_create_please_upload_valid_image_file"),
                         [".$extension"]
@@ -1082,10 +1100,10 @@ class ProjectCreateForm extends PolymerElement
     int height = original.height;
     double ratio;
     
-    if (width <= 290 && height <= 180) {
+    if ((width <= imageMaxWidth) && (height <= imageMaxHeight)) {
       return original;
     } else {
-      ratio = min(290 / width, 180 / height);
+      ratio = min(imageMaxWidth / width, imageMaxHeight / height);
       int newWidth = (width * ratio).floor();
       int newHeight = (height * ratio).floor();
       Image resized = copyResize(original, newWidth, newHeight);
@@ -1119,7 +1137,7 @@ class ProjectCreateForm extends PolymerElement
    */
   void selectedYearChanged(int oldValue)
   {
-    if (this._isLeapYear(years[selectedYear])) {
+    if (_isLeapYear(years[selectedYear])) {
       monthLengths[1] = 29;
     } else {
       monthLengths[1] = 28;
