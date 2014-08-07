@@ -3,6 +3,7 @@ import "package:polymer/polymer.dart";
 import "package:image/image.dart";
 import "dart:async";
 import "dart:html";
+import "dart:math";
 
 import "package:sprintf/sprintf.dart";
 import "../../lib/SolasMatchDart.dart";
@@ -682,24 +683,21 @@ class ProjectCreateForm extends PolymerElement
     if (!files.isEmpty) {
       imageFile = files[0];
     
-      return _validateImageFileInput().then((bool validImgExists) {
+      return _validateImageFileInput().then((_) {
         Completer fileIsDone = new Completer();
         FileReader reader = new FileReader();
         var imageFileData = null;
         reader.onLoadEnd.listen((e) {
           imageFileData = e.target.result;
           image = decodeImage(imageFileData);
-          if (image.width > 290 && image.height > 180) {
-            image = copyResize(image, 290, 180);
-            projectImageData = encodeNamedImage(image, "imgname.jpg");
-          } else {
-            projectImageData = imageFileData;
-          }
+          image = _resizeProjectImage(image);
+          projectImageData = encodeNamedImage(image, imageFile.name);
+          
           fileIsDone.complete(true);
-       });
-       reader.readAsArrayBuffer(imageFile);
-       return fileIsDone.future;
-       });
+        });
+        reader.readAsArrayBuffer(imageFile);
+        return fileIsDone.future;
+      });
     }
     //Just return true if an image was not processed.
     return new Future.value(true);
@@ -964,6 +962,9 @@ class ProjectCreateForm extends PolymerElement
     });
   }
   
+  /**
+   * This method is used to validate the project image file provided.
+   */
   Future<bool> _validateImageFileInput()
   {
     bool success = true;
@@ -997,13 +998,13 @@ class ProjectCreateForm extends PolymerElement
                 success = false;
               }
             } else {
-              //File has no extension, set error TODO: use new variant string
-              imageError = localisation.getTranslation("project_create_20");
+              //File has no extension, set error
+              imageError = localisation.getTranslation("project_create_image_has_no_extension");
               success = false;
             }
           } else {
-            //File is too big, throw error TODO: use new variant string
-            imageError = localisation.getTranslation("project_create_21");
+            //File is too big, set error
+            imageError = localisation.getTranslation("project_create_image_is_too_big");
             success = false;
           } 
         } else {
@@ -1069,6 +1070,30 @@ class ProjectCreateForm extends PolymerElement
     return tags.split(" ");
   }
   
+  /**
+   * Resizes the [Image] [original] while preserving the aspect ratio. This method is used to resize big 
+   * images uploaded with projects so they fit our desired dimensions. Credit (for the logic) to
+   * http://opensourcehacker.com/2011/12/01/calculate-aspect-ratio-conserving-resize-for-images-in-javascript/ 
+   * via http://stackoverflow.com/a/14731922 
+   */
+  Image _resizeProjectImage(Image original) 
+  {
+    int width = original.width;
+    int height = original.height;
+    double ratio;
+    
+    if (width <= 290 && height <= 180) {
+      return original;
+    } else {
+      ratio = min(290 / width, 180 / height);
+      int newWidth = (width * ratio).floor();
+      int newHeight = (height * ratio).floor();
+      Image resized = copyResize(original, newWidth, newHeight);
+      
+      return resized;
+   
+    }
+  }
   /**
    * This method is called when the segmentation checkbox is clicked for a target language, disabling the
    * translation and proofreading checkboxes.

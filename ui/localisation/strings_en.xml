@@ -464,6 +464,8 @@
     <string name="project_create_please_upload_valid_image_file">If you are uploading a project image, please upload a valid image file. %s files are not images.</string>
     <string name="project_create_image_file_empty">The image file you uploaded is empty.</string>
     <string name="project_create_upload_project_image">Optionally, you can upload an image to be associated with your project.</string>
+    <string name="project_create_image_has_no_extension">Please upload an image file with an extension.</string>
+    <string name="project_create_image_is_too_big">The image you uploaded is too large, please check the maximum file upload size under the Project Image header.</string>
 
 	<string name="project_created_project_is_now_live">Project is now live!</string>
     <string name="project_created_success"><strong>Success</strong> - Your project has been uploaded.</string>
