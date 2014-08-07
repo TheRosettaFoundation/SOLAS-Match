@@ -181,25 +181,37 @@ class Middleware
             }
         }
     }
-    
+
+    /*
+    * Checks whether the user is an admin, if so display the image
+    * Otherwise, if the image has been uploaded and approved then display the image
+    */
     public static function authUserForProjectImage(\Slim\Route $route)
     {
-            
-        if (self::isloggedIn()) {
+        if (!is_null(DAO\UserDao::getLoggedInUser())) {
             $user = DAO\UserDao::getLoggedInUser();
             if (self::isSiteAdmin($user->getId())) {
                 return true;
             }
-        }
-        
-        $params = $route->getParams();
-        $project_id = $params['project_id'];
-        
-        if ($params != null) {
-            $project = DAO\ProjectDao::getProject($project_id);    
-            $projectImageUploadedAndApproved = $project->getImageApproved() && $project->getImageUploaded() ;
-            if ($projectImageUploadedAndApproved) {
-                return true;
+        } else  {
+            $params = $route->getParams();
+            if ($params != null) {
+                $projectId = $params['projectId'];
+                if (!is_numeric($projectId) && strstr($projectId, '.')) {
+                    $projectId = explode('.', $projectId);
+                    $format = '.'.$projectId[1];
+                    $projectId = $projectId[0];
+                }
+                $project = DAO\ProjectDao::getProject($projectId);    
+                $projectImageUploadedAndApproved = $project->getImageApproved() && $project->getImageUploaded() ;
+                if ($projectImageUploadedAndApproved) {
+                    return true;
+                } else {
+                    Dispatcher::getDispatcher()->halt(
+                        Common\Enums\HttpStatusEnum::FORBIDDEN,
+                        "The user does not have permission to access the current resource"
+                    );
+                }
             }
         }
         self::notFound();
