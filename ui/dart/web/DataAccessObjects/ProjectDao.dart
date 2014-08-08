@@ -41,24 +41,48 @@ class ProjectDao
    * Returns a [Future] whose value will be a [Project] object with the given [title].
    */
   static Future<Project> getProjectByName(String title)
-    {
-      APIHelper client = new APIHelper(".json");
-      Future<Project> project = client.call("Project", 
-          "v0/projects/" + title, "GET")
-            .then((HttpRequest response) {
-        Project pro = null;
+  {
+    APIHelper client = new APIHelper(".json");
+    Future<Project> project = client.call("Project", 
+        "v0/projects/" + title, "GET")
+          .then((HttpRequest response) {
+      Project pro = null;
+      if (response.status < 400) {
+        if (response.responseText != '') {
+          Map jsonParsed = JSON.decode(response.responseText);
+          pro = ModelFactory.generateProjectFromMap(jsonParsed);
+        }
+      } else {
+        print("Error: getProject returned " + response.status.toString() + " " + response.statusText);
+      }
+      return pro;
+    });
+    return project;
+  }
+  
+  static Future<List<Tag>> getProjectTags(int projectId)
+  {
+    APIHelper client = new APIHelper(".json");
+    Future<List<Tag>> projTags = client.call("", "v0/projects/$projectId/tags", "GET")
+      .then((HttpRequest response) {
+        List<Tag> tags = null;
         if (response.status < 400) {
           if (response.responseText != '') {
             Map jsonParsed = JSON.decode(response.responseText);
-            pro = ModelFactory.generateProjectFromMap(jsonParsed);
+            if (jsonParsed.length > 0) {
+              jsonParsed['item'].forEach((String data) {            
+                Map tag = JSON.decode(data);
+                tags.add(ModelFactory.generateTagFromMap(tag));
+              });
+            }
           }
         } else {
           print("Error: getProject returned " + response.status.toString() + " " + response.statusText);
         }
-        return pro;
+        return tags;
       });
-      return project;
-    }
+    return projTags;
+  }
   
   /**
    * Calls the API to request that deadlines for the [Project] with id matching the given [projectId] should be

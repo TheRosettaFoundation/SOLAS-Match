@@ -1,0 +1,120 @@
+<polymer-element name="project-alter-form" css="resources/bootstrap/css/bootstrap.min.css resources/css/solas.css">
+  <template>
+    <div class="page-header">
+      <h1>
+        <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
+          {{project.title}}
+          <small>{{localisation.getTranslation("project_alter_alter_project_details_here")}}</small>
+        </span>
+        <div class="pull-right">
+          <a href="{{projectViewLink}}" class="pull-right btn btn-primary">
+            <i class="icon-list icon-white"></i> {{localisation.getTranslation("project_alter_view_project_details")}}
+          </a>
+        </div>
+      </h1>
+    </div>
+    
+    <!-- div containing the form -->
+    <div class="well">
+      <table width="100%">
+        <tr align="center">
+          <td>
+            <label for="title" style="font-size: large"><strong>{{localisation.getTranslation("common_title")}}</strong></label>
+            <textarea wrap="soft" cols="1" rows="4" name="title" style="width: 400px; margin-bottom: 40px">{{project.title}}</textarea>
+
+            <label for="description" style="font-size: large"><strong>{{localisation.getTranslation("common_description")}}</strong></label>
+            <textarea wrap="soft" cols="1" rows="6" name="description" style="width: 400px; margin-bottom: 40px">{{project.description}}</textarea>
+            
+            <label for="impact" style="font-size: large"><strong>{{localisation.getTranslation("common_impact")}}</strong></label>
+            <textarea wrap="soft" cols="1" rows="4" name="impact" style="width: 400px; margin-bottom: 40px">{{project.impact}}</textarea>
+            <!-- {if $isAdmin} -->
+               <label for="word-count" style="font-size: large"><strong>{{localisation.getTranslation("common_word_count")}}</strong></label>
+               <input id="word-count" name="word-count" value="{{project.wordCount}}" style="width: 400px;  margin-bottom: 20px"/>
+            <!-- {/if} -->
+          </td>
+          <td>
+            <label for="tags" style="font-size: large"><strong>{{localisation.getTranslation("common_tags")}}</strong></label>
+            <input id="tags" name="tags" value="{{projectTags}}" style="width: 400px;  margin-bottom: 20px"/>
+  
+            <div class="projFormInput">
+              <div style="margin-bottom:25px;">
+                <h2>{{localisation.getTranslation("common_deadline")}}: <span style="color: red">*</span></h2>
+                <p class="desc">{{localisation.getTranslation("project_create_7")}}</p>
+                <p>
+                  {{localisation.getTranslation("common_day")}}:
+                  <select selectedIndex="{{selectedDay}}" style="width: 3.5em">
+                    <option template repeat="{{day in days}}">{{day}}</option>
+                  </select>
+                    {{localisation.getTranslation("common_month")}}:
+                  <select selectedIndex="{{selectedMonth}}" style="width: 7.3em">
+                    <option template repeat="{{month in months}}">{{month}}</option>
+                  </select>
+                    {{localisation.getTranslation("common_year")}}:
+                  <select selectedIndex="{{selectedYear}}" style="width: 4.5em">
+                    <option template repeat="{{year in years}}">{{year}}</option>
+                  </select>
+                </p>
+                  {{localisation.getTranslation("common_hour")}}:
+                  <select selectedIndex="{{selectedHour}}" style="width: 3.5em">
+                    <option template repeat="{{hour in hours}}">{{hour}}</option>
+                  </select>
+                  {{localisation.getTranslation("common_minute")}}:
+                  <select selectedIndex="{{selectedMinute}}" style="width: 3.5em">
+                    <option template repeat="{{minute in minutes}}">{{minute}}</option>
+                  </select>
+              </div>
+            </div>
+            <p style="margin-bottom:20px;"/>
+  
+  
+            <div id="sourceLanguageDiv"></div>
+            <p style="margin-bottom:20px;"/>
+            
+            <div style="margin-bottom:20px;">
+              <label for="proj-image" style="font-size: large"><strong>{{localisation.getTranslation("common_project_image")}}</strong></label>   
+              <template if="{{project.imageUploaded  && project.imageApproved}}">
+                <img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}"/>
+              </template>
+              <template if="{{project.imageUploaded && !project.imageApproved}}">
+                    {{localisation.getTranslation("common_project_image_not_approved")}}
+              </template>
+              <template if="{{!project.imageUploaded && project.imageApproved}}">
+                    {{localisation.getTranslation("common_project_image_not_uploaded")}}
+              </template>
+              <div>
+                  <input type="file" id="projectImageFile"/>
+                  <p class="help-block">
+                      {{sprintf(localisation.getTranslation("common_maximum_file_size_is"), 20000000000)}}
+                  </p>
+              </div>
+            </div>
+            <label for="reference" style="font-size: large"><strong>{{localisation.getTranslation("common_reference")}}</strong></label>
+            <textarea wrap="soft" cols="1" rows="4" name="reference" style="width: 400px">{{project.reference}}</textarea>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+              <hr/>
+          </td>
+        </tr>
+        <tr align="center">
+          <td>
+              <p style="margin-bottom:20px;"/>  
+              <a href="{{orgDashboardLink}}" class="btn btn-danger">
+                <i class="icon-ban-circle icon-white"></i> {{localisation.getTranslation("common_cancel")}}
+              </a>
+              <p style="margin-bottom:20px;"/>  
+          </td>
+          <td>
+              <p style="margin-bottom:20px;"/>  
+              <button on-click="{{submitForm}}" class="btn btn-primary">
+                  <i class="icon-refresh icon-white"></i> {{localisation.getTranslation("project_alter_update_project_details")}}
+              </button> 
+              <p style="margin-bottom:20px;"/>  
+          </td>
+        </tr>
+        </table>
+    </div>    
+  </template>
+  <script type="application/dart" src="ProjectCreateForm.dart"></script>
+</polymer-element>

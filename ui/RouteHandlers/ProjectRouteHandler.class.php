@@ -22,6 +22,12 @@ class ProjectRouteHandler
             array($middleware, "authUserIsLoggedIn"),
             array($this, "projectView")
         )->via("POST")->name("project-view");
+
+        $app->get(
+                "/project/:project_id/alterDart/",
+                array($middleware, "authUserForOrgProject"),
+                array($this, "projectAlterDart")
+        )->via("GET", "POST")->name("project-alter-dart");
         
         $app->get(
             "/project/:project_id/alter/",
@@ -460,6 +466,30 @@ class ProjectRouteHandler
         ));
         
         $app->render("project/project.alter.tpl");
+    }
+    
+    public function projectAlterDart($projectId)
+    {
+        $app = \Slim\Slim::getInstance();
+        
+        $extraScripts = "
+<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/dart_support.js\"></script>
+<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/browser/interop.js\"></script>
+<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/Routes/Projects/ProjectAlter.dart.js\"></script>
+<span class=\"hidden\">
+";
+        $extraScripts .= file_get_contents("ui/dart/web/Routes/Projects/ProjectAlterForm.html");
+        $extraScripts .= "</span>";
+        $platformJS =
+        "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/platform.js\"></script>";
+        
+        $app->view()->appendData(array(
+        	"projectId" => $projectId,
+            "maxFileSize" => 2,
+            "extra_scripts" => $extraScripts,
+            "platformJS" => $platformJS
+        ));
+        $app->render("project/project.alterDart.tpl");
     }
     
     public function projectCreate($org_id)
