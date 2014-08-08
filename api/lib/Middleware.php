@@ -214,7 +214,7 @@ class Middleware
                 }
             }
         }
-        self::notFound();
+        return false;
     }
     
     
@@ -257,7 +257,7 @@ class Middleware
     
     public static function notFound()
     {
-        Dispatcher::getDispatcher()->redirect(Dispatcher::getDispatcher()->urlFor('notFound'));
+        Dispatcher::getDispatcher()->redirect(Dispatcher::getDispatcher()->urlFor('home'));
     }
     
     private static function isSiteAdmin($userId)

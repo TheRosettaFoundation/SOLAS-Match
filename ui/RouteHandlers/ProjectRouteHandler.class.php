@@ -272,8 +272,8 @@ class ProjectRouteHandler
         $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
         $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id, $project->getOrganisationId());
         
-        $adminDao = new DAO\AdminDao();
-        $isAdmin = $adminDao->isOrgAdmin($project->getOrganisationId(), $user_id) || $adminDao->isSiteAdmin($user_id);
+        $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
+        $isAdmin = $adminDao->isOrgAdmin($project->getOrganisationId(), $user_id) || $isSiteAdmin;
 
         if ($isOrgMember || $isAdmin) {
             $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);
@@ -335,6 +335,7 @@ class ProjectRouteHandler
         $app->view()->appendData(array(
                 "isOrgMember"   => $isOrgMember,
                 "isAdmin"       => $isAdmin,
+                "isSiteAdmin"   => $isSiteAdmin,
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation
         ));
         $app->render("project/project.view.tpl");
