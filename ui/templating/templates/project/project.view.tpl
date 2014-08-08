@@ -135,9 +135,8 @@
                     <td></td>
                     <td style = "text-align:center;">
                     	{if $project->getImageUploaded()}
-                    		<img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}"/>
-                    	
-	                        {if $isAdmin}
+	                        {if $isSiteAdmin}
+	                        	<img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}"/>
 		                        {if !$project->getImageApproved()}
 		                        	<form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
 		                       			<input type="hidden" name="imageApprove" value="0" />
@@ -151,7 +150,15 @@
 		            					<i class="icon-check icon-white"></i> {Localisation::getTranslation('project_view_image_disapprove')}</a>
 		            				 </form>
 		                        {/if}
+		                    {else}
+		                    	{if $project->getImageApproved()}
+		                    		<img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}"/>
+		                    	{else}
+			                    	{Localisation::getTranslation('common_project_image_not_approved')}
+		                    	{/if}
 		                    {/if}
+		                {else}
+		                	{Localisation::getTranslation('common_project_image_not_uploaded')}
                     	{/if}
                     </td>
                 </tr>

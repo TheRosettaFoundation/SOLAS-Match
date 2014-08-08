@@ -220,7 +220,9 @@
     <string name="common_task_file_extension_mismatch">The file <strong>extension</strong> differs from the originally downloaded file. Please upload a <strong>(.%s)!</strong></string>
     <string name="common_language_preference">Language Preference</string>
     <string name="common_project_image">Project Image</string>
-    
+    <string name="common_project_image_not_approved">The currently uploaded image is pending approval by the administrators.</string>
+    <string name="common_project_image_not_uploaded">No image has been uploaded for this project.</string>
+     
 	<string name="admin_banned_orgs_list_all_banned_organisations_of">All banned Organisations of %s.</string>
 	<string name="admin_banned_orgs_list_confirm_unban">Are you sure you want to unban this Organisation and its members?</string>
 
