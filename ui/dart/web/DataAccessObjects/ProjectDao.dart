@@ -132,6 +132,32 @@ class ProjectDao
   }
   
   /**
+   * Calls the API to update the project with the same id as [project].
+   * 
+   * Returns a [Future] whose value will be a [Project] object representing the updated project on successful
+   * completion. If a response code greater than or equal to 400 is sent back from the API a [String] is thrown
+   * showing the response code and status text. 
+   */
+    static Future<Project> updateProject(Project project)
+    {
+      APIHelper client = new APIHelper(".json");
+      Future<Project> ret = client.call("Project", "v0/projects/${project.id}", "PUT", JSON.encode(project))
+        .then((HttpRequest response) {
+          Project pro = null;
+          if (response.status < 400) {
+            if (response.responseText != '') {
+              Map jsonParsed = JSON.decode(response.responseText);
+              pro = ModelFactory.generateProjectFromMap(jsonParsed);
+            }
+          } else {
+            throw "Error #" + response.status.toString() + " - " + response.statusText;
+          }
+          return pro;
+        });
+      return ret;
+    }
+  
+  /**
    * Calls the API to delete the project with the given [projectId].
    * 
    * Returns a [Future] whose value will be true on successful deletion of the project. If a response code

@@ -9,6 +9,7 @@ import "dart:convert";
 // libs
 part 'APIHelper.dart';
 part 'Settings.dart';
+part 'FormHelper.dart';
 part 'Loader.dart';
 part 'Localisation.dart';
 part 'ModelFactory.dart';

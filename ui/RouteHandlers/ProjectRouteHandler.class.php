@@ -113,6 +113,7 @@ class ProjectRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $user_id = Common\Lib\UserSession::getCurrentUserID();
+        $adminDao = new DAO\AdminDao();
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
         $userDao = new DAO\UserDao();

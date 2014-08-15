@@ -1,12 +1,14 @@
 import "package:polymer/polymer.dart";
+import "package:image/image.dart";
 import "dart:async";
 import "dart:html";
+import "dart:math";
 
 import "package:sprintf/sprintf.dart";
 import "../../lib/SolasMatchDart.dart";
 
 /*
- * TODO
+ * TODO ADD HANDLING FOR THESE TO TEMPLATE
  * Errors that could arise and need to be handled here and in polymer template:
  * Title, description and/or impact too long.
  * Reference input is not a URL or is too long.
@@ -26,6 +28,11 @@ class ProjectAlterForm extends PolymerElement
   SelectElement langSelect;
   SelectElement countrySelect;
   List<int> monthLengths;
+  Project oldProject;
+  String tagList;
+  String imageFilename;
+  var projectImageData;
+  @observable String wordCountInput;
   @observable List<int> years;
   @observable List<String> months;
   @observable List<int> days;
@@ -55,6 +62,12 @@ class ProjectAlterForm extends PolymerElement
   @observable String tagsError;
   @observable String referenceError;
   @observable String imageError;
+  
+  //Project image related values that are retrieved from conf.
+  int imageMaxFileSize;
+  int imageMaxWidth;
+  int imageMaxHeight;
+  List<String> supportedImageFormats;
   
   /**
    * The constructor for [ProjectAlterForm], handling initialisation of variables.
@@ -102,6 +115,12 @@ class ProjectAlterForm extends PolymerElement
     
     //account for leap years
     this.selectedYearChanged(0);
+    loaded = false;
+    //publish = true;
+    //trackProject = true;
+    //targetCount = 0;
+    wordCountInput = '';
+    tagList = "";
   }
   
   /**
@@ -114,6 +133,12 @@ class ProjectAlterForm extends PolymerElement
     projectViewLink = settings.conf.urls.SiteLocation + "$projectid/view";
     
     String location = settings.conf.urls.SiteLocation;
+    //Get project image related data from conf
+    imageMaxFileSize = settings.conf.project_images.max_size;
+    imageMaxWidth = settings.conf.project_images.max_width;
+    imageMaxHeight = settings.conf.project_images.max_height;
+    //Image format string is comma separated, split it into a list
+    supportedImageFormats = (settings.conf.project_images.supported_formats as String).split(",");
     
     //import css into polymer element
     if (css != null) {
@@ -137,11 +162,13 @@ class ProjectAlterForm extends PolymerElement
       ProjectDao.getProjectTags(projectid)
       .then((List<Tag> projTags) {
         if (projTags != null) {
+          project.tag = projTags;
           projTags.forEach((Tag tag) {
             projectTags += tag.label + " ";
           });
         }
       });
+      oldProject = project;
       return true;
     }));
     
@@ -153,6 +180,16 @@ class ProjectAlterForm extends PolymerElement
       });
       constructDynamicElements();
       _setProjectDeadline();
+      
+      //Insert text stating max image file size
+      ParagraphElement imgDesc = this.shadowRoot.querySelector("#help-block");
+      imgDesc.children.clear();
+      int imgMaxSize = settings.conf.project_images.max_size;
+      imgDesc.appendHtml(sprintf(
+        localisation.getTranslation("common_maximum_file_size_is"),
+        [imgMaxSize])
+      );
+      
       //Select the project's source locale on the UI
       SelectElement sourceLangSelect = this.shadowRoot.querySelector("#source-lang-select");
       SelectElement sourceCountrySelect = this.shadowRoot.querySelector("#source-country-select");
@@ -164,6 +201,9 @@ class ProjectAlterForm extends PolymerElement
           sourceCountrySelect.options.firstWhere((OptionElement opt) {
             return opt.value == project.sourceLocale.countryCode;
       }));
+      //Display the project's word count
+      InputElement wcInput = this.shadowRoot.querySelector("#word-count");
+      wcInput.text = project.wordCount.toString();
     });
   }
   
@@ -225,7 +265,330 @@ class ProjectAlterForm extends PolymerElement
   
   void submitForm()
   {
+    print("IN SUBMITFORM");
+    //reset error variables, clearing any previously displayed errors.
+    titleError = null;
+    descriptionError = null;
+    wordCountError = null;
+    deadlineError = null;
+    impactError = null;
+    tagsError = null;
+    referenceError = null;
+    imageError = null;
     
+    validateInput().then((bool success) {
+      if (success) {
+        print("INPUT VALIDATED");
+        //if (project != oldProject) {
+          SelectElement sourceLangSelect = this.shadowRoot.querySelector("#source-lang-select");
+          SelectElement sourceCountrySelect = this.shadowRoot.querySelector("#source-country-select");
+          Language sourceLang = languages[sourceLangSelect.selectedIndex];
+          Country sourceCountry = countries[sourceCountrySelect.selectedIndex];
+          Locale sourceLocale = new Locale();
+          sourceLocale.languageName = sourceLang.name;
+          sourceLocale.languageCode = sourceLang.code;
+          sourceLocale.countryName = sourceCountry.name;
+          sourceLocale.countryCode = sourceCountry.code;
+          project.sourceLocale = sourceLocale;
+         
+          List<Tag> projectTags = new List<Tag>();
+          if (tagList.length > 0) {
+            projectTags = FormHelper.parseTagsInput(tagList);
+          }
+          if (projectTags.length > 0) {
+            project.tag.clear();
+            project.tag.addAll(projectTags);
+          }
+          print("TAG LIST PARSED");
+          //Update the project and then, if a new image has been supplied upload it.
+          ProjectDao.updateProject(project)
+          .then((_) => uploadProjectImage())
+          .then((_) {
+              //Once deadlines have been calculated, make the app progress to the "view project" page.
+              Settings settings = new Settings();
+              window.location.assign(settings.conf.urls.SiteLocation + "project/"
+                  + project.id.toString() + "/view");
+            
+          });
+        //}
+      } else {
+        print("Invalid form input.");
+      }
+    }).catchError((e, stack) {
+      print(stack);
+    });
+  }
+  
+  Future<bool> uploadProjectImage()
+  {
+    return loadProjectImageFile()
+      .then((_) { 
+      int userid = 1; //TODO remove this and maybe rework the slim route to not use user id
+        if (projectImageData != null) {
+          ProjectDao.uploadProjectImage(project.id, userid, imageFilename, projectImageData);
+        }
+      })
+      .catchError((e) {
+        throw sprintf(localisation.getTranslation("project_create_failed_upload_image"), [e]);
+      });
+  }
+  
+  Future<bool> loadProjectImageFile()
+    {
+      File imageFile = null;
+      InputElement fileInput = this.shadowRoot.querySelector("#projectImageFile");
+      Image image;
+      FileList files = fileInput.files;
+      if (!files.isEmpty) {
+        imageFile = files[0];
+      
+        return _validateImageFileInput().then((_) {
+          Completer fileIsDone = new Completer();
+          FileReader reader = new FileReader();
+          var imageFileData = null;
+          reader.onLoadEnd.listen((e) {
+            imageFileData = e.target.result;
+            image = decodeImage(imageFileData);
+            image = _resizeProjectImage(image);
+            projectImageData = encodeNamedImage(image, imageFile.name);
+            
+            fileIsDone.complete(true);
+          });
+          reader.readAsArrayBuffer(imageFile);
+          return fileIsDone.future;
+        });
+      }
+      //Just return true if an image was not processed.
+      return new Future.value(true);
+    }
+  
+  /**
+   * This method validates the form input and sets various error messages if needed fields are not set or
+   * invalid data is given.
+   */
+  Future<bool> validateInput()
+  {
+    //Validate textual form input and deadline info
+    return new Future((){
+      //title is empty
+      if (project.title == '') {
+          titleError = localisation.getTranslation("project_create_error_title_not_set");
+          return false;
+        //title too long
+        } else if (project.title.length > 110) {
+          titleError = localisation.getTranslation("project_create_error_title_too_long");
+          return false;
+        //Is the project title simply a number? Don't allow this, thus avoiding Slim route mismatch,
+        //calling route for getProject when it should be getProjectByName
+        } else if (project.title.indexOf(new RegExp(r'^\d+$')) != -1) {
+          titleError = localisation.getTranslation("project_create_title_cannot_be_number");
+          return false;
+        } else {
+          //has the title already been used?
+          return ProjectDao.getProjectByName(project.title).then((Project checkExist) {
+            if (checkExist != null) {
+              titleError = localisation.getTranslation("project_create_title_conflict");
+              return false;
+            }else{
+              return true;
+            }
+          });
+        }
+    }).then((bool success) {
+      if (success) {
+      }
+      //Project description not set
+      if (project.description == '') {
+        descriptionError = localisation.getTranslation("project_create_33");
+        success = false;
+      } else if (project.description.length > 4096) {
+        //Project description is too long
+        descriptionError = localisation.getTranslation("project_create_error_description_too_long");
+        success = false;
+      }
+      
+      //Project impact not set
+      if (project.impact == '') {
+        impactError = localisation.getTranslation("project_create_26");
+        success = false;
+      } else if (project.impact.length > 4096) {
+        //Project impact is too long
+        impactError = localisation.getTranslation("project_create_error_impact_too_long");
+        success = false;
+      }
+      
+      if(project.reference != null && project.reference != '') {
+        if(project.reference.length > 128) {
+          //Project reference is too long
+          referenceError = localisation.getTranslation("project_create_error_reference_too_long");
+          success = false;
+          Timer.run(() {
+            LIElement referenceErrTop = this.shadowRoot.querySelector("#reference_error_top");
+            referenceErrTop.setInnerHtml(
+              referenceError,
+              validator : new NodeValidatorBuilder()
+                ..allowHtml5()
+                ..allowElement('a', attributes: ['href'])
+            );
+            LIElement referenceErrBtm = this.shadowRoot.querySelector("#reference_error_btm");
+            referenceErrBtm.setInnerHtml(
+              referenceError,
+              validator : new NodeValidatorBuilder()
+                ..allowHtml5()
+                ..allowElement('a', attributes: ['href'])
+            );
+          });
+        } else if (FormHelper.validateReferenceURL(project.reference) == false) {
+          referenceError = localisation.getTranslation("project_create_error_reference_invalid");
+          success = false;
+        }
+      }
+      
+      if (wordCountInput != null && wordCountInput != '') {
+        //If word count is set, ensure it is a valid natural number
+        project.wordCount = int.parse(wordCountInput, onError: (String wordCountString) {
+          wordCountError = localisation.getTranslation("project_create_27");
+          success = false;
+          return 0;
+        });
+      } else {
+        //Word count is not set, set error message
+        wordCountError = localisation.getTranslation("project_create_27");
+        success = false;
+      }
+      if (tagList != null && tagList != "") {
+        if (FormHelper.validateTagList(tagList) == false) {
+          //Invalid tags detected, set error message
+          tagsError = localisation.getTranslation('project_create_invalid_tags');
+          success = false;
+        } else {
+          List<String> list = tagList.split(" ");
+          int listLen = list.length;
+          for (int i = 0; i < listLen; i++) {
+            if (list.elementAt(i).length > 50) {
+              //One of the tags is too long, set error message
+              tagsError = localisation.getTranslation("project_create_error_tags_too_long");
+              success = false;
+              break;
+            }
+          }
+        }
+      }
+
+      //Parse project deadline info
+      DateTime projectDeadline = FormHelper.parseDeadline(years[selectedYear], selectedMonth + 1, selectedDay + 1, selectedHour, selectedMinute);
+      if (projectDeadline != null) {
+        if (projectDeadline.isAfter(new DateTime.now())) {
+          String monthAsString = projectDeadline.month.toString();
+          monthAsString = monthAsString.length == 1 ? "0$monthAsString" : monthAsString;
+          String dayAsString = projectDeadline.day.toString();
+          dayAsString = dayAsString.length == 1 ? "0$dayAsString" : dayAsString;
+          String hourAsString = projectDeadline.hour.toString();
+          hourAsString = hourAsString.length > 2 ? "0$hourAsString" : hourAsString;
+          String minuteAsString = projectDeadline.minute.toString();
+          minuteAsString = minuteAsString.length < 2 ? "0$minuteAsString" : minuteAsString;
+          project.deadline = projectDeadline.year.toString() + "-" + monthAsString + "-" + dayAsString
+              + " " + hourAsString + ":" + minuteAsString + ":00";
+        } else {
+          //Deadline is not a date in the future, set error message
+          deadlineError = localisation.getTranslation("project_create_25");
+          success = false;
+        }
+      } else {
+        //Deadline is not set (can this even happen in current code?)
+        deadlineError = localisation.getTranslation("project_create_32");
+        success = false;
+      }
+      return success;
+      //Textual input and deadline info have been validated, validate image file
+    }).then((bool success) {
+     
+      //Validate file input
+      return _validateImageFileInput().then((bool imageIsValid) {
+        if (success && imageIsValid) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+    });
+  }
+  
+  Future<bool> _validateImageFileInput()
+  {
+    bool success = true;
+    return new Future(() {
+      File imageFile = null;
+      InputElement fileInput = this.shadowRoot.querySelector("#projectImageFile");
+      FileList files = fileInput.files;
+      if (!files.isEmpty) {
+        imageFile = files[0];
+      }
+      if (imageFile != null) {
+        if (imageFile.size > 0) {
+          //Check that file does not exceed the maximum allowed file size
+          if (imageFile.size < imageMaxFileSize) {
+            int extensionStartIndex = imageFile.name.lastIndexOf(".");
+            //Check that file has an extension
+            if (extensionStartIndex >= 0) {
+              imageFilename = imageFile.name;
+              String extension = imageFilename.substring(extensionStartIndex + 1);
+              if (extension != extension.toLowerCase()) {
+                extension = extension.toLowerCase();
+                imageFilename = imageFilename.substring(0, extensionStartIndex + 1) + extension;
+                window.alert(localisation.getTranslation("project_create_18"));
+              }
+              //Check that the file extension is valid for an image
+              if (supportedImageFormats.contains(extension) == false) {
+                imageError = sprintf(
+                  localisation.getTranslation("project_create_please_upload_valid_image_file"),
+                  [".$extension"]
+                );
+                success = false;
+              }
+            } else {
+              //File has no extension, set error
+              imageError = localisation.getTranslation("project_create_image_has_no_extension");
+              success = false;
+            }
+          } else {
+            //File is too big, set error
+            imageError = localisation.getTranslation("project_create_image_is_too_big");
+            success = false;
+          } 
+        } else {
+          //File is empty, set error
+          imageError = localisation.getTranslation("project_create_image_file_empty");
+          success = false;
+        }
+      }
+      return success;
+    });
+  }
+  
+  /**
+   * Resizes the [Image] [original] while preserving the aspect ratio. This method is used to resize big 
+   * images uploaded with projects so they fit our desired dimensions. Credit (for the logic) to
+   * http://opensourcehacker.com/2011/12/01/calculate-aspect-ratio-conserving-resize-for-images-in-javascript/ 
+   * via http://stackoverflow.com/a/14731922 
+   */
+  Image _resizeProjectImage(Image original) 
+  {
+    int width = original.width;
+    int height = original.height;
+    double ratio;
+    
+    if ((width <= imageMaxWidth) && (height <= imageMaxHeight)) {
+      return original;
+    } else {
+      ratio = min(imageMaxWidth / width, imageMaxHeight / height);
+      int newWidth = (width * ratio).floor();
+      int newHeight = (height * ratio).floor();
+      Image resized = copyResize(original, newWidth, newHeight);
+      
+      return resized;
+   
+    }
   }
   
   /**
@@ -233,7 +596,7 @@ class ProjectAlterForm extends PolymerElement
    */
   void selectedYearChanged(int oldValue)
   {
-    if (_isLeapYear(years[selectedYear])) {
+    if (FormHelper.isLeapYear(years[selectedYear])) {
       monthLengths[1] = 29;
     } else {
       monthLengths[1] = 28;

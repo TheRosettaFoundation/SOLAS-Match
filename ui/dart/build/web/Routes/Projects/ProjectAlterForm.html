@@ -20,16 +20,16 @@
         <tr align="center">
           <td>
             <label for="title" style="font-size: large"><strong>{{localisation.getTranslation("common_title")}}</strong></label>
-            <textarea wrap="soft" cols="1" rows="4" name="title" style="width: 400px; margin-bottom: 40px">{{project.title}}</textarea>
+            <textarea wrap="soft" cols="1" rows="4" value="{{project.title}}" style="width: 400px; margin-bottom: 40px">{{project.title}}</textarea>
 
             <label for="description" style="font-size: large"><strong>{{localisation.getTranslation("common_description")}}</strong></label>
-            <textarea wrap="soft" cols="1" rows="6" name="description" style="width: 400px; margin-bottom: 40px">{{project.description}}</textarea>
+            <textarea wrap="soft" cols="1" rows="6" value="{{project.description}}" style="width: 400px; margin-bottom: 40px">{{project.description}}</textarea>
             
             <label for="impact" style="font-size: large"><strong>{{localisation.getTranslation("common_impact")}}</strong></label>
-            <textarea wrap="soft" cols="1" rows="4" name="impact" style="width: 400px; margin-bottom: 40px">{{project.impact}}</textarea>
+            <textarea wrap="soft" cols="1" rows="4" value="{{project.impact}}" style="width: 400px; margin-bottom: 40px">{{project.impact}}</textarea>
             <!-- {if $isAdmin} -->
                <label for="word-count" style="font-size: large"><strong>{{localisation.getTranslation("common_word_count")}}</strong></label>
-               <input id="word-count" name="word-count" value="{{project.wordCount}}" style="width: 400px;  margin-bottom: 20px"/>
+               <input id="word-count" name="word-count" maxlength="6" value="{{wordCountInput}}" style="width: 400px;  margin-bottom: 20px">
             <!-- {/if} -->
           </td>
           <td>
@@ -83,9 +83,7 @@
               </template>
               <div>
                   <input type="file" id="projectImageFile"/>
-                  <p class="help-block">
-                      {{sprintf(localisation.getTranslation("common_maximum_file_size_is"), 20000000000)}}
-                  </p>
+                  <p id="help-block"></p>
               </div>
             </div>
             <label for="reference" style="font-size: large"><strong>{{localisation.getTranslation("common_reference")}}</strong></label>
@@ -116,5 +114,5 @@
         </table>
     </div>    
   </template>
-  <script type="application/dart" src="ProjectCreateForm.dart"></script>
+  <script type="application/dart" src="ProjectAlterForm.dart"></script>
 </polymer-element>

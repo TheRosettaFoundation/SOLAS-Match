@@ -996,7 +996,7 @@ class ProjectCreateForm extends PolymerElement
       if (imageFile != null) {
         if (imageFile.size > 0) {
           //Check that file does not exceed the maximum allowed file size
-          if (imageFile.size < maxfilesize) {
+          if (imageFile.size < imageMaxFileSize) {
             int extensionStartIndex = imageFile.name.lastIndexOf(".");
             //Check that file has an extension
             if (extensionStartIndex >= 0) {
