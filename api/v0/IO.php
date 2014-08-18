@@ -370,7 +370,7 @@ class IO
         $project = DAO\ProjectDao::save($project);
             
         try {
-             $imageFileList = glob(Common\Lib\Settings::get("files.upload_path")."proj-32/image/image.*");
+             $imageFileList = glob(Common\Lib\Settings::get("files.upload_path")."proj-$projectId/image/image.*");
                 if (count($imageFileList)>0)
                 {
                     $currentImageFile = $imageFileList[0];

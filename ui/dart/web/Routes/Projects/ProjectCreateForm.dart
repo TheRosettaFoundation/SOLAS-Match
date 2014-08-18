@@ -132,9 +132,9 @@ class ProjectCreateForm extends PolymerElement
     String location = settings.conf.urls.SiteLocation;
     
     //Get project image related data from conf
-    imageMaxFileSize = settings.conf.project_images.max_size;
-    imageMaxWidth = settings.conf.project_images.max_width;
-    imageMaxHeight = settings.conf.project_images.max_height;
+    imageMaxFileSize = int.parse(settings.conf.project_images.max_size) * 1024 * 1024;
+    imageMaxWidth = int.parse(settings.conf.project_images.max_width);
+    imageMaxHeight = int.parse(settings.conf.project_images.max_height);
     //Image format string is comma separated, split it into a list
     supportedImageFormats = (settings.conf.project_images.supported_formats as String).split(",");
     
@@ -153,7 +153,7 @@ class ProjectCreateForm extends PolymerElement
     p2.appendHtml(localisation.getTranslation("project_create_upload_project_image") + " " +
       sprintf(
         localisation.getTranslation("common_maximum_file_size_is"),
-        [imageMaxFileSize]
+        [(imageMaxFileSize / 1024 / 1024)]
       )
     );
     List<Future<bool>> loadedList = new List<Future<bool>>();

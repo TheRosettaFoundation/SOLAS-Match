@@ -16,6 +16,39 @@
     
     <!-- div containing the form -->
     <div class="well">
+      <template if="{{titleError != null || descriptionError != null || wordCountError != null || 
+                deadlineError != null || impactError != null ||
+                tagsError != null || referenceError != null || imageError != null}}">
+        <div id="error-box-top" class="alert alert-error pull-left">
+          <h3>{{localisation.getTranslation("common_please_correct_errors")}}:</h3>
+          <ol>
+            <template if="{{titleError != null}}">
+              <li id="title_error_top">{{titleError}}</li>
+            </template>
+            <template if="{{descriptionError != null}}">
+              <li id="description_error_top">{{descriptionError}}</li>
+            </template>
+            <template if="{{wordCountError != null}}">
+              <li id="word_count_error_top">{{wordCountError}}</li>
+            </template>
+            <template if="{{deadlineError != null}}">
+              <li id="deadline_error_top">{{deadlineError}}</li>
+            </template>
+            <template if="{{tagsError != null}}">
+              <li id="tags_error_top">{{tagsError}}</li>
+            </template>
+            <template if="{{impactError != null}}">
+              <li id="impact_error_top">{{impactError}}</li>
+            </template>
+            <template if="{{referenceError != null}}">
+              <li id="reference_error_top">{{referenceError}}</li>
+            </template>
+            <template if="{{imageError != null}}">
+              <li id="image_error_top">{{imageError}}</li>
+            </template>
+          </ol>
+        </div>
+      </template>
       <table width="100%">
         <tr align="center">
           <td>
@@ -95,6 +128,42 @@
               <hr/>
           </td>
         </tr>
+        <template if="{{titleError != null || descriptionError != null || wordCountError != null || 
+                        deadlineError != null || impactError != null || tagsError != null ||
+                        referenceError != null || imageError != null}}">
+          <div id="error-box-btm" class="alert alert-error pull-left">       
+              <h3>{{localisation.getTranslation("common_please_correct_errors")}}:</h3>
+              <ol>
+                <template if="{{titleError != null}}">
+                  <li id="title_error_btm">{{titleError}}</li>
+                </template>
+                <template if="{{descriptionError != null}}">
+                  <li id="description_error_btm">{{descriptionError}}</li>
+                </template>
+                <template if="{{createProjectError != null}}">
+                  <li id="create_project_error_top">{{createProjectError}}</li>
+                </template>
+                <template if="{{wordCountError != null}}">
+                  <li id="word_count_error_btm">{{wordCountError}}</li>
+                </template>
+                <template if="{{deadlineError != null}}">
+                  <li id="deadline_error_btm">{{deadlineError}}</li>
+                </template>
+                <template if="{{tagsError != null}}">
+                  <li id="tags_error_btm">{{tagsError}}</li>
+                </template>
+                <template if="{{impactError != null}}">
+                  <li id="impact_error_btm">{{impactError}}</li>
+                </template>
+                <template if="{{referenceError != null}}">
+                  <li id="reference_error_btm">{{referenceError}}</li>
+                </template>
+                <template if="{{imageError != null}}">
+                  <li id="image_error_btm">{{imageError}}</li>
+                </template>
+              </ol>
+          </div>
+        </template>
         <tr align="center">
           <td>
               <p style="margin-bottom:20px;"/>  

@@ -30,6 +30,7 @@ part 'models/UserPersonalInformation.dart';
 part 'models/Statistic.dart';
 
 // DAOs
+part '../DataAccessObjects/AdminDao.dart';
 part '../DataAccessObjects/CountryDao.dart';
 part '../DataAccessObjects/LanguageDao.dart';
 part '../DataAccessObjects/OrgDao.dart';

@@ -472,6 +472,7 @@ class ProjectRouteHandler
     public function projectAlterDart($projectId)
     {
         $app = \Slim\Slim::getInstance();
+        $userId = Common\Lib\UserSession::getCurrentUserID();
         
         $extraScripts = "
 <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/dart_support.js\"></script>
@@ -486,6 +487,7 @@ class ProjectRouteHandler
         
         $app->view()->appendData(array(
         	"projectId" => $projectId,
+            "userId" => $userId,
             "maxFileSize" => 2,
             "extra_scripts" => $extraScripts,
             "platformJS" => $platformJS

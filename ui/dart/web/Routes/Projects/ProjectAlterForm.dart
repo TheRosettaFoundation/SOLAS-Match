@@ -22,6 +22,7 @@ class ProjectAlterForm extends PolymerElement
 {
   // Bound Attributes
   @published int projectid;
+  @published int userId;
   @published int maxfilesize; //TODO: possibly remove or name change
   @published String css;
   
@@ -75,6 +76,7 @@ class ProjectAlterForm extends PolymerElement
   ProjectAlterForm.created() : super.created()
   {
     project = new Project();
+    projectTags = "";
     project.tag = new List<Tag>();
     //projectFileData = "";
     localisation = new Localisation();
@@ -129,14 +131,15 @@ class ProjectAlterForm extends PolymerElement
   void enteredView()
   {
     Settings settings = new Settings();
+    bool userIsAdmin;
     orgDashboardLink = settings.conf.urls.SiteLocation + "org/dashboard";
     projectViewLink = settings.conf.urls.SiteLocation + "$projectid/view";
     
     String location = settings.conf.urls.SiteLocation;
     //Get project image related data from conf
-    imageMaxFileSize = settings.conf.project_images.max_size;
-    imageMaxWidth = settings.conf.project_images.max_width;
-    imageMaxHeight = settings.conf.project_images.max_height;
+    imageMaxFileSize = int.parse(settings.conf.project_images.max_size) *1024 * 1024;
+    imageMaxWidth = int.parse(settings.conf.project_images.max_width);
+    imageMaxHeight = int.parse(settings.conf.project_images.max_height);
     //Image format string is comma separated, split it into a list
     supportedImageFormats = (settings.conf.project_images.supported_formats as String).split(",");
     
@@ -156,12 +159,17 @@ class ProjectAlterForm extends PolymerElement
       countries.addAll(regions);
       return true;
     }));
+    
+    loadedList.add(AdminDao.isSiteAdmin(userId).then((bool result) {
+      userIsAdmin = result;
+      return true;
+    }));
    
     loadedList.add(ProjectDao.getProject(projectid).then((Project pro) {
       project = pro;
       ProjectDao.getProjectTags(projectid)
       .then((List<Tag> projTags) {
-        if (projTags != null) {
+        if (projTags.length > 0) {
           project.tag = projTags;
           projTags.forEach((Tag tag) {
             projectTags += tag.label + " ";
@@ -184,10 +192,9 @@ class ProjectAlterForm extends PolymerElement
       //Insert text stating max image file size
       ParagraphElement imgDesc = this.shadowRoot.querySelector("#help-block");
       imgDesc.children.clear();
-      int imgMaxSize = settings.conf.project_images.max_size;
       imgDesc.appendHtml(sprintf(
         localisation.getTranslation("common_maximum_file_size_is"),
-        [imgMaxSize])
+        [(imageMaxFileSize / 1024 / 1024)])
       );
       
       //Select the project's source locale on the UI
@@ -203,7 +210,11 @@ class ProjectAlterForm extends PolymerElement
       }));
       //Display the project's word count
       InputElement wcInput = this.shadowRoot.querySelector("#word-count");
-      wcInput.text = project.wordCount.toString();
+      wordCountInput = project.wordCount.toString();
+      //Unless the user is an admin, disable editing of word count.
+      if (!userIsAdmin) {
+        wcInput.disabled = true;
+      }
     });
   }
   
@@ -265,7 +276,6 @@ class ProjectAlterForm extends PolymerElement
   
   void submitForm()
   {
-    print("IN SUBMITFORM");
     //reset error variables, clearing any previously displayed errors.
     titleError = null;
     descriptionError = null;
@@ -278,7 +288,6 @@ class ProjectAlterForm extends PolymerElement
     
     validateInput().then((bool success) {
       if (success) {
-        print("INPUT VALIDATED");
         //if (project != oldProject) {
           SelectElement sourceLangSelect = this.shadowRoot.querySelector("#source-lang-select");
           SelectElement sourceCountrySelect = this.shadowRoot.querySelector("#source-country-select");
@@ -291,30 +300,29 @@ class ProjectAlterForm extends PolymerElement
           sourceLocale.countryCode = sourceCountry.code;
           project.sourceLocale = sourceLocale;
          
-          List<Tag> projectTags = new List<Tag>();
-          if (tagList.length > 0) {
-            projectTags = FormHelper.parseTagsInput(tagList);
+          List<Tag> projectTagsParsed = new List<Tag>();
+          if (projectTags.length > 0) {
+            projectTagsParsed = FormHelper.parseTagsInput(projectTags);
           }
           if (projectTags.length > 0) {
             project.tag.clear();
-            project.tag.addAll(projectTags);
+            project.tag.addAll(projectTagsParsed);
           }
-          print("TAG LIST PARSED");
           //Update the project and then, if a new image has been supplied upload it.
           ProjectDao.updateProject(project)
           .then((_) => uploadProjectImage())
           .then((_) {
-              //Once deadlines have been calculated, make the app progress to the "view project" page.
-              Settings settings = new Settings();
-              window.location.assign(settings.conf.urls.SiteLocation + "project/"
-                  + project.id.toString() + "/view");
-            
+            //Once deadlines have been calculated, make the app progress to the "view project" page.
+            Settings settings = new Settings();
+            window.location.assign(settings.conf.urls.SiteLocation + "project/"
+                + project.id.toString() + "/view");
           });
         //}
       } else {
         print("Invalid form input.");
       }
     }).catchError((e, stack) {
+      print(e);
       print(stack);
     });
   }
@@ -451,18 +459,19 @@ class ProjectAlterForm extends PolymerElement
           success = false;
           return 0;
         });
+        
       } else {
         //Word count is not set, set error message
         wordCountError = localisation.getTranslation("project_create_27");
         success = false;
       }
-      if (tagList != null && tagList != "") {
-        if (FormHelper.validateTagList(tagList) == false) {
+      if (projectTags != null && projectTags != "") {
+        if (FormHelper.validateTagList(projectTags) == false) {
           //Invalid tags detected, set error message
           tagsError = localisation.getTranslation('project_create_invalid_tags');
           success = false;
         } else {
-          List<String> list = tagList.split(" ");
+          List<String> list = projectTags.split(" ");
           int listLen = list.length;
           for (int i = 0; i < listLen; i++) {
             if (list.elementAt(i).length > 50) {
@@ -527,7 +536,7 @@ class ProjectAlterForm extends PolymerElement
       if (imageFile != null) {
         if (imageFile.size > 0) {
           //Check that file does not exceed the maximum allowed file size
-          if (imageFile.size < imageMaxFileSize) {
+          if (imageFile.size < (imageMaxFileSize)) {
             int extensionStartIndex = imageFile.name.lastIndexOf(".");
             //Check that file has an extension
             if (extensionStartIndex >= 0) {
@@ -614,21 +623,5 @@ class ProjectAlterForm extends PolymerElement
   void selectedMonthChanged(int oldValue)
   {
     days = new List<int>.generate(monthLengths[selectedMonth], (int index) => index + 1);
-  }
-  
-  /**
-   * This is a simple method to check if a year is a leap year or not.
-   */
-  bool _isLeapYear(int year)
-  {
-    bool ret = true;
-    if (year % 4 != 0) {
-      ret = false;
-    } else {
-      if (year % 100 == 0 && year % 400 != 0) {
-        ret = false;
-      }
-    }
-    return ret;
   }
 }

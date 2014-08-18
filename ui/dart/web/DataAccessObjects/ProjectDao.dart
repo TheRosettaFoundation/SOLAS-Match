@@ -65,7 +65,7 @@ class ProjectDao
     APIHelper client = new APIHelper(".json");
     Future<List<Tag>> projTags = client.call("", "v0/projects/$projectId/tags", "GET")
       .then((HttpRequest response) {
-        List<Tag> tags = null;
+        List<Tag> tags = new List<Tag>();
         if (response.status < 400) {
           if (response.responseText != '') {
             Map jsonParsed = JSON.decode(response.responseText);
