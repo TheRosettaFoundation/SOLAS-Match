@@ -30,6 +30,7 @@ class ProjectAlterForm extends PolymerElement
   SelectElement countrySelect;
   List<int> monthLengths;
   Project oldProject;
+  bool userIsAdmin;
   String tagList;
   String imageFilename;
   var projectImageData;
@@ -51,6 +52,7 @@ class ProjectAlterForm extends PolymerElement
   @observable bool loaded;
   @observable String orgDashboardLink;
   @observable String projectViewLink;
+  @observable String imgSource;
   @observable String projectTags; //String to store project tags to be shown in form.
   
   // Error Variables
@@ -131,9 +133,9 @@ class ProjectAlterForm extends PolymerElement
   void enteredView()
   {
     Settings settings = new Settings();
-    bool userIsAdmin;
     orgDashboardLink = settings.conf.urls.SiteLocation + "org/dashboard";
     projectViewLink = settings.conf.urls.SiteLocation + "$projectid/view";
+    imgSource = settings.conf.urls.SiteLocation + "project/$projectid/image";
     
     String location = settings.conf.urls.SiteLocation;
     //Get project image related data from conf
@@ -194,7 +196,7 @@ class ProjectAlterForm extends PolymerElement
       imgDesc.children.clear();
       imgDesc.appendHtml(sprintf(
         localisation.getTranslation("common_maximum_file_size_is"),
-        [(imageMaxFileSize / 1024 / 1024)])
+        [(imageMaxFileSize / 1024 / 1024).toString()])
       );
       
       //Select the project's source locale on the UI
@@ -370,6 +372,19 @@ class ProjectAlterForm extends PolymerElement
       return new Future.value(true);
     }
   
+  void deleteImage()
+  {
+    if (window.confirm(localisation.getTranslation("project_alter_confirm_delete_image"))) {
+      ProjectDao.deleteProjectImage(project.id, project.organisationId)
+      .then((bool deletionSuccess) {
+        if (deletionSuccess) {
+          window.alert(localisation.getTranslation("project_alter_image_successfully_deleted"));
+          DivElement imgDisplay = this.shadowRoot.querySelector("#proj-image-display");
+          imgDisplay.style.display = 'none';
+        }
+      });
+    }
+  }
   /**
    * This method validates the form input and sets various error messages if needed fields are not set or
    * invalid data is given.
@@ -403,8 +418,6 @@ class ProjectAlterForm extends PolymerElement
           });
         }
     }).then((bool success) {
-      if (success) {
-      }
       //Project description not set
       if (project.description == '') {
         descriptionError = localisation.getTranslation("project_create_33");
@@ -452,19 +465,38 @@ class ProjectAlterForm extends PolymerElement
         }
       }
       
-      if (wordCountInput != null && wordCountInput != '') {
+      if (wordCountInput == '') {
+        //Word count is not set, set error message
+        wordCountError = localisation.getTranslation("project_create_27");
+        success = false; 
+        return success;
+      } else {
         //If word count is set, ensure it is a valid natural number
-        project.wordCount = int.parse(wordCountInput, onError: (String wordCountString) {
+        int newWordCount = int.parse(wordCountInput, onError: (String wordCountString) {
           wordCountError = localisation.getTranslation("project_create_27");
           success = false;
           return 0;
         });
-        
-      } else {
-        //Word count is not set, set error message
-        wordCountError = localisation.getTranslation("project_create_27");
-        success = false;
+        //only call API for word count iff parse error didn't occur
+        if (newWordCount != 0 && userIsAdmin) {
+          return ProjectDao.updateProjectWordCount(project.id, newWordCount)
+          .then((int result) {
+            if (result == 1) {
+              project.wordCount = newWordCount;
+            } else if (result == 2) {
+              window.alert(localisation.getTranslation("project_alter_word_count_error_1"));
+            } else {
+              window.alert(localisation.getTranslation("project_alter_word_count_error_2"));
+            }
+            return true;
+          });
+        } else {
+          return true;
+        }
       }
+      
+      //After word count has been validated (possibly meaning an API call), continue with rest of validation.
+    }).then((bool success) {
       if (projectTags != null && projectTags != "") {
         if (FormHelper.validateTagList(projectTags) == false) {
           //Invalid tags detected, set error message

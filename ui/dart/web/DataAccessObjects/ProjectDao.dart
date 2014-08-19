@@ -4,12 +4,7 @@ part of SolasMatchDart;
  * Class containing methods to access and modify [Project]-related data through the API.
  */
 class ProjectDao
-{
-  static Future<List<Project>> getProjects()
-  {
-    
-  }
-  
+{ 
   /**
    * Calls the API to get the [Project] object corresponding to the given [id].
    * 
@@ -172,6 +167,37 @@ class ProjectDao
         .then((HttpRequest response) {
           if (response.status < 400) {
             return true;
+          } else {
+            throw "Error #" + response.status.toString() + " - " + response.statusText;
+          }
+        });
+    return ret;
+  }
+  
+  static Future<bool> deleteProjectImage(int projectId, int orgId)
+  {
+    APIHelper client = new APIHelper(".json");
+    return client.call("", "v0/io/projectImage/$orgId/$projectId", "DELETE")
+      .then((HttpRequest response) {
+        if (response.status < 400) {
+          if (response.status == 200) {
+            return true;
+          }
+        } else {
+          throw "Error #" + response.status.toString() + " - " + response.statusText;
+        }
+      });
+  }
+  
+  static Future<int> updateProjectWordCount(int projectId, int newWordCount)
+  {
+    APIHelper client = new APIHelper(".json");
+    Future<int> ret = client.call("", "v0/projects/$projectId/updateWordCount/$newWordCount", "PUT")
+        .then((HttpRequest response) {
+          if (response.status < 400) {
+            return int.parse(response.responseText, onError : (String responseText) {
+              throw "Error: response text was: $responseText, could not parse as int";
+            });
           } else {
             throw "Error #" + response.status.toString() + " - " + response.statusText;
           }

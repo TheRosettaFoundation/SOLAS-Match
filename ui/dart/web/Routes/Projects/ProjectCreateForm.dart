@@ -153,7 +153,7 @@ class ProjectCreateForm extends PolymerElement
     p2.appendHtml(localisation.getTranslation("project_create_upload_project_image") + " " +
       sprintf(
         localisation.getTranslation("common_maximum_file_size_is"),
-        [(imageMaxFileSize / 1024 / 1024)]
+        [(imageMaxFileSize / 1024 / 1024).toString()]
       )
     );
     List<Future<bool>> loadedList = new List<Future<bool>>();

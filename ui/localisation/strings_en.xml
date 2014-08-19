@@ -407,6 +407,9 @@
     <string name="project_alter_11">Invalid date/time format!</string>
     <string name="project_alter_word_count_error_1">This project has segmentation/desegementation tasks or inconsistent word counts for its tasks. Therefore word count cannot be automatically updated. Please contact the development team with the Project ID and the new word count.</string>
     <string name="project_alter_word_count_error_2">An error occurred while updating the word count for this project. Please contact the development team with the Project ID and the new word count.</string>
+    <string name="project_alter_delete_project_image">Delete Project Image</string>
+    <string name="project_alter_confirm_delete_image">Are you sure you want to delete the image associated with this project?</string>
+    <string name="project_alter_image_successfully_deleted">The project image was successfully deleted.</string>
 
 	<string name="project_create_create_a_project">Create A Project</string>
 	<string name="project_create_0">Provide as much information as possible.</string>

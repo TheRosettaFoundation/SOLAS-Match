@@ -104,23 +104,28 @@
             <p style="margin-bottom:20px;"/>
             
             <div style="margin-bottom:20px;">
-              <label for="proj-image" style="font-size: large"><strong>{{localisation.getTranslation("common_project_image")}}</strong></label>   
-              <template if="{{project.imageUploaded  && project.imageApproved}}">
-                <img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}"/>
-              </template>
-              <template if="{{project.imageUploaded && !project.imageApproved}}">
-                    {{localisation.getTranslation("common_project_image_not_approved")}}
-              </template>
-              <template if="{{!project.imageUploaded && project.imageApproved}}">
-                    {{localisation.getTranslation("common_project_image_not_uploaded")}}
-              </template>
+              <label for="proj-image" style="font-size: large"><strong>{{localisation.getTranslation("common_project_image")}}</strong></label>
+              <div id="proj-image-display">   
+                <template if="{{project.imageUploaded  && project.imageApproved}}">
+                  <img class="project-image" src="{{imgSource}}"/>
+                </template>
+                <template if="{{project.imageUploaded && !project.imageApproved}}">
+                      {{localisation.getTranslation("common_project_image_not_approved")}}
+                </template>
+                <template if="{{!project.imageUploaded && !project.imageApproved}}">
+                      {{localisation.getTranslation("common_project_image_not_uploaded")}}
+                </template>
+              </div>
               <div>
                   <input type="file" id="projectImageFile"/>
                   <p id="help-block"></p>
               </div>
+              <button class="btn btn-danger" on-click="{{deleteImage}}">
+                <i class="icon-fire icon-white"></i>{{localisation.getTranslation("project_alter_delete_project_image")}}
+              </button>
             </div>
             <label for="reference" style="font-size: large"><strong>{{localisation.getTranslation("common_reference")}}</strong></label>
-            <textarea wrap="soft" cols="1" rows="4" name="reference" style="width: 400px">{{project.reference}}</textarea>
+            <textarea wrap="soft" cols="1" rows="4" value="{{project.reference}}" style="width: 400px">{{project.reference}}</textarea>
           </td>
         </tr>
         <tr>
