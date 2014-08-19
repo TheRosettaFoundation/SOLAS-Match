@@ -421,6 +421,7 @@
 	<string name="project_create_7">When the project and its tasks should be completed by.</string>
 	<string name="project_create_8">The tags you provide will be used to match volunteers to your project.</string>
 	<string name="project_create_separated_by">Separated by</string>
+	<string name="project_create_seperator">spaces</string>
 	<string name="project_create_for_multiword_tags_joinwithhyphens">For multiword tags: join-with-hyphens.</string>
 	<string name="project_create_publish_tasks">Publish Tasks</string>
 	<string name="project_create_9">Specify which task types you require for your workflow.</string>
@@ -1054,7 +1055,7 @@
 
 	<string name="pagination_page_of">Page %s of %s</string>
 
-	<string name="statistics_statistics">Statistics:</string>
+	<string name="statistics_statistics">%s Statistics:</string>
 	<string name="statistics_users">Users:</string>
 	<string name="statistics_projects">Projects:</string>
 	<string name="statistics_projects_archived">Projects Archived:</string>
