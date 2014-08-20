@@ -1036,7 +1036,7 @@
 
 	<string name="pagination_page_of">Page %s of %s</string>
 
-	<string name="statistics_statistics">Statistics:</string>
+	<string name="statistics_statistics">%s Statistics:</string>
 	<string name="statistics_users">Users:</string>
 	<string name="statistics_projects">Projects:</string>
 	<string name="statistics_projects_archived">Projects Archived:</string>
