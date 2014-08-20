@@ -306,7 +306,7 @@ class ProjectAlterForm extends PolymerElement
           if (projectTags.length > 0) {
             projectTagsParsed = FormHelper.parseTagsInput(projectTags);
           }
-          if (projectTags.length > 0) {
+          if (projectTagsParsed.length > 0) {
             project.tag.clear();
             project.tag.addAll(projectTagsParsed);
           }

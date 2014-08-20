@@ -104,8 +104,8 @@
             <p style="margin-bottom:20px;"/>
             
             <div style="margin-bottom:20px;">
-              <div id="proj-image-display">
-                <label for="proj-image" style="font-size: large"><strong>{{localisation.getTranslation("common_project_image")}}</strong></label>   
+              <label for="proj-image" style="font-size: large"><strong>{{localisation.getTranslation("common_project_image")}}</strong></label>
+              <div id="proj-image-display">   
                 <template if="{{project.imageUploaded  && project.imageApproved}}">
                   <img class="project-image" src="{{imgSource}}"/>
                 </template>
