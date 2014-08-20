@@ -18,6 +18,7 @@ transformers:
     - web/Routes/Users/UserPrivateProfile.dart
     - web/Routes/Users/ClaimedTasks.dart
     - web/Routes/Projects/ProjectCreate.dart
+    - web/Routes/Projects.ProjectAlter.dart
 - $dart2js:
     checked: false 
     minify: false

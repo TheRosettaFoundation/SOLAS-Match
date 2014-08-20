@@ -4,12 +4,7 @@ part of SolasMatchDart;
  * Class containing methods to access and modify [Project]-related data through the API.
  */
 class ProjectDao
-{
-  static Future<List<Project>> getProjects()
-  {
-    
-  }
-  
+{ 
   /**
    * Calls the API to get the [Project] object corresponding to the given [id].
    * 
@@ -41,24 +36,48 @@ class ProjectDao
    * Returns a [Future] whose value will be a [Project] object with the given [title].
    */
   static Future<Project> getProjectByName(String title)
-    {
-      APIHelper client = new APIHelper(".json");
-      Future<Project> project = client.call("Project", 
-          "v0/projects/" + title, "GET")
-            .then((HttpRequest response) {
-        Project pro = null;
+  {
+    APIHelper client = new APIHelper(".json");
+    Future<Project> project = client.call("Project", 
+        "v0/projects/" + title, "GET")
+          .then((HttpRequest response) {
+      Project pro = null;
+      if (response.status < 400) {
+        if (response.responseText != '') {
+          Map jsonParsed = JSON.decode(response.responseText);
+          pro = ModelFactory.generateProjectFromMap(jsonParsed);
+        }
+      } else {
+        print("Error: getProject returned " + response.status.toString() + " " + response.statusText);
+      }
+      return pro;
+    });
+    return project;
+  }
+  
+  static Future<List<Tag>> getProjectTags(int projectId)
+  {
+    APIHelper client = new APIHelper(".json");
+    Future<List<Tag>> projTags = client.call("", "v0/projects/$projectId/tags", "GET")
+      .then((HttpRequest response) {
+        List<Tag> tags = new List<Tag>();
         if (response.status < 400) {
           if (response.responseText != '') {
             Map jsonParsed = JSON.decode(response.responseText);
-            pro = ModelFactory.generateProjectFromMap(jsonParsed);
+            if (jsonParsed.length > 0) {
+              jsonParsed['item'].forEach((String data) {            
+                Map tag = JSON.decode(data);
+                tags.add(ModelFactory.generateTagFromMap(tag));
+              });
+            }
           }
         } else {
           print("Error: getProject returned " + response.status.toString() + " " + response.statusText);
         }
-        return pro;
+        return tags;
       });
-      return project;
-    }
+    return projTags;
+  }
   
   /**
    * Calls the API to request that deadlines for the [Project] with id matching the given [projectId] should be
@@ -108,6 +127,32 @@ class ProjectDao
   }
   
   /**
+   * Calls the API to update the project with the same id as [project].
+   * 
+   * Returns a [Future] whose value will be a [Project] object representing the updated project on successful
+   * completion. If a response code greater than or equal to 400 is sent back from the API a [String] is thrown
+   * showing the response code and status text. 
+   */
+    static Future<Project> updateProject(Project project)
+    {
+      APIHelper client = new APIHelper(".json");
+      Future<Project> ret = client.call("Project", "v0/projects/${project.id}", "PUT", JSON.encode(project))
+        .then((HttpRequest response) {
+          Project pro = null;
+          if (response.status < 400) {
+            if (response.responseText != '') {
+              Map jsonParsed = JSON.decode(response.responseText);
+              pro = ModelFactory.generateProjectFromMap(jsonParsed);
+            }
+          } else {
+            throw "Error #" + response.status.toString() + " - " + response.statusText;
+          }
+          return pro;
+        });
+      return ret;
+    }
+  
+  /**
    * Calls the API to delete the project with the given [projectId].
    * 
    * Returns a [Future] whose value will be true on successful deletion of the project. If a response code
@@ -122,6 +167,37 @@ class ProjectDao
         .then((HttpRequest response) {
           if (response.status < 400) {
             return true;
+          } else {
+            throw "Error #" + response.status.toString() + " - " + response.statusText;
+          }
+        });
+    return ret;
+  }
+  
+  static Future<bool> deleteProjectImage(int projectId, int orgId)
+  {
+    APIHelper client = new APIHelper(".json");
+    return client.call("", "v0/io/projectImage/$orgId/$projectId", "DELETE")
+      .then((HttpRequest response) {
+        if (response.status < 400) {
+          if (response.status == 200) {
+            return true;
+          }
+        } else {
+          throw "Error #" + response.status.toString() + " - " + response.statusText;
+        }
+      });
+  }
+  
+  static Future<int> updateProjectWordCount(int projectId, int newWordCount)
+  {
+    APIHelper client = new APIHelper(".json");
+    Future<int> ret = client.call("", "v0/projects/$projectId/updateWordCount/$newWordCount", "PUT")
+        .then((HttpRequest response) {
+          if (response.status < 400) {
+            return int.parse(response.responseText, onError : (String responseText) {
+              throw "Error: response text was: $responseText, could not parse as int";
+            });
           } else {
             throw "Error #" + response.status.toString() + " - " + response.statusText;
           }

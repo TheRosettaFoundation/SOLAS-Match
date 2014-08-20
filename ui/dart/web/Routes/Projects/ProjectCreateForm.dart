@@ -132,9 +132,9 @@ class ProjectCreateForm extends PolymerElement
     String location = settings.conf.urls.SiteLocation;
     
     //Get project image related data from conf
-    imageMaxFileSize = settings.conf.project_images.max_size;
-    imageMaxWidth = settings.conf.project_images.max_width;
-    imageMaxHeight = settings.conf.project_images.max_height;
+    imageMaxFileSize = int.parse(settings.conf.project_images.max_size) * 1024 * 1024;
+    imageMaxWidth = int.parse(settings.conf.project_images.max_width);
+    imageMaxHeight = int.parse(settings.conf.project_images.max_height);
     //Image format string is comma separated, split it into a list
     supportedImageFormats = (settings.conf.project_images.supported_formats as String).split(",");
     
@@ -153,7 +153,7 @@ class ProjectCreateForm extends PolymerElement
     p2.appendHtml(localisation.getTranslation("project_create_upload_project_image") + " " +
       sprintf(
         localisation.getTranslation("common_maximum_file_size_is"),
-        [imageMaxFileSize]
+        [(imageMaxFileSize / 1024 / 1024).toString()]
       )
     );
     List<Future<bool>> loadedList = new List<Future<bool>>();
@@ -378,16 +378,12 @@ class ProjectCreateForm extends PolymerElement
           project.sourceLocale = sourceLocale;
           project.organisationId = orgid;
          
-          List<String> projectTags = new List<String>();
+          List<Tag> tagListParsed = new List<Tag>();
           if (tagList.length > 0) {
-            projectTags = _separateTags(tagList);
+            tagListParsed = FormHelper.parseTagsInput(tagList);
           }
-          if (projectTags.length > 0) {
-            projectTags.forEach((String tagName) {
-              Tag tag = new Tag();
-              tag.label = tagName;
-              project.tag.add(tag);
-            });
+          if (tagListParsed.length > 0) {
+            project.tag.addAll(tagListParsed);
           }
          
           //Using DAO method request Project creation
@@ -797,7 +793,7 @@ class ProjectCreateForm extends PolymerElement
                   ..allowElement('a', attributes: ['href'])
               );
             });
-          } else if (_validateReferenceURL(project.reference) == false) {
+          } else if (FormHelper.validateReferenceURL(project.reference) == false) {
             referenceError = localisation.getTranslation("project_create_error_reference_invalid");
             success = false;
           }
@@ -833,7 +829,7 @@ class ProjectCreateForm extends PolymerElement
           success = false;
         }
        
-        if (_validateTagList(tagList) == false) {
+        if (FormHelper.validateTagList(tagList) == false) {
           //Invalid tags detected, set error message
           tagsError = localisation.getTranslation('project_create_invalid_tags');
           success = false;
@@ -851,7 +847,13 @@ class ProjectCreateForm extends PolymerElement
         }
        
         //Parse project deadline info
-        DateTime projectDeadline = _parseDeadline();
+        DateTime projectDeadline = FormHelper.parseDeadline(
+          years[selectedYear],
+          selectedMonth + 1,
+          selectedDay + 1,
+          selectedHour,
+          selectedMinute
+        );
         if (projectDeadline != null) {
           if (projectDeadline.isAfter(new DateTime.now())) {
             String monthAsString = projectDeadline.month.toString();
@@ -996,7 +998,7 @@ class ProjectCreateForm extends PolymerElement
       if (imageFile != null) {
         if (imageFile.size > 0) {
           //Check that file does not exceed the maximum allowed file size
-          if (imageFile.size < maxfilesize) {
+          if (imageFile.size < imageMaxFileSize) {
             int extensionStartIndex = imageFile.name.lastIndexOf(".");
             //Check that file has an extension
             if (extensionStartIndex >= 0) {
@@ -1033,59 +1035,6 @@ class ProjectCreateForm extends PolymerElement
       }
       return success;
     });
-  }
-  
-  /**
-   * This method is called by validateInput to validate the project tags provided.
-   */
-  bool _validateTagList(String tagList)
-  {
-    if (tagList.indexOf(new RegExp(r'[^a-z0-9\-\s]')) != -1) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-  
-  /**
-   * Uses a regular expression to validate the the reference URL for a project (if one is provided) actually is
-   * a URL.
-   * Credit to http://stackoverflow.com/a/24058129/1799985
-   * 
-   * Returns true if the provided URL is valid, false otherwise.
-   */
-  bool _validateReferenceURL(String url)
-  {
-    //Spread out the regular expression string on 3 lines and concatenate it together for better presentation
-    //of code
-    String regExp = 
-        r'(([\w]+:)?//)?(([\d\w]|%[a-fA-f\d]{2,2})+(:([\d\w]|%[a-fA-f\d]{2,2})+)?@)?([\d\w][-\d\w]{0,' +
-        r'253}[\d\w]\.)+[\w]{2,13}(:[\d]+)?(/([-+_~.\d\w]|%[a-fA-f\d]{2,2})*)*(\?(&?([-+_~.\d\w]|%[a-' +
-        r'fA-f\d]{2,2})=?)*)?(#([-+_~.\d\w]|%[a-fA-f\d]{2,2})*)?';
-    if (url.indexOf(new RegExp(regExp)) == -1) {
-      //String did not match pattern, it is not a URL
-      return false;
-    } else {
-      //String matched, it is a URL
-      return true;
-    }
-  }
-  
-  /**
-   * This is a simple method to parse the deadline provided for the project.
-   */
-  DateTime _parseDeadline()
-  {
-    DateTime ret = new DateTime(years[selectedYear], selectedMonth + 1, selectedDay + 1, selectedHour, selectedMinute);
-    return ret;
-  }
-  
-  /**
-   * This is a simple method to parse the project tags from the text input.
-   */
-  List<String> _separateTags(String tags)
-  {
-    return tags.split(" ");
   }
   
   /**
@@ -1137,7 +1086,7 @@ class ProjectCreateForm extends PolymerElement
    */
   void selectedYearChanged(int oldValue)
   {
-    if (_isLeapYear(years[selectedYear])) {
+    if (FormHelper.isLeapYear(years[selectedYear])) {
       monthLengths[1] = 29;
     } else {
       monthLengths[1] = 28;
@@ -1155,21 +1104,5 @@ class ProjectCreateForm extends PolymerElement
   void selectedMonthChanged(int oldValue)
   {
     days = new List<int>.generate(monthLengths[selectedMonth], (int index) => index + 1);
-  }
-  
-  /**
-   * This is a simple method to check if a year is a leap year or not.
-   */
-  bool _isLeapYear(int year)
-  {
-    bool ret = true;
-    if (year % 4 != 0) {
-      ret = false;
-    } else {
-      if (year % 100 == 0 && year % 400 != 0) {
-        ret = false;
-      }
-    }
-    return ret;
   }
 }

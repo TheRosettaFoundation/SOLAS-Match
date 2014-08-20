@@ -70,7 +70,22 @@
                         </select>
                     </p>
                     {/if}
-                    <p style="margin-bottom:20px;"/>
+                    <div style="margin-bottom:20px;"/>
+                        <label for="reference" style="font-size: large"><strong>{Localisation::getTranslation('common_project_image')}</strong></label>
+                        {if $project->getImageUploaded() && $project->getImageApproved()}
+                        <img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}"/>
+                        {elseif $project->getImageUploaded()}
+                            {Localisation::getTranslation('common_project_image_not_approved')}
+                        {else}
+                            {Localisation::getTranslation('common_project_image_not_uploaded')}
+                        {/if}
+                        <div>
+                            <input type="file" name="GRAAAH" id="GRAAAH"/>
+                            <p class="help-block">
+                                {sprintf(Localisation::getTranslation('common_maximum_file_size_is'), {20000000000})}
+                            </p>
+                        </div>
+                    </div>
 
                     <label for="reference" style="font-size: large"><strong>{Localisation::getTranslation('common_reference')}</strong></label>
                     <textarea wrap="soft" cols="1" rows="4" name="reference" style="width: 400px">{$project->getReference()}</textarea>

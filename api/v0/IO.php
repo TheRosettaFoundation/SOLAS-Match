@@ -21,6 +21,12 @@ class IO
         $app->group('/v0', function () use ($app) {
             $app->group('/io', function () use ($app) {
                 /* Routes starting with v0/io */
+                $app->delete(
+	                '/projectImage/:orgId/:projectId(:format)/',
+                    '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin',
+                    '\SolasMatch\API\V0\IO::removeProjectImage'
+                );
+                
                 $app->post(
                     '/contentMime/:filename(:format)/',
                     '\SolasMatch\API\Lib\Middleware::isLoggedIn',
@@ -109,6 +115,31 @@ class IO
             API\Dispatcher::sendResponse(null, self::setDownloadHeaders($imageFilePath, $mime), null, $format);    
         } else {
             API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::NOT_FOUND);
+        }
+    }
+    
+    public static function removeProjectImage($orgId, $projectId, $format = ".json")
+    {
+        if (!is_numeric($projectId) && strstr($projectId, '.')) {
+            $projectId = explode('.', $projectId);
+            $format = '.'.$projectId[1];
+            $projectId = $projectId[0];
+        }
+        
+        $project = DAO\ProjectDao::getProject($projectId);
+        $imageFileList = glob(Common\Lib\Settings::get("files.upload_path")."proj-$projectId/image/image.*");
+        if (count($imageFileList) > 0) {
+            $currentImageFile = $imageFileList[0];
+            $currentFileName = pathinfo($currentImageFile, PATHINFO_FILENAME);
+            $currentfileExt = pathinfo($currentImageFile, PATHINFO_EXTENSION);
+            $currentfileDir = pathinfo($currentImageFile, PATHINFO_DIRNAME);
+            $date = date('-d-m-Y-h-i-s-a', time());
+            rename($currentImageFile,$currentfileDir."/".$currentFileName.$date.".".$currentfileExt);
+            
+            $project->setImageUploaded(0);
+            $project->setImageApproved(0);
+            DAO\ProjectDao::save($project);
+            API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::OK);
         }
     }
     
@@ -370,7 +401,7 @@ class IO
         $project = DAO\ProjectDao::save($project);
             
         try {
-             $imageFileList = glob(Common\Lib\Settings::get("files.upload_path")."proj-32/image/image.*");
+             $imageFileList = glob(Common\Lib\Settings::get("files.upload_path")."proj-$projectId/image/image.*");
                 if (count($imageFileList)>0)
                 {
                     $currentImageFile = $imageFileList[0];
