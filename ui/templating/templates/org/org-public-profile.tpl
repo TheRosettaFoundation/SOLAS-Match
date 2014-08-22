@@ -69,8 +69,8 @@
                             <tbody>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {if $org->getHomePage() != 'http://' && $org->getHomePage() != ''}
-                                            <a href="{$org->getHomePage()}">{$org->getHomePage()}</a>
+                                        {if $org->getHomepage() != 'http://' && $org->getHomepage() != ''}
+                                            <a href="{$org->getHomepage()}">{$org->getHomepage()}</a>
                                         {else}
                                             {Localisation::getTranslation('org_public_profile_no_home_page_listed')}
                                         {/if}
@@ -346,7 +346,7 @@
                     {foreach $orgMembers as $member}
                         <tr>
                             <td>
-                                {if $member['orgAdmin']}
+                                {if $memberIsAdmin[{$member->getId()}]}
                                     <span class="marker org-admin-marker">{Localisation::getTranslation('org_public_profile_administrator')}</span>
                                 {else}
                                     <span class="marker org-member-marker">{Localisation::getTranslation('org_public_profile_member')}</span >
@@ -363,7 +363,7 @@
                                 </button>
                             </td>
                             <td>
-                                {if $member['orgAdmin']}
+                                {if $memberIsAdmin[{$member->getId()}]}
                                     <button type="submit" name="revokeOrgAdmin" value="{$member->getId()}" class="btn btn-inverse" 
                                             onclick="return confirm('{Localisation::getTranslation('org_public_profile_confirm_revoke_admin')}')">
                                             <i class="icon-fire icon-white"></i> {Localisation::getTranslation('org_public_profile_revoke_administrator')}

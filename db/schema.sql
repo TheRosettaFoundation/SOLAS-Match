@@ -1779,7 +1779,8 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `findOrganisation`(IN `id` INT)
     COMMENT 'finds an organisation by the data passed in.'
 BEGIN
-	SELECT *
+	SELECT o.id, o.name, o.biography, o.`home-page` as homepage, o.`e-mail` as email, o.address, o.city, o.country,
+        o.`regional-focus` as regionalFocus
 	FROM Organisations o
 	WHERE o.id=id; 
 END//
@@ -1794,11 +1795,13 @@ BEGIN
 	IF EXISTS (SELECT * FROM Admins a WHERE a.organisation_id is null and a.user_id=id) THEN
 		call getOrg(null,null,null,null,null,null,null,null,null);
 	ELSE		
-		SELECT o.*
+		SELECT o.id, o.name, o.biography, o.`home-page` as homepage, o.`e-mail` as email, o.address, o.city, o.country,
+        o.`regional-focus` as regionalFocus
 		FROM OrganisationMembers om join Organisations o on om.organisation_id=o.id
 		WHERE om.user_id = id
 		UNION
-		SELECT o.*
+		SELECT o.id, o.name, o.biography, o.`home-page` as homepage, o.`e-mail` as email, o.address, o.city, o.country,
+        o.`regional-focus` as regionalFocus
 		FROM Organisations o
 		JOIN Admins a ON
 		a.organisation_id=o.id
@@ -1848,7 +1851,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getActiveSourceLanguages`()
  READS SQL DATA
 BEGIN
-    SELECT `en-name` as language, code, id
+    SELECT `en-name` as name, code, id
         FROM Languages
         WHERE id IN (SELECT `language_id-source`
                         FROM Tasks
@@ -1863,7 +1866,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getActiveTargetLanguages`()
     READS SQL DATA
 BEGIN
-    SELECT `en-name` as language, code, id
+    SELECT `en-name` as name, code, id
         FROM Languages
         WHERE id IN (SELECT `language_id-target`
                         FROM Tasks
@@ -1880,12 +1883,12 @@ BEGIN
 
 	IF orgId = null OR orgId = '' THEN SET orgId = NULL; END IF;	
 	
-	SELECT u.id,u.`display-name`,u.email,u.password,u.biography, 
+	SELECT u.id,u.`display-name` as display_name,u.email,u.password,u.biography, 
             (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`, 
             (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`, 
             (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`, 
             (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`, 
-            u.nonce,u.`created-time` 
+            u.nonce,u.`created-time` as created_time 
 
         FROM Users u JOIN Admins a ON a.user_id = u.id 
         
@@ -1903,42 +1906,42 @@ BEGIN
 	IF orgId = null OR orgId = '' THEN SET orgId = NULL; END IF;	
 	
 	IF userId IS NOT null AND orgId IS NOT null THEN
-		SELECT u.id,u.`display-name`,u.email,u.password,u.biography, 
+		SELECT u.id,u.`display-name` as display_name,u.email,u.password,u.biography, 
 		    (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`, 
 		    (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`, 
 		    (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`, 
 		    (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`, 
-		    u.nonce,u.`created-time` 
+		    u.nonce,u.`created-time` as created_time
 
 		FROM Users u JOIN Admins a ON a.user_id = u.id 
 		WHERE a.user_id = userId AND a.organisation_id = orgId;
 	ELSEIF userId IS NOT null AND orgId IS null THEN
-		SELECT u.id,u.`display-name`,u.email,u.password,u.biography, 
+		SELECT u.id,u.`display-name` as display_name,u.email,u.password,u.biography, 
 		    (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`, 
 		    (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`, 
 		    (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`, 
 		    (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`, 
-		    u.nonce,u.`created-time` 
+		    u.nonce,u.`created-time` as created_time
 
 		FROM Users u JOIN Admins a ON a.user_id = u.id 
 		WHERE a.user_id = userId AND a.organisation_id is null;
 	ELSEIF userId IS null AND orgId IS NOT null THEN
-		SELECT u.id,u.`display-name`,u.email,u.password,u.biography, 
+		SELECT u.id,u.`display-name` as display_name,u.email,u.password,u.biography, 
 		    (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`, 
 		    (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`, 
 		    (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`, 
 		    (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`, 
-		    u.nonce,u.`created-time` 
+		    u.nonce,u.`created-time` as created_time
 
 		FROM Users u JOIN Admins a ON a.user_id = u.id 
 		WHERE a.organisation_id = orgId;
 	ELSEIF userId IS null AND orgId IS null THEN
-		SELECT u.id,u.`display-name`,u.email,u.password,u.biography, 
+		SELECT u.id,u.`display-name` as display_name,u.email,u.password,u.biography, 
 		    (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`, 
 		    (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`, 
 		    (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`, 
 		    (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`, 
-		    u.nonce,u.`created-time` 
+		    u.nonce,u.`created-time` as created_time
 
 		FROM Users u JOIN Admins a ON a.user_id = u.id 
 		WHERE (a.organisation_id is null or a.organisation_id = orgId);
@@ -1973,12 +1976,13 @@ BEGIN
     SELECT id INTO @lID FROM Languages WHERE code = lCode;
     SELECT id INTO @cID FROM Countries WHERE code = cCode;
 
-    SELECT p.id, p.title, p.description, p.impact, p.deadline, p.organisation_id, p.reference, p.`word-count`, p.created, 
+    SELECT p.id, p.title, p.description, p.impact, p.deadline, p.organisation_id as organisationId, p.reference, p.`word-count` as wordCount, p.created, 
         (select `en-name` from Languages l where l.id = p.language_id) as sourceLanguageName,            
         (select code from Languages l where l.id = p.language_id) as sourceLanguageCode,
         (select `en-name` from Countries c where c.id = p.country_id) as sourceCountryName, 
         (select code from Countries c where c.id = p.country_id) as sourceCountryCode, 
-        m.`archived-date`, m.`user_id-archived`, p.image_uploaded, p.image_approved
+        m.`archived-date` as archivedDate, m.`user_id-archived` as userIdArchived, m.`user_id-projectCreator` as userIdProjectCreator,
+        p.image_uploaded as imageUploaded, p.image_approved as imageApproved
 
     FROM ArchivedProjects p JOIN ArchivedProjectsMetadata m ON p.id = m.archivedProject_id 
 
@@ -2025,7 +2029,7 @@ BEGIN
 	if taskStatusId='' then set taskStatusId=null; end if;
 	if published='' then set published=null; end if;
 
-    SELECT t.id, t.project_id, t.title, t.`comment`, t.deadline, t.`word-count`, t.`created-time`,
+    SELECT t.id, t.project_id as projectId, t.title, t.`comment`, t.deadline, t.`word-count` as wordCount, t.`created-time` as createdTime,
             (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`, 
             (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
             (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
@@ -2034,8 +2038,8 @@ BEGIN
             (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
             (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
             (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, 
-        t.`taskType_id`, t.`taskStatus_id`, t.published, tm.version, tm.filename, tm.`content-type`, tm.`upload-time`,
-        tm.`user_id-claimed`, tm.`user_id-archived`, tm.prerequisites, tm.`user_id-taskCreator`, tm.`archived-date`
+        t.`taskType_id` as taskType, t.`taskStatus_id` as taskStatus, t.published, tm.version, tm.filename, tm.`content-type` as contentType, tm.`upload-time` as uploadTime,
+        tm.`user_id-claimed` as useridClaimed, tm.`user_id-archived` as userIdArchived, tm.prerequisites, tm.`user_id-taskCreator` as userIdTaskCreator, tm.`archived-date` as archivedDate
 
         FROM ArchivedTasks t JOIN ArchivedTasksMetadata tm ON t.id = tm.archivedTask_id 
 
@@ -2091,9 +2095,9 @@ BEGIN
 	if adminComment='' then set adminComment=null;end if;
 	if bannedDate='' then set bannedDate=null;end if;
 
-    SELECT b.org_id, b.`user_id-admin`, 
-           b.bannedtype_id, b.`comment`,
-           b.`banned-date` 
+    SELECT b.org_id as orgId, b.`user_id-admin` as userIdAdmin, 
+           b.bannedtype_id as banType, b.`comment`,
+           b.`banned-date` as bannedDate 
     	FROM BannedOrganisations b 
 	    WHERE isNullOrEqual(b.org_id,orgId) 
         and isNullOrEqual(b.`user_id-admin`,userIdAdmin) 
@@ -2116,7 +2120,7 @@ BEGIN
 	if adminComment='' then set adminComment=null;end if;
 	if bannedDate='' then set bannedDate=null;end if;
 
-	SELECT b.user_id, b.`user_id-admin`, b.bannedtype_id, b.`comment`, b.`banned-date` 
+	SELECT b.user_id as userId, b.`user_id-admin` as userIdAdmin, b.bannedtype_id as banType, b.`comment`, b.`banned-date` as bannedDate 
 	    FROM BannedUsers b 
     	WHERE isNullOrEqual(b.user_id,userId) 
         and isNullOrEqual(b.`user_id-admin`,userIdAdmin) 
@@ -2174,7 +2178,7 @@ BEGIN
 	if code='' then set code=null;end if;
 	if name='' then set name=null;end if;
 
-	select `en-name` as language, l.code, l.id 
+	select `en-name` as name, l.code, l.id 
 	    from Languages l 
     	where isNullOrEqual(l.id,id) 
         and isNullOrEqual(l.code,code) 
@@ -2189,7 +2193,7 @@ DROP PROCEDURE IF EXISTS `getLanguages`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLanguages`()
 BEGIN
-SELECT  `en-name` as language, code, id FROM Languages order by `en-name`;
+SELECT  `en-name` as name, code, id FROM Languages order by `en-name`;
 END//
 DELIMITER ;
 
@@ -2202,7 +2206,7 @@ BEGIN
     if lim= '' or lim is null then set lim = ~0; end if;
     if offset='' or offset is null then set offset=0; end if;
 
-    SELECT id, project_id, title, `word-count`, 
+    SELECT id, project_id as projectId, title, `word-count` as wordCount, 
             (SELECT `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, 
             (SELECT code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, 
             (SELECT `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, 
@@ -2211,8 +2215,8 @@ BEGIN
             (SELECT code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, 
             (SELECT `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, 
             (SELECT code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
-            comment, `task-type_id`, `task-status_id`, published, deadline, `created-time` 
-        FROM Tasks AS t 
+            comment, `task-type_id` as taskType, `task-status_id` as taskStatus, published, deadline, `created-time` as createdTime 
+        FROM Tasks t 
         WHERE NOT exists (SELECT 1 
                             FROM TaskClaims 
                             WHERE TaskClaims.task_id = t.id) 
@@ -2272,7 +2276,7 @@ DROP PROCEDURE IF EXISTS `getMembershipRequests`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getMembershipRequests`(IN `orgID` INT)
 BEGIN
-    SELECT *
+    SELECT id, user_id, org_id, `request-datetime` as request_time
     	FROM OrgRequests
         WHERE org_id = orgID
         ORDER BY `request-datetime` DESC;
@@ -2295,7 +2299,7 @@ BEGIN
 	if country='' then set country=null;end if;
 	if regionalFocus='' then set regionalFocus=null;end if;
 	
-	select * from Organisations o 
+	select o.id, o.name, o.`home-page` as homepage, o.biography, o.`e-mail` as 'email', o.address, o.city, o.country, o.`regional-focus` as regionalFocus from Organisations o
         where (id is null or o.id = id)
         and (name is null or o.name = name)
         and (url is null or o.`home-page` = url)
@@ -2315,12 +2319,12 @@ DROP PROCEDURE IF EXISTS `getOrgMembers`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgMembers`(IN `orgId` INT)
 BEGIN
-    select u.id,`display-name`,email,password,biography,
+    select u.id,`display-name` as display_name,email,password,biography,
             (select `en-name` from Languages where id =u.`language_id`) as `languageName`, 
             (select code from Languages where id =u.`language_id`) as `languageCode`, 
             (select `en-name` from Countries where id =u.`country_id`) as `countryName`, 
             (select code from Countries where id =u.`country_id`) as `countryCode`, 
-            nonce,`created-time`
+            nonce,`created-time` as created_time
     	FROM OrganisationMembers om JOIN Users u ON om.user_id = u.id
 	    WHERE organisation_id=orgId;
 END//
@@ -2332,7 +2336,7 @@ DROP PROCEDURE IF EXISTS `getOverdueTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOverdueTasks`()
 BEGIN
-    select id, project_id, title, `word-count`, 
+    select id, project_id as projectId, title, `word-count` as wordCount, 
             (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`,
             (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`,
             (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`,
@@ -2341,7 +2345,7 @@ BEGIN
             (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`,
             (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, 
             (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
-            comment,  `task-type_id`, `task-status_id`, published, deadline 
+            comment,  `task-type_id` as taskType, `task-status_id` as taskStatus, published, deadline 
         FROM Tasks t 
         where deadline < NOW()
         AND `task-status_id` != 4
@@ -2358,7 +2362,7 @@ BEGIN
     if unique_id='' then set unique_id=null;end if;
     if email='' then set email=null;end if;
     
-    SELECT * 
+    SELECT p.user_id, p.uid as 'key', p.`request-time` as requestTime 
         FROM PasswordResetRequests p 
         WHERE (unique_id is null or p.uid = unique_id)
         and (email is null or p.user_id IN
@@ -2388,7 +2392,7 @@ BEGIN
     if imageUploaded="" then set imageUploaded=null; end if;
     if imageApproved="" then set imageApproved=null; end if;
 
-    SELECT id, title, description, impact, deadline,organisation_id,reference,`word-count`, created,
+    SELECT id, title, description, impact, deadline,organisation_id as organisationId,reference,`word-count` as wordCount, created,
 
         (select `en-name` from Languages l where l.id = p.`language_id`) as `sourceLanguageName`, 
         (select code from Languages l where l.id = p.`language_id`) as `sourceLanguageCode`, 
@@ -2400,7 +2404,7 @@ BEGIN
         (select code from Countries c where c.id = p.`country_id`) as `targetCountryCode`, 
         (select sum(tsk.`task-status_id`) / (count(tsk.`task-status_id`) *4) 
 
-    from Tasks tsk where tsk.project_id = p.id) as 'status', image_uploaded, image_approved FROM Projects p
+    from Tasks tsk where tsk.project_id = p.id) as 'status', image_uploaded as imageUploaded, image_approved as imageApproved FROM Projects p
     
     WHERE (projectId is null or p.id = projectId)
         AND (titleText is null or p.title = titleText)
@@ -2424,12 +2428,12 @@ DROP PROCEDURE IF EXISTS `getProjectByTag`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getProjectByTag`(IN `tID` INT)
 BEGIN
-    select id, title, description, impact, deadline,organisation_id,reference,`word-count`, created,
+    select id, title, description, impact, deadline,organisation_id as organisationId,reference,`word-count` as wordCount, created,
             (select code from Countries where id =p.`country_id`) as country_id,
             (select code from Languages where id =p.`language_id`) as language_id, 
             (select sum(tsk.`task-status_id`)/(count(tsk.`task-status_id`)*4) 
                 from Tasks tsk 
-                where tsk.project_id=p.id) as 'status'
+                where tsk.project_id=p.id) as 'status', image_uploaded as imageUploaded, image_approved as imageApproved
         from Projects p 
         join ProjectTags pt 
         on pt.project_id=p.id
@@ -2450,7 +2454,7 @@ BEGIN
     if mime='' then set mime=null;end if;
    
 
-    SELECT * 
+    SELECT p.project_id as projectId, p.userId as userId, p.filename, p.`file-token` as token, p.`mime-type` as mime 
         FROM ProjectFiles p 
         WHERE (pID is null or p.project_id = pID)
         and (uID is null or p.user_id = uID)
@@ -2526,7 +2530,7 @@ BEGIN
     if EXISTS (SELECT 1
                 FROM UserTrackedTasks
                 WHERE task_id = taskId) then
-        SELECT u.id,`display-name`,email,u.password,biography, 
+        SELECT u.id,`display-name` as display_name,email,u.password,biography, 
                 (select `en-name` 
                     from Languages 
                     where id =u.`language_id`) as `languageName`, 
@@ -2539,7 +2543,7 @@ BEGIN
                 (select code 
                     from Countries 
                     where id =u.`country_id`) as `countryCode`, 
-                nonce,`created-time` 
+                nonce,`created-time` as created_time
             from Users u
             join UserTrackedTasks utt on u.id=utt.user_id
             WHERE task_id = taskId;
@@ -2586,7 +2590,7 @@ BEGIN
     -- if limit is null, set to maxBigInt unsigned
     if lim = '' or lim is null then set lim = ~0; end if;
   
-    SELECT t.id, t.project_id, t.title, t.`word-count`,
+    SELECT t.id, t.project_id as projectId, t.title, t.`word-count` as wordCount,
             (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`,     
             (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
             (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
@@ -2594,9 +2598,8 @@ BEGIN
             (select `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`, 
             (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
             (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
-            (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, t.`created-time`, 
-            (select code from Countries c where c.id = t.`country_id-source`) as `country_id-source`,
-            t.comment,  t.`task-type_id`, t.`task-status_id`, t.published, t.deadline  
+            (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, t.`created-time` as createdTime, 
+            t.`comment`,  t.`task-type_id` as taskType, t.`task-status_id` as taskStatus, t.published, t.deadline  
 
         FROM Tasks t join ProjectTags pt on pt.project_id = t.project_id
         WHERE pt.tag_id = `tID`
@@ -2632,7 +2635,7 @@ BEGIN
 	if dLine='' then set dLine=null;end if;
 	
 	
-	select t.id, t.project_id, t.title, `word-count`, 
+	select t.id, t.project_id as projectId, t.title, `word-count` as wordCount, 
             (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`, 
             (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
             (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
@@ -2640,7 +2643,8 @@ BEGIN
             (select `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`, 
             (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
             (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
-            (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, comment,  `task-type_id`, `task-status_id`, published, deadline, `created-time` 
+            (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, t.`comment`,
+            `task-type_id` as taskType, `task-status_id` as taskStatus, published, deadline, `created-time` as createdTime 
 
         from Tasks t 
 
@@ -2690,7 +2694,7 @@ BEGIN
 	if uID='' then set uID=null;end if;
 	if uTime='' then set uTime=null;end if;
 	
-    select task_id, version_id, filename, `content-type`, user_id, `upload-time` 
+    select task_id as 'id', version_id as version, filename, `content-type` as content_type, user_id, `upload-time` as upload_time 
         from TaskFileVersions t 
         where (tID is null or t.task_id = tID)
         and (vID is null or t.version_id = vID)
@@ -2712,12 +2716,16 @@ BEGIN
 
 	if taskId='' then set taskId=null;end if;
 	
-	SELECT t.id, t.project_id, t.title, t.`word-count`,
-        	(SELECT lg.code FROM Languages lg WHERE lg.id=`language_id-source`) as `language_id-source`,
-        	(SELECT lg.code FROM Languages lg WHERE lg.id=`language_id-target`) as `language_id-target`,
-        	(SELECT ct.code FROM Countries ct WHERE ct.id=t.`country_id-source`) as `country_id-source`,
-        	(SELECT ct.code FROM Countries ct WHERE ct.id=t.`country_id-target`)as `country_id-target`,
-        	t.`created-time`, t.deadline, t.`comment`, t.`task-type_id`, t.`task-status_id`, t.published
+	SELECT t.id, t.project_id as projectId, t.title, t.`word-count` as wordCount,
+        	(select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`, 
+            (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
+            (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
+            (select code from Languages l where l.id = t.`language_id-target`) as `targetLanguageCode`, 
+            (select `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`, 
+            (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
+            (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
+            (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`,
+        	t.`created-time` as createdTime, t.deadline, t.`comment`, t.`task-type_id` as taskType, t.`task-status_id` as taskStatus, t.published
     	FROM Tasks t JOIN TaskPrerequisites tp ON tp.`task_id-prerequisite`=t.id
 	    WHERE (tp.task_id=taskId or tp.task_id is null);	
 END//
@@ -2732,9 +2740,9 @@ BEGIN
 
 	if preReqId='' then set preReqId=NULL;end if;
 	if projectId='' then set projectId=NULL;end if;
-	if preReqId is not null then set projectId=(select p.project_id from Tasks p where p.id = preReqId);end if;
+	if preReqId is not null then set projectId=(select pt.project_id from Tasks pt where pt.id = preReqId);end if;
 	
-	SELECT t.id, t.project_id, t.title, t.`word-count`,
+	SELECT t.id, t.project_id as projectId, t.title, t.`word-count` as wordCount,
     		(select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`,     
             (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
             (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
@@ -2742,9 +2750,8 @@ BEGIN
             (select `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`, 
             (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
             (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
-            (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, 
-            (select code from Countries c where c.id = t.`country_id-source`) as `country_id-source`, 
-    		t.`created-time`, t.deadline, t.`comment`, t.`task-type_id`, t.`task-status_id`, t.published
+            (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`,
+    		t.`created-time` as createdTime, t.deadline, t.`comment`, t.`task-type_id` as taskType, t.`task-status_id` as taskStatus, t.published
     	FROM Tasks t LEFT JOIN TaskPrerequisites tp ON tp.task_id=t.id
     	WHERE (tp.`task_id-prerequisite`=preReqId or tp.`task_id-prerequisite` is null)	
 	    and (t.project_id = projectId or projectId is null);
@@ -2848,7 +2855,16 @@ DROP PROCEDURE IF EXISTS `getTrackedProjects`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTrackedProjects`(IN `uID` INT)
 BEGIN
-    select p.* 
+    select id,title,description,deadline,organisation_id as organisationId,impact,reference,`word-count` as wordCount, created,
+        (select `en-name` from Languages l where l.id = p.`language_id`) as `sourceLanguageName`, 
+        (select code from Languages l where l.id = p.`language_id`) as `sourceLanguageCode`, 
+        (select `en-name` from Languages l where l.id = p.`language_id`) as `targetLanguageName`, 
+        (select code from Languages l where l.id = p.`language_id`) as `targetLanguageCode`, 
+        (select `en-name` from Countries c where c.id = p.`country_id`) as `sourceCountryName`, 
+        (select code from Countries c where c.id = p.`country_id`) as `sourceCountryCode`, 
+        (select `en-name` from Countries c where c.id = p.`country_id`) as `targetCountryName`, 
+        (select code from Countries c where c.id = p.`country_id`) as `targetCountryCode`,
+        image_uploaded as imageUploaded, image_approved as imageApproved
         from Projects p  
         join UserTrackedProjects utp 
         on p.id=utp.Project_id
@@ -2873,12 +2889,12 @@ BEGIN
 	if lang_id='' then set lang_id=null;end if;
 	if region_id='' then set region_id=null;end if;
 	
-	select u.id,u.`display-name`, u.email, u.password, u.biography, 
+	select u.id,u.`display-name` as display_name, u.email, u.password, u.biography, 
             (select `en-name` from Languages l where l.id = u.`language_id`) as `languageName`, 
             (select code from Languages l where l.id = u.`language_id`) as `languageCode`, 
             (select `en-name` from Countries c where c.id = u.`country_id`) as `countryName`, 
             (select code from Countries c where c.id = u.`country_id`) as `countryCode`, 
-            u.nonce, u.`created-time` 
+            u.nonce, u.`created-time` as created_time
         
         from Users u  
 
@@ -2903,7 +2919,7 @@ BEGIN
     if lim = '' or lim is null then set lim = ~0; end if;
     if offset='' or offset is null then set offset = 0; end if;
 
-    SELECT id,project_id,title,`word-count`, 
+    SELECT t.id,t.project_id as projectId,title,`word-count` as wordCount, 
             (select `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, 
             (select code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, 
             (select `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, 
@@ -2912,7 +2928,9 @@ BEGIN
             (select code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, 
             (select `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, 
             (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
-            comment, `taskType_id`, `taskStatus_id`, published, deadline, `created-time` ,am.*
+            `comment`, `taskType_id` as taskType, `taskStatus_id` as taskStatus, published, deadline, `created-time` as createdTime , am.version, 
+            am.filename, am.`content-type` as contentType, am.`upload-time` as uploadTime, am.`user_id-claimed` as userIdClaimed,
+            am.`user_id-archived` as userIdArchived, am.prequisites, am.`user_id-taskCreator` as userIdTaskCreator, am.`archived-date` as archivedDate
     	FROM ArchivedTasks t 
 	    JOIN ArchivedTasksMetadata am
     	ON t.id=am.archivedTask_id
@@ -2953,12 +2971,12 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserByOAuthToken`(IN `accessToken` CHAR(40))
     READS SQL DATA
 BEGIN
-    SELECT u.id,u.`display-name`, u.email, u.password, u.biography,
+    SELECT u.id,u.`display-name` as display_name, u.email, u.password, u.biography,
         (select `en-name` from Languages l where l.id = u.`language_id`) as `languageName`,
         (select code from Languages l where l.id = u.`language_id`) as `languageCode`,
         (select `en-name` from Countries c where c.id = u.`country_id`) as `countryName`,
         (select code from Countries c where c.id = u.`country_id`) as `countryCode`,
-        u.nonce, u.`created-time`
+        u.nonce, u.`created-time` as created_time
         FROM Users u
         JOIN oauth_sessions sessions
         ON u.id = sessions.owner_id
@@ -3074,7 +3092,12 @@ DROP PROCEDURE IF EXISTS `getUsersWithBadge`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUsersWithBadge`(IN `bID` INT)
 BEGIN
-	SELECT *
+	SELECT id, `display-name` as display_name, email, password, biography,
+        (select `en-name` from Languages l where l.id = u.`language_id`) as `languageName`,
+        (select code from Languages l where l.id = u.`language_id`) as `languageCode`,
+        (select `en-name` from Countries c where c.id = u.`country_id`) as `countryName`,
+        (select code from Countries c where c.id = u.`country_id`) as `countryCode`,
+        nonce, `created-time` as created_time
 	    FROM Users JOIN UserBadges ON Users.id = UserBadges.user_id
     	WHERE badge_id = bID;
 END//
@@ -3125,7 +3148,7 @@ BEGIN
     if lim = '' or lim is null then set lim = ~0; end if;
     if offs = '' or offs is null then set offs = 0; end if;
 
-    SELECT t.id, t.project_id, t.title, t.`word-count`,
+    SELECT t.id, t.project_id as projectId, t.title, t.`word-count` as wordCount,
             (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`, 
             (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
             (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
@@ -3134,9 +3157,9 @@ BEGIN
             (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
             (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
             (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, 
-            t.`created-time`, 
-            (select code from Countries c where c.id = t.`country_id-source`) as `country_id-source`, 
-            comment, `task-type_id`, `task-status_id`, published, deadline
+            t.`created-time` as createdTime, 
+            --(select code from Countries c where c.id = t.`country_id-source`) as `country_id-source`, 
+            t.`comment`, `t.task-type_id` as taskType, t.`task-status_id` as taskStatus, t.published, t.deadline
         FROM Tasks t JOIN TaskClaims tc ON tc.task_id = t.id
         WHERE tc.user_id = uID
         ORDER BY `created-time` DESC
@@ -3161,7 +3184,7 @@ DROP PROCEDURE IF EXISTS `getUserTaskStreamNotification`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTaskStreamNotification`(IN `uID` INT)
 BEGIN
-    SELECT CAST(u.strict as UNSIGNED) AS strict, u.user_id, u.interval, u.`last-sent`
+    SELECT CAST(u.strict as UNSIGNED) AS strict, u.user_id, u.`interval`, u.`last-sent` as last_sent
         FROM UserTaskStreamNotifications u
         WHERE u.user_id = uID;
 END//
@@ -3201,7 +3224,7 @@ BEGIN
     if sourceLanguage = '' then set sourceLanguage = null; end if;
     if targetLanguage = '' then set targetLanguage = null; end if;
 
-    (SELECT id,project_id,title,`word-count`,
+    (SELECT id,project_id as projectId,title,`word-count` as wordCount,
             (SELECT `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`, 
             (SELECT code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
             (SELECT `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
@@ -3210,7 +3233,7 @@ BEGIN
             (SELECT code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
             (SELECT `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
             (SELECT code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, 
-            comment, `task-type_id`, `task-status_id`, published, deadline, `created-time` 
+            `comment`, `task-type_id` as taskType, `task-status_id` as taskStatus, published, deadline, `created-time` as createdTime 
         FROM Tasks t LEFT JOIN (SELECT * FROM UserTaskScores u WHERE u.user_id = uID ) AS uts 
         ON t.id = uts.task_id 
         WHERE t.id NOT IN ( SELECT t.task_id FROM TaskClaims t)
@@ -3281,7 +3304,7 @@ BEGIN
     if taskType = 0 then set taskType = null; end if;
     if taskStatus = 0 then set taskStatus = null; end if;
 
-    (SELECT id,project_id,title,`word-count`,
+    (SELECT id,project_id as projectId,title,`word-count` as wordCount,
             (SELECT `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`,
             (SELECT code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`,
             (SELECT `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`,
@@ -3290,7 +3313,7 @@ BEGIN
             (SELECT code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`,
             (SELECT `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`,
             (SELECT code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`,
-            comment, `task-type_id`, `task-status_id`, published, deadline, `created-time`
+            `comment`, `task-type_id` as 'taskType', `task-status_id` as 'taskStatus', published, deadline, `created-time` as createdTime
         FROM Tasks t
         WHERE t.id IN (SELECT tc.task_id FROM TaskClaims tc WHERE tc.user_id = userID)
         AND (taskType is null or t.`task-type_id` = taskType)
@@ -3314,7 +3337,7 @@ DROP PROCEDURE IF EXISTS `getUserTrackedTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTrackedTasks`(IN `id` INT)
 BEGIN
-	SELECT t.id, t.project_id, t.title, `word-count`,
+	SELECT t.id, t.project_id as projectId, t.title, `word-count` as wordCount,
             (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`,
             (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`,
             (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`,
@@ -3323,7 +3346,7 @@ BEGIN
             (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`,
             (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`,
             (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`,
-            comment, `task-type_id`, `task-status_id`, published, deadline, `created-time`
+            t.`comment`, `task-type_id` as taskType, `task-status_id` as taskStatus, published, deadline, `created-time` as createdTime
 	FROM UserTrackedTasks utt join Tasks t on utt.task_id=t.id
 	WHERE user_id = id;
 END//
@@ -4274,8 +4297,9 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `searchForOrg`(IN `org_name` VARCHAR(128))
     COMMENT 'Search for an organisation by name'
 BEGIN
-	SELECT *
-	    FROM Organisations
+	SELECT o.id, o.name, o.biography, o.`home-page` as homepage, o.`e-mail` as email, o.address, o.city, o.country,
+        o.`regional-focus` as regionalFocus
+	    FROM Organisations o
 	    WHERE name LIKE CONCAT('%', org_name, '%');
 END//
 DELIMITER ;
@@ -5196,7 +5220,9 @@ BEGIN
 	if country='' then set country=null;end if;
     if receiveCredit = '' then set receiveCredit = null; end if;
 	
-	select * from UserPersonalInformation p 
+	select id, user_id as userId, `first-name` as firstName, `last-name` as lastName, `mobile-number` as mobileNumber,
+    `business-number` as businessNumber, `job-title` as jobTitle, address, city, country, receive_credit, `language-preference` as languagePreference 
+    from UserPersonalInformation p 
         
         where (id is null or p.id = id)
             and (userId is null or p.user_id = userId)
@@ -5261,7 +5287,8 @@ DROP PROCEDURE IF EXISTS `getTrackedOrganisations`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTrackedOrganisations`(IN `userId` INT)
 BEGIN
-    SELECT o.*
+    SELECT o.id, o.name, o.biography, o.`home-page` as homepage, o.`e-mail` as email, o.address, o.city, o.country,
+        o.`regional-focus` as regionalFocus
         FROM Organisations o
         JOIN UserTrackedOrganisations uto
         ON o.id=uto.organisation_id
@@ -5274,12 +5301,12 @@ DROP PROCEDURE IF EXISTS `getUsersTrackingOrg`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUsersTrackingOrg`(IN `orgId` INT)
 BEGIN
-    SELECT u.id,u.`display-name`, u.email, u.password, u.biography,
+    SELECT u.id,u.`display-name` as display_name, u.email, u.password, u.biography,
         (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`,
         (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`,
         (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`,
         (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`,
-        u.nonce, u.`created-time`
+        u.nonce, u.`created-time` as created_time
         FROM Users u
         JOIN UserTrackedOrganisations uto
         ON u.id=uto.user_id

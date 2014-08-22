@@ -33,6 +33,9 @@ class ModelFactory
 {
     public static function buildModel($modelName, $modelData)
     {
+        if ($modelName == "Language") {
+
+        }
         $ret = null;
 
         switch($modelName)
@@ -109,6 +112,9 @@ class ModelFactory
             case "BannedOrganisation":
                 $ret = self::generateBannedOrganisation($modelData);
                 break;
+            case "OAuthResponse":
+                $ret = self::generateOAuthResponse($modelData);
+                break;
             default:
                 echo "Unable to build model $modelName";
         }
@@ -126,8 +132,8 @@ class ModelFactory
         if (isset($modelData['org_id'])) {
             $ret->setOrgId($modelData['org_id']);
         }
-        if (isset($modelData['request-datetime'])) {
-            $ret->setRequestTime($modelData['request-datetime']);
+        if (isset($modelData['request_time'])) {
+            $ret->setRequestTime($modelData['request_time']);
         }
         return $ret;
     }
@@ -141,8 +147,8 @@ class ModelFactory
         if (isset($modelData['id'])) {
             $ret->setId($modelData['id']);
         }
-        if (isset($modelData['project_id'])) {
-            $ret->setProjectId($modelData['project_id']);
+        if (isset($modelData['projectId'])) {
+            $ret->setProjectId($modelData['projectId']);
         }
         if (isset($modelData['title'])) {
             $ret->setTitle($modelData['title']);
@@ -153,11 +159,11 @@ class ModelFactory
         if (isset($modelData['deadline'])) {
             $ret->setDeadline($modelData['deadline']);
         }
-        if (isset($modelData['word-count'])) {
-            $ret->setWordCount($modelData['word-count']);
+        if (isset($modelData['wordCount'])) {
+            $ret->setWordCount($modelData['wordCount']);
         }
-        if (isset($modelData['created-time'])) {
-            $ret->setCreatedTime($modelData['created-time']);
+        if (isset($modelData['createdTime'])) {
+            $ret->setCreatedTime($modelData['createdTime']);
         }
         
         if (isset($modelData['sourceLanguageName'])) {
@@ -190,11 +196,11 @@ class ModelFactory
 
         $ret->setTargetLocale($targetLocale);
         
-        if (isset($modelData['taskType_id'])) {
-            $ret->setTaskType($modelData['taskType_id']);
+        if (isset($modelData['taskType'])) {
+            $ret->setTaskType($modelData['taskType']);
         }
-        if (isset($modelData['taskStatus_id'])) {
-            $ret->setTaskStatus($modelData['taskStatus_id']);
+        if (isset($modelData['taskStatus'])) {
+            $ret->setTaskStatus($modelData['taskStatus']);
         }
         if (isset($modelData['published'])) {
             $ret->setPublished($modelData['published']);
@@ -206,26 +212,26 @@ class ModelFactory
         if (isset($modelData['filename'])) {
             $ret->setFileName($modelData['filename']);
         }
-        if (isset($modelData['content-type'])) {
-            $ret->setContentType($modelData['content-type']);
+        if (isset($modelData['contentType'])) {
+            $ret->setContentType($modelData['contentType']);
         }
-        if (isset($modelData['upload-time'])) {
-            $ret->setUploadTime($modelData['upload-time']);
+        if (isset($modelData['uploadTime'])) {
+            $ret->setUploadTime($modelData['uploadTime']);
         }
-        if (isset($modelData['user_id-claimed'])) {
-            $ret->setUserIdClaimed($modelData['user_id-claimed']);
+        if (isset($modelData['userIdClaimed'])) {
+            $ret->setUserIdClaimed($modelData['userIdClaimed']);
         }
-        if (isset($modelData['user_id-archived'])) {
-            $ret->setUserIdArchived($modelData['user_id-archived']);
+        if (isset($modelData['userIdArchived'])) {
+            $ret->setUserIdArchived($modelData['userIdArchived']);
         }
         if (isset($modelData['prerequisites'])) {
             $ret->setPrerequisites($modelData['prerequisites']);
         }
-        if (isset($modelData['user_id-taskCreator'])) {
-            $ret->setUserIdTaskCreator($modelData['user_id-taskCreator']);
+        if (isset($modelData['userIdTaskCreator'])) {
+            $ret->setUserIdTaskCreator($modelData['userIdTaskCreator']);
         }
-        if (isset($modelData['archived-date'])) {
-            $ret->setArchivedDate($modelData['archived-date']);
+        if (isset($modelData['archivedDate'])) {
+            $ret->setArchivedDate($modelData['archivedDate']);
         }
         
         return $ret;
@@ -252,11 +258,11 @@ class ModelFactory
         if (isset($modelData['user_id'])) {
             $ret->setUserId($modelData['user_id']);
         }
-        if (isset($modelData['uid'])) {
-            $ret->setKey($modelData['uid']);
+        if (isset($modelData['key'])) {
+            $ret->setKey($modelData['key']);
         }
-        if (isset($modelData['request-time'])) {
-            $ret->setRequestTime($modelData['request-time']);
+        if (isset($modelData['requestTime'])) {
+            $ret->setRequestTime($modelData['requestTime']);
         }
 
         return $ret;
@@ -303,8 +309,8 @@ class ModelFactory
         if (isset($modelData['code'])) {
             $ret->setCode($modelData['code']);
         }
-        if (isset($modelData['language'])) {
-            $ret->setName($modelData['language']);
+        if (isset($modelData['name'])) {
+            $ret->setName($modelData['name']);
         }
 
         return $ret;
@@ -312,6 +318,9 @@ class ModelFactory
 
     private static function generateLogin($modelData)
     {
+        error_log("Logging Login modeldata...");
+        $foo = print_r($modelData, true);
+        error_log($foo);
         $ret = new Models\Login();
 
         if (isset($modelData['email'])) {
@@ -361,7 +370,7 @@ class ModelFactory
     private static function generateOrganisation($modelData)
     {
         $ret = new Models\Organisation();
-
+        
         if (isset($modelData['id'])) {
             $ret->setId($modelData['id']);
         }
@@ -371,11 +380,12 @@ class ModelFactory
         if (isset($modelData['biography'])) {
             $ret->setBiography($modelData['biography']);
         }
-        if (isset($modelData['home-page'])) {
-            $ret->setHomePage($modelData['home-page']);
+        if (isset($modelData['homepage'])) {
+            error_log($modelData['homepage']);
+            $ret->setHomepage($modelData['homepage']);
         }
-        if (isset($modelData['e-mail'])) {
-            $ret->setEmail($modelData['e-mail']);
+        if (isset($modelData['email'])) {
+            $ret->setEmail($modelData['email']);
         }
         if (isset($modelData['address'])) {
             $ret->setAddress($modelData['address']);
@@ -386,34 +396,36 @@ class ModelFactory
         if (isset($modelData['country'])) {
             $ret->setCountry($modelData['country']);
         }
-        if (isset($modelData['regional-focus'])) {
-            $ret->setRegionalFocus($modelData['regional-focus']);
+        if (isset($modelData['regionalFocus'])) {
+            $ret->setRegionalFocus($modelData['regionalFocus']);
         }
 
         return $ret;
+        
     }
 
     private static function generateTaskMetadata($modelData)
     {
         $ret = new Models\TaskMetadata();
 
-        if (isset($modelData['task_id'])) {
-            $ret->setId($modelData['task_id']);
+        //This id is the task_id, not the id of the TaskFileVersion record (i.e. TaskMetadata) on the db.
+        if (isset($modelData['id'])) {
+            $ret->setId($modelData['id']);
         }
-        if (isset($modelData['version_id'])) {
-            $ret->setVersion($modelData['version_id']);
+        if (isset($modelData['version'])) {
+            $ret->setVersion($modelData['version']);
         }
         if (isset($modelData['filename'])) {
             $ret->setFilename($modelData['filename']);
         }
-        if (isset($modelData['content-type'])) {
-            $ret->setContentType($modelData['content-type']);
+        if (isset($modelData['content_type'])) {
+            $ret->setContentType($modelData['content_type']);
         }
         if (isset($modelData['user_id'])) {
             $ret->setUserId($modelData['user_id']);
         }
-        if (isset($modelData['upload-time'])) {
-            $ret->setUploadTime($modelData['upload-time']);
+        if (isset($modelData['upload_time'])) {
+            $ret->setUploadTime($modelData['upload_time']);
         }
 
         return $ret;
@@ -436,8 +448,8 @@ class ModelFactory
         if (isset($modelData['password'])) {
             $ret->setPassword($modelData['password']);
         }
-        if (isset($modelData['display-name'])) {
-            $ret->setDisplayName($modelData['display-name']);
+        if (isset($modelData['display_name'])) {
+            $ret->setDisplayName($modelData['display_name']);
         }
         if (isset($modelData['biography'])) {
             $ret->setBiography($modelData['biography']);
@@ -457,13 +469,18 @@ class ModelFactory
         }
         if (isset($modelData['languageName']) && isset($modelData['languageCode']) &&
                 (isset($modelData['countryName'])) && isset($modelData['countryCode'])) {
+            /* //error_log("Logging user's native locale..");
+            $blah = print_r($locale, true);
+            error_log($blah); */
             $ret->setNativeLocale($locale);
         }
         
-        if (isset($modelData['created-time'])) {
-            $ret->setCreatedTime($modelData['created-time']);
+        if (isset($modelData['created_time'])) {
+            $ret->setCreatedTime($modelData['created_time']);
         }
-
+        /* error_log("Logging ret of generateUser...");
+        $avar = print_r($ret, true);
+        error_log($avar); */
         return $ret;
     }
 
@@ -477,8 +494,8 @@ class ModelFactory
         if (isset($modelData['interval'])) {
             $ret->setInterval($modelData['interval']);
         }
-        if (isset($modelData['last-sent'])) {
-            $ret->setLastSent($modelData['last-sent']);
+        if (isset($modelData['last_sent'])) {
+            $ret->setLastSent($modelData['last_sent']);
         }
         if (isset($modelData['strict'])) {
             if ($modelData['strict']) {
@@ -500,8 +517,8 @@ class ModelFactory
         if (isset($modelData['id'])) {
             $ret->setId($modelData['id']);
         }
-        if (isset($modelData['project_id'])) {
-            $ret->setProjectId($modelData['project_id']);
+        if (isset($modelData['projectId'])) {
+            $ret->setProjectId($modelData['projectId']);
         }
         if (isset($modelData['title'])) {
             $ret->setTitle($modelData['title']);
@@ -512,11 +529,11 @@ class ModelFactory
         if (isset($modelData['deadline'])) {
             $ret->setDeadline($modelData['deadline']);
         }
-        if (isset($modelData['word-count'])) {
-            $ret->setWordCount($modelData['word-count']);
+        if (isset($modelData['wordCount'])) {
+            $ret->setWordCount($modelData['wordCount']);
         }
-        if (isset($modelData['created-time'])) {
-            $ret->setCreatedTime($modelData['created-time']);
+        if (isset($modelData['createdTime'])) {
+            $ret->setCreatedTime($modelData['createdTime']);
         }
         
         if (isset($modelData['sourceLanguageName'])) {
@@ -549,11 +566,11 @@ class ModelFactory
 
         $ret->setTargetLocale($targetLocale);
         
-        if (isset($modelData['task-type_id'])) {
-            $ret->setTaskType($modelData['task-type_id']);
+        if (isset($modelData['taskType'])) {
+            $ret->setTaskType($modelData['taskType']);
         }
-        if (isset($modelData['task-status_id'])) {
-            $ret->setTaskStatus($modelData['task-status_id']);
+        if (isset($modelData['taskStatus'])) {
+            $ret->setTaskStatus($modelData['taskStatus']);
         }
         if (isset($modelData['published'])) {
             $ret->setPublished($modelData['published']);
@@ -611,8 +628,8 @@ class ModelFactory
         if (isset($modelData['deadline'])) {
             $ret->setDeadline($modelData['deadline']);
         }
-        if (isset($modelData['organisation_id'])) {
-            $ret->setOrganisationId($modelData['organisation_id']);
+        if (isset($modelData['organisationId'])) {
+            $ret->setOrganisationId($modelData['organisationId']);
         }
         if (isset($modelData['impact'])) {
             $ret->setImpact($modelData['impact']);
@@ -620,8 +637,8 @@ class ModelFactory
         if (isset($modelData['reference'])) {
             $ret->setReference($modelData['reference']);
         }
-        if (isset($modelData['word-count'])) {
-            $ret->setWordCount($modelData['word-count']);
+        if (isset($modelData['wordCount'])) {
+            $ret->setWordCount($modelData['wordCount']);
         }
         if (isset($modelData['created'])) {
             $ret->setCreatedTime($modelData['created']);
@@ -645,12 +662,12 @@ class ModelFactory
 
         $ret->setSourceLocale($sourceLocale);
         
-        if (isset($modelData['image_uploaded'])) {
-            $ret->setImageUploaded($modelData['image_uploaded'] == "\x01" ? 1 : 0);
+        if (isset($modelData['imageUploaded'])) {
+            $ret->setImageUploaded($modelData['imageUploaded'] == "\x01" ? 1 : 0);
         }
         
-        if (isset($modelData['image_approved'])) {
-            $ret->setImageApproved($modelData['image_approved']  == "\x01" ? 1 : 0);
+        if (isset($modelData['imageApproved'])) {
+            $ret->setImageApproved($modelData['imageApproved']  == "\x01" ? 1 : 0);
         }
 
         return $ret;
@@ -676,14 +693,14 @@ class ModelFactory
         if (isset($modelData['deadline'])) {
             $ret->setDeadline($modelData['deadline']);
         }
-        if (isset($modelData['organisation_id'])) {
-            $ret->setOrganisationId($modelData['organisation_id']);
+        if (isset($modelData['organisationId'])) {
+            $ret->setOrganisationId($modelData['organisationId']);
         }
         if (isset($modelData['reference'])) {
             $ret->setReference($modelData['reference']);
         }
-        if (isset($modelData['word-count'])) {
-            $ret->setWordCount($modelData['word-count']);
+        if (isset($modelData['wordCount'])) {
+            $ret->setWordCount($modelData['wordCount']);
         }
         if (isset($modelData['created'])) {
             $ret->setCreatedTime($modelData['created']);
@@ -704,34 +721,34 @@ class ModelFactory
         
         $ret->setSourceLocale($sourceLocale);
        
-        if (isset($modelData['user_id-archived'])) {
-            $ret->setUserIdArchived($modelData['user_id-archived']);
+        if (isset($modelData['userIdArchived'])) {
+            $ret->setUserIdArchived($modelData['userIdArchived']);
         }
-        if (isset($modelData['user_id-projectCreator'])) {
-            $ret->setUserIdProjectCreator($modelData['user_id-projectCreator']);
+        if (isset($modelData['userIdProjectCreator'])) {
+            $ret->setUserIdProjectCreator($modelData['userIdProjectCreator']);
         }
         if (isset($modelData['filename'])) {
             $ret->setFileName($modelData['filename']);
         }
-        if (isset($modelData['file-token'])) {
-            $ret->setFileToken($modelData['file-token']);
+        if (isset($modelData['fileToken'])) {
+            $ret->setFileToken($modelData['fileToken']);
         }
-        if (isset($modelData['mime-type'])) {
-            $ret->setMimeType($modelData['mime-type']);
+        if (isset($modelData['mimeType'])) {
+            $ret->setMimeType($modelData['mimeType']);
         }
-        if (isset($modelData['archived-date'])) {
-            $ret->setArchivedDate($modelData['archived-date']);
+        if (isset($modelData['archivedDate'])) {
+            $ret->setArchivedDate($modelData['archivedDate']);
         }
         if (isset($modelData['tags'])) {
             $ret->setTags($modelData['tags']);
         }
 
-        if (isset($modelData['image_uploaded'])) {
-            $ret->setImageUploaded($modelData['image_uploaded'] == "\x01" ? 1 : 0);
+        if (isset($modelData['imageUploaded'])) {
+            $ret->setImageUploaded($modelData['imageUploaded'] == "\x01" ? 1 : 0);
         }
         
-        if (isset($modelData['image_approved'])) {
-            $ret->setImageApproved($modelData['image_approved']  == "\x01" ? 1 : 0);
+        if (isset($modelData['imageApproved'])) {
+            $ret->setImageApproved($modelData['imageApproved']  == "\x01" ? 1 : 0);
         }
 
         return $ret;
@@ -757,20 +774,20 @@ class ModelFactory
     {
         $ret = new Models\ProjectFile();
 
-        if (isset($modelData['project_id'])) {
-            $ret->setProjectId($modelData['project_id']);
+        if (isset($modelData['projectId'])) {
+            $ret->setProjectId($modelData['projectId']);
         }
         if (isset($modelData['filename'])) {
             $ret->setFilename($modelData['filename']);
         }
-        if (isset($modelData['file-token'])) {
-            $ret->setToken($modelData['file-token']);
+        if (isset($modelData['token'])) {
+            $ret->setToken($modelData['token']);
         }
-        if (isset($modelData['user_id'])) {
-            $ret->setUserId($modelData['user_id']);
+        if (isset($modelData['userId'])) {
+            $ret->setUserId($modelData['userId']);
         }
-        if (isset($modelData['mime-type'])) {
-            $ret->setMime($modelData['mime-type']);
+        if (isset($modelData['mime'])) {
+            $ret->setMime($modelData['mime']);
         }
         
         return $ret;
@@ -784,26 +801,26 @@ class ModelFactory
         if (isset($modelData['id'])) {
             $ret->setId($modelData['id']);
         }
-        if (isset($modelData['user_id'])) {
-            $ret->setUserId($modelData['user_id']);
+        if (isset($modelData['userId'])) {
+            $ret->setUserId($modelData['userId']);
         }
-        if (isset($modelData['first-name'])) {
-            $ret->setFirstName($modelData['first-name']);
+        if (isset($modelData['firstName'])) {
+            $ret->setFirstName($modelData['firstName']);
         }
-        if (isset($modelData['last-name'])) {
-            $ret->setLastName($modelData['last-name']);
+        if (isset($modelData['lastName'])) {
+            $ret->setLastName($modelData['lastName']);
         }
-        if (isset($modelData['mobile-number'])) {
-            $ret->setMobileNumber($modelData['mobile-number']);
+        if (isset($modelData['mobileNumber'])) {
+            $ret->setMobileNumber($modelData['mobileNumber']);
         }
-        if (isset($modelData['business-number'])) {
-            $ret->setBusinessNumber($modelData['business-number']);
+        if (isset($modelData['businessNumber'])) {
+            $ret->setBusinessNumber($modelData['businessNumber']);
         }
-        if (isset($modelData['language-preference'])) {
-            $ret->setLanguagePreference($modelData['language-preference']);
+        if (isset($modelData['languagePreference'])) {
+            $ret->setLanguagePreference($modelData['languagePreference']);
         }
-        if (isset($modelData['job-title'])) {
-            $ret->setJobTitle($modelData['job-title']);
+        if (isset($modelData['jobTitle'])) {
+            $ret->setJobTitle($modelData['jobTitle']);
         }
         if (isset($modelData['address'])) {
             $ret->setAddress($modelData['address']);
@@ -845,20 +862,20 @@ class ModelFactory
     {
         $ret = new Models\BannedUser();
         
-        if (isset($modelData['user_id'])) {
-            $ret->setUserId($modelData['user_id']);
+        if (isset($modelData['userId'])) {
+            $ret->setUserId($modelData['userId']);
         }
-        if (isset($modelData['user_id-admin'])) {
-            $ret->setUserIdAdmin($modelData['user_id-admin']);
+        if (isset($modelData['userIdAdmin'])) {
+            $ret->setUserIdAdmin($modelData['userIdAdmin']);
         }
-        if (isset($modelData['bannedtype_id'])) {
-            $ret->setBanType($modelData['bannedtype_id']);
+        if (isset($modelData['banType'])) {
+            $ret->setBanType($modelData['banType']);
         }
         if (isset($modelData['comment'])) {
             $ret->setComment($modelData['comment']);
         }
-        if (isset($modelData['banned-date'])) {
-            $ret->setBannedDate($modelData['banned-date']);
+        if (isset($modelData['bannedDate'])) {
+            $ret->setBannedDate($modelData['bannedDate']);
         }
         
         return $ret;
@@ -868,20 +885,43 @@ class ModelFactory
     {
         $ret = new Models\BannedOrganisation();
         
-        if (isset($modelData['org_id'])) {
-            $ret->setOrgId($modelData['org_id']);
+        if (isset($modelData['orgId'])) {
+            $ret->setOrgId($modelData['orgId']);
         }
-        if (isset($modelData['user_id-admin'])) {
-            $ret->setUserIdAdmin($modelData['user_id-admin']);
+        if (isset($modelData['userIdAdmin'])) {
+            $ret->setUserIdAdmin($modelData['userIdAdmin']);
         }
-        if (isset($modelData['bannedtype_id'])) {
-            $ret->setBanType($modelData['bannedtype_id']);
+        if (isset($modelData['banType'])) {
+            $ret->setBanType($modelData['banType']);
         }
         if (isset($modelData['comment'])) {
             $ret->setComment($modelData['comment']);
         }
-        if (isset($modelData['banned-date'])) {
-            $ret->setBannedDate($modelData['banned-date']);
+        if (isset($modelData['bannedDate'])) {
+            $ret->setBannedDate($modelData['bannedDate']);
+        }
+        
+        return $ret;
+    }
+    
+    private static function generateOAuthResponse($modelData)
+    {
+        $ret = new Models\OAuthResponse();
+        
+        if (isset($modelData['token'])) {
+            $ret->setToken($modelData['token']);
+        }
+        
+        if (isset($modelData['token_type'])) {
+            $ret->setTokenType($modelData['token_type']);
+        }
+        
+        if (isset($modelData['expires'])) {
+            $ret->setExpires($modelData['expires']);
+        }
+        
+        if (isset($modelData['expires_in'])) {
+            $ret->setExpiresIn($modelData['expires_in']);
         }
         
         return $ret;

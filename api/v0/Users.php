@@ -442,7 +442,7 @@ class Users
 
                 $app->get(
                     '/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
+                    //'\SolasMatch\API\Lib\Middleware::isloggedIn',
                     '\SolasMatch\API\V0\Users::getUser'
                 );
 
@@ -1160,14 +1160,17 @@ class Users
             $server = API\Dispatcher::getOauthServer();
             $response = $server->getGrantType('password')->completeFlow($params);
             $oAuthResponse = new Common\Protobufs\Models\OAuthResponse();
+            error_log("Logging 'response' in login API function");
+            $blah = print_r($response, true);
+            error_log($blah);
             $oAuthResponse->setToken($response['access_token']);
             $oAuthResponse->setTokenType($response['token_type']);
             $oAuthResponse->setExpires($response['expires']);
             $oAuthResponse->setExpiresIn($response['expires_in']);
 
             $user = DAO\UserDao::getLoggedInUser($response['access_token']);
-            $user->setPassword(null);
-            $user->setNonce(null);
+            $user->setPassword("");
+            $user->setNonce("");
             API\Dispatcher::sendResponse(null, $user, null, $format, $oAuthResponse);
         } catch (Common\Exceptions\SolasMatchException $e) {
             API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode(), $format);
@@ -1224,9 +1227,12 @@ class Users
             $userId = $userId[0];
         }
         $data = DAO\UserDao::getUser($userId);
+        error_log("Logging user data in getUser...");
+        $foo = print_r($data, true);
+        error_log($foo);
         if (!is_null($data)) {
-            $data->setPassword(null);
-            $data->setNonce(null);
+            $data->setPassword("");
+            $data->setNonce("");
         }
         API\Dispatcher::sendResponse(null, $data, null, $format);
     }

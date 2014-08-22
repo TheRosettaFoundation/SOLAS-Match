@@ -546,6 +546,7 @@ class OrgRouteHandler
 
         $currentUser = $userDao->getUser(Common\Lib\UserSession::getCurrentUserId());
         $org = $orgDao->getOrganisation($org_id);
+        $memberIsAdmin = array();
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
@@ -747,12 +748,13 @@ class OrgRouteHandler
             }
 
             $org_badges = $orgDao->getOrgBadges($org_id);
-
+            
             if ($orgMemberList) {
                 foreach ($orgMemberList as $orgMember) {
-                    if ($adminDao->isOrgAdmin($org_id, $orgMember->getId())) {
-                        $orgMember['orgAdmin'] = true;
-                    }
+                    //$memberIsAdmin = $adminDao->isOrgAdmin($org_id, $orgMember->getId());
+                    $memberIsAdmin[$orgMember->getId()] = $adminDao->isOrgAdmin($org_id, $orgMember->getId());
+                    //$array[] = array("member" => $orgMember, "isAdmin" => $memberIsAdmin);
+                    //$orgMember['orgAdmin'] = true;
                 }
             }
         }
@@ -764,6 +766,7 @@ class OrgRouteHandler
                 'isMember'  => $isMember,
                 'orgMembers' => $orgMemberList,
                 'adminAccess' => $adminAccess,
+                'memberIsAdmin' => $memberIsAdmin,
                 "org_badges" => $org_badges,
                 'siteName' => $siteName,
                 "membershipRequestUsers" => $user_list,

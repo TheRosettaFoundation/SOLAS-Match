@@ -49,8 +49,8 @@
                     </p>
                     <p>
                     <strong>{Localisation::getTranslation('common_home_page')}</strong><br/>
-                    {if $org->getHomePage() != "http://" && $org->getHomePage() != ''}
-                        <a target="_blank" href="{$org->getHomePage()}">{$org->getHomePage()}</a>
+                    {if $org->getHomepage() != "http://" && $org->getHomepage() != ''}
+                        <a target="_blank" href="{$org->getHomepage()}">{$org->getHomepage()}</a>
                     {else}
                         {Localisation::getTranslation('org_public_profile_no_home_page_listed')}
                     {/if}

@@ -69,7 +69,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    {mailto address={$this_user->getEMail()} encode='hex' text={$this_user->getEMail()}}
+                                    {mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}
                                 </td>
                             </tr>
                         {/if}
@@ -437,8 +437,8 @@
                     </p>
                     <p>
                     <strong>{Localisation::getTranslation('common_home_page')}</strong><br/>
-                    {if $org->getHomePage() != "http://"}
-                        <a target="_blank" href="{$org->getHomePage()}">{$org->getHomePage()}</a>
+                    {if $org->getHomepage() != "http://"}
+                        <a target="_blank" href="{$org->getHomepage()}">{$org->getHomepage()}</a>
                     {else}
                         {Localisation::getTranslation('org_public_profile_no_home_page_listed')}
                     {/if}
