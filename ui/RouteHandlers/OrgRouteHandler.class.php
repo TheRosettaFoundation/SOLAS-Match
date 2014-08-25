@@ -121,7 +121,7 @@ class OrgRouteHandler
             if (isset($post["homepage"])) {
                 if (trim($post["homepage"])!="") {
                     if (Lib\Validator::validateURL($post["homepage"])) {
-                        $org->setHomePage($post["homepage"]);
+                        $org->setHomepage($post["homepage"]);
                     } else {
                         $errorOccured = true;
                         array_push($errorList, Lib\Localisation::getTranslation('common_invalid_url'));

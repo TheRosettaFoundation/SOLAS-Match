@@ -242,7 +242,7 @@ class PDOWrapper
     
     public static function cleanseNullOrWrapStr($str)
     {
-        return (!$str) ? 'NULL' : PDOWrapper::cleanseWrapStr($str);
+        return (is_null($str) || trim($str) == "") ? 'NULL' : PDOWrapper::cleanseWrapStr($str);
     }
     
     private function showSQL($q)
