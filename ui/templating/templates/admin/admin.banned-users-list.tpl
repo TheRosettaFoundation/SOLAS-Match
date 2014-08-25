@@ -14,10 +14,14 @@
             {foreach $bannedUserList as $bannedUser}
                 <tr>
                     <td>                
-                        <a href="{urlFor name="user-public-profile" options="user_id.{$bannedUser->getUserId()}"}">{$bannedUser['user']->getDisplayName()}</a>
+                        <a href="{urlFor name="user-public-profile" options="user_id.{$bannedUser->getUserId()}"}">
+                            {$bannedUserNames[$bannedUser->getUserId()]}
+                        </a>
                     </td>
                     <td>                
-                        <a href="{urlFor name="user-public-profile" options="user_id.{$bannedUser->getUserIdAdmin()}"}">{$bannedUser['adminUser']->getDisplayName()}</a>
+                        <a href="{urlFor name="user-public-profile" options="user_id.{$bannedUser->getUserIdAdmin()}"}">
+                            {$bannedUserAdminNames[$bannedUser->getUserId()]}
+                        </a>
                     </td>
                     <td>
                         {if $bannedUser->getBanType() == BanTypeEnum::DAY}

@@ -429,7 +429,7 @@ class OrgRouteHandler
                 if (isset($post['homepage'])) {
                     if (trim($post["homepage"])!="") {
                         if (Lib\Validator::validateURL($post["homepage"])) {
-                            $org->setHomePage($post["homepage"]);
+                            $org->setHomepage($post["homepage"]);
                         } else {
                             $errorOccured = true;
                             array_push($errorList, Lib\Localisation::getTranslation('common_invalid_url'));
@@ -751,10 +751,7 @@ class OrgRouteHandler
             
             if ($orgMemberList) {
                 foreach ($orgMemberList as $orgMember) {
-                    //$memberIsAdmin = $adminDao->isOrgAdmin($org_id, $orgMember->getId());
                     $memberIsAdmin[$orgMember->getId()] = $adminDao->isOrgAdmin($org_id, $orgMember->getId());
-                    //$array[] = array("member" => $orgMember, "isAdmin" => $memberIsAdmin);
-                    //$orgMember['orgAdmin'] = true;
                 }
             }
         }

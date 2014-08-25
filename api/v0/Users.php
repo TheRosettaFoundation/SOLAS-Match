@@ -1090,8 +1090,8 @@ class Users
             $oAuthToken->setExpiresIn($accessToken['expires_in']);
 
             $user = DAO\UserDao::getLoggedInUser($accessToken['access_token']);
-            $user->setPassword(null);
-            $user->setNonce(null);
+            $user->setPassword("");
+            $user->setNonce("");
 
             DAO\UserDao::logLoginAttempt($user->getId(), $user->getEmail(), 1);
 
