@@ -82,7 +82,7 @@ class TaskDao extends BaseDao
         $request = "{$this->siteApi}v0/tasks/$taskId/info";
         $args = array("version" => $version);
         $response = $this->client->call(
-            "\SolasMatch\Common\Protobufs\Models\TaskMetaData",
+            "\SolasMatch\Common\Protobufs\Models\TaskMetadata",
             $request,
             Common\Enums\HttpMethodEnum::GET,
             null,

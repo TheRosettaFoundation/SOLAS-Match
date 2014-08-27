@@ -29,7 +29,7 @@
         {Localisation::getTranslation('common_to')} <strong>{TemplateHelper::getLanguageAndCountry($task->getTargetLocale())}</strong>
     </p>
 
-    {assign var="taskTags" value=$task['Project']->getTagList()}
+    {assign var="taskTags" value=$task['Project']->getTag()}
     {if !empty($taskTags)}
         <p>
             {Localisation::getTranslation('common_tags')}

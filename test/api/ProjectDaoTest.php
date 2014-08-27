@@ -51,7 +51,7 @@ class ProjectDaoTest extends \PHPUnit_Framework_TestCase
             $insertedProject->getSourceLocale()->getCountryCode()
         );
         
-        $projectTags = $insertedProject->getTagList();
+        $projectTags = $insertedProject->getTag();
         $this->assertCount(2, $projectTags);
         foreach ($projectTags as $tag) {
             $this->assertInstanceOf(UnitTestHelper::PROTO_TAG, $tag);

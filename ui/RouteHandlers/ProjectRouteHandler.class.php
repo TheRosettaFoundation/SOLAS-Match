@@ -421,7 +421,7 @@ class ProjectRouteHandler
         $languages = Lib\TemplateHelper::getLanguageList();
         $countries = Lib\TemplateHelper::getCountryList();
         
-        $tags = $project->getTagList();
+        $tags = $project->getTag();
         $tag_list = "";
         if ($tags != null) {
             foreach ($tags as $tag) {
