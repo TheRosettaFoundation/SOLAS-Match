@@ -328,7 +328,7 @@ class IO
         if ($graph) {
             $index = $graphBuilder->find($task->getId(), $graph);
             $taskNode = $graph->getAllNodes($index);
-            foreach ($taskNode->getNextList() as $nextTaskId) {
+            foreach ($taskNode->getNext() as $nextTaskId) {
                 $result = DAO\TaskDao::getTasks($nextTaskId);
                 $nextTask = $result[0];
                 self::uploadFile($nextTask, $convert, $file, 0, $userId, $filename);

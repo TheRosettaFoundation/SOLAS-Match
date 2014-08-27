@@ -95,5 +95,20 @@ class WorkflowGraph extends \ProtocolBuffers\Message
     }
     return $descriptor;
   }
+  
+  public function clearRootNode()
+  {
+      $this->rootNode = array();
+  }
+  
+  public function setAllNodes(\SolasMatch\Common\Protobufs\Models\WorkflowNode $node, $index)
+  {
+      $this->allNodes[$index] = $node;
+  }
+  
+  public function hasRootNode()
+  {
+      return count($this->rootNode) > 0;
+  }
 
 }

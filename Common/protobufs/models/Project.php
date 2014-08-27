@@ -305,5 +305,10 @@ class Project extends \ProtocolBuffers\Message
     }
     return $descriptor;
   }
+  
+  public function clearTag()
+  {
+      $this->tag = array();
+  }
 
 }

@@ -563,7 +563,7 @@ class OrgRouteHandler
                     $badge->setId($post['badge_id']);
                     $badge->setTitle($post['title']);
                     $badge->setDescription($post['description']);
-                    $badge->setOwnerId(null);
+                    $badge->setOwnerId("");
                     $badgeDao->updateBadge($badge);
                     $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org_id)));
                 }

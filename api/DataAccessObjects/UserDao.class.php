@@ -59,7 +59,7 @@ class UserDao
         $userId = $user->getId();
         $nativeLanguageCode = null;
         $nativeCountryCode = null;
-        if (!is_null($userId) && $user->hasNativeLocale()) {
+        if (!is_null($userId) && !is_null($user->getNativeLocale())) {
             $nativeLocale = $user->getNativeLocale();
             $nativeLanguageCode = $nativeLocale->getLanguageCode();
             $nativeCountryCode = $nativeLocale->getCountryCode();
@@ -464,6 +464,7 @@ class UserDao
                 $ret[] = Common\Lib\ModelFactory::buildModel("User", $row);
             }
         }
+        
         return $ret;
     }
 

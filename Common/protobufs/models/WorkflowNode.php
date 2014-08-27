@@ -113,5 +113,10 @@ class WorkflowNode extends \ProtocolBuffers\Message
     }
     return $descriptor;
   }
+  
+  public function hasTask()
+  {
+      return $this->task != null;
+  }
 
 }

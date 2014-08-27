@@ -294,6 +294,7 @@ class TaskDao
             Lib\PDOWrapper::cleanseNull($task->getTaskStatus()).",".
             Lib\PDOWrapper::cleanseNull($task->getPublished());
         $result = Lib\PDOWrapper::call("taskInsertAndUpdate", $args);
+        error_log("LOGGING TASK INSERT ARGS... ".$args);
         if ($result) {
             $task = Common\Lib\ModelFactory::buildModel("Task", $result[0]);
         } else {
@@ -567,14 +568,14 @@ class TaskDao
     {
         $ret = true;
         $task = self::getTasks($node->getTaskId());
-        $dependantNodes = $node->getNextList();
+        $dependantNodes = $node->getNext();
         if (count($dependantNodes) > 0) {
             $builder = new Lib\APIWorkflowBuilder();
             foreach ($dependantNodes as $dependantId) {
                 $dTask = self::getTasks($dependantId);
                 $index = $builder->find($dependantId, $graph);
                 $dependant = $graph->getAllNodes($index);
-                $preReqs = $dependant->getPreviousList();
+                $preReqs = $dependant->getPrevious();
                 if ((count($preReqs) == 2 && $dTask->getTaskType() == Common\Enums\TaskTypeEnum::DESEGMENTATION) ||
                         count($preReqs) == 1) {
                     $ret = $ret && (self::archiveTaskNode($dependant, $graph, $userId));

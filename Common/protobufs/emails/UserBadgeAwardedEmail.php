@@ -1,6 +1,8 @@
 <?php
 namespace SolasMatch\Common\Protobufs\Emails;
 
+require_once __DIR__.'/EmailMessage/Type.php';
+
 // @@protoc_insertion_point(namespace:.SolasMatch.Common.Protobufs.Emails.UserBadgeAwardedEmail)
 
 /**

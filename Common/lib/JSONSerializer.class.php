@@ -18,7 +18,6 @@ class JSONSerializer extends Serializer
         $ret = null;
         if (is_object($data)) {
             $ret = json_encode($data);
-            //$ret = $data->jsonSerialize();
             //if the data is an associative array just json_encode it.
         } elseif (is_array($data)) {
             if ($this->isAssocArr($data)) {
@@ -55,17 +54,13 @@ class JSONSerializer extends Serializer
             error_log("Logging \"type\" info in deserialize()");
             error_log($blah);
             error_log(" {****** JSON DECODED *** ");
-            $temp=print_r($ret,true);
+            $temp = print_r($ret,true);
             error_log($temp);
             error_log(" ****** JSON DECODED *** }");
-            //error_log("COUNT OF GET ITEM ".count($ret->getItem()));
-            foreach ($ret["item"] as $val) {
-                error_log("+_+_+_)+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+".$val);
-                //$fooPrint = print_r($item, true);
-                //error_log($val." ---> type = ".$type[0]);
+            foreach ($ret["item"] as $item) {
                 $current = new $type[0];
                 
-                $arr = json_decode($val, true);
+                $arr = json_decode($item, true);
                 $current = ModelFactory::buildModel(self::stripNamespace($type[0]), $arr);
                 $result[] = $current;
             }
@@ -73,16 +68,22 @@ class JSONSerializer extends Serializer
             $current = new $type;
             
             $arr = json_decode($data, true);
-            error_log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             error_log("Logging 'data' in deserialize()...");
             error_log($data);
             $errorVar = print_r($arr, true);
-            $arr1 = self::array_flatten($arr, array());
+            $bareType = self::stripNamespace($type);
+            if ($bareType == 'Task' || $bareType == 'WorkflowGraph') {
+                $current = ModelFactory::buildModel($bareType, $arr);
+            } else {
+                $arr1 = self::array_flatten($arr, array());
+                error_log("LOGGING array_flatten result...");
+                $errorVar2 = print_r($arr1, true);
+                error_log($errorVar2);
+                $current = ModelFactory::buildModel($bareType, $arr1);
+            }
             error_log("Logging array in deserialize()...");
             error_log($errorVar);
-            error_log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             
-            $current = ModelFactory::buildModel(self::stripNamespace($type), $arr1);
             $result = $current;
         }
         return $result;
@@ -102,11 +103,6 @@ class JSONSerializer extends Serializer
             } else {
                 $return = array_merge($return, self::array_flatten($val));
             }
-            /* if (is_array($item)) {
-                $return = array_flatten($item, $return);
-            } else if(isset($item)) {
-                $return[] = $item;
-            } */
         }
         return $return;
     }
@@ -117,7 +113,7 @@ class JSONSerializer extends Serializer
      */
     private function isAssocArr($array)
     {
-        return (bool)count(array_filter(array_keys($array), 'is_string'));
+        return (bool) count(array_filter(array_keys($array), 'is_string'));
     }
     
     private static function stripNamespace($classString)

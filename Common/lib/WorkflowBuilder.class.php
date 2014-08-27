@@ -41,7 +41,7 @@ abstract class WorkflowBuilder
     public function find($taskId, $graph)
     {
         $ret = false;
-        $allNodes = $graph->getAllNodesList();
+        $allNodes = $graph->getAllNodes();
         $i = 0;
         while ($i < count($allNodes) && $ret === false) {
             if ($taskId == $allNodes[$i]->getTaskId()) {
@@ -74,7 +74,7 @@ abstract class WorkflowBuilder
         }
 
         if ($graph->hasRootNode()) {
-            $previousLayer = $graph->getRootNodeList();    //array to hold previous layer's ids
+            $previousLayer = $graph->getRootNode();    //array to hold previous layer's ids
             $currentLayer = array();
                 
             while (count($graphArray) > 0 && count($previousLayer) > 0) {
@@ -96,11 +96,11 @@ abstract class WorkflowBuilder
 
                             foreach ($previousLayer as $pId) {
                                 if (in_array($pId, $satisfiedPreReqs)) {
-                                    $node->addPrevious($pId);
+                                    $node->appendPrevious($pId);
 
                                     $index = $this->find($pId, $graph);
                                     $pNode = $graph->getAllNodes($index);
-                                    $pNode->addNext($taskId);
+                                    $pNode->appendNext($taskId);
                                     $this->updateNode($pNode, $graph);
                                 }
                             }
@@ -133,10 +133,10 @@ abstract class WorkflowBuilder
         $ret = false;
         $index = $this->find($node->getTaskId(), $graph);
         if ($index === false) {
-            if (count($node->getPreviousList()) == 0) {
-                $graph->addRootNode($node->getTaskId());
+            if (count($node->getPrevious()) == 0) {
+                $graph->appendRootNode($node->getTaskId());
             }
-            $graph->addAllNodes($node);
+            $graph->appendAllNodes($node);
             $ret = true;
         }
         return $ret;
@@ -147,17 +147,17 @@ abstract class WorkflowBuilder
         $ret = false;
         $index = $this->find($node->getTaskId(), $graph);
         if ($index !== false) {
-            if (count($node->getPreviousList()) == 0) {
-                if (!in_array($node->getTaskId(), $graph->getRootNodeList())) {
-                    $graph->addRootNode($node->getTaskId());
+            if (count($node->getPrevious()) == 0) {
+                if (!in_array($node->getTaskId(), $graph->getRootNode())) {
+                    $graph->appendRootNode($node->getTaskId());
                 }
             } else {
-                if (in_array($node->getTaskId(), $graph->getRootNodeList())) {
-                    $roots = $graph->getRootNodeList();
+                if (in_array($node->getTaskId(), $graph->getRootNode())) {
+                    $roots = $graph->getRootNode();
                     $graph->clearRootNode();
                     foreach ($roots as $rootId) {
                         if ($rootId != $node->getTaskId()) {
-                            $graph->addRootNode($rootId);
+                            $graph->appendRootNode($rootId);
                         }
                     }
                 }
@@ -172,7 +172,7 @@ abstract class WorkflowBuilder
     public function printGraph($graph)
     {
         if ($graph && $graph->hasRootNode()) {
-            $currentLayer = $graph->getRootNodeList();
+            $currentLayer = $graph->getRootNode();
             $nextLayer = array();
 
             echo "<table>";
@@ -185,7 +185,7 @@ abstract class WorkflowBuilder
                     $this->printNode($node);
                     echo "</td>";
     
-                    foreach ($node->getNextList() as $nextId) {
+                    foreach ($node->getNext() as $nextId) {
                         if (!in_array($nextId, $nextLayer)) {
                             $nextLayer[] = $nextId;
                         }
@@ -207,12 +207,12 @@ abstract class WorkflowBuilder
             echo "<p>Node: {$node->getTaskId()}</p>";
         }
         echo "<p>IN: [";
-        foreach ($node->getPreviousList() as $prevId) {
+        foreach ($node->getPrevious() as $prevId) {
             echo $prevId.", ";
         }
         echo "]</p>";
         echo "<p>OUT: [";
-        foreach ($node->getNextList() as $nextId) {
+        foreach ($node->getNext() as $nextId) {
             echo $nextId.", ";
         }
         echo "]</p>";

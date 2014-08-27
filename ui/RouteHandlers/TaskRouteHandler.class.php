@@ -526,7 +526,7 @@ class TaskRouteHandler
         $node = $graph->getAllNodes($index);
 
         if ($node) {
-            foreach ($node->getPreviousList() as $nodeId) {
+            foreach ($node->getPrevious() as $nodeId) {
                 $pTask = $taskDao->getTask($nodeId);
                 if (is_object($pTask)) {
                     $preReqTasks[] = $pTask;
@@ -810,7 +810,7 @@ class TaskRouteHandler
                     $index = $graphBuilder->find($task->getId(), $graph);
                     $node = $graph->getAllNodes($index);
                     $selectedList = array();
-                    foreach ($node->getPreviousList() as $prevId) {
+                    foreach ($node->getPrevious() as $prevId) {
                         $selectedList[] = $prevId;
                     }
 
@@ -848,7 +848,7 @@ class TaskRouteHandler
             $index = $graphBuilder->find($task_id, $graph);
             $node = $graph->getAllNodes($index);
 
-            $currentRow = $node->getPreviousList();
+            $currentRow = $node->getPrevious();
             $previousRow = array();
 
             while (count($currentRow) > 0) {
@@ -857,7 +857,7 @@ class TaskRouteHandler
                     $node = $graph->getAllNodes($index);
                     $tasksEnabled[$node->getTaskId()] = false;
 
-                    foreach ($node->getPreviousList() as $prevIndex) {
+                    foreach ($node->getPrevious() as $prevIndex) {
                         if (!in_array($prevIndex, $previousRow)) {
                             $previousRow[] = $prevIndex;
                         }

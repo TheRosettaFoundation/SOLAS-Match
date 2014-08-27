@@ -115,6 +115,9 @@ class ModelFactory
             case "OAuthResponse":
                 $ret = self::generateOAuthResponse($modelData);
                 break;
+            case "WorkflowGraph" :
+                $ret = self::generateWorkflowGraph($modelData);
+                break;
             default:
                 echo "Unable to build model $modelName";
         }
@@ -292,8 +295,8 @@ class ModelFactory
         if (isset($modelData['code'])) {
             $ret->setCode($modelData['code']);
         }
-        if (isset($modelData['country'])) {
-            $ret->setName($modelData['country']);
+        if (isset($modelData['name'])) {
+            $ret->setName($modelData['name']);
         }
 
         return $ret;
@@ -475,6 +478,10 @@ class ModelFactory
             $ret->setNativeLocale($locale);
         }
         
+        if (isset($modelData['nativeLocale'])) {
+            $ret->setNativeLocale($modelData['nativeLocale']);
+        }
+        
         if (isset($modelData['created_time'])) {
             $ret->setCreatedTime($modelData['created_time']);
         }
@@ -549,8 +556,6 @@ class ModelFactory
             $sourceLocale->setCountryCode($modelData['sourceCountryCode']);
         }
         
-        $ret->setSourceLocale($sourceLocale);
-        
         if (isset($modelData['targetLanguageName'])) {
             $targetLocale->setLanguageName($modelData['targetLanguageName']);
         }
@@ -563,7 +568,20 @@ class ModelFactory
         if (isset($modelData['targetCountryCode'])) {
             $targetLocale->setCountryCode($modelData['targetCountryCode']);
         }
+        
+        //The following two if statements should only end up having their code executed if the previous 8,
+        // isset($modelData['sourceLanguageName'], etc do not. The locale data should be set on the model
+        //in the latter form when coming from the database and in the following form when coming from
+        //some other places (i.e. sourceLocale and targetLocale existed as nested arrays in $modelData).
+        if (isset($modelData['sourceLocale'])) {
+            $sourceLocale = self::generateLocale($modelData['sourceLocale']);
+        }
+        
+        if (isset($modelData['targetLocale'])) {
+            $targetLocale = self::generateLocale($modelData['targetLocale']);
+        }
 
+        $ret->setSourceLocale($sourceLocale);
         $ret->setTargetLocale($targetLocale);
         
         if (isset($modelData['taskType'])) {
@@ -640,24 +658,24 @@ class ModelFactory
         if (isset($modelData['wordCount'])) {
             $ret->setWordCount($modelData['wordCount']);
         }
-        if (isset($modelData['created'])) {
-            $ret->setCreatedTime($modelData['created']);
+        if (isset($modelData['createdTime'])) {
+            $ret->setCreatedTime($modelData['createdTime']);
         }
         if (isset($modelData['status'])) {
             $ret->setStatus($modelData['status']);
         }
         
-        if (isset($modelData['sourceLanguageName'])) {
-            $sourceLocale->setLanguageName($modelData['sourceLanguageName']);
+        if (isset($modelData['languageName'])) {
+            $sourceLocale->setLanguageName($modelData['languageName']);
         }
-        if (isset($modelData['sourceLanguageCode'])) {
-            $sourceLocale->setLanguageCode($modelData['sourceLanguageCode']);
+        if (isset($modelData['languageCode'])) {
+            $sourceLocale->setLanguageCode($modelData['languageCode']);
         }
-        if (isset($modelData['sourceCountryName'])) {
-            $sourceLocale->setCountryName($modelData['sourceCountryName']);
+        if (isset($modelData['countryName'])) {
+            $sourceLocale->setCountryName($modelData['countryName']);
         }
-        if (isset($modelData['sourceCountryCode'])) {
-            $sourceLocale->setCountryCode($modelData['sourceCountryCode']);
+        if (isset($modelData['countryCode'])) {
+            $sourceLocale->setCountryCode($modelData['countryCode']);
         }
 
         $ret->setSourceLocale($sourceLocale);
@@ -922,6 +940,59 @@ class ModelFactory
         
         if (isset($modelData['expires_in'])) {
             $ret->setExpiresIn($modelData['expires_in']);
+        }
+        
+        return $ret;
+    }
+    
+    private static function generateWorkflowGraph($modelData)
+    {
+        
+        $ret = new Models\WorkflowGraph();
+        
+        if (isset($modelData['projectId'])) {
+            $ret->setProjectId($modelData['projectId']);
+        }
+        
+        if (isset($modelData['allNodes'])) {
+            
+            foreach ($modelData['allNodes'] as $aNode) {
+                $ret->appendAllNodes(self::generateWorkflowNode($aNode));
+            }
+        }
+        
+        if (isset($modelData['rootNode'])) {
+            
+            foreach ($modelData['rootNode'] as $rootNodePart) {
+                $ret->appendRootNode($rootNodePart);
+            }
+        }
+        
+        return $ret;
+    }
+    
+    private static function generateWorkflowNode($modelData)
+    {
+        $ret = new Models\WorkflowNode();
+        
+        if (isset($modelData['taskId'])) {
+            $ret->setTaskId($modelData['taskId']);
+        }
+        
+        if (isset($modelData['task'])) {
+            $ret->setTask(self::generateTask($modelData['task']));
+        }
+        
+        if (isset($modelData['previous'])) {
+            foreach ($modelData['previous'] as $prev) {
+                $ret->appendPrevious($prev);
+            }
+        }
+        
+        if (isset($modelData['next'])) {
+            foreach ($modelData['next'] as $next) {
+                $ret->appendNext($next);
+            }
         }
         
         return $ret;

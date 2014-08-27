@@ -33,9 +33,9 @@ class ProjectDao
     */
     public static function save($project)
     {
-        $tagList = $project->getTagList();
+        $tagList = $project->getTag(); //Get the project's tags.
         $sourceLocale = $project->getSourceLocale();
-        $args = Lib\PDOWrapper::cleanseNull($project->getId()).",".
+        $args = Lib\PDOWrapper::cleanseNullOrWrapStr($project->getId()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($project->getTitle()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($project->getDescription()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($project->getImpact()).",".
@@ -56,10 +56,11 @@ class ProjectDao
 
         TagsDao::updateTags($project->getId(), $tagList);
         $project->clearTag();
+        
         $projectTags = self::getTags($project->getId());
         if ($projectTags) {
             foreach ($projectTags as $tag) {
-                $project->addTag($tag);
+                $project->appendTag($tag);
             }
         }
         

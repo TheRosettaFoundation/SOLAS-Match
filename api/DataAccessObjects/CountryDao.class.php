@@ -13,10 +13,11 @@ class CountryDao
     {
         $result = Lib\PDOWrapper::call(
                 "getCountry",
-                Lib\PDOWrapper::cleanseNUll($id).", ".
+                Lib\PDOWrapper::cleanseNull($id).", ".
                 Lib\PDOWrapper::cleanseNullOrWrapStr($code).", ".
                 Lib\PDOWrapper::cleanseNullOrWrapStr($name)
         );
+        
         return Common\Lib\ModelFactory::buildModel("Country", $result[0]);
     }
     

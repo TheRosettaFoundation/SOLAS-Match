@@ -2160,7 +2160,7 @@ BEGIN
 	if code='' then set code=null;end if;
 	if name='' then set name=null;end if;
 
-	select `en-name` as country, c.code, c.id 
+	select `en-name` as name, c.code, c.id 
 	    from Countries c 
         where isNullOrEqual(c.id,id) 
         and isNullOrEqual(c.code,code) 
@@ -2393,24 +2393,18 @@ BEGIN
     if imageApproved="" then set imageApproved=null; end if;
 
     SELECT id, title, description, impact, deadline,organisation_id as organisationId,reference,`word-count` as wordCount, created,
-
-        (select `en-name` from Languages l where l.id = p.`language_id`) as `sourceLanguageName`, 
-        (select code from Languages l where l.id = p.`language_id`) as `sourceLanguageCode`, 
-        (select `en-name` from Languages l where l.id = p.`language_id`) as `targetLanguageName`, 
-        (select code from Languages l where l.id = p.`language_id`) as `targetLanguageCode`, 
-        (select `en-name` from Countries c where c.id = p.`country_id`) as `sourceCountryName`, 
-        (select code from Countries c where c.id = p.`country_id`) as `sourceCountryCode`, 
-        (select `en-name` from Countries c where c.id = p.`country_id`) as `targetCountryName`, 
-        (select code from Countries c where c.id = p.`country_id`) as `targetCountryCode`, 
-        (select sum(tsk.`task-status_id`) / (count(tsk.`task-status_id`) *4) 
-
-    from Tasks tsk where tsk.project_id = p.id) as 'status', image_uploaded as imageUploaded, image_approved as imageApproved FROM Projects p
+        (select `en-name` from Languages l where l.id = p.`language_id`) as `languageName`, 
+        (select code from Languages l where l.id = p.`language_id`) as `languageCode`, 
+        (select `en-name` from Countries c where c.id = p.`country_id`) as `countryName`, 
+        (select code from Countries c where c.id = p.`country_id`) as `countryCode`, 
+        (select sum(tsk.`task-status_id`) / (count(tsk.`task-status_id`) *4) FROM Tasks tsk where tsk.project_id = p.id) as 'status',
+        image_uploaded as imageUploaded, image_approved as imageApproved FROM Projects p
     
     WHERE (projectId is null or p.id = projectId)
         AND (titleText is null or p.title = titleText)
         AND (descr is null or p.description = descr)
         AND (impactText is null or p.impact = impactText)
-        AND (deadlineTime is null or deadlineTime = '0000-00-00 00:00:00' or  p.deadline = deadlineTime)
+        AND (deadlineTime is null or deadlineTime = '0000-00-00 00:00:00' or p.deadline = deadlineTime)
         AND (orgId is null or p.organisation_id = orgId)
         AND (ref is null or p.reference = ref)
         AND (wordCount is null or p.`word-count`= wordCount)
@@ -2454,7 +2448,7 @@ BEGIN
     if mime='' then set mime=null;end if;
    
 
-    SELECT p.project_id as projectId, p.userId as userId, p.filename, p.`file-token` as token, p.`mime-type` as mime 
+    SELECT p.project_id as projectId, p.user_id as userId, p.filename, p.`file-token` as token, p.`mime-type` as mime 
         FROM ProjectFiles p 
         WHERE (pID is null or p.project_id = pID)
         and (uID is null or p.user_id = uID)
@@ -3098,7 +3092,7 @@ BEGIN
         (select `en-name` from Countries c where c.id = u.`country_id`) as `countryName`,
         (select code from Countries c where c.id = u.`country_id`) as `countryCode`,
         nonce, `created-time` as created_time
-	    FROM Users JOIN UserBadges ON Users.id = UserBadges.user_id
+	    FROM Users u JOIN UserBadges ON u.id = UserBadges.user_id
     	WHERE badge_id = bID;
 END//
 DELIMITER ;
