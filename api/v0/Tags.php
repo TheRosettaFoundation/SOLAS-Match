@@ -157,7 +157,7 @@ class Tags
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper($format);
         $data=$client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Tag");
-        $data->setId(null);
+        $data->setId("");
         API\Dispatcher::sendResponse(null, DAO\TagsDao::save($data), null, $format);
     }
 }

@@ -126,7 +126,7 @@ class Upload
                 Common\Lib\Settings::get(
                     "files.upload_path"
                 )
-                ."proj-$projectId/task-$id/v-0/{$projectFileInfo->getFileName()}",
+                ."proj-$projectId/task-$id/v-0/{$projectFileInfo->getFilename()}",
                 $projectFile
             );
         }

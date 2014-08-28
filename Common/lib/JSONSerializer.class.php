@@ -74,6 +74,17 @@ class JSONSerializer extends Serializer
             $bareType = self::stripNamespace($type);
             if ($bareType == 'Task' || $bareType == 'WorkflowGraph') {
                 $current = ModelFactory::buildModel($bareType, $arr);
+            } else if ($bareType == 'Project') {
+                if (isset($arr['tag'])) {
+                    $projTags = $arr['tag'];
+                    unset($arr['tag']);
+                    $arr = self::array_flatten($arr);
+                    $arr['tag'] = $projTags; 
+                    $current = ModelFactory::buildModel($bareType, $arr);
+                } else {
+                    $arr = self::array_flatten($arr);
+                    $current = ModelFactory::buildModel($bareType, $arr);
+                }
             } else {
                 $arr1 = self::array_flatten($arr, array());
                 error_log("LOGGING array_flatten result...");

@@ -23,7 +23,7 @@ class ProjectDao extends BaseDao
             $ret = $this->client->call("\SolasMatch\Common\Protobufs\Models\Project", $request);
             if ($tags = $this->getProjectTags($id)) {
                 foreach ($tags as $tag) {
-                    $ret->addTag($tag);
+                    $ret->appendTag($tag);
                 }
             }
         }

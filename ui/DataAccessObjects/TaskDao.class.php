@@ -223,7 +223,7 @@ class TaskDao extends BaseDao
                 $taskDao = new TaskDao();
                 $task = $taskDao->getTask($taskId);
                 $projectFile = $projectDao->getProjectFileInfo($task->getProjectId());
-                $projectFileName = $projectFile->getFileName();
+                $projectFileName = $projectFile->getFilename();
                 $projectFileExtension = explode(".", $projectFileName);
                 $projectFileExtension = $projectFileExtension[count($projectFileExtension)-1];
                 $projectMime = $projectFile->getMime();

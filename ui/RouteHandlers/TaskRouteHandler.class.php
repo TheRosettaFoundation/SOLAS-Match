@@ -1224,7 +1224,7 @@ class TaskRouteHandler
             $post = $app->request()->post();
             
             $fileInfo = $projectDao->getProjectFileInfo($project->getId());
-            $canonicalExtension = explode(".", $fileInfo->getFileName());
+            $canonicalExtension = explode(".", $fileInfo->getFilename());
             $canonicalExtension = strtolower($canonicalExtension[count($canonicalExtension)-1]);
             
             $errors = array();
@@ -1586,14 +1586,15 @@ class TaskRouteHandler
                 }
             }
 
-            $dummyTask = new Common\Protobufs\Models\Task();        //Create a dummy task to hold the project info
+            $dummyTask = new Common\Protobufs\Models\Task(); //Create a dummy task to hold the project info
             $dummyTask->setProjectId($task->getProjectId());
             $dummyTask->setTitle($project->getTitle());
             $preReqTasks = array();
             $preReqTasks[] = $dummyTask;
         } else {
             foreach ($preReqTasks as $pTask) {
-                if ($taskReview = $userDao->getUserTaskReviews($userId, $pTask->getId())) {
+                $taskReview = $userDao->getUserTaskReviews($userId, $pTask->getId());
+                if ($taskReview) {
                     $reviews[$pTask->getId()] = $taskReview;
                 }
             }
@@ -1613,15 +1614,18 @@ class TaskRouteHandler
                     $pTask = $preReqTasks[$i++];
                     $review = new Common\Protobufs\Models\TaskReview();
                     $id = $pTask->getId();
+                    
 
                     $review->setUserId($userId);
-                    $review->setTaskId($id);
+                    if (!is_null($id)) { 
+                        $review->setTaskId($id);   
+                    }
                     $review->setProjectId($pTask->getProjectId());
 
                     if (is_null($id)) {
                         $id = $pTask->getProjectId();
                     }
-
+                    
                     if (isset($post["corrections_$id"]) && ctype_digit($post["corrections_$id"])) {
                         $value = intval($post["corrections_$id"]);
                         if ($value > 0 && $value <= 5) {
@@ -1659,7 +1663,8 @@ class TaskRouteHandler
                     }
 
                     if ($review->getProjectId() != null && $review->getUserId() != null && $error == null) {
-                        if (!$taskDao->submitReview($review)) {
+                        $submitResult = $taskDao->submitReview($review);
+                        if (!$submitResult) {
                             $error = sprintf(Lib\Localisation::getTranslation('task_review_9'), $pTask->getTitle());
                         }
                     } else {

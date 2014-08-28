@@ -687,6 +687,13 @@ class ModelFactory
         if (isset($modelData['imageApproved'])) {
             $ret->setImageApproved($modelData['imageApproved']  == "\x01" ? 1 : 0);
         }
+        
+        if (isset($modelData['tag'])) {
+            foreach ($modelData['tag'] as $tag) {
+                $builtTag = self::generateTag($tag);
+                $ret->appendTag($builtTag);
+            }
+        }
 
         return $ret;
     }
