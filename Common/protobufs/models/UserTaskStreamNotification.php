@@ -113,4 +113,8 @@ class UserTaskStreamNotification extends \ProtocolBuffers\Message
     return $descriptor;
   }
 
+  public function hasStrict()
+  {
+      return $this->strict != null;
+  }
 }

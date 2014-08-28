@@ -73,7 +73,7 @@ class UserDao
         }
 
         $args = Lib\PDOWrapper::cleanseNullOrWrapStr($user->getEmail()).",".
-            Lib\PDOWrapper::cleanseNull($user->getNonce()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($user->getNonce()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($user->getPassword()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($user->getBiography()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($user->getDisplayName()).",".

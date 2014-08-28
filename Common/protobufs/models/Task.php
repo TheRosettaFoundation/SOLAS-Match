@@ -266,5 +266,10 @@ class Task extends \ProtocolBuffers\Message
     }
     return $descriptor;
   }
+  
+  public function hasTargetLocale()
+  {
+      return $this->targetLocale != null;
+  }
 
 }

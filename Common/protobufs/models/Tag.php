@@ -75,4 +75,8 @@ class Tag extends \ProtocolBuffers\Message
     return $descriptor;
   }
 
+  public function hasId()
+  {
+      return $this->id != null;
+  }
 }

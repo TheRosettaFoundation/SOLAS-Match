@@ -2136,7 +2136,7 @@ DROP PROCEDURE IF EXISTS `getCountries`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getCountries`()
 BEGIN
-SELECT  `en-name` as country, code, id FROM Countries order by `en-name`;
+SELECT  `en-name` as name, code, id FROM Countries order by `en-name`;
 END//
 DELIMITER ;
 
@@ -4520,8 +4520,6 @@ BEGIN
 END//
 DELIMITER ;
 
-
--- Dumping structure for procedure Solas-Match-Test.statsUpdateUsers
 DROP PROCEDURE IF EXISTS `submitTaskReview`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `submitTaskReview`(IN projectId INT, IN taskId INT, IN userId INT, IN correction INT, IN gram INT, IN spell INT, IN consis INT, IN comm VARCHAR(2048))
@@ -5212,8 +5210,8 @@ BEGIN
 	if country='' then set country=null;end if;
     if receiveCredit = '' then set receiveCredit = null; end if;
 	
-	select id, user_id as userId, `first-name` as firstName, `last-name` as lastName, `mobile-number` as mobileNumber,
-    `business-number` as businessNumber, `job-title` as jobTitle, address, city, country, receive_credit, `language-preference` as languagePreference 
+	select p.id, p.user_id as userId, p.`first-name` as firstName, p.`last-name` as lastName, p.`mobile-number` as mobileNumber,
+    p.`business-number` as businessNumber, p.`job-title` as jobTitle, p.address, p.city, p.country, p.receive_credit, p.`language-preference` as languagePreference 
     from UserPersonalInformation p 
         
         where (id is null or p.id = id)
