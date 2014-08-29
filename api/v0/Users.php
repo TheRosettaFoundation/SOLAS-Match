@@ -1160,9 +1160,6 @@ class Users
             $server = API\Dispatcher::getOauthServer();
             $response = $server->getGrantType('password')->completeFlow($params);
             $oAuthResponse = new Common\Protobufs\Models\OAuthResponse();
-            error_log("Logging 'response' in login API function");
-            $blah = print_r($response, true);
-            error_log($blah);
             $oAuthResponse->setToken($response['access_token']);
             $oAuthResponse->setTokenType($response['token_type']);
             $oAuthResponse->setExpires($response['expires']);
@@ -1227,9 +1224,6 @@ class Users
             $userId = $userId[0];
         }
         $data = DAO\UserDao::getUser($userId);
-        error_log("Logging user data in getUser...");
-        $foo = print_r($data, true);
-        error_log($foo);
         if (!is_null($data)) {
             $data->setPassword("");
             $data->setNonce("");
@@ -1270,7 +1264,6 @@ class Users
     
     public static function getBannedComment($email, $format = ".json")
     {
-        //$data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper($format);
         
         $user = DAO\UserDao::getUser(null, $email);

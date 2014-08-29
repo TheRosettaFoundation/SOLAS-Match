@@ -332,9 +332,6 @@ class ModelFactory
 
     private static function generateLogin($modelData)
     {
-        error_log("Logging Login modeldata...");
-        $foo = print_r($modelData, true);
-        error_log($foo);
         $ret = new Models\Login();
 
         if (isset($modelData['email'])) {
@@ -395,7 +392,6 @@ class ModelFactory
             $ret->setBiography($modelData['biography']);
         }
         if (isset($modelData['homepage'])) {
-            error_log($modelData['homepage']);
             $ret->setHomepage($modelData['homepage']);
         }
         if (isset($modelData['email'])) {
@@ -483,9 +479,6 @@ class ModelFactory
         }
         if (isset($modelData['languageName']) && isset($modelData['languageCode']) &&
                 (isset($modelData['countryName'])) && isset($modelData['countryCode'])) {
-            /* //error_log("Logging user's native locale..");
-            $blah = print_r($locale, true);
-            error_log($blah); */
             $ret->setNativeLocale($locale);
         }
         
@@ -496,9 +489,6 @@ class ModelFactory
         if (isset($modelData['created_time'])) {
             $ret->setCreatedTime($modelData['created_time']);
         }
-        /* error_log("Logging ret of generateUser...");
-        $avar = print_r($ret, true);
-        error_log($avar); */
         return $ret;
     }
 

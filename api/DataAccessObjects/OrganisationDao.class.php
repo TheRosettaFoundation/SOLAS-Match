@@ -58,9 +58,6 @@ class OrganisationDao
 
             $result = Lib\PDOWrapper::call("getOrg", $args);
             if (is_array($result)) {
-                $foo = print_r($result[0], true);
-                error_log("Logging result[0] in getOrg...");
-                error_log($foo);
                 $org = Common\Lib\ModelFactory::buildModel("Organisation", $result[0]);
             }
         }
