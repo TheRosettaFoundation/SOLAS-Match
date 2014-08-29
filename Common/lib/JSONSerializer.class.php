@@ -72,7 +72,7 @@ class JSONSerializer extends Serializer
             error_log($data);
             $errorVar = print_r($arr, true);
             $bareType = self::stripNamespace($type);
-            if ($bareType == 'Task' || $bareType == 'WorkflowGraph') {
+            if ($bareType == 'Task' || $bareType == 'ArchivedTask' || $bareType == 'WorkflowGraph') {
                 $current = ModelFactory::buildModel($bareType, $arr);
             } else if ($bareType == 'Project') {
                 if (isset($arr['tag'])) {

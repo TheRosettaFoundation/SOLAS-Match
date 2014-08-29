@@ -182,8 +182,6 @@ class ModelFactory
             $sourceLocale->setCountryCode($modelData['sourceCountryCode']);
         }
         
-        $ret->setSourceLocale($sourceLocale);
-        
         if (isset($modelData['targetLanguageName'])) {
             $targetLocale->setLanguageName($modelData['targetLanguageName']);
         }
@@ -196,7 +194,20 @@ class ModelFactory
         if (isset($modelData['targetCountryCode'])) {
             $targetLocale->setCountryCode($modelData['targetCountryCode']);
         }
+        
+        //The following two if statements should only end up having their code executed if the previous 8,
+        //isset($modelData['sourceLanguageName'], etc do not. The locale data should be set on the model
+        //in the latter form when coming from the database and in the following form when coming from
+        //some other places (i.e. sourceLocale and targetLocale existed as nested arrays in $modelData).
+        if (isset($modelData['sourceLocale'])) {
+            $sourceLocale = self::generateLocale($modelData['sourceLocale']);
+        }
+        
+        if (isset($modelData['targetLocale'])) {
+            $targetLocale = self::generateLocale($modelData['targetLocale']);
+        }
 
+        $ret->setSourceLocale($sourceLocale);
         $ret->setTargetLocale($targetLocale);
         
         if (isset($modelData['taskType'])) {

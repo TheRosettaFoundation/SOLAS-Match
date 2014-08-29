@@ -2392,7 +2392,7 @@ BEGIN
     if imageUploaded="" then set imageUploaded=null; end if;
     if imageApproved="" then set imageApproved=null; end if;
 
-    SELECT id, title, description, impact, deadline,organisation_id as organisationId,reference,`word-count` as wordCount, created,
+    SELECT id, title, description, impact, deadline,organisation_id as organisationId,reference,`word-count` as wordCount, created as createdTime,
         (select `en-name` from Languages l where l.id = p.`language_id`) as `languageName`, 
         (select code from Languages l where l.id = p.`language_id`) as `languageCode`, 
         (select `en-name` from Countries c where c.id = p.`country_id`) as `countryName`, 
@@ -2924,7 +2924,7 @@ BEGIN
             (select code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
             `comment`, `taskType_id` as taskType, `taskStatus_id` as taskStatus, published, deadline, `created-time` as createdTime , am.version, 
             am.filename, am.`content-type` as contentType, am.`upload-time` as uploadTime, am.`user_id-claimed` as userIdClaimed,
-            am.`user_id-archived` as userIdArchived, am.prequisites, am.`user_id-taskCreator` as userIdTaskCreator, am.`archived-date` as archivedDate
+            am.`user_id-archived` as userIdArchived, am.prerequisites, am.`user_id-taskCreator` as userIdTaskCreator, am.`archived-date` as archivedDate
     	FROM ArchivedTasks t 
 	    JOIN ArchivedTasksMetadata am
     	ON t.id=am.archivedTask_id

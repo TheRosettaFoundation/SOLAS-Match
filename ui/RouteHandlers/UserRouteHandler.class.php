@@ -560,14 +560,13 @@ class UserRouteHandler
         $orgDao = new DAO\OrganisationDao();
         $adminDao = new DAO\AdminDao();
         $langDao = new DAO\LanguageDao();
-        
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
         if (!is_null($loggedInUserId)) {
             $app->view()->setData("isSiteAdmin", $adminDao->isSiteAdmin($loggedInUserId));
         } else {
             $app->view()->setData('isSiteAdmin', 0);
         }
-        $user=null;
+        $user = null;
         try {
             Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER.$user_id);
             $user = $userDao->getUser($user_id);
@@ -575,7 +574,7 @@ class UserRouteHandler
             $app->flash('error', Lib\Localisation::getTranslation('common_login_required_to_access_page'));
             $app->redirect($app->urlFor('login'));
         }
-        $userPersonalInfo=null;
+        $userPersonalInfo = null;
         try {
             $userPersonalInfo = $userDao->getPersonalInfo($user_id);
         } catch (Common\Exceptions\SolasMatchException $e) {

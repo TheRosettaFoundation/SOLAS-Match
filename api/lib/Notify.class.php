@@ -122,8 +122,8 @@ class Notify
         $messagingClient = new Lib\MessagingClient();
         if ($messagingClient->init()) {
             $message_type = new Common\Protobufs\Emails\UserTaskClaim();
-            $message_type->user_id = $userId;
-            $message_type->task_id = $taskId;
+            $message_type->setUserId($userId);
+            $message_type->setTaskId($taskId);
             $message = $messagingClient->createMessageFromProto($message_type);
             $messagingClient->sendTopicMessage(
                 $message,
@@ -154,8 +154,8 @@ class Notify
         if ($messagingClient->init()) {
             if ($accepted) {
                 $message_type = new Common\Protobufs\Emails\OrgMembershipAccepted();
-                $message_type->user_id = $userId;
-                $message_type->org_id = $orgId;
+                $message_type->setUserId($userId);
+                $message_type->setOrgId($orgId);
                 $message = $messagingClient->createMessageFromProto($message_type);
                 $messagingClient->sendTopicMessage(
                     $message,
@@ -164,8 +164,8 @@ class Notify
                 );
             } else {
                 $message_type = new Common\Protobufs\Emails\OrgMembershipRefused();
-                $message_type->user_id = $userId;
-                $message_type->org_id = $orgId;
+                $message_type->setUserId($userId);
+                $message_type->setOrgId($orgId);
                 $message = $messagingClient->createMessageFromProto($message_type);
                 $messagingClient->sendTopicMessage(
                     $message,
@@ -183,10 +183,10 @@ class Notify
             $messagingClient = new Lib\MessagingClient();
             if ($messagingClient->init()) {
                 $message_type = new Common\Protobufs\Emails\TaskClaimed();
-                $message_type->task_id = $taskId;
-                $message_type->translator_id = $userId;
+                $message_type->setTaskId($taskId);
+                $message_type->setTranslatorId($userId);
                 foreach ($subscribed_users as $user) {
-                    $message_type->user_id = $user->getId();
+                    $message_type->setUserId($user->getId());
                     $message = $messagingClient->createMessageFromProto($message_type);
                     $messagingClient->sendTopicMessage(
                         $message,
@@ -220,9 +220,9 @@ class Notify
             $messagingClient = new Lib\MessagingClient();
             if ($messagingClient->init()) {
                 $message_type = new Common\Protobufs\Emails\TaskArchived();
-                $message_type->task_id = $taskId;
+                $message_type->setTaskId($taskId);
                 foreach ($subscribedUsers as $user) {
-                    $message_type->user_id = $user->getId();
+                    $message_type->setUserId($user->getId());
                     $message = $messagingClient->createMessageFromProto($message_type);
                     $messagingClient->sendTopicMessage(
                         $message,
