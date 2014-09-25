@@ -311,4 +311,8 @@ class Project extends \ProtocolBuffers\Message
       $this->tag = array();
   }
 
+  public function addTag(\SolasMatch\Common\Protobufs\Models\Tag $value)
+  {
+          $this->tag[] = $value;
+  }
 }
