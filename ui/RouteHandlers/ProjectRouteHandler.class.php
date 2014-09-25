@@ -24,12 +24,6 @@ class ProjectRouteHandler
         )->via("POST")->name("project-view");
 
         $app->get(
-                "/project/:project_id/alterDart/",
-                array($middleware, "authUserForOrgProject"),
-                array($this, "projectAlterDart")
-        )->via("GET", "POST")->name("project-alter-dart");
-        
-        $app->get(
             "/project/:project_id/alter/",
             array($middleware, "authUserForOrgProject"),
             array($this, "projectAlter")
@@ -339,137 +333,20 @@ class ProjectRouteHandler
             ));
         }
         
+        $preventImageCacheToken = time(); //see http://stackoverflow.com/questions/126772/how-to-force-a-web-browser-not-to-cache-images
+        
         $app->view()->appendData(array(
                 "isOrgMember"   => $isOrgMember,
                 "isAdmin"       => $isAdmin,
                 "isSiteAdmin"   => $isSiteAdmin,
+                "imgCacheToken" => $preventImageCacheToken,
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation
         ));
         $app->render("project/project.view.tpl");
     }
     
-    public function projectAlter($project_id)
-    {
-        $app = \Slim\Slim::getInstance();
-        $deadlineError = '';
-        $projectDao = new DAO\ProjectDao();
-
-        $project = $projectDao->getProject($project_id);
-        if (\SolasMatch\UI\isValidPost($app)) {
-            $post = $app->request()->post();
-            
-            if (isset($post['title'])) {
-                $project->setTitle(htmlspecialchars($post['title']));
-            }
-            if (isset($post['description'])) {
-                $project->setDescription($post['description']);
-            }
-
-            if (isset($post['word-count'])) {
-                 $result=$projectDao->updateProjectWordCount($project_id, $post['word-count']);
-                if ($result==1) {
-                    $project->setWordCount($post['word-count']);
-                } elseif ($result==2) {
-                    $app->flash("error", Lib\Localisation::getTranslation('project_alter_word_count_error_1'));
-                } else {
-                    $app->flash("error", Lib\Localisation::getTranslation('project_alter_word_count_error_2'));
-                }
-            }
-
-            if (isset($post['impact'])) {
-                $project->setImpact($post['impact']);
-            }
-            if (isset($post['deadline'])) {
-                if ($validTime = Lib\TemplateHelper::isValidDateTime($post['deadline'])) {
-                    $date = date("Y-m-d H:i:s", $validTime);
-                    $project->setDeadline($date);
-                } else {
-                    $deadlineError = Lib\Localisation::getTranslation('project_alter_11');
-                }
-            }
-            
-            $sourceLocale = new Common\Protobufs\Models\Locale();
-            if (isset($post['sourceLanguage'])) {
-                $sourceLocale->setLanguageCode($post['sourceLanguage']);
-            }
-            if (isset($post['sourceCountry'])) {
-                $sourceLocale->setCountryCode($post['sourceCountry']);
-            }
-            if (isset($post['reference']) && $post['reference'] != "http://") {
-                $project->setReference($post['reference']);
-            }
-            $project->setSourceLocale($sourceLocale);
-                        
-            if (isset($post['tags'])) {
-                $tagLabels = Lib\TemplateHelper::separateTags($post['tags']);
-                if ($tagLabels) {
-                    $project->clearTag();
-                    foreach ($tagLabels as $tagLabel) {
-                        $newTag = new Common\Protobufs\Models\Tag();
-                        $newTag->setLabel($tagLabel);
-                        $project->addTag($newTag);
-                    }
-                }
-            }
-            
-            if ($deadlineError == '') {
-                $projectDao->updateProject($project);
-                $app->redirect($app->urlFor("project-view", array("project_id" => $project_id)));
-            }
-        }
-         
-        $languages = Lib\TemplateHelper::getLanguageList();
-        $countries = Lib\TemplateHelper::getCountryList();
-        
-        $tags = $project->getTag();
-        $tag_list = "";
-        if ($tags != null) {
-            foreach ($tags as $tag) {
-                $tag_list .= $tag->getLabel() . " ";
-            }
-        }
-
-        $tagList = "[";
-        $tagDao = new DAO\TagDao();
-        $tags = $tagDao->getTags(null);
-        if ($tags) {
-            foreach ($tags as $tag) {
-                $tagList .= "\"{$tag->getLabel()}\", ";
-            }
-        }
-        $tagList = substr($tagList, 0, strlen($tagList) - 2);
-        $tagList .= "]";
-
-        $extra_scripts = "
-            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\">".
-            "</script>".
-            "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>".
-            "<script type=\"text/javascript\">
-                var tagList = $tagList;
-            </script>"
-            .file_get_contents(__DIR__."/../js/tags-autocomplete.js");
-        
-        $user_id = Common\Lib\UserSession::getCurrentUserID();
-        $adminDao = new DAO\AdminDao();
-        $isAdmin = $adminDao->isSiteAdmin($user_id);
-        
-        
-        $word_count= $project->getWordCount();
-        $app->view()->appendData(array(
-                              "project"         => $project,
-                              "languages"       => $languages,
-                              "countries"       => $countries,
-                              "tag_list"        => $tag_list,
-                              "deadlineError"   => $deadlineError,
-                              "extra_scripts"   => $extra_scripts,
-                              "isAdmin" => $isAdmin,
-                              "word_count"   => $word_count
-        ));
-        
-        $app->render("project/project.alter.tpl");
-    }
     
-    public function projectAlterDart($projectId)
+    public function projectAlter($projectId)
     {
         $app = \Slim\Slim::getInstance();
         $userId = Common\Lib\UserSession::getCurrentUserID();
@@ -492,7 +369,7 @@ class ProjectRouteHandler
             "extra_scripts" => $extraScripts,
             "platformJS" => $platformJS
         ));
-        $app->render("project/project.alterDart.tpl");
+        $app->render("project/project.alter.tpl");
     }
     
     public function projectCreate($org_id)

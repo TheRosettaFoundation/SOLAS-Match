@@ -136,7 +136,7 @@
                     <td style = "text-align:center;">
                     	{if $project->getImageUploaded()}
 	                        {if $isSiteAdmin}
-	                        	<img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}"/>
+	                        	<img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
 		                        {if !$project->getImageApproved()}
 		                        	<form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
 		                       			<input type="hidden" name="imageApprove" value="0" />
@@ -152,7 +152,7 @@
 		                        {/if}
 		                    {else}
 		                    	{if $project->getImageApproved()}
-		                    		<img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}"/>
+		                    		<img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
 		                    	{else}
 			                    	{Localisation::getTranslation('common_project_image_not_approved')}
 		                    	{/if}
