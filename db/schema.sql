@@ -4553,7 +4553,7 @@ DELIMITER ;
 -- Dumping structure for procedure debug-test3.taskInsertAndUpdate
 DROP PROCEDURE IF EXISTS `taskInsertAndUpdate`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(128), IN `wordCount` INT, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3), IN `dLine` DATETIME, IN `taskType` INT, IN `tStatus` INT, IN `pub` VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(128), IN `wordCount` INT, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3), IN `dLine` DATETIME, IN `taskType` INT, IN `tStatus` INT, IN `pub` bit(1))
 BEGIN
 
 	if id='' then set id=null;end if;
@@ -4568,28 +4568,25 @@ BEGIN
 	if dLine='' then set dLine=null;end if;
 	if taskType='' then set taskType=null;end if;
 	if tStatus='' then set tStatus=null;end if;
-	if pub='' then set pub=null;end if;
-	if id is null then
-        if taskComment is null then set taskComment="";end if;
-        if dLine is null or dLine ='0000-00-00 00:00:00' then set dLine=DATE_ADD(now(),INTERVAL 14 DAY);end if;
+	if pub is null then set pub=1;end if;
 
-        set @scid=null;
+	if id is null then
+	        if taskComment is null then set taskComment="";end if;
+	        if dLine is null or dLine ='0000-00-00 00:00:00' then set dLine=DATE_ADD(now(),INTERVAL 14 DAY);end if;
+
+	        set @scid=null;
                 select c.id into @scid from Countries c where c.code=sCC;
 
-        set @tcid=null;
+	        set @tcid=null;
                 select c.id into @tcid from Countries c where c.code=tCC;
-
-        set @sID=null;
+	
+	        set @sID=null;
                 select l.id into @sID from Languages l where l.code=sCode;
 
-        set @tID=null;
+	        set @tID=null;
                 select l.id into @tID from Languages l where l.code=tCode;
 
-                if pub is null then set pub=1;end if;	
-
-			
-
-		insert into Tasks (project_id,title,`word-count`,`language_id-source`,`language_id-target`,`created-time`,comment,`country_id-source`,`country_id-target`,`deadline`,`task-type_id`,`task-status_id`,`published`)
+        	insert into Tasks (project_id,title,`word-count`,`language_id-source`,`language_id-target`,`created-time`,comment,`country_id-source`,`country_id-target`,`deadline`,`task-type_id`,`task-status_id`,`published`)
 		 values (projectID,name,wordCount,@sID,@tID,now(),taskComment,@scid,@tcid,dLine,taskType,tStatus,pub);
 		 call getTask(LAST_INSERT_ID(),null,null,null,null,null,null,null,null,null,null,null,null,null);
 
@@ -4672,11 +4669,12 @@ BEGIN
                     then update Tasks t SET t.`task-status_id` = tStatus WHERE t.id = id;
 		end if;
                 
-                if pub is not null 
-                and pub != (SELECT t.`published` FROM Tasks t WHERE  t.id = id)
-                or (select t.`published` from Tasks t WHERE t.id = id) is null
-
-                    then update Tasks t SET t.`published` = pub WHERE t.id = id;
+                if pub is not null then
+                    if (pub=1) then 
+                        update Tasks t SET t.`published` = 1 WHERE t.id = id;
+                    else
+                        update Tasks t SET t.`published` = 0 WHERE t.id = id;
+                    end if; 
 		end if;
 		
 		call getTask(id,null,null,null,null,null,null,null,null,null,null,null,null,null);

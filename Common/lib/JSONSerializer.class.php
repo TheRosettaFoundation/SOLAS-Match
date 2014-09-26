@@ -51,12 +51,12 @@ class JSONSerializer extends Serializer
             $ret = json_decode($data, true);
             $result = array();
             $blah = print_r($type, true);
-            error_log("Logging \"type\" info in deserialize()");
-            error_log($blah);
-            error_log(" {****** JSON DECODED *** ");
+            ///error_log("Logging \"type\" info in deserialize()");
+            ///error_log($blah);
+            ///error_log(" {****** JSON DECODED *** ");
             $temp = print_r($ret,true);
-            error_log($temp);
-            error_log(" ****** JSON DECODED *** }");
+            ///error_log($temp);
+            ///error_log(" ****** JSON DECODED *** }");
             foreach ($ret["item"] as $item) {
                 $current = new $type[0];
                 
@@ -68,8 +68,8 @@ class JSONSerializer extends Serializer
             $current = new $type;
             
             $arr = json_decode($data, true);
-            error_log("Logging 'data' in deserialize()...");
-            error_log($data);
+            ///error_log("Logging 'data' in deserialize()...");
+            ///error_log($data);
             $errorVar = print_r($arr, true);
             $bareType = self::stripNamespace($type);
             if ($bareType == 'Task' || $bareType == 'ArchivedTask' || $bareType == 'WorkflowGraph') {
@@ -87,13 +87,13 @@ class JSONSerializer extends Serializer
                 }
             } else {
                 $arr1 = self::array_flatten($arr, array());
-                error_log("LOGGING array_flatten result...");
+                ///error_log("LOGGING array_flatten result...");
                 $errorVar2 = print_r($arr1, true);
-                error_log($errorVar2);
+                ///error_log($errorVar2);
                 $current = ModelFactory::buildModel($bareType, $arr1);
             }
-            error_log("Logging array in deserialize()...");
-            error_log($errorVar);
+            ///error_log("Logging array in deserialize()...");
+            ///error_log($errorVar);
             
             $result = $current;
         }

@@ -592,7 +592,7 @@ class ModelFactory
             $ret->setTaskStatus($modelData['taskStatus']);
         }
         if (isset($modelData['published'])) {
-            $ret->setPublished($modelData['published']);
+            $ret->setPublished($modelData['published'] == "\x01" ? 1 : 0);
         }
         
         return $ret;

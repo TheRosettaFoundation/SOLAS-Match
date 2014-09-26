@@ -741,14 +741,14 @@ class TaskRouteHandler
                     $task->setTitle($post['title']);
                 }
 
-                if (isset($post['publishTask']) && $post['publishTask']) {
+                if (isset($post['publishTask'])) {
                     $task->setPublished(1);
                 } else {
                     $task->setPublished(0);
                 }
             
                 $targetLocale = new Common\Protobufs\Models\Locale();
-            
+
                 if (isset($post['target']) && $post['target'] != "") {
                     $targetLocale->setLanguageCode($post['target']);
                 }
@@ -828,6 +828,8 @@ class TaskRouteHandler
                             $taskDao->addTaskPreReq($task->getId(), $taskId);
                         }
                     }
+                    
+                    $taskDao->updateTask($task);
 
                     $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
                 } else {
@@ -878,6 +880,12 @@ class TaskRouteHandler
         $languages = Lib\TemplateHelper::getLanguageList();
         $countries = Lib\TemplateHelper::getCountryList();
        
+        $publishStatus="";
+        if ($task->getPublished())
+        {
+            $publishStatus="checked";
+        } 
+                
         $app->view()->appendData(array(
             "project"             => $project,
             "extra_scripts"       => $extra_scripts,
@@ -889,6 +897,7 @@ class TaskRouteHandler
             "word_count_err"      => $word_count_err,
             "deadlockError"       => $deadlockError,
             "deadline_error"      => $deadlineError,
+            "publishStatus"      => $publishStatus,
             "taskTypeColours"     => $taskTypeColours
         ));
         
