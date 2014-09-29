@@ -134,7 +134,7 @@ class ProjectAlterForm extends PolymerElement
   {
     Settings settings = new Settings();
     orgDashboardLink = settings.conf.urls.SiteLocation + "org/dashboard";
-    projectViewLink = settings.conf.urls.SiteLocation + "$projectid/view";
+    projectViewLink = settings.conf.urls.SiteLocation + "project/$projectid/view";
     imgSource = settings.conf.urls.SiteLocation + "project/$projectid/image";
     
     String location = settings.conf.urls.SiteLocation;
@@ -305,12 +305,13 @@ class ProjectAlterForm extends PolymerElement
           List<Tag> projectTagsParsed = new List<Tag>();
           if (projectTags.length > 0) {
             projectTagsParsed = FormHelper.parseTagsInput(projectTags);
-          }
+                }
           if (projectTagsParsed.length > 0) {
             project.tag.clear();
             project.tag.addAll(projectTagsParsed);
           }
           //Update the project and then, if a new image has been supplied upload it.
+          var temp = project.reference.toString();
           ProjectDao.updateProject(project)
           .then((_) => uploadProjectImage())
           .then((_) {
@@ -422,20 +423,24 @@ class ProjectAlterForm extends PolymerElement
       if (project.description == '') {
         descriptionError = localisation.getTranslation("project_create_33");
         success = false;
+        return success;
       } else if (project.description.length > 4096) {
         //Project description is too long
         descriptionError = localisation.getTranslation("project_create_error_description_too_long");
         success = false;
+        return success;
       }
       
       //Project impact not set
       if (project.impact == '') {
         impactError = localisation.getTranslation("project_create_26");
         success = false;
+        return success;
       } else if (project.impact.length > 4096) {
         //Project impact is too long
         impactError = localisation.getTranslation("project_create_error_impact_too_long");
         success = false;
+        return success;
       }
       
       if(project.reference != null && project.reference != '') {
@@ -462,6 +467,7 @@ class ProjectAlterForm extends PolymerElement
         } else if (FormHelper.validateReferenceURL(project.reference) == false) {
           referenceError = localisation.getTranslation("project_create_error_reference_invalid");
           success = false;
+          return success;
         }
       }
       

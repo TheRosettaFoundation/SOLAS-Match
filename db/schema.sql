@@ -3938,8 +3938,9 @@ BEGIN
         if ref is not null 
         and ref != (select p.reference from Projects p WHERE p.id = projectId)
         or (select p.reference from Projects p WHERE p.id = projectId) is null
-
             then update Projects p set p.reference = ref WHERE p.id = projectId;
+        else
+            update Projects p set p.reference = ref WHERE p.id = projectId;
         end if;
 
         if wordCount is not null 

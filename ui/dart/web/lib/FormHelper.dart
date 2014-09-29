@@ -36,7 +36,7 @@ class FormHelper
    */
   static List<Tag> parseTagsInput(String tags)
   {
-    List<String> labels = tags.split(" ");
+    List<String> labels = tags.trim().split(" ");
     List<Tag> ret = new List<Tag>();
     
     labels.forEach((String tagName) {
