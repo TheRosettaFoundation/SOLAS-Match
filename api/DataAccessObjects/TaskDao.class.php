@@ -708,7 +708,7 @@ class TaskDao
         $args = Lib\PDOWrapper::cleanse($userId).",".
                 Lib\PDOWrapper::cleanse($limit).",".
                 Lib\PDOWrapper::cleanse($offset);
-        $result = Lib\PDOWrapper::call("getUserArchivedTasks", $args);
+        $result = Lib\PDOWrapper::call("getUserArchivedTasksOffset", $args);
         if ($result) {
             $tasks = array();
             foreach ($result as $taskData) {
