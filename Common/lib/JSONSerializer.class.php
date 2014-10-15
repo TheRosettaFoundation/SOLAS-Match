@@ -57,12 +57,15 @@ class JSONSerializer extends Serializer
             $temp = print_r($ret,true);
             ///error_log($temp);
             ///error_log(" ****** JSON DECODED *** }");
-            foreach ($ret["item"] as $item) {
-                $current = new $type[0];
+            if (isset($ret["item"]))
+            {
+                foreach ($ret["item"] as $item) {
+                    $current = new $type[0];
                 
-                $arr = json_decode($item, true);
-                $current = ModelFactory::buildModel(self::stripNamespace($type[0]), $arr);
-                $result[] = $current;
+                    $arr = json_decode($item, true);
+                    $current = ModelFactory::buildModel(self::stripNamespace($type[0]), $arr);
+                    $result[] = $current;
+                }
             }
         } else {
             $current = new $type;
