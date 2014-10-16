@@ -354,6 +354,7 @@ class IO
         $mime = self::detectMimeType($file, $filename);
         $apiHelper = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
         $canonicalMime = $apiHelper->getCanonicalMime($filename);
+        
         if (!is_null($canonicalMime) && $mime != $canonicalMime) {
             $message = "The content type ($mime) of the file you are trying to upload does not";
             $message .= " match the content type ($canonicalMime) expected from its extension.";
@@ -472,14 +473,16 @@ class IO
                 ,"xlsb" => "application/vnd.ms-excel.sheet.binary.macroEnabled.12"
                 ,"xlf"  => "application/xliff+xml"
                 ,"doc"  => "application/msword"
+                ,"ppt"  => "application/vnd.ms-powerpoint"
+                ,"xls"  => "application/vnd.ms-excel"
         );
-    
+
         $finfo = new \finfo(FILEINFO_MIME_TYPE);
         $mime = $finfo->buffer($file);
         
         $extension = explode(".", $filename);
         $extension = $extension[count($extension)-1];
-      
+
         if (($mime == "application/octet-stream" || $mime == "application/zip" || $extension == "doc" || $extension == "xlf") 
             && (array_key_exists($extension, $mimeMap))) {
             $result = $mimeMap[$extension];
