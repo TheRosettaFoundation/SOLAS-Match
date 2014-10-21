@@ -139,6 +139,7 @@ class IO
             $project->setImageUploaded(0);
             $project->setImageApproved(0);
             DAO\ProjectDao::save($project);
+            Lib\Notify::sendProjectImageRemoved($projectId);
             API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::OK);
         }
     }
@@ -414,6 +415,7 @@ class IO
                 }
             $ext = pathinfo($filename, PATHINFO_EXTENSION);
             file_put_contents($destination."/image.$ext", $file);
+            Lib\Notify::sendProjectImageUploaded($projectId);
         } catch (\Exception $e) {
             $message = "You cannot upload an image file for project ($projectId), as one already exists.";
             throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::CONFLICT);

@@ -28,6 +28,12 @@ class Projects
                         '\SolasMatch\API\V0\Projects::updateProjectWordCount'
                     );
 
+                    $app->put(
+                        '/setImageApprovalStatus/:imageStatus/',
+                        '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
+                        '\SolasMatch\API\V0\Projects::setImageApprovalStatus'
+                    );
+
                     $app->post(
                         '/calculateDeadlines(:format)/',
                         '\SolasMatch\API\Lib\Middleware::isloggedIn',
@@ -148,6 +154,19 @@ class Projects
 
         $ret = null;
         $ret = DAO\ProjectDao::updateProjectWordCount($projectId, $newWordCount);
+        API\Dispatcher::sendResponse(null, $ret, null, $format);
+    }
+
+    public static function setImageApprovalStatus($projectId, $imageStatus, $format = ".json")
+    {
+        if (!is_numeric($imageStatus) && strstr($imageStatus, '.')) {
+            $imageStatus = explode('.', $imageStatus);
+            $format = '.'.$imageStatus[1];
+            $imageStatus = $imageStatus[0];
+        }
+
+        $ret = null;
+        $ret = DAO\ProjectDao::setImageApprovalStatus($projectId, $imageStatus);
         API\Dispatcher::sendResponse(null, $ret, null, $format);
     }
         

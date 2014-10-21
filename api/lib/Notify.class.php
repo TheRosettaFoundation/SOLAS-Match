@@ -24,6 +24,10 @@ require_once __DIR__."/../../Common/protobufs/emails/OrgFeedback.php";
 require_once __DIR__."/../../Common/protobufs/emails/EmailVerification.php";
 require_once __DIR__."/../../Common/protobufs/emails/BannedLogin.php";
 require_once __DIR__."/../../Common/protobufs/emails/UserBadgeAwardedEmail.php";
+require_once __DIR__."/../../Common/protobufs/emails/ProjectImageStatusChangedEmail.php";
+require_once __DIR__."/../../Common/protobufs/emails/ProjectImageUploadedEmail.php";
+require_once __DIR__."/../../Common/protobufs/emails/ProjectImageRemovedEmail.php";
+
 require_once __DIR__."/../../Common/protobufs/Requests/TaskUploadNotificationRequest.php";
 require_once __DIR__.'/../../Common/protobufs/Requests/OrgCreatedNotificationRequest.php';
 require_once __DIR__.'/../../Common/protobufs/notifications/TaskRevokedNotification.php';
@@ -246,6 +250,51 @@ class Notify
                 $message,
                 $client->MainExchange,
                 $client->TaskRevokedTopic
+            );
+        }
+    }
+    
+    public static function sendProjectImageUploaded($projectId)
+    {
+        $messagingClient = new Lib\MessagingClient();
+        if ($messagingClient->init()) {
+            $proto = new Common\Protobufs\Emails\ProjectImageUploadedEmail();
+            $proto->setProjectId($projectId);
+            $message = $messagingClient->createMessageFromProto($proto);
+            $messagingClient->sendTopicMessage(
+                $message,
+                $messagingClient->MainExchange,
+                $messagingClient->ProjectImageUploadedTopic
+            );
+        }
+    }
+    
+    public static function sendProjectImageStatusChangedEmail($projectId)
+    {
+        $messagingClient = new Lib\MessagingClient();
+        if ($messagingClient->init()) {
+            $proto = new Common\Protobufs\Emails\ProjectImageStatusChangedEmail();
+            $proto->setProjectId($projectId);
+            $message = $messagingClient->createMessageFromProto($proto);
+            $messagingClient->sendTopicMessage(
+                $message,
+                $messagingClient->MainExchange,
+                $messagingClient->ProjectImageStatusChangedTopic
+            );
+        }
+    }
+    
+    public static function sendProjectImageRemoved($projectId)
+    {
+        $messagingClient = new Lib\MessagingClient();
+        if ($messagingClient->init()) {
+            $proto = new Common\Protobufs\Emails\ProjectImageRemovedEmail();
+            $proto->setProjectId($projectId);
+            $message = $messagingClient->createMessageFromProto($proto);
+            $messagingClient->sendTopicMessage(
+                $message,
+                $messagingClient->MainExchange,
+                $messagingClient->ProjectImageRemovedTopic
             );
         }
     }
