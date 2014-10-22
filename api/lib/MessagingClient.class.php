@@ -96,15 +96,16 @@ class MessagingClient
         
         switch ($apiFormat) {
         	case '.json' : $serializer = new Common\Lib\JSONSerializer();
-        	break;
+                return new AMQPMessage($serializer->serializeToString($proto));
+        	   break;
         	case '.html' : $serializer = new Common\Lib\HTMLSerializer();
-        	break;
+        	   break;
         	case '.php' : $serializer = new Common\Lib\PHPSerializer();
-        	break;
+        	   break;
         	case '.proto' : $serializer = new Common\Lib\ProtobufSerializer();
-        	break;
+        	   break;
         	case '.xml' : $serializer = new Common\Lib\XMLSerializer();
-        	break;
+        	   break;
         	default : throw new Common\Exceptions\SolasMatchException(
         	   "Error: No API format specified or unsupported format."
             );

@@ -36,6 +36,30 @@ class JSONSerializer extends Serializer
         }
         return $ret;
     }
+    
+    public function serializeToString($data)
+    {
+        $ret = null;
+        if (is_object($data)) {
+            $ret = $data->serializeToString();
+            //if the data is an associative array just json_encode it.
+        } elseif (is_array($data)) {
+            if ($this->isAssocArr($data)) {
+                $ret = json_encode($data);
+            } else {
+                $ret = new Models\ProtoList();
+                foreach ($data as $obj) {
+                    if (!is_null($obj)) {
+                        $ret->appendItem($obj->serializeToString());
+                    }
+                }
+                $ret = $ret->serializeToString();
+            }
+        } else {
+            $ret = (is_null($data) || $data == "null") ? null : $data;
+        }
+        return $ret;
+    }
 
     public function deserialize($data, $type)
     {
