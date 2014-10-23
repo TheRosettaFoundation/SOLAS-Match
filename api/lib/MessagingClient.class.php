@@ -28,6 +28,9 @@ class MessagingClient
     public $OrgFeedbackTopic                = "email";
     public $UserReferenceRequestTopic       = "email";
     public $UserBadgeAwardedTopic           = "email";
+    public $ProjectImageUploadedTopic       = "email";
+    public $ProjectImageRemovedTopic        = "email";
+    public $ProjectImageStatusChangedTopic  = "email";
 
     private $connection;
 

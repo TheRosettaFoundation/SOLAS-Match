@@ -164,6 +164,14 @@ class ProjectDao extends BaseDao
         return $ret;
     }
     
+    public function setProjectImageStatus($project_id, $imageStatus)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/projects/$project_id/setImageApprovalStatus/$imageStatus";
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
+        return $ret;
+    }
+    
     public function downloadProjectFile($projectId)
     {
         $ret = null;

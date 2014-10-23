@@ -236,8 +236,8 @@ class ProjectRouteHandler
             if (isset($post['imageApprove'])) {
                 if (!$post['imageApprove']) {
                     $project->setImageApproved(1);
-                    $savedProject = $projectDao->updateProject($project);
-                    if ($savedProject)
+                    $result = $projectDao->setProjectImageStatus($project_id, 1);
+                    if ($result)
                     {
                         $app->flashNow(
                             "success",
@@ -251,8 +251,8 @@ class ProjectRouteHandler
                     }
                 } else {
                     $project->setImageApproved(0);
-                    $savedProject = $projectDao->updateProject($project);
-                    if ($savedProject)
+                    $result = $projectDao->setProjectImageStatus($project_id, 0);
+                    if ($result)
                     {
                         $app->flashNow(
                             "success",

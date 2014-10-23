@@ -4,6 +4,7 @@ namespace SolasMatch\API\DAO;
 
 use \SolasMatch\Common as Common;
 use \SolasMatch\API\Lib as Lib;
+use \SolasMatch\API as API;
 
 require_once __DIR__."/TagsDao.class.php";
 require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
@@ -546,6 +547,23 @@ class ProjectDao
             return $result[0]['result'];
         } else {
             return "0";
+        }
+    }
+    /*!
+     This function updates the approval status of a project image and triggers and email with the
+     updated status. Status 1 means approved where as status 0 means dissaproved.
+     */
+    public static function setImageApprovalStatus($projectId, $imageStatus)
+    {
+        $project = self::getProject((int)$projectId);
+        $project->setImageApproved((int)$imageStatus);
+        $result = self::save($project);
+        if ($result)
+        {
+            Lib\Notify::sendProjectImageStatusChangedEmail($projectId);
+            return 1;
+        } else {
+            return 0;
         }
     }
 }
