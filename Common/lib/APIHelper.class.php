@@ -81,7 +81,7 @@ class APIHelper
 
         curl_setopt($re, CURLOPT_COOKIESESSION, true);
         if (isset($_COOKIE['slim_session'])) {
-            curl_setopt($re, CURLOPT_COOKIE, "slim_session=".$_COOKIE['slim_session'].";");
+            curl_setopt($re, CURLOPT_COOKIE, "slim_session=".urlencode($_COOKIE['slim_session']).";");
         }
         
         curl_setopt($re, CURLOPT_AUTOREFERER, true);
