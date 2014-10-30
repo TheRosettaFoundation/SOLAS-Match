@@ -122,9 +122,9 @@ class ProjectDao
         $project = null;
         if (!is_null($name)) {
             $args = "null, "
-                    .Lib\PDOWrapper::cleanseNull($name).
+                    .Lib\PDOWrapper::cleanseNullOrWrapStr($name).
                     ", null, null, null, null, null, null, null, null, null, null, null";
-            $result = Lib\PDOWrapper::call("getProjects", $args);
+            $result = Lib\PDOWrapper::call("getProject", $args);
             if ($result) {
                 $project = Common\Lib\ModelFactory::buildModel("Project", $result[0]);
             }

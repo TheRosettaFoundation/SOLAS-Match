@@ -94,6 +94,11 @@ class Projects
                     '\SolasMatch\API\V0\Projects::getProjectGraph'
                 );
 
+                $app->post(
+                        '/getProjectByName/',
+                        '\SolasMatch\API\V0\Projects::getProjectByName'
+                );
+                
                 $app->get(
                     '/:projectId/',
                     '\SolasMatch\API\V0\Projects::getProject'
@@ -111,10 +116,6 @@ class Projects
                     '\SolasMatch\API\V0\Projects::deleteProject'
                 );
                 
-                $app->get(
-                    '/:title/',
-                    '\SolasMatch\API\V0\Projects::getProjectByName'
-                );
             });
 
             /* Routes starting /v0 */
@@ -243,6 +244,7 @@ class Projects
 
     public static function getProject($projectId, $format = '.json')
     {
+        error_log("IN GETPROJECT");
         if (!is_numeric($projectId) && strstr($projectId, '.')) {
             $projectId = explode('.', $projectId);
             $format = '.'.$projectId[1];
@@ -251,20 +253,11 @@ class Projects
         API\Dispatcher::sendResponse(null, DAO\ProjectDao::getProject($projectId), null, $format);
     }
     
-    public static function getProjectByName($title, $format = ".json")
+    public static function getProjectByName($format = ".json")
     {
-        if (!is_numeric($title) && strstr($title, '.')) {
-            $temp = explode('.', $title);
-            $lastIndex = sizeof($temp)-1;
-            if ($lastIndex > 0) {
-                $format = '.'.$temp[$lastIndex];
-                $title = $temp[0];
-                for ($i = 1; $i < $lastIndex; $i++) {
-                    $title = "{$title}.{$temp[$i]}";
-                }
-            }
-        }
-        $data = DAO\ProjectDao::getProjectByName(urldecode($name));
+        $title = API\Dispatcher::getDispatcher()->request()->getBody();
+        
+        $data = DAO\ProjectDao::getProjectByName($title);
         API\Dispatcher::sendResponse(null, $data, null, $format);
     }
 
