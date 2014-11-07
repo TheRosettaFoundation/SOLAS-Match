@@ -244,7 +244,6 @@ class Projects
 
     public static function getProject($projectId, $format = '.json')
     {
-        error_log("IN GETPROJECT");
         if (!is_numeric($projectId) && strstr($projectId, '.')) {
             $projectId = explode('.', $projectId);
             $format = '.'.$projectId[1];
