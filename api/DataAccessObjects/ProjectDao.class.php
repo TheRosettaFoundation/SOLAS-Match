@@ -555,12 +555,19 @@ class ProjectDao
      */
     public static function setImageApprovalStatus($projectId, $imageStatus)
     {
+        $status = (int) $imageStatus;
         $project = self::getProject((int)$projectId);
-        $project->setImageApproved((int)$imageStatus);
+        $project->setImageApproved($status);
         $result = self::save($project);
         if ($result)
         {
-            Lib\Notify::sendProjectImageStatusChangedEmail($projectId);
+            if ($status)
+            { 
+                Lib\Notify::sendProjectImageApprovedEmail($projectId);
+            } else
+            {
+                Lib\Notify::sendProjectImageDisapprovedEmail($projectId);
+            }
             return 1;
         } else {
             return 0;

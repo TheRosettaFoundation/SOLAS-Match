@@ -24,7 +24,8 @@ require_once __DIR__."/../../Common/protobufs/emails/OrgFeedback.php";
 require_once __DIR__."/../../Common/protobufs/emails/EmailVerification.php";
 require_once __DIR__."/../../Common/protobufs/emails/BannedLogin.php";
 require_once __DIR__."/../../Common/protobufs/emails/UserBadgeAwardedEmail.php";
-require_once __DIR__."/../../Common/protobufs/emails/ProjectImageStatusChangedEmail.php";
+require_once __DIR__."/../../Common/protobufs/emails/ProjectImageApprovedEmail.php";
+require_once __DIR__."/../../Common/protobufs/emails/ProjectImageDisapprovedEmail.php";
 require_once __DIR__."/../../Common/protobufs/emails/ProjectImageUploadedEmail.php";
 require_once __DIR__."/../../Common/protobufs/emails/ProjectImageRemovedEmail.php";
 
@@ -269,21 +270,6 @@ class Notify
         }
     }
     
-    public static function sendProjectImageStatusChangedEmail($projectId)
-    {
-        $messagingClient = new Lib\MessagingClient();
-        if ($messagingClient->init()) {
-            $proto = new Common\Protobufs\Emails\ProjectImageStatusChangedEmail();
-            $proto->setProjectId($projectId);
-            $message = $messagingClient->createMessageFromProto($proto);
-            $messagingClient->sendTopicMessage(
-                $message,
-                $messagingClient->MainExchange,
-                $messagingClient->ProjectImageStatusChangedTopic
-            );
-        }
-    }
-    
     public static function sendProjectImageRemoved($projectId)
     {
         $messagingClient = new Lib\MessagingClient();
@@ -296,6 +282,52 @@ class Notify
                 $messagingClient->MainExchange,
                 $messagingClient->ProjectImageRemovedTopic
             );
+        }
+    }
+    
+    public static function sendProjectImageApprovedEmail($projectId)
+    {
+        $project = DAO\ProjectDao::getProject($projectId);
+        $orgAdmins = DAO\AdminDao::getAdmins(null, $project->getOrganisationId());
+
+        if (count($orgAdmins) > 0) {
+            $messagingClient = new Lib\MessagingClient();
+            if ($messagingClient->init()) {
+                $message_type = new Common\Protobufs\Emails\ProjectImageApprovedEmail();
+                $message_type->setProjectId($projectId);
+                foreach ($orgAdmins as $user) {
+                    $message_type->setUserId($user->getId());
+                    $message = $messagingClient->createMessageFromProto($message_type);
+                    $messagingClient->sendTopicMessage(
+                        $message,
+                        $messagingClient->MainExchange,
+                        $messagingClient->TaskClaimedTopic
+                    );
+                }
+            }
+        }
+    }
+
+    public static function sendProjectImageDisapprovedEmail($projectId)
+    {
+        $project = DAO\ProjectDao::getProject($projectId);
+        $orgAdmins = DAO\AdminDao::getAdmins(null, $project->getOrganisationId());
+
+        if (count($orgAdmins) > 0) {
+            $messagingClient = new Lib\MessagingClient();
+            if ($messagingClient->init()) {
+                $message_type = new Common\Protobufs\Emails\ProjectImageDisapprovedEmail();
+                $message_type->setProjectId($projectId);
+                foreach ($orgAdmins as $user) {
+                    $message_type->setUserId($user->getId());
+                    $message = $messagingClient->createMessageFromProto($message_type);
+                    $messagingClient->sendTopicMessage(
+                        $message,
+                        $messagingClient->MainExchange,
+                        $messagingClient->TaskClaimedTopic
+                    );
+                }
+            }
         }
     }
 }
