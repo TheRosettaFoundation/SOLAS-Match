@@ -3,6 +3,7 @@
 namespace SolasMatch\Common\Lib;
 
 use \SolasMatch\Common\Protobufs\Models as Models;
+use \SolasMatch\Common\Protobufs\Emails as Emails;
 
 require_once __DIR__."/../protobufs/models/MembershipRequest.php";
 require_once __DIR__."/../protobufs/models/ArchivedTask.php";
@@ -28,6 +29,9 @@ require_once __DIR__."/../protobufs/models/Locale.php";
 require_once __DIR__."/../protobufs/models/UserPersonalInformation.php";
 require_once __DIR__."/../protobufs/models/BannedUser.php";
 require_once __DIR__."/../protobufs/models/BannedOrganisation.php";
+
+require_once __DIR__."/../protobufs/emails/UserFeedback.php";
+require_once __DIR__."/../protobufs/emails/OrgFeedback.php";
 
 class ModelFactory
 {
@@ -117,6 +121,12 @@ class ModelFactory
                 break;
             case "WorkflowGraph" :
                 $ret = self::generateWorkflowGraph($modelData);
+                break;
+            case "UserFeedback" :
+                $ret = self::generateUserFeedback($modelData);
+                break;
+            case "OrgFeedback" :
+                $ret = self::generateOrgFeedback($modelData);
                 break;
             default:
                 echo "Unable to build model $modelName";
@@ -1003,6 +1013,48 @@ class ModelFactory
             }
         }
         
+        return $ret;
+    }
+    
+    private static function generateUserFeedback($modelData)
+    {
+        $ret = new Emails\UserFeedback();
+        if (isset($modelData['email_type'])) {
+            $ret->setEmailType($modelData['email_type']);
+        }
+        if (isset($modelData['task_id'])) {
+            $ret->setTaskId($modelData['task_id']);
+        }
+        if (isset($modelData['claimant_id'])) {
+            $ret->setClaimantId($modelData['claimant_id']);
+        }
+        if (isset($modelData['feedback'])) {
+            $ret->setFeedback($modelData['feedback']);
+        }
+        return $ret;
+    }
+    
+    private static function generateOrgFeedback($modelData)
+    {
+        error_log("In Model factory");
+        $temp = print_r($modelData,true);
+        error_log($temp);            
+        $ret = new Emails\OrgFeedback();
+        if (isset($modelData['email_type'])) {
+            $ret->setEmailType($modelData['email_type']);
+        }
+        if (isset($modelData['task_id'])) {
+            $ret->setTaskId($modelData['task_id']);
+        }
+        if (isset($modelData['claimant_id'])) {
+            $ret->setClaimantId($modelData['claimant_id']);
+        }
+        if (isset($modelData['feedback'])) {
+            $ret->setFeedback($modelData['feedback']);
+        }
+        if (isset($modelData['user_id'])) {
+            $ret->setUserId($modelData['user_id']);
+        }
         return $ret;
     }
 }
