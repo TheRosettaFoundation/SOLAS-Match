@@ -37,8 +37,7 @@ class ProjectDao
    */
   static Future<Project> getProjectByName(String title)
   {
-    print("IN DART DAO TITLE IS: $title");
-    APIHelper client = new APIHelper(".json");
+    APIHelper client = new APIHelper("");
     Future<Project> project = client.call("Project", 
         "v0/projects/getProjectByName", "POST", title)
           .then((HttpRequest response) {

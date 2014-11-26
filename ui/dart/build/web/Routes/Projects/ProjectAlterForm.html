@@ -52,16 +52,16 @@
       <table width="100%">
         <tr align="center">
           <td>
-            <label for="title" style="font-size: large"><strong>{{localisation.getTranslation("common_title")}}</strong></label>
+            <label for="title" style="font-size: large"><strong>{{localisation.getTranslation("common_title")}}</strong><span style="color: red">*</span></label>
             <textarea wrap="soft" cols="1" rows="4" value="{{project.title}}" style="width: 400px; margin-bottom: 40px">{{project.title}}</textarea>
 
-            <label for="description" style="font-size: large"><strong>{{localisation.getTranslation("common_description")}}</strong></label>
+            <label for="description" style="font-size: large"><strong>{{localisation.getTranslation("common_description")}}</strong><span style="color: red">*</span></label>
             <textarea wrap="soft" cols="1" rows="6" value="{{project.description}}" style="width: 400px; margin-bottom: 40px">{{project.description}}</textarea>
             
-            <label for="impact" style="font-size: large"><strong>{{localisation.getTranslation("common_impact")}}</strong></label>
+            <label for="impact" style="font-size: large"><strong>{{localisation.getTranslation("common_impact")}}</strong><span style="color: red">*</span></label>
             <textarea wrap="soft" cols="1" rows="4" value="{{project.impact}}" style="width: 400px; margin-bottom: 40px">{{project.impact}}</textarea>
             <!-- {if $isAdmin} -->
-               <label for="word-count" style="font-size: large"><strong>{{localisation.getTranslation("common_word_count")}}</strong></label>
+               <label for="word-count" style="font-size: large"><strong>{{localisation.getTranslation("common_word_count")}}</strong><span style="color: red">*</span></label>
                <input id="word-count" name="word-count" maxlength="6" value="{{wordCountInput}}" style="width: 400px;  margin-bottom: 20px">
             <!-- {/if} -->
           </td>

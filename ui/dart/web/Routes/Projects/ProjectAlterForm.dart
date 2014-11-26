@@ -411,14 +411,24 @@ class ProjectAlterForm extends PolymerElement
           //has the title already been used?
           return ProjectDao.getProjectByName(project.title).then((Project checkExist) {
             if (checkExist != null) {
-              titleError = localisation.getTranslation("project_create_title_conflict");
-              return false;
+              int id = checkExist.id;
+              if (id != projectid) {
+                  titleError = localisation.getTranslation("project_create_title_conflict");
+                  return false;
+              } else
+              {
+                return true;
+              }
             }else{
               return true;
             }
           });
         }
     }).then((bool success) {
+      if (!success)
+      {
+        return success;
+      }
       //Project description not set
       if (project.description == '') {
         descriptionError = localisation.getTranslation("project_create_33");

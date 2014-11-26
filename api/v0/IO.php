@@ -400,6 +400,7 @@ class IO
         
         $project = DAO\ProjectDao::getProject($projectId);
         $project->setImageUploaded(1);
+        $project->setImageApproved(0);
         $project = DAO\ProjectDao::save($project);
             
         try {
