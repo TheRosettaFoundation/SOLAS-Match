@@ -5,8 +5,9 @@ namespace SolasMatch\API\V0;
 use \SolasMatch\Common as Common;
 use \SolasMatch\API\Lib as Lib;
 use \SolasMatch\API as API;
+use \SolasMatch\API\DAO as DAO;
 
-require_once __DIR__.'/../lib/Languages.class.php';
+require_once __DIR__.'/../DataAccessObjects/CountryDao.class.php';
 
 class Countries
 {
@@ -52,7 +53,7 @@ class Countries
             $format = '.'.$code[1];
             $code = $code[0];
         }
-        $data = Lib\Languages::getCountry(null, $code, null);
+        $data = DAO\CountryDao::getCountry(null, $code);
         if (is_array($data) && is_array($data[0])) {
             $data = $data[0];
         }
@@ -66,7 +67,7 @@ class Countries
             $format = '.'.$countryId[1];
             $countryId = $countryId[0];
         }
-        $data = Lib\Languages::getCountry($countryId, null, null);
+        $data = DAO\CountryDao::getCountry($countryId);
         if (is_array($data) && is_array($data[0])) {
             $data = $data[0];
         }
@@ -75,7 +76,7 @@ class Countries
 
     public static function getCountries($format = ".json")
     {
-        API\Dispatcher::sendResponse(null, Lib\Languages::getCountryList(), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\CountryDao::getCountryList(), null, $format);
     }
     
     public static function getCountriesByPattern($pattern, $format = ".json")
@@ -85,7 +86,7 @@ class Countries
             $format = '.'.$pattern[1];
             $pattern = $pattern[0];
         }
-        API\Dispatcher::sendResponse(null, Lib\Languages::getCountriesByPattern($pattern), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\CountryDao::getCountriesByPattern($pattern), null, $format);
     }
 }
 

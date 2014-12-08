@@ -140,7 +140,29 @@ Install Solas Match Dependencies
 
    Then run 
         
-        $ php composer.phar install
+        $ php composer.phar install  
+
+Install Chobie Protobuf
+--------------------------------
+
+ * In Ubuntu:
+   
+1. cd into home or workspace folder.
+2. Clone Chobie Protobuf
+	$ git clone https://github.com/chobie/php-protocolbuffers.git
+3. cd into php-protocolbuffers
+4. run:
+	$ sudo phpize
+If you get an error try:
+	$ sudo apt-get install php5-dev
+5. Run:
+	$ sudo ./configure
+	$ sudo make
+	$ sudo make install
+6. Edit php.ini file:
+	$ sudo vi /etc/php5/cgi/php.ini
+Search for extension= and add the following:
+	extension=protocolbuffers.so
 
 Set up the MySQL database
 -------------------------

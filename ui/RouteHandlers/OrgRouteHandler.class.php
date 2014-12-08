@@ -121,7 +121,7 @@ class OrgRouteHandler
             if (isset($post["homepage"])) {
                 if (trim($post["homepage"])!="") {
                     if (Lib\Validator::validateURL($post["homepage"])) {
-                        $org->setHomePage($post["homepage"]);
+                        $org->setHomepage($post["homepage"]);
                     } else {
                         $errorOccured = true;
                         array_push($errorList, Lib\Localisation::getTranslation('common_invalid_url'));
@@ -429,7 +429,7 @@ class OrgRouteHandler
                 if (isset($post['homepage'])) {
                     if (trim($post["homepage"])!="") {
                         if (Lib\Validator::validateURL($post["homepage"])) {
-                            $org->setHomePage($post["homepage"]);
+                            $org->setHomepage($post["homepage"]);
                         } else {
                             $errorOccured = true;
                             array_push($errorList, Lib\Localisation::getTranslation('common_invalid_url'));
@@ -546,6 +546,7 @@ class OrgRouteHandler
 
         $currentUser = $userDao->getUser(Common\Lib\UserSession::getCurrentUserId());
         $org = $orgDao->getOrganisation($org_id);
+        $memberIsAdmin = array();
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
@@ -562,7 +563,7 @@ class OrgRouteHandler
                     $badge->setId($post['badge_id']);
                     $badge->setTitle($post['title']);
                     $badge->setDescription($post['description']);
-                    $badge->setOwnerId(null);
+                    $badge->setOwnerId("");
                     $badgeDao->updateBadge($badge);
                     $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org_id)));
                 }
@@ -747,12 +748,10 @@ class OrgRouteHandler
             }
 
             $org_badges = $orgDao->getOrgBadges($org_id);
-
+            
             if ($orgMemberList) {
                 foreach ($orgMemberList as $orgMember) {
-                    if ($adminDao->isOrgAdmin($org_id, $orgMember->getId())) {
-                        $orgMember['orgAdmin'] = true;
-                    }
+                    $memberIsAdmin[$orgMember->getId()] = $adminDao->isOrgAdmin($org_id, $orgMember->getId());
                 }
             }
         }
@@ -764,6 +763,7 @@ class OrgRouteHandler
                 'isMember'  => $isMember,
                 'orgMembers' => $orgMemberList,
                 'adminAccess' => $adminAccess,
+                'memberIsAdmin' => $memberIsAdmin,
                 "org_badges" => $org_badges,
                 'siteName' => $siteName,
                 "membershipRequestUsers" => $user_list,

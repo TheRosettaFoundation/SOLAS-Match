@@ -121,18 +121,26 @@ class AdminRouteHandler
         $adminList = $adminDao->getSiteAdmins();
         
         $bannedOrgList = $adminDao->getBannedOrgs();
+        $bannedOrgNames = array();
+        $orgBannerAdminNames = array();
         if ($bannedOrgList) {
             foreach ($bannedOrgList as $bannedOrg) {
-                $bannedOrg['org'] = $orgDao->getOrganisation($bannedOrg->getOrgId());
-                $bannedOrg['adminUser'] = $userDao->getUser($bannedOrg->getUserIdAdmin());
+                $bannedOrgObj = $orgDao->getOrganisation($bannedOrg->getOrgId());
+                $orgBanningAdmin = $userDao->getUser($bannedOrg->getUserIdAdmin());
+                $bannedOrgNames[$bannedOrg->getOrgId()] = $bannedOrgObj->getName();
+                $orgBannerAdminNames[$bannedOrg->getOrgId()] = $orgBanningAdmin->getDisplayName();
             }
         }
         
         $bannedUserList = $adminDao->getBannedUsers();
+        $bannedUserNames = array();
+        $bannedUserAdminNames = array(); //display names of admins that banned users
         if ($bannedUserList) {
             foreach ($bannedUserList as $bannedUser) {
-                $bannedUser['user'] = $userDao->getUser($bannedUser->getUserId());
-                $bannedUser['adminUser'] = $userDao->getUser($bannedUser->getUserIdAdmin());
+                $bannedUserObj = $userDao->getUser($bannedUser->getUserId());
+                $banningAdmin = $userDao->getUser($bannedUser->getUserIdAdmin());
+                $bannedUserNames[$bannedUser->getUserId()] = $bannedUserObj->getDisplayName();
+                $bannedUserAdminNames[$bannedUser->getUserId()] = $banningAdmin->getDisplayName();
             }
         }
 
@@ -146,6 +154,10 @@ class AdminRouteHandler
                     "adminList"     => $adminList,
                     "bannedOrgList" => $bannedOrgList,
                     "bannedUserList"=> $bannedUserList,
+                    "bannedUserNames" => $bannedUserNames,
+                    "bannedOrgNames" => $bannedOrgNames,
+                    "bannedUserAdminNames" => $bannedUserAdminNames,
+                    "orgBannerAdminNames" => $orgBannerAdminNames,
                     "current_page"  => 'site-admin-dashboard',
                     "siteName"      => $siteName,
                     "extra_scripts" => $extra_scripts

@@ -114,7 +114,12 @@ class Tasks
                     '\SolasMatch\API\Lib\Middleware::authenticateUserToSubmitReview',
                     '\SolasMatch\API\V0\Tasks::submitReview'
                 );
-
+                
+                $app->get(
+                    '/topTasksCount(:format)/',
+                    '\SolasMatch\API\V0\Tasks::getTopTasksCount'
+                );
+                
                 $app->get(
                     '/topTasks(:format)/',
                     '\SolasMatch\API\V0\Tasks::getTopTasks'
@@ -271,6 +276,11 @@ class Tasks
         $limit = API\Dispatcher::clenseArgs('limit', Common\Enums\HttpMethodEnum::GET, 15);
         $offset = API\Dispatcher::clenseArgs('offset', Common\Enums\HttpMethodEnum::GET, 0);
         API\Dispatcher::sendResponse(null, DAO\TaskDao::getLatestAvailableTasks($limit, $offset), null, $format);
+    }
+    
+    public static function getTopTasksCount($format = ".json")
+    {
+        API\Dispatcher::sendResponse(null, DAO\TaskDao::getLatestAvailableTasksCount(), null, $format);
     }
 
     public static function getTask($taskId, $format = ".json")

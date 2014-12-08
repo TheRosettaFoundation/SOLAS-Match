@@ -27,7 +27,7 @@ class Localisation
                 Common\Lib\CacheHelper::SITE_LANGUAGE,
                 Common\Enums\TimeToLiveEnum::HOUR,
                 __NAMESPACE__.'\Localisation::fetchTranslationFile',
-                'strings.xml'
+                'strings_en.xml'
             )
         );
 
@@ -102,7 +102,7 @@ class Localisation
         return $ret;
     }
     
-    public static function fetchTranslationFile($lang = "strings.xml")
+    public static function fetchTranslationFile($lang = "strings_en.xml")
     {
         return file_get_contents(__DIR__."/../localisation/$lang");
     }

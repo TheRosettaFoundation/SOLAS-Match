@@ -52,7 +52,7 @@
                     <div style="margin-bottom:60px;">
                         <label for="publishtask" style="font-size: large"><strong>{Localisation::getTranslation('common_publish_task')}</strong></label>
                         <p class="desc">{Localisation::getTranslation('common_if_checked_tasks_will_appear_in_the_tasks_stream')}</p>
-                        <input type="checkbox" name="publishTask" value="1" checked="true" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if}/>
+                        <input type="checkbox" name="publishTask" value="{$task->getPublished()}" {$publishStatus} {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if}/>
                     </div>
                     <p>
                         <label for="target" style="font-size: large"><strong>{Localisation::getTranslation('common_target_language')}</strong></label>

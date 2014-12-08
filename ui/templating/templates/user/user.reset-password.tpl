@@ -19,8 +19,13 @@
             </h2>
         </label>
         <p><input type="text" name="email_address" id="email_address" /></p>
-        <input type="submit" name="password_reset" value="    {Localisation::getTranslation('user_reset_password_send_request')}" class="btn btn-primary"/>
-        <i class="icon-share-alt icon-white" style="position:relative; right:116px; top:2px;"></i>    
+        
+        
+        <button type="submit" name="password_reset" class="btn btn-primary">
+  	        <i class="icon-share-alt icon-white"></i> {Localisation::getTranslation('user_reset_password_send_request')}
+		</button>
+
+            
     </form>
 
 {include file="footer.tpl"}

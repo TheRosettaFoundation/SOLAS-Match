@@ -212,11 +212,17 @@ class Users
                     );
 
                     $app->get(
+                        '/topTasksCount(:format)/',
+                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
+                        '\SolasMatch\API\V0\Users::getUserTopTasksCount'
+                    );
+                    
+                    $app->get(
                         '/topTasks(:format)/',
                         '\SolasMatch\API\Lib\Middleware::isloggedIn',
                         '\SolasMatch\API\V0\Users::getUserTopTasks'
                     );
-
+                    
                     $app->get(
                         '/archivedTasks/:limit/:offset(:format)/',
                         '\SolasMatch\API\Lib\Middleware::isloggedIn',
@@ -436,7 +442,7 @@ class Users
 
                 $app->get(
                     '/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
+                    //'\SolasMatch\API\Lib\Middleware::isloggedIn',
                     '\SolasMatch\API\V0\Users::getUser'
                 );
 
@@ -723,6 +729,36 @@ class Users
         );
         API\Dispatcher::sendResponse(null, $data, null, $format);
     }
+
+    public static function getUserTopTasksCount($userId, $format = ".json")
+    {
+        $filter = API\Dispatcher::clenseArgs('filter', Common\Enums\HttpMethodEnum::GET, '');
+        $strict = API\Dispatcher::clenseArgs('strict', Common\Enums\HttpMethodEnum::GET, false);
+        $filters = Common\Lib\APIHelper::parseFilterString($filter);
+        $filter = "";
+        $taskType = '';
+        $sourceLanguageCode = '';
+        $targetLanguageCode = '';
+        if (isset($filters['taskType']) && $filters['taskType'] != '') {
+            $taskType = $filters['taskType'];
+        }
+        if (isset($filters['sourceLanguage']) && $filters['sourceLanguage'] != '') {
+            $sourceLanguageCode = $filters['sourceLanguage'];
+        }
+        if (isset($filters['targetLanguage']) && $filters['targetLanguage'] != '') {
+            $targetLanguageCode = $filters['targetLanguage'];
+        }
+        $dao = new DAO\TaskDao();
+        $data = $dao->getUserTopTasksCount(
+            $userId,
+            $strict,
+            $taskType,
+            $sourceLanguageCode,
+            $targetLanguageCode
+        );
+        API\Dispatcher::sendResponse(null, $data, null, $format);
+    }
+    
     
     public static function getFilteredUserClaimedTasks(
             $userId,
@@ -814,7 +850,7 @@ class Users
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper($format);
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\UserPersonalInformation");
-        API\Dispatcher::sendResponse(null, DAO\UserDao::createPersonalInfo($data), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\UserDao::savePersonalInfo($data), null, $format);
     }
 
     public static function updateUserPersonalInfo($userId, $format = ".json")
@@ -827,7 +863,7 @@ class Users
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper($format);
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\UserPersonalInformation');
-        $data = DAO\UserDao::updatePersonalInfo($data);
+        $data = DAO\UserDao::savePersonalInfo($data);
         API\Dispatcher::sendResponse(null, $data, null, $format);
     }
 
@@ -943,6 +979,13 @@ class Users
             DAO\UserDao::apiRegister($email, md5($email), false);
             $user = DAO\UserDao::getUser(null, $email);
             DAO\UserDao::finishRegistration($user->getId());
+            //Set new user's personal info to show their preferred language as English.
+            $newUser = DAO\UserDao::getUser(null, $user->getEmail());
+            $userInfo = new Common\Protobufs\Models\UserPersonalInformation();
+            $english = DAO\LanguageDao::getLanguage(null, "en");
+            $userInfo->setUserId($newUser->getId());
+            $userInfo->setLanguagePreference($english->getId());
+            DAO\UserDao::savePersonalInfo($userInfo);
         }
         $params = array();
         try {
@@ -1047,8 +1090,8 @@ class Users
             $oAuthToken->setExpiresIn($accessToken['expires_in']);
 
             $user = DAO\UserDao::getLoggedInUser($accessToken['access_token']);
-            $user->setPassword(null);
-            $user->setNonce(null);
+            $user->setPassword("");
+            $user->setNonce("");
 
             DAO\UserDao::logLoginAttempt($user->getId(), $user->getEmail(), 1);
 
@@ -1123,8 +1166,8 @@ class Users
             $oAuthResponse->setExpiresIn($response['expires_in']);
 
             $user = DAO\UserDao::getLoggedInUser($response['access_token']);
-            $user->setPassword(null);
-            $user->setNonce(null);
+            $user->setPassword("");
+            $user->setNonce("");
             API\Dispatcher::sendResponse(null, $user, null, $format, $oAuthResponse);
         } catch (Common\Exceptions\SolasMatchException $e) {
             API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode(), $format);
@@ -1162,6 +1205,14 @@ class Users
         $client = new Common\Lib\APIHelper($format);
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Register");
         $registered = DAO\UserDao::apiRegister($data->getEmail(), $data->getPassword());
+        //Set new user's personal info to show their preferred language as English.
+        $newUser = DAO\UserDao::getUser(null, $data->getEmail());
+        $userInfo = new Common\Protobufs\Models\UserPersonalInformation();
+        $english = DAO\LanguageDao::getLanguage(null, "en");
+        $userInfo->setUserId($newUser->getId());
+        $userInfo->setLanguagePreference($english->getId());
+        DAO\UserDao::savePersonalInfo($userInfo);
+        
         API\Dispatcher::sendResponse(null, $registered, null, $format);
     }
 
@@ -1174,8 +1225,8 @@ class Users
         }
         $data = DAO\UserDao::getUser($userId);
         if (!is_null($data)) {
-            $data->setPassword(null);
-            $data->setNonce(null);
+            $data->setPassword("");
+            $data->setNonce("");
         }
         API\Dispatcher::sendResponse(null, $data, null, $format);
     }
@@ -1213,7 +1264,6 @@ class Users
     
     public static function getBannedComment($email, $format = ".json")
     {
-        //$data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper($format);
         
         $user = DAO\UserDao::getUser(null, $email);

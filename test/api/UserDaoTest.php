@@ -990,7 +990,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @covers API\DAO\UserDao::createPersonalInfo
+     * @covers API\DAO\UserDao::savePersonalInfo
      */
     public function testCreatePersonalInfo()
     {
@@ -1002,14 +1002,14 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $insertedUser);
         
         $userInfo = UnitTestHelper::createUserPersonalInfo($insertedUser->getId());
-        $insertedInfo = API\DAO\UserDao::createPersonalInfo($userInfo);
+        $insertedInfo = API\DAO\UserDao::savePersonalInfo($userInfo);
         $this->assertNotNull($insertedInfo);
         $this->assertInstanceOf(UnitTestHelper::PROTO_USER_INFO, $insertedInfo);
         $this->assertEquals($userInfo->getReceiveCredit(), $insertedInfo->getReceiveCredit());
     }
     
     /**
-     * @covers API\DAO\UserDao::updatePersonalInfo
+     * @covers API\DAO\UserDao::savePersonalInfo
      */
     public function testUpdatePersonalInfo()
     {
@@ -1021,14 +1021,14 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $insertedUser);
     
         $userInfo = UnitTestHelper::createUserPersonalInfo($insertedUser->getId());
-        $insertedInfo = API\DAO\UserDao::createPersonalInfo($userInfo);
+        $insertedInfo = API\DAO\UserDao::savePersonalInfo($userInfo);
         $this->assertNotNull($insertedInfo);
         $this->assertInstanceOf(UnitTestHelper::PROTO_USER_INFO, $insertedInfo);
         
         $insertedInfo->setFirstName("Roy");
         $insertedInfo->setLastName("Jaeger");
         $insertedInfo->setMobileNumber(55555221333);
-        $updatedInfo = API\DAO\UserDao::updatePersonalInfo($insertedInfo);
+        $updatedInfo = API\DAO\UserDao::savePersonalInfo($insertedInfo);
         $this->assertNotNull($updatedInfo);
         $this->assertInstanceOf(UnitTestHelper::PROTO_USER_INFO, $updatedInfo);
         
@@ -1050,7 +1050,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(UnitTestHelper::PROTO_USER, $insertedUser);
         
         $userInfo = UnitTestHelper::createUserPersonalInfo($insertedUser->getId());
-        $insertedInfo = API\DAO\UserDao::createPersonalInfo($userInfo);
+        $insertedInfo = API\DAO\UserDao::savePersonalInfo($userInfo);
         $this->assertNotNull($insertedInfo);
         $this->assertInstanceOf(UnitTestHelper::PROTO_USER_INFO, $insertedInfo);
         
@@ -1275,7 +1275,7 @@ class UserDaoTest extends \PHPUnit_Framework_TestCase
         
         $userInfo = UnitTestHelper::createUserPersonalInfo($insertedUser->getId());
         $userInfo->setReceiveCredit(1);
-        $insertedInfo = API\DAO\UserDao::createPersonalInfo($userInfo);
+        $insertedInfo = API\DAO\UserDao::savePersonalInfo($userInfo);
         $this->assertNotNull($insertedInfo);
         $this->assertInstanceOf(UnitTestHelper::PROTO_USER_INFO, $insertedInfo);
         $getName = API\DAO\UserDao::getUserRealName($userId);

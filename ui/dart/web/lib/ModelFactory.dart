@@ -50,6 +50,8 @@ class ModelFactory
     project.createdTime = projectData['createdTime'];
     project.status = projectData['status'];
     project.sourceLocale = ModelFactory.generateLocaleFromMap(projectData['sourceLocale']);
+    project.imageUploaded = projectData['imageUploaded'];
+    project.imageApproved = projectData['imageApproved'];
     return project;
   }
   
@@ -128,7 +130,7 @@ class ModelFactory
     userInfo.lastName = userData['lastName'];
     userInfo.mobileNumber = userData['mobileNumber'];
     userInfo.businessNumber = userData['businessNumber'];
-    userInfo.sip = userData['sip'];
+    userInfo.languagePreference = userData['languagePreference'];
     userInfo.jobTitle = userData['jobTitle'];
     userInfo.address = userData['address'];
     userInfo.city = userData['city'];

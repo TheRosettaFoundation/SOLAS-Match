@@ -82,7 +82,7 @@ class TaskDao extends BaseDao
         $request = "{$this->siteApi}v0/tasks/$taskId/info";
         $args = array("version" => $version);
         $response = $this->client->call(
-            "\SolasMatch\Common\Protobufs\Models\TaskMetaData",
+            "\SolasMatch\Common\Protobufs\Models\TaskMetadata",
             $request,
             Common\Enums\HttpMethodEnum::GET,
             null,
@@ -223,7 +223,7 @@ class TaskDao extends BaseDao
                 $taskDao = new TaskDao();
                 $task = $taskDao->getTask($taskId);
                 $projectFile = $projectDao->getProjectFileInfo($task->getProjectId());
-                $projectFileName = $projectFile->getFileName();
+                $projectFileName = $projectFile->getFilename();
                 $projectFileExtension = explode(".", $projectFileName);
                 $projectFileExtension = $projectFileExtension[count($projectFileExtension)-1];
                 $projectMime = $projectFile->getMime();

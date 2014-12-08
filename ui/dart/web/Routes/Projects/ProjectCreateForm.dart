@@ -1,7 +1,9 @@
 
 import "package:polymer/polymer.dart";
+import "package:image/image.dart";
 import "dart:async";
 import "dart:html";
+import "dart:math";
 
 import "package:sprintf/sprintf.dart";
 import "../../lib/SolasMatchDart.dart";
@@ -18,11 +20,13 @@ class ProjectCreateForm extends PolymerElement
   // Other
   int maxTargetLanguages;
   String filename;
+  String imageFilename;
   String tagList;
   String wordCountInput;
   SelectElement langSelect;
   SelectElement countrySelect;
   var projectFileData;
+  var projectImageData;
   List<int> monthLengths;
   @observable List<int> years;
   @observable List<String> months;
@@ -54,6 +58,13 @@ class ProjectCreateForm extends PolymerElement
   @observable String createProjectError;
   @observable String tagsError;
   @observable String referenceError;
+  @observable String imageError;
+  
+  //Project image related values that are retrieved from conf.
+  int imageMaxFileSize;
+  int imageMaxWidth;
+  int imageMaxHeight;
+  List<String> supportedImageFormats;
   
   /**
    * The constructor for ProjectCreateForm, handling intialisation and setup of various things.
@@ -119,6 +130,14 @@ class ProjectCreateForm extends PolymerElement
     Settings settings = new Settings();
     orgDashboardLink = settings.conf.urls.SiteLocation + "org/dashboard";
     String location = settings.conf.urls.SiteLocation;
+    
+    //Get project image related data from conf
+    imageMaxFileSize = int.parse(settings.conf.project_images.max_size) * 1024 * 1024;
+    imageMaxWidth = int.parse(settings.conf.project_images.max_width);
+    imageMaxHeight = int.parse(settings.conf.project_images.max_height);
+    //Image format string is comma separated, split it into a list
+    supportedImageFormats = (settings.conf.project_images.supported_formats as String).split(",");
+    
     //import css into polymer element
     if (css != null) {
       css.split(' ').map((path) => new StyleElement()..text = "@import '$location${path}';").forEach(shadowRoot.append);
@@ -129,6 +148,14 @@ class ProjectCreateForm extends PolymerElement
     p.appendHtml(localisation.getTranslation("project_create_6") + " " +
         sprintf(localisation.getTranslation("common_maximum_file_size_is"), ["${maxfilesize / 1024 / 1024}"]));
     
+    ParagraphElement p2 = this.shadowRoot.querySelector("#image_file_desc");
+    p2.children.clear();
+    p2.appendHtml(localisation.getTranslation("project_create_upload_project_image") + " " +
+      sprintf(
+        localisation.getTranslation("common_maximum_file_size_is"),
+        [(imageMaxFileSize / 1024 / 1024).toString()]
+      )
+    );
     List<Future<bool>> loadedList = new List<Future<bool>>();
     
     loadedList.add(LanguageDao.getAllLanguages().then((List<Language> langs) {
@@ -331,6 +358,7 @@ class ProjectCreateForm extends PolymerElement
       impactError = null;
       tagsError = null;
       referenceError = null;
+      imageError = null;
       maxTargetsReached = null;
      
       //Validate form input and then check for success
@@ -350,16 +378,12 @@ class ProjectCreateForm extends PolymerElement
           project.sourceLocale = sourceLocale;
           project.organisationId = orgid;
          
-          List<String> projectTags = new List<String>();
+          List<Tag> tagListParsed = new List<Tag>();
           if (tagList.length > 0) {
-            projectTags = _separateTags(tagList);
+            tagListParsed = FormHelper.parseTagsInput(tagList);
           }
-          if (projectTags.length > 0) {
-            projectTags.forEach((String tagName) {
-              Tag tag = new Tag();
-              tag.label = tagName;
-              project.tag.add(tag);
-            });
+          if (tagListParsed.length > 0) {
+            project.tag.addAll(tagListParsed);
           }
          
           //Using DAO method request Project creation
@@ -372,7 +396,8 @@ class ProjectCreateForm extends PolymerElement
             List<Future<bool>> successList = new List<Future<bool>>();
             //upload the file and then create tasks
             successList.add(uploadProjectFile()
-              .then((_) => createProjectTasks()));
+                .then((_) => uploadProjectImage() 
+                .then((_) => createProjectTasks())));
            
             if (trackProject) {
               //track project via DAO if user selected that option
@@ -626,6 +651,19 @@ class ProjectCreateForm extends PolymerElement
           });
     }
   
+  Future<bool> uploadProjectImage()
+  {
+    return loadProjectImageFile()
+      .then((_) { 
+        if (projectImageData != null) {
+          ProjectDao.uploadProjectImage(project.id, userid, imageFilename, projectImageData);
+        }
+      })
+      .catchError((e) {
+        throw sprintf(localisation.getTranslation("project_create_failed_upload_image"), [e]);
+      });
+  }
+  
   /**
    * This method loads the content of the file and validates the file details.
    */
@@ -650,6 +688,35 @@ class ProjectCreateForm extends PolymerElement
       });
     }
   
+  Future<bool> loadProjectImageFile()
+  {
+    File imageFile = null;
+    InputElement fileInput = this.shadowRoot.querySelector("#projectImageFile");
+    Image image;
+    FileList files = fileInput.files;
+    if (!files.isEmpty) {
+      imageFile = files[0];
+    
+      return _validateImageFileInput().then((_) {
+        Completer fileIsDone = new Completer();
+        FileReader reader = new FileReader();
+        var imageFileData = null;
+        reader.onLoadEnd.listen((e) {
+          imageFileData = e.target.result;
+          image = decodeImage(imageFileData);
+          image = _resizeProjectImage(image);
+          projectImageData = encodeNamedImage(image, imageFile.name);
+          
+          fileIsDone.complete(true);
+        });
+        reader.readAsArrayBuffer(imageFile);
+        return fileIsDone.future;
+      });
+    }
+    //Just return true if an image was not processed.
+    return new Future.value(true);
+  }
+  
   /**
    * This method validates the form input and sets various error messages if needed fields are not set or
    * invalid data is given.
@@ -670,11 +737,11 @@ class ProjectCreateForm extends PolymerElement
           //calling route for getProject when it should be getProjectByName
           } else if (project.title.indexOf(new RegExp(r'^\d+$')) != -1) {
             titleError = localisation.getTranslation("project_create_title_cannot_be_number");
+            return false;
           } else {
             //has the title already been used?
             return ProjectDao.getProjectByName(project.title).then((Project checkExist) {
               if (checkExist != null) {
-                print("CHECKING IF TITLE IS IN USE");
                 titleError = localisation.getTranslation("project_create_title_conflict");
                 return false;
               }else{
@@ -682,7 +749,9 @@ class ProjectCreateForm extends PolymerElement
               }
             });
           }
-      }).then((bool success){
+      }).then((bool success) {
+        if (success) {
+        }
         //Project description not set
         if (project.description == '') {
           descriptionError = localisation.getTranslation("project_create_33");
@@ -724,7 +793,7 @@ class ProjectCreateForm extends PolymerElement
                   ..allowElement('a', attributes: ['href'])
               );
             });
-          } else if (_validateReferenceURL(project.reference) == false) {
+          } else if (FormHelper.validateReferenceURL(project.reference) == false) {
             referenceError = localisation.getTranslation("project_create_error_reference_invalid");
             success = false;
           }
@@ -760,7 +829,7 @@ class ProjectCreateForm extends PolymerElement
           success = false;
         }
        
-        if (_validateTagList(tagList) == false) {
+        if (FormHelper.validateTagList(tagList) == false) {
           //Invalid tags detected, set error message
           tagsError = localisation.getTranslation('project_create_invalid_tags');
           success = false;
@@ -778,7 +847,13 @@ class ProjectCreateForm extends PolymerElement
         }
        
         //Parse project deadline info
-        DateTime projectDeadline = _parseDeadline();
+        DateTime projectDeadline = FormHelper.parseDeadline(
+          years[selectedYear],
+          selectedMonth + 1,
+          selectedDay + 1,
+          selectedHour,
+          selectedMinute
+        );
         if (projectDeadline != null) {
           if (projectDeadline.isAfter(new DateTime.now())) {
             String monthAsString = projectDeadline.month.toString();
@@ -803,7 +878,7 @@ class ProjectCreateForm extends PolymerElement
         }
         return success;
         //Textual input and deadline info have been validated, validate target languages
-      }).then((bool success){
+      }).then((bool success) {
         
         List<Language> targetLanguages = new List<Language>();
         List<Country> targetCountries = new List<Country>();
@@ -836,11 +911,13 @@ class ProjectCreateForm extends PolymerElement
        
         //Validate file input
         return _validateFileInput().then((bool valid) {
-          if (success && valid) {
-            return true;
-          } else {
-            return false;
-          }
+          return _validateImageFileInput().then((bool imageIsValid) {
+            if (success && valid && imageIsValid) {
+              return true;
+            } else {
+              return false;
+            }
+          });
         });
       });
     }
@@ -906,58 +983,84 @@ class ProjectCreateForm extends PolymerElement
   }
   
   /**
-   * This method is called by validateInput to validate the project tags provided.
+   * This method is used to validate the project image file provided.
    */
-  bool _validateTagList(String tagList)
+  Future<bool> _validateImageFileInput()
   {
-    if (tagList.indexOf(new RegExp(r'[^a-z0-9\-\s]')) != -1) {
-      return false;
+    bool success = true;
+    return new Future(() {
+      File imageFile = null;
+      InputElement fileInput = this.shadowRoot.querySelector("#projectImageFile");
+      FileList files = fileInput.files;
+      if (!files.isEmpty) {
+        imageFile = files[0];
+      }
+      if (imageFile != null) {
+        if (imageFile.size > 0) {
+          //Check that file does not exceed the maximum allowed file size
+          if (imageFile.size < imageMaxFileSize) {
+            int extensionStartIndex = imageFile.name.lastIndexOf(".");
+            //Check that file has an extension
+            if (extensionStartIndex >= 0) {
+              imageFilename = imageFile.name;
+              String extension = imageFilename.substring(extensionStartIndex + 1);
+              if (extension != extension.toLowerCase()) {
+                extension = extension.toLowerCase();
+                imageFilename = imageFilename.substring(0, extensionStartIndex + 1) + extension;
+                window.alert(localisation.getTranslation("project_create_18"));
+              }
+              //Check that the file extension is valid for an image
+              if (supportedImageFormats.contains(extension) == false) {
+                imageError = sprintf(
+                        localisation.getTranslation("project_create_please_upload_valid_image_file"),
+                        [".$extension"]
+                      );
+                success = false;
+              }
+            } else {
+              //File has no extension, set error
+              imageError = localisation.getTranslation("project_create_image_has_no_extension");
+              success = false;
+            }
+          } else {
+            //File is too big, set error
+            imageError = localisation.getTranslation("project_create_image_is_too_big");
+            success = false;
+          } 
+        } else {
+          //File is empty, set error
+          imageError = localisation.getTranslation("project_create_image_file_empty");
+          success = false;
+        }
+      }
+      return success;
+    });
+  }
+  
+  /**
+   * Resizes the [Image] [original] while preserving the aspect ratio. This method is used to resize big 
+   * images uploaded with projects so they fit our desired dimensions. Credit (for the logic) to
+   * http://opensourcehacker.com/2011/12/01/calculate-aspect-ratio-conserving-resize-for-images-in-javascript/ 
+   * via http://stackoverflow.com/a/14731922 
+   */
+  Image _resizeProjectImage(Image original) 
+  {
+    int width = original.width;
+    int height = original.height;
+    double ratio;
+    
+    if ((width <= imageMaxWidth) && (height <= imageMaxHeight)) {
+      return original;
     } else {
-      return true;
+      ratio = min(imageMaxWidth / width, imageMaxHeight / height);
+      int newWidth = (width * ratio).floor();
+      int newHeight = (height * ratio).floor();
+      Image resized = copyResize(original, newWidth, newHeight);
+      
+      return resized;
+   
     }
   }
-  
-  /**
-   * Uses a regular expression to validate the the reference URL for a project (if one is provided) actually is
-   * a URL.
-   * Credit to http://stackoverflow.com/a/24058129/1799985
-   * 
-   * Returns true if the provided URL is valid, false otherwise.
-   */
-  bool _validateReferenceURL(String url)
-  {
-    //Spread out the regular expression string on 3 lines and concatenate it together for better presentation
-    //of code
-    String regExp = 
-        r'(([\w]+:)?//)?(([\d\w]|%[a-fA-f\d]{2,2})+(:([\d\w]|%[a-fA-f\d]{2,2})+)?@)?([\d\w][-\d\w]{0,' +
-        r'253}[\d\w]\.)+[\w]{2,13}(:[\d]+)?(/([-+_~.\d\w]|%[a-fA-f\d]{2,2})*)*(\?(&?([-+_~.\d\w]|%[a-' +
-        r'fA-f\d]{2,2})=?)*)?(#([-+_~.\d\w]|%[a-fA-f\d]{2,2})*)?';
-    if (url.indexOf(new RegExp(regExp)) == -1) {
-      //String did not match pattern, it is not a URL
-      return false;
-    } else {
-      //String matched, it is a URL
-      return true;
-    }
-  }
-  
-  /**
-   * This is a simple method to parse the deadline provided for the project.
-   */
-  DateTime _parseDeadline()
-  {
-    DateTime ret = new DateTime(years[selectedYear], selectedMonth + 1, selectedDay + 1, selectedHour, selectedMinute);
-    return ret;
-  }
-  
-  /**
-   * This is a simple method to parse the project tags from the text input.
-   */
-  List<String> _separateTags(String tags)
-  {
-    return tags.split(" ");
-  }
-  
   /**
    * This method is called when the segmentation checkbox is clicked for a target language, disabling the
    * translation and proofreading checkboxes.
@@ -983,7 +1086,7 @@ class ProjectCreateForm extends PolymerElement
    */
   void selectedYearChanged(int oldValue)
   {
-    if (this._isLeapYear(years[selectedYear])) {
+    if (FormHelper.isLeapYear(years[selectedYear])) {
       monthLengths[1] = 29;
     } else {
       monthLengths[1] = 28;
@@ -1001,21 +1104,5 @@ class ProjectCreateForm extends PolymerElement
   void selectedMonthChanged(int oldValue)
   {
     days = new List<int>.generate(monthLengths[selectedMonth], (int index) => index + 1);
-  }
-  
-  /**
-   * This is a simple method to check if a year is a leap year or not.
-   */
-  bool _isLeapYear(int year)
-  {
-    bool ret = true;
-    if (year % 4 != 0) {
-      ret = false;
-    } else {
-      if (year % 100 == 0 && year % 400 != 0) {
-        ret = false;
-      }
-    }
-    return ret;
   }
 }

@@ -354,7 +354,7 @@ class Orgs
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper($format);
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Organisation");
-        $data->setId(null);
+        $data->setId("");
         
         $name = $data->getName();
         //Is org name already in use?

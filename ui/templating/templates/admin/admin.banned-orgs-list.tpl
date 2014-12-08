@@ -14,10 +14,14 @@
             {foreach $bannedOrgList as $bannedOrg}
             <tr>
                 <td>                
-                    <a href="{urlFor name="org-public-profile" options="org_id.{$bannedOrg->getOrgId()}"}">{$bannedOrg['org']->getName()}</a>
+                    <a href="{urlFor name="org-public-profile" options="org_id.{$bannedOrg->getOrgId()}"}">
+                        {$bannedOrgNames[$bannedOrg->getOrgId()]}
+                    </a>
                 </td>
                 <td>                
-                    <a href="{urlFor name="user-public-profile" options="user_id.{$bannedOrg->getUserIdAdmin()}"}">{$bannedOrg['adminUser']->getDisplayName()}</a>
+                    <a href="{urlFor name="user-public-profile" options="user_id.{$bannedOrg->getUserIdAdmin()}"}">
+                        {$orgBannerAdminNames[$bannedOrg->getOrgId()]}
+                    </a>
                 </td>
                 <td>                
                     {$bannedOrg->getBanType()}

@@ -526,7 +526,7 @@ class TaskRouteHandler
         $node = $graph->getAllNodes($index);
 
         if ($node) {
-            foreach ($node->getPreviousList() as $nodeId) {
+            foreach ($node->getPrevious() as $nodeId) {
                 $pTask = $taskDao->getTask($nodeId);
                 if (is_object($pTask)) {
                     $preReqTasks[] = $pTask;
@@ -741,14 +741,14 @@ class TaskRouteHandler
                     $task->setTitle($post['title']);
                 }
 
-                if (isset($post['publishTask']) && $post['publishTask']) {
+                if (isset($post['publishTask'])) {
                     $task->setPublished(1);
                 } else {
                     $task->setPublished(0);
                 }
             
                 $targetLocale = new Common\Protobufs\Models\Locale();
-            
+
                 if (isset($post['target']) && $post['target'] != "") {
                     $targetLocale->setLanguageCode($post['target']);
                 }
@@ -810,7 +810,7 @@ class TaskRouteHandler
                     $index = $graphBuilder->find($task->getId(), $graph);
                     $node = $graph->getAllNodes($index);
                     $selectedList = array();
-                    foreach ($node->getPreviousList() as $prevId) {
+                    foreach ($node->getPrevious() as $prevId) {
                         $selectedList[] = $prevId;
                     }
 
@@ -828,6 +828,8 @@ class TaskRouteHandler
                             $taskDao->addTaskPreReq($task->getId(), $taskId);
                         }
                     }
+                    
+                    $taskDao->updateTask($task);
 
                     $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
                 } else {
@@ -848,7 +850,7 @@ class TaskRouteHandler
             $index = $graphBuilder->find($task_id, $graph);
             $node = $graph->getAllNodes($index);
 
-            $currentRow = $node->getPreviousList();
+            $currentRow = $node->getPrevious();
             $previousRow = array();
 
             while (count($currentRow) > 0) {
@@ -857,7 +859,7 @@ class TaskRouteHandler
                     $node = $graph->getAllNodes($index);
                     $tasksEnabled[$node->getTaskId()] = false;
 
-                    foreach ($node->getPreviousList() as $prevIndex) {
+                    foreach ($node->getPrevious() as $prevIndex) {
                         if (!in_array($prevIndex, $previousRow)) {
                             $previousRow[] = $prevIndex;
                         }
@@ -878,6 +880,12 @@ class TaskRouteHandler
         $languages = Lib\TemplateHelper::getLanguageList();
         $countries = Lib\TemplateHelper::getCountryList();
        
+        $publishStatus="";
+        if ($task->getPublished())
+        {
+            $publishStatus="checked";
+        } 
+                
         $app->view()->appendData(array(
             "project"             => $project,
             "extra_scripts"       => $extra_scripts,
@@ -889,6 +897,7 @@ class TaskRouteHandler
             "word_count_err"      => $word_count_err,
             "deadlockError"       => $deadlockError,
             "deadline_error"      => $deadlineError,
+            "publishStatus"      => $publishStatus,
             "taskTypeColours"     => $taskTypeColours
         ));
         
@@ -1224,7 +1233,7 @@ class TaskRouteHandler
             $post = $app->request()->post();
             
             $fileInfo = $projectDao->getProjectFileInfo($project->getId());
-            $canonicalExtension = explode(".", $fileInfo->getFileName());
+            $canonicalExtension = explode(".", $fileInfo->getFilename());
             $canonicalExtension = strtolower($canonicalExtension[count($canonicalExtension)-1]);
             
             $errors = array();
@@ -1586,14 +1595,15 @@ class TaskRouteHandler
                 }
             }
 
-            $dummyTask = new Common\Protobufs\Models\Task();        //Create a dummy task to hold the project info
+            $dummyTask = new Common\Protobufs\Models\Task(); //Create a dummy task to hold the project info
             $dummyTask->setProjectId($task->getProjectId());
             $dummyTask->setTitle($project->getTitle());
             $preReqTasks = array();
             $preReqTasks[] = $dummyTask;
         } else {
             foreach ($preReqTasks as $pTask) {
-                if ($taskReview = $userDao->getUserTaskReviews($userId, $pTask->getId())) {
+                $taskReview = $userDao->getUserTaskReviews($userId, $pTask->getId());
+                if ($taskReview) {
                     $reviews[$pTask->getId()] = $taskReview;
                 }
             }
@@ -1613,15 +1623,18 @@ class TaskRouteHandler
                     $pTask = $preReqTasks[$i++];
                     $review = new Common\Protobufs\Models\TaskReview();
                     $id = $pTask->getId();
+                    
 
                     $review->setUserId($userId);
-                    $review->setTaskId($id);
+                    if (!is_null($id)) { 
+                        $review->setTaskId($id);   
+                    }
                     $review->setProjectId($pTask->getProjectId());
 
                     if (is_null($id)) {
                         $id = $pTask->getProjectId();
                     }
-
+                    
                     if (isset($post["corrections_$id"]) && ctype_digit($post["corrections_$id"])) {
                         $value = intval($post["corrections_$id"]);
                         if ($value > 0 && $value <= 5) {
@@ -1659,7 +1672,8 @@ class TaskRouteHandler
                     }
 
                     if ($review->getProjectId() != null && $review->getUserId() != null && $error == null) {
-                        if (!$taskDao->submitReview($review)) {
+                        $submitResult = $taskDao->submitReview($review);
+                        if (!$submitResult) {
                             $error = sprintf(Lib\Localisation::getTranslation('task_review_9'), $pTask->getTitle());
                         }
                     } else {

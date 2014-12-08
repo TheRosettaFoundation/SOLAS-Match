@@ -71,8 +71,8 @@
                     
                     <label for='homepage'><strong>{Localisation::getTranslation('common_home_page')}</strong></label>
                     <input type='text' name='homepage' id='homepage' style="width: 80%"
-                    {if $org->getHomePage() != 'http://'}
-                        value="{$org->getHomePage()}"
+                    {if $org->getHomepage() != 'http://'}
+                        value="{$org->getHomepage()}"
                     {else}
                         value='http://'
                     {/if}

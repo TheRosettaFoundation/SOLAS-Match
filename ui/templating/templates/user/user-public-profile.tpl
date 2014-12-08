@@ -69,7 +69,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    {mailto address={$this_user->getEMail()} encode='hex' text={$this_user->getEMail()}}
+                                    {mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}
                                 </td>
                             </tr>
                         {/if}
@@ -124,6 +124,18 @@
                             </tr>
                             <tr>
                                 <td style="padding-bottom: 20px"/>
+                            </tr>
+                        {/if}
+                        {if $userPersonalInfo->getLanguagePreference() != null}
+                            <tr>
+                                <td>
+                                    <h3>{Localisation::getTranslation('common_language_preference')}</h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {$langPrefName}
+                                </td>
                             </tr>
                         {/if}
                     </tbody>
@@ -189,21 +201,6 @@
                             <tr>
                                 <td>
                                     {$userPersonalInfo->getBusinessNumber()}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding-bottom: 10px"/>
-                            </tr>
-                        {/if}
-                        {if $userPersonalInfo->getSip() != null}
-                            <tr>
-                                <td>
-                                    <h3>Session Initiation Protocol (SIP):</h3>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    {$userPersonalInfo->getSip()}
                                 </td>
                             </tr>
                             <tr>
@@ -440,8 +437,8 @@
                     </p>
                     <p>
                     <strong>{Localisation::getTranslation('common_home_page')}</strong><br/>
-                    {if $org->getHomePage() != "http://"}
-                        <a target="_blank" href="{$org->getHomePage()}">{$org->getHomePage()}</a>
+                    {if $org->getHomepage() != "http://"}
+                        <a target="_blank" href="{$org->getHomepage()}">{$org->getHomepage()}</a>
                     {else}
                         {Localisation::getTranslation('org_public_profile_no_home_page_listed')}
                     {/if}

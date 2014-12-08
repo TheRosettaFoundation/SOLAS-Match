@@ -92,7 +92,7 @@
             {/if}
 
             {if !isset($user)}
-                <div class="alert">
+                <div class="alert pull-left" style="width: 100%; margin-top: 10px;">
                     <p>{Localisation::getTranslation('index_6')}</p>
                     <p>{sprintf(Localisation::getTranslation('index_register_now'), {urlFor name='register'})}</p>
                 </div>

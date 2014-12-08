@@ -22,7 +22,7 @@ class ProjectRouteHandler
             array($middleware, "authUserIsLoggedIn"),
             array($this, "projectView")
         )->via("POST")->name("project-view");
-        
+
         $app->get(
             "/project/:project_id/alter/",
             array($middleware, "authUserForOrgProject"),
@@ -51,6 +51,12 @@ class ProjectRouteHandler
             "/project/:project_id/file/",
             array($this, "downloadProjectFile")
         )->name("download-project-file");
+        
+        $app->get(
+            "/project/:project_id/image/",
+            array($middleware, "authUserForProjectImage"),
+            array($this, "downloadProjectImageFile")
+        )->name("download-project-image");
 
         $app->get("/project/:project_id/test/", array($this, "test"));
     }
@@ -100,6 +106,7 @@ class ProjectRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $user_id = Common\Lib\UserSession::getCurrentUserID();
+        $adminDao = new DAO\AdminDao();
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
         $userDao = new DAO\UserDao();
@@ -224,6 +231,40 @@ class ProjectRouteHandler
                     }
                 }
             }
+
+            if (isset($post['imageApprove'])) {
+                if (!$post['imageApprove']) {
+                    $project->setImageApproved(1);
+                    $result = $projectDao->setProjectImageStatus($project_id, 1);
+                    if ($result)
+                    {
+                        $app->flashNow(
+                            "success",
+                            Lib\Localisation::getTranslation('project_view_image_approve_success')
+                        );
+                    } else {
+                        $app->flashNow(
+                            "error",
+                            Lib\Localisation::getTranslation('project_view_image_approve_failed')
+                        );
+                    }
+                } else {
+                    $project->setImageApproved(0);
+                    $result = $projectDao->setProjectImageStatus($project_id, 0);
+                    if ($result)
+                    {
+                        $app->flashNow(
+                            "success",
+                            Lib\Localisation::getTranslation('project_view_image_disapprove_success')
+                        );
+                    } else {
+                        $app->flashNow(
+                            "error",
+                            Lib\Localisation::getTranslation('project_view_image_approve_failed')
+                        );
+                    }
+                }
+            }
         }
 
         $org = $orgDao->getOrganisation($project->getOrganisationId());
@@ -231,8 +272,8 @@ class ProjectRouteHandler
         $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
         $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id, $project->getOrganisationId());
         
-        $adminDao = new DAO\AdminDao();
-        $isAdmin = $adminDao->isOrgAdmin($project->getOrganisationId(), $user_id) || $adminDao->isSiteAdmin($user_id);
+        $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
+        $isAdmin = $adminDao->isOrgAdmin($project->getOrganisationId(), $user_id) || $isSiteAdmin;
 
         if ($isOrgMember || $isAdmin) {
             $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);
@@ -291,132 +332,42 @@ class ProjectRouteHandler
             ));
         }
         
+        $preventImageCacheToken = time(); //see http://stackoverflow.com/questions/126772/how-to-force-a-web-browser-not-to-cache-images
+        
         $app->view()->appendData(array(
                 "isOrgMember"   => $isOrgMember,
                 "isAdmin"       => $isAdmin,
+                "isSiteAdmin"   => $isSiteAdmin,
+                "imgCacheToken" => $preventImageCacheToken,
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation
         ));
         $app->render("project/project.view.tpl");
     }
     
-    public function projectAlter($project_id)
+    
+    public function projectAlter($projectId)
     {
         $app = \Slim\Slim::getInstance();
-        $deadlineError = '';
-        $projectDao = new DAO\ProjectDao();
-
-        $project = $projectDao->getProject($project_id);
-        if (\SolasMatch\UI\isValidPost($app)) {
-            $post = $app->request()->post();
-            
-            if (isset($post['title'])) {
-                $project->setTitle(htmlspecialchars($post['title']));
-            }
-            if (isset($post['description'])) {
-                $project->setDescription($post['description']);
-            }
-
-            if (isset($post['word-count'])) {
-                 $result=$projectDao->updateProjectWordCount($project_id, $post['word-count']);
-                if ($result==1) {
-                    $project->setWordCount($post['word-count']);
-                } elseif ($result==2) {
-                    $app->flash("error", Lib\Localisation::getTranslation('project_alter_word_count_error_1'));
-                } else {
-                    $app->flash("error", Lib\Localisation::getTranslation('project_alter_word_count_error_2'));
-                }
-            }
-
-            if (isset($post['impact'])) {
-                $project->setImpact($post['impact']);
-            }
-            if (isset($post['deadline'])) {
-                if ($validTime = Lib\TemplateHelper::isValidDateTime($post['deadline'])) {
-                    $date = date("Y-m-d H:i:s", $validTime);
-                    $project->setDeadline($date);
-                } else {
-                    $deadlineError = Lib\Localisation::getTranslation('project_alter_11');
-                }
-            }
-            
-            $sourceLocale = new Common\Protobufs\Models\Locale();
-            if (isset($post['sourceLanguage'])) {
-                $sourceLocale->setLanguageCode($post['sourceLanguage']);
-            }
-            if (isset($post['sourceCountry'])) {
-                $sourceLocale->setCountryCode($post['sourceCountry']);
-            }
-            if (isset($post['reference']) && $post['reference'] != "http://") {
-                $project->setReference($post['reference']);
-            }
-            $project->setSourceLocale($sourceLocale);
-                        
-            if (isset($post['tags'])) {
-                $tagLabels = Lib\TemplateHelper::separateTags($post['tags']);
-                if ($tagLabels) {
-                    $project->clearTag();
-                    foreach ($tagLabels as $tagLabel) {
-                        $newTag = new Common\Protobufs\Models\Tag();
-                        $newTag->setLabel($tagLabel);
-                        $project->addTag($newTag);
-                    }
-                }
-            }
-            
-            if ($deadlineError == '') {
-                $projectDao->updateProject($project);
-                $app->redirect($app->urlFor("project-view", array("project_id" => $project_id)));
-            }
-        }
-         
-        $languages = Lib\TemplateHelper::getLanguageList();
-        $countries = Lib\TemplateHelper::getCountryList();
+        $userId = Common\Lib\UserSession::getCurrentUserID();
         
-        $tags = $project->getTagList();
-        $tag_list = "";
-        if ($tags != null) {
-            foreach ($tags as $tag) {
-                $tag_list .= $tag->getLabel() . " ";
-            }
-        }
-
-        $tagList = "[";
-        $tagDao = new DAO\TagDao();
-        $tags = $tagDao->getTags(null);
-        if ($tags) {
-            foreach ($tags as $tag) {
-                $tagList .= "\"{$tag->getLabel()}\", ";
-            }
-        }
-        $tagList = substr($tagList, 0, strlen($tagList) - 2);
-        $tagList .= "]";
-
-        $extra_scripts = "
-            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\">".
-            "</script>".
-            "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>".
-            "<script type=\"text/javascript\">
-                var tagList = $tagList;
-            </script>"
-            .file_get_contents(__DIR__."/../js/tags-autocomplete.js");
+        $extraScripts = "
+<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/dart_support.js\"></script>
+<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/browser/interop.js\"></script>
+<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/Routes/Projects/ProjectAlter.dart.js\"></script>
+<span class=\"hidden\">
+";
+        $extraScripts .= file_get_contents("ui/dart/web/Routes/Projects/ProjectAlterForm.html");
+        $extraScripts .= "</span>";
+        $platformJS =
+        "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/platform.js\"></script>";
         
-        $user_id = Common\Lib\UserSession::getCurrentUserID();
-        $adminDao = new DAO\AdminDao();
-        $isAdmin = $adminDao->isSiteAdmin($user_id);
-        
-        
-        $word_count= $project->getWordCount();
         $app->view()->appendData(array(
-                              "project"         => $project,
-                              "languages"       => $languages,
-                              "countries"       => $countries,
-                              "tag_list"        => $tag_list,
-                              "deadlineError"   => $deadlineError,
-                              "extra_scripts"   => $extra_scripts,
-                              "isAdmin" => $isAdmin,
-                              "word_count"   => $word_count
+        	"projectId" => $projectId,
+            "userId" => $userId,
+            "maxFileSize" => 2,
+            "extra_scripts" => $extraScripts,
+            "platformJS" => $platformJS
         ));
-        
         $app->render("project/project.alter.tpl");
     }
     
@@ -509,6 +460,32 @@ class ProjectRouteHandler
             $app->redirect($app->urlFor('home'));
         }
     }
+    
+    public function downloadProjectImageFile($projectId)
+    {
+        $app = \Slim\Slim::getInstance();
+        $projectDao = new DAO\ProjectDao();
+        
+        try {
+            $headArr = $projectDao->downloadProjectImageFile($projectId);
+            //Convert header data to array and set headers appropriately
+            $headArr = json_decode($headArr);
+            foreach ($headArr as $key => $val) {
+                $app->response->headers->set($key, $val);
+            }
+        } catch (Common\Exceptions\SolasMatchException $e) {
+            $app->flash(
+                "error",
+                sprintf(
+                    Lib\Localisation::getTranslation('common_error_file_not_found'),
+                    Lib\Localisation::getTranslation('common_project_image_file'),
+                    Common\Lib\Settings::get("site.system_email_address")
+                )
+            );
+            $app->redirect($app->urlFor('home'));
+        }
+    }
+    
 }
 
 $route_handler = new ProjectRouteHandler();

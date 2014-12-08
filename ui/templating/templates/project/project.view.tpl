@@ -119,7 +119,7 @@
             <thead>
             <th align="left" width="48%">{Localisation::getTranslation('common_description')}<hr/></th>
             <th></th>
-            <th align="left" width="48%">{Localisation::getTranslation('common_impact')}<hr/></th>
+            <th align="left" width="48%">{Localisation::getTranslation('common_project_image')}<hr/></th>
             </thead>
             <tbody>
                 <tr valign="top">
@@ -133,15 +133,54 @@
                         </i>
                     </td>
                     <td></td>
-                    <td>
-                        <i>
-                        {if $project->getImpact() != ''}
-                            {$project->getImpact()}
-                        {else}
-                            {Localisation::getTranslation('No impact has been listed')}
-                        {/if}  
-                        </i>               
+                    <td style = "text-align:center;">
+                    	{if $project->getImageUploaded()}
+	                        {if $isSiteAdmin}
+	                        	<img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
+		                        {if !$project->getImageApproved()}
+		                        	<form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+		                       			<input type="hidden" name="imageApprove" value="0" />
+		                        		<a class="image-approve-btn btn btn-success" onclick="$('#projectImageApproveForm').submit();">
+		            					<i class="icon-check icon-white"></i> {Localisation::getTranslation('project_view_image_approve')}</a>
+		            				</form>
+		            			{else}   
+		            				 <form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+		            				 	<input type="hidden" name="imageApprove" value="1" />
+		                        		<a class="image-approve-btn btn btn-inverse" onclick="$('#projectImageApproveForm').submit();"">
+		            					<i class="icon-check icon-white"></i> {Localisation::getTranslation('project_view_image_disapprove')}</a>
+		            				 </form>
+		                        {/if}
+		                    {else}
+		                    	{if $project->getImageApproved()}
+		                    		<img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
+		                    	{else}
+			                    	{Localisation::getTranslation('common_project_image_not_approved')}
+		                    	{/if}
+		                    {/if}
+		                {else}
+		                	{Localisation::getTranslation('common_project_image_not_uploaded')}
+                    	{/if}
                     </td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="padding-bottom: 40px"></td>
+                </tr>
+                
+                 <tr valign="top">
+                    <td colspan="3">
+                        <strong>{Localisation::getTranslation('common_impact')}</strong><hr/>
+                    </td>
+                </tr>
+                <tr>                
+                    <td class="nav nav-list unstyled" style="padding-left: 0px; padding-right: 0px;" colspan="2">
+                        <i>
+	                        {if $project->getImpact() != ''}
+	                            {$project->getImpact()}
+	                        {else}
+	                            {Localisation::getTranslation('No impact has been listed')}
+	                        {/if}  
+                        </i> 
+                    </td>                
                 </tr>
                 <tr>
                     <td colspan="3" style="padding-bottom: 40px"></td>

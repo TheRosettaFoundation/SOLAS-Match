@@ -254,8 +254,8 @@ class OrganisationDao
     public static function insertAndUpdate($org)
     {
         $ret = null;
-        $args = Lib\PDOWrapper::cleanseNull($org->getId()).",".
-            Lib\PDOWrapper::cleanseWrapStr($org->getHomePage()).",".
+        $args = Lib\PDOWrapper::cleanseNullOrWrapStr($org->getId()).",".
+            Lib\PDOWrapper::cleanseWrapStr($org->getHomepage()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($org->getName()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($org->getBiography()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($org->getEmail()).",".
@@ -263,6 +263,7 @@ class OrganisationDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($org->getCity()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($org->getCountry()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($org->getRegionalFocus());
+        
         $result = Lib\PDOWrapper::call("organisationInsertAndUpdate", $args);
         if (is_array($result)) {
             $ret = Common\Lib\ModelFactory::buildModel("Organisation", $result[0]);

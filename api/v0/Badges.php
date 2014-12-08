@@ -129,7 +129,7 @@ class Badges
         $data = Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper($format);
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Badge");
-        $data->setId(null);
+        $data->setId("");
         Dispatcher::sendResponse(null, DAO\BadgeDao::insertAndUpdateBadge($data), null, $format);
     }
 }

@@ -23,7 +23,7 @@ class ProjectDao extends BaseDao
             $ret = $this->client->call("\SolasMatch\Common\Protobufs\Models\Project", $request);
             if ($tags = $this->getProjectTags($id)) {
                 foreach ($tags as $tag) {
-                    $ret->addTag($tag);
+                    $ret->appendTag($tag);
                 }
             }
         }
@@ -164,10 +164,32 @@ class ProjectDao extends BaseDao
         return $ret;
     }
     
+    public function setProjectImageStatus($project_id, $imageStatus)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/projects/$project_id/setImageApprovalStatus/$imageStatus";
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
+        return $ret;
+    }
+    
     public function downloadProjectFile($projectId)
     {
         $ret = null;
         $request = "{$this->siteApi}/v0/io/download/project/$projectId";
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::GET);
+        
+        switch ($this->client->getResponseCode()) {
+            default:
+                return $ret;
+            case Common\Enums\HttpStatusEnum::NOT_FOUND:
+                throw new Common\Exceptions\SolasMatchException("No file!");
+        }
+    }
+    
+    public function downloadProjectImageFile($projectId)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}/v0/io/download/projectImage/$projectId";
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::GET);
         
         switch ($this->client->getResponseCode()) {

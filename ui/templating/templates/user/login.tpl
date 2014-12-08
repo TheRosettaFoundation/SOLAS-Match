@@ -31,12 +31,15 @@
             <input type="text" name="email" id="email"/>
             <label for="password"><strong>{Localisation::getTranslation('common_password')}</strong></label>
             <input type="password" name="password" id="password"/>
-            <p>
-                <input type="submit" class="btn btn-primary" name="login" value="   {Localisation::getTranslation('common_log_in')}" />
-                <input type="submit" class="btn btn-inverse" name="password_reset" value="   {Localisation::getTranslation('login_reset_password')}" />
-                <i class="icon-share icon-white" style="position:relative; right:200px;top:2px;"></i>
-                <i class="icon-exclamation-sign icon-white" style="position:relative; right:145px; top:2px;"></i>        
-            </p>
+            <div>
+                <button type="submit" name="login" class="btn btn-primary">
+  				    <i class="icon-share icon-white"></i> {Localisation::getTranslation('common_log_in')}
+				</button>
+				
+				<button type="submit" class="btn btn-inverse" name="password_reset">
+  				    <i class="icon-exclamation-sign icon-white"></i> {Localisation::getTranslation('login_reset_password')}
+				</button>
+            </div>
         </form>
     {/if}
 

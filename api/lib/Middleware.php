@@ -181,6 +181,42 @@ class Middleware
             }
         }
     }
+
+    /*
+    * Checks whether the user is an admin, if so display the image
+    * Otherwise, if the image has been uploaded and approved then display the image
+    */
+    public static function authUserForProjectImage(\Slim\Route $route)
+    {
+        if (!is_null(DAO\UserDao::getLoggedInUser())) {
+            $user = DAO\UserDao::getLoggedInUser();
+            if (self::isSiteAdmin($user->getId())) {
+                return true;
+            }
+        } else  {
+            $params = $route->getParams();
+            if ($params != null) {
+                $projectId = $params['projectId'];
+                if (!is_numeric($projectId) && strstr($projectId, '.')) {
+                    $projectId = explode('.', $projectId);
+                    $format = '.'.$projectId[1];
+                    $projectId = $projectId[0];
+                }
+                $project = DAO\ProjectDao::getProject($projectId);    
+                $projectImageUploadedAndApproved = $project->getImageApproved() && $project->getImageUploaded() ;
+                if ($projectImageUploadedAndApproved) {
+                    return true;
+                } else {
+                    Dispatcher::getDispatcher()->halt(
+                        Common\Enums\HttpStatusEnum::FORBIDDEN,
+                        "The user does not have permission to access the current resource"
+                    );
+                }
+            }
+        }
+        return false;
+    }
+    
     
     /*
      * Does the user Id match the Id of the resources owner
@@ -221,7 +257,7 @@ class Middleware
     
     public static function notFound()
     {
-        Dispatcher::getDispatcher()->redirect(Dispatcher::getDispatcher()->urlFor('notFound'));
+        Dispatcher::getDispatcher()->redirect(Dispatcher::getDispatcher()->urlFor('home'));
     }
     
     private static function isSiteAdmin($userId)

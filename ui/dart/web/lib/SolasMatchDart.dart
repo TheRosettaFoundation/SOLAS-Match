@@ -9,6 +9,7 @@ import "dart:convert";
 // libs
 part 'APIHelper.dart';
 part 'Settings.dart';
+part 'FormHelper.dart';
 part 'Loader.dart';
 part 'Localisation.dart';
 part 'ModelFactory.dart';
@@ -29,6 +30,7 @@ part 'models/UserPersonalInformation.dart';
 part 'models/Statistic.dart';
 
 // DAOs
+part '../DataAccessObjects/AdminDao.dart';
 part '../DataAccessObjects/CountryDao.dart';
 part '../DataAccessObjects/LanguageDao.dart';
 part '../DataAccessObjects/OrgDao.dart';

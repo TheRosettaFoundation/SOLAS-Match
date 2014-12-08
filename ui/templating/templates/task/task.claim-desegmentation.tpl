@@ -21,12 +21,12 @@
     </section>
 
     <section>
-        <h3>{Localisation::getTranslation('common_it_is_time_to_decide')}</h3>
-        <p> 
-            {Localisation::getTranslation('task_claim_desegmentation_7')} {Localisation::getTranslation('task_claim_desegmentation_8')}
-        </p>
         <p> 
             <form class="well" method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
+                <h3>{Localisation::getTranslation('common_it_is_time_to_decide')}</h3>
+                <p> 
+                    {Localisation::getTranslation('task_claim_desegmentation_7')} {Localisation::getTranslation('task_claim_desegmentation_8')}
+                </p>
                 <button type="submit" class="btn btn-primary">
                     <i class="icon-ok-circle icon-white"></i> {Localisation::getTranslation('task_claim_desegmentation_9')}
                 </button>

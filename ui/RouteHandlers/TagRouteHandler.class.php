@@ -132,13 +132,23 @@ class TagRouteHandler
         $tag_id = $tag->getId();
 
         $tasks = $tagDao->getTasksWithTag($tag_id, 10);
+        $taskTags = array();
+        $taskProjTitles = array();
+        $taskOrgs = array();
         for ($i = 0; $i < count($tasks); $i++) {
-            $tasks[$i]['Project'] = $projectDao->getProject($tasks[$i]->getProjectId());
-            $tasks[$i]['Org'] = $orgDao->getOrganisation($tasks[$i]['Project']->getOrganisationId());
+            $currId = $tasks[$i]->getId();
+            $currTaskProj = $projectDao->getProject($tasks[$i]->getProjectId());
+            //Get the task's project's list of tags.
+            $taskTags[$currId] = $currTaskProj->getTag();
+            $taskProjTitles[$currId] = $currTaskProj->getTitle();
+            $taskOrgs[$currId] = $orgDao->getOrganisation($currTaskProj->getOrganisationId());
         }
 
         $app->view()->setData('tasks', $tasks);
-        
+        $app->view()->setData('taskTags', $taskTags);
+        $app->view()->setData('taskProjTitles', $taskProjTitles);
+        $app->view()->setData('taskOrgs', $taskOrgs);
+
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $app->view()->appendData(array(
             "user_id" => $user_id

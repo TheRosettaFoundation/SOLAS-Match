@@ -5,7 +5,7 @@
                         <tr>
                             <td width="31%" style="text-align: center">
                                 <a rel="license" href="http://creativecommons.org/licenses/by/3.0/ie/">
-                                    <img alt="Creative Commons Licence" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/ie/88x31.png" />
+                                    <img alt="Creative Commons Licence" style="border-width:0" src="{urlFor name='home'}ui/img/88x31.png" />
                                 </a>
                                 <br />
                                 {sprintf(Localisation::getTranslation('footer_0'), "http://creativecommons.org/licenses/by/3.0/ie/", {urlFor name='terms'})}
@@ -29,7 +29,7 @@
                         </tr>
                     </table>
                     <div id="footer-menu">
-                        {mailto address={Settings::get("site.system_email_address")} encode='hex' text='Contact Us'} |
+                        {mailto address={Settings::get("site.system_email_address")} encode='hex' text={Localisation::getTranslation("footer_contact_us")}} |
                         <a href="{urlFor name='terms'}">
                             {Localisation::getTranslation('footer_terms_and_conditons')}
                         </a> |

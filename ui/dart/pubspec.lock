@@ -5,6 +5,10 @@ packages:
     description: analyzer
     source: hosted
     version: "0.10.5"
+  archive:
+    description: archive
+    source: hosted
+    version: "1.0.17"
   args:
     description: args
     source: hosted
@@ -37,6 +41,10 @@ packages:
     description: html_import
     source: hosted
     version: "0.9.0"
+  image:
+    description: image
+    source: hosted
+    version: "1.1.22"
   js:
     description: js
     source: hosted
@@ -81,6 +89,10 @@ packages:
     description: source_maps
     source: hosted
     version: "0.9.0"
+  source_span:
+    description: source_span
+    source: hosted
+    version: "1.0.0"
   sprintf:
     description: sprintf
     source: hosted

@@ -43,7 +43,7 @@ class GraphViewer
               var languageTasks = new Array();";
         
         if ($this->model && $this->model->hasRootNode()) {
-            $currentLayer = $this->model->getRootNodeList();
+            $currentLayer = $this->model->getRootNode();
             $nextLayer = array();
             
             $foundLanguages = array();
@@ -65,13 +65,13 @@ class GraphViewer
                     
                     $index = $this->graphBuilder->find($taskId, $this->model);
                     $node = $this->model->getAllNodes($index);
-                    foreach ($node->getNextList() as $nextId) {
+                    foreach ($node->getNext() as $nextId) {
                         $ret .= "postReqs[$taskId].push($nextId);";
                         if (!in_array($nextId, $nextLayer)) {
                             $nextLayer[] = $nextId;
                         }
                     }
-                    foreach ($node->getPreviousList() as $prevId) {
+                    foreach ($node->getPrevious() as $prevId) {
                         $ret .= "preReqs[$taskId].push($prevId);";
                     }
                 }
@@ -133,7 +133,7 @@ class GraphViewer
             $defs = $doc->createElement("defs");
             $defs->setAttribute('id', "svg-definitions");
             
-            $roots = $this->model->getRootNodeList();
+            $roots = $this->model->getRootNode();
             foreach ($roots as $rootId) {
                 $thisY = $this->yPos + 20;
 
@@ -206,7 +206,7 @@ class GraphViewer
                 $index = $this->graphBuilder->find($nodeId, $this->model);
                 $node = $this->model->getAllNodes($index);
                 $verticalNodeCount++;
-                foreach ($node->getNextList() as $nextId) {
+                foreach ($node->getNext() as $nextId) {
                     if (!in_array($nextId, $nextLayer)) {
                         $nextLayer[] = $nextId;
                     }

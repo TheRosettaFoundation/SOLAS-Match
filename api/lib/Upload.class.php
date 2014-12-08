@@ -93,7 +93,7 @@ class Upload
                 $ret = DAO\TaskDao::addTaskPreReq($id, $preReqId);
 
                 if ($task->getTaskType() != Common\Enums\TaskTypeEnum::DESEGMENTATION) {
-                    foreach ($currentTaskNode->getPreviousList() as $nodeId) {
+                    foreach ($currentTaskNode->getPrevious() as $nodeId) {
                         $preReq = DAO\TaskDao::getTask($nodeId);
                         if ($preReq->getTaskStatus() == Common\Enums\TaskStatusEnum::COMPLETE
                                 && $preReq->getTaskType() != Common\Enums\TaskTypeEnum::SEGMENTATION) {
@@ -126,7 +126,7 @@ class Upload
                 Common\Lib\Settings::get(
                     "files.upload_path"
                 )
-                ."proj-$projectId/task-$id/v-0/{$projectFileInfo->getFileName()}",
+                ."proj-$projectId/task-$id/v-0/{$projectFileInfo->getFilename()}",
                 $projectFile
             );
         }

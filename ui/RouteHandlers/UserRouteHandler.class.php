@@ -176,6 +176,7 @@ class UserRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
+        $langDao = new DAO\LanguageDao();
         
         $use_openid = Common\Lib\Settings::get("site.openid");
         $app->view()->setData("openid", $use_openid);
@@ -368,6 +369,7 @@ class UserRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
+        $langDao = new DAO\LanguageDao();
         
         $error = null;
         $openid = new \LightOpenID("http://".$_SERVER["HTTP_HOST"].$app->urlFor("home"));
@@ -394,6 +396,17 @@ class UserRouteHandler
                     Common\Lib\UserSession::setSession($user->getId());
                     $request = Common\Lib\UserSession::getReferer();
                     Common\Lib\UserSession::clearReferer();
+                    //Set site language to user's preferred language if it is not already
+                    $currentSiteLang = $langDao->getLanguageByCode(Common\Lib\UserSession::getUserLanguage());
+                    $userInfo = $userDao->getPersonalInfo($user->getId());
+                    $langPrefId = $userInfo->getLanguagePreference();
+                    $preferredLang = $langDao->getLanguage($langPrefId);
+                    if ($currentSiteLang != $preferredLang) {
+                        Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
+                    }
+                    
+                    //Redirect to homepage, or the page the page user was previously on e.g. if their
+                    //session timed out and they are logging in again.
                     if ($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
                         $app->redirect($request);
                     } else {
@@ -435,6 +448,15 @@ class UserRouteHandler
                 Common\Lib\UserSession::setSession($user->getId());
                 $request = Common\Lib\UserSession::getReferer();
                 Common\Lib\UserSession::clearReferer();
+                //Set site language to user's preferred language if it is not already
+                $currentSiteLang = $langDao->getLanguageByCode(Common\Lib\UserSession::getUserLanguage());
+                $userInfo = $userDao->getPersonalInfo($user->getId());
+                $langPrefId = $userInfo->getLanguagePreference();
+                $preferredLang = $langDao->getLanguage($langPrefId);
+                if ($currentSiteLang != $preferredLang) {
+                    Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
+                }
+                
                 if ($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
                     $app->redirect($request);
                 } else {
@@ -447,7 +469,7 @@ class UserRouteHandler
             }
         }
 
-        // Added check to display info message to users on IE borwsers
+        // Added check to display info message to users on IE browsers
         $browserData = get_browser(null, true);
         if (!is_null($browserData) && isset($browserData['browser'])) {
             $browser = $browserData['browser'];
@@ -537,14 +559,14 @@ class UserRouteHandler
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
         $adminDao = new DAO\AdminDao();
-        
+        $langDao = new DAO\LanguageDao();
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
         if (!is_null($loggedInUserId)) {
             $app->view()->setData("isSiteAdmin", $adminDao->isSiteAdmin($loggedInUserId));
         } else {
             $app->view()->setData('isSiteAdmin', 0);
         }
-        $user=null;
+        $user = null;
         try {
             Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER.$user_id);
             $user = $userDao->getUser($user_id);
@@ -552,7 +574,7 @@ class UserRouteHandler
             $app->flash('error', Lib\Localisation::getTranslation('common_login_required_to_access_page'));
             $app->redirect($app->urlFor('login'));
         }
-        $userPersonalInfo=null;
+        $userPersonalInfo = null;
         try {
             $userPersonalInfo = $userDao->getPersonalInfo($user_id);
         } catch (Common\Exceptions\SolasMatchException $e) {
@@ -605,6 +627,9 @@ class UserRouteHandler
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
 
+        $langPref = $langDao->getLanguage($userPersonalInfo->getLanguagePreference());
+        $langPrefName = $langPref->getName();
+        
         $app->view()->appendData(array(
             "badges" => $badges,
             "orgList" => $orgList,
@@ -616,6 +641,7 @@ class UserRouteHandler
             "extra_scripts" => $extra_scripts,
             "org_creation" => $org_creation,
             "userPersonalInfo" => $userPersonalInfo,
+            "langPrefName" => $langPrefName,
             "secondaryLanguages" => $secondaryLanguages,
             "taskTypeColours" => $taskTypeColours
         ));

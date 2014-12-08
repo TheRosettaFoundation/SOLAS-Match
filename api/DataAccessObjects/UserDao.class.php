@@ -59,7 +59,7 @@ class UserDao
         $userId = $user->getId();
         $nativeLanguageCode = null;
         $nativeCountryCode = null;
-        if (!is_null($userId) && $user->hasNativeLocale()) {
+        if (!is_null($userId) && !is_null($user->getNativeLocale())) {
             $nativeLocale = $user->getNativeLocale();
             $nativeLanguageCode = $nativeLocale->getLanguageCode();
             $nativeCountryCode = $nativeLocale->getCountryCode();
@@ -73,7 +73,7 @@ class UserDao
         }
 
         $args = Lib\PDOWrapper::cleanseNullOrWrapStr($user->getEmail()).",".
-            Lib\PDOWrapper::cleanseNull($user->getNonce()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($user->getNonce()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($user->getPassword()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($user->getBiography()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($user->getDisplayName()).",".
@@ -464,6 +464,7 @@ class UserDao
                 $ret[] = Common\Lib\ModelFactory::buildModel("User", $row);
             }
         }
+        
         return $ret;
     }
 
@@ -732,17 +733,7 @@ class UserDao
         return null;
     }
     
-    public static function createPersonalInfo($userInfo)
-    {
-        return self::savePersonalInfo($userInfo);
-    }
-            
-    public static function updatePersonalInfo($userInfo)
-    {
-        return self::savePersonalInfo($userInfo);
-    }
-    
-    private static function savePersonalInfo($userInfo)
+    public static function savePersonalInfo($userInfo)
     {
         $ret = null;
         $args = Lib\PDOWrapper::cleanseNull($userInfo->getId()).",".
@@ -751,7 +742,7 @@ class UserDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getLastName()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getMobileNumber()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getBusinessNumber()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getSip()).",".
+            Lib\PDOWrapper::cleanseNull($userInfo->getLanguagePreference()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getJobTitle()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getAddress()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getCity()).",".
@@ -771,7 +762,7 @@ class UserDao
         $lastName = null,
         $mobileNumber = null,
         $businessNumber = null,
-        $sip = null,
+        $langPref = null,
         $jobTitle = null,
         $address = null,
         $city = null,
@@ -785,7 +776,7 @@ class UserDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($lastName).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($mobileNumber).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($businessNumber).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($sip).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($langPref).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($jobTitle).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($address).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($city).",".

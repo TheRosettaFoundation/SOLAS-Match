@@ -28,6 +28,12 @@ class Projects
                         '\SolasMatch\API\V0\Projects::updateProjectWordCount'
                     );
 
+                    $app->put(
+                        '/setImageApprovalStatus/:imageStatus/',
+                        '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
+                        '\SolasMatch\API\V0\Projects::setImageApprovalStatus'
+                    );
+
                     $app->post(
                         '/calculateDeadlines(:format)/',
                         '\SolasMatch\API\Lib\Middleware::isloggedIn',
@@ -88,6 +94,11 @@ class Projects
                     '\SolasMatch\API\V0\Projects::getProjectGraph'
                 );
 
+                $app->post(
+                        '/getProjectByName/',
+                        '\SolasMatch\API\V0\Projects::getProjectByName'
+                );
+                
                 $app->get(
                     '/:projectId/',
                     '\SolasMatch\API\V0\Projects::getProject'
@@ -105,10 +116,6 @@ class Projects
                     '\SolasMatch\API\V0\Projects::deleteProject'
                 );
                 
-                $app->get(
-                    '/:title/',
-                    '\SolasMatch\API\V0\Projects::getProjectByName'
-                );
             });
 
             /* Routes starting /v0 */
@@ -148,6 +155,19 @@ class Projects
 
         $ret = null;
         $ret = DAO\ProjectDao::updateProjectWordCount($projectId, $newWordCount);
+        API\Dispatcher::sendResponse(null, $ret, null, $format);
+    }
+
+    public static function setImageApprovalStatus($projectId, $imageStatus, $format = ".json")
+    {
+        if (!is_numeric($imageStatus) && strstr($imageStatus, '.')) {
+            $imageStatus = explode('.', $imageStatus);
+            $format = '.'.$imageStatus[1];
+            $imageStatus = $imageStatus[0];
+        }
+
+        $ret = null;
+        $ret = DAO\ProjectDao::setImageApprovalStatus($projectId, $imageStatus);
         API\Dispatcher::sendResponse(null, $ret, null, $format);
     }
         
@@ -232,20 +252,11 @@ class Projects
         API\Dispatcher::sendResponse(null, DAO\ProjectDao::getProject($projectId), null, $format);
     }
     
-    public static function getProjectByName($title, $format = ".json")
+    public static function getProjectByName($format = ".json")
     {
-        if (!is_numeric($title) && strstr($title, '.')) {
-            $temp = explode('.', $title);
-            $lastIndex = sizeof($temp)-1;
-            if ($lastIndex > 0) {
-                $format = '.'.$temp[$lastIndex];
-                $title = $temp[0];
-                for ($i = 1; $i < $lastIndex; $i++) {
-                    $title = "{$title}.{$temp[$i]}";
-                }
-            }
-        }
-        $data = DAO\ProjectDao::getProjectByName(urldecode($name));
+        $title = API\Dispatcher::getDispatcher()->request()->getBody();
+        
+        $data = DAO\ProjectDao::getProjectByName($title);
         API\Dispatcher::sendResponse(null, $data, null, $format);
     }
 

@@ -21,6 +21,13 @@ class IO
         $app->group('/v0', function () use ($app) {
             $app->group('/io', function () use ($app) {
                 /* Routes starting with v0/io */
+
+                $app->delete(
+	                '/projectImage/:orgId/:projectId(:format)/',
+                    '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin',
+                    '\SolasMatch\API\V0\IO::removeProjectImage'
+                );
+
                 $app->post(
                     '/contentMime/:filename(:format)/',
                     '\SolasMatch\API\Lib\Middleware::isLoggedIn',
@@ -29,6 +36,13 @@ class IO
                 
                 /* Routes starting with /v0/io/download */
                 $app->group('/download', function () use ($app) {
+
+                    $app->get(
+                        '/projectImage/:projectId(:format)/',
+                        '\SolasMatch\API\Lib\Middleware::authUserForProjectImage', 
+                        '\SolasMatch\API\V0\IO::downloadProjectImageFile'
+                    );
+                                            
                     $app->get(
                         '/project/:projectId(:format)/',
                         '\SolasMatch\API\V0\IO::downloadProjectFile'
@@ -45,6 +59,12 @@ class IO
                         '/project/:projectId/file/:filename/:userId(:format)/',
                         '\SolasMatch\API\Lib\Middleware::isLoggedIn',
                         '\SolasMatch\API\V0\IO::saveProjectFile'
+                    );
+                    
+                    $app->put(
+                        '/project/:projectId/image/:filename/:userId(:format)/',
+                        '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+                        '\SolasMatch\API\V0\IO::saveProjectImageFile'
                     );
                     
                     $app->put(
@@ -72,9 +92,56 @@ class IO
             $format = substr($filename, $dotPos);  
             $filename = substr($filename, 0, $dotPos);
         }
+        
         $fileContent = API\Dispatcher::getDispatcher()->request()->getBody();
         
         API\Dispatcher::sendResponse(null, self::detectMimeType($fileContent, $filename), null, $format);
+    }
+    
+    public static function downloadProjectImageFile ($projectId, $format = ".json")
+    {
+        if (!is_numeric($projectId) && strstr($projectId, '.')) {
+            $projectId = explode('.', $projectId);
+            $format = '.'.$projectId[1];
+            $projectId = $projectId[0];
+        }
+        $imageFileList = glob(Common\Lib\Settings::get("files.upload_path")."proj-$projectId/image/image.*");
+        if (isset($imageFileList[0]))
+        {
+            $imageFilePath=$imageFileList[0];
+            $finfo = finfo_open(FILEINFO_MIME_TYPE); // return mime type ala mimetype extension
+            $mime = finfo_file($finfo, $imageFilePath);
+            finfo_close($finfo);
+            API\Dispatcher::sendResponse(null, self::setDownloadHeaders($imageFilePath, $mime), null, $format);    
+        } else {
+            API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::NOT_FOUND);
+        }
+    }
+    
+    public static function removeProjectImage($orgId, $projectId, $format = ".json")
+    {
+        if (!is_numeric($projectId) && strstr($projectId, '.')) {
+            $projectId = explode('.', $projectId);
+            $format = '.'.$projectId[1];
+            $projectId = $projectId[0];
+        }
+        
+        $project = DAO\ProjectDao::getProject($projectId);
+        $imageFileList = glob(Common\Lib\Settings::get("files.upload_path")."proj-$projectId/image/image.*");
+        if (count($imageFileList) > 0) {
+            $currentImageFile = $imageFileList[0];
+            $currentFileName = pathinfo($currentImageFile, PATHINFO_FILENAME);
+            $currentfileExt = pathinfo($currentImageFile, PATHINFO_EXTENSION);
+            $currentfileDir = pathinfo($currentImageFile, PATHINFO_DIRNAME);
+            $date = date('-d-m-Y-h-i-s-a', time());
+            rename($currentImageFile,$currentfileDir."/".$currentFileName.$date.".".$currentfileExt);
+            
+            $project->setImageUploaded(0);
+            $project->setImageApproved(0);
+            DAO\ProjectDao::save($project);
+            Lib\Notify::sendProjectImageRemoved($projectId);
+            API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::OK);
+        }
     }
     
     public static function downloadProjectFile($projectId, $format = ".json")
@@ -104,6 +171,7 @@ class IO
             $format = '.'.$taskId[1];
             $taskId = $taskId[0];
         }
+        
         $helper = new Common\Lib\APIHelper(".json");
         
         $version = API\Dispatcher::clenseArgs('version', Common\Enums\HttpMethodEnum::GET, 0);
@@ -113,6 +181,7 @@ class IO
         $projectId = $task->getProjectId();
         $absoluteFilePath = Common\Lib\Settings::get("files.upload_path").
                             "proj-$projectId/task-$taskId/v-$version/$fileName";
+        
         $mime = $helper->getCanonicalMime($fileName);
         if (file_exists($absoluteFilePath)) {
             API\Dispatcher::sendResponse(null, self::setDownloadHeaders($absoluteFilePath, $mime), null, $format);
@@ -190,6 +259,23 @@ class IO
         }
     }
     
+    public static function saveProjectImageFile($projectId, $filename, $userId, $format = ".json")
+    {
+        if (!is_numeric($userId) && strstr($userId, '.')) {
+            $userId = explode('.', $userId);
+            $format = '.'.$userId[1];
+            $userId = $userId[0];
+        }
+        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        
+        try {
+            self::saveProjectImageFileToFs($projectId, $data, urldecode($filename), $userId);
+            API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CREATED, $format);
+        } catch (Exception $e) {
+            API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
+        }
+    }
+    
     //! Upload a Task file
     /*!
      Used to store Task file upload details and save the file to the filesystem. If convert is true then the file will
@@ -243,7 +329,7 @@ class IO
         if ($graph) {
             $index = $graphBuilder->find($task->getId(), $graph);
             $taskNode = $graph->getAllNodes($index);
-            foreach ($taskNode->getNextList() as $nextTaskId) {
+            foreach ($taskNode->getNext() as $nextTaskId) {
                 $result = DAO\TaskDao::getTasks($nextTaskId);
                 $nextTask = $result[0];
                 self::uploadFile($nextTask, $convert, $file, 0, $userId, $filename);
@@ -269,6 +355,7 @@ class IO
         $mime = self::detectMimeType($file, $filename);
         $apiHelper = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
         $canonicalMime = $apiHelper->getCanonicalMime($filename);
+        
         if (!is_null($canonicalMime) && $mime != $canonicalMime) {
             $message = "The content type ($mime) of the file you are trying to upload does not";
             $message .= " match the content type ($canonicalMime) expected from its extension.";
@@ -285,6 +372,57 @@ class IO
         return $token;
     }
     
+    //! Records a ProjectImageFile upload
+    /*!
+     Used to keep track of Project Image files. Stores information about a project image file upload so it can be retrieved later.
+     if an image already exists in the image folder, it will make a backup of the old image by renaming it  
+     with a timestamp.
+    @param int $projectId is the id of a Project
+    @param string $filename is the name of the image file being uploaded
+    @param int $userId is the id of the user uploading the file
+    @param string $mime is the mime type of the image file being uploaded
+    @return Returns the ProjectImageFile info that was saved or null on failure.
+    */
+    private static function saveProjectImageFileToFs($projectId, $file, $filename, $userId)
+    {
+        $destination = Common\Lib\Settings::get("files.upload_path")."proj-$projectId/image";
+        if (!file_exists($destination)) {
+            mkdir($destination, 0755);
+        }
+        $mime = self::detectMimeType($file, $filename);
+        $apiHelper = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
+        $canonicalMime = $apiHelper->getCanonicalMime($filename);
+        if (!is_null($canonicalMime) && $mime != $canonicalMime) {
+            $message = "The content type ($mime) of the image file you are trying to upload does not";
+            $message .= " match the content type ($canonicalMime) expected from its extension.";
+            throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::BAD_REQUEST);
+        }
+        
+        $project = DAO\ProjectDao::getProject($projectId);
+        $project->setImageUploaded(1);
+        $project->setImageApproved(0);
+        $project = DAO\ProjectDao::save($project);
+            
+        try {
+             $imageFileList = glob(Common\Lib\Settings::get("files.upload_path")."proj-$projectId/image/image.*");
+                if (count($imageFileList)>0)
+                {
+                    $currentImageFile = $imageFileList[0];
+                    $currentfileName = pathinfo($currentImageFile, PATHINFO_FILENAME);
+                    $currentfileExt = pathinfo($currentImageFile, PATHINFO_EXTENSION);
+                    $currentfileDir = pathinfo($currentImageFile, PATHINFO_DIRNAME);
+                    $date = date('-d-m-Y-h-i-s-a', time());
+                    rename($currentImageFile,$currentfileDir."/".$currentfileName.$date.".".$currentfileExt);
+                }
+            $ext = pathinfo($filename, PATHINFO_EXTENSION);
+            file_put_contents($destination."/image.$ext", $file);
+            Lib\Notify::sendProjectImageUploaded($projectId);
+        } catch (\Exception $e) {
+            $message = "You cannot upload an image file for project ($projectId), as one already exists.";
+            throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::CONFLICT);
+        }
+    }
+
     private static function saveTaskFileToFs($task, $userId, $file, $filename, $version = null)
     {
         $taskId = $task->getId();
@@ -338,14 +476,16 @@ class IO
                 ,"xlsb" => "application/vnd.ms-excel.sheet.binary.macroEnabled.12"
                 ,"xlf"  => "application/xliff+xml"
                 ,"doc"  => "application/msword"
+                ,"ppt"  => "application/vnd.ms-powerpoint"
+                ,"xls"  => "application/vnd.ms-excel"
         );
-    
+
         $finfo = new \finfo(FILEINFO_MIME_TYPE);
         $mime = $finfo->buffer($file);
         
         $extension = explode(".", $filename);
         $extension = $extension[count($extension)-1];
-      
+
         if (($mime == "application/octet-stream" || $mime == "application/zip" || $extension == "doc" || $extension == "xlf") 
             && (array_key_exists($extension, $mimeMap))) {
             $result = $mimeMap[$extension];
