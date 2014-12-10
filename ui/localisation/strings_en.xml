@@ -1050,7 +1050,7 @@
 	<string name="index_6">Help us match you with the most suitable translation tasks.</string>
 	<string name="index_register_now"><a href="%s">Register now</a> to find the translation tasks best suited to you.</string>
     <string name="index_load_more">Load More</string>
-    <string name="index_dont_use_ie">The site is best viewed with Firefox or Google Chrome, not all features are avaliable with other browsers</string>
+    <string name="index_dont_use_ie">The site is best viewed with Firefox or Google Chrome, not all features are available with other browsers</string>
     <string name="index_still_using_ie">If you wish to continue using Internet Explorer we suggest installing <a href = "http://www.google.com/chromeframe">chrome frame</a>.</string>
 	<string name="index_donate_free_service"><strong>The Translation Commons match non-profit translation projects with language volunteers across the world. It is an open space maintained by</strong></string>
 	<string name="index_donate_support_us">You can show your appreciation and support future development by  becoming a Friend of The Rosetta Foundation or by making a once-off donation.</string>
