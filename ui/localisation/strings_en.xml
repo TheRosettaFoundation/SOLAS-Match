@@ -992,7 +992,8 @@
     <string name="user_public_profile_15">To request a reference e-mail summarising your completed work on Trommons, click the button on the right.</string>
     <string name="user_public_profile_16">Request an email outlining your work.</string>
     <string name="user_public_profile_reference_request_success">Your request was sent successfully, you will receive the email shortly.</string>
-    <string name="user_public_profile_17">Successfully updated user task stream notification subscription.</string>    
+    <string name="user_public_profile_17">Successfully updated user task stream notification subscription.</string>
+    <string name="user_public_profile_warning">Due to a technical issue beyond our control it is best to use Google Chrome when editing your profile</string>
 
 	<string name="user_reset_password_reset_user_password">Reset User Password</string>
 	<string name="user_reset_password_0">To reset your password enter the email address you registered with below.</string>
