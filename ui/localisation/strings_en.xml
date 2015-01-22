@@ -1000,7 +1000,7 @@
 	<string name="user_reset_password_1">When you click the button below you will receive an email to that email address with a link to a page where you can reset your password.</string>
 	<string name="user_reset_password_send_request">Send Request</string>
     <string name="user_reset_password_2">Password reset request sent. Check your email for further instructions.</string>
-    <string name="user_reset_password_3">Password reset request was already sent to %s. Another email has been sent to your contact address. Follow the link in this email to reset your password.</string>
+    <string name="user_reset_password_3">Password reset request was already sent to your contact address. Follow the link in this email to reset your password.</string>
     <string name="user_reset_password_4">Please enter a valid email address.</string>
 
     <string name="user_task_reviews_0">All reviews provided for this task</string>
