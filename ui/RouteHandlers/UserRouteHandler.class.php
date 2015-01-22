@@ -297,7 +297,7 @@ class UserRouteHandler
 
                     $response = $userDao->resetPassword($post['new_password'], $uid);
                     if ($response) {
-                        $app->flash("success", Lib\Localisation::getTranslation('password_reset_1'));
+                        $app->flash("success", Lib\Localisation::getTranslation('password_reset_2'));
                         $app->redirect($app->urlFor("home"));
                     } else {
                         $app->flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
