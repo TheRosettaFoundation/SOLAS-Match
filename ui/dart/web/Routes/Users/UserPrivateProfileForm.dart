@@ -361,6 +361,8 @@ class UserPrivateProfileForm extends PolymerElement
       if (nativeLanguageSelect.selectedIndex > 0 && nativeCountrySelect.selectedIndex > 0) {
         user.nativeLocale.countryCode = countries[nativeCountrySelect.selectedIndex].code;
         user.nativeLocale.languageCode = languages[nativeLanguageSelect.selectedIndex].code;
+        user.nativeLocale.countryName = countries[nativeCountrySelect.selectedIndex].name;
+        user.nativeLocale.languageName = languages[nativeLanguageSelect.selectedIndex].name;
       } else if((nativeLanguageSelect.selectedIndex > 0 && nativeCountrySelect.selectedIndex == 0) ||
                 (nativeLanguageSelect.selectedIndex == 0 && nativeCountrySelect.selectedIndex > 0)) {
         throw new ArgumentError(localisation.getTranslation("user_private_profile_native_language_blanks"));
