@@ -383,6 +383,7 @@ class TaskRouteHandler
 
     public function task($taskId)
     {
+        
         $app = \Slim\Slim::getInstance();
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
@@ -447,38 +448,80 @@ class TaskRouteHandler
                     break;
             }
         } else {
-            $user_id = Common\Lib\UserSession::getCurrentUserID();
-            $project = $projectDao->getProject($task->getProjectId());
+            if (isset($post['userIdOrEmail']) && trim($post['userIdOrEmail']) != "") {
+                $emailOrUserId = trim($post['userIdOrEmail']);
+                $userToBeAssigned = null;
+                $errorOccured = False;
+                if (ctype_digit($emailOrUserId)) { //checking for intergers in a string (user id)
+                    $userToBeAssigned = $userDao->getUser($emailOrUserId);
+                    if (is_null($userToBeAssigned)) {
+                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_assign_id_error'));
+                        $errorOccured = True;
+                    }
+                } else if (Lib\Validator::validateEmail($emailOrUserId)) {
+                    $userToBeAssigned = $userDao->getUserByEmail($emailOrUserId);
+                    if (is_null($userToBeAssigned)) {
+                        $errorOccured = True;
+                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_assign_email_error'));
+                    }
+                } else {
+                    $errorOccured = True;
+                    $app->flashNow("error",Lib\Localisation::getTranslation('task_view_assign_id_or_email_error'));
+                }
 
-            /*Metadata required for Tracking Organisations*/
-            $org_id = $project->getOrganisationId();
-            $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id, $org_id);
-            $isMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
+                if (!$errorOccured && !is_null($userToBeAssigned))
+                {
+                    $userDisplayName = $userToBeAssigned->getDisplayName();
+                    $assgneeId = $userToBeAssigned->getId();
+                    $isUserBlackListedForTask = $userDao->isBlacklistedForTask($assgneeId, $taskId);
+                    if ($isUserBlackListedForTask)
+                    {
+                        $app->flashNow("error", sprintf(Lib\Localisation::getTranslation('task_view_assign_task_banned_error'), $userDisplayName));
+                    } else {
+                        $userDao->claimTask($assgneeId, $taskId);
+                        $app->flash("success", sprintf(Lib\Localisation::getTranslation('task_view_assign_task_success'), $userDisplayName));
+                        $app->redirect($app->urlFor("project-view", array("project_id" => $task->getProjectId())));
+                    }
+                }
+                $post['userIdOrEmail']="";
+        }
 
-            $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
-            $taskTypeColours = array();
-            for ($i = 1; $i <= $numTaskTypes; $i++) {
-                $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
-            }
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
+        $project = $projectDao->getProject($task->getProjectId());
+        $adminDao = new DAO\AdminDao();
+        $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
+
+        /*Metadata required for Tracking Organisations*/
+        $org_id = $project->getOrganisationId();
+        $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id, $org_id);
+        $isMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
+
+        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
+        $taskTypeColours = array();
+        for ($i = 1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
+        }
+
+        $converter = Common\Lib\Settings::get("converter.converter_enabled");
         
-            $converter = Common\Lib\Settings::get("converter.converter_enabled");
+        $task_file_info = $taskDao->getTaskInfo($taskId);
+        $siteLocation = Common\Lib\Settings::get("site.location");
+        $file_path = "{$siteLocation}task/$taskId/download-file-user/";
+
+        $app->view()->appendData(array(
+            "taskTypeColours" => $taskTypeColours,
+            "project" => $project,
+            "converter" => $converter,
+            "task" => $task,
+            "file_preview_path" => $file_path,
+            "filename" => $task_file_info->getFilename(),
+            "isMember" => $isMember,
+            "isSiteAdmin"   => $isSiteAdmin,
+            'userSubscribedToOrganisation' => $userSubscribedToOrganisation
+        ));
+
+        $app->render("task/task.view.tpl");
         
-            $task_file_info = $taskDao->getTaskInfo($taskId);
-            $siteLocation = Common\Lib\Settings::get("site.location");
-            $file_path = "{$siteLocation}task/$taskId/download-file-user/";
-
-            $app->view()->appendData(array(
-                "taskTypeColours" => $taskTypeColours,
-                "project" => $project,
-                "converter" => $converter,
-                "task" => $task,
-                "file_preview_path" => $file_path,
-                "filename" => $task_file_info->getFilename(),
-                "isMember" => $isMember,
-                'userSubscribedToOrganisation' => $userSubscribedToOrganisation
-            ));
-
-            $app->render("task/task.view.tpl");
         }
     }
 
@@ -1044,6 +1087,7 @@ class TaskRouteHandler
                 "registered" => $registered,
                 "taskTypeColours" => $taskTypeColours,
                 "isMember" => $isOrgMember,
+                "isSiteAdmin" => $isSiteAdmin,
                 "userSubscribedToOrganisation" => $userSubscribedToOrganisation
         ));
 

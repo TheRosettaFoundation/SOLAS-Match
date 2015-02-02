@@ -78,6 +78,18 @@
 
     {include file="task/task.details.tpl"} 
 
+    {if $isSiteAdmin}
+        <div class="well">
+            <form id="assignTaskToUserForm" method="post" action="{urlFor name="task" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
+                {Localisation::getTranslation('task_view_assign_label')}
+                <input type="text" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}">
+                <a class="btn btn-primary" onclick="$('#assignTaskToUserForm').submit();">
+                    <i class="icon-user icon-white"></i>&nbsp;{Localisation::getTranslation('task_view_assign_button')}
+                </a>
+            </form> 
+        </div>
+    {/if}
+
     <p style="margin-bottom: 40px"/>        
     <table width="100%">
         <thead>
