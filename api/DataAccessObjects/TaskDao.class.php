@@ -603,6 +603,24 @@ class TaskDao
         return $result[0]['result'];
     }
 
+     //! Tracking Task Views
+    /*!
+      This API function is intended to record Task Views by Users. It records task views by users with a time-stamp.
+      The information contained within the TaskViews table is primariliy intended for data-mining purposes 
+      and improving the task score algorithm.
+      @param int $taskId is the id of a Task
+      @param int $userId is the id of a User
+      @return Returns 1 on success, 0 otherwise
+    */
+    public static function recordTaskView($taskId, $userId)
+    {
+        $args = Lib\PDOWrapper::cleanseNull($taskId).",".
+            Lib\PDOWrapper::cleanseNull($userId);
+        
+        $result = Lib\PDOWrapper::call("recordTaskView", $args);
+        return $result[0]['result'];
+    }
+    
     //! Claim a Task for processing
     /*!
       A User claims a Task so they are the only ones working on it. It also allows them to upload new versions of the

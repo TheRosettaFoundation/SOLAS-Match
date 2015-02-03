@@ -1300,6 +1300,19 @@ CREATE TABLE IF NOT EXISTS `UserTrackedOrganisations` (
     CONSTRAINT `FK_UserTrackedOrganisations_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+-- Structure of table TaskViews
+CREATE TABLE IF NOT EXISTS `TaskViews` (
+  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `task_id` BIGINT(20) UNSIGNED NOT NULL,
+  `user_id` INT(10) UNSIGNED NOT NULL,
+  `viewed-time` DATETIME NOT NULL,
+  `task_is_archived` BIT(1) DEFAULT 0 NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `TaskViewTimeStamps` (`task_id`, `user_id`, `viewed-time`),
+  KEY `FK_task_viewed_user` (`user_id`),
+  CONSTRAINT `FK_task_viewed_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 -- Data exporting was unselected.
 
 /*---------------------------------------end of tables---------------------------------------------*/
@@ -1543,6 +1556,9 @@ BEGIN
 			(tID, @`version`,@`filename`,@`contentType`,@`userIdClaimed`,uID,@`prerequisites`,@`userIdTaskCreator`,@`uploadTime`,NOW());
             IF EXISTS(SELECT 1 FROM TaskUnclaims WHERE task_id = tID) THEN
                 UPDATE TaskUnclaims tuc SET tuc.task_is_archived = 1 WHERE tuc.task_id = tID;
+            END IF;
+            IF EXISTS(SELECT 1 FROM TaskViews WHERE task_id = tID) THEN
+                UPDATE TaskViews tvs SET tvs.task_is_archived = 1 WHERE tvs.task_id = tID;
             END IF;
 		COMMIT;
 	   select 1 as result;
@@ -5404,6 +5420,28 @@ BEGIN
  end if;
 END//
 DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.recordTaskViews
+DROP PROCEDURE IF EXISTS `recordTaskView`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `recordTaskView`(IN `tID` INT, IN `uID` INT)
+BEGIN
+	IF `tID` = null OR `tID` = '' THEN SET `tID` = NULL; END IF;	
+	IF `uID` = null OR `uID` = '' THEN SET `uID` = NULL; END IF;
+	
+	IF (`uID` IS NOT NULL) AND (`tID` IS NOT NULL) THEN
+
+		INSERT INTO TaskViews (id, task_id, user_id, `viewed-time`) VALUES (NULL, `tID`, `uID`, NOW());
+		SELECT 1 as result;
+
+	ELSE
+		SELECT 0 as result;
+	END IF;
+	
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 

@@ -108,6 +108,12 @@ class Tasks
                     '\SolasMatch\API\Lib\Middleware::isloggedIn',
                     '\SolasMatch\API\V0\Tasks::archiveTask'
                 );
+                
+                $app->put(
+                    '/recordView/:taskId/user/:userId/',
+                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
+                    '\SolasMatch\API\V0\Tasks::recordTaskView'
+                );
 
                 $app->post(
                     '/reviews(:format)/',
@@ -263,6 +269,16 @@ class Tasks
         API\Dispatcher::sendResponse(null, DAO\TaskDao::moveToArchiveByID($taskId, $userId), null, $format);
     }
 
+    public static function recordTaskView($taskId, $userId, $format = ".json")
+    {
+        if (!is_numeric($userId) && strstr($userId, '.')) {
+            $userId = explode('.', $userId);
+            $format = '.'.$userId[1];
+            $userId = $userId[0];
+        }
+        API\Dispatcher::sendResponse(null, DAO\TaskDao::recordTaskView($taskId, $userId), null, $format);
+    }   
+    
     public static function submitReview($format = '.json')
     {
         $data = API\Dispatcher::getDispatcher()->request()->getBody();

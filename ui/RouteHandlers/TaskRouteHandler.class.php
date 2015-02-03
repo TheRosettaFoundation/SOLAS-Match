@@ -397,7 +397,8 @@ class TaskRouteHandler
             $app->redirect($app->urlFor("home"));
         }
         $taskClaimed = $taskDao->isTaskClaimed($taskId);
-
+        $trackTaskView = $taskDao->recordTaskView($taskId,$user_id); 
+        
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
             $project = $projectDao->getProject($task->getProjectId());
@@ -959,7 +960,7 @@ class TaskRouteHandler
         $task = $taskDao->getTask($task_id);
         $project = $projectDao->getProject($task->getProjectId());
         $user = $userDao->getUser($user_id);
-        
+        $trackTaskView = $taskDao->recordTaskView($task_id,$user_id);
         if ($task_file_info = $taskDao->getTaskInfo($task_id)) {
             $app->view()->appendData(array(
                 'task_file_info' => $task_file_info,
