@@ -208,4 +208,31 @@ class TaskDao
         });
     return ret;
   }
+  
+  /**
+    * Calls the API to get a completed proofread task corresponding to a given translation [Task] with the id [taskId].
+    * 
+    * Returns a [Future] whose value will be a proofreading [Task], otherwise prints a [String] 
+    * to the browser console showing the response code and status text.
+    */
+   static Future<Task> getProofreadTask(int taskId)
+   {
+     APIHelper client = new APIHelper('.json');
+     Future<Task> ret = client.call("Task", 'v0/tasks/proofreadTask/$taskId', 'GET')
+         .then((HttpRequest response) {
+       Task task  = null;
+       if (response.status < 400) {
+         if (response.responseText != '') {
+           Map jsonParsed = JSON.decode(response.responseText);
+           if (jsonParsed.length > 0) {
+             task = ModelFactory.generateTaskFromMap(jsonParsed);
+             };
+           }
+       } else {
+         print("Error: getProofreadTask returned " + response.status.toString() + " " + response.statusText);
+       }
+       return task;
+     });
+     return ret;
+   }
 }

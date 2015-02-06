@@ -687,6 +687,7 @@
     <string name="claimed_tasks_submit_completed_task">Submit Completed Task</string>
 	<string name="claimed_tasks_no_active_tasks_available">No Active Tasks available!</string>
     <string name="claimed_tasks_no_tasks_matching_filters">You do not have any claimed tasks which match the filter options you selected.</string>
+    <string name="claimed_tasks_download_proofread_task">Download Proofread Version</string>
 
 	<string name="task_desegmentation_desegmentation_task_details">Desegmentation task details.</string>
 	<string name="task_desegmentation_download">Download</string>

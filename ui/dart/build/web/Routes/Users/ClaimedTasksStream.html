@@ -71,7 +71,7 @@
           <p id="parent_{{task.id}}"></p>
           <p>
             <template if="{{task.taskStatus == 3 && (task.taskType == 3 || task.taskType == 2) }}">
-              <a href="{{siteAddress}}task/{{task.id}}/simple-upload" class="btn btn-small btn-primary">
+              <a href="{{siteAddress}}task/{{task.id}}/simple-upload" class="btn btn-small btn-success">
                 {{localisation.getTranslation("claimed_tasks_submit_completed_task")}}
               </a>
             </template>
@@ -89,9 +89,16 @@
               {{localisation.getTranslation("claimed_tasks_task_reviews")}}
             </a>
             <template if="{{task.taskStatus == 3}}">
-              <a href="{{siteAddress}}task/{{task.id}}/user-feedback" class="btn btn-small btn-primary">
+              <a href="{{siteAddress}}task/{{task.id}}/user-feedback" class="btn btn-small btn-danger">
                 {{localisation.getTranslation("claimed_tasks_unclaim_task")}}
               </a>
+            </template>
+             <template if="{{task.taskType == 2}}">
+              <template if="{{taskProofreadTask[task.id]}}">
+                <a href="{{siteAddress}}task/{{taskProofreadTask[task.id].id}}/download-task-latest-file/" class="btn btn-small btn-info">
+                    {{localisation.getTranslation("claimed_tasks_download_proofread_task")}}
+                </a>
+              </template>
             </template>
           </p>
           <br/>
