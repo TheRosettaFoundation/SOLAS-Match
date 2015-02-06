@@ -114,6 +114,12 @@ class Tasks
                     '\SolasMatch\API\Lib\Middleware::isloggedIn',
                     '\SolasMatch\API\V0\Tasks::recordTaskView'
                 );
+                
+                $app->get(
+                    '/proofreadTask/:taskId/',
+                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
+                    '\SolasMatch\API\V0\Tasks::getProofreadTask'
+                );
 
                 $app->post(
                     '/reviews(:format)/',
@@ -277,6 +283,16 @@ class Tasks
             $userId = $userId[0];
         }
         API\Dispatcher::sendResponse(null, DAO\TaskDao::recordTaskView($taskId, $userId), null, $format);
+    }   
+    
+    public static function getProofreadTask($taskId, $format = ".json")
+    {
+        if (!is_numeric($taskId) && strstr($taskId, '.')) {
+            $taskId = explode('.', $taskId);
+            $format = '.'.$taskId[1];
+            $taskId = $taskId[0];
+        }
+        API\Dispatcher::sendResponse(null, DAO\TaskDao::getProofreadTask($taskId), null, $format);
     }   
     
     public static function submitReview($format = '.json')

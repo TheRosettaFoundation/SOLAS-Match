@@ -991,4 +991,26 @@ class TaskDao
         }
         return $ret;
     }
+    
+    //! Given a completed translation task, get the Proofread task
+    /*!
+       This function returns the proofread task corresponding to a 
+       translation task. It will return the proofread task only if the status of the 
+       proofread task is `Complete`. This function is used to display the download link of the proofread 
+       file of Translation Tasks in the Claimed task page.
+       @param int $taskId is the id of a (translation) Task
+       @return Returns a Task object.
+    */
+    public static function getProofreadTask($taskId)
+    {
+        $task = null;
+        if (!is_null($taskId)) {
+            $args = Lib\PDOWrapper::cleanseNull($taskId);
+            $result = Lib\PDOWrapper::call("getProofreadTask", $args);
+            if ($result) {
+                $task = Common\Lib\ModelFactory::buildModel("Task", $result[0]);
+            }
+        }
+        return $task;    
+    }
 }
