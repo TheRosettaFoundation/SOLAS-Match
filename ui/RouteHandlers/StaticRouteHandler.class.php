@@ -64,7 +64,7 @@ class StaticRouteHandler
          $defaultCode = $locales[0]->getCode();
          if (trim($currentUILanguage)=="") //if current language is nothing, set it to default language
          {
-             $currentUILanguageCode = $defaultCode;
+             $currentUILanguage = $defaultCode;
          }
          $includePath = __DIR__."/../localisation/FAQ_".$currentUILanguage.".html";
          $htmlFileExists = False;
@@ -75,7 +75,6 @@ class StaticRouteHandler
              $htmlFileExists = False;
              $includePath = __DIR__."/../localisation/FAQ_".$defaultCode.".html";
          }
-                      
          $app = \Slim\Slim::getInstance();
          $app->view()->appendData(array(
              'current_page' => 'faq', 
