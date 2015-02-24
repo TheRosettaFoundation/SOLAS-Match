@@ -1,5 +1,8 @@
 {include file="header.tpl"}
 
+{if ($htmlFileExist)}
+    {include file="$includeFile"}
+{else}
 <div>    
     <div id="title" style="margin-top: 20px; text-align: center">
         <h1>{Localisation::getTranslation('faq_faq')}</h1>
@@ -258,5 +261,6 @@
 
     </div>
 </div>
-            
+{/if}
+
 {include file="footer.tpl"}

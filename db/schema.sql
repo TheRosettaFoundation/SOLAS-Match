@@ -1300,6 +1300,19 @@ CREATE TABLE IF NOT EXISTS `UserTrackedOrganisations` (
     CONSTRAINT `FK_UserTrackedOrganisations_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+-- Structure of table TaskViews
+CREATE TABLE IF NOT EXISTS `TaskViews` (
+  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `task_id` BIGINT(20) UNSIGNED NOT NULL,
+  `user_id` INT(10) UNSIGNED NOT NULL,
+  `viewed-time` DATETIME NOT NULL,
+  `task_is_archived` BIT(1) DEFAULT 0 NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `TaskViewTimeStamps` (`task_id`, `user_id`, `viewed-time`),
+  KEY `FK_task_viewed_user` (`user_id`),
+  CONSTRAINT `FK_task_viewed_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 -- Data exporting was unselected.
 
 /*---------------------------------------end of tables---------------------------------------------*/
@@ -1543,6 +1556,9 @@ BEGIN
 			(tID, @`version`,@`filename`,@`contentType`,@`userIdClaimed`,uID,@`prerequisites`,@`userIdTaskCreator`,@`uploadTime`,NOW());
             IF EXISTS(SELECT 1 FROM TaskUnclaims WHERE task_id = tID) THEN
                 UPDATE TaskUnclaims tuc SET tuc.task_is_archived = 1 WHERE tuc.task_id = tID;
+            END IF;
+            IF EXISTS(SELECT 1 FROM TaskViews WHERE task_id = tID) THEN
+                UPDATE TaskViews tvs SET tvs.task_is_archived = 1 WHERE tvs.task_id = tID;
             END IF;
 		COMMIT;
 	   select 1 as result;
@@ -5402,6 +5418,72 @@ BEGIN
  else
   select 0 as result;
  end if;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.recordTaskViews
+DROP PROCEDURE IF EXISTS `recordTaskView`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `recordTaskView`(IN `tID` INT, IN `uID` INT)
+BEGIN
+	IF `tID` = null OR `tID` = '' THEN SET `tID` = NULL; END IF;	
+	IF `uID` = null OR `uID` = '' THEN SET `uID` = NULL; END IF;
+	
+	IF (`uID` IS NOT NULL) AND (`tID` IS NOT NULL) THEN
+
+		INSERT INTO TaskViews (id, task_id, user_id, `viewed-time`) VALUES (NULL, `tID`, `uID`, NOW());
+		SELECT 1 as result;
+
+	ELSE
+		SELECT 0 as result;
+	END IF;
+	
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure getProofreadTask
+DROP PROCEDURE IF EXISTS `getProofreadTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getProofreadTask`(IN `tID` INT)
+BEGIN
+	DECLARE projectId INT DEFAULT 0;
+	DECLARE taskTitle varchar(128);
+	DECLARE langSource INT DEFAULT 0;
+	DECLARE langTarget INT DEFAULT 0;
+	DECLARE countrySource INT DEFAULT 0;
+	DECLARE countryTarget INT DEFAULT 0;
+	DECLARE taskType INT DEFAULT 0;
+	DECLARE taskStatus INT DEFAULT 0;		
+	
+	select project_id, title, `language_id-source`, `language_id-target`, `country_id-source`, `country_id-target`, `task-type_id`, `task-status_id` 
+            into projectId, taskTitle, langSource,  langTarget,   countrySource,   countryTarget,  taskType, taskStatus from Tasks where id = `tID`;
+
+	if taskType = 2 then
+		
+            select t.id, t.project_id as projectId, t.title, `word-count` as wordCount, 
+            (select `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`, 
+            (select code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
+            (select `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
+            (select code from Languages l where l.id = t.`language_id-target`) as `targetLanguageCode`, 
+            (select `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`, 
+            (select code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
+            (select `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
+            (select code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, t.`comment`,
+            `task-type_id` as taskType, `task-status_id` as taskStatus, published, deadline, `created-time` as createdTime 
+
+            from Tasks t 
+
+            where (t.project_id =  projectId)
+ 	        and (t.title =  taskTitle)
+                and (t.`language_id-source` = langSource)
+                and (t.`language_id-target` = langTarget)
+                and (t.`country_id-source` = countrySource)
+                and (t.`country_id-target` = countryTarget)
+                and (t.`task-status_id` = 4)
+                and (t.`task-type_id` = 3);
+	end if;
+
 END//
 DELIMITER ;
 

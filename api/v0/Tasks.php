@@ -108,6 +108,18 @@ class Tasks
                     '\SolasMatch\API\Lib\Middleware::isloggedIn',
                     '\SolasMatch\API\V0\Tasks::archiveTask'
                 );
+                
+                $app->put(
+                    '/recordView/:taskId/user/:userId/',
+                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
+                    '\SolasMatch\API\V0\Tasks::recordTaskView'
+                );
+                
+                $app->get(
+                    '/proofreadTask/:taskId/',
+                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
+                    '\SolasMatch\API\V0\Tasks::getProofreadTask'
+                );
 
                 $app->post(
                     '/reviews(:format)/',
@@ -263,6 +275,26 @@ class Tasks
         API\Dispatcher::sendResponse(null, DAO\TaskDao::moveToArchiveByID($taskId, $userId), null, $format);
     }
 
+    public static function recordTaskView($taskId, $userId, $format = ".json")
+    {
+        if (!is_numeric($userId) && strstr($userId, '.')) {
+            $userId = explode('.', $userId);
+            $format = '.'.$userId[1];
+            $userId = $userId[0];
+        }
+        API\Dispatcher::sendResponse(null, DAO\TaskDao::recordTaskView($taskId, $userId), null, $format);
+    }   
+    
+    public static function getProofreadTask($taskId, $format = ".json")
+    {
+        if (!is_numeric($taskId) && strstr($taskId, '.')) {
+            $taskId = explode('.', $taskId);
+            $format = '.'.$taskId[1];
+            $taskId = $taskId[0];
+        }
+        API\Dispatcher::sendResponse(null, DAO\TaskDao::getProofreadTask($taskId), null, $format);
+    }   
+    
     public static function submitReview($format = '.json')
     {
         $data = API\Dispatcher::getDispatcher()->request()->getBody();

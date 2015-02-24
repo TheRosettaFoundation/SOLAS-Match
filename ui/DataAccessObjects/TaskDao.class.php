@@ -168,6 +168,13 @@ class TaskDao extends BaseDao
         return $response;
     }
 
+    public function recordTaskView($taskId, $userId)
+    {
+        $request = "{$this->siteApi}v0/tasks/recordView/$taskId/user/$userId";
+        $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
+        return $response;
+    }
+    
     public function setTaskTags($task)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/tags";

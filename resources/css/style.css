@@ -78,3 +78,16 @@ a.faq-anchor
    top: -50px;
    visibility: hidden;
 }
+
+hr.dotted {
+  	border: 0;
+    border-top: 1px dotted gray; padding-top: .7em; margin-bottom: .7em; 
+}
+
+.back-to-top {
+	position:relative;
+	top:-5px;
+	float: right;
+	
+}
+

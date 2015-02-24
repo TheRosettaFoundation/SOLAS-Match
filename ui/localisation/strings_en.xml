@@ -687,6 +687,7 @@
     <string name="claimed_tasks_submit_completed_task">Submit Completed Task</string>
 	<string name="claimed_tasks_no_active_tasks_available">No Active Tasks available!</string>
     <string name="claimed_tasks_no_tasks_matching_filters">You do not have any claimed tasks which match the filter options you selected.</string>
+    <string name="claimed_tasks_download_proofread_task">Download Proofread Version</string>
 
 	<string name="task_desegmentation_desegmentation_task_details">Desegmentation task details.</string>
 	<string name="task_desegmentation_download">Download</string>
@@ -906,6 +907,15 @@
     <string name="task_view_3"><b>Error:</b> Failed to publish the task, please try again later.</string>
     <string name="task_view_4"><b>Error:</b> Failed to unpublish the task, please try again later.</string>
     <string name="task_view_5">Task <strong>%s</strong> not found.</string>
+    <string name="task_view_assign_id_error">The task could not be assigned: Invalid user ID or user does not exist.</string>
+    <string name="task_view_assign_email_error">The task could not be assigned: Invalid email or user does not exist.</string>
+    <string name="task_view_assign_id_or_email_error">The task could not be assigned: Invalid user ID or email.</string>
+    <string name="task_view_assign_task_banned_error">Unable to assign this task to %s as this user has been blacklisted for this task.</string>
+    <string name="task_view_assign_task_success">Successfully assigned this task to %s.</string>
+    <string name="task_view_assign_placeholder">User ID OR Email Address</string>
+    <string name="task_view_assign_label">Assign this task to a user:</string>
+    <string name="task_view_assign_button">Assign Task</string>
+    <string name="task_view_assign_confirmation">Is the User ID or Email address correct?</string>
 
 	<string name="email_verification_email_verification">Email Verification</string>
 	<string name="email_verification_0">You can complete registration here</string>

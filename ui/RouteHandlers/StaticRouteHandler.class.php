@@ -55,8 +55,31 @@ class StaticRouteHandler
     
     public function faq()
     {
+         $currentUILanguage ="";
+         $currentUILanguage = Common\Lib\UserSession::getUserLanguage();
+         $langDao = new DAO\LanguageDao();
+         $locales = array();
+         //get default language code
+         $locales[] = $langDao->getLanguageByCode(Common\Lib\Settings::get('site.default_site_language_code'));
+         $defaultCode = $locales[0]->getCode();
+         if (trim($currentUILanguage)=="") //if current language is nothing, set it to default language
+         {
+             $currentUILanguage = $defaultCode;
+         }
+         $includePath = __DIR__."/../localisation/FAQ_".$currentUILanguage.".html";
+         $htmlFileExists = False;
+         if (file_exists($includePath)) { //check whether FAQ html exists for the currently selected locale
+             $htmlFileExists = True;
+         } else {
+             //fallback to English version
+             $htmlFileExists = False;
+             $includePath = __DIR__."/../localisation/FAQ_".$defaultCode.".html";
+         }
          $app = \Slim\Slim::getInstance();
-         $app->view()->appendData(array('current_page' => 'faq'));
+         $app->view()->appendData(array(
+             'current_page' => 'faq', 
+             'includeFile' => $includePath, 
+             'htmlFileExist' => $htmlFileExists));
          $app->render("static/FAQ.tpl");
     }
     

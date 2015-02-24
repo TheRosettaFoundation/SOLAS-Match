@@ -603,6 +603,24 @@ class TaskDao
         return $result[0]['result'];
     }
 
+     //! Tracking Task Views
+    /*!
+      This API function is intended to record Task Views by Users. It records task views by users with a time-stamp.
+      The information contained within the TaskViews table is primariliy intended for data-mining purposes 
+      and improving the task score algorithm.
+      @param int $taskId is the id of a Task
+      @param int $userId is the id of a User
+      @return Returns 1 on success, 0 otherwise
+    */
+    public static function recordTaskView($taskId, $userId)
+    {
+        $args = Lib\PDOWrapper::cleanseNull($taskId).",".
+            Lib\PDOWrapper::cleanseNull($userId);
+        
+        $result = Lib\PDOWrapper::call("recordTaskView", $args);
+        return $result[0]['result'];
+    }
+    
     //! Claim a Task for processing
     /*!
       A User claims a Task so they are the only ones working on it. It also allows them to upload new versions of the
@@ -972,5 +990,27 @@ class TaskDao
             $ret = $result[0]['result'];
         }
         return $ret;
+    }
+    
+    //! Given a completed translation task, get the Proofread task
+    /*!
+       This function returns the proofread task corresponding to a 
+       translation task. It will return the proofread task only if the status of the 
+       proofread task is `Complete`. This function is used to display the download link of the proofread 
+       file of Translation Tasks in the Claimed task page.
+       @param int $taskId is the id of a (translation) Task
+       @return Returns a Task object.
+    */
+    public static function getProofreadTask($taskId)
+    {
+        $task = null;
+        if (!is_null($taskId)) {
+            $args = Lib\PDOWrapper::cleanseNull($taskId);
+            $result = Lib\PDOWrapper::call("getProofreadTask", $args);
+            if ($result) {
+                $task = Common\Lib\ModelFactory::buildModel("Task", $result[0]);
+            }
+        }
+        return $task;    
     }
 }

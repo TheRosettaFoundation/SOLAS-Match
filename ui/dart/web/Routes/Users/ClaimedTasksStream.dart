@@ -28,6 +28,7 @@ class ClaimedTasksStream extends PolymerElement
   @observable Map<int, List<Tag>> taskTags;
   @observable Map<int, String> taskColours;
   @observable Map<int, String> taskTypes;
+  @observable Map<int, Task> taskProofreadTask;
   @observable Map<int, String> statusFilters;
   @observable Map<int, String> taskStatuses;
   @observable Map<int, String> taskOrderings;
@@ -55,6 +56,7 @@ class ClaimedTasksStream extends PolymerElement
     taskTags = toObservable(new Map<int, List<Tag>>());
     taskColours = toObservable(new Map<int, String>());
     taskTypes = toObservable(new Map<int, String>());
+    taskProofreadTask = toObservable(new Map<int, Task>());
     statusFilters = toObservable(new Map<int, String>());
     taskStatuses = toObservable(new Map<int, String>());
     taskOrderings = toObservable(new Map<int, String>());
@@ -194,6 +196,8 @@ class ClaimedTasksStream extends PolymerElement
         orgMap.clear();
         taskAges.clear();
         taskTags.clear();
+        taskProofreadTask.clear();
+        
         if (userTasks.length > 0) {
           userTasks.forEach((Task task) {
             this.addTask(task);
@@ -227,6 +231,7 @@ class ClaimedTasksStream extends PolymerElement
     orgMap.clear();
     taskAges.clear();
     taskTags.clear();
+    taskProofreadTask.clear();
 
     if (len > 0) { //If there is at least one task to display, set things up to display it.
       if (len > limit) {
@@ -282,6 +287,16 @@ class ClaimedTasksStream extends PolymerElement
     } else {
       taskAges[task.id] = sprintf(localisation.getTranslation("common_added_seconds"), [dur.inSeconds.toString()]);
     }
+  
+    if (task.taskType == 2) { //if current task is a translation task
+        //Begin processing proofread task data
+        taskProofreadTask[task.id] = new Task();
+        //Get completed proofreading task of the translation task and store in the taskProofreadTask map.
+        TaskDao.getProofreadTask(task.id).then((Task proofreadTask) {
+            taskProofreadTask[task.id] = proofreadTask;
+        });
+    } else
+          taskProofreadTask[task.id] = null;
     
     //Begin processing task tag data
     taskTags[task.id] = new List<Tag>();
