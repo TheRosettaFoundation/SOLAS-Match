@@ -63,7 +63,7 @@
                 </p>
 
 
-                <a id="donate" href="http://www.therosettafoundation.org/participate/becomeafriend/" target="_blank">
+                <a id="donate" href="http://www.therosettafoundation.org/donate/" target="_blank">
                 <div class="donate-button">
                     {Localisation::getTranslation('index_donate_support_trommons')}
                 </div>
