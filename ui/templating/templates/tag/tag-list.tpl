@@ -39,12 +39,16 @@
     <p>{Localisation::getTranslation('tag_list_2')}</p>
     <input type="text" name="searchName" 
             value="{if isset($searchedText)}{$searchedText}{/if}" />
-    <p>
-        <input type="submit" name="search" value="    {Localisation::getTranslation('tag_list_search')}" class="btn btn-primary" />
-        <i class="icon-search icon-white" style="position:relative; right:75px; top:2px;"></i>
-        <input type="submit" name="listAll" value="    {Localisation::getTranslation('common_list_all')}" class="btn btn-inverse" />
-        <i class="icon-list icon-white" style="position:relative; right:75px; top:2px;"></i>
-    </p>
+    <div>
+        <button class="btn btn-primary" type="submit" name="search">
+        	<i class="icon-search icon-white"></i>
+        	{Localisation::getTranslation('tag_list_search')}
+        </button>
+        <button class="btn btn-inverse" type="submit" name="listAll">
+        	<i class="icon-list icon-white"></i>
+        	{Localisation::getTranslation('common_list_all')}
+        </button>
+    </div>
 </form>
 <p style="margin-bottom:10px;"/>
 {if isset($foundTags)}
