@@ -40,16 +40,17 @@ openid = {
 		this.input_id = input_id;
 		$('#openid_choice').show();
 		$('#openid_input_area').empty();
-		var i = 0;
+		var i = 0; j= 0;
 		// add box for each provider
 		for (id in providers_large) {
-			box = this.getBoxHTML(id, providers_large[id], (this.all_small ? 'small' : 'large'), i++);
+			box = this.getBoxHTML(id, providers_large[id], (this.all_small ? 'small' : 'large'), ++i);
 			openid_btns.append(box);
 		}
+		var indexes= [3,5,6,7,8,9];
 		if (providers_small) {
 			openid_btns.append('<br/>');
 			for (id in providers_small) {
-				box = this.getBoxHTML(id, providers_small[id], 'small', i++);
+				box = this.getBoxHTML(id, providers_small[id], 'small', indexes[j++]);
 				openid_btns.append(box);
 			}
 		}
@@ -70,6 +71,7 @@ openid = {
 					+ ' style="background: #FFF url(' + this.img_path + '../images.' + box_size + '/' + box_id + image_ext + ') no-repeat center center" '
 					+ 'class="' + box_id + ' openid_' + box_size + '_btn"></a>';
 		}
+		
 		var x = box_size == 'small' ? -index * 24 : -index * 100;
 		var y = box_size == 'small' ? -60 : 0;
 		return '<a title="' + this.image_title.replace('{provider}', provider["name"]) + '" href="javascript:openid.signin(\'' + box_id + '\');"'

@@ -6,10 +6,10 @@
 */
 
 var providers_large = {
-	google : {
+	/*google : {
 		name : 'Google',
 		url : 'https://www.google.com/accounts/o8/id'
-	},
+	},*/
 	yahoo : {
 		name : 'Yahoo',
 		url : 'http://me.yahoo.com/'
@@ -32,7 +32,6 @@ var providers_large = {
 };
 
 var providers_small = {
-	
         clickpass : {
 		name : 'ClickPass',
 		label : 'Enter your ClickPass username',
@@ -49,11 +48,11 @@ var providers_small = {
 		url: 'http://technorati.com/people/technorati/{username}/'
 	}, */
 	
-	google_profile : {
+	/*google_profile : {
 		name : 'Google Profile',
 		label : 'Enter your Google Profile username',
 		url : 'http://www.google.com/profiles/{username}'
-	},
+	},*/
         livejournal : {
 		name : 'LiveJournal',
 		label : 'Enter your Livejournal username.',
@@ -84,9 +83,6 @@ var providers_small = {
 		label: 'Your Launchpad username',
 		url: 'https://launchpad.net/~{username}'
 	}, */
-	
-        
-	
 	
         claimid : {
 		name : 'ClaimID',

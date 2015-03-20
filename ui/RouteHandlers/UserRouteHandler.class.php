@@ -180,15 +180,29 @@ class UserRouteHandler
         
         $use_openid = Common\Lib\Settings::get("site.openid");
         $app->view()->setData("openid", $use_openid);
+        
+        $use_google_plus = Common\Lib\Settings::get("googlePlus.enabled");
+        $app->view()->setData("gplus", $use_google_plus);
+        $appendExtraScripts = False;
         if (isset($use_openid)) {
             if ($use_openid == "y" || $use_openid == "h") {
                 $extra_scripts = "
                     <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-jquery.js\"></script>
                     <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-en.js\"></script>
                     <link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/openid.css\" />";
-                $app->view()->appendData(array("extra_scripts" => $extra_scripts));
+                $appendExtraScripts = True;
             }
         }
+        
+        if (isset($use_google_plus) && ($use_google_plus == 'y')) {
+            $extra_scripts = $extra_scripts.self::createGooglePlusJavaScript();
+            $appendExtraScripts = True;
+        }
+        
+        if ($appendExtraScripts) {
+            $app->view()->appendData(array("extra_scripts" => $extra_scripts));
+        }
+        
         $error = null;
         $warning = null;
         if (\SolasMatch\UI\isValidPost($app)) {
@@ -374,7 +388,9 @@ class UserRouteHandler
         $error = null;
         $openid = new \LightOpenID("http://".$_SERVER["HTTP_HOST"].$app->urlFor("home"));
         $use_openid = Common\Lib\Settings::get("site.openid");
+        $use_google_plus = Common\Lib\Settings::get("googlePlus.enabled");
         $app->view()->setData("openid", $use_openid);
+        $app->view()->setData("gplus", $use_google_plus);
         
         if ($app->request()->isPost() || $openid->mode) {
             $post = $app->request()->post();
@@ -460,9 +476,42 @@ class UserRouteHandler
                 if ($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
                     $app->redirect($request);
                 } else {
-                    $app->redirect($app->urlFor("home"));
+                      $app->redirect($app->urlFor("home"));
                 }
             }
+            
+            $params = $app->request()->params();
+            if (isset($params["gplustoken"])) //if sign in using google plus
+            {
+                $access_token = $params["gplustoken"];
+                if (!empty($access_token)) {
+                    try {
+                        $userDao->loginWithGooglePlus($access_token);
+                    } catch (\Exception $e) {
+                        $error = sprintf(
+                            Lib\Localisation::getTranslation('gplus_error'),
+                            $app->urlFor("login"),
+                            $app->urlFor("register"),
+                            "[".$e->getMessage()."]"
+                        );
+                        
+                        if ($e->getCode() == 400 || $e->getMessage() != "") {
+                            $app->flash('error', $error);
+                            $app->redirect($app->urlFor('home'));
+                        }
+                    }
+                } else {
+                    $error = sprintf(
+                            Lib\Localisation::getTranslation('gplus_error'),
+                            $app->urlFor("login"),
+                            $app->urlFor("register"),
+                            "[An empty access token received.]"
+                        );
+                    $app->flash('error', $error);
+                    $app->redirect($app->urlFor('home'));   
+                }
+            }
+            
             $error = $app->request()->get('error');
             if (!is_null($error)) {
                 $app->flashNow('error', $app->request()->get('error_message'));
@@ -482,18 +531,68 @@ class UserRouteHandler
                 );
             }
         }
-
+        $appendExtraScripts = False;
+        $extra_scripts = "";
         if (isset($use_openid)) {
             if ($use_openid == "y" || $use_openid == "h") {
                 $extra_scripts = "
-<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-jquery.js\"></script>
-<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-en.js\"></script>
-<link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/openid.css\" />";
-                $app->view()->appendData(array("extra_scripts" => $extra_scripts));
+        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-jquery.js\"></script>
+        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-en.js\"></script>
+        <link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/openid.css\" />";
+                $appendExtraScripts = True;
             }
         }
         
+        if (isset($use_google_plus) && ($use_google_plus == 'y')) {
+            $extra_scripts = $extra_scripts.self::createGooglePlusJavaScript();
+            $appendExtraScripts = True;
+        }
+        
+        if ($appendExtraScripts) {
+            $app->view()->appendData(array("extra_scripts" => $extra_scripts));
+        }
         $app->render("user/login.tpl");
+    }
+    
+    private static function createGooglePlusJavaScript()
+    {
+        $app = \Slim\Slim::getInstance();    
+        $client_id = Common\Lib\Settings::get("googlePlus.client_id");
+        $scope = Common\Lib\Settings::get("googlePlus.scope");
+        $redirectUri = '';
+        if (isset($_SERVER['HTTPS']) && !is_null($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
+            $redirectUri = 'https://';
+        } else {
+            $redirectUri = 'http://';
+        }
+        $redirectUri .= $_SERVER['SERVER_NAME'].$app->urlFor('login');
+        
+        $script = <<<EOD
+            <script type="text/javascript">
+            function render() {
+                gapi.signin.render('customGplusBtn', {
+                    'callback': 'signInCallback',
+                    'clientid': '$client_id',
+                    'cookiepolicy': 'single_host_origin',
+                    'scope': '$scope'
+                });
+            }
+            function signInCallback(authResult) {
+                if (authResult['code']) {
+                    $('#gSignInWrapper').attr('style', 'display: none');
+                    window.location.replace('$redirectUri?gplustoken='+authResult['access_token']);
+                } else if (authResult['error']) {
+                    if (authResult['error'] != 'immediate_failed') {
+                        console.log('There was an error: ' + authResult['error']);
+                    }
+                }
+            }
+            
+            </script>
+            <script src="https://apis.google.com/js/client:platform.js?onload=render" async defer></script>
+EOD;
+        
+        return $script;
     }
     
     public function openIdLogin($openid, $app)

@@ -477,8 +477,21 @@ class UserDao extends BaseDao
             'client_id='.Common\Lib\Settings::get('oauth.client_id').'&'.
             "redirect_uri=$redirectUri&".
             'response_type=code';
-
         $app->redirect($request);
+    }
+    
+    public function loginWithGooglePlus($accessToken)
+    {
+        $app = \Slim\Slim::getInstance();
+        $request = "{$this->siteApi}v0/users/gplus/login";
+        $postArg = "token=$accessToken"; 
+        $email = $this->client->call(
+            null,
+            $request,
+            Common\Enums\HttpMethodEnum::POST,
+            $postArg
+        );
+        self::requestAuthCode($email);
     }
 
     public function loginWithAuthCode($authCode)
