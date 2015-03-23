@@ -397,6 +397,9 @@
     <string name="org_task_review_40">Review of task %s has been submitted successfully.</string>
     <string name="org_task_review_41">You have already submitted a review for this task.</string>
     <string name="org_task_review_claimant_unavailable">The user that claimed this task is not longer available.</string>
+    <string name="org_task_complete_provide_or_view_review">Use the buttons below to provide a review for the current task or view reviews already provided for this task</string>
+    <string name="org_task_complete_provide_a_review">Provide a Review</string>
+    <string name="org_task_complete_view_reviews">View Reviews</string>
 
 	<string name="archived_projects_archived_projects">Archived Projects</string>
 	<string name="archived_projects_0">A list of projects you have worked on in the past.</string>
@@ -844,6 +847,7 @@
 
     <string name="task_profile_display_archived">Archived <strong>%s</strong> ago</string>
 
+	<string name="task_review_count">Review #%s</string>
 	<string name="task_review_form_0">You can redownload the source file <a href="%s">here</a>.</string>
 	<string name="task_review_form_1">You can download the project file <a href="%s">here</a>.</string>
     <string name="task_review_form_rating">Star rating of 1-5, where 1 = "Many Errors" and 5 = "Few Errors"</string>
@@ -1155,5 +1159,21 @@
 	<string name="slim_error_4">Back.</string>
 	<string name="slim_error_5">Show Details.</string>
 	
-	<string name="gplus_error"><p>An interal error occurred while trying to sign in with Google. <a href="%s">Try logging in again</a> or <a href="%s">register</a> for an account.</p><p><strong>%s</strong></p></string>		
+	<string name="gplus_error"><p>An interal error occurred while trying to sign in with Google. <a href="%s">Try logging in again</a> or <a href="%s">register</a> for an account.</p><p><strong>%s</strong></p></string>
+	
+	<string name ="system_badge_profile_filler_title">Profile-Filler</string>
+	<string name ="system_badge_profile_filler_desc">Filled in all info for user  public profile.</string>
+	<string name ="system_badge_registered_title">Registered</string>
+	<string name ="system_badge_registered_desc">Successfully set up an account</string>
+	<string name ="system_badge_native_language_title">Native-Language</string>
+	<string name ="system_badge_native_language_desc">Filled in your native language on your user profile successfully.</string>
+	<string name ="system_badge_translator_title">Translator</string>
+	<string name ="system_badge_translator_desc">This volunteer is available for translation tasks.</string>
+	<string name ="system_badge_proofreader_title">Proofreader</string>
+	<string name ="system_badge_proofreader_desc">This volunteer is available for proofreading tasks.</string>
+	<string name ="system_badge_interpreter_title">Interpreter</string>
+	<string name ="system_badge_interpreter_desc">This volunteer is available for interpreting tasks.</string>
+	<string name ="system_badge_polyglot_title">Polyglot</string>
+	<string name ="system_badge_polyglot_desc">One or more secondary languages selected on your profile.</string>
+			
 </resources>

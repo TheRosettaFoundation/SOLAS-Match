@@ -755,13 +755,13 @@ EOD;
                 $interval = $notifData->getInterval();
                 switch ($interval) {
                     case Common\Enums\NotificationIntervalEnum::DAILY:
-                        $interval = "daily";
+                        $interval = Lib\Localisation::getTranslation('user_task_stream_notification_edit_daily');
                         break;
                     case Common\Enums\NotificationIntervalEnum::WEEKLY:
-                        $interval = "weekly";
+                        $interval = Lib\Localisation::getTranslation('user_task_stream_notification_edit_weekly');
                         break;
                     case Common\Enums\NotificationIntervalEnum::MONTHLY:
-                        $interval = "monthly";
+                        $interval = Lib\Localisation::getTranslation('user_task_stream_notification_edit_monthly'); 
                         break;
                 }
 
