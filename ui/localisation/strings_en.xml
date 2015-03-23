@@ -1159,7 +1159,7 @@
 	<string name="slim_error_4">Back.</string>
 	<string name="slim_error_5">Show Details.</string>
 	
-	<string name="gplus_error"><p>An interal error occurred while trying to sign in with Google. <a href="%s">Try logging in again</a> or <a href="%s">register</a> for an account.</p><p><strong>%s</strong></p></string>
+	<string name="gplus_error"><p>An internal error occurred while trying to sign in with Google. <a href="%s">Try logging in again</a> or <a href="%s">register</a> for an account.</p><p><strong>%s</strong></p></string>
 	
 	<string name ="system_badge_profile_filler_title">Profile-Filler</string>
 	<string name ="system_badge_profile_filler_desc">Filled in all info for user  public profile.</string>
