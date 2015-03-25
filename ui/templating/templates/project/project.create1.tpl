@@ -11,8 +11,6 @@
         <div id="SiteLocation">{Common\Lib\Settings::get('site.location')}</div>
         <div id="SiteAPI">{Common\Lib\Settings::get('site.api')}</div>
         <div id="imageMaxFileSize">{Common\Lib\Settings::get('project_images.max_size')}</div>
-        <div id="imageMaxWidth">{Common\Lib\Settings::get('project_images.max_width')}</div>
-        <div id="imageMaxHeight">{Common\Lib\Settings::get('project_images.max_height')}</div>
         <div id="supportedImageFormats">{Common\Lib\Settings::get('project_images.supported_formats')}</div>
 
         <!-- Templates... -->
@@ -45,7 +43,7 @@
 
         <div id="placeholder_for_errors_1"></div>
 
-        <form method="post" action="{urlFor name="project-tasks-create"}" accept-charset="utf-8">
+        <form method="post" action="{urlFor name="project-create1" options="org_id.$org_id"}" accept-charset="utf-8">
 
             <div id ="projFormTop" class="pull-left">
             <div class="projFormTopBlock">
