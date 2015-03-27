@@ -10,6 +10,8 @@ require_once __DIR__."/../../Common/Enums/TaskTypeEnum.class.php";
 require_once __DIR__."/../../Common/Enums/TaskStatusEnum.class.php";
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
 
+require_once __DIR__."/api/v0/IO.php"; //(**) ALAN Work In Progress
+
 class ProjectRouteHandler
 {
     public function init()
@@ -416,106 +418,241 @@ class ProjectRouteHandler
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
 
-(**)... Maybe...
-        $titleError = null;
-        $wordCountError = null;
-        $deadlineError = null;
-        $taskPreReqs = array();
-        $task = new Common\Protobufs\Models\Task();
-        $project = $projectDao->getProject($project_id);???
-        $projectTasks = $projectDao->getProjectTasks($project_id);
-        $task->setProjectId($project_id);
-...(**)
-
         if ($post = $app->request()->post()) {
-
-            if (isset($post['title'])) {
-                $task->setTitle($post['title']);
+            if (empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact'])
+                    || empty($post['sourceCountrySelect']) || empty($post['sourceLanguageSelect']) || empty($post['project_deadline'])
+                    || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $post['project_deadline'])
+                    || empty($post['wordCountInput'] || !ctype_digit($post['wordCountInput']))) {
+                // Note the deadline date validation above is only partial (these checks have also been done on client size, if that is to be trusted)
+                $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_to_create_project'), 'project_title'));
             } else {
-                $titleError = Lib\Localisation::getTranslation('task_create_5');
-            }
+                $sourceLocale = new Common\Protobufs\Models\Locale();
+                $project = new Common\Protobufs\Models\Project();
 
-            if (isset($post['comment'])) {
-                $task->setComment($post['comment']);
-            }
+                $project->setId(null);
+                $project->setTitle($post['project_title']);
+                $project->setDescription($post['project_description']);
+                $project->setDeadline($post['project_deadline']);
+                $project->setImpact($post['project_impact']);
+                $project->setReference($post['project_reference']);
+                $project->setWordCount($post['wordCountInput']);
 
-            $projectSourceLocale = $project->getSourceLocale();
-            $taskSourceLocale = new Common\Protobufs\Models\Locale();
-            $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
-            $taskSourceLocale->setCountryCode($projectSourceLocale->getCountryCode());
-            $task->setSourceLocale($taskSourceLocale);
-            $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+                $sourceLocale->setCountryCode($post['sourceCountrySelect']);
+                $sourceLocale->setLanguageCode($post['sourceLanguageSelect']);
+                $project->setSourceLocale($sourceLocale);
 
-            $taskTargetLocale = new Common\Protobufs\Models\Locale();
-            if (isset($post['targetLanguage'])) {
-                $taskTargetLocale->setLanguageCode($post['targetLanguage']);
-            }
-            if (isset($post['targetCountry'])) {
-                $taskTargetLocale->setCountryCode($post['targetCountry']);
-            }
-            $task->setTargetLocale($taskTargetLocale);
+                $project->setOrganisationId($org_id);
+                $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
 
-            if (isset($post['taskType'])) {
-                $task->setTaskType($post['taskType']);
-            }
-
-            if (ctype_digit($post['word_count'])) {
-                $task->setWordCount($post['word_count']);
-            } elseif ($post['word_count'] != "") {
-                $wordCountError = Lib\Localisation::getTranslation('task_alter_6');
-            } else {
-                $wordCountError = Lib\Localisation::getTranslation('task_alter_7');
-            }
-
-            if (isset($post['deadline'])) {
-                if ($validTime = Lib\TemplateHelper::isValidDateTime($post['deadline'])) {
-                    $date = date("Y-m-d H:i:s", $validTime);
-                    $task->setDeadline($date);
+                $project = $projectDao->createProject($project);
+                if (empty($project) || $project->getId() <= 0) {
+                    $app->flashNow('error', Lib\Localisation::getTranslation('project_create_title_conflict'));
                 } else {
-                    $deadlineError = Lib\Localisation::getTranslation('task_alter_8');
-                }
-            }
+                    $projectTagList = array();
+                    if (!empty($post['tagList'])) {
+                        $tagLabels = explode(' ', $post['tagList']);
+                        foreach ($tagLabels as $tagLabel) {
+                            $tagLabel = trim($tagLabel);
+                            if (!empty($tagLabel)) {
+                                $tag = new Common\Protobufs\Models\Tag();
+                                $tag->setLabel($tagLabel);
+                                $projectTagList[] = $tag;
+                            }
+                        }
+                    }
 
-            if (isset($post['published'])) {
-                $task->setPublished(1);
-            } else {
-                $task->setPublished(0);
-            }
+                    $projectTags = API\DAO\TagsDao::updateTags($project->getId(), $projectTagList);
+                    $project->clearTag();
+                    foreach ($projectTags as $projectTag) {
+                        $project->addTag($projectTag);
+                    }
 
-            if (is_null($titleError) && is_null($wordCountError) && is_null($deadlineError)) {
-                $newTask = $taskDao->createTask($task);
-                $newTaskId = $newTask->getId();
+                    $projectDao->updateProject($project);
 
-                $upload_error = null;
-                try {
-                    $upload_error = $taskDao->saveTaskFile(
-                        $newTaskId,
-                        $user_id,
-                        $projectDao->getProjectFile($project_id)
-                    );
-                } catch (\Exception  $e) {
-                    $upload_error = Lib\Localisation::getTranslation('task_simple_upload_7') . $e->getMessage();
-                }
+                    if (empty($_FILES['projectFile']['name']) || !empty($_FILES['projectFile']['error']) || empty($_FILES['projectFile']['tmp_name'])
+                            || (($data = file_get_contents($_FILES['projectFile']['tmp_name'])) === false)) {
+                        $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), $_FILES['projectFile']['name']));
+                        $projectDao->deleteProject($project->getId());
+                    } else {
+                        $success = \SolasMatch\API\V0\IO::saveProjectFileToFileSystem($project->getId(), $data, $_FILES['projectFile']['name'], $user_id);
+                        if (!success) {
+                            $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('common_error_file_stopped_by_extension')));
+                            $projectDao->deleteProject($project->getId());
+                        } else {
+                            $image_failed = false;
+                            if (!empty($_FILES['projectImageFile']['name'])) {
+                                $projectImageFileName = $_FILES['projectImageFile']['name'];
+                                $extensionStartIndex = strrpos($projectImageFileName, '.');
+                                // Check that file has an extension
+                                if ($extensionStartIndex > 0) {
+                                    $extension = substr($projectImageFileName, $extensionStartIndex + 1);
+                                    $extension = strtolower($extension);
+                                    $projectImageFileName = substr($projectImageFileName, 0, $extensionStartIndex + 1) . $extension;
 
-                if (isset($post['totalTaskPreReqs']) && $post['totalTaskPreReqs'] > 0) {
-                    for ($i = 0; $i < $post['totalTaskPreReqs']; $i++) {
-                        if (isset($post["preReq_$i"])) {
-                            $taskDao->addTaskPreReq($newTaskId, $post["preReq_$i"]);
+                                    // Check that the file extension is valid for an image
+                                    if (!in_array($extension, explode(",", Common\Lib\Settings::get('project_images.supported_formats')))) {
+                                        $image_failed = true;
+                                    }
+                                } else {
+                                    // File has no extension
+                                    $image_failed = true;
+                                }
+
+                                if ($image_failed || !empty($_FILES['projectImageFile']['error']) || empty($_FILES['projectImageFile']['tmp_name'])
+                                        ||(($data = file_get_contents($_FILES['projectImageFile']['tmp_name'])) === false)) {
+                                    $image_failed = true;
+                                } else {
+                                    $imageMaxWidth  = Common\Lib\Settings::get('project_images.max_width');
+                                    $imageMaxHeight = Common\Lib\Settings::get('project_images.max_height');
+                                    list($width, $height) = getimagesize($_FILES['projectImageFile']['tmp_name']);
+
+                                    if (empty($width) || empty($height) || (($width <= $imageMaxWidth) && ($height <= $imageMaxHeight))) {
+                                        $success = \SolasMatch\API\V0\IO::saveProjectImageFileToFileSystem($project->getId(), $data, $projectImageFileName, $user_id);
+                                    } else { // Resize the image
+                                        $ratio = min($imageMaxWidth / $width, $imageMaxHeight / $height);
+                                        $newWidth  = floor($width * $ratio);
+                                        $newHeight = floor($height * $ratio);
+
+                                        $img = '';
+                                        if ($extension == 'gif') {
+                                            $img = imagecreatefromgif($_FILES['projectImageFile']['tmp_name']);
+                                        } elseif ($extension == 'png') {
+                                            $img = imagecreatefrompng($_FILES['projectImageFile']['tmp_name']);
+                                        } else {
+                                            $img = imagecreatefromjpeg($_FILES['projectImageFile']['tmp_name']);
+                                        }
+
+                                        $tci = imagecreatetruecolor($newWidth, $newHeight);
+                                        if (!empty($img) && $tci !== false) {
+                                            if (imagecopyresampled($tci, $img, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height)) {
+                                                imagejpeg($tci, $_FILES['projectImageFile']['tmp_name']); // Overwrite
+                                                // If we did not get this far, give up and use the un-resized image
+                                            }
+                                        }
+
+                                        $data = file_get_contents($_FILES['projectImageFile']['tmp_name']);
+                                        if ($data !== false) {
+                                            $success = \SolasMatch\API\V0\IO::saveProjectImageFileToFileSystem($project->getId(), $data, $projectImageFileName, $user_id);
+                                        } else {
+                                            $success = false;
+                                        }
+                                    }
+                                    if (!success) {
+                                      $image_failed = true;
+                                    }
+                                }
+                            }
+                            if ($image_failed) {
+                                $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_image'), $_FILES['projectImageFile']['name']));
+                                $projectDao->deleteProject($project->getId());
+                            } else {
+                                // Continue here whether there is, or is not, an image file uploaded as long as there was not an explicit failure
+
+                                // Add Tasks for the new Project
+                                $targetCount = 0;
+                                $creatingTasksSuccess = true;
+                                $createdTasks = array();
+                                while (!empty($post["target_language$targetCount"]) && !empty($post["target_country$targetCount"])) {
+
+                                    if (!empty($post["segmentation_$targetCount"])) {
+                                        // Create segmentation task
+                                        $id = addProjectTask(
+                                            $project,
+                                            $post["target_language$targetCount"],
+                                            $post["target_country$targetCount"],
+                                            Common\Enums\TaskTypeEnum::SEGMENTATION,
+                                            0,
+                                            $createdTasks,
+                                            $user_id,
+                                            $projectDao,
+                                            $taskDao,
+                                            $app,
+                                            $post);
+                                        if (!$id) {
+                                            $creatingTasksSuccess = false;
+                                            break;
+                                        }
+
+                                    } else {
+                                        // Not a segmentation task, so translation and/or proofreading will be created.
+                                        if (!empty($post["translation_$targetCount"])) {
+                                            $translation_Task_Id = addProjectTask(
+                                                $project,
+                                                $post["target_language$targetCount"],
+                                                $post["target_country$targetCount"],
+                                                Common\Enums\TaskTypeEnum::TRANSLATION,
+                                                0,
+                                                $createdTasks,
+                                                $user_id,
+                                                $projectDao,
+                                                $taskDao,
+                                                $app,
+                                                $post);
+                                            if (!$translation_Task_Id) {
+                                                $creatingTasksSuccess = false;
+                                                break;
+                                            }
+
+                                            if (!empty($post["proofreading_$targetCount"])) {
+                                                $id = addProjectTask(
+                                                    $project,
+                                                    $post["target_language$targetCount"],
+                                                    $post["target_country$targetCount"],
+                                                    Common\Enums\TaskTypeEnum::PROOFREADING,
+                                                    $translation_Task_Id,
+                                                    $createdTasks,
+                                                    $user_id,
+                                                    $projectDao,
+                                                    $taskDao,
+                                                    $app,
+                                                    $post);
+                                                if (!$id) {
+                                                    $creatingTasksSuccess = false;
+                                                    break;
+                                                }
+                                            }
+                                        } elseif (empty($post["translation_$targetCount"]) && !empty($post["proofreading_$targetCount"])) {
+                                            // Only a proofreading task to be created
+                                            $id = addProjectTask(
+                                                $project,
+                                                $post["target_language$targetCount"],
+                                                $post["target_country$targetCount"],
+                                                Common\Enums\TaskTypeEnum::PROOFREADING,
+                                                0,
+                                                $createdTasks,
+                                                $user_id,
+                                                $projectDao,
+                                                $taskDao,
+                                                $app,
+                                                $post);
+                                            if (!$id) {
+                                                $creatingTasksSuccess = false;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    $targetCount++;
+                                }
+
+                                if (!$creatingTasksSuccess) {
+                                    foreach ($createdTasks as $taskIdToDelete) {
+                                        if ($taskIdToDelete) {
+                                            $taskDao->deleteTask($taskIdToDelete);
+                                        }
+                                    }
+                                    $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), $_FILES['projectFile']['name']));
+                                    $projectDao->deleteProject($project->getId());
+                                } else {
+                                    $projectDao->calculateProjectDeadlines($project->getId());
+
+                                    $app->redirect($app->urlFor('project-view', array('project_id' => $project->getId())));
+                                }
+                            }
                         }
                     }
                 }
-
-                if (is_null($upload_error)) {
-  UI HAD THIS(**) window.location.assign(siteLocation + "project/" + project.id + "/view");
-                    $app->redirect($app->urlFor("task-created", array("task_id" => $newTaskId)));
-                } else {
-                    $taskDao->deleteTask($newTaskId);
-                    $app->view()->appendData(array("upload_error" => $upload_error));
-                }
             }
         }
-
-
 
         $languages = Lib\TemplateHelper::getLanguageList();
         $countries = Lib\TemplateHelper::getCountryList();
@@ -567,11 +704,76 @@ class ProjectRouteHandler
             'selected_minute'=> 0,
             "languages"      => $languages,
             "countries"      => $countries,
-            "titleError"    => $titleError,(**)MAYBE
-            "wordCountError"=> $wordCountError,(**)MAYBE
-            "deadlineError" => $deadlineError,(**)MAYBE
         ));
         $app->render("project/project.create1.tpl");
+    }
+
+    private function addProjectTask(
+        $project,
+        $target_language,
+        $target_country,
+        $taskType,
+        $preReqTaskId,
+        &$createdTasks,
+        $user_id,
+        $projectDao,
+        $taskDao,
+        $app,
+        $post)
+    {
+        $taskPreReqs = array();
+        $task = new Common\Protobufs\Models\Task();
+        $projectTasks = $projectDao->getProjectTasks($project->getId());
+        $task->setProjectId($project->getId());
+
+        $task->setTitle($project->getTitle());
+
+        $projectSourceLocale = $project->getSourceLocale();
+        $taskSourceLocale = new Common\Protobufs\Models\Locale();
+        $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
+        $taskSourceLocale->setCountryCode($projectSourceLocale->getCountryCode());
+        $task->setSourceLocale($taskSourceLocale);
+        $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+
+        $taskTargetLocale = new Common\Protobufs\Models\Locale();
+        $taskTargetLocale->setLanguageCode($target_language);
+        $taskTargetLocale->setCountryCode($target_country);
+        $task->setTargetLocale($taskTargetLocale);
+
+        $task->setTaskType($taskType);
+        $task->setWordCount($project->getWordCount());
+        $task->setDeadline($project->getDeadline());
+
+        if (!empty($post['publish'])) {
+            $task->setPublished(1);
+        } else {
+            $task->setPublished(0);
+        }
+
+        $newTask = $taskDao->createTask($task);
+        $newTaskId = $newTask->getId();
+        $createdTasks[] = $newTaskId;
+
+        try {
+            $upload_error = $taskDao->saveTaskFile(
+                $newTaskId,
+                $user_id,
+                $projectDao->getProjectFile($project->getId())
+            );
+        } catch (\Exception  $e) {
+            $newTaskId = 0;
+        }
+
+        if ($newTaskId && $preReqTaskId) {
+            $taskDao->addTaskPreReq($newTaskId, $preReqTaskId);
+        }
+
+        if (!empty($post['trackProject'])) {
+            $userDao = new DAO\UserDao();
+            $userDao->trackTask($user_id, $newTaskId);
+        }
+
+        return $newTaskId;
     }
 //(**) ALAN Work In Progress
 

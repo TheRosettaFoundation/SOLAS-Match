@@ -43,7 +43,7 @@
 
         <div id="placeholder_for_errors_1"></div>
 
-        <form method="post" action="{urlFor name="project-create1" options="org_id.$org_id"}" accept-charset="utf-8">
+        <form method="post" action="{urlFor name="project-create1" options="org_id.$org_id"}" enctype="multipart/form-data" accept-charset="utf-8">
 
             <div id ="projFormTop" class="pull-left">
             <div class="projFormTopBlock">
@@ -114,6 +114,7 @@
                             <select onchange="selectedYearChanged()" name="selectedYear" id="selectedYear" style="width: 4.5em">
                                 {html_options options=$year_list selected=$selected_year}
                             </select>
+                            <input type="hidden" name="project_deadline" id="project_deadline" />
                         </p>
                         <p>
                             {Localisation::getTranslation('common_hour')}:

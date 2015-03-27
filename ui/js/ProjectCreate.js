@@ -423,7 +423,7 @@ validateLocalValues()
 
   if (wordCountInput != null && wordCountInput != '') {
     // If word count is set, ensure it is a valid natural number
-    var q = parseInt("40");
+    var q = parseInt(wordCountInput);
     if (isNaN(q)) {
       wordCountError = Parameters.getTranslation("project_create_27");
       success = false;
@@ -488,6 +488,7 @@ validateLocalValues()
         mi = "0" + mi;
       }
       project.deadline = projectDeadline.getUTCFullYear() + "-" + m + "-" + d + " " + h + ":" + mi + ":00";
+      document.getElementById("project_deadline").value = project.deadline;
     } else {
       // Deadline is not a date in the future, set error message
       deadlineError = Parameters.getTranslation("project_create_25");
