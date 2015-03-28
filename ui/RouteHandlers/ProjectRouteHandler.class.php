@@ -672,16 +672,16 @@ class ProjectRouteHandler
         );
         $year_list = array();
         $yeari = (int)date('Y');
-        for (i = 0; i < 10; i++) {
+        for ($i = 0; $i < 10; $i++) {
             $year_list[$yeari] = $yeari++;
         }
         $hour_list = array();
-        for (i = 0; i < 24; i++) {
+        for ($i = 0; $i < 24; $i++) {
             $hour_list[$i] = $i;
         }
         $minute_list = array();
         $minutei = (int)date('Y');
-        for (i = 0; i < 60; i++) {
+        for ($i = 0; $i < 60; $i++) {
             $minute_list[$i] = $i;
         }
 
