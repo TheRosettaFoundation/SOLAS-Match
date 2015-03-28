@@ -484,8 +484,13 @@ class ProjectRouteHandler
                         } catch (\Exception  $e) {
                         }
                     } else {
-//                        $success = \SolasMatch\API\V0\IO::saveProjectFileToFileSystem($project->getId(), $data, $_FILES['projectFile']['name'], $user_id);
-                        if (!success) {
+                        try {
+                            $projectDao->saveProjectFile($project, $user_id, $_FILES['projectFile']['name'], $data);
+                            $success = true;
+                        } catch (\Exception  $e) {
+                            $success = false;
+                        }
+                        if (!$success) {
                             $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('common_error_file_stopped_by_extension')));
                             try {
                                 $projectDao->deleteProject($project->getId());
@@ -520,7 +525,12 @@ class ProjectRouteHandler
                                     list($width, $height) = getimagesize($_FILES['projectImageFile']['tmp_name']);
 
                                     if (empty($width) || empty($height) || (($width <= $imageMaxWidth) && ($height <= $imageMaxHeight))) {
-//                                        $success = \SolasMatch\API\V0\IO::saveProjectImageFileToFileSystem($project->getId(), $data, $projectImageFileName, $user_id);
+                                        try {
+                                            $projectDao->saveProjectImageFile($project, $user_id, $projectImageFileName, $data);
+                                            $success = true;
+                                        } catch (\Exception  $e) {
+                                            $success = false;
+                                        }
                                     } else { // Resize the image
                                         $ratio = min($imageMaxWidth / $width, $imageMaxHeight / $height);
                                         $newWidth  = floor($width * $ratio);
@@ -545,12 +555,17 @@ class ProjectRouteHandler
 
                                         $data = file_get_contents($_FILES['projectImageFile']['tmp_name']);
                                         if ($data !== false) {
-//                                            $success = \SolasMatch\API\V0\IO::saveProjectImageFileToFileSystem($project->getId(), $data, $projectImageFileName, $user_id);
+                                            try {
+                                                $projectDao->saveProjectImageFile($project, $user_id, $projectImageFileName, $data);
+                                                $success = true;
+                                            } catch (\Exception  $e) {
+                                                $success = false;
+                                            }
                                         } else {
                                             $success = false;
                                         }
                                     }
-                                    if (!success) {
+                                    if (!$success) {
                                       $image_failed = true;
                                     }
                                 }

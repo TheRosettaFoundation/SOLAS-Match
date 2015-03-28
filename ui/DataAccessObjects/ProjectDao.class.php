@@ -75,7 +75,7 @@ class ProjectDao extends BaseDao
         );
         return $ret;
     }
-    
+
     public function deleteProject($projectId)
     {
         $ret = null;
@@ -96,6 +96,38 @@ class ProjectDao extends BaseDao
         );
         return $ret;
     }
+
+//(**) ALAN Work In Progress
+    public function saveProjectFile($project, $userId, $filename, $fileData)
+    {
+        $filename = urlencode($filename);
+        $request = "{$this->siteApi}v0/io/upload/project/{$project->getId()}/file/{$filename}/{$userId}";
+        $response = $this->client->call(
+            null,
+            $request,
+            Common\Enums\HttpMethodEnum::PUT,
+            null,
+            null,
+            $fileData
+        );
+        return $response;
+    }
+
+    public function saveProjectImageFile($project, $userId, $filename, $fileData)
+    {
+        $filename = urlencode($filename);
+        $request = "{$this->siteApi}v0/io/upload/project/{$project->getId()}/image/{$filename}/{$userId}";
+        $response = $this->client->call(
+            null,
+            $request,
+            Common\Enums\HttpMethodEnum::PUT,
+            null,
+            null,
+            $fileData
+        );
+        return $response;
+    }
+//(**) ALAN Work In Progress
 
     public function calculateProjectDeadlines($projectId)
     {
@@ -123,7 +155,7 @@ class ProjectDao extends BaseDao
         }
         return $ret;
     }
-    
+
     public function getArchivedProjects()
     {
         $ret = null;
@@ -131,7 +163,7 @@ class ProjectDao extends BaseDao
         $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\ArchivedProject"), $request);
         return $ret;
     }
-    
+
     public function getProjectFile($project_id)
     {
         $ret = null;
@@ -139,7 +171,7 @@ class ProjectDao extends BaseDao
         $response = $this->client->call(null, $request);
         return $response;
     }
-    
+
     public function getProjectFileInfo($project_id)
     {
         $ret = null;
@@ -147,7 +179,7 @@ class ProjectDao extends BaseDao
         $ret = $this->client->call("\SolasMatch\Common\Protobufs\Models\ProjectFile", $request);
         return $ret;
     }
-    
+
     public function deleteProjectTags($project_id)
     {
         $ret = null;
@@ -163,7 +195,7 @@ class ProjectDao extends BaseDao
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
         return $ret;
     }
-    
+
     public function setProjectImageStatus($project_id, $imageStatus)
     {
         $ret = null;
@@ -171,13 +203,13 @@ class ProjectDao extends BaseDao
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
         return $ret;
     }
-    
+
     public function downloadProjectFile($projectId)
     {
         $ret = null;
         $request = "{$this->siteApi}/v0/io/download/project/$projectId";
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::GET);
-        
+
         switch ($this->client->getResponseCode()) {
             default:
                 return $ret;
@@ -185,13 +217,13 @@ class ProjectDao extends BaseDao
                 throw new Common\Exceptions\SolasMatchException("No file!");
         }
     }
-    
+
     public function downloadProjectImageFile($projectId)
     {
         $ret = null;
         $request = "{$this->siteApi}/v0/io/download/projectImage/$projectId";
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::GET);
-        
+
         switch ($this->client->getResponseCode()) {
             default:
                 return $ret;
