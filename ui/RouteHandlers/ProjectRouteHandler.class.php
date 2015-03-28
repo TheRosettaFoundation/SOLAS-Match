@@ -10,7 +10,7 @@ require_once __DIR__."/../../Common/Enums/TaskTypeEnum.class.php";
 require_once __DIR__."/../../Common/Enums/TaskStatusEnum.class.php";
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
 
-require_once __DIR__."/api/v0/IO.php"; //(**) ALAN Work In Progress
+require_once __DIR__."/../../api/v0/IO.php"; //(**) ALAN Work In Progress
 
 class ProjectRouteHandler
 {
