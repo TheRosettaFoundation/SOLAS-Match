@@ -10,8 +10,6 @@ require_once __DIR__."/../../Common/Enums/TaskTypeEnum.class.php";
 require_once __DIR__."/../../Common/Enums/TaskStatusEnum.class.php";
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
 
-//require_once __DIR__."/../../api/v0/IO.php"; //(**) ALAN Work In Progress
-
 class ProjectRouteHandler
 {
     public function init()
@@ -443,7 +441,11 @@ class ProjectRouteHandler
                 $project->setOrganisationId($org_id);
                 $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
 
-                $project = $projectDao->createProject($project);
+                try {
+                    $project = $projectDao->createProject($project);
+                } catch (\Exception  $e) {
+                    $project = null;
+                }
                 if (empty($project) || $project->getId() <= 0) {
                     $app->flashNow('error', Lib\Localisation::getTranslation('project_create_title_conflict'));
                 } else {
@@ -460,23 +462,35 @@ class ProjectRouteHandler
                         }
                     }
 
-                    $projectTags = API\DAO\TagsDao::updateTags($project->getId(), $projectTagList);
-                    $project->clearTag();
-                    foreach ($projectTags as $projectTag) {
-                        $project->addTag($projectTag);
+                    $failedToAddTags = false;
+                    try {
+                        $projectTags = API\DAO\TagsDao::updateTags($project->getId(), $projectTagList);
+                        $project->clearTag();
+                        foreach ($projectTags as $projectTag) {
+                            $project->addTag($projectTag);
+                        }
+
+                        $projectDao->updateProject($project);
+                    } catch (\Exception  $e) {
+                        $failedToAddTags = true;
                     }
 
-                    $projectDao->updateProject($project);
-
-                    if (empty($_FILES['projectFile']['name']) || !empty($_FILES['projectFile']['error']) || empty($_FILES['projectFile']['tmp_name'])
+                    if ($failedToAddTags
+                            || empty($_FILES['projectFile']['name']) || !empty($_FILES['projectFile']['error']) || empty($_FILES['projectFile']['tmp_name'])
                             || (($data = file_get_contents($_FILES['projectFile']['tmp_name'])) === false)) {
                         $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), $_FILES['projectFile']['name']));
-                        $projectDao->deleteProject($project->getId());
+                        try {
+                            $projectDao->deleteProject($project->getId());
+                        } catch (\Exception  $e) {
+                        }
                     } else {
 //                        $success = \SolasMatch\API\V0\IO::saveProjectFileToFileSystem($project->getId(), $data, $_FILES['projectFile']['name'], $user_id);
                         if (!success) {
                             $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('common_error_file_stopped_by_extension')));
-                            $projectDao->deleteProject($project->getId());
+                            try {
+                                $projectDao->deleteProject($project->getId());
+                            } catch (\Exception  $e) {
+                            }
                         } else {
                             $image_failed = false;
                             if (!empty($_FILES['projectImageFile']['name'])) {
@@ -543,7 +557,10 @@ class ProjectRouteHandler
                             }
                             if ($image_failed) {
                                 $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_image'), $_FILES['projectImageFile']['name']));
-                                $projectDao->deleteProject($project->getId());
+                                try {
+                                    $projectDao->deleteProject($project->getId());
+                                } catch (\Exception  $e) {
+                                }
                             } else {
                                 // Continue here whether there is, or is not, an image file uploaded as long as there was not an explicit failure
 
@@ -636,15 +653,30 @@ class ProjectRouteHandler
                                 if (!$creatingTasksSuccess) {
                                     foreach ($createdTasks as $taskIdToDelete) {
                                         if ($taskIdToDelete) {
-                                            $taskDao->deleteTask($taskIdToDelete);
+                                            try {
+                                                $taskDao->deleteTask($taskIdToDelete);
+                                            } catch (\Exception  $e) {
+                                            }
                                         }
                                     }
                                     $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), $_FILES['projectFile']['name']));
-                                    $projectDao->deleteProject($project->getId());
+                                    try {
+                                        $projectDao->deleteProject($project->getId());
+                                    } catch (\Exception  $e) {
+                                    }
                                 } else {
-                                    $projectDao->calculateProjectDeadlines($project->getId());
+                                    try {
+                                        $projectDao->calculateProjectDeadlines($project->getId());
 
-                                    $app->redirect($app->urlFor('project-view', array('project_id' => $project->getId())));
+                                        $app->redirect($app->urlFor('project-view', array('project_id' => $project->getId())));
+
+                                    } catch (\Exception  $e) {
+                                        $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), $_FILES['projectFile']['name']));
+                                        try {
+                                            $projectDao->deleteProject($project->getId());
+                                        } catch (\Exception  $e) {
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -722,7 +754,12 @@ class ProjectRouteHandler
     {
         $taskPreReqs = array();
         $task = new Common\Protobufs\Models\Task();
-        $projectTasks = $projectDao->getProjectTasks($project->getId());
+        try {
+            $projectTasks = $projectDao->getProjectTasks($project->getId());
+        } catch (\Exception  $e) {
+            return 0;
+        }
+
         $task->setProjectId($project->getId());
 
         $task->setTitle($project->getTitle());
@@ -749,27 +786,27 @@ class ProjectRouteHandler
             $task->setPublished(0);
         }
 
-        $newTask = $taskDao->createTask($task);
-        $newTaskId = $newTask->getId();
-        $createdTasks[] = $newTaskId;
-
         try {
+            $newTask = $taskDao->createTask($task);
+            $newTaskId = $newTask->getId();
+            $createdTasks[] = $newTaskId;
+
             $upload_error = $taskDao->saveTaskFile(
                 $newTaskId,
                 $user_id,
                 $projectDao->getProjectFile($project->getId())
             );
+
+            if ($newTaskId && $preReqTaskId) {
+                $taskDao->addTaskPreReq($newTaskId, $preReqTaskId);
+            }
+
+            if (!empty($post['trackProject'])) {
+                $userDao = new DAO\UserDao();
+                $userDao->trackTask($user_id, $newTaskId);
+            }
         } catch (\Exception  $e) {
-            $newTaskId = 0;
-        }
-
-        if ($newTaskId && $preReqTaskId) {
-            $taskDao->addTaskPreReq($newTaskId, $preReqTaskId);
-        }
-
-        if (!empty($post['trackProject'])) {
-            $userDao = new DAO\UserDao();
-            $userDao->trackTask($user_id, $newTaskId);
+            return 0;
         }
 
         return $newTaskId;
