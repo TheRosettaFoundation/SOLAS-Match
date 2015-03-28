@@ -10,7 +10,7 @@ require_once __DIR__."/../../Common/Enums/TaskTypeEnum.class.php";
 require_once __DIR__."/../../Common/Enums/TaskStatusEnum.class.php";
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
 
-require_once __DIR__."/../../api/v0/IO.php"; //(**) ALAN Work In Progress
+//require_once __DIR__."/../../api/v0/IO.php"; //(**) ALAN Work In Progress
 
 class ProjectRouteHandler
 {
@@ -473,7 +473,7 @@ class ProjectRouteHandler
                         $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), $_FILES['projectFile']['name']));
                         $projectDao->deleteProject($project->getId());
                     } else {
-                        $success = \SolasMatch\API\V0\IO::saveProjectFileToFileSystem($project->getId(), $data, $_FILES['projectFile']['name'], $user_id);
+//                        $success = \SolasMatch\API\V0\IO::saveProjectFileToFileSystem($project->getId(), $data, $_FILES['projectFile']['name'], $user_id);
                         if (!success) {
                             $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('common_error_file_stopped_by_extension')));
                             $projectDao->deleteProject($project->getId());
@@ -506,7 +506,7 @@ class ProjectRouteHandler
                                     list($width, $height) = getimagesize($_FILES['projectImageFile']['tmp_name']);
 
                                     if (empty($width) || empty($height) || (($width <= $imageMaxWidth) && ($height <= $imageMaxHeight))) {
-                                        $success = \SolasMatch\API\V0\IO::saveProjectImageFileToFileSystem($project->getId(), $data, $projectImageFileName, $user_id);
+//                                        $success = \SolasMatch\API\V0\IO::saveProjectImageFileToFileSystem($project->getId(), $data, $projectImageFileName, $user_id);
                                     } else { // Resize the image
                                         $ratio = min($imageMaxWidth / $width, $imageMaxHeight / $height);
                                         $newWidth  = floor($width * $ratio);
@@ -531,7 +531,7 @@ class ProjectRouteHandler
 
                                         $data = file_get_contents($_FILES['projectImageFile']['tmp_name']);
                                         if ($data !== false) {
-                                            $success = \SolasMatch\API\V0\IO::saveProjectImageFileToFileSystem($project->getId(), $data, $projectImageFileName, $user_id);
+//                                            $success = \SolasMatch\API\V0\IO::saveProjectImageFileToFileSystem($project->getId(), $data, $projectImageFileName, $user_id);
                                         } else {
                                             $success = false;
                                         }
