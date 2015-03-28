@@ -53,7 +53,8 @@ class Middleware
                 );
             }
         } else {
-            self::authUserOwnsResource($route);
+            self::isloggedIn($route);
+            //self::authUserOwnsResource($route);
         }
     }
     

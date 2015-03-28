@@ -448,7 +448,7 @@ class Users
 
                 $app->get(
                     '/:userId/',
-                    //'\SolasMatch\API\Lib\Middleware::isloggedIn',
+                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
                     '\SolasMatch\API\V0\Users::getUser'
                 );
 

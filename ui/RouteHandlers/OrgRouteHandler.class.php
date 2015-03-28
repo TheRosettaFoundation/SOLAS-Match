@@ -342,20 +342,30 @@ class OrgRouteHandler
             
             if (isset($post['email'])) {
                 if (Lib\Validator::validateEmail($post['email'])) {
-                    $success = $orgDao->addMember($post['email'], $org_id);
-                    if ($success) {
-                        $app->flashNow(
-                            "success",
-                            sprintf(
-                                Lib\Localisation::getTranslation('common_successfully_added_member'),
-                                $post['email'],
-                                $org->getName()
-                            )
-                        );
+                    $new_org_member = $userDao->getUserByEmail($post['email']);
+                    if (!is_null($new_org_member))
+                    {
+                        $success = $orgDao->addMember($post['email'], $org_id);
+                        if ($success) {
+                            $app->flashNow(
+                                "success",
+                                sprintf(
+                                    Lib\Localisation::getTranslation('common_successfully_added_member'),
+                                    $post['email'],
+                                    $org->getName()
+                                )
+                            );
+                        } else {
+                            $app->flashNow(
+                                "error",
+                                sprintf(Lib\Localisation::getTranslation('org_public_profile_20'), $post['email'])
+                            );
+                        }
                     } else {
+                        $email = $post['email'];
                         $app->flashNow(
                             "error",
-                            sprintf(Lib\Localisation::getTranslation('org_public_profile_20'), $post['email'])
+                            sprintf(Lib\Localisation::getTranslation('org_public_profile_21'), $email)
                         );
                     }
                 } else {
