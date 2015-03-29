@@ -704,18 +704,18 @@ class ProjectRouteHandler
         $countries = Lib\TemplateHelper::getCountryList();
 
         $month_list = array(
-            1 => Localisation::getTranslation('common_january'),
-            2 => Localisation::getTranslation('common_february'),
-            3 => Localisation::getTranslation('common_march'),
-            4 => Localisation::getTranslation('common_april'),
-            5 => Localisation::getTranslation('common_may'),
-            6 => Localisation::getTranslation('common_june'),
-            7 => Localisation::getTranslation('common_july'),
-            8 => Localisation::getTranslation('common_august'),
-            9 => Localisation::getTranslation('common_september'),
-            10 => Localisation::getTranslation('common_october'),
-            11 => Localisation::getTranslation('common_november'),
-            12 => Localisation::getTranslation('common_december'),
+            1 => Lib\Localisation::getTranslation('common_january'),
+            2 => Lib\Localisation::getTranslation('common_february'),
+            3 => Lib\Localisation::getTranslation('common_march'),
+            4 => Lib\Localisation::getTranslation('common_april'),
+            5 => Lib\Localisation::getTranslation('common_may'),
+            6 => Lib\Localisation::getTranslation('common_june'),
+            7 => Lib\Localisation::getTranslation('common_july'),
+            8 => Lib\Localisation::getTranslation('common_august'),
+            9 => Lib\Localisation::getTranslation('common_september'),
+            10 => Lib\Localisation::getTranslation('common_october'),
+            11 => Lib\Localisation::getTranslation('common_november'),
+            12 => Lib\Localisation::getTranslation('common_december'),
         );
         $year_list = array();
         $yeari = (int)date('Y');
