@@ -647,8 +647,8 @@ function segmentationClicked(target)
 {
   var index = parseInt(target.id.substring(target.id.indexOf("_") + 1));
 
-  var transCheckbox = document.getElementById("translation_" + index");
-  var proofCheckbox = document.getElementById("proofreading_" + index");
+  var transCheckbox = document.getElementById("translation_" + index);
+  var proofCheckbox = document.getElementById("proofreading_" + index);
   if (target.checked) {
     transCheckbox.checked = false;
     transCheckbox.disabled = true;
