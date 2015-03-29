@@ -166,12 +166,12 @@ function loadingComplete()
 }
 
 /**
- * This method is used to add target languages to the form.
+ * Add target languages to the form.
  */
 function addMoreTargetLanguages()
 {
   // Unless the targetCount is less than the maxTargetLanguages, don't do anything.
-  // On the UI this shouldn't be an issue anyway because this method will disable the add button when
+  // On the UI this shouldn't be an issue anyway because this function will disable the add button when
   // adding a language pushes the targetCount to the max, so this is an extra safeguard.
   if (targetCount < maxTargetLanguages) {
     // Prepare the div elements that will make up the new target language section.
@@ -277,7 +277,7 @@ function addMoreTargetLanguages()
 }
 
 /**
- * This method is used to remove target languages
+ * Remove target languages
  */
 function removeTargetLanguage()
 {
@@ -369,10 +369,10 @@ function validateForm()
 }
 
 /**
- * This method validates the form input and sets various error messages if needed fields are not set or
+ * Validate the form input and sets various error messages if needed fields are not set or
  * invalid data is given. All these are local tests (no server access).
  */
-validateLocalValues()
+function validateLocalValues()
 {
   var success = true;
 
@@ -530,7 +530,7 @@ validateLocalValues()
 }
 
 /**
- * This method is used to validate the details of the project file provided.
+ * Validate the details of the project file provided.
  */
 function validateFileInput()
 {
@@ -586,7 +586,7 @@ function validateFileInput()
 }
 
 /**
- * This method is used to validate the project image file provided.
+ * Validate the project image file provided.
  */
 function validateImageFileInput()
 {
@@ -661,7 +661,7 @@ function segmentationClicked(target)
 }
 
 /**
- * This method is called when the year is changed by the user.
+ * Called when the year is changed by the user.
  */
 function selectedYearChanged()
 {
@@ -675,7 +675,7 @@ function selectedYearChanged()
 }
 
 /**
- * This method is called when the month is changed by the user.
+ * Called when the month is changed by the user.
  */
 function selectedMonthChanged()
 {
@@ -712,7 +712,7 @@ function validateTagList(tagList)
 }
 
 /**
- * This is a simple method to parse the project tags from the text input.
+ * Parse the project tags from the text input.
  */
 function parseTagsInput(tags)
 {
@@ -733,7 +733,7 @@ function parseTagsInput(tags)
  *
  * Returns true if the provided URL is valid, false otherwise.
  */
-functiom validateReferenceURL(reference)
+function validateReferenceURL(reference)
 {
   var r = new RegExp(
     '^(([\\w]+:)?\\/\\/)?(([\\d\\w]|%[a-fA-F\\d]{2,2})+(:([\\d\\w]|%[a-fA-F\\d]{2,2})+)?@)?([\\d\\w][-\\d\\w]{0,' +
