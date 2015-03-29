@@ -44,7 +44,7 @@ Parameters.prototype.getUserLangDoc = function(deferred)
   .done(
     function(data) {
       if (data != "") {
-        var parser = new DomParser();
+        var parser = new DOMParser();
         this.userLangDoc = parser.parseFromString(data, "text/xml");
         deferred.resolve();
       }
@@ -64,7 +64,7 @@ Parameters.prototype.getDefaultLangDoc = function(deferred)
   .done(
     function(data) {
       if (data != "") {
-        var parser = new DomParser();
+        var parser = new DOMParser();
         this.defaultLangDoc = parser.parseFromString(data, "text/xml");
         deferred.resolve();
       }
