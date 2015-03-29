@@ -736,7 +736,10 @@ class ProjectRouteHandler
         $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/ProjectCreate.js\"></script>";
 
         $app->view()->appendData(array(
-            "maxFileSize"    => Lib\TemplateHelper::maxFileSizeBytes(),
+            "siteLocation"          => Common\Lib\Settings::get('site.location'),
+            "maxFileSize"           => Lib\TemplateHelper::maxFileSizeBytes(),
+            "imageMaxFileSize"      => Common\Lib\Settings::get('project_images.max_size'),
+            "supportedImageFormats" => Common\Lib\Settings::get('project_images.supported_formats'),
             "org_id"         => $org_id,
             "user_id"        => $user_id,
             "extra_scripts"  => $extraScripts,

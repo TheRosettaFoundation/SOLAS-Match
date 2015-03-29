@@ -3,15 +3,12 @@
     <span class="hidden">
 
         <!-- Parameters... -->
-        <div id="userid">{$user_id}</div>
-        <div id="orgid">{$org_id}</div>
+        <div id="siteLocation">{$siteLocation}</div>
         <div id="maxfilesize">{$maxFileSize}</div>
-
-        <!-- Settings... -->
-        <div id="SiteLocation">{Common\Lib\Settings::get('site.location')}</div>
-        <div id="SiteAPI">{Common\Lib\Settings::get('site.api')}</div>
-        <div id="imageMaxFileSize">{Common\Lib\Settings::get('project_images.max_size')}</div>
-        <div id="supportedImageFormats">{Common\Lib\Settings::get('project_images.supported_formats')}</div>
+        <div id="imageMaxFileSize">{$imageMaxFileSize}</div>
+        <div id="supportedImageFormats">{$supportedImageFormats}</div>
+        <div id="org_id">{$org_id}</div>
+        <div id="user_id">{$user_id}</div>
 
         <!-- Templates... -->
         <div id="template_language_options">
@@ -215,7 +212,7 @@
             <div class="" style="text-align:center; width:100%">
                 <div class="pull-left width-50">
                     <p style="margin-bottom:20px;"></p>
-                    <a href="{Common\Lib\Settings::get('site.location') . 'org/dashboard'}" class="btn btn-danger">
+                    <a href="{$siteLocation . 'org/dashboard'}" class="btn btn-danger">
                         <i class="icon-ban-circle icon-white"></i>
                         {Localisation::getTranslation('common_cancel')}
                     </a>

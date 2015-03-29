@@ -10,14 +10,12 @@ var DESEGMENTATION = 4;
 var parameters;
 
 // Passed from PHP
-var userid;
-var orgid;
-var maxfilesize;
-
 var siteLocation;
-var SiteAPI;
+var maxfilesize;
 var imageMaxFileSize;
 var supportedImageFormats;
+var org_id;
+var user_id;
 
 // Errors
 var createProjectError;
@@ -141,18 +139,12 @@ function set_errors_for_submission(id, id_for_div)
  */
 function documentReady()
 {
-  userid      = document.getElementById("userid").innerHTML;
-  orgid       = document.getElementById("orgid").innerHTML;
-  maxFileSize = document.getElementById("maxfilesize").innerHTML;
-
-  siteLocation= getSetting("SiteLocation");
-  SiteAPI     = getSetting("SiteAPI");
-
+  siteLocation     = getSetting("siteLocation");
+  maxFileSize      = document.getElementById("maxfilesize").innerHTML;
   imageMaxFileSize = parseInt(getSetting("imageMaxFileSize")) * 1024 * 1024;
-
-  // Get project image related data from conf
-  // Image format string is comma separated, split it into a list
-  supportedImageFormats = ((getSetting("supportedImageFormats")).toString).split(",");
+  org_id           = document.getElementById("org_id").innerHTML;
+  user_id          = document.getElementById("user_id").innerHTML;
+  supportedImageFormats = ((getSetting("supportedImageFormats")).toString).split(","); // Image format string is comma separated, split it into a list
 
   // Set the options for the day in month select field based on month/year
   selectedMonthChanged();
@@ -340,7 +332,7 @@ function validateForm()
   trackProject   = document.getElementById("trackProject").value;
   publish        = document.getElementById("publish").value;
 
-  project.organisationId = orgid;
+  project.organisationId = org_id;
   project.title = title;
   project.description = description;
   project.impact = impact;
