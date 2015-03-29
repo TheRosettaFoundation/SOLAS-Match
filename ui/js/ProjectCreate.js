@@ -6,7 +6,7 @@ var DESEGMENTATION = 4;
 
 // Globals...
 
-// Parameters retrieved from Server
+// instance of Parameters Class holding data retrieved from Server (e.g. Translations)
 var parameters;
 
 // Passed from PHP
@@ -90,7 +90,7 @@ function set_errors_for_submission(id, id_for_div)
     deadlineError != null || impactError != null || createProjectError != null ||
     tagsError != null || referenceError != null || taskError != null || duplicateLocale != null || fileError != null || imageError != null) {
     html += '<div id="' + id_for_div + '" class="alert alert-error pull-left">';
-      html += '<h3>' + Parameters.getTranslation('common_please_correct_errors') + ':</h3>';
+      html += '<h3>' + parameters.getTranslation('common_please_correct_errors') + ':</h3>';
       html += '<ol>';
         if (titleError != null) {
           html += '<li>' + titleError + '</li>';
@@ -149,19 +149,19 @@ function documentReady()
   // Set the options for the day in month select field based on month/year
   selectedMonthChanged();
 
-  document.getElementById("source_text_desc").innerHTML =
-    Parameters.getTranslation("project_create_6") + " " + Parameters.getTranslation("common_maximum_file_size_is").replace("%s", imageMaxFileSize / 1024 / 1024);
-
-  document.getElementById("image_file_desc").innerHTML =
-    Parameters.getTranslation("project_create_upload_project_image") + " " + Parameters.getTranslation("common_maximum_file_size_is").replace("%s", imageMaxFileSize / 1024 / 1024);
-
-  addMoreTargetLanguages();
-
   parameters = new Parameters(loadingComplete);
 }
 
 function loadingComplete()
 {
+  document.getElementById("source_text_desc").innerHTML =
+    parameters.getTranslation("project_create_6") + " " + parameters.getTranslation("common_maximum_file_size_is").replace("%s", imageMaxFileSize / 1024 / 1024);
+
+  document.getElementById("image_file_desc").innerHTML =
+    parameters.getTranslation("project_create_upload_project_image") + " " + parameters.getTranslation("common_maximum_file_size_is").replace("%s", imageMaxFileSize / 1024 / 1024);
+
+  addMoreTargetLanguages();
+
   document.getElementById("loading_warning").innerHTML = "";
 }
 
@@ -203,7 +203,7 @@ function addMoreTargetLanguages()
     segmentationRequiredDiv.className = "pull-left proj-task-type-checkbox";
 
     var segmentationCheckbox = document.createElement("checkbox");
-    segmentationCheckbox.title = Parameters.getTranslation("project_create_10");
+    segmentationCheckbox.title = parameters.getTranslation("project_create_10");
     segmentationCheckbox.name = "segmentation_" + targetCount;
     segmentationCheckbox.id   = "segmentation_" + targetCount;
     segmentationCheckbox.onclick = "segmentationClicked(this)";
@@ -212,7 +212,7 @@ function addMoreTargetLanguages()
     translationRequiredDiv.className = "pull-left proj-task-type-checkbox";
 
     var translationCheckbox = document.createElement("checkbox");
-    translationCheckbox.title = Parameters.getTranslation("common_create_a_translation_task_for_volunteer_translators_to_pick_up");
+    translationCheckbox.title = parameters.getTranslation("common_create_a_translation_task_for_volunteer_translators_to_pick_up");
     translationCheckbox.name = "translation_" + targetCount;
     translationCheckbox.id   = "translation_" + targetCount;
     translationCheckbox.checked = true;
@@ -221,7 +221,7 @@ function addMoreTargetLanguages()
     proofreadingRequiredDiv.className = "pull-left proj-task-type-checkbox";
 
     var proofreadingCheckbox = document.createElement("checkbox");
-    proofreadingCheckbox.title = Parameters.getTranslation("common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer");
+    proofreadingCheckbox.title = parameters.getTranslation("common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer");
     proofreadingCheckbox.name = "proofreading_" + targetCount;
     proofreadingCheckbox.id = "proofreading_" + targetCount;
     proofreadingCheckbox.checked = true;
@@ -251,7 +251,7 @@ function addMoreTargetLanguages()
 
     targetCount++;
     if (targetCount == 5) {
-      window.alert(Parameters.getTranslation("project_create_target_language_increase"));
+      window.alert(parameters.getTranslation("project_create_target_language_increase"));
     }
 
     // If maximum amount of target languages has been reached, display message to notify user.
@@ -259,7 +259,7 @@ function addMoreTargetLanguages()
       var addBtn = document.getElementById("addTargetLanguageBtn");
       addBtn.disabled = true;
 
-      document.getElementById("placeholder_for_maxTargetsReached").innerHTML = '<div class="alert alert-info" style="text-align: center">' + Parameters.getTranslation("project_create_11") + '</div>';
+      document.getElementById("placeholder_for_maxTargetsReached").innerHTML = '<div class="alert alert-info" style="text-align: center">' + parameters.getTranslation("project_create_11") + '</div>';
     } else {
       document.getElementById("placeholder_for_maxTargetsReached").innerHTML = "";
     }
@@ -377,38 +377,38 @@ function validateLocalValues()
   var success = true;
 
   if (title == '') {
-    titleError = Parameters.getTranslation("project_create_error_title_not_set");
+    titleError = parameters.getTranslation("project_create_error_title_not_set");
     success = false;
   } else if (title.length > 110) {
-    titleError = Parameters.getTranslation("project_create_error_title_too_long");
+    titleError = parameters.getTranslation("project_create_error_title_too_long");
     success = false;
   } else if (title.match(new RegExp('^\\d+$'))) {
     // Is the project title simply a number? Don't allow this, thus avoiding Slim route mismatch,
     // calling route for getProject when it should be getProjectByName
-    titleError = Parameters.getTranslation("project_create_title_cannot_be_number");
+    titleError = parameters.getTranslation("project_create_title_cannot_be_number");
     success = false;
   }
   if (description == '') {
-    descriptionError = Parameters.getTranslation("project_create_33");
+    descriptionError = parameters.getTranslation("project_create_33");
     success = false;
   } else if (description.length > 4096) {
-    descriptionError = Parameters.getTranslation("project_create_error_description_too_long");
+    descriptionError = parameters.getTranslation("project_create_error_description_too_long");
     success = false;
   }
   if (impact == '') {
-    impactError = Parameters.getTranslation("project_create_26");
+    impactError = parameters.getTranslation("project_create_26");
     success = false;
   } else if (impact.length > 4096) {
-    impactError = Parameters.getTranslation("project_create_error_impact_too_long");
+    impactError = parameters.getTranslation("project_create_error_impact_too_long");
     success = false;
   }
   if (reference != null && reference != '') {
     if (reference.length > 128) {
-      referenceError = Parameters.getTranslation("project_create_error_reference_too_long");
+      referenceError = parameters.getTranslation("project_create_error_reference_too_long");
       success = false;
     } else if (validateReferenceURL(reference)) {
       // String did not match pattern, it is not a URL
-      referenceError = Parameters.getTranslation("project_create_error_reference_invalid");
+      referenceError = parameters.getTranslation("project_create_error_reference_invalid");
       success = false;
     }
   }
@@ -417,7 +417,7 @@ function validateLocalValues()
     // If word count is set, ensure it is a valid natural number
     var q = parseInt(wordCountInput);
     if (isNaN(q)) {
-      wordCountError = Parameters.getTranslation("project_create_27");
+      wordCountError = parameters.getTranslation("project_create_27");
       success = false;
     }
     project.wordCount = q;
@@ -433,26 +433,26 @@ function validateLocalValues()
         }
         i++;
       }
-      if (segmentationMissing && !window.confirm(Parameters.getTranslation("project_create_22"))) {
+      if (segmentationMissing && !window.confirm(parameters.getTranslation("project_create_22"))) {
         success = false;
       }
     }
   } else {
     // Word count is not set
-    wordCountError = Parameters.getTranslation("project_create_27");
+    wordCountError = parameters.getTranslation("project_create_27");
     success = false;
   }
 
   if (!validateTagList(tagList)) {
     // Invalid tags detected, set error message
-    tagsError = Parameters.getTranslation('project_create_invalid_tags');
+    tagsError = parameters.getTranslation('project_create_invalid_tags');
     success = false;
   } else {
     var list = tagList.split(" ");
     for (var i = 0; i < list.length; i++) {
       if (list[i].length > 50) {
         // One of the tags is too long, set error message
-        tagsError = Parameters.getTranslation("project_create_error_tags_too_long");
+        tagsError = parameters.getTranslation("project_create_error_tags_too_long");
         success = false;
         break;
       }
@@ -483,12 +483,12 @@ function validateLocalValues()
       document.getElementById("project_deadline").value = project.deadline;
     } else {
       // Deadline is not a date in the future, set error message
-      deadlineError = Parameters.getTranslation("project_create_25");
+      deadlineError = parameters.getTranslation("project_create_25");
       success = false;
     }
   } else {
     // Deadline is not set (can this even happen in current code?)
-    deadlineError = Parameters.getTranslation("project_create_32");
+    deadlineError = parameters.getTranslation("project_create_32");
     success = false;
   }
 
@@ -507,7 +507,7 @@ function validateLocalValues()
 
     // If no task type is set, display error message
     if (!segmentationRequired[i] && !translationRequired[i] && !proofreadingRequired[i]) {
-      taskError = Parameters.getTranslation("project_create_29");
+      taskError = parameters.getTranslation("project_create_29");
       success = false;
     }
 
@@ -519,7 +519,7 @@ function validateLocalValues()
     // If a duplicate locale is encountered, display error message
     var encounteredLocale = targetLanguageCode[i] + "_" + targetCountryCode[i];
     if ($.inArray(encounteredLocale, encounteredLocales) >= 0) {
-      duplicateLocale = Parameters.getTranslation("project_create_28");
+      duplicateLocale = parameters.getTranslation("project_create_28");
       success = false;
     } else {
       encounteredLocales[i] = encounteredLocale;
@@ -552,12 +552,12 @@ function validateFileInput()
           if (extension != extension.toLowerCase()) {
             extension = extension.toLowerCase();
             projectFileName = projectFileName.substring(0, extensionStartIndex + 1) + extension;
-            window.alert(Parameters.getTranslation("project_create_18"));
+            window.alert(parameters.getTranslation("project_create_18"));
           }
 
           if (extension == "pdf") {
             // If file is a pdf, warn user that PDFs are difficult to work with
-            if (!window.confirm(Parameters.getTranslation("project_create_19"))) {
+            if (!window.confirm(parameters.getTranslation("project_create_19"))) {
               return false;
             }
           }
@@ -565,22 +565,22 @@ function validateFileInput()
           return true;
         } else {
           // File has no extension
-          fileError = Parameters.getTranslation("project_create_20");
+          fileError = parameters.getTranslation("project_create_20");
           return false;
         }
       } else {
         // File is too big
-        fileError = Parameters.getTranslation("project_create_21");
+        fileError = parameters.getTranslation("project_create_21");
         return false;
       }
     } else {
       // File is empty
-      fileError = Parameters.getTranslation("project_create_17");
+      fileError = parameters.getTranslation("project_create_17");
       return false;
     }
   } else {
     // No file provided
-    fileError = Parameters.getTranslation("project_create_16");
+    fileError = parameters.getTranslation("project_create_16");
     return false;
   }
 }
@@ -608,29 +608,29 @@ function validateImageFileInput()
           if (extension != extension.toLowerCase()) {
             extension = extension.toLowerCase();
             projectImageFileName = projectImageFileName.substring(0, extensionStartIndex + 1) + extension;
-            window.alert(Parameters.getTranslation("project_create_18"));
+            window.alert(parameters.getTranslation("project_create_18"));
           }
 
           // Check that the file extension is valid for an image
           if ($.inArray(extension, supportedImageFormats) == -1) {
-            imageError = Parameters.getTranslation("project_create_please_upload_valid_image_file") + "extension";
+            imageError = parameters.getTranslation("project_create_please_upload_valid_image_file") + "extension";
             return false;
           }
 
           return true;
         } else {
           // File has no extension
-          imageError = Parameters.getTranslation("project_create_image_has_no_extension");
+          imageError = parameters.getTranslation("project_create_image_has_no_extension");
           return false;
         }
       } else {
         // File is too big
-        imageError = Parameters.getTranslation("project_create_image_is_too_big");
+        imageError = parameters.getTranslation("project_create_image_is_too_big");
         return false;
       }
     } else {
       // File is empty
-      imageError = Parameters.getTranslation("project_create_image_file_empty");
+      imageError = parameters.getTranslation("project_create_image_file_empty");
       return false;
     }
   } else {
