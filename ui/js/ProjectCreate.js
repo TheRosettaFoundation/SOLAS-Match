@@ -93,7 +93,7 @@ function set_errors_for_submission(id, id_for_div)
       html += '<h3>' + Parameters.getTranslation('common_please_correct_errors') + ':</h3>';
       html += '<ol>';
         if (titleError != null) {
-          html += '<li>' + 'titleError + '</li>';
+          html += '<li>' + titleError + '</li>';
         }
         if (descriptionError != null) {
           html += '<li>' + descriptionError + '</li>';
