@@ -46,8 +46,8 @@ Parameters.prototype.getUserLangDoc = function(deferred)
       if (data != "") {
         var parser = new DOMParser();
         this.userLangDoc = parser.parseFromString(data, "text/xml");
-        deferred.resolve();
       }
+      deferred.resolve();
     }
   );
 }
