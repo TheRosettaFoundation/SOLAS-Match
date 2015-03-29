@@ -738,7 +738,7 @@ class ProjectRouteHandler
         $app->view()->appendData(array(
             "siteLocation"          => Common\Lib\Settings::get('site.location'),
             "maxFileSize"           => Lib\TemplateHelper::maxFileSizeBytes(),
-            "imageMaxFileSize"      => Common\Lib\Settings::get('projectImages.max_size'),
+            "imageMaxFileSize"      => Common\Lib\Settings::get('projectImages.max_image_size'),
             "supportedImageFormats" => Common\Lib\Settings::get('projectImages.supported_formats'),
             "org_id"         => $org_id,
             "user_id"        => $user_id,
