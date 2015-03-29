@@ -20,14 +20,14 @@ Parameters.prototype.getTranslation = function(key)
   if (userLangDoc != null) {
     element = userLangDoc.querySelector("[name = " + key + "]");
     if (element != null) {
-      data = element.innerHtml;
+      data = element.innerHTML;
     }
   }
 
   if (data == "") {
     element = defaultLangDoc.querySelector("[name = " + key + "]");
     if (element != null) {
-      data = element.innerHtml;
+      data = element.innerHTML;
     } else {
       print("Unable to find string with name " + key);
     }
