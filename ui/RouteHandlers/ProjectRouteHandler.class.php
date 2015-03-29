@@ -508,7 +508,7 @@ class ProjectRouteHandler
                                     $projectImageFileName = substr($projectImageFileName, 0, $extensionStartIndex + 1) . $extension;
 
                                     // Check that the file extension is valid for an image
-                                    if (!in_array($extension, explode(",", Common\Lib\Settings::get('project_images.supported_formats')))) {
+                                    if (!in_array($extension, explode(",", Common\Lib\Settings::get('projectImages.supported_formats')))) {
                                         $image_failed = true;
                                     }
                                 } else {
@@ -520,8 +520,8 @@ class ProjectRouteHandler
                                         ||(($data = file_get_contents($_FILES['projectImageFile']['tmp_name'])) === false)) {
                                     $image_failed = true;
                                 } else {
-                                    $imageMaxWidth  = Common\Lib\Settings::get('project_images.max_width');
-                                    $imageMaxHeight = Common\Lib\Settings::get('project_images.max_height');
+                                    $imageMaxWidth  = Common\Lib\Settings::get('projectImages.max_width');
+                                    $imageMaxHeight = Common\Lib\Settings::get('projectImages.max_height');
                                     list($width, $height) = getimagesize($_FILES['projectImageFile']['tmp_name']);
 
                                     if (empty($width) || empty($height) || (($width <= $imageMaxWidth) && ($height <= $imageMaxHeight))) {
@@ -738,8 +738,8 @@ class ProjectRouteHandler
         $app->view()->appendData(array(
             "siteLocation"          => Common\Lib\Settings::get('site.location'),
             "maxFileSize"           => Lib\TemplateHelper::maxFileSizeBytes(),
-            "imageMaxFileSize"      => Common\Lib\Settings::get('project_images.max_size'),
-            "supportedImageFormats" => Common\Lib\Settings::get('project_images.supported_formats'),
+            "imageMaxFileSize"      => Common\Lib\Settings::get('projectImages.max_size'),
+            "supportedImageFormats" => Common\Lib\Settings::get('projectImages.supported_formats'),
             "org_id"         => $org_id,
             "user_id"        => $user_id,
             "extra_scripts"  => $extraScripts,
