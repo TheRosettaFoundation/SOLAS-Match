@@ -144,7 +144,7 @@ function documentReady()
   imageMaxFileSize = parseInt(getSetting("imageMaxFileSize")) * 1024 * 1024;
   org_id           = document.getElementById("org_id").innerHTML;
   user_id          = document.getElementById("user_id").innerHTML;
-  supportedImageFormats = ((getSetting("supportedImageFormats")).toString).split(","); // Image format string is comma separated, split it into a list
+  supportedImageFormats = getSetting("supportedImageFormats").toString().split(","); // Image format string is comma separated, split it into a list
 
   // Set the options for the day in month select field based on month/year
   selectedMonthChanged();
