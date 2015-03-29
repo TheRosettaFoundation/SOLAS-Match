@@ -514,7 +514,7 @@ validateLocalValues()
     targetLanguageCode    [i] = document.getElementById("target_language_" + i).value;
     targetLanguageLanguage[i] = $("#target_language_" + i + " option:selected").text();
     targetCountryCode     [i] = document.getElementById("target_country_" + i).value;
-    targetCountryCountry  [i] = lang $("#target_country_" + i + " option:selected").text();
+    targetCountryCountry  [i] = $("#target_country_" + i + " option:selected").text();
 
     // If a duplicate locale is encountered, display error message
     var encounteredLocale = targetLanguageCode[i] + "_" + targetCountryCode[i];
