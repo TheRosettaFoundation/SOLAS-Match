@@ -212,7 +212,7 @@
             <div class="" style="text-align:center; width:100%">
                 <div class="pull-left width-50">
                     <p style="margin-bottom:20px;"></p>
-                    <a href="{$siteLocation . 'org/dashboard'}" class="btn btn-danger">
+                    <a href="{$siteLocation}org/dashboard" class="btn btn-danger">
                         <i class="icon-ban-circle icon-white"></i>
                         {Localisation::getTranslation('common_cancel')}
                     </a>
