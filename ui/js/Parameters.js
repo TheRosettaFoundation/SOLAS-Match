@@ -1,3 +1,6 @@
+var userLangDoc = null; // Strings for user's language preference
+var DefaultLangDoc;     // Strings for default language
+
 function Parameters(functionOnSuccess)
 {
   var deferredGetUserLangDoc = $.Deferred();
@@ -14,22 +17,22 @@ Parameters.prototype.getTranslation = function(key)
   var element;
   var data = "";
 
-  if (this.userLangDoc != null) {
-    element = this.userLangDoc.querySelector("[name = " + key + "]");
+  if (userLangDoc != null) {
+    element = userLangDoc.querySelector("[name = " + key + "]");
     if (element != null) {
       data = element.innerHtml;
     }
   }
 
-    if (data == "") {
-      element = this.defaultLangDoc.querySelector("[name = " + key + "]");
-      if (element != null) {
-        data = element.innerHtml;
-      } else {
-        print("Unable to find string with name " + key);
-      }
+  if (data == "") {
+    element = defaultLangDoc.querySelector("[name = " + key + "]");
+    if (element != null) {
+      data = element.innerHtml;
+    } else {
+      print("Unable to find string with name " + key);
     }
-    return data;
+  }
+  return data;
 }
 
 Parameters.prototype.getUserLangDoc = function(deferred)
@@ -45,7 +48,7 @@ Parameters.prototype.getUserLangDoc = function(deferred)
     function(data) {
       if (data != "") {
         var parser = new DOMParser();
-        this.userLangDoc = parser.parseFromString(data, "text/xml");
+        userLangDoc = parser.parseFromString(data, "text/xml");
       }
       deferred.resolve();
     }
@@ -65,7 +68,7 @@ Parameters.prototype.getDefaultLangDoc = function(deferred)
     function(data) {
       if (data != "") {
         var parser = new DOMParser();
-        this.defaultLangDoc = parser.parseFromString(data, "text/xml");
+        defaultLangDoc = parser.parseFromString(data, "text/xml");
         deferred.resolve();
       }
     }

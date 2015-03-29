@@ -1,13 +1,6 @@
-var PENDING_CLAIM  = 2;
-var SEGMENTATION   = 1;
-var TRANSLATION    = 2;
-var PROOFREADING   = 3;
-var DESEGMENTATION = 4;
-
 // Globals...
 
-// instance of Parameters Class holding data retrieved from Server (e.g. Translations)
-var parameters;
+var parameters; // Instance of Parameters Class holding data retrieved from Server (e.g. Translations)
 
 // Passed from PHP
 var siteLocation;
