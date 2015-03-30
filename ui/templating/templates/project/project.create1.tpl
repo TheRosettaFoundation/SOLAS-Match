@@ -101,10 +101,10 @@
                         <p class="desc">{Localisation::getTranslation('project_create_7')}</p>
                         <p>
                             {Localisation::getTranslation('common_day')}:
-                            <select name="selectedDay" id="selectedDay" style="width: 3.5em">
+                            <select name="selectedDay" id="selectedDay" style="width: 4.0em">
                             </select>
                             {Localisation::getTranslation('common_month')}:
-                            <select onchange="selectedMonthChanged()" name="selectedMonth" id="selectedMonth" style="width: 7.3em">
+                            <select onchange="selectedMonthChanged()" name="selectedMonth" id="selectedMonth" style="width: 8.0em">
                                 {html_options options=$month_list selected=$selected_month}
                             </select>
                             {Localisation::getTranslation('common_year')}:
