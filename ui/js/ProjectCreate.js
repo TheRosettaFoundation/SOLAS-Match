@@ -148,7 +148,7 @@ function documentReady()
 function loadingComplete()
 {
   document.getElementById("source_text_desc").innerHTML =
-    parameters.getTranslation("project_create_6") + " " + parameters.getTranslation("common_maximum_file_size_is").replace("%s", imageMaxFileSize / 1024 / 1024);
+    parameters.getTranslation("project_create_6") + " " + parameters.getTranslation("common_maximum_file_size_is").replace("%s", maxFileSize / 1024 / 1024);
 
   document.getElementById("image_file_desc").innerHTML =
     parameters.getTranslation("project_create_upload_project_image") + " " + parameters.getTranslation("common_maximum_file_size_is").replace("%s", imageMaxFileSize / 1024 / 1024);
@@ -688,7 +688,7 @@ function set_options_for_days_in_month(month, year)
   }
 
   var options_list = '';
-  for (var i = 0; i < monthLengths[month]; i++) {
+  for (var i = 1; i <= monthLengths[month]; i++) {
     options_list += '<option value="' + i.toString() + '">' + i.toString() + '</option>';
   }
 

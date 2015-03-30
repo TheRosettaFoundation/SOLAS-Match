@@ -700,8 +700,12 @@ class ProjectRouteHandler
             }
         }
 
-        $languages = Lib\TemplateHelper::getLanguageList();
-        $countries = Lib\TemplateHelper::getCountryList();
+        // $languages = Lib\TemplateHelper::getLanguageList(); // (code) is added to name because of settings
+        // $countries = Lib\TemplateHelper::getCountryList();
+        $langDao = new DAO\LanguageDao();
+        $languages = $langDao->getLanguages();
+        $countryDao = new DAO\CountryDao();
+        $countries = $countryDao->getCountries();
 
         $month_list = array(
             1 => Lib\Localisation::getTranslation('common_january'),
