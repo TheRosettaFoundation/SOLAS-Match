@@ -724,7 +724,8 @@ class ProjectRouteHandler
         $year_list = array();
         $yeari = (int)date('Y');
         for ($i = 0; $i < 10; $i++) {
-            $year_list[$yeari] = $yeari++;
+            $year_list[$yeari] = $yeari;
+            $yeari++;
         }
         $hour_list = array();
         for ($i = 0; $i < 24; $i++) {
