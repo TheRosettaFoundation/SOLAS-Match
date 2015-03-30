@@ -108,7 +108,7 @@
                                 {html_options options=$month_list selected=$selected_month}
                             </select>
                             {Localisation::getTranslation('common_year')}:
-                            <select onchange="selectedYearChanged()" name="selectedYear" id="selectedYear" style="width: 4.5em">
+                            <select onchange="selectedYearChanged()" name="selectedYear" id="selectedYear" style="width: 5.0em">
                                 {html_options options=$year_list selected=$selected_year}
                             </select>
                             <input type="hidden" name="project_deadline" id="project_deadline" />
