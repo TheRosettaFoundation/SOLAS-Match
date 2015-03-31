@@ -707,7 +707,7 @@ function set_options_for_days_in_month(month, year)
 function validateTagList(tagList)
 {
   var r = new RegExp('[^a-z0-9\\-\\s]');
-  return tagList.match(r);
+  return !tagList.match(r);
 }
 
 /**
