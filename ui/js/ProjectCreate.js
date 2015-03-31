@@ -200,6 +200,7 @@ function addMoreTargetLanguages()
     segmentationCheckbox.title = parameters.getTranslation("project_create_10");
     segmentationCheckbox.name = "segmentation_" + targetCount;
     segmentationCheckbox.id   = "segmentation_" + targetCount;
+    segmentationCheckbox.value = "1";
     segmentationCheckbox.onclick = "segmentationClicked(this)";
 
     var translationRequiredDiv = document.createElement("div");
@@ -210,6 +211,7 @@ function addMoreTargetLanguages()
     translationCheckbox.title = parameters.getTranslation("common_create_a_translation_task_for_volunteer_translators_to_pick_up");
     translationCheckbox.name = "translation_" + targetCount;
     translationCheckbox.id   = "translation_" + targetCount;
+    translationCheckbox.value = "1";
     translationCheckbox.checked = true;
 
     var proofreadingRequiredDiv = document.createElement("div");
@@ -220,6 +222,7 @@ function addMoreTargetLanguages()
     proofreadingCheckbox.title = parameters.getTranslation("common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer");
     proofreadingCheckbox.name = "proofreading_" + targetCount;
     proofreadingCheckbox.id = "proofreading_" + targetCount;
+    proofreadingCheckbox.value = "1";
     proofreadingCheckbox.checked = true;
 
     // Put the Select Elements into their div
@@ -325,8 +328,8 @@ function validateForm()
   selectedHour   = document.getElementById("selectedHour").value;
   selectedMinute = document.getElementById("selectedMinute").value;
   wordCountInput = document.getElementById("wordCountInput").value;
-  trackProject   = document.getElementById("trackProject").value;
-  publish        = document.getElementById("publish").value;
+  trackProject   = document.getElementById("trackProject").checked;
+  publish        = document.getElementById("publish").checked;
 
   project.organisationId = org_id;
   project.title = title;

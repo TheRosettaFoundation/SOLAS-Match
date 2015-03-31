@@ -143,14 +143,14 @@
                         <p class="desc">
                             {Localisation::getTranslation('common_if_checked_tasks_will_appear_in_the_tasks_stream')}
                         </p>
-                        <input type="checkbox" name="publish" id="publish" checked />
+                        <input type="checkbox" name="publish" id="publish" value="1" checked />
                     </div>
                 </div>
                 <div class="projFormInput">
                     <div style="margin-bottom:25px;">
                         <h2>{Localisation::getTranslation('common_track_project')}:</h2>
                         <p class="desc">{Localisation::getTranslation('project_create_12')}</p>
-                        <input type="checkbox" name="trackProject" id="trackProject" checked />
+                        <input type="checkbox" name="trackProject" id="trackProject" value="1" checked />
                     </div>
                 </div>
             </div>
