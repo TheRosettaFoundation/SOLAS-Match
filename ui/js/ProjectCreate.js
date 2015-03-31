@@ -314,9 +314,9 @@ function validateForm()
   imageError = null;
 
   // Snapshot of Form Values when Submit clicked
-  title          = document.getElementById("project_title").innerHTML
-  description    = document.getElementById("project_description").innerHTML
-  impact         = document.getElementById("project_impact").innerHTML
+  title          = document.getElementById("project_title").value
+  description    = document.getElementById("project_description").value
+  impact         = document.getElementById("project_impact").value
   reference      = document.getElementById("project_reference").value;
   tagList        = document.getElementById("tagList").value;
   selectedMonth  = document.getElementById("selectedMonth").value;
@@ -348,7 +348,7 @@ function validateForm()
   project.tag = [];
   if (tagList.length > 0) {
     var tagListParsed = parseTagsInput(tagList);
-      if (tagListParsed.length > 0) {
+    if (tagListParsed.length > 0) {
       project.tag = tagListParsed;
     }
   }
