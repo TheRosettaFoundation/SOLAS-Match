@@ -115,11 +115,11 @@
                         </p>
                         <p>
                             {Localisation::getTranslation('common_hour')}:
-                            <select name="selectedHour" id="selectedHour" style="width: 3.5em">
+                            <select name="selectedHour" id="selectedHour" style="width: 4.0em">
                                 {html_options options=$hour_list selected=$selected_hour}
                             </select>
                             {Localisation::getTranslation('common_minute')}:
-                            <select name="selectedMinute" id="selectedMinute" style="width: 3.5em">
+                            <select name="selectedMinute" id="selectedMinute" style="width: 4.0em">
                                 {html_options options=$minute_list selected=$selected_minute}
                             </select>
                         </p>
