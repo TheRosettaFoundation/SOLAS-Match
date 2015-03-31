@@ -163,7 +163,6 @@ function loadingComplete()
  */
 function addMoreTargetLanguages()
 {
-	return;
   // Unless the targetCount is less than the maxTargetLanguages, don't do anything.
   // On the UI this shouldn't be an issue anyway because this function will disable the add button when
   // adding a language pushes the targetCount to the max, so this is an extra safeguard.

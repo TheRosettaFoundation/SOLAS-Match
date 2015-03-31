@@ -197,11 +197,11 @@
         <div id="targetLangSelectDiv" class="pull-left"></div>
         <div id="targetLangContainer" class="pull-left">
         <div id="placeholder_for_maxTargetsReached"></div>
-                <button onclick="addMoreTargetLanguages()" class="btn btn-success" id="addTargetLanguageBtn">
+                <button onclick="addMoreTargetLanguages(); return false;" class="btn btn-success" id="addTargetLanguageBtn">
                     <i class="icon-upload icon-white"></i>
                     {Localisation::getTranslation('project_create_add_more_target_languages')}
                 </button>
-                <button onclick="removeTargetLanguage()" class="btn btn-inverse" id="removeBottomTargetBtn" disabled="true">
+                <button onclick="removeTargetLanguage(); return false;" class="btn btn-inverse" id="removeBottomTargetBtn" disabled="true">
                    <i class="icon-fire icon-white"></i>
                    {Localisation::getTranslation('common_remove')}
                 </button>
