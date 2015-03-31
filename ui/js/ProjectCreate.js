@@ -405,7 +405,7 @@ function validateLocalValues()
     if (reference.length > 128) {
       referenceError = parameters.getTranslation("project_create_error_reference_too_long");
       success = false;
-    } else if (validateReferenceURL(reference)) {
+    } else if (!validateReferenceURL(reference)) {
       // String did not match pattern, it is not a URL
       referenceError = parameters.getTranslation("project_create_error_reference_invalid");
       success = false;
