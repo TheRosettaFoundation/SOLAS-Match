@@ -348,9 +348,9 @@ function validateForm()
   project.tag = [];
   if (tagList.length > 0) {
     var tagListParsed = parseTagsInput(tagList);
-  }
-  if (tagListParsed.length > 0) {
-    project.tag = tagListParsed;
+      if (tagListParsed.length > 0) {
+      project.tag = tagListParsed;
+    }
   }
 
   projectImageFile = null;
