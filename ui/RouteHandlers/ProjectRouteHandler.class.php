@@ -484,8 +484,16 @@ class ProjectRouteHandler
                         } catch (\Exception  $e) {
                         }
                     } else {
+                        $projectFileName = $_FILES['projectFile']['name'];
+                        $extensionStartIndex = strrpos($projectFileName, '.');
+                        // Check that file has an extension
+                        if ($extensionStartIndex > 0) {
+                             $extension = substr($projectFileName, $extensionStartIndex + 1);
+                             $extension = strtolower($extension);
+                             $projectFileName = substr($projectFileName, 0, $extensionStartIndex + 1) . $extension;
+                        }
                         try {
-                            $projectDao->saveProjectFile($project, $user_id, $_FILES['projectFile']['name'], $data);
+                            $projectDao->saveProjectFile($project, $user_id, $projectFileName, $data);
                             $success = true;
                         } catch (\Exception  $e) {
                             $success = false;
