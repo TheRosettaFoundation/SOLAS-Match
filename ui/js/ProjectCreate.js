@@ -201,7 +201,7 @@ function addMoreTargetLanguages()
     segmentationCheckbox.name = "segmentation_" + targetCount;
     segmentationCheckbox.id   = "segmentation_" + targetCount;
     segmentationCheckbox.value = "1";
-    segmentationCheckbox.onclick = "segmentationClicked(this)";
+    segmentationCheckbox.setAttribute("onclick", "segmentationClicked(this);");
 
     var translationRequiredDiv = document.createElement("div");
     translationRequiredDiv.className = "pull-left proj-task-type-checkbox";
