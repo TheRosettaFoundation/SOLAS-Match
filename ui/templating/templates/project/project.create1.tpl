@@ -220,7 +220,7 @@
                 </div>
                 <div class="pull-left width-50">
                     <p style="margin-bottom:20px;"></p>
-                    <button type="submit" onclick="validateForm()" class="btn btn-success">
+                    <button type="submit" onclick="return validateForm();" class="btn btn-success">
                         <i class="icon-upload icon-white"></i> {Localisation::getTranslation('common_create_project')}
                     </button>
                     <p style="margin-bottom:20px;"></p>

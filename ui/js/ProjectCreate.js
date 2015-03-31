@@ -196,7 +196,7 @@ function addMoreTargetLanguages()
     segmentationRequiredDiv.className = "pull-left proj-task-type-checkbox";
 
     var segmentationCheckbox = document.createElement("input");
-	segmentationCheckbox.setAttribute("type", "checkbox");
+    segmentationCheckbox.setAttribute("type", "checkbox");
     segmentationCheckbox.title = parameters.getTranslation("project_create_10");
     segmentationCheckbox.name = "segmentation_" + targetCount;
     segmentationCheckbox.id   = "segmentation_" + targetCount;
@@ -206,7 +206,7 @@ function addMoreTargetLanguages()
     translationRequiredDiv.className = "pull-left proj-task-type-checkbox";
 
     var translationCheckbox = document.createElement("input");
-	translationCheckbox.setAttribute("type", "checkbox");
+    translationCheckbox.setAttribute("type", "checkbox");
     translationCheckbox.title = parameters.getTranslation("common_create_a_translation_task_for_volunteer_translators_to_pick_up");
     translationCheckbox.name = "translation_" + targetCount;
     translationCheckbox.id   = "translation_" + targetCount;
@@ -216,7 +216,7 @@ function addMoreTargetLanguages()
     proofreadingRequiredDiv.className = "pull-left proj-task-type-checkbox";
 
     var proofreadingCheckbox = document.createElement("input");
-	proofreadingCheckbox.setAttribute("type", "checkbox");
+    proofreadingCheckbox.setAttribute("type", "checkbox");
     proofreadingCheckbox.title = parameters.getTranslation("common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer");
     proofreadingCheckbox.name = "proofreading_" + targetCount;
     proofreadingCheckbox.id = "proofreading_" + targetCount;
