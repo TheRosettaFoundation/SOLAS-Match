@@ -612,7 +612,7 @@ function validateImageFileInput()
 
           // Check that the file extension is valid for an image
           if ($.inArray(extension, supportedImageFormats) == -1) {
-            imageError = parameters.getTranslation("project_create_please_upload_valid_image_file") + "extension";
+            imageError = parameters.getTranslation("project_create_please_upload_valid_image_file").replace("%s", extension);
             return false;
           }
 
