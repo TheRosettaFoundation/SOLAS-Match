@@ -425,7 +425,7 @@ class ProjectRouteHandler
                     || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $post['project_deadline'])
                     || empty($post['wordCountInput']) || !ctype_digit($post['wordCountInput'])) {
                 // Note the deadline date validation above is only partial (these checks have been done more rigorously on client size, if that is to be trusted)
-                $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_to_create_project'), 'project_title'));
+                $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_to_create_project'), $post['project_title']));
             } else {
                 $sourceLocale = new Common\Protobufs\Models\Locale();
                 $project = new Common\Protobufs\Models\Project();
