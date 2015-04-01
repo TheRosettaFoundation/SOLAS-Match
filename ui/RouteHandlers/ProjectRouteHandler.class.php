@@ -432,7 +432,6 @@ class ProjectRouteHandler
                 $sourceLocale = new Common\Protobufs\Models\Locale();
                 $project = new Common\Protobufs\Models\Project();
 
-                $project->setId(null);
                 $project->setTitle($post['project_title']);
                 $project->setDescription($post['project_description']);
                 $project->setDeadline($post['project_deadline']);
