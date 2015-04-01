@@ -416,7 +416,7 @@ class ProjectRouteHandler
         $taskDao = new DAO\TaskDao();
 
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
-            $_SESSION['SESSION_CSRF_KEY'] = random_string(10);
+            $_SESSION['SESSION_CSRF_KEY'] = $this->random_string(10);
         }
         $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
 
