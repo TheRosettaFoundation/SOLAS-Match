@@ -421,11 +421,11 @@ class ProjectRouteHandler
         $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
 
         if ($post = $app->request()->post()) {
-            if (empty($post['sesskey'] || $post['sesskey'] !== $sesskey
+            if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
                     || empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact'])
                     || empty($post['sourceCountrySelect']) || empty($post['sourceLanguageSelect']) || empty($post['project_deadline'])
                     || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $post['project_deadline'])
-                    || empty($post['wordCountInput'] || !ctype_digit($post['wordCountInput']))) {
+                    || empty($post['wordCountInput']) || !ctype_digit($post['wordCountInput'])) {
                 // Note the deadline date validation above is only partial (these checks have been done more rigorously on client size, if that is to be trusted)
                 $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_to_create_project'), 'project_title'));
             } else {
