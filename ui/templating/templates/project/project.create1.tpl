@@ -38,6 +38,12 @@
 
     <div class="well pull-left" style="margin-bottom: 50px">
 
+        {if isset($flash['error'])}
+            <p class="alert alert-error">
+                {$flash['error']}
+            </p>
+        {/if}
+
         <div id="placeholder_for_errors_1"></div>
 
         <form method="post" action="{urlFor name="project-create1" options="org_id.$org_id"}" enctype="multipart/form-data" accept-charset="utf-8">
