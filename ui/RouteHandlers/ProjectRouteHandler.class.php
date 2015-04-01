@@ -415,8 +415,14 @@ class ProjectRouteHandler
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
 
+        if (empty($_SESSION['SESSION_CSRF_KEY'])) {
+            $_SESSION['SESSION_CSRF_KEY'] = random_string(10);
+        }
+        $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
+
         if ($post = $app->request()->post()) {
-            if (empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact'])
+            if (empty($post['sesskey'] || $post['sesskey'] !== $sesskey
+                    || empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact'])
                     || empty($post['sourceCountrySelect']) || empty($post['sourceLanguageSelect']) || empty($post['project_deadline'])
                     || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $post['project_deadline'])
                     || empty($post['wordCountInput'] || !ctype_digit($post['wordCountInput']))) {
@@ -764,8 +770,9 @@ class ProjectRouteHandler
             'selected_hour'  => 0,
             'minute_list'    => $minute_list,
             'selected_minute'=> 0,
-            "languages"      => $languages,
-            "countries"      => $countries,
+            'languages'      => $languages,
+            'countries'      => $countries,
+            'sesskey'        => $sesskey,
         ));
         $app->render("project/project.create1.tpl");
     }

@@ -226,6 +226,7 @@
                     <p style="margin-bottom:20px;"></p>
                 </div>
             </div>
+            <input type="hidden" name="sesskey" value="{$sesskey}" />
         </form>
     </div>
     
