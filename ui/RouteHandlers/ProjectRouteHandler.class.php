@@ -849,6 +849,24 @@ class ProjectRouteHandler
 
         return $newTaskId;
     }
+
+    /**
+     * Generate and return a random string of the specified length.
+     *
+     * @param int $length The length of the string to be created.
+     * @return string
+     */
+    private function random_string($length=15) {
+        $pool  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $pool .= 'abcdefghijklmnopqrstuvwxyz';
+        $pool .= '0123456789';
+        $poollen = strlen($pool);
+        $string = '';
+        for ($i = 0; $i < $length; $i++) {
+            $string .= substr($pool, (mt_rand()%($poollen)), 1);
+        }
+        return $string;
+    }
 //(**) ALAN Work In Progress
 
     public function projectCreated($project_id)
