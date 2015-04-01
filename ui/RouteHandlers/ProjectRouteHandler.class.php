@@ -35,13 +35,11 @@ class ProjectRouteHandler
             array($this, "projectCreate")
         )->via("GET", "POST")->name("project-create");
 
-//(**) ALAN Work In Progress
         $app->get(
             "/project/:org_id/create1/",
             array($middleware, "authUserForOrg"),
             array($this, "projectCreate1")
         )->via("GET", "POST")->name("project-create1");
-//(**) ALAN Work In Progress
 
         $app->get(
             "/project/id/:project_id/created/",
@@ -446,6 +444,19 @@ class ProjectRouteHandler
                 $project->setOrganisationId($org_id);
                 $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
 
+                $project->clearTag();
+                if (!empty($post['tagList'])) {
+                    $tagLabels = explode(' ', $post['tagList']);
+                    foreach ($tagLabels as $tagLabel) {
+                        $tagLabel = trim($tagLabel);
+                        if (!empty($tagLabel)) {
+                            $tag = new Common\Protobufs\Models\Tag();
+                            $tag->setLabel($tagLabel);
+                            $project->addTag($tag);
+                        }
+                    }
+                }
+
                 try {
                     $project = $projectDao->createProject($project);
                 } catch (\Exception  $e) {
@@ -454,34 +465,7 @@ class ProjectRouteHandler
                 if (empty($project) || $project->getId() <= 0) {
                     $app->flashNow('error', Lib\Localisation::getTranslation('project_create_title_conflict'));
                 } else {
-                    $projectTagList = array();
-                    if (!empty($post['tagList'])) {
-                        $tagLabels = explode(' ', $post['tagList']);
-                        foreach ($tagLabels as $tagLabel) {
-                            $tagLabel = trim($tagLabel);
-                            if (!empty($tagLabel)) {
-                                $tag = new Common\Protobufs\Models\Tag();
-                                $tag->setLabel($tagLabel);
-                                $projectTagList[] = $tag;
-                            }
-                        }
-                    }
-
-                    $failedToAddTags = false;
-                    try {
-                        $projectTags = API\DAO\TagsDao::updateTags($project->getId(), $projectTagList);
-                        $project->clearTag();
-                        foreach ($projectTags as $projectTag) {
-                            $project->addTag($projectTag);
-                        }
-
-                        $projectDao->updateProject($project);
-                    } catch (\Exception  $e) {
-                        $failedToAddTags = true;
-                    }
-
-                    if ($failedToAddTags
-                            || empty($_FILES['projectFile']['name']) || !empty($_FILES['projectFile']['error']) || empty($_FILES['projectFile']['tmp_name'])
+                    if (empty($_FILES['projectFile']['name']) || !empty($_FILES['projectFile']['error']) || empty($_FILES['projectFile']['tmp_name'])
                             || (($data = file_get_contents($_FILES['projectFile']['tmp_name'])) === false)) {
                         $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), $_FILES['projectFile']['name']));
                         try {
