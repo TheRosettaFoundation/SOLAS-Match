@@ -125,7 +125,7 @@ class TaskDao
             self::calculateTaskScore($task->getId());
         } else {
             self::update($task);
-            self::calculateTaskScore($task->getId());
+            //self::calculateTaskScore($task->getId());
         }
         return $task;
     }
