@@ -568,8 +568,9 @@ error_log("SAVED File for " . $project->getId());
                                     }
                                 }
                             }
-error_log("AFTER DOING/NOT DOING IMAGE image_failed: $image_failed");
+error_log("AFTER DOING/NOT DOING IMAGE");
                             if ($image_failed) {
+error_log("image_failed");
                                 $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_image'), $_FILES['projectImageFile']['name']));
                                 try {
                                     $projectDao->deleteProject($project->getId());
@@ -582,15 +583,16 @@ error_log("AFTER DOING/NOT DOING IMAGE image_failed: $image_failed");
                                 $targetCount = 0;
                                 $creatingTasksSuccess = true;
                                 $createdTasks = array();
-                                while (!empty($post["target_language$targetCount"]) && !empty($post["target_country$targetCount"])) {
+error_log("STARTING TASKS");
+                                while (!empty($post["target_language_$targetCount"]) && !empty($post["target_country_$targetCount"])) {
 
                                     if (!empty($post["segmentation_$targetCount"])) {
 error_log("post[segmentation_targetCount]" . $post["segmentation_$targetCount"]);
                                         // Create segmentation task
                                         $id = addProjectTask(
                                             $project,
-                                            $post["target_language$targetCount"],
-                                            $post["target_country$targetCount"],
+                                            $post["target_language_$targetCount"],
+                                            $post["target_country_$targetCount"],
                                             Common\Enums\TaskTypeEnum::SEGMENTATION,
                                             0,
                                             $createdTasks,
@@ -610,8 +612,8 @@ error_log("post[segmentation_targetCount]" . $post["segmentation_$targetCount"])
 error_log("post[translation_targetCount]" . $post["translation_$targetCount"]);
                                             $translation_Task_Id = addProjectTask(
                                                 $project,
-                                                $post["target_language$targetCount"],
-                                                $post["target_country$targetCount"],
+                                                $post["target_language_$targetCount"],
+                                                $post["target_country_$targetCount"],
                                                 Common\Enums\TaskTypeEnum::TRANSLATION,
                                                 0,
                                                 $createdTasks,
@@ -629,8 +631,8 @@ error_log("post[translation_targetCount]" . $post["translation_$targetCount"]);
 error_log("post[proofreading_targetCount]" . $post["proofreading_$targetCount"]);
                                                 $id = addProjectTask(
                                                     $project,
-                                                    $post["target_language$targetCount"],
-                                                    $post["target_country$targetCount"],
+                                                    $post["target_language_$targetCount"],
+                                                    $post["target_country_$targetCount"],
                                                     Common\Enums\TaskTypeEnum::PROOFREADING,
                                                     $translation_Task_Id,
                                                     $createdTasks,
@@ -649,8 +651,8 @@ error_log("J post[proofreading_targetCount]" . $post["proofreading_$targetCount"
                                             // Only a proofreading task to be created
                                             $id = addProjectTask(
                                                 $project,
-                                                $post["target_language$targetCount"],
-                                                $post["target_country$targetCount"],
+                                                $post["target_language_$targetCount"],
+                                                $post["target_country_$targetCount"],
                                                 Common\Enums\TaskTypeEnum::PROOFREADING,
                                                 0,
                                                 $createdTasks,
