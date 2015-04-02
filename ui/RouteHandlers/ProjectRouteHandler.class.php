@@ -696,8 +696,10 @@ if (empty($projectx)) {
 } else {
     error_log("projectx id: " . $projectx->getId());
 }
-                                        $app->redirect($app->urlFor('project-view', array('project_id' => $project->getId())));
-
+                                        try {
+                                            $app->redirect($app->urlFor('project-view', array('project_id' => $project->getId())));
+                                        } catch (\Exception $e) { // redirect throws \Slim\Exception\Stop
+                                        }
                                     } catch (\Exception $e) {
 error_log("IN FINAL CATCH");
                                         $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), $_FILES['projectFile']['name']));
