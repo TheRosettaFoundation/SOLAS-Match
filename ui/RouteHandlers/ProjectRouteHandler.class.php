@@ -671,6 +671,7 @@ error_log("J post[proofreading_targetCount]" . $post["proofreading_$targetCount"
                                 }
 
                                 if (!$creatingTasksSuccess) {
+error_log("DELETING PROJECT ETC");
                                     foreach ($createdTasks as $taskIdToDelete) {
                                         if ($taskIdToDelete) {
                                             try {
@@ -688,9 +689,17 @@ error_log("J post[proofreading_targetCount]" . $post["proofreading_$targetCount"
                                     try {
                                         $projectDao->calculateProjectDeadlines($project->getId());
 
+error_log("BEFORE REDIRECT");
+$projectx = $projectDao->getProject($project->getId());
+if (empty($projectx)) {
+    error_log("projectx EMPTY!");
+} else {
+    error_log("projectx id: " . $projectx->getId());
+}
                                         $app->redirect($app->urlFor('project-view', array('project_id' => $project->getId())));
 
                                     } catch (\Exception $e) {
+error_log("IN FINAL CATCH");
                                         $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), $_FILES['projectFile']['name']));
                                         try {
                                             $projectDao->deleteProject($project->getId());
