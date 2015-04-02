@@ -589,7 +589,7 @@ error_log("STARTING TASKS");
                                     if (!empty($post["segmentation_$targetCount"])) {
 error_log("post[segmentation_targetCount]" . $post["segmentation_$targetCount"]);
                                         // Create segmentation task
-                                        $id = addProjectTask(
+                                        $id = $this->addProjectTask(
                                             $project,
                                             $post["target_language_$targetCount"],
                                             $post["target_country_$targetCount"],
@@ -610,7 +610,7 @@ error_log("post[segmentation_targetCount]" . $post["segmentation_$targetCount"])
                                         // Not a segmentation task, so translation and/or proofreading will be created.
                                         if (!empty($post["translation_$targetCount"])) {
 error_log("post[translation_targetCount]" . $post["translation_$targetCount"]);
-                                            $translation_Task_Id = addProjectTask(
+                                            $translation_Task_Id = $this->addProjectTask(
                                                 $project,
                                                 $post["target_language_$targetCount"],
                                                 $post["target_country_$targetCount"],
@@ -629,7 +629,7 @@ error_log("post[translation_targetCount]" . $post["translation_$targetCount"]);
 
                                             if (!empty($post["proofreading_$targetCount"])) {
 error_log("post[proofreading_targetCount]" . $post["proofreading_$targetCount"]);
-                                                $id = addProjectTask(
+                                                $id = $this->addProjectTask(
                                                     $project,
                                                     $post["target_language_$targetCount"],
                                                     $post["target_country_$targetCount"],
@@ -649,7 +649,7 @@ error_log("post[proofreading_targetCount]" . $post["proofreading_$targetCount"])
                                         } elseif (empty($post["translation_$targetCount"]) && !empty($post["proofreading_$targetCount"])) {
 error_log("J post[proofreading_targetCount]" . $post["proofreading_$targetCount"]);
                                             // Only a proofreading task to be created
-                                            $id = addProjectTask(
+                                            $id = $this->addProjectTask(
                                                 $project,
                                                 $post["target_language_$targetCount"],
                                                 $post["target_country_$targetCount"],
