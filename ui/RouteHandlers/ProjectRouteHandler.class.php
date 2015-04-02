@@ -670,20 +670,24 @@ error_log("J post[proofreading_targetCount]" . $post["proofreading_$targetCount"
                                     $targetCount++;
                                 }
 
-                                if (!$creatingTasksSuccess) {
+                                if (true || !$creatingTasksSuccess) {
 error_log("DELETING PROJECT ETC");
                                     foreach ($createdTasks as $taskIdToDelete) {
                                         if ($taskIdToDelete) {
                                             try {
+error_log("DELETING $taskIdToDelete");
                                                 $taskDao->deleteTask($taskIdToDelete);
                                             } catch (\Exception $e) {
+error_log("DELETING EXCEPTION $taskIdToDelete");
                                             }
                                         }
                                     }
                                     $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), $_FILES['projectFile']['name']));
                                     try {
+error_log("DELETING PROJECT");
                                         $projectDao->deleteProject($project->getId());
                                     } catch (\Exception $e) {
+error_log("DELETING PROJECT EXCEPTION");
                                     }
                                 } else {
                                     try {
