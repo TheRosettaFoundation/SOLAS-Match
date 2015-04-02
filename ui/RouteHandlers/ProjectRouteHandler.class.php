@@ -459,7 +459,7 @@ class ProjectRouteHandler
 
                 try {
                     $project = $projectDao->createProject($project);
-                } catch (\Exception  $e) {
+                } catch (\Exception $e) {
                     $project = null;
                 }
                 if (empty($project) || $project->getId() <= 0) {
@@ -470,7 +470,7 @@ class ProjectRouteHandler
                         $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), $_FILES['projectFile']['name']));
                         try {
                             $projectDao->deleteProject($project->getId());
-                        } catch (\Exception  $e) {
+                        } catch (\Exception $e) {
                         }
                     } else {
                         $projectFileName = $_FILES['projectFile']['name'];
@@ -484,14 +484,15 @@ class ProjectRouteHandler
                         try {
                             $projectDao->saveProjectFile($project, $user_id, $projectFileName, $data);
                             $success = true;
-                        } catch (\Exception  $e) {
+error_log("SAVED File for " . $project->getId());
+                        } catch (\Exception $e) {
                             $success = false;
                         }
                         if (!$success) {
                             $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('common_error_file_stopped_by_extension')));
                             try {
                                 $projectDao->deleteProject($project->getId());
-                            } catch (\Exception  $e) {
+                            } catch (\Exception $e) {
                             }
                         } else {
                             $image_failed = false;
@@ -525,7 +526,7 @@ class ProjectRouteHandler
                                         try {
                                             $projectDao->saveProjectImageFile($project, $user_id, $projectImageFileName, $data);
                                             $success = true;
-                                        } catch (\Exception  $e) {
+                                        } catch (\Exception $e) {
                                             $success = false;
                                         }
                                     } else { // Resize the image
@@ -555,7 +556,7 @@ class ProjectRouteHandler
                                             try {
                                                 $projectDao->saveProjectImageFile($project, $user_id, $projectImageFileName, $data);
                                                 $success = true;
-                                            } catch (\Exception  $e) {
+                                            } catch (\Exception $e) {
                                                 $success = false;
                                             }
                                         } else {
@@ -567,11 +568,12 @@ class ProjectRouteHandler
                                     }
                                 }
                             }
+error_log("AFTER DOING/NOT DOING IMAGE image_failed: $image_failed");
                             if ($image_failed) {
                                 $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_image'), $_FILES['projectImageFile']['name']));
                                 try {
                                     $projectDao->deleteProject($project->getId());
-                                } catch (\Exception  $e) {
+                                } catch (\Exception $e) {
                                 }
                             } else {
                                 // Continue here whether there is, or is not, an image file uploaded as long as there was not an explicit failure
@@ -583,6 +585,7 @@ class ProjectRouteHandler
                                 while (!empty($post["target_language$targetCount"]) && !empty($post["target_country$targetCount"])) {
 
                                     if (!empty($post["segmentation_$targetCount"])) {
+error_log("post[segmentation_targetCount]" . $post["segmentation_$targetCount"]);
                                         // Create segmentation task
                                         $id = addProjectTask(
                                             $project,
@@ -604,6 +607,7 @@ class ProjectRouteHandler
                                     } else {
                                         // Not a segmentation task, so translation and/or proofreading will be created.
                                         if (!empty($post["translation_$targetCount"])) {
+error_log("post[translation_targetCount]" . $post["translation_$targetCount"]);
                                             $translation_Task_Id = addProjectTask(
                                                 $project,
                                                 $post["target_language$targetCount"],
@@ -622,6 +626,7 @@ class ProjectRouteHandler
                                             }
 
                                             if (!empty($post["proofreading_$targetCount"])) {
+error_log("post[proofreading_targetCount]" . $post["proofreading_$targetCount"]);
                                                 $id = addProjectTask(
                                                     $project,
                                                     $post["target_language$targetCount"],
@@ -640,6 +645,7 @@ class ProjectRouteHandler
                                                 }
                                             }
                                         } elseif (empty($post["translation_$targetCount"]) && !empty($post["proofreading_$targetCount"])) {
+error_log("J post[proofreading_targetCount]" . $post["proofreading_$targetCount"]);
                                             // Only a proofreading task to be created
                                             $id = addProjectTask(
                                                 $project,
@@ -667,14 +673,14 @@ class ProjectRouteHandler
                                         if ($taskIdToDelete) {
                                             try {
                                                 $taskDao->deleteTask($taskIdToDelete);
-                                            } catch (\Exception  $e) {
+                                            } catch (\Exception $e) {
                                             }
                                         }
                                     }
                                     $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), $_FILES['projectFile']['name']));
                                     try {
                                         $projectDao->deleteProject($project->getId());
-                                    } catch (\Exception  $e) {
+                                    } catch (\Exception $e) {
                                     }
                                 } else {
                                     try {
@@ -682,11 +688,11 @@ class ProjectRouteHandler
 
                                         $app->redirect($app->urlFor('project-view', array('project_id' => $project->getId())));
 
-                                    } catch (\Exception  $e) {
+                                    } catch (\Exception $e) {
                                         $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), $_FILES['projectFile']['name']));
                                         try {
                                             $projectDao->deleteProject($project->getId());
-                                        } catch (\Exception  $e) {
+                                        } catch (\Exception $e) {
                                         }
                                     }
                                 }
@@ -777,7 +783,8 @@ class ProjectRouteHandler
         $task = new Common\Protobufs\Models\Task();
         try {
             $projectTasks = $projectDao->getProjectTasks($project->getId());
-        } catch (\Exception  $e) {
+        } catch (\Exception $e) {
+error_log("IN addProjectTask() Catch 0");
             return 0;
         }
 
@@ -811,12 +818,14 @@ class ProjectRouteHandler
             $newTask = $taskDao->createTask($task);
             $newTaskId = $newTask->getId();
             $createdTasks[] = $newTaskId;
+error_log("IN addProjectTask() newTaskId: $newTaskId, count(createdTasks): " . count($createdTasks));
 
             $upload_error = $taskDao->saveTaskFile(
                 $newTaskId,
                 $user_id,
                 $projectDao->getProjectFile($project->getId())
             );
+error_log("2IN addProjectTask() newTaskId: $newTaskId, count(createdTasks): " . count($createdTasks));
 
             if ($newTaskId && $preReqTaskId) {
                 $taskDao->addTaskPreReq($newTaskId, $preReqTaskId);
@@ -826,10 +835,12 @@ class ProjectRouteHandler
                 $userDao = new DAO\UserDao();
                 $userDao->trackTask($user_id, $newTaskId);
             }
-        } catch (\Exception  $e) {
+        } catch (\Exception $e) {
+error_log("IN addProjectTask() Catch 1");
             return 0;
         }
 
+error_log("addProjectTask() Returning newTaskId: $newTaskId");
         return $newTaskId;
     }
 
