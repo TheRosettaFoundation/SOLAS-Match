@@ -36,10 +36,10 @@ class ProjectRouteHandler
         )->via("GET", "POST")->name("project-create");
 
         $app->get(
-            "/project/:org_id/create1/",
+            "/project/:org_id/create/",
             array($middleware, "authUserForOrg"),
-            array($this, "projectCreate1")
-        )->via("GET", "POST")->name("project-create1");
+            array($this, "projectCreate")
+        )->via("GET", "POST")->name("project-create");
 
         $app->get(
             "/project/id/:project_id/created/",
@@ -383,33 +383,6 @@ class ProjectRouteHandler
         $app = \Slim\Slim::getInstance();
         $user_id = Common\Lib\UserSession::getCurrentUserID();
 
-        $extraScripts = "
-<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/dart_support.js\"></script>
-<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/browser/interop.js\"></script>
-<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/Routes/Projects/ProjectCreate.dart.js\"></script>
-<span class=\"hidden\">
-";
-        $extraScripts .= file_get_contents("ui/dart/web/Routes/Projects/ProjectCreateForm.html");
-        $extraScripts .= "</span>";
-        $platformJS =
-        "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/platform.js\"></script>";
-
-        $app->view()->appendData(array(
-            "maxFileSize"   => Lib\TemplateHelper::maxFileSizeBytes(),
-            "org_id"        => $org_id,
-            "user_id"       => $user_id,
-            "extra_scripts" => $extraScripts,
-            "platformJS"    => $platformJS
-        ));
-        $app->render("project/project.create.tpl");
-    }
-
-//(**) ALAN Work In Progress
-    public function projectCreate1($org_id)
-    {
-        $app = \Slim\Slim::getInstance();
-        $user_id = Common\Lib\UserSession::getCurrentUserID();
-
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
 
@@ -484,7 +457,6 @@ class ProjectRouteHandler
                         try {
                             $projectDao->saveProjectFile($project, $user_id, $projectFileName, $data);
                             $success = true;
-error_log("SAVED File for " . $project->getId());
                         } catch (\Exception $e) {
                             $success = false;
                         }
@@ -507,18 +479,15 @@ error_log("SAVED File for " . $project->getId());
 
                                     // Check that the file extension is valid for an image
                                     if (!in_array($extension, explode(",", Common\Lib\Settings::get('projectImages.supported_formats')))) {
-error_log("projectImages.supported_formats");
                                         $image_failed = true;
                                     }
                                 } else {
                                     // File has no extension
-error_log("File has no extension");
                                     $image_failed = true;
                                 }
 
                                 if ($image_failed || !empty($_FILES['projectImageFile']['error']) || empty($_FILES['projectImageFile']['tmp_name'])
                                         ||(($data = file_get_contents($_FILES['projectImageFile']['tmp_name'])) === false)) {
-error_log("_FILES['projectImageFile']['error']");
                                     $image_failed = true;
                                 } else {
                                     $imageMaxWidth  = Common\Lib\Settings::get('projectImages.max_width');
@@ -530,7 +499,6 @@ error_log("_FILES['projectImageFile']['error']");
                                             $projectDao->saveProjectImageFile($project, $user_id, $projectImageFileName, $data);
                                             $success = true;
                                         } catch (\Exception $e) {
-error_log("saveProjectImageFile");
                                             $success = false;
                                         }
                                     } else { // Resize the image
@@ -563,23 +531,18 @@ error_log("saveProjectImageFile");
                                                 $projectDao->saveProjectImageFile($project, $user_id, $projectImageFileName, $data);
                                                 $success = true;
                                             } catch (\Exception $e) {
-error_log("saveProjectImageFile 2");
                                                 $success = false;
                                             }
                                         } else {
-error_log("data !== false");
                                             $success = false;
                                         }
                                     }
                                     if (!$success) {
-error_log("!success");
-                                      $image_failed = true;
+                                        $image_failed = true;
                                     }
                                 }
                             }
-error_log("AFTER DOING/NOT DOING IMAGE");
                             if ($image_failed) {
-error_log("image_failed");
                                 $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_image'), $_FILES['projectImageFile']['name']));
                                 try {
                                     $projectDao->deleteProject($project->getId());
@@ -592,11 +555,9 @@ error_log("image_failed");
                                 $targetCount = 0;
                                 $creatingTasksSuccess = true;
                                 $createdTasks = array();
-error_log("STARTING TASKS");
                                 while (!empty($post["target_language_$targetCount"]) && !empty($post["target_country_$targetCount"])) {
 
                                     if (!empty($post["segmentation_$targetCount"])) {
-error_log("post[segmentation_targetCount]" . $post["segmentation_$targetCount"]);
                                         // Create segmentation task
                                         $id = $this->addProjectTask(
                                             $project,
@@ -618,7 +579,6 @@ error_log("post[segmentation_targetCount]" . $post["segmentation_$targetCount"])
                                     } else {
                                         // Not a segmentation task, so translation and/or proofreading will be created.
                                         if (!empty($post["translation_$targetCount"])) {
-error_log("post[translation_targetCount]" . $post["translation_$targetCount"]);
                                             $translation_Task_Id = $this->addProjectTask(
                                                 $project,
                                                 $post["target_language_$targetCount"],
@@ -637,7 +597,6 @@ error_log("post[translation_targetCount]" . $post["translation_$targetCount"]);
                                             }
 
                                             if (!empty($post["proofreading_$targetCount"])) {
-error_log("post[proofreading_targetCount]" . $post["proofreading_$targetCount"]);
                                                 $id = $this->addProjectTask(
                                                     $project,
                                                     $post["target_language_$targetCount"],
@@ -656,7 +615,6 @@ error_log("post[proofreading_targetCount]" . $post["proofreading_$targetCount"])
                                                 }
                                             }
                                         } elseif (empty($post["translation_$targetCount"]) && !empty($post["proofreading_$targetCount"])) {
-error_log("J post[proofreading_targetCount]" . $post["proofreading_$targetCount"]);
                                             // Only a proofreading task to be created
                                             $id = $this->addProjectTask(
                                                 $project,
@@ -680,7 +638,6 @@ error_log("J post[proofreading_targetCount]" . $post["proofreading_$targetCount"
                                 }
 
                                 if (!$creatingTasksSuccess) {
-error_log("DELETING PROJECT ETC");
                                     foreach ($createdTasks as $taskIdToDelete) {
                                         if ($taskIdToDelete) {
                                             try {
@@ -698,19 +655,11 @@ error_log("DELETING PROJECT ETC");
                                     try {
                                         $projectDao->calculateProjectDeadlines($project->getId());
 
-error_log("BEFORE REDIRECT");
-$projectx = $projectDao->getProject($project->getId());
-if (empty($projectx)) {
-    error_log("projectx EMPTY!");
-} else {
-    error_log("projectx id: " . $projectx->getId());
-}
                                         try {
                                             $app->redirect($app->urlFor('project-view', array('project_id' => $project->getId())));
                                         } catch (\Exception $e) { // redirect throws \Slim\Exception\Stop
                                         }
                                     } catch (\Exception $e) {
-error_log("IN FINAL CATCH");
                                         $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), $_FILES['projectFile']['name']));
                                         try {
                                             $projectDao->deleteProject($project->getId());
@@ -785,7 +734,7 @@ error_log("IN FINAL CATCH");
             'countries'      => $countries,
             'sesskey'        => $sesskey,
         ));
-        $app->render("project/project.create1.tpl");
+        $app->render("project/project.create.tpl");
     }
 
     private function addProjectTask(
@@ -806,7 +755,6 @@ error_log("IN FINAL CATCH");
         try {
             $projectTasks = $projectDao->getProjectTasks($project->getId());
         } catch (\Exception $e) {
-error_log("IN addProjectTask() Catch 0");
             return 0;
         }
 
@@ -840,14 +788,12 @@ error_log("IN addProjectTask() Catch 0");
             $newTask = $taskDao->createTask($task);
             $newTaskId = $newTask->getId();
             $createdTasks[] = $newTaskId;
-error_log("IN addProjectTask() newTaskId: $newTaskId, count(createdTasks): " . count($createdTasks));
 
             $upload_error = $taskDao->saveTaskFile(
                 $newTaskId,
                 $user_id,
                 $projectDao->getProjectFile($project->getId())
             );
-error_log("2IN addProjectTask() newTaskId: $newTaskId, count(createdTasks): " . count($createdTasks));
 
             if ($newTaskId && $preReqTaskId) {
                 $taskDao->addTaskPreReq($newTaskId, $preReqTaskId);
@@ -858,11 +804,9 @@ error_log("2IN addProjectTask() newTaskId: $newTaskId, count(createdTasks): " . 
                 $userDao->trackTask($user_id, $newTaskId);
             }
         } catch (\Exception $e) {
-error_log("IN addProjectTask() Catch 1");
             return 0;
         }
 
-error_log("addProjectTask() Returning newTaskId: $newTaskId");
         return $newTaskId;
     }
 
@@ -883,7 +827,6 @@ error_log("addProjectTask() Returning newTaskId: $newTaskId");
         }
         return $string;
     }
-//(**) ALAN Work In Progress
 
     public function projectCreated($project_id)
     {

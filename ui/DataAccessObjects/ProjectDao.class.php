@@ -97,7 +97,6 @@ class ProjectDao extends BaseDao
         return $ret;
     }
 
-//(**) ALAN Work In Progress
     public function saveProjectFile($project, $userId, $filename, $fileData)
     {
         $filename = urlencode($filename);
@@ -127,7 +126,6 @@ class ProjectDao extends BaseDao
         );
         return $response;
     }
-//(**) ALAN Work In Progress
 
     public function calculateProjectDeadlines($projectId)
     {
