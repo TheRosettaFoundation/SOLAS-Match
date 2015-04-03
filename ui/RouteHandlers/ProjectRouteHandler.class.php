@@ -507,15 +507,18 @@ error_log("SAVED File for " . $project->getId());
 
                                     // Check that the file extension is valid for an image
                                     if (!in_array($extension, explode(",", Common\Lib\Settings::get('projectImages.supported_formats')))) {
+error_log("projectImages.supported_formats");
                                         $image_failed = true;
                                     }
                                 } else {
                                     // File has no extension
+error_log("File has no extension");
                                     $image_failed = true;
                                 }
 
                                 if ($image_failed || !empty($_FILES['projectImageFile']['error']) || empty($_FILES['projectImageFile']['tmp_name'])
                                         ||(($data = file_get_contents($_FILES['projectImageFile']['tmp_name'])) === false)) {
+error_log("_FILES['projectImageFile']['error']");
                                     $image_failed = true;
                                 } else {
                                     $imageMaxWidth  = Common\Lib\Settings::get('projectImages.max_width');
@@ -527,6 +530,7 @@ error_log("SAVED File for " . $project->getId());
                                             $projectDao->saveProjectImageFile($project, $user_id, $projectImageFileName, $data);
                                             $success = true;
                                         } catch (\Exception $e) {
+error_log("saveProjectImageFile");
                                             $success = false;
                                         }
                                     } else { // Resize the image
@@ -537,8 +541,10 @@ error_log("SAVED File for " . $project->getId());
                                         $img = '';
                                         if ($extension == 'gif') {
                                             $img = imagecreatefromgif($_FILES['projectImageFile']['tmp_name']);
+                                            $projectImageFileName = substr($projectImageFileName, 0, $extensionStartIndex + 1) . 'jpg';
                                         } elseif ($extension == 'png') {
                                             $img = imagecreatefrompng($_FILES['projectImageFile']['tmp_name']);
+                                            $projectImageFileName = substr($projectImageFileName, 0, $extensionStartIndex + 1) . 'jpg';
                                         } else {
                                             $img = imagecreatefromjpeg($_FILES['projectImageFile']['tmp_name']);
                                         }
@@ -546,7 +552,7 @@ error_log("SAVED File for " . $project->getId());
                                         $tci = imagecreatetruecolor($newWidth, $newHeight);
                                         if (!empty($img) && $tci !== false) {
                                             if (imagecopyresampled($tci, $img, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height)) {
-                                                imagejpeg($tci, $_FILES['projectImageFile']['tmp_name']); // Overwrite
+                                                imagejpeg($tci, $_FILES['projectImageFile']['tmp_name'], 100); // Overwrite
                                                 // If we did not get this far, give up and use the un-resized image
                                             }
                                         }
@@ -557,13 +563,16 @@ error_log("SAVED File for " . $project->getId());
                                                 $projectDao->saveProjectImageFile($project, $user_id, $projectImageFileName, $data);
                                                 $success = true;
                                             } catch (\Exception $e) {
+error_log("saveProjectImageFile 2");
                                                 $success = false;
                                             }
                                         } else {
+error_log("data !== false");
                                             $success = false;
                                         }
                                     }
                                     if (!$success) {
+error_log("!success");
                                       $image_failed = true;
                                     }
                                 }
