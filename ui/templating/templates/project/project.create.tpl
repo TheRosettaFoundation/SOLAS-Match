@@ -53,7 +53,7 @@
                 <div class="projFormInput">
                     <h2>{Localisation::getTranslation('common_title')}: <span style="color: red">*</span></h2>
                     <p class="desc">{Localisation::getTranslation('project_create_1')}</p>
-                    <textarea wrap="soft" cols="1" rows="3" style="width: 400px" name="project_title" id="project_title"></textarea>
+                    <textarea wrap="soft" cols="1" rows="3" style="width: 400px" name="project_title" id="project_title" onblur="checkTitleNotUsed();"></textarea>
                     <p style="margin-bottom:40px;"></p>
                 </div>
                 <div class="projFormInput">

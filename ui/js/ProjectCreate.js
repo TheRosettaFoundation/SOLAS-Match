@@ -741,6 +741,26 @@ function validateReferenceURL(reference)
   return reference.match(r);
 }
 
+function checkTitleNotUsed()
+{
+  if (userHash != null && document.getElementById("project_title").value != "") { // Make sure API call will succeed and the field is not empty
+    DAOcheckProjectByNameNotExist(document.getElementById("project_title").value, noTitleConflict, titleConflict, errorFromServer);
+  }
+}
+
+function noTitleConflict()
+{
+}
+
+function titleConflict()
+{
+  alert(parameters.getTranslation("project_create_title_conflict"));
+}
+
+function errorFromServer()
+{
+}
+
 /**
  * Calls the API to verify a project with the given title does not exist.
  *
