@@ -1,13 +1,17 @@
+var userHash = null;    // Bearer value for Authorization Header
+
 var userLangDoc = null; // Strings for user's language preference
-var DefaultLangDoc;     // Strings for default language
+var defaultLangDoc;     // Strings for default language
 
 function Parameters(functionOnSuccess)
 {
+  var deferredGetUserHash = $.Deferred();
   var deferredGetUserLangDoc = $.Deferred();
   var deferredGetDefaultLangDoc = $.Deferred();
 
-  $.when(deferredGetUserLangDoc, deferredGetDefaultLangDoc).done(functionOnSuccess);
+  $.when(deferredGetUserHash, deferredGetUserLangDoc, deferredGetDefaultLangDoc).done(functionOnSuccess);
 
+  this.getUserHash(deferredGetUserHash);
   this.getUserLangDoc(deferredGetUserLangDoc);
   this.getDefaultLangDoc(deferredGetDefaultLangDoc);
 }
@@ -33,6 +37,32 @@ Parameters.prototype.getTranslation = function(key)
     }
   }
   return data;
+}
+
+Parameters.prototype.getUserHash = function(deferred)
+{
+  if (userHash == null) {
+    $.ajax(
+      {
+        url: siteLocation + "static/getUserHash/",
+        method: "GET",
+        dataType: "text",
+        xhrFields: {
+          withCredentials: true
+        }
+      }
+    )
+    .done(
+      function(data) {
+        if (data != "") {
+          userHash = data;
+          deferred.resolve();
+        }
+      }
+    );
+  } else {
+    deferred.resolve();
+  }
 }
 
 Parameters.prototype.getUserLangDoc = function(deferred)

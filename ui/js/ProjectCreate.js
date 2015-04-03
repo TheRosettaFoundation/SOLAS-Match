@@ -740,3 +740,41 @@ function validateReferenceURL(reference)
     'fA-f\\d]{2,2})=?)*)?(#([-+_~.\\d\\w]|%[a-fA-f\\d]{2,2})*)?$');
   return reference.match(r);
 }
+
+/**
+ * Calls the API to verify a project with the given title does not exist.
+ *
+ * handler functionNotExist called if it does not exist.
+ * handler functionExist called if it does exist (this is the unexpected case).
+ * handler functionOnFail called on failure of the API call.
+ */
+function DAOcheckProjectByNameNotExist(title, functionNotExist, functionExist, functionOnFail)
+{
+  $.ajax(
+    {
+      url: siteLocation + "v0/projects/getProjectByName",
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer " + userHash
+      },
+      contentType: 'text/plain; charset=UTF-8',
+      processData: false,
+      data: title
+    }
+  )
+  .done(function (data, textStatus, jqXHR)
+      {
+        if (jqXHR.status < 400) {
+          if (jqXHR.responseText == "") {
+            functionNotExist(); // Expected Response (project not expected to exist)
+          } else {
+            functionExist(); // Unexpected Response
+          }
+        } else {
+          functionOnFail();
+          console.log("Error: getProject returned " + jqXHR.status + " " + jqXHR.statusText);
+        }
+      }
+    )
+  .fail(functionOnFail);
+}
