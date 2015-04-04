@@ -4,6 +4,7 @@ var parameters; // Instance of Parameters Class holding data retrieved from Serv
 
 // Passed from PHP
 var siteLocation;
+var siteAPI;
 var maxfilesize;
 var imageMaxFileSize;
 var supportedImageFormats;
@@ -135,6 +136,7 @@ function set_errors_for_submission(id, id_for_div)
 function documentReady()
 {
   siteLocation     = getSetting("siteLocation");
+  siteAPI          = getSetting("siteAPI");
   maxFileSize      = document.getElementById("maxfilesize").innerHTML;
   imageMaxFileSize = parseInt(getSetting("imageMaxFileSize")) * 1024 * 1024;
   org_id           = document.getElementById("org_id").innerHTML;
@@ -779,7 +781,7 @@ function DAOcheckProjectByNameNotExist(title, functionNotExist, functionExist, f
 {
   $.ajax(
     {
-      url: siteLocation + "v0/projects/getProjectByName",
+      url: siteAPI + "v0/projects/getProjectByName",
       method: "POST",
       headers: {
         "Authorization": "Bearer " + userHash

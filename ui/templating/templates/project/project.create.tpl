@@ -4,6 +4,7 @@
 
         <!-- Parameters... -->
         <div id="siteLocation">{$siteLocation}</div>
+        <div id="siteAPI">{$siteAPI}</div>
         <div id="maxfilesize">{$maxFileSize}</div>
         <div id="imageMaxFileSize">{$imageMaxFileSize}</div>
         <div id="supportedImageFormats">{$supportedImageFormats}</div>
