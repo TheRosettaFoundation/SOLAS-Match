@@ -763,8 +763,9 @@ function titleConflict()
   alert(parameters.getTranslation("project_create_title_conflict"));
 }
 
-function errorFromServer()
+function errorFromServer(jqXHR, textStatus, errorThrown)
 {
+  console.log("Error: getProjectByName Failed, returned " + jqXHR.status + " " + jqXHR.statusText);
 }
 
 /**
@@ -798,7 +799,7 @@ function DAOcheckProjectByNameNotExist(title, functionNotExist, functionExist, f
           }
         } else {
           functionOnFail();
-          console.log("Error: getProject returned " + jqXHR.status + " " + jqXHR.statusText);
+          console.log("Error: getProjectByName returned " + jqXHR.status + " " + jqXHR.statusText);
         }
       }
     )
