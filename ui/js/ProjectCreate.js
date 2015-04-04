@@ -62,6 +62,8 @@ var targetLanguageLanguage;
 var targetCountryCode;
 var targetCountryCountry;
 
+var duplicateProjectTitle = null;
+
 $(document).ready(documentReady);
 
 
@@ -385,6 +387,9 @@ function validateLocalValues()
     // Is the project title simply a number? Don't allow this, thus avoiding Slim route mismatch,
     // calling route for getProject when it should be getProjectByName
     titleError = parameters.getTranslation("project_create_title_cannot_be_number");
+    success = false;
+  } else if (title == duplicateProjectTitle) {
+    titleError = parameters.getTranslation("project_create_title_conflict");
     success = false;
   }
   if (description == '') {
@@ -754,6 +759,7 @@ function noTitleConflict()
 
 function titleConflict()
 {
+  duplicateProjectTitle = document.getElementById("project_title").value;
   alert(parameters.getTranslation("project_create_title_conflict"));
 }
 
