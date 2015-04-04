@@ -767,7 +767,9 @@ function titleConflict()
 
 function errorFromServer(jqXHR, textStatus, errorThrown)
 {
-  console.log("Error: getProjectByName Failed, returned " + jqXHR.status + " " + jqXHR.statusText);
+  // If the project is not found, we get to here, which is OK
+  // (we do not seem to get a normal error response functionExist/noTitleConflict although the response to the POST is 200 OK!)
+  // console.log("Error: getProjectByName Failed, returned " + jqXHR.status + " " + jqXHR.statusText);
 }
 
 /**
