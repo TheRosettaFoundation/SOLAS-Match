@@ -49,7 +49,7 @@ class ProjectDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode()).",".
             Lib\PDOWrapper::cleanseNull($project->getImageUploaded()).",".
             Lib\PDOWrapper::cleanseNull($project->getImageApproved());
-            
+
         $result = Lib\PDOWrapper::call("projectInsertAndUpdate", $args);
         if ($result) {
             $project = Common\Lib\ModelFactory::buildModel("Project", $result[0]);
@@ -57,14 +57,14 @@ class ProjectDao
 
         TagsDao::updateTags($project->getId(), $tagList);
         $project->clearTag();
-        
+
         $projectTags = self::getTags($project->getId());
         if ($projectTags) {
             foreach ($projectTags as $tag) {
                 $project->appendTag($tag);
             }
         }
-        
+
         return $project;
     }
 
@@ -91,7 +91,7 @@ class ProjectDao
             );
         }
     }
-    
+
     //! Retrieve a single Project from the database
     /*!
       Get a single project by its id. If null is passed for the id then this function will return null.
@@ -131,7 +131,39 @@ class ProjectDao
         }
         return $project;
     }
-    
+
+    //! Retrieve a single Project from the database
+    /*!
+      Get a single project by its title and organisation.
+      @param string $title is the title of the requested Project
+      @param int $orgId is the id of the Organisation the request Project(s) belong to
+      @return Returns a Project object. If null is passed for either parameter then this function will return null.
+    */
+    public static function getProjectByNameAndOrganisation($title, $orgId)
+    {
+        $project = null;
+        if (!is_null($title) && !is_null($orgId)) {
+            $args = "null, ".
+                Lib\PDOWrapper::cleanseNullOrWrapStr($title).", ".
+                "null, ".
+                "null, ".
+                "null, ".
+                Lib\PDOWrapper::cleanseNull($orgId).", ".
+                "null, ".
+                "null, ".
+                "null, ".
+                "null, ".
+                "null, ".
+                "null, ".
+                "null";
+            $result = Lib\PDOWrapper::call("getProject", $args);
+            if ($result) {
+                $project = Common\Lib\ModelFactory::buildModel("Project", $result[0]);
+            }
+        }
+        return $project;
+    }
+
     //! Get a Project from the database
     /*!
       Used to retrieve a specific Project(s) from the database. All arguments for this function default to null. if
@@ -315,7 +347,7 @@ class ProjectDao
         }
         return $tasks;
     }
-    
+
     //! Get the Tag objects associated with a specific Project
     /*!
       Retrieves a list Tag objects from the database. The returned list only contains Tags that are associated with
@@ -349,7 +381,7 @@ class ProjectDao
     {
         $args = Lib\PDOWrapper::cleanseNull($projectId).",".
             Lib\PDOWrapper::cleanseNull($tagId);
-        
+
         $result = Lib\PDOWrapper::call("removeProjectTag", $args);
         if ($result) {
             return $result[0]['result'];
@@ -390,7 +422,7 @@ class ProjectDao
             return '0';
         }
     }
-    
+
     //! Get the file info for a Project
     /*!
       Retrieves data on the ProjectFile from the database. The projectId parameter is required, the others are
@@ -421,7 +453,7 @@ class ProjectDao
             return null;
         }
     }
-    
+
     //! Download the ProjectFile
     /*!
       This function returns the contents of the ProjectFile in the body of the HTTP Response.
@@ -433,12 +465,12 @@ class ProjectDao
         $projectFileInfo = self::getProjectFileInfo($projectId, null, null, null, null);
         $filename = $projectFileInfo->getFilename();
         $source = Common\Lib\Settings::get("files.upload_path")."proj-$projectId/$filename";
-        
+
         if (file_exists($source)) {
             return file_get_contents($source);
         }
     }
-    
+
     //! Records a ProjectFile upload
     /*!
       Used to keep track of Project files. Stores information about a project file upload so it can be retrieved later.
@@ -463,7 +495,7 @@ class ProjectDao
             return null;
         }
     }
-    
+
     //! Get an ArchivedTask from the database
     /*!
       Get a list of ArchivedTask objects from the database. It will only return ArchivedTasks that are a part of the
@@ -485,7 +517,7 @@ class ProjectDao
         }
         return $ret;
     }
-    
+
     //! Remove all Project Tags
     /*!
       Remove all Tags from a Project.
@@ -503,7 +535,7 @@ class ProjectDao
             return null;
         }
     }
-    
+
     //! Delete a Project
     /*!
       Permanently delete a Project. This will <b>not</b> move the Project to the ArchivedProjects table.
@@ -527,7 +559,7 @@ class ProjectDao
       1) whether the project has no tasks, if so update the project's word count to new word count
       2) whether the project has segmentation or desegmentation tasks, if so return 2 and do not perform any updates;
       3) whether the word-count of all the tasks of the project are unique, if not return 2
-      4) whether the word-count of all the tasks of the project are unique, if so update the word counts 
+      4) whether the word-count of all the tasks of the project are unique, if so update the word counts
          of tasks and the project and return 1
       The status 2 indicates that either the project has (de)segmentation tasks associated with it
       or tasks have different word-counts
@@ -562,7 +594,7 @@ class ProjectDao
         if ($result)
         {
             if ($status)
-            { 
+            {
                 Lib\Notify::sendProjectImageApprovedEmail($projectId);
             } else
             {
