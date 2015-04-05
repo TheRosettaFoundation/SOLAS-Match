@@ -751,7 +751,8 @@ function validateReferenceURL(reference)
 function checkTitleNotUsed()
 {
   if (userHash != null && document.getElementById("project_title").value != "") { // Make sure API call will succeed and the field is not empty
-    DAOcheckProjectByNameNotExist(document.getElementById("project_title").value, noTitleConflict, titleConflict, errorFromServer);
+    // DAOcheckProjectByNameNotExist(document.getElementById("project_title").value, noTitleConflict, titleConflict, errorFromServer);
+    DAOcheckProjectByNameAndOrganisationNotExist(document.getElementById("project_title").value, org_id, noTitleConflict, titleConflict, errorFromServer);
   }
 }
 
@@ -791,6 +792,41 @@ function DAOcheckProjectByNameNotExist(title, functionNotExist, functionExist, f
       contentType: 'text/plain; charset=UTF-8',
       processData: false,
       data: title
+    }
+  )
+  .done(function (data, textStatus, jqXHR)
+      {
+        if (jqXHR.status < 400) {
+          if (jqXHR.responseText == "") {
+            functionNotExist(); // Expected Response (project not expected to exist)
+          } else {
+            functionExist(); // Unexpected Response
+          }
+        } else {
+          functionOnFail();
+          console.log("Error: getProjectByName returned " + jqXHR.status + " " + jqXHR.statusText);
+        }
+      }
+    )
+  .fail(functionOnFail);
+}
+
+/**
+ * Calls the API to verify a project with the given title and organisation does not exist.
+ *
+ * handler functionNotExist called if it does not exist.
+ * handler functionExist called if it does exist (this is the unexpected case).
+ * handler functionOnFail called on failure of the API call.
+ */
+function DAOcheckProjectByNameAndOrganisationNotExist(title, orgId, functionNotExist, functionExist, functionOnFail)
+{
+  $.ajax(
+    {
+      url: siteAPI + "v0/projects/getProjectByNameAndOrganisation/" + title + "/organisation/" + orgId,
+      method: "GET",
+      headers: {
+        "Authorization": "Bearer " + userHash
+      }
     }
   )
   .done(function (data, textStatus, jqXHR)
