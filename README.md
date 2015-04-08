@@ -33,6 +33,13 @@ Contact
 * David O Carroll   <david.ocarroll@ul.ie>
 * Sean Mooney       <Sean.Mooney@ul.ie>
 * Manuel Honegger   <Manuel.Honegger@ul.ie>
+* Phillip O’Duffy
+* Raymond Kearney
+* Mark Cummins
+* Asanka Wasala
+* Aaron Mason
+* Alan Barrett
+
 
 Technical Requirements
 ======================
