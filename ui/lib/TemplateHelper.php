@@ -14,7 +14,7 @@ class TemplateHelper
 
     public static function timeSinceSqlTime($sql_string)
     {
-        return self::timeSince(strtotime($sql_string));
+        return self::timeSince(strtotime($sql_string . ' UTC'));
     }
 
     private static function timeSince($unix_time)

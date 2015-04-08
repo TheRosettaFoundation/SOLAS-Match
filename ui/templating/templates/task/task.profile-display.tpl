@@ -33,14 +33,14 @@
         <p>{Localisation::getTranslation('common_word_count')} <strong>{$task->getWordCount()|number_format}</strong></p>
     {/if}      
 	<p class="task_details">
-        {sprintf(Localisation::getTranslation('common_added'), {TemplateHelper::timeSinceSqlTime($task->getCreatedTime().' UTC')})}
+        {sprintf(Localisation::getTranslation('common_added'), {TemplateHelper::timeSinceSqlTime($task->getCreatedTime())})}
 	</p>
         
     <p>
         {sprintf(Localisation::getTranslation('task_profile_display_archived'), {TemplateHelper::timeSinceSqlTime($task->getArchivedDate())})}
     </p>
     <p>
-        {sprintf(Localisation::getTranslation('common_due_by'), {date(Settings::get("ui.date_format"), strtotime($task->getDeadline().' UTC'))})}
+        {sprintf(Localisation::getTranslation('common_due_by'), {date(Settings::get("ui.date_format"), TemplateHelper::utcStringToTime($task->getDeadline()))})}
     </p>
 
     <p style="margin-bottom:40px;"/>        
