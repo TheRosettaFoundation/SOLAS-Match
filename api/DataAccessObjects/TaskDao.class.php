@@ -125,7 +125,10 @@ class TaskDao
             self::calculateTaskScore($task->getId());
         } else {
             self::update($task);
-            self::calculateTaskScore($task->getId());
+            //commented out the following line which triggers task-score-calculation & email per every task update 
+            //operation. This is to reduce the Disk Read/Write usage of the server by the PluginHandler. 
+            
+            //self::calculateTaskScore($task->getId());
         }
         return $task;
     }
