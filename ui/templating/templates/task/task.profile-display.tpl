@@ -40,7 +40,7 @@
         {sprintf(Localisation::getTranslation('task_profile_display_archived'), {TemplateHelper::timeSinceSqlTime($task->getArchivedDate())})}
     </p>
     <p>
-        {sprintf(Localisation::getTranslation('common_due_by'), {date(Settings::get("ui.date_format"), TemplateHelper::utcStringToTime($task->getDeadline()))})}
+        {sprintf(Localisation::getTranslation('common_due_by'), {date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))})}
     </p>
 
     <p style="margin-bottom:40px;"/>        
