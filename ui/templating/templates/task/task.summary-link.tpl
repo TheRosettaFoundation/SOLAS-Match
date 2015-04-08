@@ -44,10 +44,10 @@
         <p>{Localisation::getTranslation('common_word_count')} <strong>{$task->getWordCount()|number_format}</strong></p>
     {/if}      
 	<p class="task_details">
-        {sprintf(Localisation::getTranslation('common_added'), {TemplateHelper::timeSinceSqlTime($task->getCreatedTime())})}
+        {sprintf(Localisation::getTranslation('common_added'), {TemplateHelper::timeSinceSqlTime($task->getCreatedTime().' UTC')})}
 	</p>
     <p>
-        {sprintf(Localisation::getTranslation('common_due_by'), {date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))})}
+        {sprintf(Localisation::getTranslation('common_due_by'), {date(Settings::get("ui.date_format"), strtotime($task->getDeadline().' UTC'))})}
     </p>           
         
     <p>            
