@@ -19,9 +19,9 @@
                 </a>: {$badgeEntry->getTitle()}
             </h3>
         {else}
-            <h3>{sprintf(Localisation::getTranslation('badge_list_badge'), $siteName)} {$badgeEntry->getTitle()}</h3>
+            <h3>{sprintf(Localisation::getTranslation('badge_list_badge'), $siteName)} {Localisation::getTranslation($badgeEntry->getTitle())}</h3>
         {/if}
-        <p>{$badgeEntry->getDescription()}</p>
+        <p>{Localisation::getTranslation($badgeEntry->getDescription())}</p>
         <p style="margin-bottom:20px;"></p>
     {/foreach}
 {/if}

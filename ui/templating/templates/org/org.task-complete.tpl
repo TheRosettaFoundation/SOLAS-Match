@@ -24,13 +24,13 @@
     <small>{Localisation::getTranslation('org_task_review_1')}</small>
 </h2>
 
-<p>Use the buttons below to provide a review for the current task or view reviews already provided for this task</p>
+<p>{Localisation::getTranslation('org_task_complete_provide_or_view_review')}</p>
 <p>
     <a class="btn btn-primary" href="{urlFor name="org-task-review" options="org_id.$orgId|task_id.$taskId"}">
-        <i class="icon-list-alt icon-white"></i> Provide a Review
+        <i class="icon-list-alt icon-white"></i>{Localisation::getTranslation('org_task_complete_provide_a_review')}
     </a>
     <a class="btn btn-primary" href="{urlFor name="org-task-reviews" options="org_id.$orgId|task_id.$taskId"}">
-        <i class="icon-list icon-white"></i> View Reviews
+        <i class="icon-list icon-white"></i>{Localisation::getTranslation('org_task_complete_view_reviews')}
     </a>
 </p>
 

@@ -698,13 +698,13 @@ CREATE TABLE IF NOT EXISTS `BannedUsers` (
 -- Dumping data for table Solas-Match-Test.Badges: ~4 rows (approximately)
 /*!40000 ALTER TABLE `Badges` DISABLE KEYS */;
 REPLACE INTO `Badges` (`id`, `owner_id`, `title`, `description`) VALUES
-	(3, NULL, 'Profile-Filler', 'Filled in all info for user  public profile.'),
-	(4, NULL, 'Registered', 'Successfully set up an account'),
-	(5, NULL, 'Native-Language', 'Filled in your native language on your user profile successfully.'),
-        (6, NULL, 'Translator', 'This volunteer is available for translation tasks.'),
-        (7, NULL, 'Proofreader', 'This volunteer is available for proofreading tasks.'),
-        (8, NULL, 'Interpreter', 'This volunteer is available for interpreting tasks.'),
-        (9, NULL, 'Polyglot', 'One or more secondary languages selected on your profile.');
+	(3, NULL, 'system_badge_profile_filler_title', 'system_badge_profile_filler_desc'),
+	(4, NULL, 'system_badge_registered_title', 'system_badge_registered_desc'),
+	(5, NULL, 'system_badge_native_language_title', 'system_badge_native_language_desc'),
+        (6, NULL, 'system_badge_translator_title', 'system_badge_translator_desc'),
+        (7, NULL, 'system_badge_proofreader_title', 'system_badge_proofreader_desc'),
+        (8, NULL, 'system_badge_interpreter_title', 'system_badge_interpreter_desc'),
+        (9, NULL, 'system_badge_polyglot_title', 'system_badge_polyglot_desc');
 ALTER TABLE `Badges` AUTO_INCREMENT=100;
 
 -- Dumping structure for table Solas-Match-Test.Countries

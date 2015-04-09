@@ -1,18 +1,18 @@
 <resources>
     <!-- Smarty Template Strings -->
     <string name="common_faq">FAQ</string>
-    <string name="common_forum">Forum</string>
+	<string name="common_forum">Forum</string>
 	<string name="common_banned_by">Banned By</string>
 	<string name="common_ban_duration">Ban Duration</string>
 	<string name="common_ban_reason">Ban Reason</string>
 	<string name="common_banned_date">Banned Date</string>
 	<string name="common_restore">Restore</string>
-    <string name="common_minute">Minute</string>
-    <string name="common_hour">Hour</string>
+	<string name="common_minute">Minute</string>
+	<string name="common_hour">Hour</string>
 	<string name="common_day">Day</string>
 	<string name="common_week">Week</string>
 	<string name="common_month">Month</string>
-    <string name="common_year">Year</string>
+	<string name="common_year">Year</string>
 	<string name="common_permanent">Permanent</string>
 	<string name="common_ban_organisation">Ban Organisation</string>
 	<string name="common_note">Note</string>
@@ -67,7 +67,7 @@
 	<string name="common_delete">Delete</string>
 	<string name="common_your">Your</string>
 	<string name="common_task">Task</string>
-    <string name="common_project">Project</string>
+   	<string name="common_project">Project</string>
 	<string name="common_segmentation_task">Segmentation Task</string>
 	<string name="common_translation_task">Translation Task</string>
 	<string name="common_proofreading_task">Proofreading Task</string>
@@ -88,7 +88,7 @@
 	<string name="common_this_is_what_you_need_to_do_as_soon_as_possible">This is what you need to do (as soon as possible)</string>
     <string name="common_we_have_also_emailed_you_these_instructions_to">We have also emailed you these instructions to <strong>%s</strong>.</string>
 	<string name="common_cant_find_the_file_on_your_desktop">Cannot find the file on your desktop?</string>
-    <string name="common_download_the_file">Download the <a href="%s">file</a> and save it to your desktop.</string>
+   	<string name="common_download_the_file">Download the <a href="%s">file</a> and save it to your desktop.</string>
 	<string name="common_from">From</string>
 	<string name="common_to">To</string>
 	<string name="common_added">Added <strong>%s</strong> ago</string>
@@ -127,37 +127,37 @@
 	<string name="common_badges">Badges</string>
 	<string name="common_strict">Strict</string>
 	<string name="common_the_last_email_was_sent_on">The last email was sent on %s.</string>
-    <string name="common_no_emails_have_been_sent_yet">No e-mails have been sent yet.</string>
+   	<string name="common_no_emails_have_been_sent_yet">No e-mails have been sent yet.</string>
 	<string name="common_you_are_not_currently_receiving_task_stream_notification_emails">You are not currently receiving task stream notification emails.</string>
 	<string name="common_submit">Submit</string>
 	<string name="common_log_in">Log In</string>
 	<string name="common_register">Register</string>
 	<string name="common_search_for_organisations">Search for Organisations</string>
 	<string name="common_task_type">Task Type</string>
-    <string name="common_create_administrator">Create Administrator</string>
+   	<string name="common_create_administrator">Create Administrator</string>
 	<string name="common_list_all">List All</string>
-    <string name="common_reference">Reference</string>
-    <string name="common_there_are_no_tags_associated_with_this_project">There are no tags associated with this project.</string>
-    <string name="common_password">Password</string>
-    <string name="common_create_organisation">Create Organisation</string>
-    <string name="common_success">Success</string>
-    <string name="common_if_checked_tasks_will_appear_in_the_tasks_stream">If checked, tasks will appear in the task stream.</string>
-    <string name="common_here_is_what_will_now_happen">Here is what will now happen</string>
-    <string name="common_back_to_home_page">Back to Home Page</string>
-    <string name="common_create_new_task">Create new Task</string>
-    <string name="common_project_description">Project Description</string>
-    <string name="common_due_by">Due by <strong>%s</strong></string>
-    <string name="common_source">Source</string>
-    <string name="common_target">Target</string>
-    <string name="common_reset">Reset</string>
-    <string name="common_submit_feedback">Submit Feedback</string>
-    <string name="common_claimed_date">Claimed Date</string>
-    <string name="common_claimed_by">Claimed By</string>
-    <string name="common_loading">Loading...</string>
-    <string name="common_track_project">Track Project</string>
-    <string name="common_untrack_task">Untrack Task</string>
-    <string name="common_track_task">Track Task</string>
-    <string name="common_error">Error</string>
+	<string name="common_reference">Reference</string>
+	<string name="common_there_are_no_tags_associated_with_this_project">There are no tags associated with this project.</string>
+	<string name="common_password">Password</string>
+	<string name="common_create_organisation">Create Organisation</string>
+	<string name="common_success">Success</string>
+	<string name="common_if_checked_tasks_will_appear_in_the_tasks_stream">If checked, tasks will appear in the task stream.</string>
+	<string name="common_here_is_what_will_now_happen">Here is what will now happen</string>
+	<string name="common_back_to_home_page">Back to Home Page</string>
+	<string name="common_create_new_task">Create new Task</string>
+	<string name="common_project_description">Project Description</string>
+	<string name="common_due_by">Due by <strong>%s</strong></string>
+	<string name="common_source">Source</string>
+	<string name="common_target">Target</string>
+	<string name="common_reset">Reset</string>
+	<string name="common_submit_feedback">Submit Feedback</string>
+	<string name="common_claimed_date">Claimed Date</string>
+	<string name="common_claimed_by">Claimed By</string>
+	<string name="common_loading">Loading...</string>
+	<string name="common_track_project">Track Project</string>
+	<string name="common_untrack_task">Untrack Task</string>
+	<string name="common_track_task">Track Task</string>
+	<string name="common_error">Error</string>
     <string name="common_login_required_to_access_page">Login required to access page.</string>
     <string name="common_this_user_account_has_been_banned">This user account has been banned. The administrator has given the following comment: %s</string>
     <string name="common_assign_badge">Assign Badge</string>        
@@ -397,6 +397,9 @@
     <string name="org_task_review_40">Review of task %s has been submitted successfully.</string>
     <string name="org_task_review_41">You have already submitted a review for this task.</string>
     <string name="org_task_review_claimant_unavailable">The user that claimed this task is not longer available.</string>
+    <string name="org_task_complete_provide_or_view_review">Use the buttons below to provide a review for the current task or view reviews already provided for this task</string>
+    <string name="org_task_complete_provide_a_review">Provide a Review</string>
+    <string name="org_task_complete_view_reviews">View Reviews</string>
 
 	<string name="archived_projects_archived_projects">Archived Projects</string>
 	<string name="archived_projects_0">A list of projects you have worked on in the past.</string>
@@ -518,41 +521,8 @@
     <string name="project_view_image_approve_failed">An error occurred while trying to update the image status.</string>
     <string name="project_view_image_disapprove_success">Image has been disapproved. This image will no longer be displayed.</string>
         
-    <string name="faq_faq">FAQ - Frequently Asked Questions</string>
-    <string name="faq_quicklinks">QuickLinks</string>
-    <string name="faq_volunteers">Volunteers</string>
-    <string name="faq_volunteer_questions">Volunteer Questions</string>
-    <string name="faq_organisation_questions">Organisation Questions</string>
-    <string name="faq_v_q1">How do I download the original file?</string>
-    <string name="faq_v_q2">Who do I contact with queries? Who’s the PM?</string>
-    <string name="faq_v_q3">What if I need more time?</string>
-    <string name="faq_v_q4">How do I unclaim a task?</string>
-    <string name="faq_v_q5">I am having trouble downloading the file. What do I do?</string>
-    <string name="faq_v_q6">Why does my language not appear on %s?</string>
-    <string name="faq_v_q7">There are no tasks for my language pair(s).</string>        
-    <string name="faq_v_a1">The original project file can be downloaded on the 'Download Task' page. Here, you will see a checklist. Click on option 4 to download the original project file.</string>
-    <string name="faq_v_a2">If you have any queries, please contact %s. The aim of %s is to reduce intervention levels. Therefore, there are no Project Managers assigned to projects. Any queries can be submitted to the email previously mentioned.</string>
-    <string name="faq_v_a3">If you find that you need more time on a task, please contact %s. They will be able to tell you whether the deadline is strict or not.</string>
-    <string name="faq_v_a4">To unclaim a task, please consult the relevant task page. At the bottom of the page you will see a box for user feedback. In this box you should give your reason for unclaiming the task and then click the 'Revoke Task and Submit Feedback' button.</string>
-    <string name="faq_v_a5">If you experience problems when downloading a file, please contact %s.</string>
-    <string name="faq_v_a6">If your language is not listed as a source or target language on the %s homepage, this means that there are currently no available tasks that match your language combination(s).</string>
-    <string name="faq_v_a7">You can set notification emails if there are no tasks available for your set language pair(s). This can be done via your profile. There are 2 types of notification emails offered:</string>
-    <string name="faq_v_a7_2">Additionally, you can choose whether you want notification emails on a daily, weekly or monthly basis.</string>
-    <string name="faq_v_a7_all"><strong>All</strong> - this email will list all of the tasks available on %s.</string>
-    <string name="faq_v_a7_strict"><strong>Strict</strong> - this email will only list tasks that match your set languages.</string>        
-    <string name="faq_o_q1">How do I create an organisation?</string>
-    <string name="faq_o_q2">How do I download my translation?</string>
-    <string name="faq_o_q3">How do I know when my project is finished?</string>
-    <string name="faq_o_q4">How do I add more members to my organisation?</string>
-    <string name="faq_o_q5">How do I give feedback?</string>        
-    <string name="faq_o_a1">To create an organisation, go to your profile. In the top right-hand corner of the screen you will see a 'Create Organisation' button. When you click on this button you will be brought to a page where you can enter all of the organisation's details.</string>
-    <string name="faq_o_a2">To download your translation start by finding the relevant project on your dashboard. Click on the project and hit the 'Complete' button next to the proofreading task. This will bring you to a page which has a button at the top saying 'Download Output file'. Click on this and you will have downloaded the finalised text.</string>
-    <string name="faq_o_a3">All projects have a status. When the status is at 100% the project is complete. Additionally, when you create a project you automatically track the project. This means that you will receive notification emails every time the status of your project changes.</string>
-    <string name="faq_o_a4">Firstly, anyone who wishes to become a member of an organisation must be a registered user on %s. You can add members to your organisation via the 'Add User' button on the profile page. Additionally, users can request membership to the organisation which you can accept or refuse.</string>
-    <string name="faq_o_a5">You can find a box for feedback at the bottom of the download page. There are 4 categories for feedback ranked from 1 star to 5 stars for corrections, grammar, spelling and consistency. There is also a box where any additional comments can be added.</string>
-
 	<string name="privacy_privacy_policy">Privacy Policy</string>
-        <string name="privacy_0">This Privacy Policy governs the manner in which The Rosetta Foundation collects, uses, maintains and discloses information collected from users (each, a "User") of the <a href="%s">%s</a> website ("Site"). This privacy policy applies to the Site and all products and services offered by The Rosetta Foundation.</string>
+    <string name="privacy_0">This Privacy Policy governs the manner in which The Rosetta Foundation collects, uses, maintains and discloses information collected from users (each, a "User") of the <a href="%s">%s</a> website ("Site"). This privacy policy applies to the Site and all products and services offered by The Rosetta Foundation.</string>
 	<string name="privacy_personal_identification_information">Personal identification information</string>
 	<string name="privacy_2">We may collect personal identification information from Users in a variety of ways, including, but not limited to, when Users visit our site, register on the site, and in connection with other activities, services, features or resources we make available on our Site. Users may be asked for, as appropriate, name, email address, mailing address, phone number. We will collect personal identification information from Users only if they voluntarily submit such information to us. Users can always refuse to supply personally identification information, except that it may prevent them from engaging in certain Site related activities.</string>
 	<string name="privacy_nonpersonal_identification_information">Non-personal identification information</string>
@@ -615,7 +585,7 @@
 	<string name="terms_32">remove any copyright or other proprietary notations from the materials; or</string>
 	<string name="terms_33">transfer the materials to another person or "mirror" the materials on any other server.</string>
 	<string name="terms_34">This license shall automatically terminate if you violate any of these restrictions and may be terminated by %s at any time. Upon terminating your viewing of these materials or upon the termination of this license, you must destroy any downloaded materials in your possession whether in electronic or printed format.</string>
-        <string name="terms_36">Permission is granted to modify the downloaded work, to the extent necessary, to complete a claimed task. Unless otherwise stated in the task details, all contributions by Volunteers are contributed under the terms of the <a href="%s">%s</a>. By claiming a task, you agree that your contribution will be bound by the terms under which the task is published.</string>
+    <string name="terms_36">Permission is granted to modify the downloaded work, to the extent necessary, to complete a claimed task. Unless otherwise stated in the task details, all contributions by Volunteers are contributed under the terms of the <a href="%s">%s</a>. By claiming a task, you agree that your contribution will be bound by the terms under which the task is published.</string>
 	<string name="terms_disclaimer">Disclaimer</string>
 	<string name="terms_39">TO THE FULLEST EXTENT PERMITTED BY THE APPLICABLE LAW, THE ROSETTA FOUNDATION OFFERS THE WEBSITES AND SERVICES AS-IS AND MAKES NO REPRESENTATIONS OR WARRANTIES OF ANY KIND CONCERNING THE WEBSITES OR SERVICES, EXPRESS, IMPLIED, STATUTORY OR OTHERWISE, INCLUDING, WITHOUT LIMITATION, WARRANTIES OF TITLE, MERCHANTIBILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NONINFRINGEMENT. THE ROSETTA FOUNDATION DOES NOT WARRANT THAT THE FUNCTIONS OR CONTENT CONTAINED ON THE WEBSITE OR SERVICES WILL BE UNINTERRUPTED OR ERROR-FREE, THAT DEFECTS WILL BE CORRECTED, OR THAT %s SERVERS ARE FREE OF VIRUSES OR OTHER HARMFUL COMPONENTS. THE ROSETTA FOUNDATION DOES NOT WARRANT OR MAKE ANY REPRESENTATION REGARDING USE OR THE RESULT OF USE OF THE CONTENT IN TERMS OF ACCURACY, RELIABILITY, OR OTHERWISE.</string>
 	<string name="terms_limitations">Limitations</string>
@@ -844,6 +814,7 @@
 
     <string name="task_profile_display_archived">Archived <strong>%s</strong> ago</string>
 
+	<string name="task_review_count">Review #%s</string>
 	<string name="task_review_form_0">You can redownload the source file <a href="%s">here</a>.</string>
 	<string name="task_review_form_1">You can download the project file <a href="%s">here</a>.</string>
     <string name="task_review_form_rating">Star rating of 1-5, where 1 = "Many Errors" and 5 = "Few Errors"</string>
@@ -1078,76 +1049,7 @@
 	<string name="statistics_tasks_unclaimed">Tasks Unclaimed:</string>
 	<string name="statistics_tasks_with_prerequisites">Tasks with Prerequisites:</string>
 	<string name="statistics_tasks_archived">Tasks Archived:</string>
-	
-	<string name="faq_quicklinks">QuickLinks</string>
-	<string name="faq_volunteers">Volunteers</string>
-    <string name="faq_terms">Terms</string>
-	<string name="faq_volunteer_questions">Volunteer Questions</string>
-	<string name="faq_27">How do I view my task reviews?</string>
-	<string name="faq_28">Volunteers can access their task reviews via their claimed tasks page.</string>
-	<string name="faq_29">There is a task review button under each claimed task.</string>
-	<string name="faq_30">By clicking on this button, volunteers can view any feedback given on their claimed tasks.</string>
-	<string name="faq_31">How do I request a reference email?</string>
-	<string name="faq_32">A reference email summarising your completed work on Trommons can be requested on your profile page.</string>
-	<string name="faq_33">How do I create an avatar on my profile page?</string>
-	<string name="faq_34">You can create your own avatar on Trommons via <a href="www.gravatar.com">www.gravatar.com</a>.</string>
-	<string name="faq_35">On this site you can upload your own avatar.</string>
-	<string name="faq_36">You must use the email address you registered on Trommons with in order for your avatar to sync with Trommons.</string>
-	<string name="faq_organisation_questions">Organisation Questions</string>
-	<string name="faq_59">How do I view task reviews on my projects?</string>
-	<string name="faq_60">Organisations can access task reviews via the project page.</string>
-	<string name="faq_61">Feedback can be given by both the translator and proofreader.</string>
-	<string name="faq_62">Therefore, organisation members can view feedback from the translator by clicking on the 'Complete' button beside the translation task.</string>
-	<string name="faq_63">This will bring you to a page where you can 'View Reviews'.</string>
-	<string name="faq_64">The same process can be done for reviews on the proofreading task.</string>
-	<string name="faq_65">My project file is quite large. What do I do?</string>	
-	<string name="faq_66">If your source file is over a certain word count i.e. 5,000 words, you can segment the project.</string>
-	<string name="faq_67">Segmentation is a task that enables you to split your source file into a number of manageable tasks all within the one project.</string>
-	<string name="faq_68">To create a segmentation task, go to the create project page. From here, you fill in all of the details as normal.</string>
-	<string name="faq_69">At the bottom of the page, instead of clicking on translation and proofreading, please click on segmentation and then create your project.</string>
-	<string name="faq_70">This will bring you to the project page where you will see one task- the segmentation task.</string>
-	<string name="faq_71">The next step is to click on the segmentation task title.</string>
-	<string name="faq_72">You will be brought to a page where you can claim this task (download task button in right hand corner).</string>
-	<string name="faq_73">Once, you have claimed the task, you can then upload your segments with their words counts.</string>
-	<string name="faq_74">After this, volunteers can claim any of the segments you have uploaded!</string>
-    <string name="faq_75">I have finished proofreading the translation. Do I upload a clean file or one with track changes?</string>
-    <string name="faq_76">Once you have finished proofreading the translated text, you can upload a clean file on Trommons.</string>
-	<string name="faq_77">To make suggestions/comments, please use the ‘provide feedback’ function on the project upload page.</string>
-    <string name="faq_terms_list">Solas Match Terminology</string>
-    <string name="faq_task">Task:</string>
-    <string name="faq_78">A task is a piece of work to be carried out within a project.</string>
-    <string name="faq_79">There can be a number of tasks within the one project i.e. segmentation, translation, proofreading, desegmentation.</string>
-    <string name="faq_task_stream">Task Stream:</string>
-    <string name="faq_80">The task stream is visible on the Trommons home page. Here, you can view a list of the suggested tasks corresponding to your language combinations.</string>
-    <string name="faq_81">This will effectively work for you if you have your language combinations set on your profile. You can also filter available tasks by task type, source language and target language.</string>
-    <string name="faq_segmentation">Segmentation:</string>
-    <string name="faq_82">When a project file has a large word count (i.e. anything over 5,000 words), the file has to be segmented.</string>
-    <string name="faq_83">Segmentation appears on the project page the same way as translation and proofreading tasks.</string>
-    <string name="faq_84">You claim the task, download the file and split it up into more manageable units for translation and proofreading.</string>
-    <string name="faq_85">Once this is done, the segments are uploaded and ready to be translated. Once all segments have been translated and proofread, the files are merged back together in a process called desegmentation.</string>
-    <string name="faq_86">The final output is one merged file to be downloaded by the organisation.</string>
-    <string name="faq_Tags">Tags:</string>
-    <string name="faq_87">Key words that help describe the contents of a project.</string>
-    <string name="faq_badges">Badges:</string>
-    <string name="faq_88">Badges are assigned to volunteers based on their activity on Trommons.</string>
-    <string name="faq_89">Additionally, organisations can create and assign badges to volunteers, so that only these volunteers can work on their projects.</string>
-    <string name="faq_project_impact">Project Impact:</string>
-    <string name="faq_90">The project impact section on the project details explains what the translation will be used for.</string>
-    <string name="faq_91">What is a task?</string>
-    <string name="faq_92">What is the task stream?</string>
-    <string name="faq_93">What is segmentation?</string>
-    <string name="faq_94">What are tags?</string>
-    <string name="faq_95">What are Badges?</string>
-    <string name="faq_96">What does project impact mean?</string>
-    <string name="faq_question_more_about_trf">Where can I find out more about The Rosetta Foundation?</string>
-    <string name="faq_answer_more_about_trf">To find out more about us, please visit our website at %s.</string>
-    <string name="faq_question_uploaded_tasks">How can I tell which tasks I’ve uploaded?</string>
-    <string name="faq_answer_uploaded_tasks_1">You will find a list of your uploaded tasks on your Claimed Tasks (minus Archived Tasks which appear on your Profile page).</string>
-    <string name="faq_answer_uploaded_tasks_2">On each of these tasks you will see a Tag (beside the task type), which will let you know whether the task has been completed or is still in progress.</string>
-    <string name="faq_question_work_be_credited">Will my work be credited?</string>
-    <string name="faq_answer_work_be_credited_1">We ask all partner organisations to credit the volunteer’s work. If you would like your first and last name to be used, please set these on your profile and tick the RECEIVE CREDIT box.</string>
-    <string name="faq_answer_work_be_credited_2">If your first and last name is not set, the organisation will have to use your display name. This is also the case for the reference letter, which can be requested via your profile.</string>
-    
+		
 	<string name="slim_error_Oops_there_has">Oops! there has been a technical problem.</string>
 	<string name="slim_error_1">You can report this problem by E-Mailing us at <a>info@trommons.org</a></string>
 	<string name="slim_error_2">with details of how you encountered the error, along with the technical details listed below.</string>
@@ -1155,4 +1057,21 @@
 	<string name="slim_error_4">Back.</string>
 	<string name="slim_error_5">Show Details.</string>
 	
+	<string name="gplus_error"><p>An internal error occurred while trying to sign in with Google. <a href="%s">Try logging in again</a> or <a href="%s">register</a> for an account.</p><p><strong>%s</strong></p></string>
+	
+	<string name ="system_badge_profile_filler_title">Profile-Filler</string>
+	<string name ="system_badge_profile_filler_desc">Filled in all info for user  public profile.</string>
+	<string name ="system_badge_registered_title">Registered</string>
+	<string name ="system_badge_registered_desc">Successfully set up an account</string>
+	<string name ="system_badge_native_language_title">Native-Language</string>
+	<string name ="system_badge_native_language_desc">Filled in your native language on your user profile successfully.</string>
+	<string name ="system_badge_translator_title">Translator</string>
+	<string name ="system_badge_translator_desc">This volunteer is available for translation tasks.</string>
+	<string name ="system_badge_proofreader_title">Proofreader</string>
+	<string name ="system_badge_proofreader_desc">This volunteer is available for proofreading tasks.</string>
+	<string name ="system_badge_interpreter_title">Interpreter</string>
+	<string name ="system_badge_interpreter_desc">This volunteer is available for interpreting tasks.</string>
+	<string name ="system_badge_polyglot_title">Polyglot</string>
+	<string name ="system_badge_polyglot_desc">One or more secondary languages selected on your profile.</string>
+			
 </resources>

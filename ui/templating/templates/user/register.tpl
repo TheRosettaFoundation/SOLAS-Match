@@ -38,8 +38,16 @@
         <fieldset>
             <legend>{Localisation::getTranslation('common_signin_or_create_new_account')}</legend>
             <div id="openid_choice">
-                    <p>{Localisation::getTranslation('common_please_click_your_account_provider')}</p>
-                    <div id="openid_btns"></div>
+                <p>{Localisation::getTranslation('common_please_click_your_account_provider')}</p>
+                 {if isset($gplus) && ($gplus === 'y')}
+                    <div id="gSignInWrapper">
+                        <div id="customGplusBtn" class="customGPlusSignIn">
+                           <span id="customGplusBtnIcon"></span>
+                           <span id="customGplusBtnText">Google</span>
+                        </div>
+                    </div>
+                {/if}
+                <div id="openid_btns"></div>
             </div>
             <div id="openid_input_area">
                     <input id="openid_identifier" name="openid_identifier" type="text" />

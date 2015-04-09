@@ -17,7 +17,9 @@
         {assign var="count" value=1}
         {assign var="id" value=$task->getId()}
         {foreach $reviews as $review}
-            <h2>Review #{$count}</h2>
+            <h2>
+            	{sprintf({Localisation::getTranslation('task_review_count')}, {$count})}
+            </h2>
             <p>
                 {sprintf({Localisation::getTranslation('task_review_form_0')}, {urlFor name="download-task-latest-version" options="task_id.$id"})}
             </p>

@@ -325,8 +325,8 @@
                 </h3>
                 <p>{$badge->getDescription()}</p>    
             {else}
-                <h3>{Settings::get('site.name')} - {$badge->getTitle()}</h3>            
-                <p>{$badge->getDescription()}</p>                
+                <h3>{Settings::get('site.name')} - {Localisation::getTranslation($badge->getTitle())}</h3>            
+                <p>{Localisation::getTranslation($badge->getDescription())}</p>                
             {/if}
             <p style="margin-bottom:20px;"/>
         {/foreach}

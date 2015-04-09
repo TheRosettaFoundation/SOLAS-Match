@@ -90,4 +90,39 @@ hr.dotted {
 	float: right;
 	
 }
+/* styles used in custom Google Plus Sign in button */
+#customGplusBtn {
+    display: inline-block;
+    background: #dd4b39;
+    color: white;
+    width: 219px;
+    border-radius: 5px;
+    white-space: nowrap;
+    margin-bottom: 10px;
+}
 
+#customGplusBtn:hover {
+    background: #e74b37;
+    cursor: pointer;
+}
+
+#customGplusBtnIcon {
+    background: url('../../ui/img/gplus_btn_red_32.png') transparent 5px 50% no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+    width: 35px;
+    height: 35px;
+    border-right: #bb3f30 1px solid;
+}
+
+#customGplusBtnText {
+    display: inline-block;
+    vertical-align: middle;
+    padding-left:50px;
+    padding-right: 35px;
+    font-size: 14px;
+    font-weight: bold;
+    /* Use the Roboto font that is loaded in the <head> */
+    font-family: 'Roboto',arial,sans-serif;
+}
+/* end of styles used in custom Google Plus Sign in button */

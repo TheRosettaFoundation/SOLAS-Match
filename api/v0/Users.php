@@ -11,6 +11,7 @@ use SolasMatch\API\DAO\AdminDao;
 require_once __DIR__.'/../../Common/protobufs/models/OAuthResponse.php';
 require_once __DIR__."/../../Common/protobufs/models/PasswordResetRequest.php";
 require_once __DIR__."/../../Common/protobufs/models/PasswordReset.php";
+require_once __DIR__."/../../Common/lib/Settings.class.php";
 require_once __DIR__."/../DataAccessObjects/UserDao.class.php";
 require_once __DIR__."/../DataAccessObjects/TaskDao.class.php";
 require_once __DIR__."/../lib/Notify.class.php";
@@ -393,6 +394,11 @@ class Users
                     '\SolasMatch\API\V0\Users::getAccessToken'
                 );
 
+                $app->post(
+                    '/gplus/login(:format)/',
+                    '\SolasMatch\API\V0\Users::loginWithGooglePlus'
+                );
+
                 $app->get(
                     '/getByEmail/:email/',
                     '\SolasMatch\API\Lib\Middleware::registerValidation',
@@ -442,7 +448,7 @@ class Users
 
                 $app->get(
                     '/:userId/',
-                    //'\SolasMatch\API\Lib\Middleware::isloggedIn',
+                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
                     '\SolasMatch\API\V0\Users::getUser'
                 );
 
@@ -1074,6 +1080,72 @@ class Users
         }
         $data = DAO\TaskDao::getUserTasksCount($userId);
         API\Dispatcher::sendResponse(null, $data, null, $format);
+    }
+    
+    
+    public static function loginWithGooglePlus($format = '.json')
+    {
+        try {
+            $data = API\Dispatcher::getDispatcher()->request()->getBody();
+            $parsed_data = array();
+            parse_str($data, $parsed_data);
+            $access_token = $parsed_data['token'];
+            
+            //validate token
+            $client = new Common\Lib\APIHelper("");
+            $request =  Common\Lib\Settings::get('googlePlus.token_validation_endpoint');
+            $args = null;
+            if ($access_token) {
+                $args = array("access_token" =>  $access_token );
+            } 
+            
+            $ret = $client->externalCall(
+                null,
+                $request,
+                Common\Enums\HttpMethodEnum::GET,
+                null,
+                $args
+            );
+
+            $response = json_decode($ret);
+            $email = "";
+            if(isset($response->audience))
+            {
+                $client_id = Common\Lib\Settings::get('googlePlus.client_id'); 
+                if ($client_id != $response->audience)
+                {
+                    throw new \Exception("Received token is not intended for this application.");
+                } else {
+                    if (isset($response->email))
+                    {
+                        $email = $response->email;
+                    } else {
+                        //see https://developers.google.com/accounts/docs/OAuth2UserAgent#callinganapi
+                        $request = Common\Lib\Settings::get('googlePlus.userinfo_endpoint');
+                        $ret = $client->externalCall(
+                            null,
+                            $request,
+                            Common\Enums\HttpMethodEnum::GET,
+                            null,
+                            null,
+                            null,
+                            $access_token
+                        );
+                        $userInfo = json_decode($ret);
+                        $email = $userInfo->email;
+                    }
+                }
+            }
+    
+            if (empty($email)) {
+                throw new \Exception("Unable to obtain user's email address from Google.");
+            } else {
+                 API\Dispatcher::sendResponse(null, $email, null, $format, null);    
+            }
+
+        } catch (\Exception $e) {
+            API\Dispatcher::sendResponse(null, $e->getMessage(), Common\Enums\HttpStatusEnum::BAD_REQUEST, $format);
+        }
     }
 
     public static function getAccessToken($format = '.json')

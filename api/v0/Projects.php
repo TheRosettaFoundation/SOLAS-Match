@@ -98,7 +98,12 @@ class Projects
                         '/getProjectByName/',
                         '\SolasMatch\API\V0\Projects::getProjectByName'
                 );
-                
+
+                $app->get(
+                        '/getProjectByNameAndOrganisation/:title/organisation/:orgId/',
+                        '\SolasMatch\API\V0\Projects::getProjectByNameAndOrganisation'
+                );
+
                 $app->get(
                     '/:projectId/',
                     '\SolasMatch\API\V0\Projects::getProject'
@@ -115,7 +120,7 @@ class Projects
                     '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgProject',
                     '\SolasMatch\API\V0\Projects::deleteProject'
                 );
-                
+
             });
 
             /* Routes starting /v0 */
@@ -170,7 +175,7 @@ class Projects
         $ret = DAO\ProjectDao::setImageApprovalStatus($projectId, $imageStatus);
         API\Dispatcher::sendResponse(null, $ret, null, $format);
     }
-        
+
     public static function calculateProjectDeadlines($projectId, $format = '.json')
     {
         $ret = null;
@@ -251,13 +256,23 @@ class Projects
         }
         API\Dispatcher::sendResponse(null, DAO\ProjectDao::getProject($projectId), null, $format);
     }
-    
+
     public static function getProjectByName($format = ".json")
     {
         $title = API\Dispatcher::getDispatcher()->request()->getBody();
-        
+
         $data = DAO\ProjectDao::getProjectByName($title);
         API\Dispatcher::sendResponse(null, $data, null, $format);
+    }
+
+    public static function getProjectByNameAndOrganisation($title, $orgId, $format = ".json")
+    {
+        if (!is_numeric($orgId) && strstr($orgId, '.')) {
+            $orgId = explode('.', $orgId);
+            $format = '.'.$orgId[1];
+            $orgId = $orgId[0];
+        }
+        API\Dispatcher::sendResponse(null, DAO\ProjectDao::getProjectByNameAndOrganisation($title, $orgId), null, $format);
     }
 
     public static function updateProject($projectId, $format = '.json')
