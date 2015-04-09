@@ -47,7 +47,7 @@
         {sprintf(Localisation::getTranslation('common_added'), {TemplateHelper::timeSinceSqlTime($task->getCreatedTime())})}
 	</p>
     <p>
-        {sprintf(Localisation::getTranslation('common_due_by'), {date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))})}
+        {sprintf(Localisation::getTranslation('common_due_by'), {date(Settings::get("ui.date_format"), TemplateHelper::utcStringToTime($task->getDeadline()))})}
     </p>           
         
     <p>            
