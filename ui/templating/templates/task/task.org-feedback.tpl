@@ -95,9 +95,9 @@
         </thead>
         <tbody>            
             <tr>
-                <td>{date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}</td>
+                <td>{date(Settings::get("ui.date_format"), TemplateHelper::utcStringToTime($task->getDeadline()))}</td>
                 <td>
-                    {date(Settings::get("ui.date_format"), strtotime($taskClaimedDate))}
+                    {date(Settings::get("ui.date_format"), TemplateHelper::utcStringToTime($taskClaimedDate))}
                 </td>
                 <td>
                     {assign var="user_id" value=$claimant->getId()}
