@@ -99,9 +99,9 @@
         <tbody>            
             <tr>
                 <td><a href="{urlFor name="org-public-profile" options="org_id.{$org->getId()}"}">{$org->getName()}</a></td>
-                <td>{date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}</td>
+                <td>{date(Settings::get("ui.date_format"), TemplateHelper::utcStringToTime($task->getDeadline()))}</td>
                 <td>
-                    {date(Settings::get("ui.date_format"), strtotime($taskClaimedDate))}
+                    {date(Settings::get("ui.date_format"), TemplateHelper::utcStringToTime($taskClaimedDate))}
                 </td>
                 <td>
                     {assign var="user_id" value=$claimant->getId()}
