@@ -81,10 +81,10 @@
                     {/if}
                 </td>
                 <td>
-                    {date(Settings::get("ui.date_format"), TemplateHelper::utcStringToTime($project->getCreatedTime()))}
+                    {date(Settings::get("ui.date_format"), strtotime($project->getCreatedTime()))}
                 </td>  
                 <td>
-                    {date(Settings::get("ui.date_format"), TemplateHelper::utcStringToTime($project->getDeadline()))}
+                    {date(Settings::get("ui.date_format"), strtotime($project->getDeadline()))}
                 </td>
                 {if isset($userSubscribedToProject)}
                     <td>
@@ -311,7 +311,7 @@
                                         </strong>
                                     </td>
                                     <td>
-                                        {date(Settings::get("ui.date_format"), TemplateHelper::utcStringToTime($task->getDeadline()))}
+                                        {date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}
                                     </td>
                                     <td>
                                         <form id="publishedForm{$task_id}" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" style="text-align: center">
