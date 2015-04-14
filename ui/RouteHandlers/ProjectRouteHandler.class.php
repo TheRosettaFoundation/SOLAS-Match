@@ -548,7 +548,7 @@ class ProjectRouteHandler
 
         $sourceLocale = $project->getSourceLocale();
         $sourceCountrySelectCode  = $sourceLocale->getCountryCode();
-        $sourceLanguageSelectCode = $sourceLocale->setLanguageCode();
+        $sourceLanguageSelectCode = $sourceLocale->getLanguageCode();
 
         $project_tags_list = '';
         try {
