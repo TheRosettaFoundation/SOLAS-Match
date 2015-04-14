@@ -351,30 +351,246 @@ class ProjectRouteHandler
         $app->render("project/project.view.tpl");
     }
 
-
-    public function projectAlter($projectId)
+    public function projectAlter($project_id)
     {
         $app = \Slim\Slim::getInstance();
-        $userId = Common\Lib\UserSession::getCurrentUserID();
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
 
-        $extraScripts = "
-<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/dart_support.js\"></script>
-<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/browser/interop.js\"></script>
-<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/Routes/Projects/ProjectAlter.dart.js\"></script>
-<span class=\"hidden\">
-";
-        $extraScripts .= file_get_contents("ui/dart/web/Routes/Projects/ProjectAlterForm.html");
-        $extraScripts .= "</span>";
-        $platformJS =
-        "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/platform.js\"></script>";
+        $projectDao = new DAO\ProjectDao();
+
+        if (empty($_SESSION['SESSION_CSRF_KEY'])) {
+            $_SESSION['SESSION_CSRF_KEY'] = $this->random_string(10);
+        }
+        $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
+
+        $project = $projectDao->getProject($project_id);
+
+        if ($post = $app->request()->post()) {
+            if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
+                    || empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact'])
+                    || empty($post['sourceCountrySelect']) || empty($post['sourceLanguageSelect']) || empty($post['project_deadline'])
+                    || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $post['project_deadline'])) {
+                // Note the deadline date validation above is only partial (these checks have been done more rigorously on client size, if that is to be trusted)
+                $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_to_create_project'), $post['project_title']));
+            } else {
+                $sourceLocale = new Common\Protobufs\Models\Locale();
+
+                $project->setTitle($post['project_title']);
+                $project->setDescription($post['project_description']);
+                $project->setDeadline($post['project_deadline']);
+                $project->setImpact($post['project_impact']);
+                $project->setReference($post['project_reference']);
+                // Done by DAOupdateProjectWordCount(), which only saves it conditionally...
+                // $project->setWordCount($post['wordCountInput']);
+
+                $sourceLocale->setCountryCode($post['sourceCountrySelect']);
+                $sourceLocale->setLanguageCode($post['sourceLanguageSelect']);
+                $project->setSourceLocale($sourceLocale);
+
+                $project->clearTag();
+                if (!empty($post['tagList'])) {
+                    $tagLabels = explode(' ', $post['tagList']);
+                    foreach ($tagLabels as $tagLabel) {
+                        $tagLabel = trim($tagLabel);
+                        if (!empty($tagLabel)) {
+                            $tag = new Common\Protobufs\Models\Tag();
+                            $tag->setLabel($tagLabel);
+                            $project->addTag($tag);
+                        }
+                    }
+                }
+
+                try {
+                    $project = $projectDao->updateProject($project);
+                } catch (\Exception $e) {
+                    $project = null;
+                }
+                if (empty($project) || $project->getId() <= 0) {
+                    $app->flashNow('error', Lib\Localisation::getTranslation('project_create_title_conflict'));
+                } else {
+                    if (false) { // Code copied from Project Create
+                    } else {
+                        if (false) { // Code copied from Project Create
+                        } else {
+                            $image_failed = false;
+                            if (!empty($_FILES['projectImageFile']['name'])) {
+                                $projectImageFileName = $_FILES['projectImageFile']['name'];
+                                $extensionStartIndex = strrpos($projectImageFileName, '.');
+                                // Check that file has an extension
+                                if ($extensionStartIndex > 0) {
+                                    $extension = substr($projectImageFileName, $extensionStartIndex + 1);
+                                    $extension = strtolower($extension);
+                                    $projectImageFileName = substr($projectImageFileName, 0, $extensionStartIndex + 1) . $extension;
+
+                                    // Check that the file extension is valid for an image
+                                    if (!in_array($extension, explode(",", Common\Lib\Settings::get('projectImages.supported_formats')))) {
+                                        $image_failed = true;
+                                    }
+                                } else {
+                                    // File has no extension
+                                    $image_failed = true;
+                                }
+
+                                if ($image_failed || !empty($_FILES['projectImageFile']['error']) || empty($_FILES['projectImageFile']['tmp_name'])
+                                        ||(($data = file_get_contents($_FILES['projectImageFile']['tmp_name'])) === false)) {
+                                    $image_failed = true;
+                                } else {
+                                    $imageMaxWidth  = Common\Lib\Settings::get('projectImages.max_width');
+                                    $imageMaxHeight = Common\Lib\Settings::get('projectImages.max_height');
+                                    list($width, $height) = getimagesize($_FILES['projectImageFile']['tmp_name']);
+
+                                    if (empty($width) || empty($height) || (($width <= $imageMaxWidth) && ($height <= $imageMaxHeight))) {
+                                        try {
+                                            $projectDao->saveProjectImageFile($project, $user_id, $projectImageFileName, $data);
+                                            $success = true;
+                                        } catch (\Exception $e) {
+                                            $success = false;
+                                        }
+                                    } else { // Resize the image
+                                        $ratio = min($imageMaxWidth / $width, $imageMaxHeight / $height);
+                                        $newWidth  = floor($width * $ratio);
+                                        $newHeight = floor($height * $ratio);
+
+                                        $img = '';
+                                        if ($extension == 'gif') {
+                                            $img = imagecreatefromgif($_FILES['projectImageFile']['tmp_name']);
+                                            $projectImageFileName = substr($projectImageFileName, 0, $extensionStartIndex + 1) . 'jpg';
+                                        } elseif ($extension == 'png') {
+                                            $img = imagecreatefrompng($_FILES['projectImageFile']['tmp_name']);
+                                            $projectImageFileName = substr($projectImageFileName, 0, $extensionStartIndex + 1) . 'jpg';
+                                        } else {
+                                            $img = imagecreatefromjpeg($_FILES['projectImageFile']['tmp_name']);
+                                        }
+
+                                        $tci = imagecreatetruecolor($newWidth, $newHeight);
+                                        if (!empty($img) && $tci !== false) {
+                                            if (imagecopyresampled($tci, $img, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height)) {
+                                                imagejpeg($tci, $_FILES['projectImageFile']['tmp_name'], 100); // Overwrite
+                                                // If we did not get this far, give up and use the un-resized image
+                                            }
+                                        }
+
+                                        $data = file_get_contents($_FILES['projectImageFile']['tmp_name']);
+                                        if ($data !== false) {
+                                            try {
+                                                $projectDao->saveProjectImageFile($project, $user_id, $projectImageFileName, $data);
+                                                $success = true;
+                                            } catch (\Exception $e) {
+                                                $success = false;
+                                            }
+                                        } else {
+                                            $success = false;
+                                        }
+                                    }
+                                    if (!$success) {
+                                        $image_failed = true;
+                                    }
+                                }
+                            }
+                            if ($image_failed) {
+                                $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_image'), $_FILES['projectImageFile']['name']));
+                            } else {
+                                // Continue here whether there is, or is not, an image file uploaded as long as there was not an explicit failure
+
+                                try {
+                                     $app->redirect($app->urlFor('project-view', array('project_id' => $project->getId())));
+                                } catch (\Exception $e) { // redirect throws \Slim\Exception\Stop
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        $langDao = new DAO\LanguageDao();
+        $languages = $langDao->getLanguages();
+        $countryDao = new DAO\CountryDao();
+        $countries = $countryDao->getCountries();
+
+        $month_list = array(
+            1 => Lib\Localisation::getTranslation('common_january'),
+            2 => Lib\Localisation::getTranslation('common_february'),
+            3 => Lib\Localisation::getTranslation('common_march'),
+            4 => Lib\Localisation::getTranslation('common_april'),
+            5 => Lib\Localisation::getTranslation('common_may'),
+            6 => Lib\Localisation::getTranslation('common_june'),
+            7 => Lib\Localisation::getTranslation('common_july'),
+            8 => Lib\Localisation::getTranslation('common_august'),
+            9 => Lib\Localisation::getTranslation('common_september'),
+            10 => Lib\Localisation::getTranslation('common_october'),
+            11 => Lib\Localisation::getTranslation('common_november'),
+            12 => Lib\Localisation::getTranslation('common_december'),
+        );
+        $year_list = array();
+        $yeari = (int)date('Y');
+        for ($i = 0; $i < 10; $i++) {
+            $year_list[$yeari] = $yeari;
+            $yeari++;
+        }
+        $hour_list = array();
+        for ($i = 0; $i < 24; $i++) {
+            $hour_list[$i] = $i;
+        }
+        $minute_list = array();
+        $minutei = (int)date('Y');
+        for ($i = 0; $i < 60; $i++) {
+            $minute_list[$i] = $i;
+        }
+
+        $project = $projectDao->getProject($project_id);
+        $deadline = $project->getDeadline();
+        $selected_year   = (int)substr($deadline,  0, 4);
+        $selected_month  = (int)substr($deadline,  5, 2);
+        $selected_day    = (int)substr($deadline,  8, 2);
+        $selected_hour   = (int)substr($deadline, 11, 2);
+        $selected_minute = (int)substr($deadline, 14, 2);
+
+        $sourceLocale = $project->getSourceLocale();
+        $sourceCountrySelectCode  = $sourceLocale->getCountryCode();
+        $sourceLanguageSelectCode = $sourceLocale->setLanguageCode();
+
+        $adminDao = new DAO\AdminDao();
+        $userIsAdmin = $adminDao->isSiteAdmin($user_id);
+        // For some reason the existing Dart code excludes this case...
+        //$userIsAdmin = $adminDao->isOrgAdmin($project->getOrganisationId(), $user_id) || $userIsAdmin;
+        if ($userIsAdmin) {
+            $userIsAdmin = 1; // Just to be sure what will appear in the template and then the JavaScript
+        } else {
+            $userIsAdmin = 0;
+        }
+
+        $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/ProjectAlter.js\"></script>";
 
         $app->view()->appendData(array(
-        	"projectId" => $projectId,
-            "userId" => $userId,
-            "maxFileSize" => 2,
-            "extra_scripts" => $extraScripts,
-            "platformJS" => $platformJS
+            "siteLocation"          => Common\Lib\Settings::get('site.location'),
+            "siteAPI"               => Common\Lib\Settings::get('site.api'),
+            "maxFileSize"           => Lib\TemplateHelper::maxFileSizeBytes(),
+            "imageMaxFileSize"      => Common\Lib\Settings::get('projectImages.max_image_size'),
+            "supportedImageFormats" => Common\Lib\Settings::get('projectImages.supported_formats'),
+            "project"        => $project,
+            "project_id"     => $project_id,
+            "org_id"         => $project->getOrganisationId(),
+            "user_id"        => $user_id,
+            "extra_scripts"  => $extraScripts,
+            'selected_day'   => $selected_day,
+            'month_list'     => $month_list,
+            'selected_month' => $selected_month,
+            'year_list'      => $year_list,
+            'selected_year'  => $selected_year,
+            'hour_list'      => $hour_list,
+            'selected_hour'  => $selected_hour,
+            'minute_list'    => $minute_list,
+            'selected_minute'=> $selected_minute,
+            'languages'      => $languages,
+            'countries'      => $countries,
+            'sourceLanguageSelectCode' => $sourceLanguageSelectCode,
+            'sourceCountrySelectCode'  => $sourceCountrySelectCode,
+            'userIsAdmin'    => $userIsAdmin,
+            'sesskey'        => $sesskey,
         ));
+
         $app->render("project/project.alter.tpl");
     }
 
