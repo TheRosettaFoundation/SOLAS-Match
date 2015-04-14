@@ -60,7 +60,7 @@
                 </td>
                 <td>
                     <label for="tagList" style="font-size: large"><strong>{Localisation::getTranslation('common_tags')}</strong></label>
-                    <input type="text" name="tagList" id="tagList" value="{{projectTags}}" style="width: 400px;  margin-bottom: 20px" />
+                    <input type="text" name="tagList" id="tagList" value="{$project_tags}" style="width: 400px;  margin-bottom: 20px" />
 
                     <div class="projFormInput">
                         <div style="margin-bottom:25px;">

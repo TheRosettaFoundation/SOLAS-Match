@@ -550,6 +550,19 @@ class ProjectRouteHandler
         $sourceCountrySelectCode  = $sourceLocale->getCountryCode();
         $sourceLanguageSelectCode = $sourceLocale->setLanguageCode();
 
+        $project_tags_list = '';
+        try {
+            $project_tags = $projectDao->getProjectTags($project_id);
+            if (!empty($project_tags)) {
+                $separator = '';
+                foreach ($project_tags as $project_tag) {
+                    $project_tags_list .= $separator . $project_tag->getLabel();
+                    $separator = ' ';
+                }
+            }
+        } catch (\Exception $e) {
+        }
+
         $adminDao = new DAO\AdminDao();
         $userIsAdmin = $adminDao->isSiteAdmin($user_id);
         // For some reason the existing Dart code excludes this case...
@@ -570,6 +583,7 @@ class ProjectRouteHandler
             "imageMaxFileSize"      => Common\Lib\Settings::get('projectImages.max_image_size'),
             "supportedImageFormats" => Common\Lib\Settings::get('projectImages.supported_formats'),
             "project"        => $project,
+            "project_tags"   => $project_tags_list,
             "project_id"     => $project_id,
             "org_id"         => $project->getOrganisationId(),
             "user_id"        => $user_id,
