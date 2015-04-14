@@ -129,7 +129,7 @@
                         </button>
                     </div>
                     <label for="project_reference" style="font-size: large"><strong>{Localisation::getTranslation('common_reference')}</strong></label>
-                    <input type="text" name="project_reference" id="project_reference" value="{project->getReference()}" style="width: 400px" />
+                    <input type="text" name="project_reference" id="project_reference" value="{$project->getReference()}" style="width: 400px" />
                 </td>
             </tr>
             <tr>
