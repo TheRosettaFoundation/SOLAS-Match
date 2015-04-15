@@ -19,7 +19,7 @@
     <div class="page-header">
         <h1>
             <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
-                {$project->getTitle()}
+                {$project->getTitle()|escape:'html':'UTF-8'}
                 <small>{Localisation::getTranslation('project_alter_alter_project_details_here')}</small>
             </span>
             <div class="pull-right">
@@ -47,13 +47,13 @@
             <tr align="center">
                 <td>
                     <label for="title" style="font-size: large"><strong>{Localisation::getTranslation('common_title')}</strong><span style="color: red">*</span></label>
-                    <textarea wrap="soft" cols="1" rows="4" style="width: 400px; margin-bottom: 40px" name="project_title" id="project_title" onblur="checkTitleNotUsed();">{$project->getTitle()}</textarea>
+                    <textarea wrap="soft" cols="1" rows="4" style="width: 400px; margin-bottom: 40px" name="project_title" id="project_title" onblur="checkTitleNotUsed();">{$project->getTitle()|escape:'html':'UTF-8'}</textarea>
 
                     <label for="description" style="font-size: large"><strong>{Localisation::getTranslation('common_description')}</strong><span style="color: red">*</span></label>
-                    <textarea wrap="soft" cols="1" rows="6" style="width: 400px; margin-bottom: 40px" name="project_description" id="project_description">{$project->getDescription()}</textarea>
+                    <textarea wrap="soft" cols="1" rows="6" style="width: 400px; margin-bottom: 40px" name="project_description" id="project_description">{$project->getDescription()|escape:'html':'UTF-8'}</textarea>
 
                     <label for="impact" style="font-size: large"><strong>{Localisation::getTranslation('common_impact')}</strong><span style="color: red">*</span></label>
-                    <textarea wrap="soft" cols="1" rows="4" style="width: 400px; margin-bottom: 40px" name="project_impact" id="project_impact">{$project->getImpact()}</textarea>
+                    <textarea wrap="soft" cols="1" rows="4" style="width: 400px; margin-bottom: 40px" name="project_impact" id="project_impact">{$project->getImpact()|escape:'html':'UTF-8'}</textarea>
 
                     <label for="wordCountInput" style="font-size: large"><strong>{Localisation::getTranslation('common_word_count')}</strong><span style="color: red">*</span></label>
                     <input type="text" maxlength="6" value="{$project->getWordCount()}" style="width: 400px;  margin-bottom: 20px" name="wordCountInput" id="wordCountInput" {if !$userIsAdmin}disabled{/if} />
