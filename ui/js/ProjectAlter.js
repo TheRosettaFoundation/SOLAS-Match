@@ -300,8 +300,7 @@ function validateLocalValues()
       if (mi < 10) {
         mi = "0" + mi;
       }
-      project.deadline = projectDeadline.getUTCFullYear() + "-" + m + "-" + d + " " + h + ":" + mi + ":00";
-      document.getElementById("project_deadline").value = project.deadline;
+      document.getElementById("project_deadline").value = projectDeadline.getUTCFullYear() + "-" + m + "-" + d + " " + h + ":" + mi + ":00";
     } else {
       // Deadline is not a date in the future, set error message
       deadlineError = parameters.getTranslation("project_create_25");
