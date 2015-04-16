@@ -589,7 +589,8 @@ function DAOdeleteProjectImage(projectId, orgId, functionOnSuccess, functionOnFa
       method: "DELETE",
       headers: {
         "Authorization": "Bearer " + userHash
-      }
+      },
+      dataType: "text"
     }
   )
   .done(function (data, textStatus, jqXHR)
