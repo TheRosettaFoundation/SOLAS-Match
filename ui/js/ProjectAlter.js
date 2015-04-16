@@ -570,7 +570,7 @@ function deleteProjectImageSucceeded()
   document.getElementById("proj-image-display").style.display = "none";
 }
 
-function deleteProjectImageFailed()
+function deleteProjectImageFailed(jqXHR, textStatus, errorThrown)
 {
   console.log("Error: deleteProjectImage Failed");
 }
