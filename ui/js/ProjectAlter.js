@@ -263,7 +263,7 @@ function validateLocalValues()
     } else {
       // Only call API for word count iff parse error didn't occur
       if (newWordCount != 0 && userIsAdmin) {
-        DAOupdateProjectWordCount(project_id, newWordCount, successWordCount, inconsistentWordCount, functionOnFail, errorUpdatingWordCount);
+        DAOupdateProjectWordCount(project_id, newWordCount, successWordCount, inconsistentWordCount, errorUpdatingWordCount);
       }
     }
   } else {

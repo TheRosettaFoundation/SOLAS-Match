@@ -35,7 +35,7 @@
 
     {if isset($flash['error'])}
         <p class="alert alert-error">
-            {$flash['error']}
+            {$flash['error']|escape:'html':'UTF-8'}
         </p>
     {/if}
 
