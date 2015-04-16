@@ -130,7 +130,6 @@ function documentReady()
   project_id       = document.getElementById("project_id").innerHTML;
   org_id           = document.getElementById("org_id").innerHTML;
   user_id          = document.getElementById("user_id").innerHTML;
-  initial_selected_day = document.getElementById("initial_selected_day").innerHTML;
   initial_title    = document.getElementById("project_title").value;
   userIsAdmin      = document.getElementById("userIsAdmin").innerHTML;
   if (userIsAdmin == 1) {
@@ -149,6 +148,7 @@ function documentReady()
   document.getElementById("selectedMinute").value = deadline_timestamp.getMinutes();
 
   // Set the options for the day in month select field based on month/year
+  initial_selected_day = deadline_timestamp.getDate();
   selectedMonthChanged();
   initial_selected_day = null; // If user changes date after this, do not use the initial value
 
