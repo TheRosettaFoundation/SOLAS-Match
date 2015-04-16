@@ -11,6 +11,7 @@
     <div id="project_id">{$project_id}</div>
     <div id="org_id">{$org_id}</div>
     <div id="user_id">{$user_id}</div>
+    <div id="deadline_timestamp">{$deadline_timestamp}</div>
     <div id="initial_selected_day">{$selected_day}</div>
     <div id="userIsAdmin">{$userIsAdmin}</div>
 </span>

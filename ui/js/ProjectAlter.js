@@ -11,6 +11,7 @@ var supportedImageFormats;
 var project_id;
 var org_id;
 var user_id;
+var deadline_timestamp;
 var initial_selected_day;
 var initial_title;
 var userIsAdmin;
@@ -139,6 +140,13 @@ function documentReady()
   }
 
   supportedImageFormats = getSetting("supportedImageFormats").toString().split(","); // Image format string is comma separated, split it into a list
+
+  deadline_timestamp = new Date(document.getElementById("deadline_timestamp").innerHTML * 1000);
+  document.getElementById("selectedYear").value   = deadline_timestamp.getFullYear();
+  document.getElementById("selectedMonth").value  = deadline_timestamp.getMonth() + 1;
+  document.getElementById("selectedDay").value    = deadline_timestamp.getDate();
+  document.getElementById("selectedHour").value   = deadline_timestamp.getHours();
+  document.getElementById("selectedMinute").value = deadline_timestamp.getMinutes();
 
   // Set the options for the day in month select field based on month/year
   selectedMonthChanged();

@@ -543,8 +543,9 @@ class ProjectRouteHandler
         $selected_year   = (int)substr($deadline,  0, 4);
         $selected_month  = (int)substr($deadline,  5, 2);
         $selected_day    = (int)substr($deadline,  8, 2);
-        $selected_hour   = (int)substr($deadline, 11, 2);
+        $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
         $selected_minute = (int)substr($deadline, 14, 2);
+        $deadline_timestamp = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
 
         $sourceLocale = $project->getSourceLocale();
         $sourceCountrySelectCode  = $sourceLocale->getCountryCode();
@@ -588,6 +589,7 @@ class ProjectRouteHandler
             "org_id"         => $project->getOrganisationId(),
             "user_id"        => $user_id,
             "extra_scripts"  => $extraScripts,
+            'deadline_timestamp' => $deadline_timestamp,
             'selected_day'   => $selected_day,
             'month_list'     => $month_list,
             'selected_month' => $selected_month,
