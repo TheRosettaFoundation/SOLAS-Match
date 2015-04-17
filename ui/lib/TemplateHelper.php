@@ -7,9 +7,14 @@ use \SolasMatch\UI\DAO as DAO;
 
 class TemplateHelper
 {
+    public static function utcStringToTime($sql_string)
+    {
+        return strtotime($sql_string . ' UTC');
+    }
+
     public static function timeSinceSqlTime($sql_string)
     {
-        return self::timeSince(strtotime($sql_string));
+        return self::timeSince(strtotime($sql_string . ' UTC'));
     }
 
     private static function timeSince($unix_time)
@@ -39,7 +44,7 @@ class TemplateHelper
                 break;
             }
         }
-       
+
         $print = ($count == 1) ? "1 $name" : "$count {$name}s";
 
         if ($i + 1 < $j) {
@@ -54,7 +59,7 @@ class TemplateHelper
         }
         return $print;
     }
-    
+
     public static function getTaskTypeFromId($taskTypeId)
     {
         switch ($taskTypeId) {
@@ -70,7 +75,7 @@ class TemplateHelper
                 return Localisation::getTranslation('common_error_unknown_task_type');
         }
     }
-    
+
     public static function isValidDateTime($dateTime)
     {
         //Does not support daylight saving time - Use UTC
@@ -80,7 +85,7 @@ class TemplateHelper
             return false;
         }
     }
-    
+
     public static function addTimeToUnixTime($unixTime, $timeStr)
     {
         $ret = $unixTime;
@@ -102,7 +107,7 @@ class TemplateHelper
     public static function getTaskSourceLanguage($task)
     {
         $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
-        
+
         if ($use_language_codes == "y") {
             return $task->getSourceLocale()->getLanguageCode()."-".$task->getSourceLocale()->getCountryCode();
         } elseif ($use_language_codes == "n") {
@@ -119,7 +124,7 @@ class TemplateHelper
     public static function getTaskTargetLanguage($task)
     {
         $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
-        
+
         if ($use_language_codes == "y") {
             return $task->getTargetLocale()->getLanguageCode()."-".$task->getTargetLocale()->getCountryCode();
         } elseif ($use_language_codes == "n") {
@@ -132,11 +137,11 @@ class TemplateHelper
                 ." (".$task->getTargetLocale()->getLanguageCode()."-".$task->getTargetLocale()->getCountryCode().")";
         }
     }
-    
+
     public static function getProjectSourceLanguage($project)
     {
         $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
-        
+
         if ($use_language_codes == "y") {
             return $project->getSourceLanguageCode()."-".$project->getSourceCountryCode();
         } elseif ($use_language_codes == "n") {
@@ -149,14 +154,14 @@ class TemplateHelper
                 ." (".$project->getSourceLanguageCode()."-".$project->getSourceCountryCode().")";
         }
     }
-    
+
     public static function getLanguage($locale)
     {
         $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
-        
+
         $languageName = $locale->getLanguageName();
         $languageCode = $locale->getLanguageCode();
-        
+
         if ($use_language_codes == "y") {
             return $languageCode;
         } elseif ($use_language_codes == "n") {
@@ -164,17 +169,17 @@ class TemplateHelper
         } elseif ($use_language_codes == "h") {
             return $languageName." (".$languageCode.")";
         }
-        
+
         return $languageName;
     }
-    
+
     public static function getCountry($locale)
     {
         $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
-        
+
         $countryName = $locale->getCountryName();
         $countryCode = $locale->getCountryCode();
-        
+
         if ($use_language_codes == "y") {
             return $countryCode;
         } elseif ($use_language_codes == "n") {
@@ -182,14 +187,14 @@ class TemplateHelper
         } elseif ($use_language_codes == "h") {
             return $countryName." (".$countryCode.")";
         }
-        
+
         return $countryName;
     }
 
     public static function getLanguageAndCountry($locale)
     {
         $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
-        
+
         $languageName = $locale->getLanguageName();
         $languageCode = $locale->getLanguageCode();
         $countryName = $locale->getCountryName();
@@ -203,18 +208,18 @@ class TemplateHelper
             return $languageName." - ".$countryName
                     ." (".$languageCode." - ".$countryCode.")";
         }
-        
+
         return $languageName." - ".$countryName;
     }
-    
+
     public static function getLanguageAndCountryFromCode($codes)
     {
         $splitCodes = explode(",", $codes);
         $languageCode = $splitCodes[0];
         $countryCode = $splitCodes[1];
-        
+
         $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
-        
+
         if ($use_language_codes == "y") {
             return $languageCode." - ".$countryCode;
         } elseif ($use_language_codes == "n") {
@@ -226,7 +231,7 @@ class TemplateHelper
                 .TemplateHelper::countryNameFromCode($countryCode)
                 ." (".$languageCode." - ".$countryCode.")";
         }
-        
+
         return $language." - ".$region;
     }
 
@@ -261,20 +266,20 @@ class TemplateHelper
         $result = $countryDao->getCountry($cID);
         return self::cleanse($result->getName());
     }
-    
+
     public static function countryNameFromCode($cc)
     {
         $countryDao = new DAO\CountryDao();
         $result = $countryDao->getCountryByCode($cc);
         return self::cleanse($result->getName());
     }
-     
+
     public static function getLanguageList()
     {
         $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
         $langDao = new DAO\LanguageDao();
         $languages = $langDao->getLanguages();
-       
+
         foreach ($languages as $lang) {
             if ($use_language_codes == "y") {
                 $lang->setName(self::cleanse($lang->getCode()));
@@ -304,11 +309,11 @@ class TemplateHelper
                     self::cleanse($country->getCode()).")"
                 );
             }
-            
+
         }
         return $countries;
     }
-    
+
     public static function maxFileSizeBytes()
     {
         $display_max_size = self::maxUploadSizeFromPHPSettings();
@@ -341,7 +346,7 @@ class TemplateHelper
     {
         return ini_get("upload_max_filesize");
     }
-        
+
     public static function validateFileHasBeenSuccessfullyUploaded($field_name)
     {
         if (!self::isUploadedWithoutError($field_name)) {
@@ -398,7 +403,7 @@ class TemplateHelper
     {
         return $_FILES[$field_name]["error"] == UPLOAD_ERR_OK && filesize($_FILES[$field_name]['tmp_name']) != 0;
     }
-        
+
     public static function separateTags($tags)
     {
         $separated_tags = null;
@@ -411,12 +416,12 @@ class TemplateHelper
         }
         return $separated_tags;
     }
-    
+
     public static function uiCleanseNewlineAndTabs($string)
     {
         return str_replace('\t', '&nbsp;&nbsp;&nbsp;&nbsp;', str_replace(array('\r\n', '\n', '\r'), "<br/>", $string)) ;
     }
-    
+
     private static function cleanTag($tag)
     {
         $cleaned = trim($tag);
@@ -432,7 +437,7 @@ class TemplateHelper
         $separator = " ";
         return explode($separator, $tags);
     }
-    
+
     private static function cleanse($string)
     {
         return str_replace("_", " ", $string);
