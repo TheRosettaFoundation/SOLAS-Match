@@ -34,7 +34,7 @@ class TaskRouteHandler
             array($middleware, "authUserForTaskDownload"),
             array($this, "downloadTaskLatestVersion")
         )->name("download-task-latest-version");
-        
+
         $app->get(
             "/task/:task_id/mark-archived/",
             array($middleware, "authUserForOrgTask"),
@@ -60,7 +60,6 @@ class TaskRouteHandler
 
         $app->get(
             "/task/:task_id/download-file/v/:version/",
-            array($middleware, "authUserForTaskDownload"),
             array($middleware, "authUserForTaskDownload"),
             array($this, "downloadTaskVersion")
         )->name("download-task-version");
@@ -121,13 +120,13 @@ class TaskRouteHandler
             array($middleware, "authenticateUserForTask"),
             array($this, "taskCreated")
         )->name("task-created");
-        
+
         $app->get(
             "/task/:task_id/org-feedback/",
             array($middleware, "authUserForOrgTask"),
             array($this, "taskOrgFeedback")
         )->via("POST")->name("task-org-feedback");
-        
+
         $app->get(
             "/task/:task_id/user-feedback/",
             array($middleware, "authenticateUserForTask"),
@@ -139,7 +138,7 @@ class TaskRouteHandler
             array($middleware, "authenticateUserForTask"),
             array($this, "taskReview")
         )->via("POST")->name("task-review");
-        
+
         $app->get(
             Common\Lib\Settings::get("site.api"),
             array($middleware, "authUserForOrgTask")
@@ -151,7 +150,7 @@ class TaskRouteHandler
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
         $userId = Common\Lib\UserSession::getCurrentUserID();
-        
+
         $user = $userDao->getUser($userId);
         $tasksPerPage = 10;
         $archivedTasksCount = $userDao->getUserArchivedTasksCount($userId);
@@ -159,13 +158,13 @@ class TaskRouteHandler
         $offset = $tasksPerPage * ($page_no - 1) ;
         $archivedTasks = $userDao->getUserArchivedTasks($userId, $offset, $tasksPerPage);
         $totalPages = ceil($archivedTasksCount / $tasksPerPage);
-        
+
         if ($page_no < 1) {
             $page_no = 1;
         } elseif ($page_no > $totalPages) {
             header('HTTP/1.0 404 Not Found');
         }
-        
+
         $top = 0;
         //If tasksPerPage divides into the task count with a remainder then last page will have
         //less than $tasksPerPage tasks.
@@ -175,20 +174,20 @@ class TaskRouteHandler
         } else {
             $bottom = $top + $tasksPerPage - 1;
         }
-        
+
         if ($bottom < 0) {
             $bottom = 0;
         } elseif ($bottom > $archivedTasksCount  - 1) {
             $bottom = $archivedTasksCount - 1;
         }
-        
+
         $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
         $taskTypeColours = array();
 
         for ($i=1; $i <= $numTaskTypes; $i++) {
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
-        
+
         $app->view()->setData("archivedTasks", $archivedTasks);
         $app->view()->appendData(array(
                                     "page_no" => $page_no,
@@ -266,7 +265,7 @@ class TaskRouteHandler
 
         $task = $taskDao->getTask($task_id);
         $userId = Common\Lib\UserSession::getCurrentUserID();
-        
+
         $taskType = Lib\TemplateHelper::getTaskTypeFromId($task->getTaskType());
         $result = $taskDao->archiveTask($task_id, $userId);
         if ($result) {
@@ -288,7 +287,7 @@ class TaskRouteHandler
                 )
             );
         }
-             
+
         $app->redirect($ref = $app->request()->getReferrer());
     }
 
@@ -296,7 +295,7 @@ class TaskRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $convert = $app->request()->get("convertToXliff");
-        
+
         try {
             $this->downloadTaskVersion($taskId, 0, $convert);
         } catch (Common\Exceptions\SolasMatchException $e) {
@@ -337,7 +336,7 @@ class TaskRouteHandler
         } else {
             $app->view()->setData("convert", "false");
         }
-        
+
         $sourcelocale = $task->getSourceLocale();
         $targetLocale = $task->getTargetLocale();
         $sourceLanguage = $languageDao->getLanguageByCode($sourcelocale->getLanguageCode());
@@ -346,8 +345,8 @@ class TaskRouteHandler
 
         // Used in proofreading page, link to original project file
         $projectFileDownload = $app->urlFor("home")."project/".$task->getProjectId()."/file";
-        
-        
+
+
         $app->view()->appendData(array(
                     "projectFileDownload" => $projectFileDownload,
                     "task"          => $task,
@@ -355,7 +354,7 @@ class TaskRouteHandler
                     "targetLanguage"=> $targetLanguage,
                     "taskMetadata"  => $taskMetaData
         ));
-       
+
         $app->render("task/task.claim.tpl");
     }
 
@@ -373,7 +372,7 @@ class TaskRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $taskDao = new DAO\TaskDao();
-        
+
         $headerArr = $taskDao->downloadTaskVersion($taskId, $version, $convert);
         $headerArr = json_decode($headerArr);
         foreach ($headerArr as $key => $val) {
@@ -383,7 +382,7 @@ class TaskRouteHandler
 
     public function task($taskId)
     {
-        
+
         $app = \Slim\Slim::getInstance();
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
@@ -397,8 +396,8 @@ class TaskRouteHandler
             $app->redirect($app->urlFor("home"));
         }
         $taskClaimed = $taskDao->isTaskClaimed($taskId);
-        $trackTaskView = $taskDao->recordTaskView($taskId,$user_id); 
-        
+        $trackTaskView = $taskDao->recordTaskView($taskId,$user_id);
+
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
             $project = $projectDao->getProject($task->getProjectId());
@@ -504,7 +503,7 @@ class TaskRouteHandler
         }
 
         $converter = Common\Lib\Settings::get("converter.converter_enabled");
-        
+
         $task_file_info = $taskDao->getTaskInfo($taskId);
         $siteLocation = Common\Lib\Settings::get("site.location");
         $file_path = "{$siteLocation}task/$taskId/download-file-user/";
@@ -522,7 +521,7 @@ class TaskRouteHandler
         ));
 
         $app->render("task/task.view.tpl");
-        
+
         }
     }
 
@@ -586,7 +585,7 @@ class TaskRouteHandler
         }
 
         $converter = Common\Lib\Settings::get("converter.converter_enabled");
-        
+
         $app->view()->appendData(array(
             "task"          => $task,
             "project"       => $project,
@@ -606,7 +605,7 @@ class TaskRouteHandler
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $orgDao = new DAO\OrganisationDao();
-        
+
         $fieldName = "fileUpload";
         $errorMessage = null;
         $userId = Common\Lib\UserSession::getCurrentUserID();
@@ -619,9 +618,9 @@ class TaskRouteHandler
                 $projectFile = $projectDao->getProjectFileInfo($project->getId());
                 $projectFileMimeType = $projectFile->getMime();
                 $projectFileType = pathinfo($projectFile->getFilename(), PATHINFO_EXTENSION);
-                
+
                 $fileUploadType = pathinfo($_FILES[$fieldName]["name"], PATHINFO_EXTENSION);
-                
+
                 //Call API to determine MIME type of file contents
                 $helper = new Common\Lib\APIHelper(Common\Lib\Settings::get('ui.api_format'));
                 $siteApi = Common\Lib\Settings::get("site.api");
@@ -646,17 +645,17 @@ class TaskRouteHandler
             } catch (\Exception $e) {
                 $errorMessage = $e->getMessage();
             }
-        
+
             if (is_null($errorMessage)) {
                 try {
                     $filedata = file_get_contents($_FILES[$fieldName]["tmp_name"]);
-                    
+
                     if ($post['submit'] == 'XLIFF') {
                         $taskDao->uploadOutputFile($taskId, $userId, $filedata, true);
                     } elseif ($post['submit'] == 'submit') {
                         $taskDao->uploadOutputFile($taskId, $userId, $filedata);
                     }
-                
+
                 } catch (\Exception  $e) {
                     $errorMessage = Lib\Localisation::getTranslation('task_simple_upload_7') . $e->getMessage();
                 }
@@ -715,12 +714,12 @@ class TaskRouteHandler
         $project = $projectDao->getProject($task->getProjectId());
         $org = $orgDao->getOrganisation($project->getOrganisationId());
         $tip = $tipDao->getTip();
-        
+
         $app->view()->appendData(array(
             "org_name" => $org->getName(),
             "tip"      => $tip
         ));
-        
+
         $app->render("task/task.uploaded.tpl");
     }
 
@@ -774,12 +773,12 @@ class TaskRouteHandler
                 }
             }
         }
-      
+
         $app->view()->setData("task", $task);
-        
+
         if (\SolasMatch\UI\isValidPost($app)) {
             $post = $app->request()->post();
-           
+
             if ($task->getTaskStatus() < Common\Enums\TaskStatusEnum::IN_PROGRESS) {
                 if (isset($post['title']) && $post['title'] != "") {
                     $task->setTitle($post['title']);
@@ -790,19 +789,19 @@ class TaskRouteHandler
                 } else {
                     $task->setPublished(0);
                 }
-            
+
                 $targetLocale = new Common\Protobufs\Models\Locale();
 
                 if (isset($post['target']) && $post['target'] != "") {
                     $targetLocale->setLanguageCode($post['target']);
                 }
-             
+
                 if (isset($post['targetCountry']) && $post['targetCountry'] != "") {
                     $targetLocale->setCountryCode($post['targetCountry']);
                 }
-            
+
                 $task->setTargetLocale($targetLocale);
-              
+
                 if (isset($post['word_count']) && ctype_digit($post['word_count'])) {
                     $task->setWordCount($post['word_count']);
                 } elseif (isset($post['word_count']) && $post['word_count'] != "") {
@@ -820,7 +819,7 @@ class TaskRouteHandler
                     $deadlineError = Lib\Localisation::getTranslation('task_alter_8');
                 }
             }
-            
+
             if (isset($post['impact']) && $post['impact'] != "") {
                 $task->setComment($post['impact']);
             }
@@ -834,7 +833,7 @@ class TaskRouteHandler
                         }
                     }
                 }
-                
+
                 $oldPreReqs = $taskPreReqIds[$task->getId()];
                 $thisTaskPreReqs = null;
                 if (count($selectedPreReqs) > 0) {
@@ -848,7 +847,7 @@ class TaskRouteHandler
                 $taskPreReqIds[$task->getId()] = $thisTaskPreReqs;
                 $graphBuilder = new Lib\UIWorkflowBuilder();
                 $graph = $graphBuilder->parseAndBuild($taskPreReqIds);
-                
+
                 if ($graph) {
 
                     $index = $graphBuilder->find($task->getId(), $graph);
@@ -872,7 +871,7 @@ class TaskRouteHandler
                             $taskDao->addTaskPreReq($task->getId(), $taskId);
                         }
                     }
-                    
+
                     $taskDao->updateTask($task);
 
                     $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
@@ -884,11 +883,11 @@ class TaskRouteHandler
                 }
             }
         }
-        
+
         $graphBuilder = new Lib\UIWorkflowBuilder();
         //Maybe replace with an API call
         $graph = $graphBuilder->parseAndBuild($taskPreReqIds);
-                
+
         if ($graph) {
 
             $index = $graphBuilder->find($task_id, $graph);
@@ -916,20 +915,20 @@ class TaskRouteHandler
 
         $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
         $taskTypeColours = array();
-        
+
         for ($i = 1; $i <= $numTaskTypes; $i++) {
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
-        
+
         $languages = Lib\TemplateHelper::getLanguageList();
         $countries = Lib\TemplateHelper::getCountryList();
-       
+
         $publishStatus="";
         if ($task->getPublished())
         {
             $publishStatus="checked";
-        } 
-                
+        }
+
         $app->view()->appendData(array(
             "project"             => $project,
             "extra_scripts"       => $extra_scripts,
@@ -944,7 +943,7 @@ class TaskRouteHandler
             "publishStatus"      => $publishStatus,
             "taskTypeColours"     => $taskTypeColours
         ));
-        
+
         $app->render("task/task.alter.tpl");
     }
 
@@ -970,16 +969,16 @@ class TaskRouteHandler
         $task_file_info = $taskDao->getTaskInfo($task_id, 0);
         $siteLocation = Common\Lib\Settings::get("site.location");
         $file_path= "{$siteLocation}task/$task_id/download-file-user/";
-       
+
         $app->view()->appendData(array(
             "file_preview_path" => $file_path,
             "filename" => $task_file_info->getFilename()
         ));
-        
-         
+
+
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
-            
+
             if (isset($post['published'])) {
                 if ($post['published']) {
                     $task->setPublished(1);
@@ -1050,7 +1049,7 @@ class TaskRouteHandler
                 }
             }
         }
-        
+
         $taskMetaData = array();
         $metaData = array();
         $registered = $userDao->isSubscribedToTask($user_id, $task_id);
@@ -1065,15 +1064,15 @@ class TaskRouteHandler
                      "task" => $task,
                      "taskMetaData" => $taskMetaData
         ));
-        
+
         $org = $orgDao->getOrganisation($project->getOrganisationId());
         $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
         $taskTypeColours = array();
-        
+
         for ($i = 1; $i <= $numTaskTypes; $i++) {
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
-        
+
         $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
         $adminDao = new DAO\AdminDao();
         $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
@@ -1112,7 +1111,7 @@ class TaskRouteHandler
         $task->setProjectId($project_id);
 
         if ($post = $app->request()->post()) {
-                    
+
             if (isset($post['title'])) {
                 $task->setTitle($post['title']);
             } else {
@@ -1122,14 +1121,14 @@ class TaskRouteHandler
             if (isset($post['comment'])) {
                 $task->setComment($post['comment']);
             }
-            
+
             $projectSourceLocale = $project->getSourceLocale();
             $taskSourceLocale = new Common\Protobufs\Models\Locale();
             $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
             $taskSourceLocale->setCountryCode($projectSourceLocale->getCountryCode());
             $task->setSourceLocale($taskSourceLocale);
             $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
-            
+
             $taskTargetLocale = new Common\Protobufs\Models\Locale();
             if (isset($post['targetLanguage'])) {
                 $taskTargetLocale->setLanguageCode($post['targetLanguage']);
@@ -1138,7 +1137,7 @@ class TaskRouteHandler
                 $taskTargetLocale->setCountryCode($post['targetCountry']);
             }
             $task->setTargetLocale($taskTargetLocale);
-            
+
             if (isset($post['taskType'])) {
                 $task->setTaskType($post['taskType']);
             }
@@ -1169,7 +1168,7 @@ class TaskRouteHandler
             if (is_null($titleError) && is_null($wordCountError) && is_null($deadlineError)) {
                 $newTask = $taskDao->createTask($task);
                 $newTaskId = $newTask->getId();
-                
+
                 $upload_error = null;
                 try {
                     $upload_error = $taskDao->saveTaskFile(
@@ -1180,7 +1179,7 @@ class TaskRouteHandler
                 } catch (\Exception  $e) {
                     $upload_error = Lib\Localisation::getTranslation('task_simple_upload_7') . $e->getMessage();
                 }
-                
+
                 if (isset($post['totalTaskPreReqs']) && $post['totalTaskPreReqs'] > 0) {
                     for ($i = 0; $i < $post['totalTaskPreReqs']; $i++) {
                         if (isset($post["preReq_$i"])) {
@@ -1188,7 +1187,7 @@ class TaskRouteHandler
                         }
                     }
                 }
-                
+
                 if (is_null($upload_error)) {
                     $app->redirect($app->urlFor("task-created", array("task_id" => $newTaskId)));
                 } else {
@@ -1207,10 +1206,10 @@ class TaskRouteHandler
         $taskTypes[Common\Enums\TaskTypeEnum::TRANSLATION] = "Translation";
         $taskTypes[Common\Enums\TaskTypeEnum::PROOFREADING] = "Proofreading";
         $taskTypes[Common\Enums\TaskTypeEnum::DESEGMENTATION] = "Desegmentation";
-        
+
         $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
         $taskTypeColours = array();
-        
+
         for ($i=1; $i <= $numTaskTypes; $i++) {
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
@@ -1250,7 +1249,7 @@ class TaskRouteHandler
 
         $app->render("task/task.created.tpl");
     }
-    
+
     public function taskSegmentation($task_id)
     {
         $app = \Slim\Slim::getInstance();
@@ -1260,27 +1259,27 @@ class TaskRouteHandler
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $taskTypeErr = null;
-        
+
         $task = $taskDao->getTask($task_id);
         $project = $projectDao->getProject($task->getProjectId());
         $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
         $maxSegments = Common\Lib\Settings::get("site.max_segmentation");
         $taskTypeColours = array();
-        
+
         for ($i=1; $i <= $numTaskTypes; $i++) {
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
-    
+
         $language_list = Lib\TemplateHelper::getLanguageList();
         $countries = Lib\TemplateHelper::getCountryList();
-        
+
         if ($app->request()->isPost() && $task->getTaskStatus() != Common\Enums\TaskStatusEnum::COMPLETE) {
             $post = $app->request()->post();
-            
+
             $fileInfo = $projectDao->getProjectFileInfo($project->getId());
             $canonicalExtension = explode(".", $fileInfo->getFilename());
             $canonicalExtension = strtolower($canonicalExtension[count($canonicalExtension)-1]);
-            
+
             $errors = array();
             $fileNames = array();
             $fileHashes = array();
@@ -1294,7 +1293,7 @@ class TaskRouteHandler
                     );
                     break;
                 }
-                
+
                 if ($file["error"] != UPLOAD_ERR_OK) {
                     $errors["missingFile"] = Lib\Localisation::getTranslation('task_segmentation_15');
                     break;
@@ -1305,7 +1304,7 @@ class TaskRouteHandler
                     $errors["uniqueFileName"] = Lib\Localisation::getTranslation('task_segmentation_16');
                     break;
                 }
-                
+
                 $hash = md5_file($file["tmp_name"]);
                 if (!in_array($hash, $fileHashes)) {
                     $fileHashes[] = $hash;
@@ -1314,11 +1313,11 @@ class TaskRouteHandler
                     break;
                 }
             }
-            
+
             if (!isset($post["translation_0"]) && !isset($post["proofreading_0"])) {
                 $errors["taskTypeSet"] = Lib\Localisation::getTranslation('task_segmentation_18');
             }
-            
+
             if (empty($errors)) {
                 $segmentationValue = $post["segmentationValue"];
                 $upload_error = false;
@@ -1341,7 +1340,7 @@ class TaskRouteHandler
                                 $upload_error = true;
                                 $errors["transTask$i"] = "<strong>File #$i:</strong> {$e->getMessage()}";
                             }
-                            
+
                         }
 
                         if (isset($post["proofreading_0"])) {
@@ -1363,7 +1362,7 @@ class TaskRouteHandler
                         $error_message = $e->getMessage();
                     }
                 }
-                
+
                 if (!$upload_error) {
 
                     $taskModel = new Common\Protobufs\Models\Task();
@@ -1421,11 +1420,11 @@ class TaskRouteHandler
                 ));
             }
         }
-        
+
         $extraScripts = file_get_contents(
             "http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/task-segmentation.js"
         );
-        
+
         $app->view()->appendData(array(
             "project"           => $project,
             "task"              => $task,
@@ -1435,10 +1434,10 @@ class TaskRouteHandler
             "countries"         => $countries,
             "extra_scripts"     => $extraScripts
         ));
-        
+
         $app->render("task/task-segmentation.tpl");
     }
-    
+
     public function taskOrgFeedback($task_id)
     {
         $app = \Slim\Slim::getInstance();
@@ -1506,7 +1505,7 @@ class TaskRouteHandler
                 }
             }
         }
-        
+
         $app->view()->appendData(array(
             "project" => $project,
             "task" => $task,
@@ -1515,10 +1514,10 @@ class TaskRouteHandler
             "taskTypeColours" => $taskTypeColours,
             "task_tags" => $task_tags
         ));
-        
+
         $app->render("task/task.org-feedback.tpl");
     }
-    
+
     public function taskUserFeedback($task_id)
     {
         $app = \Slim\Slim::getInstance();
@@ -1580,13 +1579,13 @@ class TaskRouteHandler
                 }
             }
         }
-        
+
         $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
         $taskTypeColours = array();
         for ($i=1; $i <= $numTaskTypes; $i++) {
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
-        
+
         $app->view()->appendData(array(
             "org" => $organisation,
             "project" => $project,
@@ -1596,7 +1595,7 @@ class TaskRouteHandler
             "taskTypeColours" => $taskTypeColours,
             "task_tags" => $task_tags
         ));
-        
+
         $app->render("task/task.user-feedback.tpl");
     }
 
@@ -1668,18 +1667,18 @@ class TaskRouteHandler
                     $pTask = $preReqTasks[$i++];
                     $review = new Common\Protobufs\Models\TaskReview();
                     $id = $pTask->getId();
-                    
+
 
                     $review->setUserId($userId);
-                    if (!is_null($id)) { 
-                        $review->setTaskId($id);   
+                    if (!is_null($id)) {
+                        $review->setTaskId($id);
                     }
                     $review->setProjectId($pTask->getProjectId());
 
                     if (is_null($id)) {
                         $id = $pTask->getProjectId();
                     }
-                    
+
                     if (isset($post["corrections_$id"]) && ctype_digit($post["corrections_$id"])) {
                         $value = intval($post["corrections_$id"]);
                         if ($value > 0 && $value <= 5) {
@@ -1776,7 +1775,7 @@ class TaskRouteHandler
 
         $app->render("task/task.review.tpl");
     }
-    
+
     private function setTaskModelData($taskModel, $project, $task, $i = null, $segmentationValue = null)
     {
         if (is_null($i) && is_null($segmentationValue)) {
@@ -1784,10 +1783,10 @@ class TaskRouteHandler
         } else {
             $taskModel->setTitle($project->getTitle()." (".($i+1)." of $segmentationValue)");
         }
-        
+
         $taskModel->setSourceLocale($project->getSourceLocale());
         $taskModel->setTargetLocale($task->getTargetLocale());
-        
+
         $taskModel->setProjectId($project->getId());
         $taskModel->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
     }
