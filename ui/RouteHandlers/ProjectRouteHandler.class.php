@@ -55,6 +55,7 @@ class ProjectRouteHandler
 
         $app->get(
             "/project/:project_id/file/",
+            array($middleware, "authUserIsLoggedIn"),
             array($this, "downloadProjectFile")
         )->name("download-project-file");
 
