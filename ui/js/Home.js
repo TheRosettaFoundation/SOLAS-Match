@@ -61,13 +61,13 @@ function renderTaskDetails()
       var days = hours / 24;
       var text;
       if (days > 0) {
-        text = parameters.getTranslation("common_added_days").replace("%s", days);
+        text = parameters.getTranslation("common_added_days").replace("%s", Math.floor(days));
       } else if (hours > 0) {
-        text = parameters.getTranslation("common_added_hours").replace("%s", hours);
+        text = parameters.getTranslation("common_added_hours").replace("%s", Math.floor(hours));
       } else if (minutes > 0) {
-        text = parameters.getTranslation("common_added_minutes").replace("%s", minutes);
+        text = parameters.getTranslation("common_added_minutes").replace("%s", Math.floor(minutes));
       } else {
-        text = parameters.getTranslation("common_added_seconds").replace("%s", seconds);
+        text = parameters.getTranslation("common_added_seconds").replace("%s", Math.floor(seconds));
       }
       $(this).html(text);
       $(this).css("visibility", "visible");
