@@ -243,9 +243,9 @@ class UserRouteHandler
                 $projectAndOrgs[$taskId]=sprintf(
                     Lib\Localisation::getTranslation('common_part_of_for'),
                     $projectUri,
-                    $projectName,
+                    htmlspecialchars($projectName, ENT_COMPAT, 'UTF-8'),
                     $orgUri,
-                    $orgName
+                    htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
                 );
 
                 $taskImages[$taskId] = '';

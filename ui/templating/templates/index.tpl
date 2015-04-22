@@ -178,7 +178,7 @@
 
                             <p class="task_details"><div class="process_created_time_utc" style="visibility: hidden">{$created_timestamps[$task_id]}</div></p>
                             <p><div class="process_deadline_utc" style="visibility: hidden">{$deadline_timestamps[$task_id]}</div></p>
-                            <p id="parents_{$task_id}">{$projectAndOrgs[$task_id]|escape:'html':'UTF-8'}</p>
+                            <p id="parents_{$task_id}">{$projectAndOrgs[$task_id]}</p>
                             <br />
                         </div>
                         {if $taskImages[$task_id]}
