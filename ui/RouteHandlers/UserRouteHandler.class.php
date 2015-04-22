@@ -236,7 +236,7 @@ class UserRouteHandler
                 $selected_minute = (int)substr($deadline, 14, 2);
                 $deadline_timestamps[$taskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
 
-                $projectUri = "{$siteLocation}project/{$taskId}/view";
+                $projectUri = "{$siteLocation}project/{$project->getId()}/view";
                 $projectName = $project->getTitle();
                 $orgUri = "{$siteLocation}org/{$org_id}/profile";
                 $orgName = $org->getName();
@@ -250,7 +250,7 @@ class UserRouteHandler
 
                 $taskImages[$taskId] = '';
                 if ($project->getImageApproved() && $project->getImageUploaded()) {
-                    $taskImages[$taskId] = "{$siteLocation}project/" . $project->getId() . '/image';
+                    $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
                 }
             }
         }
