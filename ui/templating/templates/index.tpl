@@ -1,5 +1,10 @@
 {include file="header.tpl" body_id="home"}
 
+<span class="hidden">
+    <!-- Parameters... -->
+    <div id="siteLocation">{$siteLocation}</div>
+</span>
+
 {if !isset($user)}
     <div class="hero-unit">
         <h1>{Localisation::getTranslation('index_translation_commons')}</h1>

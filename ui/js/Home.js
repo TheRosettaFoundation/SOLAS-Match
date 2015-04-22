@@ -1,5 +1,7 @@
 var parameters; // Instance of Parameters Class holding data retrieved from Server (e.g. Translations)
 
+// Passed from PHP
+var siteLocation;
 
 // http://infiniteajaxscroll.com
 var ias = $.ias({
@@ -33,6 +35,7 @@ function getSetting(text)
  */
 function documentReady()
 {
+  siteLocation = getSetting("siteLocation");
   parameters = new Parameters(loadingComplete);
 }
 
