@@ -163,10 +163,10 @@
                                 {Localisation::getTranslation('common_type')}: <span class="label label-info" style="background-color: {$taskTypeColours[$type_id]}">{$taskTypeTexts[$type_id]}</span>
                             </p>
                             <p>
-                                {Localisation::getTranslation('common_from')}: <strong>{TemplateHelper::getLanguageAndCountry($task->getSourceLocale())}</strong>
+                                {Localisation::getTranslation('common_from')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getSourceLocale())}</strong>
                             </p>
                             <p>
-                                {Localisation::getTranslation('common_to')}: <strong>{TemplateHelper::getLanguageAndCountry($task->getTargetLocale())}</strong>
+                                {Localisation::getTranslation('common_to')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
                             </p>
                             <p>
                                 {if count($taskTags[$task_id]) gt 0}
