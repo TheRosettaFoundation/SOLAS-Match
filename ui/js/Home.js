@@ -55,7 +55,7 @@ function renderTaskDetails()
     {
       $(this).removeClass("process_created_time_utc");
       var utcTime = $(this).text();
-      var seconds = parseInt(utcTime) - (new Date().getTime()) / 1000;
+      var seconds = (new Date().getTime()) / 1000 - parseInt(utcTime);
       var minutes = seconds / 60;
       var hours = minutes / 60;
       var days = hours / 24;
