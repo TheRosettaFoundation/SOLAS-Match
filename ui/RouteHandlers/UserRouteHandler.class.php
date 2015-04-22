@@ -258,8 +258,11 @@ class UserRouteHandler
         if ($currentScrollPage == $lastScrollPage && ($topTasksCount % $itemsPerScrollPage != 0)) {
             $itemsPerScrollPage = $topTasksCount % $itemsPerScrollPage;
         }
-        $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>
-                          <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Home.js\"></script>";
+        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Home.js\"></script>";
+
+
         $app->view()->appendData(array(
             'siteLocation' => $siteLocation,
             'activeSourceLanguages' => $activeSourceLanguages,
