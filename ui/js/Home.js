@@ -76,7 +76,7 @@ function renderTaskDetails()
 
   $(".process_deadline_utc").each(function ()
     {
-      $(this).removeClass("process_created_time_utc");
+      $(this).removeClass("process_deadline_utc");
       var utcTime = $(this).text();
       utcTime = parseInt(utcTime) * 1000;
       var deadline = new Date(utcTime);
