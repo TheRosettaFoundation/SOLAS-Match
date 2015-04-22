@@ -69,7 +69,7 @@ function renderTaskDetails()
       } else {
         text = parameters.getTranslation("common_added_seconds").replace("%s", seconds);
       }
-      $(this).text(text);
+      $(this).html(text);
       $(this).css("visibility", "visible");
     }
   );
@@ -96,7 +96,7 @@ function renderTaskDetails()
       if (mi < 10) {
         mi = "0" + mi;
       }
-      $(this).text(parameters.getTranslation("common_due_by").replace("%s", deadline.getFullYear() + "-" + m + "-" + d + " " + h + ":" + mi + ":00"));
+      $(this).html(parameters.getTranslation("common_due_by").replace("%s", deadline.getFullYear() + "-" + m + "-" + d + " " + h + ":" + mi + ":00"));
       $(this).css("visibility", "visible");
     }
   );
