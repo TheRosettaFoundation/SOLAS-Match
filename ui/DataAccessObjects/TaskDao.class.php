@@ -58,6 +58,21 @@ class TaskDao extends BaseDao
         return $response;
     }
 
+    public function getTopTasksCount()
+    {
+        $request = "{$this->siteApi}v0/tasks/topTasksCount";
+        $args = array();
+
+        $response = $this->client->call(
+            null,
+            $request,
+            Common\Enums\HttpMethodEnum::GET,
+            null,
+            $args
+        );
+        return $response;
+    }
+
     public function getTaskTags($taskId, $limit = null)
     {
         $request = "{$this->siteApi}v0/tasks/$taskId/tags";
