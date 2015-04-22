@@ -139,7 +139,7 @@
         {/if}
         {if isset($topTasks) && count($topTasks) > 0}
             <div class="ts">
-                {for $count=0 to $limit-1}
+                {for $count=0 to $itemsPerScrollPage-1}
                     {assign var="task" value=$topTasks[$count]}
                     <div class="ts-task">
                         {assign var="task_id" value=$task->getId()}
@@ -197,25 +197,25 @@
             {assign var="url_name" value="home-paged"}
             <ul class="pager">
                 <div class="pagination-centered">
-                    {if $current_page > 1}
+                    {if $currentScrollPage > 1}
                         <li>
                             <a href="{urlFor name="$url_name" options="page_no.1"}" title="First">&lt;&lt;</a>
                         </li>
                         <li class="ts-previous">
-                            {assign var="previous" value=($current_page - 1)}
+                            {assign var="previous" value=($currentScrollPage - 1)}
                             <a href="{urlFor name="$url_name" options="page_no.$previous"}" title="Previous">&lt;</a>
                         </li>
                     {/if}
                     <li>
-                        <a href="">{sprintf(Localisation::getTranslation('pagination_page_of'), {$current_page}, {$last_page})}</a>
+                        <a href="">{sprintf(Localisation::getTranslation('pagination_page_of'), {$currentScrollPage}, {$lastScrollPage})}</a>
                     </li>
-                    {if $current_page < $last_page}
+                    {if $currentScrollPage < $lastScrollPage}
                         <li class="ts-next">
-                            {assign var="next" value=($current_page + 1)}
+                            {assign var="next" value=($currentScrollPage + 1)}
                             <a href="{urlFor name="$url_name" options="page_no.$next"}" title="Next" >&gt;</a>
                         </li>
                         <li>
-                            <a href="{urlFor name="$url_name" options="page_no.$last_page"}" title="Last">&gt;&gt;</a>
+                            <a href="{urlFor name="$url_name" options="page_no.$lastScrollPage"}" title="Last">&gt;&gt;</a>
                         </li>
                     {/if}
                 </div>

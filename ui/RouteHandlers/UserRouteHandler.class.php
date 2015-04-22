@@ -85,7 +85,7 @@ class UserRouteHandler
         )->name("user-task-reviews");
     }
     
-    public function home($current_page = 1)
+    public function home($currentScrollPage = 1)
     {
         $app = \Slim\Slim::getInstance();
         $user_id = Common\Lib\UserSession::getCurrentUserID();
@@ -162,8 +162,8 @@ class UserRouteHandler
         $app->view()->appendData($viewData);
 
         $siteLocation = Common\Lib\Settings::get('site.location');
-        $limit = 6;
-        $offset = ($current_page - 1) * $limit;
+        $itemsPerScrollPage = 6;
+        $offset = ($currentScrollPage - 1) * $itemsPerScrollPage;
         $topTasksCount = 0;
 
         $selectedTaskType = -1;
@@ -192,11 +192,11 @@ class UserRouteHandler
         try {
             if ($user_id) {
                 $strict = false;
-                $topTasks      = $userDao->getUserTopTasks($user_id, $strict, $limit, $filter, $offset);
+                $topTasks      = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
             }
             else {
-                $topTasks      = $taskDao->getTopTasks($limit, $offset);
+                $topTasks      = $taskDao->getTopTasks($itemsPerScrollPage, $offset);
                 $topTasksCount = $taskDao->getTopTasksCount();
             }
         } catch (\Exception $e) {
@@ -210,8 +210,8 @@ class UserRouteHandler
         $projectAndOrgs = array();
         $taskImages = array();
 
-        $last_page = ceil($topTasksCount / $limit);
-        if ($current_page <= $last_page) {
+        $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
+        if ($currentScrollPage <= $lastScrollPage) {
             foreach ($topTasks as $topTask) {
                 $taskId = $topTask->getId();
                 $project = $projectDao->getProject($topTask->getProjectId());
@@ -255,8 +255,8 @@ class UserRouteHandler
             }
         }
 
-        if ($current_page == $last_page && ($topTasksCount % $limit != 0)) {
-            $limit = $topTasksCount % $limit;
+        if ($currentScrollPage == $lastScrollPage && ($topTasksCount % $itemsPerScrollPage != 0)) {
+            $itemsPerScrollPage = $topTasksCount % $itemsPerScrollPage;
         }
         $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>
                           <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Home.js\"></script>";
@@ -275,9 +275,9 @@ class UserRouteHandler
             'deadline_timestamps' => $deadline_timestamps,
             'projectAndOrgs' => $projectAndOrgs,
             'taskImages' => $taskImages,
-            'current_page' => $current_page,
-            'limit' => $limit,
-            'last_page' => $last_page,
+            'currentScrollPage' => $currentScrollPage,
+            'itemsPerScrollPage' => $itemsPerScrollPage,
+            'lastScrollPage' => $lastScrollPage,
             'extra_scripts' => $extra_scripts,
         ));
         $app->render('index.tpl');
