@@ -220,7 +220,7 @@ class UserRouteHandler
 
                 $taskTags[$taskId] = $taskDao->getTaskTags($taskId);
 
-                $created = $task->getCreatedTime();
+                $created = $topTask->getCreatedTime();
                 $selected_year   = (int)substr($created,  0, 4);
                 $selected_month  = (int)substr($created,  5, 2);
                 $selected_day    = (int)substr($created,  8, 2);
@@ -228,7 +228,7 @@ class UserRouteHandler
                 $selected_minute = (int)substr($created, 14, 2);
                 $created_timestamps[$taskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
 
-                $deadline = $task->getDeadline();
+                $deadline = $topTask->getDeadline();
                 $selected_year   = (int)substr($deadline,  0, 4);
                 $selected_month  = (int)substr($deadline,  5, 2);
                 $selected_day    = (int)substr($deadline,  8, 2);
