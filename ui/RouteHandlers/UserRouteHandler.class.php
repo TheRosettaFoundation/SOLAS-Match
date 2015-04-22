@@ -99,10 +99,10 @@ class UserRouteHandler
         $activeTargetLanguages = $languageDao->getActiveTargetLanguages();
 
         $taskTypeTexts = array();
-        $taskTypeTexts[TaskTypeEnum::SEGMENTATION]   = Lib\Localisation::getTranslation('common_segmentation');
-        $taskTypeTexts[TaskTypeEnum::TRANSLATION]    = Lib\Localisation::getTranslation('common_translation');
-        $taskTypeTexts[TaskTypeEnum::PROOFREADING]   = Lib\Localisation::getTranslation('common_proofreading');
-        $taskTypeTexts[TaskTypeEnum::DESEGMENTATION] = Lib\Localisation::getTranslation('common_desegmentation');
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::SEGMENTATION]   = Lib\Localisation::getTranslation('common_segmentation');
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::TRANSLATION]    = Lib\Localisation::getTranslation('common_translation');
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::PROOFREADING]   = Lib\Localisation::getTranslation('common_proofreading');
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::DESEGMENTATION] = Lib\Localisation::getTranslation('common_desegmentation');
 
         $numTaskTypes = Common\Lib\Settings::get('ui.task_types');
         $taskTypeColours = array();
