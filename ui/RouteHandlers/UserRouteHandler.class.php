@@ -26,7 +26,7 @@ class UserRouteHandler
         )->via("POST")->name("home");
 
         $app->get(
-            "/paged/:page_no/",
+            "/paged/:page_no/tt/:tt/sl/:sl/tl/:tl/",
             array($this, "home")
         )->via("POST")->name("home-paged");
 
@@ -85,7 +85,7 @@ class UserRouteHandler
         )->name("user-task-reviews");
     }
     
-    public function home($currentScrollPage = 1)
+    public function home($currentScrollPage = 1, $selectedTaskType = 0, $selectedSourceLanguageCode = 0, $selectedTargetLanguageCode = 0)
     {
         $app = \Slim\Slim::getInstance();
         $user_id = Common\Lib\UserSession::getCurrentUserID();
@@ -166,28 +166,23 @@ class UserRouteHandler
         $offset = ($currentScrollPage - 1) * $itemsPerScrollPage;
         $topTasksCount = 0;
 
-        $selectedTaskType = -1;
-        $selectedSourceLanguageCode = -1;
-        $selectedTargetLanguageCode = -1;
         $filter = array();
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
 
             if (isset($post['taskTypes'])) {
                 $selectedTaskType = $post['taskTypes'];
-                if ($selectedTaskType != -1) $filter['taskType'] = $selectedTaskType;
             }
-
             if (isset($post['sourceLanguage'])) {
                 $selectedSourceLanguageCode = $post['sourceLanguage'];
-                if ($selectedSourceLanguageCode != -1) $filter['sourceLanguage'] = $selectedSourceLanguageCode;
             }
-
             if (isset($post['targetLanguage'])) {
                 $selectedTargetLanguageCode = $post['targetLanguage'];
-                if ($selectedTargetLanguageCode != -1) $filter['targetLanguage'] = $selectedTargetLanguageCode;
             }
         }
+        if ($selectedTaskType           != 0) $filter['taskType']       = $selectedTaskType;
+        if ($selectedSourceLanguageCode != 0) $filter['sourceLanguage'] = $selectedSourceLanguageCode;
+        if ($selectedTargetLanguageCode != 0) $filter['targetLanguage'] = $selectedTargetLanguageCode;
 
         try {
             if ($user_id) {

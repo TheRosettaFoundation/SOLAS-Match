@@ -106,16 +106,16 @@
                         <tr>
                             <td>
                                 <select name="taskTypes" id="taskTypes">
-                                    <option value="-1" {if ($selectedTaskType == -1)}selected="selected"{/if}>{Localisation::getTranslation('index_any_task_type')}</option>
-                                    <option value="1"  {if ($selectedTaskType ==  1)}selected="selected"{/if}>{Localisation::getTranslation('common_segmentation')}</option>
-                                    <option value="2"  {if ($selectedTaskType ==  2)}selected="selected"{/if}>{Localisation::getTranslation('common_translation')}</option>
-                                    <option value="3"  {if ($selectedTaskType ==  3)}selected="selected"{/if}>{Localisation::getTranslation('common_proofreading')}</option>
-                                    <option value="4"  {if ($selectedTaskType ==  4)}selected="selected"{/if}>{Localisation::getTranslation('common_desegmentation')}</option>
+                                    <option value="0" {if ($selectedTaskType == 0)}selected="selected"{/if}>{Localisation::getTranslation('index_any_task_type')}</option>
+                                    <option value="1" {if ($selectedTaskType == 1)}selected="selected"{/if}>{Localisation::getTranslation('common_segmentation')}</option>
+                                    <option value="2" {if ($selectedTaskType == 2)}selected="selected"{/if}>{Localisation::getTranslation('common_translation')}</option>
+                                    <option value="3" {if ($selectedTaskType == 3)}selected="selected"{/if}>{Localisation::getTranslation('common_proofreading')}</option>
+                                    <option value="4" {if ($selectedTaskType == 4)}selected="selected"{/if}>{Localisation::getTranslation('common_desegmentation')}</option>
                                  </select>
                             </td>
                             <td>
                                 <select name="sourceLanguage" ID="sourceLanguage">
-                                    <option value="-1" {if ($selectedSourceLanguageCode == -1)}selected="selected"{/if}>{Localisation::getTranslation("index_any_source_language")}</option>
+                                    <option value="0" {if ($selectedSourceLanguageCode == 0)}selected="selected"{/if}>{Localisation::getTranslation("index_any_source_language")}</option>
                                     {foreach $activeSourceLanguages as $lang}
                                         <option value="{$lang->getCode()}" {if ($selectedSourceLanguageCode == $lang->getCode())}selected="selected"{/if}>{$lang->getName()}</option>
                                     {/foreach}
@@ -123,7 +123,7 @@
                             </td>
                             <td>
                                 <select name="targetLanguage" ID="targetLanguage">
-                                    <option value="-1" {if ($selectedTargetLanguageCode == -1)}selected="selected"{/if}>{Localisation::getTranslation("index_any_target_language")}</option>
+                                    <option value="0" {if ($selectedTargetLanguageCode == 0)}selected="selected"{/if}>{Localisation::getTranslation("index_any_target_language")}</option>
                                     {foreach $activeTargetLanguages as $lang}
                                         <option value="{$lang->getCode()}" {if ($selectedTargetLanguageCode == $lang->getCode())}selected="selected"{/if}>{$lang->getName()}</option>
                                     {/foreach}
@@ -204,11 +204,11 @@
                 <div class="pagination-centered">
                     {if $currentScrollPage > 1}
                         <li>
-                            <a href="{urlFor name="$url_name" options="page_no.1"}" title="First">&lt;&lt;</a>
+                            <a href="{urlFor name="$url_name" options="page_no.1|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}" title="First">&lt;&lt;</a>
                         </li>
                         <li class="ts-previous">
                             {assign var="previous" value=($currentScrollPage - 1)}
-                            <a href="{urlFor name="$url_name" options="page_no.$previous"}" title="Previous">&lt;</a>
+                            <a href="{urlFor name="$url_name" options="page_no.$previous|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}" title="Previous">&lt;</a>
                         </li>
                     {/if}
                     <li>
@@ -217,10 +217,10 @@
                     {if $currentScrollPage < $lastScrollPage}
                         <li class="ts-next">
                             {assign var="next" value=($currentScrollPage + 1)}
-                            <a href="{urlFor name="$url_name" options="page_no.$next"}" title="Next" >&gt;</a>
+                            <a href="{urlFor name="$url_name" options="page_no.$next|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}" title="Next" >&gt;</a>
                         </li>
                         <li>
-                            <a href="{urlFor name="$url_name" options="page_no.$lastScrollPage"}" title="Last">&gt;&gt;</a>
+                            <a href="{urlFor name="$url_name" options="page_no.$lastScrollPage|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}" title="Last">&gt;&gt;</a>
                         </li>
                     {/if}
                 </div>
