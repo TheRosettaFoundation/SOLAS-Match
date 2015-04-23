@@ -55,19 +55,19 @@ function renderTaskDetails()
     {
       $(this).removeClass("process_created_time_utc");
       var utcTime = $(this).text();
-      var seconds = (new Date().getTime()) / 1000 - parseInt(utcTime);
-      var minutes = seconds / 60;
-      var hours = minutes / 60;
-      var days = hours / 24;
+      var seconds = Math.floor((new Date().getTime()) / 1000 - parseInt(utcTime));
+      var minutes = Math.floor(seconds / 60);
+      var hours   = Math.floor(minutes / 60);
+      var days    = Math.floor(hours / 24);
       var text;
       if (days > 0) {
-        text = parameters.getTranslation("common_added_days").replace("%s", Math.floor(days));
+        text = parameters.getTranslation("common_added_days").replace("%s", days);
       } else if (hours > 0) {
-        text = parameters.getTranslation("common_added_hours").replace("%s", Math.floor(hours));
+        text = parameters.getTranslation("common_added_hours").replace("%s", hours);
       } else if (minutes > 0) {
-        text = parameters.getTranslation("common_added_minutes").replace("%s", Math.floor(minutes));
+        text = parameters.getTranslation("common_added_minutes").replace("%s", minutes);
       } else {
-        text = parameters.getTranslation("common_added_seconds").replace("%s", Math.floor(seconds));
+        text = parameters.getTranslation("common_added_seconds").replace("%s", seconds);
       }
       $(this).html(text);
       $(this).css("visibility", "visible");
