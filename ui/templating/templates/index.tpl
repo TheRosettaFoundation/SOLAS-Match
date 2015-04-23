@@ -200,7 +200,7 @@
 
             {* pagination begins here *}
             {assign var="url_name" value="home-paged"}
-            <ul class="pager">
+            <ul class="pager pull-left">
                 <div class="pagination-centered">
                     {if $currentScrollPage > 1}
                         <li>
