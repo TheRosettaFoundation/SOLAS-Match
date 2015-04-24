@@ -106,26 +106,26 @@
                         <tr>
                             <td>
                                 <select name="taskTypes" id="taskTypes">
-                                    <option value="0" {if ($selectedTaskType == 0)}selected="selected"{/if}>{Localisation::getTranslation('index_any_task_type')}</option>
-                                    <option value="1" {if ($selectedTaskType == 1)}selected="selected"{/if}>{Localisation::getTranslation('common_segmentation')}</option>
-                                    <option value="2" {if ($selectedTaskType == 2)}selected="selected"{/if}>{Localisation::getTranslation('common_translation')}</option>
-                                    <option value="3" {if ($selectedTaskType == 3)}selected="selected"{/if}>{Localisation::getTranslation('common_proofreading')}</option>
-                                    <option value="4" {if ($selectedTaskType == 4)}selected="selected"{/if}>{Localisation::getTranslation('common_desegmentation')}</option>
+                                    <option value="0" {if ($selectedTaskType === 0)}selected="selected"{/if}>{Localisation::getTranslation('index_any_task_type')}</option>
+                                    <option value="1" {if ($selectedTaskType === 1)}selected="selected"{/if}>{Localisation::getTranslation('common_segmentation')}</option>
+                                    <option value="2" {if ($selectedTaskType === 2)}selected="selected"{/if}>{Localisation::getTranslation('common_translation')}</option>
+                                    <option value="3" {if ($selectedTaskType === 3)}selected="selected"{/if}>{Localisation::getTranslation('common_proofreading')}</option>
+                                    <option value="4" {if ($selectedTaskType === 4)}selected="selected"{/if}>{Localisation::getTranslation('common_desegmentation')}</option>
                                  </select>
                             </td>
                             <td>
                                 <select name="sourceLanguage" ID="sourceLanguage">
-                                    <option value="0" {if ($selectedSourceLanguageCode == 0)}selected="selected"{/if}>{Localisation::getTranslation("index_any_source_language")}</option>
+                                    <option value="0" {if ($selectedSourceLanguageCode === 0)}selected="selected"{/if}>{Localisation::getTranslation("index_any_source_language")}</option>
                                     {foreach $activeSourceLanguages as $lang}
-                                        <option value="{$lang->getCode()}" {if ($selectedSourceLanguageCode == $lang->getCode())}selected="selected"{/if}>{$lang->getName()}</option>
+                                        <option value="{$lang->getCode()}" {if ($selectedSourceLanguageCode === $lang->getCode())}selected="selected"{/if}>{$lang->getName()}</option>
                                     {/foreach}
                                 </select>
                             </td>
                             <td>
                                 <select name="targetLanguage" ID="targetLanguage">
-                                    <option value="0" {if ($selectedTargetLanguageCode == 0)}selected="selected"{/if}>{Localisation::getTranslation("index_any_target_language")}</option>
+                                    <option value="0" {if ($selectedTargetLanguageCode === 0)}selected="selected"{/if}>{Localisation::getTranslation("index_any_target_language")}</option>
                                     {foreach $activeTargetLanguages as $lang}
-                                        <option value="{$lang->getCode()}" {if ($selectedTargetLanguageCode == $lang->getCode())}selected="selected"{/if}>{$lang->getName()}</option>
+                                        <option value="{$lang->getCode()}" {if ($selectedTargetLanguageCode === $lang->getCode())}selected="selected"{/if}>{$lang->getName()}</option>
                                     {/foreach}
                                 </select>
                             </td>
