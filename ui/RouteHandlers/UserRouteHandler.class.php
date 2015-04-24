@@ -181,7 +181,7 @@ class UserRouteHandler
             }
         }
         // Post or route handler may return '0', need an explicit zero
-        if ($selectedTaskType           === '0') $selectedTaskType = 0;
+        $selectedTaskType = (int)$selectedTaskType;
         if ($selectedSourceLanguageCode === '0') $selectedSourceLanguageCode = 0;
         if ($selectedTargetLanguageCode === '0') $selectedTargetLanguageCode = 0;
 
