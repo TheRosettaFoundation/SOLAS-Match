@@ -759,6 +759,19 @@ class TaskDao
         }
         return $ret;
     }
+
+    public static function getFilteredUserClaimedTasksCount(
+            $userId,
+            $taskType = null,
+            $taskStatus = null
+    ) {
+        $args  = Lib\PDOWrapper::cleanse($userId).', ';
+        $args .= Lib\PDOWrapper::cleanseNull($taskType).', ';
+        $args .= Lib\PDOWrapper::cleanseNull($taskStatus);
+        $result = Lib\PDOWrapper::call("getFilteredUserClaimedTasksCount", $args);
+        return $result[0]['result'];
+    }
+
     //! Get a count of the User's claimed Tasks
     /*!
       Get the number of Tasks a User has claimed
