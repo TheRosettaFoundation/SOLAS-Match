@@ -30,6 +30,12 @@ class TaskRouteHandler
         )->name("claimed-tasks");
 
         $app->get(
+            "/user/:user_id/claimed/tasks/paged/:page_no/tt/:tt/ts/:ts/o/:o/",
+            array($middleware, "authUserIsLoggedIn"),
+            array($this, "claimedTasks")
+        )->name("claimed-tasks-paged");
+
+        $app->get(
             "/task/:task_id/download-task-latest-file/",
             array($middleware, "authUserForTaskDownload"),
             array($this, "downloadTaskLatestVersion")
@@ -200,14 +206,18 @@ class TaskRouteHandler
         $app->render("task/archived-tasks.tpl");
     }
 
-    public function claimedTasks($userId)
+    public function claimedTasks($user_id, $currentScrollPage = 1, $selectedTaskType = 0, $selectedTaskStatus = 3, $selectedOrdering = 1)
     {
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
-        $user = $userDao->getUser($userId);
+        $orgDao = new DAO\OrganisationDao();
+        $projectDao = new DAO\ProjectDao();
+        $taskDao = new DAO\TaskDao();
+
+        $user = $userDao->getUser($user_id);
 
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
-        if ($loggedInUserId != $userId) {
+        if ($loggedInUserId != $user_id) {
             $adminDao = new DAO\AdminDao();
             if (!$adminDao->isSiteAdmin($loggedInUserId)) {
                 $app->flash('error', "You are not authorized to view this page");
@@ -215,25 +225,145 @@ class TaskRouteHandler
             }
         }
 
-        $extra_scripts = "
-<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/dart_support.js\"></script>
-<script \"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/browser/interop.js\"></script>
-<script \"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/Routes/Users/ClaimedTasks.dart.js\"></script>
-<span class=\"hidden\">
-";
+        $taskStatusTexts = array();
+        $taskStatusTexts[1] = Lib\Localisation::getTranslation('common_waiting');
+        $taskStatusTexts[2] = Lib\Localisation::getTranslation('common_unclaimed');
+        $taskStatusTexts[3] = Lib\Localisation::getTranslation('common_in_progress');
+        $taskStatusTexts[4] = Lib\Localisation::getTranslation('common_complete');
 
-        $extra_scripts .= file_get_contents("ui/dart/web/Routes/Users/ClaimedTasksStream.html");
-        $extra_scripts .= "</span>";
+        $taskTypeTexts = array();
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::SEGMENTATION]   = Lib\Localisation::getTranslation('common_segmentation');
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::TRANSLATION]    = Lib\Localisation::getTranslation('common_translation');
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::PROOFREADING]   = Lib\Localisation::getTranslation('common_proofreading');
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::DESEGMENTATION] = Lib\Localisation::getTranslation('common_desegmentation');
 
-        $platformJS =
-        "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/platform.js\"></script>";
-        $viewData = array('thisUser' => $user);
-        $viewData['extra_scripts'] = $extra_scripts;
-        $viewData['current_page'] = 'claimed-tasks';
-        $viewData['platformJS'] = $platformJS;
+        $numTaskTypes = Common\Lib\Settings::get('ui.task_types');
+        $taskTypeColours = array();
+        for ($i = 1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
+        }
 
-        $app->view()->appendData($viewData);
-        $app->render("task/claimed-tasks.tpl");
+        $siteLocation = Common\Lib\Settings::get('site.location');
+        $itemsPerScrollPage = 6;
+        $offset = ($currentScrollPage - 1) * $itemsPerScrollPage;
+        $topTasksCount = 0;
+
+        $filter = array();
+        if ($app->request()->isPost()) {
+            $post = $app->request()->post();
+
+            if (isset($post['taskTypes'])) {
+                $selectedTaskType = $post['taskTypes'];
+            }
+            if (isset($post['taskStatusFilter'])) {
+                $selectedTaskStatus = $post['taskStatusFilter'];
+            }
+            if (isset($post['ordering'])) {
+                $selectedOrdering = $post['ordering'];
+            }
+        }
+        // Post or route handler may return '0', need an explicit zero
+        $selectedTaskType   = (int)$selectedTaskType;
+        $selectedTaskStatus = (int)$selectedTaskStatus;
+        $selectedOrdering   = (int)$selectedOrdering;
+
+        try {
+            $topTasks      = $userDao->getFilteredUserClaimedTasks($user_id, $selectedOrdering, $itemsPerScrollPage, $offset, $selectedTaskType, $selectedTaskStatus);
+            $topTasksCount = $userDao->getFilteredUserClaimedTasksCount($user_id, $selectedTaskType, $selectedTaskStatus);
+        } catch (\Exception $e) {
+            $topTasks = array();
+            $topTasksCount = 0;
+        }
+
+        $taskTags = array();
+        $created_timestamps = array();
+        $deadline_timestamps = array();
+        $projectAndOrgs = array();
+        $proofreadTaskIds = array();
+
+        $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
+        if ($currentScrollPage <= $lastScrollPage) {
+            foreach ($topTasks as $topTask) {
+                $taskId = $topTask->getId();
+                $project = $projectDao->getProject($topTask->getProjectId());
+                $org_id = $project->getOrganisationId();
+                $org = $orgDao->getOrganisation($org_id);
+
+                $taskTags[$taskId] = $taskDao->getTaskTags($taskId);
+
+                $created = $topTask->getCreatedTime();
+                $selected_year   = (int)substr($created,  0, 4);
+                $selected_month  = (int)substr($created,  5, 2);
+                $selected_day    = (int)substr($created,  8, 2);
+                $selected_hour   = (int)substr($created, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
+                $selected_minute = (int)substr($created, 14, 2);
+                $created_timestamps[$taskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+
+                $deadline = $topTask->getDeadline();
+                $selected_year   = (int)substr($deadline,  0, 4);
+                $selected_month  = (int)substr($deadline,  5, 2);
+                $selected_day    = (int)substr($deadline,  8, 2);
+                $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
+                $selected_minute = (int)substr($deadline, 14, 2);
+                $deadline_timestamps[$taskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+
+                $projectUri = "{$siteLocation}project/{$project->getId()}/view";
+                $projectName = $project->getTitle();
+                $orgUri = "{$siteLocation}org/{$org_id}/profile";
+                $orgName = $org->getName();
+                $projectAndOrgs[$taskId]=sprintf(
+                    Lib\Localisation::getTranslation('common_part_of_for'),
+                    $projectUri,
+                    htmlspecialchars($projectName, ENT_COMPAT, 'UTF-8'),
+                    $orgUri,
+                    htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
+                );
+
+                if ($topTask->getTaskType() == 2) { // If current task is a translation task
+                    try {
+                        $proofreadTask = getProofreadTask($taskId);
+                    } catch (\Exception $e) {
+                        $proofreadTask = null;
+                    }
+                    if ($proofreadTask) {
+                        $proofreadTaskIds[$task_id] = $proofreadTask->getId();
+                    } else {
+                        $proofreadTaskIds[$task_id] = null;
+                    }
+                }
+            }
+        }
+
+        if ($currentScrollPage == $lastScrollPage && ($topTasksCount % $itemsPerScrollPage != 0)) {
+            $itemsPerScrollPage = $topTasksCount % $itemsPerScrollPage;
+        }
+        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/ClaimedTasks.js\"></script>";
+
+        $app->view()->appendData(array(
+            'current_page' => 'claimed-tasks',
+            'thisUser' => $user,
+            'user_id' => $user_id,
+            'siteLocation' => $siteLocation,
+            'selectedTaskType' => $selectedTaskType,
+            'selectedTaskStatus' => $selectedTaskStatus,
+            'selectedOrdering' => $selectedOrdering,
+            'topTasks' => $topTasks,
+            'taskStatusTexts' => $taskStatusTexts,
+            'taskTypeTexts' => $taskTypeTexts,
+            'taskTypeColours' => $taskTypeColours,
+            'taskTags' => $taskTags,
+            'created_timestamps' => $created_timestamps,
+            'deadline_timestamps' => $deadline_timestamps,
+            'projectAndOrgs' => $projectAndOrgs,
+            'proofreadTaskIds' => $proofreadTaskIds,
+            'currentScrollPage' => $currentScrollPage,
+            'itemsPerScrollPage' => $itemsPerScrollPage,
+            'lastScrollPage' => $lastScrollPage,
+            'extra_scripts' => $extra_scripts,
+        ));
+        $app->render('task/claimed-tasks.tpl');
     }
 
     public function downloadTaskLatestVersion($task_id)
