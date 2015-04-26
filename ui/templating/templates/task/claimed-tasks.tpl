@@ -138,7 +138,7 @@
                                 {/if}
                                 {if $type_id == 2}
                                     {if $proofreadTaskIds[$task_id]}
-                                        <a href="{$siteLocation}task/$proofreadTaskIds[$task_id]/download-task-latest-file/" class="btn btn-small btn-info">
+                                        <a href="{$siteLocation}task/{$proofreadTaskIds[$task_id]}/download-task-latest-file/" class="btn btn-small btn-info">
                                             {Localisation::getTranslation('claimed_tasks_download_proofread_task')}
                                         </a>
                                     {/if}
