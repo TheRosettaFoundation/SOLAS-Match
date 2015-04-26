@@ -9,7 +9,7 @@
     <br>
     <div class="alert alert-error">
         <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
-        <p><strong>{Localisation::getTranslation('common_warning')}! </strong>{$flash['error']|escape:'html':'UTF-8'}</p>
+        <p><strong>{Localisation::getTranslation('common_warning')}! </strong>{$flash['error']}</p>
     </div>
 {/if}
 

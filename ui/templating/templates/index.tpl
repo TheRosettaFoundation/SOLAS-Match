@@ -24,26 +24,26 @@
     <br>
     <div class="alert alert-error">
         <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
-        <p><strong>{Localisation::getTranslation('common_warning')}! </strong>{$flash['error']|escape:'html':'UTF-8'}</p>
+        <p><strong>{Localisation::getTranslation('common_warning')}! </strong>{$flash['error']}</p>
     </div>
 {/if}
 
 {if isset($flash['info'])}
     <div class="alert alert-info">
-        <p><strong>{Localisation::getTranslation('common_note')} </strong>{$flash['info']|escape:'html':'UTF-8'}</p>
+        <p><strong>{Localisation::getTranslation('common_note')} </strong>{$flash['info']}</p>
     </div>
 {/if}
 
 {if isset($flash['success'])}
     <div class="alert alert-success">
         <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
-        <p><strong>{Localisation::getTranslation('common_success')}! </strong>{$flash['success']|escape:'html':'UTF-8'}</p>
+        <p><strong>{Localisation::getTranslation('common_success')}! </strong>{$flash['success']}</p>
     </div>
 {/if}
 
 {if isset($flash['warning'])}
     <div class="alert alert-warning">
-        <p><strong>{$flash['warning']|escape:'html':'UTF-8'}</strong></p>
+        <p><strong>{$flash['warning']}</strong></p>
     </div>
 {/if}
 
