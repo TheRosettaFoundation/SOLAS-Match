@@ -326,9 +326,9 @@ class TaskRouteHandler
                         $proofreadTask = null;
                     }
                     if ($proofreadTask) {
-                        $proofreadTaskIds[$task_id] = $proofreadTask->getId();
+                        $proofreadTaskIds[$taskId] = $proofreadTask->getId();
                     } else {
-                        $proofreadTaskIds[$task_id] = null;
+                        $proofreadTaskIds[$taskId] = null;
                     }
                 }
             }
