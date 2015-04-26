@@ -140,7 +140,13 @@ class Users
                         '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
                         '\SolasMatch\API\V0\Users::getFilteredUserClaimedTasks'
                     );
-                    
+
+                    $app->get(
+                        '/filteredClaimedTasksCount/:taskType/:taskStatus(:format)/',
+                        '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+                        '\SolasMatch\API\V0\Users::getFilteredUserClaimedTasksCount'
+                    );
+
                     $app->put(
                         '/requestReference(:format)/',
                         '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
@@ -780,7 +786,7 @@ class Users
             $format = '.'.$taskStatus[1];
             $taskStatus = $taskStatus[0];
         }
-    
+
         API\Dispatcher::sendResponse(
             null,
             DAO\TaskDao::getFilteredUserClaimedTasks(
@@ -788,6 +794,30 @@ class Users
                 $orderBy,
                 $limit,
                 $offset,
+                $taskType,
+                $taskStatus
+            ),
+            null,
+            $format
+        );
+    }
+
+    public static function getFilteredUserClaimedTasksCount(
+            $userId,
+            $taskType,
+            $taskStatus,
+            $format = ".json"
+    ) {
+        if (!is_numeric($taskStatus) && strstr($taskStatus, '.')) {
+            $taskStatus = explode('.', $taskStatus);
+            $format = '.'.$taskStatus[1];
+            $taskStatus = $taskStatus[0];
+        }
+
+        API\Dispatcher::sendResponse(
+            null,
+            DAO\TaskDao::getFilteredUserClaimedTasksCount(
+                $userId,
                 $taskType,
                 $taskStatus
             ),

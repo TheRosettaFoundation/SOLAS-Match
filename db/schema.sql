@@ -3336,9 +3336,30 @@ BEGIN
              WHEN orderBy = 0 THEN `created-time`
              WHEN orderBy = 3 THEN deadline
              WHEN orderBy = 5 THEN title
-            END DESC);
+            END DESC
+            LIMIT offset, lim);
 END//
 DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `getFilteredUserClaimedTasksCount`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getFilteredUserClaimedTasksCount`(IN `userID` INT, IN `taskType` INT, IN `taskStatus` INT)
+
+    READS SQL DATA
+
+BEGIN
+    if taskType = 0 then set taskType = null; end if;
+    if taskStatus = 0 then set taskStatus = null; end if;
+
+    SELECT COUNT(1) as result
+        FROM Tasks t
+        WHERE t.id IN (SELECT tc.task_id FROM TaskClaims tc WHERE tc.user_id = userID)
+        AND (taskType is null or t.`task-type_id` = taskType)
+        AND (taskStatus is null or t.`task-status_id` = taskStatus);
+END//
+DELIMITER ;
+
 
 -- Dumping structure for procedure Solas-Match-Test.getUserTrackedTasks
 DROP PROCEDURE IF EXISTS `getUserTrackedTasks`;

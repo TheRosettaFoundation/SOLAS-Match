@@ -26,6 +26,11 @@ class UserRouteHandler
         )->via("POST")->name("home");
 
         $app->get(
+            "/paged/:page_no/tt/:tt/sl/:sl/tl/:tl/",
+            array($this, "home")
+        )->via("POST")->name("home-paged");
+
+        $app->get(
             "/register/",
             array($this, "register")
         )->via("GET", "POST")->name("register");
@@ -80,18 +85,39 @@ class UserRouteHandler
         )->name("user-task-reviews");
     }
     
-    public function home()
+    public function home($currentScrollPage = 1, $selectedTaskType = 0, $selectedSourceLanguageCode = 0, $selectedTargetLanguageCode = 0)
     {
         $app = \Slim\Slim::getInstance();
-        $viewData = array();
-        $langDao = new DAO\LanguageDao();
-        $tagDao = new DAO\TagDao();
-        $taskDao = new DAO\TaskDao();
-        $projectDao = new DAO\ProjectDao();
-        $orgDao = new DAO\OrganisationDao();
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
+        $orgDao = new DAO\OrganisationDao();
+        $projectDao = new DAO\ProjectDao();
+        $taskDao = new DAO\TaskDao();
 
-        $use_statistics = Common\Lib\Settings::get("site.stats");
+        $languageDao = new DAO\LanguageDao();
+        $activeSourceLanguages = $languageDao->getActiveSourceLanguages();
+        $activeTargetLanguages = $languageDao->getActiveTargetLanguages();
+
+        $taskTypeTexts = array();
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::SEGMENTATION]   = Lib\Localisation::getTranslation('common_segmentation');
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::TRANSLATION]    = Lib\Localisation::getTranslation('common_translation');
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::PROOFREADING]   = Lib\Localisation::getTranslation('common_proofreading');
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::DESEGMENTATION] = Lib\Localisation::getTranslation('common_desegmentation');
+
+        $numTaskTypes = Common\Lib\Settings::get('ui.task_types');
+        $taskTypeColours = array();
+        for ($i = 1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
+        }
+
+        $viewData = array();
+        $viewData['current_page'] = 'home';
+
+        $tagDao = new DAO\TagDao();
+        $top_tags = $tagDao->getTopTags(10);
+        $viewData['top_tags'] = $top_tags;
+
+        $use_statistics = Common\Lib\Settings::get('site.stats');
         if ($use_statistics == 'y') {
             $statsDao = new DAO\StatisticsDao();
             $statistics = $statsDao->getStats();
@@ -102,67 +128,163 @@ class UserRouteHandler
                     $statsArray[$stat->getName()] = $stat;
                 }
             }
-            $viewData["statsArray"] = $statsArray;
-        }
-        
-        $top_tags = $tagDao->getTopTags(10);
-        $viewData["top_tags"] = $top_tags;
-        $viewData["current_page"] = "home";
-
-        $current_user_id = Common\Lib\UserSession::getCurrentUserID();
-        
-        if ($current_user_id != null) {
-            $user_tags = $userDao->getUserTags($current_user_id);
-            $viewData["user_tags"] = $user_tags;
+            $viewData['statsArray'] = $statsArray;
         }
 
-        if ($current_user_id == null) {
+        if ($user_id != null) {
+            $user_tags = $userDao->getUserTags($user_id);
+            $viewData['user_tags'] = $user_tags;
+        }
+
+        if ($user_id == null) {
             $app->flashNow('info', Lib\Localisation::getTranslation('index_dont_use_ie'));
         }
 
-        $maintenance_msg = Common\Lib\Settings::get("maintenance.maintenance_msg");
+        $maintenance_msg = Common\Lib\Settings::get('maintenance.maintenance_msg');
         if ($maintenance_msg == 'y') {
-             $maintenanceDate = Common\Lib\Settings::get("maintenance.maintenance_date");
-             $maintenanceTime = Common\Lib\Settings::get("maintenance.maintenance_time");
-             $maintenanceDuration = Common\Lib\Settings::get("maintenance.maintenance_duration");
-             $maintenanceCustomMsg = Common\Lib\Settings::get("maintenance.maintenance_custom_msg");
-            if ($maintenanceCustomMsg=='n') {
+            $maintenanceCustomMsg = Common\Lib\Settings::get('maintenance.maintenance_custom_msg');
+            if ($maintenanceCustomMsg == 'n') {
+                $maintenanceDate     = Common\Lib\Settings::get('maintenance.maintenance_date');
+                $maintenanceTime     = Common\Lib\Settings::get('maintenance.maintenance_time');
+                $maintenanceDuration = Common\Lib\Settings::get('maintenance.maintenance_duration');
                 $msg = sprintf(
                     Lib\Localisation::getTranslation('common_maintenance_message'),
                     $maintenanceDate,
                     $maintenanceTime,
                     $maintenanceDuration
                 );
-            } elseif ($maintenanceCustomMsg=='y') {
-                $maintenanceCustomMessage = Common\Lib\Settings::get("maintenance.maintenance_custom_message");
-                $msg = $maintenanceCustomMessage;
+            } elseif ($maintenanceCustomMsg == 'y') {
+                $msg = Common\Lib\Settings::get('maintenance.maintenance_custom_message');
             }
-             $app->flashNow('warning', $msg);
+            $app->flashNow('warning', $msg);
         }
-                
-        
-        /*
-         * Turning off DART specific scripts if the users browser is Internet Explorer
-         */
-        $browserData = get_browser(null, true);
-        if (!is_null($browserData) && isset($browserData['browser'])) {
-            $browser = $browserData['browser'];
-            if ($browser != 'IE') {
-                $extra_scripts = "
-                    <script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/dart_support.js\"></script>
-                    <script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/browser/interop.js\"></script>
-                    <script src=\"{$app->urlFor("home")}ui/dart/build/web/Routes/Users/home.dart.js\"></script>
-                    <span class=\"hidden\">
-                    ";
-                $extra_scripts .= file_get_contents("ui/dart/web/Routes/Users/TaskStream.html");
-                $extra_scripts .= "</span>";
-                $viewData['platformJS'] = "
-                        <script src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/platform.js\"></script>";
-                $viewData['extra_scripts'] = $extra_scripts;
-            }
-        }
+
         $app->view()->appendData($viewData);
-        $app->render("index.tpl");
+
+        $siteLocation = Common\Lib\Settings::get('site.location');
+        $itemsPerScrollPage = 6;
+        $offset = ($currentScrollPage - 1) * $itemsPerScrollPage;
+        $topTasksCount = 0;
+
+        $filter = array();
+        if ($app->request()->isPost()) {
+            $post = $app->request()->post();
+
+            if (isset($post['taskTypes'])) {
+                $selectedTaskType = $post['taskTypes'];
+            }
+            if (isset($post['sourceLanguage'])) {
+                $selectedSourceLanguageCode = $post['sourceLanguage'];
+            }
+            if (isset($post['targetLanguage'])) {
+                $selectedTargetLanguageCode = $post['targetLanguage'];
+            }
+        }
+        // Post or route handler may return '0', need an explicit zero
+        $selectedTaskType = (int)$selectedTaskType;
+        if ($selectedSourceLanguageCode === '0') $selectedSourceLanguageCode = 0;
+        if ($selectedTargetLanguageCode === '0') $selectedTargetLanguageCode = 0;
+
+        // Identity tests (also in template) because a language code string evaluates to zero; (we use '0' because URLs look better that way)
+        if ($selectedTaskType           !== 0) $filter['taskType']       = $selectedTaskType;
+        if ($selectedSourceLanguageCode !== 0) $filter['sourceLanguage'] = $selectedSourceLanguageCode;
+        if ($selectedTargetLanguageCode !== 0) $filter['targetLanguage'] = $selectedTargetLanguageCode;
+
+        try {
+            if ($user_id) {
+                $strict = false;
+                $topTasks      = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);
+                $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
+            }
+            else {
+                $topTasks      = $taskDao->getTopTasks($itemsPerScrollPage, $offset);
+                $topTasksCount = $taskDao->getTopTasksCount();
+            }
+        } catch (\Exception $e) {
+            $topTasks = array();
+            $topTasksCount = 0;
+        }
+
+        $taskTags = array();
+        $created_timestamps = array();
+        $deadline_timestamps = array();
+        $projectAndOrgs = array();
+        $taskImages = array();
+
+        $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
+        if ($currentScrollPage <= $lastScrollPage) {
+            foreach ($topTasks as $topTask) {
+                $taskId = $topTask->getId();
+                $project = $projectDao->getProject($topTask->getProjectId());
+                $org_id = $project->getOrganisationId();
+                $org = $orgDao->getOrganisation($org_id);
+
+                $taskTags[$taskId] = $taskDao->getTaskTags($taskId);
+
+                $created = $topTask->getCreatedTime();
+                $selected_year   = (int)substr($created,  0, 4);
+                $selected_month  = (int)substr($created,  5, 2);
+                $selected_day    = (int)substr($created,  8, 2);
+                $selected_hour   = (int)substr($created, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
+                $selected_minute = (int)substr($created, 14, 2);
+                $created_timestamps[$taskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+
+                $deadline = $topTask->getDeadline();
+                $selected_year   = (int)substr($deadline,  0, 4);
+                $selected_month  = (int)substr($deadline,  5, 2);
+                $selected_day    = (int)substr($deadline,  8, 2);
+                $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
+                $selected_minute = (int)substr($deadline, 14, 2);
+                $deadline_timestamps[$taskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+
+                $projectUri = "{$siteLocation}project/{$project->getId()}/view";
+                $projectName = $project->getTitle();
+                $orgUri = "{$siteLocation}org/{$org_id}/profile";
+                $orgName = $org->getName();
+                $projectAndOrgs[$taskId]=sprintf(
+                    Lib\Localisation::getTranslation('common_part_of_for'),
+                    $projectUri,
+                    htmlspecialchars($projectName, ENT_COMPAT, 'UTF-8'),
+                    $orgUri,
+                    htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
+                );
+
+                $taskImages[$taskId] = '';
+                if ($project->getImageApproved() && $project->getImageUploaded()) {
+                    $taskImages[$taskId] = "{$siteLocation}project/{$project->getId()}/image";
+                }
+            }
+        }
+
+        if ($currentScrollPage == $lastScrollPage && ($topTasksCount % $itemsPerScrollPage != 0)) {
+            $itemsPerScrollPage = $topTasksCount % $itemsPerScrollPage;
+        }
+        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Home.js\"></script>";
+
+
+        $app->view()->appendData(array(
+            'siteLocation' => $siteLocation,
+            'activeSourceLanguages' => $activeSourceLanguages,
+            'activeTargetLanguages' => $activeTargetLanguages,
+            'selectedTaskType' => $selectedTaskType,
+            'selectedSourceLanguageCode' => $selectedSourceLanguageCode,
+            'selectedTargetLanguageCode' => $selectedTargetLanguageCode,
+            'topTasks' => $topTasks,
+            'taskTypeTexts' => $taskTypeTexts,
+            'taskTypeColours' => $taskTypeColours,
+            'taskTags' => $taskTags,
+            'created_timestamps' => $created_timestamps,
+            'deadline_timestamps' => $deadline_timestamps,
+            'projectAndOrgs' => $projectAndOrgs,
+            'taskImages' => $taskImages,
+            'currentScrollPage' => $currentScrollPage,
+            'itemsPerScrollPage' => $itemsPerScrollPage,
+            'lastScrollPage' => $lastScrollPage,
+            'extra_scripts' => $extra_scripts,
+        ));
+        $app->render('index.tpl');
     }
 
     public function videos()

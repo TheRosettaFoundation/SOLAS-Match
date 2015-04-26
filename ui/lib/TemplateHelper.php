@@ -212,6 +212,13 @@ class TemplateHelper
         return $languageName." - ".$countryName;
     }
 
+    public static function getLanguageAndCountryNoCodes($locale)
+    {
+        $languageName = $locale->getLanguageName();
+        $countryName = $locale->getCountryName();
+        return $languageName." - ".$countryName;
+    }
+
     public static function getLanguageAndCountryFromCode($codes)
     {
         $splitCodes = explode(",", $codes);
