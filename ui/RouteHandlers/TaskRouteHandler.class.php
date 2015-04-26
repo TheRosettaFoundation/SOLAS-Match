@@ -321,7 +321,7 @@ class TaskRouteHandler
 
                 if ($topTask->getTaskType() == 2) { // If current task is a translation task
                     try {
-                        $proofreadTask = getProofreadTask($taskId);
+                        $proofreadTask = $taskDao->getProofreadTask($taskId);
                     } catch (\Exception $e) {
                         $proofreadTask = null;
                     }
