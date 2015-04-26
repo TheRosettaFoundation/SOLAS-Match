@@ -27,7 +27,7 @@ class TaskRouteHandler
             "/user/:user_id/claimed/tasks/",
             array($middleware, "authUserIsLoggedIn"),
             array($this, "claimedTasks")
-        )->name("claimed-tasks");
+        )->via("POST")->name("claimed-tasks");
 
         $app->get(
             "/user/:user_id/claimed/tasks/paged/:page_no/tt/:tt/ts/:ts/o/:o/",
