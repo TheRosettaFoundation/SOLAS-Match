@@ -206,7 +206,7 @@ class TaskRouteHandler
         $app->render("task/archived-tasks.tpl");
     }
 
-    public function claimedTasks($user_id, $currentScrollPage = 1, $selectedTaskType = 0, $selectedTaskStatus = 3, $selectedOrdering = 1)
+    public function claimedTasks($user_id, $currentScrollPage = 1, $selectedTaskType = 0, $selectedTaskStatus = 3, $selectedOrdering = 0)
     {
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
