@@ -38,6 +38,13 @@ class TaskDao extends BaseDao
         return $response;
     }
 
+    public function getProofreadTask($id)
+    {
+        $request = "{$this->siteApi}v0/tasks/proofreadTask/$id";
+        $response =$this->client->call("\SolasMatch\Common\Protobufs\Models\Task", $request);
+        return $response;
+    }
+
     public function getTopTasks($limit = null, $offset = null)
     {
         $request = "{$this->siteApi}v0/tasks/topTasks";
@@ -50,6 +57,21 @@ class TaskDao extends BaseDao
         }
         $response = $this->client->call(
             array("\SolasMatch\Common\Protobufs\Models\Task"),
+            $request,
+            Common\Enums\HttpMethodEnum::GET,
+            null,
+            $args
+        );
+        return $response;
+    }
+
+    public function getTopTasksCount()
+    {
+        $request = "{$this->siteApi}v0/tasks/topTasksCount";
+        $args = array();
+
+        $response = $this->client->call(
+            null,
             $request,
             Common\Enums\HttpMethodEnum::GET,
             null,

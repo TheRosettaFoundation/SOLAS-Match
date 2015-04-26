@@ -371,7 +371,7 @@ class ProjectRouteHandler
                     || empty($post['sourceCountrySelect']) || empty($post['sourceLanguageSelect']) || empty($post['project_deadline'])
                     || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $post['project_deadline'])) {
                 // Note the deadline date validation above is only partial (these checks have been done more rigorously on client size, if that is to be trusted)
-                $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_to_create_project'), $post['project_title']));
+                $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_to_create_project'), htmlspecialchars($post['project_title'], ENT_COMPAT, 'UTF-8')));
             } else {
                 $sourceLocale = new Common\Protobufs\Models\Locale();
 
@@ -488,7 +488,7 @@ class ProjectRouteHandler
                                 }
                             }
                             if ($image_failed) {
-                                $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_image'), $_FILES['projectImageFile']['name']));
+                                $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_image'), htmlspecialchars($_FILES['projectImageFile']['name'], ENT_COMPAT, 'UTF-8')));
                             } else {
                                 // Continue here whether there is, or is not, an image file uploaded as long as there was not an explicit failure
 
@@ -656,7 +656,7 @@ class ProjectRouteHandler
                     || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $post['project_deadline'])
                     || empty($post['wordCountInput']) || !ctype_digit($post['wordCountInput'])) {
                 // Note the deadline date validation above is only partial (these checks have been done more rigorously on client size, if that is to be trusted)
-                $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_to_create_project'), $post['project_title']));
+                $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_to_create_project'), htmlspecialchars($post['project_title'], ENT_COMPAT, 'UTF-8')));
             } else {
                 $sourceLocale = new Common\Protobufs\Models\Locale();
                 $project = new Common\Protobufs\Models\Project();
@@ -698,7 +698,7 @@ class ProjectRouteHandler
                 } else {
                     if (empty($_FILES['projectFile']['name']) || !empty($_FILES['projectFile']['error']) || empty($_FILES['projectFile']['tmp_name'])
                             || (($data = file_get_contents($_FILES['projectFile']['tmp_name'])) === false)) {
-                        $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), $_FILES['projectFile']['name']));
+                        $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), htmlspecialchars($_FILES['projectFile']['name'], ENT_COMPAT, 'UTF-8')));
                         try {
                             $projectDao->deleteProject($project->getId());
                         } catch (\Exception $e) {
@@ -801,7 +801,7 @@ class ProjectRouteHandler
                                 }
                             }
                             if ($image_failed) {
-                                $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_image'), $_FILES['projectImageFile']['name']));
+                                $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_image'), htmlspecialchars($_FILES['projectImageFile']['name'], ENT_COMPAT, 'UTF-8')));
                                 try {
                                     $projectDao->deleteProject($project->getId());
                                 } catch (\Exception $e) {
@@ -904,7 +904,7 @@ class ProjectRouteHandler
                                             }
                                         }
                                     }
-                                    $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), $_FILES['projectFile']['name']));
+                                    $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), htmlspecialchars($_FILES['projectFile']['name'], ENT_COMPAT, 'UTF-8')));
                                     try {
                                         $projectDao->deleteProject($project->getId());
                                     } catch (\Exception $e) {
@@ -918,7 +918,7 @@ class ProjectRouteHandler
                                         } catch (\Exception $e) { // redirect throws \Slim\Exception\Stop
                                         }
                                     } catch (\Exception $e) {
-                                        $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), $_FILES['projectFile']['name']));
+                                        $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), htmlspecialchars($_FILES['projectFile']['name'], ENT_COMPAT, 'UTF-8')));
                                         try {
                                             $projectDao->deleteProject($project->getId());
                                         } catch (\Exception $e) {

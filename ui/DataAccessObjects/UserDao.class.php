@@ -148,7 +148,7 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function getUserTopTasks($userId, $strict = false, $limit = null, $filter = array())
+    public function getUserTopTasks($userId, $strict = false, $limit = null, $filter = array(), $offset = null)
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/topTasks";
@@ -156,6 +156,10 @@ class UserDao extends BaseDao
         $args = array();
         if ($limit) {
             $args["limit"] = $limit;
+        }
+
+        if ($offset) {
+            $args["offset"] = $offset;
         }
 
         $filterString = "";
@@ -183,6 +187,69 @@ class UserDao extends BaseDao
             Common\Enums\HttpMethodEnum::GET,
             null,
             $args
+        );
+        return $ret;
+    }
+
+    public function getUserTopTasksCount($userId, $strict = false, $filter = array())
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/$userId/topTasksCount";
+
+        $args = array();
+
+        $filterString = '';
+        if ($filter) {
+            if (isset($filter['taskType']) && $filter['taskType'] != '') {
+                $filterString .= "taskType:".$filter['taskType'].';';
+            }
+            if (isset($filter['sourceLanguage']) && $filter['sourceLanguage'] != '') {
+                $filterString .= "sourceLanguage:".$filter['sourceLanguage'].';';
+            }
+            if (isset($filter['targetLanguage']) && $filter['targetLanguage'] != '') {
+                $filterString .= "targetLanguage:".$filter['targetLanguage'].';';
+            }
+        }
+
+        if ($filterString != '') {
+            $args['filter'] = $filterString;
+        }
+
+        $args['strict'] = $strict;
+        $ret = $this->client->call(
+            null,
+            $request,
+            Common\Enums\HttpMethodEnum::GET,
+            null,
+            $args
+        );
+        return $ret;
+    }
+
+    public function getFilteredUserClaimedTasks($userId, $selectedOrdering, $limit, $offset, $selectedTaskType, $selectedTaskStatus)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/$userId/filteredClaimedTasks/$selectedOrdering/$limit/$offset/$selectedTaskType/$selectedTaskStatus";
+
+        $ret = $this->client->call(
+            array("\SolasMatch\Common\Protobufs\Models\Task"),
+            $request,
+            Common\Enums\HttpMethodEnum::GET,
+            null
+        );
+        return $ret;
+    }
+
+    public function getFilteredUserClaimedTasksCount($userId, $selectedTaskType, $selectedTaskStatus)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/users/$userId/filteredClaimedTasksCount/$selectedTaskType/$selectedTaskStatus";
+
+        $ret = $this->client->call(
+            null,
+            $request,
+            Common\Enums\HttpMethodEnum::GET,
+            null
         );
         return $ret;
     }

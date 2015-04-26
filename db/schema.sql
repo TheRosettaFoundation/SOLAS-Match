@@ -3336,7 +3336,8 @@ BEGIN
              WHEN orderBy = 0 THEN `created-time`
              WHEN orderBy = 3 THEN deadline
              WHEN orderBy = 5 THEN title
-            END DESC);
+            END DESC
+            LIMIT offset, lim);
 END//
 DELIMITER ;
 

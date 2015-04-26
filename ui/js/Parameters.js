@@ -56,8 +56,8 @@ Parameters.prototype.getUserHash = function(deferred)
       function(data) {
         if (data != "") {
           userHash = data;
-          deferred.resolve();
         }
+        deferred.resolve();
       }
     );
   } else {
