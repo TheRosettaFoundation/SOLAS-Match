@@ -12,8 +12,6 @@ var ias = $.ias({
       triggerPageThreshold: 2
     });
 
-//ias.extension(new IASNoneLeftExtension({text: 'You reached the end.'}));
-ias.extension(new IASNoneLeftExtension({text: ''}));
 ias.extension(new IASSpinnerExtension());
 ias.extension(new IASTriggerExtension({ offset: 100 }));
 ias.extension(new IASPagingExtension());
