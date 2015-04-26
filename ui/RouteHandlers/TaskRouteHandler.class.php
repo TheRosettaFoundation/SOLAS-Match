@@ -248,7 +248,6 @@ class TaskRouteHandler
         $offset = ($currentScrollPage - 1) * $itemsPerScrollPage;
         $topTasksCount = 0;
 
-        $filter = array();
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
 
