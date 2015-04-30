@@ -48,8 +48,8 @@ function documentReady()
   siteAPI      = getSetting("siteAPI");
   user_id      = getSetting("user_id");
 
-  secondaryLanguageCount = parseInt(getSetting("secondaryLanguageCount"));
-  for (var i = 0; i < secondaryLanguageCount; i++) {
+  var secondaryLanguageCountDatabase = parseInt(getSetting("secondaryLanguageCount"));
+  for (var i = 0; i < secondaryLanguageCountDatabase; i++) {
     addSecondaryLanguage(getSetting("userSecondaryLanguagesLanguageCode_" + i), getSetting("userSecondaryLanguagesCountryCode_" + i));
   }
 
