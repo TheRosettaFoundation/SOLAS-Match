@@ -852,7 +852,7 @@ EOD;
                             $locale = new Common\Protobufs\Models\Locale();
                             $locale->setLanguageCode($post["secondary_language_$i"]);
                             $locale->setCountryCode($post["secondary_country_$i"]);
-                            $userDao->createSecondaryLanguage($user_id, $locale)
+                            $userDao->createSecondaryLanguage($user_id, $locale);
                         }
                     }
 
