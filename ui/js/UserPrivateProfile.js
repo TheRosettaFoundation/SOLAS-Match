@@ -172,12 +172,6 @@ function validateForm()
     }
   }
 
-  var nativeLanguageSelect = document.getElementById("nativeLanguageSelect");
-  var nativeCountrySelect = document.getElementById("nativeCountrySelect");
-  if ((nativeLanguageSelect.value != "" && nativeCountrySelect.value == "") ||
-      (nativeLanguageSelect.value == "" && nativeCountrySelect.value != "")) {
-  }
-
   for (var i = 0; i < secondaryLanguageCount; i++) {
     var secondaryLanguageSelect = document.getElementById("secondary_language_" + i);
     var secondaryCountrySelect = document.getElementById("secondary_country_" + i);

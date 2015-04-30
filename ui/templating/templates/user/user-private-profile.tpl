@@ -76,11 +76,13 @@
                         <div id = "nativeLanguageDiv">
                             <label><strong>{Localisation::getTranslation('common_native_language')}:</strong></label>
                             <select name="nativeLanguageSelect" id="nativeLanguageSelect" style="width: 82%">
+                                <option value=""></option>
                                 {foreach $languages as $language}
                                     <option value="{$language->getCode()}" {if $language->getCode() == $nativeLanguageSelectCode}selected="selected"{/if}>{$language->getName()}</option>
                                 {/foreach}
                             </select>
                             <select name="nativeCountrySelect" id="nativeCountrySelect" style="width: 82%">
+                                <option value=""></option>
                                 {foreach $countries as $country}
                                     <option value="{$country->getCode()}" {if $country->getCode() == $nativeCountrySelectCode}selected="selected"{/if}>{$country->getName()}</option>
                                 {/foreach}
