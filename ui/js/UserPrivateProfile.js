@@ -111,7 +111,7 @@ void removeSecondaryLanguage()
     var element = document.getElementById("secondary_locale_" + secondaryLanguageCount);
     element.remove();
 
-    ButtonElement button = document.getElementById("addLanguageButton");
+    button = document.getElementById("addLanguageButton");
     button.disabled = false;
 
     if (secondaryLanguageCount < 2) {

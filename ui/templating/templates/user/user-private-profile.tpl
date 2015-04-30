@@ -82,7 +82,7 @@
                             </select>
                             <select name="nativeCountrySelect" id="nativeCountrySelect" style="width: 82%">
                                 {foreach $countries as $country}
-                                    <option value="{$country->getCode()}" {if $language->getCode() == $nativeCountrySelectCode}selected="selected"{/if}>{$country->getName()}</option>
+                                    <option value="{$country->getCode()}" {if $country->getCode() == $nativeCountrySelectCode}selected="selected"{/if}>{$country->getName()}</option>
                                 {/foreach}
                             </select>
                         </div>

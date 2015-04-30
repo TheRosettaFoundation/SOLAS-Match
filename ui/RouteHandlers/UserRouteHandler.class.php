@@ -771,7 +771,7 @@ EOD;
         $nativeLocale = $user->getNativeLocale();
         if ($nativeLocale) {
             $nativeLanguageSelectCode = $nativeLocale->getLanguageCode();
-            $nativeCountrySelectCode= $nativeLocale->getCountryCode();
+            $nativeCountrySelectCode = $nativeLocale->getCountryCode();
         }
         else {
             $nativeLanguageSelectCode = '999999999';
