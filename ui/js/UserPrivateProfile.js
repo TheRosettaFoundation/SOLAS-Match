@@ -44,9 +44,9 @@ function set_errors_for_submission(id)
  */
 function documentReady()
 {
-  siteLocation   = getSetting("siteLocation");
-  siteAPI        = getSetting("siteAPI");
-  user_id  = document.getElementById("user_id").innerHTML;
+  siteLocation = getSetting("siteLocation");
+  siteAPI      = getSetting("siteAPI");
+  user_id      = getSetting("user_id");
 
   secondaryLanguageCount = getSetting("secondaryLanguageCount");
   for (var i = 0; i < secondaryLanguageCount; i++) {

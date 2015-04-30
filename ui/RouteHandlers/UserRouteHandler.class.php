@@ -901,6 +901,8 @@ EOD;
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/UserPrivateProfile.js\"></script>";
 
         $app->view()->appendData(array(
+            'siteLocation'     => Common\Lib\Settings::get('site.location'),
+            'siteAPI'          => Common\Lib\Settings::get('site.api'),
             'user'             => $user,
             'user_id'          => $user_id,
             'userPersonalInfo' => $userPersonalInfo,
