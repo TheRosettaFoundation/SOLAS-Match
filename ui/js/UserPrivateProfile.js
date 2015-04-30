@@ -76,6 +76,7 @@ function addSecondaryLanguage(userSecondaryLanguagesLanguageCode, userSecondaryL
     languageBox.innerHTML = document.getElementById("template_language_options").innerHTML;
     languageBox.name = "secondary_language_" + secondaryLanguageCount;
     languageBox.id = "secondary_language_" + secondaryLanguageCount;
+    languageBox.style.width = "82%";
     languageBox.value = userSecondaryLanguagesLanguageCode;
     locale.appendChild(languageBox);
 
@@ -83,6 +84,7 @@ function addSecondaryLanguage(userSecondaryLanguagesLanguageCode, userSecondaryL
     countryBox.innerHTML = document.getElementById("template_country_options").innerHTML;
     countryBox.name = "secondary_country_" + secondaryLanguageCount;
     countryBox.id = "secondary_country_" + secondaryLanguageCount;
+    countryBox.style.width = "82%";
     countryBox.value = userSecondaryLanguagesCountryCode;
     locale.appendChild(countryBox);
 
