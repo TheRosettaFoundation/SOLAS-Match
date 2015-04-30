@@ -820,7 +820,7 @@ EOD;
                 }
 
                 if (!empty($post['langPrefSelect'])) {
-                    $lang = $langDao->getLanguage(null, $post['langPrefSelect']);
+                    $lang = $langDao->getLanguageByCode($post['langPrefSelect']);
                     $userPersonalInfo->setLanguagePreference($lang->getId());
                 }
 
