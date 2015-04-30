@@ -854,6 +854,7 @@ EOD;
                             $locale->setCountryCode($post["secondary_country_$i"]);
                             $userDao->createSecondaryLanguage($user_id, $locale);
                         }
+                        $i++;
                     }
 
                     foreach ($secondaryLanguages as $secondaryLanguage) {
@@ -862,6 +863,7 @@ EOD;
                             if (($post["secondary_language_$i"] == $secondaryLanguage->getLanguageCode()) && ($post["secondary_country_$i"] == $secondaryLanguage->getCountryCode())) {
                                 $found = true;
                             }
+                            $i++;
                         }
                         if (!$found) {
                             $locale = new Common\Protobufs\Models\Locale();
