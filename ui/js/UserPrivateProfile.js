@@ -104,7 +104,7 @@ function addSecondaryLanguage(userSecondaryLanguagesLanguageCode, userSecondaryL
 /**
  * This method is used to remove a secondary language selector from the page.
  */
-void removeSecondaryLanguage()
+function removeSecondaryLanguage()
 {
   if (secondaryLanguageCount > 0) {
     secondaryLanguageCount--;
