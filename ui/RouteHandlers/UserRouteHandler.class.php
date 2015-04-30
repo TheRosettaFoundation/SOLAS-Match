@@ -746,7 +746,7 @@ EOD;
         $countryDao = new DAO\CountryDao();
 
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
-            $_SESSION['SESSION_CSRF_KEY'] = $this->random_string(10);
+            $_SESSION['SESSION_CSRF_KEY'] = UserRouteHandler::random_string(10);
         }
         $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
 
@@ -926,7 +926,7 @@ EOD;
      * @param int $length The length of the string to be created.
      * @return string
      */
-    private function random_string($length=15) {
+    private static function random_string($length=15) {
         $pool  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $pool .= 'abcdefghijklmnopqrstuvwxyz';
         $pool .= '0123456789';
