@@ -914,7 +914,7 @@ EOD;
             'translator'  => $translator,
             'proofreader' => $proofreader,
             'interpreter' => $interpreter,
-            'extra_scripts' => $extraScripts,
+            'extra_scripts' => $extra_scripts,
         ));
        
         $app->render('user/user-private-profile.tpl');
