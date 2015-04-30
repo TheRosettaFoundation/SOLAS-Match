@@ -737,41 +737,205 @@ EOD;
         }
     }
 
-    public static function userPrivateProfile($userId)
+    public static function userPrivateProfile($user_id)
     {
         $app = \Slim\Slim::getInstance();
         
         $userDao = new DAO\UserDao();
-        $loggedInuser = $userDao->getUser(Common\Lib\UserSession::getCurrentUserID());
-        $user = $userDao->getUser($userId);
-        Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER.$userId);
-        
+        $langDao = new DAO\LanguageDao();
+        $countryDao = new DAO\CountryDao();
+
+        if (empty($_SESSION['SESSION_CSRF_KEY'])) {
+            $_SESSION['SESSION_CSRF_KEY'] = $this->random_string(10);
+        }
+        $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
+
+        $user = $userDao->getUser($user_id);
+        Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER.$user_id);
+
         if (!is_object($user)) {
             $app->flash("error", Lib\Localisation::getTranslation('common_login_required_to_access_page'));
             $app->redirect($app->urlFor("login"));
         }
 
-        $extraScripts = "
-<script \"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/dart_support.js\"></script>
-<script \"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/browser/interop.js\"></script>
-<script \"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/Routes/Users/UserPrivateProfile.dart.js\"></script>
-<span class=\"hidden\">
-";
-        $extraScripts .= file_get_contents("ui/dart/web/Routes/Users/UserPrivateProfileForm.html");
-        $extraScripts .= "</span>";
-        //Including for polymer
-        $platformJS =
-        "<script \"text/javascript\" src=\"{$app->urlFor("home")}ui/dart/build/web/packages/web_components/platform.js\"></script>";
+        $userPersonalInfo = null;
+        try {
+            $userPersonalInfo = $userDao->getPersonalInfo($user_id);
+        } catch (Common\Exceptions\SolasMatchException $e) {
+            error_log("Error getting user personal info: $e");
+        }
+
+        $languages = $langDao->getLanguages();
+        $countries = $countryDao->getCountries();
+
+        $nativeLocale = $user->getNativeLocale();
+        if ($nativeLocale) {
+            $nativeLanguageSelectCode = $nativeLocale->getLanguageCode();
+            $nativeCountrySelectCode= $nativeLocale->getCountryCode();
+        }
+        else {
+            $nativeLanguageSelectCode = '999999999';
+            $nativeCountrySelectCode = '999999999';
+        }
+
+        $secondaryLanguages = $userDao->getSecondaryLanguages($user_id);
+        if (empty($secondaryLanguages)) {
+            $secondaryLanguages = array();
+            $locale = new Common\Protobufs\Models\Locale();
+            $locale->setLanguageCode('');
+            $locale->setCountryCode('');
+            $secondaryLanguages[] = $locale;
+        }
+        $secondaryLanguageCount = count($secondaryLanguages);
+
+        $langPref = $langDao->getLanguage($userPersonalInfo->getLanguagePreference());
+        $langPrefSelectCode = $langPref->getCode();
+
+        $badges = $userDao->getUserBadges($user_id);
+        $translator = false;
+        $proofreader = false;
+        $interpreter = false;
+        foreach ($badges as $badge) {
+            if ($badge->getId() == 6) {
+                $translator = true;
+            } elseif ($badge->getId() == 7) {
+                $proofreader = true;
+            } elseif ($badge->getId() == 8) {
+                $interpreter = true;
+            }
+        }
+
+        if ($post = $app->request()->post()) {
+            if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
+                $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
+            } else {
+                $user->setDisplayName($post['displayName']);
+                $user->setBiography($post['biography']);
+
+                if (!empty($post['nativeLanguageSelect']) && !empty($post['nativeCountrySelect'])) {
+                    $locale = new Common\Protobufs\Models\Locale();
+                    $locale->setLanguageCode($post['nativeLanguageSelect']);
+                    $locale->setCountryCode($post['nativeCountrySelect']);
+                    $user->setNativeLocale($locale);
+                }
+
+                if (!empty($post['langPrefSelect'])) {
+                    $lang = $langDao->getLanguage(null, $post['langPrefSelect']);
+                    $userPersonalInfo->setLanguagePreference($lang->getId());
+                }
+
+                $userPersonalInfo->setFirstName($post['firstName']);
+                $userPersonalInfo->setLastName($post['lastName']);
+                $userPersonalInfo->setMobileNumber($post['mobileNumber']);
+                $userPersonalInfo->setBusinessNumber($post['businessNumber']);
+                $userPersonalInfo->setJobTitle($post['jobTitle']);
+                $userPersonalInfo->setAddress($post['address']);
+                $userPersonalInfo->setCity($post['city']);
+                $userPersonalInfo->setCountry($post['country']);
+
+                if (!empty($post['receiveCredit'])) {
+                    $userPersonalInfo->setReceiveCredit(true);
+                } else {
+                    $userPersonalInfo->setReceiveCredit(false);
+                }
+
+                try {
+                    $i = 0;
+                    while (!empty($post["secondary_language_$i"]) && !empty($post["secondary_country_$i"])) {
+                        $found = false;
+                        foreach ($secondaryLanguages as $secondaryLanguage) {
+                            if (($post["secondary_language_$i"] == $secondaryLanguage->getLanguageCode()) && ($post["secondary_country_$i"] == $secondaryLanguage->getCountryCode())) {
+                                $found = true;
+                            }
+                        }
+                        if (!$found) {
+                            $locale = new Common\Protobufs\Models\Locale();
+                            $locale->setLanguageCode($post["secondary_language_$i"]);
+                            $locale->setCountryCode($post["secondary_country_$i"]);
+                            $userDao->createSecondaryLanguage($user_id, $locale)
+                        }
+                    }
+
+                    foreach ($secondaryLanguages as $secondaryLanguage) {
+                        while (!empty($post["secondary_language_$i"]) && !empty($post["secondary_country_$i"])) {
+                            $found = false;
+                            if (($post["secondary_language_$i"] == $secondaryLanguage->getLanguageCode()) && ($post["secondary_country_$i"] == $secondaryLanguage->getCountryCode())) {
+                                $found = true;
+                            }
+                        }
+                        if (!$found) {
+                            $locale = new Common\Protobufs\Models\Locale();
+                            $locale->setLanguageCode($secondaryLanguage->getLanguageCode());
+                            $locale->setCountryCode($secondaryLanguage->getCountryCode());
+                            $userDao->deleteSecondaryLanguage($userId, $locale);
+                        }
+                    }
+
+                    $userDao->updateUser($user);
+                    $userDao->updatePersonalInfo($user_id, $userPersonalInfo);
+
+                    if ($translator && empty($post['translator'])) {
+                    $userDao->removeUserBadge($user_id, 6);
+                    } elseif (!$translator && !empty($post['translator']) {
+                        $userDao->addUserBadgeById($user_id, 6);
+                    }
+                    if ($proofreader && empty($post['proofreader'])) {
+                        $userDao->removeUserBadge($user_id, 7);
+                    } elseif (!$proofreader && !empty($post['proofreader'])) {
+                        $userDao->addUserBadgeById($user_id, 7);
+                    }
+                  if ($interpreter && empty($post['interpreter'])) {
+                        updated.add($userDao->removeUserBadge($user_id, 8);
+                    } elseif (!$interpreter && !empty($post['interpreter'])) {
+                        $userDao->addUserBadgeById($user_id, 8);
+                    }
+
+                    $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user_id)));
+                } catch (\Exception $e) {
+                    $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
+                }
+            }
+        }
+
+        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/UserPrivateProfile.js\"></script>";
 
         $app->view()->appendData(array(
-            "user"              => $loggedInuser,
-            "profileUser"       => $user,
-            "private_access"    => true,
-            'extra_scripts'     => $extraScripts,
-            'platformJS'        => $platformJS
+            'user'             => $user,
+            'user_id'          => $user_id,
+            'userPersonalInfo' => $userPersonalInfo,
+            'languages' => $languages,
+            'countries' => $countries,
+            'nativeLanguageSelectCode' => $nativeLanguageSelectCode,
+            'nativeCountrySelectCode'  => $nativeCountrySelectCode,
+            'secondaryLanguages'       => $secondaryLanguages,
+            'secondaryLanguageCount'   => $secondaryLanguageCount,
+            'langPrefSelectCode'       => $langPrefSelectCode,
+            'translator'  => $translator,
+            'proofreader' => $proofreader,
+            'interpreter' => $interpreter,
+            'extra_scripts' => $extraScripts,
         ));
        
-        $app->render("user/user-private-profile.tpl");
+        $app->render('user/user-private-profile.tpl');
+    }
+
+    /**
+     * Generate and return a random string of the specified length.
+     *
+     * @param int $length The length of the string to be created.
+     * @return string
+     */
+    private function random_string($length=15) {
+        $pool  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $pool .= 'abcdefghijklmnopqrstuvwxyz';
+        $pool .= '0123456789';
+        $poollen = strlen($pool);
+        $string = '';
+        for ($i = 0; $i < $length; $i++) {
+            $string .= substr($pool, (mt_rand()%($poollen)), 1);
+        }
+        return $string;
     }
 
     public static function userPublicProfile($user_id)
