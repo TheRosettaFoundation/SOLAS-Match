@@ -875,7 +875,7 @@ EOD;
                     $userDao->updatePersonalInfo($user_id, $userPersonalInfo);
 
                     if ($translator && empty($post['translator'])) {
-                    $userDao->removeUserBadge($user_id, 6);
+                        $userDao->removeUserBadge($user_id, 6);
                     } elseif (!$translator && !empty($post['translator'])) {
                         $userDao->addUserBadgeById($user_id, 6);
                     }
@@ -884,8 +884,8 @@ EOD;
                     } elseif (!$proofreader && !empty($post['proofreader'])) {
                         $userDao->addUserBadgeById($user_id, 7);
                     }
-                  if ($interpreter && empty($post['interpreter'])) {
-                        updated.add($userDao->removeUserBadge($user_id, 8);
+                    if ($interpreter && empty($post['interpreter'])) {
+                        $userDao->removeUserBadge($user_id, 8);
                     } elseif (!$interpreter && !empty($post['interpreter'])) {
                         $userDao->addUserBadgeById($user_id, 8);
                     }
