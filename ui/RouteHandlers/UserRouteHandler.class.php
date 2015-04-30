@@ -917,6 +917,7 @@ EOD;
             'proofreader' => $proofreader,
             'interpreter' => $interpreter,
             'extra_scripts' => $extra_scripts,
+            'sesskey'       => $sesskey,
         ));
        
         $app->render('user/user-private-profile.tpl');
