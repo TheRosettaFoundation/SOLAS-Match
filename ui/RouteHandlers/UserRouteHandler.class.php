@@ -876,7 +876,7 @@ EOD;
 
                     if ($translator && empty($post['translator'])) {
                     $userDao->removeUserBadge($user_id, 6);
-                    } elseif (!$translator && !empty($post['translator']) {
+                    } elseif (!$translator && !empty($post['translator'])) {
                         $userDao->addUserBadgeById($user_id, 6);
                     }
                     if ($proofreader && empty($post['proofreader'])) {
