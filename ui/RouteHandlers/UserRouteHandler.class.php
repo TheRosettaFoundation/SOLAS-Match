@@ -812,7 +812,7 @@ EOD;
                 $user->setDisplayName($post['displayName']);
                 $user->setBiography($post['biography']);
 
-error_log("post['nativeLanguageSelect']: $post['nativeLanguageSelect'], post['nativeCountrySelect']: $post['nativeCountrySelect']");
+error_log("post['nativeLanguageSelect']: " . $post['nativeLanguageSelect'] . ", post['nativeCountrySelect']: " . $post['nativeCountrySelect']);
                 if (!empty($post['nativeLanguageSelect']) && !empty($post['nativeCountrySelect'])) {
                     $locale = new Common\Protobufs\Models\Locale();
                     $locale->setLanguageCode($post['nativeLanguageSelect']);
