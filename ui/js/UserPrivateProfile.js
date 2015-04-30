@@ -8,7 +8,7 @@ var siteAPI;
 var user_id;
 
 // Errors
-var alert;
+var alertError;
 
 var secondaryLanguageLimit = 10;
 var secondaryLanguageCount = 0;
@@ -30,10 +30,10 @@ function set_all_errors_for_submission()
 function set_errors_for_submission(id)
 {
   html = "";
-  if (alert != null) {
+  if (alertError != null) {
     html += '<p class="alert alert-error">';
       html += '<strong>' + parameters.getTranslation('common_error') + ':</strong>';
-      html += alert;
+      html += alertError;
     html += '</p>';
   }
   document.getElementById(id).innerHTML = html;
@@ -142,10 +142,10 @@ function deleteUserFail()
 
 function validateForm()
 {
-  alert = null;
+  alertError = null;
 
   if (document.getElementById("displayName").value == "") {
-    alert = parameters.getTranslation("user_private_profile_2");
+    alertError = parameters.getTranslation("user_private_profile_2");
     set_all_errors_for_submission();
     return false;
   }
@@ -154,19 +154,19 @@ function validateForm()
   var nativeCountrySelect = document.getElementById("nativeCountrySelect");
   if ((nativeLanguageSelect.value != "" && nativeCountrySelect.value == "") ||
       (nativeLanguageSelect.value == "" && nativeCountrySelect.value != "")) {
-    alert = parameters.getTranslation('user_private_profile_native_language_blanks');
+    alertError = parameters.getTranslation("user_private_profile_native_language_blanks");
     set_all_errors_for_submission();
     return false;
   }
 
   // Check if the user has changed their language preference
-  if (document.getElementById("langPrefSelect") != getSetting("langPrefSelectCodeSaved")) {
-    window.alert(parameters.getTranslation('user_private_profile_language_preference_updated'));
+  if (document.getElementById("langPrefSelect").value != getSetting("langPrefSelectCodeSaved")) {
+    window.alert(parameters.getTranslation("user_private_profile_language_preference_updated"));
   }
 
   if (document.getElementById("receiveCredit").value) {
     if (document.getElementById("firstName").value == "" || document.getElementById("lastName").value == "") {
-      alert = parameters.getTranslation("user_private_profile_7");
+      alertError = parameters.getTranslation("user_private_profile_7");
       set_all_errors_for_submission();
       return false;
     }
@@ -177,7 +177,7 @@ function validateForm()
     var secondaryCountrySelect = document.getElementById("secondary_country_" + i);
     if ((secondaryLanguageSelect.value != "" && secondaryCountrySelect.value == "") ||
         (secondaryLanguageSelect.value == "" && secondaryCountrySelect.value != "")) {
-      alert = parameters.getTranslation("user_private_profile_secondary_languages_failed");
+      alertError = parameters.getTranslation("user_private_profile_secondary_languages_failed");
       set_all_errors_for_submission();
       return false;
     }
