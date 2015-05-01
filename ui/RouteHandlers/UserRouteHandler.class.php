@@ -871,8 +871,9 @@ error_log("Added: " . $post["secondary_language_$i"] . $post["secondary_country_
 
                     foreach ($secondaryLanguages as $secondaryLanguage) {
                         $i = 0;
+                        $found = false;
                         while (!empty($post["secondary_language_$i"]) && !empty($post["secondary_country_$i"])) {
-                            $found = false;
+error_log("COMPAREING: " . $post["secondary_language_$i"] . $post["secondary_country_$i"] . ", DB: " . $secondaryLanguage->getLanguageCode() . $secondaryLanguage->getCountryCode());
                             if (($post["secondary_language_$i"] == $secondaryLanguage->getLanguageCode()) && ($post["secondary_country_$i"] == $secondaryLanguage->getCountryCode())) {
                                 $found = true;
                             }
