@@ -795,13 +795,15 @@ EOD;
         $translator = false;
         $proofreader = false;
         $interpreter = false;
-        foreach ($badges as $badge) {
-            if ($badge->getId() == 6) {
-                $translator = true;
-            } elseif ($badge->getId() == 7) {
-                $proofreader = true;
-            } elseif ($badge->getId() == 8) {
-                $interpreter = true;
+        if (!empty($badges)) {
+            foreach ($badges as $badge) {
+                if ($badge->getId() == 6) {
+                    $translator = true;
+                } elseif ($badge->getId() == 7) {
+                    $proofreader = true;
+                } elseif ($badge->getId() == 8) {
+                    $interpreter = true;
+                }
             }
         }
 
@@ -876,7 +878,7 @@ EOD;
                             }
                             $i++;
                         }
-                        if (!$found) {
+                        if (!$found && !empty($secondaryLanguage->getLanguageCode()) && !empty($secondaryLanguage->getCountryCode())) {
                             $locale = new Common\Protobufs\Models\Locale();
                             $locale->setLanguageCode($secondaryLanguage->getLanguageCode());
                             $locale->setCountryCode($secondaryLanguage->getCountryCode());
