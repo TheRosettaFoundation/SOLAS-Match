@@ -193,7 +193,6 @@
                         {else}
                             <div id="img_{$task_id}" class="pull-right task-stream-img" style="text-align:right"></div>
                         {/if}
-                        <hr>
                     </div>
                 {/for}
             </div>
