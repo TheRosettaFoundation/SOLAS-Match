@@ -164,7 +164,7 @@ function validateForm()
     window.alert(parameters.getTranslation("user_private_profile_language_preference_updated"));
   }
 
-  if (document.getElementById("receiveCredit").value) {
+  if (document.getElementById("receiveCredit").checked) {
     if (document.getElementById("firstName").value == "" || document.getElementById("lastName").value == "") {
       alertError = parameters.getTranslation("user_private_profile_7");
       set_all_errors_for_submission();
