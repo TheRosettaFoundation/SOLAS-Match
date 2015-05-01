@@ -870,6 +870,7 @@ error_log("Added: " . $post["secondary_language_$i"] . $post["secondary_country_
                     }
 
                     foreach ($secondaryLanguages as $secondaryLanguage) {
+                        $i = 0;
                         while (!empty($post["secondary_language_$i"]) && !empty($post["secondary_country_$i"])) {
                             $found = false;
                             if (($post["secondary_language_$i"] == $secondaryLanguage->getLanguageCode()) && ($post["secondary_country_$i"] == $secondaryLanguage->getCountryCode())) {
@@ -882,7 +883,7 @@ error_log("Added: " . $post["secondary_language_$i"] . $post["secondary_country_
                             $locale->setLanguageCode($secondaryLanguage->getLanguageCode());
                             $locale->setCountryCode($secondaryLanguage->getCountryCode());
 error_log("Removing: " . $secondaryLanguage->getLanguageCode() . $secondaryLanguage->getCountryCode());
-                            $userDao->deleteSecondaryLanguage($userId, $locale);
+                            $userDao->deleteSecondaryLanguage($user_id, $locale);
 error_log("Removed: " . $secondaryLanguage->getLanguageCode() . $secondaryLanguage->getCountryCode());
                         }
                     }
