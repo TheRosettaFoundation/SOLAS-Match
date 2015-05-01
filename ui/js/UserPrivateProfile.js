@@ -138,6 +138,9 @@ function deleteUserSuccess()
 
 function deleteUserFail()
 {
+  // Seems that the call (even though it deletes the user) always calls the "fail" handler
+  DAOdestroyUserSession();
+  window.location.replace(siteLocation);
 }
 
 function validateForm()
