@@ -862,7 +862,9 @@ EOD;
                             $locale = new Common\Protobufs\Models\Locale();
                             $locale->setLanguageCode($post["secondary_language_$i"]);
                             $locale->setCountryCode($post["secondary_country_$i"]);
+error_log("Adding: " . $post["secondary_language_$i"] . $post["secondary_country_$i"]);
                             $userDao->createSecondaryLanguage($user_id, $locale);
+error_log("Added: " . $post["secondary_language_$i"] . $post["secondary_country_$i"]);
                         }
                         $i++;
                     }
@@ -879,7 +881,9 @@ EOD;
                             $locale = new Common\Protobufs\Models\Locale();
                             $locale->setLanguageCode($secondaryLanguage->getLanguageCode());
                             $locale->setCountryCode($secondaryLanguage->getCountryCode());
+error_log("Removing: " . $secondaryLanguage->getLanguageCode() . $secondaryLanguage->getCountryCode());
                             $userDao->deleteSecondaryLanguage($userId, $locale);
+error_log("Removed: " . $secondaryLanguage->getLanguageCode() . $secondaryLanguage->getCountryCode());
                         }
                     }
 
