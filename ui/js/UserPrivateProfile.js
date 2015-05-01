@@ -133,7 +133,7 @@ function deleteUser()
 function deleteUserSuccess()
 {
   DAOdestroyUserSession();
-  window.location.assign(siteLocation);
+  window.location.replace(siteLocation);
 }
 
 function deleteUserFail()
@@ -219,7 +219,7 @@ function DAOdeleteUser(userId, functionOnSuccess, functionOnFail)
  * Destroys the current user session, logging the user out. This is presently only used in the event that a
  * user decides to delete their account.
  */
-function destroyUserSession()
+function DAOdestroyUserSession()
 {
   document.cookie = "slim_session=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
 }
