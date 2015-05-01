@@ -101,6 +101,8 @@ function addSecondaryLanguage(userSecondaryLanguagesLanguageCode, userSecondaryL
     button = document.getElementById("removeLanguageButton");
     button.disabled = false;
   }
+
+  return false;
 }
 
 /**
@@ -121,6 +123,8 @@ function removeSecondaryLanguage()
       button.disabled = true;
     }
   }
+
+  return false;
 }
 
 function deleteUser()
@@ -128,6 +132,8 @@ function deleteUser()
   if (window.confirm(parameters.getTranslation("user_private_profile_6"))) {
     DAOdeleteUser(user_id, deleteUserSuccess, deleteUserFail);
   }
+
+  return false;
 }
 
 function deleteUserSuccess()
@@ -185,6 +191,7 @@ function validateForm()
       return false;
     }
   }
+
   return true;
 }
 
