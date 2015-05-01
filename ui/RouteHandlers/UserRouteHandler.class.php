@@ -862,9 +862,7 @@ EOD;
                             $locale = new Common\Protobufs\Models\Locale();
                             $locale->setLanguageCode($post["secondary_language_$i"]);
                             $locale->setCountryCode($post["secondary_country_$i"]);
-error_log("Adding: " . $post["secondary_language_$i"] . $post["secondary_country_$i"]);
                             $userDao->createSecondaryLanguage($user_id, $locale);
-error_log("Added: " . $post["secondary_language_$i"] . $post["secondary_country_$i"]);
                         }
                         $i++;
                     }
@@ -873,7 +871,6 @@ error_log("Added: " . $post["secondary_language_$i"] . $post["secondary_country_
                         $i = 0;
                         $found = false;
                         while (!empty($post["secondary_language_$i"]) && !empty($post["secondary_country_$i"])) {
-error_log("COMPAREING: " . $post["secondary_language_$i"] . $post["secondary_country_$i"] . ", DB: " . $secondaryLanguage->getLanguageCode() . $secondaryLanguage->getCountryCode());
                             if (($post["secondary_language_$i"] == $secondaryLanguage->getLanguageCode()) && ($post["secondary_country_$i"] == $secondaryLanguage->getCountryCode())) {
                                 $found = true;
                             }
@@ -883,9 +880,7 @@ error_log("COMPAREING: " . $post["secondary_language_$i"] . $post["secondary_cou
                             $locale = new Common\Protobufs\Models\Locale();
                             $locale->setLanguageCode($secondaryLanguage->getLanguageCode());
                             $locale->setCountryCode($secondaryLanguage->getCountryCode());
-error_log("Removing: " . $secondaryLanguage->getLanguageCode() . $secondaryLanguage->getCountryCode());
                             $userDao->deleteSecondaryLanguage($user_id, $locale);
-error_log("Removed: " . $secondaryLanguage->getLanguageCode() . $secondaryLanguage->getCountryCode());
                         }
                     }
 
