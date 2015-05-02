@@ -193,7 +193,6 @@
                         {else}
                             <div id="img_{$task_id}" class="pull-right task-stream-img" style="text-align:right"></div>
                         {/if}
-                        <hr>
                     </div>
                 {/for}
             </div>
@@ -201,7 +200,7 @@
             {* pagination begins here *}
             {assign var="url_name" value="home-paged"}
             <ul class="pager pull-left">
-                <div class="pagination-centered">
+                <div class="pagination-centered" id="ias-pagination">
                     {if $currentScrollPage > 1}
                         <li>
                             <a href="{urlFor name="$url_name" options="page_no.1|tt.$selectedTaskType|sl.$selectedSourceLanguageCode|tl.$selectedTargetLanguageCode"}" title="First">&lt;&lt;</a>

@@ -7,15 +7,12 @@ var siteLocation;
 var ias = $.ias({
       container: ".ts",
       item: ".ts-task",
-      pagination: ".pager",
-      next: ".ts-next a",
-      triggerPageThreshold: 2
+      pagination: "#ias-pagination",
+      next: ".ts-next a"
     });
 
 ias.extension(new IASSpinnerExtension());
 ias.extension(new IASTriggerExtension({ offset: 100 }));
-ias.extension(new IASPagingExtension());
-ias.extension(new IASHistoryExtension({ prev: '.ts-previous a' }));
 
 ias.on('rendered', renderTaskDetails);
 
