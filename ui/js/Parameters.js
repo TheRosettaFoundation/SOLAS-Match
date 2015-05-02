@@ -24,19 +24,57 @@ Parameters.prototype.getTranslation = function(key)
   if (userLangDoc != null) {
     element = userLangDoc.querySelector("[name = " + key + "]");
     if (element != null) {
-      data = element.innerHTML;
+      data = getTranslationTextFromNode(element);
     }
   }
 
   if (data == "") {
     element = defaultLangDoc.querySelector("[name = " + key + "]");
     if (element != null) {
-      data = element.innerHTML;
+      data = getTranslationTextFromNode(element);
     } else {
       print("Unable to find string with name " + key);
     }
   }
   return data;
+}
+
+function getTranslationTextFromNode(node)
+{
+  var html = "";
+  for (var i = 0; i < node.childNodes.length; i++) {
+    html += nodeToString(node.childNodes[i]);
+  }
+  return html;
+}
+
+function nodeToString(node)
+{
+  if (node.childNodes.length) {
+    var html = "";
+    for (var i = 0; i < node.childNodes.length; i++) {
+      html += nodeToString(node.childNodes[i]);
+    }
+    return "<" + node.tagName + nodeAttributesToString(node) + ">" + html + "</" + node.tagName + ">";
+  } else if (node.textContent == "" && node.tagName != "") {
+    return "<" + node.tagName + nodeAttributesToString(node) + " />";
+  } else {
+    return node.textContent;
+  }
+}
+
+function nodeAttributesToString(node)
+{
+  if (node.hasAttributes()) {
+    var attrs = node.attributes;
+    var html = "";
+    for (var i = 0; i < attrs.length; i++) {
+      html += " " + attrs[i].name + '="' + attrs[i].value + '"';
+    }
+    return html;
+  } else {
+    return "";
+  }
 }
 
 Parameters.prototype.getUserHash = function(deferred)

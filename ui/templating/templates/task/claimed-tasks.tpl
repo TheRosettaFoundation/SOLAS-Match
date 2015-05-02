@@ -153,7 +153,7 @@
             {* pagination begins here *}
             {assign var="url_name" value="claimed-tasks-paged"}
             <ul class="pager pull-left">
-                <div class="pagination-centered">
+                <div class="pagination-centered" id="ias-pagination">
                     {if $currentScrollPage > 1}
                         <li>
                             <a href="{urlFor name="$url_name" options="user_id.$user_id|page_no.1|tt.$selectedTaskType|ts.$selectedTaskStatus|o.$selectedOrdering"}" title="First">&lt;&lt;</a>
