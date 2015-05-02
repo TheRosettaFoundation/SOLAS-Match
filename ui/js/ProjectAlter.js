@@ -5,7 +5,7 @@ var parameters; // Instance of Parameters Class holding data retrieved from Serv
 // Passed from PHP
 var siteLocation;
 var siteAPI;
-var maxfilesize;
+var maxFileSize;
 var imageMaxFileSize;
 var supportedImageFormats;
 var project_id;
