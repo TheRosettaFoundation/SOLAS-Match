@@ -26,10 +26,10 @@
                 {TemplateHelper::getLanguageAndCountry($task->getTargetLocale())}
             </td>
             <td>
-                {date(Settings::get("ui.date_format"), strtotime($task->getCreatedTime()))}
+                <div class="convert_utc_to_local" style="visibility: hidden">{$task->getCreatedTime()}</div>
             </td>
             <td>
-                {date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}
+                <div class="convert_utc_to_local" style="visibility: hidden">{$task->getDeadline()}</div>
             </td>
             <td>
                 {if $task->getWordCount() != ''}

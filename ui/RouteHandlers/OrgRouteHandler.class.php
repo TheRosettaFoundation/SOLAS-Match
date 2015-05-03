@@ -298,8 +298,11 @@ class OrgRouteHandler
                 "templateData" => $templateData
             ));
         }
+
+        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
         
         $app->view()->appendData(array(
+            "extra_scripts" => $extra_scripts,
             "current_page"  => "org-dashboard"
         ));
         $app->render("org/org.dashboard.tpl");

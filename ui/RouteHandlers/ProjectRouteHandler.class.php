@@ -313,6 +313,7 @@ class ProjectRouteHandler
             $extra_scripts .= $viewer->generateDataScript();
             $extra_scripts .= file_get_contents(__DIR__."/../js/GraphHelper.js");
             $extra_scripts .= file_get_contents(__DIR__."/../js/project-view.js");
+            $extra_scripts .= file_get_contents(__DIR__."/../js/TaskView.js");
 
             $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
             $taskTypeColours = array();
