@@ -20,7 +20,9 @@ function documentReady()
 
       var d = new Date(Date.UTC(year, month, day, hour, minutes, seconds));
 
-      $(this).html(d.toString());
+      $(this).html(d.toLocaleString());
+      // Note: d.toString() is explicit about spelling out the Month in case the user's browser locale is wrong, but is longer and I am not sure about how it responds to locale
+
       $(this).css("visibility", "visible");
     }
   );
