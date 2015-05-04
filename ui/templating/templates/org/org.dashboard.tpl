@@ -60,7 +60,7 @@
                         <a href="{urlFor name="project-view" options="project_id.$project_id"}">{$projectObject->getTitle()}</a>
                     </td> 
                     <td>
-                        {date(Settings::get("ui.date_format"), strtotime($data['project']->getDeadline()))}
+                        <div class="convert_utc_to_local" style="visibility: hidden">{$data['project']->getDeadline()}</div>
                     </td>
                     <td>
                         {assign var="projectStatus" value=intval(($data['project']->getStatus()*100))}
@@ -83,7 +83,7 @@
                         {/if}
                     </td>
                     <td>
-                        {date(Settings::get("ui.date_format"), strtotime($data['project']->getCreatedTime()))}
+                        <div class="convert_utc_to_local" style="visibility: hidden">{$data['project']->getCreatedTime()}</div>
                     </td>
                     <td>
                         <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class="btn btn-small">

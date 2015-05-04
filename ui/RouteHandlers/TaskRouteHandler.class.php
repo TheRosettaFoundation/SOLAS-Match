@@ -637,7 +637,10 @@ class TaskRouteHandler
         $siteLocation = Common\Lib\Settings::get("site.location");
         $file_path = "{$siteLocation}task/$taskId/download-file-user/";
 
+        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
+
         $app->view()->appendData(array(
+            "extra_scripts" => $extra_scripts,
             "taskTypeColours" => $taskTypeColours,
             "project" => $project,
             "converter" => $converter,
@@ -715,7 +718,10 @@ class TaskRouteHandler
 
         $converter = Common\Lib\Settings::get("converter.converter_enabled");
 
+        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
+
         $app->view()->appendData(array(
+            "extra_scripts" => $extra_scripts,
             "task"          => $task,
             "project"       => $project,
             "preReqTasks"   => $preReqTasks,
@@ -816,7 +822,10 @@ class TaskRouteHandler
 
         $converter = Common\Lib\Settings::get("converter.converter_enabled");
 
+        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
+
         $app->view()->appendData(array(
+            "extra_scripts" => $extra_scripts,
             "task"          => $task,
             "project"       => $project,
             "org"           => $org,
@@ -1210,7 +1219,10 @@ class TaskRouteHandler
         }
         $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id, $project->getOrganisationId());
 
+        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
+
         $app->view()->appendData(array(
+                "extra_scripts" => $extra_scripts,
                 "org" => $org,
                 "project" => $project,
                 "registered" => $registered,
@@ -1553,6 +1565,8 @@ class TaskRouteHandler
         $extraScripts = file_get_contents(
             "http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/task-segmentation.js"
         );
+
+        $extraScripts .= file_get_contents(__DIR__."/../js/TaskView.js");
 
         $app->view()->appendData(array(
             "project"           => $project,
