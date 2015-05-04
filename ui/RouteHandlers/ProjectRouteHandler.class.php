@@ -334,7 +334,10 @@ class ProjectRouteHandler
                     "taskLanguageMap" => $taskLanguageMap
             ));
         } else {
+            $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
+
             $app->view()->appendData(array(
+                "extra_scripts" => $extra_scripts,
                 "org" => $org,
                 "project_tags" => $project_tags
             ));
