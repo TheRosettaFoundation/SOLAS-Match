@@ -24,9 +24,9 @@ function documentReady()
       if (m < 10) {
         m = "0" + m;
       }
-      var d = d.getDate();
-      if (d < 10) {
-        d = "0" + d;
+      var da = d.getDate();
+      if (da < 10) {
+        da = "0" + da;
       }
       var h = d.getHours();
       if (h < 10) {
@@ -36,7 +36,11 @@ function documentReady()
       if (mi < 10) {
         mi = "0" + mi;
       }
-      $(this).html(d.getFullYear() + "-" + m + "-" + d + " " + h + ":" + mi + ":00");
+      var s = d.getSeconds();
+      if (s < 10) {
+        s = "0" + s;
+      }
+      $(this).html(d.getFullYear() + "-" + m + "-" + da + " " + h + ":" + mi + ":" + s);
       // Note: d.toLocaleString() works, but too many people have the wrong locale set!
       // Note: d.toString() is explicit about spelling out the Month in case the user's browser locale is wrong, but is longer and I am not sure about how it responds to locale
 
@@ -45,3 +49,11 @@ function documentReady()
   );
 }
 </script>
+
+
+
+
+
+
+
+
