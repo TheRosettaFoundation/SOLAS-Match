@@ -136,10 +136,6 @@ class UserRouteHandler
             $viewData['user_tags'] = $user_tags;
         }
 
-        if ($user_id == null) {
-            $app->flashNow('info', Lib\Localisation::getTranslation('index_dont_use_ie'));
-        }
-
         $maintenance_msg = Common\Lib\Settings::get('maintenance.maintenance_msg');
         if ($maintenance_msg == 'y') {
             $maintenanceCustomMsg = Common\Lib\Settings::get('maintenance.maintenance_custom_msg');
@@ -363,20 +359,6 @@ class UserRouteHandler
         }
         if ($warning !== null) {
             $app->view()->appendData(array("warning" => $warning));
-        }
-
-        // Added check to display info message to users on IE borwsers
-        $browserData = get_browser(null, true);
-        if (!is_null($browserData) && isset($browserData['browser'])) {
-            $browser = $browserData['browser'];
-            
-            if ($browser == 'IE') {
-                $app->flashNow(
-                    "info",
-                    Lib\Localisation::getTranslation('index_dont_use_ie').
-                    Lib\Localisation::getTranslation('index_still_using_ie')
-                );
-            }
         }
 
         $app->render("user/register.tpl");
@@ -640,19 +622,6 @@ class UserRouteHandler
             }
         }
 
-        // Added check to display info message to users on IE browsers
-        $browserData = get_browser(null, true);
-        if (!is_null($browserData) && isset($browserData['browser'])) {
-            $browser = $browserData['browser'];
-
-            if ($browser == 'IE') {
-                $app->flashNow(
-                    "info",
-                    Lib\Localisation::getTranslation('index_dont_use_ie')
-                    .Lib\Localisation::getTranslation('index_still_using_ie')
-                );
-            }
-        }
         $appendExtraScripts = False;
         $extra_scripts = "";
         if (isset($use_openid)) {
