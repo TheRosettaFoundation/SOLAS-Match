@@ -878,7 +878,7 @@ EOD;
                             }
                             $i++;
                         }
-                        if (!$found && !empty($secondaryLanguage->getLanguageCode()) && !empty($secondaryLanguage->getCountryCode())) {
+                        if (!$found && $secondaryLanguage->getLanguageCode() && $secondaryLanguage->getCountryCode()) {
                             $locale = new Common\Protobufs\Models\Locale();
                             $locale->setLanguageCode($secondaryLanguage->getLanguageCode());
                             $locale->setCountryCode($secondaryLanguage->getCountryCode());
