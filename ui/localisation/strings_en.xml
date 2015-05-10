@@ -974,7 +974,6 @@
     <string name="user_public_profile_16">Request an email outlining your work.</string>
     <string name="user_public_profile_reference_request_success">Your request was sent successfully, you will receive the email shortly.</string>
     <string name="user_public_profile_17">Successfully updated user task stream notification subscription.</string>
-    <string name="user_public_profile_warning">Due to a technical issue beyond our control it is best to use Google Chrome when editing your profile</string>
 
 	<string name="user_reset_password_reset_user_password">Reset User Password</string>
 	<string name="user_reset_password_0">To reset your password enter the email address you registered with below.</string>
@@ -1032,8 +1031,6 @@
 	<string name="index_6">Help us match you with the most suitable translation tasks.</string>
 	<string name="index_register_now"><a href="%s">Register now</a> to find the translation tasks best suited to you.</string>
     <string name="index_load_more">Load More</string>
-    <string name="index_dont_use_ie">The site is best viewed with Firefox or Google Chrome, not all features are available with other browsers</string>
-    <string name="index_still_using_ie">If you wish to continue using Internet Explorer we suggest installing <a href = "http://www.google.com/chromeframe">chrome frame</a>.</string>
 	<string name="index_donate_free_service"><strong>The Translation Commons match non-profit translation projects with language volunteers across the world. It is an open space maintained by</strong></string>
 	<string name="index_donate_support_us">You can show your appreciation and support future development by  becoming a Friend of The Rosetta Foundation or by making a once-off donation.</string>
 	<string name="index_donate_support_trommons">Support Trommons</string>

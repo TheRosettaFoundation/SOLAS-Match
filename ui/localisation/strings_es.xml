@@ -972,7 +972,6 @@
     <string name="user_public_profile_16">Solicita un correo electrónico con todas tus colaboraciones</string>
     <string name="user_public_profile_reference_request_success">Tu solicitud se ha enviado: recibirás el correo electrónico en breve.</string>
     <string name="user_public_profile_17">Se ha actualizado tu suscripción a las notificaciones de tareas.</string>
-    <string name="user_public_profile_warning">Debido a un fallo técnico ajeno a nosotros, es mejor que utilices Google Chrome cuando vayas a modificar tu perfil.</string>
 
 	<string name="user_reset_password_reset_user_password">Restablecer contraseña</string>
 	<string name="user_reset_password_0">Para restablecer tu contraseña, introduce la dirección de correo electrónico con la que te registraste en Trommons.</string>
@@ -1030,8 +1029,6 @@
 	<string name="index_6">Ayúdanos a enviarte las tareas que más se ajusten a tu experiencia e intereses.</string>
 	<string name="index_register_now"><a href="%s">Regístrate</a> para buscar una tarea de traducción que puedas hacer.</string>
     <string name="index_load_more">Publicar más</string>
-    <string name="index_dont_use_ie">Este sitio está diseñado para funcionar de forma óptima en Firefox o Google Chrome. Si utilizas otro navegador, ten en cuenta que no todas las funciones estarán disponibles.</string>
-    <string name="index_still_using_ie">Si quieres utilizar Internet Explorer de todas formas, te recomendamos que instales <a href = "http://www.google.com/chromeframe">Chrome Frame</a>.</string>
 	<string name="index_donate_free_service"><strong>Translation Commons conecta a organizaciones sin ánimo de lucro con traductores y revisores voluntarios de todo el mundo. Trommons es una plataforma abierta mantenida por</strong></string>
 	<string name="index_donate_support_us">Puedes contribuir al futuro desarrollo de Trommons haciéndote amigo de The Rosetta Foundation o enviándonos un donativo.</string>
 	<string name="index_donate_support_trommons">Contribuir a este proyecto</string>
