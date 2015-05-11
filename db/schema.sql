@@ -3822,7 +3822,7 @@ BEGIN
 		INSERT INTO Organisations ( name, biography, `home-page`, `e-mail`, address, city, country, `regional-focus`) 
                 values ( companyName, bio, url, email, address, city, country, regionalFocus);
 
-		CALL getOrg(LAST_INSERT_ID(),NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+		CALL getOrg(NULL,companyName,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 	ELSE
 		
                 if companyName is not null 

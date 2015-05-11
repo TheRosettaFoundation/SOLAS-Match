@@ -109,8 +109,6 @@ class OrganisationDao extends BaseDao
         switch($this->client->getResponseCode()) {
         
             default:
-                $adminDao = new AdminDao();
-                $adminDao->createOrgAdmin($userId, $ret->getId());
                 return $ret;
         
             case Common\Enums\HttpStatusEnum::CONFLICT:

@@ -355,24 +355,24 @@ class Orgs
         $client = new Common\Lib\APIHelper($format);
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Organisation");
         $data->setId("");
-        
+        $org = null;
         $name = $data->getName();
         //Is org name already in use?
         if (DAO\OrganisationDao::getOrg(null, $name) != null) {
             API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CONFLICT);
-        }
-        $org = DAO\OrganisationDao::insertAndUpdate($data);
-        $user = DAO\UserDao::getLoggedInUser();
-        if (!is_null($org) && $org->getId() > 0) {
-            DAO\OrganisationDao::acceptMemRequest($org->getId(), $user->getId());
-            DAO\AdminDao::addOrgAdmin($user->getId(), $org->getId());
-            if (!DAO\AdminDao::isAdmin($user->getId(), $org->getId())) {
-                DAO\OrganisationDao::delete($org->getId());
+        } else {
+            $org = DAO\OrganisationDao::insertAndUpdate($data);
+            $user = DAO\UserDao::getLoggedInUser();
+            if (!is_null($org) && $org->getId() > 0) {
+                DAO\AdminDao::addOrgAdmin($user->getId(), $org->getId());
+                /*if (!DAO\AdminDao::isAdmin($user->getId(), $org->getId())) {
+                    DAO\OrganisationDao::delete($org->getId());
+                }*/
             }
-        }
-        API\Dispatcher::sendResponse(null, $org, null, $format);
-        if (!is_null($org) && $org->getId() > 0) {
-            Lib\Notify::sendOrgCreatedNotifications($org->getId());
+            API\Dispatcher::sendResponse(null, $org, null, $format);
+            if (!is_null($org) && $org->getId() > 0) {
+                Lib\Notify::sendOrgCreatedNotifications($org->getId());
+            }
         }
     }
 }
