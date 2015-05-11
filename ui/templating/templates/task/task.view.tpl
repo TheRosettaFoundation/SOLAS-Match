@@ -3,7 +3,7 @@
     <h1 class="page-header" style="height: auto">
         <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block; word-break:break-all;">
             {if $task->getTitle() != ''}
-                {$task->getTitle()}
+                {$task->getTitle()|escape:'html':'UTF-8'}
             {else}
                 {Localisation::getTranslation('common_task')} {$task->getId()}
             {/if}
