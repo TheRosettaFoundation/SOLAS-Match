@@ -126,3 +126,12 @@ hr.dotted {
     font-family: 'Roboto',arial,sans-serif;
 }
 /* end of styles used in custom Google Plus Sign in button */
+#recent-tasks .task {
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: rgba(221, 221, 217, 0.59);
+  border: solid 1px rgb(202, 202, 202);
+  padding: 7px;
+  margin: 10px;
+}
