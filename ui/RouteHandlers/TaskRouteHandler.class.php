@@ -875,7 +875,7 @@ class TaskRouteHandler
 
         $extra_scripts = "
         <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
-        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>";
+        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/DeadlinePicker.js\"></script>";
 
         $task = $taskDao->getTask($task_id);
 
@@ -1357,7 +1357,7 @@ class TaskRouteHandler
 
         $extra_scripts = "
 <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
-<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>
+<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/DeadlinePicker.js\"></script>
 ";
 
         $app->view()->appendData(array(
