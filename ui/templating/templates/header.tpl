@@ -27,9 +27,6 @@
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css"/>
         <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
 
-        <!-- dart conf file location -->
-        <link rel="dart-conf" href="{urlFor name="home"}api/v0/static/dart/conf.json">
-
         <!-- extra styles-->
         {if isset($extra_styles)}
             {$extra_styles}
@@ -44,10 +41,6 @@
         <!-- javascript -->
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-1.9.0.js"></script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-ui.js"></script>
-        <script type="text/javascript" src="{urlFor name="home"}ui/js/Long.min.js"></script>
-        <script type="text/javascript" src="{urlFor name="home"}ui/js/ByteBuffer.min.js"></script>
-        <script type="text/javascript" src="{urlFor name="home"}ui/js/ProtoBuf.min.js">var ProtoBuf = dcodeIO.ProtoBuf;</script>
-        <script type="text/javascript" src="{urlFor name="home"}ui/js/ProtoClasses.js"></script>
 
         <!-- google analytics -->
         <script type="text/javascript" src="{urlFor name="home"}ui/js/tracking.js"></script>

@@ -3,7 +3,7 @@
 {assign var="task_id" value=$task->getId()}
 {assign var="task_status_id" value=$task->getTaskStatus()}
     <h1 class="page-header">
-        {Localisation::getTranslation('common_task')} {$task->getTitle()}
+        {Localisation::getTranslation('common_task')} {$task->getTitle()|escape:'html':'UTF-8'}
         <small>{Localisation::getTranslation('task_alter_alter_task_details_here')}</small>
         <a href="{urlFor name="task-view" options="task_id.$task_id"}" class='pull-right btn btn-primary'>
             <i class="icon-list icon-white"></i> {Localisation::getTranslation('task_alter_view_task_details')}
@@ -29,11 +29,11 @@
                 <td width="50%">
                     <div style="margin-bottom:20px;">
                         <label for="title" style="font-size: large"><strong>{Localisation::getTranslation('common_title')}</strong></label>
-                        <textarea wrap="soft" cols="1" rows="4" name="title" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">{$task->getTitle()}</textarea>
+                        <textarea wrap="soft" cols="1" rows="4" name="title" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">{$task->getTitle()|escape:'html':'UTF-8'}</textarea>
                     </div>
                     <div style="margin-bottom:20px;">
                         <label for="impact" style="font-size: large"><strong>{Localisation::getTranslation('common_task_comment')}</strong></label>
-                        <textarea wrap="soft" cols="1" rows="6" name="impact" style="width: 400px">{$task->getComment()}</textarea>
+                        <textarea wrap="soft" cols="1" rows="6" name="impact" style="width: 400px">{$task->getComment()|escape:'html':'UTF-8'}</textarea>
                     </div>
                     <div style="margin-bottom:20px;">
                         <label for="deadline" style="font-size: large"><strong>{Localisation::getTranslation('common_deadline')}</strong></label>
@@ -44,7 +44,8 @@
                         {/if}
                         <p>
                             {assign var="deadlineDateTime" value=$task->getDeadline()}
-                            <input class="hasDatePicker"  type="text" id="deadline" name="deadline" value="{if isset($deadlineDateTime)}{date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))}{/if}" style="width: 400px" />
+                            <input class="hasDatePicker" type="text" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
+                            <input type="hidden" name="deadline" id="deadline" />
                         </p>
                     </div>
                 </td>
@@ -154,7 +155,7 @@
                                     {assign var="i" value=$i+1}
                                 </td>
                                 <td>
-                                    <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$projectTask->getTitle()}</a>
+                                    <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$projectTask->getTitle()|escape:'html':'UTF-8'}</a>
                                 </td>
                                 <td>{TemplateHelper::getTaskSourceLanguage($projectTask)}</td>  
                                 <td>{TemplateHelper::getTaskTargetLanguage($projectTask)}</td>
@@ -197,7 +198,7 @@
                 <td>
                     <p style="margin-bottom:20px;"/>
                     <p>
-                        <button type="submit" value="Submit" name="submit" class="btn btn-primary">
+                        <button type="submit" onclick="return validateForm();" value="Submit" name="submit" class="btn btn-primary">
                             <i class="icon-refresh icon-white"></i> {Localisation::getTranslation('task_alter_update_task_details')}
                         </button>
                     </p>    
@@ -207,6 +208,4 @@
         </table>
     </form>
                         
-<script>initDeadlinePicker();</script>
-
 {include file="footer.tpl"}
