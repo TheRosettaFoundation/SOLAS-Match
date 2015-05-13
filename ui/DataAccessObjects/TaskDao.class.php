@@ -141,6 +141,10 @@ class TaskDao extends BaseDao
 
     public function createTask($task)
     {
+        $u = Common\Lib\UserSession::getCurrentUserID();
+        $title = $task->getTitle();
+        error_log("createTask($u): $title");
+
         $request = "{$this->siteApi}v0/tasks";
         $response = $this->client->call(
             "\SolasMatch\Common\Protobufs\Models\Task",
@@ -153,6 +157,11 @@ class TaskDao extends BaseDao
 
     public function updateTask($task)
     {
+        $u = Common\Lib\UserSession::getCurrentUserID();
+        $id = $task->getId();
+        $title = $task->getTitle();
+        error_log("updateTask($u) $id: $title");
+
         $request = "{$this->siteApi}v0/tasks/{$task->getId()}";
         $response = $this->client->call(
             "\SolasMatch\Common\Protobufs\Models\Task",

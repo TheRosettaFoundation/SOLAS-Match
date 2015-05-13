@@ -5,9 +5,6 @@ php_flag display_errors on
 RewriteEngine On
 XSendFile on
 
-# Redirect for conference website
-RedirectMatch "^forum(.*)" "http://www.localisation.ie/forum$1"
-
 # RewriteBase /~demomatc/ # <- option required on server with temp URL
 
 # Help us refresh the cached stylesheet when necessary by incrementing the variable in the URL.

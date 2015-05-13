@@ -875,7 +875,7 @@ class TaskRouteHandler
 
         $extra_scripts = "
         <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
-        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>";
+        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/DeadlinePicker.js\"></script>";
 
         $task = $taskDao->getTask($task_id);
 
@@ -995,6 +995,7 @@ class TaskRouteHandler
                         $selectedList[] = $prevId;
                     }
 
+                    error_log("taskAlter (graphBuilder)");
                     $taskDao->updateTask($task);
                     if ($preReqTasks) {
                         foreach ($preReqTasks as $preReqTask) {
@@ -1010,6 +1011,7 @@ class TaskRouteHandler
                         }
                     }
 
+                    error_log("taskAlter (addTaskPreReq)");
                     $taskDao->updateTask($task);
 
                     $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
@@ -1123,6 +1125,7 @@ class TaskRouteHandler
                 } else {
                     $task->setPublished(0);
                 }
+                error_log("taskView");
                 if ($taskDao->updateTask($task)) {
                     if ($post['published']) {
                         $app->flashNow("success", Lib\Localisation::getTranslation('task_view_1'));
@@ -1307,6 +1310,7 @@ class TaskRouteHandler
             }
 
             if (is_null($titleError) && is_null($wordCountError) && is_null($deadlineError)) {
+                error_log("taskCreate");
                 $newTask = $taskDao->createTask($task);
                 $newTaskId = $newTask->getId();
 
@@ -1357,7 +1361,7 @@ class TaskRouteHandler
 
         $extra_scripts = "
 <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
-<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/datetime-picker.js\"></script>
+<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/DeadlinePicker.js\"></script>
 ";
 
         $app->view()->appendData(array(
@@ -1472,6 +1476,7 @@ class TaskRouteHandler
                         if (isset($post["translation_0"])) {
                             $taskModel->setTaskType(Common\Enums\TaskTypeEnum::TRANSLATION);
                             $taskModel->setWordCount($post["wordCount_$i"]);
+                            error_log("taskSegmentation translation_0");
                             $createdTranslation = $taskDao->createTask($taskModel);
                             $translationTaskIds[] = $createdTranslation->getId();
                             try {
@@ -1487,6 +1492,7 @@ class TaskRouteHandler
                         if (isset($post["proofreading_0"])) {
                             $taskModel->setTaskType(Common\Enums\TaskTypeEnum::PROOFREADING);
                             $taskModel->setWordCount($post["wordCount_$i"]);
+                            error_log("taskSegmentation proofreading_0");
                             $createdProofReading = $taskDao->createTask($taskModel);
                             $proofreadTaskIds[] = $createdProofReading->getId();
                             try {
@@ -1510,6 +1516,7 @@ class TaskRouteHandler
                     $this->setTaskModelData($taskModel, $project, $task);
                     $taskModel->setWordCount($task->getWordCount());
                     $taskModel->setTaskType(Common\Enums\TaskTypeEnum::DESEGMENTATION);
+                    error_log("taskSegmentation DESEGMENTATION");
                     $createdDesegmentation = $taskDao->createTask($taskModel);
                     $createdDesegmentationId = $createdDesegmentation->getId();
 
@@ -1522,6 +1529,7 @@ class TaskRouteHandler
                     }
 
                     $task->setTaskStatus(Common\Enums\TaskStatusEnum::COMPLETE);
+                    error_log("taskSegmentation COMPLETE");
                     $taskDao->updateTask($task);
                     for ($i=0; $i < $segmentationValue; $i++) {
                         if (isset($post["translation_0"]) && isset($post["proofreading_0"])) {
@@ -1616,6 +1624,7 @@ class TaskRouteHandler
                     );
                     if (isset($post['revokeTask']) && $post['revokeTask']) {
                         $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+                        error_log("taskOrgFeedback");
                         $taskDao->updateTask($task);
                         $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id, null);
                         if ($taskRevoke) {

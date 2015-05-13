@@ -2,7 +2,7 @@
 
     <h1 class="page-header">
         <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block; word-break:break-all;">
-            {$project->getTitle()}
+            {$project->getTitle()|escape:'html':'UTF-8'}
             <small>{Localisation::getTranslation('project_view_overview_of_project_details')}</small>
         </span>
         {assign var="project_id" value=$project->getId()}
@@ -60,7 +60,7 @@
                 <td style="text-align: left; overflow-wrap: break-word; word-break:break-all;">
                     {if isset($org)}
                         {assign var="org_id" value=$org->getId()}
-                        <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$org->getName()}</a>
+                        <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$org->getName()|escape:'html':'UTF-8'}</a>
                     {/if}
                 </td>
                 <td>
@@ -126,7 +126,7 @@
                     <td>
                         <i>
                         {if $project->getDescription() != ''}
-                            {$project->getDescription()}
+                            {$project->getDescription()|escape:'html':'UTF-8'}
                         {else}
                             {Localisation::getTranslation('common_no_description_has_been_listed')}
                         {/if}  
@@ -175,7 +175,7 @@
                     <td class="nav nav-list unstyled" style="padding-left: 0px; padding-right: 0px;" colspan="2">
                         <i>
 	                        {if $project->getImpact() != ''}
-	                            {$project->getImpact()}
+                              {$project->getImpact()|escape:'html':'UTF-8'}
 	                        {else}
 	                            {Localisation::getTranslation('No impact has been listed')}
 	                        {/if}  
@@ -265,7 +265,7 @@
                                 <tr style="overflow-wrap: break-word; word-break:break-all;">
                                     <td width="24%">
                                         <a href="{urlFor name="task-view" options="task_id.$task_id"}">
-                                            {$task->getTitle()}
+                                            {$task->getTitle()|escape:'html':'UTF-8'}
                                         </a>
                                         <br/>
                                     </td>

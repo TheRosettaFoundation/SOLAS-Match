@@ -2,7 +2,7 @@
     <div class="grid_8">
         <div class="page-header">
             <h1>
-                {Localisation::getTranslation('common_create_new_task')} <small>{sprintf(Localisation::getTranslation('task_create_for_project'), {$project->getTitle()})}</small><br>   
+                {Localisation::getTranslation('common_create_new_task')} <small>{sprintf(Localisation::getTranslation('task_create_for_project'), {$project->getTitle()|escape:'html':'UTF-8'})}</small><br>   
                 <small>
                     {Localisation::getTranslation('common_denotes_a_required_field')}
                 </small>
@@ -34,12 +34,12 @@
                                     </div>
                                 {/if}
                             </label>
-                            <textarea wrap="soft" cols="1" rows="3" name="title" style="width: 400px">{$task->getTitle()}</textarea>				
+                            <textarea wrap="soft" cols="1" rows="3" name="title" style="width: 400px">{$task->getTitle()|escape:'html':'UTF-8'}</textarea>        
                             <p style="margin-bottom:20px;"/>
 
                             <label for="comment"><h2>{Localisation::getTranslation('common_task_comment')}</h2></label>
                             <p>{Localisation::getTranslation('task_create_1')}</p>
-                            <textarea wrap="soft" cols="1" rows="4" name="comment" style="width: 400px">{$task->getComment()}</textarea>
+                            <textarea wrap="soft" cols="1" rows="4" name="comment" style="width: 400px">{$task->getComment()|escape:'html':'UTF-8'}</textarea>
                             <p style="margin-bottom:20px;"/>
 
                             <p>
@@ -117,7 +117,8 @@
                             {/if}
                             <p>
                                 {assign var="deadlineDateTime" value=$task->getDeadline()}
-                                <input class="hasDatePicker" type="text" id="deadline" name="deadline" value="{if isset($deadlineDateTime)} {date(Settings::get("ui.date_format"), strtotime($task->getDeadline()))} {/if}" style="width: 400px" />
+                                <input class="hasDatePicker" type="text" id="deadline_field" name="deadline_field" value="{if isset($deadlineDateTime)}{$task->getDeadline()}{/if}" style="width: 400px" />
+                                <input type="hidden" name="deadline" id="deadline" />
                             </p>
                             <p style="margin-bottom:40px;"/>
 
@@ -162,7 +163,7 @@
                                                 {assign var="i" value=$i+1}
                                             </td>
                                             <td>
-                                                <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$projectTask->getTitle()}</a>
+                                                <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$projectTask->getTitle()|escape:'html':'UTF-8'}</a>
                                             </td>
                                             <td>{TemplateHelper::getTaskSourceLanguage($projectTask)}</td>  
                                             <td>{TemplateHelper::getTaskTargetLanguage($projectTask)}</td>
@@ -210,7 +211,7 @@
                         </td>                    
                         <td>
                             <p style="margin-bottom:20px;"/>  
-                            <button type="submit" value="Submit" name="submit" class="btn btn-success">
+                            <button type="submit" onclick="return validateForm();" value="Submit" name="submit" class="btn btn-success">
                                 <i class="icon-upload icon-white"></i> {Localisation::getTranslation('common_create_task')}
                             </button>
                             <p style="margin-bottom:20px;"/>
