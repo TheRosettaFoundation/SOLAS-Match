@@ -636,7 +636,53 @@ class TaskRouteHandler
         $task_file_info = $taskDao->getTaskInfo($taskId);
         $siteLocation = Common\Lib\Settings::get("site.location");
         $file_path = "{$siteLocation}task/$taskId/download-file-user/";
+        
+        $alsoViewedTasksCount = 0;
+        
+        $alsoViewedTasks = $taskDao->getAlsoViewedTasks($taskId, 3, 0);
+        if (!empty($alsoViewedTasks)) {
+            $alsoViewedTasksCount = count($alsoViewedTasks);
+        }
+        $created_timestamps = array();
+        $deadline_timestamps = array();
+        $projectAndOrgs = array();
 
+        foreach ($alsoViewedTasks as $alsoViewedTask) {
+            $viewedTaskId = $alsoViewedTask->getId();
+            $viewedProject = $projectDao->getProject($alsoViewedTask->getProjectId());
+            $viewedOrgId = $viewedProject->getOrganisationId();
+            $viewedOrg = $orgDao->getOrganisation($viewedOrgId);
+
+            $created = $alsoViewedTask->getCreatedTime();
+            $selected_year   = (int)substr($created,  0, 4);
+            $selected_month  = (int)substr($created,  5, 2);
+            $selected_day    = (int)substr($created,  8, 2);
+            $selected_hour   = (int)substr($created, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
+            $selected_minute = (int)substr($created, 14, 2);
+            $created_timestamps[$viewedTaskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+
+            $deadline = $alsoViewedTask->getDeadline();
+            $selected_year   = (int)substr($deadline,  0, 4);
+            $selected_month  = (int)substr($deadline,  5, 2);
+            $selected_day    = (int)substr($deadline,  8, 2);
+            $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
+            $selected_minute = (int)substr($deadline, 14, 2);
+            $deadline_timestamps[$viewedTaskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+
+            $viewedProjectUri = "{$siteLocation}project/{$project->getId()}/view";
+            $viewedProjectName = $viewedProject->getTitle();
+            $viewedOrgUri = "{$siteLocation}org/{$org_id}/profile";
+            $viewedOrgName = $viewedOrg->getName();
+            $projectAndOrgs[$viewedTaskId]=sprintf(
+                Lib\Localisation::getTranslation('common_part_of_for'),
+                $viewedProjectUri,
+                htmlspecialchars($viewedProjectName, ENT_COMPAT, 'UTF-8'),
+                $viewedOrgUri,
+                htmlspecialchars($viewedOrgName, ENT_COMPAT, 'UTF-8')
+            );
+
+        }
+        
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
 
         $app->view()->appendData(array(
@@ -649,7 +695,11 @@ class TaskRouteHandler
             "filename" => $task_file_info->getFilename(),
             "isMember" => $isMember,
             "isSiteAdmin"   => $isSiteAdmin,
-            'userSubscribedToOrganisation' => $userSubscribedToOrganisation
+            'userSubscribedToOrganisation' => $userSubscribedToOrganisation,
+            'created_timestamps' => $created_timestamps,
+            'deadline_timestamps' => $deadline_timestamps,
+            'alsoViewedTasks' => $alsoViewedTasks,
+            'alsoViewedTasksCount' => $alsoViewedTasksCount
         ));
 
         $app->render("task/task.view.tpl");

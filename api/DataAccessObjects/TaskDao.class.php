@@ -303,7 +303,27 @@ class TaskDao
             $task = null;
         }
     }
-
+    
+    public static function getAlsoViewedTasks(
+            $taskId,
+            $limit = null,
+            $offset = 0
+    ) {
+        $ret = null;
+        
+        $args = Lib\PDOWrapper::cleanse($taskId).', ';
+        $args .= Lib\PDOWrapper::cleanseNull($limit).', ';
+        $args .= Lib\PDOWrapper::cleanse($offset);
+        
+        $result = Lib\PDOWrapper::call("alsoViewedTasks", $args);
+        if ($result) {
+            $ret = array();
+            foreach ($result as $row) {
+                $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
+            }
+        }
+        return $ret;
+    }
 
     public static function getTaskPreReqs($taskId)
     {

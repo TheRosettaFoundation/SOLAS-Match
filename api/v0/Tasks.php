@@ -53,12 +53,19 @@ class Tasks
                         '\SolasMatch\API\Lib\Middleware::authUserForClaimedTask',
                         '\SolasMatch\API\V0\Tasks::sendUserFeedback'
                     );
+                    
+                    $app->get(
+                        '/alsoViewedTasks/:limit/:offset(:format)/',
+                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
+                        '\SolasMatch\API\V0\Tasks::getAlsoViewedTasks'
+                    );
 
                     $app->get(
                         '/prerequisites(:format)/',
                         '\SolasMatch\API\Lib\Middleware::authUserOrOrgForClaimedTask',
                         '\SolasMatch\API\V0\Tasks::getTaskPreReqs'
                     );
+                    
 
                     $app->get(
                         '/reviews(:format)/',
@@ -70,7 +77,8 @@ class Tasks
                         '/tags(:format)/',
                         '\SolasMatch\API\V0\Tasks::getTasksTags'
                     );
-
+                    
+                
                     $app->get(
                         '/version(:format)/',
                         '\SolasMatch\API\Lib\Middleware::isloggedIn',
@@ -114,7 +122,8 @@ class Tasks
                     '\SolasMatch\API\Lib\Middleware::isloggedIn',
                     '\SolasMatch\API\V0\Tasks::recordTaskView'
                 );
-                
+            
+               
                 $app->get(
                     '/proofreadTask/:taskId/',
                     '\SolasMatch\API\Lib\Middleware::isloggedIn',
@@ -208,7 +217,31 @@ class Tasks
         Lib\Notify::sendUserFeedback($feedbackData);
         API\Dispatcher::sendResponse(null, null, null, $format);
     }
+    
+    public static function getAlsoViewedTasks(
+            $taskId,
+            $limit,
+            $offset,
+            $format = ".json"
+    ) {
+        if (!is_numeric($offset) && strstr($offset, '.')) {
+            $offset = explode('.', $offset);
+            $format = '.'.$offset[1];
+            $offset = $offset[0];
+        }
 
+        API\Dispatcher::sendResponse(
+            null,
+            DAO\TaskDao::getAlsoViewedTasks(
+                $taskId,
+                $limit,
+                $offset
+            ),
+            null,
+            $format
+        );
+    }
+    
     public static function getTaskPreReqs($taskId, $format = ".json")
     {
         API\Dispatcher::sendResponse(null, DAO\TaskDao::getTaskPreReqs($taskId), null, $format);

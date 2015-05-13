@@ -76,12 +76,13 @@
         </p>
     {/if}
 	
-	
-	<div class="row">
-		 <div class="span4 pull-right">
-	    	<h3> Users also viewed: </h3>
-	    </div>
-		<div class="pull-left" style="max-width: 70%;">
+	{if ($alsoViewedTasksCount>0)}
+		<div class="row">
+			 <div class="span4 pull-right">
+		    	<h3> Users also viewed: </h3>
+		    </div>
+			<div class="pull-left" style="max-width: 70%;">
+	{/if}
 		
 		
 		    {include file="task/task.details.tpl"} 
@@ -110,9 +111,10 @@
 		        </tbody>
 		    </table>
 		    
-		    
-		</div>
-    </div>
+	{if ($alsoViewedTasksCount>0)}		    
+			</div>
+	    </div>
+    {/if}
     
    
 {include file="footer.tpl"}
