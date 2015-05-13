@@ -132,6 +132,7 @@ class ProjectRouteHandler
                 } else {
                     $task->setPublished(false);
                 }
+                error_log("setPublished");
                 $taskDao->updateTask($task);
             }
 
@@ -1016,6 +1017,7 @@ class ProjectRouteHandler
         }
 
         try {
+            error_log("addProjectTask");
             $newTask = $taskDao->createTask($task);
             $newTaskId = $newTask->getId();
             $createdTasks[] = $newTaskId;
