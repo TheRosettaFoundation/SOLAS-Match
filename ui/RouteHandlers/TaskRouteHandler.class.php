@@ -630,6 +630,18 @@ class TaskRouteHandler
         for ($i = 1; $i <= $numTaskTypes; $i++) {
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
+        
+        $taskTypeTexts = array();
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::SEGMENTATION]   = Lib\Localisation::getTranslation('common_segmentation');
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::TRANSLATION]    = Lib\Localisation::getTranslation('common_translation');
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::PROOFREADING]   = Lib\Localisation::getTranslation('common_proofreading');
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::DESEGMENTATION] = Lib\Localisation::getTranslation('common_desegmentation');
+        
+        $taskStatusTexts = array();
+        $taskStatusTexts[1] = Lib\Localisation::getTranslation('common_waiting');
+        $taskStatusTexts[2] = Lib\Localisation::getTranslation('common_unclaimed');
+        $taskStatusTexts[3] = Lib\Localisation::getTranslation('common_in_progress');
+        $taskStatusTexts[4] = Lib\Localisation::getTranslation('common_complete');
 
         $converter = Common\Lib\Settings::get("converter.converter_enabled");
 
@@ -653,21 +665,8 @@ class TaskRouteHandler
             $viewedOrgId = $viewedProject->getOrganisationId();
             $viewedOrg = $orgDao->getOrganisation($viewedOrgId);
 
-            $created = $alsoViewedTask->getCreatedTime();
-            $selected_year   = (int)substr($created,  0, 4);
-            $selected_month  = (int)substr($created,  5, 2);
-            $selected_day    = (int)substr($created,  8, 2);
-            $selected_hour   = (int)substr($created, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
-            $selected_minute = (int)substr($created, 14, 2);
-            $created_timestamps[$viewedTaskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
-
             $deadline = $alsoViewedTask->getDeadline();
-            $selected_year   = (int)substr($deadline,  0, 4);
-            $selected_month  = (int)substr($deadline,  5, 2);
-            $selected_day    = (int)substr($deadline,  8, 2);
-            $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
-            $selected_minute = (int)substr($deadline, 14, 2);
-            $deadline_timestamps[$viewedTaskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+            $deadline_timestamps[$viewedTaskId] = $deadline;
 
             $viewedProjectUri = "{$siteLocation}project/{$project->getId()}/view";
             $viewedProjectName = $viewedProject->getTitle();
@@ -696,10 +695,13 @@ class TaskRouteHandler
             "isMember" => $isMember,
             "isSiteAdmin"   => $isSiteAdmin,
             'userSubscribedToOrganisation' => $userSubscribedToOrganisation,
-            'created_timestamps' => $created_timestamps,
             'deadline_timestamps' => $deadline_timestamps,
             'alsoViewedTasks' => $alsoViewedTasks,
-            'alsoViewedTasksCount' => $alsoViewedTasksCount
+            'alsoViewedTasksCount' => $alsoViewedTasksCount,
+            'siteLocation' => $siteLocation,
+            'taskTypeTexts' => $taskTypeTexts,
+            'projectAndOrgs' => $projectAndOrgs,
+            'taskStatusTexts' => $taskStatusTexts
         ));
 
         $app->render("task/task.view.tpl");
