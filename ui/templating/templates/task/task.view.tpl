@@ -79,7 +79,7 @@
 	{if ($alsoViewedTasksCount>0)}
 		<div class="row">
 			 <div class="span4 pull-right">
-		    	<h3> Users also viewed: </h3>
+		    	<h3>{Localisation::getTranslation('users_also_viewed')}</h3>
 		    	
 		    	{if isset($alsoViewedTasks)}
 		        <div id="also-viewed-tasks">
@@ -101,17 +101,22 @@
 		                            <p>
 		                            	{Localisation::getTranslation('common_to')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($alsoViewedTask->getTargetLocale())}</strong>
 		                            </p>
+		                            <div>
+		                            	<p>
+			                            	<span class="label label-info" style="background-color:rgb(218, 96, 52);">{$taskStatusTexts[$also_viewed_status_id]}</span>
+			                            	&nbsp;|&nbsp;
+			                            	<span class="label label-info" style="background-color: {$taskTypeColours[$also_viewed_type_id]}">{$taskTypeTexts[$also_viewed_type_id]}</span>
+											&nbsp;|&nbsp;
+											{if $alsoViewedTask->getWordCount()}
+			                                    <span class="label label-info" style="background-color:rgb(57, 165, 231);">{$alsoViewedTask->getWordCount()} {Localisation::getTranslation('project_profile_display_words')}</span>
+			                                {/if}
+		                                </p>
+		                            </div>
+		                            <p>
+		                            	<span class="process_deadline_utc" style="display: inline-block">
+		                            		{sprintf(Localisation::getTranslation('common_due_by'), {date(Settings::get("ui.date_format"), strtotime($deadline_timestamps[$also_viewed_task_id]))})}
+		                            	</span>
 		                            </p>
-		                            	<span class="label label-info" style="background-color:rgb(218, 96, 52);">{$taskStatusTexts[$also_viewed_status_id]}</span>
-		                            	&nbsp;|&nbsp;
-		                            	<span class="label label-info" style="background-color: {$taskTypeColours[$also_viewed_type_id]}">{$taskTypeTexts[$also_viewed_type_id]}</span>
-										&nbsp;|&nbsp;
-										{if $alsoViewedTask->getWordCount()}
-		                                    <span class="label label-info" style="background-color:rgb(57, 165, 231);">{$alsoViewedTask->getWordCount()} {Localisation::getTranslation('project_profile_display_words')}</span>
-		                                {/if}
-		                                
-		                            </p>
-		                            <p><span class="convert_utc_to_local" style="display: inline-block">{$deadline_timestamps[$also_viewed_task_id]}</span></p>
 		                            <p id="also_viewed_parents_{$also_viewed_task_id}">{$projectAndOrgs[$also_viewed_task_id]}</p>
 		                        </div>
 		                    </div>
