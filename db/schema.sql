@@ -3342,6 +3342,7 @@ END//
 DELIMITER ;
 
 
+
 DROP PROCEDURE IF EXISTS `getFilteredUserClaimedTasksCount`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getFilteredUserClaimedTasksCount`(IN `userID` INT, IN `taskType` INT, IN `taskStatus` INT)
@@ -3357,6 +3358,36 @@ BEGIN
         WHERE t.id IN (SELECT tc.task_id FROM TaskClaims tc WHERE tc.user_id = userID)
         AND (taskType is null or t.`task-type_id` = taskType)
         AND (taskStatus is null or t.`task-status_id` = taskStatus);
+END//
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `alsoViewedTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `alsoViewedTasks`(IN `taskID` INT, IN `lim` INT, IN `offset` INT)
+
+    READS SQL DATA
+
+BEGIN
+    -- if limit is null, set to maxBigInt unsigned
+    if lim = '' or lim is null then set lim = ~0; end if;
+    if offset='' or offset is null then set offset = 0; end if;
+
+
+    (SELECT t2.id,t2.project_id as projectId,t2.title,t2.`word-count` as wordCount,
+    (SELECT `en-name` from Languages l where l.id = t2.`language_id-source`) as `sourceLanguageName`,
+    (SELECT code from Languages l where l.id = t2.`language_id-source`) as `sourceLanguageCode`,
+    (SELECT `en-name` from Languages l where l.id = t2.`language_id-target`) as `targetLanguageName`,
+    (SELECT code from Languages l where l.id = t2.`language_id-target`) as `targetLanguageCode`,
+    (SELECT `en-name` from Countries c where c.id = t2.`country_id-source`) as `sourceCountryName`,
+    (SELECT code from Countries c where c.id = t2.`country_id-source`) as `sourceCountryCode`,
+    (SELECT `en-name` from Countries c where c.id = t2.`country_id-target`) as `targetCountryName`,
+    (SELECT code from Countries c where c.id = t2.`country_id-target`) as `targetCountryCode`,
+    `comment`, `task-type_id` as 'taskType', `task-status_id` as 'taskStatus', published, deadline, `created-time` as createdTime
+     FROM
+    (SELECT t.id, count(*) AS task_count FROM TaskViews tv JOIN Tasks t ON t.id = tv.task_id AND tv.user_id IN 
+    (SELECT DISTINCT user_id FROM `TaskViews` WHERE `task_id` = taskID) AND t.id !=taskID AND t.`task-status_id` = 2 GROUP BY task_id ORDER BY task_count DESC) 
+     AS t1 JOIN Tasks t2 ON t1.id = t2.id LIMIT offset,lim);
 END//
 DELIMITER ;
 

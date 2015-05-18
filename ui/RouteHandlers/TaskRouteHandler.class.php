@@ -630,13 +630,58 @@ class TaskRouteHandler
         for ($i = 1; $i <= $numTaskTypes; $i++) {
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
+        
+        $taskTypeTexts = array();
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::SEGMENTATION]   = Lib\Localisation::getTranslation('common_segmentation');
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::TRANSLATION]    = Lib\Localisation::getTranslation('common_translation');
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::PROOFREADING]   = Lib\Localisation::getTranslation('common_proofreading');
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::DESEGMENTATION] = Lib\Localisation::getTranslation('common_desegmentation');
+        
+        $taskStatusTexts = array();
+        $taskStatusTexts[1] = Lib\Localisation::getTranslation('common_waiting');
+        $taskStatusTexts[2] = Lib\Localisation::getTranslation('common_unclaimed');
+        $taskStatusTexts[3] = Lib\Localisation::getTranslation('common_in_progress');
+        $taskStatusTexts[4] = Lib\Localisation::getTranslation('common_complete');
 
         $converter = Common\Lib\Settings::get("converter.converter_enabled");
 
         $task_file_info = $taskDao->getTaskInfo($taskId);
         $siteLocation = Common\Lib\Settings::get("site.location");
         $file_path = "{$siteLocation}task/$taskId/download-file-user/";
+        
+        $alsoViewedTasksCount = 0;
+        
+        $alsoViewedTasks = $taskDao->getAlsoViewedTasks($taskId, 3, 0); //get first three tasks only
+        if (!empty($alsoViewedTasks)) {
+            $alsoViewedTasksCount = count($alsoViewedTasks);
+        }
+        $created_timestamps = array();
+        $deadline_timestamps = array();
+        $projectAndOrgs = array();
 
+        foreach ($alsoViewedTasks as $alsoViewedTask) {
+            $viewedTaskId = $alsoViewedTask->getId();
+            $viewedProject = $projectDao->getProject($alsoViewedTask->getProjectId());
+            $viewedOrgId = $viewedProject->getOrganisationId();
+            $viewedOrg = $orgDao->getOrganisation($viewedOrgId);
+
+            $deadline = $alsoViewedTask->getDeadline();
+            $deadline_timestamps[$viewedTaskId] = $deadline;
+
+            $viewedProjectUri = "{$siteLocation}project/{$project->getId()}/view";
+            $viewedProjectName = $viewedProject->getTitle();
+            $viewedOrgUri = "{$siteLocation}org/{$org_id}/profile";
+            $viewedOrgName = $viewedOrg->getName();
+            $projectAndOrgs[$viewedTaskId]=sprintf(
+                Lib\Localisation::getTranslation('common_part_of_for'),
+                $viewedProjectUri,
+                htmlspecialchars($viewedProjectName, ENT_COMPAT, 'UTF-8'),
+                $viewedOrgUri,
+                htmlspecialchars($viewedOrgName, ENT_COMPAT, 'UTF-8')
+            );
+
+        }
+        
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
 
         $app->view()->appendData(array(
@@ -649,7 +694,14 @@ class TaskRouteHandler
             "filename" => $task_file_info->getFilename(),
             "isMember" => $isMember,
             "isSiteAdmin"   => $isSiteAdmin,
-            'userSubscribedToOrganisation' => $userSubscribedToOrganisation
+            'userSubscribedToOrganisation' => $userSubscribedToOrganisation,
+            'deadline_timestamps' => $deadline_timestamps,
+            'alsoViewedTasks' => $alsoViewedTasks,
+            'alsoViewedTasksCount' => $alsoViewedTasksCount,
+            'siteLocation' => $siteLocation,
+            'taskTypeTexts' => $taskTypeTexts,
+            'projectAndOrgs' => $projectAndOrgs,
+            'taskStatusTexts' => $taskStatusTexts
         ));
 
         $app->render("task/task.view.tpl");
