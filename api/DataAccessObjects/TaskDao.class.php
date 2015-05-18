@@ -791,6 +791,35 @@ class TaskDao
         $result = Lib\PDOWrapper::call("getFilteredUserClaimedTasksCount", $args);
         return $result[0]['result'];
     }
+    
+    public static function getUserRecentTasks(
+            $userId,
+            $limit = null,
+            $offset = 0
+    ) {
+        $ret = null;
+        
+        $args = Lib\PDOWrapper::cleanse($userId).', ';
+        $args .= Lib\PDOWrapper::cleanseNull($limit).', ';
+        $args .= Lib\PDOWrapper::cleanse($offset);
+        
+        $result = Lib\PDOWrapper::call("getUserRecentTasks", $args);
+        if ($result) {
+            $ret = array();
+            foreach ($result as $row) {
+                $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
+            }
+        }
+        return $ret;
+    }
+
+    public static function getUserRecentTasksCount(
+            $userId
+    ) {
+        $args  = Lib\PDOWrapper::cleanse($userId);
+        $result = Lib\PDOWrapper::call("getUserRecentTasksCount", $args);
+        return $result[0]['result'];
+    }
 
     //! Get a count of the User's claimed Tasks
     /*!

@@ -3361,6 +3361,49 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getUserRecentTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserRecentTasks`(IN `userID` INT, IN `lim` INT, IN `offset` INT)
+
+    READS SQL DATA
+
+BEGIN
+    -- if limit is null, set to maxBigInt unsigned
+    if lim = '' or lim is null then set lim = ~0; end if;
+    if offset='' or offset is null then set offset = 0; end if;
+
+    (SELECT recentTasks.id, recentTasks.project_id as projectId,title,`word-count` as wordCount,
+            (SELECT `en-name` from Languages l where l.id = recentTasks.`language_id-source`) as `sourceLanguageName`,
+            (SELECT code from Languages l where l.id = recentTasks.`language_id-source`) as `sourceLanguageCode`,
+            (SELECT `en-name` from Languages l where l.id = recentTasks.`language_id-target`) as `targetLanguageName`,
+            (SELECT code from Languages l where l.id = recentTasks.`language_id-target`) as `targetLanguageCode`,
+            (SELECT `en-name` from Countries c where c.id = recentTasks.`country_id-source`) as `sourceCountryName`,
+            (SELECT code from Countries c where c.id = recentTasks.`country_id-source`) as `sourceCountryCode`,
+            (SELECT `en-name` from Countries c where c.id = recentTasks.`country_id-target`) as `targetCountryName`,
+            (SELECT code from Countries c where c.id = recentTasks.`country_id-target`) as `targetCountryCode`,
+            `comment`, `task-type_id` as 'taskType', `task-status_id` as 'taskStatus', published, deadline, `created-time` as createdTime
+        FROM
+		(SELECT tv.`viewed-time`, t.* FROM TaskViews tv
+		JOIN Tasks AS t on tv.task_id = t.id
+		where tv.user_id = userID and tv.task_is_archived = 0 and t.`task-status_id` != 4 order by tv.`viewed-time` desc) as recentTasks group by id order by `viewed-time` desc
+        LIMIT offset, lim);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getUserRecentTasksCount`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserRecentTasksCount`(IN `userID` INT)
+
+    READS SQL DATA
+
+BEGIN
+
+   SELECT count(distinct tv.task_id) as result FROM TaskViews tv
+		JOIN Tasks AS t on tv.task_id = t.id
+		where tv.user_id = userID and tv.task_is_archived = 0 and t.`task-status_id` != 4;
+END//
+DELIMITER ;
+
 
 DROP PROCEDURE IF EXISTS `alsoViewedTasks`;
 DELIMITER //

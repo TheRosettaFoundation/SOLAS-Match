@@ -126,7 +126,8 @@ hr.dotted {
     font-family: 'Roboto',arial,sans-serif;
 }
 /* end of styles used in custom Google Plus Sign in button */
-#also-viewed-tasks .task {
+
+ #also-viewed-tasks, #recent-tasks .task {
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
   border-radius: 10px;

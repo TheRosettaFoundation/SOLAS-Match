@@ -279,6 +279,7 @@ class UserRouteHandler
             'itemsPerScrollPage' => $itemsPerScrollPage,
             'lastScrollPage' => $lastScrollPage,
             'extra_scripts' => $extra_scripts,
+            'user_id' => $user_id,
         ));
         $app->render('index.tpl');
     }

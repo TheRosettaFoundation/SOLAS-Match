@@ -1070,7 +1070,9 @@
 	<string name ="system_badge_interpreter_desc">This volunteer is available for interpreting tasks.</string>
 	<string name ="system_badge_polyglot_title">Polyglot</string>
 	<string name ="system_badge_polyglot_desc">One or more secondary languages selected on your profile.</string>
-	
+
 	<string name = "users_also_viewed">Users also viewed:</string>
-			
+	<string name="recent_tasks_users_recent_tasks">%s's Recently Viewed Tasks</string>
+	<string name="recent_tasks_recently_viewed_tasks">Recently Viewed Tasks</string>	
+	<string name="common_task_stream">Task Stream</string>	
 </resources>
