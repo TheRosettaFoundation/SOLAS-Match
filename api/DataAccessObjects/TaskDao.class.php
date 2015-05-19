@@ -296,9 +296,12 @@ class TaskDao
             Lib\PDOWrapper::cleanseNull($task->getTaskType()).",".
             Lib\PDOWrapper::cleanseNull($task->getTaskStatus()).",".
             Lib\PDOWrapper::cleanseNull($task->getPublished());
+error_log("TaskDAO::insert args: " . $args);
         $result = Lib\PDOWrapper::call("taskInsertAndUpdate", $args);
         if ($result) {
+error_log("TaskDAO::insert result[0]['title']: " . $result[0]['title']);
             $task = Common\Lib\ModelFactory::buildModel("Task", $result[0]);
+error_log("TaskDAO::insert task getTitle(): " . $task->getTitle());
         } else {
             $task = null;
         }
