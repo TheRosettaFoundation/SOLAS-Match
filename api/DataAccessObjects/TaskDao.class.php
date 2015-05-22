@@ -296,6 +296,7 @@ class TaskDao
             Lib\PDOWrapper::cleanseNull($task->getTaskType()).",".
             Lib\PDOWrapper::cleanseNull($task->getTaskStatus()).",".
             Lib\PDOWrapper::cleanseNull($task->getPublished());
+        error_log("TaskDAO::insert args: " . $args);
         $result = Lib\PDOWrapper::call("taskInsertAndUpdate", $args);
         if ($result) {
             $task = Common\Lib\ModelFactory::buildModel("Task", $result[0]);
