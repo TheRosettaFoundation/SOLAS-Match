@@ -27,6 +27,8 @@
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css"/>
         <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
 
+		<link rel="shortcut icon" type="image/x-icon" href="{urlFor name="home"}favicon.ico">
+		
         <!-- extra styles-->
         {if isset($extra_styles)}
             {$extra_styles}

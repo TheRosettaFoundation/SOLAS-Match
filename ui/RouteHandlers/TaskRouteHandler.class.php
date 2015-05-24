@@ -28,7 +28,21 @@ class TaskRouteHandler
             array($middleware, "authUserIsLoggedIn"),
             array($this, "claimedTasks")
         )->via("POST")->name("claimed-tasks");
-
+        
+        
+        $app->get(
+            "/user/:user_id/recent/tasks/paged/:page_no/",
+            array($middleware, "authUserIsLoggedIn"),
+            array($this, "recentTasks")
+        )->name("recent-tasks-paged");
+        
+        $app->get(
+            "/user/:user_id/recent/tasks",
+            array($middleware, "authUserIsLoggedIn"),
+            array($this, "recentTasks")
+        )->name("recent-tasks");
+        
+        
         $app->get(
             "/user/:user_id/claimed/tasks/paged/:page_no/tt/:tt/ts/:ts/o/:o/",
             array($middleware, "authUserIsLoggedIn"),
@@ -365,6 +379,131 @@ class TaskRouteHandler
         $app->render('task/claimed-tasks.tpl');
     }
 
+    public function recentTasks($user_id, $currentScrollPage = 1)
+    {
+        $app = \Slim\Slim::getInstance();
+        $userDao = new DAO\UserDao();
+        $orgDao = new DAO\OrganisationDao();
+        $projectDao = new DAO\ProjectDao();
+        $taskDao = new DAO\TaskDao();
+
+        $user = $userDao->getUser($user_id);
+
+        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
+        if ($loggedInUserId != $user_id) {
+            $adminDao = new DAO\AdminDao();
+            if (!$adminDao->isSiteAdmin($loggedInUserId)) {
+                $app->flash('error', "You are not authorized to view this page"); //need to move to strings.xml
+                $app->redirect($app->urlFor('home'));
+            }
+        }
+
+        $taskStatusTexts = array();
+        $taskStatusTexts[1] = Lib\Localisation::getTranslation('common_waiting');
+        $taskStatusTexts[2] = Lib\Localisation::getTranslation('common_unclaimed');
+        $taskStatusTexts[3] = Lib\Localisation::getTranslation('common_in_progress');
+        $taskStatusTexts[4] = Lib\Localisation::getTranslation('common_complete');
+
+        $taskTypeTexts = array();
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::SEGMENTATION]   = Lib\Localisation::getTranslation('common_segmentation');
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::TRANSLATION]    = Lib\Localisation::getTranslation('common_translation');
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::PROOFREADING]   = Lib\Localisation::getTranslation('common_proofreading');
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::DESEGMENTATION] = Lib\Localisation::getTranslation('common_desegmentation');
+
+        $numTaskTypes = Common\Lib\Settings::get('ui.task_types');
+        $taskTypeColours = array();
+        for ($i = 1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
+        }
+
+        $siteLocation = Common\Lib\Settings::get('site.location');
+        $itemsPerScrollPage = 6;
+        $offset = ($currentScrollPage - 1) * $itemsPerScrollPage;
+        $recentTasksCount = 0;
+
+        try {
+            $recentTasks = $userDao->getUserRecentTasks($user_id, $itemsPerScrollPage, $offset);
+            $recentTasksCount = $userDao->getUserRecentTasksCount($user_id);
+        } catch (\Exception $e) {
+            $recentTasks = array();
+            $recentTasksCount = 0;
+        }
+
+        $taskTags = array();
+        $created_timestamps = array();
+        $deadline_timestamps = array();
+        $projectAndOrgs = array();
+        $proofreadTaskIds = array();
+
+        $lastScrollPage = ceil($recentTasksCount / $itemsPerScrollPage);
+        if ($currentScrollPage <= $lastScrollPage) {
+            foreach ($recentTasks as $recentTask) {
+                $taskId = $recentTask->getId();
+                $project = $projectDao->getProject($recentTask->getProjectId());
+                $org_id = $project->getOrganisationId();
+                $org = $orgDao->getOrganisation($org_id);
+
+                $taskTags[$taskId] = $taskDao->getTaskTags($taskId);
+
+                $created = $recentTask->getCreatedTime();
+                $selected_year   = (int)substr($created,  0, 4);
+                $selected_month  = (int)substr($created,  5, 2);
+                $selected_day    = (int)substr($created,  8, 2);
+                $selected_hour   = (int)substr($created, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
+                $selected_minute = (int)substr($created, 14, 2);
+                $created_timestamps[$taskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+
+                $deadline = $recentTask->getDeadline();
+                $selected_year   = (int)substr($deadline,  0, 4);
+                $selected_month  = (int)substr($deadline,  5, 2);
+                $selected_day    = (int)substr($deadline,  8, 2);
+                $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
+                $selected_minute = (int)substr($deadline, 14, 2);
+                $deadline_timestamps[$taskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+
+                $projectUri = "{$siteLocation}project/{$project->getId()}/view";
+                $projectName = $project->getTitle();
+                $orgUri = "{$siteLocation}org/{$org_id}/profile";
+                $orgName = $org->getName();
+                $projectAndOrgs[$taskId]=sprintf(
+                    Lib\Localisation::getTranslation('common_part_of_for'),
+                    $projectUri,
+                    htmlspecialchars($projectName, ENT_COMPAT, 'UTF-8'),
+                    $orgUri,
+                    htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
+                );
+                
+            }
+        }
+
+        if ($currentScrollPage == $lastScrollPage && ($recentTasksCount % $itemsPerScrollPage != 0)) {
+            $itemsPerScrollPage = $recentTasksCount % $itemsPerScrollPage;
+        }
+        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Home.js\"></script>";
+
+        $app->view()->appendData(array(
+            'current_page' => 'recent-tasks',
+            'thisUser' => $user,
+            'user_id' => $user_id,
+            'siteLocation' => $siteLocation,
+            'recentTasks' => $recentTasks,
+            'taskStatusTexts' => $taskStatusTexts,
+            'taskTypeTexts' => $taskTypeTexts,
+            'taskTypeColours' => $taskTypeColours,
+            'taskTags' => $taskTags,
+            'created_timestamps' => $created_timestamps,
+            'deadline_timestamps' => $deadline_timestamps,
+            'projectAndOrgs' => $projectAndOrgs,
+            'currentScrollPage' => $currentScrollPage,
+            'itemsPerScrollPage' => $itemsPerScrollPage,
+            'lastScrollPage' => $lastScrollPage,
+            'extra_scripts' => $extra_scripts,
+        ));
+        $app->render('task/recent-tasks.tpl');
+    }
+
     public function downloadTaskLatestVersion($task_id)
     {
         $app = \Slim\Slim::getInstance();
@@ -630,13 +769,58 @@ class TaskRouteHandler
         for ($i = 1; $i <= $numTaskTypes; $i++) {
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
+        
+        $taskTypeTexts = array();
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::SEGMENTATION]   = Lib\Localisation::getTranslation('common_segmentation');
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::TRANSLATION]    = Lib\Localisation::getTranslation('common_translation');
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::PROOFREADING]   = Lib\Localisation::getTranslation('common_proofreading');
+        $taskTypeTexts[Common\Enums\TaskTypeEnum::DESEGMENTATION] = Lib\Localisation::getTranslation('common_desegmentation');
+        
+        $taskStatusTexts = array();
+        $taskStatusTexts[1] = Lib\Localisation::getTranslation('common_waiting');
+        $taskStatusTexts[2] = Lib\Localisation::getTranslation('common_unclaimed');
+        $taskStatusTexts[3] = Lib\Localisation::getTranslation('common_in_progress');
+        $taskStatusTexts[4] = Lib\Localisation::getTranslation('common_complete');
 
         $converter = Common\Lib\Settings::get("converter.converter_enabled");
 
         $task_file_info = $taskDao->getTaskInfo($taskId);
         $siteLocation = Common\Lib\Settings::get("site.location");
         $file_path = "{$siteLocation}task/$taskId/download-file-user/";
+        
+        $alsoViewedTasksCount = 0;
+        
+        $alsoViewedTasks = $taskDao->getAlsoViewedTasks($taskId, 3, 0); //get first three tasks only
+        if (!empty($alsoViewedTasks)) {
+            $alsoViewedTasksCount = count($alsoViewedTasks);
+        }
+        $created_timestamps = array();
+        $deadline_timestamps = array();
+        $projectAndOrgs = array();
 
+        foreach ($alsoViewedTasks as $alsoViewedTask) {
+            $viewedTaskId = $alsoViewedTask->getId();
+            $viewedProject = $projectDao->getProject($alsoViewedTask->getProjectId());
+            $viewedOrgId = $viewedProject->getOrganisationId();
+            $viewedOrg = $orgDao->getOrganisation($viewedOrgId);
+
+            $deadline = $alsoViewedTask->getDeadline();
+            $deadline_timestamps[$viewedTaskId] = $deadline;
+
+            $viewedProjectUri = "{$siteLocation}project/{$project->getId()}/view";
+            $viewedProjectName = $viewedProject->getTitle();
+            $viewedOrgUri = "{$siteLocation}org/{$org_id}/profile";
+            $viewedOrgName = $viewedOrg->getName();
+            $projectAndOrgs[$viewedTaskId]=sprintf(
+                Lib\Localisation::getTranslation('common_part_of_for'),
+                $viewedProjectUri,
+                htmlspecialchars($viewedProjectName, ENT_COMPAT, 'UTF-8'),
+                $viewedOrgUri,
+                htmlspecialchars($viewedOrgName, ENT_COMPAT, 'UTF-8')
+            );
+
+        }
+        
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
 
         $app->view()->appendData(array(
@@ -649,7 +833,14 @@ class TaskRouteHandler
             "filename" => $task_file_info->getFilename(),
             "isMember" => $isMember,
             "isSiteAdmin"   => $isSiteAdmin,
-            'userSubscribedToOrganisation' => $userSubscribedToOrganisation
+            'userSubscribedToOrganisation' => $userSubscribedToOrganisation,
+            'deadline_timestamps' => $deadline_timestamps,
+            'alsoViewedTasks' => $alsoViewedTasks,
+            'alsoViewedTasksCount' => $alsoViewedTasksCount,
+            'siteLocation' => $siteLocation,
+            'taskTypeTexts' => $taskTypeTexts,
+            'projectAndOrgs' => $projectAndOrgs,
+            'taskStatusTexts' => $taskStatusTexts
         ));
 
         $app->render("task/task.view.tpl");

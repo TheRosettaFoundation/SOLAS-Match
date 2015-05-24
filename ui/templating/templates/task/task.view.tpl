@@ -75,31 +75,91 @@
             <strong>{Localisation::getTranslation('common_warning')}:</strong> {$flash['error']}
         </p>
     {/if}
-
-    {include file="task/task.details.tpl"} 
-
-    {if $isSiteAdmin and !isset($registered)}
-        <div class="well">
-            <form id="assignTaskToUserForm" method="post" action="{urlFor name="task" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
-                {Localisation::getTranslation('task_view_assign_label')}
-                <input type="text" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}">
-                <a class="btn btn-primary" onclick="$('#assignTaskToUserForm').submit();">
-                <i class="icon-user icon-white"></i>&nbsp;{Localisation::getTranslation('task_view_assign_button')}
-                </a>
-            </form> 
-        </div>
+	
+	{if ($alsoViewedTasksCount>0)}
+		<div class="row">
+			 <div class="span4 pull-right">
+		    	<h3>{Localisation::getTranslation('users_also_viewed')}</h3>
+		    	
+		    	{if isset($alsoViewedTasks)}
+		        <div id="also-viewed-tasks">
+		            <div class="ts">
+		                {for $count=0 to $alsoViewedTasksCount-1}
+		                    {assign var="alsoViewedTask" value=$alsoViewedTasks[$count]}
+		                    <div class="ts-task">
+		                        {assign var="also_viewed_task_id" value=$alsoViewedTask->getId()}
+		                        {assign var="also_viewed_type_id" value=$alsoViewedTask->getTaskType()}
+		                        {assign var="also_viewed_status_id" value=$alsoViewedTask->getTaskStatus()}
+		                        {assign var="also_viewed_task_title" value=$alsoViewedTask->getTitle()}
+		                        <div class="task">
+		                            <h2>
+		                                <a id="also_viewed_task_{$also_viewed_task_id}" href="{$siteLocation}task/{$also_viewed_task_id}/id">{$also_viewed_task_title|escape:'html':'UTF-8'}</a>
+		                            </h2>
+		                            <p>
+		                                {Localisation::getTranslation('common_from')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($alsoViewedTask->getSourceLocale())}</strong>
+		                            </p>
+		                            <p>
+		                            	{Localisation::getTranslation('common_to')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($alsoViewedTask->getTargetLocale())}</strong>
+		                            </p>
+		                            <div>
+		                            	<p>
+			                            	<span class="label label-info" style="background-color:rgb(218, 96, 52);">{$taskStatusTexts[$also_viewed_status_id]}</span>
+			                            	&nbsp;|&nbsp;
+			                            	<span class="label label-info" style="background-color: {$taskTypeColours[$also_viewed_type_id]}">{$taskTypeTexts[$also_viewed_type_id]}</span>
+											&nbsp;|&nbsp;
+											{if $alsoViewedTask->getWordCount()}
+			                                    <span class="label label-info" style="background-color:rgb(57, 165, 231);">{$alsoViewedTask->getWordCount()} {Localisation::getTranslation('project_profile_display_words')}</span>
+			                                {/if}
+		                                </p>
+		                            </div>
+		                            <p>
+		                            	<span class="process_deadline_utc" style="display: inline-block">
+		                            		{sprintf(Localisation::getTranslation('common_due_by'), {date(Settings::get("ui.date_format"), strtotime($deadline_timestamps[$also_viewed_task_id]))})}
+		                            	</span>
+		                            </p>
+		                            <p id="also_viewed_parents_{$also_viewed_task_id}">{$projectAndOrgs[$also_viewed_task_id]}</p>
+		                        </div>
+		                    </div>
+		                {/for}
+		            </div>
+		        </div>
+				{/if}
+		    	
+		    </div>
+			<div class="pull-left" style="max-width: 70%;">
+	{/if}
+		
+		
+		    {include file="task/task.details.tpl"} 
+		
+		    {if $isSiteAdmin and !isset($registered)}
+		        <div class="well">
+		            <form id="assignTaskToUserForm" method="post" action="{urlFor name="task" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
+		                {Localisation::getTranslation('task_view_assign_label')}
+		                <input type="text" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}">
+		                <a class="btn btn-primary" onclick="$('#assignTaskToUserForm').submit();">
+		                <i class="icon-user icon-white"></i>&nbsp;{Localisation::getTranslation('task_view_assign_button')}
+		                </a>
+		            </form> 
+		        </div>
+		    {/if}
+		
+		    <p style="margin-bottom: 40px"/>        
+		    <table width="100%">
+		        <thead>
+		            <th>{Localisation::getTranslation('task_view_source_document_preview')} - {$filename}<hr/></th>
+		        </thead>
+		        <tbody>
+		            <tr>
+		                <td align="center"><iframe src="http://docs.google.com/viewer?url={$file_preview_path}&embedded=true" width="800" height="780" style="border: none;"></iframe></td>
+		            </tr>
+		        </tbody>
+		    </table>
+		    
+	{if ($alsoViewedTasksCount>0)}		    
+			</div>
+	    </div>
     {/if}
-
-    <p style="margin-bottom: 40px"/>        
-    <table width="100%">
-        <thead>
-            <th>{Localisation::getTranslation('task_view_source_document_preview')} - {$filename}<hr/></th>
-        </thead>
-        <tbody>
-            <tr>
-                <td align="center"><iframe src="http://docs.google.com/viewer?url={$file_preview_path}&embedded=true" width="800" height="780" style="border: none;"></iframe></td>
-            </tr>
-        </tbody>
-    </table>
-
+    
+   
 {include file="footer.tpl"}
