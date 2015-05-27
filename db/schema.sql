@@ -3385,7 +3385,7 @@ BEGIN
         FROM
 		(SELECT tv.`viewed-time`, t.* FROM TaskViews tv
 		JOIN Tasks AS t on tv.task_id = t.id
-		where tv.user_id = userID and tv.task_is_archived = 0 and t.`task-status_id` != 4 order by tv.`viewed-time` desc) as recentTasks group by id order by `viewed-time` desc
+		where tv.user_id = userID and tv.task_is_archived = 0 and t.`task-status_id` = 2 order by tv.`viewed-time` desc) as recentTasks group by id order by `viewed-time` desc
         LIMIT offset, lim);
 END//
 DELIMITER ;
@@ -3400,7 +3400,7 @@ BEGIN
 
    SELECT count(distinct tv.task_id) as result FROM TaskViews tv
 		JOIN Tasks AS t on tv.task_id = t.id
-		where tv.user_id = userID and tv.task_is_archived = 0 and t.`task-status_id` != 4;
+		where tv.user_id = userID and tv.task_is_archived = 0 and t.`task-status_id` = 2;
 END//
 DELIMITER ;
 
