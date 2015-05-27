@@ -3385,7 +3385,7 @@ BEGIN
         FROM
 		(SELECT tv.`viewed-time`, t.* FROM TaskViews tv
 		JOIN Tasks AS t on tv.task_id = t.id
-		where tv.user_id = userID and tv.task_is_archived = 0 and t.`task-status_id` != 4 order by tv.`viewed-time` desc) as recentTasks group by id order by `viewed-time` desc
+		where tv.user_id = userID and tv.task_is_archived = 0 and t.`task-status_id` = 2 order by tv.`viewed-time` desc) as recentTasks group by id order by `viewed-time` desc
         LIMIT offset, lim);
 END//
 DELIMITER ;
@@ -3400,7 +3400,7 @@ BEGIN
 
    SELECT count(distinct tv.task_id) as result FROM TaskViews tv
 		JOIN Tasks AS t on tv.task_id = t.id
-		where tv.user_id = userID and tv.task_is_archived = 0 and t.`task-status_id` != 4;
+		where tv.user_id = userID and tv.task_is_archived = 0 and t.`task-status_id` = 2;
 END//
 DELIMITER ;
 
@@ -3413,10 +3413,18 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `alsoViewedTasks`(IN `taskID` INT, I
 
 BEGIN
     -- if limit is null, set to maxBigInt unsigned
+    DECLARE current_task_langSource INT DEFAULT 0;
+    DECLARE current_task_langTarget INT DEFAULT 0;
+    DECLARE current_task_countrySource INT DEFAULT 0;
+    DECLARE current_task_countryTarget INT DEFAULT 0;
     if lim = '' or lim is null then set lim = ~0; end if;
     if offset='' or offset is null then set offset = 0; end if;
 
+  
 
+    SELECT `language_id-source`, `language_id-target`, `country_id-source`, `country_id-target`  
+    INTO current_task_langSource, current_task_langTarget, current_task_countrySource, current_task_countryTarget FROM Tasks WHERE id = taskID;
+	
     (SELECT t2.id,t2.project_id as projectId,t2.title,t2.`word-count` as wordCount,
     (SELECT `en-name` from Languages l where l.id = t2.`language_id-source`) as `sourceLanguageName`,
     (SELECT code from Languages l where l.id = t2.`language_id-source`) as `sourceLanguageCode`,
@@ -3429,7 +3437,8 @@ BEGIN
     `comment`, `task-type_id` as 'taskType', `task-status_id` as 'taskStatus', published, deadline, `created-time` as createdTime
      FROM
     (SELECT t.id, count(*) AS task_count FROM TaskViews tv JOIN Tasks t ON t.id = tv.task_id AND tv.user_id IN 
-    (SELECT DISTINCT user_id FROM `TaskViews` WHERE `task_id` = taskID) AND t.id !=taskID AND t.`task-status_id` = 2 GROUP BY task_id ORDER BY task_count DESC) 
+    (SELECT DISTINCT user_id FROM `TaskViews` WHERE `task_id` = taskID) AND t.id != taskID AND t.`task-status_id` = 2 and
+	 t.`language_id-source` = current_task_langSource and t.`language_id-target` = current_task_langTarget GROUP BY task_id ORDER BY task_count DESC) 
      AS t1 JOIN Tasks t2 ON t1.id = t2.id LIMIT offset,lim);
 END//
 DELIMITER ;

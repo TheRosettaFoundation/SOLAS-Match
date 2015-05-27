@@ -794,31 +794,36 @@ class TaskRouteHandler
         if (!empty($alsoViewedTasks)) {
             $alsoViewedTasksCount = count($alsoViewedTasks);
         }
+        
         $created_timestamps = array();
         $deadline_timestamps = array();
         $projectAndOrgs = array();
-
-        foreach ($alsoViewedTasks as $alsoViewedTask) {
-            $viewedTaskId = $alsoViewedTask->getId();
-            $viewedProject = $projectDao->getProject($alsoViewedTask->getProjectId());
-            $viewedOrgId = $viewedProject->getOrganisationId();
-            $viewedOrg = $orgDao->getOrganisation($viewedOrgId);
-
-            $deadline = $alsoViewedTask->getDeadline();
-            $deadline_timestamps[$viewedTaskId] = $deadline;
-
-            $viewedProjectUri = "{$siteLocation}project/{$project->getId()}/view";
-            $viewedProjectName = $viewedProject->getTitle();
-            $viewedOrgUri = "{$siteLocation}org/{$org_id}/profile";
-            $viewedOrgName = $viewedOrg->getName();
-            $projectAndOrgs[$viewedTaskId]=sprintf(
-                Lib\Localisation::getTranslation('common_part_of_for'),
-                $viewedProjectUri,
-                htmlspecialchars($viewedProjectName, ENT_COMPAT, 'UTF-8'),
-                $viewedOrgUri,
-                htmlspecialchars($viewedOrgName, ENT_COMPAT, 'UTF-8')
-            );
-
+    
+        if (is_array($alsoViewedTasks) || is_object($alsoViewedTasks))
+        {
+                
+                foreach ($alsoViewedTasks as $alsoViewedTask) {
+                $viewedTaskId = $alsoViewedTask->getId();
+                $viewedProject = $projectDao->getProject($alsoViewedTask->getProjectId());
+                $viewedOrgId = $viewedProject->getOrganisationId();
+                $viewedOrg = $orgDao->getOrganisation($viewedOrgId);
+    
+                $deadline = $alsoViewedTask->getDeadline();
+                $deadline_timestamps[$viewedTaskId] = $deadline;
+    
+                $viewedProjectUri = "{$siteLocation}project/{$project->getId()}/view";
+                $viewedProjectName = $viewedProject->getTitle();
+                $viewedOrgUri = "{$siteLocation}org/{$org_id}/profile";
+                $viewedOrgName = $viewedOrg->getName();
+                $projectAndOrgs[$viewedTaskId]=sprintf(
+                    Lib\Localisation::getTranslation('common_part_of_for'),
+                    $viewedProjectUri,
+                    htmlspecialchars($viewedProjectName, ENT_COMPAT, 'UTF-8'),
+                    $viewedOrgUri,
+                    htmlspecialchars($viewedOrgName, ENT_COMPAT, 'UTF-8')
+                );
+    
+            }
         }
         
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
@@ -1414,6 +1419,7 @@ class TaskRouteHandler
         $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id, $project->getOrganisationId());
 
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
+        $alsoViewedTasksCount = 0; 
 
         $app->view()->appendData(array(
                 "extra_scripts" => $extra_scripts,
@@ -1423,6 +1429,7 @@ class TaskRouteHandler
                 "taskTypeColours" => $taskTypeColours,
                 "isMember" => $isOrgMember,
                 "isSiteAdmin" => $isSiteAdmin,
+                'alsoViewedTasksCount' => $alsoViewedTasksCount,
                 "userSubscribedToOrganisation" => $userSubscribedToOrganisation
         ));
 

@@ -134,7 +134,7 @@ hr.dotted {
   background: rgba(221, 221, 217, 0.59);
   border: solid 1px rgb(202, 202, 202);
   padding: 7px;
-  margin: 10px;
+  margin-bottom: 18px;
 }
 
 #also-viewed-tasks h2 {
