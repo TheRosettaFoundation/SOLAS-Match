@@ -1068,4 +1068,9 @@
 	<string name ="system_badge_interpreter_desc">Estás disponible para tareas de interpretación.</string>
 	<string name ="system_badge_polyglot_title">Políglota</string>
 	<string name ="system_badge_polyglot_desc">Por seleccionar uno o varios idiomas secundarios en tu perfil.</string>
+	
+	<string name="users_also_viewed">Los usuarios también han visto:</string>
+	<string name="recent_tasks_users_recent_tasks">Últimas tareas que ha visto %s</string>
+	<string name="recent_tasks_recently_viewed_tasks">Tareas vistas recientemente</string>	
+	<string name="common_task_stream">Tareas disponibles</string>	
 </resources>
