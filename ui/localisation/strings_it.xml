@@ -1069,4 +1069,9 @@
 	<string name ="system_badge_interpreter_desc">Questo volontario è disponibile per attività di interpretariato.</string>
 	<string name ="system_badge_polyglot_title">Multilingua</string>
 	<string name ="system_badge_polyglot_desc">Una o più seconde lingue sono selezionate nel tuo profilo.</string>
+	
+    <string name = "users_also_viewed">Gli utenti hanno anche visualizzato:</string>
+    <string name="recent_tasks_users_recent_tasks">Attività visualizzate di recente da %s </string>
+    <string name="recent_tasks_recently_viewed_tasks">Attività visualizzate di recente</string>    
+    <string name="common_task_stream">Elenco delle attività</string>
 </resources>

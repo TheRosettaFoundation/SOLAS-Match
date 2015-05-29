@@ -1063,5 +1063,9 @@
 	<string name ="system_badge_interpreter_desc">Dieser Freiwillige ist als Dolmetscher verfügbar.</string>
 	<string name ="system_badge_polyglot_title">Mehrsprachig</string>
 	<string name ="system_badge_polyglot_desc">Eine oder mehrere Fremdsprachen sind auf Deinem Profil ausgewählt.</string>
-			
+	
+	<string name = "users_also_viewed">Ebenfalls angesehen:</string>
+	<string name="recent_tasks_users_recent_tasks">Kürzlich von %s angesehene Aufgaben</string>
+	<string name="recent_tasks_recently_viewed_tasks">Kürzlich angesehene Aufgaben</string>	
+	<string name="common_task_stream">Aufgabenliste</string>
 </resources>
