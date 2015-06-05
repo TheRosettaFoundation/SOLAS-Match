@@ -158,7 +158,7 @@
                         <div style="width:100%; word-break: break-word" class="pull-left" id="task_{$task_id}">
                         {/if}
                             <h2>
-                                <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/id">{TemplateHelper::uiCleanseNewlineAndTabs($task_title)|escape:'html':'UTF-8'}</a>
+                                <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/id">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
                             </h2>
                             <p>
                                 {Localisation::getTranslation('common_type')}: <span class="label label-info" style="background-color: {$taskTypeColours[$type_id]}">{$taskTypeTexts[$type_id]}</span>
