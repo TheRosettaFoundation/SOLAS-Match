@@ -3,7 +3,7 @@
     <h1 class="page-header" style="height: auto">
         <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block; word-break:break-all;">
             {if $task->getTitle() != ''}
-                {$task->getTitle()|escape:'html':'UTF-8'}
+                {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
             {else}
                 {Localisation::getTranslation('common_task')} {$task->getId()}
             {/if}
@@ -93,7 +93,7 @@
 		                        {assign var="also_viewed_task_title" value=$alsoViewedTask->getTitle()}
 		                        <div class="task">
 		                            <h2>
-		                                <a id="also_viewed_task_{$also_viewed_task_id}" href="{$siteLocation}task/{$also_viewed_task_id}/id">{$also_viewed_task_title|escape:'html':'UTF-8'}</a>
+                                    <a id="also_viewed_task_{$also_viewed_task_id}" href="{$siteLocation}task/{$also_viewed_task_id}/id">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($also_viewed_task_title)}</a>
 		                            </h2>
 		                            <p>
 		                                {Localisation::getTranslation('common_from')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($alsoViewedTask->getSourceLocale())}</strong>
