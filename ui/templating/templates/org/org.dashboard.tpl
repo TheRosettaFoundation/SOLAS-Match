@@ -57,7 +57,7 @@
                 {assign var="projectObject" value=$data['project']}
                 {assign var="project_id" value=$projectObject->getId()}
                 <td width="27.5%">
-                        <a href="{urlFor name="project-view" options="project_id.$project_id"}">{$projectObject->getTitle()}</a>
+                        <a href="{urlFor name="project-view" options="project_id.$project_id"}">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($projectObject->getTitle())}</a>
                     </td> 
                     <td>
                         <div class="convert_utc_to_local" style="visibility: hidden">{$data['project']->getDeadline()}</div>
