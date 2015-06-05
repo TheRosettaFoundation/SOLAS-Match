@@ -14,7 +14,7 @@
                 {if isset($project)}
                     {assign var="projectId" value=$project->getId()}
                     <a href="{urlFor name="project-view" options="project_id.$projectId"}">
-                    {$project->getTitle()|escape:'html':'UTF-8'}
+                    {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getTitle())}
                     </a>
                 {/if}
             </td>
@@ -68,7 +68,7 @@
                 <td>
                     <i>
                         {if $task->getComment() != ''}
-                            {$task->getComment()|escape:'html':'UTF-8'}
+                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getComment())}
                         {else}
                             {Localisation::getTranslation('common_no_comment_has_been_listed')}
                         {/if}
@@ -78,7 +78,7 @@
                 <td>
                     <i>
                         {if $project->getDescription() != ''}
-                            {$project->getDescription()|escape:'html':'UTF-8'}
+                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getDescription())}
                         {else}
                             {Localisation::getTranslation('common_no_description_has_been_listed')}
                         {/if}
@@ -101,7 +101,7 @@
                 <td>
                     <i>
                     {if $project->getImpact() != ''}
-                        {$project->getImpact()|escape:'html':'UTF-8'}
+                        {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getImpact())}
                     {else}
                         {Localisation::getTranslation('No impact has been listed')}
                     {/if}  

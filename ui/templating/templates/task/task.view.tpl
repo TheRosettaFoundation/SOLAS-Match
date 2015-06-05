@@ -117,7 +117,7 @@
 		                            		{sprintf(Localisation::getTranslation('common_due_by'), {date(Settings::get("ui.date_format"), strtotime($deadline_timestamps[$also_viewed_task_id]))})}
 		                            	</span>
 		                            </p>
-		                            <p id="also_viewed_parents_{$also_viewed_task_id}">{$projectAndOrgs[$also_viewed_task_id]}</p>
+                                <p id="also_viewed_parents_{$also_viewed_task_id}">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$also_viewed_task_id])}</p>
 		                        </div>
 		                    </div>
 		                {/for}
