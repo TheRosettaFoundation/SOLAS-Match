@@ -3,7 +3,7 @@
 {assign var="task_id" value=$task->getId()}
 {assign var="task_status_id" value=$task->getTaskStatus()}
     <h1 class="page-header">
-        {Localisation::getTranslation('common_task')} {$task->getTitle()|escape:'html':'UTF-8'}
+        {Localisation::getTranslation('common_task')} {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
         <small>{Localisation::getTranslation('task_alter_alter_task_details_here')}</small>
         <a href="{urlFor name="task-view" options="task_id.$task_id"}" class='pull-right btn btn-primary'>
             <i class="icon-list icon-white"></i> {Localisation::getTranslation('task_alter_view_task_details')}
@@ -155,7 +155,7 @@
                                     {assign var="i" value=$i+1}
                                 </td>
                                 <td>
-                                    <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$projectTask->getTitle()|escape:'html':'UTF-8'}</a>
+                                    <a href="{urlFor name="task-view" options="task_id.$task_id"}">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($projectTask->getTitle())}</a>
                                 </td>
                                 <td>{TemplateHelper::getTaskSourceLanguage($projectTask)}</td>  
                                 <td>{TemplateHelper::getTaskTargetLanguage($projectTask)}</td>

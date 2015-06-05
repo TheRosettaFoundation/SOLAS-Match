@@ -2,7 +2,7 @@
     <div class="grid_8">
         <div class="page-header">
             <h1>
-                {Localisation::getTranslation('common_create_new_task')} <small>{sprintf(Localisation::getTranslation('task_create_for_project'), {$project->getTitle()|escape:'html':'UTF-8'})}</small><br>   
+                {Localisation::getTranslation('common_create_new_task')} <small>{sprintf(Localisation::getTranslation('task_create_for_project'), {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getTitle())})}</small><br>   
                 <small>
                     {Localisation::getTranslation('common_denotes_a_required_field')}
                 </small>
@@ -163,7 +163,7 @@
                                                 {assign var="i" value=$i+1}
                                             </td>
                                             <td>
-                                                <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$projectTask->getTitle()|escape:'html':'UTF-8'}</a>
+                                                <a href="{urlFor name="task-view" options="task_id.$task_id"}">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($projectTask->getTitle())}</a>
                                             </td>
                                             <td>{TemplateHelper::getTaskSourceLanguage($projectTask)}</td>  
                                             <td>{TemplateHelper::getTaskTargetLanguage($projectTask)}</td>
