@@ -48,7 +48,7 @@
                         {assign var="task_title" value=$task->getTitle()}
                         <div class="task" style="word-break: break-all; overflow-wrap: break-word;">
                             <h2>
-                                <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/id">{$task_title|escape:'html':'UTF-8'}</a>
+                                <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/id">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
                                 <span class="label label-info" style="background-color: {$taskTypeColours[$type_id]}">{$taskTypeTexts[$type_id]}</span>
                                 {if $task->getWordCount()}
                                     <span class="label label-info" style="background-color:rgb(57, 165, 231);">{$task->getWordCount()} {Localisation::getTranslation('project_profile_display_words')}</span>
@@ -73,7 +73,7 @@
                                     {/foreach}
                                 {/if}
                             </p>
-                            <p id="parents_{$task_id}">{$projectAndOrgs[$task_id]}</p>
+                            <p id="parents_{$task_id}">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$task_id])}</p>
                         </div>
                     </div>
                 {/for}

@@ -158,7 +158,7 @@
                         <div style="width:100%; word-break: break-word" class="pull-left" id="task_{$task_id}">
                         {/if}
                             <h2>
-                                <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/id">{$task_title|escape:'html':'UTF-8'}</a>
+                                <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/id">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
                             </h2>
                             <p>
                                 {Localisation::getTranslation('common_type')}: <span class="label label-info" style="background-color: {$taskTypeColours[$type_id]}">{$taskTypeTexts[$type_id]}</span>
@@ -184,7 +184,7 @@
 
                             <!-- <p class="task_details"><div class="process_created_time_utc" style="visibility: hidden">{$created_timestamps[$task_id]}</div></p> -->
                             <p><div class="process_deadline_utc" style="visibility: hidden">{$deadline_timestamps[$task_id]}</div></p>
-                            <p id="parents_{$task_id}">{$projectAndOrgs[$task_id]}</p>
+                            <p id="parents_{$task_id}">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$task_id])}</p>
                             <br />
                         </div>
                         {if $taskImages[$task_id]}

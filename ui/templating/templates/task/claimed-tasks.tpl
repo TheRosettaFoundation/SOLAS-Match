@@ -83,7 +83,7 @@
                         {assign var="task_title" value=$task->getTitle()}
                         <div class="task" style="word-break: break-all; overflow-wrap: break-word;">
                             <h2>
-                                <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/id">{$task_title|escape:'html':'UTF-8'}</a>
+                                <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/id">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
                             </h2>
                             <p>
                                 {Localisation::getTranslation('common_type')}: <span class="label label-info" style="background-color: {$taskTypeColours[$type_id]}">{$taskTypeTexts[$type_id]}</span>
@@ -111,7 +111,7 @@
                             </p>
                             <p class="task_details"><div class="process_created_time_utc" style="visibility: hidden">{$created_timestamps[$task_id]}</div></p>
                             <p><div class="process_deadline_utc" style="visibility: hidden">{$deadline_timestamps[$task_id]}</div></p>
-                            <p id="parents_{$task_id}">{$projectAndOrgs[$task_id]}</p>
+                            <p id="parents_{$task_id}">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$task_id])}</p>
                             <p>
                                {if $status_id == 3 && ($type_id == 3 || $type_id == 2)}
                                     <a href="{$siteLocation}task/{$task_id}/simple-upload" class="btn btn-small btn-success">

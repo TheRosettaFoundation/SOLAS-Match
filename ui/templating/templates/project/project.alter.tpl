@@ -19,7 +19,7 @@
     <div class="page-header">
         <h1>
             <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
-                {$project->getTitle()|escape:'html':'UTF-8'}
+                {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getTitle())}
                 <small>{Localisation::getTranslation('project_alter_alter_project_details_here')}</small>
             </span>
             <div class="pull-right">
