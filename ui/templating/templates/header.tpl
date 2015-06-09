@@ -106,6 +106,7 @@
                         <li>
                        
                             {if isset($locs)}
+                            	
                                 <div class="languageForm">
                                     <form id="languageListForm" method="post" action="{urlFor name="siteLanguage"}">
                                         <select id="languageList" name="language" onchange="jQuery('#languageListForm').submit();">
@@ -140,3 +141,23 @@
             </div>
         </div>
         <div class="container">
+        
+        {assign var="home_page" value="{urlFor name="home"}"}
+        
+        {if (Settings::get('banner.enabled') == 'y') and (!($home_page == $smarty.server.REQUEST_URI) or isset($user))}
+		    <div id="banner-container">
+		    <a href = "{Settings::get('banner.link')}" target = "_blank">
+		    	<div id="banner-container-blocks">
+			    	<div id="banner-left">
+			    		<img src="{urlFor name='home'}ui/img/banner/banner-left-{UserSession::getUserLanguage()}.png" alt="{Settings::get('banner.info')}">
+			    	</div>
+			    	<div id="banner-mid">
+			    		<img src="{urlFor name='home'}ui/img/banner/banner-mid-{UserSession::getUserLanguage()}.png" alt="{Settings::get('banner.info')}">
+			    	</div>
+			    	<div id="banner-right">
+			    		<img src="{urlFor name='home'}ui/img/banner/banner-right-{UserSession::getUserLanguage()}.png" alt="{Settings::get('banner.info')}">
+			    	</div>
+		    	</div>
+		    </a>
+		    </div>
+		{/if}

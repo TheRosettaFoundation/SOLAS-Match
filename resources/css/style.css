@@ -148,3 +148,50 @@ hr.dotted {
   font-size: 11px;
   line-height: 11px;
 }
+
+/*banner related*/
+#banner-container
+{
+  max-width:1200px;
+  margin-bottom: 20px;
+  margin-top: 25px;
+}
+
+#banner-container-blocks
+{
+ width:100%;
+ float:left;
+ background-color: rgba(255,204,51,.9) !important;
+ border-radius: 6px;
+ margin-bottom: 20px;
+}
+
+#banner-left { 
+	width: 25%;
+	float:left; 
+}
+#banner-mid { 
+	width: 50%;
+	float:left; 
+	text-align: center;
+}
+#banner-right { 
+	width: 25%;
+	float:left; 
+	text-align: right;
+}
+
+@media only screen and (min-width: 481px) and (max-width: 1200px) and (orientation: landscape) {
+	#banner-left { width: 100%; text-align: center;}
+	#banner-mid { width: 100%; text-align: center;}
+	#banner-right { width: 100%; text-align: center;}
+	
+}
+
+@media only screen and (max-width: 480px) {
+	#banner-left { width: 100%; text-align: left;}
+	#banner-mid { width: 100%; text-align: left;}
+	#banner-right { width: 100%; text-align: left;}
+}
+
+
