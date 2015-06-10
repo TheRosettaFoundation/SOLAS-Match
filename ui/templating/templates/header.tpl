@@ -106,6 +106,7 @@
                         <li>
                        
                             {if isset($locs)}
+                            	
                                 <div class="languageForm">
                                     <form id="languageListForm" method="post" action="{urlFor name="siteLanguage"}">
                                         <select id="languageList" name="language" onchange="jQuery('#languageListForm').submit();">
@@ -140,3 +141,23 @@
             </div>
         </div>
         <div class="container">
+        
+        {assign var="home_page" value="{urlFor name="home"}"}
+        
+        {if ((Settings::get('banner.enabled') == 'y') and isset($user))}
+		    <div id="banner-container">
+		    <a href = "{Settings::get('banner.link')}" target = "_blank">
+		    	<div id="banner-container-blocks">
+			    	<div id="banner-left">
+			    		<img src="{urlFor name='home'}ui/img/banner/banner-left-en.png" alt="{Settings::get('banner.info')}">
+			    	</div>
+			    	<div id="banner-mid">
+			    		<img src="{urlFor name='home'}ui/img/banner/banner-mid-en.png" alt="{Settings::get('banner.info')}">
+			    	</div>
+			    	<div id="banner-right">
+			    		<img src="{urlFor name='home'}ui/img/banner/banner-right-en.png" alt="{Settings::get('banner.info')}">
+			    	</div>
+		    	</div>
+		    </a>
+		    </div>
+		{/if}
