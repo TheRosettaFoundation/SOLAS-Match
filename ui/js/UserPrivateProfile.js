@@ -45,7 +45,7 @@ function set_errors_for_submission(id)
 function documentReady()
 {
   siteLocation = getSetting("siteLocation");
-  siteAPI      = getSetting("siteAPI");
+  siteAPI      = siteLocation + "api/";
   user_id      = getSetting("user_id");
 
   var secondaryLanguageCountDatabase = parseInt(getSetting("secondaryLanguageCount"));

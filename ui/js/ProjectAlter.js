@@ -124,7 +124,7 @@ function set_errors_for_submission(id, id_for_div)
 function documentReady()
 {
   siteLocation     = getSetting("siteLocation");
-  siteAPI          = getSetting("siteAPI");
+  siteAPI          = siteLocation + "api/";
   maxFileSize      = document.getElementById("maxfilesize").innerHTML;
   imageMaxFileSize = parseInt(getSetting("imageMaxFileSize")) * 1024 * 1024;
   project_id       = document.getElementById("project_id").innerHTML;
