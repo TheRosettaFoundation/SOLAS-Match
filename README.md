@@ -45,13 +45,13 @@ Contact
 Technical Requirements
 ======================
 
-SOLAS Match is written in PHP 5.3+ code and makes use of
+SOLAS Match is written in PHP 5.4+ code and makes use of
 a MySQL 5+ database.
 
 System Requirements
 -------------------
 
-HTTP server (Apache, for example) with PHP 5.3+ interpreter MySQL 5+
+HTTP server (Apache, for example) with PHP 5.4+ (ideally 5.5+) interpreter MySQL 5+
 database
 
 Several additional libraries also need to be installed alongside
@@ -97,39 +97,6 @@ Configure Apache
                 XSendFilePath / 
   &lt;/Directory&gt;
   </code></pre>
-
-
-Alternative - Configure Lighttpd
-------------------------------
-* Ensure that URL rewriting is enabled.
-    server.modules += ("mod_rewrite")
-
-* update lighttpd.conf with the following rewrite rules
-where deployDir is the path under the web root where Solas Match is deployed.
-
-   <pre><code>
-      url.rewrite-once = ( "deployDir/resources/css/style.([0-9]+).css$" => "deployDir/resources/css/style.css","^/?deployDir/index.php/?$" => ""  )
-      url.rewrite-if-not-file = (
-      "/?deployDir/index.php/.*" => "$1"
-      ,"(api/.*)" => "deployDir/api/dispatcher.php/$1"
-      ,"(.*)" => "deployDir/index.php/$1"
-    )
-   </code></pre>
-
-* example vHost
-
-   <pre><code>
-      $HTTP["host"] == "127.0.0.1" 
-      {
-          server.document-root = "/var/www/"
-          url.rewrite-once = ( "solas-match/resources/css/style.([0-9]+).css$" => "solas-match/resources/css/style.css","^/?solas-match/index.php/?$" => ""  )
-          url.rewrite-if-not-file = (
-          "/?solas-match/index.php/.*" => "$1"
-          ,"(api/.*)" => "solas-match/api/dispatcher.php/$1"
-          ,"(.*)" => "solas-match/index.php/$1"
-          )
-      }
-   </code></pre>  
 
 Install Solas Match Dependencies
 --------------------------------
@@ -180,7 +147,7 @@ Set up the MySQL database
 3. Import ./api/vendor/league/oauth2-server/sql/mysql.sql (using phpMyAdmin, for example. This MUST be the first import as our schema.sql executes alter table statements on some oauth tables.)
 4. Import path/to/repo/db/schema.sql (using phpMyAdmin, for example.)
 5. Import path/to/repo/db/languages.sql (using phpMyAdmin, for example.)
-6. Import path/to/repo/db/country_codes.sql (using phpMyAdmin, for example.)
+6. Import path/to/repo/db/country_codes.sql (using phpMyAdmin, for example.); if using mysql command line to import use --default-character-set=utf8
 7. Add the a new entry to the oauth_clients table for your web client using the client_id and client_secret defined in the conf file.
 8. Add an entry to the client_endpoints table with the redirect_uri set to the login page URL for this installation.
 
@@ -239,17 +206,6 @@ Set file/folder permissions
     chmod 777 path/to/repo/ui/templating/templates_compiled
     chmod 777 path/to/repo/ui/templating/cache
     
-
-Install 960.css Grid System
----------------------------
-
-This step is probably redundant, being replaced by Twitter Bootstrap. If you're working
-through these instructions, please review the general header template and correct these
-instructions as appropriate.
-
-1. Download 960 Grid System from http://960.gs/
-2. Extract just the file 960.css to ./resources/css/
-
 Install Solas Match Backend
 ---------------------------
 The Solas Match frontend sould now be fully configured.
