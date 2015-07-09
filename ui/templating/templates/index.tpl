@@ -5,7 +5,7 @@
     <div id="siteLocation">{$siteLocation}</div>
 </span>
 
-{if !isset($user)}
+<!-- {if !isset($user)}
     <div class="hero-unit">
         <h1>{Localisation::getTranslation('index_translation_commons')}</h1>
         <p>{Localisation::getTranslation('index_0')}</p>
@@ -18,8 +18,8 @@
             </a>
         </p>
     </div>
-
- 	{if ((Settings::get('banner.enabled') == 'y'))}
+ -->
+ 	<!-- {if ((Settings::get('banner.enabled') == 'y'))}
 	    <div id="banner-container">
 	    <a href = "{Settings::get('banner.link')}" target = "_blank">
 	    	<div id="banner-container-blocks">
@@ -35,7 +35,7 @@
 	    	</div>
 	    </a>
 	    </div>
-	{/if}    
+	{/if}     -->
 {/if}
 
 {if isset($flash['error'])}
@@ -65,18 +65,18 @@
     </div>
 {/if}
 
-<div class="page-header">
+<!-- <div class="page-header">
    <h1>
         {Localisation::getTranslation('index_translation_tasks')} <small>{Localisation::getTranslation('index_1')}</small>
         <a href="{urlFor name='org-search'}" class="pull-right btn btn-primary">
             <i class="icon-search icon-white"></i> {Localisation::getTranslation('common_search_for_organisations')}
         </a>
     </h1>
-</div>
+</div> -->
 
 <div class="row">
     <div class="span4 pull-right">
-        <section class="donate-block">
+        <!-- <section class="donate-block">
             <p>{Localisation::getTranslation('index_donate_free_service')}</p>
             <a href="http://www.therosettafoundation.org" target="_blank">
                 <img id="donate-trf-logo" src="{urlFor name='home'}ui/img/TheRosettaFoundationLogo.png" alt="The logo of The Rosetta Foundation" height="60"/>
@@ -90,24 +90,24 @@
                 </div>
             </a>
         </section>
-
+ -->
         {include file="tag/tags.user-tags.inc.tpl"}
         {include file="tag/tags.top-list.inc.tpl"}
         {if isset($statsArray) && is_array($statsArray)}
             {include file="statistics.tpl"}
         {/if}
-        <div id="globe" style="text-align: center">
+        <!-- <div id="globe" style="text-align: center">
             <br/>
             <script type="text/javascript" src="http://jh.revolvermaps.com/p.js"></script><script type="text/javascript">rm2d_ki101('7','300','150','7puikkj5km8','ff00ff',0);</script>
             <br/>
-        </div>
+        </div> -->
     </div>
 
     <div class="pull-left" style="max-width: 70%; overflow-wrap: break-word; word-break:break-all;">
-
+<!-- 
         <div id="loading_warning">
             <p>{Localisation::getTranslation('common_loading')}</p>
-        </div>
+        </div> -->
 
         {if isset($user)}
             <h3>{Localisation::getTranslation('index_filter_available_tasks')}</h3>
@@ -248,12 +248,12 @@
         {/if}
         <br />
 
-        {if !isset($user)}
+      <!--   {if !isset($user)}
             <div class="alert pull-left" style="width: 100%; margin-top: 10px;">
                 <p>{Localisation::getTranslation('index_6')}</p>
                 <p>{sprintf(Localisation::getTranslation('index_register_now'), {urlFor name='register'})}</p>
             </div>
-        {/if}
+        {/if} -->
     </div>
 </div>
             

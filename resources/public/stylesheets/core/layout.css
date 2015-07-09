@@ -1,0 +1,16 @@
+/*********************************************************************
+*  =Layout
+*********************************************************************/
+#container {
+  width: 90%;
+  /* 1000px */
+  max-width: 1400px;
+  margin: 0 auto; }
+
+.main-content {
+  float: left;
+  width: 100%;
+  margin-right: 2%;
+  padding: 2%; }
+
+/*# sourceMappingURL=layout.css.map */

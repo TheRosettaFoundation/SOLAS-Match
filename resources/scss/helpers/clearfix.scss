@@ -1,0 +1,16 @@
+/*********************************************************************
+*  =Helpers
+*********************************************************************/
+
+/* Clearfix semântico */
+.group { zoom: 1; }
+.group:after {
+  clear: both;
+  content: " ";
+  display: block;
+  font-size: 0;
+  height: 0;
+  visibility: hidden;
+}
+
+

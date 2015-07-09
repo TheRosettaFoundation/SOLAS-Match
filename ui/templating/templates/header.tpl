@@ -23,8 +23,13 @@
         <meta name="twitter:description" content="{Settings::get('twitter.description')}"/>
         <meta name="twitter:image" content="{Settings::get('twitter.image')}"/>
 
-        <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min.css"/>
-        <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css"/>
+<!--    <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css"/> -->
+
+        <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/public/stylesheets/style.css"/>
+
+        <script src="{urlFor name="home"}resources/public/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+
         <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
 
 		<link rel="shortcut icon" type="image/x-icon" href="{urlFor name="home"}favicon.ico">
@@ -35,7 +40,7 @@
         {/if}
 
         <!-- style overrides-->
-        <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas.css"/>
+       <!--  <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas.css"/> -->
 
         {if isset($platformJS)}
             {$platformJS}
@@ -52,13 +57,60 @@
             {$extra_scripts}
         {/if}
     </head>
+<!-- 
+        <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if} style="background-image:  url({urlFor name="home"}ui/img/bg.png); background-repeat: repeat"> -->
 
-        <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if} style="background-image:  url({urlFor name="home"}ui/img/bg.png); background-repeat: repeat">
-        <div class="navbar navbar-fixed-top">
-           <div class="navbar-inner">
-                <div class="container">
-                    <a class="brand" href="{urlFor name='home'}">{Settings::get('site.name')}</a>
-                    <ul class="nav">
+        <body class="body">
+         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+              <div class="container">
+                <div class="navbar-header">
+                  <button type="button" class="navbar-toggle pull-left collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+                    <h1>
+                    <a  href="{urlFor name='home'}">{Settings::get('site.name')}</a>
+                   <!--  <a href="#" title="Return to the homepage">Rosetta Foundation</a> -->
+                    </h1>
+                      <div class="dropdown pull-right">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Language
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+
+                                        {if isset($locs)}
+                                            
+                                            <div class="languageForm">
+                                                <form id="languageListForm" method="post" action="{urlFor name="siteLanguage"}">
+                                                    <select id="languageList" name="language" onchange="jQuery('#languageListForm').submit();">
+                                                        {foreach $locs as $loc}
+                                                            {if $loc->getCode() == {UserSession::getUserLanguage()}}
+                                                                <option value="{$loc->getCode()}" selected>{$loc->getName()}</option>
+                                                            {else}
+                                                                <option value="{$loc->getCode()}">{$loc->getName()}</option>
+                                                            {/if}
+                                                        {/foreach}
+                                                    </select>
+                                                </form>
+                                            </div>
+                                        {/if}
+
+<!-- 
+
+              <li role="presentation"><a role="menuitem" tabindex="-1" href="#">English</a></li>
+              <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Spanish</a></li>
+              <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Italian</a></li>
+            </ul> -->
+          </div>
+          
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <form class="navbar-form navbar-right" role="form">
+            <!-- rosetta  -->
+
+               <!--  <a class="brand" href="{urlFor name='home'}">{Settings::get('site.name')}</a> -->
+                   <!--  <ul class="nav">
                         <li {if isset($current_page) && $current_page == 'home'}class="active"{/if} >
                             <a href="{urlFor name="home"}">{Localisation::getTranslation('header_home')}</a>
                         </li> 
@@ -91,36 +143,21 @@
                              <li {if isset($current_page) && $current_page == 'faq'}class="active" {/if}>
                                 <a href="{urlFor name="faq"}">{Localisation::getTranslation('common_faq')}</a>
                             </li>
-                           	{if Settings::get('site.forum_enabled') == 'y'}
-	                            <li>
-	                                <a href="{Settings::get('site.forum_link')}" target="_blank">{Localisation::getTranslation('common_forum')}</a>
-	                            </li>
+                            {if Settings::get('site.forum_enabled') == 'y'}
+                                <li>
+                                    <a href="{Settings::get('site.forum_link')}" target="_blank">{Localisation::getTranslation('common_forum')}</a>
+                                </li>
                             {/if}
-                    </ul>
+                    </ul> 
                     <ul class="nav pull-right" style="max-height: 38px">
                         {if isset($userNotifications)}   
                             <li>
                                 <a>{Localisation::getTranslation('header_notifications')}<span id="notificationCount">{$userNotifications->lenght()}</span></a>
                             </li>
                         {/if}
-                        <li>
+                        <li>-->
                        
-                            {if isset($locs)}
-                            	
-                                <div class="languageForm">
-                                    <form id="languageListForm" method="post" action="{urlFor name="siteLanguage"}">
-                                        <select id="languageList" name="language" onchange="jQuery('#languageListForm').submit();">
-                                            {foreach $locs as $loc}
-                                                {if $loc->getCode() == {UserSession::getUserLanguage()}}
-                                                    <option value="{$loc->getCode()}" selected>{$loc->getName()}</option>
-                                                {else}
-                                                    <option value="{$loc->getCode()}">{$loc->getName()}</option>
-                                                {/if}
-                                            {/foreach}
-                                        </select>
-                                    </form>
-                                </div>
-                            {/if}
+                           
                         </li>
                         {if isset($user)}
                             <li>
@@ -137,12 +174,67 @@
                             <li><a href="{urlFor name="login"}">{Localisation::getTranslation('common_log_in')}</a></li>
                         {/if}
                     </ul>
+
+
+
+            <!-- end rosetta -->
+
+
+        </div><!--/.navbar-collapse -->
+
+      </div>
+  </nav>
+
+
+
+<!-- 
+       <div class="navbar navbar-fixed-top">
+           <div class="navbar-inner">
+                <div class="container">
+                   
                 </div>
             </div>
+        </div> -->
+    <ul class="list-group">
+      <li>TRANSLATION</li>
+      <li>Commons</li>
+      <li>Empowering <p>Conversation in Communities</p> </li>
+    </ul>
+
+
+    <footer id="site-footer">
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="button-row">
+            {if isset($user)}
+                     
+            <a class="btn btn-default lnr" href="{urlFor name="user-public-profile" options="user_id.$user_id"}" role="button">
+             <img src="http://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
+                                       {$user->getDisplayName()}
+            </a>
+                           
+            <a class="btn btn-default" href="{urlFor name="logout"}" role="button">{Localisation::getTranslation('header_log_out')}</a>
+            {else}
+            <a class="btn btn-default" href="{urlFor name="register"}" role="button">{Localisation::getTranslation('common_register')}</a>
+            <a class="btn btn-default" href="{urlFor name="login"}" role="button">{Localisation::getTranslation('common_log_in')}</a>
+            {/if}
+            </div>
         </div>
+    </div>
+
+
+    </footer>
+      <hr>
+
+      
+
+    </div> <!-- /container -->
+
+
         <div class="container">
         
-        {assign var="home_page" value="{urlFor name="home"}"}
+     <!--    {assign var="home_page" value="{urlFor name="home"}"}
         
         {if ((Settings::get('banner.enabled') == 'y') and (isset($user) or ($smarty.server.REQUEST_URI!=$home_page)))}
 		    <div id="banner-container">
@@ -161,3 +253,4 @@
 		    </a>
 		    </div>
 		{/if}
+ -->

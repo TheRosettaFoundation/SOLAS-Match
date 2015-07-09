@@ -1,6 +1,14 @@
-            <br/><br/>
+           <!--  <br/><br/>
             <div class="well pull-left">
-                <footer>
+ -->
+
+ 
+                      <footer>
+                        <p>&copy; Company 2015</p>
+                      </footer>
+
+
+               <!--  <footer>
                     <table>
                         <tr>
                             <td width="31%" style="text-align: center">
@@ -42,8 +50,16 @@
                             </a>
                         {/if}
                     </div>
-                </footer>    
+                </footer>     -->
             </div>
+                    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+                    <script>window.jQuery || document.write('<script src="{urlFor name="home"}resources/public/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
+
+                    <script src="{urlFor name="home"}resources/public/js/vendor/bootstrap.min.js"></script>
+
+                    <script src="{urlFor name="home"}resources/public/js/main.js"></script>
+
+
             {if isset($openid)&& ($openid==='y'||$openid==='h' )}
                 <script type="text/javascript">
                     $(window).load(function() {

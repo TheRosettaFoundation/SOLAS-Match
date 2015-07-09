@@ -1,0 +1,27 @@
+// Load all modules
+
+// Vendor CSS
+@import "vendor/normalize";
+@import "vendor/main";
+
+// Load helpers
+@import "helpers/clearfix";
+
+// Load all pages
+@import "pages/index";
+
+// Load Vendor
+@import "vendor/bootstrap.min.scss";
+@import "vendor/bootstrap-theme.min.scss";
+
+// Load modules files
+@import "modules/header";
+@import "modules/menu";
+@import "modules/footer";
+
+// Load core
+@import "core/reset";
+@import "core/typography";
+@import "core/layout";
+@import "core/base";
+@import "core/media-query";

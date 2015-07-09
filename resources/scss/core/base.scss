@@ -1,0 +1,38 @@
+/*********************************************************************
+*  =Main Definitions
+*********************************************************************/
+
+body {
+  background-color:#f0efed;
+  /*
+   * 100% = 16px  browsers default
+   * 21px ÷ 16px = 1.5em
+   */
+  font: normal normal 100%/1.5em "cabin", sans-serif;
+  color: #263640;
+}
+ul {list-style-type: none;}
+
+h1, h2 {
+  font-style: normal;
+  font-weight: normal;
+  font-family: "enriqueta", serif;
+}
+
+h1 {
+  font-size: 2em; /* 32px ÷ 16px */
+  line-height: 1.3125em; /* 42px ÷ 32px */
+  margin-bottom: .5em; /* 16px ÷ 32px */
+}
+
+h2 {
+  font-weight: bold;
+  font-size: 1.75em; /* 28px ÷ 16px */
+  line-height: 1.285714286em; /* 36px ÷ 28px */
+  color: #659ec2;
+  margin-bottom: .785714286em; /* 22px ÷ 28px */
+}
+
+h2 ~ h2 {
+  padding-top: 40px;
+}
