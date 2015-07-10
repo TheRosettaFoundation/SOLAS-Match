@@ -24,4 +24,8 @@
 @import "core/typography";
 @import "core/layout";
 @import "core/base";
-@import "core/media-query";
+//@import "core/media-query";
+
+//media-queries
+@import "core/media-queries/320px";
+@import "core/media-queries/480px";

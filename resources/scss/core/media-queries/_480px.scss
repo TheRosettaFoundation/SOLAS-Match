@@ -1,0 +1,213 @@
+/*******************************************************************************
+*  Media Query » screen equal or less than 480px
+*******************************************************************************/
+
+
+//colours
+$base-color: #fff;
+$h1-color: #ffff01;
+$header-gray:#babac2;
+
+@media screen and (max-width: 480px) {
+
+	.navbar-header h1 a {
+		  display: block;
+		  width: 200px;
+		  height: 65px;
+		  overflow: hidden;
+		  text-indent: 100%;
+		  white-space: nowrap;
+		  background: url(../../public/img/rosetta-logo.png);
+	}
+
+.dropdown {
+	
+	display:inline;
+	margin-top:-65px;
+	margin-right:5px;
+}
+
+.list-group{
+	
+	margin-top: 60px;
+}
+
+.list-group li {
+	margin:20px;
+	height: 45px;
+    font-family: 'Nunito', sans-serif;
+}
+
+.list-group li:first-child {
+    color: $h1-color;
+    font-size:52px;
+}
+
+.list-group li:nth-child(2) {
+    color: $base-color;
+    font-size:42px;
+    border-bottom:1px solid $base-color;
+} 
+
+.list-group li:nth-child(3) {
+    color: $h1-color;
+    font-size:18px;
+} 
+
+.navbar-inverse{
+	background-image:#fff;
+	background-color:#fff;
+	background-image: -webkit-linear-gradient(top, #fff 0, #fff 0%);
+	background-image: linear-gradient(to bottom, #fff 0, #fff 0%);
+	background-image: -webkit-linear-gradient(top, #fff 0, #fff 0%);
+
+}
+
+.navbar-gray {
+	background-color:$header-gray;
+	background-image:$header-gray;
+	
+	background-image: -webkit-linear-gradient(top, $header-gray 0, $header-gray 0%);
+	background-image: linear-gradient(to bottom, $header-gray 0, $header-gray 0%);
+	background-image: -webkit-linear-gradient(top, $header-gray 0, $header-gray 0%);
+}
+
+.navbar-gray .pull-right {
+	color:$base-color;
+	font-weight:bold;
+	margin:10px;
+}
+    
+.body {
+    background-color: #000000;
+}   
+.white{
+	background-color:$base-color;
+}
+
+.site-content h2 a {
+		  display: block;
+		  width: 234px;
+		  height: 75px;
+		  overflow: hidden;
+		  text-indent: 100%;
+		  white-space: nowrap;
+		  margin-left: auto;
+    	  margin-right: auto;
+    	  margin-top: 20px;
+		  background: url(../../public/img/translation-commons.jpg);
+	}
+
+
+.site-content .form #login {
+        font-family: 'Nunito', sans-serif;
+        color: $h1-color;    
+		background-color: #292931;
+		text-align: center;
+        padding-top: 30px;
+        padding-bottom: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+        
+        
+	}
+.site-content .form #register {
+        font-family: 'Nunito', sans-serif;
+        color: $h1-color;    
+        background-color: #292931;
+        text-align: center;
+        padding-top: 30px;
+        padding-bottom: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }  
+.site-content .form #organ {
+        font-family: 'Nunito', sans-serif;
+        color: $h1-color;    
+        background-color: #292931;
+        text-align: center;
+        padding-bottom: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }   
+
+
+#claimTaskHeading {
+        font-family: 'Nunito', sans-serif;
+        color: $h1-color;    
+        background-color: #292931;
+        text-align: center;
+        padding-left: 20px;
+        padding-right: 20px;
+    } 
+    
+#claimTaskHeading li {
+    padding: 5px;
+    }    
+#claimTaskButtons {
+        font-family: 'Nunito', sans-serif;
+        color: $h1-color;    
+        background-color: #292931;
+        text-align: center;
+        padding-left: 20px;
+        padding-right: 20px;
+    }     
+.site-content .form li {
+    padding: 15px;
+
+}
+.site-content .form #login li:nth-child(2){
+    border-bottom:1px solid $h1-color;
+}
+
+
+
+.navbar-inverse .navbar-toggle .icon-bar {
+	background-color: #000;
+}
+
+.navbar-inverse .navbar-toggle .icon-bar:hover {
+    color: #0000ff;
+}
+#site-footer{
+	  background: url(../../public/img/community-unity-creativity.jpg);
+	  border:1px solid #fff;	
+	  width: 350px;
+	  height: 277px;
+	  margin: 20px;
+}
+    
+#site-footer .button-row {
+    width: 50%;
+    margin: auto;
+}
+#site-footer .button-row .btn {
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 15px;
+    background: none;
+    border: none;
+    color: #fff;
+}
+
+#task-list-section {
+    background-color: #292931;
+}    
+#task-list-item-container {
+    background-color: #ffffff;
+    margin: 10px 15px 10px 15px;
+}    
+#tsk-head {
+    text-align: center;
+    color: #000000;
+}
+#task-list-item {
+    background-color: aqua;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 15px;
+}    
+    
+	} /*/mediaquery*/
