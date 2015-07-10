@@ -195,36 +195,10 @@
                 </div>
             </div>
         </div> -->
-    <ul class="list-group">
-      <li>TRANSLATION</li>
-      <li>Commons</li>
-      <li>Empowering <p>Conversation in Communities</p> </li>
-    </ul>
 
 
-    <footer id="site-footer">
 
-    <div class="row">
-        <div class="col-md-4">
-            <div class="button-row">
-            {if isset($user)}
-                     
-            <a class="btn btn-default lnr" href="{urlFor name="user-public-profile" options="user_id.$user_id"}" role="button">
-             <img src="http://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
-                                       {$user->getDisplayName()}
-            </a>
-                           
-            <a class="btn btn-default" href="{urlFor name="logout"}" role="button">{Localisation::getTranslation('header_log_out')}</a>
-            {else}
-            <a class="btn btn-default" href="{urlFor name="register"}" role="button">{Localisation::getTranslation('common_register')}</a>
-            <a class="btn btn-default" href="{urlFor name="login"}" role="button">{Localisation::getTranslation('common_log_in')}</a>
-            {/if}
-            </div>
-        </div>
-    </div>
-
-
-    </footer>
+  
       <hr>
 
       
