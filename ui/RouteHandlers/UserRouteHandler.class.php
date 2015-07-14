@@ -67,6 +67,12 @@ class UserRouteHandler
         )->via("POST")->name("user-public-profile");
 
         $app->get(
+            "/:user_id/profile1/",
+            array($middleware, 'authUserIsLoggedIn'),
+            array($this, "userPublicProfile1")
+        )->via("POST")->name("user-public-profile1");
+
+        $app->get(
             "/:user_id/privateProfile/",
             array($middleware, "authUserIsLoggedIn"),
             array($this, "userPrivateProfile")
@@ -1054,6 +1060,136 @@ EOD;
         }
                     
         $app->render("user/user-public-profile.tpl");
+    }
+
+    public static function userPublicProfile1($user_id)
+    {
+        $app = \Slim\Slim::getInstance();
+        $userDao = new DAO\UserDao();
+        $orgDao = new DAO\OrganisationDao();
+        $adminDao = new DAO\AdminDao();
+        $langDao = new DAO\LanguageDao();
+        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
+        if (!is_null($loggedInUserId)) {
+            $app->view()->setData("isSiteAdmin", $adminDao->isSiteAdmin($loggedInUserId));
+        } else {
+            $app->view()->setData('isSiteAdmin', 0);
+        }
+        $user = null;
+        try {
+            Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER.$user_id);
+            $user = $userDao->getUser($user_id);
+        } catch (Common\Exceptions\SolasMatchException $e) {
+            $app->flash('error', Lib\Localisation::getTranslation('common_login_required_to_access_page'));
+            $app->redirect($app->urlFor('login'));
+        }
+        $userPersonalInfo = null;
+        try {
+            $userPersonalInfo = $userDao->getPersonalInfo($user_id);
+        } catch (Common\Exceptions\SolasMatchException $e) {
+            error_log("Error getting user personal info: $e");
+        }
+        if ($app->request()->isPost()) {
+            $post = $app->request()->post();
+            
+            if (isset($post['revokeBadge']) && isset($post['badge_id']) && $post['badge_id'] != "") {
+                $badge_id = $post['badge_id'];
+                $userDao->removeUserBadge($user_id, $badge_id);
+            }
+                
+            if (isset($post['revoke'])) {
+                $org_id = $post['org_id'];
+                $userDao->leaveOrganisation($user_id, $org_id);
+            }
+
+            if (isset($post['referenceRequest'])) {
+                $userDao->requestReferenceEmail($user_id);
+                $app->view()->appendData(array("requestSuccess" => true));
+            }
+        }
+                    
+        $archivedJobs = $userDao->getUserArchivedTasks($user_id, 0, 10);
+        $user_tags = $userDao->getUserTags($user_id);
+        $user_orgs = $userDao->getUserOrgs($user_id);
+        $badges = $userDao->getUserBadges($user_id);
+        $secondaryLanguages = $userDao->getSecondaryLanguages($user_id);
+
+        $orgList = array();
+        if ($badges) {
+            foreach ($badges as $badge) {
+                if ($badge->getOwnerId() != null) {
+                    $org = $orgDao->getOrganisation($badge->getOwnerId());
+                    $orgList[$badge->getOwnerId()] = $org;
+                }
+            }
+        }
+       
+        $org_creation = Common\Lib\Settings::get("site.organisation_creation");
+            
+        $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}";
+        $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
+        
+        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
+        $taskTypeColours = array();
+
+        for ($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
+        }
+
+        $langPref = $langDao->getLanguage($userPersonalInfo->getLanguagePreference());
+        $langPrefName = $langPref->getName();
+        
+        $app->view()->appendData(array(
+            "badges" => $badges,
+            "orgList" => $orgList,
+            "user_orgs" => $user_orgs,
+            "current_page" => "user-profile",
+            "archivedJobs" => $archivedJobs,
+            "user_tags" => $user_tags,
+            "this_user" => $user,
+            "extra_scripts" => $extra_scripts,
+            "org_creation" => $org_creation,
+            "userPersonalInfo" => $userPersonalInfo,
+            "langPrefName" => $langPrefName,
+            "secondaryLanguages" => $secondaryLanguages,
+            "taskTypeColours" => $taskTypeColours
+        ));
+                
+        if (Common\Lib\UserSession::getCurrentUserID() == $user_id) {
+            $notifData = $userDao->getUserTaskStreamNotification($user_id);
+            $interval = null;
+            $lastSent = null;
+            $strict = null;
+
+            if ($notifData) {
+                $interval = $notifData->getInterval();
+                switch ($interval) {
+                    case Common\Enums\NotificationIntervalEnum::DAILY:
+                        $interval = Lib\Localisation::getTranslation('user_task_stream_notification_edit_daily');
+                        break;
+                    case Common\Enums\NotificationIntervalEnum::WEEKLY:
+                        $interval = Lib\Localisation::getTranslation('user_task_stream_notification_edit_weekly');
+                        break;
+                    case Common\Enums\NotificationIntervalEnum::MONTHLY:
+                        $interval = Lib\Localisation::getTranslation('user_task_stream_notification_edit_monthly'); 
+                        break;
+                }
+
+                if ($notifData->getLastSent() != null) {
+                    $lastSent = date(Common\Lib\Settings::get("ui.date_format"), strtotime($notifData->getLastSent()));
+                }
+
+                $strict = $notifData->getStrict();
+            }
+            $app->view()->appendData(array(
+                "interval"       => $interval,
+                "lastSent"       => $lastSent,
+                "strict"         => $strict,
+                "private_access" => true
+            ));
+        }
+                    
+        $app->render("user/user-public-profile1.tpl");
     }
 
     public function editTaskStreamNotification($userId)
