@@ -2428,7 +2428,8 @@ BEGIN
         AND (sourceCountryCode is null or p.country_id = (select c.id from Countries c where c.code = sourceCountryCode))
         AND (sourceLanguageCode is null or p.language_id=(select l.id from Languages l where l.code = sourceLanguageCode))
         AND (imageUploaded IS NULL OR p.image_uploaded = imageUploaded)
-        AND (imageApproved IS NULL OR p.image_approved = imageApproved);
+        AND (imageApproved IS NULL OR p.image_approved = imageApproved)
+        ORDER BY p.created DESC;
 END//
 DELIMITER ;
 
