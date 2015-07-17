@@ -32,15 +32,9 @@ class AdminRouteHandler
             $taskDao = new DAO\TaskDao();
 
             if (isset($post['verify'])) {
-                $user = $userDao->getUserByEmail($post['userEmail']);
-                if (is_object($user)) {
-                    if ($userDao->finishRegistration($user->getId())) {
-                        $app->flashNow('verifySuccess', Lib\Localisation::getTranslation('email_verification_email_verification'));
-                    } else {
-                        $app->flashNow('verifyError', Lib\Localisation::getTranslation('site_admin_dashboard_user_not_found'));
-                    }
-                }
-                else {
+                if ($userDao->finishRegistrationManually($post['userEmail'])) {
+                    $app->flashNow('verifySuccess', Lib\Localisation::getTranslation('email_verification_email_verification'));
+                } else {
                     $app->flashNow('verifyError', Lib\Localisation::getTranslation('site_admin_dashboard_user_not_found'));
                 }
             }

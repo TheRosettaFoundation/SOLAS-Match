@@ -321,6 +321,11 @@ class Users
                         '/finishRegistration(:format)/',
                         '\SolasMatch\API\V0\Users::finishRegistration'
                     );
+
+                    $app->post(
+                        '/finishRegistrationManually(:format)/',
+                        '\SolasMatch\API\V0\Users::finishRegistrationManually'
+                    );
                 });
 
                 $app->group('/email/:email', function () use ($app) {
@@ -992,6 +997,12 @@ class Users
         } else {
             API\Dispatcher::sendResponse(null, "Invalid UUID", Common\Enums\HttpStatusEnum::UNAUTHORIZED, $format);
         }
+    }
+
+    public static function finishRegistrationManually($email, $format = '.json')
+    {
+        $ret = DAO\UserDao::finishRegistrationManually($email);
+        API\Dispatcher::sendResponse(null, $ret, null, $format);
     }
 
     public static function getPasswordResetRequestTime($email, $format = ".json")

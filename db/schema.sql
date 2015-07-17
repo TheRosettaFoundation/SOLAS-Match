@@ -1844,6 +1844,21 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Test.finishRegistrationManually
+DROP PROCEDURE IF EXISTS `finishRegistrationManually`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `finishRegistrationManually`(IN `emailToVerify` VARCHAR(128))
+BEGIN
+    if exists (SELECT ru.user_id INTO @ru_user_id FROM Users u, RegisteredUsers ru WHERE u.id=ru.user_id AND u.email=emailToVerify LIMIT 1) then
+        DELETE FROM RegisteredUsers WHERE user_id=@ru_user_id;
+        SELECT @ru_user_id as result;
+    else
+        SELECT 0 as result;
+    end if;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Test.getActiveLanguages
 DROP PROCEDURE IF EXISTS `getActiveLanguages`;
 DELIMITER //
