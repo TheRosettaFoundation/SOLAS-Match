@@ -30,6 +30,21 @@ class AdminRouteHandler
             $userDao = new DAO\UserDao();
             $adminDao = new DAO\AdminDao();
             $taskDao = new DAO\TaskDao();
+
+            if (isset($post['verify'])) {
+                $user = $userDao->getUserByEmail($post['userEmail']);
+                if (is_object($user)) {
+                    if ($userDao->finishRegistration($user->getId())) {
+                        $app->flashNow('verifySuccess', Lib\Localisation::getTranslation('email_verification_email_verification'));
+                    } else {
+                        $app->flashNow('verifyError', Lib\Localisation::getTranslation('site_admin_dashboard_user_not_found'));
+                    }
+                }
+                else {
+                    $app->flashNow('verifyError', Lib\Localisation::getTranslation('site_admin_dashboard_user_not_found'));
+                }
+            }
+
             if (isset($post['addAdmin'])) {
                 $user = $userDao->getUserByEmail($post['userEmail']);
                 if (is_object($user)) {
