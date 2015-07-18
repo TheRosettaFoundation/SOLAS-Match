@@ -323,7 +323,7 @@ class Users
                     );
 
                     $app->post(
-                        '/finishRegistrationManually(:format)/',
+                        '/manuallyFinishRegistration(:format)/',
                         '\SolasMatch\API\V0\Users::finishRegistrationManually'
                     );
                 });

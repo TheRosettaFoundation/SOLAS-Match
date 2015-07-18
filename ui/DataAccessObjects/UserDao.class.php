@@ -670,7 +670,7 @@ class UserDao extends BaseDao
 
     public function finishRegistrationManually($email)
     {
-        $request = "{$this->siteApi}v0/users/$email/finishRegistrationManually";
+        $request = "{$this->siteApi}v0/users/$email/manuallyFinishRegistration";
         $resp = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
         return $resp;
     }
