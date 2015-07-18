@@ -1849,12 +1849,14 @@ DROP PROCEDURE IF EXISTS `finishRegistrationManually`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `finishRegistrationManually`(IN `emailToVerify` VARCHAR(128))
 BEGIN
-    if exists (SELECT ru.user_id INTO @ru_user_id FROM Users u, RegisteredUsers ru WHERE u.id=ru.user_id AND u.email=emailToVerify LIMIT 1) then
-        DELETE FROM RegisteredUsers WHERE user_id=@ru_user_id;
+    SET @ru_user_id = -99999;
+    SELECT ru.user_id INTO @ru_user_id FROM Users u, RegisteredUsers ru WHERE u.id=ru.user_id AND u.email=emailToVerify LIMIT 1;
+    DELETE FROM RegisteredUsers WHERE user_id=@ru_user_id;
+    IF ROW_COUNT() > 0 THEN
         SELECT @ru_user_id as result;
-    else
+    ELSE
         SELECT 0 as result;
-    end if;
+    END IF;
 END//
 DELIMITER ;
 
