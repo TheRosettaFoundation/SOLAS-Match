@@ -815,7 +815,7 @@
     <string name="task_profile_display_archived">Archived <strong>%s</strong> ago</string>
 
 	<string name="task_review_count">Review #%s</string>
-	<string name="task_review_form_0">You can redownload the source file <a href="%s">here</a>.</string>
+  <string name="task_review_form_0">You can download the output file <a href="%s">here</a>.</string>
 	<string name="task_review_form_1">You can download the project file <a href="%s">here</a>.</string>
     <string name="task_review_form_rating">Star rating of 1-5, where 1 = "Many Errors" and 5 = "Few Errors"</string>
     <string name="task_review_segmented">segmented</string>
