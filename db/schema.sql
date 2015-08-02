@@ -1037,6 +1037,14 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
 -- Data exporting was unselected.
 
 
+CREATE TABLE IF NOT EXISTS `TaskNotificationSent` (
+  `task_id` BIGINT(20) UNSIGNED NOT NULL,
+  `notification` INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`task_id`),
+  CONSTRAINT `FK_TaskNotificationSent_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
 -- Dumping structure for table Solas-Match-Test.TaskStatus
 CREATE TABLE IF NOT EXISTS `TaskStatus` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -2383,6 +2391,68 @@ BEGIN
         where deadline < NOW()
         AND `task-status_id` != 4
         AND published = 1;
+END//
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `getEarlyWarningTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getEarlyWarningTasks`()
+BEGIN
+    SELECT
+        t.id, t.project_id AS projectId, t.title, t.`word-count` AS wordCount,
+        (SELECT `en-name` FROM Languages WHERE id=t.`language_id-source`) AS `sourceLanguageName`,
+        (SELECT code      FROM Languages WHERE id=t.`language_id-source`) AS `sourceLanguageCode`,
+        (SELECT `en-name` FROM Languages WHERE id=t.`language_id-target`) AS `targetLanguageName`,
+        (SELECT code      FROM Languages WHERE id=t.`language_id-target`) AS `targetLanguageCode`,
+        (SELECT `en-name` FROM Countries WHERE id=t.`country_id-source`)  AS `sourceCountryName`,
+        (SELECT code      FROM Countries WHERE id=t.`country_id-source`)  AS `sourceCountryCode`,
+        (SELECT `en-name` FROM Countries WHERE id=t.`country_id-target`)  AS `targetCountryName`,
+        (SELECT code      FROM Countries WHERE id=t.`country_id-target`)  AS `targetCountryCode`,
+        t.comment, t.`task-type_id` as taskType, t.`task-status_id` AS taskStatus, t.published, t.deadline
+    FROM Tasks t
+    LEFT JOIN TaskNotificationSent n ON t.id=n.task_id
+    WHERE
+        t.deadline < DATE_ADD(NOW(), INTERVAL 1 WEEK) AND
+        t.deadline > DATE_SUB(DATE_ADD(NOW(), INTERVAL 1 WEEK), INTERVAL 30 HOUR) AND
+        t.`task-status_id`!=4 AND
+        t.published=1 AND
+        n.notification IS NULL;
+END//
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `getLateWarningTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getLateWarningTasks`()
+BEGIN
+    SELECT
+        t.id, t.project_id AS projectId, t.title, t.`word-count` AS wordCount,
+        (SELECT `en-name` FROM Languages WHERE id=t.`language_id-source`) AS `sourceLanguageName`,
+        (SELECT code      FROM Languages WHERE id=t.`language_id-source`) AS `sourceLanguageCode`,
+        (SELECT `en-name` FROM Languages WHERE id=t.`language_id-target`) AS `targetLanguageName`,
+        (SELECT code      FROM Languages WHERE id=t.`language_id-target`) AS `targetLanguageCode`,
+        (SELECT `en-name` FROM Countries WHERE id=t.`country_id-source`)  AS `sourceCountryName`,
+        (SELECT code      FROM Countries WHERE id=t.`country_id-source`)  AS `sourceCountryCode`,
+        (SELECT `en-name` FROM Countries WHERE id=t.`country_id-target`)  AS `targetCountryName`,
+        (SELECT code      FROM Countries WHERE id=t.`country_id-target`)  AS `targetCountryCode`,
+        t.comment, t.`task-type_id` as taskType, t.`task-status_id` AS taskStatus, t.published, t.deadline
+    FROM Tasks t
+    LEFT JOIN TaskNotificationSent n ON t.id=n.task_id
+    WHERE
+        t.deadline < DATE_SUB(NOW(), INTERVAL 1 WEEK) AND
+        t.`task-status_id`!=4 AND
+        (n.notification IS NULL OR n.notification<2);
+END//
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `taskNotificationSentInsertAndUpdate`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskNotificationSentInsertAndUpdate`(IN `taskId` INT, IN `notification` INT)
+BEGIN
+    REPLACE INTO `TaskNotificationSent` (`task_id`, `notification`) VALUES (taskId, notification);
+    select 1 as 'result';
 END//
 DELIMITER ;
 
