@@ -126,7 +126,7 @@
                                 <td style="padding-bottom: 20px"/>
                             </tr>
                         {/if}
-                        {if $userPersonalInfo->getLanguagePreference() != null}
+                        {if isset($userPersonalInfo) && $userPersonalInfo->getLanguagePreference() != null}
                             <tr>
                                 <td>
                                     <h3>{Localisation::getTranslation('common_language_preference')}</h3>

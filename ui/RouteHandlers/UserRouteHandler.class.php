@@ -1000,8 +1000,13 @@ EOD;
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
 
-        $langPref = $langDao->getLanguage($userPersonalInfo->getLanguagePreference());
-        $langPrefName = $langPref->getName();
+        if (isset($userPersonalInfo)) {
+            $langPref = $langDao->getLanguage($userPersonalInfo->getLanguagePreference());
+            $langPrefName = $langPref->getName();
+        }
+        else {
+            $langPrefName = '';
+        }
         
         $app->view()->appendData(array(
             "badges" => $badges,
