@@ -13,6 +13,47 @@
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.$adminUserId"}" accept-charset="utf-8">
         <table style="width: 40%">
             <tr>
+                <td colspan="2">
+                    <label for="verify"><h2>{Localisation::getTranslation('email_verification_email_verification')}</h2></label>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <p>{sprintf(Localisation::getTranslation('email_verification_email_verification'), $siteName)}</p>
+                </td>
+            </tr>
+            {if isset($flash['verifyError'])}
+                <tr>
+                    <td colspan="2">
+                        <p class="alert alert-error">{$flash['verifyError']}</p>
+                    </td>
+                </tr>
+            {/if}
+            {if isset($flash['verifySuccess'])}
+                <tr>
+                    <td colspan="2">
+                        <p class="alert alert-success">{$flash['verifySuccess']}</p>
+                    </td>
+                </tr>
+            {/if}
+            <tr>
+                <td>
+                    <input type="text" name="userEmail" placeholder="{Localisation::getTranslation('site_admin_dashboard_email_here')}" style="width: 95%"/>
+                </td>
+                <td valign="top">
+                    <button class="btn btn-success" type="submit" name="verify" value="1">
+                        <i class="icon-star icon-white"></i>
+                        {Localisation::getTranslation('email_verification_email_verification')}
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <hr />
+
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.$adminUserId"}" accept-charset="utf-8">
+        <table style="width: 40%">
+            <tr>
                 <td colspan="2"> 
                     <label for="addAdmin"><h2>{Localisation::getTranslation('common_create_administrator')}</h2></label>
                 </td>

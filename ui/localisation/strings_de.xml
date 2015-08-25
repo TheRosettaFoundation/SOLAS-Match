@@ -805,7 +805,7 @@
     <string name="task_profile_display_archived">Vor <strong>%s</strong> archiviert</string>
 
 	<string name="task_review_count">Revision #%s</string>
-	<string name="task_review_form_0">Du kannst die Ausgangsdatei <a href="%s">hier</a> nochmals herunterladen.</string>
+    <string name="task_review_form_0">Du kannst die Datei <a href="%s">hier</a> herunterladen.</string>
 	<string name="task_review_form_1">Du kannst die Projektdatei <a href="%s">hier</a> nochmals herunterladen.</string>
     <string name="task_review_form_rating">Bewertung mit Sternen von 1 bis 5, wobei 1 = „Viele Fehler“ und 5 = „Wenige Fehler“</string>
     <string name="task_review_segmented">segmentiert</string>

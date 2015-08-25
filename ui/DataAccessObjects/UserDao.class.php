@@ -668,6 +668,13 @@ class UserDao extends BaseDao
         return $resp;
     }
 
+    public function finishRegistrationManually($email)
+    {
+        $request = "{$this->siteApi}v0/users/$email/manuallyFinishRegistration";
+        $resp = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
+        return $resp;
+    }
+
     public function getRegisteredUser($registrationId)
     {
         $ret = null;

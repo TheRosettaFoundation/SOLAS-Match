@@ -814,7 +814,7 @@
     <string name="task_profile_display_archived">Archiviato <strong>%s</strong> fa</string>
 
 	<string name="task_review_count">Recensione #%s</string>
-	<string name="task_review_form_0">Puoi scaricare nuovamente il file sorgente <a href="%s">qui</a>.</string>
+    <string name="task_review_form_0">Puoi scaricare il file <a href="%s">qui</a>.</string>
 	<string name="task_review_form_1">Puoi scaricare il file del progetto <a href="%s">qui</a>.</string>
     <string name="task_review_form_rating">Punteggio da 1 a 5, dove 1=Molti errori e 5=Pochi errori</string>
     <string name="task_review_segmented">segmentato</string>

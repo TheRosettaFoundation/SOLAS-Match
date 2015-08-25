@@ -813,7 +813,7 @@
     <string name="task_profile_display_archived">Archivada hace <strong>%s</strong></string>
 
 	<string name="task_review_count">Comentario n.º %s</string>
-	<string name="task_review_form_0">Puedes volver a descargar el texto de origen <a href="%s">aquí</a>.</string>
+    <string name="task_review_form_0">Puedes volver a descargar el documento <a href="%s">aquí</a>.</string>
 	<string name="task_review_form_1">Puedes descargar el archivo del proyecto <a href="%s">aquí</a>.</string>
     <string name="task_review_form_rating">Valoración: de 1 a 5 estrellas (1 = muchos errores, 5 = casi ningún error o ninguno).</string>
     <string name="task_review_segmented">dividido</string>

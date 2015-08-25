@@ -208,6 +208,16 @@ class UserDao
         return $response[0]['result'];
     }
 
+    public static function finishRegistrationManually($email)
+    {
+        $args = Lib\PDOWrapper::cleanseNullOrWrapStr($email);
+        $response = Lib\PDOWrapper::call('finishRegistrationManually', $args);
+        if ($response[0]['result']) {
+            BadgeDao::assignBadge($response[0]['result'], Common\Enums\BadgeTypes::REGISTERED);
+        }
+        return $response[0]['result'];
+    }
+
     public static function getRegisteredUser($uuid)
     {
         $ret = null;
