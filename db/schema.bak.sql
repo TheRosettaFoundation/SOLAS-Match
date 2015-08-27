@@ -10,6 +10,487 @@
 /*!40101 SET NAMES utf8 */;
 SET FOREIGN_KEY_CHECKS=0;
 
+/*--------------------START OF ALTER TABLES TO NORMALISE DATA LENGTHS/TYPES -----------------------*/
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "OrgRequests"
+                                        AND COLUMN_NAME = "user_id"
+                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
+                    ALTER TABLE OrgRequests CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "PasswordResetRequests"
+                                        AND COLUMN_NAME = "user_id"
+                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
+                    ALTER TABLE PasswordResetRequests CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "TaskClaims"
+                                        AND COLUMN_NAME = "user_id"
+                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
+                    ALTER TABLE TaskClaims CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "TaskFileVersions"
+                                        AND COLUMN_NAME = "user_id"
+                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
+                    ALTER TABLE TaskFileVersions CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "TaskUnclaims"
+                                        AND COLUMN_NAME = "user_id"
+                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
+                    ALTER TABLE TaskUnclaims CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "UserBadges"
+                                        AND COLUMN_NAME = "user_id"
+                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
+                    ALTER TABLE UserBadges CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "UserNotifications"
+                                        AND COLUMN_NAME = "user_id"
+                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
+                    ALTER TABLE UserNotifications CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "UserTags"
+                                        AND COLUMN_NAME = "user_id"
+                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
+                    ALTER TABLE UserTags CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "UserTaskScores"
+                                        AND COLUMN_NAME = "user_id"
+                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
+                    ALTER TABLE UserTaskScores CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "UserTaskStreamNotifications"
+                                        AND COLUMN_NAME = "user_id"
+                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
+                    ALTER TABLE UserTaskStreamNotifications CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "ArchivedTasks"
+                                        AND COLUMN_NAME = "country_id-source"
+                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
+                    ALTER TABLE ArchivedTasks CHANGE `country_id-source` `country_id-source` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "ArchivedTasks"
+                                        AND COLUMN_NAME = "country_id-target"
+                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
+                    ALTER TABLE ArchivedTasks CHANGE `country_id-target` `country_id-target` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "Tasks"
+                                        AND COLUMN_NAME = "country_id-source"
+                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
+                    ALTER TABLE Tasks CHANGE `country_id-source` `country_id-source` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "Tasks"
+                                        AND COLUMN_NAME = "country_id-target"
+                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
+                    ALTER TABLE Tasks CHANGE `country_id-target` `country_id-target` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "TaskTranslatorBlacklist"
+                                        AND COLUMN_NAME = "task_id"
+                                        AND COLUMN_TYPE = 'BIGINT(10) UNSIGNED') then
+                    ALTER TABLE TaskTranslatorBlacklist CHANGE `task_id` `task_id` BIGINT(20) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "UserNotifications"
+                                        AND COLUMN_NAME = "task_id"
+                                        AND COLUMN_TYPE = 'BIGINT(11) UNSIGNED') then
+                    ALTER TABLE UserNotifications CHANGE `task_id` `task_id` BIGINT(20) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "UserTaskScores"
+                                        AND COLUMN_NAME = "task_id"
+                                        AND COLUMN_TYPE = 'BIGINT(11) UNSIGNED') then
+                    ALTER TABLE UserTaskScores CHANGE `task_id` `task_id` BIGINT(20) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "UserTrackedTasks"
+                                        AND COLUMN_NAME = "task_id"
+                                        AND COLUMN_TYPE = 'BIGINT(10) UNSIGNED') then
+                    ALTER TABLE UserTrackedTasks CHANGE `task_id` `task_id` BIGINT(20) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "ArchivedTasks"
+                                        AND COLUMN_NAME = "language_id-source"
+                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
+                    ALTER TABLE ArchivedTasks CHANGE `language_id-source` `language_id-source` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "ArchivedTasks"
+                                        AND COLUMN_NAME = "language_id-target"
+                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
+                    ALTER TABLE ArchivedTasks CHANGE `language_id-target` `language_id-target` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "Tasks"
+                                        AND COLUMN_NAME = "language_id-source"
+                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
+                    ALTER TABLE Tasks CHANGE `language_id-source` `language_id-source` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "Tasks"
+                                        AND COLUMN_NAME = "language_id-target"
+                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
+                    ALTER TABLE Tasks CHANGE `language_id-target` `language_id-target` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "OrgRequests"
+                                        AND COLUMN_NAME = "org_id"
+                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
+                    ALTER TABLE OrgRequests CHANGE `org_id` `org_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "ArchivedTasks"
+                                        AND COLUMN_NAME = "project_id"
+                                        AND COLUMN_TYPE = 'INT(20) UNSIGNED') then
+                    ALTER TABLE ArchivedTasks CHANGE `project_id` `project_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "Tasks"
+                                        AND COLUMN_NAME = "project_id"
+                                        AND COLUMN_TYPE = 'INT(20) UNSIGNED') then
+                    ALTER TABLE Tasks CHANGE `project_id` `project_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "UserTags"
+                                        AND COLUMN_NAME = "tag_id"
+                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
+                    ALTER TABLE UserTags CHANGE `tag_id` `tag_id` INT(10) UNSIGNED NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+                 
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "ArchivedTasks"
+                                        AND COLUMN_NAME = "published"
+                                        AND DATA_TYPE = 'VARCHAR'
+                                        AND CHARACTER_MAXIMUM_LENGTH = 50) then
+                    ALTER TABLE ArchivedTasks MODIFY `published` BIT(1) DEFAULT 0 NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+
+DROP PROCEDURE IF EXISTS alterTable;
+                 DELIMITER //
+                 CREATE PROCEDURE alterTable()
+                 BEGIN
+                    IF EXISTS(SELECT 1
+                                        FROM information_schema.`COLUMNS`
+                                        WHERE TABLE_SCHEMA = database()
+                                        AND TABLE_NAME = "Tasks"
+                                        AND COLUMN_NAME = "published"
+                                        AND DATA_TYPE = 'VARCHAR'
+                                        AND CHARACTER_MAXIMUM_LENGTH = 50) then
+                    ALTER TABLE Tasks MODIFY `published` BIT(1) DEFAULT 0 NOT NULL;
+                    END IF;
+                 END//
+                 DELIMITER ;
+                 CALL alterTable();
+                 DROP PROCEDURE alterTable;
+
+/*-------------------------------------------END OF ALTER TABLES-----------------------------------*/
+
 /*--------------------------------------------------start of tables--------------------------------*/
 
 -- Dumping structure for table Solas-Match-Test.Admins
