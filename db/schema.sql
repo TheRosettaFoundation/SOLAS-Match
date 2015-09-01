@@ -974,6 +974,7 @@ CREATE TABLE IF NOT EXISTS `TaskPrerequisites` (
   `task_id` bigint(20) unsigned NOT NULL,
   `task_id-prerequisite` bigint(20) unsigned NOT NULL,
   UNIQUE KEY `task_id` (`task_id`,`task_id-prerequisite`),
+  KEY `FK_TaskPrerequisites_Tasks_1` (`task_id`),
   KEY `FK_TaskPrerequisites_Tasks_2` (`task_id-prerequisite`),
   CONSTRAINT `FK_TaskPrerequisites_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_TaskPrerequisites_Tasks_2` FOREIGN KEY (`task_id-prerequisite`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
