@@ -1776,8 +1776,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteTask`(IN `id` INT)
 BEGIN
     if EXISTS (select 1 from Tasks where Tasks.id=id) then
 
-      START TRANSACTION;
-
       # Double nested SELECT used to force use of temporary table, because otherwise, nested tables are not allowed in UPDATE. Temporary table will be very small.
       # If any WAITING_FOR_PREREQUISITES Task has a Prerequisite Task which is being deleted and it does not have any other non COMPLETE Prerequisites (SUM(...)=0), set it to PENDING_CLAIM
       UPDATE Tasks tt SET tt.`task-status_id`=2 WHERE tt.id IN (
@@ -1794,8 +1792,6 @@ BEGIN
       );
 
 	    delete from Tasks where Tasks.id=id;
-
-      COMMIT;
 
     	select 1 as result;
     else
