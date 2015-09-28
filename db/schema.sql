@@ -2675,7 +2675,7 @@ BEGIN
             FROM Tasks t JOIN Projects p
             ON t.project_id = p.id
             WHERE t.id = taskId;
-        CALL getAdmin(@orgId);
+        CALL getAdmin(NULL, @orgId);
     end if;
 END//
 DELIMITER ;
