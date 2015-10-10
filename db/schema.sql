@@ -1253,13 +1253,19 @@ CREATE TABLE IF NOT EXISTS `UserTaskScores` (
   `task_id` bigint(20) unsigned NOT NULL,
   `score` int(11) NOT NULL DEFAULT '-1',
   PRIMARY KEY (`user_id`,`task_id`),
-  UNIQUE KEY `taskScore` (`task_id`,`user_id`),
+  KEY `FK_user_task_score_user1` (`user_id`),
+  KEY `FK_user_task_score_task1` (`task_id`),
   CONSTRAINT `FK_user_task_score_task1` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_user_task_score_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
 
+CREATE TABLE IF NOT EXISTS `UserTaskScoresUpdatedTime` (
+  `id` int(10) unsigned NOT NULL,
+  `unix_epoch` BIGINT(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Dumping structure for table Solas-Match-Test.UserTaskStreamNotifications
 CREATE TABLE IF NOT EXISTS `UserTaskStreamNotifications` (
@@ -2669,7 +2675,7 @@ BEGIN
             FROM Tasks t JOIN Projects p
             ON t.project_id = p.id
             WHERE t.id = taskId;
-        CALL getAdmin(@orgId);
+        CALL getAdmin(NULL, @orgId);
     end if;
 END//
 DELIMITER ;
@@ -4506,6 +4512,25 @@ BEGIN
     else
         UPDATE UserTaskScores SET score=points WHERE user_id=uID and task_id=tID;
     end if;
+END//
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `getUserTaskScoresUpdatedTime`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTaskScoresUpdatedTime`()
+BEGIN
+    SELECT unix_epoch FROM `UserTaskScoresUpdatedTime` WHERE id=1;
+END//
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `recordUserTaskScoresUpdatedTime`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `recordUserTaskScoresUpdatedTime`(IN `unixEpochIn` BIGINT)
+BEGIN
+    REPLACE INTO `UserTaskScoresUpdatedTime` (`id`, `unix_epoch`) VALUES (1, unixEpochIn);
+    select 1 as 'result';
 END//
 DELIMITER ;
 

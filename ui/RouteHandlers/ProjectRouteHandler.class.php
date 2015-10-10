@@ -663,6 +663,7 @@ class ProjectRouteHandler
 
                 try {
                     $project = $projectDao->createProject($project);
+                    error_log('Created Project: ' . $post['project_title']);
                 } catch (\Exception $e) {
                     $project = null;
                 }
@@ -672,6 +673,7 @@ class ProjectRouteHandler
                     if (empty($_FILES['projectFile']['name']) || !empty($_FILES['projectFile']['error']) || empty($_FILES['projectFile']['tmp_name'])
                             || (($data = file_get_contents($_FILES['projectFile']['tmp_name'])) === false)) {
                         $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), htmlspecialchars($_FILES['projectFile']['name'], ENT_COMPAT, 'UTF-8')));
+                        error_log('Project Upload Error: ' . $post['project_title']);
                         try {
                             $projectDao->deleteProject($project->getId());
                         } catch (\Exception $e) {
@@ -687,8 +689,10 @@ class ProjectRouteHandler
                         }
                         try {
                             $projectDao->saveProjectFile($project, $user_id, $projectFileName, $data);
+                            error_log("Project File Saved($user_id): " . $post['project_title']);
                             $success = true;
                         } catch (\Exception $e) {
+                            error_log("Project File Save Error($user_id): " . $post['project_title']);
                             $success = false;
                         }
                         if (!$success) {
@@ -1040,6 +1044,7 @@ class ProjectRouteHandler
             return 0;
         }
 
+        error_log("Added Task: $newTaskId");
         return $newTaskId;
     }
 
