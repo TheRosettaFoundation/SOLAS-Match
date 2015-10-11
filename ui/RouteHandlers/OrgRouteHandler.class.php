@@ -180,9 +180,11 @@ class OrgRouteHandler
                 $orgDao = new DAO\OrganisationDao();
 
                 try {
+                    error_log("Calling createOrg(, $user_id)");
                     $new_org = $orgDao->createOrg($org, $user_id);
                     if ($new_org) {
                         $org_name = $org->getName();
+                        error_log("Called createOrg() for: $org_name");
                         $app->flash(
                             "success",
                             sprintf(Lib\Localisation::getTranslation('create_org_created'), $org_name)
@@ -701,6 +703,7 @@ class OrgRouteHandler
                 
             } elseif (isset($post['makeOrgAdmin'])) {
                 $userId = $post['makeOrgAdmin'];
+                error_log("Called createOrgAdmin($userId, $org_id)");
                 $adminDao->createOrgAdmin($userId, $org_id);
             } elseif (isset($post['trackOrganisation'])) {
                 $user_id = $currentUser->getId();
