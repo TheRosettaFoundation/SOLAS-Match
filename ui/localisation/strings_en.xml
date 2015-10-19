@@ -823,12 +823,12 @@
     <string name="task_review_proofread">proofread</string>
     <string name="task_review_merged">merged</string>
 	<string name="task_review_form_corrections">Corrections</string>
-	<string name="task_review_form_2">Were there many mistakes in the source file?</string>
-	<string name="task_review_form_3">How was the use of grammar in the source file?</string>
+	<string name="task_review_form_2">Were there many mistakes in the file?</string>
+	<string name="task_review_form_3">How was the use of grammar in the file?</string>
 	<string name="task_review_form_spelling">Spelling</string>
-	<string name="task_review_form_4">Were there many spelling errors in the source file?</string>
+	<string name="task_review_form_4">Were there many spelling errors in the file?</string>
 	<string name="task_review_form_consistency">Consistency</string>
-	<string name="task_review_form_5">Were there any errors in consistency in the source file?</string>
+	<string name="task_review_form_5">Were there any errors in consistency in the file?</string>
 	<string name="task_review_form_comment">Comment</string>
 	<string name="task_review_form_6">An optional comment about the file in general.</string>
 	<string name="task_review_form_grammar">Grammar</string>
