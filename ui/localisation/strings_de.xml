@@ -813,12 +813,12 @@
     <string name="task_review_proofread">korrigiert</string>
     <string name="task_review_merged">zusammengefügt</string>
 	<string name="task_review_form_corrections">Korrekturen</string>
-	<string name="task_review_form_2">Gab es in der Ausgangsdatei viele Fehler?</string>
-	<string name="task_review_form_3">Wie gut war die Grammatik in der Ausgangsdatei?</string>
+	<string name="task_review_form_2">Gab es in der Datei viele Fehler?</string>
+	<string name="task_review_form_3">Wie gut war die Grammatik in der Datei?</string>
 	<string name="task_review_form_spelling">Rechtschreibung</string>
-	<string name="task_review_form_4">Gab es in der Ausgangsdatei viele Rechtschreibfehler?</string>
+	<string name="task_review_form_4">Gab es in der Datei viele Rechtschreibfehler?</string>
 	<string name="task_review_form_consistency">Konsistenz</string>
-	<string name="task_review_form_5">Gab es in der Ausgangsdatei viele Inkonsistenzen?</string>
+	<string name="task_review_form_5">Gab es in der Datei viele Inkonsistenzen?</string>
 	<string name="task_review_form_comment">Kommentar</string>
 	<string name="task_review_form_6">Optionaler Kommentar zur Datei im Allgemeinen.</string>
 	<string name="task_review_form_grammar">Grammatik</string>
