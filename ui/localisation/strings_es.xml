@@ -821,12 +821,12 @@
     <string name="task_review_proofread">revisado</string>
     <string name="task_review_merged">unido</string>
 	<string name="task_review_form_corrections">Correcciones</string>
-	<string name="task_review_form_2">¿Tenía muchos errores el texto original?</string>
-	<string name="task_review_form_3">¿Tenía errores gramaticales el texto original?</string>
+	<string name="task_review_form_2">¿Tenía muchos errores el texto?</string>
+	<string name="task_review_form_3">¿Tenía errores gramaticales el texto?</string>
 	<string name="task_review_form_spelling">Ortografía</string>
-	<string name="task_review_form_4">¿Tenía errores ortográficos el texto original?</string>
+	<string name="task_review_form_4">¿Tenía errores ortográficos el texto?</string>
 	<string name="task_review_form_consistency">Coherencia textual</string>
-	<string name="task_review_form_5">¿Tenía errores de coherencia el texto original?</string>
+	<string name="task_review_form_5">¿Tenía errores de coherencia el texto?</string>
 	<string name="task_review_form_comment">Comentarios</string>
 	<string name="task_review_form_6">Si tienes algún comentario general, puedes añadirlo aquí.</string>
 	<string name="task_review_form_grammar">Gramática</string>
