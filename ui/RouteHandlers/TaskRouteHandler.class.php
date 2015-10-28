@@ -2111,6 +2111,8 @@ class TaskRouteHandler
         $extra_scripts .= "<link rel=\"stylesheet\" href=\"{$app->urlFor("home")}ui/js/RateIt/src/rateit.css\"/>";
         $extra_scripts .= "<script>".file_get_contents(__DIR__."/../js/RateIt/src/jquery.rateit.min.js")."</script>";
         $extra_scripts .= file_get_contents(__DIR__."/../js/review.js");
+        // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
+        $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
         $formAction = $app->urlFor("task-review", array('task_id' => $taskId));
 
