@@ -839,7 +839,7 @@
 	<string name="task_review_0">How would you rate this task?</string>
 	<string name="task_review_1">Thank you for contributing to this project.</string>
   <string name="task_twitter_0">If you are on Twitter, click the following button to tell the world about your contribution (make sure to allow pop-ups):</string>
-  <string name="task_twitter_1">I’ve just completed a task as a volunteer on trommons.org @TheRosettaFound #languagematters</string>
+  <string name="task_twitter_1">I’ve just completed a task as a volunteer with @TheRosettaFound #languagematters</string>
 	<string name="task_review_2">Please provide a rating for the file(s) you just</string>
 	<string name="task_review_3">based on the following criteria:</string>
     <string name="task_review_4">You have already submitted a review for this file.</string>
