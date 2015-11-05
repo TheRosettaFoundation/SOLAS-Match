@@ -822,12 +822,12 @@
     <string name="task_review_proofread">revisionato</string>
     <string name="task_review_merged">desegmentato</string>
 	<string name="task_review_form_corrections">Correzioni</string>
-	<string name="task_review_form_2">C'erano molti errori nel file sorgente?</string>
-	<string name="task_review_form_3">Che livello di grammatica c'era nel file sorgente?</string>
+	<string name="task_review_form_2">C'erano molti errori nel file?</string>
+	<string name="task_review_form_3">Che livello di grammatica c'era nel file?</string>
 	<string name="task_review_form_spelling">Ortografia</string>
-	<string name="task_review_form_4">C'erano molti errori di ortografia nel file sorgente?</string>
+	<string name="task_review_form_4">C'erano molti errori di ortografia nel file?</string>
 	<string name="task_review_form_consistency">Coerenza testuale</string>
-	<string name="task_review_form_5">C'erano errori di coerenza testuale nel file sorgente?</string>
+	<string name="task_review_form_5">C'erano errori di coerenza testuale nel file?</string>
 	<string name="task_review_form_comment">Commenti</string>
 	<string name="task_review_form_6">Un commento opzionale sul file in generale.</string>
 	<string name="task_review_form_grammar">Grammatica</string>
@@ -836,6 +836,8 @@
 
 	<string name="task_review_provide_a_rating">Fornisci una valutazione</string>
 	<string name="task_review_0">Come valuteresti questa attività?</string>
+  <string name="task_twitter_0">If you are on Twitter, click the following button to tell the world about your contribution (make sure to allow pop-ups):</string>
+  <string name="task_twitter_1">Iâ€™ve just completed a task as a volunteer with @TheRosettaFound #languagematters</string>
 	<string name="task_review_1">Grazie mille per il tuo contributo a questo progetto.</string>
 	<string name="task_review_2">Fornisci una valutazione per il/i documento/i</string>
 	<string name="task_review_3">basandoti sui seguenti criteri:</string>

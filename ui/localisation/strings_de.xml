@@ -828,6 +828,8 @@
 	<string name="task_review_provide_a_rating">Gib eine Bewertung ab</string>
 	<string name="task_review_0">Wie würdest Du diese Aufgabe bewerten?</string>
 	<string name="task_review_1">Danke für Deinen Beitrag zu diesem Projekt.</string>
+  <string name="task_twitter_0">Wenn Du ein Twitter-Konto hast, kannst Du auf die folgende Schaltfläche klicken, um Deinen Beitrag mit der ganzen Welt zu teilen (Pop-ups müssen erlaubt sein):</string>
+  <string name="task_twitter_1">Ich habe gerade eine gemeinnützige Übersetzungsaufgabe für @TheRosettaFound abgeschlossen #languagematters</string>
 	<string name="task_review_2">Bitte gib eine Bewertung zu der Datei/den Dateien ab, die Du gerade</string>
 	<string name="task_review_3">basiert auf den folgenden Kriterien:</string>
     <string name="task_review_4">Für diese Datei hast Du bereits eine Revision abgeschickt.</string>
