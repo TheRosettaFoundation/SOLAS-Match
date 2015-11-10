@@ -838,6 +838,9 @@
 	<string name="task_review_0">Come valuteresti questa attività?</string>
   <string name="task_twitter_0">Se sei su Twitter, clicca qui per far sapere al mondo del tuo contributo (assicurati di accettare i pop-up):</string>
   <string name="task_twitter_1">Ho appena offerto il mio aiuto come volontario per @TheRosettaFound #languagematters</string>
+  <string name="task_twitter_2">We’ve joined www.trommons.org to connect with language volunteers @TheRosettaFound #languagematters</string>
+  <string name="task_twitter_3">Translators @TheRosettaFound can you help with our project on www.trommons.org? #languagematters</string>
+  <string name="task_twitter_4">Thanks to volunteers @TheRosettaFound for helping with translations #languagematters</string>
 	<string name="task_review_1">Grazie mille per il tuo contributo a questo progetto.</string>
 	<string name="task_review_2">Fornisci una valutazione per il/i documento/i</string>
 	<string name="task_review_3">basandoti sui seguenti criteri:</string>

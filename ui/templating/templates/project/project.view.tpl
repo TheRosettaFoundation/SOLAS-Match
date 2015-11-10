@@ -42,6 +42,13 @@
     </p>
 {/if}
 
+<p>
+{Localisation::getTranslation('task_twitter_0')} <a class="twitter-share-button"
+  href="https://twitter.com/intent/tweet?text={Localisation::getTranslation('task_twitter_3')}&url=http%3A%2F%2Ftrommons.org"
+  data-size="large" data-counturl="http://trommons.org">
+Tweet</a>
+</p>
+
     <table class="table table-striped" style="overflow-wrap: break-word; word-break:break-all; table-layout: fixed;">
         <thead>            
             <th style="text-align: left;"><strong>{Localisation::getTranslation('common_organisation')}</strong></th>
