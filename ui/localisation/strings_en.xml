@@ -841,7 +841,7 @@
   <string name="task_twitter_0">If you are on Twitter, click the following button to tell the world about your contribution (make sure to allow pop-ups):</string>
   <string name="task_twitter_1">I’ve just completed a task as a volunteer with @TheRosettaFound #languagematters</string>
   <string name="task_twitter_2">We’ve joined trommons.org to connect with language volunteers @TheRosettaFound #languagematters</string>
-  <string name="task_twitter_3">Translators @TheRosettaFound can you help with our project on www.trommons.org? #languagematters</string>
+  <string name="task_twitter_3">Translators @TheRosettaFound can you help with our project on trommons.org%3F #languagematters</string>
   <string name="task_twitter_4">Thanks to volunteers @TheRosettaFound for helping with translations #languagematters</string>
 	<string name="task_review_2">Please provide a rating for the file(s) you just</string>
 	<string name="task_review_3">based on the following criteria:</string>

@@ -831,7 +831,7 @@
   <string name="task_twitter_0">Wenn Du ein Twitter-Konto hast, kannst Du auf die folgende Schaltfläche klicken, um Deinen Beitrag mit der ganzen Welt zu teilen (Pop-ups müssen erlaubt sein):</string>
   <string name="task_twitter_1">Ich habe gerade eine gemeinnützige Übersetzungsaufgabe für @TheRosettaFound abgeschlossen #languagematters</string>
   <string name="task_twitter_2">We’ve joined trommons.org to connect with language volunteers @TheRosettaFound #languagematters</string>
-  <string name="task_twitter_3">Translators @TheRosettaFound can you help with our project on www.trommons.org? #languagematters</string>
+  <string name="task_twitter_3">Translators @TheRosettaFound can you help with our project on trommons.org%3F #languagematters</string>
   <string name="task_twitter_4">Thanks to volunteers @TheRosettaFound for helping with translations #languagematters</string>
 	<string name="task_review_2">Bitte gib eine Bewertung zu der Datei/den Dateien ab, die Du gerade</string>
 	<string name="task_review_3">basiert auf den folgenden Kriterien:</string>
