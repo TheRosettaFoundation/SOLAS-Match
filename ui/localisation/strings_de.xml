@@ -829,6 +829,9 @@
 	<string name="task_review_0">Wie würdest Du diese Aufgabe bewerten?</string>
 	<string name="task_review_1">Danke für Deinen Beitrag zu diesem Projekt.</string>
   <string name="task_twitter_0">Wenn Du ein Twitter-Konto hast, kannst Du auf die folgende Schaltfläche klicken, um Deinen Beitrag mit der ganzen Welt zu teilen (Pop-ups müssen erlaubt sein):</string>
+  <string name="task_twitter_0_org_dashboard">If you are on Twitter, click the following button to tell the world about Trommons (make sure to allow pop-ups):</string>
+  <string name="task_twitter_0_project_view">If you are on Twitter, click the following button to tell the world about your project (make sure to allow pop-ups):</string>
+  <string name="task_twitter_0_org_task_review">If you are on Twitter, click the following button to thank our volunteers (make sure to allow pop-ups):</string>
   <string name="task_twitter_1">Ich habe gerade eine gemeinnützige Übersetzungsaufgabe für @TheRosettaFound abgeschlossen #languagematters</string>
   <string name="task_twitter_2">We’ve joined trommons.org to connect with language volunteers @TheRosettaFound #languagematters</string>
   <string name="task_twitter_3">Translators @TheRosettaFound can you help with our project on trommons.org%3F #languagematters</string>
