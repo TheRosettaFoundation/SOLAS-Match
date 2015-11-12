@@ -12,6 +12,13 @@
     {sprintf(Localisation::getTranslation('org_task_review_the_volunteer'), {urlFor name="user-public-profile" options="user_id.{$translator->getId()}"}, $translator->getDisplayName())}
 </p>
 
+<p>
+{Localisation::getTranslation('task_twitter_0_org_task_review')} <a class="twitter-share-button"
+  href="https://twitter.com/intent/tweet?text={Localisation::getTranslation('task_twitter_4')}&url=http%3A%2F%2Ftrommons.org"
+  data-size="large" data-counturl="http://trommons.org">
+Tweet</a>
+</p>
+
 {if isset($formAction)}
     <form class="well" method="post" action="{$formAction}"  onsubmit="createHiddenFields()" id="TaskReviewForm" accept-charset="utf-8">
 {else}

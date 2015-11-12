@@ -836,7 +836,13 @@
 	<string name="task_review_provide_a_rating">Puntuar</string>
 	<string name="task_review_0">¿Qué puntuación le darías a esta tarea?</string>
   <string name="task_twitter_0">Si tienes Twitter, haz clic en este botón para compartir tu contribución con resto del mundo (asegúrate de que tu navegador permite las ventanas emergentes):</string>
+  <string name="task_twitter_0_org_dashboard">Si tienes Twitter, haz clic en este botón para contarle al mundo qué es Trommons (asegúrate de que tu navegador permite las ventanas emergentes):</string>
+  <string name="task_twitter_0_project_view">Si tienes Twitter, haz clic en este botón para que el mundo sepa de tu proyecto (asegúrate de que tu navegador permite las ventanas emergentes):</string>
+  <string name="task_twitter_0_org_task_review">Si tienes Twitter, haz clic en este botón para darle las gracias a nuestros voluntarios (asegúrate de que tu navegador permite las ventanas emergentes):</string>
   <string name="task_twitter_1">Acabo de hacer a una traducción/revisión voluntaria para @TheRosettaFound #languagematters</string>
+  <string name="task_twitter_2">Nos hemos unido a Trommons para contactar con traductores voluntarios @TheRosettaFound #languagematters</string>
+  <string name="task_twitter_3">Voluntarios de @TheRosettaFound, ¿nos ayudáis a traducir un proyecto en trommons.org%3F #languagematters</string>
+  <string name="task_twitter_4">¡Gracias a los voluntarios de @TheRosettaFound por ayudarnos con la traducción! #languagematters</string>
 	<string name="task_review_1">¡Gracias por contribuir a este proyecto!</string>
 	<string name="task_review_2">Deja tu valoración sobre el texto o textos que acabas de</string>
 	<string name="task_review_3">en función de estos criterios:</string>
