@@ -1,6 +1,6 @@
 {include file="header.tpl"}
 
-    <div class="page-header" style="margin-bottom: 50px">
+    <div class="page-header">
         <h1>
             {Localisation::getTranslation('org_dashboard_organisation_dashboard')} <small>{Localisation::getTranslation('org_dashboard_0')}</small>
         </h1>
