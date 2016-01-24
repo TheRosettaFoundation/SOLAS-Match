@@ -3372,7 +3372,7 @@ BEGIN
                         (SELECT language_id FROM Users WHERE id = uID)
                     OR t.`language_id-target` IN 
                         (SELECT language_id FROM UserSecondaryLanguages WHERE user_id = uID))))
-             ORDER BY uts.score DESC limit offset, lim);
+             ORDER BY (uts.score+LEAST(DATEDIFF(CURDATE(), t.`created-time`), 700)) DESC limit offset, lim);
 END//
 DELIMITER ;
 
