@@ -1100,7 +1100,7 @@ CREATE TABLE IF NOT EXISTS `TaskUnclaims` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `Tasks` (`task_id`, `user_id`, `unclaimed-time`),
   KEY `FK_task_unclaim_user` (`user_id`),
-  CONSTRAINT `FK_task_unclaim_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
+  CONSTRAINT `FK_task_unclaim_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Dumping structure for table Solas-Match-Test.UserBadges
@@ -1325,7 +1325,7 @@ CREATE TABLE IF NOT EXISTS `TaskViews` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `TaskViewTimeStamps` (`task_id`, `user_id`, `viewed-time`),
   KEY `FK_task_viewed_user` (`user_id`),
-  CONSTRAINT `FK_task_viewed_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
+  CONSTRAINT `FK_task_viewed_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
