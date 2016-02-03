@@ -146,6 +146,18 @@ class Users
                         '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
                         '\SolasMatch\API\V0\Users::getFilteredUserClaimedTasksCount'
                     );
+                    
+                    $app->get(
+                        '/recentTasks/:limit/:offset(:format)/',
+                        '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+                        '\SolasMatch\API\V0\Users::getUserRecentTasks'
+                    );
+                    
+                    $app->get(
+                        '/recentTasksCount(:format)/',
+                        '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
+                        '\SolasMatch\API\V0\Users::getUserRecentTasksCount'
+                    );
 
                     $app->put(
                         '/requestReference(:format)/',
@@ -308,6 +320,11 @@ class Users
                     $app->post(
                         '/finishRegistration(:format)/',
                         '\SolasMatch\API\V0\Users::finishRegistration'
+                    );
+
+                    $app->post(
+                        '/manuallyFinishRegistration(:format)/',
+                        '\SolasMatch\API\V0\Users::finishRegistrationManually'
                     );
                 });
 
@@ -825,6 +842,43 @@ class Users
             $format
         );
     }
+    
+    public static function getUserRecentTasks(
+            $userId,
+            $limit,
+            $offset,
+            $format = ".json"
+    ) {
+        if (!is_numeric($offset) && strstr($offset, '.')) {
+            $offset = explode('.', $offset);
+            $format = '.'.$offset[1];
+            $offset = $offset[0];
+        }
+        API\Dispatcher::sendResponse(
+        null,
+        DAO\TaskDao::getUserRecentTasks(
+        $userId,
+        $limit,
+        $offset
+        ),
+        null,
+        $format
+        );
+    }
+
+    public static function getUserRecentTasksCount(
+            $userId,
+            $format = ".json"
+    ) {
+        API\Dispatcher::sendResponse(
+        null,
+        DAO\TaskDao::getUserRecentTasksCount(
+        $userId
+        ),
+        null,
+        $format
+        );
+    }
 
     public static function getUserArchivedTasks($userId, $limit, $offset, $format = ".json")
     {
@@ -943,6 +997,12 @@ class Users
         } else {
             API\Dispatcher::sendResponse(null, "Invalid UUID", Common\Enums\HttpStatusEnum::UNAUTHORIZED, $format);
         }
+    }
+
+    public static function finishRegistrationManually($email, $format = '.json')
+    {
+        $ret = DAO\UserDao::finishRegistrationManually($email);
+        API\Dispatcher::sendResponse(null, $ret, null, $format);
     }
 
     public static function getPasswordResetRequestTime($email, $format = ".json")

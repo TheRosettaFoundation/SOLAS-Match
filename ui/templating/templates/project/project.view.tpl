@@ -2,7 +2,7 @@
 
     <h1 class="page-header">
         <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block; word-break:break-all;">
-            {$project->getTitle()|escape:'html':'UTF-8'}
+            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getTitle())}
             <small>{Localisation::getTranslation('project_view_overview_of_project_details')}</small>
         </span>
         {assign var="project_id" value=$project->getId()}
@@ -41,6 +41,13 @@
         {$flash['error']}
     </p>
 {/if}
+
+<p>
+{Localisation::getTranslation('task_twitter_0_project_view')} <a class="twitter-share-button"
+  href="https://twitter.com/intent/tweet?text={Localisation::getTranslation('task_twitter_3')}&url=http%3A%2F%2Ftrommons.org"
+  data-size="large" data-counturl="http://trommons.org">
+Tweet</a>
+</p>
 
     <table class="table table-striped" style="overflow-wrap: break-word; word-break:break-all; table-layout: fixed;">
         <thead>            
@@ -126,7 +133,7 @@
                     <td>
                         <i>
                         {if $project->getDescription() != ''}
-                            {$project->getDescription()|escape:'html':'UTF-8'}
+                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getDescription())}
                         {else}
                             {Localisation::getTranslation('common_no_description_has_been_listed')}
                         {/if}  
@@ -175,7 +182,7 @@
                     <td class="nav nav-list unstyled" style="padding-left: 0px; padding-right: 0px;" colspan="2">
                         <i>
 	                        {if $project->getImpact() != ''}
-                              {$project->getImpact()|escape:'html':'UTF-8'}
+                              {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getImpact())}
 	                        {else}
 	                            {Localisation::getTranslation('No impact has been listed')}
 	                        {/if}  
@@ -265,7 +272,7 @@
                                 <tr style="overflow-wrap: break-word; word-break:break-all;">
                                     <td width="24%">
                                         <a href="{urlFor name="task-view" options="task_id.$task_id"}">
-                                            {$task->getTitle()|escape:'html':'UTF-8'}
+                                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
                                         </a>
                                         <br/>
                                     </td>

@@ -974,6 +974,7 @@ CREATE TABLE IF NOT EXISTS `TaskPrerequisites` (
   `task_id` bigint(20) unsigned NOT NULL,
   `task_id-prerequisite` bigint(20) unsigned NOT NULL,
   UNIQUE KEY `task_id` (`task_id`,`task_id-prerequisite`),
+  KEY `FK_TaskPrerequisites_Tasks_1` (`task_id`),
   KEY `FK_TaskPrerequisites_Tasks_2` (`task_id-prerequisite`),
   CONSTRAINT `FK_TaskPrerequisites_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_TaskPrerequisites_Tasks_2` FOREIGN KEY (`task_id-prerequisite`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -1037,6 +1038,14 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
 -- Data exporting was unselected.
 
 
+CREATE TABLE IF NOT EXISTS `TaskNotificationSent` (
+  `task_id` BIGINT(20) UNSIGNED NOT NULL,
+  `notification` INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`task_id`),
+  CONSTRAINT `FK_TaskNotificationSent_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
 -- Dumping structure for table Solas-Match-Test.TaskStatus
 CREATE TABLE IF NOT EXISTS `TaskStatus` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -1091,7 +1100,7 @@ CREATE TABLE IF NOT EXISTS `TaskUnclaims` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `Tasks` (`task_id`, `user_id`, `unclaimed-time`),
   KEY `FK_task_unclaim_user` (`user_id`),
-  CONSTRAINT `FK_task_unclaim_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
+  CONSTRAINT `FK_task_unclaim_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Dumping structure for table Solas-Match-Test.UserBadges
@@ -1244,13 +1253,19 @@ CREATE TABLE IF NOT EXISTS `UserTaskScores` (
   `task_id` bigint(20) unsigned NOT NULL,
   `score` int(11) NOT NULL DEFAULT '-1',
   PRIMARY KEY (`user_id`,`task_id`),
-  UNIQUE KEY `taskScore` (`task_id`,`user_id`),
+  KEY `FK_user_task_score_user1` (`user_id`),
+  KEY `FK_user_task_score_task1` (`task_id`),
   CONSTRAINT `FK_user_task_score_task1` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_user_task_score_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
 
+CREATE TABLE IF NOT EXISTS `UserTaskScoresUpdatedTime` (
+  `id` int(10) unsigned NOT NULL,
+  `unix_epoch` BIGINT(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Dumping structure for table Solas-Match-Test.UserTaskStreamNotifications
 CREATE TABLE IF NOT EXISTS `UserTaskStreamNotifications` (
@@ -1310,7 +1325,7 @@ CREATE TABLE IF NOT EXISTS `TaskViews` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `TaskViewTimeStamps` (`task_id`, `user_id`, `viewed-time`),
   KEY `FK_task_viewed_user` (`user_id`),
-  CONSTRAINT `FK_task_viewed_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
+  CONSTRAINT `FK_task_viewed_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
@@ -1766,7 +1781,24 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteTask`(IN `id` INT)
 BEGIN
     if EXISTS (select 1 from Tasks where Tasks.id=id) then
+
+      # Double nested SELECT used to force use of temporary table, because otherwise, nested tables are not allowed in UPDATE. Temporary table will be very small.
+      # If any WAITING_FOR_PREREQUISITES Task has a Prerequisite Task which is being deleted and it does not have any other non COMPLETE Prerequisites (SUM(...)=0), set it to PENDING_CLAIM
+      UPDATE Tasks tt SET tt.`task-status_id`=2 WHERE tt.id IN (
+        SELECT * FROM (
+          SELECT t.id
+          FROM       TaskPrerequisites tpa
+          INNER JOIN Tasks             t   ON tpa.task_id=t.id AND t.`task-status_id`=1
+          INNER JOIN TaskPrerequisites tp  ON t.id=tp.task_id
+          INNER JOIN Tasks             tsk ON tp.`task_id-prerequisite`=tsk.id
+          WHERE tpa.`task_id-prerequisite`=id
+          GROUP BY t.id
+          HAVING SUM(tsk.`task-status_id`!=4 AND tsk.id!=id)=0
+        ) AS to_be_made_pending
+      );
+
 	    delete from Tasks where Tasks.id=id;
+
     	select 1 as result;
     else
 	    select 0 as result;
@@ -1840,6 +1872,23 @@ BEGIN
     else
         SELECT 0 as result;
     end if;
+END//
+DELIMITER ;
+
+
+-- Dumping structure for procedure Solas-Match-Test.finishRegistrationManually
+DROP PROCEDURE IF EXISTS `finishRegistrationManually`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `finishRegistrationManually`(IN `emailToVerify` VARCHAR(128))
+BEGIN
+    SET @ru_user_id = -99999;
+    SELECT ru.user_id INTO @ru_user_id FROM Users u, RegisteredUsers ru WHERE u.id=ru.user_id AND u.email=emailToVerify LIMIT 1;
+    DELETE FROM RegisteredUsers WHERE user_id=@ru_user_id;
+    IF ROW_COUNT() > 0 THEN
+        SELECT @ru_user_id as result;
+    ELSE
+        SELECT 0 as result;
+    END IF;
 END//
 DELIMITER ;
 
@@ -2370,6 +2419,68 @@ END//
 DELIMITER ;
 
 
+DROP PROCEDURE IF EXISTS `getEarlyWarningTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getEarlyWarningTasks`()
+BEGIN
+    SELECT
+        t.id, t.project_id AS projectId, t.title, t.`word-count` AS wordCount,
+        (SELECT `en-name` FROM Languages WHERE id=t.`language_id-source`) AS `sourceLanguageName`,
+        (SELECT code      FROM Languages WHERE id=t.`language_id-source`) AS `sourceLanguageCode`,
+        (SELECT `en-name` FROM Languages WHERE id=t.`language_id-target`) AS `targetLanguageName`,
+        (SELECT code      FROM Languages WHERE id=t.`language_id-target`) AS `targetLanguageCode`,
+        (SELECT `en-name` FROM Countries WHERE id=t.`country_id-source`)  AS `sourceCountryName`,
+        (SELECT code      FROM Countries WHERE id=t.`country_id-source`)  AS `sourceCountryCode`,
+        (SELECT `en-name` FROM Countries WHERE id=t.`country_id-target`)  AS `targetCountryName`,
+        (SELECT code      FROM Countries WHERE id=t.`country_id-target`)  AS `targetCountryCode`,
+        t.comment, t.`task-type_id` as taskType, t.`task-status_id` AS taskStatus, t.published, t.deadline
+    FROM Tasks t
+    LEFT JOIN TaskNotificationSent n ON t.id=n.task_id
+    WHERE
+        t.deadline < DATE_ADD(NOW(), INTERVAL 1 WEEK) AND
+        t.deadline > DATE_SUB(DATE_ADD(NOW(), INTERVAL 1 WEEK), INTERVAL 30 HOUR) AND
+        t.`task-status_id`!=4 AND
+        t.published=1 AND
+        n.notification IS NULL;
+END//
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `getLateWarningTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getLateWarningTasks`()
+BEGIN
+    SELECT
+        t.id, t.project_id AS projectId, t.title, t.`word-count` AS wordCount,
+        (SELECT `en-name` FROM Languages WHERE id=t.`language_id-source`) AS `sourceLanguageName`,
+        (SELECT code      FROM Languages WHERE id=t.`language_id-source`) AS `sourceLanguageCode`,
+        (SELECT `en-name` FROM Languages WHERE id=t.`language_id-target`) AS `targetLanguageName`,
+        (SELECT code      FROM Languages WHERE id=t.`language_id-target`) AS `targetLanguageCode`,
+        (SELECT `en-name` FROM Countries WHERE id=t.`country_id-source`)  AS `sourceCountryName`,
+        (SELECT code      FROM Countries WHERE id=t.`country_id-source`)  AS `sourceCountryCode`,
+        (SELECT `en-name` FROM Countries WHERE id=t.`country_id-target`)  AS `targetCountryName`,
+        (SELECT code      FROM Countries WHERE id=t.`country_id-target`)  AS `targetCountryCode`,
+        t.comment, t.`task-type_id` as taskType, t.`task-status_id` AS taskStatus, t.published, t.deadline
+    FROM Tasks t
+    LEFT JOIN TaskNotificationSent n ON t.id=n.task_id
+    WHERE
+        t.deadline < DATE_SUB(NOW(), INTERVAL 1 WEEK) AND
+        t.`task-status_id`!=4 AND
+        (n.notification IS NULL OR n.notification<2);
+END//
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `taskNotificationSentInsertAndUpdate`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `taskNotificationSentInsertAndUpdate`(IN `taskId` INT, IN `notification` INT)
+BEGIN
+    REPLACE INTO `TaskNotificationSent` (`task_id`, `notification`) VALUES (taskId, notification);
+    select 1 as 'result';
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Test.getPasswordResetRequests
 DROP PROCEDURE IF EXISTS `getPasswordResetRequests`;
 DELIMITER //
@@ -2428,7 +2539,8 @@ BEGIN
         AND (sourceCountryCode is null or p.country_id = (select c.id from Countries c where c.code = sourceCountryCode))
         AND (sourceLanguageCode is null or p.language_id=(select l.id from Languages l where l.code = sourceLanguageCode))
         AND (imageUploaded IS NULL OR p.image_uploaded = imageUploaded)
-        AND (imageApproved IS NULL OR p.image_approved = imageApproved);
+        AND (imageApproved IS NULL OR p.image_approved = imageApproved)
+        ORDER BY p.created DESC;
 END//
 DELIMITER ;
 
@@ -2563,7 +2675,7 @@ BEGIN
             FROM Tasks t JOIN Projects p
             ON t.project_id = p.id
             WHERE t.id = taskId;
-        CALL getAdmin(@orgId);
+        CALL getAdmin(NULL, @orgId);
     end if;
 END//
 DELIMITER ;
@@ -3260,7 +3372,7 @@ BEGIN
                         (SELECT language_id FROM Users WHERE id = uID)
                     OR t.`language_id-target` IN 
                         (SELECT language_id FROM UserSecondaryLanguages WHERE user_id = uID))))
-             ORDER BY uts.score DESC limit offset, lim);
+             ORDER BY (uts.score+LEAST(DATEDIFF(CURDATE(), t.`created-time`), 700)) DESC limit offset, lim);
 END//
 DELIMITER ;
 
@@ -3342,6 +3454,7 @@ END//
 DELIMITER ;
 
 
+
 DROP PROCEDURE IF EXISTS `getFilteredUserClaimedTasksCount`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getFilteredUserClaimedTasksCount`(IN `userID` INT, IN `taskType` INT, IN `taskStatus` INT)
@@ -3357,6 +3470,88 @@ BEGIN
         WHERE t.id IN (SELECT tc.task_id FROM TaskClaims tc WHERE tc.user_id = userID)
         AND (taskType is null or t.`task-type_id` = taskType)
         AND (taskStatus is null or t.`task-status_id` = taskStatus);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getUserRecentTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserRecentTasks`(IN `userID` INT, IN `lim` INT, IN `offset` INT)
+
+    READS SQL DATA
+
+BEGIN
+    -- if limit is null, set to maxBigInt unsigned
+    if lim = '' or lim is null then set lim = ~0; end if;
+    if offset='' or offset is null then set offset = 0; end if;
+
+    (SELECT recentTasks.id, recentTasks.project_id as projectId,title,`word-count` as wordCount,
+            (SELECT `en-name` from Languages l where l.id = recentTasks.`language_id-source`) as `sourceLanguageName`,
+            (SELECT code from Languages l where l.id = recentTasks.`language_id-source`) as `sourceLanguageCode`,
+            (SELECT `en-name` from Languages l where l.id = recentTasks.`language_id-target`) as `targetLanguageName`,
+            (SELECT code from Languages l where l.id = recentTasks.`language_id-target`) as `targetLanguageCode`,
+            (SELECT `en-name` from Countries c where c.id = recentTasks.`country_id-source`) as `sourceCountryName`,
+            (SELECT code from Countries c where c.id = recentTasks.`country_id-source`) as `sourceCountryCode`,
+            (SELECT `en-name` from Countries c where c.id = recentTasks.`country_id-target`) as `targetCountryName`,
+            (SELECT code from Countries c where c.id = recentTasks.`country_id-target`) as `targetCountryCode`,
+            `comment`, `task-type_id` as 'taskType', `task-status_id` as 'taskStatus', published, deadline, `created-time` as createdTime
+        FROM
+		(SELECT tv.`viewed-time`, t.* FROM TaskViews tv
+		JOIN Tasks AS t on tv.task_id = t.id
+		where tv.user_id = userID and tv.task_is_archived = 0 and t.`task-status_id` = 2 order by tv.`viewed-time` desc) as recentTasks group by id order by `viewed-time` desc
+        LIMIT offset, lim);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getUserRecentTasksCount`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserRecentTasksCount`(IN `userID` INT)
+
+    READS SQL DATA
+
+BEGIN
+
+   SELECT count(distinct tv.task_id) as result FROM TaskViews tv
+		JOIN Tasks AS t on tv.task_id = t.id
+		where tv.user_id = userID and tv.task_is_archived = 0 and t.`task-status_id` = 2;
+END//
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `alsoViewedTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `alsoViewedTasks`(IN `taskID` INT, IN `lim` INT, IN `offset` INT)
+
+    READS SQL DATA
+
+BEGIN
+    -- if limit is null, set to maxBigInt unsigned
+    DECLARE current_task_langSource INT DEFAULT 0;
+    DECLARE current_task_langTarget INT DEFAULT 0;
+    DECLARE current_task_countrySource INT DEFAULT 0;
+    DECLARE current_task_countryTarget INT DEFAULT 0;
+    if lim = '' or lim is null then set lim = ~0; end if;
+    if offset='' or offset is null then set offset = 0; end if;
+
+  
+
+    SELECT `language_id-source`, `language_id-target`, `country_id-source`, `country_id-target`  
+    INTO current_task_langSource, current_task_langTarget, current_task_countrySource, current_task_countryTarget FROM Tasks WHERE id = taskID;
+	
+    (SELECT t2.id,t2.project_id as projectId,t2.title,t2.`word-count` as wordCount,
+    (SELECT `en-name` from Languages l where l.id = t2.`language_id-source`) as `sourceLanguageName`,
+    (SELECT code from Languages l where l.id = t2.`language_id-source`) as `sourceLanguageCode`,
+    (SELECT `en-name` from Languages l where l.id = t2.`language_id-target`) as `targetLanguageName`,
+    (SELECT code from Languages l where l.id = t2.`language_id-target`) as `targetLanguageCode`,
+    (SELECT `en-name` from Countries c where c.id = t2.`country_id-source`) as `sourceCountryName`,
+    (SELECT code from Countries c where c.id = t2.`country_id-source`) as `sourceCountryCode`,
+    (SELECT `en-name` from Countries c where c.id = t2.`country_id-target`) as `targetCountryName`,
+    (SELECT code from Countries c where c.id = t2.`country_id-target`) as `targetCountryCode`,
+    `comment`, `task-type_id` as 'taskType', `task-status_id` as 'taskStatus', published, deadline, `created-time` as createdTime
+     FROM
+    (SELECT t.id, count(*) AS task_count FROM TaskViews tv JOIN Tasks t ON t.id = tv.task_id AND tv.user_id IN 
+    (SELECT DISTINCT user_id FROM `TaskViews` WHERE `task_id` = taskID) AND t.id != taskID AND t.`task-status_id` = 2 and
+	 t.`language_id-source` = current_task_langSource and t.`language_id-target` = current_task_langTarget GROUP BY task_id ORDER BY task_count DESC) 
+     AS t1 JOIN Tasks t2 ON t1.id = t2.id LIMIT offset,lim);
 END//
 DELIMITER ;
 
@@ -4321,6 +4516,25 @@ END//
 DELIMITER ;
 
 
+DROP PROCEDURE IF EXISTS `getUserTaskScoresUpdatedTime`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTaskScoresUpdatedTime`()
+BEGIN
+    SELECT unix_epoch FROM `UserTaskScoresUpdatedTime` WHERE id=1;
+END//
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `recordUserTaskScoresUpdatedTime`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `recordUserTaskScoresUpdatedTime`(IN `unixEpochIn` BIGINT)
+BEGIN
+    REPLACE INTO `UserTaskScoresUpdatedTime` (`id`, `unix_epoch`) VALUES (1, unixEpochIn);
+    select 1 as 'result';
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Test.searchForOrg
 DROP PROCEDURE IF EXISTS `searchForOrg`;
 DELIMITER //
@@ -4761,7 +4975,7 @@ BEGIN
 	if EXISTS(select 1 from TaskClaims tc where tc.task_id=tID and tc.user_id=uID) then
 		START TRANSACTION;
       delete from TaskClaims where task_id=tID and user_id=uID;
-      insert into TaskTranslatorBlacklist (task_id,user_id, revoked_by_admin) values (tID,uID,unclaimByAdmin);
+      # insert into TaskTranslatorBlacklist (task_id,user_id, revoked_by_admin) values (tID,uID,unclaimByAdmin);
       INSERT INTO TaskUnclaims (id, task_id, user_id, `unclaim-comment`, `unclaimed-time`) VALUES (NULL, tID, uID, userFeedback, NOW());
       update Tasks set `task-status_id`=2 where id = tID;
       COMMIT;

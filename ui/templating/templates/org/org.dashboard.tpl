@@ -1,6 +1,6 @@
 {include file="header.tpl"}
 
-    <div class="page-header" style="margin-bottom: 50px">
+    <div class="page-header">
         <h1>
             {Localisation::getTranslation('org_dashboard_organisation_dashboard')} <small>{Localisation::getTranslation('org_dashboard_0')}</small>
         </h1>
@@ -20,6 +20,13 @@
 
 
 {if isset($orgs)}
+
+{Localisation::getTranslation('task_twitter_0_org_dashboard')} <a class="twitter-share-button"
+  href="https://twitter.com/intent/tweet?text={Localisation::getTranslation('task_twitter_2')}&url=http%3A%2F%2Ftrommons.org"
+  data-size="large" data-counturl="http://trommons.org">
+Tweet</a>
+<br /><br />
+
     {foreach $orgs as $org}
         {assign var="org_id" value=$org->getId()}
 
@@ -57,7 +64,7 @@
                 {assign var="projectObject" value=$data['project']}
                 {assign var="project_id" value=$projectObject->getId()}
                 <td width="27.5%">
-                        <a href="{urlFor name="project-view" options="project_id.$project_id"}">{$projectObject->getTitle()}</a>
+                        <a href="{urlFor name="project-view" options="project_id.$project_id"}">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($projectObject->getTitle())}</a>
                     </td> 
                     <td>
                         <div class="convert_utc_to_local" style="visibility: hidden">{$data['project']->getDeadline()}</div>

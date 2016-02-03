@@ -296,6 +296,7 @@ class TaskDao
             Lib\PDOWrapper::cleanseNull($task->getTaskType()).",".
             Lib\PDOWrapper::cleanseNull($task->getTaskStatus()).",".
             Lib\PDOWrapper::cleanseNull($task->getPublished());
+        error_log("TaskDAO::insert args: " . $args);
         $result = Lib\PDOWrapper::call("taskInsertAndUpdate", $args);
         if ($result) {
             $task = Common\Lib\ModelFactory::buildModel("Task", $result[0]);
@@ -303,7 +304,27 @@ class TaskDao
             $task = null;
         }
     }
-
+    
+    public static function getAlsoViewedTasks(
+            $taskId,
+            $limit = null,
+            $offset = 0
+    ) {
+        $ret = null;
+        
+        $args = Lib\PDOWrapper::cleanse($taskId).', ';
+        $args .= Lib\PDOWrapper::cleanseNull($limit).', ';
+        $args .= Lib\PDOWrapper::cleanse($offset);
+        
+        $result = Lib\PDOWrapper::call("alsoViewedTasks", $args);
+        if ($result) {
+            $ret = array();
+            foreach ($result as $row) {
+                $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
+            }
+        }
+        return $ret;
+    }
 
     public static function getTaskPreReqs($taskId)
     {
@@ -769,6 +790,35 @@ class TaskDao
         $args .= Lib\PDOWrapper::cleanseNull($taskType).', ';
         $args .= Lib\PDOWrapper::cleanseNull($taskStatus);
         $result = Lib\PDOWrapper::call("getFilteredUserClaimedTasksCount", $args);
+        return $result[0]['result'];
+    }
+    
+    public static function getUserRecentTasks(
+            $userId,
+            $limit = null,
+            $offset = 0
+    ) {
+        $ret = null;
+        
+        $args = Lib\PDOWrapper::cleanse($userId).', ';
+        $args .= Lib\PDOWrapper::cleanseNull($limit).', ';
+        $args .= Lib\PDOWrapper::cleanse($offset);
+        
+        $result = Lib\PDOWrapper::call("getUserRecentTasks", $args);
+        if ($result) {
+            $ret = array();
+            foreach ($result as $row) {
+                $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
+            }
+        }
+        return $ret;
+    }
+
+    public static function getUserRecentTasksCount(
+            $userId
+    ) {
+        $args  = Lib\PDOWrapper::cleanse($userId);
+        $result = Lib\PDOWrapper::call("getUserRecentTasksCount", $args);
         return $result[0]['result'];
     }
 

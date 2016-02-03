@@ -814,7 +814,7 @@
     <string name="task_profile_display_archived">Archiviato <strong>%s</strong> fa</string>
 
 	<string name="task_review_count">Recensione #%s</string>
-	<string name="task_review_form_0">Puoi scaricare nuovamente il file sorgente <a href="%s">qui</a>.</string>
+    <string name="task_review_form_0">Puoi scaricare il file <a href="%s">qui</a>.</string>
 	<string name="task_review_form_1">Puoi scaricare il file del progetto <a href="%s">qui</a>.</string>
     <string name="task_review_form_rating">Punteggio da 1 a 5, dove 1=Molti errori e 5=Pochi errori</string>
     <string name="task_review_segmented">segmentato</string>
@@ -822,12 +822,12 @@
     <string name="task_review_proofread">revisionato</string>
     <string name="task_review_merged">desegmentato</string>
 	<string name="task_review_form_corrections">Correzioni</string>
-	<string name="task_review_form_2">C'erano molti errori nel file sorgente?</string>
-	<string name="task_review_form_3">Che livello di grammatica c'era nel file sorgente?</string>
+	<string name="task_review_form_2">C'erano molti errori nel file?</string>
+	<string name="task_review_form_3">Che livello di grammatica c'era nel file?</string>
 	<string name="task_review_form_spelling">Ortografia</string>
-	<string name="task_review_form_4">C'erano molti errori di ortografia nel file sorgente?</string>
+	<string name="task_review_form_4">C'erano molti errori di ortografia nel file?</string>
 	<string name="task_review_form_consistency">Coerenza testuale</string>
-	<string name="task_review_form_5">C'erano errori di coerenza testuale nel file sorgente?</string>
+	<string name="task_review_form_5">C'erano errori di coerenza testuale nel file?</string>
 	<string name="task_review_form_comment">Commenti</string>
 	<string name="task_review_form_6">Un commento opzionale sul file in generale.</string>
 	<string name="task_review_form_grammar">Grammatica</string>
@@ -836,6 +836,14 @@
 
 	<string name="task_review_provide_a_rating">Fornisci una valutazione</string>
 	<string name="task_review_0">Come valuteresti questa attività?</string>
+  <string name="task_twitter_0">Se sei su Twitter, clicca qui per far sapere al mondo del tuo contributo (assicurati di accettare i pop-up):</string>
+  <string name="task_twitter_0_org_dashboard">Se sei su Twitter, clicca qui per far sapere a tutti di Trommons (assicurati di accettare i pop-up):</string>
+  <string name="task_twitter_0_project_view">Se sei su Twitter, clicca qui per far sapere a tutti del tuo progetto (assicurati di accettare i pop-up):</string>
+  <string name="task_twitter_0_org_task_review">Se sei su Twitter, clicca qui per ringraziare i nostri volontari (assicurati di accettare i pop-up):</string>
+  <string name="task_twitter_1">Ho appena offerto il mio aiuto come volontario per @TheRosettaFound #languagematters</string>
+  <string name="task_twitter_2">Ci siamo iscritti a Trommons per connettere attraverso la lingua i volontari di @TheRosettaFound #languagematters</string>
+  <string name="task_twitter_3">Traduttori di @TheRosettaFound potete aiutarci con il progetto su trommons.org%3F #languagematters</string>
+  <string name="task_twitter_4">Un grazie ai volontari di @TheRosettaFound per aver reso possibile le traduzioni #languagematters</string>
 	<string name="task_review_1">Grazie mille per il tuo contributo a questo progetto.</string>
 	<string name="task_review_2">Fornisci una valutazione per il/i documento/i</string>
 	<string name="task_review_3">basandoti sui seguenti criteri:</string>
@@ -1069,4 +1077,9 @@
 	<string name ="system_badge_interpreter_desc">Questo volontario è disponibile per attività di interpretariato.</string>
 	<string name ="system_badge_polyglot_title">Multilingua</string>
 	<string name ="system_badge_polyglot_desc">Una o più seconde lingue sono selezionate nel tuo profilo.</string>
+	
+    <string name = "users_also_viewed">Gli utenti hanno anche visualizzato:</string>
+    <string name="recent_tasks_users_recent_tasks">Attività visualizzate di recente da %s </string>
+    <string name="recent_tasks_recently_viewed_tasks">Attività visualizzate di recente</string>    
+    <string name="common_task_stream">Elenco delle attività</string>
 </resources>

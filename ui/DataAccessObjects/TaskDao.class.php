@@ -30,6 +30,19 @@ class TaskDao extends BaseDao
         return $response;
     }
     
+    public function getAlsoViewedTasks($taskId,$limit, $offset)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/tasks/$taskId/alsoViewedTasks/$limit/$offset";
+
+        $ret = $this->client->call(
+            array("\SolasMatch\Common\Protobufs\Models\Task"),
+            $request,
+            Common\Enums\HttpMethodEnum::GET,
+            null
+        );
+        return $ret;
+    }
 
     public function getTaskPreReqs($taskId)
     {

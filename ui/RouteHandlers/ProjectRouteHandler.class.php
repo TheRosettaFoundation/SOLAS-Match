@@ -309,6 +309,8 @@ class ProjectRouteHandler
             $extra_scripts .= file_get_contents(__DIR__."/../js/GraphHelper.js");
             $extra_scripts .= file_get_contents(__DIR__."/../js/project-view.js");
             $extra_scripts .= file_get_contents(__DIR__."/../js/TaskView.js");
+            // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
+            $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
             $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
             $taskTypeColours = array();
@@ -330,6 +332,8 @@ class ProjectRouteHandler
             ));
         } else {
             $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
+            // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
+            $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
             $app->view()->appendData(array(
                 "extra_scripts" => $extra_scripts,
@@ -663,6 +667,7 @@ class ProjectRouteHandler
 
                 try {
                     $project = $projectDao->createProject($project);
+                    error_log('Created Project: ' . $post['project_title']);
                 } catch (\Exception $e) {
                     $project = null;
                 }
@@ -672,6 +677,7 @@ class ProjectRouteHandler
                     if (empty($_FILES['projectFile']['name']) || !empty($_FILES['projectFile']['error']) || empty($_FILES['projectFile']['tmp_name'])
                             || (($data = file_get_contents($_FILES['projectFile']['tmp_name'])) === false)) {
                         $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), htmlspecialchars($_FILES['projectFile']['name'], ENT_COMPAT, 'UTF-8')));
+                        error_log('Project Upload Error: ' . $post['project_title']);
                         try {
                             $projectDao->deleteProject($project->getId());
                         } catch (\Exception $e) {
@@ -687,8 +693,10 @@ class ProjectRouteHandler
                         }
                         try {
                             $projectDao->saveProjectFile($project, $user_id, $projectFileName, $data);
+                            error_log("Project File Saved($user_id): " . $post['project_title']);
                             $success = true;
                         } catch (\Exception $e) {
+                            error_log("Project File Save Error($user_id): " . $post['project_title']);
                             $success = false;
                         }
                         if (!$success) {
@@ -1040,6 +1048,7 @@ class ProjectRouteHandler
             return 0;
         }
 
+        error_log("Added Task: $newTaskId");
         return $newTaskId;
     }
 

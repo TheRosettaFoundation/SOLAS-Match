@@ -279,6 +279,7 @@ class UserRouteHandler
             'itemsPerScrollPage' => $itemsPerScrollPage,
             'lastScrollPage' => $lastScrollPage,
             'extra_scripts' => $extra_scripts,
+            'user_id' => $user_id,
         ));
         $app->render('index.tpl');
     }
@@ -999,8 +1000,13 @@ EOD;
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
 
-        $langPref = $langDao->getLanguage($userPersonalInfo->getLanguagePreference());
-        $langPrefName = $langPref->getName();
+        if (isset($userPersonalInfo)) {
+            $langPref = $langDao->getLanguage($userPersonalInfo->getLanguagePreference());
+            $langPrefName = $langPref->getName();
+        }
+        else {
+            $langPrefName = '';
+        }
         
         $app->view()->appendData(array(
             "badges" => $badges,
