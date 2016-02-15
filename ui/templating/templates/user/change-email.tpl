@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 
 <div class="page-header">
-    <h1>{Localisation::getTranslation('Change My email Address')}</h1>
+    <h1>{Localisation::getTranslation('common_change_email')}</h1>
 </div>
 
 {include file="handle-flash-messages.tpl"}
@@ -22,7 +22,7 @@
     <input type="text" name="email" id="email" placeholder="{Localisation::getTranslation('common_email')}"/>
     <p>
         <button type="submit" class="btn btn-success" name="submit">
-            <i class="icon-star icon-white"></i> {Localisation::getTranslation('Change My email Address')}
+            <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_change_email')}
         </button>
     </p>
 </form>
