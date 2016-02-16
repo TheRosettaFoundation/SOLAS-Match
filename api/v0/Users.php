@@ -469,6 +469,11 @@ class Users
                     '\SolasMatch\API\V0\Users::register'
                 );
 
+                $app->post(
+                    '/changeEmail(:format)/',
+                    '\SolasMatch\API\V0\Users::changeEmail'
+                );
+
                 $app->get(
                     '/:userId/',
                     '\SolasMatch\API\Lib\Middleware::isloggedIn',
@@ -1375,6 +1380,16 @@ class Users
         $userInfo->setLanguagePreference($english->getId());
         DAO\UserDao::savePersonalInfo($userInfo);
         
+        API\Dispatcher::sendResponse(null, $registered, null, $format);
+    }
+
+    public static function changeEmail($format = ".json")
+    {
+        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $client = new Common\Lib\APIHelper($format);
+        $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Register");
+        $registered = DAO\UserDao::changeEmail($data->getEmail(), true);
+
         API\Dispatcher::sendResponse(null, $registered, null, $format);
     }
 

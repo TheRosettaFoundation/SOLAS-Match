@@ -240,6 +240,27 @@ class UserDao
         return $ret;
     }
 
+    public static function changeEmail($email, $verificationRequired = true)
+    {
+        $ret = null;
+        $user = self::getUser(null, $email);
+        if (is_array($user)) {
+            $user = $user[0];
+        }
+
+        if (!is_object($user)) {
+            // CHANGE EMAIL IN DB
+            if ($verificationRequired) {
+                self::registerUser($user->getId());
+                Lib\Notify::sendEmailVerification($user->getId());
+            }
+            if ($user) {
+                $ret = '1';
+            }
+        }
+        return $ret;
+    }
+
     public static function openIdLogin($openid, $app)
     {
         if (!$openid->mode) {

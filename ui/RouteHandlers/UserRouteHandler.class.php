@@ -374,29 +374,19 @@ class UserRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
-        $langDao = new DAO\LanguageDao();
 
         $error = null;
         $warning = null;
         if (\SolasMatch\UI\isValidPost($app)) {
             $post = $app->request()->post();
-            $temp = md5($post['email'].substr(Common\Lib\Settings::get("session.site_key"), 0, 20));
-            Common\Lib\UserSession::clearCurrentUserID();
             if (!Lib\Validator::validateEmail($post['email'])) {
                 $error = Lib\Localisation::getTranslation('register_1');
-            } elseif (!Lib\TemplateHelper::isValidPassword($post['password'])) {
-                $error = Lib\Localisation::getTranslation('register_2');
-            } elseif ($user = $userDao->getUserByEmail($post['email'], $temp)) {
-                if ($userDao->isUserVerified($user->getId())) {
-                    $error = sprintf(Lib\Localisation::getTranslation('register_3'), $app->urlFor("login"));
-                } else {
-                    $error = "User is not verified";
-                    // notify user that they are not yet verified an resent verification email
-                }
+            } elseif ($userDao->getUserByEmail($post['email'])) {
+                $error = Lib\Localisation::getTranslation('common_new_email_already_used');
             }
 
             if (is_null($error)) {
-                if ($userDao->register($post['email'], $post['password'])) {
+                if ($userDao->changeEmail($post['email'])) {
                     $app->flashNow(
                         "success",
                         sprintf(Lib\Localisation::getTranslation('register_4'), $app->urlFor("login"))

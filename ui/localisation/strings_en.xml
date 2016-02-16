@@ -134,6 +134,7 @@
 	<string name="common_register">Register</string>
   <string name="common_change_email">Change My email Address</string>
   <string name="common_new_email">New email Address</string>
+  <string name="common_new_email_already_used">The new email address has already been registered by another user.</string>
 	<string name="common_search_for_organisations">Search for Organisations</string>
 	<string name="common_task_type">Task Type</string>
    	<string name="common_create_administrator">Create Administrator</string>
