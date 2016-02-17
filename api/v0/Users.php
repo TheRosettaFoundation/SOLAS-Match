@@ -1385,7 +1385,7 @@ class Users
 
     public static function changeEmail($format = ".json")
     {
-        $user = DAO\UserDao::getLoggedInUser()
+        $user = DAO\UserDao::getLoggedInUser();
         if (!is_null($user) && DAO\AdminDao::isAdmin($user->getId(), null)) {
             $data = API\Dispatcher::getDispatcher()->request()->getBody();
             $client = new Common\Lib\APIHelper($format);
