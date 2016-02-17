@@ -4287,7 +4287,7 @@ DROP PROCEDURE IF EXISTS `changeEmail`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `changeEmail`(IN `userId` INT, IN `eMail` VARCHAR(128))
 BEGIN
-    UPDATE Users u SET u.email=eMail WHERE u.id=userId
+    UPDATE Users u SET u.email=eMail WHERE u.id=userId;
 END//
 DELIMITER ;
 
