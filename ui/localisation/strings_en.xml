@@ -132,7 +132,7 @@
 	<string name="common_submit">Submit</string>
 	<string name="common_log_in">Log In</string>
 	<string name="common_register">Register</string>
-  <string name="common_change_email">Change My email Address</string>
+  <string name="common_change_email">Change User email Address</string>
   <string name="common_new_email">New email Address</string>
   <string name="common_new_email_already_used">The new email address has already been registered by another user.</string>
 	<string name="common_search_for_organisations">Search for Organisations</string>

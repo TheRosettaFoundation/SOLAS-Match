@@ -240,7 +240,7 @@ class UserDao
         return $ret;
     }
 
-    public static function changeEmail($email, $verificationRequired = true)
+    public static function changeEmail($userId, $email)
     {
         $ret = null;
         $user = self::getUser(null, $email);
@@ -248,15 +248,9 @@ class UserDao
             $user = $user[0];
         }
 
-        if (!is_object($user)) {
-            // CHANGE EMAIL IN DB
-            if ($verificationRequired) {
-                self::registerUser($user->getId());
-                Lib\Notify::sendEmailVerification($user->getId());
-            }
-            if ($user) {
-                $ret = '1';
-            }
+        if (!is_object($user)) { // $user should not exist for this email
+            Lib\PDOWrapper::call("changeEmail", Lib\PDOWrapper::cleanse($userId) . ',' . Lib\PDOWrapper::cleanseNullOrWrapStr($email));
+            $ret = '1';
         }
         return $ret;
     }

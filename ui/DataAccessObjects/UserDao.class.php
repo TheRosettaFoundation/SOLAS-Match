@@ -683,12 +683,12 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function changeEmail($email)
+    public function changeEmail($user_id, $email)
     {
         $ret = null;
         $registerData = new Common\Protobufs\Models\Register();
         $registerData->setEmail($email);
-        $registerData->setPassword('');
+        $registerData->setPassword("$user_id"); // Repurpose field to hold User for which email is to be changed
         $request = "{$this->siteApi}v0/users/changeEmail";
         $registered = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST, $registerData);
         if ($registered) {

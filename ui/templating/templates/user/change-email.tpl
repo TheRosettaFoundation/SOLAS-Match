@@ -17,7 +17,7 @@
     </div>
 {/if}
 
-<form method="post" action="{urlFor name="change-email"}" class="well" accept-charset="utf-8">
+<form method="post" action="{urlFor name="change-email" options="user_id.$user_id"}" class="well" accept-charset="utf-8">
     <label for="email"><strong>{Localisation::getTranslation('common_email')}</strong></label>
     <input type="text" name="email" id="email" placeholder="{Localisation::getTranslation('common_email')}"/>
     <p>

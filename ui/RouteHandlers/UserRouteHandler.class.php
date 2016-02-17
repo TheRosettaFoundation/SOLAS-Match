@@ -36,7 +36,7 @@ class UserRouteHandler
         )->via("GET", "POST")->name("register");
 
         $app->get(
-            "/change_email/",
+            "/:user_id/change_email/",
             array($this, "changeEmail")
         )->via("GET", "POST")->name("change-email");
 
@@ -370,10 +370,12 @@ class UserRouteHandler
         $app->render("user/register.tpl");
     }
 
-    public function changeEmail()
+    public function changeEmail($user_id)
     {
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
+        $adminDao = new DAO\AdminDao();
+        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
 
         $error = null;
         $warning = null;
@@ -385,17 +387,11 @@ class UserRouteHandler
                 $error = Lib\Localisation::getTranslation('common_new_email_already_used');
             }
 
-            if (is_null($error)) {
-                if ($userDao->changeEmail($post['email'])) {
-                    $app->flashNow(
-                        "success",
-                        sprintf(Lib\Localisation::getTranslation('register_4'), $app->urlFor("login"))
-                    );
+            if (is_null($error) && !is_null($loggedInUserId) && $adminDao->isSiteAdmin($loggedInUserId)) {
+                if ($userDao->changeEmail($user_id, $post['email'])) {
+                    $app->flashNow('success', Lib\Localisation::getTranslation('common_success'));
                 } else {
-                    $app->flashNow(
-                        'error',
-                        'Failed to register'
-                    );
+                    $app->flashNow('error', Lib\Localisation::getTranslation('common_error'));
                 }
             }
         }
@@ -406,6 +402,7 @@ class UserRouteHandler
             $app->view()->appendData(array("warning" => $warning));
         }
 
+        $app->view()->appendData(array('user_id' => $user_id));
         $app->render("user/change-email.tpl");
     }
 

@@ -1385,11 +1385,18 @@ class Users
 
     public static function changeEmail($format = ".json")
     {
-        $data = API\Dispatcher::getDispatcher()->request()->getBody();
-        $client = new Common\Lib\APIHelper($format);
-        $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Register");
-        $registered = DAO\UserDao::changeEmail($data->getEmail(), true);
+        $user = DAO\UserDao::getLoggedInUser()
+        if (!is_null($user) && DAO\AdminDao::isAdmin($user->getId(), null)) {
+            $data = API\Dispatcher::getDispatcher()->request()->getBody();
+            $client = new Common\Lib\APIHelper($format);
+            $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Register");
 
+            // password field has been repurposed to hold User for which email is to be changed
+            $registered = DAO\UserDao::changeEmail($data->getPassword(), $data->getEmail());
+        }
+        else {
+            $registered = null;
+        }
         API\Dispatcher::sendResponse(null, $registered, null, $format);
     }
 
