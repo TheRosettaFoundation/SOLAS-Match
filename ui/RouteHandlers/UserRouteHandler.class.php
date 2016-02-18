@@ -379,7 +379,7 @@ class UserRouteHandler
 
         $error = null;
         $warning = null;
-        if (\SolasMatch\UI\isValidPost($app)) {
+        if ($app->request()->isPost() && sizeof($app->request()->post()) > 1) {
             $post = $app->request()->post();
             if (!Lib\Validator::validateEmail($post['email'])) {
                 $error = Lib\Localisation::getTranslation('register_1');
