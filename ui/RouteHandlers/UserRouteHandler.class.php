@@ -36,6 +36,11 @@ class UserRouteHandler
         )->via("GET", "POST")->name("register");
 
         $app->get(
+            "/:user_id/change_email/",
+            array($this, "changeEmail")
+        )->via("GET", "POST")->name("change-email");
+
+        $app->get(
             "/user/:uuid/verification/",
             array($this, 'emailVerification')
         )->via('POST')->name('email-verification');
@@ -363,6 +368,42 @@ class UserRouteHandler
         }
 
         $app->render("user/register.tpl");
+    }
+
+    public function changeEmail($user_id)
+    {
+        $app = \Slim\Slim::getInstance();
+        $userDao = new DAO\UserDao();
+        $adminDao = new DAO\AdminDao();
+        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
+
+        $error = null;
+        $warning = null;
+        if ($app->request()->isPost() && sizeof($app->request()->post()) > 1) {
+            $post = $app->request()->post();
+            if (!Lib\Validator::validateEmail($post['email'])) {
+                $error = Lib\Localisation::getTranslation('register_1');
+            } elseif ($userDao->getUserByEmail($post['email'])) {
+                $error = Lib\Localisation::getTranslation('common_new_email_already_used');
+            }
+
+            if (is_null($error) && !is_null($loggedInUserId) && $adminDao->isSiteAdmin($loggedInUserId)) {
+                if ($userDao->changeEmail($user_id, $post['email'])) {
+                    $app->flashNow('success', '');
+                } else {
+                    $app->flashNow('error', '');
+                }
+            }
+        }
+        if ($error !== null) {
+            $app->view()->appendData(array("error" => $error));
+        }
+        if ($warning !== null) {
+            $app->view()->appendData(array("warning" => $warning));
+        }
+
+        $app->view()->appendData(array('user_id' => $user_id));
+        $app->render("user/change-email.tpl");
     }
 
     public function emailVerification($uuid)

@@ -4282,6 +4282,16 @@ END//
 DELIMITER ;
 
 
+-- Dumping structure for procedure Solas-Match-Test.changeEmail
+DROP PROCEDURE IF EXISTS `changeEmail`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `changeEmail`(IN `userId` INT, IN `eMail` VARCHAR(128))
+BEGIN
+    UPDATE Users u SET u.email=eMail WHERE u.id=userId;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure debug-test3.removeAdmin
 DROP PROCEDURE IF EXISTS `removeAdmin`;
 DELIMITER //

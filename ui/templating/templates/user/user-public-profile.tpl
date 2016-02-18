@@ -70,6 +70,11 @@
                             <tr>
                                 <td>
                                     {mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}
+                                    {if $isSiteAdmin}
+                                        <a href='{urlFor name="change-email" options="user_id.$user_id"}' class='pull-right btn btn-primary'>
+                                            <i class="icon-list icon-white"></i> {Localisation::getTranslation('common_change_email')}
+                                        </a>
+                                    {/if}
                                 </td>
                             </tr>
                         {/if}

@@ -682,7 +682,22 @@ class UserDao extends BaseDao
         $ret = $this->client->call("\SolasMatch\Common\Protobufs\Models\User", $request);
         return $ret;
     }
-    
+
+    public function changeEmail($user_id, $email)
+    {
+        $ret = null;
+        $registerData = new Common\Protobufs\Models\Register();
+        $registerData->setEmail($email);
+        $registerData->setPassword("$user_id"); // Repurpose field to hold User for which email is to be changed
+        $request = "{$this->siteApi}v0/users/changeEmail";
+        $registered = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST, $registerData);
+        if ($registered) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function createPersonalInfo($userId, $personalInfo)
     {
         $ret = null;
