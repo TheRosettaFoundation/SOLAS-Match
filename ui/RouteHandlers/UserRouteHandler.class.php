@@ -389,9 +389,9 @@ class UserRouteHandler
 
             if (is_null($error) && !is_null($loggedInUserId) && $adminDao->isSiteAdmin($loggedInUserId)) {
                 if ($userDao->changeEmail($user_id, $post['email'])) {
-                    $app->flashNow('success', Lib\Localisation::getTranslation('common_success'));
+                    $app->flashNow('success', '');
                 } else {
-                    $app->flashNow('error', Lib\Localisation::getTranslation('common_error'));
+                    $app->flashNow('error', '');
                 }
             }
         }
