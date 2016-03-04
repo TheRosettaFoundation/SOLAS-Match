@@ -929,8 +929,8 @@
 	<string name="user_private_profile_0">Aktualisiere hier Deine persönlichen Details.</string>
 	<string name="user_private_profile_2">Ungültige Eingabe, Dein Anzeigename kann nicht leer sein.</string>
 	<string name="user_private_profile_please_note">Bitte beachte:</string>
-	<string name="user_private_profile_3">All diese Felder sind optional.</string>
-	<string name="user_private_profile_4">Wenn Du sie aber ausfüllst, erhalten wir wertvolle Informationen, mit denen wir Dich kontaktieren und mit passendere Aufgaben für Deine Aufgabenliste auswählen können.</string>
+  <string name="user_private_profile_3">Bitte fülle diese optionalen Felder aus.</string>
+  <string name="user_private_profile_4">Das wichtigste Feld ist Deine Muttersprache. Damit erhalten wir wertvolle Informationen, mit denen wir passendere Aufgaben für Dich auswählen können.</string>
 	<string name="user_private_profile_add_secondary_language">Zweitsprache(n) hinzufügen</string>
 	<string name="user_private_profile_task_type_preferences">Bevorzugte Aufgabentypen:</string>
 	<string name="user_private_profile_translating">Übersetzung</string>
