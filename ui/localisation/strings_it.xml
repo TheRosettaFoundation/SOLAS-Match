@@ -938,8 +938,8 @@
 	<string name="user_private_profile_0">Aggiorna i tuoi dettagli personali qui.</string>
 	<string name="user_private_profile_2">Carattere invalido, il tuo nome pubblico non può essere lasciato in bianco.</string>
 	<string name="user_private_profile_please_note">Nota bene:</string>
-	<string name="user_private_profile_3">Tutti questi campi sono opzionali.</string>
-	<string name="user_private_profile_4">Tuttavia, queste informazioni sono preziose per noi per poterti segnalare le attività più interessanti nel tuo elenco personalizzato delle attività disponibili.</string>
+  <string name="user_private_profile_3">Ti preghiamo di riempire questi campi opzionali.</string>
+  <string name="user_private_profile_4">In particolare, ti chiediamo di indicare la tua lingua materna. In questo modo, ti potremo segnalare le attività più interessanti per te tra quelle che risultano disponibili.</string>
 	<string name="user_private_profile_add_secondary_language">Aggiungi una seconda lingua</string>
 	<string name="user_private_profile_task_type_preferences">Preferenze sul tipo di attività:</string>
 	<string name="user_private_profile_translating">Traduzione</string>
