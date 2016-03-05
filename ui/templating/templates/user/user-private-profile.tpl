@@ -74,7 +74,7 @@
 
                     <div id="language_area">
                         <div id = "nativeLanguageDiv">
-                            <label><strong>{Localisation::getTranslation('common_native_language')}:</strong></label>
+                            <label><strong>{Localisation::getTranslation('common_native_language')}: <span style="color: red">*</span></strong></label>
                             <select name="nativeLanguageSelect" id="nativeLanguageSelect" style="width: 82%">
                                 <option value=""></option>
                                 {foreach $languages as $language}

@@ -572,7 +572,12 @@ class UserRouteHandler
                     if ($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
                         $app->redirect($request);
                     } else {
-                        $app->redirect($app->urlFor("home"));
+                        $nativeLocale = $user->getNativeLocale();
+                        if ($nativeLocale && $nativeLocale->getLanguageCode()) {
+                            $app->redirect($app->urlFor("home"));
+                        } else {
+                            $app->redirect($app->urlFor('user-private-profile', array('user_id' => $user->getId())));
+                        }
                     }
                 }
             } elseif (isset($post['password_reset'])) {
@@ -622,7 +627,12 @@ class UserRouteHandler
                 if ($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
                     $app->redirect($request);
                 } else {
-                      $app->redirect($app->urlFor("home"));
+                    $nativeLocale = $user->getNativeLocale();
+                    if ($nativeLocale && $nativeLocale->getLanguageCode()) {
+                        $app->redirect($app->urlFor("home"));
+                    } else {
+                        $app->redirect($app->urlFor('user-private-profile', array('user_id' => $user->getId())));
+                    }
                 }
             }
             

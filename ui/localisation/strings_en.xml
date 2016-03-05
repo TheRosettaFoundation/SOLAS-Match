@@ -942,8 +942,8 @@
 	<string name="user_private_profile_0">Update your personal details here.</string>
 	<string name="user_private_profile_2">Invalid input, your display name cannot be blank.</string>
 	<string name="user_private_profile_please_note">Please Note:</string>
-	<string name="user_private_profile_3">All these fields are optional.</string>
-	<string name="user_private_profile_4">However, filling them out will provide us with valuable information for contacting you and for matching you with more relevant tasks for your Task Stream.</string>
+  <string name="user_private_profile_3">Please complete these optional fields.</string>
+  <string name="user_private_profile_4">Filling in your Native Language is most important. It will provide us with valuable information for matching you with more relevant tasks.</string>
 	<string name="user_private_profile_add_secondary_language">Add Secondary Language</string>
 	<string name="user_private_profile_task_type_preferences">Task Type Preferences:</string>
 	<string name="user_private_profile_translating">Translating</string>

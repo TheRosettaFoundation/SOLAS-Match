@@ -937,8 +937,8 @@
 	<string name="user_private_profile_0">Aquí puedes actualizar tus datos personales.</string>
 	<string name="user_private_profile_2">Tienes que especificar un nombre de usuario.</string>
 	<string name="user_private_profile_please_note">Ten en cuenta que:</string>
-	<string name="user_private_profile_3">Estos campos son opcionales.</string>
-	<string name="user_private_profile_4">Sin embargo, te recomendamos que los rellenes, ya que así podremos contactar contigo si es necesario y enviarte tareas que se ajusten más a tu perfil.</string>
+  <string name="user_private_profile_3">Por favor, rellena los campos opcionales.</string>
+  <string name="user_private_profile_4">Es importante que indiques tu lengua materna para que podamos enviarte aquellas tareas que se ajusten a tu combinación lingüística.</string>
 	<string name="user_private_profile_add_secondary_language">Añade un idioma secundario</string>
 	<string name="user_private_profile_task_type_preferences">Tareas que prefieres recibir</string>
 	<string name="user_private_profile_translating">Traducción</string>
