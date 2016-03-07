@@ -52,7 +52,12 @@ class Dispatcher
             $app->configureMode('development', function () use ($app) {
                 $app->config(array(
                     'log.enable' => false,
-                    'debug' => true
+                    'debug' => true,
+                    'cookies.lifetime' => Common\Lib\Settings::get('site.cookie_timeout'),
+                    'cookies.encrypt' => true,
+                    'cookies.secret_key' => Common\Lib\Settings::get('session.site_key'),
+                    'cookies.cipher' => MCRYPT_RIJNDAEL_256,
+                    'cookies.cipher_mode' => MCRYPT_MODE_CBC
                 ));
             });
         }
