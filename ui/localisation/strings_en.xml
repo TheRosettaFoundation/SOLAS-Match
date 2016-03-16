@@ -968,7 +968,7 @@
 	<string name="user_public_profile_remove_badge">Remove Badge</string>
 	<string name="user_public_profile_5">Are you sure you want to remove this badge?</string>
 	<string name="user_public_profile_task_stream_notifications">Task Stream Notifications</string>
-	<string name="user_public_profile_6">How often do you recieve task stream e-mail updates?</string>
+  <string name="user_public_profile_6">How often do you receive task stream e-mail updates?</string>
 	<string name="user_public_profile_edit_notifications">Edit Notifications</string>
 	<string name="user_public_profile_7">No emails have been sent yet.</string>
 	<string name="user_public_profile_8">A list of tags you have subscribed to.</string>
