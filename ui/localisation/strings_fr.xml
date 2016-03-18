@@ -1,0 +1,1089 @@
+<resources>
+    <!-- Smarty Template Strings -->
+    <string name="common_faq">FAQ</string>
+	<string name="common_forum">Forum</string>
+	<string name="common_banned_by">Interdit par</string>
+	<string name="common_ban_duration">Durée de l&apos;interdiction</string>
+	<string name="common_ban_reason">Raison de l&apos;interdiction</string>
+	<string name="common_banned_date">Date de l&apos;interdiction</string>
+	<string name="common_restore">Restaurer</string>
+	<string name="common_minute">Minute</string>
+	<string name="common_hour">Heure</string>
+	<string name="common_day">Jour</string>
+	<string name="common_week">Semaine</string>
+	<string name="common_month">Mois</string>
+	<string name="common_year">Année</string>
+	<string name="common_permanent">Définitive</string>
+	<string name="common_ban_organisation">Interdire l&apos;organisation</string>
+	<string name="common_note">Remarque</string>
+	<string name="common_denotes_a_required_field">Remarque : <span style="color: red">*</span> indique un champ obligatoire.</string>
+	<string name="common_address">Adresse</string>
+	<string name="common_city">Ville</string>
+	<string name="common_country">Pays</string>
+	<string name="common_home_page">Page d&apos;accueil</string>
+	<string name="common_email">Adresse email</string>
+	<string name="common_biography">Informations sur l&apos;organisation</string>
+	<string name="common_regional_focus">Régions concernées</string>
+	<string name="common_africa">Afrique</string>
+	<string name="common_asia">Asie</string>
+	<string name="common_australia">Australie</string>
+	<string name="common_europe">Europe</string>
+	<string name="common_north_america">Amérique du nord</string>
+	<string name="common_south_america">Amérique du sud</string>
+	<string name="common_organisation_profile">Profil de l&apos;organisation</string>
+	<string name="common_name">Nom</string>
+	<string name="common_organisation_name">Nom de l&apos;organisation</string>
+	<string name="common_warning">Avertissement</string>
+	<string name="common_description">Description</string>
+	<string name="common_title">Titre</string>
+	<string name="common_deadline">Échéance</string>
+	<string name="common_status">Statut</string>
+	<string name="common_word_count">Compte de mots</string>
+	<string name="common_created">Créé</string>
+	<string name="common_edit">Modifier</string>
+	<string name="common_archive">Archiver</string>
+    <string name="common_archived_tasks">Tâches archivées</string>
+	<string name="common_add_user">Ajouter un utilisateur</string>
+    <string name="common_any_task_status">Tous les statuts de tâches</string>
+	<string name="common_impact">Impact</string>
+	<string name="common_tags">Tags</string>
+	<string name="common_source_language">Langue source</string>
+	<string name="common_target_language">Langue cible</string>
+	<string name="common_segmentation">Segmentation</string>
+	<string name="common_translation">Traduction</string>
+	<string name="common_proofreading">Relecture</string>
+	<string name="common_desegmentation">Désegmentation</string>
+	<string name="common_cancel">Annuler</string>
+	<string name="common_create_project">Créer un projet</string>
+	<string name="common_what_happens_now">Et maintenant ?</string>
+	<string name="common_edit_project">Modifier un projet</string>
+	<string name="common_organisation">Organisation</string>
+	<string name="common_organisations">Organisations</string>
+	<string name="common_type">Type de tâche</string>
+	<string name="common_waiting">En attente</string>
+	<string name="common_unclaimed">Non prise en charge</string>
+	<string name="common_in_progress">En cours</string>
+	<string name="common_complete">Terminée</string>
+	<string name="common_delete">Supprimer</string>
+	<string name="common_your">Votre</string>
+	<string name="common_task">Tâche</string>
+   	<string name="common_project">Projet</string>
+	<string name="common_segmentation_task">Tâche de segmentation</string>
+	<string name="common_translation_task">Tâche de traduction</string>
+	<string name="common_proofreading_task">Tâche de relecture</string>
+	<string name="common_desegmentation_task">Tâche de désegmentation</string>
+	<string name="common_please_fill_in_all_required_fields">Complétez les champs obligatoires</string>
+    <string name="common_please_correct_errors">Corrigez les erreurs suivantes</string>
+	<string name="common_provide_feedback">Fournir des commentaires</string>
+	<string name="common_here">ici</string>
+	<string name="common_create_a_translation_task_for_volunteer_translators_to_pick_up">Créer une tâche de traduction pour les traducteurs bénévoles.</string>
+	<string name="common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer">Créer une tâche de relecture afin d&apos;évaluer la traduction fournie par un bénévole.</string>
+	<string name="common_thanks_for_providing_your_translation_for_this_task">Merci de votre traduction pour cette tâche.</string>
+	<string name="common_maximum_file_size_is">La taille maximum de fichier est de <strong>% Mo</strong>.</string>
+	<string name="common_assign">Attribuer</string>
+	<string name="common_it_is_time_to_decide">C&apos;est le moment de décider.</string>
+	<string name="common_no_just_bring_me_back_to_the_task_page">Non, je souhaite revenir à la page de la tâche.</string>
+	<string name="common_review_this_checklist_for_your_downloaded_file">Consultez la liste de vérification pour le fichier téléchargé.</string>
+	<string name="common_after_downloading">Après le téléchargement</string>
+	<string name="common_this_is_what_you_need_to_do_as_soon_as_possible">Voici ce que vous devrez faire (le plus rapidement possible)</string>
+    <string name="common_we_have_also_emailed_you_these_instructions_to">Nous vous avons également envoyé ces instructions par email à l&apos;adresse <strong>%s</strong>.</string>
+	<string name="common_cant_find_the_file_on_your_desktop">Vous ne trouvez pas le fichier sur votre Bureau ?</string>
+   	<string name="common_download_the_file">Téléchargez le <a href="%s">fichier</a> et enregistrez-le sur votre Bureau.</string>
+	<string name="common_from">De</string>
+	<string name="common_to">À</string>
+	<string name="common_added">Ajouté il y a <strong>%s</strong> </string>
+    <string name="common_added_days">Ajouté il y a <strong>%s jour(s)</strong></string>
+    <string name="common_added_hours">Ajouté il y a <strong>%s heure(s)</strong></string>
+    <string name="common_added_minutes">Ajouté il y a <strong>%s minute(s)</strong></string>
+    <string name="common_added_seconds">Ajouté il y a <strong>%s seconde(s)</strong></string>
+	<string name="common_approximate_or_use_a_website_such_as">Approximatif, ou utiliser un site web tel que</string>
+	<string name="common_publish_task">Publier la tâche</string>
+	<string name="common_task_prerequisites">Condition(s) préalable(s) pour cette tâche</string>
+	<string name="common_assign_prerequisites_for_this_task_if_any">Indiquer - le cas échéant - des conditions préalables pour cette tâche </string>
+	<string name="common_these_are_tasks_that_must_be_completed_before_the_current_task_becomes_available">Ces tâches doivent être terminées avant que celle en cours ne devienne disponible.</string>
+	<string name="common_create_task">Créer une tâche</string>
+	<string name="common_wait_for_translators">Attendre des traducteurs</string>
+	<string name="common_task_deadline">Échéance de la tâche</string>
+	<string name="common_task_comment">Commentaire concernant la tâche</string>
+	<string name="common_tracking">Suivi</string>
+	<string name="common_unpublish">Annuler la publication</string>
+	<string name="common_publish">Publier</string>
+	<string name="common_no_comment_has_been_listed">Aucun commentaire.</string>
+	<string name="common_no_description_has_been_listed">Aucune description.</string>
+    <string name="common_no_impact_has_been_listed">Aucune information d&apos;impact.</string>
+	<string name="common_signin_or_create_new_account">Se connecter ou créer un nouveau compte</string>
+	<string name="common_please_click_your_account_provider">Sélectionnez votre fournisseur de compte :</string>
+	<string name="common_openid_is_service_that_allows_you_to_logon_to_many_different_websites_using_a_single_indentity">OpenID est un service qui permet de se connecter à différents sites web avec la même identité.</string>
+	<string name="common_display_name">Nom complet</string>
+	<string name="common_remove">Supprimer</string>
+	<string name="common_user_profile">Profil d&apos;utilisateur</string>
+	<string name="common_native_language">Langue maternelle</string>
+	<string name="common_secondary_languages">Deuxième(s) langue(s)</string>
+	<string name="common_first_name">Prénom</string>
+	<string name="common_last_name">Nom de famille</string>
+	<string name="common_mobile_number">Numéro de portable</string>
+	<string name="common_business_number">Numéro professionnel</string>
+	<string name="common_job_title">Titre</string>
+	<string name="common_badges">Badges</string>
+	<string name="common_strict">Spécifiques</string>
+	<string name="common_the_last_email_was_sent_on">Le dernier email a été envoyé le %s.</string>
+   	<string name="common_no_emails_have_been_sent_yet">Aucun email n&apos;a encore été envoyé.</string>
+	<string name="common_you_are_not_currently_receiving_task_stream_notification_emails">Vous ne recevez actuellement pas les emails de notification de la liste des tâches.</string>
+	<string name="common_submit">Envoyer</string>
+	<string name="common_log_in">Se connecter</string>
+	<string name="common_register">S&apos;inscrire</string>
+  <string name="common_change_email">Change User email Address</string>
+  <string name="common_new_email">New email Address</string>
+  <string name="common_new_email_already_used">The new email address has already been registered by another user.</string>
+	<string name="common_search_for_organisations">Rechercher des organisations</string>
+	<string name="common_task_type">Type de tâche</string>
+   	<string name="common_create_administrator">Créer un administrateur</string>
+	<string name="common_list_all">Tout afficher</string>
+	<string name="common_reference">Référence</string>
+	<string name="common_there_are_no_tags_associated_with_this_project">Aucun tag n&apos;est associé à ce projet.</string>
+	<string name="common_password">Mot de passe</string>
+	<string name="common_create_organisation">Créer une organisation</string>
+	<string name="common_success">Opération réussie</string>
+	<string name="common_if_checked_tasks_will_appear_in_the_tasks_stream">Si vous cochez cela, ces tâches apparaîtront dans la liste des tâches.</string>
+	<string name="common_here_is_what_will_now_happen">Voici ce qui va se passer</string>
+	<string name="common_back_to_home_page">Retour à la page d&apos;accueil</string>
+	<string name="common_create_new_task">Créer une nouvelle tâche</string>
+	<string name="common_project_description">Description du projet</string>
+	<string name="common_due_by">À livrer pour le <strong>%s</strong></string>
+	<string name="common_source">Source</string>
+	<string name="common_target">Cible</string>
+	<string name="common_reset">Réinitialiser</string>
+	<string name="common_submit_feedback">Soumettre des commentaires</string>
+	<string name="common_claimed_date">Date de prise en charge</string>
+	<string name="common_claimed_by">Tâche prise en charge par</string>
+	<string name="common_loading">En cours de chargement...</string>
+	<string name="common_track_project">Suivre le projet</string>
+	<string name="common_untrack_task">Arrêter de suivre la tâche</string>
+	<string name="common_track_task">Suivre la tâche</string>
+	<string name="common_error">Erreur</string>
+    <string name="common_login_required_to_access_page">Vous devez vous connecter pour accéder à cette page.</string>
+    <string name="common_this_user_account_has_been_banned">Ce compte d&apos;utilisateur fait l&apos;objet d&apos;une interdiction. L&apos;administrateur a indiqué le commentaire suivant : %s</string>
+    <string name="common_assign_badge">Attribuer un badge</string>        
+    <string name="common_successfully_added_member">%s a été ajouté comme membre de %s.</string>
+    <string name="common_invalid_userid">Identifiant utilisateur non valide : %s</string>
+    <string name="common_invalid_characters">Les caractères non valides sont les suivants : &apos;/&apos;, &apos;\&apos;, &apos;;&apos;, &apos;#&apos;,&apos;~&apos;, &apos;|&apos;, &apos;&lt;&apos;, &apos;&gt;&apos;, &quot; et &apos;@&apos;</string>
+    <string name="common_invalid_url">L&apos;URL indiquée n&apos;est pas valide.</string>
+    <string name="common_no_valid_email">L&apos;adresse email que vous avez indiquée n&apos;est pas valide.</string>
+    <string name="common_all_fields">Tous les champs doivent être renseignés.</string>
+    <string name="common_error_upload_invalid_content">Le contenu du fichier que vous téléchargez n&apos;est pas valide. Assurez-vous de télécharger un fichier valide (<strong>.%s</strong>) dont le type de contenu est valide (<strong>%s</strong>).</string>
+    <string name="common_error_upload_internal_server_error">Erreur interne de serveur.  Contactez les administrateurs.</string>
+    <string name="common_error_login_incorrect">Nom d&apos;utilisateur ou mot de passe incorrect. Vérifiez les identifiants indiqués et réessayez.</string>
+    <string name="common_error_login_unverified">Impossible de confirmer ce compte utilisateur. Vérifiez votre adresse email.</string>
+    <string name="common_error_not_exist">Vous ne disposez pas des privilèges suffisants pour accéder à cette page, ou celle-ci n&apos;existe pas.</string>
+    <string name="common_error_already_claimed">Cette tâche est déjà prise en charge par un autre utilisateur.</string>
+    <string name="common_error_cannot_claim_desegmentation">Vous ne pouvez pas prendre en charge la tâche de désegmentation <a href="%s">%s</a> car vous avez travaillé sur une de ses tâches à effectuer au préalable.</string>
+    <string name="common_error_cannot_reclaim">Vous ne pouvez pas reprendre en charge la tâche <a href="%s">%s</a> car vous l&apos;avez déjà abandonnée.</string>
+    <string name="common_error_cannot_reclaim_admin_revoked">Vous ne pouvez pas reprendre la tâche <a href="%s">%s</a> car un administrateur l&apos;a déjà révoquée pour vous.</string>      
+    <string name="common_error_unknown_task_type">Type de tâche inconnu.</string>
+    <string name="common_error_language_code_expected">Code de langue valide attendu.</string>
+    <string name="common_error_unable_to_upload">Nous n&apos;avons pas réussi à télécharger votre fichier. %s</string>
+    <string name="common_error_file_too_large">Le fichier que vous essayez de télécharger est trop volumineux. La taille maximum de fichier est de <strong>{$taille_max_fichier} Mo</strong>.</string>
+    <string name="common_error_partial_upload">Le fichier a été partiellement téléchargé uniquement. Réessayez.</string>
+    <string name="common_error_no_file_selected">Vous n&apos;avez pas sélectionné de fichier à télécharger. Réessayez.</string>
+    <string name="common_error_server_missing_temp">Un dossier temporaire manque sur le serveur.</string>
+    <string name="common_error_server_failed_write_disk">Impossible pour le serveur d&apos;enregistrer le fichier sur le disque dur.</string>
+    <string name="common_error_file_stopped_by_extension">Téléchargement du fichier interrompu en raison de son extension.</string>
+    <string name="common_error_file_invalid_empty">Assurez-vous que le fichier que vous essayez de télécharger est valide et n&apos;est pas vide.</string>
+    <string name="common_error_org_name_not_set">Vous devez définir un <strong>nom d&apos;organisation</strong>.</string>
+    <string name="common_error_org_name_in_use">Une organisation intitulée <strong>%s</strong> existe déjà. Veuillez choisir un autre nom.</string>
+    <string name="common_error_file_not_found">Le fichier requis est introuvable dans notre système. Type de fichier requis : %s. Contactez-nous à l&apos;adresse %s pour nous donner des détails sur ce problème.</string>
+    <!-- The 3 strings below are used for the error above -->
+    <string name="common_original_project_file">fichier projet d&apos;origine</string>
+    <string name="common_project_image_file">fichier image du projet</string>
+    <string name="common_original_task_file">fichier de tâche d&apos;origine</string>
+    <string name="common_latest_task_file_version">dernière version du fichier de tâche</string>
+
+    <string name="common_task_status">Statut de la tâche</string>
+    <string name="common_download_file">Télécharger le fichier</string>
+    <string name="common_can_you_open_file">Pouvez-vous ouvrir ce fichier sur votre ordinateur ?</string>
+    <string name="common_part_of_for">Partie de <a href="%s">%s</a> pour <a href="%s">%s</a></string> 
+    <string name="common_what_type_of_emails">Quel type d&apos;emails souhaitez-vous recevoir ?</string>
+    <string name="common_how_often_receiving_emails">À quelle fréquence souhaitez-vous recevoir ces emails ?</string>        
+    <string name="common_january">Janvier</string>
+    <string name="common_february">Février</string>
+    <string name="common_march">Mars</string>
+    <string name="common_april">Avril</string>
+    <string name="common_may">Mai</string>
+    <string name="common_june">Juin</string>
+    <string name="common_july">Juillet</string>
+    <string name="common_august">Août</string>
+    <string name="common_september">Septembre</string>
+    <string name="common_october">Octobre</string>
+    <string name="common_november">Novembre</string>
+    <string name="common_december">Décembre</string>
+    <string name="common_maintenance_message">Notez que notre site fera l&apos;objet d&apos;opérations de maintenance programmées le %1$s à %2$s. Ces opérations devraient durer uniquement %3$s heure(s).</string>
+    <string name="common_sitewide_maintenance">Trommons est actuellement indisponible en raison d&apos;opérations de maintenance.</string>
+    <string name="common_sitewide_maintenance_msg">Le service reprendra dans environ %s heure(s). Nous vous remercions de votre patience.</string>
+    <string name="common_this_may_take_days_weeks">Selon les tâches, ceci peut prendre plusieurs jours ou plusieurs semaines.</string>
+    <string name="common_task_file_extension_mismatch">L&apos;<strong>extension</strong> du fichier est différente de celle du fichier téléchargé à l&apos;origine. Téléchargez un <strong>(.%s) !</strong></string>
+    <string name="common_language_preference">Langue préférée</string>
+    <string name="common_project_image">Image du projet</string>
+    <string name="common_project_image_not_approved">L&apos;image actuellement téléchargée doit être approuvée par les administrateurs.</string>
+    <string name="common_project_image_not_uploaded">Aucune image n&apos;a été téléchargée pour ce projet.</string>
+     
+	<string name="admin_banned_orgs_list_all_banned_organisations_of">Toutes les organisations de %s faisant l&apos;objet d&apos;une interdiction.</string>
+	<string name="admin_banned_orgs_list_confirm_unban">Souhaitez-vous vraiment annuler l&apos;interdiction de cette organisation et de ses membres ?</string>
+
+	<string name="admin_banned_users_list_all_banned_users_of">Tous les utilisateurs de %s faisant l&apos;objet d&apos;une interdiction.</string>
+	<string name="admin_banned_users_list_user_display_name">Nom complet d&apos;utilisateur</string>
+	<string name="admin_banned_users_list_confirm_unban">Souhaitez-vous vraiment annuler l&apos;interdiction de cet utilisateur ?</string>
+
+	<string name="admin_site_admins_list_all_current_administrators_of">Tous les administrateurs actuels de %s.</string>
+	<string name="admin_site_admins_list_display_name">Nom complet</string>
+	<string name="admin_site_admins_list_revoke_administrator_rights">Révoquer les droits administrateurs</string>
+	<string name="admin_site_admins_list_revoke">Révoquer</string>
+	<string name="admin_site_admins_list_confirm_revoke">Voulez-vous vraiment révoquer les privilèges administrateurs de cet utilisateur ?</string>
+
+	<string name="site_admin_dashboard_administration_dashboard">Tableau de bord d&apos;administration</string>
+	<string name="site_admin_dashboard_the_site_administrators_dashboard">Tableau de bord de l&apos;administrateur du site.</string>
+    <string name="site_admin_dashboard_add_new_admin">Ajouter un nouvel administrateur de site à %s.</string>
+	<string name="site_admin_dashboard_email_here">Indiquer l&apos;adresse email de l&apos;utilisateur ici.</string>
+	<string name="site_admin_dashboard_add_admin">Ajouter un administrateur</string>
+	<string name="site_admin_dashboard_sitewide_user_ban">Interdire un utilisateur sur l&apos;ensemble du site.</string>
+	<string name="site_admin_dashboard_sitewide_org_ban">Interdire une organisation sur l&apos;ensemble du site.</string>
+	<string name="site_admin_dashboard_will_ban_all_members">Tous les membres de cette organisation feront l&apos;objet d&apos;une interdiction !</string>
+	<string name="site_admin_dashboard_organisation_name_goes_here">Indiquer le nom de l&apos;organisation ici.</string>
+	<string name="site_admin_dashboard_ban_reason">Raison de l&apos;interdiction</string>
+	<string name="site_admin_dashboard_ban_user">Interdire un utilisateur</string>
+	<string name="site_admin_dashboard_user_email_address">Adresse email de l&apos;utilisateur</string>
+	<string name="site_admin_dashboard_ban_duration">Durée de l&apos;interdiction</string>
+	<string name="site_admin_dashboard_delete_user">Supprimer l&apos;utilisateur</string>
+	<string name="site_admin_dashboard_permanently">Supprimer <strong>définitivement</strong> un utilisateur de %s.</string>
+	<string name="site_admin_dashboard_confirm_delete_user">Voulez-vous vraiment supprimer cet utilisateur de façon définitive ? Cette opération ne pourra pas être annulée.</string>
+    <string name="site_admin_dashboard_successfully_deleted_user">Utilisateur supprimé.</string>
+    <string name="site_admin_dashboard_user_not_found">Impossible de trouver cet utilisateur. L&apos;adresse email indiquée ne correspond à aucun compte dans notre système.</string>
+    <string name="site_admin_dashboard_only_add_trusted">Ajoutez uniquement des utilisateurs auxquels vous faites confiance !</string>
+    <string name="site_admin_dashboard_task_id_here">Indiquer l&apos;identifiant de tâche ici.</string>
+    <string name="site_admin_dashboard_revoke_task">Reprendre la tâche</string>
+    <string name="site_admin_dashboard_revoke_task_from_user">Reprendre une tâche à un utilisateur.</string>
+    <string name="site_admin_dashboard_confirm_revoke_task">Voulez-vous vraiment reprendre cette tâche ?</string>
+    <string name="site_admin_dashboard_revoke_task_success">Tâche reprise à l&apos;utilisateur.</string>
+    <string name="site_admin_dashboard_revoke_task_error_no_claim">L&apos;utilisateur spécifié n&apos;a pas pris en charge la tâche indiquée.</string>
+    <string name="site_admin_dashboard_revoke_task_error_invalid">Adresse email utilisateur ou identifiant de tâche non valide.</string>
+
+	<string name="badge_list_badge_list">Liste des badges</string>
+	<string name="badge_list_all_available_badges_of">Tous les badges disponibles dans %s.</string>
+	<string name="badge_list_badge">Badge %s :</string>
+
+	<string name="create_org_create_an_organisation">Créer une organisation</string>
+	<string name="create_org_create_your_own_organisation">Créer votre propre organisation.</string>
+    <string name="create_org_invalid_name">Les noms d&apos;organisation ne peuvent pas contenir de caractères non valides.</string>
+    <string name="create_org_created">L&apos;organisation <strong>%s</strong> a été créée.</string>
+
+	<string name="org_private_profile_alter_profile_here">Vous pouvez modifier le profil de votre organisation ici.</string>
+	<string name="org_private_profile_public_profile">Profil public</string>
+	<string name="org_private_profile_your_organisation_name">Nom de votre organisation.</string>
+	<string name="org_private_profile_organisationexamplecom">organisation@exemple.com</string>
+	<string name="org_private_profile_enter_organisation_biography_here">Entrer des informations sur l&apos;organisation ici.</string>
+	<string name="org_private_profile_update_organisation_details">Mettre à jour les information sur l&apos;organisation</string>
+    <string name="org_private_profile_confirm_delete">Voulez-vous vraiment supprimer cette organisation ?</string>
+	<string name="org_private_profile_delete_organisation">Supprimer l&apos;organisation</string>
+    <string name="org_private_profile_delete_success">Organisation %s supprimée.</string>        
+    <string name="org_private_profile_delete_fail">Impossible de supprimer l&apos;organisation. Réessayez plus tard.</string> 
+
+	<string name="org_public_profile_an_organisation_of">Organisation de %s.</string>
+	<string name="org_public_profile_edit_organisation_details">Modifier les informations de l&apos;organisation</string>
+	<string name="org_public_profile_request_membership">Faire une demande d&apos;adhésion</string>
+	<string name="org_public_profile_track_organisation">Suivre cette organisation</string>
+	<string name="org_public_profile_untrack_organisation">Ne plus suivre cette organisation</string>
+	<string name="org_public_profile_org_track_success">Vous suivez désormais cette organisation et recevrez par email des notifications concernant ses activités.</string>
+    <string name="org_public_profile_org_track_error">Impossible de s&apos;abonner aux notifications concernant cette organisation.</string>
+    <string name="org_public_profile_org_untrack_success">Vous ne suivez plus cette organisation et ne recevrez plus d&apos;emails à son sujet.</string>
+    <string name="org_public_profile_org_untrack_error">Impossible de se désabonner des notifications concernant cette organisation.</string>
+	<string name="org_public_profile_no_home_page_listed">Aucune page d&apos;accueil indiquée.</string>
+	<string name="org_public_profile_no_address_listed">Aucune adresse indiquée.</string>
+	<string name="org_public_profile_no_city_listed">Aucune ville indiquée.</string>
+	<string name="org_public_profile_no_country_listed">Aucun pays indiqué.</string>
+	<string name="org_public_profile_no_email_listed">Aucune adresse email indiquée.</string>
+	<string name="org_public_profile_no_biography_listed">Aucune information indiquée.</string>
+	<string name="org_public_profile_no_regional_focus_listed">Aucune région indiquée.</string>
+	<string name="org_public_profile_badge_overview">Résumé des badges créés par cette organisation.</string>
+	<string name="org_public_profile_create_badge">Créer un badge</string>
+	<string name="org_public_profile_edit_badge">Modifier un badge</string>
+	<string name="org_public_profile_delete_badge">Supprimer un badge</string>
+	<string name="org_public_profile_confirm_delete_badge">Voulez-vous vraiment supprimer ce badge ?</string>
+	<string name="org_public_profile_no_badges_associated">Aucun badge associé à cette organisation.</string>
+	<string name="org_public_profile_membership_requests">Demandes d&apos;adhésion</string>
+	<string name="org_public_profile_membership_request_overview">Résumé des utilisateurs ayant fait une demande d&apos;adhésion.</string>
+	<string name="org_public_profile_accept">Accepter</string>
+	<string name="org_public_profile_deny">Refuser</string>
+	<string name="org_public_profile_no_membership_requests_associated">Aucune demande d&apos;adhésion associée à cette organisation.</string>
+	<string name="org_public_profile_organisation_members">Membres de l&apos;organisation</string>
+	<string name="org_public_profile_member_list">Liste des utilisateurs membres de cette organisation.</string>
+	<string name="org_public_profile_member_type">Type de membre</string>
+	<string name="org_public_profile_username">Nom d&apos;utilisateur</string>
+	<string name="org_public_profile_remove_user">Supprimer l&apos;utilisateur</string>
+	<string name="org_public_profile_alter_permissions">Modifier les autorisations</string>
+	<string name="org_public_profile_administrator">Administrateur</string>
+	<string name="org_public_profile_member">Membre</string>
+	<string name="org_public_profile_confirm_revoke_membership">Voulez-vous vraiment révoquer l&apos;adhésion de cet utilisateur ?</string>
+	<string name="org_public_profile_revoke_membership">Révoquer l&apos;adhésion</string>
+	<string name="org_public_profile_confirm_revoke_admin">Voulez-vous vraiment révoquer les privilèges administrateur de cet utilisateur ?</string>
+	<string name="org_public_profile_revoke_administrator">Révoquer les privilèges administrateur</string>
+	<string name="org_public_profile_no_members">Cette organisation ne comprend aucun membre.</string>
+    <string name="org_public_profile_confirm_make_admin">Voulez-vous vraiment accorder des privilèges administrateur pour cette organisation à cet utilisateur ?</string>        
+    <string name="org_public_profile_membership_requested">Demande d&apos;adhésion envoyée.</string>
+    <string name="org_public_profile_membership_already_requested">Vous avez déjà envoyé une demande d&apos;adhésion à cette organisation.</string>        
+    <string name="org_public_profile_13">Vous êtes déjà membre de cette organisation.</string>         
+    <string name="org_public_profile_20">%s est déjà membre de cette organisation.</string>        
+    <string name="org_public_profile_21">L&apos;adresse email %s n&apos;est pas enregistrée dans ce système. Avez-vous utilisé la bonne adresse email ?</string>
+    <string name="org_public_profile_23"><a href="%s">%s</a> ajouté à la liste des membres de %s.</string>
+    <string name="org_public_profile_24">Impossible d&apos;ajouter cet utilisateur à la liste des membres. Réessayez plus tard.</string>        
+    <string name="org_public_profile_25">Demande d&apos;adhésion de <a href="%s">%s</a> rejetée.</string>        
+    <string name="org_public_profile_26">Adhésion de l&apos;utilisateur <a href="%s">%s</a> révoquée.</string>        
+    <string name="org_public_profile_27">Impossible de révoquer l&apos;adhésion de l&apos;utilisateur <a href="%s">%s</a>.</string>        
+    <string name="org_public_profile_28">Utilisateur introuvable dans le système.</string> 
+
+	<string name="org_search_organisation_search">Recherche d&apos;organisations</string>
+	<string name="org_search_0">Recherche d&apos;organisations par leur nom.</string>
+	<string name="org_search_search">Rechercher</string>
+	<string name="org_search_search_results">Résultats de la recherche : %s résultat(s) obtenu(s) !</string>
+    <string name="org_search_34">Aucune organisation trouvée.</string>
+
+	<string name="org_create_badge_create_organisation_badge">Créer un badge pour l&apos;organisation</string>
+	<string name="org_create_badge_badge_title">Titre du badge</string>
+	<string name="org_create_badge_0">Créez un badge pour votre organisation.</string>
+	<string name="org_create_badge_create_badge">Créer un badge</string>
+    <string name="org_create_badge_33">Nouveau badge d&apos;organisation créé.</string>  
+
+	<string name="org_dashboard_organisation_dashboard">Tableau de bord de l&apos;organisation</string>
+	<string name="org_dashboard_0">Résumé des projets créés par vos organisations.</string>
+	<string name="org_dashboard_edit_organisation">Modifier l&apos;organisation</string>
+	<string name="org_dashboard_1">Avertissement : Archiver un projet le supprime, ainsi que toutes les tâches qui lui sont associées, de notre système et l&apos;enregistre dans notre base de données. Lorsqu&apos;un projet est archivé, il n&apos;est plus possible de travailler dessus. Voulez-vous vraiment archiver ce projet ?</string>
+	<string name="org_dashboard_archive_project">Archiver le projet</string>
+    <string name="org_dashboard_3">Aucun projet n&apos;est associé à cette organisation.</string>
+    <string name="org_dashboard_5">Réception des notifications de %s interrompue.</string>
+    <string name="org_dashboard_6">Impossible de se désabonner des notifications de %s.</string>
+    <string name="org_dashboard_7">Vous recevrez désormais les notifications de %s.</string>
+    <string name="org_dashboard_8">Impossible de s&apos;abonner à %s.</string>
+    <string name="org_dashboard_9">Vous avez archivé le projet <strong>%s</strong>.</string>
+    <string name="org_dashboard_10">Erreur lors de l&apos;archivage du projet <strong>%s</strong>.</string>
+
+	<string name="org_edit_badge_edit_organisation_badge_details">Modifier les détails du badge de l&apos;organisation.</string>
+	<string name="org_edit_badge_badge_title">Titre du badge</string>
+	<string name="org_edit_badge_0">Indiquer ici le nouveau nom du badge.</string>
+	<string name="org_edit_badge_1">Indiquer ici la nouvelle description du badge.</string>
+	<string name="org_edit_badge_update_badge">Mettre à jour le badge</string>
+               
+    <string name="org_manage_badge_manage_badge">Gérer le badge &apos;%s&apos;</string>
+	<string name="org_manage_badge_0">Attribuer/enlever un badge à un utilisateur.</string>
+	<string name="org_manage_badge_3">Indiquer l&apos;adresse email d&apos;un utilisateur pour lui attribuer un badge.</string>
+	<string name="org_manage_badge_users_with_this_badge">Utilisateurs détenteurs de ce badge.</string>
+	<string name="org_manage_badge_4">Liste des utilisateurs auxquels un membre de l&apos;organisation a attribué ce badge.</string>
+	<string name="org_manage_badge_remove_badge">Enlever le badge</string>
+	<string name="org_manage_badge_5">Ce badge n&apos;a pas encore été attribué à des utilisateurs.</string>
+    <string name="org_manage_badge_29">Badge %s attribué à l&apos;utilisateur %s.</string>
+    <string name="org_manage_badge_30">L&apos;utilisateur %s possède déjà ce badge ou bien cet utilisateur n&apos;existe pas.</string>        
+    <string name="org_manage_badge_32">Badge enlevé à l&apos;utilisateur %s.</string>
+
+	<string name="org_request_queue_0">Ajouter un utilisateur à votre organisation.</string>
+	<string name="org_request_queue_2">Indiquer l&apos;adresse email de l&apos;utilisateur pour l&apos;ajouter à la liste des membres de cette organisation.</string>   
+    <string name="org_request_queue_7">Identifiant utilisateur non valide : %s</string> 
+
+	<string name="org_task_review_review_this_completed_task">Évaluer la tâche terminée.</string>
+	<string name="org_task_review_0">Cliquez sur le bouton ci-dessous pour télécharger le fichier revu pour cette tâche.</string>
+	<string name="org_task_review_download_output_file">Télécharger le fichier revu</string>
+	<string name="org_task_review_review_this_file">Évaluer ce fichier</string>
+	<string name="org_task_review_1">Aidez-nous à trouver les meilleurs bénévoles pour les tâches.</string>
+	<string name="org_task_review_the_volunteer">Le bénévole <a href="%s">%s</a> a terminé cette tâche. Pour nous aider à améliorer le système, effectuez une évaluation de cette tâche.</string>
+    <string name="org_task_review_3"><a href="%s">%s</a> a terminé cette tâche.</string>
+    <string name="org_task_review_35">Le nombre d&apos;étoiles attribué aux corrections à effectuer doit être entre 1 et 5.</string>
+    <string name="org_task_review_36">Le nombre d&apos;étoiles attribué à la grammaire doit être entre 1 et 5.</string>
+    <string name="org_task_review_37">Le nombre d&apos;étoiles attribué à l&apos;orthographe doit être entre 1 et 5.</string>
+    <string name="org_task_review_38">Le nombre d&apos;étoiles attribué à la cohérence doit être entre 1 et 5.</string>
+    <string name="org_task_review_39">Impossible d&apos;enregistrer l&apos;évaluation de %s, réessayez plus tard.</string>
+    <string name="org_task_review_40">L&apos;évaluation de la tâche %s a été enregistrée.</string>
+    <string name="org_task_review_41">Vous avez déjà fourni une évaluation pour cette tâche.</string>
+    <string name="org_task_review_claimant_unavailable">L&apos;utilisateur qui a pris en charge cette tâche n&apos;est plus disponible.</string>
+    <string name="org_task_complete_provide_or_view_review">Évaluez cette tâche à l&apos;aide des boutons ci-dessous ou affichez les évaluations déjà fournies pour cette tâche.</string>
+    <string name="org_task_complete_provide_a_review">Fournir une évaluation</string>
+    <string name="org_task_complete_view_reviews">Afficher les évaluations</string>
+
+	<string name="archived_projects_archived_projects">Projets archivés</string>
+	<string name="archived_projects_0">Liste des projets sur lesquels vous avez travaillé</string>
+
+	<string name="project_alter_alter_project_details_here">Modifier ici les détails du projet</string>
+	<string name="project_alter_view_project_details">Afficher les détails du projet</string>
+	<string name="project_alter_update_project_details">Mettre à jour les détails du projet</string>
+    <string name="project_alter_11">Format de date/d&apos;heure non valide !</string>
+    <string name="project_alter_word_count_error_1">Ce projet comprend des tâches de segmentation/désegmentation ou des tâches avec comptes de mots incohérents. Par conséquent, le compte de mots ne peut être mis à jour automatiquement. Contactez l&apos;équipe de développement en indiquant l&apos;identifiant du projet et le nouveau compte de mots.</string>
+    <string name="project_alter_word_count_error_2">Une erreur s&apos;est produite lors de la mise à jour du compte de mots de ce projet. Contactez l&apos;équipe de développement en indiquant l&apos;identifiant du projet et le nouveau compte de mots.</string>
+    <string name="project_alter_delete_project_image">Supprimer l&apos;image du projet</string>
+    <string name="project_alter_confirm_delete_image">Voulez-vous vraiment supprimer l&apos;image associée à ce projet ?</string>
+    <string name="project_alter_image_successfully_deleted">L&apos;image du projet a été supprimée.</string>
+
+	<string name="project_create_create_a_project">Créer un projet</string>
+	<string name="project_create_0">Fournir autant d&apos;informations que possible. </string>
+	<string name="project_create_source_text">Texte source</string>
+	<string name="project_create_1">Indiquer un titre parlant pour le projet</string>
+	<string name="project_create_target_language_increase">Notez que la création de plus de cinq tâches peut prendre un certain temps. Ne cliquez pas sur le bouton Créer un projet plus d&apos;une fois et ne quittez pas cette page.</string>
+	<string name="project_create_2">Résumé concis du projet</string>
+	<string name="project_create_3">À qui ou à quoi bénéficiera l&apos;aide apportée sur ce projet.</string>
+	<string name="project_create_4">Ces informations seront lues par les bénévoles souhaitant prendre en charge votre projet.</string>
+	<string name="project_create_5">Indiquer une URL donnant le contexte de ce projet.</string>
+	<string name="project_create_6">Télécharger le fichier source de ce projet.</string>
+	<string name="project_create_7">Dates auxquelles le projet et ses tâches devraient être terminés.</string>
+	<string name="project_create_8">Les tags fournis seront utilisés pour associer des bénévoles à votre projet.</string>
+	<string name="project_create_separated_by">Ils sont séparés par</string>
+	<string name="project_create_seperator">des espaces</string>
+	<string name="project_create_for_multiword_tags_joinwithhyphens">Pour les tags comportant plusieurs mots : les-attacher-avec-des-traits-d&apos;union.</string>
+	<string name="project_create_publish_tasks">Publier des tâches</string>
+	<string name="project_create_9">Spécifier les types de tâches dont vous avez besoin pour votre workflow.</string>
+	<string name="project_create_10">Créer une tâche de segmentation pour diviser de gros fichiers source en segments gérables de 4 000 mots maximum.</string>
+	<string name="project_create_11">Vous avez atteint le nombre maximum de champs de traduction cible autorisés.</string>
+    <string name="project_create_12">Si cette case est cochée, vous suivrez automatiquement ce projet et recevrez des notifications par email.</string>
+    <string name="project_create_add_more_target_languages">Ajouter d&apos;autres langues cibles.</string>
+    <string name="project_create_13"><strong>Impossible de créer une tâche de segmentation :</strong></string>
+    <string name="project_create_14">Impossible de créer une tâche de traduction.</string>
+    <string name="project_create_15">Impossible de créer une tâche de relecture.</string>
+    <string name="project_create_16">Aucun fichier projet téléchargé.</string>
+    <string name="project_create_17">Le fichier projet téléchargé est vide.</string>
+    <string name="project_create_failed_to_create_project"><strong>Impossible de créer le projet</strong> : %s</string>
+    <string name="project_create_title_conflict">Un projet du même titre que celui que vous avez indiqué existe déjà pour votre organisation.</string>
+    <string name="project_create_title_cannot_be_number">Un titre de projet ne peut pas être constitué uniquement d&apos;un nombre entier. Indiquer un titre parlant.</string>
+    <string name="project_create_18">L&apos;extension du fichier est passée en minuscules.</string>
+	<string name="project_create_target_languages">Langue(s) cible(s)</string>
+    <string name="project_create_19">Le fichier téléchargé est au format PDF. Voulez-vous vraiment télécharger un fichier PDF ? Travailler avec ce type de fichier n&apos;est pas très pratique. </string>
+    <string name="project_create_20">Télécharger un fichier avec une extension.</string>
+    <string name="project_create_21">Le fichier téléchargé est trop volumineux. Vérifiez la taille maximum de fichier autorisée sous l&apos;en-tête Texte source.</string>
+    <string name="project_create_22">Notez que le compte de mots de votre fichier est très élevé. La limite recommandée est de 3 000 mots. Nous vous suggérons de créer plutôt une tâche de segmentation. Voulez-vous vraiment continuer ?</string>
+    <string name="project_create_error_title_too_long">Le titre du projet est trop long. Limitez-le à 100 caractères maximum.</string>
+    <string name="project_create_error_description_too_long">La description du projet est trop longue. Limitez-la à 4 096 caractères maximum.</string>
+    <string name="project_create_error_impact_too_long">Le texte sur l&apos;impact du projet est trop long. Limitez-le à 4 096 caractères maximum.</string>
+    <string name="project_create_error_reference_invalid">La référence du projet doit correspondre à une URL valide.</string>    
+    <string name="project_create_error_reference_too_long">L&apos;URL de référence du projet est trop longue. Elle ne doit pas dépasser 128 caractères. Envisagez d&apos;utiliser un outil de raccourcissement des URLs, tel que <a href="https://bitly.com/">bitly</a>.</string>
+    <string name="project_create_error_tags_too_long">Chaque tag de projet ne doit pas dépasser 50 caractères.</string>
+    <string name="project_create_invalid_tags">Les tags doivent uniquement comporter des minuscules, des chiffres et des traits d&apos;union.</string>
+    <string name="project_create_25">L&apos;échéance indiquée doit correspondre à une date dans le futur.</string>
+    <string name="project_create_26">L&apos;impact du projet doit être défini.</string>
+    <string name="project_create_27">Le compte de mots du projet doit être indiqué et correspondre à nombre entier valide.</string>
+    <string name="project_create_28">Chaque nouvelle paire de langues ajoutée doit être unique.</string>
+    <string name="project_create_29">Chaque <strong>langue cible</strong> doit être associée à un <strong>type de tâche</strong> au minimum.</string>
+    <string name="project_create_error_title_not_set">Le projet doit avoir un titre.</string>
+    <string name="project_create_32">Le projet doit avoir une date d&apos;échéance.</string>
+    <string name="project_create_33">Le projet doit avoir une description.</string>
+    <string name="project_create_failed_project_track"><strong>Impossible de suivre ce projet :</strong> %s</string>
+    <string name="project_create_failed_project_deadlines"><strong>Une erreur s&apos;est produite lors du calcul des dates d&apos;échéance du projet :</strong> %s</string>
+    <string name="project_create_failed_upload_file"><strong>Impossible de télécharger le fichier %s :</strong> %s</string>
+    <string name="project_create_failed_upload_image"><strong>Impossible de télécharger le fichier image du projet :</strong> %s</string>
+    <string name="project_create_failed_track_task"><strong>Impossible de suivre la tâche %s :</strong> %s</string>
+    <string name="project_create_failed_add_prereq"><strong>Impossible d&apos;ajouter des conditions préalables à la tâche de relecture :</strong> %s</string>
+    <string name="project_create_please_upload_valid_image_file">Si vous téléchargez une image pour le projet, utilisez un fichier image valide. Le fichiers %s ne sont pas des images.</string>
+    <string name="project_create_image_file_empty">Le fichier image téléchargé est vide.</string>
+    <string name="project_create_upload_project_image">Si vous le souhaitez, vous pouvez aussi télécharger une image à associer à votre projet.</string>
+    <string name="project_create_image_has_no_extension">Téléchargez un fichier image doté d&apos;une extension.</string>
+    <string name="project_create_image_is_too_big">L&apos;image téléchargée est trop volumineuse. Vérifiez la taille maximum de fichier autorisée sous l&apos;en-tête Image du projet.</string>
+
+	<string name="project_created_project_is_now_live">Votre projet est actif !</string>
+    <string name="project_created_success"><strong>Opération réussie</strong> - Votre projet a été téléchargé.</string>
+    <string name="project_created_1">Il est maintenant sur le <a href="%s">Tableau de bord</a> de vos organisations.</string>
+    <string name="project_created_2">Vous pouvez afficher les détails de ce projet et les tâches qui lui sont associées dans l&apos;<a href="%s">Affichage Projet</a>.</string>
+	<string name="project_created_4">Les traducteurs bénévoles verront les nouvelles tâches associées à votre projet.</string>
+	<string name="project_created_5">Si l&apos;un d&apos;eux est intéressé par une tâche, il peut la prendre en charge, la télécharger puis renvoyer son travail terminé.</string>
+	<string name="project_created_create_new_project">Créer un nouveau projet</string>
+
+	<string name="project_profile_display_by_project">Par projet</string>
+	<string name="project_profile_display_words">mots</string>
+
+	<string name="project_view_overview_of_project_details">Résumé des détails du projet</string>
+	<string name="project_view_project_deadline">Date d&apos;échéance du projet</string>
+	<string name="project_view_untrack_project">Ne plus suivre ce projet</string>
+	<string name="project_view_tasks">Tâches</string>
+	<string name="project_view_0">Résumé des tâches créées pour ce projet</string>
+	<string name="project_view_list_view">Affichage sous forme de liste</string>
+	<string name="project_view_graph_view">Affichage sous forme de graphique</string>
+	<string name="project_view_archive_delete">Archiver/Supprimer</string>
+	<string name="project_view_edit_task">Modifier la tâche</string>
+    <string name="project_view_failed_build_graph"><strong>Impossible de créer un graphique</strong>, ce projet ne contient aucune tâche.</string>
+	<string name="project_view_1">Si vous supprimez une tâche, elle disparaîtra complètement du système. Une tâche ne devrait être supprimée qu&apos;en cas d&apos;erreur. Voulez-vous vraiment supprimer cette tâche ?</string>
+	<string name="project_view_2">Impossible d&apos;archiver des tâches en cours.</string>
+	<string name="project_view_3">Archiver une tâche la supprimera du système et la copiera dans notre base de données. Lorsqu&apos;une tâche est archivée, il n&apos;est plus possible de la mettre à jour. Voulez-vous vraiment archiver cette tâche ?</string>
+	<string name="project_view_4">Aucune tâche n&apos;a été téléchargée pour votre organisation.</string>
+	<string name="project_view_5">Si vous avez du contenu à traduire, ajoutez une nouvelle tâche pour celui-ci.</string>
+	<string name="project_view_6">Pour vous abonner aux notifications de ce projet, connectez-vous.</string>                
+    <string name="project_view_7">Vous suivez maintenant ce projet et recevrez des notifications par email lorsque son statut sera modifié.</string>
+    <string name="project_view_8">Impossible de s&apos;abonner aux notifications de ce projet.</string>
+    <string name="project_view_9">Vous ne suivez plus ce projet et ne recevrez plus d&apos;emails à son sujet.</string>
+    <string name="project_view_10">Impossible de se désabonner de cette notification.</string>
+    <string name="project_view_11">Réception des notifications de %s interrompue.</string>
+    <string name="project_view_12">Impossible de se désabonner des notifications de %s.</string>
+    <string name="project_view_13">Vous recevrez désormais les notifications de %s.</string>
+    <string name="project_view_14">Impossible de s&apos;abonner à %s.</string>
+    <string name="project_view_15">La tâche %s a été supprimée.</string>
+    <string name="project_view_16">La tâche %s a été archivée.</string>
+    <string name="project_view_17">Vous avez archivé <strong>%s %s</strong>.</string>
+    <string name="project_view_18">Une erreur s&apos;est produite lors de l&apos;archivage de <strong>%s %s</strong>.</string>
+    <string name="project_view_image_approve">Approuver l&apos;image</string>
+    <string name="project_view_image_disapprove">Rejeter l&apos;image</string>
+    <string name="project_view_image_approve_success">Image approuvée.</string>
+    <string name="project_view_image_approve_failed">Une erreur s&apos;est produite lors de la mise à jour du statut de l&apos;image.</string>
+    <string name="project_view_image_disapprove_success">Image rejetée. Cette image ne sera plus affichée.</string>
+        
+	<string name="privacy_privacy_policy">Règles de confidentialité</string>
+    <string name="privacy_0">Ces Règles de confidentialité régissent la manière dont The Rosetta Foundation obtient, utilise, maintient à jour et partage les informations provenant des utilisateurs (chacun, un « Utilisateur ») du site web <a href="%s">%s</a> (le « Site »). Ces Règles de confidentialité s&apos;appliquent au Site et à tous les produits et services offerts par The Rosetta Foundation.</string>
+	<string name="privacy_personal_identification_information">Informations personnelles d&apos;identification</string>
+	<string name="privacy_2">Il est possible que nous collections des informations personnelles d&apos;identification des Utilisateurs de diverses manières, y compris mais pas uniquement, lors de leur visite de notre Site ou leur inscription sur celui-ci, ou en lien avec d&apos;autres activités, services ou ressources disponibles sur le Site. Il est possible que les utilisateurs doivent indiquer leur nom, adresse email, adresse postale et numéro de téléphone. Nous collecterons les informations personnelles d&apos;identification des Utilisateurs uniquement si ceux-ci nous fournissent ces informations de leur plein gré. Les Utilisateurs ont toujours la possibilité de refuser de fournir des informations personnelles d&apos;identification. Cependant, ceci peut avoir pour effet de les empêcher de participer à certaines activités associées au Site.</string>
+	<string name="privacy_nonpersonal_identification_information">Informations non personnelles d&apos;identification</string>
+	<string name="privacy_5">Il est possible que nous collections des informations non personnelles d&apos;identification sur les Utilisateurs lors de leurs interactions avec notre Site. Les informations non personnelles d&apos;identification peuvent inclure le nom du navigateur, le type d&apos;ordinateur utilisé et des informations techniques relatives à la façon dont les Utilisateurs se connectent à notre Site, tels que le système d&apos;exploitation et les fournisseurs de services Internet utilisés, ainsi que d&apos;autres informations de ce type.</string>
+	<string name="privacy_web_browser_cookies">Cookies du navigateur web</string>
+	<string name="privacy_7">Il est possible que notre Site utilise des « cookies » pour améliorer l&apos;expérience Utilisateur. Le navigateur web de l&apos;Utilisateur place des cookies sur son disque dur pour conserver et parfois suivre des informations à son sujet. L&apos;Utilisateur peut choisir de configurer son navigateur pour qu&apos;il refuse les cookies ou pour qu&apos;il l&apos;avertisse de l&apos;envoi de cookies. Dans ce cas, notez que certains parties du Site peuvent ne pas fonctionner correctement.</string>
+	<string name="privacy_10">Comment nous utilisons les informations que nous collectons</string>
+	<string name="privacy_11">The Rosetta Foundation est susceptible de collecter et d&apos;utiliser des informations personnelles d&apos;Utilisateurs à ces fins :</string>
+	<string name="privacy_to_personalize_user_experience">Pour personnaliser l&apos;expérience utilisateur.</string>
+	<string name="privacy_12">Ces informations peuvent être utilisées associées à d&apos;autres informations pour comprendre comment nos Utilisateurs en tant que groupe utilisent les services et ressources fournis par notre Site.</string>
+	<string name="privacy_to_improve_our_site">Pour améliorer notre Site.</string>
+	<string name="privacy_13">Vos commentaires peuvent être utilisés pour améliorer nos produits et services.</string>
+	<string name="privacy_to_send_periodic_emails">Pour envoyer régulièrement des emails. </string>
+	<string name="privacy_14">Les adresses email peuvent être utilisées pour répondre à des demandes, questions et/ou requêtes des utilisateurs. Si l&apos;Utilisateur accepte d&apos;être inclus dans notre liste de distribution, il recevra des emails qui pouvant contenir des informations sur l&apos;entreprise, des mises à jour, des informations liées aux produits ou services, etc. Il peut à tout moment se désabonner et ne plus recevoir ces emails en nous contactant par l&apos;intermédiaire de notre Site.</string>
+	<string name="privacy_17">Comment nous protégeons vos informations</string>
+	<string name="privacy_18">Nous adoptons les mesures nécessaires dans le domaine de la collecte, du stockage et de la gestion des données, ainsi que les mesures de sécurité requises pour éviter l&apos;accès non autorisé à vos informations personnelles, votre nom utilisateur, votre mot de passe, vos informations de transaction et données stockées sur notre Site, ainsi que leur modification, publication ou destruction.</string>
+	<string name="privacy_sharing_your_personal_information">Partage de vos informations personnelles</string>
+	<string name="privacy_19">Nous ne vendons, n&apos;échangeons ni ne louons à personne les informations personnelles d&apos;identification de nos Utilisateurs. Dans les buts indiqués ci-dessus, nous partageons occasionnellement avec nos partenaires commerciaux, affiliés et partenaires publicitaires des informations démographiques génériques et regroupées qui n&apos;ont aucun lien avec les informations personnelles d&apos;identification de nos visiteurs et utilisateurs.</string>
+	<string name="privacy_21">Modifications de ces Règles de confidentialité</string>
+	<string name="privacy_22">The Rosetta Foundation peut modifier ces Règles de confidentialité à tout moment. Lorsque c&apos;est le cas, nous modifions la date de mise à jour située au bas de cette page. Nous encourageons les Utilisateurs à vérifier régulièrement cette page pour y noter d&apos;éventuels changements et rester informé de la façon dont nous aidons à protéger les informations personnelles que nous collectons. Vous reconnaissez et acceptez la responsabilité de consulter ces Règles de confidentialité régulièrement pour rester informé d&apos;éventuelles modifications.</string>
+	<string name="privacy_26">Acceptation de ces conditions</string>
+	<string name="privacy_27">En utilisant ce Site, vous indiquez accepter ces règles. Si vous n&apos;acceptez pas ces règles, nous vous demandons de ne pas utiliser notre Site. Votre utilisation du Site suite à la publication de modifications sur ces règles indiquera que vous acceptez ces modifications.</string>
+	<string name="privacy_contacting_us">Comment nous contacter</string>
+	<string name="privacy_30">Pour toute question concernant ces règles de confidentialité, les pratiques en cours sur le site, ou votre utilisation du site, contactez-nous à l&apos;adresse suivante : %s</string>
+	<string name="privacy_31">Dernière modification de ce document : 25 avril 2013</string>
+
+	<string name="terms_terms_and_conditions">Conditions générales d&apos;utilisation</string>
+	<string name="terms_terms">Conditions</string>
+	<string name="terms_0">En accédant à ce site web, vous acceptez ses Conditions générales d&apos;utilisation ainsi que toutes les lois et réglementations en vigueur, et reconnaissez devoir vous conformer à toutes les lois locales applicables. Si vous n&apos;acceptez pas certaines de ces conditions, vous n&apos;êtes pas autorisé à accéder à ce site ni à l&apos;utiliser. Les matériaux contenus dans ce site web sont protégés par les lois applicables en matière de droits d&apos;auteur et de marques.</string>
+	<string name="terms_organisation_use_of">Utilisation par une organisation de %s</string>
+	<string name="terms_3">L&apos;autorisation de publier du contenu est accordée aux organisations sous réserve des conditions de la licence ci-dessous.</string>
+	<string name="terms_organisation_use_license">Licence d&apos;utilisation par une organisation</string>
+	<string name="terms_4">Ceci constitue un octroi de licence et non pas un transfert de titre, et cette licence ne vous autorise pas à :</string>
+	<string name="terms_5">utiliser %s pour publier du contenu commercial ou à des fins lucratives ;</string>
+	<string name="terms_6">tenter de décompiler ou d&apos;effectuer une ingénierie inverse sur le logiciel contenu sur le site web de %s ;</string>
+	<string name="terms_7">supprimer toute mention de droits d&apos;auteur ou de marques déposées des matériaux.</string>
+	<string name="terms_8">Dans le cadre de cette licence, vous confirmez que :</string>
+	<string name="terms_9">votre organisation n&apos;exerce pas de discrimination à l&apos;embauche ou dans ses pratiques liées à l&apos;emploi, <br/>y compris la discrimination ou le harcèlement fondé sur la race, la couleur, la religion, le statut d&apos;ancien combattant, le pays d&apos;origine, l&apos;ascendance, <br/>l&apos;état de grossesse, le sexe, l&apos;identité ou l&apos;expression du genre, l&apos;âge, l&apos;état civil, le handicap mental ou physique, la condition médicale, <br/>l&apos;orientation sexuelle ou toute autre caractéristique protégée par la loi, dans l&apos;administration ou l&apos;offre de ses programmes et services.</string>
+	<string name="terms_13">tout le contenu proposé par votre organisation sera utilisé uniquement pour des activités à but non lucratif.</string>
+	<string name="terms_14">votre organisation accepte que tout contenu publié sur %s le soit selon les conditions de la Licence d&apos;utilisation pour les bénévoles, située dans la section 3 de ce document.</string>
+	<string name="terms_15">Cette licence sera automatiquement résiliée si vous ne vous conformez pas à l&apos;une de ces restrictions, et elle peut être résiliée par %s à tout moment. Après la lecture de ces matériaux ou en cas de résiliation de cette licence, vous devez détruire tout document téléchargé et encore en votre possession, qu&apos;il soit sous forme électronique ou imprimée.</string>
+	<string name="terms_offensive_content">Contenu à caractère choquant</string>
+	<string name="terms_17">Vous n&apos;êtes pas autorisé à publier tout contenu que %s a des motifs raisonnables de considérer comme :</string>
+	<string name="terms_constitutes_child_pornography">constituant de la pédopornographie ;</string>
+	<string name="terms_constitutes_pornography">constituant de la pornographie ;</string>
+	<string name="terms_18">étant excessivement violent, incitant à la violence, menaçant de violence ou comportant du contenu blessant ou des paroles incitant à la haine ;</string>
+	<string name="terms_19">étant injuste ou trompeur en regard des lois de protection du consommateur, y compris les chaînes de lettres et les systèmes pyramidaux ;</string>
+	<string name="terms_20">étant diffamatoire ou portant atteinte à la vie privée d&apos;une personne ;</string>
+	<string name="terms_21">créant un risque pour la sécurité ou la santé d&apos;une personne, créant un risque pour la sécurité ou la santé publique, compromettant la sécurité nationale ou affectant les résultats d&apos;une enquête légale ;</string>
+	<string name="terms_22">mettant en lumière de manière inappropriée des secrets de fabrication ou autres informations confidentielles ou de marque d&apos;un autre individu ;</string>
+	<string name="terms_23">ayant pour objectif d&apos;aider d&apos;autres personnes à déjouer des protections techniques de droits d&apos;auteur ;</string>
+	<string name="terms_24">transgressant clairement la marque déposée ou de service, le brevet ou tout autre droit de propriété d&apos;un autre individu ;</string>
+	<string name="terms_25">effectuant la promotion de drogues illicites, portant atteinte aux lois de contrôle à l&apos;exportation, étant lié à des jeux d&apos;argent ou au trafic d&apos;armes illicites ;</string>
+	<string name="terms_26">étant illégale d&apos;une autre manière ou encourageant un comportement illégal selon les lois qui s&apos;appliquent à vous ou à %s ;</string>
+	<string name="terms_27">étant malveillant, frauduleux ou pouvant provoquer des représailles à l&apos;encontre de %s.</string>
+	<string name="terms_volunteer_use_license">Licence d&apos;utilisation pour les bénévoles</string>
+	<string name="terms_28">Une autorisation est accordée de télécharger temporairement une copie des matériaux (informations ou logiciel) sur le site web de %s uniquement à des fins d&apos;affichage provisoire, pour des raisons personnelles et non commerciales. Ceci constitue un octroi de licence et non pas un transfert de titre, et cette licence ne vous autorise pas à :</string>
+	<string name="terms_30">utiliser les matériaux à des fins commerciales ou d&apos;exposition au public (dans un but commercial ou non) ;</string>
+	<string name="terms_31">tenter de décompiler ou d&apos;effectuer une ingénierie inverse sur le logiciel contenu sur le site web de %s ;</string>
+	<string name="terms_32">supprimer toute mention de droits d&apos;auteur ou de marques déposées des matériaux ; ou</string>
+	<string name="terms_33">transmettre ces matériaux à un autre individu ou sur un serveur miroir.</string>
+	<string name="terms_34">Cette licence sera automatiquement résiliée si vous ne vous conformez pas à l&apos;une de ces restrictions, et elle peut être résiliée par %s à tout moment. Après la lecture de ces matériaux ou en cas de résiliation de cette licence, vous devez détruire tout document téléchargé et encore en votre possession, qu&apos;il soit sous forme électronique ou imprimée.</string>
+    <string name="terms_36">Vous êtes autorisé à modifier le contenu téléchargé, dans la mesure où cela est nécessaire, afin d&apos;effectuer une tâche que vous avez prise en charge. Sauf mention contraire dans les détails relatifs à la tâche, toute contribution par des bénévoles est effectuée selon les conditions de <a href="%s">%s</a>. Lorsque vous prenez en charge une tâche, vous acceptez que votre contribution soit liée aux conditions sous lesquelles cette tâche est publiée.</string>
+	<string name="terms_disclaimer">Clause de non-responsabilité :</string>
+	<string name="terms_39">DANS LA MESURE OU LA LOI APPLICABLE LE PERMET, THE ROSETTA FOUNDATION MET A DISPOSITION LES SITES WEB ET SERVICES TELS QUELS ET NE FAIT AUCUNE REPRESENTATION OU N&apos;OFFRE AUCUNE GARANTIE DE QUELQUE SORTE QUE CE SOIT, EXPRESSE, IMPLICITE, STATUTAIRE OU AUTRE CONCERNANT CES SITES OU SERVICES, Y COMPRIS ET SANS RESTRICTION DES GARANTIES DE TITRE, DE QUALITE MARCHANDE, D&apos;ADEQUATION A UN USAGE PARTICULIER OU D&apos;ABSENCE DE NON CONFORMITE. THE ROSETTA FOUNDATION NE GARANTIT EN AUCUN CAS QUE LES FONCTIONS OU LE CONTENU DU SITE WEB OU DES SERVICES NE SERONT PAS INTERROMPUS OU NE CONTIENDRONT PAS D&apos;ERREURS, QUE LES DEFAUTS SERONT CORRIGES OU QUE LES SERVEURS DE %S NE CONTIIENDRONT PAS DE VIRUS NI D&apos;AUTRES COMPOSANTS DOMMAGEABLES. THE ROSETTA FOUNDATION NE GARANTIT PAS ET NE FAIT AUCUNE REPRESENTATION CONCERNANT L&apos;UTILISATION OU LE RESULTAT DE L&apos;UTILISATION DE CE CONTENU EN CE QUI CONCERNE LA PRECISION, FIABILITE OU AUTRE.</string>
+	<string name="terms_limitations">Limitations de responsabilité</string>
+	<string name="terms_42">SAUF DANS LA MESURE REQUISE PAR LA LOI APPLICABLE ET UNIQUEMENT DANS CETTE MESURE, THE ROSETTA FOUNDATION, SES EMPLOYES, MEMBRES DU BUREAU, DIRECTEURS, AFFILIES OU AGENTS DECLINENT TOUTE RESPONSABILITE ENVERS VOUS, QUELLE QUE SOIT LA DOCTRINE DE DROIT INDIQUEE, CONCERNANT TOUT DOMMAGE PARTICULIER, DIRECT, INDIRECT, PUNITIF, REEL, ACCESSOIRE, EXEMPLAIRE OU AUTRE, Y COMPRIS ET SANS LIMITE, LA PERTE DE RECETTES, DE REVENU OU DE BENEFICES, LES PREJUDICES MATERIELS OU MORAUX, LA DETRESSE PSYCHOLOGIQUE, LE COUT DE PRODUITS OU SERVICES DE SUBSTITUTION, OU DES DOMMAGES SIMILAIRES SUBIS PAR VOUS OU TOUT TIERS EN RELATION AVEC LES SITES WEB OU SERVICES (OU LEUR RESILIATION POUR QUELQUE RAISON QUE CE SOIT), MEME SI THE ROSETTA FOUNDATION A ETE PREVENUE DE LA POSSIBILITE DE TELS DOMMAGES. THE ROSETTA FOUNDATION DECLINE TOUTE RESPONSABILITE CONCERNANT TOUT CONTENU PUBLIE VIA LES SITES WEB OU SERVICES (Y COMPRIS LES RECLAMATIONS LIEES AU CONTENU PUBLIE SUR CES SITES WEBS OU SERVICES), VOTRE UTILISATION DES SITES WEB OU SERVICES OU LA CONDUITE DE TIERS SUR LES SITES WEB, EN LIAISON AVEC LES SERVICES OU D&apos;UNE AUTRE MANIERE LIEE AUX SITES WEB OU SERVICES.</string>
+	<string name="terms_revisions_and_errata">Révisions et errata</string>
+	<string name="terms_44">Il est possible que les matériaux apparaissant sur le site web de %s contiennent des erreurs techniques, typographiques ou photographiques. %s ne garantit en aucun cas que les matériaux apparaissant sur son site web sont exacts, complets ou actuels. %s peut effectuer des modifications sur les matériaux apparaissant sur son site web à tout moment et sans préavis. %s ne s&apos;engage cependant pas à tenir ces matériaux à jour.</string>
+	<string name="terms_links">Liens</string>
+	<string name="terms_47">%s n&apos;a pas passé en revue tous les sites associés à son site internet et n&apos;est pas responsable du contenu de ces sites associés. Inclure un lien n&apos;implique pas que %s adhère au contenu de ce site. L&apos;utilisation d&apos;un tel site associé se fait aux risques et périls de l&apos;utilisateur.</string>
+	<string name="terms_49">Modifications des Conditions d&apos;utilisation du site</string>
+	<string name="terms_50">The Rosetta Foundation peut modifier les Conditions d&apos;utilisation de son site web à tout moment et sans préavis. En utilisant ce site web, vous acceptez de respecter la version actuelle de ces Conditions générales d&apos;utilisation.</string>
+	<string name="terms_governing_law">Loi applicable</string>
+	<string name="terms_52">Toute déclaration concernant le site web Trommons.org sera régie par les lois de l&apos;État Irlandais sans égard à ses dispositions concernant les conflits de lois.</string>
+	<string name="terms_53">Conditions générales applicables à l&apos;utilisation d&apos;un site web.</string>
+	<string name="terms_privacy_policy">Règles de confidentialité</string>
+    <string name="terms_54">Nous attachons une grande importante au respect de votre vie privée. En conséquence, nous avons développé ces règles pour vous aider à comprendre comment nous collectons, utilisons, communiquons, partageons et utilisons les informations personnelles. Nos <a href="%s">Règles de confidentialité</a> sont résumées ci-dessous.</string>
+	<string name="terms_56">Nous nous engageons à gérer notre entreprise selon ces principes afin d&apos;assurer la protection et le maintien de la confidentialité des informations personnelles.</string>
+
+	<string name="videos_volunteer_videos">Vidéos pour les bénévoles</string>
+	<string name="videos_organisation_videos">Vidéos pour les organisations</string>
+
+	<string name="tag_list_tag_list">Liste des tags</string>
+	<string name="tag_list_all_tags_in">Tous les tags existant dans %s</string>
+	<string name="tag_list_subscribed_tags">Tags auxquels vous êtes abonné</string>
+	<string name="tag_list_0">Ces tags sont plus susceptibles d&apos;apparaître dans votre liste de tâches</string>
+	<string name="tag_list_tag_search">Recherche de tags</string>
+	<string name="tag_list_1">Rechercher des tags dans le système.</string>
+	<string name="tag_list_2">Entrer du texte pour chercher des tags :</string>
+    <string name="tag_list_invalid_search">Supprimez les caractères non valides de votre chaîne de recherche.</string>
+	<string name="tag_list_search">Rechercher</string>
+	<string name="tag_list_successfully_found">%s tag(s) trouvé(s) !</string>
+	<string name="tag_list_3">Aucun tag correspondant au mot-clé <strong>%s</strong> trouvé.</string>
+
+	<string name="tag_tasks_related_to">Tâches associées à &quot;%s&quot;.</string>
+	<string name="tag_0">Trouver des tâches associées à ce tag.</string>
+	<string name="tag_unsubscribe">Se désabonner</string>
+	<string name="tag_1">Supprimer le tag de la liste des tags auxquels vous êtes abonné.</string>
+	<string name="tag_subscribe_to_tag">S&apos;abonner à ce tag</string>
+	<string name="tag_2">Enregistrer le tag sur la liste des tags auxquels vous êtes abonné.</string>
+	<string name="tag_no_open_tasks">Aucune tâche ouverte.</string>
+	<string name="tag_3">Il n&apos;existe actuellement aucune tâche associée à cette étiquette de tag.</string>        
+    <string name="tag_4">Tag %s ajouté à la liste d&apos;abonnement</string>
+    <string name="tag_5">Impossible d&apos;enregistrer le tag %s pour l&apos;utilisateur %s.</string>
+    <string name="tag_6">Tag %s supprimé pour l&apos;utilisateur %s.</string>
+    <string name="tag_7">Impossible de supprimer le tag %s pour l&apos;utilisateur %s.</string>
+
+	<string name="tags_top_list_inc_popular_tags">Tags les plus utilisés</string>
+	<string name="tags_top_list_inc_more_tags">Plus de tags</string>
+
+	<string name="tags_user_tags_inc_0">Tags auxquels vous êtes abonné</string>
+	<string name="tags_user_tags_inc_1">Cliquez pour supprimer un tag de la liste d&apos;abonnement</string>
+
+	<string name="archived_tasks_archived_tasks">Tâches archivées</string>
+	<string name="archived_tasks_0">Liste des tâches sur lesquelles vous avez travaillé par le passé.</string>
+
+	<string name="claimed_tasks_claimed_tasks">Tâches prises en charge</string>
+    <string name="claimed_tasks_users_claimed_tasks">Tâches prises en charge de %s</string>
+	<string name="claimed_tasks_a_list_of_tasks">Liste des tâches sur lesquelles vous travaillez actuellement.</string>
+    <string name="claimed_tasks_ordering">Classement</string>
+    <!-- Strings for ordering selection in claimed tasks filter -->
+    <string name="claimed_tasks_ordering_created_asc">Date de création, à partir de la plus récente</string>
+    <string name="claimed_tasks_ordering_created_desc">Date de création, à partir de la moins récente</string>
+    <string name="claimed_tasks_ordering_deadline_asc">Date d&apos;échéance, à partir de la plus proche</string>
+    <string name="claimed_tasks_ordering_deadline_desc">Date d&apos;échéance, à partir de la plus éloignée</string>
+    <string name="claimed_tasks_ordering_title_asc">Titre de tâche (A-Z)</string>
+    <string name="claimed_tasks_ordering_title_desc">Titre de tâche (Z-A)</string>
+    <!-- End ordering selection strings -->
+    <string name="claimed_tasks_task_reviews">Révisions de tâche</string>
+    <string name="claimed_tasks_unclaim_task">Abandonner la tâche</string>
+    <string name="claimed_tasks_submit_completed_task">Renvoyer une tâche terminée</string>
+	<string name="claimed_tasks_no_active_tasks_available">Aucune tâche active disponible !</string>
+    <string name="claimed_tasks_no_tasks_matching_filters">Aucune tâche prise en charge correspondant aux options de filtre sélectionnées.</string>
+    <string name="claimed_tasks_download_proofread_task">Télécharger la version relue</string>
+
+	<string name="task_desegmentation_desegmentation_task_details">Détails de la tâche de désegmentation</string>
+	<string name="task_desegmentation_download">Télécharger</string>
+	<string name="task_desegmentation_0">Télécharger les fichiers suivants et les fusionner :</string>
+	<string name="task_desegmentation_1">Télécharger le fichier fusionné ici</string>
+	<string name="task_desegmentation_upload">Télécharger</string>
+	<string name="task_desegmentation_2">%s pourra l&apos;utiliser à son avantage.</string>
+    <string name="task_desegmentation_4">Télécharger <strong>%s</strong> <a href="%s">ici</a>.</string>   
+    <string name="task_desegmentation_5">Cette organisation pourra l&apos;utiliser à son avantage.</string>     
+
+	<string name="task_segmentation_0">Télécharger une nouvelle version du fichier écrasera l&apos;ancienne version.</string>
+	<string name="task_segmentation_2">La limite recommandée est d&apos;environ 2 000 mots maximum par tâche.</string>
+	<string name="task_segmentation_3">Si vous souhaitez télécharger à nouveau le fichier, cliquez</string>
+	<string name="task_segmentation_4">Scinder les fichiers source volumineux en tâches plus petites et plus gérables.</string>
+	<string name="task_segmentation_number_of_segments">Nombre de segments :</string>
+	<string name="task_segmentation_5">Créer une tâche de désegmentation pour fusionner les segments de tâche créés par une tâche de segmentation.</string>
+    <string name="task_segmentation_6">Si vous souhaitez télécharger à nouveau le fichier de projet d&apos;origine, cliquez</string>
+	<string name="task_segmentation_upload_your_segmented_file">Télécharger votre fichier segmenté.</string>
+	<string name="task_segmentation_submit_segmented_tasks">Envoyer les tâches segmentées</string>
+    <string name="task_segmentation_15">Vous n&apos;avez pas sélectionné de <strong>fichier segmenté</strong> à télécharger.</string>
+    <string name="task_segmentation_16">Chaque <strong>fichier segmenté</strong> téléchargé doit avoir un <strong>nom de fichier unique</strong>.</string>
+    <string name="task_segmentation_17">Vous avez sélectionné <strong>un ou plusieurs</strong> fichiers de <strong>contenu</strong> identique.</string>
+    <string name="task_segmentation_18">Vous devez définir au moins un type de tâche, par exemple <strong>Traduction</strong> et/ou <strong>Relecture</strong>.</string>
+    <string name="task_segmentation_7">Cette tâche a déjà été segmentée, vous ne pouvez pas la resegmenter.</string>
+
+	<string name="task_simple_upload_finished_processing">Tâche terminée ?</string>
+	<string name="task_simple_upload_provide_feedback">Fournir des commentaires</string>
+	<string name="task_simple_upload_upload_error">Erreur de téléchargement</string>
+	<string name="task_simple_upload_0">Téléchargez votre version traduite de %s</string>
+    <string name="task_simple_upload_0_proofreading">Téléchargez votre version relue de %s</string>
+	<string name="task_simple_upload_upload">Télécharger</string>
+	<string name="task_simple_upload_1">%s pourra l&apos;utiliser à son avantage.</string>
+	<string name="task_simple_upload_2">Télécharger une nouvelle version du fichier écrasera l&apos;ancienne version.</string>
+	<string name="task_simple_upload_3">Vous ne trouvez pas le fichier correspondant à la tâche ?</string>
+	<string name="task_simple_upload_4">Vous avez perdu le fichier d&apos;origine ou le dernier fichier téléchargé ?</string>
+    <string name="task_simple_upload_original_task_file">Cliquez <a href="%s">ici</a> pour télécharger le <strong>fichier d&apos;origine de la tâche</strong>.</string>
+    <string name="task_simple_upload_original_project_file">Cliquez <a href="%s">ici</a> pour télécharger le <strong>fichier d&apos;origine du projet</strong>.</string>
+	<string name="task_simple_upload_latest_uploaded_file">Cliquez <a href="%s">ici</a> pour télécharger le <strong>dernier fichier téléchargé</strong>.</string>
+	<string name="task_simple_upload_as_xliff">(format XLIFF .xlf)</string>
+    <string name="task_simple_upload_6">Le <strong>contenu</strong> du fichier que vous téléchargez ne correspond pas au format <strong>(.%s)</strong> valide. Si vous avez des difficultés à ouvrir et travailler avec <strong>le format (.%s)</strong>, envisagez d&apos;utiliser <a href="http://www.libreoffice.org/download/?nodetect" target="_blank">LibreOffice</a>.</string>
+    <string name="task_simple_upload_7">Erreur de fichier :</string>
+    <string name="task_simple_upload_8">Cette organisation pourra l&apos;utiliser à son avantage.</string>
+    <string name="task_simple_upload_clean_upload">Téléchargez une « version propre » de ce texte, c&apos;est-à-dire acceptez toutes les modifications.</string>
+
+	<string name="task_alter_alter_task_details_here">Modifier les détails de la tâche ici.</string>
+	<string name="task_alter_view_task_details">Afficher les détails de la tâche.</string>
+	<string name="task_alter_0">Cette tâche est terminée.</string>
+	<string name="task_alter_1">Vous pouvez uniquement modifier certains détails de la tâche.</string>
+	<string name="task_alter_2">Cette tâche a été prise en charge et est en cours.</string>
+    <string name="task_alter_you_can_only_edit">Vous pouvez uniquement modifier le <strong>commentaire</strong> et <strong>l&apos;échéance</strong> de la tâche.</string>
+	<string name="task_alter_update_task_details">Mettre à jour les détails de la tâche.</string>
+    <string name="task_alter_6">Le compte de mots doit être numérique.</string>
+    <string name="task_alter_7">Le compte de mots ne peut pas être vide.</string>
+    <string name="task_alter_8">Format de date/d&apos;heure non valide !</string>
+    <string name="task_alter_9">Un blocage s&apos;est produit. Vérifiez les conditions préalables de la tâche.</string>
+
+	<string name="task_claim_desegmentation_desegmentation_task">Tâche de désegmentation</string>
+	<string name="task_claim_desegmentation_0">Voulez-vous fusionner les fichiers associés à cette tâche ?</string>
+	<string name="task_claim_desegmentation_1">Consultez cette liste avant de prendre en charge la tâche.</string>
+	<string name="task_claim_desegmentation_2">Pourrez-vous fusionner ces fichiers ?</string>
+    <string name="task_claim_desegmentation_3">Pouvez-vous ouvrir des fichiers de type <strong>%s</strong> et travailler avec ceux-ci ?</string>
+    <string name="task_claim_desegmentation_4">Disposez-vous de suffisamment de temps pour fusionner ces fichiers ? <strong>Vérifiez la longueur des fichiers</strong>.</string>
+    <string name="task_claim_desegmentation_6">Pensez-vous pouvoir fusionner des fichiers en <strong>%s</strong> ?</string>
+	<string name="task_claim_desegmentation_7">Voulez-vous fusionner ces fichiers ?</string>
+	<string name="task_claim_desegmentation_8">Les fichiers à fusionner peuvent être téléchargés une fois la tâche prise en charge.</string>
+	<string name="task_claim_desegmentation_9">Oui, je promets de fusionner ces fichiers</string>
+
+	<string name="task_claim_proofreading_0">Voulez-vous relire ce fichier ?</string>
+	<string name="task_claim_proofreading_1">Pourrez-vous relire ce fichier ?</string>
+	<string name="task_claim_proofreading_2">Disposez-vous de suffisamment de temps pour relire ce fichier ? Vérifiez la longueur du fichier.</string>
+    <string name="task_claim_proofreading_3">Pensez-vous pouvoir relire un fichier en <strong>%s ?</strong></string>
+	<string name="task_claim_proofreading_4">Quand vous aurez terminé la relecture du fichier, vous devrez le télécharger à nouveau.</string>
+	<string name="task_claim_proofreading_5">Oui, je promets de relire ce fichier</string>
+    <string name="task_claim_proofreading_6">
+        Si vous souhaitez ouvrir le <strong>fichier d&apos;origine</strong> dans sa langue source, vous pouvez le télécharger <a href="%s">ici</a>
+    </string>
+
+	<string name="task_claim_segmentation_0">Voulez-vous segmenter ce fichier ?</string>
+	<string name="task_claim_segmentation_1">Pourrez-vous segmenter ce fichier ?</string>
+	<string name="task_claim_segmentation_2">Voulez-vous segmenter ce fichier ?</string>
+	<string name="task_claim_segmentation_3">Lorsque vous aurez terminé de segmenter ce fichier, vous devrez télécharger un fichier pour chaque segment.</string>
+	<string name="task_claim_segmentation_4">Oui, je promets de segmenter ce fichier</string>
+    <string name="task_claim_segmentation_5">Disposez-vous de suffisamment de temps pour segmenter ce fichier ? <strong>Vérifiez la longueur du fichier</strong>.</string>
+
+	<string name="task_claim_translation_0">Voulez-vous traduire ce fichier ?</string>
+	<string name="task_claim_translation_1">Pourrez-vous traduire ce fichier ?</string>
+    <string name="task_claim_translation_2">Disposez-vous de suffisamment de temps pour traduire ce fichier ? <strong>Vérifiez la longueur du fichier</strong>.</string>
+    <string name="task_claim_translation_3">Pensez-vous pouvoir traduire ce fichier en <strong>%s</strong> ?</string>
+	<string name="task_claim_translation_4">Lorsque vous aurez terminé de traduire ce fichier, vous devrez le télécharger à nouveau.</string>
+	<string name="task_claim_translation_5">Oui, je promets de traduire ce fichier.</string>
+
+	<string name="task_claimed_desegmentation_desegmentation_task_claimed">Tâche de désegmentation prise en charge</string>
+	<string name="task_claimed_desegmentation_0">Fusionnez les fichiers requis !</string>
+    <string name="task_claimed_desegmentation_1">Vous avez pris en charge la tâche de désegmentation <strong>%s</strong></string>
+    <string name="task_claimed_desegmentation_2">Cliquez <a href="%s">ici</a> pour télécharger chacun des segments du fichier complet.</string>
+    <string name="task_claimed_desegmentation_3"><strong>Fusionnez à nouveau les fichiers</strong> et téléchargez le fichier fusionné.</string>
+	<string name="task_claimed_desegmentation_want_to_get_started">Vous voulez commencer ?</string>
+	<string name="task_claimed_desegmentation_merge_files">Fusionner les fichiers</string>
+	<string name="task_claimed_desegmentation_5">Retourner à la page d&apos;accueil</string>
+
+	<string name="task_claimed_proofreading_proofreading_task_claimed">Tâche de relecture prise en charge</string>
+	<string name="task_claimed_proofreading_please_proofread_it">Effectuez une relecture !</string>
+    <string name="task_claimed_proofreading_0">Vous avez pris en charge la tâche de relecture <strong>%s</strong>.</string>
+	<string name="task_claimed_proofreading_1">Ouvrez le fichier que vous avez déjà enregistré sur votre ordinateur.</string>
+    <string name="task_claimed_proofreading_proofread_the_file_in">Relisez le fichier de <strong>%s</strong> pour vous assurer que son orthographe et sa grammaire sont correctes.</string>
+	<string name="task_claimed_proofreading_upload_the_proofread_file">Téléchargez le fichier relu sur la page de téléchargement de la tâche.</string>
+	<string name="task_claimed_proofreading_4">Lorsque vous avez  terminé la relecture du fichier téléchargé :</string>
+	<string name="task_claimed_proofreading_upload_proofread_task">Téléchargez la tâche relue</string>
+
+	<string name="task_claimed_segmentation_segmentation_task_claimed">Tâche de segmentation prise en charge</string>
+	<string name="task_claimed_segmentation_please_segment_it">Effectuez la segmentation !</string>
+	<string name="task_claimed_segmentation_0">Vous avez pris en charge la tâche de segmentation</string>
+    <string name="task_claimed_segmentation_segment_the_file"><strong>Scindez le fichier</strong> en segments individuels de taille appropriée (par exemple un maximum de 2 000 mots chacun). </string>
+    <string name="task_claimed_segmentation_2"><strong>Téléchargez vos fichiers segmentés</strong> sur la page de segmentation de la tâche.</string>
+	<string name="task_claimed_segmentation_4">Lorsque vous avez terminé la segmentation du fichier téléchargé :</string>
+	<string name="task_claimed_segmentation_upload_task_segments">Téléchargez les segments de la tâche</string>
+    <string name="task_claimed_segmentation_5"><strong>Ouvrez le fichier</strong> déjà enregistré sur votre ordinateur.</string>
+
+	<string name="task_claimed_translation_translation_task_claimed">Tâche de traduction prise en charge</string>
+	<string name="task_claimed_translation_please_translate_it">Effectuez la traduction !</string>
+	<string name="task_claimed_translation_0">Vous avez pris en charge la tâche de traduction</string>
+	<string name="task_claimed_translation_we_need_your_translation">Nous avons besoin de votre traduction.</string>
+	<string name="task_claimed_translation_translate_the_file_to">Traduisez le fichier en %s en vous servant de votre logiciel de traduction préféré.</string>
+	<string name="task_claimed_translation_4">Lorsque vous avez terminé la traduction du fichier téléchargé :</string>
+    <string name="task_claimed_translation_5">Téléchargez votre fichier contenant la traduction terminée sur la page de la tâche.</string>
+	<string name="task_claimed_translation_upload_translated_task">Téléchargez la tâche traduite</string>
+
+    <string name="task_create_for_project">Pour le projet <strong>%s</strong>.</string>
+	<string name="task_create_0">Indiquer un titre parlant pour cette tâche.</string>
+	<string name="task_create_1">Quel sera l&apos;impact de cette tâche de traduction.</string>
+	<string name="task_create_2">Indiquer le type de tâche.</string>
+	<string name="task_create_word_count_tool">Outil pour calculer un compte de mots</string>
+	<string name="task_create_3">Indiquer une date d&apos;échéance pour la tâche.</string>
+	<string name="task_create_4">Souhaitez-vous que la tâche soit publiée sur la liste active des tâches ?</string>
+    <string name="task_create_5">Le titre ne doit pas rester vide.</string>
+	
+	<string name="task_created_task_is_now_live">Votre tâche est maintenant active !</string>
+	<string name="task_created_0">Vous avez créé une nouvelle tâche.</string>
+    <string name="task_created_1">Elle est maintenant affichée sur la liste de la page <a href="%s">Affichage projet</a>.</string>
+	<string name="task_created_2">Des traducteurs bénévoles vont la voir.</string>
+	<string name="task_created_3">Si l&apos;un d&apos;eux est intéressé, il la prendra en charge, la téléchargera puis la renverra une fois le travail terminé. </string>
+    <string name="task_created_5">Vous pouvez voir les détails de cette tâche sur la page <a href="%s">Affichage tâche</a>.</string>
+
+	<string name="task_details_project_impact">Impact du projet :</string>
+	<string name="task_details_project_tags">Tags du projet :</string>
+
+	<string name="task_org_feedback_user_feedback">Commentaires utilisateur</string>
+	<string name="task_org_feedback_1">Vous pouvez fournir des commentaires directement au traducteur qui s&apos;est chargé de cette tâche ici</string>
+	<string name="task_org_feedback_2">Reprendre la tâche et envoyer des commentaires</string>
+    <string name="task_org_feedback_3">La tâche <a href="%s">%s</a> a été reprise à <a href="%s">%s</a>. Cet utilisateur sera averti par email et vos commentaires lui seront envoyés.</string>
+    <string name="task_org_feedback_4">Impossible de reprendre la tâche <a href="%s">%s</a> à <a href="%s">%s</a>. Réessayez plus tard.</string>
+    <string name="task_org_feedback_5">Le formulaire de commentaires ne peut pas être vide.</string>
+    <string name="task_org_feedback_6">Commentaires envoyés à <a href="%s">%s</a>.</string>
+
+    <string name="task_profile_display_archived">Archivé il y a <strong>%s</strong>.</string>
+
+	<string name="task_review_count">Relire #%s</string>
+  <string name="task_review_form_0">Vous pouvez télécharger le fichier de sortie <a href="%s">ici</a>.</string>
+	<string name="task_review_form_1">Vous pouvez télécharger le fichier de projet <a href="%s">ici</a>.</string>
+    <string name="task_review_form_rating">Evaluation sous forme d&apos;un nombre d&apos;étoiles allant de 1 à 5, où 1 = &quot;Beaucoup d&apos;erreurs&quot; et 5 = &quot;Peu d&apos;erreurs&quot;</string>
+    <string name="task_review_segmented">segmenté</string>
+    <string name="task_review_translated">traduit</string>
+    <string name="task_review_proofread">relu</string>
+    <string name="task_review_merged">fusionné</string>
+	<string name="task_review_form_corrections">Corrections à effectuer</string>
+	<string name="task_review_form_2">Le fichier contenait-il beaucoup d&apos;erreurs ?</string>
+	<string name="task_review_form_3">Comment était la grammaire dans le fichier ?</string>
+	<string name="task_review_form_spelling">Orthographe</string>
+	<string name="task_review_form_4">Le fichier contenait-il beaucoup de fautes d&apos;orthographe ?</string>
+	<string name="task_review_form_consistency">Cohérence</string>
+	<string name="task_review_form_5">Le fichier contenait-il des erreurs de cohérence ?</string>
+	<string name="task_review_form_comment">Commentaire</string>
+	<string name="task_review_form_6">Commentaire facultatif sur le fichier en général</string>
+	<string name="task_review_form_grammar">Grammaire</string>
+	<string name="task_review_form_skip">Ignorer</string>
+    <string name="task_review_form_submit_review">Soumettre une évaluation</string>
+
+	<string name="task_review_provide_a_rating">Indiquer un nombre d&apos;étoiles</string>
+	<string name="task_review_0">Combien d&apos;étoiles donneriez-vous à cette tâche ?</string>
+	<string name="task_review_1">Merci de votre contribution à ce projet.</string>
+  <string name="task_twitter_0">Si vous utilisez Twitter, cliquez sur ce bouton pour partager des informations sur votre contribution (assurez-vous d&apos;autoriser l&apos;utilisation des fenêtres contextuelles) :</string>
+  <string name="task_twitter_0_org_dashboard">Si vous utilisez Twitter, cliquez sur ce bouton pour partager des informations sur Trommons (assurez-vous d&apos;autoriser l&apos;utilisation des fenêtres contextuelles) :</string>
+  <string name="task_twitter_0_project_view">Si vous utilisez Twitter, cliquez sur ce bouton pour partager des informations sur ce projet (assurez-vous d&apos;autoriser l&apos;utilisation des fenêtres contextuelles) :</string>
+  <string name="task_twitter_0_org_task_review">Si vous utilisez Twitter, cliquez sur ce bouton pour remercier nos bénévoles (assurez-vous d&apos;autoriser l&apos;utilisation des fenêtres contextuelles) :</string>
+  <string name="task_twitter_1">Je viens de terminer un travail en tant que bénévole sur @TheRosettaFound #languagematters</string>
+  <string name="task_twitter_2">Nous nous sommes inscrits à Trommons pour entrer en contact avec des bénévoles dans le domaine des langues @TheRosettaFound #languagematters</string>
+  <string name="task_twitter_3">Traducteurs @TheRosettaFound pouvez-vous aider sur un projet qui se trouve sur trommons.org%3F #languagematters</string>
+  <string name="task_twitter_4">Merci aux bénévoles @TheRosettaFound pour votre aide sur nos traductions ~#languagematters</string>
+	<string name="task_review_2">Donnez un nombre d&apos;étoiles au(x) fichier(s) que vous venez de</string>
+	<string name="task_review_3">en fonction des critères suivants :</string>
+    <string name="task_review_4">Vous avez déjà soumis une évaluation pour ce fichier.</string>
+    <string name="task_review_5">Le nombre d&apos;étoiles attribué aux corrections à effectuer doit être entre 1 et 5.</string>
+    <string name="task_review_6">Le nombre d&apos;étoiles attribué à la grammaire doit être entre 1 et 5.</string>
+    <string name="task_review_7">Le nombre d&apos;étoiles attribué à l&apos;orthographe doit être entre 1 et 5.</string>
+    <string name="task_review_8">Le nombre d&apos;étoiles attribué à la cohérence doit être entre 1 et 5.</string>
+    <string name="task_review_9">Impossible d&apos;enregistrer l&apos;évaluation de %s, réessayez plus tard.</string>
+    <string name="task_review_10">L&apos;évaluation de la tâche %s a été enregistrée.</string>
+
+	<string name="task_uploaded_0">Merci de votre évaluation !</string>
+	<string name="task_uploaded_1">Votre fichier a été téléchargé.</string>
+	<string name="task_uploaded_2">Accordez un peu de temps à l&apos;organisation pour la révision.</string>
+	<string name="task_uploaded_is_complete">Votre tâche est terminée.</string>
+	<string name="task_uploaded_3">L&apos;organisation va recevoir le travail que vous avez téléchargé.</string>
+    <string name="task_uploaded_4"><strong>%s</strong> apprécie vraiment de pouvoir utiliser votre traduction. Merci.</string>
+	<string name="task_uploaded_5">Les bonnes traductions font toute la différence !</string>
+	<string name="task_uploaded_find_a_new_task">Trouver une nouvelle tâche</string>
+
+	<string name="task_user_feedback_organisation_feedback">Commentaires pour l&apos;organisation</string>
+	<string name="task_user_feedback_provide_direct_feedback">Vous pouvez envoyer vos commentaires directement à l&apos;organisation à qui appartient cette tâche ici.</string>
+	<string name="task_user_feedback_if_accidental_claim"> Sinon, si vous avez pris cette tâche en charge par erreur ou que vous ne pouvez pas la terminer, vous pouvez également indiquer les raisons de cette décision et abandonner la tâche en utilisant ce formulaire.</string>
+	<string name="task_user_feedback_2">Abandonner la tâche et envoyer des commentaires</string>
+    <string name="task_user_feedback_3">La tâche <a href="%s">%s</a> a été abandonnée. L&apos;organisation sera prévenue par email et recevra vos commentaires.</string>
+    <string name="task_user_feedback_4">Impossible d&apos;abandonner cette tâche <a href="%s">%s</a>. Réessayez plus tard.</string>
+    <string name="task_user_feedback_5">Le formulaire de commentaires ne peut rester vide. Complétez-le avant de continuer.</string>
+
+	<string name="task_view_download_task">Télécharger la tâche</string>
+	<string name="task_view_edit_task_details">Modifier les détails de la tâche</string>
+	<string name="task_view_source_document_preview">Aperçu du document source</string>
+    <string name="task_view_10">Vous suivez désormais cette tâche et recevrez des notifications par email à chaque changement de statut.</string>
+    <string name="task_view_11">Impossible de s&apos;abonner aux notifications pour cette tâche.</string>
+    <string name="task_view_12">Vous ne suivez plus cette tâche et ne recevrez plus d&apos;emails à son sujet.</string>
+    <string name="task_view_13">Impossible de se désabonner de cette notification.</string>
+    <string name="task_view_0">Remarque : Cette tâche a déjà été prise en charge par un autre utilisateur.</string>
+    <string name="task_view_1"><b>Opération réussie :</b> Cette tâche est maintenant publiée et apparaîtra dans la liste des tâches des utilisateurs.</string>
+    <string name="task_view_2"><b>Opération réussie :</b> Cette tâche n&apos;est plus publiée et n&apos;apparaîtra plus dans la liste des tâches des utilisateurs.</string>
+    <string name="task_view_3"><b>Erreur :</b> Impossible de publier la tâche. Réessayez plus tard.</string>
+    <string name="task_view_4"><b>Erreur :</b> Impossible d&apos;annuler la publication de la tâche. Réessayez plus tard.</string>
+    <string name="task_view_5">Impossible de trouver la tâche <strong>%s</strong>.</string>
+    <string name="task_view_assign_id_error">Impossible d&apos;attribuer cette tâche : Identifiant utilisateur non valide, ou l&apos;utilisateur n&apos;existe pas.</string>
+    <string name="task_view_assign_email_error">Impossible d&apos;attribuer cette tâche : Adresse email non valide ou l&apos;utilisateur n&apos;existe pas.</string>
+    <string name="task_view_assign_id_or_email_error">Impossible d&apos;attribuer cette tâche : Identifiant utilisateur ou adresse email non valide.</string>
+    <string name="task_view_assign_task_banned_error">Impossible d&apos;attribuer cette tâche à %s car cet utilisateur n&apos;a pas l&apos;autorisation de travailler sur cette tâche.</string>
+    <string name="task_view_assign_task_success">Tâche attribuée à %s.</string>
+    <string name="task_view_assign_placeholder">Identifiant utilisateur OU adresse email</string>
+    <string name="task_view_assign_label">Attribuer cette tâche à un utilisateur :</string>
+    <string name="task_view_assign_button">Attribuer la tâche</string>
+    <string name="task_view_assign_confirmation">L&apos;identifiant utilisateur ou l&apos;adresse email est-il/elle correct(e) ?</string>
+
+	<string name="email_verification_email_verification">Vérification de l&apos;adresse email</string>
+	<string name="email_verification_0">Vous pouvez terminer l&apos;inscription ici</string>
+	<string name="email_verification_welcome_to">Bienvenue dans</string>
+	<string name="email_verification_1">Vous aurez accès au site une fois que vous cliquerez sur le bouton ci-dessous.</string>
+	<string name="email_verification_2">Vous pouvez vous connecter à tout moment en ouvrant la page de connexion (lien situé sur la droite de la barre d&apos;état).</string>
+	<string name="email_verification_3">Une fois connecté, vous pouvez afficher des tâches dans la liste des tâches.</string>
+	<string name="email_verification_4">Si une tâche vous intéresse, vous pouvez la prendre en charge et commencer à travailler dessus.</string>
+	<string name="email_verification_5">Si vous représentez une organisation, vous pouvez demander à devenir membre pour votre organisation en vous rendant sur le profil public de l&apos;organisation.</string>
+	<string name="email_verification_6">Si votre organisation n&apos;existe pas encore dans le système, vous pouvez la créer sur votre profil public.</string>
+	<string name="email_verification_finish_registration">Terminer l&apos;inscription</string>
+    <string name="email_verification_7">Identifiant d&apos;inscription non valide. Essayez de vous inscrire à nouveau.</string>
+    <string name="email_verification_8">Inscription terminée. Connectez-vous ci-dessous à l&apos;aide de votre nom d&apos;utilisateur et mot de passe.</string>
+
+	<string name="login_log_in_to">Se connecter à</string>
+	<string name="login_reset_password">Réinitialiser le mot de passe</string>
+	<string name="login_0">En savoir plus sur <a href='%s'>OpenID</a> et <a href='%s'>comment obtenir un compte activé pour OpenID</a>.</string>
+	<string name="login_signin">Se connecter</string>
+    <string name="login_1"><p>Impossible de se connecter. Vérifiez votre adresse email et votre mot de passe. <a href="%s">Essayez à nouveau de vous connecter</a> ou <a href="%s">inscrivez-vous</a> sur un compte.</p><p><strong>%s</strong></p></string>
+    <string name="login_2">Oups ! Vous avez apparemment annulé l&apos;authentification. Sélectionnez à nouveau votre fournisseur de compte ci-dessous.</string>
+
+	<string name="password_reset_password_reset">Réinitialisation du mot de passe</string>
+	<string name="password_reset_reset_your_password_here">Réinitialisez votre mot de passe ici</string>
+	<string name="password_reset_new_password">Nouveau mot de passe</string>
+	<string name="password_reset_confirm_new_password">Confirmer le nouveau mot de passe</string>
+	<string name="password_reset_change_password">Changer le mot de passe</string>
+    <string name="password_reset_1">Identifiant unique incorrect Avez-vous bien copié l&apos;URL ?</string>
+    <string name="password_reset_2">Votre mot de passe a été changé.</string>
+    <string name="password_reset_3">Impossible de changer le mot de passe.</string>
+    <string name="password_reset_4">Les mots de passe indiqués ne correspondent pas. Réessayez.</string>
+    <string name="password_reset_5">Vérifiez le mot de passe indiqué et réessayez.</string>
+
+	<string name="register_register_on">S&apos;inscrire à</string>
+	<string name="register_your_email">Adresse email</string>
+	<string name="register_your_password">Mot de passe</string>
+    <string name="register_1">L&apos;adresse email indiquée n&apos;est pas valide. Réessayez.</string>
+    <string name="register_2">Vous n&apos;avez pas indiqué de mot de passe. Réessayez.</string>
+    <string name="register_3">Vous disposez déjà d&apos;un compte utilisateur confirmé. <a href="%s">Connectez-vous</a></string>
+    <string name="register_4">Un email de confirmation a été envoyé à l&apos;adresse email avec laquelle vous vous êtes inscrit. Suivez le lien se trouvant dans cet email pour terminer votre inscription. Une fois votre adresse email confirmée, vous pouvez vous connecter <a href="%s">ici</a>.</string>
+
+	<string name="user_private_profile_private_profile">Profil privé</string>
+	<string name="user_private_profile_0">Mettez à jour vos informations personnelles ici.</string>
+	<string name="user_private_profile_2">Entrée non valide. Votre nom d&apos;affichage ne peut rester vide.</string>
+	<string name="user_private_profile_please_note">Remarque :</string>
+	<string name="user_private_profile_3">Tous ces champs sont facultatifs.</string>
+	<string name="user_private_profile_4">Cependant, si vous les complétez, vous nous fournirez des informations très utiles qui nous permettront de vous contacter et de sélectionner des tâches plus pertinentes pour votre liste de tâches.</string>
+	<string name="user_private_profile_add_secondary_language">Ajouter une deuxième langue</string>
+	<string name="user_private_profile_task_type_preferences">Préférences concernant les types de tâche :</string>
+	<string name="user_private_profile_translating">Traduire</string>
+	<string name="user_private_profile_proofreading">Relire</string>
+	<string name="user_private_profile_interpreting">Interpréter</string>
+	<string name="user_private_profile_update_profile_details">Mettre à jour les détails du profil</string>
+	<string name="user_private_profile_6">Voulez-vous vraiment supprimer définitivement votre compte ? </string>
+	<string name="user_private_profile_delete_user_account">Supprimer le compte utilisateur</string>
+    <string name="user_private_profile_secondary_languages_failed">Certaines données n&apos;ont pas été enregistrées. Assurez-vous d&apos;indiquer à la fois une langue et un pays pour vos deuxièmes langues. Toutes les entrées vides seront ignorées.</string>
+    <string name="user_private_profile_native_language_blanks">Lorsque vous complétez les informations concernant votre langue maternelle, assurez-vous de sélectionner à la fois une langue et un pays.</string>
+    <string name="user_private_profile_receive_credit">Remerciements</string>
+	<string name="user_private_profile_7">Si vous souhaitez recevoir des remerciements à votre nom pour votre travail, complétez les champs prénom et nom de famille.</string>
+    <string name="user_private_profile_language_preference_updated">Vos préférences de langue ont été mises à jour. Le site s&apos;affichera dans la langue de votre choix la prochaine fois que vous vous connectez.</string>
+
+	<string name="user_public_profile_0">Résumé des détails de votre compte.</string>
+	<string name="user_public_profile_1">Lorsque vous créez une organisation, vous confirmez que ses activités ne sont pas en contradiction avec les conditions générales d&apos;utilisation de ce site.</string>
+	<string name="user_public_profile_edit_profile_details">Modifier les détails du profil</string>
+	<string name="user_public_profile_2">Résumé des détails de votre compte.</string>
+	<string name="user_public_profile_3">Pour sélectionner une langue maternelle, modifiez votre profil.</string>
+	<string name="user_public_profile_4">Liste des badges obtenus.</string>
+	<string name="user_public_profile_list_all_badges">Lister tous les badges</string>
+	<string name="user_public_profile_remove_badge">Supprimer le badge</string>
+	<string name="user_public_profile_5">Voulez-vous vraiment supprimer ce badge ?</string>
+	<string name="user_public_profile_task_stream_notifications">Notifications de la liste des tâches</string>
+	<string name="user_public_profile_6">A quelle fréquence recevez-vous des mises à jour par email de la listes des tâches ?</string>
+	<string name="user_public_profile_edit_notifications">Modifier les notifications</string>
+	<string name="user_public_profile_7">Aucun email n&apos;a encore été envoyé.</string>
+	<string name="user_public_profile_8">Liste des tags auxquels vous vous êtes abonné.</string>
+	<string name="user_public_profile_search_for_tags">Rechercher des tags</string>
+	<string name="user_public_profile_9">Pour le moment, vous n&apos;êtes abonné à aucun tag sur le système.</string>
+	<string name="user_public_profile_10">Liste des organisations auxquelles vous appartenez.</string>
+	<string name="user_public_profile_leave_organisation">Quitter l&apos;organisation</string>
+	<string name="user_public_profile_11">Voulez-vous vraiment quitter cette organisation ?</string>
+	<string name="user_public_profile_14">Liste des tâches sur lesquelles vous avez travaillé par le passé.</string>
+	<string name="user_public_profile_list_all_archived_tasks">Liste de toutes les tâches archivées</string>
+    <string name="user_public_profile_reference_email">Email de référence</string>
+    <string name="user_public_profile_request_reference">Demander une référence</string>
+    <string name="user_public_profile_15">Pour demander un email de référence contenant un résumé du travail que vous avez effectué sur Trommons, cliquez sur le bouton situé sur la droite.</string>
+    <string name="user_public_profile_16">Demander un email résumant votre travail.</string>
+    <string name="user_public_profile_reference_request_success">Votre demande a été envoyée, vous recevrez un email sous peu.</string>
+    <string name="user_public_profile_17">Abonnement de l&apos;utilisateur aux notifications de la liste des tâches mis à jour.</string>
+
+	<string name="user_reset_password_reset_user_password">Réinitialiser le mot de passe utilisateur</string>
+	<string name="user_reset_password_0">Pour réinitialiser votre mot de passe, entrez ci-dessous l&apos;adresse email avec laquelle vous vous êtes inscrit.</string>
+	<string name="user_reset_password_1">Lorsque vous cliquerez sur le bouton ci-dessous, vous recevrez à cette adresse un email contenant un lien vers la page sur laquelle vous pouvez réinitialiser votre mot de passe.</string>
+	<string name="user_reset_password_send_request">Envoyer la demande</string>
+    <string name="user_reset_password_2">Demande de réinitialisation du mot de passe envoyée. Pour obtenir des instructions supplémentaires, vérifiez vos emails.</string>
+    <string name="user_reset_password_3">La demande de réinitialisation de mot de passe a déjà été envoyée à votre adresse de contact. Suivez le lien se trouvant dans cet email pour réinitialiser votre mot de passe.</string>
+    <string name="user_reset_password_4">Entrez une adresse email valide.</string>
+
+    <string name="user_task_reviews_0">Toutes les évaluations fournies pour cette tâche</string>
+    <string name="user_task_reviews_1">Les évaluations sont fournies par les membres de l&apos;organisation et d&apos;autres bénévoles.</string>
+    <string name="user_task_reviews_2">Une évaluation représente la qualité de votre travail pour cette tâche.</string>
+    <string name="user_task_reviews_3">Nous utilisons toutes les évaluations fournies pour choisir le meilleur bénévole pour chaque tâche.</string>
+    <string name="user_task_reviews_4">Aucune évaluation n&apos;est actuellement disponible pour cette tâche.</string>
+
+	<string name="user_task_stream_notification_edit_0">Sélectionnez la fréquence à laquelle vous voulez recevoir des emails contenant la liste des tâches.</string>
+	<string name="user_task_stream_notification_edit_1">Cet email de notification vous enverra régulièrement la liste des tâches correspondant à vos compétences et à vos centres d&apos;intérêt.</string>
+	<string name="user_task_stream_notification_edit_2">Si vous choisissez de recevoir des notifications spécifiques, vous recevrez uniquement les notifications des tâches correspondant aux langues que vous avez indiqué vous intéresser (par exemple en les définissant comme langue maternelle ou une de vos deuxièmes langues).</string>
+    <string name="user_task_stream_notification_edit_5">Quel type de notifications souhaitez-vous recevoir ?</string>
+    <string name="user_task_stream_notification_edit_6">A quelle fréquence souhaitez-vous recevoir ce type de notification ?</string>
+	<string name="user_task_stream_notification_edit_all">Toutes</string>
+	<string name="user_task_stream_notification_edit_never">Jamais</string>
+	<string name="user_task_stream_notification_edit_daily">Tous les jours</string>
+	<string name="user_task_stream_notification_edit_weekly">Toutes les semaines</string>
+	<string name="user_task_stream_notification_edit_monthly">Tous les mois</string>
+
+    <string name="footer_0">Sauf mention du contraire, tout travail effectué est soumis à la licence <a href="%s">Creative Commons Attribution 3.0 Ireland License</a> en accord avec les <a href="%s">Conditions générales d&apos;utilisation</a>.</string>
+	<string name="footer_terms_and_conditons">Conditions générales d&apos;utilisation</string>
+	<string name="footer_privacy_policy">Règles de confidentialité</string>
+	<string name="footer_community_forum">Forum de la communauté</string>
+    <string name="footer_feedback">Vos <a href="%s">commentaires</a> sont les bienvenus.</string>
+    <string name="footer_powered_by">Avec <a href="%s">%s</a></string>
+    <string name="footer_maintained_by">Géré par <a href="%s">%s</a></string>
+    <string name="footer_contact_us">Contactez-nous</string>
+
+	<string name="header_home">Accueil</string>
+	<string name="header_dashboard">Tableau de bord</string>
+	<string name="header_claimed_tasks">Tâches prises en charge</string>
+	<string name="header_profile">Profil</string>
+	<string name="header_admin">Administration</string>
+	<string name="header_videos">Vidéos</string>
+	<string name="header_notifications">Notifications :</string>
+	<string name="header_log_out">Se déconnecter</string>
+
+	<string name="index_translation_commons">Translation Commons</string>
+	<string name="index_0">Encourager la communication dans les communautés</string>
+	<string name="index_translation_tasks">Tâches de traduction</string>
+	<string name="index_1">Prenez une tâche, traduisez, téléchargez.</string>
+	<string name="index_any_task_type">Tous types de tâches</string>
+    <string name="index_any_source_language">Toute langue source</string>
+    <string name="index_any_target_language">Toute langue cible</string>
+    <string name="index_filter_available_tasks">Filtrer les tâches disponibles :</string>
+	<string name="index_filter_task_stream">Filtrer la liste des tâches</string>
+	<string name="index_no_tasks_available">Aucune tâche disponible !</string>
+	<string name="index_6">Aidez-nous à trouver les tâches de traduction qui vous conviennent le mieux.</string>
+	<string name="index_register_now"><a href="%s">Inscrivez-vous dès maintenant</a> pour trouver les tâches de traduction les plus adaptées à vos compétences.</string>
+    <string name="index_load_more">Afficher la suite</string>
+	<string name="index_donate_free_service"><strong>Translation Commons associe des projets de traduction à but non lucratif à des bénévoles de la linguistique partout dans le monde. C&apos;est un outil ouvert géré par</strong></string>
+	<string name="index_donate_support_us">Vous pouvez manifester votre reconnaissance et apporter votre soutien à nos futurs développements en devenant Ami de The Rosetta Foundation ou en faisant une donation.</string>
+	<string name="index_donate_support_trommons">Soutenir Trommons</string>
+
+	<string name="pagination_page_of">Page %s sur %s</string>
+
+	<string name="statistics_statistics">Statistiques de %s :</string>
+	<string name="statistics_users">Utilisateurs :</string>
+	<string name="statistics_projects">Projets :</string>
+	<string name="statistics_projects_archived">Projets archivés :</string>
+	<string name="statistics_tasks">Tâches :</string>
+	<string name="statistics_tasks_claimed">Tâches prises en charge :</string>
+	<string name="statistics_tasks_unclaimed">Tâches non prises en charge :</string>
+	<string name="statistics_tasks_with_prerequisites">Tâches avec conditions préalables :</string>
+	<string name="statistics_tasks_archived">Tâches archivées :</string>
+		
+	<string name="slim_error_Oops_there_has">Oups ! Un problème technique s&apos;est produit.</string>
+	<string name="slim_error_1">Vous pouvez signaler ce problème en nous envoyant un email à <a>info@trommons.org</a></string>
+	<string name="slim_error_2">avec des détails indiquant comment l&apos;erreur s&apos;est produite et en fournissant les détails techniques ci-dessous.</string>
+	<string name="slim_error_3">Retour </string>
+	<string name="slim_error_4">en arrière.</string>
+	<string name="slim_error_5">Afficher les détails.</string>
+	
+	<string name="gplus_error"><p>Une erreur interne s&apos;est produite pendant une tentative de connexion avec Google. <a href="%s">Essayez à nouveau de vous connecter</a> ou <a href="%s">inscrivez-vous</a> sur un compte.</p><p><strong>%s</strong></p></string>
+	
+	<string name ="system_badge_profile_filler_title">Informations de profil</string>
+	<string name ="system_badge_profile_filler_desc">Toutes les informations pour un profil public d&apos;utilisateur ont été remplies.</string>
+	<string name ="system_badge_registered_title">Inscription</string>
+	<string name ="system_badge_registered_desc">Un compte a été ouvert.</string>
+	<string name ="system_badge_native_language_title">Langue maternelle</string>
+	<string name ="system_badge_native_language_desc">Une langue maternelle a été indiquée dans le profil utilisateur.</string>
+	<string name ="system_badge_translator_title">Traducteur</string>
+	<string name ="system_badge_translator_desc">Ce bénévole est disponible pour des tâches de traduction.</string>
+	<string name ="system_badge_proofreader_title">Relecteur</string>
+	<string name ="system_badge_proofreader_desc">Ce bénévole est disponible pour des tâches de relecture.</string>
+	<string name ="system_badge_interpreter_title">Interprète</string>
+	<string name ="system_badge_interpreter_desc">Ce bénévole est disponible pour des tâches d&apos;interprétation.</string>
+	<string name ="system_badge_polyglot_title">Polyglotte</string>
+	<string name ="system_badge_polyglot_desc">Une ou plusieurs langues secondaires sélectionnées dans le profil.</string>
+
+	<string name = "users_also_viewed">Les utilisateurs ont également consulté :</string>
+	<string name="recent_tasks_users_recent_tasks">Tâches récemment affichées de %s</string>
+	<string name="recent_tasks_recently_viewed_tasks">Tâches récemment affichées</string>
+	<string name="common_task_stream">Liste des tâches</string>
+</resources>
