@@ -373,12 +373,18 @@ Tweet</a>
                                                     <i class="icon-fire icon-white"></i> {Localisation::getTranslation('project_view_2')}
                                                 </button>  
                                             {else}
+                                                {if $isSiteAdmin}
                                                 <input type="hidden" name="archiveTask" value="Delete" />
                                                 <a class="btn btn-small btn-inverse" 
                                                     onclick="if (confirm('{Localisation::getTranslation('project_view_3')}')) 
                                                         $('#archiveDeleteForm{$task_id}').submit();" >
                                                     <i class="icon-fire icon-white"></i> {Localisation::getTranslation('common_archive')}
                                                 </a> 
+                                                {else}
+                                                    <button class="btn btn-small btn-inverse" disabled>
+                                                        <i class="icon-fire icon-white"></i> {Localisation::getTranslation('common_archive')}
+                                                    </button>
+                                                {/if}
                                             {/if}
                                         </form>
                                     </td>
