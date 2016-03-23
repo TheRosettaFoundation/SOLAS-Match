@@ -380,10 +380,6 @@ Tweet</a>
                                                         $('#archiveDeleteForm{$task_id}').submit();" >
                                                     <i class="icon-fire icon-white"></i> {Localisation::getTranslation('common_archive')}
                                                 </a> 
-                                                {else}
-                                                    <button class="btn btn-small btn-inverse" disabled>
-                                                        <i class="icon-fire icon-white"></i> {Localisation::getTranslation('common_archive')}
-                                                    </button>
                                                 {/if}
                                             {/if}
                                         </form>
