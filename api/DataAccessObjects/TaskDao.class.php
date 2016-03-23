@@ -680,7 +680,11 @@ class TaskDao
         } else {
             $args .= ", 0";
         }
+
+        error_log("call unClaimTask($args)");
         $ret = Lib\PDOWrapper::call("unClaimTask", $args);
+        $result = $ret[0]['result'];
+        error_log("result: $result");
         return $ret[0]['result'];
     }
 
