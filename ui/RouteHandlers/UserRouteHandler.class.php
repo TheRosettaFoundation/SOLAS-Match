@@ -910,6 +910,22 @@ EOD;
                     $userDao->updateUser($user);
                     $userDao->updatePersonalInfo($user_id, $userPersonalInfo);
 
+                    if (isset($post['interval'])) {
+                        if ($post['interval'] == 0) {
+                            $userDao->removeTaskStreamNotification($user_id);
+                        } else {
+                            $notifData = new Common\Protobufs\Models\UserTaskStreamNotification();
+                            $notifData->setUserId($user_id);
+                            $notifData->setInterval($post['interval']);
+                            if (isset($post['strictMode']) && $post['strictMode'] == 'enabled') {
+                                $notifData->setStrict(true);
+                            } else {
+                                $notifData->setStrict(false);
+                            }
+                            $userDao->requestTaskStreamNotification($notifData);
+                        }
+                    }
+
                     if ($translator && empty($post['translator'])) {
                         $userDao->removeUserBadge($user_id, 6);
                     } elseif (!$translator && !empty($post['translator'])) {
@@ -933,6 +949,34 @@ EOD;
             }
         }
 
+        $notifData = $userDao->getUserTaskStreamNotification($user_id);
+        $interval = null;
+        $lastSent = null;
+        if ($notifData) {
+            $interval = $notifData->getInterval();
+            switch ($interval) {
+                case Common\Enums\NotificationIntervalEnum::DAILY:
+                    $interval = 'daily';
+                    break;
+                case Common\Enums\NotificationIntervalEnum::WEEKLY:
+                    $interval = 'weekly';
+                    break;
+                case Common\Enums\NotificationIntervalEnum::MONTHLY:
+                    $interval = 'monthly';
+                    break;
+            }
+
+            if ($notifData->getLastSent() != null) {
+                $lastSent = date(Common\Lib\Settings::get("ui.date_format"), strtotime($notifData->getLastSent()));
+            }
+
+            if ($notifData->hasStrict()) {
+                $strict = $notifData->getStrict();
+            } else {
+                $strict = false;
+            }
+        }
+
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/UserPrivateProfile.js\"></script>";
 
@@ -949,6 +993,10 @@ EOD;
             'secondaryLanguages'       => $secondaryLanguages,
             'secondaryLanguageCount'   => $secondaryLanguageCount,
             'langPrefSelectCode'       => $langPrefSelectCode,
+            'interval'    => $interval,
+            'intervalId'  => $notifData->getInterval(),
+            'lastSent'    => $lastSent,
+            'strict'      => $strict,
             'translator'  => $translator,
             'proofreader' => $proofreader,
             'interpreter' => $interpreter,
