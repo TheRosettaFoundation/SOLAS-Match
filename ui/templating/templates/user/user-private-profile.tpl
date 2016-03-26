@@ -147,15 +147,12 @@
             <tr>
                 <td colspan="2">
                     <hr/>
-                    <div class="page-header">
-                        <h1>
-                            <small>{Localisation::getTranslation('user_task_stream_notification_edit_0')}</small>
-                        </h1>
-                    </div>
-
                     {if !(isset($strict))}
                         {assign var="strict" value=false}
                     {/if}
+                    <p>
+                        {Localisation::getTranslation('user_task_stream_notification_edit_0')}
+                    </p>
                     <p>
                         {Localisation::getTranslation('user_task_stream_notification_edit_1')}
                     </p>
@@ -163,34 +160,7 @@
                         {Localisation::getTranslation('user_task_stream_notification_edit_2')}
                     </p>
                     <p>
-                        <hr />
-                        {if isset($interval)}
-                            <p>
-                                {Localisation::getTranslation('common_what_type_of_emails')}
-                                {if $strict}
-                                    <strong>{Localisation::getTranslation('common_strict')}</strong>
-                                {/if}
-                            </p>
-                            <p>
-                                {Localisation::getTranslation('common_how_often_receiving_emails')}
-                                <strong>{$interval}</strong>
-                            </p>
-                            <p>
-                                {if $lastSent != null}
-                                    {sprintf(Localisation::getTranslation('common_the_last_email_was_sent_on'), {$lastSent})}
-                                {else}
-                                    {Localisation::getTranslation('common_no_emails_have_been_sent_yet')}
-                                {/if}
-                            </p>
-                        {else}
-                            {Localisation::getTranslation('common_you_are_not_currently_receiving_task_stream_notification_emails')}
-                        {/if}
-                        <hr />
-                    </p>
-                    <p>
-                        {Localisation::getTranslation('user_task_stream_notification_edit_5')}
-                    </p>
-                    <p>
+                        <label for='strictMode'><strong>{Localisation::getTranslation('user_task_stream_notification_edit_5')}:</strong></label>
                         <select name="strictMode">
                             <option value="disabled" {if (!$strict)}selected="true"{/if}>
                                 {Localisation::getTranslation('user_task_stream_notification_edit_all')}
@@ -201,9 +171,7 @@
                         </select>
                     </p>
                     <p>
-                        {Localisation::getTranslation('user_task_stream_notification_edit_6')}
-                    </p>
-                    <p>
+                        <label for='interval'><strong>{Localisation::getTranslation('user_task_stream_notification_edit_6')}:</strong></label>
                         <select name="interval">
                             <option value="0"
                                 {if !isset($intervalId)}

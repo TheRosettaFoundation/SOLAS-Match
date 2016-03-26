@@ -950,26 +950,7 @@ EOD;
         }
 
         $notifData = $userDao->getUserTaskStreamNotification($user_id);
-        $interval = null;
-        $lastSent = null;
         if ($notifData) {
-            $interval = $notifData->getInterval();
-            switch ($interval) {
-                case Common\Enums\NotificationIntervalEnum::DAILY:
-                    $interval = 'daily';
-                    break;
-                case Common\Enums\NotificationIntervalEnum::WEEKLY:
-                    $interval = 'weekly';
-                    break;
-                case Common\Enums\NotificationIntervalEnum::MONTHLY:
-                    $interval = 'monthly';
-                    break;
-            }
-
-            if ($notifData->getLastSent() != null) {
-                $lastSent = date(Common\Lib\Settings::get("ui.date_format"), strtotime($notifData->getLastSent()));
-            }
-
             if ($notifData->hasStrict()) {
                 $strict = $notifData->getStrict();
             } else {
@@ -977,9 +958,7 @@ EOD;
             }
 
             $app->view()->appendData(array(
-                'interval'   => $interval,
                 'intervalId' => $notifData->getInterval(),
-                'lastSent'   => $lastSent,
                 'strict'     => $strict,
             ));
         }
