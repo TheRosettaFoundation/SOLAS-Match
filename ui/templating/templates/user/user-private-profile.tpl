@@ -151,7 +151,7 @@
                         {assign var="strict" value=false}
                     {/if}
                     <p>
-                        {Localisation::getTranslation('user_task_stream_notification_edit_0')}
+                        <strong>{Localisation::getTranslation('user_task_stream_notification_edit_0')}</strong>
                     </p>
                     <p>
                         {Localisation::getTranslation('user_task_stream_notification_edit_1')}
