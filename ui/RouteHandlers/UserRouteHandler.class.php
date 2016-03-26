@@ -975,6 +975,13 @@ EOD;
             } else {
                 $strict = false;
             }
+
+            $app->view()->appendData(array(
+                'interval'   => $interval,
+                'intervalId' => $notifData->getInterval(),
+                'lastSent'   => $lastSent,
+                'strict'     => $strict,
+            ));
         }
 
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
@@ -993,10 +1000,6 @@ EOD;
             'secondaryLanguages'       => $secondaryLanguages,
             'secondaryLanguageCount'   => $secondaryLanguageCount,
             'langPrefSelectCode'       => $langPrefSelectCode,
-            'interval'    => $interval,
-            'intervalId'  => $notifData->getInterval(),
-            'lastSent'    => $lastSent,
-            'strict'      => $strict,
             'translator'  => $translator,
             'proofreader' => $proofreader,
             'interpreter' => $interpreter,
