@@ -148,7 +148,10 @@
                 <td colspan="2">
                     <hr/>
                     {if !(isset($strict))}
-                        {assign var="strict" value=false}
+                        {assign var="strict" value=true}
+                    {/if}
+                    {if !(isset($intervalId))}
+                        {assign var="intervalId" value={NotificationIntervalEnum::DAILY}}
                     {/if}
                     <p>
                         <strong>{Localisation::getTranslation('user_task_stream_notification_edit_0')}</strong>
