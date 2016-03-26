@@ -910,6 +910,22 @@ EOD;
                     $userDao->updateUser($user);
                     $userDao->updatePersonalInfo($user_id, $userPersonalInfo);
 
+                    if (isset($post['interval'])) {
+                        if ($post['interval'] == 0) {
+                            $userDao->removeTaskStreamNotification($user_id);
+                        } else {
+                            $notifData = new Common\Protobufs\Models\UserTaskStreamNotification();
+                            $notifData->setUserId($user_id);
+                            $notifData->setInterval($post['interval']);
+                            if (isset($post['strictMode']) && $post['strictMode'] == 'enabled') {
+                                $notifData->setStrict(true);
+                            } else {
+                                $notifData->setStrict(false);
+                            }
+                            $userDao->requestTaskStreamNotification($notifData);
+                        }
+                    }
+
                     if ($translator && empty($post['translator'])) {
                         $userDao->removeUserBadge($user_id, 6);
                     } elseif (!$translator && !empty($post['translator'])) {
@@ -931,6 +947,20 @@ EOD;
                     $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
                 }
             }
+        }
+
+        $notifData = $userDao->getUserTaskStreamNotification($user_id);
+        if ($notifData) {
+            if ($notifData->hasStrict()) {
+                $strict = $notifData->getStrict();
+            } else {
+                $strict = false;
+            }
+
+            $app->view()->appendData(array(
+                'intervalId' => $notifData->getInterval(),
+                'strict'     => $strict,
+            ));
         }
 
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
