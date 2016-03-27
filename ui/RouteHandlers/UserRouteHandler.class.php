@@ -763,6 +763,7 @@ EOD;
         $app = \Slim\Slim::getInstance();
         
         $userDao = new DAO\UserDao();
+        $adminDao = new DAO\AdminDao();
         $langDao = new DAO\LanguageDao();
         $countryDao = new DAO\CountryDao();
 
@@ -966,9 +967,17 @@ EOD;
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/UserPrivateProfile.js\"></script>";
 
+        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
+        if (!is_null($loggedInUserId)) {
+            $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
+        } else {
+            $isSiteAdmin = false;
+        }
+
         $app->view()->appendData(array(
             'siteLocation'     => Common\Lib\Settings::get('site.location'),
             'siteAPI'          => Common\Lib\Settings::get('site.api'),
+            'isSiteAdmin'      => $isSiteAdmin,
             'user'             => $user,
             'user_id'          => $user_id,
             'userPersonalInfo' => $userPersonalInfo,
