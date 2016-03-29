@@ -569,7 +569,7 @@ class UserRouteHandler
                     
                     //Redirect to homepage, or the page the page user was previously on e.g. if their
                     //session timed out and they are logging in again.
-                    if ($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
+                    if ($request) {
                         $app->redirect($request);
                     } else {
                         $nativeLocale = $user->getNativeLocale();
@@ -624,7 +624,7 @@ class UserRouteHandler
                     Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
                 }
                 
-                if ($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
+                if ($request) {
                     $app->redirect($request);
                 } else {
                     $nativeLocale = $user->getNativeLocale();
