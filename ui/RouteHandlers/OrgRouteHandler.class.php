@@ -428,10 +428,10 @@ class OrgRouteHandler
         if ($post = $app->request()->post()) {
 
             if (isset($post['updateOrgDetails'])) {
-                if (isset($post['displayName']) && $post['displayName'] != '') {
+                if (isset($post['orgName']) && $post['orgName'] != '') {
                     //Check if new org title has forbidden characters
-                    if (Lib\Validator::filterSpecialChars($post["displayName"])) {
-                        $org->setName($post['displayName']);
+                    if (Lib\Validator::filterSpecialChars($post['orgName'])) {
+                        $org->setName($post['orgName']);
                     } else {
                         $errorOccured = true;
                         array_push(
