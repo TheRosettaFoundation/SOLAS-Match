@@ -54,14 +54,14 @@
                     />
 
                     <label for='biography'><strong>{Localisation::getTranslation('org_private_profile_organisation_overview')} <span style="color: red">*</span></strong></label>
-                    <textarea name='biography' cols='40' rows='10' style="width: 80%"
+                    <textarea name='biography' id='biography' cols='40' rows='10' style="width: 80%"
                     {if $org->getBiography() == ''}
                         placeholder="{Localisation::getTranslation('org_private_profile_enter_organisation_biography_here')}"
                     {/if}
                     >{if $org->getBiography() != ''}{TemplateHelper::uiCleanseNewlineAndTabs($org->getBiography())}{/if}</textarea>
 
-                    <label for='activity'><strong>{Localisation::getTranslation('org_private_profile_organisation_activity')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
-                    <select name='activity' multiple id='activity' style="width: 80%">
+                    <label for='activitys'><strong>{Localisation::getTranslation('org_private_profile_organisation_activity')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
+                    <select name='activitys[]' multiple id='activitys' style="width: 80%">
                         <option value=""></option>
                         {foreach $activitys as $activity}
                             <option value="{$activity['code']}" {if $activity['selected']}selected="selected"{/if}>{$activity['value']}</option>
@@ -88,7 +88,7 @@
 
                     <label for='linkedin'><strong>{Localisation::getTranslation('org_private_profile_organisation_linkedin')}</strong></label>
                     <input type='text' name='linkedin' id='linkedin' style="width: 80%"
-                    {if $org->getLinkedin() != 'http://'}
+                    {if $org2->getLinkedin() != 'http://'}
                         value="{$org2->getLinkedin()}"
                     {else}
                         value='http://'
@@ -107,7 +107,7 @@
 
                 <td width="50%">
                     <label for='address'><strong>{Localisation::getTranslation('common_address')}</strong></label>
-                    <textarea name='address' cols='40' rows='7' style="width: 80%">
+                    <textarea name='address' id='address' cols='40' rows='7' style="width: 80%">
                     {if $org->getAddress() != ''}{TemplateHelper::uiCleanseNewlineAndTabs($org->getAddress())}{/if}</textarea>
 
                     <label for='city'><strong>{Localisation::getTranslation('common_city')}</strong></label>
@@ -189,15 +189,15 @@
                                 />
 
                                 <label for='othercontacts'><strong>{Localisation::getTranslation('org_private_profile_organisation_other_contacts')}</strong></label>
-                                <textarea name='othercontacts' cols='40' rows='7' style="width: 80%">
-                                {if $org->getOtherContacts() != ''}{TemplateHelper::uiCleanseNewlineAndTabs($org->getOtherContacts())}{/if}</textarea>
+                                <textarea name='othercontacts' id='othercontacts' cols='40' rows='7' style="width: 80%">
+                                {if $org2->getOtherContacts() != ''}{TemplateHelper::uiCleanseNewlineAndTabs($org2->getOtherContacts())}{/if}</textarea>
 
                                 <label for='structure'><strong>{Localisation::getTranslation('org_private_profile_organisation_structure')}</strong></label>
-                                <textarea name='structure' cols='40' rows='10' style="width: 80%">
+                                <textarea name='structure' id='structure' cols='40' rows='10' style="width: 80%">
                                 {if $org2->getStructure() != ''}{TemplateHelper::uiCleanseNewlineAndTabs($org2->getStructure())}{/if}</textarea>
 
                                 <label for='affiliations'><strong>{Localisation::getTranslation('org_private_profile_organisation_affiliations')}</strong></label>
-                                <textarea name='affiliations' cols='40' rows='10' style="width: 80%">
+                                <textarea name='affiliations' id='affiliations' cols='40' rows='10' style="width: 80%">
                                 {if $org2->getAffiliations() != ''}{TemplateHelper::uiCleanseNewlineAndTabs($org2->getAffiliations())}{/if}</textarea>
 
                                 <label for='urlvideo1'><strong>{Localisation::getTranslation('org_private_profile_organisation_url_video_1')}</strong></label>
@@ -227,48 +227,48 @@
                                 {/if}
                                 />
 
-                                <label for='employee'><strong>{Localisation::getTranslation('org_private_profile_organisation_employee')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
-                                <select name='employee' multiple id='employee' style="width: 80%">
+                                <label for='employees'><strong>{Localisation::getTranslation('org_private_profile_organisation_employee')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
+                                <select name='employees[]' multiple id='employees' style="width: 80%">
                                     <option value=""></option>
                                     {foreach $employees as $employee}
                                         <option value="{$employee['code']}" {if $employee['selected']}selected="selected"{/if}>{$employee['value']}</option>
                                     {/foreach}
                                 </select>
 
-                                <label for='funding'><strong>{Localisation::getTranslation('org_private_profile_organisation_funding')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
-                                <select name='funding' multiple id='funding' style="width: 80%">
+                                <label for='fundings'><strong>{Localisation::getTranslation('org_private_profile_organisation_funding')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
+                                <select name='fundings[]' multiple id='fundings' style="width: 80%">
                                     <option value=""></option>
                                     {foreach $fundings as $funding}
                                         <option value="{$funding['code']}" {if $funding['selected']}selected="selected"{/if}>{$funding['value']}</option>
                                     {/foreach}
                                 </select>
 
-                                <label for='find'><strong>{Localisation::getTranslation('org_private_profile_organisation_find')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
-                                <select name='find' multiple id='find' style="width: 80%">
+                                <label for='finds'><strong>{Localisation::getTranslation('org_private_profile_organisation_find')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
+                                <select name='finds[]' multiple id='finds' style="width: 80%">
                                     <option value=""></option>
                                     {foreach $finds as $find}
                                         <option value="{$find['code']}" {if $find['selected']}selected="selected"{/if}>{$find['value']}</option>
                                     {/foreach}
                                 </select>
 
-                                <label for='translation'><strong>{Localisation::getTranslation('org_private_profile_organisation_translation')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
-                                <select name='translation' multiple id='translation' style="width: 80%">
+                                <label for='translations'><strong>{Localisation::getTranslation('org_private_profile_organisation_translation')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
+                                <select name='translations[]' multiple id='translations' style="width: 80%">
                                     <option value=""></option>
                                     {foreach $translations as $translation}
                                         <option value="{$translation['code']}" {if $translation['selected']}selected="selected"{/if}>{$translation['value']}</option>
                                     {/foreach}
                                 </select>
 
-                                <label for='request'><strong>{Localisation::getTranslation('org_private_profile_organisation_request')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
-                                <select name='request' multiple id='request' style="width: 80%">
+                                <label for='requests'><strong>{Localisation::getTranslation('org_private_profile_organisation_request')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
+                                <select name='requests[]' multiple id='requests' style="width: 80%">
                                     <option value=""></option>
                                     {foreach $requests as $request}
                                         <option value="{$request['code']}" {if $request['selected']}selected="selected"{/if}>{$request['value']}</option>
                                     {/foreach}
                                 </select>
 
-                                <label for='content'><strong>{Localisation::getTranslation('org_private_profile_organisation_content')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
-                                <select name='content' multiple id='content' style="width: 80%">
+                                <label for='contents'><strong>{Localisation::getTranslation('org_private_profile_organisation_content')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
+                                <select name='contents[]' multiple id='contents' style="width: 80%">
                                     <option value=""></option>
                                     {foreach $contents as $content}
                                         <option value="{$content['code']}" {if $content['selected']}selected="selected"{/if}>{$content['value']}</option>
@@ -276,35 +276,35 @@
                                 </select>
 
                                 <label for='subjectmatters'><strong>{Localisation::getTranslation('org_private_profile_organisation_subject_matters')}</strong></label>
-                                <textarea name='subjectmatters' cols='40' rows='7' style="width: 80%">
-                                {if $org->getSubjectMatters() != ''}{TemplateHelper::uiCleanseNewlineAndTabs($org->getSubjectMatters())}{/if}</textarea>
+                                <textarea name='subjectmatters' id='subjectmatters' cols='40' rows='7' style="width: 80%">
+                                {if $org2->getSubjectMatters() != ''}{TemplateHelper::uiCleanseNewlineAndTabs($org2->getSubjectMatters())}{/if}</textarea>
 
                                 <label for='pages'><strong>{Localisation::getTranslation('org_private_profile_organisation_pages')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
-                                <select name='pages' multiple id='pages' style="width: 80%">
+                                <select name='pages[]' multiple id='pages' style="width: 80%">
                                     <option value=""></option>
-                                    {foreach $pagess as $pages}
-                                        <option value="{$pages['code']}" {if $pages['selected']}selected="selected"{/if}>{$pages['value']}</option>
+                                    {foreach $pages as $page}
+                                        <option value="{$page['code']}" {if $page['selected']}selected="selected"{/if}>{$page['value']}</option>
                                     {/foreach}
                                 </select>
 
-                                <label for='source'><strong>{Localisation::getTranslation('org_private_profile_organisation_source')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
-                                <select name='source' multiple id='source' style="width: 80%">
+                                <label for='sources'><strong>{Localisation::getTranslation('org_private_profile_organisation_source')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
+                                <select name='sources[]' multiple id='sources' style="width: 80%">
                                     <option value=""></option>
                                     {foreach $sources as $source}
                                         <option value="{$source['code']}" {if $source['selected']}selected="selected"{/if}>{$source['value']}</option>
                                     {/foreach}
                                 </select>
 
-                                <label for='target'><strong>{Localisation::getTranslation('org_private_profile_organisation_target')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
-                                <select name='target' multiple id='target' style="width: 80%">
+                                <label for='targets'><strong>{Localisation::getTranslation('org_private_profile_organisation_target')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
+                                <select name='targets[]' multiple id='targets' style="width: 80%">
                                     <option value=""></option>
                                     {foreach $targets as $target}
                                         <option value="{$target['code']}" {if $target['selected']}selected="selected"{/if}>{$target['value']}</option>
                                     {/foreach}
                                 </select>
 
-                                <label for='often'><strong>{Localisation::getTranslation('org_private_profile_organisation_often')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
-                                <select name='often' multiple id='often' style="width: 80%">
+                                <label for='oftens'><strong>{Localisation::getTranslation('org_private_profile_organisation_often')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
+                                <select name='oftens[]' multiple id='oftens' style="width: 80%">
                                     <option value=""></option>
                                     {foreach $oftens as $often}
                                         <option value="{$often['code']}" {if $often['selected']}selected="selected"{/if}>{$often['value']}</option>

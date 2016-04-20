@@ -142,6 +142,17 @@ class Orgs
 
             /* Routes starting /v0 */
             $app->get(
+                '/orgextended/:orgId/',
+                '\SolasMatch\API\V0\Orgs::getOrgExtendedProfile'
+            );
+
+            $app->put(
+                '/orgextended/:orgId/',
+                '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin',
+                '\SolasMatch\API\V0\Orgs::updateOrgExtendedProfile'
+            );
+
+            $app->get(
                 '/orgs(:format)/',
                 '\SolasMatch\API\Lib\Middleware::isloggedIn',
                 '\SolasMatch\API\V0\Orgs::getOrgs'
@@ -315,6 +326,17 @@ class Orgs
         API\Dispatcher::sendResponse(null, $org, null, $format);
     }
 
+    public static function getOrgExtendedProfile($orgId, $format = ".json")
+    {
+        if (!is_numeric($orgId) && strstr($orgId, '.')) {
+            $orgId = explode('.', $orgId);
+            $format = '.'.$orgId[1];
+            $orgId = $orgId[0];
+        }
+        $org = DAO\OrganisationDao::getOrgExtendedProfile($orgId);
+        API\Dispatcher::sendResponse(null, $org, null, $format);
+    }
+
     public static function updateOrg($orgId, $format = ".json")
     {
         if (!is_numeric($orgId) && strstr($orgId, '.')) {
@@ -332,6 +354,20 @@ class Orgs
             API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CONFLICT);
         }
         API\Dispatcher::sendResponse(null, DAO\OrganisationDao::insertAndUpdate($data), null, $format);
+    }
+
+    public static function updateOrgExtendedProfile($orgId, $format = ".json")
+    {
+        if (!is_numeric($orgId) && strstr($orgId, '.')) {
+            $orgId = explode('.', $orgId);
+            $format = '.'.$orgId[1];
+            $orgId = $orgId[0];
+        }
+        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $client = new Common\Lib\APIHelper($format);
+        $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\OrganisationExtendedProfile");
+        $data->setId($orgId);
+        API\Dispatcher::sendResponse(null, DAO\OrganisationDao::insertAndUpdateExtendedProfile($data), null, $format);
     }
 
     public static function deleteOrg($orgId, $format = ".json")

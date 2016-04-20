@@ -420,6 +420,35 @@ class OrgRouteHandler
         $app = \Slim\Slim::getInstance();
         $orgDao = new DAO\OrganisationDao();
         $org = $orgDao->getOrganisation($org_id);
+        $org2 = $orgDao->getOrganisationExtendedProfile($org_id)
+        if (empty($org2)) {
+            $org2 = new Common\Protobufs\Models\OrganisationExtendedProfile();
+            $org2->setId($org_id);
+            $org2->setFacebook('');
+            $org2->setLinkedin('');
+            $org2->setPrimaryContactName('');
+            $org2->setPrimaryContactTitle('');
+            $org2->setPrimaryContactEmail('');
+            $org2->setPrimaryContactPhone('');
+            $org2->setOtherContacts('');
+            $org2->setStructure('');
+            $org2->setAffiliations('');
+            $org2->setUrlVideo1('');
+            $org2->setUrlVideo2('');
+            $org2->setUrlVideo3('');
+            $org2->setSubjectMatters('');
+            $org2->setActivitys('');
+            $org2->setEmployees('');
+            $org2->setFundings('');
+            $org2->setFinds('');
+            $org2->setTranslations('');
+            $org2->setRequests('');
+            $org2->setContents('');
+            $org2->setPages('');
+            $org2->setSources('');
+            $org2->setTargets('');
+            $org2->setOftens('');
+        }
         $userId = Common\Lib\UserSession::getCurrentUserId();
         
         $errorOccured = null;
@@ -513,6 +542,80 @@ class OrgRouteHandler
                     $orgDao = new DAO\OrganisationDao();
                     try {
                         $orgDao->updateOrg($org);
+
+                        if (isset($post['facebook'])) {
+                            $org2->setFacebook($post['facebook']);
+                        }
+                        if (isset($post['linkedin'])) {
+                            $org2->setLinkedin($post['linkedin']);
+                        }
+                        if (isset($post['primarycontactname'])) {
+                            $org2->setPrimaryContactName($post['primarycontactname']);
+                        }
+                        if (isset($post['primarycontacttitle'])) {
+                            $org2->setPrimaryContactTitle($post['primarycontacttitle']);
+                        }
+                        if (isset($post['primarycontactemail'])) {
+                            $org2->setPrimaryContactEmail($post['primarycontactemail']);
+                        }
+                        if (isset($post['primarycontactphone'])) {
+                            $org2->setPrimaryContactPhone($post['primarycontactphone']);
+                        }
+                        if (isset($post['othercontacts'])) {
+                            $org2->setOtherContacts($post['othercontacts']);
+                        }
+                        if (isset($post['structure'])) {
+                            $org2->setStructure($post['structure']);
+                        }
+                        if (isset($post['affiliations'])) {
+                            $org2->setAffiliations($post['affiliations']);
+                        }
+                        if (isset($post['urlvideo1'])) {
+                            $org2->setUrlVideo1($post['urlvideo1']);
+                        }
+                        if (isset($post['urlvideo2'])) {
+                            $org2->setUrlVideo2($post['urlvideo2']);
+                        }
+                        if (isset($post['urlvideo3'])) {
+                            $org2->setUrlVideo3($post['urlvideo3']);
+                        }
+                        if (isset($post['subjectmatters'])) {
+                            $org2->setSubjectMatters($post['subjectmatters']);
+                        }
+                        if (isset($post['activitys'])) {
+                            $org2->setActivitys(implode (',' , $post['activitys']));
+                        }
+                        if (isset($post['employees'])) {
+                            $org2->setEmployees(implode (',' , $post['employees']));
+                        }
+                        if (isset($post['fundings'])) {
+                            $org2->setFundings(implode (',' , $post['fundings']));
+                        }
+                        if (isset($post['finds'])) {
+                            $org2->setFinds(implode (',' , $post['finds']));
+                        }
+                        if (isset($post['translations'])) {
+                            $org2->setTranslations(implode (',' , $post['translations']));
+                        }
+                        if (isset($post['requests'])) {
+                            $org2->setRequests(implode (',' , $post['requests']));
+                        }
+                        if (isset($post['contents'])) {
+                            $org2->setContents(implode (',' , $post['contents']));
+                        }
+                        if (isset($post['pages'])) {
+                            $org2->setPages(implode (',' , $post['pages']));
+                        }
+                        if (isset($post['sources'])) {
+                            $org2->setSources(implode (',' , $post['sources']));
+                        }
+                        if (isset($post['targets'])) {
+                            $org2->setTargets(implode (',' , $post['targets']));
+                        }
+                        if (isset($post['oftens'])) {
+                            $org2->setOftens(implode (',' , $post['oftens']));
+                        }
+                        $orgDao->updateOrgExtendedProfile($org2);
                         $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org->getId())));
                     } catch (Common\Exceptions\SolasMatchException $ex) {
                         $org_name = $org->getName();
@@ -545,7 +648,6 @@ class OrgRouteHandler
                 }
             }
         }
-        
 
         $adminDao = new DAO\AdminDao();
         if ($adminDao->isOrgAdmin($org->getId(), $userId) || $adminDao->isSiteAdmin($userId)) {
@@ -553,6 +655,7 @@ class OrgRouteHandler
         }
         
         $app->view()->setData("org", $org);
+        $app->view()->setData("org2", $org2);
         $app->render("org/org-private-profile.tpl");
     }
 

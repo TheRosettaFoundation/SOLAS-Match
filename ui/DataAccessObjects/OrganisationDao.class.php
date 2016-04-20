@@ -22,7 +22,15 @@ class OrganisationDao extends BaseDao
         $ret = $this->client->call("\SolasMatch\Common\Protobufs\Models\Organisation", $request);
         return $ret;
     }
-    
+
+    public function getOrganisationExtendedProfile($id)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/orgextended/$id";
+        $ret = $this->client->call("\SolasMatch\Common\Protobufs\Models\OrganisationExtendedProfile", $request);
+        return $ret;
+    }
+
     public function getOrganisationByName($name)
     {
         $ret = null;
@@ -139,6 +147,19 @@ class OrganisationDao extends BaseDao
                 throw new Common\Exceptions\SolasMatchException($ret, $this->client->getResponseCode());
                 break;
         }
+    }
+
+    public function updateOrgExtendedProfile($org)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/orgextended/{$org->getId()}";
+        $ret = $this->client->call(
+            "\SolasMatch\Common\Protobufs\Models\OrganisationExtendedProfile",
+            $request,
+            Common\Enums\HttpMethodEnum::PUT,
+            $org
+        );
+        return $ret;
     }
 
     public function deleteOrg($orgId)
