@@ -583,37 +583,37 @@ class OrgRouteHandler
                             $org2->setSubjectMatters($post['subjectmatters']);
                         }
                         if (isset($post['activitys'])) {
-                            $org2->setActivitys(implode (',' , $post['activitys']));
+                            $org2->setActivitys(implode(',' , $post['activitys']));
                         }
                         if (isset($post['employees'])) {
-                            $org2->setEmployees(implode (',' , $post['employees']));
+                            $org2->setEmployees(implode(',' , $post['employees']));
                         }
                         if (isset($post['fundings'])) {
-                            $org2->setFundings(implode (',' , $post['fundings']));
+                            $org2->setFundings(implode(',' , $post['fundings']));
                         }
                         if (isset($post['finds'])) {
-                            $org2->setFinds(implode (',' , $post['finds']));
+                            $org2->setFinds(implode(',' , $post['finds']));
                         }
                         if (isset($post['translations'])) {
-                            $org2->setTranslations(implode (',' , $post['translations']));
+                            $org2->setTranslations(implode(',' , $post['translations']));
                         }
                         if (isset($post['requests'])) {
-                            $org2->setRequests(implode (',' , $post['requests']));
+                            $org2->setRequests(implode(',' , $post['requests']));
                         }
                         if (isset($post['contents'])) {
-                            $org2->setContents(implode (',' , $post['contents']));
+                            $org2->setContents(implode(',' , $post['contents']));
                         }
                         if (isset($post['pages'])) {
-                            $org2->setPages(implode (',' , $post['pages']));
+                            $org2->setPages(implode(',' , $post['pages']));
                         }
                         if (isset($post['sources'])) {
-                            $org2->setSources(implode (',' , $post['sources']));
+                            $org2->setSources(implode(',' , $post['sources']));
                         }
                         if (isset($post['targets'])) {
-                            $org2->setTargets(implode (',' , $post['targets']));
+                            $org2->setTargets(implode(',' , $post['targets']));
                         }
                         if (isset($post['oftens'])) {
-                            $org2->setOftens(implode (',' , $post['oftens']));
+                            $org2->setOftens(implode(',' , $post['oftens']));
                         }
                         $orgDao->updateOrgExtendedProfile($org2);
                         $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org->getId())));
