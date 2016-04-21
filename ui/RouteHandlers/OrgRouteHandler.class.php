@@ -654,9 +654,138 @@ class OrgRouteHandler
             $app->view()->appendData(array('orgAdmin' => true));
         }
         
-        $app->view()->setData("org", $org);
-        $app->view()->setData("org2", $org2);
+        $possibleActivitys = array(
+            'agri' => 'Agriculture, Food & Nutrition',
+            'anim' => 'Animals & Wildlife',
+            'arts' => 'Arts & Culture',
+            'busi' => 'Business & Industry',
+            'chil' => 'Children',
+            'civi' => 'Civil Society Development',
+            'comm' => 'Community Development',
+            'crim' => 'Crime & Safety',
+            'demo' => 'Democracy & Good Governance',
+            'disa' => 'Disabilities - Special Needs',
+            'drug' => 'Drugs & Addiction',
+            'econ' => 'Economic Development',
+            'educ' => 'Education & Literacy',
+            'empl' => 'Employment & Labor',
+            'envi' => 'Environment & Climate Change',
+            'fami' => 'Family',
+            'heal' => 'Health & Wellbeing',
+            'hiva' => 'HIV/AIDS',
+            'hous' => 'Housing & Shelter',
+            'huma' => 'Human Rights',
+            'humr' => 'Humanitarian Relief',
+            'immi' => 'Immigration',
+            'indi' => 'Indigenous Communities',
+            'inte' => 'International Cooperation & International Relations',
+            'info' => 'Information and communications technology (ICT)',
+            'lgbt' => 'LGBTQ (Lesbian, Gay, Bi-sexual and Transgender)',
+            'live' => 'Livelihood',
+            'olde' => 'Older People & Active Ageing',
+            'othe' => 'Other/General',
+            'peac' => 'Peace & Conflict Resolution',
+            'pove' => 'Poverty Alleviation',
+            'pris' => 'Prisioners/Offenders/Ex-offenders',
+            'publ' => 'Public Affairs',
+            'reli' => 'Religion & Faith based',
+            'refu' => 'Refugees & Asylum Seekers',
+            'scie' => 'Science',
+            'soci' => 'Social Sciences',
+            'spor' => 'Sports & Recreation',
+            'tour' => 'Tourism & Travel',
+            'volu' => 'Volunteerism & Active Citizenship',
+            'wate' => 'Water & Sanitation',
+            'wome' => 'Women & Gender',
+            'yout' => 'Youth & Adolescents',
+        );
+        $possibleEmployees = array(
+            '0'    => '0',
+            '1'    => '1',
+            '5'    => '2-5',
+            '20'   => '6-20',
+            '100'  => '21-100',
+            '1000' => '101+',
+        );
+        $possibleFundings = array(
+            'publ' => 'Public',
+            'priv' => 'Private',
+            'corp' => 'Corporate',
+        );
+        $possibleFinds = array(
+            'webs' => 'Web Search',
+            'face' => 'Facebook',
+            'twit' => 'Twitter',
+            'link' => 'LinkedIn',
+            'sdve' => 'Advertisement',
+            'cont' => 'Through a Contact',
+        );
+        $possibleTranslations = array(
+            'paid' => 'Paid commercial services',
+            'volu' => 'Volunteers',
+            'univ' => 'Universities',
+            'none' => 'None of the above',
+        );
+        $possibleRequests = array(
+            'allt' => 'Looking for a volunteer-based solution for all our translation needs',
+            'addi' => 'Looking for a volunteer-based solution to provide additional capacity to our volunteers',
+        );
+        $possibleContents = array(
+            'webs' => 'Website',
+            'stra' => 'Strategy',
+            'advo' => 'Advocacy',
+            'manu' => 'Manuals',
+            'proj' => 'Projects',
+            'camp' => 'Campaigns',
+            'othe' => 'Other',
+        );
+        $possiblegetPages = array(
+            '10' => '1-10',
+            '100' => '11-100',
+            '1000' => '100-1000',
+            '10000' => '1000-10000',
+            '100000' => '10000+',
+        );
+        $langDao = new DAO\LanguageDao();
+        $languages = $langDao->getLanguages();
+        $possibleLanguages = array();
+        foreach ($languages as $language) {
+            $possibleLanguages[$language->getCode()] = $language->getName();
+        }
+        $possibleOftens = array(
+            'mont' => 'Every month',
+            'quar' => 'Every quarter',
+            'once' => 'Once or twice per year',
+            'othe' => 'Other',
+        );
+
+        $app->view()->appendData(array(
+            'org'  => $org,
+            'org2' => $org2,
+            'activitys'    => $this->generateOptions($possibleActivitys, $org2->getActivitys()),
+            'employees'    => $this->generateOptions($possibleEmployees, $org2->getEmployees()),
+            'fundings'     => $this->generateOptions($possibleFundings, $org2->getFundings()),
+            'finds'        => $this->generateOptions($possibleFinds, $org2->getFinds()),
+            'translations' => $this->generateOptions($possibleTranslations, $org2->getTranslations()),
+            'requests'     => $this->generateOptions($possibleRequests, $org2->getRequests()),
+            'contents'     => $this->generateOptions($possibleContents, $org2->getContents()),
+            'pages'        => $this->generateOptions($possiblePages, $org2->getPages()),
+            'sources'      => $this->generateOptions($possibleLanguages, $org2->getSources()),
+            'targets'      => $this->generateOptions($possibleLanguages, $org2->getTargets()),
+            'oftens'       => $this->generateOptions($possibleOftens, $org2->getOftens()),
+        ));
+
         $app->render("org/org-private-profile.tpl");
+    }
+
+    private function generateOptions($possibleOptions, $selectedCodes)
+    {
+        $selectedCodesArray = explode(',' , $selectedCodes);
+        $options = array();
+        foreach($possibleOptions as $code => $option) {
+            $options[] = array('code' => $code, 'selected' => in_array($code, $selectedCodesArray), 'value' => $option);
+        }
+        return $options;
     }
 
     public function orgPublicProfile($org_id)
