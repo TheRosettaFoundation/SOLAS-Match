@@ -479,14 +479,6 @@ class OrgRouteHandler
                     $errorOccured = true;
                     $errorList[] = Lib\Localisation::getTranslation('org_private_profile_organisation_error_overview_not_set');
                 }
-                if (empty($post['primarycontactname'])) {
-                    $errorOccured = true;
-                    $errorList[] = Lib\Localisation::getTranslation('org_private_profile_organisation_error_name_not_set');
-                }
-                if (empty($post['primarycontactemail'])) {
-                    $errorOccured = true;
-                    $errorList[] = Lib\Localisation::getTranslation('org_private_profile_organisation_error_email_not_set');
-                }
                 if (isset($post['homepage'])) {
                     if (trim($post["homepage"])!="") {
                         if (Lib\Validator::validateURL($post["homepage"])) {
@@ -539,14 +531,136 @@ class OrgRouteHandler
                 if (isset($post["southAmerica"])) {
                     $regionalFocus[] .= "South-America";
                 }
-
                 if (!empty($regionalFocus)) {
                     $org->setRegionalFocus(implode(",", $regionalFocus));
                 }
-                
+                if (isset($post['facebook'])) {
+                    if (trim($post['facebook']) != '') {
+                        if (Lib\Validator::validateURL($post['facebook'])) {
+                            $org2->setFacebook($post['facebook']);
+                        } else {
+                            $errorOccured = true;
+                            $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
+                        }
+                    }
+                }
+                if (isset($post['linkedin'])) {
+                    if (trim($post['linkedin']) != '') {
+                        if (Lib\Validator::validateURL($post['linkedin'])) {
+                            $org2->setLinkedin($post['linkedin']);
+                        } else {
+                            $errorOccured = true;
+                            $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
+                        }
+                    }
+                }
+                if (isset($post['urlvideo1'])) {
+                    if (trim($post['urlvideo1']) != '') {
+                        if (Lib\Validator::validateURL($post['urlvideo1'])) {
+                            $org2->setUrlVideo1($post['urlvideo1']);
+                        } else {
+                            $errorOccured = true;
+                            $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
+                        }
+                    }
+                }
+                if (isset($post['urlvideo2'])) {
+                    if (trim($post['urlvideo2']) != '') {
+                        if (Lib\Validator::validateURL($post['urlvideo2'])) {
+                            $org2->setUrlVideo2($post['urlvideo2']);
+                        } else {
+                            $errorOccured = true;
+                            $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
+                        }
+                    }
+                }
+                if (isset($post['urlvideo3'])) {
+                    if (trim($post['urlvideo3']) != '') {
+                        if (Lib\Validator::validateURL($post['urlvideo3'])) {
+                            $org2->setUrlVideo3($post['urlvideo3']);
+                        } else {
+                            $errorOccured = true;
+                            $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
+                        }
+                    }
+                }
+                if (empty($post['primarycontactname'])) {
+                    $errorOccured = true;
+                    $errorList[] = Lib\Localisation::getTranslation('org_private_profile_organisation_error_name_not_set');
+                }
+                else {
+                    $org2->setPrimaryContactName($post['primarycontactname']);
+                }
+                if (isset($post['primarycontacttitle'])) {
+                    $org2->setPrimaryContactTitle($post['primarycontacttitle']);
+                }
+                if (isset($post['primarycontactemail'])) {
+                    if (trim($post['primarycontactemail']) != '') {
+                        if (Lib\Validator::validateEmail($post['primarycontactemail'])) {
+                            $org2->setPrimaryContactEmail($post['primarycontactemail']);
+                        } else {
+                            $errorOccured = true;
+                            $errorList[] = Lib\Localisation::getTranslation('user_reset_password_4');
+                        }
+                    } else {
+                        $errorOccured = true;
+                        $errorList[] = Lib\Localisation::getTranslation('org_private_profile_organisation_error_email_not_set');
+                    }
+                } else {
+                    $errorOccured = true;
+                    $errorList[] = Lib\Localisation::getTranslation('org_private_profile_organisation_error_email_not_set');
+                }
+                if (isset($post['primarycontactphone'])) {
+                    $org2->setPrimaryContactPhone($post['primarycontactphone']);
+                }
+                if (isset($post['othercontacts'])) {
+                    $org2->setOtherContacts($post['othercontacts']);
+                }
+                if (isset($post['structure'])) {
+                    $org2->setStructure($post['structure']);
+                }
+                if (isset($post['affiliations'])) {
+                    $org2->setAffiliations($post['affiliations']);
+                }
+                if (isset($post['subjectmatters'])) {
+                    $org2->setSubjectMatters($post['subjectmatters']);
+                }
+                if (isset($post['activitys'])) {
+                    $org2->setActivitys(implode(',', $post['activitys']));
+                }
+                if (isset($post['employees'])) {
+                    $org2->setEmployees(implode(',', $post['employees']));
+                }
+                if (isset($post['fundings'])) {
+                    $org2->setFundings(implode(',', $post['fundings']));
+                }
+                if (isset($post['finds'])) {
+                    $org2->setFinds(implode(',', $post['finds']));
+                }
+                if (isset($post['translations'])) {
+                    $org2->setTranslations(implode(',', $post['translations']));
+                }
+                if (isset($post['requests'])) {
+                    $org2->setRequests(implode(',', $post['requests']));
+                }
+                if (isset($post['contents'])) {
+                    $org2->setContents(implode(',', $post['contents']));
+                }
+                if (isset($post['pages'])) {
+                    $org2->setPages(implode(',', $post['pages']));
+                }
+                if (isset($post['sources'])) {
+                    $org2->setSources(implode(',', $post['sources']));
+                }
+                if (isset($post['targets'])) {
+                    $org2->setTargets(implode(',', $post['targets']));
+                }
+                if (isset($post['oftens'])) {
+                    $org2->setOftens(implode(',', $post['oftens']));
+                }
+
                 if (!is_null($errorOccured)) {
                     $app->view()->appendData(array(
-                    "org"     => $org,
                     "errorOccured" => $errorOccured,
                     "errorList" => $errorList
                     ));
@@ -554,79 +668,6 @@ class OrgRouteHandler
                     $orgDao = new DAO\OrganisationDao();
                     try {
                         $orgDao->updateOrg($org);
-
-                        if (isset($post['facebook'])) {
-                            $org2->setFacebook($post['facebook']);
-                        }
-                        if (isset($post['linkedin'])) {
-                            $org2->setLinkedin($post['linkedin']);
-                        }
-                        if (isset($post['primarycontactname'])) {
-                            $org2->setPrimaryContactName($post['primarycontactname']);
-                        }
-                        if (isset($post['primarycontacttitle'])) {
-                            $org2->setPrimaryContactTitle($post['primarycontacttitle']);
-                        }
-                        if (isset($post['primarycontactemail'])) {
-                            $org2->setPrimaryContactEmail($post['primarycontactemail']);
-                        }
-                        if (isset($post['primarycontactphone'])) {
-                            $org2->setPrimaryContactPhone($post['primarycontactphone']);
-                        }
-                        if (isset($post['othercontacts'])) {
-                            $org2->setOtherContacts($post['othercontacts']);
-                        }
-                        if (isset($post['structure'])) {
-                            $org2->setStructure($post['structure']);
-                        }
-                        if (isset($post['affiliations'])) {
-                            $org2->setAffiliations($post['affiliations']);
-                        }
-                        if (isset($post['urlvideo1'])) {
-                            $org2->setUrlVideo1($post['urlvideo1']);
-                        }
-                        if (isset($post['urlvideo2'])) {
-                            $org2->setUrlVideo2($post['urlvideo2']);
-                        }
-                        if (isset($post['urlvideo3'])) {
-                            $org2->setUrlVideo3($post['urlvideo3']);
-                        }
-                        if (isset($post['subjectmatters'])) {
-                            $org2->setSubjectMatters($post['subjectmatters']);
-                        }
-                        if (isset($post['activitys'])) {
-                            $org2->setActivitys(implode(',' , $post['activitys']));
-                        }
-                        if (isset($post['employees'])) {
-                            $org2->setEmployees(implode(',' , $post['employees']));
-                        }
-                        if (isset($post['fundings'])) {
-                            $org2->setFundings(implode(',' , $post['fundings']));
-                        }
-                        if (isset($post['finds'])) {
-                            $org2->setFinds(implode(',' , $post['finds']));
-                        }
-                        if (isset($post['translations'])) {
-                            $org2->setTranslations(implode(',' , $post['translations']));
-                        }
-                        if (isset($post['requests'])) {
-                            $org2->setRequests(implode(',' , $post['requests']));
-                        }
-                        if (isset($post['contents'])) {
-                            $org2->setContents(implode(',' , $post['contents']));
-                        }
-                        if (isset($post['pages'])) {
-                            $org2->setPages(implode(',' , $post['pages']));
-                        }
-                        if (isset($post['sources'])) {
-                            $org2->setSources(implode(',' , $post['sources']));
-                        }
-                        if (isset($post['targets'])) {
-                            $org2->setTargets(implode(',' , $post['targets']));
-                        }
-                        if (isset($post['oftens'])) {
-                            $org2->setOftens(implode(',' , $post['oftens']));
-                        }
                         $orgDao->updateOrgExtendedProfile($org2);
                         $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org->getId())));
                     } catch (Common\Exceptions\SolasMatchException $ex) {
@@ -792,7 +833,7 @@ class OrgRouteHandler
 
     private function generateOptions($possibleOptions, $selectedCodes)
     {
-        $selectedCodesArray = explode(',' , $selectedCodes);
+        $selectedCodesArray = explode(',', $selectedCodes);
         $options = array();
         foreach($possibleOptions as $code => $option) {
             $options[] = array('code' => $code, 'selected' => in_array($code, $selectedCodesArray), 'value' => $option);
