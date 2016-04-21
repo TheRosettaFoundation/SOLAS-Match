@@ -475,6 +475,18 @@ class OrgRouteHandler
                     $errorOccured = true;
                     $errorList[] = Lib\Localisation::getTranslation('common_error_org_name_not_set');
                 }
+                if (empty($post['biography'])) {
+                    $errorOccured = true;
+                    $errorList[] = Lib\Localisation::getTranslation('org_private_profile_organisation_error_overview_not_set');
+                }
+                if (empty($post['primarycontactname'])) {
+                    $errorOccured = true;
+                    $errorList[] = Lib\Localisation::getTranslation('org_private_profile_organisation_error_name_not_set');
+                }
+                if (empty($post['primarycontactemail'])) {
+                    $errorOccured = true;
+                    $errorList[] = Lib\Localisation::getTranslation('org_private_profile_organisation_error_email_not_set');
+                }
                 if (isset($post['homepage'])) {
                     if (trim($post["homepage"])!="") {
                         if (Lib\Validator::validateURL($post["homepage"])) {
