@@ -771,9 +771,37 @@ CREATE TABLE IF NOT EXISTS `Organisations` (
 	UNIQUE INDEX `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-
-
 -- Data exporting was unselected.
+
+
+CREATE TABLE IF NOT EXISTS `OrganisationExtendedProfiles` (
+  `id` INT(10) UNSIGNED NOT NULL,
+  `facebook`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `linkedin`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `primaryContactName`  VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `primaryContactTitle` VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `primaryContactEmail` VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `primaryContactPhone` VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `otherContacts`       VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `structure`           VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `affiliations`        VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `urlVideo1`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `urlVideo2`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `urlVideo3`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `subjectMatters`      VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `activitys`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `employees`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `fundings`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `finds`               VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `translations`        VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `requests`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `contents`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `pages`               VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `sources`             VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `targets`             VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `oftens`              VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 -- Dumping structure for table Solas-Match-Test.OrgRequests
@@ -1719,7 +1747,8 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteOrg`(IN `id` INT)
 BEGIN
 if EXISTS (select 1 from Organisations o where o.id=id) then
-	delete from Organisations where Organisations.id=id;
+  DELETE FROM Organisations WHERE Organisations.id=id;
+  DELETE FROM OrganisationExtendedProfiles WHERE OrganisationExtendedProfiles.id=id;
 	select 1 as result;
 else
 	select 0 as result;
@@ -2363,18 +2392,28 @@ BEGIN
 	if city='' then set city=null;end if;
 	if country='' then set country=null;end if;
 	if regionalFocus='' then set regionalFocus=null;end if;
-	
+
 	select o.id, o.name, o.`home-page` as homepage, o.biography, o.`e-mail` as 'email', o.address, o.city, o.country, o.`regional-focus` as regionalFocus from Organisations o
         where (id is null or o.id = id)
         and (name is null or o.name = name)
         and (url is null or o.`home-page` = url)
         and (bio is null or o.biography = bio)
         and (email is null or o.`e-mail` = email)
-        and (address is null or o.address = address) 
+        and (address is null or o.address = address)
         and (city is null or o.city = city)
-        and (country is null or o.country = country) 
+        and (country is null or o.country = country)
         and (regionalFocus is null or o.`regional-focus` = regionalFocus)
     	GROUP BY o.name;
+END//
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `getOrganisationExtendedProfile`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrganisationExtendedProfile`(IN `id` INT)
+BEGIN
+  SELECT * FROM OrganisationExtendedProfiles o
+  WHERE o.id = id
 END//
 DELIMITER ;
 
@@ -4014,80 +4053,195 @@ DROP PROCEDURE IF EXISTS `organisationInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `organisationInsertAndUpdate`(IN `id` INT(10), IN `url` TEXT, IN `companyName` VARCHAR(128), IN `bio` VARCHAR(4096), IN `email` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128), IN `regionalFocus` VARCHAR(128))
 BEGIN
-	if id='' then set id=null;end if;
-	if url='' then set url=null;end if;
-	if companyName='' then set companyName=null;end if;
-	if bio='' then set bio=null;end if;
-	if email='' then set email=null;end if;
-	if address='' then set address=null;end if;
-	if city='' then set city=null;end if;
-	if country='' then set country=null;end if;
-	if regionalFocus='' then set regionalFocus=null;end if;
-	
-	IF id IS NULL AND NOT EXISTS(select * FROM Organisations o WHERE o.name = companyName) THEN
-		INSERT INTO Organisations ( name, biography, `home-page`, `e-mail`, address, city, country, `regional-focus`) 
+  if id='' then set id=null;end if;
+  if url='' then set url=null;end if;
+  if companyName='' then set companyName=null;end if;
+  if bio='' then set bio=null;end if;
+  if email='' then set email=null;end if;
+  if address='' then set address=null;end if;
+  if city='' then set city=null;end if;
+  if country='' then set country=null;end if;
+  if regionalFocus='' then set regionalFocus=null;end if;
+
+  IF id IS NULL AND NOT EXISTS(select * FROM Organisations o WHERE o.name = companyName) THEN
+    INSERT INTO Organisations ( name, biography, `home-page`, `e-mail`, address, city, country, `regional-focus`)
                 values ( companyName, bio, url, email, address, city, country, regionalFocus);
 
-		CALL getOrg(NULL,companyName,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
-	ELSE
-		
-                if companyName is not null 
+    CALL getOrg(NULL,companyName,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+  ELSE
+
+                if companyName is not null
                 and companyName != (select o.name from Organisations o  WHERE o.id = id)
                 or (select o.name from Organisations o  WHERE o.id = id) is null
                     then update Organisations org set org.name = companyName WHERE org.id = id;
-		end if;
+    end if;
 
-                if url is not null 
-                and url != (select o.`home-page` from Organisations o WHERE o.id = id) 
+                if url is not null
+                and url != (select o.`home-page` from Organisations o WHERE o.id = id)
                 or (select o.`home-page` from Organisations o WHERE o.id = id) is null
                     then update Organisations org set  org.`home-page` = url WHERE org.id = id;
-		end if;
+    end if;
 
-                if bio is not null 
-                and bio != (select o.biography from Organisations o WHERE o.id = id) 
+                if bio is not null
+                and bio != (select o.biography from Organisations o WHERE o.id = id)
                 or (select o.biography from Organisations o WHERE o.id = id) is null
-                    then 
+                    then
                         # set bio = REPLACE(bio, '\\n', '');
                         # set bio = REPLACE(bio, '\\r', '\n');
                         update Organisations org set  org.biography = bio WHERE org.id = id;
-		end if;
+    end if;
 
-		if email is not null 
-                and email != (select o.`e-mail` from Organisations o WHERE o.id = id) 
+    if email is not null
+                and email != (select o.`e-mail` from Organisations o WHERE o.id = id)
                 or (select o.`e-mail` from Organisations o WHERE o.id = id) is null
                     then update Organisations org set org.`e-mail` = email WHERE org.id = id;
-		end if;
+    end if;
 
-                if address is not null 
-                and address != (select o.address from Organisations o WHERE o.id = id) 
+                if address is not null
+                and address != (select o.address from Organisations o WHERE o.id = id)
                 or (select o.address from Organisations o WHERE o.id = id) is null
-                    then 
+                    then
                         # set address = REPLACE(address, '\\n', '');
                         # set address = REPLACE(address, '\\r', '\n');
                         update Organisations org set org.address = address WHERE org.id = id;
-		end if;
+    end if;
 
-                if city is not null 
-                and city != (select o.city from Organisations o WHERE o.id = id) 
+                if city is not null
+                and city != (select o.city from Organisations o WHERE o.id = id)
                 or (select o.city from Organisations o WHERE o.id = id) is null
                     then update Organisations org set org.city = city WHERE org.id = id;
-		end if;
+    end if;
 
-                if country is not null 
-                and country != (select o.country from Organisations o  WHERE o.id = id) 
+                if country is not null
+                and country != (select o.country from Organisations o  WHERE o.id = id)
                 or (select o.country from Organisations o  WHERE o.id = id) is null
                     then update Organisations org set org.country = country WHERE org.id = id;
-		end if;
+    end if;
 
-                if regionalFocus is not null 
-                and regionalFocus != (select o.`regional-focus` from Organisations o WHERE o.id = id) 
+                if regionalFocus is not null
+                and regionalFocus != (select o.`regional-focus` from Organisations o WHERE o.id = id)
                 or (select o.`regional-focus` from Organisations o WHERE o.id = id) is null
                     then update Organisations org set org.`regional-focus` = regionalFocus WHERE org.id = id;
-		end if;
-		
+    end if;
+
         CALL getOrg(id,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
-	END IF;		
+  END IF;
+END//
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `organisationExtendedProfileInsertAndUpdate`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `organisationExtendedProfileInsertAndUpdate`(
+  IN `id` INT(10),
+  IN `facebook`,
+  IN `linkedin`,
+  IN `primaryContactName`,
+  IN `primaryContactTitle`,
+  IN `primaryContactEmail`,
+  IN `primaryContactPhone`,
+  IN `otherContacts`,
+  IN `structure`,
+  IN `affiliations`,
+  IN `urlVideo1`,
+  IN `urlVideo2`,
+  IN `urlVideo3`,
+  IN `subjectMatters`,
+  IN `activitys`,
+  IN `employees`,
+  IN `fundings`,
+  IN `finds`,
+  IN `translations`,
+  IN `requests`,
+  IN `contents`,
+  IN `pages`,
+  IN `sources`,
+  IN `targets`,
+  IN `oftens`)
+BEGIN
+  IF NOT EXISTS (SELECT id FROM OrganisationExtendedProfiles o WHERE o.id=id) THEN
+    INSERT INTO OrganisationExtendedProfiles
+      (`id`,
+       `facebook`,
+       `linkedin`,
+       `primaryContactName`,
+       `primaryContactTitle`,
+       `primaryContactEmail`,
+       `primaryContactPhone`,
+       `otherContacts`,
+       `structure`,
+       `affiliations`,
+       `urlVideo1`,
+       `urlVideo2`,
+       `urlVideo3`,
+       `subjectMatters`,
+       `activitys`,
+       `employees`,
+       `fundings`,
+       `finds`,
+       `translations`,
+       `requests`,
+       `contents`,
+       `pages`,
+       `sources`,
+       `targets`,
+       `oftens`)
+    VALUES
+      (id,
+       facebook,
+       linkedin,
+       primaryContactName,
+       primaryContactTitle,
+       primaryContactEmail,
+       primaryContactPhone,
+       otherContacts,
+       structure,
+       affiliations,
+       urlVideo1,
+       urlVideo2,
+       urlVideo3,
+       subjectMatters,
+       activitys,
+       employees,
+       fundings,
+       finds,
+       translations,
+       requests,
+       contents,
+       pages,
+       sources,
+       targets,
+       oftens);
+  ELSE
+    UPDATE OrganisationExtendedProfiles o
+    SET col_name1={expr1|DEFAULT},
+      o.`facebook`=facebook,
+      o.`linkedin`=linkedin,
+      o.`primaryContactName`=primaryContactName,
+      o.`primaryContactTitle`=primaryContactTitle,
+      o.`primaryContactEmail`=primaryContactEmail,
+      o.`primaryContactPhone`=primaryContactPhone,
+      o.`otherContacts`=otherContacts,
+      o.`structure`=structure,
+      o.`affiliations`=affiliations,
+      o.`urlVideo1`=urlVideo1,
+      o.`urlVideo2`=urlVideo2,
+      o.`urlVideo3`=urlVideo3,
+      o.`subjectMatters`=subjectMatters,
+      o.`activitys`=activitys,
+      o.`employees`=employees,
+      o.`fundings`=fundings,
+      o.`finds`=finds,
+      o.`translations`=translations,
+      o.`requests`=requests,
+      o.`contents`=contents,
+      o.`pages`=pages,
+      o.`sources`=sources,
+      o.`targets`=targets,
+      o.`oftens`=oftens
+    WHERE o.`id`=id;
+	END IF;
 END//
 DELIMITER ;
 

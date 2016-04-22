@@ -65,6 +65,22 @@ class OrganisationDao
         return $org;
     }
 
+    //! Retrieve a single Organisation's Extended Profile data from the database
+    /*!
+      @param int $orgId is the id of an OrganisationExtendedProfile
+      @return A single OrganisationExtendedProfile object or null
+    */
+    public static function getOrganisationExtendedProfile($orgId = null)
+    {
+        $org = null;
+
+        $result = Lib\PDOWrapper::call('getOrganisationExtendedProfile', Lib\PDOWrapper::cleanseNull($orgId));
+        if (!empty($result)) {
+            $org = Common\Lib\ModelFactory::buildModel("OrganisationExtendedProfile", $result[0]);
+        }
+        return $org;
+    }
+
     //! Get an Organisation object from the database
     /*!
       Used to retrieve an Organisation from the database. It accepts a number of arguments that it uses to filter
@@ -269,6 +285,46 @@ class OrganisationDao
             $ret = Common\Lib\ModelFactory::buildModel("Organisation", $result[0]);
         }
         return $ret;
+    }
+
+    //! Create/Update an Organisation's Extended Profile
+    /*!
+      Used to create or update an OrganisationExtendedProfile.
+      If an OrganisationExtendedProfile with the same id as the OrganisationExtendedProfile object passed to this function exists
+      then the OrganisationExtendedProfile will be updated so that its fields match that of the OrganisationExtendedProfile object argument.
+      Otherwise a new OrganisationExtendedProfile will be created with the data specified in the OrganisationExtendedProfile object argument.
+      @param OrganisationExtendedProfile $org is the OrganisationExtendedProfile object that contains the data for the create/update
+      @return Returns null
+    */
+    public static function insertAndUpdateExtendedProfile($org)
+    {
+        $args = Lib\PDOWrapper::cleanseNullOrWrapStr($org->getId()) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($org->getFacebook()) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($org->getLinkedin()) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($org->getPrimaryContactName()) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($org->getPrimaryContactTitle()) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($org->getPrimaryContactEmail()) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($org->getPrimaryContactPhone()) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($org->getOtherContacts()) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($org->getStructure()) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($org->getAffiliations()) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($org->getUrlVideo1()) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($org->getUrlVideo2()) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($org->getUrlVideo3()) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($org->getSubjectMatters()) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($org->getActivitys()) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($org->getEmployees()) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($org->getFundings()) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($org->getFinds()) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($org->getTranslations()) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($org->getRequests()) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($org->getContents()) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($org->getPages()) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($org->getSources()) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($org->getTargets()) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($org->getOftens());
+        Lib\PDOWrapper::call('organisationExtendedProfileInsertAndUpdate', $args);
+        return null;
     }
 
     //! Delete an Organisation

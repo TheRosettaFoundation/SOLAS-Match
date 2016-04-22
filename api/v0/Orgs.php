@@ -143,7 +143,7 @@ class Orgs
             /* Routes starting /v0 */
             $app->get(
                 '/orgextended/:orgId/',
-                '\SolasMatch\API\V0\Orgs::getOrgExtendedProfile'
+                '\SolasMatch\API\V0\Orgs::getOrganisationExtendedProfile'
             );
 
             $app->put(
@@ -326,14 +326,14 @@ class Orgs
         API\Dispatcher::sendResponse(null, $org, null, $format);
     }
 
-    public static function getOrgExtendedProfile($orgId, $format = ".json")
+    public static function getOrganisationExtendedProfile($orgId, $format = ".json")
     {
         if (!is_numeric($orgId) && strstr($orgId, '.')) {
             $orgId = explode('.', $orgId);
             $format = '.'.$orgId[1];
             $orgId = $orgId[0];
         }
-        $org = DAO\OrganisationDao::getOrgExtendedProfile($orgId);
+        $org = DAO\OrganisationDao::getOrganisationExtendedProfile($orgId);
         API\Dispatcher::sendResponse(null, $org, null, $format);
     }
 

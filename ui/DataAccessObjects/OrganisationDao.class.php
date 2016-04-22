@@ -151,15 +151,13 @@ class OrganisationDao extends BaseDao
 
     public function updateOrgExtendedProfile($org)
     {
-        $ret = null;
         $request = "{$this->siteApi}v0/orgextended/{$org->getId()}";
-        $ret = $this->client->call(
+        $this->client->call(
             "\SolasMatch\Common\Protobufs\Models\OrganisationExtendedProfile",
             $request,
             Common\Enums\HttpMethodEnum::PUT,
             $org
         );
-        return $ret;
     }
 
     public function deleteOrg($orgId)
