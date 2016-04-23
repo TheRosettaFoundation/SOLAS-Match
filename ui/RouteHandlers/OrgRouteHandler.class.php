@@ -98,38 +98,37 @@ class OrgRouteHandler
     {
         $app = \Slim\Slim::getInstance();
 
+        $org2 = new Common\Protobufs\Models\OrganisationExtendedProfile();
+        $org2->setFacebook('');
+        $org2->setLinkedin('');
+        $org2->setPrimaryContactName('');
+        $org2->setPrimaryContactTitle('');
+        $org2->setPrimaryContactEmail('');
+        $org2->setPrimaryContactPhone('');
+        $org2->setOtherContacts('');
+        $org2->setStructure('');
+        $org2->setAffiliations('');
+        $org2->setUrlVideo1('');
+        $org2->setUrlVideo2('');
+        $org2->setUrlVideo3('');
+        $org2->setSubjectMatters('');
+        $org2->setActivitys('');
+        $org2->setEmployees('');
+        $org2->setFundings('');
+        $org2->setFinds('');
+        $org2->setTranslations('');
+        $org2->setRequests('');
+        $org2->setContents('');
+        $org2->setPages('');
+        $org2->setSources('');
+        $org2->setTargets('');
+        $org2->setOftens('');
+
         $org = null;
-        $org2 = null;
         $errorOccured = null;
         $errorList = array();
         if ($post = $app->request()->post()) {
-
             $org = new Common\Protobufs\Models\Organisation();
-            $org2 = new Common\Protobufs\Models\OrganisationExtendedProfile();
-            $org2->setFacebook('');
-            $org2->setLinkedin('');
-            $org2->setPrimaryContactName('');
-            $org2->setPrimaryContactTitle('');
-            $org2->setPrimaryContactEmail('');
-            $org2->setPrimaryContactPhone('');
-            $org2->setOtherContacts('');
-            $org2->setStructure('');
-            $org2->setAffiliations('');
-            $org2->setUrlVideo1('');
-            $org2->setUrlVideo2('');
-            $org2->setUrlVideo3('');
-            $org2->setSubjectMatters('');
-            $org2->setActivitys('');
-            $org2->setEmployees('');
-            $org2->setFundings('');
-            $org2->setFinds('');
-            $org2->setTranslations('');
-            $org2->setRequests('');
-            $org2->setContents('');
-            $org2->setPages('');
-            $org2->setSources('');
-            $org2->setTargets('');
-            $org2->setOftens('');
 
             if (isset($post["orgName"]) && $post["orgName"] != '') {
                 if (Lib\Validator::filterSpecialChars($post["orgName"])) {

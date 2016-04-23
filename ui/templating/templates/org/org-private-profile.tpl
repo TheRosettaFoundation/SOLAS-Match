@@ -49,13 +49,13 @@
                     {if $org->getName() != ''}
                        value="{$org->getName()}"
                     {else}
-                        placeholder='{Localisation::getTranslation('org_private_profile_your_organisation_name')}'
+                        placeholder="{Localisation::getTranslation('org_private_profile_your_organisation_name')}"
                     {/if}
                     />
 
                     <label for='biography'><strong>{Localisation::getTranslation('org_private_profile_organisation_overview')} <span style="color: red">*</span></strong></label>
                     <textarea name='biography' id='biography' cols='40' rows='10' style="width: 80%"
-                    {if $org->getBiography() == ''}
+                    {if is_null($org->getBiography()) || $org->getBiography() == ''}
                         placeholder="{Localisation::getTranslation('org_private_profile_enter_organisation_biography_here')}"
                     {/if}
                     >{if $org->getBiography() != ''}{TemplateHelper::uiCleanseNewlineAndTabs($org->getBiography())}{/if}</textarea>
@@ -70,37 +70,37 @@
 
                     <label for='homepage'><strong>{Localisation::getTranslation('org_private_profile_organisation_website')}</strong></label>
                     <input type='text' name='homepage' id='homepage' style="width: 80%"
-                    {if $org->getHomepage() != ''}
+                    {if !is_null($org->getHomepage()) && $org->getHomepage() != ''}
                         value="{$org->getHomepage()}"
                     {else}
-                        placeholder='http://'
+                        placeholder="http://"
                     {/if}
                     />
 
                     <label for='facebook'><strong>{Localisation::getTranslation('org_private_profile_organisation_facebook')}</strong></label>
                     <input type='text' name='facebook' id='facebook' style="width: 80%"
-                    {if $org2->getFacebook() != 'http://'}
+                    {if $org2->getFacebook() != ''}
                         value="{$org2->getFacebook()}"
                     {else}
-                        value='http://'
+                        placeholder="http://"
                     {/if}
                     />
 
                     <label for='linkedin'><strong>{Localisation::getTranslation('org_private_profile_organisation_linkedin')}</strong></label>
                     <input type='text' name='linkedin' id='linkedin' style="width: 80%"
-                    {if $org2->getLinkedin() != 'http://'}
+                    {if $org2->getLinkedin() != ''}
                         value="{$org2->getLinkedin()}"
                     {else}
-                        value='http://'
+                        placeholder="http://"
                     {/if}
                     />
 
                     <label for='email'><strong>{Localisation::getTranslation('org_private_profile_organisation_email_volunteers')}</strong></label>
                     <input type='text' name='email' id='email' style="width: 80%"
-                    {if $org->getEmail() != ''}
+                    {if !is_null($org->getEmail()) && $org->getEmail() != ''}
                          value="{$org->getEmail()}"
                     {else}
-                        placeholder='{Localisation::getTranslation('org_private_profile_organisationexamplecom')}'
+                        placeholder="{Localisation::getTranslation('org_private_profile_organisationexamplecom')}"
                     {/if}
                     />
                 </td>
@@ -175,9 +175,9 @@
                                 <label for='primarycontactemail'><strong>{Localisation::getTranslation('org_private_profile_organisation_primary_contact_email')} <span style="color: red">*</span></strong></label>
                                 <input type='text' name='primarycontactemail' id='primarycontactemail' style="width: 80%"
                                 {if $org2->getPrimaryContactEmail() != ''}
-                                     value="{$org2->getPrimaryContactEmail()}"
+                                    value="{$org2->getPrimaryContactEmail()}"
                                 {else}
-                                    placeholder='{Localisation::getTranslation('org_private_profile_organisationexamplecom')}'
+                                    placeholder="{Localisation::getTranslation('org_private_profile_organisationexamplecom')}"
                                 {/if}
                                 />
 
@@ -205,7 +205,7 @@
                                 {if $org2->getUrlVideo1() != ''}
                                     value="{$org2->getUrlVideo1()}"
                                 {else}
-                                    placeholder='http://'
+                                    placeholder="http://"
                                 {/if}
                                 />
 
@@ -214,7 +214,7 @@
                                 {if $org2->getUrlVideo2() != ''}
                                     value="{$org2->getUrlVideo2()}"
                                 {else}
-                                    placeholder='http://'
+                                    placeholder="http://"
                                 {/if}
                                 />
 
@@ -223,7 +223,7 @@
                                 {if $org2->getUrlVideo3() != ''}
                                     value="{$org2->getUrlVideo3()}"
                                 {else}
-                                    placeholder='http://'
+                                    placeholder="http://"
                                 {/if}
                                 />
 
@@ -310,8 +310,8 @@
                                         <option value="{$often['code']}" {if $often['selected']}selected="selected"{/if}>{$often['value']}</option>
                                     {/foreach}
                                 </select>
+                                <hr/>
                             </td>
-                            <hr/>
                         </tr>
                     </table> 
                 </td>
