@@ -97,11 +97,39 @@ class OrgRouteHandler
     public function createOrg()
     {
         $app = \Slim\Slim::getInstance();
+
+        $org = null;
+        $org2 = null;
         $errorOccured = null;
         $errorList = array();
         if ($post = $app->request()->post()) {
 
             $org = new Common\Protobufs\Models\Organisation();
+            $org2 = new Common\Protobufs\Models\OrganisationExtendedProfile();
+            $org2->setFacebook('');
+            $org2->setLinkedin('');
+            $org2->setPrimaryContactName('');
+            $org2->setPrimaryContactTitle('');
+            $org2->setPrimaryContactEmail('');
+            $org2->setPrimaryContactPhone('');
+            $org2->setOtherContacts('');
+            $org2->setStructure('');
+            $org2->setAffiliations('');
+            $org2->setUrlVideo1('');
+            $org2->setUrlVideo2('');
+            $org2->setUrlVideo3('');
+            $org2->setSubjectMatters('');
+            $org2->setActivitys('');
+            $org2->setEmployees('');
+            $org2->setFundings('');
+            $org2->setFinds('');
+            $org2->setTranslations('');
+            $org2->setRequests('');
+            $org2->setContents('');
+            $org2->setPages('');
+            $org2->setSources('');
+            $org2->setTargets('');
+            $org2->setOftens('');
 
             if (isset($post["orgName"]) && $post["orgName"] != '') {
                 if (Lib\Validator::filterSpecialChars($post["orgName"])) {
@@ -128,7 +156,11 @@ class OrgRouteHandler
                     }
                 }
             }
-            if (isset($post["biography"])) {
+
+            if (empty($post['biography'])) {
+                $errorOccured = true;
+                $errorList[] = Lib\Localisation::getTranslation('org_private_profile_organisation_error_overview_not_set');
+            } else {
                 $org->setBiography($post["biography"]);
             }
             if (isset($post["address"])) {
@@ -170,11 +202,135 @@ class OrgRouteHandler
             if (isset($post["southAmerica"])) {
                 $regionalFocus[] .= "South-America";
             }
-            
             if (!empty($regionalFocus)) {
                 $org->setRegionalFocus(implode(",", $regionalFocus));
             }
-            
+
+            if (isset($post['facebook'])) {
+                if (trim($post['facebook']) != '') {
+                    if (Lib\Validator::validateURL($post['facebook'])) {
+                        $org2->setFacebook(Lib\Validator::addhttp($post['facebook']));
+                    } else {
+                        $errorOccured = true;
+                        $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
+                    }
+                }
+            }
+            if (isset($post['linkedin'])) {
+                if (trim($post['linkedin']) != '') {
+                    if (Lib\Validator::validateURL($post['linkedin'])) {
+                        $org2->setLinkedin(Lib\Validator::addhttp($post['linkedin']));
+                    } else {
+                        $errorOccured = true;
+                        $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
+                    }
+                }
+            }
+            if (isset($post['urlvideo1'])) {
+                if (trim($post['urlvideo1']) != '') {
+                    if (Lib\Validator::validateURL($post['urlvideo1'])) {
+                        $org2->setUrlVideo1(Lib\Validator::addhttp($post['urlvideo1']));
+                    } else {
+                        $errorOccured = true;
+                        $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
+                    }
+                }
+            }
+            if (isset($post['urlvideo2'])) {
+                if (trim($post['urlvideo2']) != '') {
+                    if (Lib\Validator::validateURL($post['urlvideo2'])) {
+                        $org2->setUrlVideo2(Lib\Validator::addhttp($post['urlvideo2']));
+                    } else {
+                        $errorOccured = true;
+                        $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
+                    }
+                }
+            }
+            if (isset($post['urlvideo3'])) {
+                if (trim($post['urlvideo3']) != '') {
+                    if (Lib\Validator::validateURL($post['urlvideo3'])) {
+                        $org2->setUrlVideo3(Lib\Validator::addhttp($post['urlvideo3']));
+                    } else {
+                        $errorOccured = true;
+                        $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
+                    }
+                }
+            }
+            if (empty($post['primarycontactname'])) {
+                $errorOccured = true;
+                $errorList[] = Lib\Localisation::getTranslation('org_private_profile_organisation_error_name_not_set');
+            }
+            else {
+                $org2->setPrimaryContactName($post['primarycontactname']);
+            }
+            if (isset($post['primarycontacttitle'])) {
+                $org2->setPrimaryContactTitle($post['primarycontacttitle']);
+            }
+            if (isset($post['primarycontactemail'])) {
+                if (trim($post['primarycontactemail']) != '') {
+                    if (Lib\Validator::validateEmail($post['primarycontactemail'])) {
+                        $org2->setPrimaryContactEmail($post['primarycontactemail']);
+                    } else {
+                        $errorOccured = true;
+                        $errorList[] = Lib\Localisation::getTranslation('user_reset_password_4');
+                    }
+                } else {
+                    $errorOccured = true;
+                    $errorList[] = Lib\Localisation::getTranslation('org_private_profile_organisation_error_email_not_set');
+                }
+            } else {
+                $errorOccured = true;
+                $errorList[] = Lib\Localisation::getTranslation('org_private_profile_organisation_error_email_not_set');
+            }
+            if (isset($post['primarycontactphone'])) {
+                $org2->setPrimaryContactPhone($post['primarycontactphone']);
+            }
+            if (isset($post['othercontacts'])) {
+                $org2->setOtherContacts($post['othercontacts']);
+            }
+            if (isset($post['structure'])) {
+                $org2->setStructure($post['structure']);
+            }
+            if (isset($post['affiliations'])) {
+                $org2->setAffiliations($post['affiliations']);
+            }
+            if (isset($post['subjectmatters'])) {
+                $org2->setSubjectMatters($post['subjectmatters']);
+            }
+            if (isset($post['activitys'])) {
+                $org2->setActivitys(implode(',', $post['activitys']));
+            }
+            if (isset($post['employees'])) {
+                $org2->setEmployees(implode(',', $post['employees']));
+            }
+            if (isset($post['fundings'])) {
+                $org2->setFundings(implode(',', $post['fundings']));
+            }
+            if (isset($post['finds'])) {
+                $org2->setFinds(implode(',', $post['finds']));
+            }
+            if (isset($post['translations'])) {
+                $org2->setTranslations(implode(',', $post['translations']));
+            }
+            if (isset($post['requests'])) {
+                $org2->setRequests(implode(',', $post['requests']));
+            }
+            if (isset($post['contents'])) {
+                $org2->setContents(implode(',', $post['contents']));
+            }
+            if (isset($post['pages'])) {
+                $org2->setPages(implode(',', $post['pages']));
+            }
+            if (isset($post['sources'])) {
+                $org2->setSources(implode(',', $post['sources']));
+            }
+            if (isset($post['targets'])) {
+                $org2->setTargets(implode(',', $post['targets']));
+            }
+            if (isset($post['oftens'])) {
+                $org2->setOftens(implode(',', $post['oftens']));
+            }
+
             if (is_null($errorOccured)) {
                 $user_id = Common\Lib\UserSession::getCurrentUserID();
                 $orgDao = new DAO\OrganisationDao();
@@ -183,6 +339,8 @@ class OrgRouteHandler
                     error_log("Calling createOrg(, $user_id)");
                     $new_org = $orgDao->createOrg($org, $user_id);
                     if ($new_org) {
+                        $org2->setId($new_org->getId());
+                        $orgDao->updateOrgExtendedProfile($org2);
                         $org_name = $org->getName();
                         error_log("Called createOrg() for: $org_name");
                         $app->flash(
@@ -199,19 +357,27 @@ class OrgRouteHandler
                     );
                     $errorOccured = true;
                 }
-
-                $app->view()->appendData(array(
-                    "org"     => $org,
-                    "errorOccured" => $errorOccured,
-                    "errorList" => $errorList
-                ));
             }
         }
+
         $app->view()->appendData(array(
-            "org"     => null,
-            "errorOccured" => $errorOccured,
-            "errorList" => $errorList
+            'org'  => $org,
+            'org2' => $org2,
+            'activitys'    => $this->generateOptions(possibleActivitys(), $org2->getActivitys()),
+            'employees'    => $this->generateOptions(possibleEmployees(), $org2->getEmployees()),
+            'fundings'     => $this->generateOptions(possibleFundings(), $org2->getFundings()),
+            'finds'        => $this->generateOptions(possibleFinds(), $org2->getFinds()),
+            'translations' => $this->generateOptions(possibleTranslations(), $org2->getTranslations()),
+            'requests'     => $this->generateOptions(possibleRequests(), $org2->getRequests()),
+            'contents'     => $this->generateOptions(possibleContents(), $org2->getContents()),
+            'pages'        => $this->generateOptions(possiblePages(), $org2->getPages()),
+            'sources'      => $this->generateOptions(possibleLanguages(), $org2->getSources()),
+            'targets'      => $this->generateOptions(possibleLanguages(), $org2->getTargets()),
+            'oftens'       => $this->generateOptions(possibleOftens(), $org2->getOftens()),
+            'errorOccured' => $errorOccured,
+            'errorList'    => $errorList,
         ));
+
         $app->render("org/create-org.tpl");
     }
 
