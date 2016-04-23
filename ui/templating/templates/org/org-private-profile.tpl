@@ -63,7 +63,7 @@
                     <label for='activitys'><strong>{Localisation::getTranslation('org_private_profile_organisation_activity')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
                     <select name='activitys[]' multiple id='activitys' style="width: 80%">
                         <option value=""></option>
-                        {foreach $activitys as $activity}
+                        {foreach from=$activitys item=activity}
                             <option value="{$activity['code']}" {if $activity['selected']}selected="selected"{/if}>{$activity['value']}</option>
                         {/foreach}
                     </select>
@@ -230,7 +230,7 @@
                                 <label for='employees'><strong>{Localisation::getTranslation('org_private_profile_organisation_employee')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
                                 <select name='employees[]' multiple id='employees' style="width: 80%">
                                     <option value=""></option>
-                                    {foreach $employees as $employee}
+                                    {foreach from=$employees item=employee}
                                         <option value="{$employee['code']}" {if $employee['selected']}selected="selected"{/if}>{$employee['value']}</option>
                                     {/foreach}
                                 </select>
@@ -238,7 +238,7 @@
                                 <label for='fundings'><strong>{Localisation::getTranslation('org_private_profile_organisation_funding')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
                                 <select name='fundings[]' multiple id='fundings' style="width: 80%">
                                     <option value=""></option>
-                                    {foreach $fundings as $funding}
+                                    {foreach from=$fundings item=funding}
                                         <option value="{$funding['code']}" {if $funding['selected']}selected="selected"{/if}>{$funding['value']}</option>
                                     {/foreach}
                                 </select>
@@ -246,7 +246,7 @@
                                 <label for='finds'><strong>{Localisation::getTranslation('org_private_profile_organisation_find')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
                                 <select name='finds[]' multiple id='finds' style="width: 80%">
                                     <option value=""></option>
-                                    {foreach $finds as $find}
+                                    {foreach from=$finds item=find}
                                         <option value="{$find['code']}" {if $find['selected']}selected="selected"{/if}>{$find['value']}</option>
                                     {/foreach}
                                 </select>
@@ -254,7 +254,7 @@
                                 <label for='translations'><strong>{Localisation::getTranslation('org_private_profile_organisation_translation')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
                                 <select name='translations[]' multiple id='translations' style="width: 80%">
                                     <option value=""></option>
-                                    {foreach $translations as $translation}
+                                    {foreach from=$translations item=translation}
                                         <option value="{$translation['code']}" {if $translation['selected']}selected="selected"{/if}>{$translation['value']}</option>
                                     {/foreach}
                                 </select>
@@ -262,7 +262,7 @@
                                 <label for='requests'><strong>{Localisation::getTranslation('org_private_profile_organisation_request')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
                                 <select name='requests[]' multiple id='requests' style="width: 80%">
                                     <option value=""></option>
-                                    {foreach $requests as $request}
+                                    {foreach from=$requests item=request}
                                         <option value="{$request['code']}" {if $request['selected']}selected="selected"{/if}>{$request['value']}</option>
                                     {/foreach}
                                 </select>
@@ -270,7 +270,7 @@
                                 <label for='contents'><strong>{Localisation::getTranslation('org_private_profile_organisation_content')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
                                 <select name='contents[]' multiple id='contents' style="width: 80%">
                                     <option value=""></option>
-                                    {foreach $contents as $content}
+                                    {foreach from=$contents item=content}
                                         <option value="{$content['code']}" {if $content['selected']}selected="selected"{/if}>{$content['value']}</option>
                                     {/foreach}
                                 </select>
@@ -282,7 +282,7 @@
                                 <label for='pages'><strong>{Localisation::getTranslation('org_private_profile_organisation_pages')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
                                 <select name='pages[]' multiple id='pages' style="width: 80%">
                                     <option value=""></option>
-                                    {foreach $pages as $page}
+                                    {foreach from=$pages item=page}
                                         <option value="{$page['code']}" {if $page['selected']}selected="selected"{/if}>{$page['value']}</option>
                                     {/foreach}
                                 </select>
@@ -290,7 +290,7 @@
                                 <label for='sources'><strong>{Localisation::getTranslation('org_private_profile_organisation_source')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
                                 <select name='sources[]' multiple id='sources' style="width: 80%">
                                     <option value=""></option>
-                                    {foreach $sources as $source}
+                                    {foreach from=$sources item=source}
                                         <option value="{$source['code']}" {if $source['selected']}selected="selected"{/if}>{$source['value']}</option>
                                     {/foreach}
                                 </select>
@@ -298,7 +298,7 @@
                                 <label for='targets'><strong>{Localisation::getTranslation('org_private_profile_organisation_target')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
                                 <select name='targets[]' multiple id='targets' style="width: 80%">
                                     <option value=""></option>
-                                    {foreach $targets as $target}
+                                    {foreach from=$targets item=target}
                                         <option value="{$target['code']}" {if $target['selected']}selected="selected"{/if}>{$target['value']}</option>
                                     {/foreach}
                                 </select>
@@ -306,7 +306,7 @@
                                 <label for='oftens'><strong>{Localisation::getTranslation('org_private_profile_organisation_often')}</strong>{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
                                 <select name='oftens[]' multiple id='oftens' style="width: 80%">
                                     <option value=""></option>
-                                    {foreach $oftens as $often}
+                                    {foreach from=$oftens item=often}
                                         <option value="{$often['code']}" {if $often['selected']}selected="selected"{/if}>{$often['value']}</option>
                                     {/foreach}
                                 </select>
