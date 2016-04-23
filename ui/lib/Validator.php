@@ -5,7 +5,7 @@ namespace SolasMatch\UI\Lib;
 class Validator
 {
     
-    private static function addhttp($url)
+    public static function addhttp($url)
     {
         if (!preg_match("~^(?:f|ht)tps?://~i", $url)) {
             $url = "http://" . $url;

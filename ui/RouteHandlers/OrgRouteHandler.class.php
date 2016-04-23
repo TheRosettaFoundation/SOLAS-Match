@@ -537,7 +537,7 @@ class OrgRouteHandler
                 if (isset($post['facebook'])) {
                     if (trim($post['facebook']) != '') {
                         if (Lib\Validator::validateURL($post['facebook'])) {
-                            $org2->setFacebook($post['facebook']);
+                            $org2->setFacebook(Lib\Validator::addhttp($post['facebook']));
                         } else {
                             $errorOccured = true;
                             $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
@@ -547,7 +547,7 @@ class OrgRouteHandler
                 if (isset($post['linkedin'])) {
                     if (trim($post['linkedin']) != '') {
                         if (Lib\Validator::validateURL($post['linkedin'])) {
-                            $org2->setLinkedin($post['linkedin']);
+                            $org2->setLinkedin(Lib\Validator::addhttp($post['linkedin']));
                         } else {
                             $errorOccured = true;
                             $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
@@ -557,7 +557,7 @@ class OrgRouteHandler
                 if (isset($post['urlvideo1'])) {
                     if (trim($post['urlvideo1']) != '') {
                         if (Lib\Validator::validateURL($post['urlvideo1'])) {
-                            $org2->setUrlVideo1($post['urlvideo1']);
+                            $org2->setUrlVideo1(Lib\Validator::addhttp($post['urlvideo1']));
                         } else {
                             $errorOccured = true;
                             $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
@@ -567,7 +567,7 @@ class OrgRouteHandler
                 if (isset($post['urlvideo2'])) {
                     if (trim($post['urlvideo2']) != '') {
                         if (Lib\Validator::validateURL($post['urlvideo2'])) {
-                            $org2->setUrlVideo2($post['urlvideo2']);
+                            $org2->setUrlVideo2(Lib\Validator::addhttp($post['urlvideo2']));
                         } else {
                             $errorOccured = true;
                             $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
@@ -577,7 +577,7 @@ class OrgRouteHandler
                 if (isset($post['urlvideo3'])) {
                     if (trim($post['urlvideo3']) != '') {
                         if (Lib\Validator::validateURL($post['urlvideo3'])) {
-                            $org2->setUrlVideo3($post['urlvideo3']);
+                            $org2->setUrlVideo3(Lib\Validator::addhttp($post['urlvideo3']));
                         } else {
                             $errorOccured = true;
                             $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
