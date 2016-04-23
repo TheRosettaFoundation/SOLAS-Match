@@ -707,7 +707,28 @@ class OrgRouteHandler
             $app->view()->appendData(array('orgAdmin' => true));
         }
         
-        $possibleActivitys = array(
+        $app->view()->appendData(array(
+            'org'  => $org,
+            'org2' => $org2,
+            'activitys'    => $this->generateOptions(possibleActivitys(), $org2->getActivitys()),
+            'employees'    => $this->generateOptions(possibleEmployees(), $org2->getEmployees()),
+            'fundings'     => $this->generateOptions(possibleFundings(), $org2->getFundings()),
+            'finds'        => $this->generateOptions(possibleFinds(), $org2->getFinds()),
+            'translations' => $this->generateOptions(possibleTranslations(), $org2->getTranslations()),
+            'requests'     => $this->generateOptions(possibleRequests(), $org2->getRequests()),
+            'contents'     => $this->generateOptions(possibleContents(), $org2->getContents()),
+            'pages'        => $this->generateOptions(possiblePages(), $org2->getPages()),
+            'sources'      => $this->generateOptions(possibleLanguages(), $org2->getSources()),
+            'targets'      => $this->generateOptions(possibleLanguages(), $org2->getTargets()),
+            'oftens'       => $this->generateOptions(possibleOftens(), $org2->getOftens()),
+        ));
+
+        $app->render("org/org-private-profile.tpl");
+    }
+
+    private function possibleActivitys()
+    {
+        return array(
             'agri' => 'Agriculture, Food & Nutrition',
             'anim' => 'Animals & Wildlife',
             'arts' => 'Arts & Culture',
@@ -752,7 +773,11 @@ class OrgRouteHandler
             'wome' => 'Women & Gender',
             'yout' => 'Youth & Adolescents',
         );
-        $possibleEmployees = array(
+    }
+
+    private function possibleEmployees()
+    {
+        return array(
             '0'    => '0',
             '1'    => '1',
             '5'    => '2-5',
@@ -760,12 +785,20 @@ class OrgRouteHandler
             '100'  => '21-100',
             '1000' => '101+',
         );
-        $possibleFundings = array(
+    }
+
+    private function possibleFundings()
+    {
+        return array(
             'publ' => 'Public',
             'priv' => 'Private',
             'corp' => 'Corporate',
         );
-        $possibleFinds = array(
+    }
+
+    private function possibleFinds()
+    {
+        return array(
             'webs' => 'Web Search',
             'face' => 'Facebook',
             'twit' => 'Twitter',
@@ -773,17 +806,29 @@ class OrgRouteHandler
             'sdve' => 'Advertisement',
             'cont' => 'Through a Contact',
         );
-        $possibleTranslations = array(
+    }
+
+    private function possibleTranslations()
+    {
+        return array(
             'paid' => 'Paid commercial services',
             'volu' => 'Volunteers',
             'univ' => 'Universities',
             'none' => 'None of the above',
         );
-        $possibleRequests = array(
+    }
+
+    private function possibleRequests()
+    {
+        return array(
             'allt' => 'Looking for a volunteer-based solution for all our translation needs',
             'addi' => 'Looking for a volunteer-based solution to provide additional capacity to our volunteers',
         );
-        $possibleContents = array(
+    }
+
+    private function possibleContents()
+    {
+        return array(
             'webs' => 'Website',
             'stra' => 'Strategy',
             'advo' => 'Advocacy',
@@ -792,43 +837,39 @@ class OrgRouteHandler
             'camp' => 'Campaigns',
             'othe' => 'Other',
         );
-        $possiblegetPages = array(
+    }
+
+    private function possiblePages()
+    {
+        return array(
             '10' => '1-10',
             '100' => '11-100',
             '1000' => '100-1000',
             '10000' => '1000-10000',
             '100000' => '10000+',
         );
+    }
+
+    private function possibleLanguages()
+    {
         $langDao = new DAO\LanguageDao();
         $languages = $langDao->getLanguages();
-        $possibleLanguages = array();
+        $possibleLanguagesArray = array();
         foreach ($languages as $language) {
-            $possibleLanguages[$language->getCode()] = $language->getName();
+            $possibleLanguagesArray[$language->getCode()] = $language->getName();
         }
-        $possibleOftens = array(
+        return $possibleLanguagesArray;
+    }
+
+
+    private function possibleOftens()
+    {
+        return array(
             'mont' => 'Every month',
             'quar' => 'Every quarter',
             'once' => 'Once or twice per year',
             'othe' => 'Other',
         );
-
-        $app->view()->appendData(array(
-            'org'  => $org,
-            'org2' => $org2,
-            'activitys'    => $this->generateOptions($possibleActivitys, $org2->getActivitys()),
-            'employees'    => $this->generateOptions($possibleEmployees, $org2->getEmployees()),
-            'fundings'     => $this->generateOptions($possibleFundings, $org2->getFundings()),
-            'finds'        => $this->generateOptions($possibleFinds, $org2->getFinds()),
-            'translations' => $this->generateOptions($possibleTranslations, $org2->getTranslations()),
-            'requests'     => $this->generateOptions($possibleRequests, $org2->getRequests()),
-            'contents'     => $this->generateOptions($possibleContents, $org2->getContents()),
-            'pages'        => $this->generateOptions($possiblePages, $org2->getPages()),
-            'sources'      => $this->generateOptions($possibleLanguages, $org2->getSources()),
-            'targets'      => $this->generateOptions($possibleLanguages, $org2->getTargets()),
-            'oftens'       => $this->generateOptions($possibleOftens, $org2->getOftens()),
-        ));
-
-        $app->render("org/org-private-profile.tpl");
     }
 
     private function generateOptions($possibleOptions, $selectedCodes)
