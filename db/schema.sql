@@ -4053,77 +4053,77 @@ DROP PROCEDURE IF EXISTS `organisationInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `organisationInsertAndUpdate`(IN `id` INT(10), IN `url` TEXT, IN `companyName` VARCHAR(128), IN `bio` VARCHAR(4096), IN `email` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128), IN `regionalFocus` VARCHAR(128))
 BEGIN
-  if id='' then set id=null;end if;
-  if url='' then set url=null;end if;
-  if companyName='' then set companyName=null;end if;
-  if bio='' then set bio=null;end if;
-  if email='' then set email=null;end if;
-  if address='' then set address=null;end if;
-  if city='' then set city=null;end if;
-  if country='' then set country=null;end if;
-  if regionalFocus='' then set regionalFocus=null;end if;
-
-  IF id IS NULL AND NOT EXISTS(select * FROM Organisations o WHERE o.name = companyName) THEN
-    INSERT INTO Organisations ( name, biography, `home-page`, `e-mail`, address, city, country, `regional-focus`)
+	if id='' then set id=null;end if;
+	if url='' then set url=null;end if;
+	if companyName='' then set companyName=null;end if;
+	if bio='' then set bio=null;end if;
+	if email='' then set email=null;end if;
+	if address='' then set address=null;end if;
+	if city='' then set city=null;end if;
+	if country='' then set country=null;end if;
+	if regionalFocus='' then set regionalFocus=null;end if;
+	
+	IF id IS NULL AND NOT EXISTS(select * FROM Organisations o WHERE o.name = companyName) THEN
+		INSERT INTO Organisations ( name, biography, `home-page`, `e-mail`, address, city, country, `regional-focus`) 
                 values ( companyName, bio, url, email, address, city, country, regionalFocus);
 
-    CALL getOrg(NULL,companyName,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
-  ELSE
-
-                if companyName is not null
+		CALL getOrg(NULL,companyName,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+	ELSE
+		
+                if companyName is not null 
                 and companyName != (select o.name from Organisations o  WHERE o.id = id)
                 or (select o.name from Organisations o  WHERE o.id = id) is null
                     then update Organisations org set org.name = companyName WHERE org.id = id;
-    end if;
+		end if;
 
-                if url is not null
-                and url != (select o.`home-page` from Organisations o WHERE o.id = id)
+                if url is not null 
+                and url != (select o.`home-page` from Organisations o WHERE o.id = id) 
                 or (select o.`home-page` from Organisations o WHERE o.id = id) is null
                     then update Organisations org set  org.`home-page` = url WHERE org.id = id;
-    end if;
+		end if;
 
-                if bio is not null
-                and bio != (select o.biography from Organisations o WHERE o.id = id)
+                if bio is not null 
+                and bio != (select o.biography from Organisations o WHERE o.id = id) 
                 or (select o.biography from Organisations o WHERE o.id = id) is null
-                    then
+                    then 
                         # set bio = REPLACE(bio, '\\n', '');
                         # set bio = REPLACE(bio, '\\r', '\n');
                         update Organisations org set  org.biography = bio WHERE org.id = id;
-    end if;
+		end if;
 
-    if email is not null
-                and email != (select o.`e-mail` from Organisations o WHERE o.id = id)
+		if email is not null 
+                and email != (select o.`e-mail` from Organisations o WHERE o.id = id) 
                 or (select o.`e-mail` from Organisations o WHERE o.id = id) is null
                     then update Organisations org set org.`e-mail` = email WHERE org.id = id;
-    end if;
+		end if;
 
-                if address is not null
-                and address != (select o.address from Organisations o WHERE o.id = id)
+                if address is not null 
+                and address != (select o.address from Organisations o WHERE o.id = id) 
                 or (select o.address from Organisations o WHERE o.id = id) is null
-                    then
+                    then 
                         # set address = REPLACE(address, '\\n', '');
                         # set address = REPLACE(address, '\\r', '\n');
                         update Organisations org set org.address = address WHERE org.id = id;
-    end if;
+		end if;
 
-                if city is not null
-                and city != (select o.city from Organisations o WHERE o.id = id)
+                if city is not null 
+                and city != (select o.city from Organisations o WHERE o.id = id) 
                 or (select o.city from Organisations o WHERE o.id = id) is null
                     then update Organisations org set org.city = city WHERE org.id = id;
-    end if;
+		end if;
 
-                if country is not null
-                and country != (select o.country from Organisations o  WHERE o.id = id)
+                if country is not null 
+                and country != (select o.country from Organisations o  WHERE o.id = id) 
                 or (select o.country from Organisations o  WHERE o.id = id) is null
                     then update Organisations org set org.country = country WHERE org.id = id;
-    end if;
+		end if;
 
-                if regionalFocus is not null
-                and regionalFocus != (select o.`regional-focus` from Organisations o WHERE o.id = id)
+                if regionalFocus is not null 
+                and regionalFocus != (select o.`regional-focus` from Organisations o WHERE o.id = id) 
                 or (select o.`regional-focus` from Organisations o WHERE o.id = id) is null
                     then update Organisations org set org.`regional-focus` = regionalFocus WHERE org.id = id;
-    end if;
-
+		end if;
+		
         CALL getOrg(id,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
   END IF;
