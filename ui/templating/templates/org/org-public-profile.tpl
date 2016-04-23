@@ -30,10 +30,10 @@
                     {if !$isMember}
                         <form id="trackedOrganisationForm" method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
                             {if $isMember || $adminAccess}
-                        <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='btn btn-primary'>
-                            <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('org_public_profile_edit_organisation_details')}
-                        </a>
-                    {/if}
+                            <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='btn btn-primary'>
+                                <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('org_public_profile_edit_organisation_details')}
+                            </a>
+                            {/if}
                             <a href="{urlFor name="org-request-membership" options="org_id.$org_id"}" class='btn btn-primary'>
                                 <i class="icon-ok-circle icon-white"></i> {Localisation::getTranslation('org_public_profile_request_membership')}
                             </a>
@@ -49,7 +49,11 @@
                                 </a>
                             {/if}
                         </form>
-                        
+                    {/if}
+                    {if $isMember || $adminAccess}
+                        <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='btn btn-primary'>
+                            <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('org_public_profile_edit_organisation_details')}
+                        </a>
                     {/if}
                 </div>
             {/if}
