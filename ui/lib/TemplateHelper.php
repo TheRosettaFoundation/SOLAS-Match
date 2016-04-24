@@ -455,6 +455,21 @@ class TemplateHelper
         return str_replace("_", " ", $string);
     }
 
+    public static function expandSelectedOptions($options)
+    {
+        $string = ''
+        foreach ($options as $option) {
+            if ($option['selected']) {
+                if ($string === '') {
+                    $string .= $option['value'];
+                } else {
+                    $string .= ', ' . $option['value'];
+                }
+            }
+        }
+        return $string;
+    }
+
     public static function registerWithSmarty()
     {
         \Slim\Slim::getInstance()->view()->getInstance()->registerClass('TemplateHelper', __NAMESPACE__.'\TemplateHelper');

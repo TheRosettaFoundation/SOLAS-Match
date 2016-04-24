@@ -91,7 +91,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {TemplateHelper::expandSelectedOptions($org2->getActivitys(), $activitys)}
+                                        {TemplateHelper::expandSelectedOptions($activitys)}
                                     </td>
                                 </tr>
                                 <tr>
@@ -325,7 +325,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {TemplateHelper::expandSelectedOptions($org2->getEmployees(), $employees)}
+                                        {TemplateHelper::expandSelectedOptions($employees)}
                                     </td>
                                 </tr>
                                 <tr>
@@ -339,7 +339,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {TemplateHelper::expandSelectedOptions($org2->getFundings(), $fundings)}
+                                        {TemplateHelper::expandSelectedOptions($fundings)}
                                     </td>
                                 </tr>
                                 <tr>
@@ -353,7 +353,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {TemplateHelper::expandSelectedOptions($org2->getFinds(), $finds)}
+                                        {TemplateHelper::expandSelectedOptions($finds)}
                                     </td>
                                 </tr>
                                 <tr>
@@ -367,7 +367,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {TemplateHelper::expandSelectedOptions($org2->getTranslations(), $translations)}
+                                        {TemplateHelper::expandSelectedOptions($translations)}
                                     </td>
                                 </tr>
                                 <tr>
@@ -381,7 +381,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {TemplateHelper::expandSelectedOptions($org2->getRequests(), $requests)}
+                                        {TemplateHelper::expandSelectedOptions($requests)}
                                     </td>
                                 </tr>
                                 <tr>
@@ -395,7 +395,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {TemplateHelper::expandSelectedOptions($org2->getContents(), $contents)}
+                                        {TemplateHelper::expandSelectedOptions($contents)}
                                     </td>
                                 </tr>
                                 <tr>
@@ -423,7 +423,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {TemplateHelper::expandSelectedOptions($org2->getPages(), $pages)}
+                                        {TemplateHelper::expandSelectedOptions($pages)}
                                     </td>
                                 </tr>
                                 <tr>
@@ -437,7 +437,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {TemplateHelper::expandSelectedOptions($org2->getSources(), $sources)}
+                                        {TemplateHelper::expandSelectedOptions($sources)}
                                     </td>
                                 </tr>
                                 <tr>
@@ -451,7 +451,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {TemplateHelper::expandSelectedOptions($org2->getTargets(), $targets)}
+                                        {TemplateHelper::expandSelectedOptions($targets)}
                                     </td>
                                 </tr>
                                 <tr>
@@ -465,7 +465,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {TemplateHelper::expandSelectedOptions($org2->getOftens(), $oftens)}
+                                        {TemplateHelper::expandSelectedOptions($oftens)}
                                     </td>
                                 </tr>
                                 {/if}
