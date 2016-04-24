@@ -68,9 +68,41 @@
                     <div>
                         <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
                             <thead>                
-                                <th align="left">{Localisation::getTranslation('common_home_page')}<hr/></th>
+                                <th align="left">{Localisation::getTranslation('org_private_profile_organisation_overview')}<hr/></th>
                             </thead>
                             <tbody>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {if $org->getBiography() != ''}
+                                            {TemplateHelper::uiCleanseNewlineAndTabs($org->getBiography())}
+                                        {else}
+                                            {Localisation::getTranslation('org_public_profile_no_biography_listed')}
+                                        {/if}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_activity')}</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {TemplateHelper::expandSelectedOptions($org2->getActivitys(), $activitys)}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_website')}</strong><hr/>
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td style="font-style: italic">
                                         {if $org->getHomepage() != 'http://' && $org->getHomepage() != ''}
@@ -83,11 +115,372 @@
                                 <tr>
                                     <td style="padding-bottom: 40px"/>
                                 </tr>
+
                                 <tr valign="top">
                                     <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('common_address')}</strong><hr/>
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_facebook')}</strong><hr/>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {if $org2->Facebook() != 'http://' && $org2->Facebook() != ''}
+                                            <a href="{$org2->Facebook()}">{$org2->Facebook()}</a>
+                                        {/if}
+                                    </td>  
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_linkedin')}</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {if $org2->getLinkedin() != 'http://' && $org2->getLinkedin() != ''}
+                                            <a href="{$org2->getLinkedin()}">{$org2->getLinkedin()}</a>
+                                        {/if}
+                                    </td>  
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_email_volunteers')}</strong><hr/>
+                                    </td>
+                                </tr>
+                                 <tr>
+                                    <td style="font-style: italic">
+                                        {if $org->getEmail() != ''}
+                                            <a href="mailto:{$org->getEmail()}">{$org->getEmail()}</a>
+                                        {else}
+                                            {Localisation::getTranslation('org_public_profile_no_email_listed')}
+                                        {/if}
+                                    </td>
+                                </tr>
+
+                                {if $isMember || $adminAccess}
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_primary_contact_name')}</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {$org2->getPrimaryContactName()}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_primary_contact_title')}</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {$org2->getPrimaryContactTitle()}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_primary_contact_email')}</strong><hr/>
+                                    </td>
+                                </tr>
+                                 <tr>
+                                    <td style="font-style: italic">
+                                        {if $org2->getPrimaryContactEmail() != ''}
+                                            <a href="mailto:{$org2->getPrimaryContactEmail()}">{$org2->getPrimaryContactEmail()}</a>
+                                        {else}
+                                            {Localisation::getTranslation('org_public_profile_no_email_listed')}
+                                        {/if}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_primary_contact_phone')}</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {$org2->getPrimaryContactPhone()}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_other_contacts')}</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {TemplateHelper::uiCleanseNewlineAndTabs($org2->getOtherContacts())}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_structure')}</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {TemplateHelper::uiCleanseNewlineAndTabs($org2->getStructure())}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_affiliations')}</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {TemplateHelper::uiCleanseNewlineAndTabs($org2->getAffiliations())}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_url_video_1')}</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {if $org2->getUrlVideo1() != 'http://' && $org2->getUrlVideo1() != ''}
+                                            <a href="{$org2->getUrlVideo1()}">{$org2->getUrlVideo1()}</a>
+                                        {/if}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_url_video_2')}</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {if $org2->getUrlVideo2() != 'http://' && $org2->getUrlVideo2() != ''}
+                                            <a href="{$org2->getUrlVideo2()}">{$org2->getUrlVideo2()}</a>
+                                        {/if}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_url_video_3')}</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {if $org2->getUrlVideo3() != 'http://' && $org2->getUrlVideo3() != ''}
+                                            <a href="{$org2->getUrlVideo3()}">{$org2->getUrlVideo3()}</a>
+                                        {/if}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_employee')}</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {TemplateHelper::expandSelectedOptions($org2->getEmployees(), $employees)}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_funding')}</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {TemplateHelper::expandSelectedOptions($org2->getFundings(), $fundings)}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_find')}</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {TemplateHelper::expandSelectedOptions($org2->getFinds(), $finds)}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_translation')}</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {TemplateHelper::expandSelectedOptions($org2->getTranslations(), $translations)}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_request')}</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {TemplateHelper::expandSelectedOptions($org2->getRequests(), $requests)}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_content')}</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {TemplateHelper::expandSelectedOptions($org2->getContents(), $contents)}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_subject_matters')}</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {TemplateHelper::uiCleanseNewlineAndTabs($org2->getSubjectMatters())}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_pages')}</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {TemplateHelper::expandSelectedOptions($org2->getPages(), $pages)}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_source')}</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {TemplateHelper::expandSelectedOptions($org2->getSources(), $sources)}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_target')}</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {TemplateHelper::expandSelectedOptions($org2->getTargets(), $targets)}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 40px"/>
+                                </tr>
+
+                                <tr valign="top">
+                                    <td colspan="1" >
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_often')}</strong><hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-style: italic">
+                                        {TemplateHelper::expandSelectedOptions($org2->getOftens(), $oftens)}
+                                    </td>
+                                </tr>
+                                {/if}
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+                <td style="width: 4%"/>
+                <td style="width: 48%">            
+                    <div>
+                        <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
+                            <thead>                
+                                <th align="left" width="48%">{Localisation::getTranslation('common_address')}<hr/></th>
+                            </thead>
+                            <tbody>
                                 <tr>
                                     <td style="font-style: italic">
                                         {if $org->getAddress() != ''}
@@ -95,11 +488,12 @@
                                         {else}
                                             {Localisation::getTranslation('org_public_profile_no_address_listed')}
                                         {/if}
-                                    </td>  
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td style="padding-bottom: 40px"/>
                                 </tr>
+
                                 <tr valign="top">
                                     <td colspan="1" >
                                         <strong>{Localisation::getTranslation('common_city')}</strong><hr/>
@@ -112,11 +506,12 @@
                                         {else}
                                             {Localisation::getTranslation('org_public_profile_no_city_listed')}
                                         {/if}
-                                    </td>  
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td style="padding-bottom: 40px"/>
                                 </tr>
+
                                 <tr valign="top">
                                     <td colspan="1" >
                                         <strong>{Localisation::getTranslation('common_country')}</strong><hr/>
@@ -129,49 +524,12 @@
                                         {else}
                                             {Localisation::getTranslation('org_public_profile_no_country_listed')}
                                         {/if}
-                                    </td>  
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </td>
-                <td style="width: 4%"/>
-                <td style="width: 48%">            
-                    <div>
-                        <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
-                            <thead>                
-                                <th align="left" width="48%">{Localisation::getTranslation('common_email')}<hr/></th>
-                            </thead>
-                            <tbody>
-                                 <tr>
-                                    <td style="font-style: italic">
-                                        {if $org->getEmail() != ''}
-                                            <a href="mailto:{$org->getEmail()}">{$org->getEmail()}</a>
-                                        {else}
-                                            {Localisation::getTranslation('org_public_profile_no_email_listed')}
-                                        {/if}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="padding-bottom: 40px"/>
                                 </tr>
-                                <tr valign="top">
-                                    <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('common_biography')}</strong><hr/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-style: italic">
-                                        {if $org->getBiography() != ''}
-                                            {TemplateHelper::uiCleanseNewlineAndTabs($org->getBiography())}
-                                        {else}
-                                            {Localisation::getTranslation('org_public_profile_no_biography_listed')}
-                                        {/if}
-                                    </td>  
-                                </tr>
-                                <tr>
-                                    <td style="padding-bottom: 40px"/>
-                                </tr>
+
                                 <tr valign="top">
                                     <td colspan="1" >
                                         <strong>{Localisation::getTranslation('common_regional_focus')}</strong><hr/>
