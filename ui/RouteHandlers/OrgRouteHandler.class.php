@@ -585,7 +585,7 @@ class OrgRouteHandler
         $app = \Slim\Slim::getInstance();
         $orgDao = new DAO\OrganisationDao();
         $org = $orgDao->getOrganisation($org_id);
-        $org2 = $orgDao->getOrganisationExtendedProfile($org_id)
+        $org2 = $orgDao->getOrganisationExtendedProfile($org_id);
         if (empty($org2)) {
             $org2 = new Common\Protobufs\Models\OrganisationExtendedProfile();
             $org2->setId($org_id);
@@ -1057,6 +1057,36 @@ class OrgRouteHandler
 
         $currentUser = $userDao->getUser(Common\Lib\UserSession::getCurrentUserId());
         $org = $orgDao->getOrganisation($org_id);
+        $org2 = $orgDao->getOrganisationExtendedProfile($org_id);
+        if (empty($org2)) {
+            $org2 = new Common\Protobufs\Models\OrganisationExtendedProfile();
+            $org2->setId($org_id);
+            $org2->setFacebook('');
+            $org2->setLinkedin('');
+            $org2->setPrimaryContactName('');
+            $org2->setPrimaryContactTitle('');
+            $org2->setPrimaryContactEmail('');
+            $org2->setPrimaryContactPhone('');
+            $org2->setOtherContacts('');
+            $org2->setStructure('');
+            $org2->setAffiliations('');
+            $org2->setUrlVideo1('');
+            $org2->setUrlVideo2('');
+            $org2->setUrlVideo3('');
+            $org2->setSubjectMatters('');
+            $org2->setActivitys('');
+            $org2->setEmployees('');
+            $org2->setFundings('');
+            $org2->setFinds('');
+            $org2->setTranslations('');
+            $org2->setRequests('');
+            $org2->setContents('');
+            $org2->setPages('');
+            $org2->setSources('');
+            $org2->setTargets('');
+            $org2->setOftens('');
+        }
+
         $memberIsAdmin = array();
 
         if ($app->request()->isPost()) {
@@ -1272,6 +1302,18 @@ class OrgRouteHandler
         $app->view()->setData("current_page", "org-public-profile");
         $app->view()->appendData(array(
                 "org" => $org,
+                'org2' => $org2,
+                'activitys'    => $this->generateOptions(possibleActivitys(), $org2->getActivitys()),
+                'employees'    => $this->generateOptions(possibleEmployees(), $org2->getEmployees()),
+                'fundings'     => $this->generateOptions(possibleFundings(), $org2->getFundings()),
+                'finds'        => $this->generateOptions(possibleFinds(), $org2->getFinds()),
+                'translations' => $this->generateOptions(possibleTranslations(), $org2->getTranslations()),
+                'requests'     => $this->generateOptions(possibleRequests(), $org2->getRequests()),
+                'contents'     => $this->generateOptions(possibleContents(), $org2->getContents()),
+                'pages'        => $this->generateOptions(possiblePages(), $org2->getPages()),
+                'sources'      => $this->generateOptions(possibleLanguages(), $org2->getSources()),
+                'targets'      => $this->generateOptions(possibleLanguages(), $org2->getTargets()),
+                'oftens'       => $this->generateOptions(possibleOftens(), $org2->getOftens()),
                 'isMember'  => $isMember,
                 'orgMembers' => $orgMemberList,
                 'adminAccess' => $adminAccess,
