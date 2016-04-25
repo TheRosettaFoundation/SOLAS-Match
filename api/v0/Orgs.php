@@ -140,18 +140,22 @@ class Orgs
                 );
             });
 
+            $app->group('/orgextended', function () use ($app) {
+
+                /* Routes starting /v0/orgextended */
+                $app->get(
+                    '/:orgId/',
+                    '\SolasMatch\API\V0\Orgs::getOrganisationExtendedProfile'
+                );
+
+                $app->put(
+                    '/:orgId/',
+                    '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin',
+                    '\SolasMatch\API\V0\Orgs::updateOrgExtendedProfile'
+                );
+            });
+
             /* Routes starting /v0 */
-            $app->get(
-                '/orgextended/:orgId/',
-                '\SolasMatch\API\V0\Orgs::getOrganisationExtendedProfile'
-            );
-
-            $app->put(
-                '/orgextended/:orgId/',
-                '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin',
-                '\SolasMatch\API\V0\Orgs::updateOrgExtendedProfile'
-            );
-
             $app->get(
                 '/orgs(:format)/',
                 '\SolasMatch\API\Lib\Middleware::isloggedIn',
