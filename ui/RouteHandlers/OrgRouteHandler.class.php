@@ -1042,7 +1042,7 @@ class OrgRouteHandler
         $selectedCodesArray = explode(',', $selectedCodes);
         $options = array();
         foreach($possibleOptions as $code => $option) {
-            $options[] = array('code' => $code, 'selected' => in_array($code, $selectedCodesArray), 'value' => $option);
+            $options[] = array('code' => $code, 'selected' => in_array($code, $selectedCodesArray, true), 'value' => $option);
         }
         return $options;
     }
