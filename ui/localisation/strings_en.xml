@@ -298,7 +298,7 @@
     <string name="org_private_profile_organisation_primary_contact_name">Primary Contact Given Name and Family Name</string>
     <string name="org_private_profile_organisation_primary_contact_title">Primary Contact Title</string>
     <string name="org_private_profile_organisation_primary_contact_email">Primary Contact email</string>
-    <string name="org_private_profile_organisation_primary_contact_phone</string>
+    <string name="org_private_profile_organisation_primary_contact_phone">Primary Contact Phone</string>
     <string name="org_private_profile_organisation_other_contacts">Details for other Contacts</string>
     <string name="org_private_profile_organisation_structure">Organisational Structure, Leadership Team, Board and Locations</string>
     <string name="org_private_profile_organisation_affiliations">Organisational Affiliations and Awards</string>
