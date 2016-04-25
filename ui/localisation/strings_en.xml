@@ -295,13 +295,13 @@
     <string name="org_private_profile_organisation_facebook">Facebook or other URL</string>
     <string name="org_private_profile_organisation_linkedin">LinkedIn or other URL</string>
     <string name="org_private_profile_organisation_email_volunteers">Contact email for Volunteers</string>
-    <string name="org_private_profile_organisation_primary_contact_name">Primary Contact Given Name & Family Name</string>
+    <string name="org_private_profile_organisation_primary_contact_name">Primary Contact Given Name and Family Name</string>
     <string name="org_private_profile_organisation_primary_contact_title">Primary Contact Title</string>
     <string name="org_private_profile_organisation_primary_contact_email">Primary Contact email</string>
     <string name="org_private_profile_organisation_primary_contact_phone
     <string name="org_private_profile_organisation_other_contacts">Details for other Contacts</string>
-    <string name="org_private_profile_organisation_structure">Organisational Structure, Leadership Team, Board & Locations</string>
-    <string name="org_private_profile_organisation_affiliations">Organisational Affiliations & Awards</string>
+    <string name="org_private_profile_organisation_structure">Organisational Structure, Leadership Team, Board and Locations</string>
+    <string name="org_private_profile_organisation_affiliations">Organisational Affiliations and Awards</string>
     <string name="org_private_profile_organisation_url_video_1">URL (1) for Video or other Document descibing Organisation or Organisation's Impact or Social Responsibility/Impact report</string>
     <string name="org_private_profile_organisation_url_video_2">URL (2) for Video or other Document descibing Organisation or Organisation's Impact or Social Responsibility/Impact report</string>
     <string name="org_private_profile_organisation_url_video_3">URL (3) for Video or other Document descibing Organisation or Organisation's Impact or Social Responsibility/Impact report</string>
@@ -317,7 +317,7 @@
     <string name="org_private_profile_organisation_target">What are the most frequent target languages?</string>
     <string name="org_private_profile_organisation_often">How often do you require translations?</string>
     <string name="org_private_profile_organisation_error_overview_not_set"><strong>Overview of Organisation</strong> must be set.</string>
-    <string name="org_private_profile_organisation_error_name_not_set"><strong>Primary Contact Given Name & Family Name</strong> must be set.</string>
+    <string name="org_private_profile_organisation_error_name_not_set"><strong>Primary Contact Given Name and Family Name</strong> must be set.</string>
     <string name="org_private_profile_organisation_error_email_not_set"><strong>Primary Contact email</strong> must be set.</string>
 	<string name="org_public_profile_an_organisation_of">An organisation of %s.</string>
 	<string name="org_public_profile_edit_organisation_details">Edit Organisation Details</string>
