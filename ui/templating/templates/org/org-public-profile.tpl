@@ -123,8 +123,8 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {if $org2->Facebook() != 'http://' && $org2->Facebook() != ''}
-                                            <a href="{$org2->Facebook()}">{$org2->Facebook()}</a>
+                                        {if $org2->getFacebook() != 'http://' && $org2->getFacebook() != ''}
+                                            <a href="{$org2->getFacebook()}">{$org2->getFacebook()}</a>
                                         {/if}
                                     </td>  
                                 </tr>
