@@ -457,7 +457,7 @@ class TemplateHelper
 
     public static function expandSelectedOptions($options)
     {
-        $string = ''
+        $string = '';
         foreach ($options as $option) {
             if ($option['selected']) {
                 if ($string === '') {
