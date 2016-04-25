@@ -16,6 +16,7 @@ require_once __DIR__."/../protobufs/models/Login.php";
 require_once __DIR__."/../protobufs/models/Badge.php";
 require_once __DIR__."/../protobufs/models/Tag.php";
 require_once __DIR__."/../protobufs/models/Organisation.php";
+require_once __DIR__."/../protobufs/models/OrganisationExtendedProfile.php";
 require_once __DIR__."/../protobufs/models/TaskMetadata.php";
 require_once __DIR__."/../protobufs/models/User.php";
 require_once __DIR__."/../protobufs/models/Task.php";
@@ -76,6 +77,9 @@ class ModelFactory
                 break ;
             case "Organisation":
                 $ret = self::generateOrganisation($modelData);
+                break;
+            case "OrganisationExtendedProfile":
+                $ret = self::generateOrganisationExtendedProfile($modelData);
                 break;
             case "TaskMetadata":
                 $ret = self::generateTaskMetadata($modelData);
@@ -422,6 +426,89 @@ class ModelFactory
 
         return $ret;
         
+    }
+
+    private static function generateOrganisationExtendedProfile($modelData)
+    {
+        $ret = new Models\OrganisationExtendedProfile();
+
+        if (isset($modelData['id'])) {
+            $ret->setId($modelData['id']);
+        }
+        if (isset($modelData['facebook'])) {
+            $ret->setFacebook($modelData['facebook']);
+        }
+        if (isset($modelData['linkedin'])) {
+            $ret->setLinkedin($modelData['linkedin']);
+        }
+        if (isset($modelData['primaryContactName'])) {
+            $ret->setPrimaryContactName($modelData['primaryContactName']);
+        }
+        if (isset($modelData['primaryContactTitle'])) {
+            $ret->setPrimaryContactTitle($modelData['primaryContactTitle']);
+        }
+        if (isset($modelData['primaryContactEmail'])) {
+            $ret->setPrimaryContactEmail($modelData['primaryContactEmail']);
+        }
+        if (isset($modelData['primaryContactPhone'])) {
+            $ret->setPrimaryContactPhone($modelData['primaryContactPhone']);
+        }
+        if (isset($modelData['otherContacts'])) {
+            $ret->setOtherContacts($modelData['otherContacts']);
+        }
+        if (isset($modelData['structure'])) {
+            $ret->setStructure($modelData['structure']);
+        }
+        if (isset($modelData['affiliations'])) {
+            $ret->setAffiliations($modelData['affiliations']);
+        }
+        if (isset($modelData['urlVideo1'])) {
+            $ret->setUrlVideo1($modelData['urlVideo1']);
+        }
+        if (isset($modelData['urlVideo2'])) {
+            $ret->setUrlVideo2($modelData['urlVideo2']);
+        }
+        if (isset($modelData['urlVideo3'])) {
+            $ret->setUrlVideo3($modelData['urlVideo3']);
+        }
+        if (isset($modelData['subjectMatters'])) {
+            $ret->setSubjectMatters($modelData['subjectMatters']);
+        }
+        if (isset($modelData['activitys'])) {
+            $ret->setActivitys($modelData['activitys']);
+        }
+        if (isset($modelData['employees'])) {
+            $ret->setEmployees($modelData['employees']);
+        }
+        if (isset($modelData['fundings'])) {
+            $ret->setFundings($modelData['fundings']);
+        }
+        if (isset($modelData['finds'])) {
+            $ret->setFinds($modelData['finds']);
+        }
+        if (isset($modelData['translations'])) {
+            $ret->setTranslations($modelData['translations']);
+        }
+        if (isset($modelData['requests'])) {
+            $ret->setRequests($modelData['requests']);
+        }
+        if (isset($modelData['contents'])) {
+            $ret->setContents($modelData['contents']);
+        }
+        if (isset($modelData['pages'])) {
+            $ret->setPages($modelData['pages']);
+        }
+        if (isset($modelData['sources'])) {
+            $ret->setSources($modelData['sources']);
+        }
+        if (isset($modelData['targets'])) {
+            $ret->setTargets($modelData['targets']);
+        }
+        if (isset($modelData['oftens'])) {
+            $ret->setOftens($modelData['oftens']);
+        }
+
+        return $ret;
     }
 
     private static function generateTaskMetadata($modelData)
