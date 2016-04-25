@@ -2413,7 +2413,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrganisationExtendedProfile`(IN `id` INT)
 BEGIN
   SELECT * FROM OrganisationExtendedProfiles o
-  WHERE o.id = id
+  WHERE o.id=id;
 END//
 DELIMITER ;
 
@@ -4135,30 +4135,30 @@ DROP PROCEDURE IF EXISTS `organisationExtendedProfileInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `organisationExtendedProfileInsertAndUpdate`(
   IN `id` INT(10),
-  IN `facebook`,
-  IN `linkedin`,
-  IN `primaryContactName`,
-  IN `primaryContactTitle`,
-  IN `primaryContactEmail`,
-  IN `primaryContactPhone`,
-  IN `otherContacts`,
-  IN `structure`,
-  IN `affiliations`,
-  IN `urlVideo1`,
-  IN `urlVideo2`,
-  IN `urlVideo3`,
-  IN `subjectMatters`,
-  IN `activitys`,
-  IN `employees`,
-  IN `fundings`,
-  IN `finds`,
-  IN `translations`,
-  IN `requests`,
-  IN `contents`,
-  IN `pages`,
-  IN `sources`,
-  IN `targets`,
-  IN `oftens`)
+  IN `facebook` VARCHAR(255),
+  IN `linkedin` VARCHAR(255),
+  IN `primaryContactName` VARCHAR(255),
+  IN `primaryContactTitle` VARCHAR(255),
+  IN `primaryContactEmail` VARCHAR(255),
+  IN `primaryContactPhone` VARCHAR(255),
+  IN `otherContacts` VARCHAR(4096),
+  IN `structure` VARCHAR(4096),
+  IN `affiliations` VARCHAR(4096),
+  IN `urlVideo1` VARCHAR(255),
+  IN `urlVideo2` VARCHAR(255),
+  IN `urlVideo3` VARCHAR(255),
+  IN `subjectMatters` VARCHAR(4096),
+  IN `activitys` VARCHAR(255),
+  IN `employees` VARCHAR(255),
+  IN `fundings` VARCHAR(255),
+  IN `finds` VARCHAR(255),
+  IN `translations` VARCHAR(255),
+  IN `requests` VARCHAR(255),
+  IN `contents` VARCHAR(255),
+  IN `pages` VARCHAR(255),
+  IN `sources` VARCHAR(255),
+  IN `targets` VARCHAR(255),
+  IN `oftens` VARCHAR(255))
 BEGIN
   REPLACE INTO OrganisationExtendedProfiles
     (`id`,
