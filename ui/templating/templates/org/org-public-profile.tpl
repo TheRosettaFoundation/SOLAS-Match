@@ -520,7 +520,7 @@
                                 <tr>
                                     <td style="font-style: italic">
                                         {if $org->getCountry() != ''}
-                                            {TemplateHelper::uiCleanseHTML()$org->getCountry())}
+                                            {TemplateHelper::uiCleanseHTML($org->getCountry())}
                                         {else}
                                             {Localisation::getTranslation('org_public_profile_no_country_listed')}
                                         {/if}
