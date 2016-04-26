@@ -74,7 +74,7 @@
                                 <tr>
                                     <td style="font-style: italic">
                                         {if $org->getBiography() != ''}
-                                            {TemplateHelper::uiCleanseNewlineAndTabs($org->getBiography())}
+                                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($org->getBiography())}
                                         {else}
                                             {Localisation::getTranslation('org_public_profile_no_biography_listed')}
                                         {/if}
@@ -175,7 +175,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {$org2->getPrimaryContactName()}
+                                        {TemplateHelper::uiCleanseHTML($org2->getPrimaryContactName())}
                                     </td>
                                 </tr>
                                 <tr>
@@ -189,7 +189,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {$org2->getPrimaryContactTitle()}
+                                        {TemplateHelper::uiCleanseHTML($org2->getPrimaryContactTitle())}
                                     </td>
                                 </tr>
                                 <tr>
@@ -221,7 +221,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {$org2->getPrimaryContactPhone()}
+                                        {TemplateHelper::uiCleanseHTML($org2->getPrimaryContactPhone())}
                                     </td>
                                 </tr>
                                 <tr>
@@ -235,7 +235,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {TemplateHelper::uiCleanseNewlineAndTabs($org2->getOtherContacts())}
+                                        {TemplateHelper::uiCleanseHTMLNewlineAndTabs($org2->getOtherContacts())}
                                     </td>
                                 </tr>
                                 <tr>
@@ -249,7 +249,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {TemplateHelper::uiCleanseNewlineAndTabs($org2->getStructure())}
+                                        {TemplateHelper::uiCleanseHTMLNewlineAndTabs($org2->getStructure())}
                                     </td>
                                 </tr>
                                 <tr>
@@ -263,7 +263,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {TemplateHelper::uiCleanseNewlineAndTabs($org2->getAffiliations())}
+                                        {TemplateHelper::uiCleanseHTMLNewlineAndTabs($org2->getAffiliations())}
                                     </td>
                                 </tr>
                                 <tr>
@@ -409,7 +409,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {TemplateHelper::uiCleanseNewlineAndTabs($org2->getSubjectMatters())}
+                                        {TemplateHelper::uiCleanseHTMLNewlineAndTabs($org2->getSubjectMatters())}
                                     </td>
                                 </tr>
                                 <tr>
@@ -484,7 +484,7 @@
                                 <tr>
                                     <td style="font-style: italic">
                                         {if $org->getAddress() != ''}
-                                            {TemplateHelper::uiCleanseNewlineAndTabs($org->getAddress())}
+                                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($org->getAddress())}
                                         {else}
                                             {Localisation::getTranslation('org_public_profile_no_address_listed')}
                                         {/if}
@@ -502,7 +502,7 @@
                                 <tr>
                                     <td style="font-style: italic">
                                         {if $org->getCity() != ''}
-                                            {$org->getCity()}
+                                            {TemplateHelper::uiCleanseHTML($org->getCity())}
                                         {else}
                                             {Localisation::getTranslation('org_public_profile_no_city_listed')}
                                         {/if}
@@ -520,7 +520,7 @@
                                 <tr>
                                     <td style="font-style: italic">
                                         {if $org->getCountry() != ''}
-                                            {$org->getCountry()}
+                                            {TemplateHelper::uiCleanseHTML()$org->getCountry())}
                                         {else}
                                             {Localisation::getTranslation('org_public_profile_no_country_listed')}
                                         {/if}
@@ -658,7 +658,7 @@
                      <td width="50%">
                          <i>
                          {if $nonMember->getBiography() != ''}
-                             {TemplateHelper::uiCleanseNewlineAndTabs($nonMember->getBiography())}
+                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($nonMember->getBiography())}
                          {else}
                              {Localisation::getTranslation('org_public_profile_no_biography_listed')}
                          {/if}
