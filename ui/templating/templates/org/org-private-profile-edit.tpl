@@ -91,7 +91,7 @@
 
                     <label for='city'><strong>{Localisation::getTranslation('common_city')}</strong></label>
                     <input type='text' name='city' id='city' style="width: 80%"
-                    {if $org && !is_null($org->getCity) && $org->getCity() != ''}
+                    {if $org && !is_null($org->getCity()) && $org->getCity() != ''}
                         value="{$org->getCity()}"
                     {/if}
                     />
