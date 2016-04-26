@@ -287,7 +287,7 @@
     <string name="org_private_profile_delete_fail">Unable to delete organisation. Please try again later.</string> 
 
     <string name="org_private_profile_organisation_visible_by_all">Visible to all Registered Users of Trommons</string>
-    <string name="org_private_profile_organisation_visible_by_members">Visible to Organisation Members and Trommons Administrators</string>
+    <string name="org_private_profile_organisation_visible_by_members">Visible to Organisation Members and Trommons Administrators only</string>
     <string name="org_private_profile_organisation_overview">Overview of Organisation including Vision, Mission and Target Beneficiary Communities</string>
     <string name="org_private_profile_organisation_activity">Area of Activity</string>
     <string name="org_private_profile_organisation_multiple">Hold down Ctrl (Windows)/Command (Mac) to select multiple options</string>
