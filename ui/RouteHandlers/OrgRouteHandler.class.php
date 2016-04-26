@@ -958,6 +958,7 @@ class OrgRouteHandler
             'publ' => 'Public',
             'priv' => 'Private',
             'corp' => 'Corporate',
+            'none' => 'No funding',
         );
     }
 
@@ -968,8 +969,9 @@ class OrgRouteHandler
             'face' => 'Facebook',
             'twit' => 'Twitter',
             'link' => 'LinkedIn',
-            'sdve' => 'Advertisement',
-            'cont' => 'Through a Contact',
+            'adve' => 'Advertisement',
+            'publ' => 'Public event',
+            'cont' => 'Through a contact',
         );
     }
 
@@ -979,7 +981,7 @@ class OrgRouteHandler
             'paid' => 'Paid commercial services',
             'volu' => 'Volunteers',
             'univ' => 'Universities',
-            'none' => 'None of the above',
+            'none' => 'No translations so far',
         );
     }
 
@@ -987,7 +989,7 @@ class OrgRouteHandler
     {
         return array(
             'allt' => 'Looking for a volunteer-based solution for all our translation needs',
-            'addi' => 'Looking for a volunteer-based solution to provide additional capacity to our volunteers',
+            'addi' => 'Looking for a volunteer-based solution to provide additional capacity',
         );
     }
 
