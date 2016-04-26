@@ -108,7 +108,6 @@
                 <td colspan="2" style="font-weight: bold; text-align: center; padding-bottom: 10px">
                     <hr/>
                     {Localisation::getTranslation('common_regional_focus')}
-                    <hr/>
                 </td>
             </tr>  
             <tr align="center">
@@ -135,6 +134,7 @@
             </tr>
             <tr valign="top" align="center">
                 <td colspan="2" style="font-weight: bold; text-align: center; padding-bottom: 10px">
+                    <hr/>
                     {Localisation::getTranslation('org_private_profile_organisation_visible_by_members')}...
                     <hr/>
                 </td>
