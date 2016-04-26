@@ -34,11 +34,7 @@
                     {if !isset($org) || is_null($org->getBiography()) || $org->getBiography() == ''}
                         placeholder="{Localisation::getTranslation('org_private_profile_enter_organisation_biography_here')}"
                     {/if}
-                    >
-                    {if isset($org) && !is_null($org->getBiography()) && $org->getBiography() != ''}
-                        {TemplateHelper::uiCleanseNewlineAndTabs($org->getBiography())}
-                    {/if}
-                    </textarea>
+                    >{if isset($org) && !is_null($org->getBiography()) && $org->getBiography() != ''}{TemplateHelper::uiCleanseNewlineAndTabs($org->getBiography())}{/if}</textarea>
 
                     <label for='activitys'><strong>{Localisation::getTranslation('org_private_profile_organisation_activity')}</strong><br />{Localisation::getTranslation('org_private_profile_organisation_multiple')}</label>
                     <select name='activitys[]' multiple id='activitys' size="8" style="width: 80%">
@@ -86,8 +82,7 @@
 
                 <td width="50%">
                     <label for='address'><strong>{Localisation::getTranslation('common_address')}</strong></label>
-                    <textarea name='address' id='address' cols='40' rows='7' style="width: 80%">
-                    {if isset($org) && !is_null($org) && $org->getAddress() != ''}{TemplateHelper::uiCleanseNewlineAndTabs($org->getAddress())}{/if}</textarea>
+                    <textarea name='address' id='address' cols='40' rows='7' style="width: 80%">{if isset($org) && !is_null($org) && $org->getAddress() != ''}{TemplateHelper::uiCleanseNewlineAndTabs($org->getAddress())}{/if}</textarea>
 
                     <label for='city'><strong>{Localisation::getTranslation('common_city')}</strong></label>
                     <input type='text' name='city' id='city' style="width: 80%"
@@ -172,16 +167,13 @@
                     />
 
                     <label for='othercontacts'><strong>{Localisation::getTranslation('org_private_profile_organisation_other_contacts')}</strong></label>
-                    <textarea name='othercontacts' id='othercontacts' cols='40' rows='7' style="width: 80%">
-                    {if $org2->getOtherContacts() != ''}{TemplateHelper::uiCleanseNewlineAndTabs($org2->getOtherContacts())}{/if}</textarea>
+                    <textarea name='othercontacts' id='othercontacts' cols='40' rows='7' style="width: 80%">{if $org2->getOtherContacts() != ''}{TemplateHelper::uiCleanseNewlineAndTabs($org2->getOtherContacts())}{/if}</textarea>
 
                     <label for='structure'><strong>{Localisation::getTranslation('org_private_profile_organisation_structure')}</strong></label>
-                    <textarea name='structure' id='structure' cols='40' rows='10' style="width: 80%">
-                    {if $org2->getStructure() != ''}{TemplateHelper::uiCleanseNewlineAndTabs($org2->getStructure())}{/if}</textarea>
+                    <textarea name='structure' id='structure' cols='40' rows='10' style="width: 80%">{if $org2->getStructure() != ''}{TemplateHelper::uiCleanseNewlineAndTabs($org2->getStructure())}{/if}</textarea>
 
                     <label for='affiliations'><strong>{Localisation::getTranslation('org_private_profile_organisation_affiliations')}</strong></label>
-                    <textarea name='affiliations' id='affiliations' cols='40' rows='10' style="width: 80%">
-                    {if $org2->getAffiliations() != ''}{TemplateHelper::uiCleanseNewlineAndTabs($org2->getAffiliations())}{/if}</textarea>
+                    <textarea name='affiliations' id='affiliations' cols='40' rows='10' style="width: 80%">{if $org2->getAffiliations() != ''}{TemplateHelper::uiCleanseNewlineAndTabs($org2->getAffiliations())}{/if}</textarea>
 
                     <label for='urlvideo1'><strong>{Localisation::getTranslation('org_private_profile_organisation_url_video_1')}</strong></label>
                     <input type='text' name='urlvideo1' id='urlvideo1' style="width: 80%"
@@ -253,8 +245,7 @@
                     </select>
 
                     <label for='subjectmatters'><strong>{Localisation::getTranslation('org_private_profile_organisation_subject_matters')}</strong></label>
-                    <textarea name='subjectmatters' id='subjectmatters' cols='40' rows='7' style="width: 80%">
-                    {if $org2->getSubjectMatters() != ''}{TemplateHelper::uiCleanseNewlineAndTabs($org2->getSubjectMatters())}{/if}</textarea>
+                    <textarea name='subjectmatters' id='subjectmatters' cols='40' rows='7' style="width: 80%">{if $org2->getSubjectMatters() != ''}{TemplateHelper::uiCleanseNewlineAndTabs($org2->getSubjectMatters())}{/if}</textarea>
 
                     <label for='pages'><strong>{Localisation::getTranslation('org_private_profile_organisation_pages')}</strong></label>
                     <select name='pages[]' multiple id='pages' size="5" style="width: 80%">
