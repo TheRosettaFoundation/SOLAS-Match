@@ -17,7 +17,8 @@
                     {Localisation::getTranslation('org_private_profile_organisation_visible_by_all')}...
                     <hr/>
                 </td>
-
+            </tr>
+            <tr valign="top" align="center">
                 <td width="50%">
                     <label for='orgName'><strong>{Localisation::getTranslation('common_organisation_name')} <span style="color: red">*</span></strong></label>
                     <input type='text' name='orgName' id='orgName' style="width: 80%"
