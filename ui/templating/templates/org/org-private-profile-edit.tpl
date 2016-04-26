@@ -108,6 +108,7 @@
                 <td colspan="2" style="font-weight: bold; text-align: center; padding-bottom: 10px">
                     <hr/>
                     {Localisation::getTranslation('common_regional_focus')}
+                    <hr/>
                 </td>
             </tr>  
             <tr align="center">
@@ -282,7 +283,6 @@
                             <option value="{$often['code']}" {if $often['selected']}selected="selected"{/if}>{$often['value']}</option>
                         {/foreach}
                     </select>
-                    <hr/>
                 </td>
             </tr>
             <tr>                
