@@ -302,11 +302,11 @@
     <string name="org_private_profile_organisation_other_contacts">Details for other Contacts</string>
     <string name="org_private_profile_organisation_structure">Organisational Structure, Leadership Team, Board and Locations</string>
     <string name="org_private_profile_organisation_affiliations">Organisational Affiliations and Awards</string>
-    <string name="org_private_profile_organisation_url_video_1">URL (1) for Video or other Document descibing Organisation or Organisation's Impact or Social Responsibility/Impact report</string>
-    <string name="org_private_profile_organisation_url_video_2">URL (2) for Video or other Document descibing Organisation or Organisation's Impact or Social Responsibility/Impact report</string>
-    <string name="org_private_profile_organisation_url_video_3">URL (3) for Video or other Document descibing Organisation or Organisation's Impact or Social Responsibility/Impact report</string>
+    <string name="org_private_profile_organisation_url_video_1">URLs for Videos or Documents describing the Organisation's Impact or Social Responsibility/Impact report<br />(1)</string>
+    <string name="org_private_profile_organisation_url_video_2">(2)</string>
+    <string name="org_private_profile_organisation_url_video_3">(3)</string>
     <string name="org_private_profile_organisation_employee">Number of Employees</string>
-    <string name="org_private_profile_organisation_funding">Your funding sources</string>
+    <string name="org_private_profile_organisation_funding">Your Funding Sources</string>
     <string name="org_private_profile_organisation_find">How did you find us?</string>
     <string name="org_private_profile_organisation_translation">How are you getting your translations done at the moment?</string>
     <string name="org_private_profile_organisation_request">Which one of the following best defines your request?</string>
