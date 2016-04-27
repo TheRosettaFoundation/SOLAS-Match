@@ -91,7 +91,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {TemplateHelper::expandSelectedOptions($activitys)}
+                                        {TemplateHelper::expandSelectedOptionsSemicolon($activitys)}
                                     </td>
                                 </tr>
                                 <tr>
