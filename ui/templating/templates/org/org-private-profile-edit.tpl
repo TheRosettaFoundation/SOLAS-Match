@@ -70,12 +70,12 @@
                     {/if}
                     />
 
-                    <label for='email'><strong>{Localisation::getTranslation('org_private_profile_organisation_email_volunteers')}</strong></label>
-                    <input type='text' name='email' id='email' style="width: 80%"
-                    {if isset($org) && !is_null($org->getEmail()) && $org->getEmail() != ''}
-                        value="{$org->getEmail()}"
+                    <label for='twitter'><strong>{Localisation::getTranslation('org_private_profile_organisation_twitter')}</strong></label>
+                    <input type='text' name='twitter' id='twitter' style="width: 80%"
+                    {if $org2->getPrimaryContactEmail() != ''}
+                        value="{$org2->getPrimaryContactEmail()}"
                     {else}
-                        placeholder="{Localisation::getTranslation('org_private_profile_organisationexamplecom')}"
+                        placeholder="http://"
                     {/if}
                     />
                 </td>
@@ -150,10 +150,10 @@
                     {/if}
                     />
 
-                    <label for='primarycontactemail'><strong>{Localisation::getTranslation('org_private_profile_organisation_primary_contact_email')} <span style="color: red">*</span></strong></label>
-                    <input type='text' name='primarycontactemail' id='primarycontactemail' style="width: 80%"
-                    {if $org2->getPrimaryContactEmail() != ''}
-                        value="{$org2->getPrimaryContactEmail()}"
+                    <label for='email'><strong>{Localisation::getTranslation('org_private_profile_organisation_primary_contact_email')} <span style="color: red">*</span></strong></label>
+                    <input type='text' name='email' id='email' style="width: 80%"
+                    {if isset($org) && !is_null($org->getEmail()) && $org->getEmail() != ''}
+                        value="{$org->getEmail()}"
                     {else}
                         placeholder="{Localisation::getTranslation('org_private_profile_organisationexamplecom')}"
                     {/if}
@@ -175,7 +175,7 @@
                     <label for='affiliations'><strong>{Localisation::getTranslation('org_private_profile_organisation_affiliations')}</strong></label>
                     <textarea name='affiliations' id='affiliations' cols='40' rows='10' style="width: 80%">{if $org2->getAffiliations() != ''}{TemplateHelper::uiCleanseHTMLReinsertNewlineAndTabs($org2->getAffiliations())}{/if}</textarea>
 
-                    <label for='urlvideo1'><strong>{Localisation::getTranslation('org_private_profile_organisation_url_video_1')}</strong></label>
+                    <label for='urlvideo1'><strong>{Localisation::getTranslation('org_private_profile_organisation_url_video_1')}<br />(1)</strong></label>
                     <input type='text' name='urlvideo1' id='urlvideo1' style="width: 80%"
                     {if $org2->getUrlVideo1() != ''}
                         value="{$org2->getUrlVideo1()}"
@@ -184,7 +184,7 @@
                     {/if}
                     />
 
-                    <label for='urlvideo2'><strong>{Localisation::getTranslation('org_private_profile_organisation_url_video_2')}</strong></label>
+                    <label for='urlvideo2'><strong>(2)</strong></label>
                     <input type='text' name='urlvideo2' id='urlvideo2' style="width: 80%"
                     {if $org2->getUrlVideo2() != ''}
                         value="{$org2->getUrlVideo2()}"
@@ -193,7 +193,7 @@
                     {/if}
                     />
 
-                    <label for='urlvideo3'><strong>{Localisation::getTranslation('org_private_profile_organisation_url_video_3')}</strong></label>
+                    <label for='urlvideo3'><strong>(3)</strong></label>
                     <input type='text' name='urlvideo3' id='urlvideo3' style="width: 80%"
                     {if $org2->getUrlVideo3() != ''}
                         value="{$org2->getUrlVideo3()}"

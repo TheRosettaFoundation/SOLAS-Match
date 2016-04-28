@@ -179,7 +179,13 @@ class OrgRouteHandler
                         $errorOccured = true;
                         array_push($errorList, Lib\Localisation::getTranslation('user_reset_password_4'));
                     }
+                } else {
+                    $errorOccured = true;
+                    $errorList[] = Lib\Localisation::getTranslation('org_private_profile_organisation_error_email_not_set');
                 }
+            } else {
+                $errorOccured = true;
+                $errorList[] = Lib\Localisation::getTranslation('org_private_profile_organisation_error_email_not_set');
             }
 
             $regionalFocus = array();
@@ -225,6 +231,16 @@ class OrgRouteHandler
                     }
                 }
             }
+            if (isset($post['twitter'])) {
+                if (trim($post['twitter']) != '') {
+                    if (Lib\Validator::validateURL($post['twitter'])) {
+                        $org2->setPrimaryContactEmail(Lib\Validator::addhttp($post['twitter']));
+                    } else {
+                        $errorOccured = true;
+                        $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
+                    }
+                }
+            }
             if (isset($post['urlvideo1'])) {
                 if (trim($post['urlvideo1']) != '') {
                     if (Lib\Validator::validateURL($post['urlvideo1'])) {
@@ -264,22 +280,6 @@ class OrgRouteHandler
             }
             if (isset($post['primarycontacttitle'])) {
                 $org2->setPrimaryContactTitle($post['primarycontacttitle']);
-            }
-            if (isset($post['primarycontactemail'])) {
-                if (trim($post['primarycontactemail']) != '') {
-                    if (Lib\Validator::validateEmail($post['primarycontactemail'])) {
-                        $org2->setPrimaryContactEmail($post['primarycontactemail']);
-                    } else {
-                        $errorOccured = true;
-                        $errorList[] = Lib\Localisation::getTranslation('user_reset_password_4');
-                    }
-                } else {
-                    $errorOccured = true;
-                    $errorList[] = Lib\Localisation::getTranslation('org_private_profile_organisation_error_email_not_set');
-                }
-            } else {
-                $errorOccured = true;
-                $errorList[] = Lib\Localisation::getTranslation('org_private_profile_organisation_error_email_not_set');
             }
             if (isset($post['primarycontactphone'])) {
                 $org2->setPrimaryContactPhone($post['primarycontactphone']);
@@ -674,7 +674,13 @@ class OrgRouteHandler
                             $errorOccured = true;
                             array_push($errorList, Lib\Localisation::getTranslation('user_reset_password_4'));
                         }
+                    } else {
+                        $errorOccured = true;
+                        $errorList[] = Lib\Localisation::getTranslation('org_private_profile_organisation_error_email_not_set');
                     }
+                } else {
+                    $errorOccured = true;
+                    $errorList[] = Lib\Localisation::getTranslation('org_private_profile_organisation_error_email_not_set');
                 }
 
                 $regionalFocus = array();
@@ -713,6 +719,16 @@ class OrgRouteHandler
                     if (trim($post['linkedin']) != '') {
                         if (Lib\Validator::validateURL($post['linkedin'])) {
                             $org2->setLinkedin(Lib\Validator::addhttp($post['linkedin']));
+                        } else {
+                            $errorOccured = true;
+                            $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
+                        }
+                    }
+                }
+                if (isset($post['twitter'])) {
+                    if (trim($post['twitter']) != '') {
+                        if (Lib\Validator::validateURL($post['twitter'])) {
+                            $org2->setPrimaryContactEmail(Lib\Validator::addhttp($post['twitter']));
                         } else {
                             $errorOccured = true;
                             $errorList[] = Lib\Localisation::getTranslation('common_invalid_url');
@@ -758,22 +774,6 @@ class OrgRouteHandler
                 }
                 if (isset($post['primarycontacttitle'])) {
                     $org2->setPrimaryContactTitle($post['primarycontacttitle']);
-                }
-                if (isset($post['primarycontactemail'])) {
-                    if (trim($post['primarycontactemail']) != '') {
-                        if (Lib\Validator::validateEmail($post['primarycontactemail'])) {
-                            $org2->setPrimaryContactEmail($post['primarycontactemail']);
-                        } else {
-                            $errorOccured = true;
-                            $errorList[] = Lib\Localisation::getTranslation('user_reset_password_4');
-                        }
-                    } else {
-                        $errorOccured = true;
-                        $errorList[] = Lib\Localisation::getTranslation('org_private_profile_organisation_error_email_not_set');
-                    }
-                } else {
-                    $errorOccured = true;
-                    $errorList[] = Lib\Localisation::getTranslation('org_private_profile_organisation_error_email_not_set');
                 }
                 if (isset($post['primarycontactphone'])) {
                     $org2->setPrimaryContactPhone($post['primarycontactphone']);

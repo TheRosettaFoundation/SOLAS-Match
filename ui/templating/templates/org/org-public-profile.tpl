@@ -150,15 +150,13 @@
 
                                 <tr valign="top">
                                     <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_email_volunteers')}</strong><hr/>
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_twitter')}</strong><hr/>
                                     </td>
                                 </tr>
-                                 <tr>
+                                <tr>
                                     <td style="font-style: italic">
-                                        {if $org->getEmail() != ''}
-                                            <a href="mailto:{$org->getEmail()}">{$org->getEmail()}</a>
-                                        {else}
-                                            {Localisation::getTranslation('org_public_profile_no_email_listed')}
+                                        {if $org2->getPrimaryContactEmail() != 'http://' && $org2->getPrimaryContactEmail() != ''}
+                                            <a href="{$org2->getPrimaryContactEmail()}">{$org2->getPrimaryContactEmail()}</a>
                                         {/if}
                                     </td>
                                 </tr>
@@ -201,10 +199,10 @@
                                         <strong>{Localisation::getTranslation('org_private_profile_organisation_primary_contact_email')}</strong><hr/>
                                     </td>
                                 </tr>
-                                 <tr>
+                                <tr>
                                     <td style="font-style: italic">
-                                        {if $org2->getPrimaryContactEmail() != ''}
-                                            <a href="mailto:{$org2->getPrimaryContactEmail()}">{$org2->getPrimaryContactEmail()}</a>
+                                        {if $org->getEmail() != ''}
+                                            <a href="mailto:{$org->getEmail()}">{$org->getEmail()}</a>
                                         {else}
                                             {Localisation::getTranslation('org_public_profile_no_email_listed')}
                                         {/if}
@@ -272,7 +270,7 @@
 
                                 <tr valign="top">
                                     <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_url_video_1')}</strong><hr/>
+                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_url_video_1')}<br />(1)</strong><hr/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -288,7 +286,7 @@
 
                                 <tr valign="top">
                                     <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_url_video_2')}</strong><hr/>
+                                        <strong>(2)</strong><hr/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -304,7 +302,7 @@
 
                                 <tr valign="top">
                                     <td colspan="1" >
-                                        <strong>{Localisation::getTranslation('org_private_profile_organisation_url_video_3')}</strong><hr/>
+                                        <strong>(3)</strong><hr/>
                                     </td>
                                 </tr>
                                 <tr>
