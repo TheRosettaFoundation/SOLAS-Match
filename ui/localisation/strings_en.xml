@@ -302,7 +302,7 @@
     <string name="org_private_profile_organisation_other_contacts">Details for other Contacts</string>
     <string name="org_private_profile_organisation_structure">Organisational Structure, Leadership Team, Board and Locations</string>
     <string name="org_private_profile_organisation_affiliations">Organisational Affiliations and Awards</string>
-    <string name="org_private_profile_organisation_url_video_1">URLs for Videos or Documents describing the Organisation's Impact or Social Responsibility/Impact report</string>
+    <string name="org_private_profile_organisation_url_video_1">URLs for Videos or Documents describing the Organisation's Impact<br />or Social Responsibility/Impact report</string>
     <string name="org_private_profile_organisation_employee">Number of Employees</string>
     <string name="org_private_profile_organisation_funding">Your Funding Sources</string>
     <string name="org_private_profile_organisation_find">How did you find us?</string>
@@ -310,7 +310,7 @@
     <string name="org_private_profile_organisation_request">Which one of the following best defines your request?</string>
     <string name="org_private_profile_organisation_content">What are the typical content types you need translations for?</string>
     <string name="org_private_profile_organisation_subject_matters">What are the typical subject matters?</string>
-    <string name="org_private_profile_organisation_pages">What are the typical content volumes in pages during the course of a year (one page = 250 words)</string>
+    <string name="org_private_profile_organisation_pages">What are the typical content volumes in pages during the course of a year<br />(one page = 250 words)</string>
     <string name="org_private_profile_organisation_source">What are the most frequent source languages?</string>
     <string name="org_private_profile_organisation_target">What are the most frequent target languages?</string>
     <string name="org_private_profile_organisation_often">How often do you require translations?</string>
