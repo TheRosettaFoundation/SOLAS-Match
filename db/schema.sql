@@ -771,9 +771,37 @@ CREATE TABLE IF NOT EXISTS `Organisations` (
 	UNIQUE INDEX `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-
-
 -- Data exporting was unselected.
+
+
+CREATE TABLE IF NOT EXISTS `OrganisationExtendedProfiles` (
+  `id` INT(10) UNSIGNED NOT NULL,
+  `facebook`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `linkedin`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `primaryContactName`  VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `primaryContactTitle` VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `primaryContactEmail` VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `primaryContactPhone` VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `otherContacts`       VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `structure`           VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `affiliations`        VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `urlVideo1`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `urlVideo2`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `urlVideo3`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `subjectMatters`      VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `activitys`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `employees`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `fundings`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `finds`               VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `translations`        VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `requests`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `contents`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `pages`               VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `sources`             VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `targets`             VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `oftens`              VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 -- Dumping structure for table Solas-Match-Test.OrgRequests
@@ -1719,7 +1747,8 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteOrg`(IN `id` INT)
 BEGIN
 if EXISTS (select 1 from Organisations o where o.id=id) then
-	delete from Organisations where Organisations.id=id;
+  DELETE FROM Organisations WHERE Organisations.id=id;
+  DELETE FROM OrganisationExtendedProfiles WHERE OrganisationExtendedProfiles.id=id;
 	select 1 as result;
 else
 	select 0 as result;
@@ -2363,18 +2392,28 @@ BEGIN
 	if city='' then set city=null;end if;
 	if country='' then set country=null;end if;
 	if regionalFocus='' then set regionalFocus=null;end if;
-	
+
 	select o.id, o.name, o.`home-page` as homepage, o.biography, o.`e-mail` as 'email', o.address, o.city, o.country, o.`regional-focus` as regionalFocus from Organisations o
         where (id is null or o.id = id)
         and (name is null or o.name = name)
         and (url is null or o.`home-page` = url)
         and (bio is null or o.biography = bio)
         and (email is null or o.`e-mail` = email)
-        and (address is null or o.address = address) 
+        and (address is null or o.address = address)
         and (city is null or o.city = city)
-        and (country is null or o.country = country) 
+        and (country is null or o.country = country)
         and (regionalFocus is null or o.`regional-focus` = regionalFocus)
     	GROUP BY o.name;
+END//
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `getOrganisationExtendedProfile`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrganisationExtendedProfile`(IN `id` INT)
+BEGIN
+  SELECT * FROM OrganisationExtendedProfiles o
+  WHERE o.id=id;
 END//
 DELIMITER ;
 
@@ -4087,7 +4126,92 @@ BEGIN
 		
         CALL getOrg(id,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
-	END IF;		
+  END IF;
+END//
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `organisationExtendedProfileInsertAndUpdate`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `organisationExtendedProfileInsertAndUpdate`(
+  IN `id` INT(10),
+  IN `facebook` VARCHAR(255),
+  IN `linkedin` VARCHAR(255),
+  IN `primaryContactName` VARCHAR(255),
+  IN `primaryContactTitle` VARCHAR(255),
+  IN `primaryContactEmail` VARCHAR(255),
+  IN `primaryContactPhone` VARCHAR(255),
+  IN `otherContacts` VARCHAR(4096),
+  IN `structure` VARCHAR(4096),
+  IN `affiliations` VARCHAR(4096),
+  IN `urlVideo1` VARCHAR(255),
+  IN `urlVideo2` VARCHAR(255),
+  IN `urlVideo3` VARCHAR(255),
+  IN `subjectMatters` VARCHAR(4096),
+  IN `activitys` VARCHAR(255),
+  IN `employees` VARCHAR(255),
+  IN `fundings` VARCHAR(255),
+  IN `finds` VARCHAR(255),
+  IN `translations` VARCHAR(255),
+  IN `requests` VARCHAR(255),
+  IN `contents` VARCHAR(255),
+  IN `pages` VARCHAR(255),
+  IN `sources` VARCHAR(255),
+  IN `targets` VARCHAR(255),
+  IN `oftens` VARCHAR(255))
+BEGIN
+  REPLACE INTO OrganisationExtendedProfiles
+    (`id`,
+     `facebook`,
+     `linkedin`,
+     `primaryContactName`,
+     `primaryContactTitle`,
+     `primaryContactEmail`,
+     `primaryContactPhone`,
+     `otherContacts`,
+     `structure`,
+     `affiliations`,
+     `urlVideo1`,
+     `urlVideo2`,
+     `urlVideo3`,
+     `subjectMatters`,
+     `activitys`,
+     `employees`,
+     `fundings`,
+     `finds`,
+     `translations`,
+     `requests`,
+     `contents`,
+     `pages`,
+     `sources`,
+     `targets`,
+     `oftens`)
+  VALUES
+    (id,
+     facebook,
+     linkedin,
+     primaryContactName,
+     primaryContactTitle,
+     primaryContactEmail,
+     primaryContactPhone,
+     otherContacts,
+     structure,
+     affiliations,
+     urlVideo1,
+     urlVideo2,
+     urlVideo3,
+     subjectMatters,
+     activitys,
+     employees,
+     fundings,
+     finds,
+     translations,
+     requests,
+     contents,
+     pages,
+     sources,
+     targets,
+     oftens);
 END//
 DELIMITER ;
 
