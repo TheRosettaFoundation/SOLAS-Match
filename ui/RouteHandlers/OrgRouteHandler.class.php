@@ -98,6 +98,11 @@ class OrgRouteHandler
     {
         $app = \Slim\Slim::getInstance();
 
+        if (empty($_SESSION['SESSION_CSRF_KEY'])) {
+            $_SESSION['SESSION_CSRF_KEY'] = Common\Lib\UserSession::random_string(10);
+        }
+        $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
+
         $org2 = new Common\Protobufs\Models\OrganisationExtendedProfile();
         $org2->setFacebook('');
         $org2->setLinkedin('');
@@ -130,8 +135,8 @@ class OrgRouteHandler
         if ($post = $app->request()->post()) {
             $org = new Common\Protobufs\Models\Organisation();
 
-            if (isset($post["orgName"]) && $post["orgName"] != '') {
-                if (Lib\Validator::filterSpecialChars($post["orgName"])) {
+            if (!empty($post['sesskey']) && $post['sesskey'] === $sesskey && isset($post['orgName']) && $post['orgName'] != '') {
+                if (Lib\Validator::filterSpecialChars($post['orgName'])) {
                     $org->setName($post['orgName']);
                 } else {
                     $errorMsg = Lib\Localisation::getTranslation('create_org_invalid_name')
@@ -375,6 +380,7 @@ class OrgRouteHandler
             'oftens'       => $this->generateOptions($this->possibleOftens(), $org2->getOftens()),
             'errorOccured' => $errorOccured,
             'errorList'    => $errorList,
+            'sesskey'      => $sesskey,
         ));
 
         $app->render("org/create-org.tpl");
@@ -583,6 +589,12 @@ class OrgRouteHandler
     public function orgPrivateProfile($org_id)
     {
         $app = \Slim\Slim::getInstance();
+
+        if (empty($_SESSION['SESSION_CSRF_KEY'])) {
+            $_SESSION['SESSION_CSRF_KEY'] = Common\Lib\UserSession::random_string(10);
+        }
+        $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
+
         $orgDao = new DAO\OrganisationDao();
         $org = $orgDao->getOrganisation($org_id);
         $org2 = $orgDao->getOrganisationExtendedProfile($org_id);
@@ -622,7 +634,7 @@ class OrgRouteHandler
         if ($post = $app->request()->post()) {
 
             if (isset($post['updateOrgDetails'])) {
-                if (isset($post['orgName']) && $post['orgName'] != '') {
+                if (!empty($post['sesskey']) && $post['sesskey'] === $sesskey && isset($post['orgName']) && $post['orgName'] != '') {
                     //Check if new org title has forbidden characters
                     if (Lib\Validator::filterSpecialChars($post['orgName'])) {
                         $org->setName($post['orgName']);
@@ -849,9 +861,9 @@ class OrgRouteHandler
             }
 
             if (isset($post['deleteId'])) {
-                $deleteId = $post["deleteId"];
+                $deleteId = $post['deleteId'];
                 if ($deleteId) {
-                    if ($orgDao->deleteOrg($org->getId())) {
+                    if (!empty($post['sesskey']) && $post['sesskey'] === $sesskey && $orgDao->deleteOrg($org->getId())) {
                         $app->flash(
                             "success",
                             sprintf(
@@ -886,6 +898,7 @@ class OrgRouteHandler
             'sources'      => $this->generateOptions($this->possibleLanguages(), $org2->getSources()),
             'targets'      => $this->generateOptions($this->possibleLanguages(), $org2->getTargets()),
             'oftens'       => $this->generateOptions($this->possibleOftens(), $org2->getOftens()),
+            'sesskey'      => $sesskey,
         ));
 
         $app->render("org/org-private-profile.tpl");

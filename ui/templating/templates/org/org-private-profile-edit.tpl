@@ -274,6 +274,8 @@
                             <option value="{$often['code']}" {if $often['selected']}selected="selected"{/if}>{$often['value']}</option>
                         {/foreach}
                     </select>
+
+                    <input type="hidden" name="sesskey" value="{$sesskey}" />
                 </td>
             </tr>
             <tr>                
