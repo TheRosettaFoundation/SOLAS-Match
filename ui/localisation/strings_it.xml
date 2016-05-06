@@ -283,6 +283,37 @@
     <string name="org_private_profile_delete_success">L'organizzazione %s è stata eliminata con successo</string>        
     <string name="org_private_profile_delete_fail">Impossibile eliminare l'organizzazione. Si prega di riprovare più tardi.</string> 
 
+    <string name="org_private_profile_organisation_visible_by_all">Visibile a tutti gli utenti registrati su Trommons</string>
+    <string name="org_private_profile_organisation_visible_by_members">Visibile solo ai membri delle organizzazioni e agli amministratori di Trommons</string>
+    <string name="org_private_profile_organisation_overview">Panoramica sull'organizzazione, includendo valori, missione<br />e comunità a cui si rivolge l'organizzazione</string>
+    <string name="org_private_profile_organisation_activity">Settore d'azione</string>
+    <string name="org_private_profile_organisation_multiple">Tenere premuto Ctrl (Windows)/Command (Mac) per selezionare opzioni multiple</string>
+    <string name="org_private_profile_organisation_website">Sito internet dell'organizzazione</string>
+    <string name="org_private_profile_organisation_facebook">Facebook</string>
+    <string name="org_private_profile_organisation_linkedin">LinkedIn</string>
+    <string name="org_private_profile_organisation_twitter">Twitter</string>
+    <string name="org_private_profile_organisation_primary_contact_name">Nome e cognome di un referente presso l'organizzazione</string>
+    <string name="org_private_profile_organisation_primary_contact_title">Incarico</string>
+    <string name="org_private_profile_organisation_primary_contact_email">Email</string>
+    <string name="org_private_profile_organisation_primary_contact_phone">Numero di telefono</string>
+    <string name="org_private_profile_organisation_other_contacts">Dettagli per altri referenti</string>
+    <string name="org_private_profile_organisation_structure">Struttura organizzativa, team direttivo, Consiglio di amministrazione e  sede</string>
+    <string name="org_private_profile_organisation_affiliations">Organizzazioni affiliate e riconoscimenti</string>
+    <string name="org_private_profile_organisation_url_video_1">URL per video o documenti correlati all'impatto dell'organizzazione<br />o alla relazione sull'impatto o sulla responsabilita sociale</string>
+    <string name="org_private_profile_organisation_employee">Numero di impiegati</string>
+    <string name="org_private_profile_organisation_funding">Provenienza dei fondi</string>
+    <string name="org_private_profile_organisation_find">Come avete saputo della nostra organizzazione?</string>
+    <string name="org_private_profile_organisation_translation">In che modo traducete i vostri documenti al momento?</string>
+    <string name="org_private_profile_organisation_request">Quale delle seguenti opzioni descrive meglio le vostre attuali necessità?</string>
+    <string name="org_private_profile_organisation_content">Di che tipo sono i testi di cui generalmente richiedete una traduzione?</string>
+    <string name="org_private_profile_organisation_subject_matters">Generalmente, quali sono gli argomenti dei vostri testi?</string>
+    <string name="org_private_profile_organisation_pages">Generalmente, a quante pagine ammonta il volume dei vostri testi per anno<br />(1 pagina = 250 parole)?</string>
+    <string name="org_private_profile_organisation_source">Generalmente, a partire da quale lingua richiedete le traduzioni?</string>
+    <string name="org_private_profile_organisation_target">Generalmente, verso quale lingua richiedete le traduzioni?</string>
+    <string name="org_private_profile_organisation_often">Quanto spesso fate ricorso a traduzioni?</string>
+    <string name="org_private_profile_organisation_error_overview_not_set"><strong>Panoramica dell'organizzazione</strong>è un campo obbligatorio.</string>
+    <string name="org_private_profile_organisation_error_name_not_set"><strong>Nome e cognomen di un referente presso l'organizzazione</strong> è un campo obbligatorio.</string>
+    <string name="org_private_profile_organisation_error_email_not_set"><strong>Indirizzo email</strong> è un campo obbligatorio.</string>
 	<string name="org_public_profile_an_organisation_of">Un'organizzazione di %s.</string>
 	<string name="org_public_profile_edit_organisation_details">Modifica i Dati dell'Organizzazione</string>
 	<string name="org_public_profile_request_membership">Richiedi accesso</string>

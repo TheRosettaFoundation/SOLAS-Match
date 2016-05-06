@@ -279,6 +279,37 @@
     <string name="org_private_profile_delete_success">Die Organisation %s wurde gelöscht.</string>        
     <string name="org_private_profile_delete_fail">Die Organisation kann nicht gelöscht werden. Bitte versuche es später noch einmal.</string> 
 
+    <string name="org_private_profile_organisation_visible_by_all">Für alle registrierten Trommons-Benutzer sichtbar</string>
+    <string name="org_private_profile_organisation_visible_by_members">Nur für Mitglieder von Organisationen und Trommons-Administratoren sichtbar</string>
+    <string name="org_private_profile_organisation_overview">Organisationsübersicht einschließlich Vision, Mission<br />und begünstigte Zielgruppen</string>
+    <string name="org_private_profile_organisation_activity">Tätigkeitsbereich</string>
+    <string name="org_private_profile_organisation_multiple">Halte Strg (Windows)/die Befehlstaste (Mac) gedrückt, um mehrere Optionen auszuwählen</string>
+    <string name="org_private_profile_organisation_website">Internetseite der Organisation</string>
+    <string name="org_private_profile_organisation_facebook">Facebook</string>
+    <string name="org_private_profile_organisation_linkedin">LinkedIn</string>
+    <string name="org_private_profile_organisation_twitter">Twitter</string>
+    <string name="org_private_profile_organisation_primary_contact_name">Vor- und Nachname der Hauptkontaktperson</string>
+    <string name="org_private_profile_organisation_primary_contact_title">Berufsbezeichnung der Hauptkontaktperson</string>
+    <string name="org_private_profile_organisation_primary_contact_email">E-Mail-Adresse der Hauptkontaktperson</string>
+    <string name="org_private_profile_organisation_primary_contact_phone">Telefonnummer der Hauptkontaktperson</string>
+    <string name="org_private_profile_organisation_other_contacts">Kontaktdetails für andere Kontaktpersonen</string>
+    <string name="org_private_profile_organisation_structure">Organisationsstruktur, Leitungsteam, Vorstand und Standorte</string>
+    <string name="org_private_profile_organisation_affiliations">Organisationszugehörigkeiten und Auszeichnungen</string>
+    <string name="org_private_profile_organisation_url_video_1">URLs zu Videos oder Dokumenten, die die Relevanz der Organisation beschreiben<br />oder Berichte zur sozialen Verantwortung</string>
+    <string name="org_private_profile_organisation_employee">Anzahl der Angestellten</string>
+    <string name="org_private_profile_organisation_funding">Finanzierungsquellen der Organisation</string>
+    <string name="org_private_profile_organisation_find">Wie hast Du uns gefunden?</string>
+    <string name="org_private_profile_organisation_translation">Wie werden Übersetzungen momentan erstellt?</string>
+    <string name="org_private_profile_organisation_request">Welcher der folgenden Punkte definiert Deine Anfrage am besten?</string>
+    <string name="org_private_profile_organisation_content">Für welche Art Inhalte werden üblicherweise Übersetzungen benötigt?</string>
+    <string name="org_private_profile_organisation_subject_matters">Um welche Themen geht es üblicherweise?</string>
+    <string name="org_private_profile_organisation_pages">Welches Volumen in Seiten fällt innerhalb eines Jahres an<br />(eine Seite = 250 Wörter)?</string>
+    <string name="org_private_profile_organisation_source">Was sind die häufigsten Ausgangssprachen?</string>
+    <string name="org_private_profile_organisation_target">Was sind die häufigsten Zielsprachen?</string>
+    <string name="org_private_profile_organisation_often">Wie häufig werden Übersetzungen benötigt?</string>
+    <string name="org_private_profile_organisation_error_overview_not_set"><strong>Die Organisationsübersicht</strong> muss eingegeben werden.</string>
+    <string name="org_private_profile_organisation_error_name_not_set"><strong>Vor- und Nachname der Hauptkontaktperson</strong> müssen eingegeben werden.</string>
+    <string name="org_private_profile_organisation_error_email_not_set"><strong>Die E-Mail-Adresse der Hauptkontaktperson</strong> muss eingegeben werden.</string>
 	<string name="org_public_profile_an_organisation_of">Eine Organisation von %s.</string>
 	<string name="org_public_profile_edit_organisation_details">Organisationsdetails bearbeiten</string>
 	<string name="org_public_profile_request_membership">Mitgliedschaft anfordern</string>
