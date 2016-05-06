@@ -1811,31 +1811,50 @@ class TaskRouteHandler
             $post = $app->request()->post();
             if (isset($post['feedback'])) {
                 if ($post['feedback'] != "") {
-                    $taskDao->sendOrgFeedback($task_id, $user_id, $claimant->getId(), $post['feedback']);
-                    $app->flashNow(
-                        "success",
-                        sprintf(
-                            Lib\Localisation::getTranslation('task_org_feedback_6'),
-                            $app->urlFor("user-public-profile", array("user_id" => $claimant->getId())),
-                            $claimant->getDisplayName()
-                        )
-                    );
+                    if ($claimant != null) {
+                        $taskDao->sendOrgFeedback($task_id, $user_id, $claimant->getId(), $post['feedback']);
+                        $app->flashNow(
+                            "success",
+                            sprintf(
+                                Lib\Localisation::getTranslation('task_org_feedback_6'),
+                                $app->urlFor("user-public-profile", array("user_id" => $claimant->getId())),
+                                $claimant->getDisplayName()
+                            )
+                        );
+                    }
                     if (isset($post['revokeTask']) && $post['revokeTask']) {
                         $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
                         error_log("taskOrgFeedback");
                         $taskDao->updateTask($task);
-                        $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id, null);
+                        if ($claimant != null) {
+                            $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id, null);
+                        } else {
+                            $taskRevoke = true;
+                        }
                         if ($taskRevoke) {
-                            $app->flash(
-                                "taskSuccess",
-                                sprintf(
-                                    Lib\Localisation::getTranslation('task_org_feedback_3'),
-                                    $app->urlFor("task-view", array("task_id" => $task_id)),
-                                    $task->getTitle(),
-                                    $app->urlFor("user-public-profile", array("user_id" => $claimant->getId())),
-                                    $claimant->getDisplayName()
-                                )
-                            );
+                            if ($claimant != null) {
+                                $app->flash(
+                                    "taskSuccess",
+                                    sprintf(
+                                        Lib\Localisation::getTranslation('task_org_feedback_3'),
+                                        $app->urlFor("task-view", array("task_id" => $task_id)),
+                                        $task->getTitle(),
+                                        $app->urlFor("user-public-profile", array("user_id" => $claimant->getId())),
+                                        $claimant->getDisplayName()
+                                    )
+                                );
+                            } else {
+                                $app->flash(
+                                    "taskSuccess",
+                                    sprintf(
+                                        Lib\Localisation::getTranslation('task_org_feedback_3'),
+                                        $app->urlFor("task-view", array("task_id" => $task_id)),
+                                        $task->getTitle(),
+                                        '',
+                                        ''
+                                    )
+                                );
+                            }
                             $app->redirect($app->urlFor("project-view", array("project_id" => $task->getProjectId())));
                         } else {
                             $app->flashNow(
@@ -1889,9 +1908,17 @@ class TaskRouteHandler
 
             if (isset($post['feedback'])) {
                 if ($post['feedback'] != '') {
-                    $taskDao->sendUserFeedback($task_id, $claimant->getId(), $post['feedback']);
+                    if ($claimant != null) {
+                        $taskDao->sendUserFeedback($task_id, $claimant->getId(), $post['feedback']);
+                    }
                     if (isset($post['revokeTask']) && $post['revokeTask']) {
-                        $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id, $post['feedback']);
+                        if ($claimant != null) {
+                            $taskRevoke = $userDao->unclaimTask($claimant->getId(), $task_id, $post['feedback']);
+                        } else {
+                            $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+                            $taskDao->updateTask($task);
+                            $taskRevoke = true;
+                        }
                         if ($taskRevoke) {
                             $app->flash(
                                 "success",
