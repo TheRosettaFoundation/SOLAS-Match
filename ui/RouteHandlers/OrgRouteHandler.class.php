@@ -1107,18 +1107,18 @@ class OrgRouteHandler
             "othe" => "Altro/Generico",
             "envi" => "Ambiente & Cambiamenti climatici",
             "arts" => "Arte & Cultura",
-            "indi" => "Comunit‡ indigene ",
+            "indi" => "Comunit√† indigene ",
             "inte" => "Cooperazione internazionale & Relazioni internazionali",
-            "crim" => "Criminalit‡ & Sicurezza",
+            "crim" => "Criminalit√† & Sicurezza",
             "demo" => "Democrazia & Buona Governance",
             "huma" => "Diritti umani",
-            "disa" => "Disabilit‡ ñ Bisogni specifici",
+            "disa" => "Disabilit√† ‚Äì Bisogni specifici",
             "wome" => "Donne & Genere",
             "drug" => "Droghe & Dipendenze",
             "fami" => "Famiglia",
             "anim" => "Fauna selvatica",
             "reli" => "Fede & Religione",
-            "yout" => "Giovent˘ & Adolescenti",
+            "yout" => "Giovent√π & Adolescenti",
             "hiva" => "HIV/AIDS",
             "immi" => "Immigrazione",
             "busi" => "Industria & Business",
@@ -1130,17 +1130,17 @@ class OrgRouteHandler
             "peac" => "Pace & Risoluzione dei conflitti",
             "publ" => "Politiche pubbliche",
             "pris" => "Prigionieri/Delinquenti/Ex delinquenti",
-            "pove" => "Riduzione della povert‡",
+            "pove" => "Riduzione della povert√†",
             "refu" => "Rifugiati & Richiedenti asilo",
             "heal" => "Salute & Benessere",
             "scie" => "Scienza",
             "soci" => "Scienze sociali",
             "spor" => "Sport & Tempo libero",
-            "civi" => "Sviluppo della societ‡ civile",
-            "comm" => "Sviluppo delle comunit‡",
+            "civi" => "Sviluppo della societ√† civile",
+            "comm" => "Sviluppo delle comunit√†",
             "econ" => "Sviluppo economico",
             "info" => "Tecnologie dell'informazione e della comunicazione (TIC)",
-            "olde" => "Terza et‡ e invecchiamento attivo",
+            "olde" => "Terza et√† e invecchiamento attivo",
             "tour" => "Viaggi & Turismo",
             "volu" => "Volontariato & Cittadinanza attiva",
         );
@@ -1174,7 +1174,7 @@ class OrgRouteHandler
         return array(
             "paid" => "Servizi commerciali a pagamento",
             "volu" => "Volontari",
-            "univ" => "Universit‡",
+            "univ" => "Universit√†",
             "none" => "Non richiedevamo traduzioni",
         );
     }
@@ -1182,8 +1182,8 @@ class OrgRouteHandler
     private function possibleRequests_it()
     {
         return array(
-            "allt" => "Cerchiamo una soluzione su base volontaria per le nostre necessit‡ di traduzioni",
-            "addi" => "Cerchiamo una soluzione su base volontaria per aumentare le nostre capacit‡",
+            "allt" => "Cerchiamo una soluzione su base volontaria per le nostre necessit√† di traduzioni",
+            "addi" => "Cerchiamo una soluzione su base volontaria per aumentare le nostre capacit√†",
         );
     }
 
@@ -1191,7 +1191,7 @@ class OrgRouteHandler
     {
         return array(
             "webs" => "Siti Web",
-            "stra" => "Pianificazione dell'attivit‡",
+            "stra" => "Pianificazione dell'attivit√†",
             "advo" => "Protezione",
             "manu" => "Manuali",
             "proj" => "Progetti",
@@ -1213,56 +1213,56 @@ class OrgRouteHandler
     private function possibleActivitys_de()
     {
         return array(
-            "pove" => "Armutsbek‰mpfung",
-            "disa" => "Behinderungen - besondere Bed¸rfnisse",
-            "empl" => "Besch‰ftigung & Arbeit",
+            "pove" => "Armutsbek√§mpfung",
+            "disa" => "Behinderungen - besondere Bed√ºrfnisse",
+            "empl" => "Besch√§ftigung & Arbeit",
             "educ" => "Bildung & Alphabetisierung",
             "demo" => "Demokratie & Verantwortungsbewusste Regierung",
             "drug" => "Drogen & Sucht",
-            "volu" => "Ehrenamt & Aktivb¸rger",
+            "volu" => "Ehrenamt & Aktivb√ºrger",
             "civi" => "Entwicklung der Zivilgesellschaft",
             "fami" => "Familie",
-            "refu" => "Fl¸chtlinge & Asylbewerber",
+            "refu" => "Fl√ºchtlinge & Asylbewerber",
             "wome" => "Frauen & Gender",
-            "peac" => "Frieden & Konfliktlˆsung",
+            "peac" => "Frieden & Konfliktl√∂sung",
             "comm" => "Gemeinschaftsentwicklung",
             "heal" => "Gesundheit & Wohlbefinden",
             "hiva" => "HIV/AIDS",
             "anim" => "Haus- & Wildtiere",
-            "humr" => "Humanit‰re Hilfe",
-            "pris" => "H‰ftlinge/Straft‰ter/Ehemalige Straft‰ter",
+            "humr" => "Humanit√§re Hilfe",
+            "pris" => "H√§ftlinge/Straft√§ter/Ehemalige Straft√§ter",
             "immi" => "Immigration",
             "indi" => "Indigene Gemeinschaften",
             "info" => "Informations- und kommunikationstechnologie (IKT)",
             "inte" => "Internationale Kooperation & Internationale Beziehungen",
             "yout" => "Jugend & Heranwachsende",
             "chil" => "Kinder",
-            "crim" => "Kriminalit‰t & Sicherheit",
+            "crim" => "Kriminalit√§t & Sicherheit",
             "arts" => "Kunst & Kultur",
             "lgbt" => "LGBTQ (Lesben, Schwule, Bisexuelle, Transgender und Queer)",
-            "agri" => "Landwirtschaft, Nahrungsmittel & Ern‰hrung",
+            "agri" => "Landwirtschaft, Nahrungsmittel & Ern√§hrung",
             "live" => "Lebensunterhalt",
             "huma" => "Menschenrechte",
-            "reli" => "Religion & Religiˆses",
+            "reli" => "Religion & Religi√∂ses",
             "othe" => "Sonstiges/Allgemein",
             "soci" => "Sozialwissenschaften",
             "spor" => "Sport & Freizeit",
             "tour" => "Tourismus & Reisen",
             "envi" => "Umwelt & Klimawandel",
             "busi" => "Unternehmen & Industrie",
-            "wate" => "Wasser & Sanit‰re Einrichtungen",
+            "wate" => "Wasser & Sanit√§re Einrichtungen",
             "econ" => "Wirtschaftliche Entwicklung",
             "scie" => "Wissenschaft",
             "hous" => "Wohnen & Unterkunft",
-            "olde" => "ƒltere Menschen & Aktives Altern",
-            "publ" => "÷ffentliche Angelegenheiten",
+            "olde" => "√Ñltere Menschen & Aktives Altern",
+            "publ" => "√ñffentliche Angelegenheiten",
         );
     }
 
     private function possibleFundings_de()
     {
         return array(
-            "publ" => "÷ffentlich",
+            "publ" => "√ñffentlich",
             "priv" => "Privat",
             "corp" => "Unternehmen",
             "none" => "Keine Finanzierung",
@@ -1277,8 +1277,8 @@ class OrgRouteHandler
             "twit" => "Twitter",
             "link" => "LinkedIn",
             "adve" => "Werbung",
-            "publ" => "÷ffentliche Veranstaltung",
-            "cont" => "‹ber eine Kontaktperson",
+            "publ" => "√ñffentliche Veranstaltung",
+            "cont" => "√úber eine Kontaktperson",
         );
     }
 
@@ -1287,16 +1287,16 @@ class OrgRouteHandler
         return array(
             "paid" => "Kostenpflichtige kommerzielle Dienstleistungen",
             "volu" => "Freiwillige",
-            "univ" => "Universit‰ten",
-            "none" => "Bisher keine ‹bersetzungen",
+            "univ" => "Universit√§ten",
+            "none" => "Bisher keine √úbersetzungen",
         );
     }
 
     private function possibleRequests_de()
     {
         return array(
-            "allt" => "Wir suchen nach einer auf Freiwilligen basierenden Lˆsung f¸r alle ‹bersetzungsaufgaben",
-            "addi" => "Wir suchen nach einer auf Freiwilligen basierenden Lˆsung f¸r zus‰tzliche ‹bersetzungsaufgaben",
+            "allt" => "Wir suchen nach einer auf Freiwilligen basierenden L√∂sung f√ºr alle √úbersetzungsaufgaben",
+            "addi" => "Wir suchen nach einer auf Freiwilligen basierenden L√∂sung f√ºr zus√§tzliche √úbersetzungsaufgaben",
         );
     }
 
