@@ -938,7 +938,7 @@ class OrgRouteHandler
             'othe' => 'Other/General',
             'peac' => 'Peace & Conflict Resolution',
             'pove' => 'Poverty Alleviation',
-            'pris' => 'Prisioners/Offenders/Ex-offenders',
+            'pris' => 'Prisoners/Offenders/Ex-offenders',
             'publ' => 'Public Affairs',
             'reli' => 'Religion & Faith based',
             'refu' => 'Refugees & Asylum Seekers',
