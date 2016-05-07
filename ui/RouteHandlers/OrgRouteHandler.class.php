@@ -907,9 +907,9 @@ class OrgRouteHandler
     private function possibleActivitys()
     {
         $lang = Common\Lib\UserSession::getUserLanguage();
-        // if ($lang === 'es') return possibleActivitys_es();
-        if ($lang === 'de') return possibleActivitys_de();
-        if ($lang === 'it') return possibleActivitys_it();
+        // if ($lang === 'es') return $this->possibleActivitys_es();
+        if ($lang === 'de') return $this->possibleActivitys_de();
+        if ($lang === 'it') return $this->possibleActivitys_it();
 
         return array(
             'agri' => 'Agriculture, Food & Nutrition',
@@ -973,9 +973,9 @@ class OrgRouteHandler
     private function possibleFundings()
     {
         $lang = Common\Lib\UserSession::getUserLanguage();
-        // if ($lang === 'es') return possibleFundings_es();
-        if ($lang === 'de') return possibleFundings_de();
-        if ($lang === 'it') return possibleFundings_it();
+        // if ($lang === 'es') return $this->possibleFundings_es();
+        if ($lang === 'de') return $this->possibleFundings_de();
+        if ($lang === 'it') return $this->possibleFundings_it();
 
         return array(
             'publ' => 'Public',
@@ -988,9 +988,9 @@ class OrgRouteHandler
     private function possibleFinds()
     {
         $lang = Common\Lib\UserSession::getUserLanguage();
-        // if ($lang === 'es') return possibleFinds_es();
-        if ($lang === 'de') return possibleFinds_de();
-        if ($lang === 'it') return possibleFinds_it();
+        // if ($lang === 'es') return $this->possibleFinds_es();
+        if ($lang === 'de') return $this->possibleFinds_de();
+        if ($lang === 'it') return $this->possibleFinds_it();
 
         return array(
             'webs' => 'Web Search',
@@ -1006,9 +1006,9 @@ class OrgRouteHandler
     private function possibleTranslations()
     {
         $lang = Common\Lib\UserSession::getUserLanguage();
-        // if ($lang === 'es') return possibleTranslations_es();
-        if ($lang === 'de') return possibleTranslations_de();
-        if ($lang === 'it') return possibleTranslations_it();
+        // if ($lang === 'es') return $this->possibleTranslations_es();
+        if ($lang === 'de') return $this->possibleTranslations_de();
+        if ($lang === 'it') return $this->possibleTranslations_it();
 
         return array(
             'paid' => 'Paid commercial services',
@@ -1021,9 +1021,9 @@ class OrgRouteHandler
     private function possibleRequests()
     {
         $lang = Common\Lib\UserSession::getUserLanguage();
-        // if ($lang === 'es') return possibleRequests_es();
-        if ($lang === 'de') return possibleRequests_de();
-        if ($lang === 'it') return possibleRequests_it();
+        // if ($lang === 'es') return $this->possibleRequests_es();
+        if ($lang === 'de') return $this->possibleRequests_de();
+        if ($lang === 'it') return $this->possibleRequests_it();
 
         return array(
             'allt' => 'Looking for a volunteer-based solution for all our translation needs',
@@ -1034,9 +1034,9 @@ class OrgRouteHandler
     private function possibleContents()
     {
         $lang = Common\Lib\UserSession::getUserLanguage();
-        // if ($lang === 'es') return possibleContents_es();
-        if ($lang === 'de') return possibleContents_de();
-        if ($lang === 'it') return possibleContents_it();
+        // if ($lang === 'es') return $this->possibleContents_es();
+        if ($lang === 'de') return $this->possibleContents_de();
+        if ($lang === 'it') return $this->possibleContents_it();
 
         return array(
             'webs' => 'Website',
@@ -1075,9 +1075,9 @@ class OrgRouteHandler
     private function possibleOftens()
     {
         $lang = Common\Lib\UserSession::getUserLanguage();
-        // if ($lang === 'es') return possibleOftens_es();
-        if ($lang === 'de') return possibleOftens_de();
-        if ($lang === 'it') return possibleOftens_it();
+        // if ($lang === 'es') return $this->possibleOftens_es();
+        if ($lang === 'de') return $this->possibleOftens_de();
+        if ($lang === 'it') return $this->possibleOftens_it();
 
         return array(
             'mont' => 'Every month',
