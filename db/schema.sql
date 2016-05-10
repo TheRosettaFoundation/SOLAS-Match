@@ -2381,7 +2381,7 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getOrg
 DROP PROCEDURE IF EXISTS `getOrg`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrg`(IN `id` INT, IN `name` VARCHAR(50), IN `url` VARCHAR(50), IN `bio` vARCHAR(50), IN `email` VARCHAR(50), IN `address` VARCHAR(50), IN `city` VARCHAR(50), IN `country` VARCHAR(50), IN `regionalFocus` VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrg`(IN `id` INT, IN `name` VARCHAR(128), IN `url` VARCHAR(128), IN `bio` VARCHAR(4096), IN `email` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128), IN `regionalFocus` VARCHAR(128))
 BEGIN
 	if id='' then set id=null;end if;
 	if name='' then set name=null;end if;
@@ -2777,7 +2777,7 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getTask
 DROP PROCEDURE IF EXISTS `getTask`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `created` DATETIME, IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `tType` INT, IN `tStatus` INT, IN `pub` BIT(1), IN `dLine` DATETIME)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(128), IN `wordCount` INT, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `created` DATETIME, IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `tType` INT, IN `tStatus` INT, IN `pub` BIT(1), IN `dLine` DATETIME)
     READS SQL DATA
 BEGIN
 	if id='' then set id=null;end if;
