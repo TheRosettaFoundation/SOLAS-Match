@@ -907,7 +907,7 @@ class OrgRouteHandler
     private function possibleActivitys()
     {
         $lang = Common\Lib\UserSession::getUserLanguage();
-        // if ($lang === 'es') return $this->possibleActivitys_es();
+        if ($lang === 'es') return $this->possibleActivitys_es();
         if ($lang === 'de') return $this->possibleActivitys_de();
         if ($lang === 'it') return $this->possibleActivitys_it();
 
@@ -973,7 +973,7 @@ class OrgRouteHandler
     private function possibleFundings()
     {
         $lang = Common\Lib\UserSession::getUserLanguage();
-        // if ($lang === 'es') return $this->possibleFundings_es();
+        if ($lang === 'es') return $this->possibleFundings_es();
         if ($lang === 'de') return $this->possibleFundings_de();
         if ($lang === 'it') return $this->possibleFundings_it();
 
@@ -988,7 +988,7 @@ class OrgRouteHandler
     private function possibleFinds()
     {
         $lang = Common\Lib\UserSession::getUserLanguage();
-        // if ($lang === 'es') return $this->possibleFinds_es();
+        if ($lang === 'es') return $this->possibleFinds_es();
         if ($lang === 'de') return $this->possibleFinds_de();
         if ($lang === 'it') return $this->possibleFinds_it();
 
@@ -1006,7 +1006,7 @@ class OrgRouteHandler
     private function possibleTranslations()
     {
         $lang = Common\Lib\UserSession::getUserLanguage();
-        // if ($lang === 'es') return $this->possibleTranslations_es();
+        if ($lang === 'es') return $this->possibleTranslations_es();
         if ($lang === 'de') return $this->possibleTranslations_de();
         if ($lang === 'it') return $this->possibleTranslations_it();
 
@@ -1021,7 +1021,7 @@ class OrgRouteHandler
     private function possibleRequests()
     {
         $lang = Common\Lib\UserSession::getUserLanguage();
-        // if ($lang === 'es') return $this->possibleRequests_es();
+        if ($lang === 'es') return $this->possibleRequests_es();
         if ($lang === 'de') return $this->possibleRequests_de();
         if ($lang === 'it') return $this->possibleRequests_it();
 
@@ -1034,7 +1034,7 @@ class OrgRouteHandler
     private function possibleContents()
     {
         $lang = Common\Lib\UserSession::getUserLanguage();
-        // if ($lang === 'es') return $this->possibleContents_es();
+        if ($lang === 'es') return $this->possibleContents_es();
         if ($lang === 'de') return $this->possibleContents_de();
         if ($lang === 'it') return $this->possibleContents_it();
 
@@ -1075,7 +1075,7 @@ class OrgRouteHandler
     private function possibleOftens()
     {
         $lang = Common\Lib\UserSession::getUserLanguage();
-        // if ($lang === 'es') return $this->possibleOftens_es();
+        if ($lang === 'es') return $this->possibleOftens_es();
         if ($lang === 'de') return $this->possibleOftens_de();
         if ($lang === 'it') return $this->possibleOftens_it();
 
@@ -1124,8 +1124,8 @@ class OrgRouteHandler
             "busi" => "Industria & Business",
             "chil" => "Infanzia",
             "educ" => "Istruzione & Alfabetismo",
-            "lgbt" => "LGBTQ (Lesbian, Gay, Bi-sexual and Transgender)",
             "empl" => "Lavoro & Occupazione",
+            "lgbt" => "LGBTQ (Lesbian, Gay, Bi-sexual and Transgender)",
             "live" => "Mezzi di sostentamento",
             "peac" => "Pace & Risoluzione dei conflitti",
             "publ" => "Politiche pubbliche",
@@ -1213,6 +1213,7 @@ class OrgRouteHandler
     private function possibleActivitys_de()
     {
         return array(
+            "olde" => "Ältere Menschen & Aktives Altern",
             "pove" => "Armutsbekämpfung",
             "disa" => "Behinderungen - besondere Bedürfnisse",
             "empl" => "Beschäftigung & Arbeit",
@@ -1227,10 +1228,10 @@ class OrgRouteHandler
             "peac" => "Frieden & Konfliktlösung",
             "comm" => "Gemeinschaftsentwicklung",
             "heal" => "Gesundheit & Wohlbefinden",
-            "hiva" => "HIV/AIDS",
-            "anim" => "Haus- & Wildtiere",
-            "humr" => "Humanitäre Hilfe",
             "pris" => "Häftlinge/Straftäter/Ehemalige Straftäter",
+            "anim" => "Haus- & Wildtiere",
+            "hiva" => "HIV/AIDS",
+            "humr" => "Humanitäre Hilfe",
             "immi" => "Immigration",
             "indi" => "Indigene Gemeinschaften",
             "info" => "Informations- und kommunikationstechnologie (IKT)",
@@ -1239,10 +1240,11 @@ class OrgRouteHandler
             "chil" => "Kinder",
             "crim" => "Kriminalität & Sicherheit",
             "arts" => "Kunst & Kultur",
-            "lgbt" => "LGBTQ (Lesben, Schwule, Bisexuelle, Transgender und Queer)",
             "agri" => "Landwirtschaft, Nahrungsmittel & Ernährung",
             "live" => "Lebensunterhalt",
+            "lgbt" => "LGBTQ (Lesben, Schwule, Bisexuelle, Transgender und Queer)",
             "huma" => "Menschenrechte",
+            "publ" => "Öffentliche Angelegenheiten",
             "reli" => "Religion & Religiöses",
             "othe" => "Sonstiges/Allgemein",
             "soci" => "Sozialwissenschaften",
@@ -1254,8 +1256,6 @@ class OrgRouteHandler
             "econ" => "Wirtschaftliche Entwicklung",
             "scie" => "Wissenschaft",
             "hous" => "Wohnen & Unterkunft",
-            "olde" => "Ältere Menschen & Aktives Altern",
-            "publ" => "Öffentliche Angelegenheiten",
         );
     }
 
@@ -1320,6 +1320,119 @@ class OrgRouteHandler
             "quar" => "Jedes Quartal",
             "once" => "Ein- bis zweimal im Jahr",
             "othe" => "Sonstiges",
+        );
+    }
+
+    private function possibleActivitys_es()
+    {
+        return array(
+            "agri" => "Agricultura, alimentación y nutrición",
+            "wate" => "Agua y saneamiento",
+            "pove" => "Alivio de la pobreza",
+            "hous" => "Alojamiento y abrigo",
+            "publ" => "Ámbito público",
+            "anim" => "Animales y vida salvaje",
+            "arts" => "Arte y cultura",
+            "humr" => "Ayuda humanitaria",
+            "scie" => "Ciencia",
+            "soci" => "Ciencias sociales",
+            "indi" => "Comunidades indígenas",
+            "pris" => "Convictos/delincuentes/ex delincuentes",
+            "inte" => "Cooperación internacional y relaciones internacionales",
+            "crim" => "Delincuencia y seguridad",
+            "demo" => "Democracia y buen gobierno",
+            "spor" => "Deportes y recreo",
+            "huma" => "Derechos humanos",
+            "comm" => "Desarrollo de la comunidad",
+            "civi" => "Desarrollo de la sociedad civil",
+            "econ" => "Desarrollo económico",
+            "disa" => "Discapacidades y necesidades especiales",
+            "drug" => "Drogas y adicción",
+            "educ" => "Educación y enseñanza",
+            "fami" => "Familia",
+            "othe" => "General/Otros",
+            "busi" => "Industria y empresa",
+            "immi" => "Inmigración",
+            "yout" => "Jóvenes y adolescentes",
+            "lgbt" => "LGBTQ (comunidad lesbiana, gay, bisexual y transexual)",
+            "olde" => "Mayores y envejecimiento saludable",
+            "envi" => "Medioambiente y cambio climático",
+            "wome" => "Mujer y asuntos de género",
+            "chil" => "Niños",
+            "peac" => "Paz y resolución de conflictos",
+            "refu" => "Refugiados y solicitantes de asilo",
+            "reli" => "Religión y fe",
+            "heal" => "Salud y bienestar",
+            "live" => "Subsistencia",
+            "info" => "Tecnologías de la información y comunicaciones",
+            "empl" => "Trabajo y empleo",
+            "tour" => "Turismo y viajes",
+            "hiva" => "VIH/SIDA",
+            "volu" => "Voluntariado y ciudadanía activa",
+        );
+    }
+
+    private function possibleFundings_es()
+    {
+        return array(
+            "publ" => "Fondos públicos",
+            "priv" => "Fondos privados",
+            "corp" => "Financiación empresarial",
+            "none" => "Ninguna",
+        );
+    }
+
+    private function possibleFinds_es()
+    {
+        return array(
+            "webs" => "Búsqueda en Internet",
+            "face" => "Facebook",
+            "twit" => "Twitter",
+            "link" => "LinkedIn",
+            "adve" => "Anuncio",
+            "publ" => "Evento público",
+            "cont" => "A través de otra persona",
+        );
+    }
+
+    private function possibleTranslations_es()
+    {
+        return array(
+            "paid" => "Servicios de traducción de pago",
+            "volu" => "Voluntarios",
+            "univ" => "Universidades",
+            "none" => "Aún no hemos traducido nada",
+        );
+    }
+
+    private function possibleRequests_es()
+    {
+        return array(
+            "allt" => "Buscamos voluntarios para todas las traducciones",
+            "addi" => "Buscamos voluntarios para ampliar la capacidad del equipo existente",
+        );
+    }
+
+    private function possibleContents_es()
+    {
+       return array(
+            "webs" => "Sitio web",
+            "stra" => "Planificación/estrategia",
+            "advo" => "Legal",
+            "manu" => "Guías y tutoriales",
+            "proj" => "Proyectos",
+            "camp" => "Campañas",
+            "othe" => "Otros",
+       );
+    }
+
+    private function possibleOftens_es()
+    {
+        return array(
+            "mont" => "Todos los meses",
+            "quar" => "Cada tres meses",
+            "once" => "Una o dos veces al año",
+            "othe" => "Otra frecuencia",
         );
     }
 
