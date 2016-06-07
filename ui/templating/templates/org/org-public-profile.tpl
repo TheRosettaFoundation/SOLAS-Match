@@ -50,7 +50,7 @@
                             {/if}
                         </form>
                     {/if}
-                    {if $isMember}
+                    {if $isMember && $adminAccess}
                         <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class='btn btn-primary'>
                             <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('org_public_profile_edit_organisation_details')}
                         </a>

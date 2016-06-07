@@ -468,8 +468,17 @@ class OrgRouteHandler
                 $templateData[$org->getId()] = $taskData;
             }
 
+            $adminForOrg = array();
+            foreach ($orgs as $orgAdminTest) {
+                $adminForOrg[$orgAdminTest->getId()] = false;
+                if ($isSiteAdmin || $adminDao->isOrgAdmin($orgAdminTest->getId(), $current_user_id)) {
+                    $adminForOrg[$orgAdminTest->getId()] = true;
+                }
+            }
+
             $app->view()->appendData(array(
                 "orgs" => $orgs,
+                'adminForOrg' => $adminForOrg,
                 "templateData" => $templateData
             ));
         }
