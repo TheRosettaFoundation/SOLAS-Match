@@ -36,9 +36,13 @@ Tweet</a>
             </a>
         </div>
         <div style="display: inline-block; float: right; font-weight: bold; font-size: large">
+
+            {if $adminForOrg[$org_id]}
             <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class="btn btn-primary">
                 <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('org_dashboard_edit_organisation')}
             </a>
+            {/if}
+
             <a class="btn btn-success" href="{urlFor name="project-create" options="org_id.$org_id"}">
                 <i class="icon-upload icon-white"></i> {Localisation::getTranslation('common_create_project')}
             </a>  
