@@ -250,6 +250,7 @@ class Orgs
         $user = DAO\UserDao::getUser(null, $email);
         if (!is_null($user)) {
             $ret = DAO\OrganisationDao::acceptMemRequest($orgId, $user->getId());
+            DAO\AdminDao::addOrgAdmin($user->getId(), $orgId); // When manually adding a user to the Organisation, make them an Admin for simplicity
         }
         API\Dispatcher::sendResponse(null, $ret, null, $format);
     }
