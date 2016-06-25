@@ -2300,7 +2300,7 @@ BEGIN
     if lim= '' or lim is null then set lim = ~0; end if;
     if offset='' or offset is null then set offset=0; end if;
 
-    SELECT id, project_id as projectId, title, `word-count` as wordCount, 
+    SELECT t.id, project_id as projectId, t.title, t.`word-count` as wordCount,
             (SELECT `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, 
             (SELECT code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, 
             (SELECT `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, 
@@ -2309,13 +2309,16 @@ BEGIN
             (SELECT code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, 
             (SELECT `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, 
             (SELECT code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
-            comment, `task-type_id` as taskType, `task-status_id` as taskStatus, published, deadline, `created-time` as createdTime 
+            comment, `task-type_id` as taskType, `task-status_id` as taskStatus, published, t.deadline, t.`created-time` as createdTime
         FROM Tasks t 
+        JOIN      Projects p ON t.project_id=p.id
+        LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
         WHERE NOT exists (SELECT 1 
                             FROM TaskClaims 
                             WHERE TaskClaims.task_id = t.id) 
         AND t.published = 1 
         AND t.`task-status_id` = 2 
+        AND b.id IS NULL
         ORDER BY `created-time` DESC 
         LIMIT offset, lim;
 END//
