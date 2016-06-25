@@ -3391,6 +3391,8 @@ BEGIN
     FROM
         Users u,
         Tasks t
+    JOIN      Projects p ON t.project_id=p.id
+    LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
     WHERE
         u.id=uID AND
         t.id NOT IN (SELECT t.task_id FROM TaskClaims t) AND
@@ -3414,6 +3416,10 @@ BEGIN
                     t.`language_id-target` IN (SELECT language_id FROM UserSecondaryLanguages WHERE user_id=uID)
                 )
             )
+        ) AND
+        (
+            b.id IS NULL OR
+            b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
         )
     ORDER BY
         IF(t.`language_id-target`=u.language_id, 1000 + IF(u.country_id=t.`country_id-target`, 100, 0), 0) +
