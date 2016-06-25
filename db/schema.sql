@@ -3447,6 +3447,8 @@ BEGIN
 
     (SELECT count(*) as `result`
         FROM Tasks t
+        JOIN      Projects p ON t.project_id=p.id
+        LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
         WHERE t.id NOT IN ( SELECT t.task_id FROM TaskClaims t)
         AND t.published = 1 
         AND t.`task-status_id` = 2 
@@ -3462,7 +3464,13 @@ BEGIN
                 AND (t.`language_id-target` IN 
                         (SELECT language_id FROM Users WHERE id = uID)
                     OR t.`language_id-target` IN 
-                        (SELECT language_id FROM UserSecondaryLanguages WHERE user_id = uID)))));
+                        (SELECT language_id FROM UserSecondaryLanguages WHERE user_id = uID))))
+        AND
+        (
+            b.id IS NULL OR
+            b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
+        )
+    );
 END//
 DELIMITER ;
 
