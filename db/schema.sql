@@ -2331,11 +2331,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasksCount`()
 BEGIN
     SELECT count(*) as result
         FROM Tasks t 
+        JOIN      Projects p ON t.project_id=p.id
+        LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
         WHERE NOT exists (SELECT 1 
                             FROM TaskClaims 
                             WHERE TaskClaims.task_id = t.id) 
         AND t.published = 1 
-        AND t.`task-status_id` = 2;
+        AND t.`task-status_id` = 2
+        AND b.id IS NULL;
 END//
 DELIMITER ;
 
