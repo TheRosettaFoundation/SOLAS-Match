@@ -286,6 +286,37 @@
     <string name="org_private_profile_delete_success">Organisation %s supprimée.</string>        
     <string name="org_private_profile_delete_fail">Impossible de supprimer l&apos;organisation. Réessayez plus tard.</string> 
 
+    <string name="org_private_profile_organisation_visible_by_all">Visible par tous les utilisateurs inscrits sur Trommons</string>
+    <string name="org_private_profile_organisation_visible_by_members">Visible seulement par les membres de l'organisation et les administrateurs de Trommons</string>
+    <string name="org_private_profile_organisation_overview">Aperçu de l'organisation, son projet, sa mission<br />et des communautés bénéficiaires cibles</string>
+    <string name="org_private_profile_organisation_activity">Secteur d'activité</string>
+    <string name="org_private_profile_organisation_multiple">Maintenez la touche Ctrl (Windows)/Commande (Mac) enfoncée pour sélectionner plusieurs options</string>
+    <string name="org_private_profile_organisation_website">Site de l'organisation</string>
+    <string name="org_private_profile_organisation_facebook">Facebook</string>
+    <string name="org_private_profile_organisation_linkedin">LinkedIn</string>
+    <string name="org_private_profile_organisation_twitter">Twitter</string>
+    <string name="org_private_profile_organisation_primary_contact_name">Prénom et nom du contact principal</string>
+    <string name="org_private_profile_organisation_primary_contact_title">Fonction du contact principal</string>
+    <string name="org_private_profile_organisation_primary_contact_email">Adresse e-mail du contact principal</string>
+    <string name="org_private_profile_organisation_primary_contact_phone">Numéro de téléphone du contact principal</string>
+    <string name="org_private_profile_organisation_other_contacts">Coordonnées des autres contacts</string>
+    <string name="org_private_profile_organisation_structure">Structure de l'organisation, équipe de direction, conseil d'administration, sites</string>
+    <string name="org_private_profile_organisation_affiliations">Affiliations et récompenses </string>
+    <string name="org_private_profile_organisation_url_video_1">Lien vers des vidéos ou des documents relatifs à l'impact de l'organisation <br />ou compte-rendu sur sa responsabilité sociale/son impact social</string>
+    <string name="org_private_profile_organisation_employee">Nombre d'employés</string>
+    <string name="org_private_profile_organisation_funding">Vos sources de financement</string>
+    <string name="org_private_profile_organisation_find">Comment avez-vous entendu parler de nous ?</string>
+    <string name="org_private_profile_organisation_translation">À quels moyens avez-vous actuellement recours pour vos traductions ?</string>
+    <string name="org_private_profile_organisation_request">Parmis les propositions suivantes, laquelle correpond le mieux à votre demande ?</string>
+    <string name="org_private_profile_organisation_content">Pour quel type de contenu avez-vous généralement besoin de traductions ?</string>
+    <string name="org_private_profile_organisation_subject_matters">Quels en sont généralement les sujets ?</string>
+    <string name="org_private_profile_organisation_pages">Quel est, en général, le volume de contenu en pages par an<br />(une page = 250 mots)?</string>
+    <string name="org_private_profile_organisation_source">Quelles sont les langues sources les plus fréquentes ?</string>
+    <string name="org_private_profile_organisation_target">Quelles sont les langues cibles les plus fréquentes ?</string>
+    <string name="org_private_profile_organisation_often">À quelle fréquence avez-vous besoin de services de traduction ?</string>
+    <string name="org_private_profile_organisation_error_overview_not_set"><strong>L'aperçu de l'organisation</strong> doit être renseigné.</string>
+    <string name="org_private_profile_organisation_error_name_not_set"><strong>Le prénom et le nom du contact principal</strong> doivent être renseignés.</string>
+    <string name="org_private_profile_organisation_error_email_not_set"><strong>L'adresse e-mail du contact principal</strong> doit être renseignée.</string>
 	<string name="org_public_profile_an_organisation_of">Organisation de %s.</string>
 	<string name="org_public_profile_edit_organisation_details">Modifier les informations de l&apos;organisation</string>
 	<string name="org_public_profile_request_membership">Faire une demande d&apos;adhésion</string>
