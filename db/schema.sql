@@ -2300,7 +2300,7 @@ BEGIN
     if lim= '' or lim is null then set lim = ~0; end if;
     if offset='' or offset is null then set offset=0; end if;
 
-    SELECT id, project_id as projectId, title, `word-count` as wordCount, 
+    SELECT t.id, project_id as projectId, t.title, t.`word-count` as wordCount,
             (SELECT `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, 
             (SELECT code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, 
             (SELECT `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, 
@@ -2309,13 +2309,16 @@ BEGIN
             (SELECT code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, 
             (SELECT `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, 
             (SELECT code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
-            comment, `task-type_id` as taskType, `task-status_id` as taskStatus, published, deadline, `created-time` as createdTime 
+            comment, `task-type_id` as taskType, `task-status_id` as taskStatus, published, t.deadline, t.`created-time` as createdTime
         FROM Tasks t 
+        JOIN      Projects p ON t.project_id=p.id
+        LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
         WHERE NOT exists (SELECT 1 
                             FROM TaskClaims 
                             WHERE TaskClaims.task_id = t.id) 
         AND t.published = 1 
         AND t.`task-status_id` = 2 
+        AND b.id IS NULL
         ORDER BY `created-time` DESC 
         LIMIT offset, lim;
 END//
@@ -2328,11 +2331,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasksCount`()
 BEGIN
     SELECT count(*) as result
         FROM Tasks t 
+        JOIN      Projects p ON t.project_id=p.id
+        LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
         WHERE NOT exists (SELECT 1 
                             FROM TaskClaims 
                             WHERE TaskClaims.task_id = t.id) 
         AND t.published = 1 
-        AND t.`task-status_id` = 2;
+        AND t.`task-status_id` = 2
+        AND b.id IS NULL;
 END//
 DELIMITER ;
 
@@ -3391,6 +3397,8 @@ BEGIN
     FROM
         Users u,
         Tasks t
+    JOIN      Projects p ON t.project_id=p.id
+    LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
     WHERE
         u.id=uID AND
         t.id NOT IN (SELECT t.task_id FROM TaskClaims t) AND
@@ -3414,6 +3422,10 @@ BEGIN
                     t.`language_id-target` IN (SELECT language_id FROM UserSecondaryLanguages WHERE user_id=uID)
                 )
             )
+        ) AND
+        (
+            b.id IS NULL OR
+            b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
         )
     ORDER BY
         IF(t.`language_id-target`=u.language_id, 1000 + IF(u.country_id=t.`country_id-target`, 100, 0), 0) +
@@ -3441,6 +3453,8 @@ BEGIN
 
     (SELECT count(*) as `result`
         FROM Tasks t
+        JOIN      Projects p ON t.project_id=p.id
+        LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
         WHERE t.id NOT IN ( SELECT t.task_id FROM TaskClaims t)
         AND t.published = 1 
         AND t.`task-status_id` = 2 
@@ -3456,7 +3470,13 @@ BEGIN
                 AND (t.`language_id-target` IN 
                         (SELECT language_id FROM Users WHERE id = uID)
                     OR t.`language_id-target` IN 
-                        (SELECT language_id FROM UserSecondaryLanguages WHERE user_id = uID)))));
+                        (SELECT language_id FROM UserSecondaryLanguages WHERE user_id = uID))))
+        AND
+        (
+            b.id IS NULL OR
+            b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
+        )
+    );
 END//
 DELIMITER ;
 
@@ -3587,21 +3607,49 @@ BEGIN
     SELECT `language_id-source`, `language_id-target`, `country_id-source`, `country_id-target`  
     INTO current_task_langSource, current_task_langTarget, current_task_countrySource, current_task_countryTarget FROM Tasks WHERE id = taskID;
 	
-    (SELECT t2.id,t2.project_id as projectId,t2.title,t2.`word-count` as wordCount,
-    (SELECT `en-name` from Languages l where l.id = t2.`language_id-source`) as `sourceLanguageName`,
-    (SELECT code from Languages l where l.id = t2.`language_id-source`) as `sourceLanguageCode`,
-    (SELECT `en-name` from Languages l where l.id = t2.`language_id-target`) as `targetLanguageName`,
-    (SELECT code from Languages l where l.id = t2.`language_id-target`) as `targetLanguageCode`,
-    (SELECT `en-name` from Countries c where c.id = t2.`country_id-source`) as `sourceCountryName`,
-    (SELECT code from Countries c where c.id = t2.`country_id-source`) as `sourceCountryCode`,
-    (SELECT `en-name` from Countries c where c.id = t2.`country_id-target`) as `targetCountryName`,
-    (SELECT code from Countries c where c.id = t2.`country_id-target`) as `targetCountryCode`,
-    `comment`, `task-type_id` as 'taskType', `task-status_id` as 'taskStatus', published, deadline, `created-time` as createdTime
+    (
+    SELECT
+        t2.id,
+        t2.project_id AS projectId,
+        t2.title,
+        t2.`word-count` AS wordCount,
+        (SELECT `en-name` from Languages l where l.id = t2.`language_id-source`) as `sourceLanguageName`,
+        (SELECT code from Languages l where l.id = t2.`language_id-source`) as `sourceLanguageCode`,
+        (SELECT `en-name` from Languages l where l.id = t2.`language_id-target`) as `targetLanguageName`,
+        (SELECT code from Languages l where l.id = t2.`language_id-target`) as `targetLanguageCode`,
+        (SELECT `en-name` from Countries c where c.id = t2.`country_id-source`) as `sourceCountryName`,
+        (SELECT code from Countries c where c.id = t2.`country_id-source`) as `sourceCountryCode`,
+        (SELECT `en-name` from Countries c where c.id = t2.`country_id-target`) as `targetCountryName`,
+        (SELECT code from Countries c where c.id = t2.`country_id-target`) as `targetCountryCode`,
+        `comment`,
+        `task-type_id` AS 'taskType',
+        `task-status_id` AS 'taskStatus',
+        published,
+        deadline,
+        `created-time` AS createdTime
      FROM
-    (SELECT t.id, count(*) AS task_count FROM TaskViews tv JOIN Tasks t ON t.id = tv.task_id AND tv.user_id IN 
-    (SELECT DISTINCT user_id FROM `TaskViews` WHERE `task_id` = taskID) AND t.id != taskID AND t.`task-status_id` = 2 and
-	 t.`language_id-source` = current_task_langSource and t.`language_id-target` = current_task_langTarget GROUP BY task_id ORDER BY task_count DESC) 
-     AS t1 JOIN Tasks t2 ON t1.id = t2.id LIMIT offset,lim);
+        (
+        SELECT
+            t.id,
+            COUNT(*) AS task_count
+        FROM TaskViews tv
+        JOIN Tasks     t  ON
+            t.id=tv.task_id AND
+            tv.user_id IN (SELECT DISTINCT user_id FROM TaskViews WHERE task_id=taskID) AND
+            t.id!=taskID AND
+            t.`task-status_id`=2 AND
+            t.`language_id-source`=current_task_langSource AND
+            t.`language_id-target`=current_task_langTarget AND
+            t.published=1
+        JOIN      Projects p ON t.project_id=p.id
+        LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+        WHERE b.id IS NULL
+        GROUP BY task_id
+        ORDER BY task_count DESC
+        ) AS t1
+    JOIN Tasks t2 ON t1.id=t2.id
+    LIMIT offset,lim
+    );
 END//
 DELIMITER ;
 
