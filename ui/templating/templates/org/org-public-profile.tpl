@@ -38,7 +38,6 @@
                             <a href="{urlFor name="org-request-membership" options="org_id.$org_id"}" class='btn btn-primary'>
                                 <i class="icon-ok-circle icon-white"></i> {Localisation::getTranslation('org_public_profile_request_membership')}
                             </a>
-                            {/if}
                             {if $userSubscribedToOrganisation}
                                 <input type="hidden" name="trackOrganisation" value="0" />
                                 <a class="btn btn-small btn-inverse" onclick="$('#trackedOrganisationForm').submit();" >
@@ -49,6 +48,7 @@
                                 <a class="btn btn-small" onclick="$('#trackedOrganisationForm').submit();" >
                                     <i class="icon-envelope icon-black"></i>{Localisation::getTranslation('org_public_profile_track_organisation')}
                                 </a>
+                            {/if}
                             {/if}
                         </form>
                     {/if}

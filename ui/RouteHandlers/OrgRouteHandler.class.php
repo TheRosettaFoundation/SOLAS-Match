@@ -919,6 +919,7 @@ class OrgRouteHandler
         if ($lang === 'es') return $this->possibleActivitys_es();
         if ($lang === 'de') return $this->possibleActivitys_de();
         if ($lang === 'it') return $this->possibleActivitys_it();
+        if ($lang === 'fr') return $this->possibleActivitys_fr();
 
         return array(
             'agri' => 'Agriculture, Food & Nutrition',
@@ -985,6 +986,7 @@ class OrgRouteHandler
         if ($lang === 'es') return $this->possibleFundings_es();
         if ($lang === 'de') return $this->possibleFundings_de();
         if ($lang === 'it') return $this->possibleFundings_it();
+        if ($lang === 'fr') return $this->possibleFundings_fr();
 
         return array(
             'publ' => 'Public',
@@ -1000,6 +1002,7 @@ class OrgRouteHandler
         if ($lang === 'es') return $this->possibleFinds_es();
         if ($lang === 'de') return $this->possibleFinds_de();
         if ($lang === 'it') return $this->possibleFinds_it();
+        if ($lang === 'fr') return $this->possibleFinds_fr();
 
         return array(
             'webs' => 'Web Search',
@@ -1018,6 +1021,7 @@ class OrgRouteHandler
         if ($lang === 'es') return $this->possibleTranslations_es();
         if ($lang === 'de') return $this->possibleTranslations_de();
         if ($lang === 'it') return $this->possibleTranslations_it();
+        if ($lang === 'fr') return $this->possibleTranslations_fr();
 
         return array(
             'paid' => 'Paid commercial services',
@@ -1033,6 +1037,7 @@ class OrgRouteHandler
         if ($lang === 'es') return $this->possibleRequests_es();
         if ($lang === 'de') return $this->possibleRequests_de();
         if ($lang === 'it') return $this->possibleRequests_it();
+        if ($lang === 'fr') return $this->possibleRequests_fr();
 
         return array(
             'allt' => 'Looking for a volunteer-based solution for all our translation needs',
@@ -1046,6 +1051,7 @@ class OrgRouteHandler
         if ($lang === 'es') return $this->possibleContents_es();
         if ($lang === 'de') return $this->possibleContents_de();
         if ($lang === 'it') return $this->possibleContents_it();
+        if ($lang === 'fr') return $this->possibleContents_fr();
 
         return array(
             'webs' => 'Website',
@@ -1087,6 +1093,7 @@ class OrgRouteHandler
         if ($lang === 'es') return $this->possibleOftens_es();
         if ($lang === 'de') return $this->possibleOftens_de();
         if ($lang === 'it') return $this->possibleOftens_it();
+        if ($lang === 'fr') return $this->possibleOftens_fr();
 
         return array(
             'mont' => 'Every month',
@@ -1442,6 +1449,119 @@ class OrgRouteHandler
             "quar" => "Cada tres meses",
             "once" => "Una o dos veces al año",
             "othe" => "Otra frecuencia",
+        );
+    }
+
+    private function possibleActivitys_fr()
+    {
+        return array(
+            "publ" => "Affaires publiques",
+            "agri" => "Agriculture, Alimentation & Nutrition",
+            "humr" => "Aide humanitaire",
+            "anim" => "Animaux & Faune",
+            "arts" => "Arts & Culture",
+            "othe" => "Autres/Général",
+            "busi" => "Commerce & Industrie",
+            "indi" => "Communautés autochtones",
+            "inte" => "Coopération internationale & Relations internationales",
+            "crim" => "Délits & sécurité",
+            "demo" => "Démocracie & Bonne gouvernance",
+            "pris" => "Détenus/Délinquants/Ex-délinquants",
+            "comm" => "Développement communautaire",
+            "civi" => "Développement de la société civile",
+            "econ" => "Développement économique",
+            "drug" => "Drogues & Dépendance",
+            "huma" => "Droits humains",
+            "wate" => "Eau & Assainissement",
+            "educ" => "Éducation & Alphabétisation",
+            "empl" => "Emploi & Travail",
+            "chil" => "Enfants",
+            "envi" => "Environnement & Changement climatique",
+            "fami" => "Famille",
+            "wome" => "Femmes & Égalité des sexes",
+            "disa" => "Handicaps - Besoins particuliers",
+            "immi" => "Immigration",
+            "yout" => "Jeunes & Adolescents",
+            "lgbt" => "LGBTQ (Lesbiennes, Gays, Bisexuels et Transgenres)",
+            "hous" => "Logement & Hébergement",
+            "pove" => "Lutte contre la pauvreté",
+            "live" => "Moyens de subsistance",
+            "peac" => "Paix & Règlement des conflits",
+            "olde" => "Personnes âgées & Vieillissement actif",
+            "refu" => "Refugiés & Demandeurs d'asile",
+            "reli" => "Religion & Foi",
+            "heal" => "Santé & Bien-être",
+            "scie" => "Science",
+            "soci" => "Sciences sociales",
+            "spor" => "Sports & Loisirs",
+            "info" => "Technologies de l'information et de la communication (TIC)",
+            "tour" => "Tourisme & Voyage",
+            "hiva" => "VIH/SIDA",
+            "volu" => "Volontariat & Citoyenneté active",
+        );
+    }
+
+    private function possibleFundings_fr()
+    {
+        return array(
+            "publ" => "Public",
+            "priv" => "Privé",
+            "corp" => "Entreprise",
+            "none" => "Pas de financement",
+        );
+    }
+
+    private function possibleFinds_fr()
+    {
+        return array(
+            "webs" => "Moteur de recherche",
+            "face" => "Facebook",
+            "twit" => "Twitter",
+            "link" => "LinkedIn",
+            "adve" => "Publicité",
+            "publ" => "Événement public",
+            "cont" => "Par le biais d'un contact",
+        );
+    }
+
+    private function possibleTranslations_fr()
+    {
+        return array(
+            "paid" => "Services de traduction payants",
+            "volu" => "Bénévoles",
+            "univ" => "Universités",
+            "none" => "Pas de traductions pour le moment",
+        );
+    }
+
+    private function possibleRequests_fr()
+    {
+        return array(
+            "allt" => "À la recherche d'une solution basée sur le volontariat pour tous nos besoins en traduction",
+            "addi" => "À la recherche d'une solution basée sur le volontariat pour acquérir des moyens supplémentaires",
+        );
+    }
+
+    private function possibleContents_fr()
+    {
+       return array(
+            "webs" => "Site internet",
+            "stra" => "Stratégie",
+            "advo" => "Défense",
+            "manu" => "Manuels",
+            "proj" => "Projets",
+            "camp" => "Campagnes",
+            "othe" => "Autre",
+       );
+    }
+
+    private function possibleOftens_fr()
+    {
+        return array(
+            "mont" => "Tous les mois",
+            "quar" => "Tous les trimestres",
+            "once" => "Une ou deux fois par an",
+            "othe" => "Autre",
         );
     }
 
