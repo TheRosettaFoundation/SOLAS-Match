@@ -36,9 +36,13 @@ Tweet</a>
             </a>
         </div>
         <div style="display: inline-block; float: right; font-weight: bold; font-size: large">
+
+            {if $adminForOrg[$org_id]}
             <a href="{urlFor name="org-private-profile" options="org_id.$org_id"}" class="btn btn-primary">
                 <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('org_dashboard_edit_organisation')}
             </a>
+            {/if}
+
             <a class="btn btn-success" href="{urlFor name="project-create" options="org_id.$org_id"}">
                 <i class="icon-upload icon-white"></i> {Localisation::getTranslation('common_create_project')}
             </a>  
@@ -98,10 +102,12 @@ Tweet</a>
                         </a>
                     </td>
                     <td>
+                        {if $isSiteAdmin}
                         <a href="{urlFor name="archive-project" options="project_id.$project_id"}" class="btn btn-inverse" 
                             onclick="return confirm('{Localisation::getTranslation('org_dashboard_1')}')">
                             <i class="icon-fire icon-white"></i> {Localisation::getTranslation('org_dashboard_archive_project')}
                         </a>
+                        {/if}
                     </td>
                 </tr>
             {/foreach}

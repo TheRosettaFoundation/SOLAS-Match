@@ -140,6 +140,21 @@ class Orgs
                 );
             });
 
+            $app->group('/orgextended', function () use ($app) {
+
+                /* Routes starting /v0/orgextended */
+                $app->get(
+                    '/:orgId/',
+                    '\SolasMatch\API\V0\Orgs::getOrganisationExtendedProfile'
+                );
+
+                $app->put(
+                    '/:orgId/',
+                    '\SolasMatch\API\Lib\Middleware::authenticateOrgAdmin',
+                    '\SolasMatch\API\V0\Orgs::updateOrgExtendedProfile'
+                );
+            });
+
             /* Routes starting /v0 */
             $app->get(
                 '/orgs(:format)/',
@@ -235,6 +250,7 @@ class Orgs
         $user = DAO\UserDao::getUser(null, $email);
         if (!is_null($user)) {
             $ret = DAO\OrganisationDao::acceptMemRequest($orgId, $user->getId());
+            DAO\AdminDao::addOrgAdmin($user->getId(), $orgId); // When manually adding a user to the Organisation, make them an Admin for simplicity
         }
         API\Dispatcher::sendResponse(null, $ret, null, $format);
     }
@@ -315,6 +331,17 @@ class Orgs
         API\Dispatcher::sendResponse(null, $org, null, $format);
     }
 
+    public static function getOrganisationExtendedProfile($orgId, $format = ".json")
+    {
+        if (!is_numeric($orgId) && strstr($orgId, '.')) {
+            $orgId = explode('.', $orgId);
+            $format = '.'.$orgId[1];
+            $orgId = $orgId[0];
+        }
+        $org = DAO\OrganisationDao::getOrganisationExtendedProfile($orgId);
+        API\Dispatcher::sendResponse(null, $org, null, $format);
+    }
+
     public static function updateOrg($orgId, $format = ".json")
     {
         if (!is_numeric($orgId) && strstr($orgId, '.')) {
@@ -332,6 +359,20 @@ class Orgs
             API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CONFLICT);
         }
         API\Dispatcher::sendResponse(null, DAO\OrganisationDao::insertAndUpdate($data), null, $format);
+    }
+
+    public static function updateOrgExtendedProfile($orgId, $format = ".json")
+    {
+        if (!is_numeric($orgId) && strstr($orgId, '.')) {
+            $orgId = explode('.', $orgId);
+            $format = '.'.$orgId[1];
+            $orgId = $orgId[0];
+        }
+        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $client = new Common\Lib\APIHelper($format);
+        $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\OrganisationExtendedProfile");
+        $data->setId($orgId);
+        API\Dispatcher::sendResponse(null, DAO\OrganisationDao::insertAndUpdateExtendedProfile($data), null, $format);
     }
 
     public static function deleteOrg($orgId, $format = ".json")

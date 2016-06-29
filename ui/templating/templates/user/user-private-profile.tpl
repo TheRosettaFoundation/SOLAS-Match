@@ -147,6 +147,72 @@
             <tr>
                 <td colspan="2">
                     <hr/>
+                    {if $isSiteAdmin}
+                        {if !(isset($strict))}
+                            {assign var="strict" value=false}
+                        {/if}
+                    {else}
+                        {if !(isset($strict))}
+                            {assign var="strict" value=true}
+                        {/if}
+                        {if !(isset($intervalId))}
+                            {assign var="intervalId" value={NotificationIntervalEnum::DAILY}}
+                        {/if}
+                    {/if}
+                    <p>
+                        <strong>{Localisation::getTranslation('user_task_stream_notification_edit_0')}</strong>
+                    </p>
+                    <p>
+                        {Localisation::getTranslation('user_task_stream_notification_edit_1')}
+                    </p>
+                    <p>
+                        {Localisation::getTranslation('user_task_stream_notification_edit_2')}
+                    </p>
+                    <p>
+                        <label for='strictMode'><strong>{Localisation::getTranslation('user_task_stream_notification_edit_5')}:</strong></label>
+                        <select name="strictMode">
+                            <option value="disabled" {if (!$strict)}selected="true"{/if}>
+                                {Localisation::getTranslation('user_task_stream_notification_edit_all')}
+                            </option>
+                            <option value="enabled" {if ($strict)}selected="true"{/if}>
+                                {Localisation::getTranslation('common_strict')}
+                            </option>
+                        </select>
+                    </p>
+                    <p>
+                        <label for='interval'><strong>{Localisation::getTranslation('user_task_stream_notification_edit_6')}:</strong></label>
+                        <select name="interval">
+                            <option value="0"
+                                {if !isset($intervalId)}
+                                    selected="true"
+                                {/if}
+                            >
+                               {Localisation::getTranslation('user_task_stream_notification_edit_never')}
+                            </option>
+                            <option value="{NotificationIntervalEnum::DAILY}"
+                                {if isset($intervalId) && $intervalId == NotificationIntervalEnum::DAILY}
+                                    selected="true"
+                                {/if}
+                            >
+                                {Localisation::getTranslation('user_task_stream_notification_edit_daily')}
+                            </option>
+                            <option value="{NotificationIntervalEnum::WEEKLY}"
+                                {if isset($intervalId) && $intervalId == NotificationIntervalEnum::WEEKLY}
+                                    selected="true"
+                                {/if}
+                            >
+                                {Localisation::getTranslation('user_task_stream_notification_edit_weekly')}
+                            </option>
+                            <option value="{NotificationIntervalEnum::MONTHLY}"
+                                {if isset($intervalId) && $intervalId == NotificationIntervalEnum::MONTHLY}
+                                    selected="true"
+                                {/if}
+                            >
+                                {Localisation::getTranslation('user_task_stream_notification_edit_monthly')}
+                            </option>
+                        </select>
+                    </p>
+                    <hr/>
                 </td>
             </tr>
             <tr>

@@ -771,9 +771,37 @@ CREATE TABLE IF NOT EXISTS `Organisations` (
 	UNIQUE INDEX `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-
-
 -- Data exporting was unselected.
+
+
+CREATE TABLE IF NOT EXISTS `OrganisationExtendedProfiles` (
+  `id` INT(10) UNSIGNED NOT NULL,
+  `facebook`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `linkedin`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `primaryContactName`  VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `primaryContactTitle` VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `primaryContactEmail` VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `primaryContactPhone` VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `otherContacts`       VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `structure`           VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `affiliations`        VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `urlVideo1`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `urlVideo2`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `urlVideo3`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `subjectMatters`      VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `activitys`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `employees`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `fundings`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `finds`               VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `translations`        VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `requests`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `contents`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `pages`               VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `sources`             VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `targets`             VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `oftens`              VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 -- Dumping structure for table Solas-Match-Test.OrgRequests
@@ -1719,7 +1747,8 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteOrg`(IN `id` INT)
 BEGIN
 if EXISTS (select 1 from Organisations o where o.id=id) then
-	delete from Organisations where Organisations.id=id;
+  DELETE FROM Organisations WHERE Organisations.id=id;
+  DELETE FROM OrganisationExtendedProfiles WHERE OrganisationExtendedProfiles.id=id;
 	select 1 as result;
 else
 	select 0 as result;
@@ -2271,7 +2300,7 @@ BEGIN
     if lim= '' or lim is null then set lim = ~0; end if;
     if offset='' or offset is null then set offset=0; end if;
 
-    SELECT id, project_id as projectId, title, `word-count` as wordCount, 
+    SELECT t.id, project_id as projectId, t.title, t.`word-count` as wordCount,
             (SELECT `en-name` from Languages where id =t.`language_id-source`) as `sourceLanguageName`, 
             (SELECT code from Languages where id =t.`language_id-source`) as `sourceLanguageCode`, 
             (SELECT `en-name` from Languages where id =t.`language_id-target`) as `targetLanguageName`, 
@@ -2280,13 +2309,16 @@ BEGIN
             (SELECT code from Countries where id =t.`country_id-source`) as `sourceCountryCode`, 
             (SELECT `en-name` from Countries where id =t.`country_id-target`) as `targetCountryName`, 
             (SELECT code from Countries where id =t.`country_id-target`) as `targetCountryCode`, 
-            comment, `task-type_id` as taskType, `task-status_id` as taskStatus, published, deadline, `created-time` as createdTime 
+            comment, `task-type_id` as taskType, `task-status_id` as taskStatus, published, t.deadline, t.`created-time` as createdTime
         FROM Tasks t 
+        JOIN      Projects p ON t.project_id=p.id
+        LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
         WHERE NOT exists (SELECT 1 
                             FROM TaskClaims 
                             WHERE TaskClaims.task_id = t.id) 
         AND t.published = 1 
         AND t.`task-status_id` = 2 
+        AND b.id IS NULL
         ORDER BY `created-time` DESC 
         LIMIT offset, lim;
 END//
@@ -2299,11 +2331,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasksCount`()
 BEGIN
     SELECT count(*) as result
         FROM Tasks t 
+        JOIN      Projects p ON t.project_id=p.id
+        LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
         WHERE NOT exists (SELECT 1 
                             FROM TaskClaims 
                             WHERE TaskClaims.task_id = t.id) 
         AND t.published = 1 
-        AND t.`task-status_id` = 2;
+        AND t.`task-status_id` = 2
+        AND b.id IS NULL;
 END//
 DELIMITER ;
 
@@ -2352,7 +2387,7 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getOrg
 DROP PROCEDURE IF EXISTS `getOrg`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrg`(IN `id` INT, IN `name` VARCHAR(50), IN `url` VARCHAR(50), IN `bio` vARCHAR(50), IN `email` VARCHAR(50), IN `address` VARCHAR(50), IN `city` VARCHAR(50), IN `country` VARCHAR(50), IN `regionalFocus` VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrg`(IN `id` INT, IN `name` VARCHAR(128), IN `url` VARCHAR(128), IN `bio` VARCHAR(4096), IN `email` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128), IN `regionalFocus` VARCHAR(128))
 BEGIN
 	if id='' then set id=null;end if;
 	if name='' then set name=null;end if;
@@ -2363,18 +2398,28 @@ BEGIN
 	if city='' then set city=null;end if;
 	if country='' then set country=null;end if;
 	if regionalFocus='' then set regionalFocus=null;end if;
-	
+
 	select o.id, o.name, o.`home-page` as homepage, o.biography, o.`e-mail` as 'email', o.address, o.city, o.country, o.`regional-focus` as regionalFocus from Organisations o
         where (id is null or o.id = id)
         and (name is null or o.name = name)
         and (url is null or o.`home-page` = url)
         and (bio is null or o.biography = bio)
         and (email is null or o.`e-mail` = email)
-        and (address is null or o.address = address) 
+        and (address is null or o.address = address)
         and (city is null or o.city = city)
-        and (country is null or o.country = country) 
+        and (country is null or o.country = country)
         and (regionalFocus is null or o.`regional-focus` = regionalFocus)
     	GROUP BY o.name;
+END//
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `getOrganisationExtendedProfile`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrganisationExtendedProfile`(IN `id` INT)
+BEGIN
+  SELECT * FROM OrganisationExtendedProfiles o
+  WHERE o.id=id;
 END//
 DELIMITER ;
 
@@ -2738,7 +2783,7 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.getTask
 DROP PROCEDURE IF EXISTS `getTask`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(50), IN `wordCount` INT, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `created` DATETIME, IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `tType` INT, IN `tStatus` INT, IN `pub` BIT(1), IN `dLine` DATETIME)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(128), IN `wordCount` INT, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `created` DATETIME, IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `tType` INT, IN `tStatus` INT, IN `pub` BIT(1), IN `dLine` DATETIME)
     READS SQL DATA
 BEGIN
 	if id='' then set id=null;end if;
@@ -3330,49 +3375,67 @@ DELIMITER ;
 -- Dumping structure for procedure debug-test3.getUserTopTasks
 DROP PROCEDURE IF EXISTS `getUserTopTasks`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasks`(IN `uID` INT, IN `strict` INT, IN `lim` INT, 
-IN `offset` INT, IN `taskType` INT, IN `sourceLanguage` VARCHAR(3), IN `targetLanguage` VARCHAR(3))
-
-    READS SQL DATA
-
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasks`(IN `uID` INT, IN `strict` INT, IN `lim` INT, IN `offset` INT, IN `taskType` INT, IN `sourceLanguage` VARCHAR(3), IN `targetLanguage` VARCHAR(3))
 BEGIN
-    -- if limit is null, set to maxBigInt unsigned
-    if lim = '' or lim is null then set lim = ~0; end if;
-    if offset='' or offset is null then set offset = 0; end if;
+    IF lim=''    OR lim    IS NULL THEN SET lim    = ~0; END IF;
+    IF offset='' OR offset IS NULL THEN SET offset =  0; END IF;
+    IF taskType=''       THEN SET taskType       = NULL; END IF;
+    IF sourceLanguage='' THEN SET sourceLanguage = NULL; END IF;
+    IF targetLanguage='' THEN SET targetLanguage = NULL; END IF;
 
-    if taskType = ''       then set taskType = null; end if;
-    if sourceLanguage = '' then set sourceLanguage = null; end if;
-    if targetLanguage = '' then set targetLanguage = null; end if;
-
-    (SELECT id,project_id as projectId,title,`word-count` as wordCount,
-            (SELECT `en-name` from Languages l where l.id = t.`language_id-source`) as `sourceLanguageName`, 
-            (SELECT code from Languages l where l.id = t.`language_id-source`) as `sourceLanguageCode`, 
-            (SELECT `en-name` from Languages l where l.id = t.`language_id-target`) as `targetLanguageName`, 
-            (SELECT code from Languages l where l.id = t.`language_id-target`) as `targetLanguageCode`, 
-            (SELECT `en-name` from Countries c where c.id = t.`country_id-source`) as `sourceCountryName`, 
-            (SELECT code from Countries c where c.id = t.`country_id-source`) as `sourceCountryCode`, 
-            (SELECT `en-name` from Countries c where c.id = t.`country_id-target`) as `targetCountryName`, 
-            (SELECT code from Countries c where c.id = t.`country_id-target`) as `targetCountryCode`, 
-            `comment`, `task-type_id` as taskType, `task-status_id` as taskStatus, published, deadline, `created-time` as createdTime 
-        FROM Tasks t LEFT JOIN (SELECT * FROM UserTaskScores u WHERE u.user_id = uID ) AS uts 
-        ON t.id = uts.task_id 
-        WHERE t.id NOT IN ( SELECT t.task_id FROM TaskClaims t)
-        AND t.published = 1 
-        AND t.`task-status_id` = 2 
-        AND not exists( SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id = uID AND t.task_id = t.id)
-        AND (taskType is null or t.`task-type_id` = taskType)
-        AND (sourceLanguage is null or t.`language_id-source` = (SELECT l.id FROM Languages l WHERE l.code = sourceLanguage))
-        AND (targetLanguage is null or t.`language_id-target` = (SELECT l.id FROM Languages l WHERE l.code = targetLanguage))
-        AND (strict = 0
-            OR ((t.`language_id-source` IN 
-                        (SELECT language_id FROM Users WHERE id =  uID)
-                    OR t.`language_id-source` IN 
-                        (SELECT language_id FROM UserSecondaryLanguages WHERE user_id =  uID))
-                AND (t.`language_id-target` IN 
-                        (SELECT language_id FROM Users WHERE id = uID)
-                    OR t.`language_id-target` IN 
-                        (SELECT language_id FROM UserSecondaryLanguages WHERE user_id = uID))))
-             ORDER BY (uts.score+LEAST(DATEDIFF(CURDATE(), t.`created-time`), 700)) DESC limit offset, lim);
+    SELECT
+        t.id, t.project_id as projectId, t.title, t.`word-count` AS wordCount,
+        (SELECT `en-name` FROM Languages l WHERE l.id=t.`language_id-source`) AS `sourceLanguageName`,
+        (SELECT `code`    FROM Languages l WHERE l.id=t.`language_id-source`) AS `sourceLanguageCode`,
+        (SELECT `en-name` FROM Languages l WHERE l.id=t.`language_id-target`) AS `targetLanguageName`,
+        (SELECT `code`    FROM Languages l WHERE l.id=t.`language_id-target`) AS `targetLanguageCode`,
+        (SELECT `en-name` FROM Countries c WHERE c.id=t.`country_id-source`)  AS `sourceCountryName`,
+        (SELECT `code`    FROM Countries c WHERE c.id=t.`country_id-source`)  AS `sourceCountryCode`,
+        (SELECT `en-name` FROM Countries c WHERE c.id=t.`country_id-target`)  AS `targetCountryName`,
+        (SELECT `code`    FROM Countries c WHERE c.id=t.`country_id-target`)  AS `targetCountryCode`,
+        t.`comment`, t.`task-type_id` AS taskType, t.`task-status_id` AS taskStatus, t.published, t.deadline, t.`created-time` AS createdTime 
+    FROM
+        Users u,
+        Tasks t
+    JOIN      Projects p ON t.project_id=p.id
+    LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+    WHERE
+        u.id=uID AND
+        t.id NOT IN (SELECT t.task_id FROM TaskClaims t) AND
+        t.published=1 AND
+        t.`task-status_id`=2 AND
+        NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id=uID AND t.task_id=t.id) AND
+        (taskType IS NULL OR t.`task-type_id`=taskType) AND
+        (sourceLanguage IS NULL OR t.`language_id-source`=(SELECT l.id FROM Languages l WHERE l.code=sourceLanguage)) AND
+        (targetLanguage IS NULL OR t.`language_id-target`=(SELECT l.id FROM Languages l WHERE l.code=targetLanguage)) AND
+        (
+            strict=0
+            OR
+            (
+                (
+                    t.`language_id-source` IN (SELECT language_id FROM Users                  WHERE id     =uID) OR
+                    t.`language_id-source` IN (SELECT language_id FROM UserSecondaryLanguages WHERE user_id=uID)
+                )
+                AND
+                (
+                    t.`language_id-target` IN (SELECT language_id FROM Users                  WHERE id     =uID) OR
+                    t.`language_id-target` IN (SELECT language_id FROM UserSecondaryLanguages WHERE user_id=uID)
+                )
+            )
+        ) AND
+        (
+            b.id IS NULL OR
+            b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
+        )
+    ORDER BY
+        IF(t.`language_id-target`=u.language_id, 1000 + IF(u.country_id=t.`country_id-target`, 100, 0), 0) +
+        IF(t.`language_id-source`=u.language_id,  750 + IF(u.country_id=t.`country_id-source`,  75, 0), 0) +
+        IF(t.`language_id-target` IN (SELECT language_id FROM UserSecondaryLanguages WHERE user_id=uID), 500 + IF(t.`country_id-target` IN (SELECT country_id FROM UserSecondaryLanguages WHERE user_id=uID), 50, 0), 0) +
+        IF(t.`language_id-source` IN (SELECT language_id FROM UserSecondaryLanguages WHERE user_id=uID), 500 + IF(t.`country_id-source` IN (SELECT country_id FROM UserSecondaryLanguages WHERE user_id=uID), 50, 0), 0) +
+        (SELECT 250.*(1.0-POWER(0.75, COUNT(*)))/(1.0-0.75) FROM ProjectTags pt WHERE pt.project_id=t.project_id AND pt.tag_id IN (SELECT ut.tag_id FROM UserTags ut WHERE user_id=uID)) +
+        LEAST(DATEDIFF(CURDATE(), t.`created-time`), 700)
+        DESC
+    LIMIT offset, lim;
 END//
 DELIMITER ;
 
@@ -3389,8 +3452,9 @@ BEGIN
     if targetLanguage = '' then set targetLanguage = null; end if;
 
     (SELECT count(*) as `result`
-        FROM Tasks t LEFT JOIN (SELECT * FROM UserTaskScores u WHERE u.user_id = uID ) AS uts 
-        ON t.id = uts.task_id 
+        FROM Tasks t
+        JOIN      Projects p ON t.project_id=p.id
+        LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
         WHERE t.id NOT IN ( SELECT t.task_id FROM TaskClaims t)
         AND t.published = 1 
         AND t.`task-status_id` = 2 
@@ -3406,7 +3470,13 @@ BEGIN
                 AND (t.`language_id-target` IN 
                         (SELECT language_id FROM Users WHERE id = uID)
                     OR t.`language_id-target` IN 
-                        (SELECT language_id FROM UserSecondaryLanguages WHERE user_id = uID)))));
+                        (SELECT language_id FROM UserSecondaryLanguages WHERE user_id = uID))))
+        AND
+        (
+            b.id IS NULL OR
+            b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
+        )
+    );
 END//
 DELIMITER ;
 
@@ -3537,21 +3607,49 @@ BEGIN
     SELECT `language_id-source`, `language_id-target`, `country_id-source`, `country_id-target`  
     INTO current_task_langSource, current_task_langTarget, current_task_countrySource, current_task_countryTarget FROM Tasks WHERE id = taskID;
 	
-    (SELECT t2.id,t2.project_id as projectId,t2.title,t2.`word-count` as wordCount,
-    (SELECT `en-name` from Languages l where l.id = t2.`language_id-source`) as `sourceLanguageName`,
-    (SELECT code from Languages l where l.id = t2.`language_id-source`) as `sourceLanguageCode`,
-    (SELECT `en-name` from Languages l where l.id = t2.`language_id-target`) as `targetLanguageName`,
-    (SELECT code from Languages l where l.id = t2.`language_id-target`) as `targetLanguageCode`,
-    (SELECT `en-name` from Countries c where c.id = t2.`country_id-source`) as `sourceCountryName`,
-    (SELECT code from Countries c where c.id = t2.`country_id-source`) as `sourceCountryCode`,
-    (SELECT `en-name` from Countries c where c.id = t2.`country_id-target`) as `targetCountryName`,
-    (SELECT code from Countries c where c.id = t2.`country_id-target`) as `targetCountryCode`,
-    `comment`, `task-type_id` as 'taskType', `task-status_id` as 'taskStatus', published, deadline, `created-time` as createdTime
+    (
+    SELECT
+        t2.id,
+        t2.project_id AS projectId,
+        t2.title,
+        t2.`word-count` AS wordCount,
+        (SELECT `en-name` from Languages l where l.id = t2.`language_id-source`) as `sourceLanguageName`,
+        (SELECT code from Languages l where l.id = t2.`language_id-source`) as `sourceLanguageCode`,
+        (SELECT `en-name` from Languages l where l.id = t2.`language_id-target`) as `targetLanguageName`,
+        (SELECT code from Languages l where l.id = t2.`language_id-target`) as `targetLanguageCode`,
+        (SELECT `en-name` from Countries c where c.id = t2.`country_id-source`) as `sourceCountryName`,
+        (SELECT code from Countries c where c.id = t2.`country_id-source`) as `sourceCountryCode`,
+        (SELECT `en-name` from Countries c where c.id = t2.`country_id-target`) as `targetCountryName`,
+        (SELECT code from Countries c where c.id = t2.`country_id-target`) as `targetCountryCode`,
+        `comment`,
+        `task-type_id` AS 'taskType',
+        `task-status_id` AS 'taskStatus',
+        published,
+        deadline,
+        `created-time` AS createdTime
      FROM
-    (SELECT t.id, count(*) AS task_count FROM TaskViews tv JOIN Tasks t ON t.id = tv.task_id AND tv.user_id IN 
-    (SELECT DISTINCT user_id FROM `TaskViews` WHERE `task_id` = taskID) AND t.id != taskID AND t.`task-status_id` = 2 and
-	 t.`language_id-source` = current_task_langSource and t.`language_id-target` = current_task_langTarget GROUP BY task_id ORDER BY task_count DESC) 
-     AS t1 JOIN Tasks t2 ON t1.id = t2.id LIMIT offset,lim);
+        (
+        SELECT
+            t.id,
+            COUNT(*) AS task_count
+        FROM TaskViews tv
+        JOIN Tasks     t  ON
+            t.id=tv.task_id AND
+            tv.user_id IN (SELECT DISTINCT user_id FROM TaskViews WHERE task_id=taskID) AND
+            t.id!=taskID AND
+            t.`task-status_id`=2 AND
+            t.`language_id-source`=current_task_langSource AND
+            t.`language_id-target`=current_task_langTarget AND
+            t.published=1
+        JOIN      Projects p ON t.project_id=p.id
+        LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+        WHERE b.id IS NULL
+        GROUP BY task_id
+        ORDER BY task_count DESC
+        ) AS t1
+    JOIN Tasks t2 ON t1.id=t2.id
+    LIMIT offset,lim
+    );
 END//
 DELIMITER ;
 
@@ -4076,7 +4174,92 @@ BEGIN
 		
         CALL getOrg(id,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
-	END IF;		
+  END IF;
+END//
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `organisationExtendedProfileInsertAndUpdate`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `organisationExtendedProfileInsertAndUpdate`(
+  IN `id` INT(10),
+  IN `facebook` VARCHAR(255),
+  IN `linkedin` VARCHAR(255),
+  IN `primaryContactName` VARCHAR(255),
+  IN `primaryContactTitle` VARCHAR(255),
+  IN `primaryContactEmail` VARCHAR(255),
+  IN `primaryContactPhone` VARCHAR(255),
+  IN `otherContacts` VARCHAR(4096),
+  IN `structure` VARCHAR(4096),
+  IN `affiliations` VARCHAR(4096),
+  IN `urlVideo1` VARCHAR(255),
+  IN `urlVideo2` VARCHAR(255),
+  IN `urlVideo3` VARCHAR(255),
+  IN `subjectMatters` VARCHAR(4096),
+  IN `activitys` VARCHAR(255),
+  IN `employees` VARCHAR(255),
+  IN `fundings` VARCHAR(255),
+  IN `finds` VARCHAR(255),
+  IN `translations` VARCHAR(255),
+  IN `requests` VARCHAR(255),
+  IN `contents` VARCHAR(255),
+  IN `pages` VARCHAR(255),
+  IN `sources` VARCHAR(255),
+  IN `targets` VARCHAR(255),
+  IN `oftens` VARCHAR(255))
+BEGIN
+  REPLACE INTO OrganisationExtendedProfiles
+    (`id`,
+     `facebook`,
+     `linkedin`,
+     `primaryContactName`,
+     `primaryContactTitle`,
+     `primaryContactEmail`,
+     `primaryContactPhone`,
+     `otherContacts`,
+     `structure`,
+     `affiliations`,
+     `urlVideo1`,
+     `urlVideo2`,
+     `urlVideo3`,
+     `subjectMatters`,
+     `activitys`,
+     `employees`,
+     `fundings`,
+     `finds`,
+     `translations`,
+     `requests`,
+     `contents`,
+     `pages`,
+     `sources`,
+     `targets`,
+     `oftens`)
+  VALUES
+    (id,
+     facebook,
+     linkedin,
+     primaryContactName,
+     primaryContactTitle,
+     primaryContactEmail,
+     primaryContactPhone,
+     otherContacts,
+     structure,
+     affiliations,
+     urlVideo1,
+     urlVideo2,
+     urlVideo3,
+     subjectMatters,
+     activitys,
+     employees,
+     fundings,
+     finds,
+     translations,
+     requests,
+     contents,
+     pages,
+     sources,
+     targets,
+     oftens);
 END//
 DELIMITER ;
 

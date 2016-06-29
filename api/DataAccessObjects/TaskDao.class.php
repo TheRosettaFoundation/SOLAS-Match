@@ -122,7 +122,7 @@ class TaskDao
     {
         if (is_null($task->getId())) {
             self::insert($task);
-            self::calculateTaskScore($task->getId());
+            // self::calculateTaskScore($task->getId()); // Not required see https://github.com/TheRosettaFoundation/SOLAS-Match/commit/ce6724ca50cd68eb1898156fd942237bdb5dddcf and https://github.com/TheRosettaFoundation/SOLAS-Match-Backend/commit/0130685a93246d8f6f82ac44041cd039c1879cd0
         } else {
             self::update($task);
             //commented out the following line which triggers task-score-calculation & email per every task update 
@@ -680,7 +680,11 @@ class TaskDao
         } else {
             $args .= ", 0";
         }
+
+        error_log("call unClaimTask($args)");
         $ret = Lib\PDOWrapper::call("unClaimTask", $args);
+        $result = $ret[0]['result'];
+        error_log("result: $result");
         return $ret[0]['result'];
     }
 

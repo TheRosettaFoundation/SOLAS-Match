@@ -434,6 +434,16 @@ class TemplateHelper
         return str_replace('\t', '&nbsp;&nbsp;&nbsp;&nbsp;', str_replace(array('\r\n', '\n', '\r'), "<br/>", htmlspecialchars($string, ENT_COMPAT, 'UTF-8')));
     }
 
+    public static function uiCleanseHTMLReinsertNewlineAndTabs($string)
+    {
+        return str_replace('\t', '&nbsp;&nbsp;&nbsp;&nbsp;', str_replace(array('\r\n', '\n', '\r'), "\r\n", htmlspecialchars($string, ENT_COMPAT, 'UTF-8')));
+    }
+
+    public static function uiCleanseHTML($string)
+    {
+        return htmlspecialchars($string, ENT_COMPAT, 'UTF-8');
+    }
+
     private static function cleanTag($tag)
     {
         $cleaned = trim($tag);
@@ -453,6 +463,36 @@ class TemplateHelper
     private static function cleanse($string)
     {
         return str_replace("_", " ", $string);
+    }
+
+    public static function expandSelectedOptions($options)
+    {
+        $string = '';
+        foreach ($options as $option) {
+            if ($option['selected']) {
+                if ($string === '') {
+                    $string .= $option['value'];
+                } else {
+                    $string .= ', ' . $option['value'];
+                }
+            }
+        }
+        return $string;
+    }
+
+    public static function expandSelectedOptionsSemicolon($options)
+    {
+        $string = '';
+        foreach ($options as $option) {
+            if ($option['selected']) {
+                if ($string === '') {
+                    $string .= $option['value'];
+                } else {
+                    $string .= '; ' . $option['value'];
+                }
+            }
+        }
+        return $string;
     }
 
     public static function registerWithSmarty()

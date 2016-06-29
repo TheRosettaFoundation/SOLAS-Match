@@ -9,6 +9,7 @@
 		<div class="pull-right">
             <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                 {if (!$isOrgMember)}
+                    {if false}
                         {if ($userSubscribedToOrganisation)}
                             <input type="hidden" name="trackOrganisation" value="0" />
                                 <a class="btn btn-small btn-inverse pull-right" onclick="$('#trackedOrganisationForm').submit();" >
@@ -20,6 +21,7 @@
                                     <i class="icon-envelope icon-black"></i>{Localisation::getTranslation('org_public_profile_track_organisation')}
                                 </a>
                         {/if}
+                    {/if}
                 {/if}
                 {if ($isOrgMember || $isAdmin)}
                     <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='pull-right btn btn-primary fixMargin'>
@@ -373,12 +375,14 @@ Tweet</a>
                                                     <i class="icon-fire icon-white"></i> {Localisation::getTranslation('project_view_2')}
                                                 </button>  
                                             {else}
+                                                {if $isSiteAdmin}
                                                 <input type="hidden" name="archiveTask" value="Delete" />
                                                 <a class="btn btn-small btn-inverse" 
                                                     onclick="if (confirm('{Localisation::getTranslation('project_view_3')}')) 
                                                         $('#archiveDeleteForm{$task_id}').submit();" >
                                                     <i class="icon-fire icon-white"></i> {Localisation::getTranslation('common_archive')}
                                                 </a> 
+                                                {/if}
                                             {/if}
                                         </form>
                                     </td>

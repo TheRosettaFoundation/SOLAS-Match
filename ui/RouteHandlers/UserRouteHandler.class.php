@@ -569,7 +569,7 @@ class UserRouteHandler
                     
                     //Redirect to homepage, or the page the page user was previously on e.g. if their
                     //session timed out and they are logging in again.
-                    if ($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
+                    if ($request) {
                         $app->redirect($request);
                     } else {
                         $nativeLocale = $user->getNativeLocale();
@@ -624,7 +624,7 @@ class UserRouteHandler
                     Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
                 }
                 
-                if ($request && $app->request()->getRootUri() && strpos($request, $app->request()->getRootUri())) {
+                if ($request) {
                     $app->redirect($request);
                 } else {
                     $nativeLocale = $user->getNativeLocale();
@@ -763,6 +763,7 @@ EOD;
         $app = \Slim\Slim::getInstance();
         
         $userDao = new DAO\UserDao();
+        $adminDao = new DAO\AdminDao();
         $langDao = new DAO\LanguageDao();
         $countryDao = new DAO\CountryDao();
 
@@ -910,6 +911,22 @@ EOD;
                     $userDao->updateUser($user);
                     $userDao->updatePersonalInfo($user_id, $userPersonalInfo);
 
+                    if (isset($post['interval'])) {
+                        if ($post['interval'] == 0) {
+                            $userDao->removeTaskStreamNotification($user_id);
+                        } else {
+                            $notifData = new Common\Protobufs\Models\UserTaskStreamNotification();
+                            $notifData->setUserId($user_id);
+                            $notifData->setInterval($post['interval']);
+                            if (isset($post['strictMode']) && $post['strictMode'] == 'enabled') {
+                                $notifData->setStrict(true);
+                            } else {
+                                $notifData->setStrict(false);
+                            }
+                            $userDao->requestTaskStreamNotification($notifData);
+                        }
+                    }
+
                     if ($translator && empty($post['translator'])) {
                         $userDao->removeUserBadge($user_id, 6);
                     } elseif (!$translator && !empty($post['translator'])) {
@@ -933,12 +950,34 @@ EOD;
             }
         }
 
+        $notifData = $userDao->getUserTaskStreamNotification($user_id);
+        if ($notifData) {
+            if ($notifData->hasStrict()) {
+                $strict = $notifData->getStrict();
+            } else {
+                $strict = false;
+            }
+
+            $app->view()->appendData(array(
+                'intervalId' => $notifData->getInterval(),
+                'strict'     => $strict,
+            ));
+        }
+
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/UserPrivateProfile.js\"></script>";
+
+        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
+        if (!is_null($loggedInUserId)) {
+            $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
+        } else {
+            $isSiteAdmin = false;
+        }
 
         $app->view()->appendData(array(
             'siteLocation'     => Common\Lib\Settings::get('site.location'),
             'siteAPI'          => Common\Lib\Settings::get('site.api'),
+            'isSiteAdmin'      => $isSiteAdmin,
             'user'             => $user,
             'user_id'          => $user_id,
             'userPersonalInfo' => $userPersonalInfo,

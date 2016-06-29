@@ -286,6 +286,37 @@
     <string name="org_private_profile_delete_success">Successfully deleted the organisation %s</string>        
     <string name="org_private_profile_delete_fail">Unable to delete organisation. Please try again later.</string> 
 
+    <string name="org_private_profile_organisation_visible_by_all">Visible to all Registered Users of Trommons</string>
+    <string name="org_private_profile_organisation_visible_by_members">Visible to Organisation Members and Trommons Administrators only</string>
+    <string name="org_private_profile_organisation_overview">Overview of Organisation including Vision, Mission<br />and Target Beneficiary Communities</string>
+    <string name="org_private_profile_organisation_activity">Area of Activity</string>
+    <string name="org_private_profile_organisation_multiple">Hold down Ctrl (Windows)/Command (Mac) to select multiple options</string>
+    <string name="org_private_profile_organisation_website">Organisation's Website</string>
+    <string name="org_private_profile_organisation_facebook">Facebook</string>
+    <string name="org_private_profile_organisation_linkedin">LinkedIn</string>
+    <string name="org_private_profile_organisation_twitter">Twitter</string>
+    <string name="org_private_profile_organisation_primary_contact_name">Primary Contact Given Name and Family Name</string>
+    <string name="org_private_profile_organisation_primary_contact_title">Primary Contact Title</string>
+    <string name="org_private_profile_organisation_primary_contact_email">Primary Contact email</string>
+    <string name="org_private_profile_organisation_primary_contact_phone">Primary Contact Phone</string>
+    <string name="org_private_profile_organisation_other_contacts">Details for other Contacts</string>
+    <string name="org_private_profile_organisation_structure">Organisational Structure, Leadership Team, Board and Locations</string>
+    <string name="org_private_profile_organisation_affiliations">Organisational Affiliations and Awards</string>
+    <string name="org_private_profile_organisation_url_video_1">URLs for Videos or Documents describing the Organisation's Impact<br />or Social Responsibility/Impact report</string>
+    <string name="org_private_profile_organisation_employee">Number of Employees</string>
+    <string name="org_private_profile_organisation_funding">Your Funding Sources</string>
+    <string name="org_private_profile_organisation_find">How did you find us?</string>
+    <string name="org_private_profile_organisation_translation">How are you getting your translations done at the moment?</string>
+    <string name="org_private_profile_organisation_request">Which one of the following best defines your request?</string>
+    <string name="org_private_profile_organisation_content">What are the typical content types you need translations for?</string>
+    <string name="org_private_profile_organisation_subject_matters">What are the typical subject matters?</string>
+    <string name="org_private_profile_organisation_pages">What are the typical content volumes in pages during the course of a year<br />(one page = 250 words)?</string>
+    <string name="org_private_profile_organisation_source">What are the most frequent source languages?</string>
+    <string name="org_private_profile_organisation_target">What are the most frequent target languages?</string>
+    <string name="org_private_profile_organisation_often">How often do you require translations?</string>
+    <string name="org_private_profile_organisation_error_overview_not_set"><strong>Overview of Organisation</strong> must be set.</string>
+    <string name="org_private_profile_organisation_error_name_not_set"><strong>Primary Contact Given Name and Family Name</strong> must be set.</string>
+    <string name="org_private_profile_organisation_error_email_not_set"><strong>Primary Contact email</strong> must be set.</string>
 	<string name="org_public_profile_an_organisation_of">An organisation of %s.</string>
 	<string name="org_public_profile_edit_organisation_details">Edit Organisation Details</string>
 	<string name="org_public_profile_request_membership">Request Membership</string>
@@ -734,9 +765,7 @@
     <string name="task_claim_proofreading_3">Do you think you are capable of proofreading a file in <strong>%s?</strong></string>
 	<string name="task_claim_proofreading_4">When you are finished proofreading the file, you will need to upload it again.</string>
 	<string name="task_claim_proofreading_5">Yes, I promise I will proofread this file</string>
-    <string name="task_claim_proofreading_6">
-        If you would like to view the <strong>original file</strong> in its source language you can download it <a href="%s">here</a>
-    </string>
+    <string name="task_claim_proofreading_6">If you would like to view the <strong>original file</strong> in its source language you can download it <a href="%s">here</a></string>
 
 	<string name="task_claim_segmentation_0">Do you want to segment this file?</string>
 	<string name="task_claim_segmentation_1">Will you be able to segment this file?</string>
