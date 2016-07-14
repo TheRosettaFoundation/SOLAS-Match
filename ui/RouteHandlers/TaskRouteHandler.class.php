@@ -589,6 +589,11 @@ class TaskRouteHandler
         $userDao = new DAO\UserDao();
         $languageDao = new DAO\LanguageDao();
 
+        $taskClaimed = $taskDao->isTaskClaimed($taskId);
+        if ($taskClaimed) { // Protect against someone inappropriately creating URL for this route
+            $app->redirect($app->urlFor("task", array("task_id" => $taskId)));
+        }
+
         $task = $taskDao->getTask($taskId);
         if ($app->request()->isPost()) {
             $user_id = Common\Lib\UserSession::getCurrentUserID();
@@ -936,6 +941,11 @@ class TaskRouteHandler
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $orgDao = new DAO\OrganisationDao();
+
+        $taskClaimed = $taskDao->isTaskClaimed($taskId);
+        if (!$taskClaimed) { // Protect against someone inappropriately creating URL for this route
+            $app->redirect($app->urlFor("task", array("task_id" => $taskId)));
+        }
 
         $fieldName = "fileUpload";
         $errorMessage = null;
