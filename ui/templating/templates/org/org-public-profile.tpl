@@ -748,4 +748,47 @@
     {/if}
 {/if}
 
+{if $isSiteAdmin}
+    <h1 class="page-header">
+        Subscription
+        <small>Set or update subscription for this organisation.</small>
+    </h1>
+    <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
+        <table>
+            <tr>
+                <td>
+                    <label for="level" style="font-size: large"><strong>Level</strong></label>
+                    <select name="level" id="level" style="width: 80%">
+                        <option value="10"   {if $subscription['level'] ==   10}selected="selected"{/if}>Intermittent use for year</option>
+                        <option value="20"   {if $subscription['level'] ==   20}selected="selected"{/if}>Moderate use for year</option>
+                        <option value="30"   {if $subscription['level'] ==   30}selected="selected"{/if}>Heavy use for year</option>
+                        <option value="100"  {if $subscription['level'] ==  100}selected="selected"{/if}>Partner</option>
+                        <option value="1000" {if $subscription['level'] == 1000}selected="selected"{/if}>Free because unable to pay</option>
+                    </select>
+                </td>
+                <td>
+                    <label for="deadline" style="font-size: large"><strong>Start Date</strong></label>
+                    {if $deadline_error != ''}
+                        <div class="alert alert-error">
+                            {$deadline_error}
+                        </div>
+                    {/if}
+                    <p>
+                        <input class="hasDatePicker" type="text" id="deadline_field" name="deadline_field" value="{$subscription['start_date']}" style="width: 80%" />
+                        <input type="hidden" name="deadline" id="deadline" />
+                    </p>
+                </td>
+                <td>
+                    <label for="comment" style="font-size: large"><strong>Comment</strong></label>
+                    <input type="text" name="comment" id="comment" maxlength="255" value="{$subscription['comment']|escape:'html':'UTF-8'}" style="width: 80%" />
+                </td>
+                    <button type="submit" onclick="return validateForm();" value="setSubscription" name="setsubscription" class="btn btn-primary">
+                        <i class="icon-star icon-white"></i> Update Subscription
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </form>
+{/if}
+
 {include file='footer.tpl'}
