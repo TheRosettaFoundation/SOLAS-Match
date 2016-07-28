@@ -759,7 +759,7 @@
             {if $no_subscription}
             <tr>
                 <td>
-                    <div style="font-size: large"><strong>There is no Subscription for this organisation, set one...</strong></div>
+                    <div style="font-size: large"><strong>There is no Subscription for this organisation, set one...<br /><br /></strong></div>
                 </td>
             </tr>
             {/if}

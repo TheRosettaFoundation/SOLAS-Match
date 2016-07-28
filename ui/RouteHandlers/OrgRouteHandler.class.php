@@ -1846,7 +1846,7 @@ error_log("updateSubscription($org_id, $level, 0, $start_date, $comment)");
                     'level' => 1000,
                     'spare' => 0,
                     'start_date' => gmdate('Y-m-d H:i:s'),
-                    'comment' => 'FOR TEST ONLY');
+                    'comment' => '');
             } else {
                 $no_subscription = false;
             }
