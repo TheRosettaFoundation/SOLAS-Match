@@ -1754,8 +1754,8 @@ class OrgRouteHandler
                 }
             } elseif (isset($post['revokeOrgAdmin'])) {
                 $userId = $post['revokeOrgAdmin'];
+                error_log("Called revokeOrgAdmin($userId, $org_id)");
                 $adminDao->removeOrgAdmin($userId, $org_id);
-                
             } elseif (isset($post['makeOrgAdmin'])) {
                 $userId = $post['makeOrgAdmin'];
                 error_log("Called createOrgAdmin($userId, $org_id)");
