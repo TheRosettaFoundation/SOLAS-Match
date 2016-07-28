@@ -766,7 +766,7 @@
             <tr>
                 <td>
                     <label for="level" style="font-size: large"><strong>Level</strong></label>
-                    <select name="level" id="level" style="width: 80%">
+                    <select name="level" id="level" style="width: 82%">
                         <option value="10"   {if $subscription['level'] ==   10}selected="selected"{/if}>Intermittent use for year</option>
                         <option value="20"   {if $subscription['level'] ==   20}selected="selected"{/if}>Moderate use for year</option>
                         <option value="30"   {if $subscription['level'] ==   30}selected="selected"{/if}>Heavy use for year</option>
