@@ -1580,8 +1580,7 @@ class OrgRouteHandler
             $extra_scripts = "
             <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
             <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/DeadlinePicker.js\"></script>";
-        }
-        else {
+        } else {
             $extra_scripts = '';
         }
 
@@ -1838,6 +1837,7 @@ error_log("updateSubscription($org_id, $level, 0, $start_date, $comment)");
             }
         }
 
+        $no_subscription = true;
         if ($isSiteAdmin) {
 //            $subscription = $orgDao->getSubscription($org_id);
             if (empty($subscription)) {
@@ -1847,9 +1847,10 @@ error_log("updateSubscription($org_id, $level, 0, $start_date, $comment)");
                     'spare' => 0,
                     'start_date' => gmdate('Y-m-d H:i:s'),
                     'comment' => 'FOR TEST ONLY');
+            } else {
+                $no_subscription = false;
             }
-        }
-        else {
+        } else {
             $subscription = array();
         }
 
@@ -1877,6 +1878,7 @@ error_log("updateSubscription($org_id, $level, 0, $start_date, $comment)");
                 'isSiteAdmin' => $isSiteAdmin,
                 'deadline_error' => $deadlineError,
                 'extra_scripts' => $extra_scripts,
+                'no_subscription' => $no_subscription,
                 'subscription' => $subscription,
                 'siteName' => $siteName,
                 "membershipRequestUsers" => $user_list,

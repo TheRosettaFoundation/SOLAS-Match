@@ -756,6 +756,13 @@
     </h1>
     <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
         <table>
+            {if $no_subscription}
+            <tr>
+                <td>
+                    <div style="font-size: large"><strong>There is no Subscription for this organisation, set one...</strong></div>
+                </td>
+            </tr>
+            {/if}
             <tr>
                 <td>
                     <label for="level" style="font-size: large"><strong>Level</strong></label>
@@ -767,6 +774,8 @@
                         <option value="1000" {if $subscription['level'] == 1000}selected="selected"{/if}>Free because unable to pay</option>
                     </select>
                 </td>
+            </tr>
+            <tr>
                 <td>
                     <label for="deadline" style="font-size: large"><strong>Start Date</strong></label>
                     {if $deadline_error != ''}
@@ -779,12 +788,17 @@
                         <input type="hidden" name="deadline" id="deadline" />
                     </p>
                 </td>
+            </tr>
+            <tr>
                 <td>
                     <label for="comment" style="font-size: large"><strong>Comment</strong></label>
                     <input type="text" name="comment" id="comment" maxlength="255" value="{$subscription['comment']|escape:'html':'UTF-8'}" style="width: 80%" />
                 </td>
+            </tr>
+            <tr>
+                <td>
                     <button type="submit" onclick="return validateForm();" value="setSubscription" name="setsubscription" class="btn btn-primary">
-                        <i class="icon-star icon-white"></i> Update Subscription
+                        <i class="icon-refresh icon-white"></i> Update Subscription
                     </button>
                 </td>
             </tr>
