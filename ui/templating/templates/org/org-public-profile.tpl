@@ -749,6 +749,7 @@
 {/if}
 
 {if $isSiteAdmin}
+    <p style="margin-bottom: 40px" />
     <h1 class="page-header">
         Subscription
         <small>Set or update subscription for this organisation.</small>
