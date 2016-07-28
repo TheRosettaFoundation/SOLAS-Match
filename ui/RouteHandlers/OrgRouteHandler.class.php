@@ -1573,6 +1573,7 @@ class OrgRouteHandler
         $userDao = new DAO\UserDao();
         $badgeDao = new DAO\BadgeDao();
 
+        $currentUser = $userDao->getUser(Common\Lib\UserSession::getCurrentUserId());
         $isSiteAdmin = $adminDao->isSiteAdmin($currentUser->getId());
         $deadlineError = '';
         if ($isSiteAdmin) {
@@ -1584,7 +1585,6 @@ class OrgRouteHandler
             $extra_scripts = '';
         }
 
-        $currentUser = $userDao->getUser(Common\Lib\UserSession::getCurrentUserId());
         $org = $orgDao->getOrganisation($org_id);
         $org2 = $orgDao->getOrganisationExtendedProfile($org_id);
         if (empty($org2)) {
