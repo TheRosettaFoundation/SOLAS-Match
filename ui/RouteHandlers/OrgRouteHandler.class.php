@@ -1790,8 +1790,9 @@ class OrgRouteHandler
                 if ($validTime = Lib\TemplateHelper::isValidDateTime($post['deadline'])) {
                     $start_date = date("Y-m-d H:i:s", $validTime);
                     $comment = '';
-                    if (isset($post['comment'])) $comment = $post['comment'];
-error_log("updateSubscription($org_id, $post['level'], 0, $start_date, $comment)");
+                    if (!empty($post['comment'])) $comment = $post['comment'];
+$level = $post['level'];
+error_log("updateSubscription($org_id, $level, 0, $start_date, $comment)");
 //                    $orgDao->updateSubscription($org_id, $post['level'], 0, $start_date, $comment);
                 } else {
                     $deadlineError = Lib\Localisation::getTranslation('task_alter_8');
