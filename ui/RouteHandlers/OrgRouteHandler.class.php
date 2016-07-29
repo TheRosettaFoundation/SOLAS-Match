@@ -1790,9 +1790,9 @@ class OrgRouteHandler
                     $start_date = date("Y-m-d H:i:s", $validTime);
                     $comment = '';
                     if (!empty($post['comment'])) $comment = $post['comment'];
-$level = $post['level'];
-error_log("updateSubscription($org_id, $level, 0, $start_date, $comment)");
-//                    $orgDao->updateSubscription($org_id, $post['level'], 0, $start_date, $comment);
+                    $level = $post['level'];
+                    error_log("updateSubscription($org_id, $level, 0, $start_date, $comment)");
+                    $orgDao->updateSubscription($org_id, $post['level'], 0, $start_date, $comment);
                 } else {
                     $start_dateError = Lib\Localisation::getTranslation('task_alter_8');
                 }
@@ -1839,7 +1839,7 @@ error_log("updateSubscription($org_id, $level, 0, $start_date, $comment)");
 
         $no_subscription = true;
         if ($isSiteAdmin) {
-//            $subscription = $orgDao->getSubscription($org_id);
+            $subscription = $orgDao->getSubscription($org_id);
             if (empty($subscription)) {
                 $subscription = array(
                     'organisation_id' => $org_id,

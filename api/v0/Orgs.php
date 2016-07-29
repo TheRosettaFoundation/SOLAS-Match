@@ -155,6 +155,22 @@ class Orgs
                 );
             });
 
+            $app->group('/subscription', function () use ($app) {
+
+                /* Routes starting /v0/subscription */
+                $app->get(
+                    '/:orgId/',
+                    '\SolasMatch\API\Lib\Middleware::isSiteAdmin',
+                    '\SolasMatch\API\V0\Orgs::getSubscription'
+                );
+
+                $app->put(
+                    '/:orgId/',
+                    '\SolasMatch\API\Lib\Middleware::isSiteAdmin',
+                    '\SolasMatch\API\V0\Orgs::updateOrgExtendedProfile'
+                );
+            });
+
             /* Routes starting /v0 */
             $app->get(
                 '/orgs(:format)/',
@@ -416,6 +432,17 @@ class Orgs
                 Lib\Notify::sendOrgCreatedNotifications($org->getId());
             }
         }
+    }
+
+    public static function getSubscription($org_id, $format = ".json")
+    {
+        if (!is_numeric($org_id) && strstr($org_id, '.')) {
+            $org_id = explode('.', $org_id);
+            $format = '.'.$org_id[1];
+            $org_id = $org_id[0];
+        }
+        $ret = DAO\OrganisationDao::getSubscription($org_id);
+        API\Dispatcher::sendResponse(null, $ret, null, $format);
     }
 }
 
