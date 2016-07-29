@@ -777,15 +777,15 @@
             </tr>
             <tr>
                 <td>
-                    <label for="deadline" style="font-size: large"><strong>Start Date</strong></label>
-                    {if $deadline_error != ''}
+                    <label for="start_date" style="font-size: large"><strong>Start Date</strong></label>
+                    {if $start_date_error != ''}
                         <div class="alert alert-error">
-                            {$deadline_error}
+                            {$start_date_error}
                         </div>
                     {/if}
                     <p>
-                        <input class="hasDatePicker" type="text" id="deadline_field" name="deadline_field" value="{$subscription['start_date']}" style="width: 80%" />
-                        <input type="hidden" name="deadline" id="deadline" />
+                        <input class="hasDatePicker" type="text" id="start_date_field" name="start_date_field" value="{$subscription['start_date']}" style="width: 80%" />
+                        <input type="hidden" name="start_date" id="start_date" />
                     </p>
                 </td>
             </tr>

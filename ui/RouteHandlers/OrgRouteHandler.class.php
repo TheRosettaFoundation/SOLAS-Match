@@ -1575,11 +1575,11 @@ class OrgRouteHandler
 
         $currentUser = $userDao->getUser(Common\Lib\UserSession::getCurrentUserId());
         $isSiteAdmin = $adminDao->isSiteAdmin($currentUser->getId());
-        $deadlineError = '';
+        $start_dateError = '';
         if ($isSiteAdmin) {
             $extra_scripts = "
             <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
-            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/DeadlinePicker.js\"></script>";
+            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/start_datePicker.js\"></script>";
         } else {
             $extra_scripts = '';
         }
@@ -1785,8 +1785,8 @@ class OrgRouteHandler
                         );
                     }
                 }
-            } elseif (isset($post['deadline']) && $post['deadline'] != '' && isset($post['level']) && ($post['level'] == 10 || $post['level'] == 20 || $post['level'] == 30 || $post['level'] == 100 || $post['level'] == 1000)) {
-                if ($validTime = Lib\TemplateHelper::isValidDateTime($post['deadline'])) {
+            } elseif (isset($post['start_date']) && $post['start_date'] != '' && isset($post['level']) && ($post['level'] == 10 || $post['level'] == 20 || $post['level'] == 30 || $post['level'] == 100 || $post['level'] == 1000)) {
+                if ($validTime = Lib\TemplateHelper::isValidDateTime($post['start_date'])) {
                     $start_date = date("Y-m-d H:i:s", $validTime);
                     $comment = '';
                     if (!empty($post['comment'])) $comment = $post['comment'];
@@ -1794,7 +1794,7 @@ $level = $post['level'];
 error_log("updateSubscription($org_id, $level, 0, $start_date, $comment)");
 //                    $orgDao->updateSubscription($org_id, $post['level'], 0, $start_date, $comment);
                 } else {
-                    $deadlineError = Lib\Localisation::getTranslation('task_alter_8');
+                    $start_dateError = Lib\Localisation::getTranslation('task_alter_8');
                 }
             }
         }
@@ -1876,7 +1876,7 @@ error_log("updateSubscription($org_id, $level, 0, $start_date, $comment)");
                 'memberIsAdmin' => $memberIsAdmin,
                 "org_badges" => $org_badges,
                 'isSiteAdmin' => $isSiteAdmin,
-                'deadline_error' => $deadlineError,
+                'start_date_error' => $start_dateError,
                 'extra_scripts' => $extra_scripts,
                 'no_subscription' => $no_subscription,
                 'subscription' => $subscription,
