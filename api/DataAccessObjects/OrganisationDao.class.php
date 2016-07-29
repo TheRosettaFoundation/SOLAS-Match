@@ -361,4 +361,26 @@ class OrganisationDao
         }
         return $ret;
     }
+
+    public static function getSubscription($org_id)
+    {
+        $subscription = null;
+
+        $result = Lib\PDOWrapper::call('getSubscription', Lib\PDOWrapper::cleanse($org_id));
+        if (!empty($result)) {
+            $subscription = $result[0];
+        }
+        return $subscription;
+    }
+
+    public static function updateSubscription($org_id, $level, $spare, $start_date, $comment)
+    {
+        $args = Lib\PDOWrapper::cleanse($org_id) . ',' .
+                Lib\PDOWrapper::cleanse($level) . ',' .
+                Lib\PDOWrapper::cleanse($spare) . ',' .
+                Lib\PDOWrapper::cleanse($start_date) . ',' .
+                Lib\PDOWrapper::cleanseWrapStr($comment);
+        $result = Lib\PDOWrapper::call('updateSubscription', $args);
+        return $result[0]['result'];
+    }
 }

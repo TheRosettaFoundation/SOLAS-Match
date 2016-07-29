@@ -159,15 +159,15 @@ class Orgs
 
                 /* Routes starting /v0/subscription */
                 $app->get(
-                    '/:orgId/',
+                    '/:org_id/',
                     '\SolasMatch\API\Lib\Middleware::isSiteAdmin',
                     '\SolasMatch\API\V0\Orgs::getSubscription'
                 );
 
-                $app->put(
-                    '/:orgId/',
+                $app->post(
+                    '/:org_id/level/:level/spare/:spare/start_date/:start_date/',
                     '\SolasMatch\API\Lib\Middleware::isSiteAdmin',
-                    '\SolasMatch\API\V0\Orgs::updateOrgExtendedProfile'
+                    '\SolasMatch\API\V0\Orgs::updateSubscription'
                 );
             });
 
@@ -443,6 +443,18 @@ class Orgs
         }
         $ret = DAO\OrganisationDao::getSubscription($org_id);
         API\Dispatcher::sendResponse(null, $ret, null, $format);
+    }
+
+    public static function updateSubscription($org_id, $level, $spare, $start_date, $format = ".json")
+    {
+        if (strstr($start_date, '.')) {
+            $start_date = explode('.', $start_date);
+            $format = '.'.$start_date[1];
+            $start_date = $start_date[0];
+        }
+        $comment = API\Dispatcher::getDispatcher()->request()->getBody();
+        $comment = trim($comment);
+        API\Dispatcher::sendResponse(null, DAO\TaskDao::updateSubscription($org_id, $level, $spare, urldecode($start_date), $comment), null, $format);
     }
 }
 
