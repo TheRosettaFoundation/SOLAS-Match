@@ -1368,6 +1368,7 @@ CREATE TABLE IF NOT EXISTS Subscriptions (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS SubscriptionsRecorded (
+  time_stamp DATETIME NOT NULL,
   organisation_id INT(10) UNSIGNED NOT NULL,
   level INT(10) UNSIGNED NOT NULL,
   spare INT(10) UNSIGNED DEFAULT 0 NOT NULL,
@@ -5938,7 +5939,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `updateSubscription`(IN `organisation_id` INT, IN `level` INT, IN `spare` INT, IN `start_date` DATETIME, IN `comment` VARCHAR(255))
 BEGIN
     REPLACE INTO Subscriptions (`organisation_id`, `level`, `spare`, `start_date`, `comment`) VALUES (organisation_id, level, spare, start_date, comment);
-    INSERT INTO SubscriptionsRecorded (`organisation_id`, `level`, `spare`, `start_date`, `comment`) VALUES (organisation_id, level, spare, start_date, comment);
+    INSERT INTO SubscriptionsRecorded (`time_stamp`, `organisation_id`, `level`, `spare`, `start_date`, `comment`) VALUES (NOW(), organisation_id, level, spare, start_date, comment);
     SELECT 1 as result;
 END//
 DELIMITER ;
