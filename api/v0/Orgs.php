@@ -160,13 +160,13 @@ class Orgs
                 /* Routes starting /v0/subscription */
                 $app->get(
                     '/:org_id/',
-                    '\SolasMatch\API\Lib\Middleware::isSiteAdmin',
+                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
                     '\SolasMatch\API\V0\Orgs::getSubscription'
                 );
 
                 $app->post(
                     '/:org_id/level/:level/spare/:spare/start_date/:start_date/',
-                    '\SolasMatch\API\Lib\Middleware::isSiteAdmin',
+                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
                     '\SolasMatch\API\V0\Orgs::updateSubscription'
                 );
             });
