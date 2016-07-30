@@ -380,6 +380,7 @@ class OrganisationDao
                 Lib\PDOWrapper::cleanse($spare) . ',' .
                 Lib\PDOWrapper::cleanse($start_date) . ',' .
                 Lib\PDOWrapper::cleanseWrapStr($comment);
+error_log("updateSubscription($args)");
         $result = Lib\PDOWrapper::call('updateSubscription', $args);
         return $result[0]['result'];
     }
