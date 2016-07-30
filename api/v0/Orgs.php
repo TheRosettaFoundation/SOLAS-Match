@@ -454,7 +454,7 @@ class Orgs
         }
         $comment = API\Dispatcher::getDispatcher()->request()->getBody();
         $comment = trim($comment);
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::updateSubscription($org_id, $level, $spare, urldecode($start_date), $comment), null, $format);
+        API\Dispatcher::sendResponse(null, DAO\OrganisationDao::updateSubscription($org_id, $level, $spare, urldecode($start_date), $comment), null, $format);
     }
 }
 
