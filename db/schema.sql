@@ -5946,9 +5946,9 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `getSubscription`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getSubscription`(IN `organisation_id` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getSubscription`(IN `org_id` INT)
 BEGIN
-  SELECT `organisation_id`, `level`, `spare`, `start_date`, `comment` FROM Subscriptions WHERE `organisation_id`=organisation_id;
+  SELECT `organisation_id`, `level`, `spare`, `start_date`, `comment` FROM Subscriptions WHERE `organisation_id`=org_id;
 END//
 DELIMITER ;
 
