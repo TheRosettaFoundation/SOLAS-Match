@@ -14,7 +14,7 @@ require_once __DIR__."/../DataAccessObjects/ProjectDao.class.php";
 class Middleware
 {
 
-    public static function isloggedIn ()
+    public static function isloggedIn()
     {
         if (!is_null(DAO\UserDao::getLoggedInUser())) {
             return true;
@@ -448,17 +448,18 @@ class Middleware
         }
     }
 
-    // Does the user id match the current user or does the current user
-    // belong to the organisation that created the task in question
+    // Does the current user match the user id passed in the URL
+    // or does the current user belong to the organisation that created the task id passed in the URL?
     public static function authUserOrOrgForTask(\Slim\Route $route)
     {
         if (self::isloggedIn()) {
             $user = DAO\UserDao::getLoggedInUser();
-            if (self::isSiteAdmin($user->getId())) {
+            $current_user = $user->getId();
+            if (self::isSiteAdmin($current_user)) {
                 return true;
             }
             $params = $route->getParams();
-            //in this function userId refers to the id being tested which may not be the currently logged in user
+            // In this function, $userId refers to the id being tested which may not be the currently logged in user
             $userId = $params['userId'];
             if (!is_numeric($userId) && strstr($userId, '.')) {
                 $userId = explode('.', $userId);
@@ -472,23 +473,20 @@ class Middleware
                 $taskId = $taskId[0];
             }
             
-            $task = null;
+            $orgId = null;
             if ($taskId != null) {
                 $task = DAO\TaskDao::getTask($taskId);
-
+                $projectId = $task->getProjectId();
+                if ($projectId != null) {
+                    $project = DAO\ProjectDao::getProject($projectId);
+                    $orgId = $project->getOrganisationId();
+                }
             }
-            $projectId = $task->getProjectId();
-            $project = null;
-            if ($projectId != null) {
-                $project = DAO\ProjectDao::getProject($projectId);
-
-            }
-            $orgId = $project->getOrganisationId();
             
-            if ($userId == $user->getId()) {
+            if ($userId == $current_user) {
                 return true;
             } elseif ($orgId != null &&
-                    (DAO\OrganisationDao::isMember($orgId, $userId) || DAO\AdminDao::isAdmin($userId, $orgId))) {
+                    (DAO\OrganisationDao::isMember($orgId, $current_user) || DAO\AdminDao::isAdmin($current_user, $orgId))) {
                 return true;
             } else {
                 Dispatcher::getDispatcher()->halt(

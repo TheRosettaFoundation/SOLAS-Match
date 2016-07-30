@@ -155,6 +155,22 @@ class Orgs
                 );
             });
 
+            $app->group('/subscription', function () use ($app) {
+
+                /* Routes starting /v0/subscription */
+                $app->get(
+                    '/:org_id/',
+                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
+                    '\SolasMatch\API\V0\Orgs::getSubscription'
+                );
+
+                $app->post(
+                    '/:org_id/level/:level/spare/:spare/start_date/:start_date/',
+                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
+                    '\SolasMatch\API\V0\Orgs::updateSubscription'
+                );
+            });
+
             /* Routes starting /v0 */
             $app->get(
                 '/orgs(:format)/',
@@ -416,6 +432,29 @@ class Orgs
                 Lib\Notify::sendOrgCreatedNotifications($org->getId());
             }
         }
+    }
+
+    public static function getSubscription($org_id, $format = ".json")
+    {
+        if (!is_numeric($org_id) && strstr($org_id, '.')) {
+            $org_id = explode('.', $org_id);
+            $format = '.'.$org_id[1];
+            $org_id = $org_id[0];
+        }
+        $ret = DAO\OrganisationDao::getSubscription($org_id);
+        API\Dispatcher::sendResponse(null, $ret, null, $format);
+    }
+
+    public static function updateSubscription($org_id, $level, $spare, $start_date, $format = ".json")
+    {
+        if (strstr($start_date, '.')) {
+            $start_date = explode('.', $start_date);
+            $format = '.'.$start_date[1];
+            $start_date = $start_date[0];
+        }
+        $comment = API\Dispatcher::getDispatcher()->request()->getBody();
+        $comment = trim($comment);
+        API\Dispatcher::sendResponse(null, DAO\OrganisationDao::updateSubscription($org_id, $level, $spare, urldecode($start_date), $comment), null, $format);
     }
 }
 

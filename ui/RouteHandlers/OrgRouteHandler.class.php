@@ -1574,6 +1574,16 @@ class OrgRouteHandler
         $badgeDao = new DAO\BadgeDao();
 
         $currentUser = $userDao->getUser(Common\Lib\UserSession::getCurrentUserId());
+        $isSiteAdmin = $adminDao->isSiteAdmin($currentUser->getId());
+        $start_dateError = '';
+        if ($isSiteAdmin) {
+            $extra_scripts = "
+            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
+            <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/start_datePicker.js\"></script>";
+        } else {
+            $extra_scripts = '';
+        }
+
         $org = $orgDao->getOrganisation($org_id);
         $org2 = $orgDao->getOrganisationExtendedProfile($org_id);
         if (empty($org2)) {
@@ -1743,8 +1753,8 @@ class OrgRouteHandler
                 }
             } elseif (isset($post['revokeOrgAdmin'])) {
                 $userId = $post['revokeOrgAdmin'];
+                error_log("Called revokeOrgAdmin($userId, $org_id)");
                 $adminDao->removeOrgAdmin($userId, $org_id);
-                
             } elseif (isset($post['makeOrgAdmin'])) {
                 $userId = $post['makeOrgAdmin'];
                 error_log("Called createOrgAdmin($userId, $org_id)");
@@ -1774,6 +1784,17 @@ class OrgRouteHandler
                             Lib\Localisation::getTranslation('org_public_profile_org_untrack_error')
                         );
                     }
+                }
+            } elseif ($isSiteAdmin && isset($post['start_date']) && $post['start_date'] != '' && isset($post['level']) && ($post['level'] == 10 || $post['level'] == 20 || $post['level'] == 30 || $post['level'] == 100 || $post['level'] == 1000)) {
+                if ($validTime = Lib\TemplateHelper::isValidDateTime($post['start_date'])) {
+                    $start_date = date("Y-m-d H:i:s", $validTime);
+                    $comment = '';
+                    if (!empty($post['comment'])) $comment = $post['comment'];
+                    $level = $post['level'];
+                    error_log("updateSubscription($org_id, $level, 0, $start_date, $comment)");
+                    $orgDao->updateSubscription($org_id, $post['level'], 0, $start_date, $comment);
+                } else {
+                    $start_dateError = Lib\Localisation::getTranslation('task_alter_8');
                 }
             }
         }
@@ -1816,6 +1837,23 @@ class OrgRouteHandler
             }
         }
 
+        $no_subscription = true;
+        if ($isSiteAdmin) {
+            $subscription = $orgDao->getSubscription($org_id);
+            if (empty($subscription)) {
+                $subscription = array(
+                    'organisation_id' => $org_id,
+                    'level' => 1000,
+                    'spare' => 0,
+                    'start_date' => gmdate('Y-m-d H:i:s'),
+                    'comment' => '');
+            } else {
+                $no_subscription = false;
+            }
+        } else {
+            $subscription = array();
+        }
+
         $siteName = Common\Lib\Settings::get("site.name");
         $app->view()->setData("current_page", "org-public-profile");
         $app->view()->appendData(array(
@@ -1837,6 +1875,11 @@ class OrgRouteHandler
                 'adminAccess' => $adminAccess,
                 'memberIsAdmin' => $memberIsAdmin,
                 "org_badges" => $org_badges,
+                'isSiteAdmin' => $isSiteAdmin,
+                'start_date_error' => $start_dateError,
+                'extra_scripts' => $extra_scripts,
+                'no_subscription' => $no_subscription,
+                'subscription' => $subscription,
                 'siteName' => $siteName,
                 "membershipRequestUsers" => $user_list,
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation
