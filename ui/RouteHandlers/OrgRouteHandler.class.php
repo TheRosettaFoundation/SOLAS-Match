@@ -1840,8 +1840,6 @@ class OrgRouteHandler
         $no_subscription = true;
         if ($isSiteAdmin) {
             $subscription = $orgDao->getSubscription($org_id);
-$temp_error_log = print_r($subscription, true);
-error_log("Returned subscription: $temp_error_log");
             if (empty($subscription)) {
                 $subscription = array(
                     'organisation_id' => $org_id,
