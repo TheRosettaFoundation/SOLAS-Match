@@ -378,7 +378,7 @@ class OrganisationDao
         $args = Lib\PDOWrapper::cleanse($org_id) . ',' .
                 Lib\PDOWrapper::cleanse($level) . ',' .
                 Lib\PDOWrapper::cleanse($spare) . ',' .
-                Lib\PDOWrapper::cleanse($start_date) . ',' .
+                Lib\PDOWrapper::cleanseWrapStr($start_date) . ',' .
                 Lib\PDOWrapper::cleanseWrapStr($comment);
 error_log("updateSubscription($args)");
         $result = Lib\PDOWrapper::call('updateSubscription', $args);
