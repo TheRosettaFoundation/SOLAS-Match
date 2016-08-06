@@ -5954,6 +5954,33 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `number_of_projects_ever`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `number_of_projects_ever`(IN `org_id` INT)
+BEGIN
+    SET @totalArchivedProjects = 0;
+    SET @totalProjects = 0;
+    SELECT COUNT(*) INTO @totalArchivedProjects FROM ArchivedProjects WHERE `organisation_id`=org_id;
+    SELECT COUNT(*) INTO @totalProjects         FROM Projects         WHERE `organisation_id`=org_id;
+    SELECT @totalArchivedProjects+@totalProjects AS result;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `number_of_projects_since_last_donation`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `number_of_projects_since_last_donation`(IN `org_id` INT)
+BEGIN
+    SET @subscription_start_date = 0;
+    SELECT `start_date` INTO @subscription_start_date FROM Subscriptions WHERE `organisation_id`=org_id;
+
+    SET @totalArchivedProjects = 0;
+    SET @totalProjects = 0;
+    SELECT COUNT(*) INTO @totalArchivedProjects FROM ArchivedProjects WHERE `organisation_id`=org_id AND `created`>@subscription_start_date;
+    SELECT COUNT(*) INTO @totalProjects         FROM Projects         WHERE `organisation_id`=org_id AND `created`>@subscription_start_date;
+    SELECT @totalArchivedProjects+@totalProjects AS result;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
