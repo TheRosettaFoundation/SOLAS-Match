@@ -15,7 +15,7 @@ class SubscriptionDao extends BaseDao
         $ret = 0;
         $result = Lib\PDOWrapper::call('number_of_projects_ever', Lib\PDOWrapper::cleanse($org_id));
         if (!empty($result)) {
-            $ret = $result[0];
+            $ret = $result[0]['result'];
         }
         return $ret;
     }
@@ -25,7 +25,7 @@ class SubscriptionDao extends BaseDao
         $ret = 0;
         $result = Lib\PDOWrapper::call('number_of_projects_since_last_donation', Lib\PDOWrapper::cleanse($org_id));
         if (!empty($result)) {
-            $ret = $result[0];
+            $ret = $result[0]['result'];
         }
         return $ret;
     }
