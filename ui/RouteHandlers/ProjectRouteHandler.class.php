@@ -935,7 +935,7 @@ class ProjectRouteHandler
             $text_end .= '<ul>';
             $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_intermittent') . ': €xx ';
             $text_end .=
-                '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+                '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline!important;">
                 <input name="business" type="hidden" value="Reinhard.Schaler@ul.ie" />
                 <input name="cmd" type="hidden" value="_donations" />
                 <input name="item_name" type="hidden" value="Once off donation" />
@@ -947,7 +947,7 @@ class ProjectRouteHandler
             $text_end .= '</li>';
             $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_moderate') . ': €xx ';
             $text_end .=
-                '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+                '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
                 <input name="business" type="hidden" value="Reinhard.Schaler@ul.ie" />
                 <input name="cmd" type="hidden" value="_donations" />
                 <input name="item_name" type="hidden" value="Once off donation" />
