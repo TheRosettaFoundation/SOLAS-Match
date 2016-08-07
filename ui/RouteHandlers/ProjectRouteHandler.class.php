@@ -920,27 +920,27 @@ class ProjectRouteHandler
         if (empty($subscription)) {
             $number_of_projects_ever = $subscriptionDao->number_of_projects_ever($org_id);
 
-            $text_start = Localisation::getTranslation('project_subscription') . '<br />';
+            $text_start = Lib\Localisation::getTranslation('project_subscription') . '<br />';
 
-            $text_middle_pay = Localisation::getTranslation('project_subscription_initial');
+            $text_middle_pay = Lib\Localisation::getTranslation('project_subscription_initial');
             if ($number_of_projects_ever == 1) {
-                $text_middle_pay .= ' ' . Localisation::getTranslation('project_subscription_number');
+                $text_middle_pay .= ' ' . Lib\Localisation::getTranslation('project_subscription_number');
             } elseif ($number_of_projects_ever > 1) {
-                $text_middle_pay .= ' ' . sprintf(Localisation::getTranslation('project_subscription_numbers'), $number_of_projects_ever);
+                $text_middle_pay .= ' ' . sprintf(Lib\Localisation::getTranslation('project_subscription_numbers'), $number_of_projects_ever);
             }
             $text_middle_pay .= '<br />';
-            $text_middle_pay .= Localisation::getTranslation('project_subscription_remind') . '<br /><br />';
+            $text_middle_pay .= Lib\Localisation::getTranslation('project_subscription_remind') . '<br /><br />';
 
-            $text_end = Localisation::getTranslation('project_subscription_annual_donation') . '<br />';
+            $text_end = Lib\Localisation::getTranslation('project_subscription_annual_donation') . '<br />';
             $text_end .= '<ul>';
-            $text_end .= '<li>' . Localisation::getTranslation('project_subscription_intermittent') . ': €xx</li>';
-            $text_end .= '<li>' . Localisation::getTranslation('project_subscription_moderate') . ': €xx</li>';
-            $text_end .= '<li>' . Localisation::getTranslation('project_subscription_heavy') . ': €xx</li>';
+            $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_intermittent') . ': €xx</li>';
+            $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_moderate') . ': €xx</li>';
+            $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_heavy') . ': €xx</li>';
             $text_end .= '</ul><br /><br />';
-            $text_end .= Localisation::getTranslation('project_subscription_paypal_link') . ': <a href="LINK">LINK</a><br />';
-            $text_end .= Localisation::getTranslation('project_subscription_bank') . '<br />';
-            $text_end .= Localisation::getTranslation('project_subscription_bank_details') . '<br /><br />';
-            $text_end .= Localisation::getTranslation('project_subscription_cannot');
+            $text_end .= Lib\Localisation::getTranslation('project_subscription_paypal_link') . ': <a href="LINK">LINK</a><br />';
+            $text_end .= Lib\Localisation::getTranslation('project_subscription_bank') . '<br />';
+            $text_end .= Lib\Localisation::getTranslation('project_subscription_bank_details') . '<br /><br />';
+            $text_end .= Lib\Localisation::getTranslation('project_subscription_cannot');
 
             if ($number_of_projects_ever < 2) {
                 $subscription_text = $text_start . $text_middle_pay . $text_end;
@@ -954,14 +954,14 @@ class ProjectRouteHandler
             $number_of_projects_since_last_donation = $subscriptionDao->number_of_projects_since_last_donation($org_id);
 
             if ($number_of_projects_since_last_donation == 1) {
-                $text_middle_renew .= Localisation::getTranslation('project_subscription_number_renew') . '<br />';
+                $text_middle_renew .= Lib\Localisation::getTranslation('project_subscription_number_renew') . '<br />';
             } elseif ($number_of_projects_since_last_donation > 1) {
-                $text_middle_renew .= sprintf(Localisation::getTranslation('project_subscription_numbers_renew'), $number_of_projects_since_last_donation) . '<br />';
+                $text_middle_renew .= sprintf(Lib\Localisation::getTranslation('project_subscription_numbers_renew'), $number_of_projects_since_last_donation) . '<br />';
             }
-            $text_middle_renew .= Localisation::getTranslation('project_subscription_remind_renew') . '<br /><br />';
+            $text_middle_renew .= Lib\Localisation::getTranslation('project_subscription_remind_renew') . '<br /><br />';
 
-            $text_middle_upgrade .= sprintf(Localisation::getTranslation('project_subscription_numbers_upgrade'), $number_of_projects_since_last_donation) . '<br />';
-            $text_middle_upgrade .= Localisation::getTranslation('project_subscription_remind_upgrade') . '<br /><br />';
+            $text_middle_upgrade .= sprintf(Lib\Localisation::getTranslation('project_subscription_numbers_upgrade'), $number_of_projects_since_last_donation) . '<br />';
+            $text_middle_upgrade .= Lib\Localisation::getTranslation('project_subscription_remind_upgrade') . '<br /><br />';
 
             switch ($subscription['level']) {
                 case 1000: // Free because unable to pay
