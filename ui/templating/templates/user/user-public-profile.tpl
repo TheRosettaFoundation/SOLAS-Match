@@ -298,6 +298,7 @@
     {if isset($requestSuccess)}
         <p class="alert alert-success">{Localisation::getTranslation('user_public_profile_reference_request_success')}</p>
     {/if}
+    </p>{Localisation::getTranslation('user_public_profile_certificate')}</p>
     <p style="margin-bottom:50px;"/>
 {/if}
 
