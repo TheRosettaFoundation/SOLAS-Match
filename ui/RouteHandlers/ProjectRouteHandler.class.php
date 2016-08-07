@@ -619,6 +619,8 @@ class ProjectRouteHandler
         $user_id = Common\Lib\UserSession::getCurrentUserID();
 
         $projectDao = new DAO\ProjectDao();
+        $orgDao = new DAO\OrganisationDao();
+        $subscriptionDao = new DAO\SubscriptionDao();
         $taskDao = new DAO\TaskDao();
 
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
@@ -913,6 +915,81 @@ class ProjectRouteHandler
             }
         }
 
+        $subscription_text = null;
+        $subscription = $orgDao->getSubscription($org_id);
+        if (empty($subscription)) {
+            $number_of_projects_ever = $subscriptionDao->number_of_projects_ever($org_id);
+
+            $text_start = Localisation::getTranslation('project_subscription') . '<br />';
+
+            $text_middle_pay = Localisation::getTranslation('project_subscription_initial');
+            if ($number_of_projects_ever == 1) {
+                $text_middle_pay .= ' ' . Localisation::getTranslation('project_subscription_number');
+            } elseif ($number_of_projects_ever > 1) {
+                $text_middle_pay .= ' ' . sprintf(Localisation::getTranslation('project_subscription_numbers'), $number_of_projects_ever);
+            }
+            $text_middle_pay .= '<br />';
+            $text_middle_pay .= Localisation::getTranslation('project_subscription_remind') . '<br /><br />';
+
+            $text_end = Localisation::getTranslation('project_subscription_annual_donation') . '<br />';
+            $text_end .= '<ul>';
+            $text_end .= '<li>' . Localisation::getTranslation('project_subscription_intermittent') . ': €xx</li>';
+            $text_end .= '<li>' . Localisation::getTranslation('project_subscription_moderate') . ': €xx</li>';
+            $text_end .= '<li>' . Localisation::getTranslation('project_subscription_heavy') . ': €xx</li>';
+            $text_end .= '</ul><br /><br />';
+            $text_end .= Localisation::getTranslation('project_subscription_paypal_link') . ': <a href="LINK">LINK</a><br />';
+            $text_end .= Localisation::getTranslation('project_subscription_bank') . '<br />';
+            $text_end .= Localisation::getTranslation('project_subscription_bank_details') . '<br /><br />';
+            $text_end .= Localisation::getTranslation('project_subscription_cannot');
+
+            if ($number_of_projects_ever < 2) {
+                $subscription_text = $text_start . $text_middle_pay . $text_end;
+            } else {
+                $subscription_text = $text_start . $text_middle_pay . $text_end;
+            }
+        } else {
+            $year_ago = gmdate('Y-m-d H:i:s', time() - 365*24*60*60);
+            $outside_year = $subscription['start_date'] < $year_ago;
+
+            $number_of_projects_since_last_donation = $subscriptionDao->number_of_projects_since_last_donation($org_id);
+
+            if ($number_of_projects_since_last_donation == 1) {
+                $text_middle_renew .= Localisation::getTranslation('project_subscription_number_renew') . '<br />';
+            } elseif ($number_of_projects_since_last_donation > 1) {
+                $text_middle_renew .= sprintf(Localisation::getTranslation('project_subscription_numbers_renew'), $number_of_projects_since_last_donation) . '<br />';
+            }
+            $text_middle_renew .= Localisation::getTranslation('project_subscription_remind_renew') . '<br /><br />';
+
+            $text_middle_upgrade .= sprintf(Localisation::getTranslation('project_subscription_numbers_upgrade'), $number_of_projects_since_last_donation) . '<br />';
+            $text_middle_upgrade .= Localisation::getTranslation('project_subscription_remind_upgrade') . '<br /><br />';
+
+            switch ($subscription['level']) {
+                case 1000: // Free because unable to pay
+                    break;
+                case 100:  // Partner
+                    break;
+                case 10:   // Intermittent use for year
+                    if ($outside_year) {
+                        $subscription_text = $text_start . $text_middle_renew . $text_end;
+                    } elseif ($number_of_projects_since_last_donation >= 3) {
+                        $subscription_text = $text_start . $text_middle_upgrade . $text_end;
+                    }
+                    break;
+                case 20:   // Moderate use for year
+                    if ($outside_year) {
+                        $subscription_text = $text_start . $text_middle_renew . $text_end;
+                    } elseif ($number_of_projects_since_last_donation >= 10) {
+                        $subscription_text = $text_start . $text_middle_upgrade . $text_end;
+                    }
+                    break;
+                case 30:   // Heavy use for year
+                    if ($outside_year) {
+                        $subscription_text = $text_start . $text_middle_renew . $text_end;
+                    }
+                break;
+            }
+        }
+
         // $languages = Lib\TemplateHelper::getLanguageList(); // (code) is added to name because of settings
         // $countries = Lib\TemplateHelper::getCountryList();
         $langDao = new DAO\LanguageDao();
@@ -961,6 +1038,7 @@ class ProjectRouteHandler
             "supportedImageFormats" => Common\Lib\Settings::get('projectImages.supported_formats'),
             "org_id"         => $org_id,
             "user_id"        => $user_id,
+            'subscription_text' => $subscription_text,
             "extra_scripts"  => $extraScripts,
             'month_list'     => $month_list,
             'selected_month' => (int)date('n'),

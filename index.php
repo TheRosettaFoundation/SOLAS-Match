@@ -54,6 +54,7 @@ require_once 'ui/DataAccessObjects/TaskDao.class.php';
 require_once 'ui/DataAccessObjects/TagDao.class.php';
 require_once 'ui/DataAccessObjects/OrganisationDao.class.php';
 require_once 'ui/DataAccessObjects/StatisticsDao.class.php';
+require_once 'ui/DataAccessObjects/SubscriptionDao.class.php';
 require_once 'ui/DataAccessObjects/ProjectDao.class.php';
 require_once 'ui/DataAccessObjects/TipDao.class.php';
 

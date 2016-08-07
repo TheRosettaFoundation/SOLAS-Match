@@ -37,6 +37,13 @@
         </div>           
     </div>  
 
+    {if isset($subscription_text)}
+        <p style="margin-bottom: 40px" />
+        <h2 class="page-header">
+            {$subscription_text}
+        </h2>
+    {/if}
+
     <div class="well pull-left" style="margin-bottom: 50px">
 
         {if isset($flash['error'])}
