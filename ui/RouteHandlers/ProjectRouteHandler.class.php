@@ -933,9 +933,9 @@ class ProjectRouteHandler
 
             $text_end = Lib\Localisation::getTranslation('project_subscription_annual_donation') . '<br />';
             $text_end .= '<ul>';
-            $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_intermittent') . ': €xx</li>';
-            $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_moderate') . ': €xx</li>';
-            $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_heavy') . ': €xx</li>';
+            $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_intermittent') . ': â‚¬xx</li>';
+            $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_moderate') . ': â‚¬xx</li>';
+            $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_heavy') . ': â‚¬xx</li>';
             $text_end .= '</ul><br /><br />';
             $text_end .= Lib\Localisation::getTranslation('project_subscription_paypal_link') . ': <a href="LINK">LINK</a><br />';
             $text_end .= Lib\Localisation::getTranslation('project_subscription_bank') . '<br />';
