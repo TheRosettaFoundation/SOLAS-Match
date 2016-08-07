@@ -20,7 +20,7 @@ class SubscriptionDao extends BaseDao
         return $ret;
     }
 
-    public number_of_projects_since_last_donation($org_id)
+    public function number_of_projects_since_last_donation($org_id)
     {
         $ret = 0;
         $result = Lib\PDOWrapper::call('number_of_projects_since_last_donation', Lib\PDOWrapper::cleanse($org_id));
