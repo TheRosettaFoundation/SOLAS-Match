@@ -985,6 +985,7 @@ class ProjectRouteHandler
 
             $number_of_projects_since_last_donation = $subscriptionDao->number_of_projects_since_last_donation($org_id);
 
+            $text_middle_renew = '';
             if ($number_of_projects_since_last_donation == 1) {
                 $text_middle_renew .= Lib\Localisation::getTranslation('project_subscription_number_renew') . '<br />';
             } elseif ($number_of_projects_since_last_donation > 1) {
