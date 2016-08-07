@@ -460,7 +460,6 @@
     <string name="project_subscription_intermittent">Intermittent use (up to 3 Projects/Year)</string>
     <string name="project_subscription_moderate">Moderate use (up to 10 Projects/Year)</string>
     <string name="project_subscription_heavy">Heavy use</string>
-    <string name="project_subscription_paypal_link">Here is a link to make a donation via PayPal</string>
     <string name="project_subscription_bank">Alternatively our bank details are...</string>
     <string name="project_subscription_bank_details">DETAILS WHAT LOOK LIKE?</string>
     <string name="project_subscription_cannot">If you have a good reason why you cannot make a donation, please email us at <a href="mailto:xxx@xxx.org?subject=Subscription">xxx@xxx.org</a>.</string>

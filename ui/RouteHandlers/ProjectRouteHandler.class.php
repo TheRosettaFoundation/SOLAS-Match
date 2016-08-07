@@ -933,19 +933,7 @@ class ProjectRouteHandler
 
             $text_end = Lib\Localisation::getTranslation('project_subscription_annual_donation') . '<br />';
             $text_end .= '<ul>';
-            $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_intermittent') . ': €xx ';
-            $text_end .=
-                '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline!important;">
-                <input name="business" type="hidden" value="Reinhard.Schaler@ul.ie" />
-                <input name="cmd" type="hidden" value="_donations" />
-                <input name="item_name" type="hidden" value="Once off donation" />
-                <input name="item_number" type="hidden" value="Once off donation" />
-                <input name="amount" type="hidden" value="10.00" />
-                <input name="currency_code" type="hidden" value="EUR" />
-                <input alt="PayPal - The safer, easier way to pay online" name="submit" src="http://www.therosettafoundation.org/wp-content/uploads/2015/01/10.png" type="image" />
-                </form>';
-            $text_end .= '</li>';
-            $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_moderate') . ': €xx ';
+            $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_intermittent') . ': ';
             $text_end .=
                 '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
                 <input name="business" type="hidden" value="Reinhard.Schaler@ul.ie" />
@@ -957,9 +945,9 @@ class ProjectRouteHandler
                 <input alt="PayPal - The safer, easier way to pay online" name="submit" src="http://www.therosettafoundation.org/wp-content/uploads/2015/01/10.png" type="image" />
                 </form>';
             $text_end .= '</li>';
-            $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_heavy') . ': €xx ';
+            $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_moderate') . ': ';
             $text_end .=
-                '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+                '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
                 <input name="business" type="hidden" value="Reinhard.Schaler@ul.ie" />
                 <input name="cmd" type="hidden" value="_donations" />
                 <input name="item_name" type="hidden" value="Once off donation" />
@@ -969,8 +957,19 @@ class ProjectRouteHandler
                 <input alt="PayPal - The safer, easier way to pay online" name="submit" src="http://www.therosettafoundation.org/wp-content/uploads/2015/01/10.png" type="image" />
                 </form>';
             $text_end .= '</li>';
-            $text_end .= '</ul><br /><br />';
-            $text_end .= Lib\Localisation::getTranslation('project_subscription_paypal_link') . ': <a href="LINK">LINK</a><br />';
+            $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_heavy') . ': ';
+            $text_end .=
+                '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
+                <input name="business" type="hidden" value="Reinhard.Schaler@ul.ie" />
+                <input name="cmd" type="hidden" value="_donations" />
+                <input name="item_name" type="hidden" value="Once off donation" />
+                <input name="item_number" type="hidden" value="Once off donation" />
+                <input name="amount" type="hidden" value="10.00" />
+                <input name="currency_code" type="hidden" value="EUR" />
+                <input alt="PayPal - The safer, easier way to pay online" name="submit" src="http://www.therosettafoundation.org/wp-content/uploads/2015/01/10.png" type="image" />
+                </form>';
+            $text_end .= '</li>';
+            $text_end .= '</ul><br />';
             $text_end .= Lib\Localisation::getTranslation('project_subscription_bank') . '<br />';
             $text_end .= Lib\Localisation::getTranslation('project_subscription_bank_details') . '<br /><br />';
             $text_end .= Lib\Localisation::getTranslation('project_subscription_cannot');
