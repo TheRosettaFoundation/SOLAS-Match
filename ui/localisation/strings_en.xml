@@ -455,7 +455,7 @@
     <string name="project_subscription_initial">We are happy for organisations to create two initial projects without a donation.</string>
     <string name="project_subscription_number">You have already created one project.</string>
     <string name="project_subscription_numbers">You have already created %s projects.</string>
-    <string name="project_subscription_remind">We will continue to remind you to make a donation at the amount suggested below when you create a project.</string>
+    <string name="project_subscription_remind">We will continue to remind you to make a donation of the amounts suggested below when you create a project.</string>
     <string name="project_subscription_annual_donation">The suggested annual donation is (click one)...</string>
     <string name="project_subscription_intermittent">Intermittent use (up to 3 Projects/Year)</string>
     <string name="project_subscription_moderate">Moderate use (up to 10 Projects/Year)</string>
