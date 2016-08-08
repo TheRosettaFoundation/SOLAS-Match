@@ -995,7 +995,7 @@ class ProjectRouteHandler
                 $subscription_text = $text_start . $text_middle_pay . $text_end;
             }
         } else {
-            $year_ago = gmdate('Y-m-d H:i:s', time() - 365*24*60*60);
+            $year_ago = gmdate('Y-m-d H:i:s', strtotime('-1 year'));
             $outside_year = $subscription['start_date'] < $year_ago;
 
             $number_of_projects_since_last_donation = $subscriptionDao->number_of_projects_since_last_donation($org_id);
