@@ -29,4 +29,14 @@ class SubscriptionDao extends BaseDao
         }
         return $ret;
     }
+
+    public function number_of_projects_since_donation_anniversary($org_id)
+    {
+        $ret = 0;
+        $result = Lib\PDOWrapper::call('number_of_projects_since_donation_anniversary', Lib\PDOWrapper::cleanse($org_id));
+        if (!empty($result)) {
+            $ret = $result[0]['result'];
+        }
+        return $ret;
+    }
 }

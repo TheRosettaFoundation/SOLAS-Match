@@ -999,15 +999,16 @@ class ProjectRouteHandler
             $outside_year = $subscription['start_date'] < $year_ago;
 
             $number_of_projects_since_last_donation = $subscriptionDao->number_of_projects_since_last_donation($org_id);
+            $number_of_projects_since_donation_anniversary = $subscriptionDao->number_of_projects_since_donation_anniversary($org_id);
 
 $text_start .= "year_ago: $year_ago ";
 $text_start .= "subscription['start_date']: " . $subscription['start_date'] . ' ';
 
             $text_middle_renew = sprintf(Lib\Localisation::getTranslation('project_subscription_last_donation'), substr($subscription['start_date'], 8, 2) . ' ' . $month_list[(int)substr($subscription['start_date'], 5, 2)] . ' ' . substr($subscription['start_date'], 0, 4)) . ' ';
-            if ($number_of_projects_since_last_donation == 1) {
+            if ($number_of_projects_since_donation_anniversary == 1) {
                 $text_middle_renew .= Lib\Localisation::getTranslation('project_subscription_number_renew') . '<br />';
-            } elseif ($number_of_projects_since_last_donation > 1) {
-                $text_middle_renew .= sprintf(Lib\Localisation::getTranslation('project_subscription_numbers_renew'), $number_of_projects_since_last_donation) . '<br />';
+            } elseif ($number_of_projects_since_donation_anniversary > 1) {
+                $text_middle_renew .= sprintf(Lib\Localisation::getTranslation('project_subscription_numbers_renew'), $number_of_projects_since_donation_anniversary) . '<br />';
             }
             $text_middle_renew .= Lib\Localisation::getTranslation('project_subscription_remind_renew') . '<br /><br />';
 
