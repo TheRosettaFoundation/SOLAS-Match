@@ -1000,6 +1000,9 @@ class ProjectRouteHandler
 
             $number_of_projects_since_last_donation = $subscriptionDao->number_of_projects_since_last_donation($org_id);
 
+$text_start .= "year_ago: $year_ago ";
+$text_start .= "subscription['start_date']: " . $subscription['start_date'] . ' ';
+
             $text_middle_renew = sprintf(Lib\Localisation::getTranslation('project_subscription_last_donation'), $month_list[(int)substr($subscription['start_date'], 5, 2)] . ' ' . substr($subscription['start_date'], 0, 4)) . ' ';
             if ($number_of_projects_since_last_donation == 1) {
                 $text_middle_renew .= Lib\Localisation::getTranslation('project_subscription_number_renew') . '<br />';
