@@ -464,7 +464,7 @@
     <string name="project_subscription_bank_details">DETAILS WHAT LOOK LIKE?</string>
     <string name="project_subscription_cannot">If you have a good reason why you cannot make a donation, please email us at <a href="mailto:xxx@xxx.org?subject=Subscription">xxx@xxx.org</a>.</string>
 
-    <string name="project_subscription_last_donation">Your last donation was in %s.</string>
+    <string name="project_subscription_last_donation">Your last donation was for the period starting %s.</string>
     <string name="project_subscription_number_renew">You have already created one project since the anniversary of your last donation.</string>
     <string name="project_subscription_numbers_renew">You have already created %s projects since the anniversary of your last donation.</string>
     <string name="project_subscription_remind_renew">We will continue to remind you to renew your annual donation each time you create a project.</string>
