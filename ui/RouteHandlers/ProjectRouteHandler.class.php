@@ -915,6 +915,21 @@ class ProjectRouteHandler
             }
         }
 
+        $month_list = array(
+            1 => Lib\Localisation::getTranslation('common_january'),
+            2 => Lib\Localisation::getTranslation('common_february'),
+            3 => Lib\Localisation::getTranslation('common_march'),
+            4 => Lib\Localisation::getTranslation('common_april'),
+            5 => Lib\Localisation::getTranslation('common_may'),
+            6 => Lib\Localisation::getTranslation('common_june'),
+            7 => Lib\Localisation::getTranslation('common_july'),
+            8 => Lib\Localisation::getTranslation('common_august'),
+            9 => Lib\Localisation::getTranslation('common_september'),
+            10 => Lib\Localisation::getTranslation('common_october'),
+            11 => Lib\Localisation::getTranslation('common_november'),
+            12 => Lib\Localisation::getTranslation('common_december'),
+        );
+
         $subscription_text = null;
         $text_start = Lib\Localisation::getTranslation('project_subscription') . '<br />';
 
@@ -985,7 +1000,7 @@ class ProjectRouteHandler
 
             $number_of_projects_since_last_donation = $subscriptionDao->number_of_projects_since_last_donation($org_id);
 
-            $text_middle_renew = sprintf(Lib\Localisation::getTranslation('project_subscription_last_donation'), $subscription['start_date']);
+            $text_middle_renew = sprintf(Lib\Localisation::getTranslation('project_subscription_last_donation'), $month_list[(int)substr($subscription['start_date'], 5, 2)] . ' ' . substr($subscription['start_date'], 0, 4));
             if ($number_of_projects_since_last_donation == 1) {
                 $text_middle_renew .= Lib\Localisation::getTranslation('project_subscription_number_renew') . '<br />';
             } elseif ($number_of_projects_since_last_donation > 1) {
@@ -1030,20 +1045,6 @@ class ProjectRouteHandler
         $countryDao = new DAO\CountryDao();
         $countries = $countryDao->getCountries();
 
-        $month_list = array(
-            1 => Lib\Localisation::getTranslation('common_january'),
-            2 => Lib\Localisation::getTranslation('common_february'),
-            3 => Lib\Localisation::getTranslation('common_march'),
-            4 => Lib\Localisation::getTranslation('common_april'),
-            5 => Lib\Localisation::getTranslation('common_may'),
-            6 => Lib\Localisation::getTranslation('common_june'),
-            7 => Lib\Localisation::getTranslation('common_july'),
-            8 => Lib\Localisation::getTranslation('common_august'),
-            9 => Lib\Localisation::getTranslation('common_september'),
-            10 => Lib\Localisation::getTranslation('common_october'),
-            11 => Lib\Localisation::getTranslation('common_november'),
-            12 => Lib\Localisation::getTranslation('common_december'),
-        );
         $year_list = array();
         $yeari = (int)date('Y');
         for ($i = 0; $i < 10; $i++) {
