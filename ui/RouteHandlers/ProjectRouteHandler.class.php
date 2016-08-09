@@ -933,113 +933,113 @@ class ProjectRouteHandler
         $subscription_text = null;
         $paypal_email = Common\Lib\Settings::get('banner.paypal_email');
         if (!empty($paypal_email)) {
-        $text_start = Lib\Localisation::getTranslation('project_subscription') . '<br />';
+            $text_start = Lib\Localisation::getTranslation('project_subscription') . '<br />';
 
-        $text_end = Lib\Localisation::getTranslation('project_subscription_annual_donation') . '<br />';
-        $text_end .= '<ul>';
-        $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_intermittent') . ': ';
-        $text_end .=
-            '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
-            <input name="business" type="hidden" value="Reinhard.Schaler@ul.ie" />
-            <input name="cmd" type="hidden" value="_donations" />
-            <input name="item_name" type="hidden" value="Once off donation" />
-            <input name="item_number" type="hidden" value="Once off donation" />
-            <input name="amount" type="hidden" value="10.00" />
-            <input name="currency_code" type="hidden" value="EUR" />
-            <input alt="PayPal - The safer, easier way to pay online" name="submit" src="http://www.therosettafoundation.org/wp-content/uploads/2015/01/10.png" type="image"  height="29" width="64" />
-            </form>';
-        $text_end .= '</li>';
-        $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_moderate') . ': ';
-        $text_end .=
-            '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
-            <input name="business" type="hidden" value="Reinhard.Schaler@ul.ie" />
-            <input name="cmd" type="hidden" value="_donations" />
-            <input name="item_name" type="hidden" value="Once off donation" />
-            <input name="item_number" type="hidden" value="Once off donation" />
-            <input name="amount" type="hidden" value="10.00" />
-            <input name="currency_code" type="hidden" value="EUR" />
-            <input alt="PayPal - The safer, easier way to pay online" name="submit" src="http://www.therosettafoundation.org/wp-content/uploads/2015/01/10.png" type="image"  height="29" width="64" />
-            </form>';
-        $text_end .= '</li>';
-        $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_heavy') . ': ';
-        $text_end .=
-            '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
-            <input name="business" type="hidden" value="Reinhard.Schaler@ul.ie" />
-            <input name="cmd" type="hidden" value="_donations" />
-            <input name="item_name" type="hidden" value="Once off donation" />
-            <input name="item_number" type="hidden" value="Once off donation" />
-            <input name="amount" type="hidden" value="10.00" />
-            <input name="currency_code" type="hidden" value="EUR" />
-            <input alt="PayPal - The safer, easier way to pay online" name="submit" src="http://www.therosettafoundation.org/wp-content/uploads/2015/01/10.png" type="image"  height="29" width="64" />
-            </form>';
-        $text_end .= '</li>';
-        $text_end .= '</ul><br />';
-        $text_end .= Lib\Localisation::getTranslation('project_subscription_bank') . '<br />';
-        $text_end .= Lib\Localisation::getTranslation('project_subscription_bank_details') . '<br /><br />';
-        $text_end .= Lib\Localisation::getTranslation('project_subscription_cannot');
+            $text_end = Lib\Localisation::getTranslation('project_subscription_annual_donation') . '<br />';
+            $text_end .= '<ul>';
+            $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_intermittent') . ': ';
+            $text_end .=
+                '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
+                <input name="business" type="hidden" value="Reinhard.Schaler@ul.ie" />
+                <input name="cmd" type="hidden" value="_donations" />
+                <input name="item_name" type="hidden" value="Once off donation" />
+                <input name="item_number" type="hidden" value="Once off donation" />
+                <input name="amount" type="hidden" value="10.00" />
+                <input name="currency_code" type="hidden" value="EUR" />
+                <input alt="PayPal - The safer, easier way to pay online" name="submit" src="http://www.therosettafoundation.org/wp-content/uploads/2015/01/10.png" type="image"  height="29" width="64" />
+                </form>';
+            $text_end .= '</li>';
+            $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_moderate') . ': ';
+            $text_end .=
+                '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
+                <input name="business" type="hidden" value="Reinhard.Schaler@ul.ie" />
+                <input name="cmd" type="hidden" value="_donations" />
+                <input name="item_name" type="hidden" value="Once off donation" />
+                <input name="item_number" type="hidden" value="Once off donation" />
+                <input name="amount" type="hidden" value="10.00" />
+                <input name="currency_code" type="hidden" value="EUR" />
+                <input alt="PayPal - The safer, easier way to pay online" name="submit" src="http://www.therosettafoundation.org/wp-content/uploads/2015/01/10.png" type="image"  height="29" width="64" />
+                </form>';
+            $text_end .= '</li>';
+            $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_heavy') . ': ';
+            $text_end .=
+                '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
+                <input name="business" type="hidden" value="Reinhard.Schaler@ul.ie" />
+                <input name="cmd" type="hidden" value="_donations" />
+                <input name="item_name" type="hidden" value="Once off donation" />
+                <input name="item_number" type="hidden" value="Once off donation" />
+                <input name="amount" type="hidden" value="10.00" />
+                <input name="currency_code" type="hidden" value="EUR" />
+                <input alt="PayPal - The safer, easier way to pay online" name="submit" src="http://www.therosettafoundation.org/wp-content/uploads/2015/01/10.png" type="image"  height="29" width="64" />
+                </form>';
+            $text_end .= '</li>';
+            $text_end .= '</ul><br />';
+            $text_end .= Lib\Localisation::getTranslation('project_subscription_bank') . '<br />';
+            $text_end .= Lib\Localisation::getTranslation('project_subscription_bank_details') . '<br /><br />';
+            $text_end .= Lib\Localisation::getTranslation('project_subscription_cannot');
 
-        $subscription = $orgDao->getSubscription($org_id);
-        if (empty($subscription)) {
-            $number_of_projects_ever = $subscriptionDao->number_of_projects_ever($org_id);
+            $subscription = $orgDao->getSubscription($org_id);
+            if (empty($subscription)) {
+                $number_of_projects_ever = $subscriptionDao->number_of_projects_ever($org_id);
 
-            $text_middle_pay = Lib\Localisation::getTranslation('project_subscription_initial');
-            if ($number_of_projects_ever == 1) {
-                $text_middle_pay .= ' ' . Lib\Localisation::getTranslation('project_subscription_number');
-            } elseif ($number_of_projects_ever > 1) {
-                $text_middle_pay .= ' ' . sprintf(Lib\Localisation::getTranslation('project_subscription_numbers'), $number_of_projects_ever);
-            }
-            $text_middle_pay .= '<br />';
-            $text_middle_pay .= Lib\Localisation::getTranslation('project_subscription_remind') . '<br /><br />';
+                $text_middle_pay = Lib\Localisation::getTranslation('project_subscription_initial');
+                if ($number_of_projects_ever == 1) {
+                    $text_middle_pay .= ' ' . Lib\Localisation::getTranslation('project_subscription_number');
+                } elseif ($number_of_projects_ever > 1) {
+                    $text_middle_pay .= ' ' . sprintf(Lib\Localisation::getTranslation('project_subscription_numbers'), $number_of_projects_ever);
+                }
+                $text_middle_pay .= '<br />';
+                $text_middle_pay .= Lib\Localisation::getTranslation('project_subscription_remind') . '<br /><br />';
 
-            if ($number_of_projects_ever < 2) {
-                $subscription_text = $text_start . $text_middle_pay . $text_end;
+                if ($number_of_projects_ever < 2) {
+                    $subscription_text = $text_start . $text_middle_pay . $text_end;
+                } else {
+                    $subscription_text = $text_start . $text_middle_pay . $text_end;
+                }
             } else {
-                $subscription_text = $text_start . $text_middle_pay . $text_end;
+                $year_ago = gmdate('Y-m-d H:i:s', strtotime('-1 year'));
+                $outside_year = $subscription['start_date'] < $year_ago;
+
+                $number_of_projects_since_last_donation = $subscriptionDao->number_of_projects_since_last_donation($org_id);
+                $number_of_projects_since_donation_anniversary = $subscriptionDao->number_of_projects_since_donation_anniversary($org_id);
+
+                $text_middle_renew = sprintf(Lib\Localisation::getTranslation('project_subscription_last_donation'), substr($subscription['start_date'], 8, 2) . ' ' . $month_list[(int)substr($subscription['start_date'], 5, 2)] . ' ' . substr($subscription['start_date'], 0, 4)) . ' ';
+                if ($number_of_projects_since_donation_anniversary == 1) {
+                    $text_middle_renew .= Lib\Localisation::getTranslation('project_subscription_number_renew') . '<br />';
+                } elseif ($number_of_projects_since_donation_anniversary > 1) {
+                    $text_middle_renew .= sprintf(Lib\Localisation::getTranslation('project_subscription_numbers_renew'), $number_of_projects_since_donation_anniversary) . '<br />';
+                }
+                $text_middle_renew .= Lib\Localisation::getTranslation('project_subscription_remind_renew') . '<br /><br />';
+
+                $text_middle_upgrade  = sprintf(Lib\Localisation::getTranslation('project_subscription_numbers_upgrade'), $number_of_projects_since_last_donation) . '<br />';
+                $text_middle_upgrade .= Lib\Localisation::getTranslation('project_subscription_remind_upgrade') . '<br /><br />';
+
+                switch ($subscription['level']) {
+                    case 1000: // Free because unable to pay
+                        break;
+                    case 100:  // Partner
+                        break;
+                    case 10:   // Intermittent use for year
+                        if ($outside_year) {
+                            $subscription_text = $text_start . $text_middle_renew . $text_end;
+                        } elseif ($number_of_projects_since_last_donation >= 3) {
+                            $subscription_text = $text_start . $text_middle_upgrade . $text_end;
+                        }
+                        break;
+                    case 20:   // Moderate use for year
+                        if ($outside_year) {
+                            $subscription_text = $text_start . $text_middle_renew . $text_end;
+                        } elseif ($number_of_projects_since_last_donation >= 10) {
+                            $subscription_text = $text_start . $text_middle_upgrade . $text_end;
+                        }
+                        break;
+                    case 30:   // Heavy use for year
+                        if ($outside_year) {
+                            $subscription_text = $text_start . $text_middle_renew . $text_end;
+                        }
+                    break;
+                }
             }
-        } else {
-            $year_ago = gmdate('Y-m-d H:i:s', strtotime('-1 year'));
-            $outside_year = $subscription['start_date'] < $year_ago;
-
-            $number_of_projects_since_last_donation = $subscriptionDao->number_of_projects_since_last_donation($org_id);
-            $number_of_projects_since_donation_anniversary = $subscriptionDao->number_of_projects_since_donation_anniversary($org_id);
-
-            $text_middle_renew = sprintf(Lib\Localisation::getTranslation('project_subscription_last_donation'), substr($subscription['start_date'], 8, 2) . ' ' . $month_list[(int)substr($subscription['start_date'], 5, 2)] . ' ' . substr($subscription['start_date'], 0, 4)) . ' ';
-            if ($number_of_projects_since_donation_anniversary == 1) {
-                $text_middle_renew .= Lib\Localisation::getTranslation('project_subscription_number_renew') . '<br />';
-            } elseif ($number_of_projects_since_donation_anniversary > 1) {
-                $text_middle_renew .= sprintf(Lib\Localisation::getTranslation('project_subscription_numbers_renew'), $number_of_projects_since_donation_anniversary) . '<br />';
-            }
-            $text_middle_renew .= Lib\Localisation::getTranslation('project_subscription_remind_renew') . '<br /><br />';
-
-            $text_middle_upgrade  = sprintf(Lib\Localisation::getTranslation('project_subscription_numbers_upgrade'), $number_of_projects_since_last_donation) . '<br />';
-            $text_middle_upgrade .= Lib\Localisation::getTranslation('project_subscription_remind_upgrade') . '<br /><br />';
-
-            switch ($subscription['level']) {
-                case 1000: // Free because unable to pay
-                    break;
-                case 100:  // Partner
-                    break;
-                case 10:   // Intermittent use for year
-                    if ($outside_year) {
-                        $subscription_text = $text_start . $text_middle_renew . $text_end;
-                    } elseif ($number_of_projects_since_last_donation >= 3) {
-                        $subscription_text = $text_start . $text_middle_upgrade . $text_end;
-                    }
-                    break;
-                case 20:   // Moderate use for year
-                    if ($outside_year) {
-                        $subscription_text = $text_start . $text_middle_renew . $text_end;
-                    } elseif ($number_of_projects_since_last_donation >= 10) {
-                        $subscription_text = $text_start . $text_middle_upgrade . $text_end;
-                    }
-                    break;
-                case 30:   // Heavy use for year
-                    if ($outside_year) {
-                        $subscription_text = $text_start . $text_middle_renew . $text_end;
-                    }
-                break;
-            }
-        }
         }
 
         // $languages = Lib\TemplateHelper::getLanguageList(); // (code) is added to name because of settings
