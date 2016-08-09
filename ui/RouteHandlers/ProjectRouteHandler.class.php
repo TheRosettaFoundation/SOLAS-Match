@@ -940,7 +940,7 @@ class ProjectRouteHandler
             $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_intermittent') . ': ';
             $text_end .=
                 '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
-                <input name="business" type="hidden" value="Reinhard.Schaler@ul.ie" />
+                <input name="business" type="hidden" value="' . Common\Lib\Settings::get('banner.paypal_email') . '" />
                 <input name="cmd" type="hidden" value="_donations" />
                 <input name="item_name" type="hidden" value="Once off donation" />
                 <input name="item_number" type="hidden" value="Once off donation" />
@@ -952,7 +952,7 @@ class ProjectRouteHandler
             $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_moderate') . ': ';
             $text_end .=
                 '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
-                <input name="business" type="hidden" value="Reinhard.Schaler@ul.ie" />
+                <input name="business" type="hidden" value="' . Common\Lib\Settings::get('banner.paypal_email') . '" />
                 <input name="cmd" type="hidden" value="_donations" />
                 <input name="item_name" type="hidden" value="Once off donation" />
                 <input name="item_number" type="hidden" value="Once off donation" />
@@ -964,7 +964,7 @@ class ProjectRouteHandler
             $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_heavy') . ': ';
             $text_end .=
                 '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
-                <input name="business" type="hidden" value="Reinhard.Schaler@ul.ie" />
+                <input name="business" type="hidden" value="' . Common\Lib\Settings::get('banner.paypal_email') . '" />
                 <input name="cmd" type="hidden" value="_donations" />
                 <input name="item_name" type="hidden" value="Once off donation" />
                 <input name="item_number" type="hidden" value="Once off donation" />
