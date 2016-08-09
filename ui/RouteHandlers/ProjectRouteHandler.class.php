@@ -976,7 +976,7 @@ class ProjectRouteHandler
                 </form>';
             $text_end .= Lib\Localisation::getTranslation('project_subscription_heavy');
             $text_end .= '</li>';
-            $text_end .= '</ul><br />';
+            $text_end .= '</ul>';
             $text_end .= Lib\Localisation::getTranslation('project_subscription_bank') . '<br />';
             $text_end .= Lib\Localisation::getTranslation('project_subscription_bank_details') . '<br /><br />';
             $text_end .= Lib\Localisation::getTranslation('project_subscription_cannot');
