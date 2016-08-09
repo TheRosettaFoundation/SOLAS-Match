@@ -937,7 +937,7 @@ class ProjectRouteHandler
 
             $text_end = Lib\Localisation::getTranslation('project_subscription_annual_donation') . '<br />';
             $text_end .= '<ul>';
-            $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_intermittent') . ': ';
+            $text_end .= '<li>';
             $text_end .=
                 '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
                 <input name="business" type="hidden" value="' . Common\Lib\Settings::get('banner.paypal_email') . '" />
@@ -948,8 +948,9 @@ class ProjectRouteHandler
                 <input name="currency_code" type="hidden" value="EUR" />
                 <input alt="PayPal - The safer, easier way to pay online" name="submit" src="http://www.therosettafoundation.org/wp-content/uploads/2015/01/10.png" type="image" style="height:29px; width:64px;" />
                 </form>';
+            $text_end .= Lib\Localisation::getTranslation('project_subscription_intermittent');
             $text_end .= '</li>';
-            $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_moderate') . ': ';
+            $text_end .= '<li>';
             $text_end .=
                 '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
                 <input name="business" type="hidden" value="' . Common\Lib\Settings::get('banner.paypal_email') . '" />
@@ -960,8 +961,9 @@ class ProjectRouteHandler
                 <input name="currency_code" type="hidden" value="EUR" />
                 <input alt="PayPal - The safer, easier way to pay online" name="submit" src="http://www.therosettafoundation.org/wp-content/uploads/2015/01/10.png" type="image" style="height:29px; width:64px;" />
                 </form>';
+            $text_end .= Lib\Localisation::getTranslation('project_subscription_moderate');
             $text_end .= '</li>';
-            $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_heavy') . ': ';
+            $text_end .= '<li>';
             $text_end .=
                 '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
                 <input name="business" type="hidden" value="' . Common\Lib\Settings::get('banner.paypal_email') . '" />
@@ -972,6 +974,7 @@ class ProjectRouteHandler
                 <input name="currency_code" type="hidden" value="EUR" />
                 <input alt="PayPal - The safer, easier way to pay online" name="submit" src="http://www.therosettafoundation.org/wp-content/uploads/2015/01/10.png" type="image" style="height:29px; width:64px;" />
                 </form>';
+            $text_end .= Lib\Localisation::getTranslation('project_subscription_heavy');
             $text_end .= '</li>';
             $text_end .= '</ul><br />';
             $text_end .= Lib\Localisation::getTranslation('project_subscription_bank') . '<br />';
