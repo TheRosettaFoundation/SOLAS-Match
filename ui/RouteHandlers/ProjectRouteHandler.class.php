@@ -931,6 +931,8 @@ class ProjectRouteHandler
         );
 
         $subscription_text = null;
+        $paypal_email = Common\Lib\Settings::get('banner.paypal_email');
+        if (!empty($paypal_email)) {
         $text_start = Lib\Localisation::getTranslation('project_subscription') . '<br />';
 
         $text_end = Lib\Localisation::getTranslation('project_subscription_annual_donation') . '<br />';
@@ -944,7 +946,7 @@ class ProjectRouteHandler
             <input name="item_number" type="hidden" value="Once off donation" />
             <input name="amount" type="hidden" value="10.00" />
             <input name="currency_code" type="hidden" value="EUR" />
-            <input alt="PayPal - The safer, easier way to pay online" name="submit" src="http://www.therosettafoundation.org/wp-content/uploads/2015/01/10.png" type="image" />
+            <input alt="PayPal - The safer, easier way to pay online" name="submit" src="http://www.therosettafoundation.org/wp-content/uploads/2015/01/10.png" type="image"  height="29" width="64" />
             </form>';
         $text_end .= '</li>';
         $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_moderate') . ': ';
@@ -956,7 +958,7 @@ class ProjectRouteHandler
             <input name="item_number" type="hidden" value="Once off donation" />
             <input name="amount" type="hidden" value="10.00" />
             <input name="currency_code" type="hidden" value="EUR" />
-            <input alt="PayPal - The safer, easier way to pay online" name="submit" src="http://www.therosettafoundation.org/wp-content/uploads/2015/01/10.png" type="image" />
+            <input alt="PayPal - The safer, easier way to pay online" name="submit" src="http://www.therosettafoundation.org/wp-content/uploads/2015/01/10.png" type="image"  height="29" width="64" />
             </form>';
         $text_end .= '</li>';
         $text_end .= '<li>' . Lib\Localisation::getTranslation('project_subscription_heavy') . ': ';
@@ -968,7 +970,7 @@ class ProjectRouteHandler
             <input name="item_number" type="hidden" value="Once off donation" />
             <input name="amount" type="hidden" value="10.00" />
             <input name="currency_code" type="hidden" value="EUR" />
-            <input alt="PayPal - The safer, easier way to pay online" name="submit" src="http://www.therosettafoundation.org/wp-content/uploads/2015/01/10.png" type="image" />
+            <input alt="PayPal - The safer, easier way to pay online" name="submit" src="http://www.therosettafoundation.org/wp-content/uploads/2015/01/10.png" type="image"  height="29" width="64" />
             </form>';
         $text_end .= '</li>';
         $text_end .= '</ul><br />';
@@ -1037,6 +1039,7 @@ class ProjectRouteHandler
                     }
                 break;
             }
+        }
         }
 
         // $languages = Lib\TemplateHelper::getLanguageList(); // (code) is added to name because of settings
