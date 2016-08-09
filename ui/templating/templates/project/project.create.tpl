@@ -38,10 +38,7 @@
     </div>  
 
     {if isset($subscription_text)}
-        <p style="margin-bottom: 40px" />
-        <h4 class="page-header">
-            {$subscription_text}
-        </h4>
+        <p>{$subscription_text}</p>
     {/if}
 
     <div class="well pull-left" style="margin-bottom: 50px">
