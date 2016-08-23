@@ -460,9 +460,7 @@
     <string name="project_subscription_intermittent">Intermittent use (up to 3 Projects/Year)</string>
     <string name="project_subscription_moderate">Moderate use (up to 10 Projects/Year)</string>
     <string name="project_subscription_heavy">Heavy use</string>
-    <string name="project_subscription_bank">Alternatively our bank details are...</string>
-    <string name="project_subscription_bank_details">DETAILS WHAT LOOK LIKE?</string>
-    <string name="project_subscription_cannot">If you have a good reason why you cannot make a donation, please email us at <a href="mailto:xxx@xxx.org?subject=Subscription">xxx@xxx.org</a>.</string>
+    <string name="project_subscription_cannot">For other payment methods or if you have a good reason why you cannot make a donation, please email us at <a href="mailto:info@trommons.org?subject=Subscription">info@trommons.org</a>.</string>
 
     <string name="project_subscription_last_donation">Your last donation was for the period starting %s.</string>
     <string name="project_subscription_number_renew">You have already created one project since the anniversary of that date.</string>
@@ -472,7 +470,7 @@
     <string name="project_subscription_numbers_upgrade">You have already created %s projects since your last donation, which reaches the expected amount based on your donation.</string>
     <string name="project_subscription_remind_upgrade">We will continue to remind you to upgrade your annual donation each time you create a project.</string>
 
-    <string name="user_public_profile_certificate">Alternatively, if you wish to receive a posted hard copy certificate of work done in return for a donation of €25, please email <a href="mailto:xxx@xxx.org?subject=Certificate">xxx@xxx.org</a>. This donation will help ensure the future of the Translation Commons by contributing towards the costs of server infrastructure and support.</string>
+    <string name="user_public_profile_certificate">If you wish to receive a signed certificate by post, please email <a href="mailto:info@trommons.org?subject=Certificate">info@trommons.org</a>. We kindly ask for a donation of €25 in return. This donation will help ensure the future of the Translation Commons by contributing towards the costs of server infrastructure and support.</string>
 
 	<string name="project_create_source_text">Source Text</string>
 	<string name="project_create_1">Provide a meaningful title for the project.</string>
