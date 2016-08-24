@@ -933,10 +933,10 @@ class ProjectRouteHandler
         $subscription_text = null;
         $paypal_email = Common\Lib\Settings::get('banner.paypal_email');
         if (!empty($paypal_email)) {
-            $text_start = Lib\Localisation::getTranslation('project_subscription') . '<br />';
+            $text_start = '<p style="font-size: 14px">' . Lib\Localisation::getTranslation('project_subscription') . '<br />';
 
-            $text_end = Lib\Localisation::getTranslation('project_subscription_annual_donation') . '<br />';
-            $text_end .= '<ul>';
+            $text_end = Lib\Localisation::getTranslation('project_subscription_annual_donation') . '</p>';
+            $text_end .= '<ul style="font-size: 14px">';
             $text_end .= '<li>';
             $text_end .=
                 '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
@@ -977,7 +977,7 @@ class ProjectRouteHandler
             $text_end .= Lib\Localisation::getTranslation('project_subscription_heavy');
             $text_end .= '</li>';
             $text_end .= '</ul>';
-            $text_end .= Lib\Localisation::getTranslation('project_subscription_cannot');
+            $text_end .= '<p style="font-size: 14px">' . Lib\Localisation::getTranslation('project_subscription_cannot') . '</p>';
 
             $subscription = $orgDao->getSubscription($org_id);
             if (empty($subscription)) {

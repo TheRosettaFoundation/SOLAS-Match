@@ -451,7 +451,7 @@
 	<string name="project_create_create_a_project">Create A Project</string>
 	<string name="project_create_0">Provide as much information as possible.</string>
 
-    <string name="project_subscription">To ensure the future of the Translation Commons we request organisations using Trommons to make an annual donation towards maintaining the platform (server infrastructure and support).</string>
+    <string name="project_subscription">To ensure the future of the Translation Commons we request organisations using Trommons to make an annual donation<br />towards maintaining the platform (server infrastructure and support).</string>
     <string name="project_subscription_initial">We are happy for organisations to create two initial projects without a donation.</string>
     <string name="project_subscription_number">You have already created one project.</string>
     <string name="project_subscription_numbers">You have already created %s projects.</string>

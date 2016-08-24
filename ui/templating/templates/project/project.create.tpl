@@ -38,7 +38,7 @@
     </div>  
 
     {if isset($subscription_text)}
-        <p style="font-size: 14px">{$subscription_text}</p>
+        {$subscription_text}
     {/if}
 
     <div class="well pull-left" style="margin-bottom: 50px">
