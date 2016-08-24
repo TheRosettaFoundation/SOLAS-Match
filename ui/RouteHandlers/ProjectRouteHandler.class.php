@@ -943,8 +943,8 @@ class ProjectRouteHandler
                 <input name="business" type="hidden" value="' . Common\Lib\Settings::get('banner.paypal_email') . '" />
                 <input name="cmd" type="hidden" value="_donations" />
                 <input name="item_name" type="hidden" value="Once off donation" />
-                <input name="item_number" type="hidden" value="Once off donation" />
-                <input name="amount" type="hidden" value="10.00" />
+                <input name="item_number" type="hidden" value="Subscription: Intermittent use" />
+                <input name="amount" type="hidden" value="35.00" />
                 <input name="currency_code" type="hidden" value="EUR" />
                 <input alt="PayPal - The safer, easier way to pay online" name="submit" src="http://www.therosettafoundation.org/wp-content/uploads/2015/01/10.png" type="image" style="height:29px; width:64px;" />
                 </form>';
@@ -956,8 +956,8 @@ class ProjectRouteHandler
                 <input name="business" type="hidden" value="' . Common\Lib\Settings::get('banner.paypal_email') . '" />
                 <input name="cmd" type="hidden" value="_donations" />
                 <input name="item_name" type="hidden" value="Once off donation" />
-                <input name="item_number" type="hidden" value="Once off donation" />
-                <input name="amount" type="hidden" value="10.00" />
+                <input name="item_number" type="hidden" value="Subscription: Moderate use" />
+                <input name="amount" type="hidden" value="75.00" />
                 <input name="currency_code" type="hidden" value="EUR" />
                 <input alt="PayPal - The safer, easier way to pay online" name="submit" src="http://www.therosettafoundation.org/wp-content/uploads/2015/01/10.png" type="image" style="height:29px; width:64px;" />
                 </form>';
@@ -969,8 +969,8 @@ class ProjectRouteHandler
                 <input name="business" type="hidden" value="' . Common\Lib\Settings::get('banner.paypal_email') . '" />
                 <input name="cmd" type="hidden" value="_donations" />
                 <input name="item_name" type="hidden" value="Once off donation" />
-                <input name="item_number" type="hidden" value="Once off donation" />
-                <input name="amount" type="hidden" value="10.00" />
+                <input name="item_number" type="hidden" value="Subscription: Heavy use" />
+                <input name="amount" type="hidden" value="300.00" />
                 <input name="currency_code" type="hidden" value="EUR" />
                 <input alt="PayPal - The safer, easier way to pay online" name="submit" src="http://www.therosettafoundation.org/wp-content/uploads/2015/01/10.png" type="image" style="height:29px; width:64px;" />
                 </form>';
@@ -982,7 +982,7 @@ class ProjectRouteHandler
                 <input name="business" type="hidden" value="' . Common\Lib\Settings::get('banner.paypal_email') . '" />
                 <input name="cmd" type="hidden" value="_donations" />
                 <input name="item_name" type="hidden" value="Once off donation" />
-                <input name="item_number" type="hidden" value="The Rosetta Foundation" />
+                <input name="item_number" type="hidden" value="Subscription: Upgrade other" />
                 <input name="currency_code" type="hidden" value="EUR" />
                 <input alt="PayPal - The safer, easier way to pay online" name="submit" src="http://www.therosettafoundation.org/wp-content/uploads/2015/01/Other-Amount.png" type="image" style="height:29px; width:64px;" />
                 </form>';
