@@ -976,6 +976,18 @@ class ProjectRouteHandler
                 </form>';
             $text_end .= Lib\Localisation::getTranslation('project_subscription_heavy');
             $text_end .= '</li>';
+            $text_end .= '<li>';
+            $text_end .=
+                '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
+                <input name="business" type="hidden" value="' . Common\Lib\Settings::get('banner.paypal_email') . '" />
+                <input name="cmd" type="hidden" value="_donations" />
+                <input name="item_name" type="hidden" value="Once off donation" />
+                <input name="item_number" type="hidden" value="The Rosetta Foundation" />
+                <input name="currency_code" type="hidden" value="EUR" />
+                <input alt="PayPal - The safer, easier way to pay online" name="submit" src="http://www.therosettafoundation.org/wp-content/uploads/2015/01/Other-Amount.png" type="image" style="height:29px; width:64px;" />
+                </form>';
+            $text_end .= Lib\Localisation::getTranslation('project_subscription_other');
+            $text_end .= '</li>';
             $text_end .= '</ul>';
             $text_end .= '<p style="font-size: 14px">' . Lib\Localisation::getTranslation('project_subscription_cannot') . '</p>';
 

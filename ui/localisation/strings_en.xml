@@ -460,6 +460,7 @@
     <string name="project_subscription_intermittent">Intermittent use (up to 3 Projects/Year)</string>
     <string name="project_subscription_moderate">Moderate use (up to 10 Projects/Year)</string>
     <string name="project_subscription_heavy">Heavy use</string>
+    <string name="project_subscription_other">Other amount, use for upgrade</string>
     <string name="project_subscription_cannot">For other payment methods or if you have a good reason why you cannot make a donation, please email us at <a href="mailto:info@trommons.org?subject=Subscription">info@trommons.org</a>.</string>
 
     <string name="project_subscription_last_donation">Your last donation was for the period starting %s.</string>
