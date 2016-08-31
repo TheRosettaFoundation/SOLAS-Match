@@ -451,17 +451,17 @@
 	<string name="project_create_create_a_project">Create A Project</string>
 	<string name="project_create_0">Provide as much information as possible.</string>
 
-    <string name="project_subscription">To ensure the future of the Translation Commons we request organisations using Trommons to make an annual donation<br />towards maintaining the platform (server infrastructure and support).</string>
+    <string name="project_subscription">To ensure the future of the Translation Commons, we request organisations using Trommons to make an annual donation<br />towards maintaining the platform. This is to cover server infrastructure and support.</string>
     <string name="project_subscription_initial">We are happy for organisations to create two initial projects without a donation.</string>
     <string name="project_subscription_number">You have already created one project.</string>
     <string name="project_subscription_numbers">You have already created %s projects.</string>
     <string name="project_subscription_remind">We will continue to remind you to make a donation of the amounts suggested below when you create a project.</string>
-    <string name="project_subscription_annual_donation">The suggested annual donation via PayPal is (click one)...</string>
+    <string name="project_subscription_annual_donation">Suggested annual donation via PayPal</string>
     <string name="project_subscription_intermittent">Intermittent use (up to 3 Projects/Year)</string>
     <string name="project_subscription_moderate">Moderate use (up to 10 Projects/Year)</string>
     <string name="project_subscription_heavy">Heavy use</string>
-    <string name="project_subscription_other">Other amount, use for upgrade</string>
-    <string name="project_subscription_cannot">For other payment methods or if you have a good reason why you cannot make a donation, please email us at <a href="mailto:info@trommons.org?subject=Subscription">info@trommons.org</a>.</string>
+    <string name="project_subscription_other">Other amount</string>
+    <string name="project_subscription_cannot">For other payment methods, or if you have a good reason why you cannot make a donation, please email us at <a href="mailto:info@trommons.org?subject=Subscription">info@trommons.org</a>.</string>
 
     <string name="project_subscription_last_donation">Your last donation was for the period starting %s.</string>
     <string name="project_subscription_number_renew">You have already created one project since the anniversary of that date.</string>
