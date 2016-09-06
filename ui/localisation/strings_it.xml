@@ -447,6 +447,29 @@
 
 	<string name="project_create_create_a_project">Crea un progetto</string>
 	<string name="project_create_0">Fornisci più informazioni possibili.</string>
+
+    <string name="project_subscription">Per assicurare un futuro a Translation Commons, chiediamo alle organizzazioni registrate di effettuare una donazione annuale<br />per il mantenimento della piattaforma che permetterà di coprire i costi di infrastruttura del server e di supporto.</string>
+    <string name="project_subscription_initial">Le organizzazioni possono creare due progetti iniziali senza alcuna donazione previa.</string>
+    <string name="project_subscription_number">Avete già creato un progetto.</string>
+    <string name="project_subscription_numbers">Avete già creato %s progetti.</string>
+    <string name="project_subscription_remind">Vi ricorderemo di effettuare una donazione pari a uno degli importi indicati ogni volta che creerete un progetto.</string>
+    <string name="project_subscription_annual_donation">Donazione annuale consigliata via PayPal</string>
+    <string name="project_subscription_intermittent">Utilizzo saltuario (fino a 3 progetti per anno)</string>
+    <string name="project_subscription_moderate">Utilizzo moderato (fino a 10 progetti per anno)</string>
+    <string name="project_subscription_heavy">Utilizzo frequente</string>
+    <string name="project_subscription_other">Altri importi</string>
+    <string name="project_subscription_cannot">Per altre modalità di pagamento o per spiegare il motivo per cui non potete effettuare una donazione, vi preghiamo di scrivere a <a href="mailto:info@trommons.org?subject=Subscription">info@trommons.org</a>.</string>
+
+    <string name="project_subscription_last_donation">Ultima donazione valida per il periodo dal %s.</string>
+    <string name="project_subscription_number_renew">Avete già creato un progetto dalla scadenza della donazione annuale.</string>
+    <string name="project_subscription_numbers_renew">Avete già creato %s progetti dalla scadenza della donazione annuale.</string>
+    <string name="project_subscription_remind_renew">Vi ricorderemo di rinnovare la vostra donazione annuale quando creerete un nuovo progetto.</string>
+
+    <string name="project_subscription_numbers_upgrade">Avete superato il limite di progetti previsto per la vostra donazione (%s progetti creati dalla vostra ultima donazione).</string>
+    <string name="project_subscription_remind_upgrade">Vi ricorderemo di rinnovare la vostra donazione annuale quando creerete un nuovo progetto.</string>
+
+    <string name="user_public_profile_certificate">Per ricevere un certificato ufficiale via posta, vi preghiamo di scrivere a <a href="mailto:info@trommons.org?subject=Certificate">info@trommons.org</a>. Vi verrà richiesta una donazione pari a €25 per il servizio. Tale donazione ci permetterà di assicurare a Translation Commons un futuro, garantendo la copertura dei costi delle infrastrutture del server e supporto.</string>
+
 	<string name="project_create_source_text">Testo di partenza</string>
 	<string name="project_create_1">Dai un titolo rappresentativo al progetto.</string>
 	<string name="project_create_target_language_increase">La creazione di più di cinque attività può comportare tempi molto lunghi per il completamento. Non fare click sul pulsante &quot;Crea Progetto&quot; più di una volta e non abbandonare la pagina.</string>
