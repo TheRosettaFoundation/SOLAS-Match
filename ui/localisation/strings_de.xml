@@ -443,6 +443,29 @@
 
 	<string name="project_create_create_a_project">Projekt erstellen</string>
 	<string name="project_create_0">Gib so viele Informationen wie möglich.</string>
+
+    <string name="project_subscription">Um die Übersetzungs-Commons auch in Zukunft betreiben zu können, bitten wir die Organisationen, die Trommons verwenden, um eine jährliche Spende<br />für die Aufrechterhaltung der Plattform. Mit den Spenden sollen Serverinfrastruktur und Kundenbetreuung abgedeckt werden.</string>
+    <string name="project_subscription_initial">Alle Organisationen können gern zwei erste Projekte ohne Spende erstellen.</string>
+    <string name="project_subscription_number">Sie haben bereits ein Projekt erstellt.</string>
+    <string name="project_subscription_numbers">Sie haben bereits %s Projekte erstellt.</string>
+    <string name="project_subscription_remind">Wir werden Sie weiterhin um eine Spende in Höhe der unten vorgeschlagenen Summen bitten, wenn Sie ein neues Projekt erstellen.</string>
+    <string name="project_subscription_annual_donation">Vorgeschlagene jährliche Spende über PayPal</string>
+    <string name="project_subscription_intermittent">Gelegentliche Nutzung (bis zu 3 Projekte/Jahr)</string>
+    <string name="project_subscription_moderate">Mittlere Nutzung (bis zu 10 Projekte/Jahr)</string>
+    <string name="project_subscription_heavy">Häufige Nutzung</string>
+    <string name="project_subscription_other">Andere Summe</string>
+    <string name="project_subscription_cannot">Bitte kontaktieren Sie uns per E-Mail unter <a href="mailto:info@trommons.org?subject=Subscription">info@trommons.org</a>, wenn Sie eine andere Zahlungsmethode nutzen möchten oder wenn Sie aus triftigen Gründen keine Spende leisten können.</string>
+
+    <string name="project_subscription_last_donation">Zuletzt haben Sie für den Zeitraum ab dem %s gespendet.</string>
+    <string name="project_subscription_number_renew">Sie haben seit dem Ablauf dieser Jahresfrist bereits ein Projekt erstellt.</string>
+    <string name="project_subscription_numbers_renew">Sie haben seit dem Ablauf dieser Jahresfrist bereits %s Projekte erstellt.</string>
+    <string name="project_subscription_remind_renew">Wir werden Sie weiterhin darum bitten, Ihre jährliche Spende zu erneuern, wenn Sie neue Projekte erstellen.</string>
+
+    <string name="project_subscription_numbers_upgrade">Sie haben seit Ihrer letzten Spende bereits %s Projekte erstellt. Damit ist die erwartete Projektanzahl für Ihren Spendenbeitrag erreicht.</string>
+    <string name="project_subscription_remind_upgrade">Wir werden Sie weiterhin darum bitten, Ihre jährliche Spende zu erhöhen, wenn Sie neue Projekte erstellen.</string>
+
+    <string name="user_public_profile_certificate">Bitte schreiben Sie eine E-Mail an <a href="mailto:info@trommons.org?subject=Certificate">info@trommons.org</a>, wenn Sie ein unterschriebenes Zertifikat per Post erhalten möchten. Wir möchten Sie hierfür um eine Spende in Höhe von 25 € bitten. Ihr Spendenbeitrag hilft, die Zukunft der Übersetzungs-Commons zu sichern, indem er einen Teil der Kosten für die Serverinfrastruktur und Kundenbetreuung deckt.</string>
+
 	<string name="project_create_source_text">Ausgangstext</string>
 	<string name="project_create_1">Gib einen aussagekräftigen Titel für das Projekt an.</string>
 	<string name="project_create_target_language_increase">Bitte beachte, dass die Erstellung von mehr als fünf Aufgaben einige Zeit in Anspruch nehmen kann. Bitte klicke nicht mehrfach auf die Schaltfläche „Projekt erstellen“ und verlasse diese Seite nicht.</string>

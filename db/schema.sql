@@ -521,6 +521,7 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
   `image_approved` BIT(1) DEFAULT 0 NOT NULL,
   UNIQUE KEY `id` (`id`),
   KEY `organisation_id` (`organisation_id`,`language_id`,`country_id`),
+  KEY `key_organisation_id` (`organisation_id`),
   KEY `FK_ArchivedProjects_Languages` (`language_id`),
   KEY `FK_ArchivedProjects_Countries` (`country_id`),
   CONSTRAINT `FK_archivedproject_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -877,6 +878,7 @@ CREATE TABLE IF NOT EXISTS `Projects` (
     `image_approved` BIT(1) DEFAULT 0 NOT NULL,
 	PRIMARY KEY (`id`),
 	UNIQUE INDEX `organisation_id` (`organisation_id`, `title`, `language_id`, `country_id`),
+    KEY `key_organisation_id` (`organisation_id`),
 	INDEX `FK_Projects_Languages` (`language_id`),
 	INDEX `FK_Projects_Countries` (`country_id`),
 	CONSTRAINT `FK_Projects_Countries` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -1357,6 +1359,25 @@ CREATE TABLE IF NOT EXISTS `TaskViews` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
+CREATE TABLE IF NOT EXISTS Subscriptions (
+  organisation_id INT(10) UNSIGNED NOT NULL,
+  level INT(10) UNSIGNED NOT NULL,
+  spare INT(10) UNSIGNED DEFAULT 0 NOT NULL,
+  start_date DATETIME NOT NULL,
+  comment VARCHAR(255) COLLATE utf8_unicode_ci DEFAULT '',
+  PRIMARY KEY (organisation_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS SubscriptionsRecorded (
+  time_stamp DATETIME NOT NULL,
+  organisation_id INT(10) UNSIGNED NOT NULL,
+  level INT(10) UNSIGNED NOT NULL,
+  spare INT(10) UNSIGNED DEFAULT 0 NOT NULL,
+  start_date DATETIME NOT NULL,
+  comment VARCHAR(255) COLLATE utf8_unicode_ci DEFAULT '',
+  KEY (organisation_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*---------------------------------------end of tables---------------------------------------------*/
 
@@ -5912,6 +5933,66 @@ BEGIN
                 and (t.`task-type_id` = 3);
 	end if;
 
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `updateSubscription`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateSubscription`(IN `organisation_id` INT, IN `level` INT, IN `spare` INT, IN `start_date` DATETIME, IN `comment` VARCHAR(255))
+BEGIN
+    REPLACE INTO Subscriptions (`organisation_id`, `level`, `spare`, `start_date`, `comment`) VALUES (organisation_id, level, spare, start_date, comment);
+    INSERT INTO SubscriptionsRecorded (`time_stamp`, `organisation_id`, `level`, `spare`, `start_date`, `comment`) VALUES (NOW(), organisation_id, level, spare, start_date, comment);
+    SELECT 1 as result;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getSubscription`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getSubscription`(IN `org_id` INT)
+BEGIN
+  SELECT `organisation_id`, `level`, `spare`, `start_date`, `comment` FROM Subscriptions WHERE `organisation_id`=org_id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `number_of_projects_ever`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `number_of_projects_ever`(IN `org_id` INT)
+BEGIN
+    SET @totalArchivedProjects = 0;
+    SET @totalProjects = 0;
+    SELECT COUNT(*) INTO @totalArchivedProjects FROM ArchivedProjects WHERE `organisation_id`=org_id;
+    SELECT COUNT(*) INTO @totalProjects         FROM Projects         WHERE `organisation_id`=org_id;
+    SELECT @totalArchivedProjects+@totalProjects AS result;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `number_of_projects_since_last_donation`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `number_of_projects_since_last_donation`(IN `org_id` INT)
+BEGIN
+    SET @subscription_start_date = 0;
+    SELECT `start_date` INTO @subscription_start_date FROM Subscriptions WHERE `organisation_id`=org_id;
+
+    SET @totalArchivedProjects = 0;
+    SET @totalProjects = 0;
+    SELECT COUNT(*) INTO @totalArchivedProjects FROM ArchivedProjects WHERE `organisation_id`=org_id AND `created`>@subscription_start_date;
+    SELECT COUNT(*) INTO @totalProjects         FROM Projects         WHERE `organisation_id`=org_id AND `created`>@subscription_start_date;
+    SELECT @totalArchivedProjects+@totalProjects AS result;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `number_of_projects_since_donation_anniversary`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `number_of_projects_since_donation_anniversary`(IN `org_id` INT)
+BEGIN
+    SET @subscription_start_date = 0;
+    SELECT `start_date` + INTERVAL 1 YEAR INTO @subscription_start_date FROM Subscriptions WHERE `organisation_id`=org_id;
+
+    SET @totalArchivedProjects = 0;
+    SET @totalProjects = 0;
+    SELECT COUNT(*) INTO @totalArchivedProjects FROM ArchivedProjects WHERE `organisation_id`=org_id AND `created`>@subscription_start_date;
+    SELECT COUNT(*) INTO @totalProjects         FROM Projects         WHERE `organisation_id`=org_id AND `created`>@subscription_start_date;
+    SELECT @totalArchivedProjects+@totalProjects AS result;
 END//
 DELIMITER ;
 

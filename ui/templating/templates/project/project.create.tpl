@@ -37,6 +37,10 @@
         </div>           
     </div>  
 
+    {if isset($subscription_text)}
+        <div class="well pull-left">{$subscription_text}</div>
+    {/if}
+
     <div class="well pull-left" style="margin-bottom: 50px">
 
         {if isset($flash['error'])}

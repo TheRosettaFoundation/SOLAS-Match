@@ -619,6 +619,8 @@ class ProjectRouteHandler
         $user_id = Common\Lib\UserSession::getCurrentUserID();
 
         $projectDao = new DAO\ProjectDao();
+        $orgDao = new DAO\OrganisationDao();
+        $subscriptionDao = new DAO\SubscriptionDao();
         $taskDao = new DAO\TaskDao();
 
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
@@ -913,13 +915,6 @@ class ProjectRouteHandler
             }
         }
 
-        // $languages = Lib\TemplateHelper::getLanguageList(); // (code) is added to name because of settings
-        // $countries = Lib\TemplateHelper::getCountryList();
-        $langDao = new DAO\LanguageDao();
-        $languages = $langDao->getLanguages();
-        $countryDao = new DAO\CountryDao();
-        $countries = $countryDao->getCountries();
-
         $month_list = array(
             1 => Lib\Localisation::getTranslation('common_january'),
             2 => Lib\Localisation::getTranslation('common_february'),
@@ -934,6 +929,140 @@ class ProjectRouteHandler
             11 => Lib\Localisation::getTranslation('common_november'),
             12 => Lib\Localisation::getTranslation('common_december'),
         );
+
+        $subscription_text = null;
+        $paypal_email = Common\Lib\Settings::get('banner.paypal_email');
+        if (!empty($paypal_email)) {
+            $text_start = '<p style="font-size: 14px">' . Lib\Localisation::getTranslation('project_subscription') . '<br />';
+
+            $siteLocation = Common\Lib\Settings::get('site.location');
+            $text_end = Lib\Localisation::getTranslation('project_subscription_annual_donation') . '</p>';
+            $text_end .= '<ul style="font-size: 14px">';
+            $text_end .= '<li>';
+            $text_end .=
+                '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
+                <input name="business" type="hidden" value="' . Common\Lib\Settings::get('banner.paypal_email') . '" />
+                <input name="cmd" type="hidden" value="_donations" />
+                <input name="item_name" type="hidden" value="Subscription: Intermittent use" />
+                <input name="item_number" type="hidden" value="Subscription: Intermittent use" />
+                <input name="amount" type="hidden" value="35.00" />
+                <input name="currency_code" type="hidden" value="EUR" />
+                <input alt="PayPal - The safer, easier way to pay online" name="submit" src="' . $siteLocation . 'ui/img/p35.png" type="image" style="height:29px; width:64px;" />
+                </form>';
+            $text_end .= Lib\Localisation::getTranslation('project_subscription_intermittent');
+            $text_end .= '</li>';
+            $text_end .= '<li>';
+            $text_end .=
+                '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
+                <input name="business" type="hidden" value="' . Common\Lib\Settings::get('banner.paypal_email') . '" />
+                <input name="cmd" type="hidden" value="_donations" />
+                <input name="item_name" type="hidden" value="Subscription: Moderate use" />
+                <input name="item_number" type="hidden" value="Subscription: Moderate use" />
+                <input name="amount" type="hidden" value="75.00" />
+                <input name="currency_code" type="hidden" value="EUR" />
+                <input alt="PayPal - The safer, easier way to pay online" name="submit" src="' . $siteLocation . 'ui/img/p75.png" type="image" style="height:29px; width:64px;" />
+                </form>';
+            $text_end .= Lib\Localisation::getTranslation('project_subscription_moderate');
+            $text_end .= '</li>';
+            $text_end .= '<li>';
+            $text_end .=
+                '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
+                <input name="business" type="hidden" value="' . Common\Lib\Settings::get('banner.paypal_email') . '" />
+                <input name="cmd" type="hidden" value="_donations" />
+                <input name="item_name" type="hidden" value="Subscription: Heavy use" />
+                <input name="item_number" type="hidden" value="Subscription: Heavy use" />
+                <input name="amount" type="hidden" value="300.00" />
+                <input name="currency_code" type="hidden" value="EUR" />
+                <input alt="PayPal - The safer, easier way to pay online" name="submit" src="' . $siteLocation . 'ui/img/p300.jpg" type="image" style="height:29px; width:64px;" />
+                </form>';
+            $text_end .= Lib\Localisation::getTranslation('project_subscription_heavy');
+            $text_end .= '</li>';
+            $text_end .= '<li>';
+            $text_end .=
+                '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
+                <input name="business" type="hidden" value="' . Common\Lib\Settings::get('banner.paypal_email') . '" />
+                <input name="cmd" type="hidden" value="_donations" />
+                <input name="item_name" type="hidden" value="Subscription: Upgrade other" />
+                <input name="item_number" type="hidden" value="Subscription: Upgrade other" />
+                <input name="currency_code" type="hidden" value="EUR" />
+                <input alt="PayPal - The safer, easier way to pay online" name="submit" src="' . $siteLocation . 'ui/img/pother.jpg" type="image" style="height:29px; width:64px;" />
+                </form>';
+            $text_end .= Lib\Localisation::getTranslation('project_subscription_other');
+            $text_end .= '</li>';
+            $text_end .= '</ul>';
+            $text_end .= '<p style="font-size: 14px">' . Lib\Localisation::getTranslation('project_subscription_cannot') . '</p>';
+
+            $subscription = $orgDao->getSubscription($org_id);
+            if (empty($subscription)) {
+                $number_of_projects_ever = $subscriptionDao->number_of_projects_ever($org_id);
+
+                $text_middle_pay = Lib\Localisation::getTranslation('project_subscription_initial');
+                if ($number_of_projects_ever == 1) {
+                    $text_middle_pay .= ' ' . Lib\Localisation::getTranslation('project_subscription_number');
+                } elseif ($number_of_projects_ever > 1) {
+                    $text_middle_pay .= ' ' . sprintf(Lib\Localisation::getTranslation('project_subscription_numbers'), $number_of_projects_ever);
+                }
+                $text_middle_pay .= '<br />';
+                $text_middle_pay .= Lib\Localisation::getTranslation('project_subscription_remind') . '<br /><br />';
+
+                if ($number_of_projects_ever < 2) {
+                    $subscription_text = $text_start . $text_middle_pay . $text_end;
+                } else {
+                    $subscription_text = $text_start . $text_middle_pay . $text_end;
+                }
+            } else {
+                $year_ago = gmdate('Y-m-d H:i:s', strtotime('-1 year'));
+                $outside_year = $subscription['start_date'] < $year_ago;
+
+                $number_of_projects_since_last_donation = $subscriptionDao->number_of_projects_since_last_donation($org_id);
+                $number_of_projects_since_donation_anniversary = $subscriptionDao->number_of_projects_since_donation_anniversary($org_id);
+
+                $text_middle_renew = sprintf(Lib\Localisation::getTranslation('project_subscription_last_donation'), substr($subscription['start_date'], 8, 2) . ' ' . $month_list[(int)substr($subscription['start_date'], 5, 2)] . ' ' . substr($subscription['start_date'], 0, 4)) . ' ';
+                if ($number_of_projects_since_donation_anniversary == 1) {
+                    $text_middle_renew .= Lib\Localisation::getTranslation('project_subscription_number_renew') . '<br />';
+                } elseif ($number_of_projects_since_donation_anniversary > 1) {
+                    $text_middle_renew .= sprintf(Lib\Localisation::getTranslation('project_subscription_numbers_renew'), $number_of_projects_since_donation_anniversary) . '<br />';
+                }
+                $text_middle_renew .= Lib\Localisation::getTranslation('project_subscription_remind_renew') . '<br /><br />';
+
+                $text_middle_upgrade  = sprintf(Lib\Localisation::getTranslation('project_subscription_numbers_upgrade'), $number_of_projects_since_last_donation) . '<br />';
+                $text_middle_upgrade .= Lib\Localisation::getTranslation('project_subscription_remind_upgrade') . '<br /><br />';
+
+                switch ($subscription['level']) {
+                    case 1000: // Free because unable to pay
+                        break;
+                    case 100:  // Partner
+                        break;
+                    case 10:   // Intermittent use for year
+                        if ($outside_year) {
+                            $subscription_text = $text_start . $text_middle_renew . $text_end;
+                        } elseif ($number_of_projects_since_last_donation >= 3) {
+                            $subscription_text = $text_start . $text_middle_upgrade . $text_end;
+                        }
+                        break;
+                    case 20:   // Moderate use for year
+                        if ($outside_year) {
+                            $subscription_text = $text_start . $text_middle_renew . $text_end;
+                        } elseif ($number_of_projects_since_last_donation >= 10) {
+                            $subscription_text = $text_start . $text_middle_upgrade . $text_end;
+                        }
+                        break;
+                    case 30:   // Heavy use for year
+                        if ($outside_year) {
+                            $subscription_text = $text_start . $text_middle_renew . $text_end;
+                        }
+                    break;
+                }
+            }
+        }
+
+        // $languages = Lib\TemplateHelper::getLanguageList(); // (code) is added to name because of settings
+        // $countries = Lib\TemplateHelper::getCountryList();
+        $langDao = new DAO\LanguageDao();
+        $languages = $langDao->getLanguages();
+        $countryDao = new DAO\CountryDao();
+        $countries = $countryDao->getCountries();
+
         $year_list = array();
         $yeari = (int)date('Y');
         for ($i = 0; $i < 10; $i++) {
@@ -961,6 +1090,7 @@ class ProjectRouteHandler
             "supportedImageFormats" => Common\Lib\Settings::get('projectImages.supported_formats'),
             "org_id"         => $org_id,
             "user_id"        => $user_id,
+            'subscription_text' => $subscription_text,
             "extra_scripts"  => $extraScripts,
             'month_list'     => $month_list,
             'selected_month' => (int)date('n'),

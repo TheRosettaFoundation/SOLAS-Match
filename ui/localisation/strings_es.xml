@@ -450,6 +450,29 @@
 
 	<string name="project_create_create_a_project">Crea un proyecto</string>
 	<string name="project_create_0">Proporciona tanta información como te sea posible.</string>
+
+    <string name="project_subscription">Para asegurar la continuidad de Trommons, pedimos a las organizaciones usuarias que colaboren con una aportación económica.<br />Destinaremos esta aportación a cubrir los gastos derivados del mantenimiento y la infraestructura del servidor.</string>
+    <string name="project_subscription_initial">Podrás crear dos primeros proyectos sin tener que donar nada.</string>
+    <string name="project_subscription_number">Ya has creado un proyecto.</string>
+    <string name="project_subscription_numbers">Ya has creado %s proyectos.</string>
+    <string name="project_subscription_remind">Cada vez que crees un proyecto, te recordaremos que puedes aportar alguna de las cantidades sugeridas a continuación.</string>
+    <string name="project_subscription_annual_donation">Donación anual sugerida, realizada vía PayPal</string>
+    <string name="project_subscription_intermittent">Uso esporádico (hasta tres proyectos al año)</string>
+    <string name="project_subscription_moderate">Uso moderado (hasta diez proyectos al año)</string>
+    <string name="project_subscription_heavy">Uso frecuente</string>
+    <string name="project_subscription_other">Otra cantidad</string>
+    <string name="project_subscription_cannot">Para otros métodos de pago, o si existe alguna razón por la que tu organización no pueda colaborar económicamente, escríbenos a <a href="mailto:info@trommons.org?subject=Subscription">info@trommons.org</a>.</string>
+
+    <string name="project_subscription_last_donation">Tu última aportación corresponde al periodo que comenzó el %s.</string>
+    <string name="project_subscription_number_renew">Has creado un proyecto desde que se cumplió esa fecha.</string>
+    <string name="project_subscription_numbers_renew">Has creado %s proyectos desde que se cumplió esa fecha.</string>
+    <string name="project_subscription_remind_renew">Cada vez que crees un proyecto, te recordaremos que renueves tu aportación anual.</string>
+
+    <string name="project_subscription_numbers_upgrade">Has creado %s proyectos desde tu última aportación, por lo que has alcanzado el número de proyectos que corresponde a tu aportación.</string>
+    <string name="project_subscription_remind_upgrade">Cada vez que crees un proyecto, te recordaremos que actualices tu aportación anual.</string>
+
+    <string name="user_public_profile_certificate">Si deseas recibir un certificado de tu donación por correo, escríbenos a <a href="mailto:info@trommons.org?subject=Certificate">info@trommons.org</a>. A cambio, te solicitaremos que colabores con 25 €. Destinaremos tu aportación al mantenimiento y la infraestructura del servidor, lo que nos ayudará mantener la continuidad de Trommons.</string>
+
 	<string name="project_create_source_text">Texto de origen</string>
 	<string name="project_create_1">Proporciona un título relevante para este proyecto.</string>
 	<string name="project_create_target_language_increase">Ten en cuenta que si creas más de cinco tareas, el proceso puede tardar algo más en completarse. Mientras tanto, no hagas clic en &quot;Crear proyecto&quot; otra vez ni cierres la página.</string>

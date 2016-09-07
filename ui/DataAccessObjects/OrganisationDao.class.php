@@ -31,6 +31,22 @@ class OrganisationDao extends BaseDao
         return $ret;
     }
 
+    public function getSubscription($org_id)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/subscription/$org_id";
+        $ret = $this->client->call(null, $request);
+        return json_decode($ret, true);
+    }
+
+    public function updateSubscription($org_id, $level, $spare, $start_date, $comment)
+    {
+        $ret = null;
+        $request = "{$this->siteApi}v0/subscription/$org_id/level/$level/spare/$spare/start_date/" . urlencode($start_date);
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST, $comment);
+        return $ret;
+    }
+
     public function getOrganisationByName($name)
     {
         $ret = null;
