@@ -452,7 +452,7 @@
 	<string name="project_create_0">Proporciona tanta información como te sea posible.</string>
 
     <string name="project_subscription">Para asegurar la continuidad de Trommons, pedimos a las organizaciones usuarias que colaboren con una aportación económica.<br />Destinaremos esta aportación a cubrir los gastos derivados del mantenimiento y la infraestructura del servidor.</string>
-    <string name="project_subscription_initial">Podrás crear dos primeros proyectos sin tener que donar nada.</string>
+    <string name="project_subscription_initial">Podrás crear dos proyectos sin tener que donar nada.</string>
     <string name="project_subscription_number">Ya has creado un proyecto.</string>
     <string name="project_subscription_numbers">Ya has creado %s proyectos.</string>
     <string name="project_subscription_remind">Cada vez que crees un proyecto, te recordaremos que puedes aportar alguna de las cantidades sugeridas a continuación.</string>
