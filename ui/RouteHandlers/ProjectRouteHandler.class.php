@@ -935,7 +935,9 @@ class ProjectRouteHandler
         if (!empty($paypal_email)) {
             $text_start = '<p style="font-size: 14px">' . Lib\Localisation::getTranslation('project_subscription') . '<br />';
 
-            $siteLocation = Common\Lib\Settings::get('site.location');
+            //$siteLocation = Common\Lib\Settings::get('site.location');
+            $maximum_button_text_length = max(strlen(Lib\Localisation::getTranslation('project_subscription_intermittent')), strlen(Lib\Localisation::getTranslation('project_subscription_moderate')), strlen(Lib\Localisation::getTranslation('project_subscription_heavy')), strlen(Lib\Localisation::getTranslation('project_subscription_other')));
+            $button_size = ($maximum_button_text_length + 5) * 14;
             $text_end = Lib\Localisation::getTranslation('project_subscription_annual_donation') . '</p>';
             $text_end .= '<ul style="font-size: 14px">';
             $text_end .= '<li>';
@@ -947,9 +949,12 @@ class ProjectRouteHandler
                 <input name="item_number" type="hidden" value="Subscription: Intermittent use" />
                 <input name="amount" type="hidden" value="35.00" />
                 <input name="currency_code" type="hidden" value="EUR" />
-                <input alt="PayPal - The safer, easier way to pay online" name="submit" src="' . $siteLocation . 'ui/img/p35.png" type="image" style="height:29px; width:64px;" />
-                </form>';
-            $text_end .= Lib\Localisation::getTranslation('project_subscription_intermittent');
+                <button type="submit" class="btn btn-success" style="width: ' . $button_size . 'px;">
+                    <i class="icon-gift icon-white"></i> ' . Lib\Localisation::getTranslation('project_subscription_intermittent') .
+                '</button>' .
+                /*<input alt="PayPal - The safer, easier way to pay online" name="submit" src="' . $siteLocation . 'ui/img/p35.png" type="image" style="height:29px; width:64px;" />*/
+                '</form>';
+            //$text_end .= Lib\Localisation::getTranslation('project_subscription_intermittent');
             $text_end .= '</li>';
             $text_end .= '<li>';
             $text_end .=
@@ -960,9 +965,12 @@ class ProjectRouteHandler
                 <input name="item_number" type="hidden" value="Subscription: Moderate use" />
                 <input name="amount" type="hidden" value="75.00" />
                 <input name="currency_code" type="hidden" value="EUR" />
-                <input alt="PayPal - The safer, easier way to pay online" name="submit" src="' . $siteLocation . 'ui/img/p75.png" type="image" style="height:29px; width:64px;" />
-                </form>';
-            $text_end .= Lib\Localisation::getTranslation('project_subscription_moderate');
+                <button type="submit" class="btn btn-success" style="width: ' . $button_size . 'px;">
+                    <i class="icon-gift icon-white"></i> ' . Lib\Localisation::getTranslation('project_subscription_moderate') .
+                '</button>' .
+                /*<input alt="PayPal - The safer, easier way to pay online" name="submit" src="' . $siteLocation . 'ui/img/p75.png" type="image" style="height:29px; width:64px;" />*/
+                '</form>';
+            //$text_end .= Lib\Localisation::getTranslation('project_subscription_moderate');
             $text_end .= '</li>';
             $text_end .= '<li>';
             $text_end .=
@@ -973,9 +981,12 @@ class ProjectRouteHandler
                 <input name="item_number" type="hidden" value="Subscription: Heavy use" />
                 <input name="amount" type="hidden" value="300.00" />
                 <input name="currency_code" type="hidden" value="EUR" />
-                <input alt="PayPal - The safer, easier way to pay online" name="submit" src="' . $siteLocation . 'ui/img/p300.jpg" type="image" style="height:29px; width:64px;" />
-                </form>';
-            $text_end .= Lib\Localisation::getTranslation('project_subscription_heavy');
+                <button type="submit" class="btn btn-success" style="width: ' . $button_size . 'px;">
+                    <i class="icon-gift icon-white"></i> ' . Lib\Localisation::getTranslation('project_subscription_heavy') .
+                '</button>' .
+                /*<input alt="PayPal - The safer, easier way to pay online" name="submit" src="' . $siteLocation . 'ui/img/p300.jpg" type="image" style="height:29px; width:64px;" />*/
+                '</form>';
+            //$text_end .= Lib\Localisation::getTranslation('project_subscription_heavy');
             $text_end .= '</li>';
             $text_end .= '<li>';
             $text_end .=
@@ -985,9 +996,12 @@ class ProjectRouteHandler
                 <input name="item_name" type="hidden" value="Subscription: Upgrade other" />
                 <input name="item_number" type="hidden" value="Subscription: Upgrade other" />
                 <input name="currency_code" type="hidden" value="EUR" />
-                <input alt="PayPal - The safer, easier way to pay online" name="submit" src="' . $siteLocation . 'ui/img/pother.jpg" type="image" style="height:29px; width:64px;" />
-                </form>';
-            $text_end .= Lib\Localisation::getTranslation('project_subscription_other');
+                <button type="submit" class="btn btn-success" style="width: ' . $button_size . 'px;">
+                    <i class="icon-gift icon-white"></i> ' . Lib\Localisation::getTranslation('project_subscription_other') .
+                '</button>' .
+                /*<input alt="PayPal - The safer, easier way to pay online" name="submit" src="' . $siteLocation . 'ui/img/pother.jpg" type="image" style="height:29px; width:64px;" />*/
+                '</form>';
+            //$text_end .= Lib\Localisation::getTranslation('project_subscription_other');
             $text_end .= '</li>';
             $text_end .= '</ul>';
             $text_end .= '<p style="font-size: 14px">' . Lib\Localisation::getTranslation('project_subscription_cannot') . '</p>';
