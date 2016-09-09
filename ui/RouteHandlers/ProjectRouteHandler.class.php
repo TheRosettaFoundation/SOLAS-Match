@@ -950,7 +950,7 @@ $text_end .= "<p>maximum_button_text_length: $maximum_button_text_length, button
                 <input name="item_number" type="hidden" value="Subscription: Intermittent use" />
                 <input name="amount" type="hidden" value="35.00" />
                 <input name="currency_code" type="hidden" value="EUR" />
-                <button type="submit" class="btn btn-success" style="width: ' . $button_size . 'px; padding: 0px 0px 3px 0px;">
+                <button type="submit" class="btn btn-success" style="width: ' . $button_size . 'px; margin: 0px 0px 3px 0px;">
                     <i class="icon-gift icon-white"></i> ' . Lib\Localisation::getTranslation('project_subscription_intermittent') .
                 '</button>' .
                 /*<input alt="PayPal - The safer, easier way to pay online" name="submit" src="' . $siteLocation . 'ui/img/p35.png" type="image" style="height:29px; width:64px;" />*/
@@ -966,7 +966,7 @@ $text_end .= "<p>maximum_button_text_length: $maximum_button_text_length, button
                 <input name="item_number" type="hidden" value="Subscription: Moderate use" />
                 <input name="amount" type="hidden" value="75.00" />
                 <input name="currency_code" type="hidden" value="EUR" />
-                <button type="submit" class="btn btn-success" style="width: ' . $button_size . 'px; padding: 0px 0px 3px 0px;">
+                <button type="submit" class="btn btn-success" style="width: ' . $button_size . 'px; margin: 0px 0px 3px 0px;">
                     <i class="icon-gift icon-white"></i> ' . Lib\Localisation::getTranslation('project_subscription_moderate') .
                 '</button>' .
                 /*<input alt="PayPal - The safer, easier way to pay online" name="submit" src="' . $siteLocation . 'ui/img/p75.png" type="image" style="height:29px; width:64px;" />*/
@@ -982,7 +982,7 @@ $text_end .= "<p>maximum_button_text_length: $maximum_button_text_length, button
                 <input name="item_number" type="hidden" value="Subscription: Heavy use" />
                 <input name="amount" type="hidden" value="300.00" />
                 <input name="currency_code" type="hidden" value="EUR" />
-                <button type="submit" class="btn btn-success" style="width: ' . $button_size . 'px; padding: 0px 0px 3px 0px;">
+                <button type="submit" class="btn btn-success" style="width: ' . $button_size . 'px; margin: 0px 0px 3px 0px;">
                     <i class="icon-gift icon-white"></i> ' . Lib\Localisation::getTranslation('project_subscription_heavy') .
                 '</button>' .
                 /*<input alt="PayPal - The safer, easier way to pay online" name="submit" src="' . $siteLocation . 'ui/img/p300.jpg" type="image" style="height:29px; width:64px;" />*/
