@@ -160,7 +160,7 @@ class Orgs
                 /* Routes starting /v0/subscription */
                 $app->get(
                     '/:org_id/',
-                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
+                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
                     '\SolasMatch\API\V0\Orgs::getSubscription'
                 );
 
