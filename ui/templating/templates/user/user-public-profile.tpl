@@ -443,7 +443,7 @@
                     </p>
                     <p>
                     <strong>{Localisation::getTranslation('common_home_page')}</strong><br/>
-                    {if $org->getHomepage() != "http://"}
+                    {if $org->getHomepage() != "https://"}
                         <a target="_blank" href="{$org->getHomepage()}">{$org->getHomepage()}</a>
                     {else}
                         {Localisation::getTranslation('org_public_profile_no_home_page_listed')}
