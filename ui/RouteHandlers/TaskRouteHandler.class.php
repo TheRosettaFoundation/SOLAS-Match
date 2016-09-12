@@ -1778,10 +1778,10 @@ class TaskRouteHandler
             }
         }
 
-        $extraScripts = file_get_contents(
-            "http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/task-segmentation.js"
-        );
-
+        //$extraScripts = file_get_contents(
+        //    "http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/task-segmentation.js"
+        //);
+        $extraScripts  = file_get_contents(__DIR__."/../js/task-segmentation.js");
         $extraScripts .= file_get_contents(__DIR__."/../js/TaskView.js");
 
         $app->view()->appendData(array(
