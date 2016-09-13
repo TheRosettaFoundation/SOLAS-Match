@@ -103,6 +103,8 @@ class APIHelper
         curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
         curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($re, CURLOPT_HEADER, true);
+        curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false); // Calls will be local so no need to verify hostname (& test server may not have proper certificate)
+        curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false); // Calls will be local so no need to verify certificate (& test server may not have proper certificate)
         $res = curl_exec($re);
         $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
         $header = substr($res, 0, $header_size);
