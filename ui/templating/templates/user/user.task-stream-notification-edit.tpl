@@ -2,7 +2,7 @@
 
 <div class="page-header">
     <h1>
-        <img src="http://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=80&r=g" alt="" />
+        <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=80&r=g" alt="" />
         {$user->getDisplayName()}
         <small>{Localisation::getTranslation('user_task_stream_notification_edit_0')}</small>
     </h1>
