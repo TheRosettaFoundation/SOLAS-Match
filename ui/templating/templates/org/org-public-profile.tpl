@@ -107,7 +107,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {if $org->getHomepage() != 'http://' && $org->getHomepage() != ''}
+                                        {if $org->getHomepage() != 'https://' && $org->getHomepage() != ''}
                                             <a href="{$org->getHomepage()}">{$org->getHomepage()}</a>
                                         {else}
                                             {Localisation::getTranslation('org_public_profile_no_home_page_listed')}
@@ -125,7 +125,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {if $org2->getFacebook() != 'http://' && $org2->getFacebook() != ''}
+                                        {if $org2->getFacebook() != 'https://' && $org2->getFacebook() != ''}
                                             <a href="{$org2->getFacebook()}">{$org2->getFacebook()}</a>
                                         {/if}
                                     </td>  
@@ -141,7 +141,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {if $org2->getLinkedin() != 'http://' && $org2->getLinkedin() != ''}
+                                        {if $org2->getLinkedin() != 'https://' && $org2->getLinkedin() != ''}
                                             <a href="{$org2->getLinkedin()}">{$org2->getLinkedin()}</a>
                                         {/if}
                                     </td>  
@@ -157,7 +157,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {if $org2->getPrimaryContactEmail() != 'http://' && $org2->getPrimaryContactEmail() != ''}
+                                        {if $org2->getPrimaryContactEmail() != 'https://' && $org2->getPrimaryContactEmail() != ''}
                                             <a href="{$org2->getPrimaryContactEmail()}">{$org2->getPrimaryContactEmail()}</a>
                                         {/if}
                                     </td>
@@ -277,7 +277,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {if $org2->getUrlVideo1() != 'http://' && $org2->getUrlVideo1() != ''}
+                                        {if $org2->getUrlVideo1() != 'https://' && $org2->getUrlVideo1() != ''}
                                             <a href="{$org2->getUrlVideo1()}">{$org2->getUrlVideo1()}</a>
                                         {/if}
                                     </td>
@@ -293,7 +293,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {if $org2->getUrlVideo2() != 'http://' && $org2->getUrlVideo2() != ''}
+                                        {if $org2->getUrlVideo2() != 'https://' && $org2->getUrlVideo2() != ''}
                                             <a href="{$org2->getUrlVideo2()}">{$org2->getUrlVideo2()}</a>
                                         {/if}
                                     </td>
@@ -309,7 +309,7 @@
                                 </tr>
                                 <tr>
                                     <td style="font-style: italic">
-                                        {if $org2->getUrlVideo3() != 'http://' && $org2->getUrlVideo3() != ''}
+                                        {if $org2->getUrlVideo3() != 'https://' && $org2->getUrlVideo3() != ''}
                                             <a href="{$org2->getUrlVideo3()}">{$org2->getUrlVideo3()}</a>
                                         {/if}
                                     </td>

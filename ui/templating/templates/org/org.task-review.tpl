@@ -14,8 +14,8 @@
 
 <p>
 {Localisation::getTranslation('task_twitter_0_org_task_review')} <a class="twitter-share-button"
-  href="https://twitter.com/intent/tweet?text={Localisation::getTranslation('task_twitter_4')}&url=http%3A%2F%2Ftrommons.org"
-  data-size="large" data-counturl="http://trommons.org">
+  href="https://twitter.com/intent/tweet?text={Localisation::getTranslation('task_twitter_4')}&url=https%3A%2F%2Ftrommons.org"
+  data-size="large" data-counturl="https://trommons.org">
 Tweet</a>
 </p>
 

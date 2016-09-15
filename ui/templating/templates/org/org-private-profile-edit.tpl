@@ -48,7 +48,7 @@
                     {if isset($org) && !is_null($org->getHomepage()) && $org->getHomepage() != ''}
                         value="{$org->getHomepage()}"
                     {else}
-                        placeholder="http://"
+                        placeholder="https://"
                     {/if}
                     />
 
@@ -57,7 +57,7 @@
                     {if $org2->getFacebook() != ''}
                         value="{$org2->getFacebook()}"
                     {else}
-                        placeholder="http://"
+                        placeholder="https://"
                     {/if}
                     />
 
@@ -66,7 +66,7 @@
                     {if $org2->getLinkedin() != ''}
                         value="{$org2->getLinkedin()}"
                     {else}
-                        placeholder="http://"
+                        placeholder="https://"
                     {/if}
                     />
 
@@ -75,7 +75,7 @@
                     {if $org2->getPrimaryContactEmail() != ''}
                         value="{$org2->getPrimaryContactEmail()}"
                     {else}
-                        placeholder="http://"
+                        placeholder="https://"
                     {/if}
                     />
                 </td>
@@ -180,7 +180,7 @@
                     {if $org2->getUrlVideo1() != ''}
                         value="{$org2->getUrlVideo1()}"
                     {else}
-                        placeholder="http://"
+                        placeholder="https://"
                     {/if}
                     />
 
@@ -189,7 +189,7 @@
                     {if $org2->getUrlVideo2() != ''}
                         value="{$org2->getUrlVideo2()}"
                     {else}
-                        placeholder="http://"
+                        placeholder="https://"
                     {/if}
                     />
 
@@ -198,7 +198,7 @@
                     {if $org2->getUrlVideo3() != ''}
                         value="{$org2->getUrlVideo3()}"
                     {else}
-                        placeholder="http://"
+                        placeholder="https://"
                     {/if}
                     />
 

@@ -7,7 +7,7 @@
         <table>
             <tr>
                 <td>                    
-                    <img src="http://www.gravatar.com/avatar/{md5( strtolower( trim($this_user->getEmail())))}?s=80{urlencode("&")}r=g" alt="" />
+                    <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($this_user->getEmail())))}?s=80{urlencode("&")}r=g" alt="" />
                     {assign var="user_id" value=$this_user->getId()}
                     {if $this_user->getDisplayName() != ''}
                         {$this_user->getDisplayName()}
@@ -443,7 +443,7 @@
                     </p>
                     <p>
                     <strong>{Localisation::getTranslation('common_home_page')}</strong><br/>
-                    {if $org->getHomepage() != "http://"}
+                    {if $org->getHomepage() != "https://"}
                         <a target="_blank" href="{$org->getHomepage()}">{$org->getHomepage()}</a>
                     {else}
                         {Localisation::getTranslation('org_public_profile_no_home_page_listed')}

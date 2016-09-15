@@ -532,7 +532,7 @@ class UserRouteHandler
         $langDao = new DAO\LanguageDao();
         
         $error = null;
-        $openid = new \LightOpenID("http://".$_SERVER["HTTP_HOST"].$app->urlFor("home"));
+        $openid = new \LightOpenID("https://".$_SERVER["HTTP_HOST"].$app->urlFor("home"));
         $use_openid = Common\Lib\Settings::get("site.openid");
         $use_google_plus = Common\Lib\Settings::get("googlePlus.enabled");
         $app->view()->setData("openid", $use_openid);

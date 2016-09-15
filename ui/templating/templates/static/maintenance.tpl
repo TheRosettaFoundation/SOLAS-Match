@@ -134,7 +134,7 @@
 
             <div id="globe" style="text-align: center">
                 <br/>
-                <script type="text/javascript" src="http://jh.revolvermaps.com/p.js"></script><script type="text/javascript">rm2d_ki101('7','300','150','7puikkj5km8','ff00ff',0);</script>
+                <script type="text/javascript" src="//rf.revolvermaps.com/0/0/4.js?i=7puikkj5km8&amp;m=7&amp;h=150&amp;c=ff00ff&amp;r=0" async="async"></script>
                 <br/>
             </div>
         </div>

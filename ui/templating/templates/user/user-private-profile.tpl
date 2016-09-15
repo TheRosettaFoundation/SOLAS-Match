@@ -35,7 +35,7 @@
 {if isset($user)}
     <div class="page-header">
         <h1>
-            <img src="http://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=80&r=g" alt="" />
+            <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=80&r=g" alt="" />
             {if $user->getDisplayName() != ''}
                 {$user->getDisplayName()|escape:'html':'UTF-8'}
             {else}
