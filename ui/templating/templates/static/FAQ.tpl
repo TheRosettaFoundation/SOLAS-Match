@@ -117,7 +117,7 @@
             <a id="vol12" class="faq-anchor"></a>
             <h3>{Localisation::getTranslation('faq_question_more_about_trf')}</h3>
             <p>
-            	{sprintf(Localisation::getTranslation('faq_answer_more_about_trf'), "<a href=\"http://www.therosettafoundation.org/\" target=\"_blank\">www.therosettafoundation.org</a>")}
+            	{sprintf(Localisation::getTranslation('faq_answer_more_about_trf'), "<a href=\"https://www.therosettafoundation.org/\" target=\"_blank\">www.therosettafoundation.org</a>")}
             </p>
 
             <a id="vol13" class="faq-anchor"></a>

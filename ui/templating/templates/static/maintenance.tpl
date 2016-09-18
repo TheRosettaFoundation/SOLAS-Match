@@ -118,7 +118,7 @@
         <div class="span4 pull-right">
             <section class="donate-block">
                 <p>{Localisation::getTranslation('index_donate_free_service')}</p>
-                <a href="http://www.therosettafoundation.org" target="_blank">
+                <a href="https://www.therosettafoundation.org" target="_blank">
                     <img id="donate-trf-logo" src="{urlFor name='home'}ui/img/TheRosettaFoundationLogo.png" alt="The logo of The Rosetta Foundation" height="60"/>
                 </a>
                 <p>
@@ -128,7 +128,7 @@
                 	{sprintf(Localisation::getTranslation('index_donate_every_month'), "donate", "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&amp;business=Reinhard%2eSchaler%40ul%2eie&amp;item_name=Friend%20of%20The%20Rosetta%20Foundation&amp;src=1&amp;a3=5.00&amp;p3=1&amp;t3=M¤cy_code=EUR")}
                 </div>
                 <p>
-                  	{sprintf(Localisation::getTranslation('index_donate_once_off'), "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=Reinhard%2eSchaler%40ul%2eie&amp;lc=US&amp;item_name=The%20Rosetta%20Foundation&amp;no_note=0¤cy_code=EUR", "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&amp;business=Reinhard%2eSchaler%40ul%2eie&amp;item_name=Friend%20of%20The%20Rosetta%20Foundation&amp;src=1&amp;a3=5.00&amp;p3=1&amp;t3=M¤cy_code=EUR","http://www.therosettafoundation.org/participate/becomeafriend/","_blank")}
+                  	{sprintf(Localisation::getTranslation('index_donate_once_off'), "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=Reinhard%2eSchaler%40ul%2eie&amp;lc=US&amp;item_name=The%20Rosetta%20Foundation&amp;no_note=0¤cy_code=EUR", "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&amp;business=Reinhard%2eSchaler%40ul%2eie&amp;item_name=Friend%20of%20The%20Rosetta%20Foundation&amp;src=1&amp;a3=5.00&amp;p3=1&amp;t3=M¤cy_code=EUR","https://www.therosettafoundation.org/participate/becomeafriend/","_blank")}
                 </p>
             </section>
 

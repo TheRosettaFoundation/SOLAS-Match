@@ -11,11 +11,11 @@
                                 {sprintf(Localisation::getTranslation('footer_0'), "http://creativecommons.org/licenses/by/3.0/ie/", {urlFor name='terms'})}
                             </td>
                             <td width="38%" style="text-align: center">
-                                <a href="http://www.therosettafoundation.org" target="_blank">
+                                <a href="https://www.therosettafoundation.org" target="_blank">
                                     <img alt="The Rosetta Foundation" style="border-width:0" src="{urlFor name='home'}ui/img/TheRosettaFoundationLogo.png" height="48px" />
                                 </a>
                                 <br />
-                                {sprintf(Localisation::getTranslation('footer_maintained_by'), "http://www.therosettafoundation.org/", "The Rosetta Foundation")}
+                                {sprintf(Localisation::getTranslation('footer_maintained_by'), "https://www.therosettafoundation.org/", "The Rosetta Foundation")}
                                 <br/>
                                 {sprintf(Localisation::getTranslation('footer_feedback'), "https://docs.google.com/a/ul.ie/spreadsheet/viewform?formkey=dER4VFJZQVpNY0g2anpLb2dJSGJEbFE6MQ#gid=0")}
                             </td>
