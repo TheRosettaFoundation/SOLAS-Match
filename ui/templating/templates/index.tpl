@@ -78,13 +78,13 @@
     <div class="span4 pull-right">
         <section class="donate-block">
             <p>{Localisation::getTranslation('index_donate_free_service')}</p>
-            <a href="http://www.therosettafoundation.org" target="_blank">
+            <a href="https://www.therosettafoundation.org" target="_blank">
                 <img id="donate-trf-logo" src="{urlFor name='home'}ui/img/TheRosettaFoundationLogo.png" alt="The logo of The Rosetta Foundation" height="60"/>
             </a>
             <p>
                 <strong>{Localisation::getTranslation('index_donate_support_us')}</strong>
             </p>
-            <a id="donate" href="http://www.therosettafoundation.org/donate/" target="_blank">
+            <a id="donate" href="https://www.therosettafoundation.org/donate/" target="_blank">
                 <div class="donate-button">
                     {Localisation::getTranslation('index_donate_support_trommons')}
                 </div>
