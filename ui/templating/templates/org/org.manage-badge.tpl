@@ -36,7 +36,7 @@
             {foreach $user_list as $user}
                 <div class="row">
                     {if $user->getDisplayName() != ''}
-                        {assign var="displayName" value=$user->getDisplayName()}
+                        {assign var="displayName" value=TemplateHelper::uiCleanseHTML($user->getDisplayName())}
                     {else}
                         {assign var="displayName" value=$user->getEmail()}
                     {/if}

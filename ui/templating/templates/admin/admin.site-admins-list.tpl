@@ -10,7 +10,7 @@
             {foreach $adminList as $admin}
             <tr>
                 <td>                
-                    <a href="{urlFor name="user-public-profile" options="user_id.{$admin->getId()}"}">{$admin->getDisplayName()}</a>
+                    <a href="{urlFor name="user-public-profile" options="user_id.{$admin->getId()}"}">{TemplateHelper::uiCleanseHTML($admin->getDisplayName())}</a>
                 </td>
                 <td>
                     <form method="post" action="{urlFor name="site-admin-dashboard" options="user_id.{$adminUserId}"}">

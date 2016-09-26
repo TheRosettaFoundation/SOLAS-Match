@@ -17,7 +17,7 @@
     <h1>
         {if isset($thisUser)}
             {if $thisUser->getDisplayName() != ''}
-                {sprintf(Localisation::getTranslation('claimed_tasks_users_claimed_tasks'), {$thisUser->getDisplayName()})}
+                {sprintf(Localisation::getTranslation('claimed_tasks_users_claimed_tasks'), {TemplateHelper::uiCleanseHTML($thisUser->getDisplayName())})}
             {else}
                 {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
             {/if}

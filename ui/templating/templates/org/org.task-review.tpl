@@ -9,7 +9,7 @@
 {include file="handle-flash-messages.tpl"}
 
 <p>
-    {sprintf(Localisation::getTranslation('org_task_review_the_volunteer'), {urlFor name="user-public-profile" options="user_id.{$translator->getId()}"}, $translator->getDisplayName())}
+    {sprintf(Localisation::getTranslation('org_task_review_the_volunteer'), {urlFor name="user-public-profile" options="user_id.{$translator->getId()}"}, TemplateHelper::uiCleanseHTML($translator->getDisplayName()))}
 </p>
 
 <p>

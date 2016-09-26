@@ -102,7 +102,7 @@
                 <td>
                     {if $claimant != NULL}
                     {assign var="user_id" value=$claimant->getId()}
-                    <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{$claimant->getDisplayName()}</a>
+                    <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{TemplateHelper::uiCleanseHTML($claimant->getDisplayName())}</a>
                     {else}
                     {Localisation::getTranslation('org_task_review_claimant_unavailable')}
                     {/if}

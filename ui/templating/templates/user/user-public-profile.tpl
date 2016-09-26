@@ -10,7 +10,7 @@
                     <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($this_user->getEmail())))}?s=80{urlencode("&")}r=g" alt="" />
                     {assign var="user_id" value=$this_user->getId()}
                     {if $this_user->getDisplayName() != ''}
-                        {$this_user->getDisplayName()}
+                        {TemplateHelper::uiCleanseHTML($this_user->getDisplayName())}
                     {else}
                         {Localisation::getTranslation('common_user_profile')}
                     {/if}
@@ -55,7 +55,7 @@
                     <tbody>
                         <tr>
                             <td>
-                                {$this_user->getDisplayName()}
+                                {TemplateHelper::uiCleanseHTML($this_user->getDisplayName())}
                             </td>
                         </tr>
                         {if isset($private_access) || $isSiteAdmin}

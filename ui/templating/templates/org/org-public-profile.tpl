@@ -652,7 +652,7 @@
                      {assign var="user_id" value=$nonMember->getId()}                        
                      {if $nonMember->getDisplayName() != ''}
                          <td style="text-align: left">
-                             <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{$nonMember->getDisplayName()}</a>
+                             <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{TemplateHelper::uiCleanseHTML($nonMember->getDisplayName())}</a>
                          </td>
                      {/if}
                      <td width="50%">
@@ -715,7 +715,7 @@
                                 {/if}
                             </td>
                             <td>
-                                <a href="{urlFor name="user-public-profile" options="user_id.{$member->getId()}"}">{$member->getDisplayName()}</a>
+                                <a href="{urlFor name="user-public-profile" options="user_id.{$member->getId()}"}">{TemplateHelper::uiCleanseHTML($member->getDisplayName())}</a>
                             </td>
                         {if $adminAccess}
                             <td>

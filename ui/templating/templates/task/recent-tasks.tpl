@@ -17,7 +17,7 @@
     <h3>
         {if isset($thisUser)}
             {if $thisUser->getDisplayName() != ''}
-                {sprintf(Localisation::getTranslation('recent_tasks_users_recent_tasks'), {$thisUser->getDisplayName()})}
+                {sprintf(Localisation::getTranslation('recent_tasks_users_recent_tasks'), {TemplateHelper::uiCleanseHTML($thisUser->getDisplayName())})}
             {else}
                 {Localisation::getTranslation('recent_tasks_recently_viewed_tasks')}
             {/if}
