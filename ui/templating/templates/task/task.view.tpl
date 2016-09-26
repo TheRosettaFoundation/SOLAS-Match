@@ -149,7 +149,7 @@
 		    <p style="margin-bottom: 40px"/>        
 		    <table width="100%">
 		        <thead>
-		            <th>{Localisation::getTranslation('task_view_source_document_preview')} - {$filename}<hr/></th>
+                <th>{Localisation::getTranslation('task_view_source_document_preview')} - {TemplateHelper::uiCleanseHTML($filename)}<hr/></th>
 		        </thead>
 		        <tbody>
 		            <tr>
