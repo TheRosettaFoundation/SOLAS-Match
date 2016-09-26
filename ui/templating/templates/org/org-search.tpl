@@ -65,7 +65,7 @@
 
 {if isset($flash['error'])}
     <div class="alert alert-error">
-        <p>{$flash['error']}</p>
+        <p>{TemplateHelper::uiCleanseHTML($flash['error'])}</p>
     </div>
 {/if}
 

@@ -68,13 +68,13 @@
     
     {if isset($flash['success'])}
         <p class="alert alert-success">
-            <strong>{Localisation::getTranslation('common_success')}:</strong> {$flash['success']}
+            <strong>{Localisation::getTranslation('common_success')}:</strong> {TemplateHelper::uiCleanseHTML($flash['success'])}
         </p>
     {/if}
 
     {if isset($flash['error'])}
         <p class="alert alert-error">
-            <strong>{Localisation::getTranslation('common_warning')}:</strong> {$flash['error']}
+            <strong>{Localisation::getTranslation('common_warning')}:</strong> {TemplateHelper::uiCleanseHTML($flash['error'])}
         </p>
     {/if}
 	

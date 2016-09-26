@@ -3,17 +3,17 @@
 {if isset($org)}
     {if isset($flash['error'])}
         <div class="alert alert-error">
-            {$flash['error']}
+            {TemplateHelper::uiCleanseHTML($flash['error'])}
         </div>
     {/if}
     {if isset($flash['success'])}
         <div class="alert alert-success">
-            {$flash['success']}
+            {TemplateHelper::uiCleanseHTML($flash['success'])}
         </div>
     {/if}
     {if isset($flash['info'])}
         <div class="alert alert-info">
-            {$flash['info']}
+            {TemplateHelper::uiCleanseHTML($flash['info'])}
         </div>
     {/if}
     <div class='page-header'>
