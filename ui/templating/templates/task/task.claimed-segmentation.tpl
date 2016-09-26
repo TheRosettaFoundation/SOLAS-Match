@@ -6,7 +6,7 @@
         </div>
 
         <div class="alert alert-success">
-            <strong>{Localisation::getTranslation('common_success')}</strong> {Localisation::getTranslation('task_claimed_segmentation_0')} &ldquo;<strong>{$task->getTitle()}</strong>&rdquo;.
+            <strong>{Localisation::getTranslation('common_success')}</strong> {Localisation::getTranslation('task_claimed_segmentation_0')} &ldquo;<strong>{TemplateHelper::uiCleanseHTML($task->getTitle())}</strong>&rdquo;.
         </div>
     </section>
 

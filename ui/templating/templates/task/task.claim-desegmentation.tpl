@@ -2,7 +2,7 @@
 
     <section>
         <div class="page-header">
-            <h1>{$task->getTitle()} <small>{Localisation::getTranslation('task_claim_desegmentation_desegmentation_task')}</small></h1>
+            <h1>{TemplateHelper::uiCleanseHTML($task->getTitle())} <small>{Localisation::getTranslation('task_claim_desegmentation_desegmentation_task')}</small></h1>
         </div>
     </section>
 

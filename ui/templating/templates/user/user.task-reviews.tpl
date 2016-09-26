@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 
 <div class="page-header">
-    <h1>{$task->getTitle()} <small>{Localisation::getTranslation('user_task_reviews_0')}</small></h1>
+    <h1>{TemplateHelper::uiCleanseHTML($task->getTitle())} <small>{Localisation::getTranslation('user_task_reviews_0')}</small></h1>
 </div>
 
 <p>

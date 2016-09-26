@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 
 <div class="page-header">
-    <h1>{$task->getTitle()} <small>All reviews for this task</small></h1>
+    <h1>{TemplateHelper::uiCleanseHTML($task->getTitle())} <small>All reviews for this task</small></h1>
 </div>
 
 <h2>Input file reviews</h2>

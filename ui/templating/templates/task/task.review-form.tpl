@@ -1,4 +1,4 @@
-<h2>{$reviewedTask->getTitle()}</h2>
+<h2>{TemplateHelper::uiCleanseHTML($reviewedTask->getTitle())}</h2>
 {if $reviewedTask->getId() != null}
     {assign var="id" value=$reviewedTask->getId()}
     <p>

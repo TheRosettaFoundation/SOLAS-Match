@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 
     <h1 class="page-header">
-        {sprintf(Localisation::getTranslation('org_manage_badge_manage_badge'), $badge->getTitle())}
+        {sprintf(Localisation::getTranslation('org_manage_badge_manage_badge'), TemplateHelper::uiCleanseHTML($badge->getTitle()))}
         <small>{Localisation::getTranslation('org_manage_badge_0')}</small>
     </h1>
 

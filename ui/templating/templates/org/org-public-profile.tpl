@@ -588,7 +588,7 @@
             {assign var="org_id" value=$org->getId()}
             <tr>
                 <td style="text-align: left" width="20%">
-                    <strong>{$badge->getTitle()}</strong>
+                    <strong>{TemplateHelper::uiCleanseHTML($badge->getTitle())}</strong>
                 </td>
                 <td width="35%">
                     {TemplateHelper::uiCleanseHTML($badge->getDescription())}
