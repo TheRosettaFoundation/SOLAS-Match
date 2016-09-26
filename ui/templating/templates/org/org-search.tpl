@@ -44,7 +44,7 @@
                         {if $org->getBiography() == ''}
                             {Localisation::getTranslation('org_public_profile_no_biography_listed')}
                         {else}                            
-                            {TemplateHelper::uiCleanseNewlineAndTabs($org->getBiography())}
+                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($org->getBiography())}
                         {/if}
                     </p>
                     <p>
