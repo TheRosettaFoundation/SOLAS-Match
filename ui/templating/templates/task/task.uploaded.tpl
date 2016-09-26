@@ -24,7 +24,7 @@
             <hr>
                 <p><strong>{Localisation::getTranslation('task_uploaded_5')}</strong></p>
                 <p>
-                    <i>{$tip}</i>
+                    <i>{TemplateHelper::uiCleanseHTML($tip)}</i>
                 </p>
             <hr>
         {/if}
