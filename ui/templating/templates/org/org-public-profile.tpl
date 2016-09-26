@@ -591,7 +591,7 @@
                     <strong>{$badge->getTitle()}</strong>
                 </td>
                 <td width="35%">
-                    {$badge->getDescription()}
+                    {TemplateHelper::uiCleanseHTML($badge->getDescription())}
                 </td>
                 {if ($isMember || $adminAccess) && isset($user)}
                     <td>

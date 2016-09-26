@@ -18,7 +18,7 @@
 
         <label for="description"><strong>{Localisation::getTranslation('common_description')}</strong></label>
         <textarea name='description' cols='40' rows='5' {if $badge->getDescription() == ''} placeholder="{Localisation::getTranslation('org_edit_badge_1')}" {/if}
-        >{if $badge->getDescription() != ''}{$badge->getDescription()}{/if}</textarea>
+        >{if $badge->getDescription() != ''}{TemplateHelper::uiCleanseHTML($badge->getDescription())}{/if}</textarea>
 
         <p>
             <button type='submit' class='btn btn-primary' name='submit'>

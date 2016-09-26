@@ -18,10 +18,10 @@
                     {$org_list[$org_id]->getName()}
                 </a>: {$badgeEntry->getTitle()}
             </h3>
-            <p>{$badgeEntry->getDescription()}</p>
+            <p>{TemplateHelper::uiCleanseHTML($badgeEntry->getDescription())}</p>
         {else}
             <h3>{sprintf(Localisation::getTranslation('badge_list_badge'), $siteName)} {Localisation::getTranslation($badgeEntry->getTitle())}</h3>
-            <p>{Localisation::getTranslation($badgeEntry->getDescription())}</p>
+            <p>{TemplateHelper::uiCleanseHTML(Localisation::getTranslation($badgeEntry->getDescription()))}</p>
         {/if}
         <p style="margin-bottom:20px;"></p>
     {/foreach}

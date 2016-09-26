@@ -329,10 +329,10 @@
                     <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
                         {$org->getName()}</a> - {$badge->getTitle()}
                 </h3>
-                <p>{$badge->getDescription()}</p>    
+                <p>{TemplateHelper::uiCleanseHTML($badge->getDescription())}</p>
             {else}
                 <h3>{Settings::get('site.name')} - {Localisation::getTranslation($badge->getTitle())}</h3>            
-                <p>{Localisation::getTranslation($badge->getDescription())}</p>                
+                <p>{TemplateHelper::uiCleanseHTML(Localisation::getTranslation($badge->getDescription()))}</p>
             {/if}
             <p style="margin-bottom:20px;"/>
         {/foreach}
