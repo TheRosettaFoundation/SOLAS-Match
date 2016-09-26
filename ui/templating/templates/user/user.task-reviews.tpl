@@ -73,7 +73,7 @@
                 <small>{Localisation::getTranslation('task_review_form_6')}</small>
             </h3>
             {if $review->getComment() != ''}
-                <p>{$review->getComment()}</p>
+                <p>{TemplateHelper::uiCleanseHTML($review->getComment())}</p>
             {else}
                 <p>{Localisation::getTranslation('common_no_comment_has_been_listed')}</p>
             {/if}

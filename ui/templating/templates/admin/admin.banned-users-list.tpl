@@ -35,7 +35,7 @@
                         {/if}
                     </td>
                     <td>                
-                        {$bannedUser->getComment()}
+                        {TemplateHelper::uiCleanseHTML($bannedUser->getComment())}
                     </td>
                     <td>                
                         {date(Settings::get("ui.date_format"), strtotime($bannedUser->getBannedDate()))}

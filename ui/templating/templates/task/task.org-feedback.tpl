@@ -65,7 +65,7 @@
                     <td>
                         <i>
                         {if $task->getComment() != ''}
-                            {$task->getComment()}
+                            {TemplateHelper::uiCleanseHTML($task->getComment())}
                         {else}
                            {Localisation::getTranslation('common_no_comment_has_been_listed')}
                         {/if}
@@ -75,7 +75,7 @@
                     <td>
                         <i>
                         {if $project->getDescription() != ''}
-                            {$project->getDescription()}
+                            {TemplateHelper::uiCleanseHTML($project->getDescription())}
                         {else}
                             {Localisation::getTranslation('common_no_description_has_been_listed')}
                         {/if}
