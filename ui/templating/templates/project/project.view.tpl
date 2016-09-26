@@ -77,7 +77,7 @@ Tweet</a>
                 </td>
                 <td>
                     {if $project->getReference() != ''}
-                        <a target="_blank" href="{$project->getReference()}">{$project->getReference()}</a>
+                        <a target="_blank" href="{TemplateHelper::uiCleanseHTML($project->getReference())}">{TemplateHelper::uiCleanseHTML($project->getReference())}</a>
                     {else}
                         -
                     {/if}
