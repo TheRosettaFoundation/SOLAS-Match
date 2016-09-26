@@ -9,7 +9,7 @@
     <form class="well" method="post" action="{urlFor name="org-search"}" accept-charset="utf-8">
         <label for="search_name"><strong>{Localisation::getTranslation('common_organisation_name')}</strong></label>
         <input type="text" name="search_name" id="search_name" style="height: 20px" 
-                value="{if isset($searchedText)}{$searchedText}{/if}" />
+                value="{if isset($searchedText)}{TemplateHelper::uiCleanseHTML($searchedText)}{/if}" />
         <br />
                 
         <button type="submit" name="submit" class="btn btn-primary">

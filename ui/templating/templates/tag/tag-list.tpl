@@ -38,7 +38,7 @@
 <form method="post" action="{urlFor name="tags-list"}" class="well" accept-charset="utf-8">
     <p>{Localisation::getTranslation('tag_list_2')}</p>
     <input type="text" name="searchName" 
-            value="{if isset($searchedText)}{$searchedText}{/if}" />
+            value="{if isset($searchedText)}{TemplateHelper::uiCleanseHTML($searchedText)}{/if}" />
     <div>
         <button class="btn btn-primary" type="submit" name="search">
         	<i class="icon-search icon-white"></i>
@@ -66,7 +66,7 @@
         {/foreach}
         </ul>
     {else}
-        <p class="alert alert-error">{sprintf(Localisation::getTranslation('tag_list_3'), {$searchedText})}</p>
+        <p class="alert alert-error">{sprintf(Localisation::getTranslation('tag_list_3'), {TemplateHelper::uiCleanseHTML($searchedText)})}</p>
     {/if}
 {/if}
 
