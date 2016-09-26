@@ -53,7 +53,7 @@
     <p>            
         {assign var="project_id" value=$task->getProjectId()}
         {assign var="org_id" value=$taskOrgs[$task->getId()]->getId()}
-        {sprintf(Localisation::getTranslation('common_part_of_for'), {urlFor name="project-view" options="project_id.$project_id"}, {$taskProjTitles[$task->getId()]}, {urlFor name="org-public-profile" options="org_id.$org_id"}, {$taskOrgs[$task->getId()]->getName()})}  
+        {sprintf(Localisation::getTranslation('common_part_of_for'), {urlFor name="project-view" options="project_id.$project_id"}, {TemplateHelper::uiCleanseHTML($taskProjTitles[$task->getId()])}, {urlFor name="org-public-profile" options="org_id.$org_id"}, {$taskOrgs[$task->getId()]->getName()})}
     </p>  
 
     <p style="margin-bottom:40px;"/>        

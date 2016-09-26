@@ -115,7 +115,7 @@
                                 <td style="padding-bottom: 10px"/>
                             </tr>
                         {/if}
-                        {assign var=bio value={TemplateHelper::uiCleanseNewlineAndTabs($this_user->getBiography())}}
+                        {assign var=bio value={TemplateHelper::uiCleanseHTMLNewlineAndTabs($this_user->getBiography())}}
                         {if isset($bio)}
                             <tr>
                                 <td>
@@ -160,7 +160,7 @@
                             </tr>
                             <tr>
                                  <td>
-                                     {$userPersonalInfo->getFirstName()}
+                                     {TemplateHelper::uiCleanseHTML($userPersonalInfo->getFirstName())}
                                  </td>
                              </tr>
                              <tr>
@@ -175,7 +175,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    {$userPersonalInfo->getLastName()}
+                                    {TemplateHelper::uiCleanseHTML($userPersonalInfo->getLastName())}
                                 </td>
                             </tr>
                             <tr>
@@ -190,7 +190,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    {$userPersonalInfo->getMobileNumber()}
+                                    {TemplateHelper::uiCleanseHTML($userPersonalInfo->getMobileNumber())}
                                 </td>
                             </tr>
                             <tr>
@@ -205,7 +205,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    {$userPersonalInfo->getBusinessNumber()}
+                                    {TemplateHelper::uiCleanseHTML($userPersonalInfo->getBusinessNumber())}
                                 </td>
                             </tr>
                             <tr>
@@ -220,7 +220,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    {$userPersonalInfo->getJobTitle()}
+                                    {TemplateHelper::uiCleanseHTML($userPersonalInfo->getJobTitle())}
                                 </td>
                             </tr>
                             <tr>
@@ -236,7 +236,7 @@
                             <tr>
                                 <td>
                                     {if $userPersonalInfo->getAddress() != null}
-                                        {TemplateHelper::uiCleanseNewlineAndTabs($userPersonalInfo->getAddress())}
+                                        {TemplateHelper::uiCleanseHTMLNewlineAndTabs($userPersonalInfo->getAddress())}
                                     {/if}
                                 </td>
                             </tr>
@@ -252,7 +252,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    {$userPersonalInfo->getCity()}
+                                    {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCity())}
                                 </td>
                             </tr>
                             <tr>
@@ -327,11 +327,11 @@
                 {assign var="org" value=$orgList[$org_id]}
                 <h3>
                     <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-                        {$org->getName()}</a> - {$badge->getTitle()}
+                        {$org->getName()}</a> - {TemplateHelper::uiCleanseHTML($badge->getTitle())}
                 </h3>
                 <p>{TemplateHelper::uiCleanseHTML($badge->getDescription())}</p>
             {else}
-                <h3>{Settings::get('site.name')} - {Localisation::getTranslation($badge->getTitle())}</h3>            
+                <h3>{Settings::get('site.name')} - {TemplateHelper::uiCleanseHTML(Localisation::getTranslation($badge->getTitle()))}</h3>
                 <p>{TemplateHelper::uiCleanseHTML(Localisation::getTranslation($badge->getDescription()))}</p>
             {/if}
             <p style="margin-bottom:20px;"/>
@@ -438,7 +438,7 @@
                         {if $org->getBiography() == ''}
                             {Localisation::getTranslation('org_public_profile_no_biography_listed')}
                         {else}                            
-                            {TemplateHelper::uiCleanseNewlineAndTabs($org->getBiography())}
+                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($org->getBiography())}
                         {/if}
                     </p>
                     <p>
