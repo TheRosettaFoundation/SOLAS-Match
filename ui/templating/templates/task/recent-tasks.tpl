@@ -69,7 +69,7 @@
 
                                 {if count($taskTags[$task_id]) gt 0}
                                     {foreach $taskTags[$task_id] as $tag}
-                                        <a href="{$siteLocation}tag/{$tag->getId()}" class="label"><span class="label">{trim(trim($tag->getLabel()),",")}</span></a>
+                                        <a href="{$siteLocation}tag/{$tag->getId()}" class="label"><span class="label">{trim(trim(TemplateHelper::uiCleanseHTML($tag->getLabel())),",")}</span></a>
                                     {/foreach}
                                 {/if}
                             </p>

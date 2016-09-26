@@ -10,7 +10,7 @@
     <ul class="nav nav-list unstyled">
     {foreach $user_tags as $tag}
         <li>
-            {assign var="tag_label" value=$tag->getLabel()}
+            {assign var="tag_label" value=TemplateHelper::uiCleanseHTML($tag->getLabel())}
             {assign var="tagId" value=$tag->getId()}
             <p>
                 <a class="label" href="{urlFor name="tag-details" options="id.$tagId"}">{$tag_label}</a>
@@ -57,7 +57,7 @@
         <ul class="nav nav-list unstyled">
         {foreach $foundTags as $tag}
             <li>
-                {assign var="tag_label" value=$tag->getLabel()}
+                {assign var="tag_label" value=TemplateHelper::uiCleanseHTML($tag->getLabel())}
                 {assign var="tagId" value=$tag->getId()}
                 <p>
                     <a class="label" href="{urlFor name="tag-details" options="id.$tagId"}">{$tag_label}</a>

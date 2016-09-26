@@ -35,7 +35,7 @@
             {Localisation::getTranslation('common_tags')}
             {foreach from=$currentTaskTags item=tag}
                 {assign var="tagId" value=$tag->getId()}
-                <a href="{urlFor name="tag-details" options="id.$tagId"}" class="label"><span class="label">{$tag->getLabel()}</span></a>
+                <a href="{urlFor name="tag-details" options="id.$tagId"}" class="label"><span class="label">{TemplateHelper::uiCleanseHTML($tag->getLabel())}</span></a>
             {/foreach}
         </p>
     {/if}

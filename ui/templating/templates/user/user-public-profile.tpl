@@ -386,7 +386,7 @@
 {if isset($user_tags) && count($user_tags) > 0}
     {foreach $user_tags as $tag}
         <p>
-            {assign var="tag_label" value=$tag->getLabel()}
+            {assign var="tag_label" value=TemplateHelper::uiCleanseHTML($tag->getLabel())}
             {assign var="tagId" value=$tag->getId()}
             <a class="tag" href="{urlFor name="tag-details" options="id.$tagId"}">
                 <span class="label">{$tag_label}</span>

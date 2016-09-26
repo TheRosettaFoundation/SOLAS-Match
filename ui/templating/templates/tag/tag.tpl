@@ -2,7 +2,7 @@
 {include file="handle-flash-messages.tpl"}
 
     <div class="page-header">
-        <h1>{sprintf(Localisation::getTranslation('tag_tasks_related_to'), $tag->getLabel())} <small>{Localisation::getTranslation('tag_0')}</small>
+        <h1>{sprintf(Localisation::getTranslation('tag_tasks_related_to'), TemplateHelper::uiCleanseHTML($tag->getLabel()))} <small>{Localisation::getTranslation('tag_0')}</small>
              {if isset($user)}
                 {if isset($subscribed)}
                     <a href="{urlFor name="tag-subscribe" options="id.{$tag->getId()}|subscribe.false"}" class="pull-right btn btn-inverse"
