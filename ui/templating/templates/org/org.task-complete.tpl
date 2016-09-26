@@ -7,7 +7,7 @@
 
 <p>
     {if $claimant != NULL}
-        {sprintf(Localisation::getTranslation("org_task_review_3"), $claimantProfile, $userName)}
+        {sprintf(Localisation::getTranslation("org_task_review_3"), $claimantProfile, TemplateHelper::uiCleanseHTML($userName))}
     {else}
         {Localisation::getTranslation("org_task_review_claimant_unavailable")}
     {/if}
