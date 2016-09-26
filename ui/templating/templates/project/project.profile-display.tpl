@@ -11,7 +11,7 @@
         {/if}                
 
         {foreach from=$project->getTags() item=tag}
-            <span class="label">{$tag}</span>                        
+            <span class="label">{TemplateHelper::uiCleanseHTML($tag)}</span>
         {/foreach}
     </p>
 
