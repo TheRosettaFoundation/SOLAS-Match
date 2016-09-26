@@ -15,12 +15,12 @@
                 <tr>
                     <td>                
                         <a href="{urlFor name="user-public-profile" options="user_id.{$bannedUser->getUserId()}"}">
-                            {$bannedUserNames[$bannedUser->getUserId()]}
+                            {TemplateHelper::uiCleanseHTML($bannedUserNames[$bannedUser->getUserId()])}
                         </a>
                     </td>
                     <td>                
                         <a href="{urlFor name="user-public-profile" options="user_id.{$bannedUser->getUserIdAdmin()}"}">
-                            {$bannedUserAdminNames[$bannedUser->getUserId()]}
+                            {TemplateHelper::uiCleanseHTML($bannedUserAdminNames[$bannedUser->getUserId()])}
                         </a>
                     </td>
                     <td>
