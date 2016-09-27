@@ -444,6 +444,28 @@ class TemplateHelper
         return htmlspecialchars($string, ENT_COMPAT, 'UTF-8');
     }
 
+    public static function uiCleanseHTMLKeepMarkup($string)
+    {
+        $escaped = preg_replace(
+            array('#<strong>#',               '#</strong>#',               '#<b>#',               '#</b>#',               '#<p>#',               '#</p>#',               '# target="_blank">#'),
+            array('@BRAxyz@strong@KETxyz@',   '@BRAxyz@/strong@KETxyz@',   '@BRAxyz@b@KETxyz@',   '@BRAxyz@/b@KETxyz@',   '@BRAxyz@p@KETxyz@',   '@BRAxyz@/p@KETxyz@',   '>target=_blank'),
+            $string);
+        $escaped = preg_replace(
+            array('#<a href="(.*)">(.*)</a>#U'),
+            array('@BRAxyz@a href=@QUOTExyz@$1@QUOTExyz@@KETxyz@$2@BRAxyz@/a@KETxyz@'),
+            $escaped);
+        $escaped = htmlspecialchars($escaped, ENT_COMPAT, 'UTF-8');
+        $escaped = preg_replace(
+            array('#@BRAxyz@#', '#@KETxyz@#', '#@QUOTExyz@#'),
+            array('<',          '>',          '"'),
+            $escaped);
+        $escaped = preg_replace(
+            array('#>target=_blank#'),
+            array(' target="_blank">'),
+            $escaped);
+        return $escaped;
+    }
+
     private static function cleanTag($tag)
     {
         $cleaned = trim($tag);
