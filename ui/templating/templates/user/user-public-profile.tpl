@@ -267,7 +267,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    {$userPersonalInfo->getCountry()}
+                                    {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCountry())}
                                 </td>
                             </tr>
                             <tr>
