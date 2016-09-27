@@ -7,7 +7,7 @@
 
     {if isset($flash['success'])}
         <div class="alert alert-success">
-            <strong>{Localisation::getTranslation('common_note')}</strong> {TemplateHelper::uiCleanseHTML($flash['success'])}
+            <strong>{Localisation::getTranslation('common_note')}</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
         </div>
     {/if}
 
@@ -19,7 +19,7 @@
 
         {if isset($flash['error'])}
             <div class="alert alert-error">
-                <strong>{Localisation::getTranslation('common_warning')}</strong> {TemplateHelper::uiCleanseHTML($flash['error'])}
+                <strong>{Localisation::getTranslation('common_warning')}</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
             </div>
         {/if}
         <p>

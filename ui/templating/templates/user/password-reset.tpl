@@ -10,21 +10,21 @@
 {if isset($flash['error'])}
     <div class="alert alert-error">
         <a class="close" data-dismiss="alert" href="{urlFor name='login'}">×</a>
-        <p><strong>Warning! </strong>{TemplateHelper::uiCleanseHTML($flash['error'])}</p>
+        <p><strong>Warning! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}</p>
     </div>
 {/if}
 
 {if isset($flash['info'])}
     <div class="alert alert-info">
         <a class="close" data-dismiss="alert" href="{urlFor name='login'}">×</a>
-        <p><strong>NOTE: </strong>{TemplateHelper::uiCleanseHTML($flash['info'])}</p>
+        <p><strong>NOTE: </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['info'])}</p>
     </div>
 {/if}
 
 {if isset($flash['success'])}
     <div class="alert alert-success">
         <a class="close" data-dismiss="alert" href="{urlFor name='login'}">×</a>
-        <p><strong>Success! </strong>{TemplateHelper::uiCleanseHTML($flash['success'])}</p>
+        <p><strong>Success! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}</p>
     </div>
 {/if}
 

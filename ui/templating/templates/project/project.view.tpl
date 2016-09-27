@@ -34,13 +34,13 @@
 
 {if isset($flash['success'])}
     <p class="alert alert-success">
-        {TemplateHelper::uiCleanseHTML($flash['success'])}
+        {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
     </p>
 {/if}
 
 {if isset($flash['error'])}
     <p class="alert alert-error">
-        {TemplateHelper::uiCleanseHTML($flash['error'])}
+        {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
     </p>
 {/if}
 
@@ -231,11 +231,11 @@ Tweet</a>
             
     {if isset($flash['taskSuccess'])}
         <div class="alert alert-success">
-            {TemplateHelper::uiCleanseHTML($flash['taskSuccess'])}
+            {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['taskSuccess'])}
         </div>
     {else if isset($flash['taskError'])}
         <div class="alert alert-error">
-            {TemplateHelper::uiCleanseHTML($flash['taskError'])}
+            {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['taskError'])}
         </div>
     {/if}        
 
