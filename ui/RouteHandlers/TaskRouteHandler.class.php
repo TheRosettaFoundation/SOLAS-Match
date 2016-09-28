@@ -901,6 +901,7 @@ class TaskRouteHandler
         $index = $graphBuilder->find($task->getId(), $graph);
         $node = $graph->getAllNodes($index);
 
+        $preReqTasks = array();
         if ($node) {
             foreach ($node->getPrevious() as $nodeId) {
                 $pTask = $taskDao->getTask($nodeId);
