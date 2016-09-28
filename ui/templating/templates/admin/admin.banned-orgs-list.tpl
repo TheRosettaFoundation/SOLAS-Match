@@ -20,14 +20,14 @@
                 </td>
                 <td>                
                     <a href="{urlFor name="user-public-profile" options="user_id.{$bannedOrg->getUserIdAdmin()}"}">
-                        {$orgBannerAdminNames[$bannedOrg->getOrgId()]}
+                        {TemplateHelper::uiCleanseHTML($orgBannerAdminNames[$bannedOrg->getOrgId()])}
                     </a>
                 </td>
                 <td>                
                     {$bannedOrg->getBanType()}
                 </td>
                 <td>                
-                    {$bannedOrg->getComment()}
+                    {TemplateHelper::uiCleanseHTML($bannedOrg->getComment())}
                 </td>
                 <td>                
                     {date(Settings::get("ui.date_format"), strtotime($bannedOrg->getBannedDate()))}

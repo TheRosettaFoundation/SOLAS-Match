@@ -42,26 +42,26 @@
     <br>
     <div class="alert alert-error">
         <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
-        <p><strong>{Localisation::getTranslation('common_warning')}! </strong>{$flash['error']}</p>
+        <p><strong>{Localisation::getTranslation('common_warning')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}</p>
     </div>
 {/if}
 
 {if isset($flash['info'])}
     <div class="alert alert-info">
-        <p><strong>{Localisation::getTranslation('common_note')} </strong>{$flash['info']}</p>
+        <p><strong>{Localisation::getTranslation('common_note')} </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['info'])}</p>
     </div>
 {/if}
 
 {if isset($flash['success'])}
     <div class="alert alert-success">
         <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
-        <p><strong>{Localisation::getTranslation('common_success')}! </strong>{$flash['success']}</p>
+        <p><strong>{Localisation::getTranslation('common_success')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}</p>
     </div>
 {/if}
 
 {if isset($flash['warning'])}
     <div class="alert alert-warning">
-        <p><strong>{$flash['warning']}</strong></p>
+        <p><strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['warning'])}</strong></p>
     </div>
 {/if}
 
@@ -190,7 +190,7 @@
                             <p>
                                 {if count($taskTags[$task_id]) gt 0}
                                     {foreach $taskTags[$task_id] as $tag}
-                                        <a href="{$siteLocation}tag/{$tag->getId()}" class="label"><span class="label">{trim(trim($tag->getLabel()),",")}</span></a>
+                                        <a href="{$siteLocation}tag/{$tag->getId()}" class="label"><span class="label">{trim(trim(TemplateHelper::uiCleanseHTML($tag->getLabel())),",")}</span></a>
                                     {/foreach}
                                 {/if}
                             </p>

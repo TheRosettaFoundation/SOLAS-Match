@@ -5,7 +5,7 @@
             <h1>{Localisation::getTranslation('task_claimed_desegmentation_desegmentation_task_claimed')} <small>{Localisation::getTranslation('task_claimed_desegmentation_0')}</small></h1>
         </div>
         <div class="alert alert-success">
-            <strong>{Localisation::getTranslation('common_success')}</strong> {sprintf(Localisation::getTranslation('task_claimed_desegmentation_1'), {$task->getTitle()})}
+            <strong>{Localisation::getTranslation('common_success')}</strong> {sprintf(Localisation::getTranslation('task_claimed_desegmentation_1'), {TemplateHelper::uiCleanseHTML($task->getTitle())})}
         </div>
     </section>
 

@@ -2,7 +2,7 @@
 
 <div class='page-header'>
     <h1>
-        {if isset($user) && $user->getDisplayName() != ''}{$user->getDisplayName()}'s {else} {Localisation::getTranslation('common_your')}{/if}
+        {if isset($user) && $user->getDisplayName() != ''}{TemplateHelper::uiCleanseHTML($user->getDisplayName())}'s {else} {Localisation::getTranslation('common_your')}{/if}
         {Localisation::getTranslation('archived_projects_archived_projects')} <small>{Localisation::getTranslation('archived_projects_0')}</small>
     </h1>
 </div>

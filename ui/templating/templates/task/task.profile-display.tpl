@@ -4,7 +4,7 @@
     {assign var="type_id" value=$task->getTaskType()}    
                          
         <h2>
-            {$task->getTitle()}
+            {TemplateHelper::uiCleanseHTML($task->getTitle())}
         </h2>
         {if $type_id == TaskTypeEnum::SEGMENTATION}
             <p>{Localisation::getTranslation('common_type')} 

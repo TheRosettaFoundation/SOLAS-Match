@@ -6,7 +6,7 @@
 
 
     <h1 class="page-header">
-        {$task->getTitle()}
+        {TemplateHelper::uiCleanseHTML($task->getTitle())}
         <small>
             <strong>
                 - <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">{Localisation::getTranslation('common_desegmentation_task')}
@@ -20,7 +20,7 @@
     <div class="well">
         <div class="page-header">
             <h1>
-                {$task->getTitle()} <small>{Localisation::getTranslation('task_desegmentation_desegmentation_task_details')}</small>
+                {TemplateHelper::uiCleanseHTML($task->getTitle())} <small>{Localisation::getTranslation('task_desegmentation_desegmentation_task_details')}</small>
                 <a href="{urlFor name="task-user-feedback" options="task_id.$task_id"}" style="float: right" class="btn btn-success">
                     <i class="icon-upload icon-white"></i> {Localisation::getTranslation('common_provide_feedback')}
                 </a>
@@ -32,7 +32,7 @@
 
         {foreach from=$preReqTasks item=pTask}
             {assign var="pTaskId" value=$pTask->getId()}
-            <p>{sprintf(Localisation::getTranslation('task_desegmentation_4'), {$pTask->getTitle()}, {urlFor name="download-task-latest-version" options="task_id.$pTaskId"})}</p>
+            <p>{sprintf(Localisation::getTranslation('task_desegmentation_4'), {TemplateHelper::uiCleanseHTML($pTask->getTitle())}, {urlFor name="download-task-latest-version" options="task_id.$pTaskId"})}</p>
         {/foreach}
         <p>
             You can download the <strong>original project file</strong> 

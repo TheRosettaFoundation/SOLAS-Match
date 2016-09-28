@@ -4,11 +4,11 @@
     <h1 class="page-header">{$org->getName()}<small> {Localisation::getTranslation('org_request_queue_0')}</small></h1>
 
     {if isset($flash['error'])}
-        <div class="alert alert-error">{$flash['error']}</div>
+        <div class="alert alert-error">{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}</div>
     {/if}
 
     {if isset($flash['success'])}
-        <div class="alert alert-success">{$flash['success']}</div>
+        <div class="alert alert-success">{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}</div>
     {/if}
 
     <form class="well" method="post" action="{urlFor name="org-request-queue" options="org_id.$org_id"}" accept-charset="utf-8">

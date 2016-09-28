@@ -8,13 +8,13 @@
 
 {if isset($flash['success'])}
     <p class="alert alert-success" style="margin-bottom: 50px">
-        {$flash['success']}
+        {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
     </p>
 {/if}
 
 {if isset($flash['error'])}
     <p class="alert alert-error" style="margin-bottom: 50px">
-        {$flash['error']}
+        {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
     </p>
 {/if}
 

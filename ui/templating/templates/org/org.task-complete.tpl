@@ -2,12 +2,12 @@
 
 {assign var="taskId" value=$task->getId()}
 <div class="page-header">
-    <h1>{$task->getTitle()} <small>{Localisation::getTranslation('org_task_review_review_this_completed_task')}</small></h1>
+    <h1>{TemplateHelper::uiCleanseHTML($task->getTitle())} <small>{Localisation::getTranslation('org_task_review_review_this_completed_task')}</small></h1>
 </div>
 
 <p>
     {if $claimant != NULL}
-        {sprintf(Localisation::getTranslation("org_task_review_3"), $claimantProfile, $userName)}
+        {sprintf(Localisation::getTranslation("org_task_review_3"), $claimantProfile, TemplateHelper::uiCleanseHTML($userName))}
     {else}
         {Localisation::getTranslation("org_task_review_claimant_unavailable")}
     {/if}

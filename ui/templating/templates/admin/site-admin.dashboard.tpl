@@ -25,14 +25,14 @@
             {if isset($flash['verifyError'])}
                 <tr>
                     <td colspan="2">
-                        <p class="alert alert-error">{$flash['verifyError']}</p>
+                        <p class="alert alert-error">{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['verifyError'])}</p>
                     </td>
                 </tr>
             {/if}
             {if isset($flash['verifySuccess'])}
                 <tr>
                     <td colspan="2">
-                        <p class="alert alert-success">{$flash['verifySuccess']}</p>
+                        <p class="alert alert-success">{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['verifySuccess'])}</p>
                     </td>
                 </tr>
             {/if}
@@ -189,14 +189,14 @@
             {if isset($flash['deleteError'])}
                 <tr>
                     <td colspan="2">
-                        <p class="alert alert-error">{$flash['deleteError']}</p>
+                        <p class="alert alert-error">{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['deleteError'])}</p>
                     </td>
                 </tr>
             {/if}
             {if isset($flash['deleteSuccess'])}
                 <tr>
                     <td colspan="2">
-                        <p class="alert alert-success">{$flash['deleteSuccess']}</p>
+                        <p class="alert alert-success">{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['deleteSuccess'])}</p>
                     </td>
                 </tr>
             {/if}
@@ -230,14 +230,14 @@
             {if isset($flash['revokeTaskError'])}
                 <tr>
                     <td colspan="2">
-                        <p class="alert alert-error">{$flash['revokeTaskError']}</p>
+                        <p class="alert alert-error">{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['revokeTaskError'])}</p>
                     </td>
                 </tr>
             {/if}
             {if isset($flash['revokeTaskSuccess'])}
                 <tr>
                     <td colspan="2">
-                        <p class="alert alert-success">{$flash['revokeTaskSuccess']}</p>
+                        <p class="alert alert-success">{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['revokeTaskSuccess'])}</p>
                     </td>
                 </tr>
             {/if}

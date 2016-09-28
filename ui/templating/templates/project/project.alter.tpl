@@ -60,7 +60,7 @@
                 </td>
                 <td>
                     <label for="tagList" style="font-size: large"><strong>{Localisation::getTranslation('common_tags')}</strong></label>
-                    <input type="text" name="tagList" id="tagList" value="{$project_tags}" style="width: 400px;  margin-bottom: 20px" />
+                    <input type="text" name="tagList" id="tagList" value="{TemplateHelper::uiCleanseHTML($project_tags)}" style="width: 400px;  margin-bottom: 20px" />
 
                     <div class="projFormInput">
                         <div style="margin-bottom:25px;">
@@ -129,7 +129,7 @@
                         </button>
                     </div>
                     <label for="project_reference" style="font-size: large"><strong>{Localisation::getTranslation('common_reference')}</strong></label>
-                    <input type="text" name="project_reference" id="project_reference" value="{$project->getReference()}" style="width: 400px" />
+                    <input type="text" name="project_reference" id="project_reference" value="{TemplateHelper::uiCleanseHTML($project->getReference())}" style="width: 400px" />
                 </td>
             </tr>
             <tr>

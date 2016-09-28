@@ -4,7 +4,7 @@
     {assign var="type_id" value=$task->getTaskType()}    
                          
         <h2>
-            <a href="{urlFor name="task-view" options="task_id.$task_id"}">{$task->getTitle()}</a>
+            <a href="{urlFor name="task-view" options="task_id.$task_id"}">{TemplateHelper::uiCleanseHTML($task->getTitle())}</a>
         </h2>
         {if $type_id == TaskTypeEnum::SEGMENTATION}
             <p>{Localisation::getTranslation('common_type')} 
@@ -35,7 +35,7 @@
             {Localisation::getTranslation('common_tags')}
             {foreach from=$currentTaskTags item=tag}
                 {assign var="tagId" value=$tag->getId()}
-                <a href="{urlFor name="tag-details" options="id.$tagId"}" class="label"><span class="label">{$tag->getLabel()}</span></a>
+                <a href="{urlFor name="tag-details" options="id.$tagId"}" class="label"><span class="label">{TemplateHelper::uiCleanseHTML($tag->getLabel())}</span></a>
             {/foreach}
         </p>
     {/if}
@@ -53,7 +53,7 @@
     <p>            
         {assign var="project_id" value=$task->getProjectId()}
         {assign var="org_id" value=$taskOrgs[$task->getId()]->getId()}
-        {sprintf(Localisation::getTranslation('common_part_of_for'), {urlFor name="project-view" options="project_id.$project_id"}, {$taskProjTitles[$task->getId()]}, {urlFor name="org-public-profile" options="org_id.$org_id"}, {$taskOrgs[$task->getId()]->getName()})}  
+        {sprintf(Localisation::getTranslation('common_part_of_for'), {urlFor name="project-view" options="project_id.$project_id"}, {TemplateHelper::uiCleanseHTML($taskProjTitles[$task->getId()])}, {urlFor name="org-public-profile" options="org_id.$org_id"}, {$taskOrgs[$task->getId()]->getName()})}
     </p>  
 
     <p style="margin-bottom:40px;"/>        

@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 
     <h1 class="page-header">
-        {$badge->getTitle()}
+        {TemplateHelper::uiCleanseHTML($badge->getTitle())}
         <small>{Localisation::getTranslation('org_edit_badge_edit_organisation_badge_details')}</small>
     </h1>
 
@@ -11,14 +11,14 @@
         <label for='title'><strong>{Localisation::getTranslation('org_edit_badge_badge_title')}</strong></label>
         <input type='text' name='title' id='title'
         {if $badge->getTitle() != ''}
-            value='{$badge->getTitle()}'
+            value='{TemplateHelper::uiCleanseHTML($badge->getTitle())}'
         {else}
             placeholder='{Localisation::getTranslation('org_edit_badge_0')}'
         {/if} /> 
 
         <label for="description"><strong>{Localisation::getTranslation('common_description')}</strong></label>
         <textarea name='description' cols='40' rows='5' {if $badge->getDescription() == ''} placeholder="{Localisation::getTranslation('org_edit_badge_1')}" {/if}
-        >{if $badge->getDescription() != ''}{$badge->getDescription()}{/if}</textarea>
+        >{if $badge->getDescription() != ''}{TemplateHelper::uiCleanseHTML($badge->getDescription())}{/if}</textarea>
 
         <p>
             <button type='submit' class='btn btn-primary' name='submit'>

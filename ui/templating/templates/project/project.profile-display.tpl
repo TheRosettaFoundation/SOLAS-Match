@@ -1,7 +1,7 @@
 {* Must have an object $project assigned by parent *}
 <div class="project">
     {assign var='project_id' value=$project->getId()}
-    <h2>{$project->getTitle()}</h2>
+    <h2>{TemplateHelper::uiCleanseHTML($project->getTitle())}</h2>
     <p>
         {if $project->getSourceLanguageCode()}
             {Localisation::getTranslation('common_from')} <strong>{TemplateHelper::languageNameFromCode($project->getSourceLanguageCode())}</strong>
@@ -11,7 +11,7 @@
         {/if}                
 
         {foreach from=$project->getTags() item=tag}
-            <span class="label">{$tag}</span>                        
+            <span class="label">{TemplateHelper::uiCleanseHTML($tag)}</span>
         {/foreach}
     </p>
 

@@ -10,7 +10,7 @@
     <ul class="nav nav-list unstyled">
     {foreach $user_tags as $tag}
         <li>
-            {assign var="tag_label" value=$tag->getLabel()}
+            {assign var="tag_label" value=TemplateHelper::uiCleanseHTML($tag->getLabel())}
             {assign var="tagId" value=$tag->getId()}
             <p>
                 <a class="label" href="{urlFor name="tag-details" options="id.$tagId"}">{$tag_label}</a>
@@ -38,7 +38,7 @@
 <form method="post" action="{urlFor name="tags-list"}" class="well" accept-charset="utf-8">
     <p>{Localisation::getTranslation('tag_list_2')}</p>
     <input type="text" name="searchName" 
-            value="{if isset($searchedText)}{$searchedText}{/if}" />
+            value="{if isset($searchedText)}{TemplateHelper::uiCleanseHTML($searchedText)}{/if}" />
     <div>
         <button class="btn btn-primary" type="submit" name="search">
         	<i class="icon-search icon-white"></i>
@@ -57,7 +57,7 @@
         <ul class="nav nav-list unstyled">
         {foreach $foundTags as $tag}
             <li>
-                {assign var="tag_label" value=$tag->getLabel()}
+                {assign var="tag_label" value=TemplateHelper::uiCleanseHTML($tag->getLabel())}
                 {assign var="tagId" value=$tag->getId()}
                 <p>
                     <a class="label" href="{urlFor name="tag-details" options="id.$tagId"}">{$tag_label}</a>
@@ -66,7 +66,7 @@
         {/foreach}
         </ul>
     {else}
-        <p class="alert alert-error">{sprintf(Localisation::getTranslation('tag_list_3'), {$searchedText})}</p>
+        <p class="alert alert-error">{sprintf(Localisation::getTranslation('tag_list_3'), {TemplateHelper::uiCleanseHTML($searchedText)})}</p>
     {/if}
 {/if}
 

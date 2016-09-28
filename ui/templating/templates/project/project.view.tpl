@@ -34,13 +34,13 @@
 
 {if isset($flash['success'])}
     <p class="alert alert-success">
-        {$flash['success']}
+        {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
     </p>
 {/if}
 
 {if isset($flash['error'])}
     <p class="alert alert-error">
-        {$flash['error']}
+        {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
     </p>
 {/if}
 
@@ -77,7 +77,7 @@ Tweet</a>
                 </td>
                 <td>
                     {if $project->getReference() != ''}
-                        <a target="_blank" href="{$project->getReference()}">{$project->getReference()}</a>
+                        <a target="_blank" href="{TemplateHelper::uiCleanseHTML($project->getReference())}">{TemplateHelper::uiCleanseHTML($project->getReference())}</a>
                     {else}
                         -
                     {/if}
@@ -203,7 +203,7 @@ Tweet</a>
                     <td class="nav nav-list unstyled" style="padding-left: 0px; padding-right: 0px;" colspan="2">
                     {if isset($project_tags) && is_array($project_tags)}
                         {foreach $project_tags as $ptag}
-                            {assign var="tag_label" value=$ptag->getLabel()}
+                            {assign var="tag_label" value=TemplateHelper::uiCleanseHTML($ptag->getLabel())}
                             {assign var="tagId" value=$ptag->getId()}
                             <a class="tag label" href="{urlFor name="tag-details" options="id.$tagId"}">{$tag_label}</a>
                         {/foreach}
@@ -231,11 +231,11 @@ Tweet</a>
             
     {if isset($flash['taskSuccess'])}
         <div class="alert alert-success">
-            {$flash['taskSuccess']}
+            {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['taskSuccess'])}
         </div>
     {else if isset($flash['taskError'])}
         <div class="alert alert-error">
-            {$flash['taskError']}
+            {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['taskError'])}
         </div>
     {/if}        
 

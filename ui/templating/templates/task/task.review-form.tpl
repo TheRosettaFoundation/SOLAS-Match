@@ -1,4 +1,4 @@
-<h2>{$reviewedTask->getTitle()}</h2>
+<h2>{TemplateHelper::uiCleanseHTML($reviewedTask->getTitle())}</h2>
 {if $reviewedTask->getId() != null}
     {assign var="id" value=$reviewedTask->getId()}
     <p>
@@ -81,7 +81,7 @@
     		{Localisation::getTranslation('task_review_form_comment')}
         	<small>{Localisation::getTranslation('task_review_form_6')}</small>
 		</h3>
-    	<p>{$review->getComment()}</p>
+      <p>{TemplateHelper::uiCleanseHTML($review->getComment())}</p>
     {/if}
 {else}
 

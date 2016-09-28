@@ -6,7 +6,7 @@
 
     <h1 class="page-header">   
         {if $task->getTitle() != ''}
-            {$task->getTitle()}
+            {TemplateHelper::uiCleanseHTML($task->getTitle())}
         {else}
             {Localisation::getTranslation('common_task')} {$task->getId()}
         {/if}
@@ -41,7 +41,7 @@
                 <td class="nav nav-list unstyled" style="padding-left: 0px; padding-right: 0px;">
                 {if isset($task_tags) && is_array($task_tags)}
                     {foreach $task_tags as $tag}
-                        {assign var="tag_label" value=$tag->getLabel()}
+                        {assign var="tag_label" value=TemplateHelper::uiCleanseHTML($tag->getLabel())}
                         {assign var="tagId" value=$tag->getId()}
                         <a class="tag label" href="{urlFor name="tag-details" options="id.$tagId"}">{$tag_label}</a>
                     {/foreach}
@@ -65,7 +65,7 @@
                     <td>
                         <i>
                         {if $task->getComment() != ''}
-                            {$task->getComment()}
+                            {TemplateHelper::uiCleanseHTML($task->getComment())}
                         {else}
                            {Localisation::getTranslation('common_no_comment_has_been_listed')}
                         {/if}
@@ -75,7 +75,7 @@
                     <td>
                         <i>
                         {if $project->getDescription() != ''}
-                            {$project->getDescription()}
+                            {TemplateHelper::uiCleanseHTML($project->getDescription())}
                         {else}
                             {Localisation::getTranslation('common_no_description_has_been_listed')}
                         {/if}
@@ -102,7 +102,7 @@
                 <td>
                     {if $claimant != NULL}
                     {assign var="user_id" value=$claimant->getId()}
-                    <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{$claimant->getDisplayName()}</a>
+                    <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{TemplateHelper::uiCleanseHTML($claimant->getDisplayName())}</a>
                     {else}
                     {Localisation::getTranslation('org_task_review_claimant_unavailable')}
                     {/if}

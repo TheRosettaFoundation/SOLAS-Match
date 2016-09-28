@@ -126,7 +126,7 @@
                             <li>
                                 <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                                     <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
-                                       {$user->getDisplayName()}
+                                       {TemplateHelper::uiCleanseHTML($user->getDisplayName())}
                                 </a>
                             </li>
                             <li>

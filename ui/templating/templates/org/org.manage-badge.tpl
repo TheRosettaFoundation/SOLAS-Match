@@ -1,13 +1,13 @@
 {include file="header.tpl"}
 
     <h1 class="page-header">
-        {sprintf(Localisation::getTranslation('org_manage_badge_manage_badge'), $badge->getTitle())}
+        {sprintf(Localisation::getTranslation('org_manage_badge_manage_badge'), TemplateHelper::uiCleanseHTML($badge->getTitle()))}
         <small>{Localisation::getTranslation('org_manage_badge_0')}</small>
     </h1>
 
     {if isset($flash['success'])}
         <div class="alert alert-success">
-            <strong>{Localisation::getTranslation('common_note')}</strong> {$flash['success']}
+            <strong>{Localisation::getTranslation('common_note')}</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
         </div>
     {/if}
 
@@ -19,7 +19,7 @@
 
         {if isset($flash['error'])}
             <div class="alert alert-error">
-                <strong>{Localisation::getTranslation('common_warning')}</strong> {$flash['error']}
+                <strong>{Localisation::getTranslation('common_warning')}</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
             </div>
         {/if}
         <p>
@@ -36,7 +36,7 @@
             {foreach $user_list as $user}
                 <div class="row">
                     {if $user->getDisplayName() != ''}
-                        {assign var="displayName" value=$user->getDisplayName()}
+                        {assign var="displayName" value=TemplateHelper::uiCleanseHTML($user->getDisplayName())}
                     {else}
                         {assign var="displayName" value=$user->getEmail()}
                     {/if}

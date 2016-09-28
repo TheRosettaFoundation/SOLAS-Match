@@ -444,6 +444,40 @@ class TemplateHelper
         return htmlspecialchars($string, ENT_COMPAT, 'UTF-8');
     }
 
+    public static function uiCleanseHTMLKeepMarkup($string)
+    {
+        $escaped = preg_replace(
+            '# target="_blank">#',
+            '>target=_blank',
+            $string);
+        $escaped = preg_replace(
+            '#<a href="([^"<>]*)">([^<>]*)</a>#U',
+            '@BRAxyz@a href=@QUOTExyz@$1@QUOTExyz@@KETxyz@$2@BRAxyz@/a@KETxyz@',
+            $escaped);
+        $escaped = preg_replace(
+            '#<strong>([^<>]*)</strong>#U',
+            '@BRAxyz@strong@KETxyz@$1@BRAxyz@/strong@KETxyz@',
+            $escaped);
+        $escaped = preg_replace(
+            '#<b>([^<>]*)</b>#U',
+            '@BRAxyz@b@KETxyz@$1@BRAxyz@/b@KETxyz@',
+            $escaped);
+        $escaped = preg_replace(
+            '#<p>([^<>]*)</p>#U',
+            '@BRAxyz@p@KETxyz@$1@BRAxyz@/p@KETxyz@',
+            $escaped);
+        $escaped = htmlspecialchars($escaped, ENT_COMPAT, 'UTF-8');
+        $escaped = preg_replace(
+            array('#@BRAxyz@#', '#@KETxyz@#', '#@QUOTExyz@#'),
+            array('<',          '>',          '"'),
+            $escaped);
+        $escaped = preg_replace(
+            '#>target=_blank#',
+            ' target="_blank">',
+            $escaped);
+        return $escaped;
+    }
+
     private static function cleanTag($tag)
     {
         $cleaned = trim($tag);

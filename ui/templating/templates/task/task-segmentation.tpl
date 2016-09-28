@@ -8,7 +8,7 @@
 
     <h1 class="page-header">
         {if $task->getTitle() != ''}
-            {$task->getTitle()}
+            {TemplateHelper::uiCleanseHTML($task->getTitle())}
         {else}
             {Localisation::getTranslation('common_task')} {$task->getId()}
         {/if}

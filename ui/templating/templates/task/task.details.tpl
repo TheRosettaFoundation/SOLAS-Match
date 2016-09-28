@@ -110,7 +110,7 @@
                 <td></td>
                 <td>
                     {foreach from=$project->getTag() item=tag}
-                        <a class="tag label" href="{urlFor name="tag-details" options="id.{$tag->getId()}"}">{$tag->getLabel()}</a>
+                        <a class="tag label" href="{urlFor name="tag-details" options="id.{$tag->getId()}"}">{TemplateHelper::uiCleanseHTML($tag->getLabel())}</a>
                     {/foreach}
                 </td>                    
             </tr>

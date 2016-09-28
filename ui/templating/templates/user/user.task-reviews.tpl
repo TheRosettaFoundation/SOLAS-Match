@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 
 <div class="page-header">
-    <h1>{$task->getTitle()} <small>{Localisation::getTranslation('user_task_reviews_0')}</small></h1>
+    <h1>{TemplateHelper::uiCleanseHTML($task->getTitle())} <small>{Localisation::getTranslation('user_task_reviews_0')}</small></h1>
 </div>
 
 <p>
@@ -73,7 +73,7 @@
                 <small>{Localisation::getTranslation('task_review_form_6')}</small>
             </h3>
             {if $review->getComment() != ''}
-                <p>{$review->getComment()}</p>
+                <p>{TemplateHelper::uiCleanseHTML($review->getComment())}</p>
             {else}
                 <p>{Localisation::getTranslation('common_no_comment_has_been_listed')}</p>
             {/if}

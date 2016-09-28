@@ -9,7 +9,7 @@
     <br>
     <div class="alert alert-error">
         <a class="close" data-dismiss="alert" href="{urlFor name='home'}">×</a>
-        <p><strong>{Localisation::getTranslation('common_warning')}! </strong>{$flash['error']}</p>
+        <p><strong>{Localisation::getTranslation('common_warning')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}</p>
     </div>
 {/if}
 
@@ -17,7 +17,7 @@
     <h1>
         {if isset($thisUser)}
             {if $thisUser->getDisplayName() != ''}
-                {sprintf(Localisation::getTranslation('claimed_tasks_users_claimed_tasks'), {$thisUser->getDisplayName()})}
+                {sprintf(Localisation::getTranslation('claimed_tasks_users_claimed_tasks'), {TemplateHelper::uiCleanseHTML($thisUser->getDisplayName())})}
             {else}
                 {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
             {/if}
@@ -100,7 +100,7 @@
                             <p>
                                 {if count($taskTags[$task_id]) gt 0}
                                     {foreach $taskTags[$task_id] as $tag}
-                                        <a href="{$siteLocation}tag/{$tag->getId()}" class="label"><span class="label">{trim(trim($tag->getLabel()),",")}</span></a>
+                                        <a href="{$siteLocation}tag/{$tag->getId()}" class="label"><span class="label">{trim(trim(TemplateHelper::uiCleanseHTML($tag->getLabel())),",")}</span></a>
                                     {/foreach}
                                 {/if}
                             </p>

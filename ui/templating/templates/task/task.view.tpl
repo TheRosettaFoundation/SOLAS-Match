@@ -68,13 +68,13 @@
     
     {if isset($flash['success'])}
         <p class="alert alert-success">
-            <strong>{Localisation::getTranslation('common_success')}:</strong> {$flash['success']}
+            <strong>{Localisation::getTranslation('common_success')}:</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
         </p>
     {/if}
 
     {if isset($flash['error'])}
         <p class="alert alert-error">
-            <strong>{Localisation::getTranslation('common_warning')}:</strong> {$flash['error']}
+            <strong>{Localisation::getTranslation('common_warning')}:</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
         </p>
     {/if}
 	
@@ -149,7 +149,7 @@
 		    <p style="margin-bottom: 40px"/>        
 		    <table width="100%">
 		        <thead>
-		            <th>{Localisation::getTranslation('task_view_source_document_preview')} - {$filename}<hr/></th>
+                <th>{Localisation::getTranslation('task_view_source_document_preview')} - {TemplateHelper::uiCleanseHTML($filename)}<hr/></th>
 		        </thead>
 		        <tbody>
 		            <tr>

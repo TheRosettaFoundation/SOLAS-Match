@@ -3,17 +3,17 @@
 {if isset($org)}
     {if isset($flash['error'])}
         <div class="alert alert-error">
-            {$flash['error']}
+            {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
         </div>
     {/if}
     {if isset($flash['success'])}
         <div class="alert alert-success">
-            {$flash['success']}
+            {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
         </div>
     {/if}
     {if isset($flash['info'])}
         <div class="alert alert-info">
-            {$flash['info']}
+            {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['info'])}
         </div>
     {/if}
     <div class='page-header'>
@@ -588,10 +588,10 @@
             {assign var="org_id" value=$org->getId()}
             <tr>
                 <td style="text-align: left" width="20%">
-                    <strong>{$badge->getTitle()}</strong>
+                    <strong>{TemplateHelper::uiCleanseHTML($badge->getTitle())}</strong>
                 </td>
                 <td width="35%">
-                    {$badge->getDescription()}
+                    {TemplateHelper::uiCleanseHTML($badge->getDescription())}
                 </td>
                 {if ($isMember || $adminAccess) && isset($user)}
                     <td>
@@ -652,7 +652,7 @@
                      {assign var="user_id" value=$nonMember->getId()}                        
                      {if $nonMember->getDisplayName() != ''}
                          <td style="text-align: left">
-                             <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{$nonMember->getDisplayName()}</a>
+                             <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">{TemplateHelper::uiCleanseHTML($nonMember->getDisplayName())}</a>
                          </td>
                      {/if}
                      <td width="50%">
@@ -715,7 +715,7 @@
                                 {/if}
                             </td>
                             <td>
-                                <a href="{urlFor name="user-public-profile" options="user_id.{$member->getId()}"}">{$member->getDisplayName()}</a>
+                                <a href="{urlFor name="user-public-profile" options="user_id.{$member->getId()}"}">{TemplateHelper::uiCleanseHTML($member->getDisplayName())}</a>
                             </td>
                         {if $adminAccess}
                             <td>

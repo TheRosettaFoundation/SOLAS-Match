@@ -2,7 +2,7 @@
 
 <div class='page-header'>
     <h1>
-        {if isset($user) && $user->getDisplayName() != ''}{$user->getDisplayName()}'s {else} Your{/if}
+        {if isset($user) && $user->getDisplayName() != ''}{TemplateHelper::uiCleanseHTML($user->getDisplayName())}'s {else} Your{/if}
         {Localisation::getTranslation('archived_tasks_archived_tasks')} <small>{Localisation::getTranslation('archived_tasks_0')}</small>
     </h1>
 </div>
