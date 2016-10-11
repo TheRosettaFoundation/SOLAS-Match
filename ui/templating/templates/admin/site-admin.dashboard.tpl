@@ -48,6 +48,7 @@
                 </td>
             </tr>
         </table>
+        <input type="hidden" name="sesskey" value="{$sesskey}" />
     </form>
     <hr />
 
@@ -76,6 +77,7 @@
                 </td>
             </tr>
         </table> 
+        <input type="hidden" name="sesskey" value="{$sesskey}" />
     </form>
     
     {if !empty($adminList)}
@@ -124,6 +126,7 @@
                 </td>
             </tr>
         </table> 
+        <input type="hidden" name="sesskey" value="{$sesskey}" />
     </form>
                 
     {if !empty($bannedOrgList)}
@@ -171,6 +174,7 @@
                 </td>
             </tr>
         </table> 
+        <input type="hidden" name="sesskey" value="{$sesskey}" />
     </form>
                 
     {if !empty($bannedUserList)}
@@ -217,6 +221,7 @@
                 </td>
             </tr>
         </table> 
+        <input type="hidden" name="sesskey" value="{$sesskey}" />
     </form>
     <hr/>
 
@@ -259,6 +264,7 @@
                 </td>
             </tr>
         </table> 
+        <input type="hidden" name="sesskey" value="{$sesskey}" />
     </form>
 </div>
 

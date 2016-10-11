@@ -291,6 +291,7 @@
                 <i class="icon-list-alt icon-white" style="position:relative; right:-30px; top:12px;"></i>
                 <input type="submit" class="btn btn-primary" name="referenceRequest" 
                     value="    {Localisation::getTranslation('user_public_profile_request_reference')}" />
+                <input type="hidden" name="sesskey" value="{$sesskey}" />
             </form>
         </h1>            
     </div>
@@ -321,6 +322,7 @@
                             <input type="hidden" name="badge_id" value="{$badge->getId()}" />
                             <input type="submit" class='btn btn-inverse' name="revokeBadge" value="    {Localisation::getTranslation('user_public_profile_remove_badge')}" 
                            onclick="return confirm('{Localisation::getTranslation('user_public_profile_5')}')"/>
+                            <input type="hidden" name="sesskey" value="{$sesskey}" />
                         </form>   
                     {/if}
                 {assign var="org_id" value=$badge->getOwnerId()}
@@ -429,6 +431,7 @@
                             <input type="submit" class='btn btn-inverse' name="revoke" value="    {Localisation::getTranslation('user_public_profile_leave_organisation')}" 
                                    onclick="return confirm('{Localisation::getTranslation('user_public_profile_11')}')"/>
                         {/if}                      
+                        <input type="hidden" name="sesskey" value="{$sesskey}" />
                     </form>
                 </div>
                 <div class="span8">

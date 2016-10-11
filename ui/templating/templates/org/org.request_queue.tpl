@@ -18,6 +18,7 @@
             <input type="submit" value="    Add User" class="btn btn-primary" />
             <i class="icon-plus-sign icon-white" style="position:relative; right:88px; top:2px;"></i>
         </p>
+        <input type="hidden" name="sesskey" value="{$sesskey}" />
     </form>
 
 {include file="footer.tpl"}

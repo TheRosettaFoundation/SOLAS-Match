@@ -138,6 +138,7 @@
                     <i class="icon-repeat icon-white"></i> {Localisation::getTranslation('common_reset')}
                 </button>
             </span>
+            <input type="hidden" name="sesskey" value="{$sesskey}" />
         </form>
     </div>  
 {include file="footer.tpl"}

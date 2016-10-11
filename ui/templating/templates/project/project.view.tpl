@@ -28,6 +28,7 @@
                         <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('common_edit_project')}
                     </a> 
                 {/if}
+                <input type="hidden" name="sesskey" value="{$sesskey}" />
             </form>
 		</div>
     </h1>
@@ -114,6 +115,7 @@ Tweet</a>
                                     </a>
                                 </p>
                             {/if}
+                            <input type="hidden" name="sesskey" value="{$sesskey}" />
                         </form>                     
                     </td>
                 {/if}
@@ -151,12 +153,14 @@ Tweet</a>
 		                       			<input type="hidden" name="imageApprove" value="0" />
 		                        		<a class="image-approve-btn btn btn-success" onclick="$('#projectImageApproveForm').submit();">
 		            					<i class="icon-check icon-white"></i> {Localisation::getTranslation('project_view_image_approve')}</a>
+                            <input type="hidden" name="sesskey" value="{$sesskey}" />
 		            				</form>
 		            			{else}   
 		            				 <form id="projectImageApproveForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
 		            				 	<input type="hidden" name="imageApprove" value="1" />
 		                        		<a class="image-approve-btn btn btn-inverse" onclick="$('#projectImageApproveForm').submit();"">
 		            					<i class="icon-check icon-white"></i> {Localisation::getTranslation('project_view_image_disapprove')}</a>
+                             <input type="hidden" name="sesskey" value="{$sesskey}" />
 		            				 </form>
 		                        {/if}
 		                    {else}
@@ -336,6 +340,7 @@ Tweet</a>
                                                     <i class="icon-check icon-black"></i> {Localisation::getTranslation('common_publish')}
                                                 </a>
                                             {/if}
+                                            <input type="hidden" name="sesskey" value="{$sesskey}" />
                                         </form>
 
                                     </td>
@@ -353,6 +358,7 @@ Tweet</a>
                                                     <i class="icon-envelope icon-black"></i> {Localisation::getTranslation('common_track_task')}
                                                 </a>
                                             {/if}
+                                            <input type="hidden" name="sesskey" value="{$sesskey}" />
                                         </form>
                                     </td>    
                                     <td>
@@ -384,6 +390,7 @@ Tweet</a>
                                                 </a> 
                                                 {/if}
                                             {/if}
+                                            <input type="hidden" name="sesskey" value="{$sesskey}" />
                                         </form>
                                     </td>
                                 </tr>                        

@@ -27,6 +27,7 @@
                 <i class="icon-plus-sign icon-white"></i> {Localisation::getTranslation('common_assign_badge')}
             </button>
         </p>
+        <input type="hidden" name="sesskey" value="{$sesskey}" />
     </form>
 
     <h3>{Localisation::getTranslation('org_manage_badge_users_with_this_badge')}</h3>
@@ -55,6 +56,7 @@
                                 <a href="#" onclick="this.parentNode.submit()" class="pull-right btn btn-inverse">
                                     <i class="icon-fire icon-white"></i> {Localisation::getTranslation('org_manage_badge_remove_badge')}
                                 </a>
+                                <input type="hidden" name="sesskey" value="{$sesskey}" />
                             </form>
                         </div>
                     </li>

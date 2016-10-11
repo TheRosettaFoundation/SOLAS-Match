@@ -38,6 +38,7 @@
                         <input type="hidden" name="orgId" value="{$bannedOrg->getOrgId()}" />
                         <input type="submit" class='btn btn-primary' name="unBanOrg" value="    {Localisation::getTranslation('common_restore')}" 
                        onclick="return confirm('{Localisation::getTranslation('admin_banned_orgs_list_confirm_unban')}')"/>
+                        <input type="hidden" name="sesskey" value="{$sesskey}" />
                     </form> 
                 </td>
             </tr>

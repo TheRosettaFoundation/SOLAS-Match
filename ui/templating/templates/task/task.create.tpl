@@ -219,6 +219,7 @@
                     </tr>                
                 </fieldset>
             </table>
+            <input type="hidden" name="sesskey" value="{$sesskey}" />
         </form>
     </div>
 {include file="footer.tpl"}

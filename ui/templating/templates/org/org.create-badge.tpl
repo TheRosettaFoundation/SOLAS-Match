@@ -21,6 +21,7 @@
                 <i class="icon-star icon-white"></i> {Localisation::getTranslation('org_create_badge_create_badge')}
             </button>
         </p>
+        <input type="hidden" name="sesskey" value="{$sesskey}" />
     </form>
 
 {include file="footer.tpl"}

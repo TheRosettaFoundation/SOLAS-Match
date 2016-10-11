@@ -206,6 +206,7 @@
                 </td>
             </tr>        
         </table>
+        <input type="hidden" name="sesskey" value="{$sesskey}" />
     </form>
                         
 {include file="footer.tpl"}

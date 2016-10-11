@@ -25,6 +25,7 @@
             <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_change_email')}
         </button>
     </p>
+    <input type="hidden" name="sesskey" value="{$sesskey}" />
 </form>
 
 {include file="footer.tpl"}

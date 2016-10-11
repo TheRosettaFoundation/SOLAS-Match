@@ -33,6 +33,7 @@
             <h1>{Localisation::getTranslation('task_simple_upload_finished_processing')}
                 <form method="post" action="{urlFor name="task-user-feedback" options="task_id.$task_id"}" enctype="application/x-www-form-urlencoded">
                     <button style="float: right" class="btn btn-success" type="submit" value="Submit Feedback"><i class="icon-upload icon-white"></i> {Localisation::getTranslation('task_simple_upload_provide_feedback')}</button>   
+                    <input type="hidden" name="sesskey" value="{$sesskey}" />
                 </form>
             </h1>
             <div class="pull-right" >
@@ -60,6 +61,7 @@
             {if ($converter == "y")}
                 <button type="submit" value="XLIFF" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> {Localisation::getTranslation('task_simple_upload_as_xliff')}</button>
             {/if}
+            <input type="hidden" name="sesskey" value="{$sesskey}" />
         </form>
 
         {if isset($file_previously_uploaded) && $file_previously_uploaded}

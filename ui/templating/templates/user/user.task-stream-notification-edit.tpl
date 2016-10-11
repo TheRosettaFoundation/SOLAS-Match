@@ -98,6 +98,7 @@
     <button type="submit" value="Submit" class="btn btn-success">
         <i class="icon-upload icon-white"></i> {Localisation::getTranslation('common_submit')}
     </button>      
+    <input type="hidden" name="sesskey" value="{$sesskey}" />
 </form>
 
 {include file="footer.tpl"}
