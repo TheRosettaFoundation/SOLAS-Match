@@ -50,7 +50,7 @@
                                 </a>
                             {/if}
                             {/if}
-                            <input type="hidden" name="sesskey" value="{$sesskey}" />
+                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                         </form>
                     {/if}
                     {if $isMember && $adminAccess}
@@ -610,7 +610,7 @@
                             <input type="hidden" name="badge_id" value="{$badge_id}" />
                             <input type="submit" class='btn btn-inverse' name="deleteBadge" value="    {Localisation::getTranslation('org_public_profile_delete_badge')}"
                               onclick="return confirm('{Localisation::getTranslation('org_public_profile_confirm_delete_badge')}')" />                                 
-                            <input type="hidden" name="sesskey" value="{$sesskey}" />
+                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                         </form> 
                         <i class="icon-fire icon-white" style="position:relative; right:44px; top:-40px;"></i> 
                     </td>  
@@ -676,7 +676,7 @@
                              <input type="submit" name="refuse" value="    Refuse Request" class="btn btn-inverse" />
                              <i class="icon-remove-circle icon-white" style="position:relative; right:126px; top:2px;"></i>
                          </td>
-                         <input type="hidden" name="sesskey" value="{$sesskey}" />
+                         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                      </form>
                  </tr>
              {/foreach}
@@ -745,7 +745,7 @@
                     {/foreach}
                 </tbody>
             </table>
-            <input type="hidden" name="sesskey" value="{$sesskey}" />
+            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
         </form>
     {else}
         <p class="alert alert-info">{Localisation::getTranslation('org_public_profile_no_members')}</p>
@@ -807,7 +807,7 @@
                 </td>
             </tr>
         </table>
-        <input type="hidden" name="sesskey" value="{$sesskey}" />
+        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </form>
 {/if}
 

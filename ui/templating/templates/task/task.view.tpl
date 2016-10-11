@@ -54,7 +54,7 @@
                     </a>
                 {/if}
                 {/if}
-                    <input type="hidden" name="sesskey" value="{$sesskey}" />
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
             {/if}
             
@@ -143,7 +143,7 @@
 		                <a class="btn btn-primary" onclick="$('#assignTaskToUserForm').submit();">
 		                <i class="icon-user icon-white"></i>&nbsp;{Localisation::getTranslation('task_view_assign_button')}
 		                </a>
-                    <input type="hidden" name="sesskey" value="{$sesskey}" />
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 		            </form> 
 		        </div>
 		    {/if}

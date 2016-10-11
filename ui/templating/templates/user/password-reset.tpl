@@ -40,7 +40,7 @@
   			    <i class="icon-share icon-white"></i> {Localisation::getTranslation('password_reset_change_password')}
 			</button>
         </div>
-        <input type="hidden" name="sesskey" value="{$sesskey}" />
+        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </form>
     
 {include file="footer.tpl"}

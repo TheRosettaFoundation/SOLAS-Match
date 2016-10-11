@@ -44,7 +44,7 @@
         <form class="well" method="post" enctype="multipart/form-data" action="{urlFor name="task-desegmentation" options="task_id.$taskId"}" accept-charset="utf-8">
             <p><input type="file" name="{$fieldName}" id="{$fieldName}" /></p>
             <p><button type="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> {Localisation::getTranslation('task_desegmentation_upload')}</button>
-            <input type="hidden" name="sesskey" value="{$sesskey}" />
+            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
         </form>
 
         {if isset($file_previously_uploaded) && $file_previously_uploaded}
