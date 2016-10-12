@@ -377,10 +377,14 @@ class UserRouteHandler
         $adminDao = new DAO\AdminDao();
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
 
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
         $error = null;
         $warning = null;
         if ($app->request()->isPost() && sizeof($app->request()->post()) > 1) {
             $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'changeEmail');
+
             if (!Lib\Validator::validateEmail($post['email'])) {
                 $error = Lib\Localisation::getTranslation('register_1');
             } elseif ($userDao->getUserByEmail($post['email'])) {
@@ -402,7 +406,7 @@ class UserRouteHandler
             $app->view()->appendData(array("warning" => $warning));
         }
 
-        $app->view()->appendData(array('user_id' => $user_id));
+        $app->view()->appendData(array('user_id' => $user_id, 'sesskey' => $sesskey));
         $app->render("user/change-email.tpl");
     }
 
@@ -439,6 +443,8 @@ class UserRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
+
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
         
         $reset_request = $userDao->getPasswordResetRequest($uid);
         if (!is_object($reset_request)) {
@@ -450,6 +456,7 @@ class UserRouteHandler
         $app->view()->setData("uid", $uid);
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'passwordReset');
 
             if (isset($post['new_password']) && Lib\TemplateHelper::isValidPassword($post['new_password'])) {
                 if (isset($post['confirmation_password']) &&
@@ -469,6 +476,11 @@ class UserRouteHandler
                 $app->flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
             }
         }
+
+        $app->view()->appendData(array(
+            'sesskey' => $sesskey,
+        ));
+
         $app->render("user/password-reset.tpl");
     }
 
@@ -1024,6 +1036,9 @@ EOD;
         $adminDao = new DAO\AdminDao();
         $langDao = new DAO\LanguageDao();
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
+
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
         if (!is_null($loggedInUserId)) {
             $app->view()->setData("isSiteAdmin", $adminDao->isSiteAdmin($loggedInUserId));
         } else {
@@ -1045,6 +1060,7 @@ EOD;
         }
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'userPublicProfile');
             
             if (isset($post['revokeBadge']) && isset($post['badge_id']) && $post['badge_id'] != "") {
                 $badge_id = $post['badge_id'];
@@ -1099,6 +1115,7 @@ EOD;
         }
         
         $app->view()->appendData(array(
+            'sesskey' => $sesskey,
             "badges" => $badges,
             "orgList" => $orgList,
             "user_orgs" => $user_orgs,
@@ -1156,10 +1173,13 @@ EOD;
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
 
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
         $user = $userDao->getUser($userId);
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'editTaskStreamNotification');
 
             if (isset($post['interval'])) {
                 $success = false;
@@ -1218,6 +1238,7 @@ EOD;
         }
 
         $app->view()->appendData(array(
+            'sesskey' => $sesskey,
             "user" => $user
         ));
 

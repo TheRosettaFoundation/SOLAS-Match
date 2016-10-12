@@ -589,6 +589,8 @@ class TaskRouteHandler
         $userDao = new DAO\UserDao();
         $languageDao = new DAO\LanguageDao();
 
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
         $taskClaimed = $taskDao->isTaskClaimed($taskId);
         if ($taskClaimed) { // Protect against someone inappropriately creating URL for this route
             $app->redirect($app->urlFor("task", array("task_id" => $taskId)));
@@ -596,6 +598,9 @@ class TaskRouteHandler
 
         $task = $taskDao->getTask($taskId);
         if ($app->request()->isPost()) {
+            $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'taskClaim');
+
             $user_id = Common\Lib\UserSession::getCurrentUserID();
             $userDao->claimTask($user_id, $taskId);
             $app->redirect($app->urlFor("task-claimed", array(
@@ -621,6 +626,7 @@ class TaskRouteHandler
 
 
         $app->view()->appendData(array(
+                    'sesskey' => $sesskey,
                     "projectFileDownload" => $projectFileDownload,
                     "task"          => $task,
                     "sourceLanguage"=> $sourceLanguage,
@@ -655,12 +661,13 @@ class TaskRouteHandler
 
     public function task($taskId)
     {
-
         $app = \Slim\Slim::getInstance();
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
+
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $task = $taskDao->getTask($taskId);
@@ -673,6 +680,8 @@ class TaskRouteHandler
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'task');
+
             $project = $projectDao->getProject($task->getProjectId());
             $org_id=$project->getOrganisationId();
 
@@ -834,6 +843,7 @@ class TaskRouteHandler
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
 
         $app->view()->appendData(array(
+            'sesskey' => $sesskey,
             "extra_scripts" => $extra_scripts,
             "taskTypeColours" => $taskTypeColours,
             "project" => $project,
@@ -864,6 +874,8 @@ class TaskRouteHandler
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
 
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
         $userId = Common\Lib\UserSession::getCurrentUserID();
         $fieldName = "mergedFile";
         $errorMessage = null;
@@ -871,6 +883,9 @@ class TaskRouteHandler
         $project = $projectDao->getProject($task->getProjectId());
 
         if ($app->request()->isPost()) {
+            $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'desegmentationTask');
+
             $uploadError = false;
             try {
                 Lib\TemplateHelper::validateFileHasBeenSuccessfullyUploaded($fieldName);
@@ -923,6 +938,7 @@ class TaskRouteHandler
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
 
         $app->view()->appendData(array(
+            'sesskey'       => $sesskey,
             "extra_scripts" => $extra_scripts,
             "task"          => $task,
             "project"       => $project,
@@ -943,6 +959,8 @@ class TaskRouteHandler
         $projectDao = new DAO\ProjectDao();
         $orgDao = new DAO\OrganisationDao();
 
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
         $taskClaimed = $taskDao->isTaskClaimed($taskId);
         if (!$taskClaimed) { // Protect against someone inappropriately creating URL for this route
             $app->redirect($app->urlFor("task", array("task_id" => $taskId)));
@@ -955,6 +973,8 @@ class TaskRouteHandler
         $project = $projectDao->getProject($task->getProjectId());
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'taskSimpleUpload');
+
             try {
                 Lib\TemplateHelper::validateFileHasBeenSuccessfullyUploaded($fieldName);
                 $projectFile = $projectDao->getProjectFileInfo($project->getId());
@@ -1032,6 +1052,7 @@ class TaskRouteHandler
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
 
         $app->view()->appendData(array(
+            'sesskey'       => $sesskey,
             "extra_scripts" => $extra_scripts,
             "task"          => $task,
             "project"       => $project,
@@ -1075,6 +1096,8 @@ class TaskRouteHandler
         $projectDao = new DAO\ProjectDao();
         $currentTask = $taskDao->getTask($task_id);
         $currentTaskStatus = $currentTask->getTaskStatus();
+
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $word_count_err = null;
         $deadlockError = null;
@@ -1123,6 +1146,7 @@ class TaskRouteHandler
 
         if (\SolasMatch\UI\isValidPost($app)) {
             $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'taskAlter');
 
             if ($task->getTaskStatus() < Common\Enums\TaskStatusEnum::IN_PROGRESS) {
                 if (isset($post['title']) && $post['title'] != "") {
@@ -1277,6 +1301,7 @@ class TaskRouteHandler
         }
 
         $app->view()->appendData(array(
+            'sesskey'             => $sesskey,
             "project"             => $project,
             "extra_scripts"       => $extra_scripts,
             "languages"           => $languages,
@@ -1302,6 +1327,8 @@ class TaskRouteHandler
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
 
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $task = $taskDao->getTask($task_id);
         $project = $projectDao->getProject($task->getProjectId());
@@ -1325,6 +1352,7 @@ class TaskRouteHandler
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'taskView');
 
             if (isset($post['published'])) {
                 if ($post['published']) {
@@ -1433,6 +1461,7 @@ class TaskRouteHandler
         $alsoViewedTasksCount = 0; 
 
         $app->view()->appendData(array(
+                'sesskey' => $sesskey,
                 "extra_scripts" => $extra_scripts,
                 "org" => $org,
                 "project" => $project,
@@ -1454,6 +1483,8 @@ class TaskRouteHandler
         $taskDao = new DAO\TaskDao();
         $user_id = Common\Lib\UserSession::getCurrentUserID();
 
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
         $titleError = null;
         $wordCountError = null;
         $deadlineError = null;
@@ -1464,6 +1495,7 @@ class TaskRouteHandler
         $task->setProjectId($project_id);
 
         if ($post = $app->request()->post()) {
+            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'taskCreate');
 
             if (isset($post['title'])) {
                 $task->setTitle($post['title']);
@@ -1574,6 +1606,7 @@ class TaskRouteHandler
 ";
 
         $app->view()->appendData(array(
+            'sesskey'       => $sesskey,
             "project"       => $project,
             "task"          => $task,
             "projectTasks"  => $projectTasks,
@@ -1607,9 +1640,10 @@ class TaskRouteHandler
     public function taskSegmentation($task_id)
     {
         $app = \Slim\Slim::getInstance();
-
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
+
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $taskTypeErr = null;
@@ -1629,6 +1663,7 @@ class TaskRouteHandler
 
         if ($app->request()->isPost() && $task->getTaskStatus() != Common\Enums\TaskStatusEnum::COMPLETE) {
             $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'taskSegmentation');
 
             $fileInfo = $projectDao->getProjectFileInfo($project->getId());
             $canonicalExtension = explode(".", $fileInfo->getFilename());
@@ -1786,6 +1821,7 @@ class TaskRouteHandler
         $extraScripts .= file_get_contents(__DIR__."/../js/TaskView.js");
 
         $app->view()->appendData(array(
+            'sesskey'           => $sesskey,
             "project"           => $project,
             "task"              => $task,
             "taskTypeColours"   => $taskTypeColours,
@@ -1805,6 +1841,8 @@ class TaskRouteHandler
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
 
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $task = $taskDao->getTask($task_id);
         $taskClaimedDate = $taskDao->getClaimedDate($task_id);
@@ -1820,6 +1858,8 @@ class TaskRouteHandler
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'taskOrgFeedback');
+
             if (isset($post['feedback'])) {
                 if ($post['feedback'] != "") {
                     if ($claimant != null) {
@@ -1887,6 +1927,7 @@ class TaskRouteHandler
         }
 
         $app->view()->appendData(array(
+            'sesskey' => $sesskey,
             "project" => $project,
             "task" => $task,
             "taskClaimedDate" => $taskClaimedDate,
@@ -1906,6 +1947,8 @@ class TaskRouteHandler
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
 
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $task = $taskDao->getTask($task_id);
         $taskClaimedDate = $taskDao->getClaimedDate($task_id);
@@ -1916,6 +1959,7 @@ class TaskRouteHandler
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'taskUserFeedback');
 
             if (isset($post['feedback'])) {
                 if ($post['feedback'] != '') {
@@ -1975,6 +2019,7 @@ class TaskRouteHandler
         }
 
         $app->view()->appendData(array(
+            'sesskey' => $sesskey,
             "org" => $organisation,
             "project" => $project,
             "task" => $task,
@@ -1993,6 +2038,8 @@ class TaskRouteHandler
         $taskDao = new DAO\TaskDao();
         $userDao = new DAO\UserDao();
         $userId = Common\Lib\UserSession::getCurrentUserID();
+
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $task = $taskDao->getTask($taskId);
         $action = "";
@@ -2047,6 +2094,7 @@ class TaskRouteHandler
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'taskReview');
 
             if (isset($post['submitReview'])) {
                 $i = 0;
@@ -2155,6 +2203,7 @@ class TaskRouteHandler
         $formAction = $app->urlFor("task-review", array('task_id' => $taskId));
 
         $app->view()->appendData(array(
+            'sesskey'       => $sesskey,
             'extra_scripts' => $extra_scripts,
             'taskId'        => $taskId,
             'tasks'         => $preReqTasks,
