@@ -113,11 +113,14 @@ class ProjectRouteHandler
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
 
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
         $project = $projectDao->getProject($project_id);
         $app->view()->setData("project", $project);
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'projectView');
 
             $task = null;
             if (isset($post['task_id'])) {
@@ -345,6 +348,7 @@ class ProjectRouteHandler
         $preventImageCacheToken = time(); //see http://stackoverflow.com/questions/126772/how-to-force-a-web-browser-not-to-cache-images
 
         $app->view()->appendData(array(
+                'sesskey'       => $sesskey,
                 "isOrgMember"   => $isOrgMember,
                 "isAdmin"       => $isAdmin,
                 "isSiteAdmin"   => $isSiteAdmin,

@@ -98,6 +98,32 @@ class UserSession
     }
 
     /**
+     * Get Key for using in Form Posts and subsequent (when POST recieved) security check against CSRF.
+     *
+     * @return string
+     */
+    public static function getCSRFKey() {
+        if (empty($_SESSION['SESSION_CSRF_KEY'])) {
+            $_SESSION['SESSION_CSRF_KEY'] = self::random_string(10);
+        }
+        return $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
+    }
+
+    /**
+     * Check Key returned from Post matches $_SESSION['SESSION_CSRF_KEY'].
+     *
+     * @param string $postKey sesskey returned from browser by POST.
+     * @param string $location.
+     * @return void, will error_log() and throw \Exception if test fails.
+     */
+    public static function checkCSRFKey($postKey, $location) {
+        if (empty($postKey) || $postKey !== $_SESSION['SESSION_CSRF_KEY']) {
+            error_log("CSRF attempt identified!: $location");
+            throw new \Exception("CSRF attempt identified!: $location");
+        }
+    }
+
+    /**
      * Generate and return a random string of the specified length.
      *
      * @param int $length The length of the string to be created.
