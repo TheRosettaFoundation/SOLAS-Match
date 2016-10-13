@@ -443,8 +443,6 @@ class UserRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
-
-        $sesskey = Common\Lib\UserSession::getCSRFKey();
         
         $reset_request = $userDao->getPasswordResetRequest($uid);
         if (!is_object($reset_request)) {
@@ -456,7 +454,6 @@ class UserRouteHandler
         $app->view()->setData("uid", $uid);
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'passwordReset');
 
             if (isset($post['new_password']) && Lib\TemplateHelper::isValidPassword($post['new_password'])) {
                 if (isset($post['confirmation_password']) &&
@@ -476,10 +473,6 @@ class UserRouteHandler
                 $app->flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
             }
         }
-
-        $app->view()->appendData(array(
-            'sesskey' => $sesskey,
-        ));
 
         $app->render("user/password-reset.tpl");
     }
