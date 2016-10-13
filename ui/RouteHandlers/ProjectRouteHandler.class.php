@@ -42,7 +42,7 @@ class ProjectRouteHandler
         )->name("project-created");
 
         $app->get(
-            "/project/id/:project_id/mark-archived/",
+            "/project/id/:project_id/mark-archived/:sesskey/",
             array($middleware, "authUserForOrgProject"),
             array($this, "archiveProject")
         )->name("archive-project");
@@ -1231,10 +1231,12 @@ class ProjectRouteHandler
         $app->render("project/project.created.tpl");
     }
 
-    public function archiveProject($project_id)
+    public function archiveProject($project_id, $sesskey)
     {
         $app = \Slim\Slim::getInstance();
         $projectDao = new DAO\ProjectDao();
+
+        Common\Lib\UserSession::checkCSRFKey($sesskey, 'archiveProject');
 
         $project = $projectDao->getProject($project_id);
         $user_id = Common\Lib\UserSession::getCurrentUserID();

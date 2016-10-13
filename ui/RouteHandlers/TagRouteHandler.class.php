@@ -20,7 +20,7 @@ class TagRouteHandler
         )->via("POST")->name("tags-list");
 
         $app->get(
-            "/tag/:id/:subscribe/",
+            "/tag/:id/:subscribe/:sesskey/",
             array($middleware, "authUserIsLoggedIn"),
             array($this, "tagSubscribe")
         )->via("POST")->name("tag-subscribe");
@@ -77,11 +77,13 @@ class TagRouteHandler
         $app->render("tag/tag-list.tpl");
     }
 
-    public function tagSubscribe($id, $subscribe)
+    public function tagSubscribe($id, $subscribe, $sesskey)
     {
         $app = \Slim\Slim::getInstance();
         $tagDao = new DAO\TagDao();
         $userDao = new DAO\UserDao();
+
+        Common\Lib\UserSession::checkCSRFKey($sesskey, 'tagSubscribe');
 
         $tag = $tagDao->getTag($id);
         $user_id = Common\Lib\UserSession::getCurrentUserID();
@@ -176,7 +178,9 @@ class TagRouteHandler
         }
 
         $top_tags= $tagDao->getTopTags(30);
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
         $app->view()->appendData(array(
+            'sesskey' => $sesskey,
             "tag" => $tag,
             "top_tags" => $top_tags,
             "taskTypeColours" => $taskTypeColours
