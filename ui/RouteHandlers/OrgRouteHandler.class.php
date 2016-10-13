@@ -396,6 +396,8 @@ class OrgRouteHandler
         $projectDao = new DAO\ProjectDao();
         $adminDao = new DAO\AdminDao();
         $isSiteAdmin = $adminDao->isSiteAdmin($current_user_id);
+
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
         
         $current_user = $userDao->getUser($current_user_id);
         $my_organisations = $userDao->getUserOrgs($current_user_id);
@@ -403,6 +405,8 @@ class OrgRouteHandler
         
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'orgDashboard');
+
             if (isset($post['track'])) {
                 $project_id = $post['project_id'];
                 $project = $projectDao->getProject($project_id);
@@ -487,7 +491,6 @@ class OrgRouteHandler
         // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
         $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
-        $sesskey = Common\Lib\UserSession::getCSRFKey();
         $app->view()->appendData(array(
             'sesskey'       => $sesskey,
             "isSiteAdmin"   => $isSiteAdmin,
