@@ -473,7 +473,6 @@ class UserRouteHandler
                 $app->flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
             }
         }
-
         $app->render("user/password-reset.tpl");
     }
 
