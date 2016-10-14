@@ -25,6 +25,7 @@
                 <i class="icon-refresh icon-white"></i> {Localisation::getTranslation('org_edit_badge_update_badge')}
             </button>
         </p>
+        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </form>
 
 {include file="footer.tpl"}

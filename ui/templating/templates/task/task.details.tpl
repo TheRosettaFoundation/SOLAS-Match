@@ -140,6 +140,7 @@
                             <i class="icon-check icon-black"></i> {Localisation::getTranslation('common_publish')}
                         </a>
                     {/if}
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
             </td>
             <td>
@@ -156,6 +157,7 @@
                             <i class="icon-envelope icon-black"></i> {Localisation::getTranslation('common_track_task')}
                         </a>
                     {/if}
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                 </form>
             </td>
         </tr>

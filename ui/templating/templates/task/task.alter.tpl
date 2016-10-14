@@ -206,6 +206,7 @@
                 </td>
             </tr>        
         </table>
+        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </form>
                         
 {include file="footer.tpl"}

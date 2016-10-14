@@ -48,6 +48,7 @@ Tweet</a>
         </button>
     {/if}
 {if isset($formAction)}
+        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
     </form>
 {else}
     </div>

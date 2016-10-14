@@ -18,6 +18,7 @@
                         <input type="hidden" name="userId" value="{$admin->getId()}" />
                         <input type="submit" class='btn btn-inverse' name="revokeAdmin" value="    {Localisation::getTranslation('admin_site_admins_list_revoke')}" 
                        onclick="return confirm('{Localisation::getTranslation('admin_site_admins_list_confirm_revoke')}')"/>
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                     </form> 
                 </td>
             </tr>

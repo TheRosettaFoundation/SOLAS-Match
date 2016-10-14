@@ -396,6 +396,8 @@ class OrgRouteHandler
         $projectDao = new DAO\ProjectDao();
         $adminDao = new DAO\AdminDao();
         $isSiteAdmin = $adminDao->isSiteAdmin($current_user_id);
+
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
         
         $current_user = $userDao->getUser($current_user_id);
         $my_organisations = $userDao->getUserOrgs($current_user_id);
@@ -403,6 +405,8 @@ class OrgRouteHandler
         
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'orgDashboard');
+
             if (isset($post['track'])) {
                 $project_id = $post['project_id'];
                 $project = $projectDao->getProject($project_id);
@@ -486,8 +490,9 @@ class OrgRouteHandler
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
         // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
         $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
-        
+
         $app->view()->appendData(array(
+            'sesskey'       => $sesskey,
             "isSiteAdmin"   => $isSiteAdmin,
             "extra_scripts" => $extra_scripts,
             "current_page"  => "org-dashboard"
@@ -526,9 +531,12 @@ class OrgRouteHandler
         $orgDao = new DAO\OrganisationDao();
         $userDao = new DAO\UserDao();
 
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
         $org = $orgDao->getOrganisation($org_id);
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'orgRequestQueue');
             
             if (isset($post['email'])) {
                 if (Lib\Validator::validateEmail($post['email'])) {
@@ -590,7 +598,7 @@ class OrgRouteHandler
         }
         
         $app->view()->setData("org", $org);
-        $app->view()->appendData(array("user_list" => $user_list));
+        $app->view()->appendData(array("user_list" => $user_list, 'sesskey' => $sesskey));
         
         $app->render("org/org.request_queue.tpl");
     }
@@ -1573,6 +1581,8 @@ class OrgRouteHandler
         $userDao = new DAO\UserDao();
         $badgeDao = new DAO\BadgeDao();
 
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
         $currentUser = $userDao->getUser(Common\Lib\UserSession::getCurrentUserId());
         $isSiteAdmin = $adminDao->isSiteAdmin($currentUser->getId());
         $start_dateError = '';
@@ -1619,6 +1629,7 @@ class OrgRouteHandler
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'orgPublicProfile');
                    
             if (isset($post['deleteBadge'])) {
                 $badgeDao->deleteBadge($post['badge_id']);
@@ -1857,6 +1868,7 @@ class OrgRouteHandler
         $siteName = Common\Lib\Settings::get("site.name");
         $app->view()->setData("current_page", "org-public-profile");
         $app->view()->appendData(array(
+                'sesskey' => $sesskey,
                 "org" => $org,
                 'org2' => $org2,
                 'activitys'    => $this->generateOptions($this->possibleActivitys(), $org2->getActivitys()),
@@ -1894,6 +1906,8 @@ class OrgRouteHandler
         $badgeDao = new DAO\BadgeDao();
         $userDao = new DAO\UserDao();
 
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
         $badge = $badgeDao->getBadge($badge_id);
         $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
@@ -1905,6 +1919,7 @@ class OrgRouteHandler
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'orgManageBadge');
             
             if (isset($post['email']) && $post['email'] != "") {
                 if (Lib\Validator::validateEmail($post['email'])) {
@@ -1947,6 +1962,7 @@ class OrgRouteHandler
         $user_list = $badgeDao->getUserWithBadge($badge_id);
 
         $app->view()->appendData(array(
+            'sesskey' => $sesskey,
             "user_list" => $user_list
         ));
         
@@ -1958,8 +1974,11 @@ class OrgRouteHandler
         $app = \Slim\Slim::getInstance();
         $badgeDao = new DAO\BadgeDao();
 
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
         if (\SolasMatch\UI\isValidPost($app)) {
             $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'orgCreateBadge');
             
             if ($post['title'] == "" || $post['description'] == "") {
                 $app->flashNow("error", Lib\Localisation::getTranslation('common_all_fields'));
@@ -1976,6 +1995,9 @@ class OrgRouteHandler
         }
         
         $app->view()->setData("org_id", $org_id);
+        $app->view()->appendData(array(
+            'sesskey'       => $sesskey,
+        ));
         $app->render("org/org.create-badge.tpl");
     }
 
@@ -2055,11 +2077,14 @@ class OrgRouteHandler
         $taskDao = new DAO\TaskDao();
         $userDao = new DAO\UserDao();
 
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
         $userId = Common\Lib\UserSession::getCurrentUserID();
         $task = $taskDao->getTask($taskId);
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'orgTaskReview');
 
             if (isset($post['submitReview'])) {
                 $review = new Common\Protobufs\Models\TaskReview();
@@ -2156,6 +2181,7 @@ class OrgRouteHandler
         $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
         $app->view()->appendData(array(
+                    'sesskey' => $sesskey,
                     'extra_scripts' => $extra_scripts,
                     'task'      => $task,
                     'review'    => $taskReview,

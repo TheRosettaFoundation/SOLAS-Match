@@ -46,6 +46,7 @@
                             <input type="hidden" name="userId" value="{$bannedUser->getUserId()}" />
                             <input type="submit" class='btn btn-primary' name="unBanUser" value="    {Localisation::getTranslation('common_restore')}" 
                            onclick="return confirm('{Localisation::getTranslation('admin_banned_users_list_confirm_unban')}')"/>
+                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                         </form> 
                     </td>
                 </tr>

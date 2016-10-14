@@ -25,8 +25,12 @@ class AdminRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $userId = Common\Lib\UserSession::getCurrentUserID();
+
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
         
         if ($post = $app->request()->post()) {
+            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'adminDashboard');
+
             $userDao = new DAO\UserDao();
             $adminDao = new DAO\AdminDao();
             $taskDao = new DAO\TaskDao();
@@ -159,6 +163,7 @@ class AdminRouteHandler
         $extra_scripts .= file_get_contents(__DIR__."/../js/site-admin.dashboard.js");
 
         $app->view()->appendData(array(
+                    'sesskey'       => $sesskey,
                     "adminUserId"   => $userId,
                     "adminList"     => $adminList,
                     "bannedOrgList" => $bannedOrgList,

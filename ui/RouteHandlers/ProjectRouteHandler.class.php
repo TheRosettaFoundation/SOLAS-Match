@@ -42,7 +42,7 @@ class ProjectRouteHandler
         )->name("project-created");
 
         $app->get(
-            "/project/id/:project_id/mark-archived/",
+            "/project/id/:project_id/mark-archived/:sesskey/",
             array($middleware, "authUserForOrgProject"),
             array($this, "archiveProject")
         )->name("archive-project");
@@ -113,11 +113,14 @@ class ProjectRouteHandler
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
 
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
         $project = $projectDao->getProject($project_id);
         $app->view()->setData("project", $project);
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'projectView');
 
             $task = null;
             if (isset($post['task_id'])) {
@@ -345,6 +348,7 @@ class ProjectRouteHandler
         $preventImageCacheToken = time(); //see http://stackoverflow.com/questions/126772/how-to-force-a-web-browser-not-to-cache-images
 
         $app->view()->appendData(array(
+                'sesskey'       => $sesskey,
                 "isOrgMember"   => $isOrgMember,
                 "isAdmin"       => $isAdmin,
                 "isSiteAdmin"   => $isSiteAdmin,
@@ -1227,10 +1231,12 @@ class ProjectRouteHandler
         $app->render("project/project.created.tpl");
     }
 
-    public function archiveProject($project_id)
+    public function archiveProject($project_id, $sesskey)
     {
         $app = \Slim\Slim::getInstance();
         $projectDao = new DAO\ProjectDao();
+
+        Common\Lib\UserSession::checkCSRFKey($sesskey, 'archiveProject');
 
         $project = $projectDao->getProject($project_id);
         $user_id = Common\Lib\UserSession::getCurrentUserID();
