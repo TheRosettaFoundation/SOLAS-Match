@@ -119,7 +119,7 @@ class UserSession
     public static function checkCSRFKey($postKey, $location) {
         if (empty($postKey) || $postKey !== $_SESSION['SESSION_CSRF_KEY']) {
             error_log("CSRF attempt identified!: $location");
-            throw new \Exception("CSRF attempt identified!: $location");
+//            throw new \Exception("CSRF attempt identified!: $location");
         }
     }
 
