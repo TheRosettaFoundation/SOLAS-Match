@@ -383,7 +383,7 @@ class UserRouteHandler
         $warning = null;
         if ($app->request()->isPost() && sizeof($app->request()->post()) > 1) {
             $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'changeEmail');
+            Common\Lib\UserSession::checkCSRFKey($post, 'changeEmail');
 
             if (!Lib\Validator::validateEmail($post['email'])) {
                 $error = Lib\Localisation::getTranslation('register_1');
@@ -1052,7 +1052,7 @@ EOD;
         }
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'userPublicProfile');
+            Common\Lib\UserSession::checkCSRFKey($post, 'userPublicProfile');
             
             if (isset($post['revokeBadge']) && isset($post['badge_id']) && $post['badge_id'] != "") {
                 $badge_id = $post['badge_id'];
@@ -1171,7 +1171,7 @@ EOD;
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'editTaskStreamNotification');
+            Common\Lib\UserSession::checkCSRFKey($post, 'editTaskStreamNotification');
 
             if (isset($post['interval'])) {
                 $success = false;

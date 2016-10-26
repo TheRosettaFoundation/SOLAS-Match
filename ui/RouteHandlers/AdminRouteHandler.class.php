@@ -29,7 +29,7 @@ class AdminRouteHandler
         $sesskey = Common\Lib\UserSession::getCSRFKey();
         
         if ($post = $app->request()->post()) {
-            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'adminDashboard');
+            Common\Lib\UserSession::checkCSRFKey($post, 'adminDashboard');
 
             $userDao = new DAO\UserDao();
             $adminDao = new DAO\AdminDao();
