@@ -116,9 +116,27 @@ class UserSession
      * @param string $location.
      * @return void, will error_log() and throw \Exception if test fails.
      */
-    public static function checkCSRFKey($postKey, $location) {
+    public static function checkCSRFKey($post, $location) {
+        if (is_array($post)) {
+            if (!empty($post['sesskey'])) $postKey = $post['sesskey'];
+            else                          $postKey = '9999999999';
+        }
+        elseif (is_string($post)) {
+            $postKey = $post;
+        }
+        else {
+            $postKey = '8888888888';
+        }
+
         if (empty($postKey) || $postKey !== $_SESSION['SESSION_CSRF_KEY']) {
-            error_log("CSRF attempt identified!: $location");
+            $expected = $_SESSION['SESSION_CSRF_KEY'];
+            error_log("CSRF attempt identified!: $location, sesskey: $postKey ($expected)");
+            if (is_array($post)) {
+                error_log('POST...');
+                foreach ($post as $key => $item) {
+                    error_log("$key => $item");
+                }
+            }
 //            throw new \Exception("CSRF attempt identified!: $location");
         }
     }
