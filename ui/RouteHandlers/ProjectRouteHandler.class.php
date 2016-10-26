@@ -120,7 +120,7 @@ class ProjectRouteHandler
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'projectView');
+            Common\Lib\UserSession::checkCSRFKey($post, 'projectView');
 
             $task = null;
             if (isset($post['task_id'])) {
