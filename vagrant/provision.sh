@@ -9,7 +9,7 @@ echo "mysql-server-5.5 mysql-server/root_password_again password 123" | sudo deb
 
 apt-get install -y curl build-essential vim-nox git
 apt-get install -y apache2 libapache2-mod-xsendfile
-apt-get install -y php5 php5-mcrypt php5-curl php5-mysql php5-gd php5-dev
+apt-get install -y php5 php5-mcrypt php5-curl php5-mysql php5-gd php5-dev php-apc
 apt-get install -y mysql-server mysql-client
 
 php5enmod mcrypt
