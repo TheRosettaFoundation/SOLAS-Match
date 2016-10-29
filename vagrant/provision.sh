@@ -4,8 +4,8 @@ export DEBIAN_FRONTEND=noninteractive
 
 apt-get update
 
-echo "mysql-server-5.5 mysql-server/root_password password 123" | sudo debconf-set-selections
-echo "mysql-server-5.5 mysql-server/root_password_again password 123" | sudo debconf-set-selections
+echo "mysql-server-5.5 mysql-server/root_password password root" | sudo debconf-set-selections
+echo "mysql-server-5.5 mysql-server/root_password_again password root" | sudo debconf-set-selections
 
 apt-get install -y curl build-essential vim-nox git
 apt-get install -y apache2 libapache2-mod-xsendfile
@@ -41,28 +41,68 @@ if [ ! -f '/etc/php5/apache2/conf.d/30-error_log.ini' ]; then
 fi
 
 # Install php-protocolbuffers
-cd /tmp; git clone https://github.com/chobie/php-protocolbuffers.git
-cd /tmp/php-protocolbuffers
-phpize
-./configure
-make
-make install
-echo "extension=protocolbuffers.so" > /etc/php5/apache2/conf.d/40-protocolbuffer.ini
+if [ ! -f '/etc/php5/apache2/conf.d/40-protocolbuffer.ini' ]; then
+    cd /tmp; git clone https://github.com/chobie/php-protocolbuffers.git
+    cd /tmp/php-protocolbuffers
+    phpize
+    ./configure
+    make
+    make install
+    echo "extension=protocolbuffers.so" > /etc/php5/apache2/conf.d/40-protocolbuffer.ini
+fi
 
+# Create database
+mysql -uroot -proot -e 'create database SolasMatch'
 
-ln -s /vagrant/assets/conf.ini /var/www/html/match/Common/conf/conf.ini
+# Import database
+mysql --default-character-set=utf8 -u root -proot SolasMatch < /opt/match/api/vendor/league/oauth2-server/sql/mysql.sql
+mysql --default-character-set=utf8 -u root -proot SolasMatch < /opt/match/db/schema.sql
+mysql --default-character-set=utf8 -u root -proot SolasMatch < /opt/match/db/country_codes.sql
 
-chmod 777 /var/www/html/match/uploads
-mkdir /var/www/html/match/ui/templating/templates_compiled
-chmod 777 /var/www/html/match/ui/templating/templates_compiled
-mkdir /var/www/html/match/ui/templating/cache
-chmod 777 /var/www/html/match/ui/templating/cache
-
+if [ ! -f '/var/www/html/match/Common/conf/conf.ini' ]; then
+    ln -s /vagrant/assets/conf.ini /var/www/html/match/Common/conf/conf.ini
+fi
 
 service apache2 restart
 
 cd /var/www/html/match/api; sudo -u vagrant -H sh -c "composer install"
 cd /var/www/html/match/ui; sudo -u vagrant -H sh -c "composer install"
 
+# Install Backend
 
+apt-get install rabbitmq-server
+apt-get -y install cmake qt5-default qt5-qmake libqt5sql5-mysql libctemplate-dev
 
+cd /tmp
+wget https://github.com/alanxz/rabbitmq-c/archive/v0.7.0.tar.gz
+tar zxvf v0.7.0.tar.gz
+cd rabbitmq-c-0.7.0/
+cmake .
+cmake --build .
+cmake --build . --target install
+cd /tmp
+git clone https://github.com/TheRosettaFoundation/amqpcpp.git
+cd /tmp/amqpcpp
+make
+cp -p libamqpcpp.so /usr/local/lib/
+cp -p libamqpcpp.a /usr/local/lib/
+cp -p include/AMQPcpp.h /usr/local/include/
+
+cd /opt
+git clone https://github.com/TheRosettaFoundation/SOLAS-Match-Backend.git
+cd /opt/SOLAS-Match-Backend/
+git checkout qt521
+
+mkdir /etc/SOLAS-Match
+ln -s /opt/SOLAS-Match-Backend/templates/ /etc/SOLAS-Match/templates
+ln -s /opt/SOLAS-Match-Backend/schedule.xml /etc/SOLAS-Match/schedule.xml
+ln -s /vagrant/assets/conf.ini
+qmake
+make
+cd PluginHandler
+ln -s ../conf.ini conf.ini
+ln -s ../schedule.xml schedule.xml
+ln -s ../templates templates
+cd ..
+ln -s /vagrant/assets/run_daemon.sh /opt/SOLAS-Match-Backend
+chmod 755 run_daemon.sh
