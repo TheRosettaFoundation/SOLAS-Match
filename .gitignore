@@ -5,6 +5,7 @@ composer.phar
 vendor
 /nbproject/
 /ui/templating/templates_compiled/
+/ui/templating/cache/
 /Common/includes/conf.ini
 Common/includes/conf.ini
 backup/
