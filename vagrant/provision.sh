@@ -26,7 +26,6 @@ if [ ! -d '/var/www/html/match' ]; then
     ln -s /opt/match /var/www/html/match
 fi
 
-service apache2 restart
 
 # Install composer
 if [ ! -e '/usr/local/bin/composer' ]; then
@@ -49,6 +48,18 @@ phpize
 make
 make install
 echo "extension=protocolbuffers.so" > /etc/php5/apache2/conf.d/40-protocolbuffer.ini
+
+
+ln -s /vagrant/assets/conf.ini /var/www/html/match/Common/conf/conf.ini
+
+chmod 777 /var/www/html/match/uploads
+mkdir /var/www/html/match/ui/templating/templates_compiled
+chmod 777 /var/www/html/match/ui/templating/templates_compiled
+mkdir /var/www/html/match/ui/templating/cache
+chmod 777 /var/www/html/match/ui/templating/cache
+
+
+service apache2 restart
 
 cd /var/www/html/match/api; sudo -u vagrant -H sh -c "composer install"
 cd /var/www/html/match/ui; sudo -u vagrant -H sh -c "composer install"
