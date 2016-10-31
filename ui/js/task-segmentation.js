@@ -3,8 +3,8 @@
     var CURR_SEGMENTS = 2;
     var TOTAL_WORD_COUNT = 0;
 
-    $(document).ready(function() {     
-        var segmentationElements = document.getElementById('segmentationElements');        
+    $(document).ready(function() {
+        var segmentationElements = document.getElementById('segmentationElements');
         var formSelect = document.createElement('select');
         formSelect.setAttribute('name', 'segmentationValue');
         formSelect.setAttribute('onchange', "segmentSelectChange(this);");
@@ -21,18 +21,18 @@
             if (i < CURR_SEGMENTS) {
                 jQuery('#wordCount_' + i).val(defaultWordCount);
             }
-        }        
-        segmentationElements.appendChild(formSelect); 
-    }) 
+        }
+        segmentationElements.appendChild(formSelect);
+    })
 
     function segmentSelectChange(node) {
-        var index = node.selectedIndex; 
+        var index = node.selectedIndex;
         var value = parseInt(node.options[index].value);
         var templateNode = document.getElementById('taskUploadTemplate_0');
         var taskSegments = document.getElementById('taskSegments');
         var defaultWordCount = Math.round(TOTAL_WORD_COUNT / value);
 
-        if(value < CURR_SEGMENTS) { 
+        if(value < CURR_SEGMENTS) {
             for(var i=CURR_SEGMENTS; i > 0; i--) {
                 if (i > value) {
                     var del = document.getElementById('taskUploadTemplate_' + (i-1));
@@ -45,7 +45,7 @@
         } else if(value > CURR_SEGMENTS) {
             for(var i=0 ; i < value; i++) {
                 if (i >= CURR_SEGMENTS) {
-                    var clonedNode = templateNode.cloneNode(true);                    
+                    var clonedNode = templateNode.cloneNode(true);
                     var inputs = clonedNode.getElementsByTagName('input');
                     clonedNode.setAttribute('id',clonedNode.getAttribute("id").replace("0",i));
                     for(var j=0; j < inputs.length; j++){
@@ -61,8 +61,39 @@
                 }
 
                 jQuery('#wordCount_' + i).val(defaultWordCount);
-            }             
-        }  
-        CURR_SEGMENTS = value;              
+            }
+        }
+        CURR_SEGMENTS = value;
+    }
+
+    // http://stackoverflow.com/questions/3717793/javascript-file-upload-size-validation
+    function checkFileSizes() {
+        var input, file, maxFileSizeBytes, totalFileSizes = 0;
+
+        if (!window.FileReader) {
+            return true;
+        }
+
+        for (var i=0; i < MAX_SEGMENTS; ++i) {
+            input = document.getElementById("segmentationUpload_" + i);
+            if (input && input.files) {
+                if (!input.files[0]) {
+                    window.alert(parameters.getTranslation("task_segmentation_15"));
+                    return false;
+                }
+                else {
+                    file = input.files[0];
+                    totalFileSizes += file.size;
+                }
+            }
+        }
+
+        maxFileSizeBytes = parseInt(document.getElementById("maxfilesize").innerHTML);
+
+        if (totalFileSizes > maxFileSizeBytes) {
+            window.alert(parameters.getTranslation("common_maximum_file_total_size_vs_limit_is").replace("%2$s", (maxFileSizeBytes/1024/1024).toFixed(1)).replace("%1$s", (totalFileSizes/1024/1024).toFixed(1)));
+            return false;
+        }
+        return true;
     }
 </script>
