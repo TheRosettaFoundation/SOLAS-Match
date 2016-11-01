@@ -1,9 +1,21 @@
 <script type="text/javascript">
+    // Globals...
+
+    var parameters; // Instance of Parameters Class holding data retrieved from Server (e.g. Translations)
+
+    // Passed from PHP
+    var siteLocation;
+
+
     var MAX_SEGMENTS = 10;
     var CURR_SEGMENTS = 2;
     var TOTAL_WORD_COUNT = 0;
 
+
     $(document).ready(function() {
+        siteLocation = getSetting("siteLocation");
+        parameters = new Parameters(loadingComplete);
+
         var segmentationElements = document.getElementById('segmentationElements');
         var formSelect = document.createElement('select');
         formSelect.setAttribute('name', 'segmentationValue');
@@ -24,6 +36,13 @@
         }
         segmentationElements.appendChild(formSelect);
     })
+
+    function getSetting(text) {
+        return document.getElementById(text).innerHTML;
+    }
+
+    function loadingComplete() {
+    }
 
     function segmentSelectChange(node) {
         var index = node.selectedIndex;

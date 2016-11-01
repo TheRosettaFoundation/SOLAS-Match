@@ -3,6 +3,7 @@
     <span class="hidden">
 
         <!-- Parameters... -->
+        <div id="siteLocation">{$siteLocation}</div>
         <div id="maxfilesize">{$maxFileSize}</div>
     </span>
 
