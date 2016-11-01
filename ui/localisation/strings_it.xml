@@ -80,6 +80,8 @@
 	<string name="common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer">Crea un'attività di revisione per valutare la traduzione di un volontario.</string>
 	<string name="common_thanks_for_providing_your_translation_for_this_task">Grazie di aver svolto quest'attività di traduzione.</string>
 	<string name="common_maximum_file_size_is">La grandezza massima del file è di <strong>%sMB</strong></string>
+  <string name="common_maximum_file_total_size_is">The maximum total MB that can be uploaded for all files is <strong>%sMB</strong></string>
+  <string name="common_maximum_file_total_size_vs_limit_is">You have selected to upload %1$sMB, but the limit is %2$sMB.</string>
 	<string name="common_assign">Assegna</string>
 	<string name="common_it_is_time_to_decide">È il momento di decidere</string>
 	<string name="common_no_just_bring_me_back_to_the_task_page">No, portami di nuovo alla pagina delle attività.</string>

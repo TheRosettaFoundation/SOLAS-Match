@@ -1817,7 +1817,8 @@ class TaskRouteHandler
         //$extraScripts = file_get_contents(
         //    "http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/task-segmentation.js"
         //);
-        $extraScripts  = file_get_contents(__DIR__."/../js/task-segmentation.js");
+        $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extraScripts .= file_get_contents(__DIR__."/../js/task-segmentation.js");
         $extraScripts .= file_get_contents(__DIR__."/../js/TaskView.js");
 
         $app->view()->appendData(array(
@@ -1825,6 +1826,7 @@ class TaskRouteHandler
             "project"           => $project,
             "task"              => $task,
             "taskTypeColours"   => $taskTypeColours,
+            'maxFileSize'       => Lib\TemplateHelper::maxFileSizeBytes(),
             "maxSegmentation"   => $maxSegments,
             "languages"         => $language_list,
             "countries"         => $countries,
