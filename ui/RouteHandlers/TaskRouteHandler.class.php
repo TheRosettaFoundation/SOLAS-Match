@@ -1380,16 +1380,16 @@ class TaskRouteHandler
                 if ($post['track'] == "Ignore") {
                     $response = $userDao->untrackTask($user_id, $task->getId());
                     if ($response) {
-                        $app->flashNow("success", Lib\Localisation::getTranslation('task_view_10'));
+                        $app->flashNow("success", Lib\Localisation::getTranslation('task_view_12'));
                     } else {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_11'));
+                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_13'));
                     }
                 } else {
                     $response = $userDao->trackTask($user_id, $task->getId());
                     if ($response) {
-                        $app->flashNow("success", Lib\Localisation::getTranslation('task_view_12'));
+                        $app->flashNow("success", Lib\Localisation::getTranslation('task_view_10'));
                     } else {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_13'));
+                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_11'));
                     }
                 }
             }
