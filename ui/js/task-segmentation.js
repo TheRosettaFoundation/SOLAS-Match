@@ -97,7 +97,7 @@
             input = document.getElementById("segmentationUpload_" + i);
             if (input && input.files) {
                 if (!input.files[0]) {
-                    window.alert(parameters.getTranslation("task_segmentation_15"));
+                    window.alert(parameters.getTranslation("task_segmentation_15").replace("<strong>", "").replace("</strong>", ""));
                     return false;
                 }
                 else {
