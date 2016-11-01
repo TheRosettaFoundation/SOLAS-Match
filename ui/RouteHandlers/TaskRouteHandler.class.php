@@ -1814,7 +1814,7 @@ class TaskRouteHandler
             }
         }
 
-        $extraScripts  = file_get_contents(__DIR__."/../js/Parameters.js");
+        $extraScripts  = '<script type="text/javascript">' . file_get_contents(__DIR__."/../js/Parameters.js") . '</script>';
         $extraScripts .= file_get_contents(__DIR__."/../js/task-segmentation.js");
         $extraScripts .= file_get_contents(__DIR__."/../js/TaskView.js");
 
