@@ -1380,16 +1380,16 @@ class TaskRouteHandler
                 if ($post['track'] == "Ignore") {
                     $response = $userDao->untrackTask($user_id, $task->getId());
                     if ($response) {
-                        $app->flashNow("success", Lib\Localisation::getTranslation('task_view_10'));
+                        $app->flashNow("success", Lib\Localisation::getTranslation('task_view_12'));
                     } else {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_11'));
+                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_13'));
                     }
                 } else {
                     $response = $userDao->trackTask($user_id, $task->getId());
                     if ($response) {
-                        $app->flashNow("success", Lib\Localisation::getTranslation('task_view_12'));
+                        $app->flashNow("success", Lib\Localisation::getTranslation('task_view_10'));
                     } else {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_13'));
+                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_11'));
                     }
                 }
             }
@@ -1814,10 +1814,8 @@ class TaskRouteHandler
             }
         }
 
-        //$extraScripts = file_get_contents(
-        //    "http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/task-segmentation.js"
-        //);
-        $extraScripts  = file_get_contents(__DIR__."/../js/task-segmentation.js");
+        $extraScripts  = '<script type="text/javascript">' . file_get_contents(__DIR__."/../js/Parameters.js") . '</script>';
+        $extraScripts .= file_get_contents(__DIR__."/../js/task-segmentation.js");
         $extraScripts .= file_get_contents(__DIR__."/../js/TaskView.js");
 
         $app->view()->appendData(array(
@@ -1825,6 +1823,8 @@ class TaskRouteHandler
             "project"           => $project,
             "task"              => $task,
             "taskTypeColours"   => $taskTypeColours,
+            'siteLocation'      => Common\Lib\Settings::get('site.location'),
+            'maxFileSize'       => Lib\TemplateHelper::maxFileSizeBytes(),
             "maxSegmentation"   => $maxSegments,
             "languages"         => $language_list,
             "countries"         => $countries,
