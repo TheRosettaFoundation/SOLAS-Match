@@ -157,7 +157,7 @@ class UserSession
             error_log($_SERVER['REQUEST_URI']);
 
             $app = \Slim\Slim::getInstance();
-//            $app->flash('error', Lib\Localisation::getTranslation('common_error'));
+//            $app->flash('error', 'CSRF Error');
             if ($is_a_post) {
 //                $app->redirect($_SERVER['REQUEST_URI']); // Will be a GET
             }
