@@ -1,5 +1,12 @@
 {include file="header.tpl"}
 
+    <span class="hidden">
+
+        <!-- Parameters... -->
+        <div id="siteLocation">{$siteLocation}</div>
+        <div id="maxfilesize">{$maxFileSize}</div>
+    </span>
+
     {if $task->getTaskStatus() == TaskStatusEnum::COMPLETE}
         <div class="alert alert-info">
             <p>{Localisation::getTranslation('task_segmentation_7')}</p>
@@ -100,7 +107,7 @@
                             <p class="desc">
                                 <strong id="label_0">File #1:</strong> 
                                 {Localisation::getTranslation('task_segmentation_upload_your_segmented_file')}
-                                {sprintf(Localisation::getTranslation('common_maximum_file_size_is'), TemplateHelper::maxFileSizeMB())} 
+                                {sprintf(Localisation::getTranslation('common_maximum_file_total_size_is'), TemplateHelper::maxFileSizeMB())}
                             </p>
                             <input type="file" name="segmentationUpload_0" id="segmentationUpload_0"/>
                             <label>{Localisation::getTranslation('common_word_count')}:</label>
@@ -113,7 +120,7 @@
                             <p class="desc">
                                 <strong>File #2: </strong> 
                                 {Localisation::getTranslation('task_segmentation_upload_your_segmented_file')}
-                                {sprintf(Localisation::getTranslation('common_maximum_file_size_is'), TemplateHelper::maxFileSizeMB())} 
+                                {sprintf(Localisation::getTranslation('common_maximum_file_total_size_is'), TemplateHelper::maxFileSizeMB())}
                             </p>
                             <input type="file" name="segmentationUpload_1" id="segmentationUpload_1"/>
                             <label>{Localisation::getTranslation('common_word_count')}:</label>
@@ -127,7 +134,7 @@
                 <tr>
                     <td align="center" colspan="5">
                         <p style="margin-bottom:20px;"></p> 
-                        <button type="submit" name="createSegmentation" value="1" class="btn btn-success">
+                        <button type="submit" name="createSegmentation" value="1" class="btn btn-success" onclick='return checkFileSizes();'>
                             <i class="icon-upload icon-white"></i> {Localisation::getTranslation('task_segmentation_submit_segmented_tasks')}
                         </button>
                     </td>

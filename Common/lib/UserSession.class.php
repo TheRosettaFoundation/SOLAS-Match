@@ -112,13 +112,59 @@ class UserSession
     /**
      * Check Key returned from Post matches $_SESSION['SESSION_CSRF_KEY'].
      *
-     * @param string $postKey sesskey returned from browser by POST.
+     * @param string $post sesskey returned from browser by GET | array $post POST Parameters
      * @param string $location.
-     * @return void, will error_log() and throw \Exception if test fails.
+     * @return void, will error_log() and redirect if test fails.
      */
-    public static function checkCSRFKey($postKey, $location) {
+    public static function checkCSRFKey($post, $location) {
+        $is_a_post = false;
+
+        if (is_array($post)) {
+            if (!empty($post['sesskey'])) $postKey = $post['sesskey'];
+            else                          $postKey = '9999999999';
+
+            $is_a_post = true;
+        }
+        elseif (is_string($post)) {
+            $postKey = $post;
+        }
+        else {
+            $postKey = '8888888888';
+        }
+
         if (empty($postKey) || $postKey !== $_SESSION['SESSION_CSRF_KEY']) {
-            error_log("CSRF attempt identified!: $location");
+            $expected = $_SESSION['SESSION_CSRF_KEY'];
+            error_log("CSRF attempt identified!: $location, sesskey: $postKey ($expected)");
+            if (is_array($post)) {
+                error_log('POST...');
+                foreach ($post as $key => $item) {
+                    error_log("$key => $item");
+                }
+            }
+
+            if (!empty($_FILES) && is_array($_FILES)) {
+                error_log('FILES...');
+                foreach ($_FILES as $file) {
+                    if (is_array($file)) {
+                        error_log('FILE...');
+                        foreach ($file as $key => $item) {
+                            error_log("$key => $item");
+                        }
+                    }
+                }
+            }
+
+            error_log($_SERVER['REQUEST_URI']);
+
+            $app = \Slim\Slim::getInstance();
+//            $app->flash('error', 'CSRF Error');
+            if ($is_a_post) {
+//                $app->redirect($_SERVER['REQUEST_URI']); // Will be a GET
+            }
+            else {
+//                $app->redirect($app->urlFor('home'));
+            }
+
 //            throw new \Exception("CSRF attempt identified!: $location");
         }
     }

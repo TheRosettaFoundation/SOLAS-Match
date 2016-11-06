@@ -405,7 +405,7 @@ class OrgRouteHandler
         
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'orgDashboard');
+            Common\Lib\UserSession::checkCSRFKey($post, 'orgDashboard');
 
             if (isset($post['track'])) {
                 $project_id = $post['project_id'];
@@ -536,7 +536,7 @@ class OrgRouteHandler
         $org = $orgDao->getOrganisation($org_id);
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'orgRequestQueue');
+            Common\Lib\UserSession::checkCSRFKey($post, 'orgRequestQueue');
             
             if (isset($post['email'])) {
                 if (Lib\Validator::validateEmail($post['email'])) {
@@ -1629,7 +1629,7 @@ class OrgRouteHandler
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'orgPublicProfile');
+            Common\Lib\UserSession::checkCSRFKey($post, 'orgPublicProfile');
                    
             if (isset($post['deleteBadge'])) {
                 $badgeDao->deleteBadge($post['badge_id']);
@@ -1919,7 +1919,7 @@ class OrgRouteHandler
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'orgManageBadge');
+            Common\Lib\UserSession::checkCSRFKey($post, 'orgManageBadge');
             
             if (isset($post['email']) && $post['email'] != "") {
                 if (Lib\Validator::validateEmail($post['email'])) {
@@ -1978,7 +1978,7 @@ class OrgRouteHandler
 
         if (\SolasMatch\UI\isValidPost($app)) {
             $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'orgCreateBadge');
+            Common\Lib\UserSession::checkCSRFKey($post, 'orgCreateBadge');
             
             if ($post['title'] == "" || $post['description'] == "") {
                 $app->flashNow("error", Lib\Localisation::getTranslation('common_all_fields'));
@@ -2084,7 +2084,7 @@ class OrgRouteHandler
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'orgTaskReview');
+            Common\Lib\UserSession::checkCSRFKey($post, 'orgTaskReview');
 
             if (isset($post['submitReview'])) {
                 $review = new Common\Protobufs\Models\TaskReview();

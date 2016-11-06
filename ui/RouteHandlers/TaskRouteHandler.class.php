@@ -599,7 +599,7 @@ class TaskRouteHandler
         $task = $taskDao->getTask($taskId);
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'taskClaim');
+            Common\Lib\UserSession::checkCSRFKey($post, 'taskClaim');
 
             $user_id = Common\Lib\UserSession::getCurrentUserID();
             $userDao->claimTask($user_id, $taskId);
@@ -680,7 +680,7 @@ class TaskRouteHandler
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'task');
+            Common\Lib\UserSession::checkCSRFKey($post, 'task');
 
             $project = $projectDao->getProject($task->getProjectId());
             $org_id=$project->getOrganisationId();
@@ -884,7 +884,7 @@ class TaskRouteHandler
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'desegmentationTask');
+            Common\Lib\UserSession::checkCSRFKey($post, 'desegmentationTask');
 
             $uploadError = false;
             try {
@@ -973,7 +973,7 @@ class TaskRouteHandler
         $project = $projectDao->getProject($task->getProjectId());
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'taskSimpleUpload');
+            Common\Lib\UserSession::checkCSRFKey($post, 'taskSimpleUpload');
 
             try {
                 Lib\TemplateHelper::validateFileHasBeenSuccessfullyUploaded($fieldName);
@@ -1146,7 +1146,7 @@ class TaskRouteHandler
 
         if (\SolasMatch\UI\isValidPost($app)) {
             $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'taskAlter');
+            Common\Lib\UserSession::checkCSRFKey($post, 'taskAlter');
 
             if ($task->getTaskStatus() < Common\Enums\TaskStatusEnum::IN_PROGRESS) {
                 if (isset($post['title']) && $post['title'] != "") {
@@ -1352,7 +1352,7 @@ class TaskRouteHandler
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'taskView');
+            Common\Lib\UserSession::checkCSRFKey($post, 'taskView');
 
             if (isset($post['published'])) {
                 if ($post['published']) {
@@ -1380,16 +1380,16 @@ class TaskRouteHandler
                 if ($post['track'] == "Ignore") {
                     $response = $userDao->untrackTask($user_id, $task->getId());
                     if ($response) {
-                        $app->flashNow("success", Lib\Localisation::getTranslation('task_view_10'));
+                        $app->flashNow("success", Lib\Localisation::getTranslation('task_view_12'));
                     } else {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_11'));
+                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_13'));
                     }
                 } else {
                     $response = $userDao->trackTask($user_id, $task->getId());
                     if ($response) {
-                        $app->flashNow("success", Lib\Localisation::getTranslation('task_view_12'));
+                        $app->flashNow("success", Lib\Localisation::getTranslation('task_view_10'));
                     } else {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_13'));
+                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_11'));
                     }
                 }
             }
@@ -1495,7 +1495,7 @@ class TaskRouteHandler
         $task->setProjectId($project_id);
 
         if ($post = $app->request()->post()) {
-            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'taskCreate');
+            Common\Lib\UserSession::checkCSRFKey($post, 'taskCreate');
 
             if (isset($post['title'])) {
                 $task->setTitle($post['title']);
@@ -1663,7 +1663,7 @@ class TaskRouteHandler
 
         if ($app->request()->isPost() && $task->getTaskStatus() != Common\Enums\TaskStatusEnum::COMPLETE) {
             $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'taskSegmentation');
+            Common\Lib\UserSession::checkCSRFKey($post, 'taskSegmentation');
 
             $fileInfo = $projectDao->getProjectFileInfo($project->getId());
             $canonicalExtension = explode(".", $fileInfo->getFilename());
@@ -1814,10 +1814,8 @@ class TaskRouteHandler
             }
         }
 
-        //$extraScripts = file_get_contents(
-        //    "http://".$_SERVER["HTTP_HOST"]."{$app->urlFor("home")}ui/js/task-segmentation.js"
-        //);
-        $extraScripts  = file_get_contents(__DIR__."/../js/task-segmentation.js");
+        $extraScripts  = '<script type="text/javascript">' . file_get_contents(__DIR__."/../js/Parameters.js") . '</script>';
+        $extraScripts .= file_get_contents(__DIR__."/../js/task-segmentation.js");
         $extraScripts .= file_get_contents(__DIR__."/../js/TaskView.js");
 
         $app->view()->appendData(array(
@@ -1825,6 +1823,8 @@ class TaskRouteHandler
             "project"           => $project,
             "task"              => $task,
             "taskTypeColours"   => $taskTypeColours,
+            'siteLocation'      => Common\Lib\Settings::get('site.location'),
+            'maxFileSize'       => Lib\TemplateHelper::maxFileSizeBytes(),
             "maxSegmentation"   => $maxSegments,
             "languages"         => $language_list,
             "countries"         => $countries,
@@ -1858,7 +1858,7 @@ class TaskRouteHandler
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'taskOrgFeedback');
+            Common\Lib\UserSession::checkCSRFKey($post, 'taskOrgFeedback');
 
             if (isset($post['feedback'])) {
                 if ($post['feedback'] != "") {
@@ -1959,7 +1959,7 @@ class TaskRouteHandler
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'taskUserFeedback');
+            Common\Lib\UserSession::checkCSRFKey($post, 'taskUserFeedback');
 
             if (isset($post['feedback'])) {
                 if ($post['feedback'] != '') {
@@ -2094,7 +2094,7 @@ class TaskRouteHandler
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post['sesskey'], 'taskReview');
+            Common\Lib\UserSession::checkCSRFKey($post, 'taskReview');
 
             if (isset($post['submitReview'])) {
                 $i = 0;
