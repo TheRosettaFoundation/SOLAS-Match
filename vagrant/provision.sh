@@ -70,7 +70,7 @@ cd /var/www/html/match/ui; sudo -u vagrant -H sh -c "composer install"
 
 # Install Backend
 
-apt-get install rabbitmq-server
+apt-get -y install rabbitmq-server
 apt-get -y install cmake qt5-default qt5-qmake libqt5sql5-mysql libctemplate-dev
 
 cd /tmp
