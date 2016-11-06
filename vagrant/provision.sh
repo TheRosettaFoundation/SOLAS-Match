@@ -59,6 +59,10 @@ mysql --default-character-set=utf8 -u root -proot SolasMatch < /opt/match/api/ve
 mysql --default-character-set=utf8 -u root -proot SolasMatch < /opt/match/db/schema.sql
 mysql --default-character-set=utf8 -u root -proot SolasMatch < /opt/match/db/country_codes.sql
 
+# Add OAuth client
+mysql -uroot -proot SolasMatch -e 'insert into oauth_clients (id, secret) values ("yub78q7gabcku73FK47A4AIFK7GAK7UGFAK4", "sfvg7gir74bi7ybawQFNJUMSDCPOPi7u238OH88r");'
+mysql -uroot -proot SolasMatch -e 'insert into oauth_client_endpoints (client_id) VALUES ("yub78q7gabcku73FK47A4AIFK7GAK7UGFAK4");'
+
 if [ ! -f '/var/www/html/match/Common/conf/conf.ini' ]; then
     ln -s /vagrant/assets/conf.ini /var/www/html/match/Common/conf/conf.ini
 fi
@@ -96,7 +100,7 @@ git checkout qt521
 mkdir /etc/SOLAS-Match
 ln -s /opt/SOLAS-Match-Backend/templates/ /etc/SOLAS-Match/templates
 ln -s /opt/SOLAS-Match-Backend/schedule.xml /etc/SOLAS-Match/schedule.xml
-ln -s /vagrant/assets/conf.ini
+ln -s /vagrant/assets/conf_back.ini /opt/SOLAS-Match-Backend/conf.ini
 qmake
 make
 cd PluginHandler
