@@ -972,6 +972,7 @@ CREATE TABLE IF NOT EXISTS `TaskClaims` (
   `claimed-time` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `Tasks` (`task_id`,`user_id`),
+  UNIQUE KEY `FK_task_claim_task` (`task_id`),
   KEY `FK_task_claim_user` (`user_id`),
   CONSTRAINT `FK_task_claim_task` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_task_claim_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
