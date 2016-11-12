@@ -2,6 +2,8 @@
 
 namespace SolasMatch\Common\Lib;
 
+use \SolasMatch\UI\Lib as Lib;
+
 class UserSession
 {
     public static function setSession($user_id)
@@ -157,12 +159,12 @@ class UserSession
             error_log($_SERVER['REQUEST_URI']);
 
             $app = \Slim\Slim::getInstance();
-//            $app->flash('error', 'CSRF Error');
+            $app->flash('error', Lib\Localisation::getTranslation('common_error_partial_upload')); // This is most likely reason: FILE UPLOAD error => 3, The uploaded file was only partially uploaded
             if ($is_a_post) {
-//                $app->redirect($_SERVER['REQUEST_URI']); // Will be a GET
+                $app->redirect($_SERVER['REQUEST_URI']); // Will be a GET
             }
             else {
-//                $app->redirect($app->urlFor('home'));
+                $app->redirect($app->urlFor('home'));
             }
 
 //            throw new \Exception("CSRF attempt identified!: $location");
