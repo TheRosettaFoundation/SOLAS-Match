@@ -57,6 +57,7 @@ mysql -uroot -proot -e 'create database SolasMatch'
 # Import database
 mysql --default-character-set=utf8 -u root -proot SolasMatch < /opt/match/api/vendor/league/oauth2-server/sql/mysql.sql
 mysql --default-character-set=utf8 -u root -proot SolasMatch < /opt/match/db/schema.sql
+mysql --default-character-set=utf8 -u root -proot SolasMatch < /opt/match/db/languages.sql
 mysql --default-character-set=utf8 -u root -proot SolasMatch < /opt/match/db/country_codes.sql
 
 # Add OAuth client
