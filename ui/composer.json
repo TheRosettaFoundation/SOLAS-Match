@@ -2,39 +2,19 @@
     "name": "rosetta-foundation/solas-match",
     "description": "A translation platform for NGOs",
 
-    "repositories": [
-    {
-        "type": "package",
-        "package": {
-            "name": "drslump/protobuf-php",
-            "version": "0.9.4",
-            "type": "git",
-            "source": {
-                "url": "git://github.com/drslump/Protobuf-PHP.git",
-                "type": "git",
-                "reference": "master"
-            },
-            "autoload": {
-                "files": ["library/DrSlump/Protobuf.php"]
-            }
-        }
-    }
-    ],
-
-   "require-dev": {
-            "phpunit/phpunit": "3.7.*"
-    },
 
     "require": {
-        "fp/lightopenid" : "dev-master",
+        "lightopenid/lightopenid" : "dev-master",
         "slim/slim": "2.4.0",
-        "slim/views": "0.1.*",
+        "slim/views": "0.1.1",
         "smarty/smarty": "3.1.*",
         "drslump/protobuf-php": "*"
     },
+   "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
     "autoload": {
-        "classmap": ["vendor/slim/views/Slim/Views/Smarty.php","vendor/slim/slim/Slim/View.php"]
-        
+        "classmap": ["vendor/slim/views/Slim/Views/Smarty.php", "vendor/slim/slim/Slim/View.php"]
     },
 
     "authors": [
