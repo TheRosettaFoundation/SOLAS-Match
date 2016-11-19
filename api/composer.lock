@@ -10,7 +10,7 @@
             "version": "0.9.4",
             "source": {
                 "type": "git",
-                "url": "git://github.com/drslump/Protobuf-PHP.git",
+                "url": "https://github.com/drslump/Protobuf-PHP.git",
                 "reference": "master"
             },
             "type": "git",

@@ -199,8 +199,8 @@ class IO
         $headerArray['Content-Disposition'] = "attachment; filename=\"".trim($path_parts["basename"],'"')."\"";
         $headerArray['Content-length'] = $fsize;
         $headerArray['X-Frame-Options'] = "ALLOWALL";
-        $headerArray['Pragma'] = "public";
-        $headerArray['Cache-control'] = "private"; //See http://goo.gl/3fdIVm
+        $headerArray['Pragma'] = "no-cache";
+        $headerArray['Cache-control'] = "no-cache, must-revalidate, no-transform"; // e.g. https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching (previous comment See http://goo.gl/3fdIVm)
         $headerArray['X-Sendfile'] = realpath($absoluteFilePath);
 
         return $headerArray;
