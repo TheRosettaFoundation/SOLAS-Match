@@ -8,8 +8,11 @@ use \SolasMatch\API\Lib as Lib;
 use \SolasMatch\API as API;
 
 require_once __DIR__."/../DataAccessObjects/ProjectDao.class.php";
+require_once __DIR__."/../DataAccessObjects/UserDao.class.php";
 require_once __DIR__."/../../Common/protobufs/models/Project.php";
+require_once __DIR__."/../../Common/lib/Settings.class.php";
 require_once __DIR__."/../lib/APIWorkflowBuilder.class.php";
+
 
 class Projects
 {
@@ -318,6 +321,30 @@ class Projects
         API\Dispatcher::sendResponse(null, DAO\ProjectDao::getProjects(), null, $format);
     }
 
+    private static function addTrackProjectForUsers($userIds, $projectId)
+    {
+        foreach($userIds as $userId) {
+            try {
+                DAO\UserDao::trackProject($projectId, $userId);
+                error_log(sprintf('User %s tracks project %s', $userId, $projectId));
+            } catch (Exception $e) {
+                error_log('Error auto-tracking project ' . $projectId);
+            }
+        }
+    }
+
+    private static function getAutoFollowAdminIds()
+    {
+        $result = array();
+        try {
+            $adminIdsString = Common\Lib\Settings::get('site.autofollow_admin_ids');
+            $result = array_map('intval', explode(',', $adminIdsString));
+        } catch(Exception $e) {
+            error_log($e->getMessage());
+        }
+        return $result;
+    }
+
     public static function createProject($format = '.json')
     {
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
@@ -325,6 +352,9 @@ class Projects
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\Project');
         $project = DAO\ProjectDao::save($data);
         if (!is_null($project) && $project->getId() > 0) {
+            // Auto track the project for admins
+            $admins = self::getAutoFollowAdminIds();
+            self::addTrackProjectForUsers($admins, $project->getId());
             API\Dispatcher::sendResponse(null, $project, null, $format);
         } else {
             API\Dispatcher::sendResponse(
