@@ -337,8 +337,10 @@ class Projects
     {
         $result = array();
         try {
-            $adminIdsString = Common\Lib\Settings::get('site.autofollow_admin_ids');
-            $result = array_map('intval', explode(',', $adminIdsString));
+            $adminIdsString = trim(Common\Lib\Settings::get('site.autofollow_admin_ids'));
+            if ($adminIdsString) {
+                $result = array_map('intval', explode(',', $adminIdsString));
+            }
         } catch(Exception $e) {
             error_log($e->getMessage());
         }
