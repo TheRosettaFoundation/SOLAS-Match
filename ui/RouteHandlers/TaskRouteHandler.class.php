@@ -1213,7 +1213,16 @@ class TaskRouteHandler
                         }
                     }
                 }
-                $taskPreReqIds[$task->getId()] = $thisTaskPreReqs;
+
+                if ($task->getTaskStatus() > Common\Enums\TaskStatusEnum::PENDING_CLAIM) {
+                    // The Template has checkboxes disabled, so they will never be sucessfully sent in POST
+                    // So no not overwrite existing $taskPreReqIds for current Task
+                    error_log('Existing Task taskPreReqIds: ' . implode (', ', $oldPreReqs));
+                }
+                else {
+                    $taskPreReqIds[$task->getId()] = $thisTaskPreReqs;
+                }
+
                 $graphBuilder = new Lib\UIWorkflowBuilder();
                 $graph = $graphBuilder->parseAndBuild($taskPreReqIds);
 
