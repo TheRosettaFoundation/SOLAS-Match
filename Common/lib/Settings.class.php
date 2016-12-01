@@ -6,7 +6,9 @@ class Settings
 {
     public static function get($var)
     {
-        $settings = self::load(dirname(__FILE__).'/../conf/conf.ini');
+        $filePath = getenv('SOLAS_CONFIG');
+        $filePath = $filePath ? $filePath : dirname(__FILE__).'/../conf/conf.ini';
+        $settings = self::load($filePath);
         $var = explode('.', $var);
         if (isset($settings[$var[0]][$var[1]])) {
             return $settings[$var[0]][$var[1]];
