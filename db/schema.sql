@@ -2480,6 +2480,7 @@ BEGIN
             comment,  `task-type_id` as taskType, `task-status_id` as taskStatus, published, deadline 
         FROM Tasks t 
         where deadline < NOW()
+        AND   deadline > DATE_SUB(DATE_SUB(NOW(), INTERVAL 1 DAY), INTERVAL 30 MINUTE)
         AND `task-status_id` != 4
         AND published = 1;
 END//
