@@ -166,7 +166,7 @@ class TaskDao extends BaseDao
             $task
         );
         if (!empty($response)) {
-            if (get_class($response) === 'Task') {
+            if (get_class($response) === 'SolasMatch\Common\Protobufs\Models\Task') {
                 error_log("TaskDAO::createTask id: " . $response->getId());
                 if ($response->getPublished()) {
                     error_log("TaskDAO::createTask published: True");
