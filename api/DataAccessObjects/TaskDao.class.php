@@ -300,7 +300,16 @@ class TaskDao
         $result = Lib\PDOWrapper::call("taskInsertAndUpdate", $args);
         if ($result) {
             $task = Common\Lib\ModelFactory::buildModel("Task", $result[0]);
+            if (!empty($task)) {
+                error_log("TaskDAO::insert id: " . $task->getId());
+                if ($task->getPublished()) {
+                    error_log("TaskDAO::insert published: True");
+                } else {
+                    error_log("TaskDAO::insert published: False");
+                }
+            }
         } else {
+            error_log("TaskDAO::insert Failed");
             $task = null;
         }
     }
