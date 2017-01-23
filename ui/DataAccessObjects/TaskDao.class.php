@@ -165,6 +165,20 @@ class TaskDao extends BaseDao
             Common\Enums\HttpMethodEnum::POST,
             $task
         );
+        if (!empty($response)) {
+            if (get_class($response) === 'SolasMatch\Common\Protobufs\Models\Task') {
+                error_log("TaskDAO::createTask id: " . $response->getId());
+                if ($response->getPublished()) {
+                    error_log("TaskDAO::createTask published: True");
+                } else {
+                    error_log("TaskDAO::createTask published: False");
+                }
+            } else {
+                error_log("get_class(): " . get_class($response));
+            }
+        } else {
+            error_log("TaskDAO::createTask Failed");
+        }
         return $response;
     }
 
