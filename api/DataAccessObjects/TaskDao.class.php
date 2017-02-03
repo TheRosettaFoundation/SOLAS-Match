@@ -281,11 +281,13 @@ class TaskDao
     // Insert a Task into the database (pass by reference so no return)
     private static function insert(&$task)
     {
+      $number = '';
+      for ($i = 0; $i < 10; $i++) {
         $sourceLocale = $task->getSourceLocale();
         $targetLocale = $task->getTargetLocale();
         $args = "null ,".
             Lib\PDOWrapper::cleanseNull($task->getProjectId()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($task->getTitle()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($task->getTitle() . $number) . ",".
             Lib\PDOWrapper::cleanseNull($task->getWordCount()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($targetLocale->getLanguageCode()).",".
@@ -302,16 +304,15 @@ class TaskDao
             $task = Common\Lib\ModelFactory::buildModel("Task", $result[0]);
             if (!empty($task)) {
                 error_log("TaskDAO::insert id: " . $task->getId());
-                if ($task->getPublished()) {
-                    error_log("TaskDAO::insert published: True");
-                } else {
-                    error_log("TaskDAO::insert published: False");
-                }
             }
+            return;
         } else {
             error_log("TaskDAO::insert Failed");
-            $task = null;
         }
+        // Make sure UNIQUE KEY is unique
+        $number = $number . substr('0123456789', mt_rand() % 10, 1);
+      }
+      $task = null;
     }
     
     public static function getAlsoViewedTasks(
