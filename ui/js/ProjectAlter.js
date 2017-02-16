@@ -254,23 +254,23 @@ function validateLocalValues()
     }
   }
 
-  if (wordCountInput != null && wordCountInput != '') {
-    // If word count is set, ensure it is a valid natural number
-    var newWordCount = parseInt(wordCountInput);
-    if (isNaN(newWordCount)) {
-      wordCountError = parameters.getTranslation("project_create_27");
-      success = false;
-    } else {
-      // Only call API for word count iff parse error didn't occur
-      if (newWordCount != 0 && userIsAdmin) {
-        DAOupdateProjectWordCount(project_id, newWordCount, successWordCount, inconsistentWordCount, errorUpdatingWordCount);
-      }
-    }
-  } else {
-    // Word count is not set
-    wordCountError = parameters.getTranslation("project_create_27");
-    success = false;
-  }
+  //if (wordCountInput != null && wordCountInput != '') {
+  //  // If word count is set, ensure it is a valid natural number
+  //  var newWordCount = parseInt(wordCountInput);
+  //  if (isNaN(newWordCount)) {
+  //    wordCountError = parameters.getTranslation("project_create_27");
+  //    success = false;
+  //  } else {
+  //    // Only call API for word count iff parse error didn't occur
+  //    if (newWordCount != 0 && userIsAdmin) {
+  //      DAOupdateProjectWordCount(project_id, newWordCount, successWordCount, inconsistentWordCount, errorUpdatingWordCount);
+  //    }
+  //  }
+  //} else {
+  //  // Word count is not set
+  //  wordCountError = parameters.getTranslation("project_create_27");
+  //  success = false;
+  //}
 
   if (!validateTagList(tagList)) {
     // Invalid tags detected, set error message
@@ -323,8 +323,31 @@ function validateLocalValues()
   return success;
 }
 
+/**
+ * Update Project & Task Word Counts
+ */
+function updatewordCount()
+{
+  wordCountInput = document.getElementById("wordCountInput").value;
+
+  if (wordCountInput == null || wordCountInput == '' || !userIsAdmin) {
+    window.alert(parameters.getTranslation("project_create_27"));
+    return;
+  }
+
+  // If word count is set, ensure it is a valid natural number
+  var newWordCount = parseInt(wordCountInput);
+  if (isNaN(newWordCount) || newWordCount == 0) {
+    window.alert(parameters.getTranslation("project_create_27"));
+    return;
+  }
+
+  DAOupdateProjectWordCount(project_id, newWordCount, successWordCount, inconsistentWordCount, errorUpdatingWordCount);
+}
+
 function successWordCount()
 {
+  window.alert(parameters.getTranslation("common_success"));
 }
 
 function inconsistentWordCount()
