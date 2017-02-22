@@ -788,7 +788,7 @@ EOD;
         try {
             $userPersonalInfo = $userDao->getPersonalInfo($user_id);
         } catch (Common\Exceptions\SolasMatchException $e) {
-            error_log("Error getting user personal info: $e");
+            // error_log("Error getting user personal info: $e");
         }
 
         $languages = $langDao->getLanguages();
@@ -1048,7 +1048,7 @@ EOD;
         try {
             $userPersonalInfo = $userDao->getPersonalInfo($user_id);
         } catch (Common\Exceptions\SolasMatchException $e) {
-            error_log("Error getting user personal info: $e");
+            // error_log("Error getting user personal info: $e");
         }
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
