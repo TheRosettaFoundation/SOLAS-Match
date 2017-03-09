@@ -239,7 +239,7 @@
 	<string name="admin_site_admins_list_display_name">Display Name</string>
 	<string name="admin_site_admins_list_revoke_administrator_rights">Revoke Administrator Rights</string>
 	<string name="admin_site_admins_list_revoke">Revoke</string>
-	<string name="admin_site_admins_list_confirm_revoke">Are you sure you want to revoke this user's administrator privileges?</string>
+  <string name="admin_site_admins_list_confirm_revoke">Are you sure you want to revoke this user&#8242;s administrator privileges?</string>
 
 	<string name="site_admin_dashboard_administration_dashboard">Administration Dashboard</string>
 	<string name="site_admin_dashboard_the_site_administrators_dashboard">The site administrator's dashboard.</string>
