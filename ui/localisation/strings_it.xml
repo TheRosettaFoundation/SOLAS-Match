@@ -351,12 +351,12 @@
 	<string name="org_public_profile_alter_permissions">Modifica i permessi</string>
 	<string name="org_public_profile_administrator">Amministratore</string>
 	<string name="org_public_profile_member">Membro</string>
-	<string name="org_public_profile_confirm_revoke_membership">Sei sicuro di voler revocare l'accesso a questo utente?</string>
+  <string name="org_public_profile_confirm_revoke_membership">Sei sicuro di voler revocare l&#8242;accesso a questo utente?</string>
 	<string name="org_public_profile_revoke_membership">Revoca l'accesso</string>
 	<string name="org_public_profile_confirm_revoke_admin">Sei sicuro di volere revocare i diritti di amministratore a questo utente?</string>
 	<string name="org_public_profile_revoke_administrator">Revoca l'amministratore</string>
 	<string name="org_public_profile_no_members">Quest'organizzazione ha zero membri.</string>
-    <string name="org_public_profile_confirm_make_admin">Sei sicuro di voler far diventare quest'utente l'amministratore di questa organizzazione?</string>        
+  <string name="org_public_profile_confirm_make_admin">Sei sicuro di voler far diventare quest&#8242;utente l&#8242;amministratore di questa organizzazione?</string>
     <string name="org_public_profile_membership_requested">Accesso richiesto con successo.</string>
     <string name="org_public_profile_membership_already_requested">Hai già inviato una richiesta di accesso a questa organizzazione.</string>        
     <string name="org_public_profile_13">Sei già membro di questa organizzazione.</string>         
@@ -553,9 +553,9 @@
 	<string name="project_view_archive_delete">Archivia/Elimina</string>
 	<string name="project_view_edit_task">Modifica l'attività</string>
     <string name="project_view_failed_build_graph"><strong>Impossibile costruire il grafico</strong>, non ci sono attività in elenco per questo progetto </string>
-	<string name="project_view_1">Cancellando un'attività, non rimane alcuna traccia della stessa nel sistema. Un'attività dovrebbe essere cancellata solo in presenza di un errore. Sei sicuro di voler eliminare quest'attività?</string>
+  <string name="project_view_1">Cancellando un&#8242;attività, non rimane alcuna traccia della stessa nel sistema. Un&#8242;attività dovrebbe essere cancellata solo in presenza di un errore. Sei sicuro di voler eliminare quest&#8242;attività?</string>
 	<string name="project_view_2">Non si può archiviare un'attività in corso.</string>
-	<string name="project_view_3">Archiviando un'attività, questa verrà rimossa dal sistema e conservata nel nostro database. Una volta archiviata, l'attività non potrà più essere modificata. Sei sicuro di voler archiviare quest'attività?</string>
+  <string name="project_view_3">Archiviando un&#8242;attività, questa verrà rimossa dal sistema e conservata nel nostro database. Una volta archiviata, l&#8242;attività non potrà più essere modificata. Sei sicuro di voler archiviare quest&#8242;attività?</string>
 	<string name="project_view_4">Non sono state caricate attività per la tua organizzazione.</string>
 	<string name="project_view_5">Se hai altri materiali da tradurre, crea una nuova attività.</string>
 	<string name="project_view_6">Accedere per poter attivare le notifiche per questo progetto.</string>                
@@ -949,7 +949,7 @@
     <string name="task_view_assign_placeholder">ID Utente o indirizzo e-mail</string>
     <string name="task_view_assign_label">Assegna l'attivit` all'utente:</string>
     <string name="task_view_assign_button">Assegna l'attivit`</string>
-    <string name="task_view_assign_confirmation">L'ID Utente o l'indirizzo e-mail sono corretti?</string>
+  <string name="task_view_assign_confirmation">L&#8242;ID Utente o l&#8242;indirizzo e-mail sono corretti?</string>
 
 	<string name="email_verification_email_verification">Verifica dell'email</string>
 	<string name="email_verification_0">Puoi completare la registrazione qui</string>
@@ -1011,7 +1011,7 @@
     <string name="user_private_profile_language_preference_updated">Le tue preferenze linguistiche sono state aggiornate. Il sito verrà caricato nella lingua da te selezionata al prossimo Login.</string>
 
 	<string name="user_public_profile_0">Informazioni generali sull'account.</string>
-	<string name="user_public_profile_1">Creando un'organizzazione stai implicitamente dichiarando che le sue attività non sono in conflitto con i termini e condizioni d'uso del presente sito.</string>
+  <string name="user_public_profile_1">Creando un&#8242;organizzazione stai implicitamente dichiarando che le sue attività non sono in conflitto con i termini e condizioni d&#8242;uso del presente sito.</string>
 	<string name="user_public_profile_edit_profile_details">Modifica i dettagli del profilo</string>
 	<string name="user_public_profile_2">Informazioni generali sull'account.</string>
 	<string name="user_public_profile_3">Seleziona la tua lingua madre modificando il tuo profilo.</string>
@@ -1028,7 +1028,7 @@
 	<string name="user_public_profile_9">Al momento non hai sottoscritto nessun tag sul sistema.</string>
 	<string name="user_public_profile_10">Lista delle organizzazioni a cui appartieni.</string>
 	<string name="user_public_profile_leave_organisation">Lascia organizzazione</string>
-	<string name="user_public_profile_11">Sei sicuro di voler abbandonare quest'organizzazione?</string>
+  <string name="user_public_profile_11">Sei sicuro di voler abbandonare quest&#8242;organizzazione?</string>
 	<string name="user_public_profile_14">Lista di attività a cui hai lavorato in passato.</string>
 	<string name="user_public_profile_list_all_archived_tasks">Lista di tutte le attività archiviate</string>
     <string name="user_public_profile_reference_email">Email per le referenze</string>
