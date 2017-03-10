@@ -460,10 +460,10 @@ class OrgRouteHandler
                     foreach ($my_org_projects as $project) {
                         $temp = array();
                         $temp['project'] = $project;
-                        $temp['userSubscribedToProject'] = $userDao->isSubscribedToProject(
-                            Common\Lib\UserSession::getCurrentUserID(),
-                            $project->getId()
-                        );
+                        //$temp['userSubscribedToProject'] = $userDao->isSubscribedToProject(
+                        //    Common\Lib\UserSession::getCurrentUserID(),
+                        //    $project->getId()
+                        //);
                         $taskData[]=$temp;
                     }
                 } else {
