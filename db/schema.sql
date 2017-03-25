@@ -2334,13 +2334,13 @@ BEGIN
             comment, `task-type_id` as taskType, `task-status_id` as taskStatus, published, t.deadline, t.`created-time` as createdTime
         FROM Tasks t 
         JOIN      Projects p ON t.project_id=p.id
-        LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+        LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
         WHERE NOT exists (SELECT 1 
                             FROM TaskClaims 
                             WHERE TaskClaims.task_id = t.id) 
         AND t.published = 1 
         AND t.`task-status_id` = 2 
-        AND b.id IS NULL
+        AND r.restricted_task_id IS NULL
         ORDER BY `created-time` DESC 
         LIMIT offset, lim;
 END//
@@ -2354,13 +2354,13 @@ BEGIN
     SELECT count(*) as result
         FROM Tasks t 
         JOIN      Projects p ON t.project_id=p.id
-        LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+        LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
         WHERE NOT exists (SELECT 1 
                             FROM TaskClaims 
                             WHERE TaskClaims.task_id = t.id) 
         AND t.published = 1 
         AND t.`task-status_id` = 2
-        AND b.id IS NULL;
+        AND r.restricted_task_id IS NULL;
 END//
 DELIMITER ;
 
@@ -3422,6 +3422,7 @@ BEGIN
         Tasks t
     JOIN      Projects p ON t.project_id=p.id
     LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+    LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
     WHERE
         u.id=uID AND
         t.id NOT IN (SELECT t.task_id FROM TaskClaims t) AND
@@ -3447,6 +3448,7 @@ BEGIN
             )
         ) AND
         (
+            r.restricted_task_id IS NULL OR
             b.id IS NULL OR
             b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
         )
@@ -3478,6 +3480,7 @@ BEGIN
         FROM Tasks t
         JOIN      Projects p ON t.project_id=p.id
         LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+        LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
         WHERE t.id NOT IN ( SELECT t.task_id FROM TaskClaims t)
         AND t.published = 1 
         AND t.`task-status_id` = 2 
@@ -3496,6 +3499,7 @@ BEGIN
                         (SELECT language_id FROM UserSecondaryLanguages WHERE user_id = uID))))
         AND
         (
+            r.restricted_task_id IS NULL OR
             b.id IS NULL OR
             b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
         )
@@ -3665,8 +3669,8 @@ BEGIN
             t.`language_id-target`=current_task_langTarget AND
             t.published=1
         JOIN      Projects p ON t.project_id=p.id
-        LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
-        WHERE b.id IS NULL
+        LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
+        WHERE r.restricted_task_id IS NULL
         GROUP BY task_id
         ORDER BY task_count DESC
         ) AS t1
