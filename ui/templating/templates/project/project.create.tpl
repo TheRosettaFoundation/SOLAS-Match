@@ -164,6 +164,15 @@
                         <input type="checkbox" name="trackProject" id="trackProject" value="1" checked />
                     </div>
                 </div>
+                {if $showRestrictTask}
+                <div class="projFormInput">
+                    <div style="margin-bottom:25px;">
+                        <h2>{Localisation::getTranslation('common_track_project')}:</h2>
+                        <p class="desc">{Localisation::getTranslation('project_create_12')}</p>
+                        <input type="checkbox" name="restrictTask" id="restrictTask" value="1" checked />
+                    </div>
+                </div>
+                {/if}
             </div>
         </div>
         <div id ="projFormBottom">
