@@ -1380,6 +1380,12 @@ CREATE TABLE IF NOT EXISTS SubscriptionsRecorded (
   KEY (organisation_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `RestrictedTasks` (
+  `restricted_task_id` BIGINT(20) UNSIGNED NOT NULL,
+  UNIQUE KEY `FK_restricted_task_id` (`restricted_task_id`),
+  CONSTRAINT `FK_restricted_task_id` FOREIGN KEY (`restricted_task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -5999,6 +6005,30 @@ BEGIN
     SELECT COUNT(*) INTO @totalArchivedProjects FROM ArchivedProjects WHERE `organisation_id`=org_id AND `created`>@subscription_start_date;
     SELECT COUNT(*) INTO @totalProjects         FROM Projects         WHERE `organisation_id`=org_id AND `created`>@subscription_start_date;
     SELECT @totalArchivedProjects+@totalProjects AS result;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `organisationHasQualifiedBadge`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `organisationHasQualifiedBadge`(IN `ownerID` INT)
+BEGIN
+    SELECT b.id FROM Badges b WHERE b.owner_id=ownerID AND b.title='Qualified';
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `setRestrictedTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `setRestrictedTask`(IN `taskID` INT)
+BEGIN
+    REPLACE INTO RestrictedTasks (`restricted_task_id`) VALUES (taskID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `removeRestrictedTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeRestrictedTask`(IN `taskID` INT)
+BEGIN
+    DELETE FROM RestrictedTasks WHERE restricted_task_id=taskID;
 END//
 DELIMITER ;
 
