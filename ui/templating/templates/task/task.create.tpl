@@ -130,8 +130,8 @@
 
                             {if $showRestrictTask}
                             <p>
-                                <h2>{Localisation::getTranslation('common_publish_task')}</h2>
-                                <p class="desc">{Localisation::getTranslation('task_create_4')}</p>
+                                <h2>{Localisation::getTranslation('restrict_task')}</h2>
+                                <p class="desc">{Localisation::getTranslation('restrict_task_long')}</p>
                                 <input type="checkbox" name="restrictTask" checked="true" />
                             </p>
                            {/if}

@@ -57,8 +57,8 @@
                     </div>
                     {if $showRestrictTask}
                     <div style="margin-bottom:60px;">
-                        <label for="restrictTask" style="font-size: large"><strong>{Localisation::getTranslation('common_publish_task')}</strong></label>
-                        <p class="desc">{Localisation::getTranslation('common_if_checked_tasks_will_appear_in_the_tasks_stream')}</p>
+                        <label for="restrictTask" style="font-size: large"><strong>{Localisation::getTranslation('restrict_task')}</strong></label>
+                        <p class="desc">{Localisation::getTranslation('restrict_task_long')}</p>
                         <input type="checkbox" name="restrictTask" value="1" {$restrictTaskStatus} />
                     </div>
                     {/if}
