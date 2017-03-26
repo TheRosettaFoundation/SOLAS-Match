@@ -350,4 +350,24 @@ class TaskDao extends BaseDao
                 break;
         }
     }
+
+    public function organisationHasQualifiedBadge($org_id)
+    {
+        $ret = 0;
+        $result = Lib\PDOWrapper::call('organisationHasQualifiedBadge', Lib\PDOWrapper::cleanse($org_id));
+        if (!empty($result)) {
+            $ret = 1;
+        }
+        return $ret;
+    }
+
+    public function setRestrictedTask($task_id)
+    {
+        Lib\PDOWrapper::call('setRestrictedTask', Lib\PDOWrapper::cleanse($task_id));
+    }
+
+    public function removeRestrictedTask($task_id)
+    {
+        Lib\PDOWrapper::call('removeRestrictedTask', Lib\PDOWrapper::cleanse($task_id));
+    }
 }
