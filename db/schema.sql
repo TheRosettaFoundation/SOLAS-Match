@@ -6032,6 +6032,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getRestrictedTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getRestrictedTask`(IN `taskID` INT)
+BEGIN
+    SELECT restricted_task_id FROM RestrictedTasks WHERE restricted_task_id=taskID;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 

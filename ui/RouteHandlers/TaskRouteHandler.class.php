@@ -1159,6 +1159,12 @@ class TaskRouteHandler
                     $task->setPublished(0);
                 }
 
+                if (!empty($post['restrictTask'])) {
+                    $taskDao->setRestrictedTask($task_id);
+                } else {
+                    $taskDao->removeRestrictedTask($task_id);
+                }
+
                 $targetLocale = new Common\Protobufs\Models\Locale();
 
                 if (isset($post['target']) && $post['target'] != "") {
@@ -1309,6 +1315,11 @@ class TaskRouteHandler
             $publishStatus="checked";
         }
 
+        $restrictTaskStatus = '';
+        if ($taskDao->getRestrictedTask($task_id)) {
+            $restrictTaskStatus = 'checked';
+        }
+
         $app->view()->appendData(array(
             'sesskey'             => $sesskey,
             "project"             => $project,
@@ -1322,6 +1333,8 @@ class TaskRouteHandler
             "deadlockError"       => $deadlockError,
             "deadline_error"      => $deadlineError,
             "publishStatus"      => $publishStatus,
+            'showRestrictTask'    => $taskDao->organisationHasQualifiedBadge($project->getOrganisationId()),
+            'restrictTaskStatus'  => $restrictTaskStatus,
             "taskTypeColours"     => $taskTypeColours
         ));
 
@@ -1559,6 +1572,12 @@ class TaskRouteHandler
                 $task->setPublished(0);
             }
 
+            if (!empty($post['restrictTask'])) {
+                $taskDao->setRestrictedTask($task_id);
+            } else {
+                $taskDao->removeRestrictedTask($task_id);
+            }
+
             if (is_null($titleError) && is_null($wordCountError) && is_null($deadlineError)) {
                 error_log("taskCreate");
                 $newTask = $taskDao->createTask($task);
@@ -1627,6 +1646,7 @@ class TaskRouteHandler
             "titleError"    => $titleError,
             "wordCountError"=> $wordCountError,
             "deadlineError" => $deadlineError,
+            'showRestrictTask' => $taskDao->organisationHasQualifiedBadge($project->getOrganisationId()),
             "taskTypeColours" => $taskTypeColours
         ));
 

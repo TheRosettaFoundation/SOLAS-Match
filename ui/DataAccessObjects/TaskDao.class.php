@@ -370,4 +370,14 @@ class TaskDao extends BaseDao
     {
         Lib\PDOWrapper::call('removeRestrictedTask', Lib\PDOWrapper::cleanse($task_id));
     }
+
+    public function getRestrictedTask($task_id)
+    {
+        $ret = 0;
+        $result = Lib\PDOWrapper::call('getRestrictedTask', Lib\PDOWrapper::cleanse($task_id));
+        if (!empty($result)) {
+            $ret = 1;
+        }
+        return $ret;
+    }
 }
