@@ -1572,16 +1572,16 @@ class TaskRouteHandler
                 $task->setPublished(0);
             }
 
-            if (!empty($post['restrictTask'])) {
-                $taskDao->setRestrictedTask($task_id);
-            } else {
-                $taskDao->removeRestrictedTask($task_id);
-            }
-
             if (is_null($titleError) && is_null($wordCountError) && is_null($deadlineError)) {
                 error_log("taskCreate");
                 $newTask = $taskDao->createTask($task);
                 $newTaskId = $newTask->getId();
+
+                if (!empty($post['restrictTask'])) {
+                    $taskDao->setRestrictedTask($newTaskId);
+                } else {
+                    $taskDao->removeRestrictedTask($newTaskId);
+                }
 
                 $upload_error = null;
                 try {
