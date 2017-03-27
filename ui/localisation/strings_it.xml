@@ -1140,7 +1140,7 @@
     <string name="common_task_stream">Elenco delle attività</string>
 
 <string name="restrict_tasks">Restrict Tasks</string>
-<string name="restrict_tasks_long">If checked, tasks will only be shown to volunteers with the "Qualified" badge for your organisation.</string>
+<string name="restrict_tasks_long">If checked, tasks will only be shown to qualified volunteers.</string>
 <string name="restrict_task">Restrict Task</string>
-<string name="restrict_task_long">If checked, task will only be shown to volunteers with the "Qualified" badge for your organisation.</string>
+<string name="restrict_task_long">If checked, task will only be shown to qualified volunteers.</string>
 </resources>
