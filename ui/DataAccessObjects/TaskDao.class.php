@@ -7,6 +7,7 @@ use \SolasMatch\UI\Lib as Lib;
 
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/BaseDao.php";
+require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 
 class TaskDao extends BaseDao
 {
