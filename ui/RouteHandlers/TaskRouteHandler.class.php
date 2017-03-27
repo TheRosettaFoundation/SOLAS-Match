@@ -1751,6 +1751,9 @@ class TaskRouteHandler
                             $taskModel->setWordCount($post["wordCount_$i"]);
                             error_log("taskSegmentation translation_0");
                             $createdTranslation = $taskDao->createTask($taskModel);
+                            if ($taskDao->getRestrictedTask($task_id)) {
+                                $taskDao->setRestrictedTask($createdTranslation->getId());
+                            }
                             $translationTaskIds[] = $createdTranslation->getId();
                             try {
                                 $filedata = file_get_contents($_FILES['segmentationUpload_'.$i]['tmp_name']);
@@ -1767,6 +1770,9 @@ class TaskRouteHandler
                             $taskModel->setWordCount($post["wordCount_$i"]);
                             error_log("taskSegmentation proofreading_0");
                             $createdProofReading = $taskDao->createTask($taskModel);
+                            if ($taskDao->getRestrictedTask($task_id)) {
+                                $taskDao->setRestrictedTask($createdProofReading->getId());
+                            }
                             $proofreadTaskIds[] = $createdProofReading->getId();
                             try {
                                 $filedata = file_get_contents($_FILES['segmentationUpload_'.$i]['tmp_name']);
@@ -1791,6 +1797,9 @@ class TaskRouteHandler
                     $taskModel->setTaskType(Common\Enums\TaskTypeEnum::DESEGMENTATION);
                     error_log("taskSegmentation DESEGMENTATION");
                     $createdDesegmentation = $taskDao->createTask($taskModel);
+                    if ($taskDao->getRestrictedTask($task_id)) {
+                        $taskDao->setRestrictedTask($createdDesegmentation->getId());
+                    }
                     $createdDesegmentationId = $createdDesegmentation->getId();
 
                     try {
