@@ -4,6 +4,7 @@ namespace SolasMatch\UI\DAO;
 
 use \SolasMatch\Common as Common;
 use \SolasMatch\UI\Lib as Lib;
+use \SolasMatch\API\Lib as LibAPI;
 
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/BaseDao.php";
@@ -355,7 +356,7 @@ class TaskDao extends BaseDao
     public function organisationHasQualifiedBadge($org_id)
     {
         $ret = 0;
-        $result = Lib\PDOWrapper::call('organisationHasQualifiedBadge', Lib\PDOWrapper::cleanse($org_id));
+        $result = LibAPI\PDOWrapper::call('organisationHasQualifiedBadge', LibAPI\PDOWrapper::cleanse($org_id));
         if (!empty($result)) {
             $ret = 1;
         }
@@ -364,18 +365,18 @@ class TaskDao extends BaseDao
 
     public function setRestrictedTask($task_id)
     {
-        Lib\PDOWrapper::call('setRestrictedTask', Lib\PDOWrapper::cleanse($task_id));
+        LibAPI\PDOWrapper::call('setRestrictedTask', LibAPI\PDOWrapper::cleanse($task_id));
     }
 
     public function removeRestrictedTask($task_id)
     {
-        Lib\PDOWrapper::call('removeRestrictedTask', Lib\PDOWrapper::cleanse($task_id));
+        LibAPI\PDOWrapper::call('removeRestrictedTask', LibAPI\PDOWrapper::cleanse($task_id));
     }
 
     public function getRestrictedTask($task_id)
     {
         $ret = 0;
-        $result = Lib\PDOWrapper::call('getRestrictedTask', Lib\PDOWrapper::cleanse($task_id));
+        $result = LibAPI\PDOWrapper::call('getRestrictedTask', LibAPI\PDOWrapper::cleanse($task_id));
         if (!empty($result)) {
             $ret = 1;
         }
