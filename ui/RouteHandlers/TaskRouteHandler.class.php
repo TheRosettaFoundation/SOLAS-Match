@@ -1159,6 +1159,12 @@ class TaskRouteHandler
                     $task->setPublished(0);
                 }
 
+                if (!empty($post['restrictTask'])) {
+                    $taskDao->setRestrictedTask($task_id);
+                } else {
+                    $taskDao->removeRestrictedTask($task_id);
+                }
+
                 $targetLocale = new Common\Protobufs\Models\Locale();
 
                 if (isset($post['target']) && $post['target'] != "") {
@@ -1309,6 +1315,11 @@ class TaskRouteHandler
             $publishStatus="checked";
         }
 
+        $restrictTaskStatus = '';
+        if ($taskDao->getRestrictedTask($task_id)) {
+            $restrictTaskStatus = 'checked';
+        }
+
         $app->view()->appendData(array(
             'sesskey'             => $sesskey,
             "project"             => $project,
@@ -1322,6 +1333,8 @@ class TaskRouteHandler
             "deadlockError"       => $deadlockError,
             "deadline_error"      => $deadlineError,
             "publishStatus"      => $publishStatus,
+            'showRestrictTask'    => $taskDao->organisationHasQualifiedBadge($project->getOrganisationId()),
+            'restrictTaskStatus'  => $restrictTaskStatus,
             "taskTypeColours"     => $taskTypeColours
         ));
 
@@ -1564,6 +1577,12 @@ class TaskRouteHandler
                 $newTask = $taskDao->createTask($task);
                 $newTaskId = $newTask->getId();
 
+                if (!empty($post['restrictTask'])) {
+                    $taskDao->setRestrictedTask($newTaskId);
+                } else {
+                    $taskDao->removeRestrictedTask($newTaskId);
+                }
+
                 $upload_error = null;
                 try {
                     $upload_error = $taskDao->saveTaskFile(
@@ -1627,6 +1646,7 @@ class TaskRouteHandler
             "titleError"    => $titleError,
             "wordCountError"=> $wordCountError,
             "deadlineError" => $deadlineError,
+            'showRestrictTask' => $taskDao->organisationHasQualifiedBadge($project->getOrganisationId()),
             "taskTypeColours" => $taskTypeColours
         ));
 
@@ -1731,6 +1751,9 @@ class TaskRouteHandler
                             $taskModel->setWordCount($post["wordCount_$i"]);
                             error_log("taskSegmentation translation_0");
                             $createdTranslation = $taskDao->createTask($taskModel);
+                            if ($taskDao->getRestrictedTask($task_id)) {
+                                $taskDao->setRestrictedTask($createdTranslation->getId());
+                            }
                             $translationTaskIds[] = $createdTranslation->getId();
                             try {
                                 $filedata = file_get_contents($_FILES['segmentationUpload_'.$i]['tmp_name']);
@@ -1747,6 +1770,9 @@ class TaskRouteHandler
                             $taskModel->setWordCount($post["wordCount_$i"]);
                             error_log("taskSegmentation proofreading_0");
                             $createdProofReading = $taskDao->createTask($taskModel);
+                            if ($taskDao->getRestrictedTask($task_id)) {
+                                $taskDao->setRestrictedTask($createdProofReading->getId());
+                            }
                             $proofreadTaskIds[] = $createdProofReading->getId();
                             try {
                                 $filedata = file_get_contents($_FILES['segmentationUpload_'.$i]['tmp_name']);
@@ -1771,6 +1797,9 @@ class TaskRouteHandler
                     $taskModel->setTaskType(Common\Enums\TaskTypeEnum::DESEGMENTATION);
                     error_log("taskSegmentation DESEGMENTATION");
                     $createdDesegmentation = $taskDao->createTask($taskModel);
+                    if ($taskDao->getRestrictedTask($task_id)) {
+                        $taskDao->setRestrictedTask($createdDesegmentation->getId());
+                    }
                     $createdDesegmentationId = $createdDesegmentation->getId();
 
                     try {
@@ -2237,6 +2266,8 @@ class TaskRouteHandler
 
         $taskModel->setProjectId($project->getId());
         $taskModel->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+
+        $taskModel->setPublished(1);
     }
 }
 

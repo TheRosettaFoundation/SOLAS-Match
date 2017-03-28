@@ -50,11 +50,18 @@
                     </div>
                 </td>
                 <td>
-                    <div style="margin-bottom:60px;">
-                        <label for="publishtask" style="font-size: large"><strong>{Localisation::getTranslation('common_publish_task')}</strong></label>
+                    <div style="margin-bottom:20px;">
+                        <label for="publishTask" style="font-size: large"><strong>{Localisation::getTranslation('common_publish_task')}</strong></label>
                         <p class="desc">{Localisation::getTranslation('common_if_checked_tasks_will_appear_in_the_tasks_stream')}</p>
                         <input type="checkbox" name="publishTask" value="{$task->getPublished()}" {$publishStatus} {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if}/>
                     </div>
+                    {if $showRestrictTask}
+                    <div style="margin-bottom:60px;">
+                        <label for="restrictTask" style="font-size: large"><strong>{Localisation::getTranslation('restrict_task')}</strong></label>
+                        <p class="desc">{Localisation::getTranslation('restrict_task_long')}</p>
+                        <input type="checkbox" name="restrictTask" value="1" {$restrictTaskStatus} />
+                    </div>
+                    {/if}
                     <p>
                         <label for="target" style="font-size: large"><strong>{Localisation::getTranslation('common_target_language')}</strong></label>
                         <select name="target" id="target" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">

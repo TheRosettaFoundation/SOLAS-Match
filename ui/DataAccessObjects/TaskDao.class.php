@@ -4,9 +4,11 @@ namespace SolasMatch\UI\DAO;
 
 use \SolasMatch\Common as Common;
 use \SolasMatch\UI\Lib as Lib;
+use \SolasMatch\API\Lib as LibAPI;
 
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/BaseDao.php";
+require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 
 class TaskDao extends BaseDao
 {
@@ -349,5 +351,35 @@ class TaskDao extends BaseDao
                 throw new Common\Exceptions\SolasMatchException("File not found!");
                 break;
         }
+    }
+
+    public function organisationHasQualifiedBadge($org_id)
+    {
+        $ret = 0;
+        $result = LibAPI\PDOWrapper::call('organisationHasQualifiedBadge', LibAPI\PDOWrapper::cleanse($org_id));
+        if (!empty($result)) {
+            $ret = 1;
+        }
+        return $ret;
+    }
+
+    public function setRestrictedTask($task_id)
+    {
+        LibAPI\PDOWrapper::call('setRestrictedTask', LibAPI\PDOWrapper::cleanse($task_id));
+    }
+
+    public function removeRestrictedTask($task_id)
+    {
+        LibAPI\PDOWrapper::call('removeRestrictedTask', LibAPI\PDOWrapper::cleanse($task_id));
+    }
+
+    public function getRestrictedTask($task_id)
+    {
+        $ret = 0;
+        $result = LibAPI\PDOWrapper::call('getRestrictedTask', LibAPI\PDOWrapper::cleanse($task_id));
+        if (!empty($result)) {
+            $ret = 1;
+        }
+        return $ret;
     }
 }

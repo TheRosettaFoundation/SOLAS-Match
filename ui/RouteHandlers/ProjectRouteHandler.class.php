@@ -1118,6 +1118,7 @@ class ProjectRouteHandler
             'selected_minute'=> 0,
             'languages'      => $languages,
             'countries'      => $countries,
+            'showRestrictTask' => $taskDao->organisationHasQualifiedBadge($org_id),
             'sesskey'        => $sesskey,
         ));
         $app->render("project/project.create.tpl");
@@ -1189,6 +1190,10 @@ class ProjectRouteHandler
             if (!empty($post['trackProject'])) {
                 $userDao = new DAO\UserDao();
                 $userDao->trackTask($user_id, $newTaskId);
+            }
+
+            if (!empty($post['restrictTask'])) {
+                $taskDao->setRestrictedTask($newTaskId);
             }
         } catch (\Exception $e) {
             return 0;

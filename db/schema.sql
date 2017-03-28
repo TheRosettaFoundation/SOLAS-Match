@@ -1380,6 +1380,12 @@ CREATE TABLE IF NOT EXISTS SubscriptionsRecorded (
   KEY (organisation_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `RestrictedTasks` (
+  `restricted_task_id` BIGINT(20) UNSIGNED NOT NULL,
+  UNIQUE KEY `FK_restricted_task_id` (`restricted_task_id`),
+  CONSTRAINT `FK_restricted_task_id` FOREIGN KEY (`restricted_task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -2334,13 +2340,13 @@ BEGIN
             comment, `task-type_id` as taskType, `task-status_id` as taskStatus, published, t.deadline, t.`created-time` as createdTime
         FROM Tasks t 
         JOIN      Projects p ON t.project_id=p.id
-        LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+        LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
         WHERE NOT exists (SELECT 1 
                             FROM TaskClaims 
                             WHERE TaskClaims.task_id = t.id) 
         AND t.published = 1 
         AND t.`task-status_id` = 2 
-        AND b.id IS NULL
+        AND r.restricted_task_id IS NULL
         ORDER BY `created-time` DESC 
         LIMIT offset, lim;
 END//
@@ -2354,13 +2360,13 @@ BEGIN
     SELECT count(*) as result
         FROM Tasks t 
         JOIN      Projects p ON t.project_id=p.id
-        LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+        LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
         WHERE NOT exists (SELECT 1 
                             FROM TaskClaims 
                             WHERE TaskClaims.task_id = t.id) 
         AND t.published = 1 
         AND t.`task-status_id` = 2
-        AND b.id IS NULL;
+        AND r.restricted_task_id IS NULL;
 END//
 DELIMITER ;
 
@@ -3422,6 +3428,7 @@ BEGIN
         Tasks t
     JOIN      Projects p ON t.project_id=p.id
     LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+    LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
     WHERE
         u.id=uID AND
         t.id NOT IN (SELECT t.task_id FROM TaskClaims t) AND
@@ -3447,6 +3454,7 @@ BEGIN
             )
         ) AND
         (
+            r.restricted_task_id IS NULL OR
             b.id IS NULL OR
             b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
         )
@@ -3478,6 +3486,7 @@ BEGIN
         FROM Tasks t
         JOIN      Projects p ON t.project_id=p.id
         LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+        LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
         WHERE t.id NOT IN ( SELECT t.task_id FROM TaskClaims t)
         AND t.published = 1 
         AND t.`task-status_id` = 2 
@@ -3496,6 +3505,7 @@ BEGIN
                         (SELECT language_id FROM UserSecondaryLanguages WHERE user_id = uID))))
         AND
         (
+            r.restricted_task_id IS NULL OR
             b.id IS NULL OR
             b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
         )
@@ -3665,8 +3675,8 @@ BEGIN
             t.`language_id-target`=current_task_langTarget AND
             t.published=1
         JOIN      Projects p ON t.project_id=p.id
-        LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
-        WHERE b.id IS NULL
+        LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
+        WHERE r.restricted_task_id IS NULL
         GROUP BY task_id
         ORDER BY task_count DESC
         ) AS t1
@@ -5995,6 +6005,38 @@ BEGIN
     SELECT COUNT(*) INTO @totalArchivedProjects FROM ArchivedProjects WHERE `organisation_id`=org_id AND `created`>@subscription_start_date;
     SELECT COUNT(*) INTO @totalProjects         FROM Projects         WHERE `organisation_id`=org_id AND `created`>@subscription_start_date;
     SELECT @totalArchivedProjects+@totalProjects AS result;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `organisationHasQualifiedBadge`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `organisationHasQualifiedBadge`(IN `ownerID` INT)
+BEGIN
+    SELECT b.id FROM Badges b WHERE b.owner_id=ownerID AND b.title='Qualified';
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `setRestrictedTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `setRestrictedTask`(IN `taskID` INT)
+BEGIN
+    REPLACE INTO RestrictedTasks (`restricted_task_id`) VALUES (taskID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `removeRestrictedTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeRestrictedTask`(IN `taskID` INT)
+BEGIN
+    DELETE FROM RestrictedTasks WHERE restricted_task_id=taskID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getRestrictedTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getRestrictedTask`(IN `taskID` INT)
+BEGIN
+    SELECT restricted_task_id FROM RestrictedTasks WHERE restricted_task_id=taskID;
 END//
 DELIMITER ;
 

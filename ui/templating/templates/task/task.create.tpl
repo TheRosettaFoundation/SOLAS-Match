@@ -127,7 +127,15 @@
                                 <p class="desc">{Localisation::getTranslation('task_create_4')}</p>
                                 <input type="checkbox" name="published" checked="true" />
                             </p>
-                                              
+
+                            {if $showRestrictTask}
+                            <p>
+                                <h2>{Localisation::getTranslation('restrict_task')}</h2>
+                                <p class="desc">{Localisation::getTranslation('restrict_task_long')}</p>
+                                <input type="checkbox" name="restrictTask" checked="true" />
+                            </p>
+                           {/if}
+
                         </td>
                     </tr>
                     {if !is_null($projectTasks)}
