@@ -2266,6 +2266,8 @@ class TaskRouteHandler
 
         $taskModel->setProjectId($project->getId());
         $taskModel->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+
+        $taskModel->setPublished(1);
     }
 }
 
