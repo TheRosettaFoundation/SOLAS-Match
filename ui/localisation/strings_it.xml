@@ -1139,8 +1139,8 @@
     <string name="recent_tasks_recently_viewed_tasks">Attività visualizzate di recente</string>    
     <string name="common_task_stream">Elenco delle attività</string>
 
-<string name="restrict_tasks">Restrict Tasks</string>
-<string name="restrict_tasks_long">If checked, tasks will only be shown to qualified volunteers.</string>
-<string name="restrict_task">Restrict Task</string>
-<string name="restrict_task_long">If checked, task will only be shown to qualified volunteers.</string>
+<string name="restrict_tasks">Accesso limitato</string>
+<string name="restrict_tasks_long">Selezionare per rendere questo contenuto visibile solo a chi possiede un riconoscimento.</string>
+<string name="restrict_task">Accesso limitato</string>
+<string name="restrict_task_long">Selezionare per rendere questo contenuto visibile solo a chi possiede un riconoscimento.</string>
 </resources>
