@@ -4,8 +4,7 @@
 
 {if isset($all_users) && count($all_users) > 0}
 
-<div class="well">
-<table width="100%" style="overflow-wrap: break-word;" class="table table-striped">
+<table width="100%" style="width: 100%; overflow-wrap: break-word;" class="table table-striped">
   <thead>
     <th>ID</th>
     <th>Name</th>
@@ -35,7 +34,6 @@
   </tbody>
 
 </table>
-</div>
 
 {else}<p class="alert alert-info">No Users</p>{/if}
 
