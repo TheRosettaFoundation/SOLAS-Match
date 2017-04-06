@@ -41,7 +41,7 @@ class StatisticsDao extends BaseDao
 
     public function getUsers()
     {
-        $result = LibAPI\PDOWrapper::call('getUsers');
+        $result = LibAPI\PDOWrapper::call('getUsers', '');
         return $result;
     }
 }
