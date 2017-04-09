@@ -6,14 +6,14 @@
 
 <table style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-    <th>ID</th>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Biography</th>
-    <th>Language</th>
-    <th>City</th>
-    <th>Country</th>
-    <th>Created</th>
+    <th width="5%">ID</th>
+    <th width="10%">Name</th>
+    <th width="15%">Email</th>
+    <th width="40%">Biography</th>
+    <th width="9%">Language</th>
+    <th width="7%">City</th>
+    <th width="7%">Country</th>
+    <th width="7%">Created</th>
   </thead>
 
   <tbody>
