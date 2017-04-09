@@ -24,7 +24,7 @@
       <td>{TemplateHelper::uiCleanseHTML($user_row['first_name'])} {TemplateHelper::uiCleanseHTML($user_row['last_name'])}</td>
       <td>{$user_row['email']}</td>
       <td>{TemplateHelper::uiCleanseHTML($user_row['biography'])}</td>
-      <td>{$user_row['native_language']} {$user_row['native_country']}</td>
+      <td>{$user_row['native_language']}<br />{$user_row['native_country']}</td>
       <td>{TemplateHelper::uiCleanseHTML($user_row['city'])}</td>
       <td>{TemplateHelper::uiCleanseHTML($user_row['country'])}</td>
       <td>{$user_row['created_time']}</td>

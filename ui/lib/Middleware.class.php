@@ -42,6 +42,17 @@ class Middleware
         return $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
     }
 
+    public function authIsSiteAdmin()
+    {
+        if ($this->isSiteAdmin()) {
+            return true;
+        }
+
+        $app = \Slim\Slim::getInstance();
+        $app->flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
+        $app->redirect($app->urlFor('login'));
+    }
+
     public function authenticateUserForTask(\Slim\Route $route)
     {
         if ($this->isSiteAdmin()) {
