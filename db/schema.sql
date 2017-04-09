@@ -6040,6 +6040,30 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getUsers`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUsers`()
+BEGIN
+    SELECT
+        u.id,
+        u.`display-name` as display_name,
+        u.email,
+        u.biography,
+        u.`created-time` as created_time,
+        l.`en-name` AS native_language,
+        c.`en-name` AS native_country,
+        i.city,
+        i.country,
+        i.`first-name` AS first_name,
+        i.`last-name` AS last_name
+    FROM Users u
+    LEFT JOIN UserPersonalInformation i ON u.id=i.user_id
+    LEFT JOIN Countries c ON u.country_id=c.id
+    LEFT JOIN Languages l ON u.language_id=l.id
+    ORDER BY u.id DESC;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 

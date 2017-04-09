@@ -4,7 +4,7 @@
 
 {if isset($all_users) && count($all_users) > 0}
 
-<table width="100%" style="width: 100%; overflow-wrap: break-word;" class="table table-striped">
+<table style="overflow-wrap: break-word;" class="container table table-striped">
   <thead>
     <th>ID</th>
     <th>Name</th>
@@ -20,7 +20,7 @@
   {foreach $all_users as $user_row}
 
     <tr>
-      <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['id']}"}">{$user_row['id']}</a></td>
+      <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['id']}"}" target="_blank">{$user_row['id']}</a></td>
       <td>{TemplateHelper::uiCleanseHTML($user_row['first_name'])} {TemplateHelper::uiCleanseHTML($user_row['last_name'])}</td>
       <td>{$user_row['email']}</td>
       <td>{TemplateHelper::uiCleanseHTML($user_row['biography'])}</td>
