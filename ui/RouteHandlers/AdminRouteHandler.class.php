@@ -15,13 +15,13 @@ class AdminRouteHandler
                           
         $app->get(
             "/admin/",
-            array($middleware, "isSiteAdmin"),
+            array($middleware, 'authIsSiteAdmin'),
             array($this, "adminDashboard")
         )->via("POST")->name("site-admin-dashboard");
 
         $app->get(
             '/all_users/',
-            array($middleware, 'isSiteAdmin'),
+            array($middleware, 'authIsSiteAdmin'),
             array($this, 'all_users')
         )->via('POST')->name('all_users');
     }
