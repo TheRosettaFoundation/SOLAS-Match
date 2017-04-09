@@ -4,7 +4,7 @@
 
 {if isset($all_users) && count($all_users) > 0}
 
-<table style="overflow-wrap: break-word;" class="container table table-striped">
+<table style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
     <th>ID</th>
     <th>Name</th>
