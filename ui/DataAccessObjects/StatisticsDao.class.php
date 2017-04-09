@@ -3,9 +3,11 @@
 namespace SolasMatch\UI\DAO;
 
 use \SolasMatch\Common as Common;
+use \SolasMatch\API\Lib as LibAPI;
 
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/BaseDao.php";
+require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 
 class StatisticsDao extends BaseDao
 {
@@ -35,5 +37,11 @@ class StatisticsDao extends BaseDao
         $request = "{$this->siteApi}v0/stats/$stat";
         $ret = $this->client->call("\SolasMatch\Common\Protobufs\Models\Statistic", $request);
         return $ret;
+    }
+
+    public function getUsers()
+    {
+        $result = LibAPI\PDOWrapper::call('getUsers', '');
+        return $result;
     }
 }
