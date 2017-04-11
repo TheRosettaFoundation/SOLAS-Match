@@ -23,7 +23,7 @@
       <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['id']}"}" target="_blank">{$user_row['id']}</a></td>
       <td>{TemplateHelper::uiCleanseHTML($user_row['first_name'])} {TemplateHelper::uiCleanseHTML($user_row['last_name'])}</td>
       <td>{$user_row['email']}</td>
-      <td>{TemplateHelper::uiCleanseHTML($user_row['biography'])}</td>
+      <td>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['biography'])}</td>
       <td>{$user_row['native_language']}<br />{$user_row['native_country']}</td>
       <td>{TemplateHelper::uiCleanseHTML($user_row['city'])}</td>
       <td>{TemplateHelper::uiCleanseHTML($user_row['country'])}</td>
