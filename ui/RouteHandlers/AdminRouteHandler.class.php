@@ -24,6 +24,12 @@ class AdminRouteHandler
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'all_users')
         )->via('POST')->name('all_users');
+
+        $app->get(
+            '/all_users_plain/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'all_users_plain')
+        )->via('POST')->name('all_users_plain');
     }
     
     public function adminDashboard()
@@ -194,6 +200,17 @@ class AdminRouteHandler
 
         $app->view()->appendData(array('all_users' => $all_users));
         $app->render('admin/all_users.tpl');
+    }
+
+    public function all_users_plain()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->getUsers();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('admin/all_users_plain.tpl');
     }
 }
 
