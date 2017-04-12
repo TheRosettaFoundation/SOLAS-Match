@@ -1,3 +1,16 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" >
+
+<head>
+    <meta charset="utf-8" content="application/xhtml+xml" />
+    <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css"/>
+    <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
+    <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas.css"/>
+</head>
+
+<body>
+
 {if isset($all_users) && count($all_users) > 0}
 
 <table class="container table table-striped">
@@ -32,3 +45,6 @@
 </table>
 
 {else}<p class="alert alert-info">No Users</p>{/if}
+
+</body>
+</html>
