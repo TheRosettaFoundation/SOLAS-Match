@@ -6040,6 +6040,22 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `isUserRestrictedFromTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserRestrictedFromTask`(IN `taskID` INT, IN `userID` INT)
+BEGIN
+    SELECT t.id
+    FROM Tasks            t
+    JOIN RestrictedTasks  r ON t.id=r.restricted_task_id
+    JOIN Projects         p ON t.project_id=p.id
+    JOIN Badges           b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+    LEFT JOIN UserBadges ub ON b.id=ub.badge_id AND ub.user_id=userID
+    WHERE
+        t.id=taskID AND
+        ub.badge_id IS NULL;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `getUsers`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUsers`()

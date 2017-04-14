@@ -596,6 +596,12 @@ class TaskRouteHandler
             $app->redirect($app->urlFor("task", array("task_id" => $taskId)));
         }
 
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
+        if ($taskDao->isUserRestrictedFromTask($taskId, $user_id)) {
+            $app->flash('error', "You are not authorized to view this page");
+            $app->redirect($app->urlFor('home'));
+        }
+
         $task = $taskDao->getTask($taskId);
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
@@ -675,6 +681,12 @@ class TaskRouteHandler
             $app->flash("error", sprintf(Lib\Localisation::getTranslation('task_view_5'), $taskId));
             $app->redirect($app->urlFor("home"));
         }
+
+        if ($taskDao->isUserRestrictedFromTask($taskId, $user_id)) {
+            $app->flash('error', "You are not authorized to view this page");
+            $app->redirect($app->urlFor('home'));
+        }
+
         $taskClaimed = $taskDao->isTaskClaimed($taskId);
         $trackTaskView = $taskDao->recordTaskView($taskId,$user_id);
 
@@ -1352,6 +1364,12 @@ class TaskRouteHandler
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
+
+        if ($taskDao->isUserRestrictedFromTask($task_id, $user_id)) {
+            $app->flash('error', "You are not authorized to view this page");
+            $app->redirect($app->urlFor('home'));
+        }
+
         $task = $taskDao->getTask($task_id);
         $project = $projectDao->getProject($task->getProjectId());
         $user = $userDao->getUser($user_id);
