@@ -382,4 +382,14 @@ class TaskDao extends BaseDao
         }
         return $ret;
     }
+
+    public function isUserRestrictedFromTask($task_id, $user_id)
+    {
+        $ret = 0;
+        $result = LibAPI\PDOWrapper::call('isUserRestrictedFromTask', LibAPI\PDOWrapper::cleanse($task_id), LibAPI\PDOWrapper::cleanse($user_id));
+        if (!empty($result)) {
+            $ret = 1;
+        }
+        return $ret;
+    }
 }
