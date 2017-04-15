@@ -29,7 +29,7 @@
     <tr>
       <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{$user_row['display_name']}</a></td>
       <td>{$user_row['email']}</td>
-      <td><a href="{urlFor name="task" options="task_id.{$user_row['task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['task_title'])}</a></td>
+      <td><a href="{urlFor name="task-view" options="task_id.{$user_row['task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['task_title'])}</a></td>
       <td>{TemplateHelper::uiCleanseHTML($user_row['task_id'])}</td>
       <td><a href="{urlFor name="project-view" options="project_id.{$user_row['project_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['project_title'])}</a></td>
       <td>{TemplateHelper::uiCleanseHTML($user_row['project_id'])}</td>
