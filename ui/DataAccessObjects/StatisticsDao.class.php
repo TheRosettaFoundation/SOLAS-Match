@@ -50,4 +50,10 @@ class StatisticsDao extends BaseDao
         $result = LibAPI\PDOWrapper::call('active_now', '');
         return $result;
     }
+
+    public function active_users()
+    {
+        $result = LibAPI\PDOWrapper::call('active_users', '');
+        return $result;
+    }
 }
