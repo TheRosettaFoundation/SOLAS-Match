@@ -16,9 +16,9 @@
 <table style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
     <th width="25%">Email</th>
-    <th width="40%">Task Title</th>
+    <th width="35%">Task Title</th>
     <th width="25%">Creator Email</th>
-    <th width="10%">Created Time</th>    
+    <th width="15%">Created Time</th>
   </thead>
 
   <tbody>
