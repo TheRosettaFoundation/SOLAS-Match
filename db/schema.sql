@@ -6126,6 +6126,28 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `unclaimed_tasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `unclaimed_tasks`()
+BEGIN
+    SELECT
+        t.id AS task_id,
+        t.title AS task_title,
+        t.`created-time` AS created_time,
+        tv.user_id AS creator_id,
+        u2.email AS creator_email,
+        p.id AS project_id,
+        p.title AS project_title,
+        IF(t.`task-status_id`=1, 'Waiting for Prerequisites', 'Pending Claim') AS status
+    FROM Projects          p
+    JOIN Tasks             t ON p.id=t.project_id
+    JOIN TaskFileVersions tv ON t.id=tv.task_id AND tv.version_id=0
+    JOIN Users            u2 ON tv.user_id=u2.id
+    WHERE t.`task-status_id`<3
+    ORDER BY t.id;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
