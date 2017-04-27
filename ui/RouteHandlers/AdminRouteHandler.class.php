@@ -42,6 +42,12 @@ class AdminRouteHandler
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'active_users')
         )->via('POST')->name('active_users');
+
+        $app->get(
+            '/unclaimed_tasks/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'unclaimed_tasks')
+        )->via('POST')->name('unclaimed_tasks');
     }
     
     public function adminDashboard()
@@ -245,6 +251,17 @@ class AdminRouteHandler
 
         $app->view()->appendData(array('all_users' => $all_users));
         $app->render('admin/active_users.tpl');
+    }
+
+    public function unclaimed_tasks()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->unclaimed_tasks();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('admin/unclaimed_tasks.tpl');
     }
 }
 

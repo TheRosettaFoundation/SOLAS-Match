@@ -56,4 +56,10 @@ class StatisticsDao extends BaseDao
         $result = LibAPI\PDOWrapper::call('active_users', '');
         return $result;
     }
+
+    public function unclaimed_tasks()
+    {
+        $result = LibAPI\PDOWrapper::call('unclaimed_tasks', '');
+        return $result;
+    }
 }
