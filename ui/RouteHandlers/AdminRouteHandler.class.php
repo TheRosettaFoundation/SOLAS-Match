@@ -44,6 +44,12 @@ class AdminRouteHandler
         )->via('POST')->name('active_users');
 
         $app->get(
+            '/active_users_unique/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'active_users_unique')
+        )->via('POST')->name('active_users_unique');
+
+        $app->get(
             '/unclaimed_tasks/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'unclaimed_tasks')
@@ -251,6 +257,21 @@ class AdminRouteHandler
 
         $app->view()->appendData(array('all_users' => $all_users));
         $app->render('admin/active_users.tpl');
+    }
+
+    public function active_users_unique()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->active_users();
+        $all_users_unique = array();
+        foreach($all_users as $all_user) {
+            $all_users_unique['email'] = array('email' => $all_user['email']);
+        }
+
+        $app->view()->appendData(array('all_users' => $all_users_unique));
+        $app->render('admin/active_users_unique.tpl');
     }
 
     public function unclaimed_tasks()
