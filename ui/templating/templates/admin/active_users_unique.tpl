@@ -25,7 +25,7 @@
 
     <tr>
       <td>{$user_row['email']}</td>
-      <td>{$user_row['display_name']}</td>
+      <td>{TemplateHelper::uiCleanseHTML($user_row['display_name'])}</td>
     </tr>
 
   {/foreach}
