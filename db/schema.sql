@@ -6148,6 +6148,45 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `user_languages`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `user_languages`()
+BEGIN
+(
+    SELECT
+        u.id AS user_id,
+        u.`display-name` AS display_name,
+        u.email,
+        l.code AS language_code,
+        l.`en-name` AS language_name,
+        c.code AS country_code,
+        c.`en-name` AS country_name,
+        'Native' AS native_or_secondary
+    FROM Users     u
+    JOIN Languages l ON u.language_id=l.id
+    JOIN Countries c ON u.country_id=c.id
+)
+UNION
+(
+    SELECT
+        u.id AS user_id,
+        u.`display-name` AS display_name,
+        u.email,
+        l.code AS language_code,
+        l.`en-name` AS language_name,
+        c.code AS country_code,
+        c.`en-name` AS country_name,
+        'Secondary' AS native_or_secondary
+    FROM Users                   u
+    JOIN UserSecondaryLanguages sl ON u.id=sl.user_id
+    JOIN Languages               l ON sl.language_id=l.id
+    JOIN Countries               c ON sl.country_id=c.id
+)
+ORDER BY language_name, country_name, display_name;
+# Could add parameter e.g. WHERE l.`en-name`='English'
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
