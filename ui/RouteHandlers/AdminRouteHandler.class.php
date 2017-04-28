@@ -267,7 +267,7 @@ class AdminRouteHandler
         $all_users = $statsDao->active_users();
         $all_users_unique = array();
         foreach($all_users as $all_user) {
-            $all_users_unique[$all_user['email']] = array('email' => $all_user['email']);
+            $all_users_unique[$all_user['email']] = array('email' => $all_user['email'], 'display_name' => $all_user['display_name']);
         }
 
         $app->view()->appendData(array('all_users' => $all_users_unique));
