@@ -54,6 +54,12 @@ class AdminRouteHandler
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'unclaimed_tasks')
         )->via('POST')->name('unclaimed_tasks');
+
+        $app->get(
+            '/user_languages/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'user_languages')
+        )->via('POST')->name('user_languages');
     }
     
     public function adminDashboard()
@@ -283,6 +289,17 @@ class AdminRouteHandler
 
         $app->view()->appendData(array('all_users' => $all_users));
         $app->render('admin/unclaimed_tasks.tpl');
+    }
+
+    public function user_languages()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->user_languages();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('admin/user_languages.tpl');
     }
 }
 

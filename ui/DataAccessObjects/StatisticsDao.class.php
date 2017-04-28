@@ -62,4 +62,10 @@ class StatisticsDao extends BaseDao
         $result = LibAPI\PDOWrapper::call('unclaimed_tasks', '');
         return $result;
     }
+
+    public function user_languages()
+    {
+        $result = LibAPI\PDOWrapper::call('user_languages', '');
+        return $result;
+    }
 }
