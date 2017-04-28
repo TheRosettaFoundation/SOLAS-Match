@@ -16,7 +16,8 @@
 <table style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
     {assign var="all_users_count" value=count($all_users)}
-    <th width="100%">Email ({$all_users_count})</th>
+    <th width="60%">Email ({$all_users_count})</th>
+    <th width="40%">Display Name</th>
   </thead>
 
   <tbody>
@@ -24,6 +25,7 @@
 
     <tr>
       <td>{$user_row['email']}</td>
+      <td>{TemplateHelper::uiCleanseHTML($user_row['display_name'])}</td>
     </tr>
 
   {/foreach}
