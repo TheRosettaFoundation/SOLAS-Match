@@ -296,9 +296,10 @@ class AdminRouteHandler
         $app = \Slim\Slim::getInstance();
         $statsDao = new DAO\StatisticsDao();
 
+        if ($code === 'full') $code = null;
         $all_users = $statsDao->user_languages($code);
 
-        $app->view()->appendData(array('all_users' => $all_users, 'code' => $code));
+        $app->view()->appendData(array('all_users' => $all_users));
         $app->render('admin/user_languages.tpl');
     }
 }
