@@ -6150,7 +6150,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `user_languages`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `user_languages`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `user_languages`(IN `languageCode` VARCHAR(3))
 BEGIN
 (
     SELECT
@@ -6165,6 +6165,7 @@ BEGIN
     FROM Users     u
     JOIN Languages l ON u.language_id=l.id
     JOIN Countries c ON u.country_id=c.id
+    WHERE languageCode IS NULL OR l.code=languageCode
 )
 UNION
 (
@@ -6181,9 +6182,9 @@ UNION
     JOIN UserSecondaryLanguages sl ON u.id=sl.user_id
     JOIN Languages               l ON sl.language_id=l.id
     JOIN Countries               c ON sl.country_id=c.id
+    WHERE languageCode IS NULL OR l.code=languageCode
 )
 ORDER BY language_name, country_name, display_name;
-# Could add parameter e.g. WHERE l.`en-name`='English'
 END//
 DELIMITER ;
 
