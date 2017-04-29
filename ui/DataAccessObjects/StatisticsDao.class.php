@@ -63,9 +63,9 @@ class StatisticsDao extends BaseDao
         return $result;
     }
 
-    public function user_languages()
+    public function user_languages($code)
     {
-        $result = LibAPI\PDOWrapper::call('user_languages', '');
+        $result = LibAPI\PDOWrapper::call('user_languages', LibAPI\PDOWrapper::cleanseNullOrWrapStr($code));
         return $result;
     }
 }

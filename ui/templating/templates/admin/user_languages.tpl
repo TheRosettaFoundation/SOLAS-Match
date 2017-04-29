@@ -17,7 +17,7 @@
   <thead>
     <th width="25%">Display Name</th>
     <th width="25%">Email</th>
-    <th width="5%">Code</th>    
+    <th width="5%">Code</th>
     <th width="15%">Language</th>
     <th width="5%">Code</th>
     <th width="15%">Country</th>
