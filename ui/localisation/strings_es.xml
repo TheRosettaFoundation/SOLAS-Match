@@ -518,6 +518,10 @@
     <string name="project_create_25">La fecha de entrega debe ser una fecha futura.</string>
     <string name="project_create_26">Tienes que especificar la repercusión del proyecto.</string>
     <string name="project_create_27">Tienes que especificar el número de palabras del proyecto. Debe ser un número natural válido.</string>
+    <string name="project_create_set_source_language">Source Language must be set.</string>
+    <string name="project_create_set_source_country">Source Country must be set.</string>
+    <string name="project_create_set_target_language">Target Languages must be set.</string>
+    <string name="project_create_set_target_country">Target Countries must be set.</string>
     <string name="project_create_28">Cada par de idiomas que agregues debe ser distinto.</string>
     <string name="project_create_29">Debes indicar al menos un <strong>tipo de tarea</strong> para cada <strong>idioma de destino</strong>.</string>
     <string name="project_create_error_title_not_set">Tienes que especificar un título para el proyecto.</string>

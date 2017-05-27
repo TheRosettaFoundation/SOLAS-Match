@@ -13,12 +13,14 @@
 
         <!-- Templates... -->
         <div id="template_language_options">
+            <option value="0"></option>
             {foreach $languages as $language}
                 <option value="{$language->getCode()}" >{$language->getName()}</option>
             {/foreach}
         </div>
 
         <div id="template_country_options">
+            <option value="0"></option>
             {foreach $countries as $country}
                 <option value="{$country->getCode()}">{$country->getName()}</option>
             {/foreach}
@@ -183,11 +185,13 @@
                 <div id="sourceLanguageDiv">
                     <h2>{Localisation::getTranslation('common_source_language')}: <span style="color: red">*</span></h2>
                     <select name="sourceLanguageSelect" id="sourceLanguageSelect" style="width: 400px">
+                        <option value="0"></option>
                         {foreach $languages as $language}
                             <option value="{$language->getCode()}" >{$language->getName()}</option>
                         {/foreach}
                     </select>
                     <select name="sourceCountrySelect" id="sourceCountrySelect" style="width: 400px">
+                        <option value="0"></option>
                         {foreach $countries as $country}
                             <option value="{$country->getCode()}">{$country->getName()}</option>
                         {/foreach}
