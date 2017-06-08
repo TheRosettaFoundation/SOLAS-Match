@@ -511,10 +511,10 @@
     <string name="project_create_25">Die Abgabefrist muss ein Datum in der Zukunft sein.</string>
     <string name="project_create_26">Der Einfluss des Projekts muss eingegeben werden.</string>
     <string name="project_create_27">Die Anzahl der Wörter im Projekt muss als gültige natürliche Zahl angegeben werden.</string>
-    <string name="project_create_set_source_language">Source Language must be set.</string>
-    <string name="project_create_set_source_country">Source Country must be set.</string>
-    <string name="project_create_set_target_language">Target Languages must be set.</string>
-    <string name="project_create_set_target_country">Target Countries must be set.</string>
+    <string name="project_create_set_source_language">Ausgangssprache muss angegeben werden.</string>
+    <string name="project_create_set_source_country">Ausgangsland muss angegeben werden.</string>
+    <string name="project_create_set_target_language">Zielsprachen müssen angegeben werden.</string>
+    <string name="project_create_set_target_country">Zielländer müssen angegeben werden.</string>
     <string name="project_create_28">Jedes neue Zielsprachenpaar muss einzigartig sein.</string>
     <string name="project_create_29">Wenigstens ein <strong>Aufgabentyp</strong> muss für jede <strong>Zielsprache</strong> ausgewählt sein.</string>
     <string name="project_create_error_title_not_set">Der Projekttitel muss eingegeben werden.</string>
