@@ -515,10 +515,10 @@
     <string name="project_create_25">La scadenza deve essere una data futura.</string>
     <string name="project_create_26">L'impatto del progetto deve essere chiaro.</string>
     <string name="project_create_27">Il conteggio parole del progetto deve essere indicato e deve essere un numero naturale valido.</string>
-    <string name="project_create_set_source_language">Source Language must be set.</string>
-    <string name="project_create_set_source_country">Source Country must be set.</string>
-    <string name="project_create_set_target_language">Target Languages must be set.</string>
-    <string name="project_create_set_target_country">Target Countries must be set.</string>
+    <string name="project_create_set_source_language">Impostare lingua di partenza.</string>
+    <string name="project_create_set_source_country">Impostare Paese della lingua di partenza.</string>
+    <string name="project_create_set_target_language">Impostare lingua di arrivo.</string>
+    <string name="project_create_set_target_country">Impostare Paesi della lingua di arrivo.</string>
     <string name="project_create_28">Le nuove combinazioni linguistiche create devono essere uniche.</string>
     <string name="project_create_29">Per ogni <strong>lingua di arrivo</strong> deve essere selezionato un <strong>tipo di attività</strong>.</string>
     <string name="project_create_error_title_not_set">Indicare il titolo del progetto.</string>
