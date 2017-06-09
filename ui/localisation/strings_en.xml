@@ -518,6 +518,10 @@
     <string name="project_create_25">Deadline must be some date in the future.</string>
     <string name="project_create_26">Project Impact must be set.</string>
     <string name="project_create_27">Project Word Count must be set and be a valid natural number.</string>
+    <string name="project_create_set_source_language">Source Language must be set.</string>
+    <string name="project_create_set_source_country">Source Country must be set.</string>
+    <string name="project_create_set_target_language">Target Languages must be set.</string>
+    <string name="project_create_set_target_country">Target Countries must be set.</string>
     <string name="project_create_28">Each new Target Language pair added must be a unique pair.</string>
     <string name="project_create_29">At least one <strong>Task Type</strong> must be set for each <strong>Target Language</strong>.</string>
     <string name="project_create_error_title_not_set">Project Title must be set.</string>

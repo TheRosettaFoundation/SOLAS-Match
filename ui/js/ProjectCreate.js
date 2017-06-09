@@ -21,6 +21,10 @@ var impactError;
 var tagsError;
 var referenceError;
 var taskError;
+var project_create_set_source_language;
+var project_create_set_source_country;
+var project_create_set_target_language;
+var project_create_set_target_country;
 var duplicateLocale;
 var fileError;
 var imageError;
@@ -84,6 +88,10 @@ function set_errors_for_submission(id, id_for_div)
   html = "";
   if (titleError != null || descriptionError != null || wordCountError != null ||
     deadlineError != null || impactError != null || createProjectError != null ||
+    project_create_set_source_language != null ||
+    project_create_set_source_country != null ||
+    project_create_set_target_language != null ||
+    project_create_set_target_country != null ||
     tagsError != null || referenceError != null || taskError != null || duplicateLocale != null || fileError != null || imageError != null) {
     html += '<div id="' + id_for_div + '" class="alert alert-error pull-left">';
       html += '<h3>' + parameters.getTranslation('common_please_correct_errors') + ':</h3>';
@@ -114,6 +122,18 @@ function set_errors_for_submission(id, id_for_div)
         }
         if (taskError != null) {
           html += '<li>' + taskError + '</li>';
+        }
+        if (project_create_set_source_language != null) {
+          html += '<li>' + project_create_set_source_language + '</li>';
+        }
+        if (project_create_set_source_country != null) {
+          html += '<li>' + project_create_set_source_country + '</li>';
+        }
+        if (project_create_set_target_language != null) {
+          html += '<li>' + project_create_set_target_language + '</li>';
+        }
+        if (project_create_set_target_country != null) {
+          html += '<li>' + project_create_set_target_country + '</li>';
         }
         if (duplicateLocale != null) {
           html += '<li>' + duplicateLocale + '</li>';
@@ -316,6 +336,10 @@ function validateForm()
   tagsError = null;
   referenceError = null;
   taskError = null;
+  project_create_set_source_language = null;
+  project_create_set_source_country = null;
+  project_create_set_target_language = null;
+  project_create_set_target_country = null;
   duplicateLocale = null;
   fileError = null;
   imageError = null;
@@ -498,6 +522,9 @@ function validateLocalValues()
     success = false;
   }
 
+  if (project.sourceLocale.languageCode == 0) project_create_set_source_language = parameters.getTranslation("project_create_set_source_language");
+  if (project.sourceLocale.countryCode  == 0) project_create_set_source_country = parameters.getTranslation("project_create_set_source_country");
+
   var encounteredLocales = [];
   segmentationRequired   = [];
   translationRequired    = [];
@@ -521,6 +548,9 @@ function validateLocalValues()
     targetLanguageLanguage[i] = $("#target_language_" + i + " option:selected").text();
     targetCountryCode     [i] = document.getElementById("target_country_" + i).value;
     targetCountryCountry  [i] = $("#target_country_" + i + " option:selected").text();
+
+    if (targetLanguageCode[i] == 0) project_create_set_target_language = parameters.getTranslation("project_create_set_target_language");
+    if (targetCountryCode [i] == 0) project_create_set_target_country  = parameters.getTranslation("project_create_set_target_country");
 
     // If a duplicate locale is encountered, display error message
     var encounteredLocale = targetLanguageCode[i] + "_" + targetCountryCode[i];
