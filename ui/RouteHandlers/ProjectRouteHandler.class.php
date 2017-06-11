@@ -900,6 +900,19 @@ class ProjectRouteHandler
                                     try {
                                         $projectDao->calculateProjectDeadlines($project->getId());
 
+                                        $source_language = $post['sourceLanguageSelect'] . '-' . $post['sourceCountrySelect'];
+                                        $target_languages = '';
+                                        $targetCount = 0;
+                                        if (!empty($post["target_language_$targetCount"]) && !empty($post["target_country_$targetCount"])) {
+                                            $target_languages = $post["target_language_$targetCount"] . '-' . $post["target_country_$targetCount"];
+                                        }
+                                        $targetCount++;
+                                        while (!empty($post["target_language_$targetCount"]) && !empty($post["target_country_$targetCount"])) {
+                                            $target_languages .= ',' . $target_languages = $post["target_language_$targetCount"] . '-' . $post["target_country_$targetCount"];
+                                            $targetCount++;
+                                        }
+                                        $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, $post['wordCountInput']);
+
                                         try {
                                             $app->redirect($app->urlFor('project-view', array('project_id' => $project->getId())));
                                         } catch (\Exception $e) { // redirect throws \Slim\Exception\Stop
