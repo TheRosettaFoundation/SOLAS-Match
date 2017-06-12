@@ -1332,12 +1332,155 @@ class ProjectRouteHandler
 
     public function project_cron()
     {
+        matecat_acceptable_languages = array(
+'af-ZA',
+'sq-AL',
+'am-AM',
+'ar-SA',
+'an-ES',
+'hy-AM',
+'ast-ES',
+'az-AZ',
+'ba-RU',
+'eu-ES',
+'bn-IN',
+'be-BY',
+'fr-BE',
+'bs-BA',
+'br-FR',
+'bg-BG',
+'my-MM',
+'ca-ES',
+'cav-ES',
+'cb-PH',
+'zh-CN',
+'zh-TW',
+'hr-HR',
+'cs-CZ',
+'da-DK',
+'nl-NL',
+'en-GB',
+'en-US',
+'eo-XN',
+'et-EE',
+'fo-FO',
+'ff-FUL',
+'fi-FI',
+'nl-BE',
+'fr-CA',
+'gl-ES',
+'ka-GE',
+'de-DE',
+'el-GR',
+'gu-IN',
+'ht-HT',
+'ha-HAU',
+'US-HI',
+'he-IL',
+'mrj-RU',
+'hi-IN',
+'hu-HU',
+'is-IS',
+'id-ID',
+'ga-IE',
+'it-IT',
+'ja-JP',
+'jv-ID',
+'kn-IN',
+'kr-KAU',
+'kk-KZ',
+'km-KH',
+'ko-KR',
+'ku-KMR',
+'ku-CKB',
+'ky-KG',
+'lo-LA',
+'la-XN',
+'lv-LV',
+'ln-LIN',
+'lt-LT',
+'lb-LU',
+'mk-MK',
+'mg-MLG',
+'ms-MY',
+'ml-IN',
+'mt-MT',
+'mhr-RU',
+'mi-NZ',
+'mr-IN',
+'mn-MN',
+'sr-ME',
+'nr-ZA',
+'ne-NP',
+'nb-NO',
+'nn-NO',
+'ny-NYA',
+'oc-FR',
+'oc-ES',
+'pa-IN',
+'pap-CW',
+'ps-PK',
+'fa-IR',
+'pl-PL',
+'pt-PT',
+'pt-BR',
+'qu-XN',
+'ro-RO',
+'ru-RU',
+'gd-GB',
+'sr-Latn-RS',
+'sr-Cyrl-RS',
+'nso-ZA',
+'tn-ZA',
+'si-LK',
+'sk-SK',
+'sl-SI',
+'so-SO',
+'es-ES',
+'es-MX',
+'es-CO',
+'su-ID',
+'sw-SZ',
+'sv-SE',
+'de-CH',
+'tl-PH',
+'tg-TJ',
+'ta-IN',
+'te-IN',
+'tt-RU',
+'th-TH',
+'ts-ZA',
+'tr-TR',
+'tk-TM',
+'udm-RU',
+'uk-UA',
+'ur-PK',
+'uz-UZ',
+'vi-VN',
+'cy-GB',
+'xh-ZA',
+'yi-YD',
+'zu-ZA',
+);
+
         $taskDao = new DAO\TaskDao();
 
         $projects = $taskDao->getWordCountRequestForProjects(0);
         if (!empty($projects)) {
             foreach ($projects as $project) {
                 $project_id = $project['project_id'];
+
+                $project_file = getProjectFileLocation($project_id);
+                if (!empty($project_file)) {
+                    $filename = $project_file['filename'];
+                    $file = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/$filename";
+                } else {
+                    error_log("project_cron getProjectFileLocation FAILED for: $project_id");
+                    continue;
+                }
+
+                $source_language = $project['source_language'];
+                if (!in_array($source_language, matecat_acceptable_languages)) $source_language = 'en-US';
 
                 $re = curl_init('https://www.matecat.com/api/new');
 
@@ -1354,15 +1497,14 @@ class ProjectRouteHandler
 
                 // http://php.net/manual/en/class.curlfile.php
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                $file = '/home/alan/Test MS 2.docx';
                 $mime = finfo_file($finfo, $file);
                 finfo_close($finfo);
-                $cfile = new CURLFile($file, $mime, 'Test MS 2.docx');
+                $cfile = new CURLFile($file, $mime, $filename);
 
                 $fields = array(
                   'file'         => $cfile,
-                  'project_name' => 'project-1',
-                  'source_lang'  => 'en-US',
+                  'project_name' => "proj-$project_id",
+                  'source_lang'  => $source_language,
                   'target_lang'  => 'es-ES',
                   'tms_engine'   => '1',
                   'mt_engine'    => '1',
@@ -1393,8 +1535,7 @@ class ProjectRouteHandler
                     }
                     elseif (empty($response_data['id_project']) || empty($response_data['project_pass'])) {
                         error_log("project_cron id_project or project_pass empty!");
-                    }
-                    else {
+                    } else {
                         $matecat_id_project      = $response_data['id_project']
                         $matecat_id_project_pass = $response_data['project_pass']
 
