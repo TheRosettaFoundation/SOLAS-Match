@@ -1468,7 +1468,7 @@ class ProjectRouteHandler
         // status 1 => Uploaded to MateCat [This call will happen one minute after getWordCountRequestForProjects(0)]
         $projects = $taskDao->getWordCountRequestForProjects(1);
 error_log('(1)projects...');
-error_log(print_r($response_data, true));
+error_log(print_r($projects, true));
 $projects = array();
         if (!empty($projects)) {
             foreach ($projects as $project) {
@@ -1536,7 +1536,7 @@ $projects = array();
         // status 0 => Waiting for Upload to MateCat
         $projects = $taskDao->getWordCountRequestForProjects(0);
 error_log('(0)projects...');
-error_log(print_r($response_data, true));
+error_log(print_r($projects, true));
         if (!empty($projects)) {
             foreach ($projects as $project) {
                 $project_id = $project['project_id'];
