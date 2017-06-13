@@ -1551,7 +1551,9 @@ error_log(print_r($projects, true));
                 }
 
                 $source_language = $project['source_language'];
+error_log("1-source_language: $source_language");
                 if (!in_array($source_language, $matecat_acceptable_languages)) $source_language = 'en-US';
+error_log("2-source_language: $source_language");
 
 /*
                 // https://www.matecat.com/api/docs#!/Project/post_new
