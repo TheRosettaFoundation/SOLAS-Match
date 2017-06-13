@@ -1607,8 +1607,8 @@ class ProjectRouteHandler
                         // Change status to Complete (3), if there was an error!
                         $taskDao->updateWordCountRequestForProjects($project_id, 0, 0, 0, 3);
                     } else {
-                        $matecat_id_project      = $response_data['id_project']
-                        $matecat_id_project_pass = $response_data['project_pass']
+                        $matecat_id_project      = $response_data['id_project'];
+                        $matecat_id_project_pass = $response_data['project_pass'];
 
                         // Change status to Uploaded (1), 0 is still placeholder for new word count
                         $taskDao->updateWordCountRequestForProjects($project_id, $matecat_id_project, $matecat_id_project_pass, 0, 1);
