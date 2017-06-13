@@ -1467,6 +1467,9 @@ class ProjectRouteHandler
 
         // status 1 => Uploaded to MateCat [This call will happen one minute after getWordCountRequestForProjects(0)]
         $projects = $taskDao->getWordCountRequestForProjects(1);
+error_log('(1)projects...');
+error_log(print_r($response_data, true));
+$projects = array();
         if (!empty($projects)) {
             foreach ($projects as $project) {
                 $project_id = $project['project_id'];
@@ -1532,6 +1535,8 @@ class ProjectRouteHandler
 
         // status 0 => Waiting for Upload to MateCat
         $projects = $taskDao->getWordCountRequestForProjects(0);
+error_log('(0)projects...');
+error_log(print_r($response_data, true));
         if (!empty($projects)) {
             foreach ($projects as $project) {
                 $project_id = $project['project_id'];
@@ -1548,6 +1553,7 @@ class ProjectRouteHandler
                 $source_language = $project['source_language'];
                 if (!in_array($source_language, $matecat_acceptable_languages)) $source_language = 'en-US';
 
+/*
                 // https://www.matecat.com/api/docs#!/Project/post_new
                 $re = curl_init('https://www.matecat.com/api/new');
 
@@ -1561,6 +1567,7 @@ class ProjectRouteHandler
                     'Expect:'
                 );
                 curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
+*/
 
                 // http://php.net/manual/en/class.curlfile.php
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -1578,6 +1585,9 @@ class ProjectRouteHandler
                   'subject'      => 'general',
                   'owner_email'  => 'anonymous'
                 );
+error_log('fields...');
+error_log(print_r($fields, true));
+/*
                 curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
 
                 curl_setopt($re, CURLOPT_HEADER, true);
@@ -1617,6 +1627,7 @@ class ProjectRouteHandler
                     // If this was a comms error, we will retry (as status is still 0)
                     error_log("project_cron /new ($project_id) responseCode: $responseCode");
                 }
+*/
             }
         }
     }
