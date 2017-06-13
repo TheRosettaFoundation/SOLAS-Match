@@ -1541,7 +1541,7 @@ error_log(print_r($projects, true));
             foreach ($projects as $project) {
                 $project_id = $project['project_id'];
 
-                $project_file = getProjectFileLocation($project_id);
+                $project_file = $taskDao->getProjectFileLocation($project_id);
                 if (!empty($project_file)) {
                     $filename = $project_file['filename'];
                     $file = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/$filename";
