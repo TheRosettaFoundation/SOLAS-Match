@@ -424,7 +424,7 @@ class TaskDao extends BaseDao
     }
 
     public function getProjectFileLocation($project_id) {
-        $result = LibAPI\PDOWrapper::call("getProjectFile", LibAPI\PDOWrapper::cleanse($projectId) . ',NULL,NULL,NULL,NULL');
+        $result = LibAPI\PDOWrapper::call('getProjectFile', LibAPI\PDOWrapper::cleanse($project_id) . ',NULL,NULL,NULL,NULL');
         if ($result) {
             return $result[0];
         } else {
