@@ -1332,7 +1332,7 @@ class ProjectRouteHandler
 
     public function project_cron()
     {
-        matecat_acceptable_languages = array(
+        $matecat_acceptable_languages = array(
 'af-ZA',
 'sq-AL',
 'am-AM',
