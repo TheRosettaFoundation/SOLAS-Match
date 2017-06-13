@@ -1546,7 +1546,7 @@ class ProjectRouteHandler
                 }
 
                 $source_language = $project['source_language'];
-                if (!in_array($source_language, matecat_acceptable_languages)) $source_language = 'en-US';
+                if (!in_array($source_language, $matecat_acceptable_languages)) $source_language = 'en-US';
 
                 // https://www.matecat.com/api/docs#!/Project/post_new
                 $re = curl_init('https://www.matecat.com/api/new');
