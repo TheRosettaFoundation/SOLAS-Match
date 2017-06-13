@@ -6232,8 +6232,8 @@ DROP PROCEDURE IF EXISTS `updateWordCountForProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `updateWordCountForProject`(IN `pID` INT, IN `matecatWordCount` INT)
 BEGIN
-    UPDATES Projects SET `word-count`=matecatWordCount WHERE id=pID;
-    UPDATES Tasks SET `word-count`=matecatWordCount WHERE project_id=pID;
+    UPDATE Projects SET `word-count`=matecatWordCount WHERE id=pID;
+    UPDATE Tasks SET `word-count`=matecatWordCount WHERE project_id=pID;
 END//
 DELIMITER ;
 
