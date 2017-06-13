@@ -1570,10 +1570,13 @@ error_log(print_r($projects, true));
 */
 
                 // http://php.net/manual/en/class.curlfile.php
+error_log("1-filename: $filename, file: $file");
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
                 $mime = finfo_file($finfo, $file);
                 finfo_close($finfo);
+error_log("2-filename: $filename, file: $file");
                 $cfile = new CURLFile($file, $mime, $filename);
+error_log("3-filename: $filename, file: $file");
 
                 $fields = array(
                   'file'         => $cfile,
