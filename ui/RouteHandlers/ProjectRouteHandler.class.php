@@ -1553,6 +1553,7 @@ error_log(print_r($projects, true));
                 $source_language = $project['source_language'];
                 if (!in_array($source_language, $matecat_acceptable_languages)) $source_language = 'en-US';
 
+/*
                 // https://www.matecat.com/api/docs#!/Project/post_new
                 $re = curl_init('https://www.matecat.com/api/new');
 
@@ -1566,6 +1567,7 @@ error_log(print_r($projects, true));
                     'Expect:'
                 );
                 curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
+*/
 
                 // http://php.net/manual/en/class.curlfile.php
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -1583,13 +1585,14 @@ error_log(print_r($projects, true));
                   'subject'      => 'general',
                   'owner_email'  => 'anonymous'
                 );
+/*
                 curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
 
                 curl_setopt($re, CURLOPT_HEADER, true);
                 curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
                 curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
                 curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
-/*
+
                 $res = curl_exec($re);
 
                 $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
