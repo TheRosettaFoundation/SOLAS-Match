@@ -63,7 +63,7 @@ class ProjectRouteHandler
 
         $app->get(
             '/project_cron/',
-            array($this, 'project_cron')
+            array($this, 'project_cronx')
         )->name('project_cron');
     }
 
@@ -1328,6 +1328,11 @@ class ProjectRouteHandler
             );
             $app->redirect($app->urlFor('home'));
         }
+    }
+
+    public function project_cronx()
+    {
+error_log('TOP TOP TOP TOP TOP TOP TOP TOP ');
     }
 
     public function project_cron()
