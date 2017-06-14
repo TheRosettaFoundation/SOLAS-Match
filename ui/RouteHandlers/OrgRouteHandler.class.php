@@ -364,6 +364,9 @@ class OrgRouteHandler
             }
         }
 
+        $adminDao = new DAO\AdminDao();
+        $isSiteAdmin = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
+
         $app->view()->appendData(array(
             'org'  => $org,
             'org2' => $org2,
@@ -380,6 +383,7 @@ class OrgRouteHandler
             'oftens'       => $this->generateOptions($this->possibleOftens(), $org2->getOftens()),
             'errorOccured' => $errorOccured,
             'errorList'    => $errorList,
+            'isSiteAdmin'  => $isSiteAdmin,
             'sesskey'      => $sesskey,
         ));
 
