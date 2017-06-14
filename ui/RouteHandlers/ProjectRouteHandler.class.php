@@ -1332,11 +1332,14 @@ class ProjectRouteHandler
 
     public function project_cronx()
     {
+$app = \Slim\Slim::getInstance();
 error_log('TOP TOP TOP TOP TOP TOP TOP TOP ');
+$app->render("template.tpl");
     }
 
     public function project_cron()
     {
+$this->project_cronx();
 error_log('TOP TOP TOP TOP TOP TOP TOP TOP ');
 return 0;
         $matecat_acceptable_languages = array(
