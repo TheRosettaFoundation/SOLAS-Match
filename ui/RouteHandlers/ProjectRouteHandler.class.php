@@ -1580,7 +1580,7 @@ error_log("1-filename: $filename, file: $file");
                 $mime = finfo_file($finfo, $file);
                 finfo_close($finfo);
 error_log("2-filename: $filename, file: $file");
-                $cfile = new CURLFile($file, $mime, $filename);
+                $cfile = new \CURLFile($file, $mime, $filename);
 error_log("3-filename: $filename, file: $file");
 
                 $fields = array(
