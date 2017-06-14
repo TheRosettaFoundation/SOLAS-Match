@@ -32,7 +32,7 @@
 {else}
 
 <h1 class="page-header">
-Thank you for your interest in registering as an organization on Trommons
+Thank you for your interest in registering as an organisation on Trommons
 </h1>
 Registrations for non-profits are currently managed by Translators without Borders (TWB).<br />
 <br />
