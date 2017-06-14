@@ -365,7 +365,7 @@ class OrgRouteHandler
         }
 
         $adminDao = new DAO\AdminDao();
-        $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
+        $isSiteAdmin = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
 
         $app->view()->appendData(array(
             'org'  => $org,
