@@ -1589,6 +1589,7 @@ error_log(print_r($projects, true));
                 curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
                 curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
                 curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
+/*
                 $res = curl_exec($re);
 
                 $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
@@ -1622,6 +1623,7 @@ error_log(print_r($projects, true));
                     // If this was a comms error, we will retry (as status is still 0)
                     error_log("project_cron /new ($project_id) responseCode: $responseCode");
                 }
+*/
             }
         }
     }
