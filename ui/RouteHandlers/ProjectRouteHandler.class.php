@@ -1333,6 +1333,7 @@ class ProjectRouteHandler
     public function project_cron()
     {
 error_log('TOP TOP TOP TOP TOP TOP TOP TOP ');
+return 0;
         $matecat_acceptable_languages = array(
 'af-ZA',
 'sq-AL',
