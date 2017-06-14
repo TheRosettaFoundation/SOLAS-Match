@@ -1535,6 +1535,8 @@ $projects = array();
 
         // status 0 => Waiting for Upload to MateCat
         $projects = $taskDao->getWordCountRequestForProjects(0);
+error_log('(0)projects...');
+error_log(print_r($projects, true));
         if (!empty($projects)) {
             foreach ($projects as $project) {
                 $project_id = $project['project_id'];
