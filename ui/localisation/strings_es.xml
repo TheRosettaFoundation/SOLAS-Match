@@ -277,6 +277,14 @@
     <string name="create_org_invalid_name">El nombre de la organización no puede contener caracteres no válidos.</string>
     <string name="create_org_created">Se ha creado la organización <strong>%s</strong>.</string>
 
+    <string name="thank_registering_organisation">Gracias por su interés en registrarse como organización en Trommons</string>
+    <string name="registrations_twb">El registro para nuevas ONG será llevado a cabo por Translators without Borders (TWB).<br />
+<br />
+Haga click en <a href="https://translatorswithoutborders.org/non-profit-application/">este enlace para acceder a la página web de Translators without Borders</a>.<br /> 
+<br />
+Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@therosettafoundation.org">info@therosettafoundation.org</a><br />
+</string>
+
 	<string name="org_private_profile_alter_profile_here">Modifica aquí el perfil de tu organización</string>
 	<string name="org_private_profile_public_profile">Perfil público</string>
 	<string name="org_private_profile_your_organisation_name">Nombre de tu organización.</string>

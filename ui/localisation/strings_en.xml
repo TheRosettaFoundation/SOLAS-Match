@@ -277,6 +277,13 @@
     <string name="create_org_invalid_name">Organisation names cannot contain invalid characters.</string>
     <string name="create_org_created">The organisation <strong>%s</strong> has been created.</string>
 
+    <string name="thank_registering_organisation">Thank you for your interest in registering as an organisation on Trommons</string>
+    <string name="registrations_twb">Registrations for non-profits are currently managed by Translators without Borders (TWB).<br />
+<br />
+Please click on <a href="https://translatorswithoutborders.org/non-profit-application/">this link to go to the Translators without Borders website</a>.<br />
+<br />
+Should you have any questions please contact <a href="mailto:info@therosettafoundation.org">info@therosettafoundation.org</a><br /></string>
+
 	<string name="org_private_profile_alter_profile_here">Alter your organisation's profile here.</string>
 	<string name="org_private_profile_public_profile">Public Profile</string>
 	<string name="org_private_profile_your_organisation_name">Your organisation name.</string>

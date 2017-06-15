@@ -32,13 +32,9 @@
 {else}
 
 <h1 class="page-header">
-Thank you for your interest in registering as an organisation on Trommons
+{Localisation::getTranslation('thank_registering_organisation')}
 </h1>
-Registrations for non-profits are currently managed by Translators without Borders (TWB).<br />
-<br />
-Please click on <a href="https://translatorswithoutborders.org/non-profit-application/">this link to go to the Translators without Borders website</a>.<br />
-<br />
-Should you have any questions please contact <a href="mailto:info@therosettafoundation.org">info@therosettafoundation.org</a><br />
+{Localisation::getTranslation('registrations_twb')}
 
 {/if}
 
