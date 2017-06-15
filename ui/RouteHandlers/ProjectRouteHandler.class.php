@@ -62,9 +62,9 @@ class ProjectRouteHandler
         $app->get("/project/:project_id/test/", array($this, "test"));
 
         $app->get(
-            '/project_cron_minute/',
-            array($this, 'project_cron_minute')
-        )->name('project_cron_minute');
+            '/project_cron_1minute/',
+            array($this, 'project_cron_1minute')
+        )->name('project_cron_1minute');
     }
 
     public function test($projectId)
@@ -1330,7 +1330,7 @@ class ProjectRouteHandler
         }
     }
 
-    public function project_cron_minute()
+    public function project_cron_1minute()
     {
 error_log('TOP TOP TOP TOP TOP TOP TOP TOP ');
         $app = \Slim\Slim::getInstance();
