@@ -1335,7 +1335,6 @@ class ProjectRouteHandler
 error_log('TOP TOP TOP TOP TOP TOP TOP TOP ');
 //$app = \Slim\Slim::getInstance();
 //$app->render("template.tpl");
-return 0;
         $matecat_acceptable_languages = array(
 'af-ZA',
 'sq-AL',
