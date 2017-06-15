@@ -1536,9 +1536,11 @@ $projects = array();
         // status 0 => Waiting for Upload to MateCat
         $projects = $taskDao->getWordCountRequestForProjects(0);
         if (!empty($projects)) {
+            $count = 0;
             foreach ($projects as $project) {
+                if (++$count > 1) break; // Limit number done at one time, just in case
+
                 $project_id = $project['project_id'];
-error_log("0 project_id: $project_id");
 
                 $project_file = $taskDao->getProjectFileLocation($project_id);
                 if (!empty($project_file)) {
