@@ -1334,6 +1334,9 @@ class ProjectRouteHandler
     {
 error_log('TOP TOP TOP TOP TOP TOP TOP TOP ');
         $app = \Slim\Slim::getInstance();
+$app->render('nothing.tpl');
+return;
+        $taskDao = new DAO\TaskDao();
 
         $matecat_acceptable_languages = array(
 'af-ZA',
@@ -1465,8 +1468,6 @@ error_log('TOP TOP TOP TOP TOP TOP TOP TOP ');
 'yi-YD',
 'zu-ZA',
 );
-
-        $taskDao = new DAO\TaskDao();
 
         // status 1 => Uploaded to MateCat [This call will happen one minute after getWordCountRequestForProjects(0)]
         $projects = $taskDao->getWordCountRequestForProjects(1);
