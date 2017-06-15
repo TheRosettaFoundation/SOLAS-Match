@@ -1535,11 +1535,10 @@ $projects = array();
 
         // status 0 => Waiting for Upload to MateCat
         $projects = $taskDao->getWordCountRequestForProjects(0);
-error_log('(0)projects...');
-error_log(print_r($projects, true));
         if (!empty($projects)) {
             foreach ($projects as $project) {
                 $project_id = $project['project_id'];
+error_log("0 project_id: $project_id");
 
                 $project_file = $taskDao->getProjectFileLocation($project_id);
                 if (!empty($project_file)) {
@@ -1553,7 +1552,6 @@ error_log(print_r($projects, true));
                 $source_language = $project['source_language'];
                 if (!in_array($source_language, $matecat_acceptable_languages)) $source_language = 'en-US';
 
-/*
                 // https://www.matecat.com/api/docs#!/Project/post_new
                 $re = curl_init('https://www.matecat.com/api/new');
 
@@ -1567,7 +1565,6 @@ error_log(print_r($projects, true));
                     'Expect:'
                 );
                 curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
-*/
 
                 // http://php.net/manual/en/class.curlfile.php
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -1585,7 +1582,6 @@ error_log(print_r($projects, true));
                   'subject'      => 'general',
                   'owner_email'  => 'anonymous'
                 );
-/*
                 curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
 
                 curl_setopt($re, CURLOPT_HEADER, true);
@@ -1626,7 +1622,6 @@ error_log(print_r($projects, true));
                     // If this was a comms error, we will retry (as status is still 0)
                     error_log("project_cron /new ($project_id) responseCode: $responseCode");
                 }
-*/
             }
         }
 
