@@ -1332,14 +1332,6 @@ class ProjectRouteHandler
 
     public function project_cron_1_minute()
     {
-error_log('TOP TOP TOP TOP TOP TOP TOP TOP ');
-        $app = \Slim\Slim::getInstance();
-
-        $app->view()->appendData(array(
-            'body' => 'Dummy',
-        ));
-$app->render('nothing.tpl');
-return;
         $taskDao = new DAO\TaskDao();
 
         $matecat_acceptable_languages = array(
@@ -1638,7 +1630,11 @@ error_log(print_r($projects, true));
             }
         }
 
-        $app->render('nothing.tpl');
+        //$app = \Slim\Slim::getInstance();
+        //$app->view()->appendData(array(
+        //    'body' => 'Dummy',
+        //));
+        //$app->render('nothing.tpl');
     }
 }
 
