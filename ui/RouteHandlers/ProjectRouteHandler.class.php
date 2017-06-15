@@ -60,6 +60,11 @@ class ProjectRouteHandler
         )->name("download-project-image");
 
         $app->get("/project/:project_id/test/", array($this, "test"));
+
+        $app->get(
+            '/project_cron_1_minute/',
+            array($this, 'project_cron_1_minute')
+        )->name('project_cron_1_minute');
     }
 
     public function test($projectId)
@@ -900,6 +905,19 @@ class ProjectRouteHandler
                                     try {
                                         $projectDao->calculateProjectDeadlines($project->getId());
 
+                                        $source_language = $post['sourceLanguageSelect'] . '-' . $post['sourceCountrySelect'];
+                                        $target_languages = '';
+                                        $targetCount = 0;
+                                        if (!empty($post["target_language_$targetCount"]) && !empty($post["target_country_$targetCount"])) {
+                                            $target_languages = $post["target_language_$targetCount"] . '-' . $post["target_country_$targetCount"];
+                                        }
+                                        $targetCount++;
+                                        while (!empty($post["target_language_$targetCount"]) && !empty($post["target_country_$targetCount"])) {
+                                            $target_languages .= ',' . $target_languages = $post["target_language_$targetCount"] . '-' . $post["target_country_$targetCount"];
+                                            $targetCount++;
+                                        }
+                                        $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, $post['wordCountInput']);
+
                                         try {
                                             $app->redirect($app->urlFor('project-view', array('project_id' => $project->getId())));
                                         } catch (\Exception $e) { // redirect throws \Slim\Exception\Stop
@@ -1312,6 +1330,306 @@ class ProjectRouteHandler
         }
     }
 
+    public function project_cron_1_minute()
+    {
+        $taskDao = new DAO\TaskDao();
+
+        $matecat_acceptable_languages = array(
+'af-ZA',
+'sq-AL',
+'am-AM',
+'ar-SA',
+'an-ES',
+'hy-AM',
+'ast-ES',
+'az-AZ',
+'ba-RU',
+'eu-ES',
+'bn-IN',
+'be-BY',
+'fr-BE',
+'bs-BA',
+'br-FR',
+'bg-BG',
+'my-MM',
+'ca-ES',
+'cav-ES',
+'cb-PH',
+'zh-CN',
+'zh-TW',
+'hr-HR',
+'cs-CZ',
+'da-DK',
+'nl-NL',
+'en-GB',
+'en-US',
+'eo-XN',
+'et-EE',
+'fo-FO',
+'ff-FUL',
+'fi-FI',
+'nl-BE',
+'fr-CA',
+'gl-ES',
+'ka-GE',
+'de-DE',
+'el-GR',
+'gu-IN',
+'ht-HT',
+'ha-HAU',
+'US-HI',
+'he-IL',
+'mrj-RU',
+'hi-IN',
+'hu-HU',
+'is-IS',
+'id-ID',
+'ga-IE',
+'it-IT',
+'ja-JP',
+'jv-ID',
+'kn-IN',
+'kr-KAU',
+'kk-KZ',
+'km-KH',
+'ko-KR',
+'ku-KMR',
+'ku-CKB',
+'ky-KG',
+'lo-LA',
+'la-XN',
+'lv-LV',
+'ln-LIN',
+'lt-LT',
+'lb-LU',
+'mk-MK',
+'mg-MLG',
+'ms-MY',
+'ml-IN',
+'mt-MT',
+'mhr-RU',
+'mi-NZ',
+'mr-IN',
+'mn-MN',
+'sr-ME',
+'nr-ZA',
+'ne-NP',
+'nb-NO',
+'nn-NO',
+'ny-NYA',
+'oc-FR',
+'oc-ES',
+'pa-IN',
+'pap-CW',
+'ps-PK',
+'fa-IR',
+'pl-PL',
+'pt-PT',
+'pt-BR',
+'qu-XN',
+'ro-RO',
+'ru-RU',
+'gd-GB',
+'sr-Latn-RS',
+'sr-Cyrl-RS',
+'nso-ZA',
+'tn-ZA',
+'si-LK',
+'sk-SK',
+'sl-SI',
+'so-SO',
+'es-ES',
+'es-MX',
+'es-CO',
+'su-ID',
+'sw-SZ',
+'sv-SE',
+'de-CH',
+'tl-PH',
+'tg-TJ',
+'ta-IN',
+'te-IN',
+'tt-RU',
+'th-TH',
+'ts-ZA',
+'tr-TR',
+'tk-TM',
+'udm-RU',
+'uk-UA',
+'ur-PK',
+'uz-UZ',
+'vi-VN',
+'cy-GB',
+'xh-ZA',
+'yi-YD',
+'zu-ZA',
+);
+
+        // status 1 => Uploaded to MateCat [This call will happen one minute after getWordCountRequestForProjects(0)]
+        $projects = $taskDao->getWordCountRequestForProjects(1);
+        if (!empty($projects)) {
+            foreach ($projects as $project) {
+                $project_id = $project['project_id'];
+                $matecat_id_project = $project['matecat_id_project'];
+                $matecat_id_project_pass = $project['matecat_id_project_pass'];
+
+                // https://www.matecat.com/api/docs#!/Project/get_status (i.e. Word Count)
+                $re = curl_init("https://www.matecat.com/api/status?id_project=$matecat_id_project&project_pass=$matecat_id_project_pass");
+
+                // http://php.net/manual/en/function.curl-setopt.php
+                curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
+                curl_setopt($re, CURLOPT_COOKIESESSION, true);
+                curl_setopt($re, CURLOPT_FOLLOWLOCATION, true);
+                curl_setopt($re, CURLOPT_AUTOREFERER, true);
+
+                $httpHeaders = array(
+                    'Expect:'
+                );
+                curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
+
+                curl_setopt($re, CURLOPT_HEADER, true);
+                curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
+                curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
+                $res = curl_exec($re);
+
+                $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
+                $header = substr($res, 0, $header_size);
+                $res = substr($res, $header_size);
+                $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
+
+                curl_close($re);
+
+                $word_count = 0;
+                if ($responseCode == 200) {
+                    $response_data = json_decode($res, true);
+
+                    if ($response_data['status'] !== 'DONE') {
+                        error_log("project_cron /status ($project_id) status NOT DONE: " . $response_data['status']);
+                    }
+                    if (!empty($response_data['errors'])) {
+                        foreach ($response_data['errors'] as $error) {
+                            error_log("project_cron /status ($project_id) error: " . $error);
+                        }
+                    }
+
+                    if (!empty($response_data['data']['summary']['TOTAL_RAW_WC'])) {
+                        $word_count = $response_data['data']['summary']['TOTAL_RAW_WC'];
+
+                        // Set word count for the Project and its Tasks
+                        $taskDao->updateWordCountForProject($project_id, $word_count);
+                    } else {
+                        error_log("project_cron /status ($project_id) TOTAL_RAW_WC empty!");
+                    }
+                } else {
+                    error_log("project_cron /status ($project_id) responseCode: $responseCode");
+                }
+
+                // Change status to Complete (2), even if there was an error!?
+                $taskDao->updateWordCountRequestForProjects($project_id, $matecat_id_project, $matecat_id_project_pass, $word_count, 2);
+            }
+        }
+
+        // status 0 => Waiting for Upload to MateCat
+        $projects = $taskDao->getWordCountRequestForProjects(0);
+        if (!empty($projects)) {
+            $count = 0;
+            foreach ($projects as $project) {
+                if (++$count > 1) break; // Limit number done at one time, just in case
+
+                $project_id = $project['project_id'];
+
+                $project_file = $taskDao->getProjectFileLocation($project_id);
+                if (!empty($project_file)) {
+                    $filename = $project_file['filename'];
+                    $file = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/$filename";
+                } else {
+                    error_log("project_cron ($project_id) getProjectFileLocation FAILED");
+                    continue;
+                }
+
+                $source_language = $project['source_language'];
+                if (!in_array($source_language, $matecat_acceptable_languages)) $source_language = 'en-US';
+
+                // https://www.matecat.com/api/docs#!/Project/post_new
+                $re = curl_init('https://www.matecat.com/api/new');
+
+                // http://php.net/manual/en/function.curl-setopt.php
+                curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
+                curl_setopt($re, CURLOPT_COOKIESESSION, true);
+                curl_setopt($re, CURLOPT_FOLLOWLOCATION, true);
+                curl_setopt($re, CURLOPT_AUTOREFERER, true);
+
+                $httpHeaders = array(
+                    'Expect:'
+                );
+                curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
+
+                // http://php.net/manual/en/class.curlfile.php
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $mime = finfo_file($finfo, $file);
+                finfo_close($finfo);
+                $cfile = new \CURLFile($file, $mime, $filename);
+
+                $fields = array(
+                  'file'         => $cfile,
+                  'project_name' => "proj-$project_id",
+                  'source_lang'  => $source_language,
+                  'target_lang'  => 'es-ES',
+                  'tms_engine'   => '1',
+                  'mt_engine'    => '1',
+                  'subject'      => 'general',
+                  'owner_email'  => 'anonymous'
+                );
+                curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
+
+                curl_setopt($re, CURLOPT_HEADER, true);
+                curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
+                curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
+
+                $res = curl_exec($re);
+
+                $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
+                $header = substr($res, 0, $header_size);
+                $res = substr($res, $header_size);
+                $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
+
+                curl_close($re);
+
+                if ($responseCode == 200) {
+                    $response_data = json_decode($res, true);
+
+                    if ($response_data['status'] !== 'OK') {
+                        error_log("project_cron /new ($project_id) status NOT OK: " . $response_data['status']);
+                        error_log("project_cron /new ($project_id) status message: " . $response_data['message']);
+                        // Change status to Complete (3), if there was an error!
+                        $taskDao->updateWordCountRequestForProjects($project_id, 0, 0, 0, 3);
+                    }
+                    elseif (empty($response_data['id_project']) || empty($response_data['project_pass'])) {
+                        error_log("project_cron /new ($project_id) id_project or project_pass empty!");
+                        // Change status to Complete (3), if there was an error!
+                        $taskDao->updateWordCountRequestForProjects($project_id, 0, 0, 0, 3);
+                    } else {
+                        $matecat_id_project      = $response_data['id_project'];
+                        $matecat_id_project_pass = $response_data['project_pass'];
+
+                        // Change status to Uploaded (1), 0 is still placeholder for new word count
+                        $taskDao->updateWordCountRequestForProjects($project_id, $matecat_id_project, $matecat_id_project_pass, 0, 1);
+                    }
+                } else {
+                    // If this was a comms error, we will retry (as status is still 0)
+                    error_log("project_cron /new ($project_id) responseCode: $responseCode");
+                }
+            }
+        }
+
+        //$app = \Slim\Slim::getInstance();
+        //$app->view()->appendData(array(
+        //    'body' => 'Dummy',
+        //));
+        //$app->render('nothing.tpl');
+    }
 }
 
 $route_handler = new ProjectRouteHandler();

@@ -392,4 +392,43 @@ class TaskDao extends BaseDao
         }
         return $ret;
     }
+
+    public function insertWordCountRequestForProjects($project_id, $source_language, $target_languages, $user_word_count)
+    {
+        LibAPI\PDOWrapper::call('insertWordCountRequestForProjects',
+            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($source_language) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($target_languages) . ',' .
+            LibAPI\PDOWrapper::cleanse($user_word_count));
+    }
+
+    public function updateWordCountRequestForProjects($project_id, $matecat_id_project, $matecat_id_project_pass, $matecat_word_count, $state)
+    {
+        LibAPI\PDOWrapper::call('updateWordCountRequestForProjects',
+            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($matecat_id_project) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($matecat_id_project_pass) . ',' .
+            LibAPI\PDOWrapper::cleanse($matecat_word_count) . ',' .
+            LibAPI\PDOWrapper::cleanse($state));
+    }
+
+    public function getWordCountRequestForProjects($state)
+    {
+        $result = LibAPI\PDOWrapper::call('getWordCountRequestForProjects', LibAPI\PDOWrapper::cleanse($state));
+        return $result;
+    }
+
+    public function updateWordCountForProject($project_id, $matecat_word_count)
+    {
+        LibAPI\PDOWrapper::call('updateWordCountForProject', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($matecat_word_count));
+    }
+
+    public function getProjectFileLocation($project_id) {
+        $result = LibAPI\PDOWrapper::call('getProjectFile', LibAPI\PDOWrapper::cleanse($project_id) . ',NULL,NULL,NULL,NULL');
+        if ($result) {
+            return $result[0];
+        } else {
+            return false;
+        }
+    }
 }
