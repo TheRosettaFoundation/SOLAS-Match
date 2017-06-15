@@ -6,5 +6,6 @@
 
 <body>
 <h1>Nothing</h1>
+{body}
 </body>
 </html>

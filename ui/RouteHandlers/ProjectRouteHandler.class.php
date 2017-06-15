@@ -1334,6 +1334,10 @@ class ProjectRouteHandler
     {
 error_log('TOP TOP TOP TOP TOP TOP TOP TOP ');
         $app = \Slim\Slim::getInstance();
+
+        $app->view()->appendData(array(
+            'body' => 'dummy',
+        ));
 $app->render('nothing.tpl');
 return;
         $taskDao = new DAO\TaskDao();
