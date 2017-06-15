@@ -62,9 +62,9 @@ class ProjectRouteHandler
         $app->get("/project/:project_id/test/", array($this, "test"));
 
         $app->get(
-            '/project_cron/',
-            array($this, 'project_cronx')
-        )->name('project_cron');
+            '/project_cron_minute/',
+            array($this, 'project_cron_minute')
+        )->name('project_cron_minute');
     }
 
     public function test($projectId)
@@ -1330,17 +1330,11 @@ class ProjectRouteHandler
         }
     }
 
-    public function project_cronx()
+    public function project_cron_minute()
     {
-$app = \Slim\Slim::getInstance();
 error_log('TOP TOP TOP TOP TOP TOP TOP TOP ');
-$app->render("template.tpl");
-    }
-
-    public function project_cron()
-    {
-$this->project_cronx();
-error_log('TOP TOP TOP TOP TOP TOP TOP TOP ');
+//$app = \Slim\Slim::getInstance();
+//$app->render("template.tpl");
 return 0;
         $matecat_acceptable_languages = array(
 'af-ZA',
