@@ -1333,8 +1333,8 @@ class ProjectRouteHandler
     public function project_cron_minute()
     {
 error_log('TOP TOP TOP TOP TOP TOP TOP TOP ');
-//$app = \Slim\Slim::getInstance();
-//$app->render("template.tpl");
+        $app = \Slim\Slim::getInstance();
+
         $matecat_acceptable_languages = array(
 'af-ZA',
 'sq-AL',
@@ -1632,6 +1632,8 @@ error_log(print_r($projects, true));
 */
             }
         }
+
+        $app->render('nothing.tpl');
     }
 }
 
