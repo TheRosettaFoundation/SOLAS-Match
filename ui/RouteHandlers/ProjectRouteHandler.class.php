@@ -1334,137 +1334,6 @@ class ProjectRouteHandler
     {
         $taskDao = new DAO\TaskDao();
 
-        $matecat_acceptable_languages = array(
-'af-ZA',
-'sq-AL',
-'am-AM',
-'ar-SA',
-'an-ES',
-'hy-AM',
-'ast-ES',
-'az-AZ',
-'ba-RU',
-'eu-ES',
-'bn-IN',
-'be-BY',
-'fr-BE',
-'bs-BA',
-'br-FR',
-'bg-BG',
-'my-MM',
-'ca-ES',
-'cav-ES',
-'cb-PH',
-'zh-CN',
-'zh-TW',
-'hr-HR',
-'cs-CZ',
-'da-DK',
-'nl-NL',
-'en-GB',
-'en-US',
-'eo-XN',
-'et-EE',
-'fo-FO',
-'ff-FUL',
-'fi-FI',
-'nl-BE',
-'fr-CA',
-'gl-ES',
-'ka-GE',
-'de-DE',
-'el-GR',
-'gu-IN',
-'ht-HT',
-'ha-HAU',
-'US-HI',
-'he-IL',
-'mrj-RU',
-'hi-IN',
-'hu-HU',
-'is-IS',
-'id-ID',
-'ga-IE',
-'it-IT',
-'ja-JP',
-'jv-ID',
-'kn-IN',
-'kr-KAU',
-'kk-KZ',
-'km-KH',
-'ko-KR',
-'ku-KMR',
-'ku-CKB',
-'ky-KG',
-'lo-LA',
-'la-XN',
-'lv-LV',
-'ln-LIN',
-'lt-LT',
-'lb-LU',
-'mk-MK',
-'mg-MLG',
-'ms-MY',
-'ml-IN',
-'mt-MT',
-'mhr-RU',
-'mi-NZ',
-'mr-IN',
-'mn-MN',
-'sr-ME',
-'nr-ZA',
-'ne-NP',
-'nb-NO',
-'nn-NO',
-'ny-NYA',
-'oc-FR',
-'oc-ES',
-'pa-IN',
-'pap-CW',
-'ps-PK',
-'fa-IR',
-'pl-PL',
-'pt-PT',
-'pt-BR',
-'qu-XN',
-'ro-RO',
-'ru-RU',
-'gd-GB',
-'sr-Latn-RS',
-'sr-Cyrl-RS',
-'nso-ZA',
-'tn-ZA',
-'si-LK',
-'sk-SK',
-'sl-SI',
-'so-SO',
-'es-ES',
-'es-MX',
-'es-CO',
-'su-ID',
-'sw-SZ',
-'sv-SE',
-'de-CH',
-'tl-PH',
-'tg-TJ',
-'ta-IN',
-'te-IN',
-'tt-RU',
-'th-TH',
-'ts-ZA',
-'tr-TR',
-'tk-TM',
-'udm-RU',
-'uk-UA',
-'ur-PK',
-'uz-UZ',
-'vi-VN',
-'cy-GB',
-'xh-ZA',
-'yi-YD',
-'zu-ZA',
-);
-
         // status 1 => Uploaded to MateCat [This call will happen one minute after getWordCountRequestForProjects(0)]
         $projects = $taskDao->getWordCountRequestForProjects(1);
         if (!empty($projects)) {
@@ -1474,7 +1343,8 @@ class ProjectRouteHandler
                 $matecat_id_project_pass = $project['matecat_id_project_pass'];
 
                 // https://www.matecat.com/api/docs#!/Project/get_status (i.e. Word Count)
-                $re = curl_init("https://www.matecat.com/api/status?id_project=$matecat_id_project&project_pass=$matecat_id_project_pass");
+                // $re = curl_init("https://www.matecat.com/api/status?id_project=$matecat_id_project&project_pass=$matecat_id_project_pass");
+                $re = curl_init("https://kato.translatorswb.org/api/status?id_project=$matecat_id_project&project_pass=$matecat_id_project_pass");
 
                 // http://php.net/manual/en/function.curl-setopt.php
                 curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
@@ -1549,10 +1419,12 @@ class ProjectRouteHandler
                 }
 
                 $source_language = $project['source_language'];
-                if (!in_array($source_language, $matecat_acceptable_languages)) $source_language = 'en-US';
+                $source_language = $this->valid_language_for_makecat($source_language)
+                if (empty($source_language)) $source_language = 'en-US';
 
                 // https://www.matecat.com/api/docs#!/Project/post_new
-                $re = curl_init('https://www.matecat.com/api/new');
+                // $re = curl_init('https://www.matecat.com/api/new');
+                $re = curl_init('https://kato.translatorswb.org/api/new');
 
                 // http://php.net/manual/en/function.curl-setopt.php
                 curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
@@ -1571,11 +1443,25 @@ class ProjectRouteHandler
                 finfo_close($finfo);
                 $cfile = new \CURLFile($file, $mime, $filename);
 
+                $target_languages = explode(',', $project['target_languages']);
+                $filtered_target_languages = '';
+                foreach ($target_languages as $target_language) {
+                    $target_language = $this->valid_language_for_makecat($target_language);
+                    if (!empty($target_language)) {
+                        if (empty($filtered_target_languages)) {
+                            $filtered_target_languages = $target_language;
+                        } else {
+                            $filtered_target_languages .= ',' . $target_language;
+                        }
+                    }
+                }
+                if empty($filtered_target_languages) $filtered_target_languages = 'es-ES';
+
                 $fields = array(
                   'file'         => $cfile,
                   'project_name' => "proj-$project_id",
                   'source_lang'  => $source_language,
-                  'target_lang'  => 'es-ES',
+                  'target_lang'  => '$filtered_target_languages,
                   'tms_engine'   => '1',
                   'mt_engine'    => '1',
                   'subject'      => 'general',
@@ -1629,6 +1515,144 @@ class ProjectRouteHandler
         //    'body' => 'Dummy',
         //));
         //$app->render('nothing.tpl');
+    }
+
+    public function valid_language_for_makecat($language_code)
+    {
+        $matecat_acceptable_languages = array(
+'af' => 'af-ZA',
+'sq' => 'sq-AL',
+'am' => 'am-AM',
+'ar' => 'ar-SA',
+'an' => 'an-ES',
+'hy' => 'hy-AM',
+'ast' => 'ast-ES',
+'az' => 'az-AZ',
+'ba' => 'ba-RU',
+'eu' => 'eu-ES',
+'bn' => 'bn-IN',
+'be' => 'be-BY',
+'fr-BE' => 'fr-BE',
+'bs' => 'bs-BA',
+'br' => 'br-FR',
+'bg' => 'bg-BG',
+'my' => 'my-MM',
+'ca' => 'ca-ES',
+'cav' => 'cav-ES',
+'cb' => 'cb-PH',
+'zh' => 'zh-CN',
+'zh-TW' => 'zh-TW',
+'hr' => 'hr-HR',
+'cs' => 'cs-CZ',
+'da' => 'da-DK',
+'nl' => 'nl-NL',
+'en-GB' => 'en-GB',
+'en' => 'en-US',
+'eo' => 'eo-XN',
+'et' => 'et-EE',
+'fo' => 'fo-FO',
+'ff' => 'ff-FUL',
+'fi' => 'fi-FI',
+'nl-BE' => 'nl-BE',
+'fr' => 'fr-FR',
+'fr-CA' => 'fr-CA',
+'gl' => 'gl-ES',
+'ka' => 'ka-GE',
+'de' => 'de-DE',
+'el' => 'el-GR',
+'gu' => 'gu-IN',
+'ht' => 'ht-HT',
+'ha' => 'ha-HAU',
+'US' => 'US-HI',
+'he' => 'he-IL',
+'mrj' => 'mrj-RU',
+'hi' => 'hi-IN',
+'hu' => 'hu-HU',
+'is' => 'is-IS',
+'id' => 'id-ID',
+'ga' => 'ga-IE',
+'it' => 'it-IT',
+'ja' => 'ja-JP',
+'jv' => 'jv-ID',
+'kn' => 'kn-IN',
+'kr' => 'kr-KAU',
+'kk' => 'kk-KZ',
+'km' => 'km-KH',
+'ko' => 'ko-KR',
+'ku' => 'ku-KMR',
+'ku-CKB' => 'ku-CKB',
+'ky' => 'ky-KG',
+'lo' => 'lo-LA',
+'la' => 'la-XN',
+'lv' => 'lv-LV',
+'ln' => 'ln-LIN',
+'lt' => 'lt-LT',
+'lb' => 'lb-LU',
+'mk' => 'mk-MK',
+'mg' => 'mg-MLG',
+'ms' => 'ms-MY',
+'ml' => 'ml-IN',
+'mt' => 'mt-MT',
+'mhr' => 'mhr-RU',
+'mi' => 'mi-NZ',
+'mr' => 'mr-IN',
+'mn' => 'mn-MN',
+'sr-ME' => 'sr-ME',
+'nr' => 'nr-ZA',
+'ne' => 'ne-NP',
+'nb' => 'nb-NO',
+'nn' => 'nn-NO',
+'ny' => 'ny-NYA',
+'oc' => 'oc-FR',
+'oc-ES' => 'oc-ES',
+'pa' => 'pa-IN',
+'pap' => 'pap-CW',
+'ps' => 'ps-PK',
+'fa' => 'fa-IR',
+'pl' => 'pl-PL',
+'pt-PT' => 'pt-PT',
+'pt' => 'pt-BR',
+'qu' => 'qu-XN',
+'ro' => 'ro-RO',
+'ru' => 'ru-RU',
+'gd' => 'gd-GB',
+'sr-Latn-RS' => 'sr-Latn-RS',
+'sr' => 'sr-Cyrl-RS',
+'nso' => 'nso-ZA',
+'tn' => 'tn-ZA',
+'si' => 'si-LK',
+'sk' => 'sk-SK',
+'sl' => 'sl-SI',
+'so' => 'so-SO',
+'es-ES' => 'es-ES',
+'es' => 'es-MX',
+'es-CO' => 'es-CO',
+'su' => 'su-ID',
+'sw' => 'sw-SZ',
+'sv' => 'sv-SE',
+'de-CH' => 'de-CH',
+'tl' => 'tl-PH',
+'tg' => 'tg-TJ',
+'ta' => 'ta-IN',
+'te' => 'te-IN',
+'tt' => 'tt-RU',
+'th' => 'th-TH',
+'ts' => 'ts-ZA',
+'tr' => 'tr-TR',
+'tk' => 'tk-TM',
+'udm' => 'udm-RU',
+'uk' => 'uk-UA',
+'ur' => 'ur-PK',
+'uz' => 'uz-UZ',
+'vi' => 'vi-VN',
+'cy' => 'cy-GB',
+'xh' => 'xh-ZA',
+'yi' => 'yi-YD',
+'zu' => 'zu-ZA',
+);
+        if (in_array($language_code, $matecat_acceptable_languages)) return $language_code;
+        if (!empty($matecat_acceptable_languages[substr($language_code, strpos($language_code, '-'))]) return $matecat_acceptable_languages[substr($language_code, strpos($language_code, '-'))];
+        return '';
     }
 }
 
