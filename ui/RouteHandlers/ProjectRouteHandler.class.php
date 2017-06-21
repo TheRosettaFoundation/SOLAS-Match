@@ -1419,7 +1419,7 @@ class ProjectRouteHandler
                 }
 
                 $source_language = $project['source_language'];
-                $source_language = $this->valid_language_for_makecat($source_language)
+                $source_language = $this->valid_language_for_matecat($source_language)
                 if (empty($source_language)) $source_language = 'en-US';
 
                 // https://www.matecat.com/api/docs#!/Project/post_new
@@ -1444,24 +1444,28 @@ class ProjectRouteHandler
                 $cfile = new \CURLFile($file, $mime, $filename);
 
                 $target_languages = explode(',', $project['target_languages']);
-                $filtered_target_languages = '';
+                $filtered_target_languages = array();
                 foreach ($target_languages as $target_language) {
-                    $target_language = $this->valid_language_for_makecat($target_language);
-                    if (!empty($target_language)) {
-                        if (empty($filtered_target_languages)) {
-                            $filtered_target_languages = $target_language;
-                        } else {
-                            $filtered_target_languages .= ',' . $target_language;
-                        }
+                    $target_language = $this->valid_language_for_matecat($target_language);
+                    if (!empty($target_language) && ($target_language != $source_language)) {
+                        $filtered_target_languages[$target_language] = $target_language;
                     }
                 }
-                if empty($filtered_target_languages) $filtered_target_languages = 'es-ES';
+                if (!empty($filtered_target_languages)) {
+                    $filtered_target_languages = implode(',', $filtered_target_languages);
+                } else {
+                    if ($source_language != 'es-ES') {
+                        $filtered_target_languages = 'es-ES';
+                    } else {
+                        $filtered_target_languages = 'en-US';
+                    }
+                }
 
                 $fields = array(
                   'file'         => $cfile,
                   'project_name' => "proj-$project_id",
                   'source_lang'  => $source_language,
-                  'target_lang'  => '$filtered_target_languages,
+                  'target_lang'  => $filtered_target_languages,
                   'tms_engine'   => '1',
                   'mt_engine'    => '1',
                   'subject'      => 'general',
@@ -1517,7 +1521,7 @@ class ProjectRouteHandler
         //$app->render('nothing.tpl');
     }
 
-    public function valid_language_for_makecat($language_code)
+    public function valid_language_for_matecat($language_code)
     {
         $matecat_acceptable_languages = array(
 'af' => 'af-ZA',
