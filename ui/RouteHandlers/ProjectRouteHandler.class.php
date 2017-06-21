@@ -1655,7 +1655,7 @@ class ProjectRouteHandler
 'zu' => 'zu-ZA',
 );
         if (in_array($language_code, $matecat_acceptable_languages)) return $language_code;
-        if (!empty($matecat_acceptable_languages[substr($language_code, strpos($language_code, '-'))]) return $matecat_acceptable_languages[substr($language_code, strpos($language_code, '-'))];
+        if (!empty($matecat_acceptable_languages[substr($language_code, strpos($language_code, '-'))])) return $matecat_acceptable_languages[substr($language_code, strpos($language_code, '-'))];
         return '';
     }
 }
