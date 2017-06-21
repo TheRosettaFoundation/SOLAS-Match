@@ -1419,7 +1419,7 @@ class ProjectRouteHandler
                 }
 
                 $source_language = $project['source_language'];
-                $source_language = $this->valid_language_for_matecat($source_language)
+                $source_language = $this->valid_language_for_matecat($source_language);
                 if (empty($source_language)) $source_language = 'en-US';
 
                 // https://www.matecat.com/api/docs#!/Project/post_new
