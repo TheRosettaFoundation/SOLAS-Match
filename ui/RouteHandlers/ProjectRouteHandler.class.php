@@ -1386,8 +1386,15 @@ class ProjectRouteHandler
                     if (!empty($response_data['data']['summary']['TOTAL_RAW_WC'])) {
                         $word_count = $response_data['data']['summary']['TOTAL_RAW_WC'];
 
-                        // Set word count for the Project and its Tasks
-                        $taskDao->updateWordCountForProject($project_id, $word_count);
+                        if (!empty($response_data['jobs']['langpairs'])) {
+                            $langpairs = count($response_data['jobs']['langpairs']);
+                            $word_count = $word_count / $langpairs;
+
+                            // Set word count for the Project and its Tasks
+                            $taskDao->updateWordCountForProject($project_id, $word_count);
+                        } else {
+                            error_log("project_cron /status ($project_id) langpairs empty!");
+                        }
                     } else {
                         error_log("project_cron /status ($project_id) TOTAL_RAW_WC empty!");
                     }
