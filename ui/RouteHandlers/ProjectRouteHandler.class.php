@@ -1391,7 +1391,7 @@ class ProjectRouteHandler
                             $word_count = $word_count / $langpairs;
 
                             // Set word count for the Project and its Tasks
-                            $taskDao->updateWordCountForProject($project_id, $word_count);
+//                            $taskDao->updateWordCountForProject($project_id, $word_count);
                         } else {
                             error_log("project_cron /status ($project_id) langpairs empty!");
                         }
