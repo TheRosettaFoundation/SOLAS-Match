@@ -1386,6 +1386,20 @@ CREATE TABLE IF NOT EXISTS `RestrictedTasks` (
   CONSTRAINT `FK_restricted_task_id` FOREIGN KEY (`restricted_task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `WordCountRequestForProjects` (
+    project_id INT(10) UNSIGNED NOT NULL,
+    matecat_id_project INT(10) UNSIGNED NOT NULL,
+    matecat_id_project_pass VARCHAR(50) NOT NULL,
+    source_language VARCHAR(10) NOT NULL,
+    target_languages VARCHAR(100) NOT NULL,
+    user_word_count INT(10) UNSIGNED NOT NULL,
+    matecat_word_count INT(10) UNSIGNED NOT NULL,
+    state INT(10) UNSIGNED NOT NULL,
+    KEY state (state),
+    KEY FK_WordCountRequestForProjects_project_id (project_id),
+    CONSTRAINT FK_WordCountRequestForProjects_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -6185,6 +6199,41 @@ UNION
     WHERE languageCode IS NULL OR l.code=languageCode
 )
 ORDER BY language_name, country_name, display_name;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insertWordCountRequestForProjects`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertWordCountRequestForProjects`(IN `pID` INT, IN sourceLanguage VARCHAR(10), IN targetLanguages VARCHAR(100), IN `userWordCount` INT)
+BEGIN
+    INSERT INTO WordCountRequestForProjects
+               (project_id, matecat_id_project, matecat_id_project_pass, source_language, target_languages, user_word_count, matecat_word_count, state)
+        VALUES (pID,                         0,                      '',  sourceLanguage,  targetLanguages,   userWordCount,                  0,     0);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `updateWordCountRequestForProjects`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateWordCountRequestForProjects`(IN `pID` INT, IN `matecatID` INT, IN `matecatPW` VARCHAR(50), IN `matecatWordCount` INT, IN `setState` INT)
+BEGIN
+    UPDATE WordCountRequestForProjects SET matecat_id_project=matecatID, matecat_id_project_pass=matecatPW, matecat_word_count=matecatWordCount, state=setState WHERE project_id=pID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getWordCountRequestForProjects`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getWordCountRequestForProjects`(IN `getState` INT)
+BEGIN
+    SELECT * FROM WordCountRequestForProjects WHERE state=getState;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `updateWordCountForProject`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateWordCountForProject`(IN `pID` INT, IN `matecatWordCount` INT)
+BEGIN
+    UPDATE Projects SET `word-count`=matecatWordCount WHERE id=pID;
+    UPDATE Tasks SET `word-count`=matecatWordCount WHERE project_id=pID;
 END//
 DELIMITER ;
 
