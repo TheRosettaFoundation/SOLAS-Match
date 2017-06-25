@@ -913,7 +913,7 @@ class ProjectRouteHandler
                                         }
                                         $targetCount++;
                                         while (!empty($post["target_language_$targetCount"]) && !empty($post["target_country_$targetCount"])) {
-                                            $target_languages .= ',' . $target_languages = $post["target_language_$targetCount"] . '-' . $post["target_country_$targetCount"];
+                                            $target_languages .= ',' . $post["target_language_$targetCount"] . '-' . $post["target_country_$targetCount"];
                                             $targetCount++;
                                         }
                                         $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, $post['wordCountInput']);
