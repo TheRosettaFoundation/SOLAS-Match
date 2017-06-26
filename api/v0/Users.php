@@ -997,6 +997,7 @@ class Users
     {
         $user = DAO\UserDao::getRegisteredUser($uuid);
         if ($user != null) {
+            error_log("finishRegistration($uuid) " . $user->getId());
             $ret = DAO\UserDao::finishRegistration($user->getId());
             API\Dispatcher::sendResponse(null, $ret, null, $format);
         } else {
@@ -1006,6 +1007,7 @@ class Users
 
     public static function finishRegistrationManually($email, $format = '.json')
     {
+        error_log("finishRegistrationManually($email)");
         $ret = DAO\UserDao::finishRegistrationManually($email);
         API\Dispatcher::sendResponse(null, $ret, null, $format);
     }
@@ -1077,6 +1079,7 @@ class Users
     {
         $user = DAO\UserDao::getUser(null, $email);
         if (!$user) {
+            error_log("apiRegister($email) in getAuthCode()");
             DAO\UserDao::apiRegister($email, md5($email), false);
             $user = DAO\UserDao::getUser(null, $email);
             DAO\UserDao::finishRegistration($user->getId());
@@ -1371,6 +1374,7 @@ class Users
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper($format);
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Register");
+        error_log("apiRegister() in register() " . $data->getEmail());
         $registered = DAO\UserDao::apiRegister($data->getEmail(), $data->getPassword());
         //Set new user's personal info to show their preferred language as English.
         $newUser = DAO\UserDao::getUser(null, $data->getEmail());
@@ -1437,6 +1441,7 @@ class Users
             $format = '.'.$userId[1];
             $userId = $userId[0];
         }
+        error_log("deleteUser($userId)");
         DAO\UserDao::deleteUser($userId);
         API\Dispatcher::sendResponse(null, null, null, $format);
     }
