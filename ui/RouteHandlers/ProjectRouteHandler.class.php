@@ -1476,7 +1476,7 @@ class ProjectRouteHandler
                   'tms_engine'   => '1',
                   'mt_engine'    => '1',
                   'subject'      => 'general',
-                  'owner_email'  => 'anonymous'
+                  'owner_email'  => 'info@trommons.org'
                 );
                 curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
 
