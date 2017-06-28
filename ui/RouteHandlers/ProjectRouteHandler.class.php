@@ -642,7 +642,8 @@ class ProjectRouteHandler
                     || empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact'])
                     || empty($post['sourceCountrySelect']) || empty($post['sourceLanguageSelect']) || empty($post['project_deadline'])
                     || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $post['project_deadline'])
-                    || empty($post['wordCountInput']) || !ctype_digit($post['wordCountInput'])) {
+                    ) {
+                    // || empty($post['wordCountInput']) || !ctype_digit($post['wordCountInput'])
                 // Note the deadline date validation above is only partial (these checks have been done more rigorously on client size, if that is to be trusted)
                 $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_to_create_project'), htmlspecialchars($post['project_title'], ENT_COMPAT, 'UTF-8')));
             } else {
@@ -654,7 +655,8 @@ class ProjectRouteHandler
                 $project->setDeadline($post['project_deadline']);
                 $project->setImpact($post['project_impact']);
                 $project->setReference($post['project_reference']);
-                $project->setWordCount($post['wordCountInput']);
+                // $project->setWordCount($post['wordCountInput']);
+                $project->setWordCount(0);
 
                 $sourceLocale->setCountryCode($post['sourceCountrySelect']);
                 $sourceLocale->setLanguageCode($post['sourceLanguageSelect']);
@@ -916,7 +918,8 @@ class ProjectRouteHandler
                                             $target_languages .= ',' . $post["target_language_$targetCount"] . '-' . $post["target_country_$targetCount"];
                                             $targetCount++;
                                         }
-                                        $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, $post['wordCountInput']);
+                                        // $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, $post['wordCountInput']);
+                                        $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, 0);
 
                                         try {
                                             $app->redirect($app->urlFor('project-view', array('project_id' => $project->getId())));
@@ -1114,7 +1117,7 @@ class ProjectRouteHandler
         }
 
         $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/ProjectCreate1.js\"></script>";
+        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/ProjectCreate2.js\"></script>";
 
         $app->view()->appendData(array(
             "siteLocation"          => Common\Lib\Settings::get('site.location'),
@@ -1391,7 +1394,7 @@ class ProjectRouteHandler
                             $word_count = $word_count / $langpairs;
 
                             // Set word count for the Project and its Tasks
-//                            $taskDao->updateWordCountForProject($project_id, $word_count);
+                            $taskDao->updateWordCountForProject($project_id, $word_count);
                         } else {
                             error_log("project_cron /status ($project_id) langpairs empty!");
                         }

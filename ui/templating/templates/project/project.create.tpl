@@ -101,11 +101,8 @@
                 </div>
                 <div class="projFormInput">
                     <div style="margin-bottom: 25px;">
-                        <h2>{Localisation::getTranslation('common_word_count')}: <span style="color: red">*</span></h2>
-                        <p class="desc">{Localisation::getTranslation('common_approximate_or_use_a_website_such_as')}
-                            <a href="http://wordcounttool.net/" target="_blank">{Localisation::getTranslation('task_create_word_count_tool')}</a>
-                        </p>
-                        <input type="text"  maxlength="6" name="wordCountInput" id="wordCountInput" style="width: 400px"/>
+                        <h2>{Localisation::getTranslation('common_word_count')}:</h2>
+                        <p class="desc">{Localisation::getTranslation('project_create_word_count')}</p>
                     </div>
                 </div>
                 <div class="projFormInput">

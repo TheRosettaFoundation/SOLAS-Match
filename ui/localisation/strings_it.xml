@@ -486,6 +486,7 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@therosettafoun
 	<string name="project_create_3">Chi o cosa trarrà vantaggio dalla contribuzione a questo progetto.</string>
 	<string name="project_create_4">Questa parte verrà letta dai volontari che stanno valutando se contribuire al tuo progetto.</string>
 	<string name="project_create_5">Inserisci un indirizzo web che dia un contesto al progetto.</string>
+    <string name="project_create_word_count">This will be calculated automatically, and will be visible, after a two minute delay, on the page you reach after submitting this form.</string>
 	<string name="project_create_6">Carica il file sorgente per questo progetto.</string>
 	<string name="project_create_7">Quando il progetto e le sue attività dovrebbero concludersi.</string>
 	<string name="project_create_8">I tag selezionati verranno usati per abbinare i volontari al tuo progetto.</string>

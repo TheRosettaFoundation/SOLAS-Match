@@ -355,7 +355,7 @@ function validateForm()
   selectedDay    = document.getElementById("selectedDay").value;
   selectedHour   = document.getElementById("selectedHour").value;
   selectedMinute = document.getElementById("selectedMinute").value;
-  wordCountInput = document.getElementById("wordCountInput").value;
+  // wordCountInput = document.getElementById("wordCountInput").value;
   trackProject   = document.getElementById("trackProject").checked;
   publish        = document.getElementById("publish").checked;
 
@@ -469,8 +469,8 @@ function validateLocalValues()
     }
   } else {
     // Word count is not set
-    wordCountError = parameters.getTranslation("project_create_27");
-    success = false;
+    // wordCountError = parameters.getTranslation("project_create_27");
+    // success = false;
   }
 
   if (!validateTagList(tagList)) {

@@ -490,6 +490,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="project_create_4">This will be read by volunteers considering assigning themselves to your project.</string>
 	<string name="project_create_5">Enter a URL that gives context to this project.</string>
 	<string name="project_create_6">Upload your source file for the project.</string>
+    <string name="project_create_word_count">This will be calculated automatically, and will be visible, after a two minute delay, on the page you reach after submitting this form.</string>
 	<string name="project_create_7">When the project and its tasks should be completed by.</string>
 	<string name="project_create_8">The tags you provide will be used to match volunteers to your project.</string>
 	<string name="project_create_separated_by">Separated by</string>
