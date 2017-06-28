@@ -1651,6 +1651,9 @@ class TaskRouteHandler
 <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/DeadlinePicker.js\"></script>
 ";
 
+        $task_word_count = $task->getWordCount();
+        if (empty($task_word_count)) $task->setWordCount($project->getWordCount());
+
         $app->view()->appendData(array(
             'sesskey'       => $sesskey,
             "project"       => $project,
