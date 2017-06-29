@@ -1403,6 +1403,9 @@ class ProjectRouteHandler
 
                             // Set word count for the Project and its Tasks
                             $taskDao->updateWordCountForProject($project_id, $word_count);
+
+                            // Change status to Complete (2)
+                            $taskDao->updateWordCountRequestForProjects($project_id, $matecat_id_project, $matecat_id_project_pass, $word_count, 2);
                         } else {
                             error_log("project_cron /status ($project_id) langpairs empty!");
                         }
@@ -1412,9 +1415,7 @@ class ProjectRouteHandler
                 } else {
                     error_log("project_cron /status ($project_id) responseCode: $responseCode");
                 }
-
-                // Change status to Complete (2), even if there was an error!?
-                $taskDao->updateWordCountRequestForProjects($project_id, $matecat_id_project, $matecat_id_project_pass, $word_count, 2);
+                // Note, we will retry if there was an error and hope it is temporary and/or the analysis is not complete yet
             }
         }
 
