@@ -32,8 +32,10 @@
                 <div class="convert_utc_to_local" style="visibility: hidden">{$task->getDeadline()}</div>
             </td>
             <td>
-                <div id="siteLocationURL">{Settings::get("site.location")}</div>
-                <div id="project_id_for_updated_wordcount">{$task->getProjectId()}</div>
+                <span class="hidden">
+                    <div id="siteLocationURL">{Settings::get("site.location")}</div>
+                    <div id="project_id_for_updated_wordcount">{$task->getProjectId()}</div>
+                </span>
                 <div id="put_updated_wordcount_here">
                 {if $task->getWordCount() != '' && $task->getWordCount() != 0}
                     {$task->getWordCount()}
