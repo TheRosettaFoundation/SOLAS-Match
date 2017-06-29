@@ -1335,6 +1335,9 @@ class ProjectRouteHandler
 
     public function project_cron_1_minute()
     {
+      $fp_for_lock = fopen(__DIR__ . '/project_cron_1_minute_lock.txt', 'r+');
+      if (flock($fp_for_lock, LOCK_EX)) { // Acquire an exclusive lock, if possible, if not we will wait for next time
+
         $taskDao = new DAO\TaskDao();
 
         // status 1 => Uploaded to MateCat [This call will happen one minute after getWordCountRequestForProjects(0)]
@@ -1523,6 +1526,10 @@ class ProjectRouteHandler
                 }
             }
         }
+
+        flock($fp_for_lock, LOCK_UN); // Release the lock
+      }
+      fclose($fp_for_lock);
 
         //$app = \Slim\Slim::getInstance();
         //$app->view()->appendData(array(
