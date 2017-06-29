@@ -84,6 +84,7 @@ Tweet</a>
                     {/if}
                 </td>
                 <td>
+                    <div id="project_id_for_updated_wordcount">{$project_id}</div>
                     <div class="put_updated_wordcount_here">
                     {if $project->getWordCount() != '' && $project->getWordCount() != 0}
                         {$project->getWordCount()}
