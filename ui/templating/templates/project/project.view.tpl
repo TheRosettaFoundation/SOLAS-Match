@@ -84,11 +84,13 @@ Tweet</a>
                     {/if}
                 </td>
                 <td>
-                    {if $project->getWordCount() != ''}
+                    <div class="put_updated_wordcount_here">
+                    {if $project->getWordCount() != '' && $project->getWordCount() != 0}
                         {$project->getWordCount()}
                     {else}
                         -
                     {/if}
+                    </div>
                 </td>
                 <td>
                     <div class="convert_utc_to_local" style="visibility: hidden">{$project->getCreatedTime()}</div>
