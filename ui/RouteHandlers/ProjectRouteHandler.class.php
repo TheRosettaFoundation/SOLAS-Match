@@ -1687,7 +1687,7 @@ class ProjectRouteHandler
         $projectDao = new DAO\ProjectDao();
         $project = $projectDao->getProject($project_id);
 
-        project_cron_1_minute(); // Trigger update
+        $this->project_cron_1_minute(); // Trigger update
 
         \Slim\Slim::getInstance()->response()->body($project->getWordCount());
     }
