@@ -65,6 +65,11 @@ class ProjectRouteHandler
             '/project_cron_1_minute/',
             array($this, 'project_cron_1_minute')
         )->name('project_cron_1_minute');
+
+        $app->get(
+            '/project/:project_id/getwordcount/',
+            array($this, 'project_get_wordcount')
+        )->name('project_get_wordcount');
     }
 
     public function test($projectId)
@@ -1674,6 +1679,16 @@ class ProjectRouteHandler
         if (in_array($language_code, $matecat_acceptable_languages)) return $language_code;
         if (!empty($matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))])) return $matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))];
         return '';
+    }
+
+    public function project_get_wordcount($project_id)
+    {
+        $projectDao = new DAO\ProjectDao();
+        $project = $projectDao->getProject($project_id);
+
+        project_cron_1_minute(); // Trigger update
+
+        \Slim\Slim::getInstance()->response()->body($project->getWordCount());
     }
 }
 

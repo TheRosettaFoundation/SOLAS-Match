@@ -852,7 +852,7 @@ class TaskRouteHandler
             }
         }
         
-        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
+        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView1.js");
 
         $app->view()->appendData(array(
             'sesskey' => $sesskey,
@@ -1497,7 +1497,7 @@ class TaskRouteHandler
         }
         $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id, $project->getOrganisationId());
 
-        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
+        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView1.js");
         $alsoViewedTasksCount = 0; 
 
         $app->view()->appendData(array(
