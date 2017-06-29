@@ -84,6 +84,7 @@ Tweet</a>
                     {/if}
                 </td>
                 <td>
+                    <div id="siteLocationURL">{Settings::get("site.location")}</div>
                     <div id="project_id_for_updated_wordcount">{$project_id}</div>
                     <div id="put_updated_wordcount_here">
                     {if $project->getWordCount() != '' && $project->getWordCount() != 0}

@@ -1,5 +1,8 @@
 <script type="text/javascript">
 
+var intervalID = null; // Global ID for interval timer for getting wordcount
+
+
 $(document).ready(documentReady);
 
 /**
@@ -47,6 +50,33 @@ function documentReady()
       $(this).css("visibility", "visible");
     }
   );
+
+  if (document.getElementById("put_updated_wordcount_here").innerHTML == "-") {
+    intervalID = setInterval(DAOgetWordCount, 5000);
+
+    DAOgetWordCount();
+  }
+}
+
+function DAOgetWordCount()
+{
+  $.ajax(
+    {
+      url: document.getElementById("siteLocationURL").innerHTML + "project/" + document.getElementById("project_id_for_updated_wordcount").innerHTML + "/getwordcount/",
+      method: "GET"
+    }
+  )
+  .done(function (data, textStatus, jqXHR)
+      {
+        if (jqXHR.status == 200) {
+          if (data != "" && data != 0) {
+            clearInterval(intervalID);
+
+            document.getElementById("put_updated_wordcount_here").innerHTML = data;
+          }
+        }
+      }
+    )
 }
 </script>
 
