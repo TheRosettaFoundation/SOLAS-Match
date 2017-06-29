@@ -356,6 +356,7 @@ function validateForm()
   selectedHour   = document.getElementById("selectedHour").value;
   selectedMinute = document.getElementById("selectedMinute").value;
   // wordCountInput = document.getElementById("wordCountInput").value;
+  wordCountInput = null;
   trackProject   = document.getElementById("trackProject").checked;
   publish        = document.getElementById("publish").checked;
 
