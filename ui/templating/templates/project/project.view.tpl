@@ -84,11 +84,11 @@ Tweet</a>
                     {/if}
                 </td>
                 <td>
-                    {if $project->getWordCount() != ''}
-                        {$project->getWordCount()}
-                    {else}
-                        -
-                    {/if}
+                    <span class="hidden">
+                        <div id="siteLocationURL">{Settings::get("site.location")}</div>
+                        <div id="project_id_for_updated_wordcount">{$project_id}</div>
+                    </span>
+                    <div id="put_updated_wordcount_here">{if $project->getWordCount() != '' && $project->getWordCount() > 1}{$project->getWordCount()}{else}-{/if}</div>
                 </td>
                 <td>
                     <div class="convert_utc_to_local" style="visibility: hidden">{$project->getCreatedTime()}</div>

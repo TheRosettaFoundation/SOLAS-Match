@@ -852,7 +852,7 @@ class TaskRouteHandler
             }
         }
         
-        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
+        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView1.js");
 
         $app->view()->appendData(array(
             'sesskey' => $sesskey,
@@ -1497,7 +1497,7 @@ class TaskRouteHandler
         }
         $userSubscribedToOrganisation = $userDao->isSubscribedToOrganisation($user_id, $project->getOrganisationId());
 
-        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
+        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView1.js");
         $alsoViewedTasksCount = 0; 
 
         $app->view()->appendData(array(
@@ -1650,6 +1650,9 @@ class TaskRouteHandler
 <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ui-timepicker-addon.js\"></script>
 <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/DeadlinePicker.js\"></script>
 ";
+
+        $task_word_count = $task->getWordCount();
+        if (empty($task_word_count) && $project->getWordCount() > 1) $task->setWordCount($project->getWordCount());
 
         $app->view()->appendData(array(
             'sesskey'       => $sesskey,

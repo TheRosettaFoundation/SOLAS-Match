@@ -65,6 +65,11 @@ class ProjectRouteHandler
             '/project_cron_1_minute/',
             array($this, 'project_cron_1_minute')
         )->name('project_cron_1_minute');
+
+        $app->get(
+            '/project/:project_id/getwordcount/',
+            array($this, 'project_get_wordcount')
+        )->name('project_get_wordcount');
     }
 
     public function test($projectId)
@@ -316,7 +321,7 @@ class ProjectRouteHandler
             $extra_scripts .= $viewer->generateDataScript();
             $extra_scripts .= file_get_contents(__DIR__."/../js/GraphHelper.js");
             $extra_scripts .= file_get_contents(__DIR__."/../js/project-view.js");
-            $extra_scripts .= file_get_contents(__DIR__."/../js/TaskView.js");
+            $extra_scripts .= file_get_contents(__DIR__."/../js/TaskView1.js");
             // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
             $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
@@ -339,7 +344,7 @@ class ProjectRouteHandler
                     "taskLanguageMap" => $taskLanguageMap
             ));
         } else {
-            $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
+            $extra_scripts = file_get_contents(__DIR__."/../js/TaskView1.js");
             // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
             $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
@@ -642,7 +647,8 @@ class ProjectRouteHandler
                     || empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact'])
                     || empty($post['sourceCountrySelect']) || empty($post['sourceLanguageSelect']) || empty($post['project_deadline'])
                     || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $post['project_deadline'])
-                    || empty($post['wordCountInput']) || !ctype_digit($post['wordCountInput'])) {
+                    ) {
+                    // || empty($post['wordCountInput']) || !ctype_digit($post['wordCountInput'])
                 // Note the deadline date validation above is only partial (these checks have been done more rigorously on client size, if that is to be trusted)
                 $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_to_create_project'), htmlspecialchars($post['project_title'], ENT_COMPAT, 'UTF-8')));
             } else {
@@ -654,7 +660,8 @@ class ProjectRouteHandler
                 $project->setDeadline($post['project_deadline']);
                 $project->setImpact($post['project_impact']);
                 $project->setReference($post['project_reference']);
-                $project->setWordCount($post['wordCountInput']);
+                // $project->setWordCount($post['wordCountInput']);
+                $project->setWordCount(1); // Code in taskInsertAndUpdate() does not support 0, so use 1 as placeholder
 
                 $sourceLocale->setCountryCode($post['sourceCountrySelect']);
                 $sourceLocale->setLanguageCode($post['sourceLanguageSelect']);
@@ -916,7 +923,8 @@ class ProjectRouteHandler
                                             $target_languages .= ',' . $post["target_language_$targetCount"] . '-' . $post["target_country_$targetCount"];
                                             $targetCount++;
                                         }
-                                        $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, $post['wordCountInput']);
+                                        // $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, $post['wordCountInput']);
+                                        $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, 0);
 
                                         try {
                                             $app->redirect($app->urlFor('project-view', array('project_id' => $project->getId())));
@@ -1114,7 +1122,7 @@ class ProjectRouteHandler
         }
 
         $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/ProjectCreate1.js\"></script>";
+        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/ProjectCreate2.js\"></script>";
 
         $app->view()->appendData(array(
             "siteLocation"          => Common\Lib\Settings::get('site.location'),
@@ -1332,6 +1340,9 @@ class ProjectRouteHandler
 
     public function project_cron_1_minute()
     {
+      $fp_for_lock = fopen(__DIR__ . '/project_cron_1_minute_lock.txt', 'r');
+      if (flock($fp_for_lock, LOCK_EX | LOCK_NB)) { // Acquire an exclusive lock, if possible, if not we will wait for next time
+
         $taskDao = new DAO\TaskDao();
 
         // status 1 => Uploaded to MateCat [This call will happen one minute after getWordCountRequestForProjects(0)]
@@ -1391,7 +1402,10 @@ class ProjectRouteHandler
                             $word_count = $word_count / $langpairs;
 
                             // Set word count for the Project and its Tasks
-//                            $taskDao->updateWordCountForProject($project_id, $word_count);
+                            $taskDao->updateWordCountForProject($project_id, $word_count);
+
+                            // Change status to Complete (2)
+                            $taskDao->updateWordCountRequestForProjects($project_id, $matecat_id_project, $matecat_id_project_pass, $word_count, 2);
                         } else {
                             error_log("project_cron /status ($project_id) langpairs empty!");
                         }
@@ -1401,9 +1415,7 @@ class ProjectRouteHandler
                 } else {
                     error_log("project_cron /status ($project_id) responseCode: $responseCode");
                 }
-
-                // Change status to Complete (2), even if there was an error!?
-                $taskDao->updateWordCountRequestForProjects($project_id, $matecat_id_project, $matecat_id_project_pass, $word_count, 2);
+                // Note, we will retry if there was an error and hope it is temporary and/or the analysis is not complete yet
             }
         }
 
@@ -1520,6 +1532,10 @@ class ProjectRouteHandler
                 }
             }
         }
+
+        flock($fp_for_lock, LOCK_UN); // Release the lock
+      }
+      fclose($fp_for_lock);
 
         //$app = \Slim\Slim::getInstance();
         //$app->view()->appendData(array(
@@ -1664,6 +1680,19 @@ class ProjectRouteHandler
         if (in_array($language_code, $matecat_acceptable_languages)) return $language_code;
         if (!empty($matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))])) return $matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))];
         return '';
+    }
+
+    public function project_get_wordcount($project_id)
+    {
+        $projectDao = new DAO\ProjectDao();
+        $project = $projectDao->getProject($project_id);
+
+        $this->project_cron_1_minute(); // Trigger update
+
+        $word_count = $project->getWordCount();
+        if (empty($word_count) || $word_count == 1) $word_count = '-';
+
+        \Slim\Slim::getInstance()->response()->body($word_count);
     }
 }
 
