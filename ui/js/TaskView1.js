@@ -51,18 +51,15 @@ function documentReady()
     }
   );
 
-console.log("Adocument.getElementById(put_updated_wordcount_here).innerHTML: " + document.getElementById("put_updated_wordcount_here").innerHTML + ";");
   if (document.getElementById("put_updated_wordcount_here").innerHTML == "-") {
     intervalID = setInterval(DAOgetWordCount, 5000);
 
-console.log("Bdocument.getElementById(put_updated_wordcount_here).innerHTML: " + document.getElementById("put_updated_wordcount_here").innerHTML + ";");
     DAOgetWordCount();
   }
 }
 
 function DAOgetWordCount()
 {
-console.log("Cdocument.getElementById(put_updated_wordcount_here).innerHTML: " + document.getElementById("put_updated_wordcount_here").innerHTML + ";");
   $.ajax(
     {
       url: document.getElementById("siteLocationURL").innerHTML + "project/" + document.getElementById("project_id_for_updated_wordcount").innerHTML + "/getwordcount/",
@@ -72,12 +69,10 @@ console.log("Cdocument.getElementById(put_updated_wordcount_here).innerHTML: " +
   .done(function (data, textStatus, jqXHR)
       {
         if (jqXHR.status == 200) {
-console.log("Ddocument.getElementById(put_updated_wordcount_here).innerHTML: " + document.getElementById("put_updated_wordcount_here").innerHTML + ";" + data + ";");
           if (data != "" && data != "-") {
             clearInterval(intervalID);
 
             document.getElementById("put_updated_wordcount_here").innerHTML = data;
-console.log("Edocument.getElementById(put_updated_wordcount_here).innerHTML: " + document.getElementById("put_updated_wordcount_here").innerHTML + ";");
           }
         }
       }
