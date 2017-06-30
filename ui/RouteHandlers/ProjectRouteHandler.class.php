@@ -1689,7 +1689,10 @@ class ProjectRouteHandler
 
         $this->project_cron_1_minute(); // Trigger update
 
-        \Slim\Slim::getInstance()->response()->body($project->getWordCount());
+        $word_count = $project->getWordCount();
+        if (empty($word_count)) $word_count = '-';
+
+        \Slim\Slim::getInstance()->response()->body($word_count);
     }
 }
 
