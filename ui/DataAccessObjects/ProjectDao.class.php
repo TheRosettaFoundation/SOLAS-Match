@@ -65,6 +65,7 @@ class ProjectDao extends BaseDao
 
     public function createProject($project)
     {
+error_log("ui projectDao->createproject");
         $ret = null;
         $request = "{$this->siteApi}v0/projects";
         $ret = $this->client->call(

@@ -50,8 +50,10 @@ class ProjectDao
             Lib\PDOWrapper::cleanseNull($project->getImageUploaded()).",".
             Lib\PDOWrapper::cleanseNull($project->getImageApproved());
 
+error_log("function save()... args: $args");
         $result = Lib\PDOWrapper::call("projectInsertAndUpdate", $args);
         if ($result) {
+error_log("success projectInsertAndUpdate");
             $project = Common\Lib\ModelFactory::buildModel("Project", $result[0]);
         }
 
