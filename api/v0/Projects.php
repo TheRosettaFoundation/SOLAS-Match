@@ -350,18 +350,15 @@ class Projects
     public static function createProject($format = '.json')
     {
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
-error_log("data: $data");
         $client = new Common\Lib\APIHelper($format);
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\Project');
         $project = DAO\ProjectDao::save($data);
         if (!is_null($project) && $project->getId() > 0) {
-error_log("Success in createproject");
             // Auto track the project for admins
             $admins = self::getAutoFollowAdminIds();
             self::addTrackProjectForUsers($admins, $project->getId());
             API\Dispatcher::sendResponse(null, $project, null, $format);
         } else {
-error_log("FAIL in createproject");
             API\Dispatcher::sendResponse(
                 null,
                 "Project details conflict with existing data",
