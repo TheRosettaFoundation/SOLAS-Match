@@ -661,7 +661,7 @@ class ProjectRouteHandler
                 $project->setImpact($post['project_impact']);
                 $project->setReference($post['project_reference']);
                 // $project->setWordCount($post['wordCountInput']);
-                $project->setWordCount(0);
+                $project->setWordCount(1); // Code in taskInsertAndUpdate() does not support 0, so use 1 as placeholder
 
                 $sourceLocale->setCountryCode($post['sourceCountrySelect']);
                 $sourceLocale->setLanguageCode($post['sourceLanguageSelect']);
@@ -1690,7 +1690,7 @@ class ProjectRouteHandler
         $this->project_cron_1_minute(); // Trigger update
 
         $word_count = $project->getWordCount();
-        if (empty($word_count)) $word_count = '-';
+        if (empty($word_count) || $word_count == 1) $word_count = '-';
 
         \Slim\Slim::getInstance()->response()->body($word_count);
     }

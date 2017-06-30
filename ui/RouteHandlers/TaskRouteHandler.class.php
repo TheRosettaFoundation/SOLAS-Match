@@ -1652,7 +1652,7 @@ class TaskRouteHandler
 ";
 
         $task_word_count = $task->getWordCount();
-        if (empty($task_word_count)) $task->setWordCount($project->getWordCount());
+        if (empty($task_word_count) && $project->getWordCount() > 1) $task->setWordCount($project->getWordCount());
 
         $app->view()->appendData(array(
             'sesskey'       => $sesskey,
