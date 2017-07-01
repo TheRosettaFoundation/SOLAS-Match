@@ -1385,32 +1385,37 @@ class ProjectRouteHandler
                 if ($responseCode == 200) {
                     $response_data = json_decode($res, true);
 
-                    if ($response_data['status'] !== 'DONE') {
-                        error_log("project_cron /status ($project_id) status NOT DONE: " . $response_data['status']);
-                    }
-                    if (!empty($response_data['errors'])) {
-                        foreach ($response_data['errors'] as $error) {
-                            error_log("project_cron /status ($project_id) error: " . $error);
-                        }
-                    }
+                    if ($response_data['status'] === 'DONE') {
+                        if (empty($response_data['errors'])) {
+                            if (!empty($response_data['data']['summary']['TOTAL_RAW_WC'])) {
+                                $word_count = $response_data['data']['summary']['TOTAL_RAW_WC'];
 
-                    if (!empty($response_data['data']['summary']['TOTAL_RAW_WC'])) {
-                        $word_count = $response_data['data']['summary']['TOTAL_RAW_WC'];
+                                if (!empty($response_data['jobs']['langpairs'])) {
+                                    $langpairs = count($response_data['jobs']['langpairs']);
+                                    $word_count = $word_count / $langpairs;
 
-                        if (!empty($response_data['jobs']['langpairs'])) {
-                            $langpairs = count($response_data['jobs']['langpairs']);
-                            $word_count = $word_count / $langpairs;
+                                    if (!empty($word_count)) {
+                                        // Set word count for the Project and its Tasks
+                                        $taskDao->updateWordCountForProject($project_id, $word_count);
 
-                            // Set word count for the Project and its Tasks
-                            $taskDao->updateWordCountForProject($project_id, $word_count);
-
-                            // Change status to Complete (2)
-                            $taskDao->updateWordCountRequestForProjects($project_id, $matecat_id_project, $matecat_id_project_pass, $word_count, 2);
+                                        // Change status to Complete (2)
+                                        $taskDao->updateWordCountRequestForProjects($project_id, $matecat_id_project, $matecat_id_project_pass, $word_count, 2);
+                                    } else {
+                                        error_log("project_cron /status ($project_id) calculated wordcount empty!");
+                                    }
+                                } else {
+                                    error_log("project_cron /status ($project_id) langpairs empty!");
+                                }
+                            } else {
+                                error_log("project_cron /status ($project_id) TOTAL_RAW_WC empty!");
+                            }
                         } else {
-                            error_log("project_cron /status ($project_id) langpairs empty!");
+                            foreach ($response_data['errors'] as $error) {
+                                error_log("project_cron /status ($project_id) error: " . $error);
+                            }
                         }
                     } else {
-                        error_log("project_cron /status ($project_id) TOTAL_RAW_WC empty!");
+                        error_log("project_cron /status ($project_id) status NOT DONE: " . $response_data['status']);
                     }
                 } else {
                     error_log("project_cron /status ($project_id) responseCode: $responseCode");
