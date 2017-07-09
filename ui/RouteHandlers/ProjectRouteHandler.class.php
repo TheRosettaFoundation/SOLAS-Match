@@ -1491,7 +1491,8 @@ class ProjectRouteHandler
                   'source_lang'  => $source_language,
                   'target_lang'  => $filtered_target_languages,
                   'tms_engine'   => '1',
-                  'mt_engine'    => '1',
+                  'mt_engine'    => '0',
+                  'private_tm_key' => '81c6737631bb9c48dab5',
                   'subject'      => 'general',
                   'owner_email'  => 'info@trommons.org'
                 );
