@@ -66,6 +66,18 @@ class AdminRouteHandler
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'download_user_languages')
         )->name('download_user_languages');
+
+        $app->get(
+            '/download_all_users/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_all_users')
+        )->name('download_all_users');
+
+        $app->get(
+            '/download_active_users/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_active_users')
+        )->name('download_active_users');
     }
     
     public function adminDashboard()
@@ -322,6 +334,58 @@ class AdminRouteHandler
 
         header('Content-type: text/csv');
         header('Content-Disposition: attachment; filename="user_languages.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
+    }
+
+    public function download_all_users()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $all_users = $statsDao->getUsers();
+
+        $data = "\xEF\xBB\xBF" . '"ID","Name","Email","Biography","Language","City","Country","Created"' . "\n";
+
+        foreach ($all_users as $user_row) {
+            $data .= '"' . $user_row['id'] . '","' .
+                str_replace('"', '""', $user_row['first_name']) . ' ' . str_replace('"', '""', $user_row['last_name']) . '","' .
+                $user_row['email'] . '","' .
+                str_replace('"', '""', $user_row['biography']) . '","' .
+                $user_row['native_language'] . ' ' . $user_row['native_country'] . '","' .
+                str_replace('"', '""', $user_row['city']) . '","' .
+                str_replace('"', '""', $user_row['country']) . '","' .
+                $user_row['created_time'] . '"' . "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="all_users.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
+    }
+
+    public function download_active_users()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $all_users = $statsDao->active_users();
+
+        $data = "\xEF\xBB\xBF" . '"Email","Task Title","Creator Email","Created Time"' . "\n";
+
+        foreach ($all_users as $user_row) {
+            $data .= '"' . $user_row['email'] . '","' .
+                str_replace('"', '""', $user_row['task_title']) . '","' .
+                $user_row['creator_email'] . '","' .
+                $user_row['created_time'] . '"' . "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="active_users.csv"');
         header('Content-length: ' . strlen($data));
         header('X-Frame-Options: ALLOWALL');
         header('Pragma: no-cache');
