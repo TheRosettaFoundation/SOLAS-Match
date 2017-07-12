@@ -60,6 +60,12 @@ class AdminRouteHandler
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'user_languages')
         )->via('POST')->name('user_languages');
+
+        $app->get(
+            '/download_user_languages/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_user_languages')
+        )->name('download_user_languages');
     }
     
     public function adminDashboard()
@@ -301,6 +307,27 @@ class AdminRouteHandler
 
         $app->view()->appendData(array('all_users' => $all_users));
         $app->render('admin/user_languages.tpl');
+    }
+
+    public function download_user_languages()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $all_users = $statsDao->user_languages($code);
+
+        $data = '"Display Name","Email","Code","Language","Code","Country",""';
+
+        foreach ($all_users as $user_row) {
+            $data .= '"' . $user_row['display_name'] . '","' . $user_row['email'] . '","' . $user_row['language_code'] . '","' . $user_row['language_name'] . '","' . $user_row['country_code'] . '","' . $user_row['country_name'] . '","' . $user_row['native_or_secondary'] . '"' . "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="download.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
     }
 }
 
