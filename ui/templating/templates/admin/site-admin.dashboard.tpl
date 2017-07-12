@@ -12,9 +12,9 @@
 <div class="well">
     <p><a href="{urlFor name="active_now"}" target="_blank">List all tasks currently in progress showing information about the volunteer working on them.</a></p>
     <p><a href="{urlFor name="unclaimed_tasks"}" target="_blank">List all tasks still unclaimed and the email address of their creators.</a></p>
-    <p><a href="{urlFor name="active_users"}" target="_blank">List all volunteers who have ever claimed a task (and which task is still on the system and not archived), the corresponding task and the task creator's email address.</a></p> <a href="{urlFor name="download_active_users"}">[Download]</a></p>
+    <p><a href="{urlFor name="active_users"}" target="_blank">List all volunteers who have ever claimed a task (and which task is still on the system and not archived), the corresponding task and the task creator's email address.</a> <a href="{urlFor name="download_active_users"}">[Download]</a></p>
     <p><a href="{urlFor name="active_users_unique"}" target="_blank">List all volunteers who have ever claimed a task (and which task is still on the system and not archived) showing their email address and Display Name.</a></p>
-    <p><a href="{urlFor name="all_users"}" target="_blank">List all users currently registered on Trommons showing information about them.</a></p> <a href="{urlFor name="download_all_users"}">[Download]</a></p>
+    <p><a href="{urlFor name="all_users"}" target="_blank">List all users currently registered on Trommons showing information about them.</a> <a href="{urlFor name="download_all_users"}">[Download]</a></p>
     <p><a href="{urlFor name="all_users_plain"}" target="_blank">(Same as above but plain layout.)</a></p>
     <p><a href="{urlFor name="user_languages" options="code.full"}" target="_blank">List all languages indicated on user's profiles showing information about the user (if you replace the "full" in the URL with a language code like "es", you will just get that language).</a> <a href="{urlFor name="download_user_languages"}">[Download]</a></p>
     <hr />
