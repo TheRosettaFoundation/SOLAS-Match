@@ -321,7 +321,7 @@ class AdminRouteHandler
         }
 
         header('Content-type: text/csv');
-        header('Content-Disposition: attachment; filename="download.csv"');
+        header('Content-Disposition: attachment; filename="user_languages.csv"');
         header('Content-length: ' . strlen($data));
         header('X-Frame-Options: ALLOWALL');
         header('Pragma: no-cache');
