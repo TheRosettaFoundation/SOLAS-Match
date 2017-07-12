@@ -317,7 +317,6 @@ class AdminRouteHandler
         $data = "\xEF\xBB\xBF" . '"Display Name","Email","Code","Language","Code","Country",""' . "\n";
 
         foreach ($all_users as $user_row) {
-            if (empty($user_row['display_name'])) $user_row['display_name'] = '';
             $data .= '"' . str_replace('"', '""', $user_row['display_name']) . '","' . $user_row['email'] . '","' . $user_row['language_code'] . '","' . $user_row['language_name'] . '","' . $user_row['country_code'] . '","' . $user_row['country_name'] . '","' . $user_row['native_or_secondary'] . '"' . "\n";
         }
 
