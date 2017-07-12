@@ -312,7 +312,7 @@ class AdminRouteHandler
     public function download_user_languages()
     {
         $statsDao = new DAO\StatisticsDao();
-        $all_users = $statsDao->user_languages('full');
+        $all_users = $statsDao->user_languages(null);
 
         $data = '"Display Name","Email","Code","Language","Code","Country",""';
 
