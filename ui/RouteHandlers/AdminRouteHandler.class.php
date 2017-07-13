@@ -78,6 +78,12 @@ class AdminRouteHandler
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'download_active_users')
         )->name('download_active_users');
+
+        $app->get(
+            '/community_stats/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'community_stats')
+        )->name('community_stats');
     }
     
     public function adminDashboard()
@@ -353,7 +359,7 @@ class AdminRouteHandler
             $data .= '"' . $user_row['id'] . '","' .
                 str_replace('"', '""', $user_row['first_name']) . ' ' . str_replace('"', '""', $user_row['last_name']) . '","' .
                 $user_row['email'] . '","' .
-                str_replace('"', '""', $user_row['biography']) . '","' .
+                str_replace(array('\r\n', '\n', '\r'), "\n", str_replace('"', '""', $user_row['biography'])) . '","' .
                 $user_row['native_language'] . ' ' . $user_row['native_country'] . '","' .
                 str_replace('"', '""', $user_row['city']) . '","' .
                 str_replace('"', '""', $user_row['country']) . '","' .
@@ -386,6 +392,55 @@ class AdminRouteHandler
 
         header('Content-type: text/csv');
         header('Content-Disposition: attachment; filename="active_users.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
+    }
+
+    public function community_stats()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $all_users0                 = $statsDao->community_stats();
+        $community_stats_secondary0 = $statsDao->community_stats_secondary();
+        $community_stats_words0     = $statsDao->community_stats_words();
+
+        $all_users = array();
+        foreach ($all_users0 as $user_row) {
+            $all_users[$user_row['id']] = $user_row;
+        }
+        unset($all_users0);
+
+        $community_stats_secondary = array();
+        foreach ($community_stats_secondary0 as $user_row) {
+            $community_stats_secondary[$user_row['id']] = $user_row;
+        }
+        unset($community_stats_secondary0);
+
+        $community_stats_words = array();
+        foreach ($community_stats_words0 as $user_row) {
+            $community_stats_words[$user_row['id']] = $user_row;
+        }
+        unset($community_stats_words0);
+
+        $data = "\xEF\xBB\xBF" . '"Name","Email","Country","Created Time","Last Accessed","Words Translated","Words Proofread","Native Language","Secondary Languages"' . "\n";
+
+        foreach ($all_users as $i => $user_row) {
+            $data .= '"' . str_replace('"', '""', $user_row['display_name']) . '","' .
+                $user_row['email'] . '","' .
+                str_replace('"', '""', $user_row['country']) . '","' .
+                $user_row['created_time'] . '","' .
+                $user_row['last_accessed'] . '","' .
+                $community_stats_words[$i]['words_translated'] . '","' .
+                $community_stats_words[$i]['words_proofread'] . '","' .
+                $user_row['native_code'] . '","' .
+                $community_stats_secondary[$i]['secondary_codes'] . '"' . "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="community_stats.csv"');
         header('Content-length: ' . strlen($data));
         header('X-Frame-Options: ALLOWALL');
         header('Pragma: no-cache');
