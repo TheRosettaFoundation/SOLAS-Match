@@ -353,7 +353,7 @@ class AdminRouteHandler
             $data .= '"' . $user_row['id'] . '","' .
                 str_replace('"', '""', $user_row['first_name']) . ' ' . str_replace('"', '""', $user_row['last_name']) . '","' .
                 $user_row['email'] . '","' .
-                str_replace('"', '""', $user_row['biography']) . '","' .
+                str_replace(array('\r\n', '\n', '\r'), "\n", str_replace('"', '""', $user_row['biography'])) . '","' .
                 $user_row['native_language'] . ' ' . $user_row['native_country'] . '","' .
                 str_replace('"', '""', $user_row['city']) . '","' .
                 str_replace('"', '""', $user_row['country']) . '","' .
