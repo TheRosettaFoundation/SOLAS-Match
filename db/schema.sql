@@ -6202,6 +6202,63 @@ ORDER BY language_name, country_name, display_name;
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `community_stats`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `community_stats`()
+BEGIN
+    SELECT
+        u.id,
+        u.`display-name` as display_name,
+        u.email,
+        u.`created-time` as created_time,
+        IFNULL(l.`en-name`, '') AS native_language,
+        IFNULL(l.code, '') AS native_code,
+        IFNULL(c.`en-name`, '') AS native_country,
+        IFNULL(i.city, '') AS city,
+        IFNULL(i.country, '') AS country,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`, '') AS last_name,
+        IFNULL(MAX(ul.`login-time`), '') AS last_accessed
+    FROM Users u
+    LEFT JOIN UserPersonalInformation i ON u.id=i.user_id
+    LEFT JOIN Countries c ON u.country_id=c.id
+    LEFT JOIN Languages l ON u.language_id=l.id
+    LEFT JOIN UserLogins ul ON u.id=ul.user_id
+    GROUP BY u.id
+    ORDER BY u.id DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `community_stats_secondary`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `community_stats_secondary`()
+BEGIN
+    SELECT
+        u.id,
+        IFNULL(GROUP_CONCAT(l.code ORDER BY l.code SEPARATOR ', '), '') AS secondary_codes,
+        IFNULL(GROUP_CONCAT(l.`en-name` ORDER BY l.`en-name` SEPARATOR ', '), '') AS secondary_languages
+    FROM Users u
+    LEFT JOIN UserSecondaryLanguages usl ON u.id=usl.user_id
+    LEFT JOIN Languages l ON usl.language_id=l.id
+    GROUP BY u.id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `community_stats_words`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `community_stats_words`()
+BEGIN
+    SELECT
+        u.id,
+        SUM(IF(`task-type_id`=2 AND `task-status_id`=4, t.`word-count`, 0)) AS words_translated,
+        SUM(IF(`task-type_id`=3 AND `task-status_id`=4, t.`word-count`, 0)) AS words_proofread
+    FROM Users u
+    LEFT JOIN TaskClaims tc ON u.id=tc.user_id
+    LEFT JOIN Tasks t ON tc.task_id=t.id
+    GROUP BY u.id;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `insertWordCountRequestForProjects`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insertWordCountRequestForProjects`(IN `pID` INT, IN sourceLanguage VARCHAR(10), IN targetLanguages VARCHAR(100), IN `userWordCount` INT)
