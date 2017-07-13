@@ -403,15 +403,40 @@ class AdminRouteHandler
     public function community_stats()
     {
         $statsDao = new DAO\StatisticsDao();
-        $all_users = $statsDao->active_users();
+        $all_users0                 = $statsDao->community_stats();
+        $community_stats_secondary0 = $statsDao->community_stats_secondary();
+        $community_stats_words0     = $statsDao->community_stats_words();
 
-        $data = "\xEF\xBB\xBF" . '"Email","Task Title","Creator Email","Created Time"' . "\n";
+        $all_users = array();
+        foreach ($all_users0 as $user_row) {
+            $all_users[$user_row['id']] = $user_row;
+        }
+        unset($all_users0);
 
-        foreach ($all_users as $user_row) {
-            $data .= '"' . $user_row['email'] . '","' .
-                str_replace('"', '""', $user_row['task_title']) . '","' .
-                $user_row['creator_email'] . '","' .
-                $user_row['created_time'] . '"' . "\n";
+        $community_stats_secondary = array();
+        foreach ($community_stats_secondary0 as $user_row) {
+            $community_stats_secondary[$user_row['id']] = $user_row;
+        }
+        unset($community_stats_secondary0);
+
+        $community_stats_words = array();
+        foreach ($community_stats_words0 as $user_row) {
+            $community_stats_words[$user_row['id']] = $user_row;
+        }
+        unset($community_stats_words0);
+
+        $data = "\xEF\xBB\xBF" . '"Name","Email","Country","Created Time","Last Accessed","Words Translated","Words Proofread","Native Language","Secondary Languages"' . "\n";
+
+        foreach ($all_users as $i => $user_row) {
+            $data .= '"' . str_replace('"', '""', $user_row['display_name']) . '","' .
+                $user_row['email'] . '","' .
+                str_replace('"', '""', $user_row['country']) . '","' .
+                $user_row['created_time'] . '","' .
+                $user_row['last_accessed'] . '","' .
+                $community_stats_words[$i]['words_translated'] . '","' .
+                $community_stats_words[$i]['words_proofread'] . '","' .
+                $user_row['native_code'] . '","' .
+                $community_stats_secondary[$i]['secondary_codes'] . '"' . "\n";
         }
 
         header('Content-type: text/csv');
