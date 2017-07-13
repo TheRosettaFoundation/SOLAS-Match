@@ -78,6 +78,12 @@ class AdminRouteHandler
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'download_active_users')
         )->name('download_active_users');
+
+        $app->get(
+            '/community_stats/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'community_stats')
+        )->name('community_stats');
     }
     
     public function adminDashboard()
@@ -386,6 +392,30 @@ class AdminRouteHandler
 
         header('Content-type: text/csv');
         header('Content-Disposition: attachment; filename="active_users.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
+    }
+
+    public function community_stats()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $all_users = $statsDao->active_users();
+
+        $data = "\xEF\xBB\xBF" . '"Email","Task Title","Creator Email","Created Time"' . "\n";
+
+        foreach ($all_users as $user_row) {
+            $data .= '"' . $user_row['email'] . '","' .
+                str_replace('"', '""', $user_row['task_title']) . '","' .
+                $user_row['creator_email'] . '","' .
+                $user_row['created_time'] . '"' . "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="community_stats.csv"');
         header('Content-length: ' . strlen($data));
         header('X-Frame-Options: ALLOWALL');
         header('Pragma: no-cache');
