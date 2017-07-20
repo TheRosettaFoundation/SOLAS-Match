@@ -1400,6 +1400,20 @@ CREATE TABLE IF NOT EXISTS `WordCountRequestForProjects` (
     CONSTRAINT FK_WordCountRequestForProjects_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `MatecatLanguagePairs` (
+    task_id BIGINT(20) UNSIGNED NOT NULL,
+    project_id INT(10) UNSIGNED NOT NULL,
+    type_id  INT(10) UNSIGNED NOT NULL,
+    matecat_langpair  VARCHAR(50) NOT NULL,
+    matecat_id_job INT(10) UNSIGNED NOT NULL,
+    matecat_id_job_password VARCHAR(50) NOT NULL,
+    matecat_id_file INT(10) UNSIGNED NOT NULL,
+    UNIQUE KEY FK_matecat_language_pair_task_id (task_id),
+    CONSTRAINT FK_matecat_language_pair_task_id FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    KEY FK_matecat_language_pair_project_id (project_id),
+    CONSTRAINT FK_matecat_language_pair_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
