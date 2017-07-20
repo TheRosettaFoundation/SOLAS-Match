@@ -812,6 +812,9 @@ class ProjectRouteHandler
                                 $targetCount = 0;
                                 $creatingTasksSuccess = true;
                                 $createdTasks = array();
+                                $matecat_translation_task_ids[]         = array();
+                                $matecat_translation_target_languages[] = array();
+                                $matecat_translation_target_countrys[]  = array();
                                 while (!empty($post["target_language_$targetCount"]) && !empty($post["target_country_$targetCount"])) {
 
                                     if (!empty($post["segmentation_$targetCount"])) {
@@ -852,6 +855,9 @@ class ProjectRouteHandler
                                                 $creatingTasksSuccess = false;
                                                 break;
                                             }
+                                            $matecat_translation_task_ids[]         = $translation_Task_Id;
+                                            $matecat_translation_target_languages[] = $post["target_language_$targetCount"];
+                                            $matecat_translation_target_countrys[]  = $post["target_country_$targetCount"];
 
                                             if (!empty($post["proofreading_$targetCount"])) {
                                                 $id = $this->addProjectTask(
@@ -925,6 +931,16 @@ class ProjectRouteHandler
                                         }
                                         // $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, $post['wordCountInput']);
                                         $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, 0);
+
+                                        $source_language = $this->valid_language_for_matecat($source_language);
+                                        if (!empty($source_language) && !empty($matecat_translation_task_ids)) {
+                                            foreach($matecat_translation_task_ids as $i => $matecat_translation_task_id) {
+                                                $target_language = $this->valid_language_for_matecat($matecat_translation_target_languages[$i] . '-' . $matecat_translation_target_countrys[$i]);
+                                                if (!empty($target_language) && ($target_language != $source_language)) {
+                                                    $taskDao->insertMatecatLanguagePairs($matecat_translation_task_id, $project->getId(), Common\Enums\TaskTypeEnum::TRANSLATION, "$source_language|$target_language");
+                                                }
+                                            }
+                                        }
 
                                         try {
                                             $app->redirect($app->urlFor('project-view', array('project_id' => $project->getId())));
