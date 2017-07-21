@@ -1408,6 +1408,29 @@ class ProjectRouteHandler
 
                                 if (!empty($response_data['jobs']['langpairs'])) {
                                     $langpairs = count($response_data['jobs']['langpairs']);
+
+                                    foreach ($response_data['jobs']['langpairs'] as $job_password => $langpair) {
+                                        $matecat_id_job          = substr($job_password, 0, strpos($job_password, '-'));
+                                        $matecat_id_job_password = substr($job_password, strpos($job_password, '-') + 1);
+                                        $matecat_id_file         = 0;
+                                        if (!empty($response_data['data']['jobs'][$matecat_id_job]['chunks'][$matecat_id_job_password])) {
+                                            foreach ($response_data['data']['jobs'][$matecat_id_job]['chunks'][$matecat_id_job_password] as $i => $filename_array) {
+                                                $matecat_id_file = $i;
+                                                break; // Should only be one
+                                            }
+                                        } else {
+                                            error_log("project_cron /status ($project_id) ['data']['jobs'][$matecat_id_job]['chunks'][$matecat_id_job_password] empty!");
+                                        }
+
+                                        if (!empty($matecat_id_job) && !empty($matecat_id_job_password) && !empty($matecat_id_file)) {
+                                            // Set matecat_id_job, matecat_id_job_password, matecat_id_file
+                                            // Note: SQL will not update if we were forced to use fake language pairs for word count purposes as they will not match
+                                            $taskDao->updateMatecatLanguagePairs($project_id, Common\Enums\TaskTypeEnum::TRANSLATION, $langpair, $matecat_id_job, $matecat_id_job_password, $matecat_id_file);
+                                        } else {
+                                            error_log("project_cron /status ($project_id) matecat_id_job($matecat_id_job), matecat_id_job_password($matecat_id_job_password) or matecat_id_file($matecat_id_file) empty!");
+                                        }
+                                    }
+
                                     $word_count = $word_count / $langpairs;
 
                                     if (!empty($word_count)) {
