@@ -650,6 +650,10 @@ class TaskRouteHandler
 
         $task = $taskDao->getTask($task_id);
         $app->view()->setData("task", $task);
+        $matecat_url = '';
+        $app->view()->appendData(array(
+            'matecat_url' => $matecat_url,
+        ));
         $app->render("task/task.claimed.tpl");
     }
 

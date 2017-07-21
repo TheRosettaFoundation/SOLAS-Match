@@ -25,7 +25,7 @@
             <p>Alternative option: <a href="{$matecat_url}" class="btn btn-primary">
                 <i class="icon-download icon-white"></i> Translate using the Kató Translation Memory</a>
             </p>
-         {/if}
+        {/if}
     </section>
 
     <section>
