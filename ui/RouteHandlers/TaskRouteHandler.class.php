@@ -1079,6 +1079,60 @@ class TaskRouteHandler
 
         $converter = Common\Lib\Settings::get("converter.converter_enabled");
 
+        $matecat_url = '';
+        $matecat_download_url = '';
+        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) {
+            $matecat_tasks = $taskDao->getMatecatLanguagePairs($taskId);
+            if (!empty($matecat_tasks)) {
+                $matecat_langpair = $matecat_tasks[0]['matecat_langpair'];
+                $matecat_id_job = $matecat_tasks[0]['matecat_id_job'];
+                $matecat_id_job_password = $matecat_tasks[0]['matecat_id_job_password'];
+                $matecat_id_file = $matecat_tasks[0]['matecat_id_file'];
+                if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password) && !empty($matecat_id_file)) {
+                    // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
+                    $re = curl_init("https://kato.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
+
+                    curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
+                    curl_setopt($re, CURLOPT_COOKIESESSION, true);
+                    curl_setopt($re, CURLOPT_FOLLOWLOCATION, true);
+                    curl_setopt($re, CURLOPT_AUTOREFERER, true);
+
+                    $httpHeaders = array(
+                        'Expect:'
+                    );
+                    curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
+
+                    curl_setopt($re, CURLOPT_HEADER, true);
+                    curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
+                    curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
+                    curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
+                    $res = curl_exec($re);
+
+                    $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
+                    $header = substr($res, 0, $header_size);
+                    $res = substr($res, $header_size);
+                    $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
+
+                    curl_close($re);
+
+                    if ($responseCode == 200) {
+                        $response_data = json_decode($res, true);
+
+                        if (!empty($response_data['stats']['DOWNLOAD_STATUS'])) {
+                            if ($response_data['stats']['DOWNLOAD_STATUS'] === 'translated' || $response_data['stats']['DOWNLOAD_STATUS'] === 'approved') {
+                                $matecat_url = 'https://kato.translatorswb.org/translate/proj-' . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                                $matecat_download_url = "https://kato.translatorswb.org/?action=downloadFile&id_job=$matecat_id_job&id_file=$matecat_id_file&password=$matecat_id_job_password&download_type=all"
+                            }
+                        } else {
+                            error_log("https://kato.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats ($taskId) DOWNLOAD_STATUS empty!");
+                        }
+                    } else {
+                        error_log("https://kato.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats ($taskId) responseCode: $responseCode");
+                    }
+                }
+            }
+        }
+
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
 
         $app->view()->appendData(array(
@@ -1092,6 +1146,8 @@ class TaskRouteHandler
             "fieldName"     => $fieldName,
             "max_file_size" => Lib\TemplateHelper::maxFileSizeMB(),
             "taskTypeColours"   => $taskTypeColours,
+            'matecat_url' => $matecat_url,
+            'matecat_download_url' => $matecat_download_url,
             "file_previously_uploaded" => $file_previously_uploaded
         ));
 
