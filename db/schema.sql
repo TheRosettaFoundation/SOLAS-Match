@@ -6308,6 +6308,40 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `insertMatecatLanguagePairs`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertMatecatLanguagePairs`(IN `tID` BIGINT, IN `pID` INT, IN `typeID` INT, IN matecatLangpair VARCHAR(50))
+BEGIN
+    INSERT INTO MatecatLanguagePairs
+               (task_id, project_id, type_id, matecat_langpair, matecat_id_job, matecat_id_job_password, matecat_id_file)
+        VALUES (    tID,        pID,  typeID,  matecatLangpair,              0,                      '',               0);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `updateMatecatLanguagePairs`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateMatecatLanguagePairs`(IN `pID` INT, IN `typeID` INT, IN matecatLangpair VARCHAR(50), IN `matecatIdJob` INT, IN `matecatIdJobPW` VARCHAR(50), IN `matecatIdFile` INT)
+BEGIN
+    UPDATE MatecatLanguagePairs
+    SET
+        matecat_id_job=matecatIdJob,
+        matecat_id_job_password=matecatIdJobPW,
+        matecat_id_file=matecatIdFile
+   WHERE
+       project_id=pID AND
+       type_id=typeID AND
+       matecat_langpair=matecatLangpair;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getMatecatLanguagePairs`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getMatecatLanguagePairs`(IN `tID` BIGINT)
+BEGIN
+    SELECT * FROM MatecatLanguagePairs WHERE task_id=tID;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
