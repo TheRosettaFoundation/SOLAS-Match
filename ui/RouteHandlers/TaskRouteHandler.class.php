@@ -1002,9 +1002,11 @@ class TaskRouteHandler
         $task = $taskDao->getTask($taskId);
         $project = $projectDao->getProject($task->getProjectId());
         if ($app->request()->isPost()) {
-            $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post, 'taskSimpleUpload');
+          $post = $app->request()->post();
+          Common\Lib\UserSession::checkCSRFKey($post, 'taskSimpleUpload');
 
+          if (!empty($post['copy_from_matecat'])) {
+          } else {
             try {
                 Lib\TemplateHelper::validateFileHasBeenSuccessfullyUploaded($fieldName);
                 $projectFile = $projectDao->getProjectFileInfo($project->getId());
@@ -1052,12 +1054,13 @@ class TaskRouteHandler
                     $errorMessage = Lib\Localisation::getTranslation('task_simple_upload_7') . $e->getMessage();
                 }
             }
+          }
 
-            if (is_null($errorMessage)) {
-                $app->redirect($app->urlFor("task-review", array("task_id" => $taskId)));
-            } else {
-                $app->flashNow("error", $errorMessage);
-            }
+          if (is_null($errorMessage)) {
+              $app->redirect($app->urlFor("task-review", array("task_id" => $taskId)));
+          } else {
+              $app->flashNow("error", $errorMessage);
+          }
         }
 
         $org = $orgDao->getOrganisation($project->getOrganisationId());
