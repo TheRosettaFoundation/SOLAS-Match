@@ -431,4 +431,30 @@ class TaskDao extends BaseDao
             return false;
         }
     }
+
+    public function insertMatecatLanguagePairs($task_id, $project_id, $type_id, $matecat_langpair)
+    {
+        LibAPI\PDOWrapper::call('insertMatecatLanguagePairs',
+            LibAPI\PDOWrapper::cleanse($task_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($type_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($matecat_langpair));
+    }
+
+    public function updateMatecatLanguagePairs($project_id, $type_id, $matecat_langpair, $matecat_id_job, $matecat_id_job_password, $matecat_id_file)
+    {
+        LibAPI\PDOWrapper::call('updateMatecatLanguagePairs',
+            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($type_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($matecat_langpair) . ',' .
+            LibAPI\PDOWrapper::cleanse($matecat_id_job) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($matecat_id_job_password) . ',' .
+            LibAPI\PDOWrapper::cleanse($matecat_id_file));
+    }
+
+    public function getMatecatLanguagePairs(task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getMatecatLanguagePairs', LibAPI\PDOWrapper::cleanse(task_id));
+        return $result;
+    }
 }
