@@ -22,7 +22,7 @@
             <p>{sprintf(Localisation::getTranslation('common_we_have_also_emailed_you_these_instructions_to'), {$user->getEmail()})}</p>
         {/if}
         {if $matecat_url != ''}
-            <p>Alternative option: <a href="{$matecat_url}" class="btn btn-primary">
+            <p>Alternative option: <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
                 <i class="icon-download icon-white"></i> Translate using the Kató Translation Memory</a>
             </p>
         {/if}
