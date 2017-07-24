@@ -452,9 +452,9 @@ class TaskDao extends BaseDao
             LibAPI\PDOWrapper::cleanse($matecat_id_file));
     }
 
-    public function getMatecatLanguagePairs(task_id)
+    public function getMatecatLanguagePairs($task_id)
     {
-        $result = LibAPI\PDOWrapper::call('getMatecatLanguagePairs', LibAPI\PDOWrapper::cleanse(task_id));
+        $result = LibAPI\PDOWrapper::call('getMatecatLanguagePairs', LibAPI\PDOWrapper::cleanse($task_id));
         return $result;
     }
 }
