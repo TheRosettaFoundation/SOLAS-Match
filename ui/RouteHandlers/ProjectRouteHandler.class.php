@@ -936,10 +936,15 @@ error_log("after insertWordCountRequestForProjects(, $source_language, $target_l
 
                                         $source_language = $this->valid_language_for_matecat($source_language);
 error_log("before !empty() $source_language");
+if (!empty($matecat_translation_task_ids)) error_log("count: " . count($matecat_translation_task_ids));
+error_log("before !empty() matecat_translation_task_ids: " . implode(',', $matecat_translation_task_ids));
                                         if (!empty($source_language) && !empty($matecat_translation_task_ids)) {
                                             $target_list = array();
                                             foreach ($matecat_translation_task_ids as $i => $matecat_translation_task_id) {
+error_log("after foreach $i => $matecat_translation_task_id");
+error_log($matecat_translation_target_languages[$i] . '-' . $matecat_translation_target_countrys[$i]);
                                                 $target_language = $this->valid_language_for_matecat($matecat_translation_target_languages[$i] . '-' . $matecat_translation_target_countrys[$i]);
+error_log($target_language);
                                                 if (!empty($target_language) && ($target_language != $source_language) && !in_array($target_language, $target_list)) {
                                                     $target_list[] = $target_language;
 error_log("before insertMatecatLanguagePairs($matecat_translation_task_id, , 2, $source_language|$target_language)");
