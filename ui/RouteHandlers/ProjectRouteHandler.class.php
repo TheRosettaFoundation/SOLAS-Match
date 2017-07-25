@@ -812,9 +812,9 @@ class ProjectRouteHandler
                                 $targetCount = 0;
                                 $creatingTasksSuccess = true;
                                 $createdTasks = array();
-                                $matecat_translation_task_ids[]         = array();
-                                $matecat_translation_target_languages[] = array();
-                                $matecat_translation_target_countrys[]  = array();
+                                $matecat_translation_task_ids         = array();
+                                $matecat_translation_target_languages = array();
+                                $matecat_translation_target_countrys  = array();
                                 while (!empty($post["target_language_$targetCount"]) && !empty($post["target_country_$targetCount"])) {
 
                                     if (!empty($post["segmentation_$targetCount"])) {
