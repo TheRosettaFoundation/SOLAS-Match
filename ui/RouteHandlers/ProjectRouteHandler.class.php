@@ -930,16 +930,21 @@ class ProjectRouteHandler
                                             $targetCount++;
                                         }
                                         // $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, $post['wordCountInput']);
+error_log("before insertWordCountRequestForProjects(, $source_language, $target_languages, 0)");
                                         $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, 0);
+error_log("after insertWordCountRequestForProjects(, $source_language, $target_languages, 0)");
 
                                         $source_language = $this->valid_language_for_matecat($source_language);
+error_log("before !empty() $source_language");
                                         if (!empty($source_language) && !empty($matecat_translation_task_ids)) {
                                             $target_list = array();
                                             foreach ($matecat_translation_task_ids as $i => $matecat_translation_task_id) {
                                                 $target_language = $this->valid_language_for_matecat($matecat_translation_target_languages[$i] . '-' . $matecat_translation_target_countrys[$i]);
                                                 if (!empty($target_language) && ($target_language != $source_language) && !in_array($target_language, $target_list)) {
                                                     $target_list[] = $target_language;
+error_log("before insertMatecatLanguagePairs($matecat_translation_task_id, , 2, $source_language|$target_language)");
                                                     $taskDao->insertMatecatLanguagePairs($matecat_translation_task_id, $project->getId(), Common\Enums\TaskTypeEnum::TRANSLATION, "$source_language|$target_language");
+error_log("after insertMatecatLanguagePairs($matecat_translation_task_id, , 2, $source_language|$target_language)");
                                                 }
                                             }
                                         }
