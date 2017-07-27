@@ -37,17 +37,15 @@
             {if isset($flash['search_user_results'])}
                 <tr>
                     <td colspan="2">
-                        <p class="alert alert-success">
-                            <table>
-                                {foreach $flash['search_user_results'] as $item}
-                                    <tr>
-                                        <td><a href="mailto:{$item['email']}">{$item['email']}</a></td>
-                                        <td><a href="{urlFor name="user-public-profile" options="user_id.{$item['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($item['name'])}</a></td>
-                                    </tr>
-                                {/foreach}
-                            </table>
-                            {if count($flash['search_user_results']) == 20}Only 20 shown.{/if}
-                        </p>
+                        <table class="alert alert-success">
+                            {foreach $flash['search_user_results'] as $item}
+                                <tr>
+                                    <td><a href="mailto:{$item['email']}">{$item['email']}</a></td>
+                                    <td><a href="{urlFor name="user-public-profile" options="user_id.{$item['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($item['name'])}</a></td>
+                                </tr>
+                            {/foreach}
+                        </table>
+                        {if count($flash['search_user_results']) == 20}Only 20 shown.{/if}
                     </td>
                 </tr>
             {/if}
