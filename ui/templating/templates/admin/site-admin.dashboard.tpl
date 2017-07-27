@@ -51,7 +51,7 @@
             {/if}
             <tr>
                 <td>
-                    <input type="text" name="search_user" placeholder="User name or e-mail." style="width: 95%"/>
+                    <input type="text" name="search_user" placeholder="User name or e-mail." style="width: 40%"/>
                 </td>
                 <td valign="top">
                     <button class="btn btn-success" type="submit" name="search_user_submit" value="1">
