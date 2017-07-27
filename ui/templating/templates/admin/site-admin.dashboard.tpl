@@ -20,6 +20,50 @@
     <p><a href="{urlFor name="community_stats"}">[Download community report]</a></p>
     <hr />
 
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">
+        <table style="width: 40%">
+            <tr>
+                <td colspan="2">
+                    <label for="search_user"><h2>Search User</h2></label>
+                </td>
+            </tr>
+            {if isset($flash['search_user_fail'])}
+                <tr>
+                    <td colspan="2">
+                        <p class="alert alert-error">{$flash['search_user_fail']}</p>
+                    </td>
+                </tr>
+            {/if}
+            {if isset($flash['search_user_results'])}
+                <tr>
+                    <td colspan="2">
+                        <p class="alert alert-success">
+                            {foreach $flash['search_user_results'] as $item}
+                                <a href="mailto:{$item['email']}">{$item['email']}</a>
+                                <a href="{urlFor name="user-public-profile" options="user_id.{$item['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($item['name'])}</a>
+                                <br />
+                            {/foreach}
+                            {if count($flash['search_user_results']) == 20}Only 20 shown.{/if}
+                        </p>
+                    </td>
+                </tr>
+            {/if}
+            <tr>
+                <td>
+                    <input type="text" name="user_email" placeholder="User name or e-mail." style="width: 95%"/>
+                </td>
+                <td valign="top">
+                    <button class="btn btn-success" type="submit" name="search_user" value="1">
+                        <i class="icon-star icon-white"></i>
+                        Search
+                    </button>
+                </td>
+            </tr>
+        </table>
+        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+    </form>
+    <hr />
+
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.$adminUserId"}" accept-charset="utf-8">
         <table style="width: 40%">
             <tr>

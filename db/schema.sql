@@ -6294,6 +6294,26 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `search_user`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `search_user`(IN `name` VARCHAR(128))
+BEGIN
+    SELECT
+        u.id AS user_id,
+        u.email,
+        CONCAT(IFNULL(CONCAT(i.`first-name`, ' ', i.`last-name`), ''), ' (', u.`display-name`, ') ') as name
+    FROM Users u
+    LEFT JOIN UserPersonalInformation i ON u.id=i.user_idgit
+    WHERE
+        u.email LIKE CONCAT('%', name, '%') OR
+        u.`display-name` LIKE CONCAT('%', name, '%') OR
+        i.`first-name` LIKE CONCAT('%', name, '%') OR
+        i.`last-name` LIKE CONCAT('%', name, '%')
+    ORDER BY u.email
+    LIMIT 20;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 

@@ -99,6 +99,16 @@ class AdminRouteHandler
             $userDao = new DAO\UserDao();
             $adminDao = new DAO\AdminDao();
             $taskDao = new DAO\TaskDao();
+            $statsDao = new DAO\StatisticsDao();
+
+            if (!empty($post['search_user'])) {
+                $items_found = $statsDao->SearchUsers($post['search_user']);
+                if (!empty($items_found)) {
+                    $app->flashNow('search_user_results', $items_found);
+                } else {
+                    $app->flashNow('search_user_fail', 'Not Found');
+                }
+            }
 
             if (isset($post['verify'])) {
                 if ($userDao->finishRegistrationManually($post['userEmail'])) {
