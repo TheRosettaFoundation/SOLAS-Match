@@ -96,7 +96,6 @@ class StatisticsDao extends BaseDao
     public function search_organisation($name)
     {
         $result = LibAPI\PDOWrapper::call('search_organisation', LibAPI\PDOWrapper::cleanseNullOrWrapStr($name));
-error_log(LibAPI\PDOWrapper::cleanseNullOrWrapStr($name) . ' Expectáéíóú');
         return $result;
     }
 }
