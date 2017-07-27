@@ -43,7 +43,7 @@
                 </td>
                 <td valign="top">
                     <button class="btn btn-success" type="submit" name="search_user_submit" value="1">
-                        <i class="icon-star icon-white"></i>
+                        <i class="icon-search icon-white"></i>
                         Search User
                     </button>
                 </td>
@@ -76,7 +76,7 @@
                 </td>
                 <td valign="top">
                     <button class="btn btn-success" type="submit" name="search_organisation_submit" value="1">
-                        <i class="icon-star icon-white"></i>
+                        <i class="icon-search icon-white"></i>
                         Search Organisation
                     </button>
                 </td>
