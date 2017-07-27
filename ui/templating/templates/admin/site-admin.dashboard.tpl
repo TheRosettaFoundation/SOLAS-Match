@@ -21,7 +21,7 @@
     <hr />
 
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">
-        <table style="width: 40%">
+        <table style="width: 95%">
             <tr>
                 <td colspan="2">
                     <label for="search_user"><h2>Search User</h2></label>
@@ -38,11 +38,14 @@
                 <tr>
                     <td colspan="2">
                         <p class="alert alert-success">
-                            {foreach $flash['search_user_results'] as $item}
-                                <a href="mailto:{$item['email']}">{$item['email']}</a>
-                                <a href="{urlFor name="user-public-profile" options="user_id.{$item['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($item['name'])}</a>
-                                <br />
-                            {/foreach}
+                            <table>
+                                {foreach $flash['search_user_results'] as $item}
+                                    <tr>
+                                        <td><a href="mailto:{$item['email']}">{$item['email']}</a></td>
+                                        <td><a href="{urlFor name="user-public-profile" options="user_id.{$item['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($item['name'])}</a></td>
+                                    </tr>
+                                {/foreach}
+                            </table>
                             {if count($flash['search_user_results']) == 20}Only 20 shown.{/if}
                         </p>
                     </td>
