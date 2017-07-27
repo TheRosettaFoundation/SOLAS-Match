@@ -50,10 +50,10 @@
             {/if}
             <tr>
                 <td>
-                    <input type="text" name="user_email" placeholder="User name or e-mail." style="width: 95%"/>
+                    <input type="text" name="search_user" placeholder="User name or e-mail." style="width: 95%"/>
                 </td>
                 <td valign="top">
-                    <button class="btn btn-success" type="submit" name="search_user" value="1">
+                    <button class="btn btn-success" type="submit" name="search_user_submit" value="1">
                         <i class="icon-star icon-white"></i>
                         Search
                     </button>
