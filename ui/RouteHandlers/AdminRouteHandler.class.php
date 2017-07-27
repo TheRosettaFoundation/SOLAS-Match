@@ -102,7 +102,7 @@ class AdminRouteHandler
             $statsDao = new DAO\StatisticsDao();
 
             if (!empty($post['search_user'])) {
-                $items_found = $statsDao->SearchUsers($post['search_user']);
+                $items_found = $statsDao->search_user($post['search_user']);
                 if (!empty($items_found)) {
                     $app->flashNow('search_user_results', $items_found);
                 } else {
