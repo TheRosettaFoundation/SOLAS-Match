@@ -110,6 +110,15 @@ class AdminRouteHandler
                 }
             }
 
+            if (!empty($post['search_organisation'])) {
+                $items_found = $statsDao->search_organisation($post['search_organisation']);
+                if (!empty($items_found)) {
+                    $app->flashNow('search_organisation_results', $items_found);
+                } else {
+                    $app->flashNow('search_organisation_fail', 'Not Found');
+                }
+            }
+
             if (isset($post['verify'])) {
                 if ($userDao->finishRegistrationManually($post['userEmail'])) {
                     $app->flashNow('verifySuccess', Lib\Localisation::getTranslation('email_verification_email_verification'));
