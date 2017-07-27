@@ -6314,6 +6314,23 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `search_organisation`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `search_organisation`(IN `orgName` VARCHAR(128))
+BEGIN
+    SELECT
+        o.id AS org_id,
+        IFNULL(o.`e-mail`, '') AS email,
+        name
+    FROM Organisations o
+    WHERE
+        o.`e-mail` LIKE CONCAT('%', orgName, '%') OR
+        o.name LIKE CONCAT('%', orgName, '%')
+    ORDER BY o.name
+    LIMIT 20;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
