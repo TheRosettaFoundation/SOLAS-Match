@@ -21,40 +21,30 @@
     <hr />
 
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">
-        <table style="width: 95%">
+        {if isset($flash['search_user_fail'])}
+            <p class="alert alert-error">{$flash['search_user_fail']}</p>
+        {/if}
+        {if isset($flash['search_user_results'])}
+            <table class="alert alert-success">
+                {foreach $flash['search_user_results'] as $item}
+                    <tr>
+                        <td><a href="mailto:{$item['email']}">{$item['email']}</a></td>
+                        <td><a href="{urlFor name="user-public-profile" options="user_id.{$item['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($item['name'])}</a></td>
+                    </tr>
+                {/foreach}
+                {if count($flash['search_user_results']) == 20}<tr><td>Only 20 shown.</td></tr>{/if}
+            </table>
+        {/if}
+
+        <table style="width: 40%">
             <tr>
-                <td colspan="2">
-                    <label for="search_user"><h2>Search User</h2></label>
+                <td>
+                    <input type="text" name="search_user" placeholder="User name or e-mail." style="width: 95%"/>
                 </td>
-            </tr>
-            {if isset($flash['search_user_fail'])}
-                <tr>
-                    <td colspan="2">
-                        <p class="alert alert-error">{$flash['search_user_fail']}</p>
-                    </td>
-                </tr>
-            {/if}
-            {if isset($flash['search_user_results'])}
-                <tr>
-                    <td colspan="2">
-                        <table class="alert alert-success">
-                            {foreach $flash['search_user_results'] as $item}
-                                <tr>
-                                    <td><a href="mailto:{$item['email']}">{$item['email']}</a></td>
-                                    <td><a href="{urlFor name="user-public-profile" options="user_id.{$item['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($item['name'])}</a></td>
-                                </tr>
-                            {/foreach}
-                        </table>
-                        {if count($flash['search_user_results']) == 20}Only 20 shown.{/if}
-                    </td>
-                </tr>
-            {/if}
-            <tr>
-                <td colspan="2" valign="top">
-                    <input type="text" name="search_user" placeholder="User name or e-mail." style="width: 40%"/>
+                <td valign="top">
                     <button class="btn btn-success" type="submit" name="search_user_submit" value="1">
                         <i class="icon-star icon-white"></i>
-                        Search
+                        Search User
                     </button>
                 </td>
             </tr>
