@@ -119,6 +119,15 @@ class AdminRouteHandler
                 }
             }
 
+            if (!empty($post['search_project'])) {
+                $items_found = $statsDao->search_project($post['search_project']);
+                if (!empty($items_found)) {
+                    $app->flashNow('search_project_results', $items_found);
+                } else {
+                    $app->flashNow('search_project_fail', 'Not Found');
+                }
+            }
+
             if (isset($post['verify'])) {
                 if ($userDao->finishRegistrationManually($post['userEmail'])) {
                     $app->flashNow('verifySuccess', Lib\Localisation::getTranslation('email_verification_email_verification'));
