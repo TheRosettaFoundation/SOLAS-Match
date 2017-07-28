@@ -99,6 +99,34 @@ class AdminRouteHandler
             $userDao = new DAO\UserDao();
             $adminDao = new DAO\AdminDao();
             $taskDao = new DAO\TaskDao();
+            $statsDao = new DAO\StatisticsDao();
+
+            if (!empty($post['search_user'])) {
+                $items_found = $statsDao->search_user($post['search_user']);
+                if (!empty($items_found)) {
+                    $app->flashNow('search_user_results', $items_found);
+                } else {
+                    $app->flashNow('search_user_fail', 'Not Found');
+                }
+            }
+
+            if (!empty($post['search_organisation'])) {
+                $items_found = $statsDao->search_organisation($post['search_organisation']);
+                if (!empty($items_found)) {
+                    $app->flashNow('search_organisation_results', $items_found);
+                } else {
+                    $app->flashNow('search_organisation_fail', 'Not Found');
+                }
+            }
+
+            if (!empty($post['search_project'])) {
+                $items_found = $statsDao->search_project($post['search_project']);
+                if (!empty($items_found)) {
+                    $app->flashNow('search_project_results', $items_found);
+                } else {
+                    $app->flashNow('search_project_fail', 'Not Found');
+                }
+            }
 
             if (isset($post['verify'])) {
                 if ($userDao->finishRegistrationManually($post['userEmail'])) {

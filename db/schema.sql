@@ -6294,6 +6294,62 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `search_user`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `search_user`(IN `name` VARCHAR(128))
+BEGIN
+    SELECT
+        u.id AS user_id,
+        u.email,
+        CONCAT(IFNULL(CONCAT(i.`first-name`, ' ', i.`last-name`), ''), ' (', u.`display-name`, ') ') as name
+    FROM Users u
+    LEFT JOIN UserPersonalInformation i ON u.id=i.user_id
+    WHERE
+        u.email LIKE CONCAT('%', name, '%') OR
+        u.`display-name` LIKE CONCAT('%', name, '%') OR
+        i.`first-name` LIKE CONCAT('%', name, '%') OR
+        i.`last-name` LIKE CONCAT('%', name, '%')
+    ORDER BY u.email
+    LIMIT 20;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `search_organisation`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `search_organisation`(IN `orgName` VARCHAR(128))
+BEGIN
+    SELECT
+        o.id AS org_id,
+        IFNULL(o.`e-mail`, '') AS email,
+        name
+    FROM Organisations o
+    WHERE
+        o.`e-mail` LIKE CONCAT('%', orgName, '%') OR
+        o.name LIKE CONCAT('%', orgName, '%')
+    ORDER BY o.name
+    LIMIT 20;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `search_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `search_project`(IN `name` VARCHAR(128))
+BEGIN
+    SELECT
+        p.id AS proj_id,
+        p.title AS proj_title,
+        IFNULL(t.id, '') AS task_id,
+        CONCAT(t.title, ' (', (SELECT l.code FROM Languages l WHERE l.id=t.`language_id-target`), ')') AS task_title
+    FROM Projects p
+    LEFT JOIN Tasks t ON p.id=t.project_id
+    WHERE
+        p.title LIKE CONCAT('%', name, '%') OR
+        t.title LIKE CONCAT('%', name, '%')
+    ORDER BY p.title, t.title, t.id
+    LIMIT 20;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 

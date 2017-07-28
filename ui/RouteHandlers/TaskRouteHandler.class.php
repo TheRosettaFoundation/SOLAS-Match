@@ -1849,6 +1849,7 @@ class TaskRouteHandler
                             $taskDao->addTaskPreReq($createdDesegmentationId, $translationTaskIds[$i]);
                         }
                     }
+                    error_log('taskSegmentation calculateProjectDeadlines: ' . $project->getId());
                     $projectDao->calculateProjectDeadlines($project->getId());
                     $app->redirect($app->urlFor("task-review", array("task_id" => $task->getId())));
                 } else {

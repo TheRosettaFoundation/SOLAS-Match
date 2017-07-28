@@ -20,6 +20,105 @@
     <p><a href="{urlFor name="community_stats"}">[Download community report]</a></p>
     <hr />
 
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">
+        {if isset($flash['search_user_fail'])}
+            <p class="alert alert-error">{$flash['search_user_fail']}</p>
+        {/if}
+        {if isset($flash['search_user_results'])}
+            <table class="alert alert-success">
+                {foreach $flash['search_user_results'] as $item}
+                    <tr>
+                        <td><a href="mailto:{$item['email']}">{$item['email']}</a></td>
+                        <td><a href="{urlFor name="user-public-profile" options="user_id.{$item['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($item['name'])}</a></td>
+                    </tr>
+                {/foreach}
+                {if count($flash['search_user_results']) == 20}<tr><td>Only 20 shown.</td></tr>{/if}
+            </table>
+        {/if}
+
+        <table style="width: 40%">
+            <tr>
+                <td>
+                    <input type="text" name="search_user" placeholder="User name or e-mail." style="width: 95%"/>
+                </td>
+                <td valign="top">
+                    <button class="btn btn-success" type="submit" name="search_user_submit" value="1">
+                        <i class="icon-search icon-white"></i>
+                        Search User
+                    </button>
+                </td>
+            </tr>
+        </table>
+        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+    </form>
+    <hr />
+
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">
+        {if isset($flash['search_organisation_fail'])}
+            <p class="alert alert-error">{$flash['search_organisation_fail']}</p>
+        {/if}
+        {if isset($flash['search_organisation_results'])}
+            <table class="alert alert-success">
+                {foreach $flash['search_organisation_results'] as $item}
+                    <tr>
+                        <td><a href="{urlFor name="org-public-profile" options="org_id.{$item['org_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($item['name'])}</a></td>
+                        <td>{if $item['email'] != ''}<a href="mailto:{$item['email']}">{$item['email']}</a>{/if}</td>
+                    </tr>
+                {/foreach}
+                {if count($flash['search_organisation_results']) == 20}<tr><td>Only 20 shown.</td></tr>{/if}
+            </table>
+        {/if}
+
+        <table style="width: 40%">
+            <tr>
+                <td>
+                    <input type="text" name="search_organisation" placeholder="Organisation name or e-mail." style="width: 95%"/>
+                </td>
+                <td valign="top">
+                    <button class="btn btn-success" type="submit" name="search_organisation_submit" value="1">
+                        <i class="icon-search icon-white"></i>
+                        Search Organisation
+                    </button>
+                </td>
+            </tr>
+        </table>
+        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+    </form>
+    <hr />
+
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">
+        {if isset($flash['search_project_fail'])}
+            <p class="alert alert-error">{$flash['search_project_fail']}</p>
+        {/if}
+        {if isset($flash['search_project_results'])}
+            <table class="alert alert-success">
+                {foreach $flash['search_project_results'] as $item}
+                    <tr>
+                        <td><a href="{urlFor name="project-view" options="project_id.{$item['proj_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($item['proj_title'])}</a></td>
+                        <td>{if $item['task_id'] != ''}<a href="{urlFor name="task-view" options="task_id.{$item['task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($item['task_title'])}</a>{/if}</td>
+                    </tr>
+                {/foreach}
+                {if count($flash['search_project_results']) == 20}<tr><td>Only 20 shown.</td></tr>{/if}
+            </table>
+        {/if}
+
+        <table style="width: 40%">
+            <tr>
+                <td>
+                    <input type="text" name="search_project" placeholder="Project or Task name." style="width: 95%"/>
+                </td>
+                <td valign="top">
+                    <button class="btn btn-success" type="submit" name="search_project_submit" value="1">
+                        <i class="icon-search icon-white"></i>
+                        Search Project
+                    </button>
+                </td>
+            </tr>
+        </table>
+        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+    </form>
+    <hr />
+
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"  options="user_id.$adminUserId"}" accept-charset="utf-8">
         <table style="width: 40%">
             <tr>
