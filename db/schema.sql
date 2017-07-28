@@ -6331,6 +6331,25 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `search_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `search_project`(IN `name` VARCHAR(128))
+BEGIN
+    SELECT
+        p.id AS proj_id,
+        p.title AS proj_title,
+        IFNULL(t.id, '') AS task_id,
+        CONCAT(t.title, ' (', (SELECT l.code FROM Languages l WHERE l.id=t.`language_id-target`), ')') AS task_title
+    FROM Projects p
+    LEFT JOIN Tasks t ON p.id=t.project_id
+    WHERE
+        p.title LIKE CONCAT('%', name, '%') OR
+        t.title LIKE CONCAT('%', name, '%')
+    ORDER BY p.title, t.title, t.id
+    LIMIT 20;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
