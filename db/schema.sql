@@ -6303,7 +6303,7 @@ BEGIN
         u.email,
         CONCAT(IFNULL(CONCAT(i.`first-name`, ' ', i.`last-name`), ''), ' (', u.`display-name`, ') ') as name
     FROM Users u
-    LEFT JOIN UserPersonalInformation i ON u.id=i.user_idgit
+    LEFT JOIN UserPersonalInformation i ON u.id=i.user_id
     WHERE
         u.email LIKE CONCAT('%', name, '%') OR
         u.`display-name` LIKE CONCAT('%', name, '%') OR
