@@ -70,8 +70,8 @@
             <input type="hidden" name="copy_from_matecat" value="1" />
             Alternative option: <button type="submit" value="submit" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> Copy your translation from Kató to Trommons</button>
             <p>
-                <a href="{$matecat_url}" target="_blank">Click here to view your translation on Kató.</a><br />
-                <a href="{$matecat_download_url}">Click here to download your translation from Kató and upload it to Trommons manually.</a>
+                Click <a href="{$matecat_url}" target="_blank">here</a> to <strong>view your translation on Kató</strong>.<br />
+                Click <a href="{$matecat_download_url}">here</a> to <strong>download your translation from Kató and upload it to Trommons manually</strong>.
             </p>
             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
         </form>
