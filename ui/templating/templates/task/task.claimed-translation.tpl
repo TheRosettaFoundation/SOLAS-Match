@@ -23,7 +23,8 @@
         {/if}
         {if $matecat_url != ''}
             <p>Alternative option: <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
-                <i class="icon-download icon-white"></i> Translate using the Kató Translation Memory</a>
+                <i class="icon-th-list icon-white"></i> Translate using Kató</a><br />
+                <a href="https://kato.translatorswb.org/public/doc/" target="_blank">Kató is the TWB cloud based translation platform, pleased read these guidelines before using Kató.</a>
             </p>
         {/if}
     </section>

@@ -68,10 +68,10 @@
         <form class="well" method="post" action="{urlFor name="task-simple-upload" options="task_id.$task_id"}" enctype="application/x-www-form-urlencoded">
             <input type="hidden" name="task_id" value="{$task->getId()}" />
             <input type="hidden" name="copy_from_matecat" value="1" />
-            Alternative option: <button type="submit" value="submit" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> Copy translated version from Kató to Trommons</button>
+            Alternative option: <button type="submit" value="submit" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> Copy your translation from Kató to Trommons</button>
             <p>
-                Or <a href="{$matecat_download_url}">click here to download the translated version from Kató</a> which you can upload to Trommons above.
-                <a href="{$matecat_url}" target="_blank">(Click here to review translation in Kató Translation Memory.)</a>
+                <a href="{$matecat_url}" target="_blank">Click here to view your translation on Kató.</a><br />
+                <a href="{$matecat_download_url}">Click here to download your translation from Kató and upload it to Trommons manually.</a>
             </p>
             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
         </form>
