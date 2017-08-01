@@ -24,7 +24,7 @@
         {if $matecat_url != ''}
             <p>Alternative option: <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
                 <i class="icon-th-list icon-white"></i> Translate using Kató</a><br />
-                Kató is the TWB cloud based translation platform, please read <a href="https://kato.translatorswb.org/public/doc/" target="_blank">these guidelines</a> before using Kató.
+                Kató is a Translators without Borders (TWB) translation platform. Please read <a href="https://kato.translatorswb.org/public/doc/" target="_blank">these guidelines</a> before using Kató.
             </p>
         {/if}
     </section>
