@@ -79,7 +79,7 @@
         <section class="donate-block">
             <p>{Localisation::getTranslation('index_donate_free_service')}</p>
             <a href="https://www.therosettafoundation.org" target="_blank">
-                <img id="donate-trf-logo" src="{urlFor name='home'}ui/img/TheRosettaFoundationLogo.png" alt="The logo of The Rosetta Foundation" height="60"/>
+                <img id="donate-trf-logo" src="{urlFor name='home'}ui/img/TheRosettaFoundationLogo.jpg" alt="The logo of The Rosetta Foundation" height="60"/>
             </a>
             <p>
                 <strong>{Localisation::getTranslation('index_donate_support_us')}</strong>

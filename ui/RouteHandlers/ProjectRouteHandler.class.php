@@ -418,6 +418,7 @@ class ProjectRouteHandler
                 }
 
                 try {
+                    error_log('projectAlter: ' . $project->getId());
                     $project = $projectDao->updateProject($project);
                 } catch (\Exception $e) {
                     $project = null;
@@ -916,6 +917,7 @@ class ProjectRouteHandler
                                     }
                                 } else {
                                     try {
+                                        error_log('projectCreate calculateProjectDeadlines: ' . $project->getId());
                                         $projectDao->calculateProjectDeadlines($project->getId());
 
                                         $source_language = $post['sourceLanguageSelect'] . '-' . $post['sourceCountrySelect'];

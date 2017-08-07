@@ -84,6 +84,7 @@ class ProjectDao
             $proto = new Common\Protobufs\Requests\CalculateProjectDeadlinesRequest();
             $proto->setProjectId($projectId);
             $message = $messagingClient->createMessageFromProto($proto);
+            error_log('sendTopicMessage CalculateProjectDeadlinesTopic: ' . $projectId);
             $messagingClient->sendTopicMessage(
                 $message,
                 $messagingClient->MainExchange,
