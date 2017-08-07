@@ -22,9 +22,9 @@
             <p>{sprintf(Localisation::getTranslation('common_we_have_also_emailed_you_these_instructions_to'), {$user->getEmail()})}</p>
         {/if}
         {if $matecat_url != ''}
-            <p>Alternative option: <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
-                <i class="icon-th-list icon-white"></i> Translate using Kató</a><br />
-                Kató is a Translators without Borders (TWB) translation platform. Please read <a href="https://kato.translatorswb.org/public/doc/" target="_blank">these guidelines</a> before using Kató.
+            <p>{Localisation::getTranslation('task_claimed_alternative_option')} <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
+                <i class="icon-th-list icon-white"></i> {Localisation::getTranslation('task_claimed_translate_using_kato')}</a><br />
+                {Localisation::getTranslation('task_claimed_please_read_kato')}
             </p>
         {/if}
     </section>
