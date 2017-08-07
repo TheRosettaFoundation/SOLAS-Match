@@ -12,7 +12,7 @@
                             </td>
                             <td width="38%" style="text-align: center">
                                 <a href="https://www.therosettafoundation.org" target="_blank">
-                                    <img alt="The Rosetta Foundation" style="border-width:0" src="{urlFor name='home'}ui/img/TheRosettaFoundationLogo.png" height="48px" />
+                                    <img alt="The Rosetta Foundation" style="border-width:0" src="{urlFor name='home'}ui/img/TheRosettaFoundationLogo.jpg" height="48px" />
                                 </a>
                                 <br />
                                 {sprintf(Localisation::getTranslation('footer_maintained_by'), "https://www.therosettafoundation.org/", "The Rosetta Foundation")}
