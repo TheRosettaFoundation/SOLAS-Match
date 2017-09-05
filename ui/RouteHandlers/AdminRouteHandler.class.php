@@ -453,12 +453,13 @@ class AdminRouteHandler
         }
         unset($community_stats_words0);
 
-        $data = "\xEF\xBB\xBF" . '"Name","Email","Country","Created Time","Last Accessed","Words Translated","Words Proofread","Native Language","Secondary Languages"' . "\n";
+        $data = "\xEF\xBB\xBF" . '"Name","Email","Country","City","Created Time","Last Accessed","Words Translated","Words Proofread","Native Language","Secondary Languages"' . "\n";
 
         foreach ($all_users as $i => $user_row) {
             $data .= '"' . str_replace('"', '""', $user_row['display_name']) . '","' .
                 $user_row['email'] . '","' .
                 str_replace('"', '""', $user_row['country']) . '","' .
+                str_replace('"', '""', $user_row['city']) . '","' .
                 $user_row['created_time'] . '","' .
                 $user_row['last_accessed'] . '","' .
                 $community_stats_words[$i]['words_translated'] . '","' .
