@@ -501,6 +501,8 @@ class AdminRouteHandler
             $all_orgs[$org_row['id']]['words_translated'] = array();
             $all_orgs[$org_row['id']]['words_proofread']  = array();
             $all_orgs[$org_row['id']]['language_pairs']   = array();
+error_log($org_row['id']);
+error_log(print_r($all_orgs[$org_row['id']], true));
         }
         unset($all_orgs0);
 
@@ -538,7 +540,7 @@ class AdminRouteHandler
         }
         $data .= "\n";
 
-        foreach ($all_orgs as $i => $org_row) {
+        foreach ($all_orgs as $org_row) {
             $data .= '"' . str_replace('"', '""', $org_row['name']) . '","' .
                 str_replace('"', '""', $org_row['email']) . '","' .
                 str_replace('"', '""', $org_row['homepage']) . '","' .
