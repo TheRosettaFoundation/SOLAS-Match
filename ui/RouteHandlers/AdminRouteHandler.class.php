@@ -508,6 +508,7 @@ error_log(print_r($all_orgs[$org_row['id']], true));
 
         foreach ($all_org_admins as $user_row) {
             $all_orgs[$user_row['organisation_id']]['admins'][$user_row['email']] = $user_row['email'];
+error_log(print_r($all_orgs[$user_row['organisation_id']], true));
         }
 
         foreach ($all_org_members as $user_row) {
