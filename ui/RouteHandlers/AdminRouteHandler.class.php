@@ -534,7 +534,7 @@ class AdminRouteHandler
 
         $year_list = array_reverse($year_list);
         foreach ($year_list as $year) {
-            $data .= ',"' . $year . ' Words Translated","Words Proofread","Language Pairs"'
+            $data .= ',"' . $year . ' Words Translated","Words Proofread","Language Pairs"';
         }
         $data .= "\n";
 
