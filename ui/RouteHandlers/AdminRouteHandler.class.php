@@ -501,13 +501,14 @@ class AdminRouteHandler
             $all_orgs[$org_row['id']]['words_translated'] = array();
             $all_orgs[$org_row['id']]['words_proofread']  = array();
             $all_orgs[$org_row['id']]['language_pairs']   = array();
-error_log($org_row['id']);
+error_log("foreach all_orgs0, id: " . $org_row['id']);
 error_log(print_r($all_orgs[$org_row['id']], true));
         }
         unset($all_orgs0);
 
         foreach ($all_org_admins as $user_row) {
             $all_orgs[$user_row['organisation_id']]['admins'][$user_row['email']] = $user_row['email'];
+error_log("foreach all_org_admins");
 error_log(print_r($all_orgs[$user_row['organisation_id']], true));
         }
 
@@ -542,6 +543,7 @@ error_log(print_r($all_orgs[$user_row['organisation_id']], true));
         $data .= "\n";
 
         foreach ($all_orgs as $org_row) {
+error_log("foreach all_orgs as org_row");
 error_log(print_r($org_row, true));
             $data .= '"' . str_replace('"', '""', $org_row['name']) . '","' .
                 str_replace('"', '""', $org_row['email']) . '","' .
