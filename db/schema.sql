@@ -6350,6 +6350,78 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `all_orgs`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `all_orgs`()
+BEGIN
+    SELECT o.id, o.name, IFNULL(o.`home-page`, '') as homepage, IFNULL(o.`e-mail`, '') AS email
+    FROM Organisations o
+    ORDER BY o.name;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `all_org_admins`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `all_org_admins`()
+BEGIN
+    SELECT u.id, u.email, a.organisation_id
+    FROM Admins a
+    JOIN Users u ON a.user_id=u.id
+    WHERE a.organisation_id IS NOT NULL
+    ORDER BY u.email;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `all_org_members`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `all_org_members`()
+BEGIN
+    SELECT u.id, u.email, om.organisation_id
+    FROM OrganisationMembers om
+    JOIN Users u ON om.user_id=u.id
+    ORDER BY u.email;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `org_stats_words`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `org_stats_words`()
+BEGIN
+    SELECT
+        p.organisation_id,
+        YEAR(tc.`claimed-time`) AS year,
+        SUM(IF(`task-type_id`=2, t.`word-count`, 0)) AS words_translated,
+        SUM(IF(`task-type_id`=3, t.`word-count`, 0)) AS words_proofread
+    FROM Projects p
+    JOIN Tasks t ON p.id=t.project_id
+    JOIN TaskClaims tc ON t.id=tc.task_id
+    WHERE
+        (t.`task-type_id`=2 OR t.`task-type_id`=3) AND
+        t.`task-status_id`=4
+    GROUP BY p.organisation_id, YEAR(tc.`claimed-time`);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `org_stats_languages`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `org_stats_languages`()
+BEGIN
+    SELECT DISTINCT
+        p.organisation_id,
+        YEAR(tc.`claimed-time`) AS year,
+        CONCAT(l.code, '-', l2.code)
+    FROM Projects p
+    JOIN Tasks t ON p.id=t.project_id
+    JOIN Languages l ON t.`language_id-source`=l.id
+    JOIN Languages l2 ON t.`language_id-target`=l2.id
+    JOIN TaskClaims tc ON t.id=tc.task_id
+    WHERE
+        (t.`task-type_id`=2 OR t.`task-type_id`=3) AND
+        t.`task-status_id`=4
+    ORDER BY CONCAT(l.code, '-', l2.code);
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
