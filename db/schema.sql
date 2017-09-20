@@ -6409,7 +6409,7 @@ BEGIN
     SELECT DISTINCT
         p.organisation_id,
         YEAR(tc.`claimed-time`) AS year,
-        CONCAT(l.code, '-', l2.code)
+        CONCAT(l.code, '-', l2.code) AS language_pair
     FROM Projects p
     JOIN Tasks t ON p.id=t.project_id
     JOIN Languages l ON t.`language_id-source`=l.id
