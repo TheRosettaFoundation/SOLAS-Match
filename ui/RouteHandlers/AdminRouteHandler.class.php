@@ -542,8 +542,9 @@ error_log(print_r($all_orgs[$user_row['organisation_id']], true));
         }
         $data .= "\n";
 
-        foreach ($all_orgs as $org_row) {
-error_log("foreach all_orgs as org_row");
+        //foreach ($all_orgs as $org_row) {
+foreach ($all_orgs as $ijk => $org_row) {
+error_log("foreach all_orgs as ijk => org_row, ijk: $ijk");
 error_log(print_r($org_row, true));
             $data .= '"' . str_replace('"', '""', $org_row['name']) . '","' .
                 str_replace('"', '""', $org_row['email']) . '","' .
