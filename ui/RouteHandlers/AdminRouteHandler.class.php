@@ -541,6 +541,7 @@ error_log(print_r($all_orgs[$org_row['id']], true));
         $data .= "\n";
 
         foreach ($all_orgs as $org_row) {
+error_log(print_r($org_row, true));
             $data .= '"' . str_replace('"', '""', $org_row['name']) . '","' .
                 str_replace('"', '""', $org_row['email']) . '","' .
                 str_replace('"', '""', $org_row['homepage']) . '","' .
