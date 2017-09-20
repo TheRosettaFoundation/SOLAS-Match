@@ -507,30 +507,38 @@ error_log(print_r($all_orgs[$org_row['id']], true));
         unset($all_orgs0);
 
         foreach ($all_org_admins as $user_row) {
-            $all_orgs[$user_row['organisation_id']]['admins'][$user_row['email']] = $user_row['email'];
+            if (!empty($all_orgs[$user_row['organisation_id']])) {
+                $all_orgs[$user_row['organisation_id']]['admins'][$user_row['email']] = $user_row['email'];
 error_log("foreach all_org_admins");
 error_log(print_r($all_orgs[$user_row['organisation_id']], true));
+            }
         }
 
         foreach ($all_org_members as $user_row) {
-            if (!in_array($user_row['email'] , $all_orgs[$user_row['organisation_id']]['admins'])) {
-                $all_orgs[$user_row['organisation_id']]['members'][$user_row['email']] = $user_row['email'];
+            if (!empty($all_orgs[$user_row['organisation_id']])) {
+                if (!in_array($user_row['email'] , $all_orgs[$user_row['organisation_id']]['admins'])) {
+                    $all_orgs[$user_row['organisation_id']]['members'][$user_row['email']] = $user_row['email'];
+                }
             }
         }
 
         $year_list = array();
         foreach ($org_stats_words as $words_row) {
-            $year_list[$words_row['year']] = $words_row['year'];
+            if (!empty($all_orgs[$words_row['organisation_id']])) {
+                $year_list[$words_row['year']] = $words_row['year'];
 
-            $all_orgs[$words_row['organisation_id']]['words_translated'][$words_row['year']] = $words_row['words_translated'];
-            $all_orgs[$words_row['organisation_id']]['words_proofread'] [$words_row['year']] = $words_row['words_proofread'];
+                $all_orgs[$words_row['organisation_id']]['words_translated'][$words_row['year']] = $words_row['words_translated'];
+                $all_orgs[$words_row['organisation_id']]['words_proofread'] [$words_row['year']] = $words_row['words_proofread'];
+            }
         }
         unset($org_stats_words);
 
         foreach ($org_stats_languages as $words_row) {
-            $year_list[$words_row['year']] = $words_row['year'];
+            if (!empty($all_orgs[$words_row['organisation_id']])) {
+                $year_list[$words_row['year']] = $words_row['year'];
 
-            $all_orgs[$words_row['organisation_id']]['language_pairs'][$words_row['year']][$words_row['language_pair']] = $words_row['language_pair'];
+                $all_orgs[$words_row['organisation_id']]['language_pairs'][$words_row['year']][$words_row['language_pair']] = $words_row['language_pair'];
+            }
         }
         unset($org_stats_languages);
 
