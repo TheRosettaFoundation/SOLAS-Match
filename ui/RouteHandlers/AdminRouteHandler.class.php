@@ -84,6 +84,12 @@ class AdminRouteHandler
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'community_stats')
         )->name('community_stats');
+
+        $app->get(
+            '/org_stats/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'org_stats')
+        )->name('org_stats');
     }
     
     public function adminDashboard()
@@ -470,6 +476,84 @@ class AdminRouteHandler
 
         header('Content-type: text/csv');
         header('Content-Disposition: attachment; filename="community_stats.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
+    }
+
+    public function org_stats()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $all_orgs0           = $statsDao->all_orgs();
+        $all_org_admins      = $statsDao->all_org_admins();
+        $all_org_members     = $statsDao->all_org_members();
+        $org_stats_words     = $statsDao->org_stats_words();
+        $org_stats_languages = $statsDao->org_stats_languages();
+
+        $all_orgs = array();
+        foreach ($all_orgs0 as $org_row) {
+            $all_orgs[$org_row['id']] = $org_row;
+            $all_orgs[$org_row['id']]['admins']  = array();
+            $all_orgs[$org_row['id']]['members'] = array();
+            $all_orgs[$org_row['id']]['words_translated'] = array();
+            $all_orgs[$org_row['id']]['words_proofread']  = array();
+            $all_orgs[$org_row['id']]['language_pairs']   = array();
+        }
+        unset($all_orgs0);
+
+        foreach ($all_org_admins as $user_row) {
+            $all_orgs[$user_row['organisation_id']]['admins'][$user_row['email']] = $user_row['email'];
+        }
+
+        foreach ($all_org_members as $user_row) {
+            if (!in_array($user_row['email'] , $all_orgs[$user_row['organisation_id']]['admins'])) {
+                $all_orgs[$user_row['organisation_id']]['members'][$user_row['email']] = $user_row['email'];
+            }
+        }
+
+        $year_list = array();
+        foreach ($org_stats_words as $words_row) {
+            $year_list[$words_row['year']] = $words_row['year'];
+
+            $all_orgs[$words_row['organisation_id']]['words_translated'][$words_row['year']] = $words_row['words_translated'];
+            $all_orgs[$words_row['organisation_id']]['words_proofread'] [$words_row['year']] = $words_row['words_proofread'];
+        }
+        unset($org_stats_words);
+
+        foreach ($org_stats_languages as $words_row) {
+            $year_list[$words_row['year']] = $words_row['year'];
+
+            $all_orgs[$words_row['organisation_id']]['language_pairs'][$words_row['year']][$words_row['language_pair']] = $words_row['language_pair'];
+        }
+        unset($org_stats_languages);
+
+        $data = "\xEF\xBB\xBF" . '"Name","Email","Website","Admins","Members"';
+
+        $year_list = array_reverse($year_list);
+        foreach ($year_list as $year) {
+            $data .= ',"' . $year . ' Words Translated","Words Proofread","Language Pairs"'
+        }
+        $data .= "\n";
+
+        foreach ($all_orgs as $i => $org_row) {
+            $data .= '"' . str_replace('"', '""', $org_row['name']) . '","' .
+                str_replace('"', '""', $org_row['email']) . '","' .
+                str_replace('"', '""', $org_row['homepage']) . '","' .
+                str_replace('"', '""', implode(', ', $org_row['admins'])) . '","' .
+                str_replace('"', '""', implode(', ', $org_row['members'])) . '"';
+            foreach ($year_list as $year) {
+                $data .= ',"' . (empty($org_row['words_translated'][$year]) ? '' : $org_row['words_translated'][$year]) . '"';
+                $data .= ',"' . (empty($org_row['words_proofread'] [$year]) ? '' : $org_row['words_proofread'][$year]) . '"';
+                $data .= ',"' . (empty($org_row['language_pairs']  [$year]) ? '' : implode(', ', $org_row['language_pairs'][$year])) . '"';
+            }
+            $data .= "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="org_stats.csv"');
         header('Content-length: ' . strlen($data));
         header('X-Frame-Options: ALLOWALL');
         header('Pragma: no-cache');
