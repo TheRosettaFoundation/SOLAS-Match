@@ -87,6 +87,36 @@ class StatisticsDao extends BaseDao
         return $result;
     }
 
+    public function all_orgs()
+    {
+        $result = LibAPI\PDOWrapper::call('all_orgs', '');
+        return $result;
+    }
+
+    public function all_org_admins()
+    {
+        $result = LibAPI\PDOWrapper::call('all_org_admins', '');
+        return $result;
+    }
+
+    public function all_org_members()
+    {
+        $result = LibAPI\PDOWrapper::call('all_org_members', '');
+        return $result;
+    }
+
+    public function org_stats_words()
+    {
+        $result = LibAPI\PDOWrapper::call('org_stats_words', '');
+        return $result;
+    }
+
+    public function org_stats_languages()
+    {
+        $result = LibAPI\PDOWrapper::call('org_stats_languages', '');
+        return $result;
+    }
+
     public function search_user($name)
     {
         $result = LibAPI\PDOWrapper::call('search_user', LibAPI\PDOWrapper::cleanseNullOrWrapStr($name));
