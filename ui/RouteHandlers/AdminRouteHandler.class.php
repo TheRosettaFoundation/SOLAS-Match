@@ -540,7 +540,7 @@ class AdminRouteHandler
 
         $data = "\xEF\xBB\xBF" . '"Name","Email","Website","Admins","Members"';
 
-        $year_list = array_reverse($year_list);
+        rsort($year_list);
         foreach ($year_list as $year) {
             $data .= ',"' . $year . ' Words Translated","Words Proofread","Language Pairs"';
         }
