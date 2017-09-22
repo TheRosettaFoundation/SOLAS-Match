@@ -1438,7 +1438,8 @@ class ProjectRouteHandler
                 $project_file = $taskDao->getProjectFileLocation($project_id);
                 if (!empty($project_file)) {
                     $filename = $project_file['filename'];
-                    $file = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/$filename";
+                    //$file = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/$filename";
+                    $file = GETPHYSICALPROJECTFILEPATH($project_id, $filename);
                 } else {
                     error_log("project_cron ($project_id) getProjectFileLocation FAILED");
                     continue;
