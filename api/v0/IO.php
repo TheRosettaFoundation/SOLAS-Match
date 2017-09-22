@@ -156,7 +156,8 @@ class IO
         if (!is_null($fileInfo)) {
             $fileName = $fileInfo->getFilename();
             $mime = $fileInfo->getMime();
-            $absoluteFilePath = Common\Lib\Settings::get("files.upload_path")."proj-$projectId/$fileName";
+            //$absoluteFilePath = Common\Lib\Settings::get("files.upload_path")."proj-$projectId/$fileName";
+            $absoluteFilePath = GETPHYSICALPROJECTFILEPATH($projectId, $fileName);
             API\Dispatcher::sendResponse(null, self::setDownloadHeaders($absoluteFilePath, $mime), null, $format);
         } else {
             API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::NOT_FOUND);
@@ -179,8 +180,9 @@ class IO
         $fileName = DAO\TaskDao::getFilename($taskId, $version);
         $task = DAO\TaskDao::getTask($taskId);
         $projectId = $task->getProjectId();
-        $absoluteFilePath = Common\Lib\Settings::get("files.upload_path").
-                            "proj-$projectId/task-$taskId/v-$version/$fileName";
+        //$absoluteFilePath = Common\Lib\Settings::get("files.upload_path").
+        //                    "proj-$projectId/task-$taskId/v-$version/$fileName";
+        $absoluteFilePath = GETPHYSICALTASKFILEPATH($projectId, $taskId, $version, $fileName);
 
         $mime = $helper->getCanonicalMime($fileName);
         if (file_exists($absoluteFilePath)) {
