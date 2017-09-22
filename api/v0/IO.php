@@ -365,7 +365,9 @@ class IO
         }
             $token = DAO\ProjectDao::recordProjectFileInfo($projectId, $filename, $userId, $mime);
         try {
-            file_put_contents($destination.$token, $file);
+            //file_put_contents($destination.$token, $file);
+            $physical_pointer = SAVEPHYSICALPROJECTFILE($projectId, $filename, $file);
+            file_put_contents($destination.$token, $physical_pointer);
         } catch (\Exception $e) {
             $message = "You cannot upload a project file for project ($projectId), as one already exists.";
             throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::CONFLICT);
@@ -456,7 +458,13 @@ class IO
             }
         }
         $destinationPath = $uploadFolder."/$filename";
-        $ret = file_put_contents($destinationPath, $file) ? 1 : 0;
+        //$ret = file_put_contents($destinationPath, $file) ? 1 : 0;
+        $physical_pointer = SAVEPHYSICALTASKFILE($projId, $taskId, $version, $filename, $file);
+        if ($physical_pointer) {
+            $ret = file_put_contents($destinationPath, $physical_pointer) ? 1 : 0;
+        } else {
+            $ret = 0;
+        }
         Lib\Notify::sendTaskUploadNotifications($taskId, $version);
         return $ret;
     }
