@@ -74,6 +74,12 @@ class IO
                     );
 
                     $app->put(
+                        '/taskfromproject/:taskId/:userId(:format)/',
+                        '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+                        '\SolasMatch\API\V0\IO::saveTaskFileFromProject'
+                    );
+
+                    $app->put(
                         '/taskOutput/:taskId/:userId(:format)/',
                         '\SolasMatch\API\Lib\Middleware::isLoggedIn',
                         '\SolasMatch\API\V0\IO::saveOutputFile'
@@ -230,6 +236,28 @@ class IO
         API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CREATED);
     }
 
+    public static function saveTaskFileFromProject($taskId, $userId, $format = ".json")
+    {
+        if (!is_numeric($userId) && strstr($userId, '.')) {
+            $userId = explode('.', $userId);
+            $format = '.'.$userId[1];
+            $userId = $userId[0];
+        }
+        $task = DAO\TaskDao::getTask($taskId);
+        $version = API\Dispatcher::clenseArgs('version', Common\Enums\HttpMethodEnum::GET, null);
+        $convert = API\Dispatcher::clenseArgs('convertFromXliff', Common\Enums\HttpMethodEnum::GET, false);
+        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $projectFile = DAO\ProjectDao::getProjectFileInfo($task->getProjectId(), null, null, null, null);
+        $filename = $projectFile->getFilename();
+        try {
+            self::uploadFile($task, $convert, $data, $version, $userId, $filename, true);
+        } catch (Common\Exceptions\SolasMatchException $e) {
+            API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
+            return;
+        }
+        API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CREATED);
+    }
+
     public static function saveOutputFile($taskId, $userId, $format = ".json")
     {
         if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -290,7 +318,7 @@ class IO
     @param String $filename is the name of the uploaded file
     @return No return
     */
-    private static function uploadFile($task, $convert, &$file, $version, $userId, $filename)
+    private static function uploadFile($task, $convert, &$file, $version, $userId, $filename, $from_project_physical_pointer = false)
     {
         $success = null;
         if ($convert) {
@@ -299,10 +327,11 @@ class IO
                 $userId,
                 Lib\FormatConverter::convertFromXliff($file),
                 $filename,
-                $version
+                $version,
+                $from_project_physical_pointer
             );
         } else {
-            $success = self::saveTaskFileToFs($task, $userId, $file, $filename, $version);
+            $success = self::saveTaskFileToFs($task, $userId, $file, $filename, $version, $from_project_physical_pointer);
         }
         if (!$success) {
             throw new Common\Exceptions\SolasMatchException(
@@ -427,14 +456,17 @@ class IO
         }
     }
 
-    private static function saveTaskFileToFs($task, $userId, $file, $filename, $version = null)
+    private static function saveTaskFileToFs($task, $userId, $file, $filename, $version = null, $from_project_physical_pointer = false)
     {
         $taskId = $task->getId();
         $projId = $task->getProjectId();
-        $taskFileMime = self::detectMimeType($file, $filename);
         $projectFileInfo = DAO\ProjectDao::getProjectFileInfo($projId);
         $projectFileMime = $projectFileInfo->getMime();
-
+        if ($from_project_physical_pointer) {
+            $taskFileMime = $projectFileMime;
+        } else {
+            $taskFileMime = self::detectMimeType($file, $filename);
+        }
 
         if ($taskFileMime != $projectFileMime) {
             API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::BAD_REQUEST);
@@ -459,7 +491,11 @@ class IO
         }
         $destinationPath = $uploadFolder."/$filename";
         //$ret = file_put_contents($destinationPath, $file) ? 1 : 0;
-        $physical_pointer = SAVEPHYSICALTASKFILE($projId, $taskId, $version, $filename, $file);
+        if ($from_project_physical_pointer) {
+            $physical_pointer = $file;
+        } else {
+            $physical_pointer = SAVEPHYSICALTASKFILE($projId, $taskId, $version, $filename, $file);
+        }
         if ($physical_pointer) {
             $ret = file_put_contents($destinationPath, $physical_pointer) ? 1 : 0;
         } else {

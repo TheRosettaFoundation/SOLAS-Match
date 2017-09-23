@@ -312,6 +312,49 @@ class TaskDao extends BaseDao
         }
     }
 
+    public function saveTaskFileFromProject($taskId, $userId, $fileData, $version = null, $convert = null)
+    {
+        $request = "{$this->siteApi}v0/io/upload/taskfromproject/$taskId/$userId";
+        $args = array();
+        if (!is_null($version)) {
+            $args["version"] = $version;
+        }
+        if (!is_null($convert)) {
+            $args['convertFromXliff'] = $convert ? 1 : 0;
+        }
+
+        $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT, null, $args, $fileData);
+
+        switch($this->client->getResponseCode()) {
+            case Common\Enums\HttpStatusEnum::CREATED:
+                return;
+            case Common\Enums\HttpStatusEnum::BAD_REQUEST:
+                $projectDao = new ProjectDao();
+                $taskDao = new TaskDao();
+                $task = $taskDao->getTask($taskId);
+                $projectFile = $projectDao->getProjectFileInfo($task->getProjectId());
+                $projectFileName = $projectFile->getFilename();
+                $projectFileExtension = explode(".", $projectFileName);
+                $projectFileExtension = $projectFileExtension[count($projectFileExtension)-1];
+                $projectMime = $projectFile->getMime();
+                throw new Common\Exceptions\SolasMatchException(
+                    sprintf(
+                        Lib\Localisation::getTranslation('common_error_upload_invalid_content'),
+                        $projectFileExtension,
+                        $projectMime
+                    ),
+                    $this->client->getResponseCode()
+                );
+                break;
+            case Common\Enums\HttpStatusEnum::INTERNAL_SERVER_ERROR:
+                throw new Common\Exceptions\SolasMatchException(
+                    Lib\Localisation::getTranslation('common_error_upload_internal_server_error'),
+                    $this->client->getResponseCode()
+                );
+                break;
+        }
+    }
+
     public function uploadOutputFile($taskId, $userId, $fileData, $convert = false)
     {
         $request = "{$this->siteApi}v0/io/upload/taskOutput/$taskId/$userId";

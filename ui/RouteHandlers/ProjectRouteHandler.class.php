@@ -1205,7 +1205,7 @@ class ProjectRouteHandler
             $newTaskId = $newTask->getId();
             $createdTasks[] = $newTaskId;
 
-            $upload_error = $taskDao->saveTaskFile(
+            $upload_error = $taskDao->saveTaskFileFromProject(
                 $newTaskId,
                 $user_id,
                 $projectDao->getProjectFile($project->getId())
