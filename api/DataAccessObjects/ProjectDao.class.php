@@ -612,7 +612,11 @@ class ProjectDao
     }
 
     public static function savePhysicalProjectFile($project_id, $filename, $file) {
-        file_put_contents(Common\Lib\Settings::get('files.upload_path') . "files/proj-$project_id/$filename", $file);
+        $physical_pointer = "files/proj-$project_id/$filename";
+        $ret = file_put_contents(Common\Lib\Settings::get('files.upload_path') . $physical_pointer, $file);
+        if ($ret === false) $physical_pointer = false;
+
+        return $physical_pointer;
     }
 
     public static function getPhysicalTaskFilePath($project_id, $task_id, $version, $filename) {
@@ -620,9 +624,13 @@ class ProjectDao
 
     }
 
-    public static function savePhysicalTaskFile($project_id, $task_Id, $version, $filename, $file) {
+    public static function savePhysicalTaskFile($project_id, $task_id, $version, $filename, $file) {
+>On creation, have to check if file exists and if so up revision number for creation
 
+        $physical_pointer = "files/proj-$project_id/task-$task_id/v-$version/???revision???/$filename";
+        $ret = file_put_contents(Common\Lib\Settings::get('files.upload_path') . $physical_pointer, $file);
+        if ($ret === false) $physical_pointer = false;
 
-        RETURN $physical_pointer;;;;
+        return $physical_pointer;
     }
 }

@@ -396,7 +396,14 @@ class IO
         try {
             //file_put_contents($destination.$token, $file);
             $physical_pointer = DAO\ProjectDao::savePhysicalProjectFile($projectId, $filename, $file);
-            file_put_contents($destination.$token, $physical_pointer);
+            if ($physical_pointer !== false) {
+                $ret = file_put_contents($destination.$token, $physical_pointer);
+                if ($ret === false) $physical_pointer = false;
+            }
+            if ($physical_pointer === false) {
+                $message = "Failed to write file data ($projectId).";
+                throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::INTERNAL_SERVER_ERROR);
+            }
         } catch (\Exception $e) {
             $message = "You cannot upload a project file for project ($projectId), as one already exists.";
             throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::CONFLICT);
