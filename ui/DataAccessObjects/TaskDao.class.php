@@ -474,4 +474,8 @@ class TaskDao extends BaseDao
             return false;
         }
     }
+
+    public function getPhysicalProjectFilePath($project_id, $filename) {
+        return Common\Lib\Settings::get('files.upload_path') . "files/proj-$project_id/$filename";
+    }
 }
