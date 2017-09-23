@@ -626,9 +626,16 @@ class ProjectDao
     }
 
     public static function savePhysicalTaskFile($project_id, $task_id, $version, $filename, $file) {
->On creation, have to check if file exists and if so up revision number for creation
+        $revision = 0;
+        while (true) {
+            $dir_pointer = "files/proj-$project_id/task-$task_id/v-$version/r-$revision";
+            $physical_pointer = "$dir_pointer/$filename";
+            if (!file_exists(Common\Lib\Settings::get('files.upload_path') . $physical_pointer)) break;
+            $revision++;
+        }
 
-        $physical_pointer = "files/proj-$project_id/task-$task_id/v-$version/???revision???/$filename";
+        mkdir(Common\Lib\Settings::get('files.upload_path') . $dir_pointer, 0755, true);
+
         $ret = file_put_contents(Common\Lib\Settings::get('files.upload_path') . $physical_pointer, $file);
         if ($ret === false) $physical_pointer = false;
 
