@@ -606,4 +606,23 @@ class ProjectDao
             return 0;
         }
     }
+
+    public static function getPhysicalProjectFilePath($project_id, $filename) {
+        return Common\Lib\Settings::get('files.upload_path') . "files/proj-$project_id/$filename";
+    }
+
+    public static function savePhysicalProjectFile($project_id, $filename, $file) {
+        file_put_contents(Common\Lib\Settings::get('files.upload_path') . "files/proj-$project_id/$filename", $file);
+    }
+
+    public static function getPhysicalTaskFilePath($project_id, $task_id, $version, $filename) {
+
+
+    }
+
+    public static function savePhysicalTaskFile($project_id, $task_Id, $version, $filename, $file) {
+
+
+        RETURN $physical_pointer;;;;
+    }
 }

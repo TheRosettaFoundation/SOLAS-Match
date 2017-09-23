@@ -163,7 +163,7 @@ class IO
             $fileName = $fileInfo->getFilename();
             $mime = $fileInfo->getMime();
             //$absoluteFilePath = Common\Lib\Settings::get("files.upload_path")."proj-$projectId/$fileName";
-            $absoluteFilePath = GETPHYSICALPROJECTFILEPATH($projectId, $fileName);
+            $absoluteFilePath = DAO\ProjectDao::getPhysicalProjectFilePath($projectId, $fileName);
             API\Dispatcher::sendResponse(null, self::setDownloadHeaders($absoluteFilePath, $mime), null, $format);
         } else {
             API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::NOT_FOUND);
@@ -188,7 +188,7 @@ class IO
         $projectId = $task->getProjectId();
         //$absoluteFilePath = Common\Lib\Settings::get("files.upload_path").
         //                    "proj-$projectId/task-$taskId/v-$version/$fileName";
-        $absoluteFilePath = GETPHYSICALTASKFILEPATH($projectId, $taskId, $version, $fileName);
+        $absoluteFilePath = DAO\ProjectDao::getPhysicalTaskFilePath($projectId, $taskId, $version, $fileName);
 
         $mime = $helper->getCanonicalMime($fileName);
         if (file_exists($absoluteFilePath)) {
@@ -395,7 +395,7 @@ class IO
             $token = DAO\ProjectDao::recordProjectFileInfo($projectId, $filename, $userId, $mime);
         try {
             //file_put_contents($destination.$token, $file);
-            $physical_pointer = SAVEPHYSICALPROJECTFILE($projectId, $filename, $file);
+            $physical_pointer = DAO\ProjectDao::savePhysicalProjectFile($projectId, $filename, $file);
             file_put_contents($destination.$token, $physical_pointer);
         } catch (\Exception $e) {
             $message = "You cannot upload a project file for project ($projectId), as one already exists.";
@@ -494,7 +494,7 @@ class IO
         if ($from_project_physical_pointer) {
             $physical_pointer = $file;
         } else {
-            $physical_pointer = SAVEPHYSICALTASKFILE($projId, $taskId, $version, $filename, $file);
+            $physical_pointer = DAO\ProjectDao::savePhysicalTaskFile($projId, $taskId, $version, $filename, $file);
         }
         if ($physical_pointer) {
             $ret = file_put_contents($destinationPath, $physical_pointer) ? 1 : 0;
