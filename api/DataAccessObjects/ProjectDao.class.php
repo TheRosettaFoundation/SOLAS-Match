@@ -626,12 +626,17 @@ class ProjectDao
     }
 
     public static function savePhysicalTaskFile($project_id, $task_id, $version, $filename, $file) {
-        $revision = 0;
-        while (true) {
-            $dir_pointer = "files/proj-$project_id/task-$task_id/v-$version/r-$revision";
-            $physical_pointer = "$dir_pointer/$filename";
-            if (!file_exists(Common\Lib\Settings::get('files.upload_path') . $physical_pointer)) break;
-            $revision++;
+        $dir_pointer = "files/proj-$project_id/task-$task_id/v-$version";
+        $physical_pointer = "$dir_pointer/$filename";
+        if (file_exists(Common\Lib\Settings::get('files.upload_path') . $physical_pointer)) {
+            // I think this should never happen
+            $revision = 0;
+            while (true) {
+                $dir_pointer = "files/proj-$project_id/task-$task_id/v-$version/r-$revision";
+                $physical_pointer = "$dir_pointer/$filename";
+                if (!file_exists(Common\Lib\Settings::get('files.upload_path') . $physical_pointer)) break;
+                $revision++;
+            }
         }
 
         mkdir(Common\Lib\Settings::get('files.upload_path') . $dir_pointer, 0755, true);
