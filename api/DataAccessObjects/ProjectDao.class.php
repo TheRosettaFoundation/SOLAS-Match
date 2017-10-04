@@ -465,7 +465,7 @@ class ProjectDao
     {
         $projectFileInfo = self::getProjectFileInfo($projectId, null, null, null, null);
         $filename = $projectFileInfo->getFilename();
-        $source = Common\Lib\Settings::get("files.upload_path")."proj-$projectId/$filename";
+        $source = Common\Lib\Settings::get('files.upload_path')."proj-$projectId/$filename";
 
         if (file_exists($source)) {
             return file_get_contents($source);
@@ -605,5 +605,51 @@ class ProjectDao
         } else {
             return 0;
         }
+    }
+
+    public static function getPhysicalProjectFilePath($project_id, $filename) {
+        $path = file_get_contents(Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/$filename");
+        if ($path === false) $path = 'BADPATH';
+        return Common\Lib\Settings::get('files.upload_path') . $path;
+    }
+
+    public static function savePhysicalProjectFile($project_id, $filename, $file) {
+        $dir_pointer = "files/proj-$project_id";
+        $physical_pointer = "$dir_pointer/$filename";
+
+        mkdir(Common\Lib\Settings::get('files.upload_path') . $dir_pointer, 0755);
+
+        $ret = file_put_contents(Common\Lib\Settings::get('files.upload_path') . $physical_pointer, $file);
+        if ($ret === false) $physical_pointer = false;
+
+        return $physical_pointer;
+    }
+
+    public static function getPhysicalTaskFilePath($project_id, $task_id, $version, $filename) {
+        $path = file_get_contents(Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-$version/$filename");
+        if ($path === false) $path = 'BADPATH';
+        return Common\Lib\Settings::get('files.upload_path') . $path;
+    }
+
+    public static function savePhysicalTaskFile($project_id, $task_id, $version, $filename, $file) {
+        $dir_pointer = "files/proj-$project_id/task-$task_id/v-$version";
+        $physical_pointer = "$dir_pointer/$filename";
+        if (file_exists(Common\Lib\Settings::get('files.upload_path') . $physical_pointer)) {
+            // I think this should never happen
+            $revision = 0;
+            while (true) {
+                $dir_pointer = "files/proj-$project_id/task-$task_id/v-$version/r-$revision";
+                $physical_pointer = "$dir_pointer/$filename";
+                if (!file_exists(Common\Lib\Settings::get('files.upload_path') . $physical_pointer)) break;
+                $revision++;
+            }
+        }
+
+        mkdir(Common\Lib\Settings::get('files.upload_path') . $dir_pointer, 0755, true);
+
+        $ret = file_put_contents(Common\Lib\Settings::get('files.upload_path') . $physical_pointer, $file);
+        if ($ret === false) $physical_pointer = false;
+
+        return $physical_pointer;
     }
 }

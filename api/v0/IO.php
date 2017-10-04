@@ -74,6 +74,12 @@ class IO
                     );
 
                     $app->put(
+                        '/taskfromproject/:taskId/:userId(:format)/',
+                        '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+                        '\SolasMatch\API\V0\IO::saveTaskFileFromProject'
+                    );
+
+                    $app->put(
                         '/taskOutput/:taskId/:userId(:format)/',
                         '\SolasMatch\API\Lib\Middleware::isLoggedIn',
                         '\SolasMatch\API\V0\IO::saveOutputFile'
@@ -156,8 +162,13 @@ class IO
         if (!is_null($fileInfo)) {
             $fileName = $fileInfo->getFilename();
             $mime = $fileInfo->getMime();
-            $absoluteFilePath = Common\Lib\Settings::get("files.upload_path")."proj-$projectId/$fileName";
-            API\Dispatcher::sendResponse(null, self::setDownloadHeaders($absoluteFilePath, $mime), null, $format);
+            //$absoluteFilePath = Common\Lib\Settings::get("files.upload_path")."proj-$projectId/$fileName";
+            $absoluteFilePath = DAO\ProjectDao::getPhysicalProjectFilePath($projectId, $fileName);
+            if (file_exists($absoluteFilePath)) {
+                API\Dispatcher::sendResponse(null, self::setDownloadHeaders($absoluteFilePath, $mime), null, $format);
+            } else {
+                API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::NOT_FOUND);
+            }
         } else {
             API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::NOT_FOUND);
         }
@@ -179,8 +190,9 @@ class IO
         $fileName = DAO\TaskDao::getFilename($taskId, $version);
         $task = DAO\TaskDao::getTask($taskId);
         $projectId = $task->getProjectId();
-        $absoluteFilePath = Common\Lib\Settings::get("files.upload_path").
-                            "proj-$projectId/task-$taskId/v-$version/$fileName";
+        //$absoluteFilePath = Common\Lib\Settings::get("files.upload_path").
+        //                    "proj-$projectId/task-$taskId/v-$version/$fileName";
+        $absoluteFilePath = DAO\ProjectDao::getPhysicalTaskFilePath($projectId, $taskId, $version, $fileName);
 
         $mime = $helper->getCanonicalMime($fileName);
         if (file_exists($absoluteFilePath)) {
@@ -221,6 +233,28 @@ class IO
         $filename = $projectFile->getFilename();
         try {
             self::uploadFile($task, $convert, $data, $version, $userId, $filename);
+        } catch (Common\Exceptions\SolasMatchException $e) {
+            API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
+            return;
+        }
+        API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CREATED);
+    }
+
+    public static function saveTaskFileFromProject($taskId, $userId, $format = ".json")
+    {
+        if (!is_numeric($userId) && strstr($userId, '.')) {
+            $userId = explode('.', $userId);
+            $format = '.'.$userId[1];
+            $userId = $userId[0];
+        }
+        $task = DAO\TaskDao::getTask($taskId);
+        $version = API\Dispatcher::clenseArgs('version', Common\Enums\HttpMethodEnum::GET, null);
+        $convert = API\Dispatcher::clenseArgs('convertFromXliff', Common\Enums\HttpMethodEnum::GET, false);
+        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $projectFile = DAO\ProjectDao::getProjectFileInfo($task->getProjectId(), null, null, null, null);
+        $filename = $projectFile->getFilename();
+        try {
+            self::uploadFile($task, false, $data, $version, $userId, $filename, true);
         } catch (Common\Exceptions\SolasMatchException $e) {
             API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
             return;
@@ -288,7 +322,7 @@ class IO
     @param String $filename is the name of the uploaded file
     @return No return
     */
-    private static function uploadFile($task, $convert, &$file, $version, $userId, $filename)
+    private static function uploadFile($task, $convert, &$file, $version, $userId, $filename, $from_project_physical_pointer = false)
     {
         $success = null;
         if ($convert) {
@@ -300,7 +334,7 @@ class IO
                 $version
             );
         } else {
-            $success = self::saveTaskFileToFs($task, $userId, $file, $filename, $version);
+            $success = self::saveTaskFileToFs($task, $userId, $file, $filename, $version, $from_project_physical_pointer);
         }
         if (!$success) {
             throw new Common\Exceptions\SolasMatchException(
@@ -308,6 +342,7 @@ class IO
                 Common\Enums\HttpStatusEnum::INTERNAL_SERVER_ERROR
             );
         }
+        return $success;
     }
 
     //! Upload a new version of a Task file
@@ -323,7 +358,7 @@ class IO
     */
     private static function uploadOutputFile($task, $convert, &$file, $userId, $filename)
     {
-        self::uploadFile($task, $convert, $file, null, $userId, $filename);
+        $physical_pointer = self::uploadFile($task, $convert, $file, null, $userId, $filename);
         $graphBuilder = new Lib\APIWorkflowBuilder();
         $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
         if ($graph) {
@@ -332,7 +367,11 @@ class IO
             foreach ($taskNode->getNext() as $nextTaskId) {
                 $result = DAO\TaskDao::getTasks($nextTaskId);
                 $nextTask = $result[0];
-                self::uploadFile($nextTask, $convert, $file, 0, $userId, $filename);
+                if ($physical_pointer) {
+                    self::uploadFile($nextTask, false, $physical_pointer, 0, $userId, $filename, true);
+                } else {
+                    self::uploadFile($nextTask, $convert, $file, 0, $userId, $filename);
+                }
             }
         }
     }
@@ -363,7 +402,16 @@ class IO
         }
             $token = DAO\ProjectDao::recordProjectFileInfo($projectId, $filename, $userId, $mime);
         try {
-            file_put_contents($destination.$token, $file);
+            //file_put_contents($destination.$token, $file);
+            $physical_pointer = DAO\ProjectDao::savePhysicalProjectFile($projectId, $filename, $file);
+            if ($physical_pointer !== false) {
+                $ret = file_put_contents($destination.$token, $physical_pointer);
+                if ($ret === false) $physical_pointer = false;
+            }
+            if ($physical_pointer === false) {
+                $message = "Failed to write file data ($projectId).";
+                throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::INTERNAL_SERVER_ERROR);
+            }
         } catch (\Exception $e) {
             $message = "You cannot upload a project file for project ($projectId), as one already exists.";
             throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::CONFLICT);
@@ -423,14 +471,17 @@ class IO
         }
     }
 
-    private static function saveTaskFileToFs($task, $userId, $file, $filename, $version = null)
+    private static function saveTaskFileToFs($task, $userId, $file, $filename, $version = null, $from_project_physical_pointer = false)
     {
         $taskId = $task->getId();
         $projId = $task->getProjectId();
-        $taskFileMime = self::detectMimeType($file, $filename);
         $projectFileInfo = DAO\ProjectDao::getProjectFileInfo($projId);
         $projectFileMime = $projectFileInfo->getMime();
-
+        if ($from_project_physical_pointer) {
+            $taskFileMime = $projectFileMime;
+        } else {
+            $taskFileMime = self::detectMimeType($file, $filename);
+        }
 
         if ($taskFileMime != $projectFileMime) {
             API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::BAD_REQUEST);
@@ -454,7 +505,17 @@ class IO
             }
         }
         $destinationPath = $uploadFolder."/$filename";
-        $ret = file_put_contents($destinationPath, $file) ? 1 : 0;
+        //$ret = file_put_contents($destinationPath, $file) ? 1 : 0;
+        if ($from_project_physical_pointer) {
+            $physical_pointer = $file;
+        } else {
+            $physical_pointer = DAO\ProjectDao::savePhysicalTaskFile($projId, $taskId, $version, $filename, $file);
+        }
+        if ($physical_pointer) {
+            $ret = file_put_contents($destinationPath, $physical_pointer) ? $physical_pointer : 0;
+        } else {
+            $ret = 0;
+        }
         Lib\Notify::sendTaskUploadNotifications($taskId, $version);
         return $ret;
     }

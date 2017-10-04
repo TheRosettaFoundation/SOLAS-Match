@@ -1205,7 +1205,7 @@ class ProjectRouteHandler
             $newTaskId = $newTask->getId();
             $createdTasks[] = $newTaskId;
 
-            $upload_error = $taskDao->saveTaskFile(
+            $upload_error = $taskDao->saveTaskFileFromProject(
                 $newTaskId,
                 $user_id,
                 $projectDao->getProjectFile($project->getId())
@@ -1438,7 +1438,12 @@ class ProjectRouteHandler
                 $project_file = $taskDao->getProjectFileLocation($project_id);
                 if (!empty($project_file)) {
                     $filename = $project_file['filename'];
-                    $file = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/$filename";
+                    //$file = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/$filename";
+                    $file = $taskDao->getPhysicalProjectFilePath($project_id, $filename);
+                    if (!$file) {
+                        error_log("project_cron ($project_id) getPhysicalProjectFilePath FAILED");
+                        continue;
+                    }
                 } else {
                     error_log("project_cron ($project_id) getProjectFileLocation FAILED");
                     continue;

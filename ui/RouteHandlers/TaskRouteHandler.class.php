@@ -1603,7 +1603,7 @@ class TaskRouteHandler
 
                 $upload_error = null;
                 try {
-                    $upload_error = $taskDao->saveTaskFile(
+                    $upload_error = $taskDao->saveTaskFileFromProject(
                         $newTaskId,
                         $user_id,
                         $projectDao->getProjectFile($project_id)
