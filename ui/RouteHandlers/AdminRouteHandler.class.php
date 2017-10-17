@@ -595,7 +595,7 @@ class AdminRouteHandler
                 'new_tasks' => $new_tasks_month['new_tasks'],
                 'average_time_to_assign' => 0,
                 'average_time_to_turnaround' => 0,
-                )
+                );
         }
 
         $total = 0
