@@ -90,6 +90,12 @@ class AdminRouteHandler
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'org_stats')
         )->name('org_stats');
+
+        $app->get(
+            '/community_dashboard/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'community_dashboard')
+        )->name('community_dashboard');
     }
     
     public function adminDashboard()
@@ -562,6 +568,113 @@ class AdminRouteHandler
 
         header('Content-type: text/csv');
         header('Content-Disposition: attachment; filename="org_stats.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
+    }
+
+    public function community_dashboard()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $users_active               = $statsDao->users_active();
+        $users_signed_up            = $statsDao->users_signed_up();
+        $new_tasks                  = $statsDao->new_tasks();
+        $average_time_to_assign     = $statsDao->average_time_to_assign();
+        $average_time_to_turnaround = $statsDao->average_time_to_turnaround();
+
+        $all_months = array();
+        foreach ($new_tasks as $new_tasks_month) { // new_tasks sorted newest first (like most of these)
+            $all_months[$new_tasks_month['month']] = array(
+                'total_translators' => 0,
+                'users_active' => 0,
+                'users_signed_up' => 0,
+                'monthly_community_growth' => 0,
+                'new_tasks' => $new_tasks_month['new_tasks'],
+                'average_time_to_assign' => 0,
+                'average_time_to_turnaround' => 0,
+        }
+
+        $total = 0
+        $previous = 0;
+        foreach ($users_signed_up as $users_signed_up_month) { // users_signed_up is sorted oldest first!
+            $all_months[$users_signed_up_month['month']]['users_signed_up'] = $users_signed_up_month['users_signed_up'];
+            $total+= $users_signed_up_month['users_signed_up'];
+            $all_months[$users_signed_up_month['month']]['total_translators'] = $total;
+            if ($previous) {
+                $percent = number_format(($total/$previous - 1.0) * 100., 2);
+                $percent = "$percent%";
+            } else {
+                $percent = '100%';
+            }
+            $all_months[$users_signed_up_month['month']]['monthly_community_growth'] = $percent;
+            $total = $previous;
+        }
+
+        foreach ($users_active as $users_active_month) {
+            $all_months[$users_active_month['month']]['users_active'] = $users_active_month['users_active'];
+        }
+
+        foreach ($average_time_to_assign as $average_time_to_assign_month) {
+            $all_months[$average_time_to_assign_month['month']]['average_time_to_assign'] = $average_time_to_assign_month['average_time_to_assign'];
+        }
+
+        foreach ($average_time_to_turnaround as $average_time_to_turnaround_month) {
+            $all_months[$average_time_to_turnaround_month['month']]['average_time_to_turnaround'] = $average_time_to_turnaround_month['average_time_to_turnaround'];
+        }
+
+        $data = "\xEF\xBB\xBF" . '"trommons.org Community"';
+        foreach ($all_months as $month) {
+            $data .= ',"' . $month . '"';
+        }
+        $data .= "\n";
+
+        $data .= '"Total Translators"';
+        foreach ($all_months as $month) {
+            $data .= ',"' . $all_months[$month]['total_translators'] . '"';
+        }
+        $data .= "\n";
+
+        $data .= '"Active Translators"';
+        foreach ($all_months as $month) {
+            $data .= ',"' . $all_months[$month]['users_active'] . '"';
+        }
+        $data .= "\n";
+
+        $data .= '"New Sign-ups"';
+        foreach ($all_months as $month) {
+            $data .= ',"' . $all_months[$month]['users_signed_up'] . '"';
+        }
+        $data .= "\n";
+
+        $data .= '"Monthly Community Growth"';
+        foreach ($all_months as $month) {
+            $data .= ',"' . $all_months[$month]['monthly_community_growth'] . '"';
+        }
+        $data .= "\n";
+
+        $data .= '"Total New Tasks"';
+        foreach ($all_months as $month) {
+            $data .= ',"' . $all_months[$month]['new_tasks'] . '"';
+        }
+        $data .= "\n";
+
+        $data .= '"Average Time to Assign (hours)"';
+        foreach ($all_months as $month) {
+            $data .= ',"' . $all_months[$month]['average_time_to_assign'] . '"';
+        }
+        $data .= "\n";
+
+        $data .= '"Average Turnaround (hours)"';
+        foreach ($all_months as $month) {
+            $data .= ',"' . $all_months[$month]['average_time_to_turnaround'] . '"';
+        }
+        $data .= "\n";
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="community_dashboard.csv"');
         header('Content-length: ' . strlen($data));
         header('X-Frame-Options: ALLOWALL');
         header('Pragma: no-cache');
