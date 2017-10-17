@@ -598,7 +598,7 @@ class AdminRouteHandler
                 );
         }
 
-        $total = 0
+        $total = 0;
         $previous = 0;
         foreach ($users_signed_up as $users_signed_up_month) { // users_signed_up is sorted oldest first!
             $all_months[$users_signed_up_month['month']]['users_signed_up'] = $users_signed_up_month['users_signed_up'];
