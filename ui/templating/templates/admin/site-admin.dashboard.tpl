@@ -19,6 +19,7 @@
     <p><a href="{urlFor name="user_languages" options="code.full"}" target="_blank">List all languages indicated on user's profiles showing information about the user (if you replace the "full" in the URL with a language code like "es", you will just get that language).</a> <a href="{urlFor name="download_user_languages"}">[Download]</a></p>
     <p><a href="{urlFor name="community_stats"}">[Download community report]</a></p>
     <p><a href="{urlFor name="org_stats"}">[Download NGO report]</a></p>
+    <p><a href="{urlFor name="community_dashboard"}">[Download Community Dashboard report]</a></p>
     <hr />
 
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">
