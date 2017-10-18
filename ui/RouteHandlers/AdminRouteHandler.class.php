@@ -627,50 +627,50 @@ class AdminRouteHandler
         }
 
         $data = "\xEF\xBB\xBF" . '"trommons.org Community"';
-        foreach ($all_months as $month) {
+        foreach ($all_months as $month => $month_data) {
             $data .= ',"' . $month . '"';
         }
         $data .= "\n";
 
         $data .= '"Total Translators"';
-        foreach ($all_months as $month) {
-            $data .= ',"' . $all_months[$month]['total_translators'] . '"';
+        foreach ($all_months as $month_data) {
+            $data .= ',"' . $month_data['total_translators'] . '"';
         }
         $data .= "\n";
 
         $data .= '"Active Translators"';
-        foreach ($all_months as $month) {
-            $data .= ',"' . $all_months[$month]['users_active'] . '"';
+        foreach ($all_months as $month_data) {
+            $data .= ',"' . $month_data['users_active'] . '"';
         }
         $data .= "\n";
 
         $data .= '"New Sign-ups"';
-        foreach ($all_months as $month) {
-            $data .= ',"' . $all_months[$month]['users_signed_up'] . '"';
+        foreach ($all_months as $month_data) {
+            $data .= ',"' . $month_data['users_signed_up'] . '"';
         }
         $data .= "\n";
 
         $data .= '"Monthly Community Growth"';
-        foreach ($all_months as $month) {
-            $data .= ',"' . $all_months[$month]['monthly_community_growth'] . '"';
+        foreach ($all_months as $month_data) {
+            $data .= ',"' . $month_data['monthly_community_growth'] . '"';
         }
         $data .= "\n";
 
         $data .= '"Total New Tasks"';
-        foreach ($all_months as $month) {
-            $data .= ',"' . $all_months[$month]['new_tasks'] . '"';
+        foreach ($all_months as $month_data) {
+            $data .= ',"' . $month_data['new_tasks'] . '"';
         }
         $data .= "\n";
 
         $data .= '"Average Time to Assign (hours)"';
-        foreach ($all_months as $month) {
-            $data .= ',"' . $all_months[$month]['average_time_to_assign'] . '"';
+        foreach ($all_months as $month_data) {
+            $data .= ',"' . $month_data['average_time_to_assign'] . '"';
         }
         $data .= "\n";
 
         $data .= '"Average Turnaround (hours)"';
-        foreach ($all_months as $month) {
-            $data .= ',"' . $all_months[$month]['average_time_to_turnaround'] . '"';
+        foreach ($all_months as $month_data) {
+            $data .= ',"' . $month_data['average_time_to_turnaround'] . '"';
         }
         $data .= "\n";
 
