@@ -601,32 +601,39 @@ class AdminRouteHandler
         $total = 0;
         $previous = 0;
         foreach ($users_signed_up as $users_signed_up_month) { // users_signed_up is sorted oldest first!
-            $all_months[$users_signed_up_month['month']]['users_signed_up'] = $users_signed_up_month['users_signed_up'];
-            $total+= $users_signed_up_month['users_signed_up'];
-            $all_months[$users_signed_up_month['month']]['total_translators'] = $total;
-            if ($previous) {
-                $percent = number_format(($total/$previous - 1.0) * 100., 2);
-                $percent = "$percent%";
-            } else {
-                $percent = '100%';
+            if (!empty($all_months[$users_signed_up_month['month']])) {
+                $all_months[$users_signed_up_month['month']]['users_signed_up'] = $users_signed_up_month['users_signed_up'];
+                $total+= $users_signed_up_month['users_signed_up'];
+                $all_months[$users_signed_up_month['month']]['total_translators'] = $total;
+                if ($previous) {
+                    $percent = number_format(($total/$previous - 1.0) * 100., 2);
+                    $percent = "$percent%";
+                } else {
+                    $percent = '100%';
+                }
+                $all_months[$users_signed_up_month['month']]['monthly_community_growth'] = $percent;
+                $previous = $total;
             }
-            $all_months[$users_signed_up_month['month']]['monthly_community_growth'] = $percent;
-            $total = $previous;
         }
 
         foreach ($users_active as $users_active_month) {
-            $all_months[$users_active_month['month']]['users_active'] = $users_active_month['users_active'];
+            if (!empty($all_months[$users_active_month['month']])) {
+                $all_months[$users_active_month['month']]['users_active'] = $users_active_month['users_active'];
+            }
         }
 
         foreach ($average_time_to_assign as $average_time_to_assign_month) {
-            $all_months[$average_time_to_assign_month['month']]['average_time_to_assign'] = $average_time_to_assign_month['average_time_to_assign'];
+            if (!empty($all_months[$average_time_to_assign_month['month']])) {
+                $all_months[$average_time_to_assign_month['month']]['average_time_to_assign'] = $average_time_to_assign_month['average_time_to_assign'];
+            }
         }
 
         foreach ($average_time_to_turnaround as $average_time_to_turnaround_month) {
-            $all_months[$average_time_to_turnaround_month['month']]['average_time_to_turnaround'] = $average_time_to_turnaround_month['average_time_to_turnaround'];
+            if (!empty($all_months[$average_time_to_turnaround_month['month']])) {
+                $all_months[$average_time_to_turnaround_month['month']]['average_time_to_turnaround'] = $average_time_to_turnaround_month['average_time_to_turnaround'];
+            }
         }
 
-error_log(print_r($all_months, true));
         $data = "\xEF\xBB\xBF" . '"trommons.org Community"';
         foreach ($all_months as $month => $month_data) {
             $data .= ',"' . $month . '"';
@@ -640,10 +647,7 @@ error_log(print_r($all_months, true));
         $data .= "\n";
 
         $data .= '"Active Translators"';
-        foreach ($all_months as $x => $month_data) {
-if (empty($month_data['users_active'])) {
-  error_log("x: $x");error_log(print_r($month_data, true));
-}
+        foreach ($all_months as $month_data) {
             $data .= ',"' . $month_data['users_active'] . '"';
         }
         $data .= "\n";
