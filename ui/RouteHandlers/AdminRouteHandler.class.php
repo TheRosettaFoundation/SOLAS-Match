@@ -603,9 +603,10 @@ class AdminRouteHandler
         $total = 0;
         $previous = 0;
         foreach ($users_signed_up as $users_signed_up_month) { // users_signed_up is sorted oldest first!
-            if (!empty($all_months[$users_signed_up_month['month']])) {
+            $total+= $users_signed_up_month['users_signed_up'];
+
+            if (!empty($all_months[$users_signed_up_month['month']])) { // Don't add partial data
                 $all_months[$users_signed_up_month['month']]['users_signed_up'] = $users_signed_up_month['users_signed_up'];
-                $total+= $users_signed_up_month['users_signed_up'];
                 $all_months[$users_signed_up_month['month']]['total_translators'] = $total;
                 if ($previous) {
                     $percent = number_format(($total/$previous - 1.0) * 100., 2);
