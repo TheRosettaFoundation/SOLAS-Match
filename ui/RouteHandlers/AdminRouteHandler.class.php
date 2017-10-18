@@ -587,15 +587,17 @@ class AdminRouteHandler
 
         $all_months = array();
         foreach ($new_tasks as $new_tasks_month) { // new_tasks sorted newest first (like most of these)
-            $all_months[$new_tasks_month['month']] = array(
-                'total_translators' => 0,
-                'users_active' => 0,
-                'users_signed_up' => 0,
-                'monthly_community_growth' => 0,
-                'new_tasks' => $new_tasks_month['new_tasks'],
-                'average_time_to_assign' => 0,
-                'average_time_to_turnaround' => 0,
-                );
+            if ($new_tasks_month['month'] != 'May-12') { // Hack to remove bad data
+                $all_months[$new_tasks_month['month']] = array(
+                    'total_translators' => 0,
+                    'users_active' => 0,
+                    'users_signed_up' => 0,
+                    'monthly_community_growth' => 0,
+                    'new_tasks' => $new_tasks_month['new_tasks'],
+                    'average_time_to_assign' => 0,
+                    'average_time_to_turnaround' => 0,
+                    );
+            }
         }
 
         $total = 0;
