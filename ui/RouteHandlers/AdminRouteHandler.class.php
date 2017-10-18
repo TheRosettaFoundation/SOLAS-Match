@@ -640,7 +640,10 @@ error_log(print_r($all_months, true));
         $data .= "\n";
 
         $data .= '"Active Translators"';
-        foreach ($all_months as $month_data) {
+        foreach ($all_months as $x => $month_data) {
+if (empty($month_data['users_active']) {
+  error_log("x: $x");error_log(print_r($month_data, true));
+}
             $data .= ',"' . $month_data['users_active'] . '"';
         }
         $data .= "\n";
