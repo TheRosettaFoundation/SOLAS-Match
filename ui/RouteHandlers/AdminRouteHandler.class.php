@@ -626,6 +626,7 @@ class AdminRouteHandler
             $all_months[$average_time_to_turnaround_month['month']]['average_time_to_turnaround'] = $average_time_to_turnaround_month['average_time_to_turnaround'];
         }
 
+error_log(print_r($all_months, true));
         $data = "\xEF\xBB\xBF" . '"trommons.org Community"';
         foreach ($all_months as $month => $month_data) {
             $data .= ',"' . $month . '"';
