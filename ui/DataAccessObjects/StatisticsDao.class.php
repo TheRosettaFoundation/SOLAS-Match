@@ -117,6 +117,36 @@ class StatisticsDao extends BaseDao
         return $result;
     }
 
+    public function users_active()
+    {
+        $result = LibAPI\PDOWrapper::call('users_active', '');
+        return $result;
+    }
+
+    public function users_signed_up()
+    {
+        $result = LibAPI\PDOWrapper::call('users_signed_up', '');
+        return $result;
+    }
+
+    public function new_tasks()
+    {
+        $result = LibAPI\PDOWrapper::call('new_tasks', '');
+        return $result;
+    }
+
+    public function average_time_to_assign()
+    {
+        $result = LibAPI\PDOWrapper::call('average_time_to_assign', '');
+        return $result;
+    }
+
+    public function average_time_to_turnaround()
+    {
+        $result = LibAPI\PDOWrapper::call('average_time_to_turnaround', '');
+        return $result;
+    }
+
     public function search_user($name)
     {
         $result = LibAPI\PDOWrapper::call('search_user', LibAPI\PDOWrapper::cleanseNullOrWrapStr($name));

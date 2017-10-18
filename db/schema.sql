@@ -6422,6 +6422,64 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `users_active`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `users_active`()
+BEGIN
+SELECT COUNT(DISTINCT user_id) AS users_active, CONCAT(SUBSTRING(MONTHNAME(tc.`claimed-time`),1, 3), '-', SUBSTRING(YEAR(tc.`claimed-time`), 3)) AS month
+FROM TaskClaims tc
+GROUP BY YEAR(tc.`claimed-time`), MONTH(tc.`claimed-time`)
+ORDER BY YEAR(tc.`claimed-time`) DESC, MONTH(tc.`claimed-time`) DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `users_signed_up`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `users_signed_up`()
+BEGIN
+SELECT COUNT(*) AS users_signed_up,  CONCAT(SUBSTRING(MONTHNAME(u.`created-time`),1, 3), '-', SUBSTRING(YEAR(u.`created-time`), 3)) AS month
+FROM Users u
+GROUP BY YEAR(u.`created-time`), MONTH(u.`created-time`)
+ORDER BY YEAR(u.`created-time`) ASC, MONTH(u.`created-time`) ASC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `new_tasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `new_tasks`()
+BEGIN
+SELECT COUNT(*) AS new_tasks,  CONCAT(SUBSTRING(MONTHNAME(t.`created-time`),1, 3), '-', SUBSTRING(YEAR(t.`created-time`), 3)) AS month
+FROM Tasks t
+GROUP BY YEAR(t.`created-time`), MONTH(t.`created-time`)
+ORDER BY YEAR(t.`created-time`) DESC, MONTH(t.`created-time`) DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `average_time_to_assign`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `average_time_to_assign`()
+BEGIN
+SELECT ROUND(AVG(UNIX_TIMESTAMP(tc.`claimed-time`) - UNIX_TIMESTAMP(t.`created-time`))/(60.*60.)) AS average_time_to_assign, CONCAT(SUBSTRING(MONTHNAME(tc.`claimed-time`),1, 3), '-', SUBSTRING(YEAR(tc.`claimed-time`), 3)) AS month
+FROM Tasks t
+JOIN TaskClaims tc ON t.id=tc.task_id
+GROUP BY YEAR(tc.`claimed-time`), MONTH(tc.`claimed-time`)
+ORDER BY YEAR(tc.`claimed-time`) DESC, MONTH(tc.`claimed-time`) DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `average_time_to_turnaround`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `average_time_to_turnaround`()
+BEGIN
+SELECT ROUND(AVG(UNIX_TIMESTAMP(tfv.`upload-time`) - UNIX_TIMESTAMP(t.`created-time`))/(60.*60.)) AS average_time_to_turnaround, CONCAT(SUBSTRING(MONTHNAME(tfv.`upload-time`),1, 3), '-', SUBSTRING(YEAR(tfv.`upload-time`), 3)) AS month
+FROM Tasks t
+JOIN TaskFileVersions tfv ON t.id=tfv.task_id AND tfv.version_id>0 AND tfv.version_id=(SELECT MAX(tfv0.version_id) FROM TaskFileVersions tfv0 WHERE tfv.task_id=tfv0.id)
+WHERE t.`task-status_id`=4
+GROUP BY YEAR(tfv.`upload-time`), MONTH(tfv.`upload-time`)
+ORDER BY YEAR(tfv.`upload-time`) DESC, MONTH(tfv.`upload-time`) DESC;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
