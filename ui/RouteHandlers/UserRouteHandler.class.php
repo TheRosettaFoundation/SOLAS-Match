@@ -698,6 +698,12 @@ class UserRouteHandler
         if ($appendExtraScripts) {
             $app->view()->appendData(array("extra_scripts" => $extra_scripts));
         }
+
+        $app->view()->appendData(array(
+            'client_id'    => Common\Lib\Settings::get('proz.client_id'),
+            'redirect_uri' => urlencode(Common\Lib\Settings::get('proz.redirect_uri')),
+        ));
+
         $app->render("user/login.tpl");
     }
     
