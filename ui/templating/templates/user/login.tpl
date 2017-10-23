@@ -60,7 +60,7 @@
 	                    </div>
                     {/if}
                     <div>
-                        <a href="https://twb.translationcenter.org/oauth/authorize?client_id={$client_id}&redirect_uri={$redirect_uri}&response_type=code&scope=public+user.email"  class="btn btn-primary">
+                        <a href="https://twb.translationcenter.org/oauth/authorize?client_id={$client_id}&redirect_uri={$redirect_uri}&response_type=code&scope=public+user.email"  class="btn btn-primary" style="background-color: #fb8f37; margin-bottom: 10px;">
                             <i class="icon-share icon-white"></i> {Localisation::getTranslation('log_in_with_proz')}
                         </a>
                     </div>
