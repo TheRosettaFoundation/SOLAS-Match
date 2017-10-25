@@ -90,6 +90,7 @@ hr.dotted {
 	float: right;
 	
 }
+
 /* styles used in custom Google Plus Sign in button */
 #customGplusBtn {
     display: inline-block;
@@ -126,6 +127,34 @@ hr.dotted {
     font-family: 'Roboto',arial,sans-serif;
 }
 /* end of styles used in custom Google Plus Sign in button */
+
+/* styles used in ProZ Sign in button */
+#customProZBtn {
+    display: inline-block;
+    background: #fb8f37;
+    color: white;
+    width: 219px;
+    border-radius: 5px;
+    white-space: nowrap;
+    margin-bottom: 10px;
+}
+
+#customProZBtn:hover {
+    background: Orange;
+    cursor: pointer;
+}
+
+#customProZBtnText {
+    display: inline-block;
+    height: 35px;
+    vertical-align: middle;
+    padding-left: 50px;
+    padding-right: 35px;
+    font-size: 14px;
+    font-weight: bold;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+/* end of styles used in ProZ Sign in button */
 
 #recent-tasks .task, #also-viewed-tasks .task {
   -moz-border-radius: 10px;
