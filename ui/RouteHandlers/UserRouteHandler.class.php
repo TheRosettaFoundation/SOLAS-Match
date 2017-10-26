@@ -367,6 +367,11 @@ class UserRouteHandler
             $app->view()->appendData(array("warning" => $warning));
         }
 
+        $app->view()->appendData(array(
+            'client_id'    => Common\Lib\Settings::get('proz.client_id'),
+            'redirect_uri' => urlencode(Common\Lib\Settings::get('proz.redirect_uri')),
+        ));
+
         $app->render("user/register.tpl");
     }
 

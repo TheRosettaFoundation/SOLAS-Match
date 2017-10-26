@@ -47,6 +47,12 @@
                         </div>
                     </div>
                 {/if}
+                <div id="pSignInWrapper">
+                    <div id="customProZBtn" class="customProZSignIn">
+                        <span id="customProZBtnIcon"></span>
+                        <a id="customProZBtnText" href="https://twb.translationcenter.org/oauth/authorize?client_id={$client_id}&redirect_uri={$redirect_uri}&response_type=code&scope=public+user.email">{Localisation::getTranslation('log_in_with_proz')}</a>
+                    </div>
+                </div>
                 <div id="openid_btns"></div>
             </div>
             <div id="openid_input_area">
