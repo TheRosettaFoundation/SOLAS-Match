@@ -144,6 +144,12 @@ hr.dotted {
     cursor: pointer;
 }
 
+#customProZBtnIcon {
+    display: inline-block;
+    vertical-align: middle;
+    height: 35px;
+}
+
 #customProZBtnText {
     display: inline-block;
     vertical-align: middle;
@@ -152,10 +158,9 @@ hr.dotted {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: white;
     text-decoration: none;
-    height: 35px;
+    width: 100%;
     text-align: center;
 }
-
 /* end of styles used in ProZ Sign in button */
 
 #recent-tasks .task, #also-viewed-tasks .task {
