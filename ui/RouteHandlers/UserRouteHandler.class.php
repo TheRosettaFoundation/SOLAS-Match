@@ -790,7 +790,7 @@ class UserRouteHandler
         }
 
         $error = sprintf(
-            Lib\Localisation::getTranslation('gplus_error'),
+            Lib\Localisation::getTranslation('proz_error'),
             $app->urlFor('login'),
             $app->urlFor('register'),
             "[$bad_message]"
