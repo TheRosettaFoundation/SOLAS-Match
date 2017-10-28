@@ -719,6 +719,86 @@ class UserRouteHandler
 
     public function login_proz()
     {
+        $app = \Slim\Slim::getInstance();
+        $userDao = new DAO\UserDao();
+
+        $bad_message = '';
+
+        $code = $app->request()->get('code');
+        if (!empty($code)) {
+            // Exchange the authorization code for an access token
+            $client_id = Common\Lib\Settings::get('proz.client_id');
+            $client_secret = Common\Lib\Settings::get('proz.client_secret');
+            $redirect_uri = urlencode(Common\Lib\Settings::get('proz.redirect_uri'))
+
+            $curl = curl_init('https://www.proz.com/oauth/token');
+            curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+            curl_setopt($curl, CURLOPT_USERPWD, "$client_id:$client_secret");
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_POST, true);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, "grant_type=authorization_code&code=$code&redirect_uri=$redirect_uri");
+            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($curl, CURLOPT_AUTOREFERER, true);
+
+            $curl_response = curl_exec($curl);
+
+            $responseCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+            curl_close($curl);
+
+            if ($responseCode == 200) {
+                $response_data = json_decode($curl_response);
+
+                $access_token = $response_data->access_token;
+
+                $curl = curl_init('https://api.proz.com/v2/user');
+                curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $access_token"));
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+                curl_setopt($curl, CURLOPT_AUTOREFERER, true);
+
+                $curl_response = curl_exec($curl);
+
+                $responseCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+                curl_close($curl);
+
+                if ($responseCode == 200) {
+
+                    $response_data = json_decode($curl_response);
+
+                    if (!empty($response_data->email)) {
+                        $userDao->requestAuthCode($response_data->email);
+                        // This does not return,
+                        // it redirects to API /v0/users/$email/auth/code
+                        // which starts "normal" Trommons authorization process
+                        // (and may register a user if the email is new),
+                        // which then redirects to /login URL with a different Trommons 'code',
+                        // which completes login and
+                        // redirects to UserSession::getReferer() or home.
+                    } else {
+                        $bad_message = 'email not set /user';
+                    }
+                } else {
+                    $bad_message = "BAD responseCode /user: $responseCode";
+                }
+            } else {
+                $bad_message = "BAD responseCode /oauth/token: $responseCode";
+            }
+        } else {
+            $bad_message = 'An empty access token received.';
+        }
+
+        $error = sprintf(
+            Lib\Localisation::getTranslation('gplus_error'),
+            $app->urlFor('login'),
+            $app->urlFor('register'),
+            "[$bad_message]"
+            );
+        error_log($bad_message);
+
+        $app->flash('error', $error);
+        $app->redirect($app->urlFor('home'));
     }
 
     private static function createGooglePlusJavaScript()
