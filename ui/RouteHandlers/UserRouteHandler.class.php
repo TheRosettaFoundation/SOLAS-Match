@@ -66,6 +66,11 @@ class UserRouteHandler
         )->via("GET", "POST")->name("login");
 
         $app->get(
+            '/loggedin/',
+            array($this, "login_proz")
+        )->via('GET', 'POST')->name('loggedin');
+
+        $app->get(
             "/:user_id/profile/",
             array($middleware, 'authUserIsLoggedIn'),
             array($this, "userPublicProfile")
@@ -711,7 +716,11 @@ class UserRouteHandler
 
         $app->render("user/login.tpl");
     }
-    
+
+    public function login_proz()
+    {
+    }
+
     private static function createGooglePlusJavaScript()
     {
         $app = \Slim\Slim::getInstance();    
