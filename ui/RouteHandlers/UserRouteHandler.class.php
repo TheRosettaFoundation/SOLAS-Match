@@ -725,20 +725,13 @@ class UserRouteHandler
         $bad_message = '';
 
         $code = $app->request()->get('code');
-error_log("Got code: $code");
         if (!empty($code)) {
             // Exchange the authorization code for an access token
             $client_id = Common\Lib\Settings::get('proz.client_id');
             $client_secret = Common\Lib\Settings::get('proz.client_secret');
             $redirect_uri = urlencode(Common\Lib\Settings::get('proz.redirect_uri'));
 
-/*
             $curl = curl_init('https://www.proz.com/oauth/token');
-*/
-$curl = curl_init('https://loc.csisdmz.ul.ie/SOLAS-Match/proz_token.php');
-curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-//DEL ABOVE
             curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
             curl_setopt($curl, CURLOPT_USERPWD, "$client_id:$client_secret");
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -758,14 +751,7 @@ curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 
                 $access_token = $response_data->access_token;
 
-/*
                 $curl = curl_init('https://api.proz.com/v2/user');
-*/
-error_log("Got access_token: $access_token");
-$curl = curl_init('https://loc.csisdmz.ul.ie/SOLAS-Match/proj_user.php');
-curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-//DEL ABOVE
                 curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $access_token"));
                 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
@@ -782,7 +768,8 @@ curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
                     $response_data = json_decode($curl_response);
 
                     if (!empty($response_data->email)) {
-error_log("Got email: {$response_data->email}");
+                        error_log("Got email from ProZ SSO: {$response_data->email}");
+
                         $userDao->requestAuthCode($response_data->email);
                         // This does not return,
                         // it redirects to API /v0/users/$email/auth/code
