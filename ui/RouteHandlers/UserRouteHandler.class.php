@@ -731,7 +731,10 @@ class UserRouteHandler
             $client_secret = Common\Lib\Settings::get('proz.client_secret');
             $redirect_uri = urlencode(Common\Lib\Settings::get('proz.redirect_uri'));
 
+/*
             $curl = curl_init('https://www.proz.com/oauth/token');
+*/
+$curl = curl_init('https://loc.csisdmz.ul.ie/SOLAS-Match/proz_token.php');
             curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
             curl_setopt($curl, CURLOPT_USERPWD, "$client_id:$client_secret");
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -751,7 +754,10 @@ class UserRouteHandler
 
                 $access_token = $response_data->access_token;
 
+/*
                 $curl = curl_init('https://api.proz.com/v2/user');
+*/
+$curl = curl_init('https://loc.csisdmz.ul.ie/SOLAS-Match/proj_user.php');
                 curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $access_token"));
                 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
