@@ -725,6 +725,7 @@ class UserRouteHandler
         $bad_message = '';
 
         $code = $app->request()->get('code');
+error_log("Got code: $code");
         if (!empty($code)) {
             // Exchange the authorization code for an access token
             $client_id = Common\Lib\Settings::get('proz.client_id');
@@ -757,6 +758,7 @@ $curl = curl_init('https://loc.csisdmz.ul.ie/SOLAS-Match/proz_token.php');
 /*
                 $curl = curl_init('https://api.proz.com/v2/user');
 */
+error_log("Got access_token: $access_token");
 $curl = curl_init('https://loc.csisdmz.ul.ie/SOLAS-Match/proj_user.php');
                 curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $access_token"));
                 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -774,6 +776,7 @@ $curl = curl_init('https://loc.csisdmz.ul.ie/SOLAS-Match/proj_user.php');
                     $response_data = json_decode($curl_response);
 
                     if (!empty($response_data->email)) {
+error_log("Got email: {$response_data->email}");
                         $userDao->requestAuthCode($response_data->email);
                         // This does not return,
                         // it redirects to API /v0/users/$email/auth/code
