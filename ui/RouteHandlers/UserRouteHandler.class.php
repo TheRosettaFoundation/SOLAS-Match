@@ -729,7 +729,7 @@ class UserRouteHandler
             // Exchange the authorization code for an access token
             $client_id = Common\Lib\Settings::get('proz.client_id');
             $client_secret = Common\Lib\Settings::get('proz.client_secret');
-            $redirect_uri = urlencode(Common\Lib\Settings::get('proz.redirect_uri'))
+            $redirect_uri = urlencode(Common\Lib\Settings::get('proz.redirect_uri'));
 
             $curl = curl_init('https://www.proz.com/oauth/token');
             curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
