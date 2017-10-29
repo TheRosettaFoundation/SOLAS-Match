@@ -736,8 +736,10 @@ error_log("Got code: $code");
             $curl = curl_init('https://www.proz.com/oauth/token');
 */
 $curl = curl_init('https://loc.csisdmz.ul.ie/SOLAS-Match/proz_token.php');
+/*
             curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
             curl_setopt($curl, CURLOPT_USERPWD, "$client_id:$client_secret");
+*/
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($curl, CURLOPT_POST, true);
             curl_setopt($curl, CURLOPT_POSTFIELDS, "grant_type=authorization_code&code=$code&redirect_uri=$redirect_uri");
