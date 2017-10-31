@@ -1374,7 +1374,12 @@ class ProjectRouteHandler
                 curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
                 curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
                 curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($re, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
+
                 $res = curl_exec($re);
+                if ($error_number = curl_errno($re)) {
+                    error_log("project_cron /status ($project_id) Curl error ($error_number): " . curl_error($re)); // $responseCode will be 0, so error will be caught below
+                }
 
                 $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
                 $header = substr($res, 0, $header_size);
@@ -1509,8 +1514,12 @@ class ProjectRouteHandler
                 curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
                 curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
                 curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($re, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
 
                 $res = curl_exec($re);
+                if ($error_number = curl_errno($re)) {
+                    error_log("project_cron /new ($project_id) Curl error ($error_number): " . curl_error($re)); // $responseCode will be 0, so error will be caught below
+                }
 
                 $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
                 $header = substr($res, 0, $header_size);
