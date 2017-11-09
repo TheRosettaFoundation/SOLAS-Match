@@ -562,6 +562,15 @@ class UserRouteHandler
                     Common\Lib\UserSession::setSession($user->getId());
                     $request = Common\Lib\UserSession::getReferer();
                     Common\Lib\UserSession::clearReferer();
+
+                    // Check have we previously been redirected from SAML to do login, if so get return address so we can redirect to it below
+                    if (!$request) {
+                        if (!empty($_SESSION['return_to_SAML_url'])) {
+                            $request = $_SESSION['return_to_SAML_url'];
+                        }
+                    }
+                    unset($_SESSION['return_to_SAML_url']);
+
                     //Set site language to user's preferred language if it is not already
                     $currentSiteLang = $langDao->getLanguageByCode(Common\Lib\UserSession::getUserLanguage());
                     $userInfo = $userDao->getPersonalInfo($user->getId());
@@ -619,6 +628,15 @@ class UserRouteHandler
                 Common\Lib\UserSession::setSession($user->getId());
                 $request = Common\Lib\UserSession::getReferer();
                 Common\Lib\UserSession::clearReferer();
+
+                // Check have we previously been redirected from SAML to do login, if so get return address so we can redirect to it below
+                if (!$request) {
+                    if (!empty($_SESSION['return_to_SAML_url'])) {
+                        $request = $_SESSION['return_to_SAML_url'];
+                    }
+                }
+                unset($_SESSION['return_to_SAML_url']);
+
                 //Set site language to user's preferred language if it is not already
                 $currentSiteLang = $langDao->getLanguageByCode(Common\Lib\UserSession::getUserLanguage());
                 $userInfo = $userDao->getPersonalInfo($user->getId());
@@ -670,6 +688,11 @@ class UserRouteHandler
                     $app->flash('error', $error);
                     $app->redirect($app->urlFor('home'));   
                 }
+            }
+
+            $return_to_SAML_url = $app->request()->get('ReturnTo');
+            if (!empty($return_to_SAML_url)) {
+                $_SESSION['return_to_SAML_url'] = $return_to_SAML_url;
             }
             
             $error = $app->request()->get('error');
