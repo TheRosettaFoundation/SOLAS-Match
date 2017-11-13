@@ -1663,6 +1663,8 @@ class ProjectRouteHandler
 'pt-PT' => 'pt-PT',
 'pt' => 'pt-BR',
 'qu' => 'qu-XN',
+'rhg' => 'rhg-MM',
+'rhl' => 'rhl-MM',
 'ro' => 'ro-RO',
 'ru' => 'ru-RU',
 'gd' => 'gd-GB',
@@ -1699,6 +1701,7 @@ class ProjectRouteHandler
 'cy' => 'cy-GB',
 'xh' => 'xh-ZA',
 'yi' => 'yi-YD',
+'yo' => 'yo-NG',
 'zu' => 'zu-ZA',
 );
         if (in_array($language_code, $matecat_acceptable_languages)) return $language_code;
