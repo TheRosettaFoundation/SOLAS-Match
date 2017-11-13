@@ -133,6 +133,7 @@
 	<string name="common_you_are_not_currently_receiving_task_stream_notification_emails">Actualmente no recibes notificaciones de tareas disponibles en tu correo.</string>
 	<string name="common_submit">Enviar</string>
 	<string name="common_log_in">Iniciar sesión</string>
+    <string name="log_in_with_proz">Iniciar sesión con TWB Workspace</string>
 	<string name="common_register">Crear cuenta</string>
   <string name="common_change_email">Modificar el e-mail del usuario</string>
   <string name="common_new_email">Nueva dirección de e-mail</string>
@@ -1133,7 +1134,8 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
 	<string name="slim_error_5">Ver detalles.</string>
 	
 	<string name="gplus_error"><p>Se ha producido un error al intentar acceder a través de Google. <a href="%s">Inténtalo de nuevo</a> o, si no tienes cuenta, <a href="%s">registra una</a>.</p><p><strong>%s</strong></p></string>
-	
+  <string name="proz_error"><p>Se ha producido un error al intentar acceder a través de ProZ. <a href="%s">Inténtalo de nuevo</a> o, si no tienes cuenta, <a href="%s">registra una</a>.</p><p><strong>%s</strong></p></string>
+
 	<string name ="system_badge_profile_filler_title">Perfil completado</string>
 	<string name ="system_badge_profile_filler_desc">Has proporcionado toda la información de perfil de tu cuenta</string>
 	<string name ="system_badge_registered_title">Registro de cuenta</string>

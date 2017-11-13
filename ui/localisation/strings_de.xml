@@ -131,6 +131,7 @@
 	<string name="common_you_are_not_currently_receiving_task_stream_notification_emails">Du erhältst derzeit keine E-Mails zur aktuellen Aufgabenliste.</string>
 	<string name="common_submit">Abschicken</string>
 	<string name="common_log_in">Anmelden</string>
+    <string name="log_in_with_proz">Mit TWB Workspace einloggen</string>
 	<string name="common_register">Registrieren</string>
 	<string name="common_search_for_organisations">Nach Organisationen suchen</string>
 	<string name="common_task_type">Aufgabentyp</string>
@@ -1124,7 +1125,8 @@ Bei Fragen schreiben Sie bitte an <a href="mailto:info@therosettafoundation.org"
 	<string name="slim_error_5">Details anzeigen.</string>
 	
 	<string name="gplus_error"><p>Bei der Anmeldung mit Google ist ein interner Fehler aufgetreten. <a href="%s">Versuche erneut, Dich anzumelden</a> oder <a href="%s">registriere</a> ein neues Benutzerkonto.</p><p><strong>%s</strong></p></string>
-	
+  <string name="proz_error"><p>Bei der Anmeldung mit ProZ ist ein interner Fehler aufgetreten. <a href="%s">Versuche erneut, Dich anzumelden</a> oder <a href="%s">registriere</a> ein neues Benutzerkonto.</p><p><strong>%s</strong></p></string>
+
 	<string name ="system_badge_profile_filler_title">Profil-Füller</string>
 	<string name ="system_badge_profile_filler_desc">Alle Informationen für das öffentliche Benutzerprofil eingefügt.</string>
 	<string name ="system_badge_registered_title">Registriert</string>
