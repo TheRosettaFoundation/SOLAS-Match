@@ -133,6 +133,7 @@
 	<string name="common_you_are_not_currently_receiving_task_stream_notification_emails">Al momento non stai ricevendo le notifiche sulle attività disponibili.</string>
 	<string name="common_submit">Invia</string>
 	<string name="common_log_in">Accedi</string>
+    <string name="log_in_with_proz">Accedi con TWB Workspace</string>
 	<string name="common_register">Registra</string>
 	<string name="common_search_for_organisations">Cerca Organizzazione</string>
 	<string name="common_task_type">Tipo di attività</string>
@@ -1130,7 +1131,8 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@therosettafoun
 	<string name="slim_error_5">Mostra dettagli.</string>
 	
 	<string name="gplus_error"><p>Se ha producido un error al intentar acceder a través de Google. <a href="%s">Inicia sesión de nuevo</a> o <a href="%s">regístrate</a> para abrir una cuenta de Trommons.</p><p><strong>%s</strong></p></string>
-	
+  <string name="proz_error"><p>Se ha producido un error al intentar acceder a través de ProZ. <a href="%s">Inicia sesión de nuevo</a> o <a href="%s">regístrate</a> para abrir una cuenta de Trommons.</p><p><strong>%s</strong></p></string>
+
 	<string name ="system_badge_profile_filler_title">Informazioni Profilo</string>
 	<string name ="system_badge_profile_filler_desc">Informazioni profilo pubblico utente.</string>
 	<string name ="system_badge_registered_title">Registrato</string>

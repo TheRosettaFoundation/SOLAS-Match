@@ -133,6 +133,7 @@
 	<string name="common_you_are_not_currently_receiving_task_stream_notification_emails">You are not currently receiving task stream notification emails.</string>
 	<string name="common_submit">Submit</string>
 	<string name="common_log_in">Log In</string>
+    <string name="log_in_with_proz">Login with TWB Workspace</string>
 	<string name="common_register">Register</string>
   <string name="common_change_email">Change User email Address</string>
   <string name="common_new_email">New email Address</string>
@@ -1132,6 +1133,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="slim_error_5">Show Details.</string>
 	
 	<string name="gplus_error"><p>An internal error occurred while trying to sign in with Google. <a href="%s">Try logging in again</a> or <a href="%s">register</a> for an account.</p><p><strong>%s</strong></p></string>
+  <string name="proz_error"><p>An internal error occurred while trying to sign in with ProZ. <a href="%s">Try logging in again</a> or <a href="%s">register</a> for an account.</p><p><strong>%s</strong></p></string>
 	
 	<string name ="system_badge_profile_filler_title">Profile-Filler</string>
 	<string name ="system_badge_profile_filler_desc">Filled in all info for user  public profile.</string>
