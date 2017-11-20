@@ -844,6 +844,13 @@ Bei Fragen schreiben Sie bitte an <a href="mailto:info@therosettafoundation.org"
     <string name="task_claimed_translation_5">Lade die fertig übersetzte Datei auf die Seite der Aufgabe hoch.</string>
 	<string name="task_claimed_translation_upload_translated_task">Übersetzte Aufgabe hochladen</string>
 
+    <string name="task_claimed_alternative_option">Alternativ:</string>
+    <string name="task_claimed_translate_using_kato">In Kató übersetzen</string>
+    <string name="task_claimed_please_read_kato">Kató ist das Übersetzungssystem von Translators without Borders (TWB). Bitte vor dem Übersetzen in Kató <a href="https://kato.translatorswb.org/public/doc/translators.html" target="_blank">diese Hinweise</a> lesen.</string>
+    <string name="task_simple_upload_copy_from_kato">Die Übersetzung von Kató nach Trommons kopieren</string>
+    <string name="task_simple_upload_view_on_kato"><a href="%s" target="_blank">Hier</a> klicken, um die <strong>Übersetzung in Kató anzuzeigen</strong>.</string>
+    <string name="task_simple_upload_download_from_kato"><a href="%s">Hier</a> klicken, um die <strong>Übersetzung von Kató herunterzuladen und manuell in Trommons hochzuladen</strong>.</string>
+
     <string name="task_create_for_project">Für Projekt <strong>%s</strong>.</string>
 	<string name="task_create_0">Gib einen aussagekräftigen Titel für die Aufgabe an.</string>
 	<string name="task_create_1">Wer und was wird von der Übersetzung dieser Aufgabe beeinflusst?</string>

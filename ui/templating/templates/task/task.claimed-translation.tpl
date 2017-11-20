@@ -21,6 +21,12 @@
         {if isset($user)}
             <p>{sprintf(Localisation::getTranslation('common_we_have_also_emailed_you_these_instructions_to'), {$user->getEmail()})}</p>
         {/if}
+        {if $matecat_url != ''}
+            <p>{Localisation::getTranslation('task_claimed_alternative_option')} <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
+                <i class="icon-th-list icon-white"></i> {Localisation::getTranslation('task_claimed_translate_using_kato')}</a><br />
+                {Localisation::getTranslation('task_claimed_please_read_kato')}
+            </p>
+        {/if}
     </section>
 
     <section>
