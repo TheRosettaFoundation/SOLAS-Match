@@ -858,7 +858,7 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
 
     <string name="task_claimed_alternative_option">Opción alternativa:</string>
     <string name="task_claimed_translate_using_kato">Traducir utilzando Kató</string>
-    <string name="task_claimed_please_read_kato">Kató es una plataforma de traducción de Translators without Borders (TWB). Por favor, lee <a href="https://kato.translatorswb.org/public/doc/" target="_blank">la siguiente guía</a> antes de usar Kató.</string>
+    <string name="task_claimed_please_read_kato">Kató es una plataforma de traducción de Translators without Borders (TWB). Por favor, lee <a href="https://kato.translatorswb.org/public/doc/translators.html" target="_blank">la siguiente guía</a> antes de usar Kató.</string>
     <string name="task_simple_upload_copy_from_kato">Copia tu traducción de Kató a Trommons</string>
     <string name="task_simple_upload_view_on_kato">Pulsa <a href="%s" target="_blank">aquí</a> para <strong>ver tu traducción en Kató</strong>.</string>
     <string name="task_simple_upload_download_from_kato">Pulsa <a href="%s">aquí</a> para <strong>descargar tu traducción de Kató y cargarla en Trommons manualmente</strong>.</string>
