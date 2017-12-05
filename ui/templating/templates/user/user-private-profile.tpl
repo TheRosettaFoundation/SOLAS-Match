@@ -89,7 +89,7 @@
                             </select>
                         </div>
                         <div id="secondaryLanguageDiv">
-                            <label><strong>{Localisation::getTranslation('common_secondary_languages')}:</strong></label>
+                            <label><strong>{Localisation::getTranslation('i_can_translate_from')}:</strong></label>
                             <button onclick="addSecondaryLanguage(); return false;" class="btn btn-success" id="addLanguageButton" {if $secondaryLanguageCount >= 10}disabled{/if}>
                                 <i class="icon-upload icon-white"></i> {Localisation::getTranslation('user_private_profile_add_secondary_language')}
                             </button>
