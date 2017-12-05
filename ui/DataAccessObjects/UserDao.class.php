@@ -3,12 +3,14 @@
 namespace SolasMatch\UI\DAO;
 
 use \SolasMatch\UI\Lib as Lib;
+use \SolasMatch\API\Lib as LibAPI;
 use \SolasMatch\Common as Common;
 
 require_once __DIR__."/../../Common/Enums/HttpStatusEnum.class.php";
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/../../Common/protobufs/models/OAuthResponse.php";
 require_once __DIR__."/BaseDao.php";
+require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 
 class UserDao extends BaseDao
 {
