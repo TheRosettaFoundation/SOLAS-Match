@@ -123,6 +123,9 @@
 	<string name="common_secondary_languages">Secondary Language(s)</string>
     <string name="i_can_translate_from">I Can Translate From</string>
     <string name="qualification_level_for_above">Qualification Level for Above</string>
+    <string name="user_qualification_level_0">Starter</string>
+    <string name="user_qualification_level_1">Basic</string>
+    <string name="user_qualification_level_2">Advanced</string>
 	<string name="common_first_name">First Name</string>
 	<string name="common_last_name">Last Name</string>
 	<string name="common_mobile_number">Mobile Number</string>

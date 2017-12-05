@@ -11,6 +11,9 @@
     {foreach $secondaryLanguages as $secondaryLanguage}
         <div id="userSecondaryLanguagesLanguageCode_{$i}">{$secondaryLanguage->getLanguageCode()}</div>
         <div id="userSecondaryLanguagesCountryCode_{$i}">{$secondaryLanguage->getCountryCode()}</div>
+        <div id="userSecondaryLanguagesLanguageCodeTarget_{$i}">{$secondaryLanguage->getCountryCode()}</div>
+        <div id="userSecondaryLanguagesCountryCodeTarget_{$i}">{$secondaryLanguage->getCountryCode()}</div>
+        <div id="userSecondaryLanguagesQualificationLevel_{$i}">{$secondaryLanguage->getCountryCode()}</div>
         {assign var="i" value=$i+1}
     {/foreach}
     <div id="langPrefSelectCodeSaved">{$langPrefSelectCode}</div>
@@ -28,6 +31,12 @@
         {foreach $countries as $country}
             <option value="{$country->getCode()}">{$country->getName()}</option>
         {/foreach}
+    </div>
+
+    <div id="template_qualification_options">
+        <option value="0">{Localisation::getTranslation('user_qualification_level_0')}</option>
+        <option value="1">{Localisation::getTranslation('user_qualification_level_1')}</option>
+        <option value="2">{Localisation::getTranslation('user_qualification_level_2')}</option>
     </div>
 
 </span>
