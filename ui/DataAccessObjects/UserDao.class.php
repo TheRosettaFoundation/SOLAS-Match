@@ -742,36 +742,34 @@ class UserDao extends BaseDao
         return $ret;
     }
     
-    public function createSecondaryLanguage($userId, $locale)
+    public function createUserQualifiedPair($user_id, $language_id_source, $language_id_target, $country_id_source, $country_id_target, $qualification_level)
     {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/secondaryLanguages";
-        $ret = $this->client->call(
-            "\SolasMatch\Common\Protobufs\Models\Locale",
-            $request,
-            Common\Enums\HttpMethodEnum::POST,
-            $locale
-        );
-        return $ret;
+        LibAPI\PDOWrapper::call('createUserQualifiedPair',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($language_id_source) . ',' .
+            LibAPI\PDOWrapper::cleanse($language_id_target) . ',' .
+            LibAPI\PDOWrapper::cleanse($country_id_source) . ',' .
+            LibAPI\PDOWrapper::cleanse($country_id_target) . ',' .
+            LibAPI\PDOWrapper::cleanse($qualification_level));
     }
-    
-    public function getSecondaryLanguages($userId)
+
+    public function getUserQualifiedPairs($user_id)
     {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/secondaryLanguages";
-        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\Locale"), $request);
-        return $ret;
+        $result = LibAPI\PDOWrapper::call('getUserQualifiedPairs', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) $result = array();
+        return $result;
     }
-    
-    public function deleteSecondaryLanguage($userId, $locale)
+
+    public function removeUserQualifiedPair($user_id, $language_id_source, $language_id_target, $country_id_source, $country_id_target)
     {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/removeSecondaryLanguage/$userId/{$locale->getLanguageCode()}".
-            "/{$locale->getCountryCode()}";
-        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
-        return $ret;
+        LibAPI\PDOWrapper::call('removeUserQualifiedPair',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($language_id_source) . ',' .
+            LibAPI\PDOWrapper::cleanse($language_id_target) . ',' .
+            LibAPI\PDOWrapper::cleanse($country_id_source) . ',' .
+            LibAPI\PDOWrapper::cleanse($country_id_target));
     }
-    
+
     public function deleteUser($userId)
     {
         $request = "{$this->siteApi}v0/users/$userId";
