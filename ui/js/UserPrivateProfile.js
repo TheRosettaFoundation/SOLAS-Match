@@ -83,7 +83,11 @@ function addSecondaryLanguage(
     var locale = document.createElement("div");
     locale.id = "secondary_locale_" + secondaryLanguageCount;
 
-i_can_translate_from
+    var text1 = document.createElement("label");
+    text1.innerHTML = "<strong>" + parameters.getTranslation("i_can_translate_from") + ":</strong>";
+    text1.style.width = "82%";
+    locale.appendChild(text1);
+
     var languageBox = document.createElement("select");
     languageBox.innerHTML = document.getElementById("template_language_options").innerHTML;
     languageBox.name = "secondary_language_" + secondaryLanguageCount;
@@ -100,7 +104,11 @@ i_can_translate_from
     countryBox.value = userSecondaryLanguagesCountryCode;
     locale.appendChild(countryBox);
 
-common_to
+    var text2 = document.createElement("label");
+    text2.innerHTML = "<strong>" + parameters.getTranslation("common_to") + ":</strong>";
+    text2.style.width = "82%";
+    locale.appendChild(text2);
+
     var languageBoxTarget = document.createElement("select");
     languageBoxTarget.innerHTML = document.getElementById("template_language_options").innerHTML;
     languageBoxTarget.name = "secondary_language_target_" + secondaryLanguageCount;
@@ -117,7 +125,11 @@ common_to
     countryBoxTarget.value = userSecondaryLanguagesCountryCodeTarget;
     locale.appendChild(countryBoxTarget);
 
-qualification_level_for_above
+    var text3 = document.createElement("label");
+    text3.innerHTML = "<strong>" + parameters.getTranslation("qualification_level_for_above") + ":</strong>";
+    text3.style.width = "82%";
+    locale.appendChild(text3);
+
     var qualificationLevel = document.createElement("select");
     qualificationLevel.innerHTML = document.getElementById("template_qualification_options").innerHTML;
     qualificationLevel.name = "secondary_country_target_" + secondaryLanguageCount;
