@@ -232,10 +232,13 @@ function validateForm()
   }
 
   for (var i = 0; i < userQualifiedPairsCount; i++) {
-    var secondaryLanguageSelect = document.getElementById("language_code_source_" + i);
-    var secondaryCountrySelect = document.getElementById("country_code_source_" + i);
-    if ((secondaryLanguageSelect.value != "" && secondaryCountrySelect.value == "") ||
-        (secondaryLanguageSelect.value == "" && secondaryCountrySelect.value != "")) {
+    var languageCodeSource = document.getElementById("language_code_source_" + i);
+    var countryCodeSource  = document.getElementById("country_code_source_" + i);
+    var languageCodeTarget = document.getElementById("language_code_target_" + i);
+    var countryCodeTarget  = document.getElementById("country_code_target_" + i);
+
+    if ((languageCodeSource.value != "" && countryCodeSource.value == "") ||
+        (secondaryLanguageSelect.value == "" && countryCodeSource.value != "")) {
       alertError = parameters.getTranslation("user_private_profile_secondary_languages_failed");
       set_all_errors_for_submission();
       return false;
