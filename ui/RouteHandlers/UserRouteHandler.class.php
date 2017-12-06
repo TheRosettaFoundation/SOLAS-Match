@@ -1003,17 +1003,17 @@ EOD;
 
                 try {
                     $i = 0;
-                    while (!empty($post["secondary_language_$i"]) && !empty($post["secondary_country_$i"])) {
+                    while (!empty($post["language_code_source_$i"]) && !empty($post["country_code_source_$i"])) {
                         $found = false;
                         foreach ($userQualifiedPairs as $userQualifiedPair) {
-                            if (($post["secondary_language_$i"] == $userQualifiedPair->getLanguageCode()) && ($post["secondary_country_$i"] == $userQualifiedPair->getCountryCode())) {
+                            if (($post["language_code_source_$i"] == $userQualifiedPair->getLanguageCode()) && ($post["country_code_source_$i"] == $userQualifiedPair->getCountryCode())) {
                                 $found = true;
                             }
                         }
                         if (!$found) {
                             $locale = new Common\Protobufs\Models\Locale();
-                            $locale->setLanguageCode($post["secondary_language_$i"]);
-                            $locale->setCountryCode($post["secondary_country_$i"]);
+                            $locale->setLanguageCode($post["language_code_source_$i"]);
+                            $locale->setCountryCode($post["country_code_source_$i"]);
                             $userDao->createSecondaryLanguage($user_id, $locale);
 createUserQualifiedPair($user_id, $language_id_source, $language_id_target, $country_id_source, $country_id_target, $qualification_level)
                         }
@@ -1023,8 +1023,8 @@ createUserQualifiedPair($user_id, $language_id_source, $language_id_target, $cou
                     foreach ($userQualifiedPairs as $userQualifiedPair) {
                         $i = 0;
                         $found = false;
-                        while (!empty($post["secondary_language_$i"]) && !empty($post["secondary_country_$i"])) {
-                            if (($post["secondary_language_$i"] == $userQualifiedPair->getLanguageCode()) && ($post["secondary_country_$i"] == $userQualifiedPair->getCountryCode())) {
+                        while (!empty($post["language_code_source_$i"]) && !empty($post["country_code_source_$i"])) {
+                            if (($post["language_code_source_$i"] == $userQualifiedPair->getLanguageCode()) && ($post["country_code_source_$i"] == $userQualifiedPair->getCountryCode())) {
                                 $found = true;
                             }
                             $i++;
