@@ -10,8 +10,8 @@ var user_id;
 // Errors
 var alertError;
 
-var secondaryLanguageLimit = 10;
-var secondaryLanguageCount = 0;
+var userQualifiedPairsLimit = 10;
+var userQualifiedPairsCount = 0;
 
 $(document).ready(documentReady);
 
@@ -48,8 +48,8 @@ function documentReady()
   siteAPI      = getSetting("siteAPI");
   user_id      = getSetting("user_id");
 
-  var secondaryLanguageCountDatabase = parseInt(getSetting("secondaryLanguageCount"));
-  for (var i = 0; i < secondaryLanguageCountDatabase; i++) {
+  var userQualifiedPairsCountDatabase = parseInt(getSetting("userQualifiedPairsCount"));
+  for (var i = 0; i < userQualifiedPairsCountDatabase; i++) {
     addSecondaryLanguage(
       getSetting("userSecondaryLanguagesLanguageCode_" + i),
       getSetting("userSecondaryLanguagesCountryCode_" + i),
@@ -78,10 +78,10 @@ function addSecondaryLanguage(
   userSecondaryLanguagesCountryCodeTarget,
   userSecondaryLanguagesQualificationLevel)
 {
-  if (secondaryLanguageCount < secondaryLanguageLimit) {
+  if (userQualifiedPairsCount < userQualifiedPairsLimit) {
     var secondaryLanguageDiv = document.getElementById("secondaryLanguageDiv");
     var locale = document.createElement("div");
-    locale.id = "secondary_locale_" + secondaryLanguageCount;
+    locale.id = "secondary_locale_" + userQualifiedPairsCount;
 
     var text1 = document.createElement("label");
     text1.innerHTML = "<strong>" + parameters.getTranslation("i_can_translate_from") + ":</strong>";
@@ -90,16 +90,16 @@ function addSecondaryLanguage(
 
     var languageBox = document.createElement("select");
     languageBox.innerHTML = document.getElementById("template_language_options").innerHTML;
-    languageBox.name = "secondary_language_" + secondaryLanguageCount;
-    languageBox.id = "secondary_language_" + secondaryLanguageCount;
+    languageBox.name = "secondary_language_" + userQualifiedPairsCount;
+    languageBox.id = "secondary_language_" + userQualifiedPairsCount;
     languageBox.style.width = "82%";
     languageBox.value = userSecondaryLanguagesLanguageCode;
     locale.appendChild(languageBox);
 
     var countryBox = document.createElement("select");
     countryBox.innerHTML = document.getElementById("template_country_options").innerHTML;
-    countryBox.name = "secondary_country_" + secondaryLanguageCount;
-    countryBox.id = "secondary_country_" + secondaryLanguageCount;
+    countryBox.name = "secondary_country_" + userQualifiedPairsCount;
+    countryBox.id = "secondary_country_" + userQualifiedPairsCount;
     countryBox.style.width = "82%";
     countryBox.value = userSecondaryLanguagesCountryCode;
     locale.appendChild(countryBox);
@@ -111,16 +111,16 @@ function addSecondaryLanguage(
 
     var languageBoxTarget = document.createElement("select");
     languageBoxTarget.innerHTML = document.getElementById("template_language_options").innerHTML;
-    languageBoxTarget.name = "secondary_language_target_" + secondaryLanguageCount;
-    languageBoxTarget.id = "secondary_language_target_" + secondaryLanguageCount;
+    languageBoxTarget.name = "secondary_language_target_" + userQualifiedPairsCount;
+    languageBoxTarget.id = "secondary_language_target_" + userQualifiedPairsCount;
     languageBoxTarget.style.width = "82%";
     languageBoxTarget.value = userSecondaryLanguagesLanguageCodeTarget;
     locale.appendChild(languageBoxTarget);
 
     var countryBoxTarget = document.createElement("select");
     countryBoxTarget.innerHTML = document.getElementById("template_language_options").innerHTML;
-    countryBoxTarget.name = "secondary_country_target_" + secondaryLanguageCount;
-    countryBoxTarget.id = "secondary_country_target_" + secondaryLanguageCount;
+    countryBoxTarget.name = "secondary_country_target_" + userQualifiedPairsCount;
+    countryBoxTarget.id = "secondary_country_target_" + userQualifiedPairsCount;
     countryBoxTarget.style.width = "82%";
     countryBoxTarget.value = userSecondaryLanguagesCountryCodeTarget;
     locale.appendChild(countryBoxTarget);
@@ -132,8 +132,8 @@ function addSecondaryLanguage(
 
     var qualificationLevel = document.createElement("select");
     qualificationLevel.innerHTML = document.getElementById("template_qualification_options").innerHTML;
-    qualificationLevel.name = "secondary_country_target_" + secondaryLanguageCount;
-    qualificationLevel.id = "secondary_country_target_" + secondaryLanguageCount;
+    qualificationLevel.name = "secondary_country_target_" + userQualifiedPairsCount;
+    qualificationLevel.id = "secondary_country_target_" + userQualifiedPairsCount;
     qualificationLevel.style.width = "82%";
     qualificationLevel.value = userSecondaryLanguagesQualificationLevel;
     locale.appendChild(qualificationLevel);
@@ -144,8 +144,8 @@ function addSecondaryLanguage(
 
     var button = document.getElementById("addLanguageButton");
     secondaryLanguageDiv.insertBefore(locale, button);
-    secondaryLanguageCount++;
-    if (secondaryLanguageCount >= secondaryLanguageLimit) {
+    userQualifiedPairsCount++;
+    if (userQualifiedPairsCount >= userQualifiedPairsLimit) {
       button.disabled = true;
     }
     button = document.getElementById("removeLanguageButton");
@@ -160,15 +160,15 @@ function addSecondaryLanguage(
  */
 function removeSecondaryLanguage()
 {
-  if (secondaryLanguageCount > 0) {
-    secondaryLanguageCount--;
-    var element = document.getElementById("secondary_locale_" + secondaryLanguageCount);
+  if (userQualifiedPairsCount > 0) {
+    userQualifiedPairsCount--;
+    var element = document.getElementById("secondary_locale_" + userQualifiedPairsCount);
     element.parentNode.removeChild(element);
 
     button = document.getElementById("addLanguageButton");
     button.disabled = false;
 
-    if (secondaryLanguageCount < 2) {
+    if (userQualifiedPairsCount < 2) {
       button = document.getElementById("removeLanguageButton");
       button.disabled = true;
     }
@@ -231,7 +231,7 @@ function validateForm()
     }
   }
 
-  for (var i = 0; i < secondaryLanguageCount; i++) {
+  for (var i = 0; i < userQualifiedPairsCount; i++) {
     var secondaryLanguageSelect = document.getElementById("secondary_language_" + i);
     var secondaryCountrySelect = document.getElementById("secondary_country_" + i);
     if ((secondaryLanguageSelect.value != "" && secondaryCountrySelect.value == "") ||

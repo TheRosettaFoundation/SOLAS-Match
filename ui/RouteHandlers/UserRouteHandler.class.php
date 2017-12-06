@@ -929,15 +929,14 @@ EOD;
             $nativeCountrySelectCode = '999999999';
         }
 
-        $secondaryLanguages = $userDao->getSecondaryLanguages($user_id);
-        if (empty($secondaryLanguages)) {
-            $secondaryLanguages = array();
+        $userQualifiedPairs = $userDao->getUserQualifiedPairs($user_id);
+        if (empty($userQualifiedPairs)) {
             $locale = new Common\Protobufs\Models\Locale();
             $locale->setLanguageCode('');
             $locale->setCountryCode('');
-            $secondaryLanguages[] = $locale;
+            $userQualifiedPairs[] = $locale;
         }
-        $secondaryLanguageCount = count($secondaryLanguages);
+        $userQualifiedPairsCount = count($userQualifiedPairs);
 
         $langPref = $langDao->getLanguage($userPersonalInfo->getLanguagePreference());
         $langPrefSelectCode = $langPref->getCode();
@@ -1006,8 +1005,8 @@ EOD;
                     $i = 0;
                     while (!empty($post["secondary_language_$i"]) && !empty($post["secondary_country_$i"])) {
                         $found = false;
-                        foreach ($secondaryLanguages as $secondaryLanguage) {
-                            if (($post["secondary_language_$i"] == $secondaryLanguage->getLanguageCode()) && ($post["secondary_country_$i"] == $secondaryLanguage->getCountryCode())) {
+                        foreach ($userQualifiedPairs as $userQualifiedPair) {
+                            if (($post["secondary_language_$i"] == $userQualifiedPair->getLanguageCode()) && ($post["secondary_country_$i"] == $userQualifiedPair->getCountryCode())) {
                                 $found = true;
                             }
                         }
@@ -1016,24 +1015,26 @@ EOD;
                             $locale->setLanguageCode($post["secondary_language_$i"]);
                             $locale->setCountryCode($post["secondary_country_$i"]);
                             $userDao->createSecondaryLanguage($user_id, $locale);
+createUserQualifiedPair($user_id, $language_id_source, $language_id_target, $country_id_source, $country_id_target, $qualification_level)
                         }
                         $i++;
                     }
 
-                    foreach ($secondaryLanguages as $secondaryLanguage) {
+                    foreach ($userQualifiedPairs as $userQualifiedPair) {
                         $i = 0;
                         $found = false;
                         while (!empty($post["secondary_language_$i"]) && !empty($post["secondary_country_$i"])) {
-                            if (($post["secondary_language_$i"] == $secondaryLanguage->getLanguageCode()) && ($post["secondary_country_$i"] == $secondaryLanguage->getCountryCode())) {
+                            if (($post["secondary_language_$i"] == $userQualifiedPair->getLanguageCode()) && ($post["secondary_country_$i"] == $userQualifiedPair->getCountryCode())) {
                                 $found = true;
                             }
                             $i++;
                         }
-                        if (!$found && $secondaryLanguage->getLanguageCode() && $secondaryLanguage->getCountryCode()) {
+                        if (!$found && $userQualifiedPair->getLanguageCode() && $userQualifiedPair->getCountryCode()) {
                             $locale = new Common\Protobufs\Models\Locale();
-                            $locale->setLanguageCode($secondaryLanguage->getLanguageCode());
-                            $locale->setCountryCode($secondaryLanguage->getCountryCode());
+                            $locale->setLanguageCode($userQualifiedPair->getLanguageCode());
+                            $locale->setCountryCode($userQualifiedPair->getCountryCode());
                             $userDao->deleteSecondaryLanguage($user_id, $locale);
+removeUserQualifiedPair($user_id, $language_id_source, $language_id_target, $country_id_source, $country_id_target)
                         }
                     }
 
@@ -1114,8 +1115,8 @@ EOD;
             'countries' => $countries,
             'nativeLanguageSelectCode' => $nativeLanguageSelectCode,
             'nativeCountrySelectCode'  => $nativeCountrySelectCode,
-            'secondaryLanguages'       => $secondaryLanguages,
-            'secondaryLanguageCount'   => $secondaryLanguageCount,
+            'userQualifiedPairs'       => $userQualifiedPairs,
+            'userQualifiedPairsCount'  => $userQualifiedPairsCount,
             'langPrefSelectCode'       => $langPrefSelectCode,
             'translator'  => $translator,
             'proofreader' => $proofreader,
@@ -1199,7 +1200,7 @@ EOD;
         $user_tags = $userDao->getUserTags($user_id);
         $user_orgs = $userDao->getUserOrgs($user_id);
         $badges = $userDao->getUserBadges($user_id);
-        $secondaryLanguages = $userDao->getSecondaryLanguages($user_id);
+        $userQualifiedPairs = $userDao->getUserQualifiedPairs($user_id);
 
         $orgList = array();
         if ($badges) {
@@ -1244,7 +1245,7 @@ EOD;
             "org_creation" => $org_creation,
             "userPersonalInfo" => $userPersonalInfo,
             "langPrefName" => $langPrefName,
-            "secondaryLanguages" => $secondaryLanguages,
+            "userQualifiedPairs" => $userQualifiedPairs,
             "taskTypeColours" => $taskTypeColours
         ));
                 

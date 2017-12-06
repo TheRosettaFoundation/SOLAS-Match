@@ -6,14 +6,14 @@
     <div id="siteLocation">{$siteLocation}</div>
     <div id="siteAPI">{$siteAPI}</div>
     <div id="user_id">{$user_id}</div>
-    <div id="secondaryLanguageCount">{$secondaryLanguageCount}</div>
+    <div id="userQualifiedPairsCount">{$userQualifiedPairsCount}</div>
     {assign var="i" value=0}
-    {foreach $secondaryLanguages as $secondaryLanguage}
-        <div id="userSecondaryLanguagesLanguageCode_{$i}">{$secondaryLanguage->getLanguageCode()}</div>
-        <div id="userSecondaryLanguagesCountryCode_{$i}">{$secondaryLanguage->getCountryCode()}</div>
-        <div id="userSecondaryLanguagesLanguageCodeTarget_{$i}">{$secondaryLanguage->getCountryCode()}</div>
-        <div id="userSecondaryLanguagesCountryCodeTarget_{$i}">{$secondaryLanguage->getCountryCode()}</div>
-        <div id="userSecondaryLanguagesQualificationLevel_{$i}">{$secondaryLanguage->getCountryCode()}</div>
+    {foreach $userQualifiedPairs as $userQualifiedPair}
+        <div id="userSecondaryLanguagesLanguageCode_{$i}">{$userQualifiedPair['language_code_source']}</div>
+        <div id="userSecondaryLanguagesCountryCode_{$i}">{$userQualifiedPair['country_code_source']}</div>
+        <div id="userSecondaryLanguagesLanguageCodeTarget_{$i}">{$userQualifiedPair['language_code_target']}</div>
+        <div id="userSecondaryLanguagesCountryCodeTarget_{$i}">{$userQualifiedPair['country_code_target']}</div>
+        <div id="userSecondaryLanguagesQualificationLevel_{$i}">{$userQualifiedPair['qualification_level']}</div>
         {assign var="i" value=$i+1}
     {/foreach}
     <div id="langPrefSelectCodeSaved">{$langPrefSelectCode}</div>
@@ -99,10 +99,10 @@
                         </div>
                         <div id="secondaryLanguageDiv">
                             <label><strong>{Localisation::getTranslation('i_can_translate_from')}:</strong></label>
-                            <button onclick="addSecondaryLanguage(); return false;" class="btn btn-success" id="addLanguageButton" {if $secondaryLanguageCount >= 10}disabled{/if}>
+                            <button onclick="addSecondaryLanguage(); return false;" class="btn btn-success" id="addLanguageButton" {if $userQualifiedPairsCount >= 10}disabled{/if}>
                                 <i class="icon-upload icon-white"></i> {Localisation::getTranslation('user_private_profile_add_secondary_language')}
                             </button>
-                            <button onclick="removeSecondaryLanguage(); return false;" class="btn btn-inverse" id="removeLanguageButton" {if $secondaryLanguageCount <= 1}disabled{/if}>
+                            <button onclick="removeSecondaryLanguage(); return false;" class="btn btn-inverse" id="removeLanguageButton" {if $userQualifiedPairsCount <= 1}disabled{/if}>
                                 <i class="icon-fire icon-white"></i> {Localisation::getTranslation('common_remove')}
                             </button>
                         </div>
