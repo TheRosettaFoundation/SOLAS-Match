@@ -931,10 +931,7 @@ EOD;
 
         $userQualifiedPairs = $userDao->getUserQualifiedPairs($user_id);
         if (empty($userQualifiedPairs)) {
-            $locale = new Common\Protobufs\Models\Locale();
-            $locale->setLanguageCode('');
-            $locale->setCountryCode('');
-            $userQualifiedPairs[] = $locale;
+            $userQualifiedPairs[] = array('language_code_source' => '', 'country_code_source' => '', 'language_code_target' => '', 'country_code_target' => '', 'qualification_level' => 0);
         }
         $userQualifiedPairsCount = count($userQualifiedPairs);
 
