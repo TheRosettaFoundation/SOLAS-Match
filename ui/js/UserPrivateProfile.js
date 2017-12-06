@@ -51,8 +51,8 @@ function documentReady()
   var userQualifiedPairsCountDatabase = parseInt(getSetting("userQualifiedPairsCount"));
   for (var i = 0; i < userQualifiedPairsCountDatabase; i++) {
     addSecondaryLanguage(
-      getSetting("userQualifiedPairLanguageCode_" + i),
-      getSetting("userQualifiedPairCountryCode_" + i),
+      getSetting("userQualifiedPairLanguageCodeSource_" + i),
+      getSetting("userQualifiedPairCountryCodeSource_" + i),
       getSetting("userQualifiedPairLanguageCodeTarget_" + i),
       getSetting("userQualifiedPairCountryCodeTarget_" + i),
       getSetting("userQualifiedPairQualificationLevel_" + i)
@@ -72,8 +72,8 @@ function loadingComplete()
  * This method is used to add another secondary language selector to the page.
  */
 function addSecondaryLanguage(
-  userQualifiedPairLanguageCode,
-  userQualifiedPairCountryCode,
+  userQualifiedPairLanguageCodeSource,
+  userQualifiedPairCountryCodeSource,
   userQualifiedPairLanguageCodeTarget,
   userQualifiedPairCountryCodeTarget,
   userQualifiedPairQualificationLevel)
@@ -93,7 +93,7 @@ function addSecondaryLanguage(
     languageBox.name = "language_code_source_" + userQualifiedPairsCount;
     languageBox.id = "language_code_source_" + userQualifiedPairsCount;
     languageBox.style.width = "82%";
-    languageBox.value = userQualifiedPairLanguageCode;
+    languageBox.value = userQualifiedPairLanguageCodeSource;
     locale.appendChild(languageBox);
 
     var countryBox = document.createElement("select");
@@ -101,7 +101,7 @@ function addSecondaryLanguage(
     countryBox.name = "country_code_source_" + userQualifiedPairsCount;
     countryBox.id = "country_code_source_" + userQualifiedPairsCount;
     countryBox.style.width = "82%";
-    countryBox.value = userQualifiedPairCountryCode;
+    countryBox.value = userQualifiedPairCountryCodeSource;
     locale.appendChild(countryBox);
 
     var text2 = document.createElement("label");

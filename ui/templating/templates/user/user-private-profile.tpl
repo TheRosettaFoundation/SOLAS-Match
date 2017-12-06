@@ -9,8 +9,8 @@
     <div id="userQualifiedPairsCount">{$userQualifiedPairsCount}</div>
     {assign var="i" value=0}
     {foreach $userQualifiedPairs as $userQualifiedPair}
-        <div id="userQualifiedPairLanguageCode_{$i}">{$userQualifiedPair['language_code_source']}</div>
-        <div id="userQualifiedPairCountryCode_{$i}">{$userQualifiedPair['country_code_source']}</div>
+        <div id="userQualifiedPairLanguageCodeSource_{$i}">{$userQualifiedPair['language_code_source']}</div>
+        <div id="userQualifiedPairCountryCodeSource_{$i}">{$userQualifiedPair['country_code_source']}</div>
         <div id="userQualifiedPairLanguageCodeTarget_{$i}">{$userQualifiedPair['language_code_target']}</div>
         <div id="userQualifiedPairCountryCodeTarget_{$i}">{$userQualifiedPair['country_code_target']}</div>
         <div id="userQualifiedPairQualificationLevel_{$i}">{$userQualifiedPair['qualification_level']}</div>
