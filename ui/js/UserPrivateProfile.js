@@ -102,6 +102,7 @@ function addSecondaryLanguage(
     countryBox.id = "country_code_source_" + userQualifiedPairsCount;
     countryBox.style.width = "82%";
     countryBox.value = userQualifiedPairCountryCodeSource;
+    if (userQualifiedPairCountryCodeSource == "") countryBox.value = "--";
     locale.appendChild(countryBox);
 
     var text2 = document.createElement("label");
@@ -123,6 +124,7 @@ function addSecondaryLanguage(
     countryBoxTarget.id = "country_code_target_" + userQualifiedPairsCount;
     countryBoxTarget.style.width = "82%";
     countryBoxTarget.value = userQualifiedPairCountryCodeTarget;
+    if (userQualifiedPairCountryCodeTarget == "") countryBoxTarget.value = "--";
     locale.appendChild(countryBoxTarget);
 
     var text3 = document.createElement("label");
@@ -237,8 +239,7 @@ function validateForm()
     var languageCodeTarget = document.getElementById("language_code_target_" + i);
     var countryCodeTarget  = document.getElementById("country_code_target_" + i);
 
-    if ((languageCodeSource.value != "" && countryCodeSource.value == "") ||
-        (secondaryLanguageSelect.value == "" && countryCodeSource.value != "")) {
+    if ((languageCodeSource.value == "" && languageCodeTarget.value != "") || (languageCodeTarget.value == "" && languageCodeSource.value != "")) {
       alertError = parameters.getTranslation("user_private_profile_secondary_languages_failed");
       set_all_errors_for_submission();
       return false;
