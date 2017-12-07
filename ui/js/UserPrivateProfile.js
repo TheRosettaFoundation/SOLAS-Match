@@ -93,7 +93,7 @@ function addSecondaryLanguage(
     languageBox.name = "language_code_source_" + userQualifiedPairsCount;
     languageBox.id = "language_code_source_" + userQualifiedPairsCount;
     languageBox.style.width = "82%";
-    languageBox.value = userQualifiedPairLanguageCodeSource;
+    languageBox.value = (userQualifiedPairLanguageCodeSource == 0) ? "" : userQualifiedPairLanguageCodeSource;
     locale.appendChild(languageBox);
 
     var countryBox = document.createElement("select");
@@ -101,8 +101,7 @@ function addSecondaryLanguage(
     countryBox.name = "country_code_source_" + userQualifiedPairsCount;
     countryBox.id = "country_code_source_" + userQualifiedPairsCount;
     countryBox.style.width = "82%";
-    countryBox.value = userQualifiedPairCountryCodeSource;
-    if (userQualifiedPairCountryCodeSource == "") countryBox.value = "--";
+    countryBox.value = (userQualifiedPairCountryCodeSource == 0 || userQualifiedPairCountryCodeSource == "") ? "--" : userQualifiedPairCountryCodeSource;
     locale.appendChild(countryBox);
 
     var text2 = document.createElement("label");
@@ -115,7 +114,7 @@ function addSecondaryLanguage(
     languageBoxTarget.name = "language_code_target_" + userQualifiedPairsCount;
     languageBoxTarget.id = "language_code_target_" + userQualifiedPairsCount;
     languageBoxTarget.style.width = "82%";
-    languageBoxTarget.value = userQualifiedPairLanguageCodeTarget;
+    languageBoxTarget.value = (userQualifiedPairLanguageCodeTarget == 0) ? "" : userQualifiedPairLanguageCodeTarget;
     locale.appendChild(languageBoxTarget);
 
     var countryBoxTarget = document.createElement("select");
@@ -123,8 +122,7 @@ function addSecondaryLanguage(
     countryBoxTarget.name = "country_code_target_" + userQualifiedPairsCount;
     countryBoxTarget.id = "country_code_target_" + userQualifiedPairsCount;
     countryBoxTarget.style.width = "82%";
-    countryBoxTarget.value = userQualifiedPairCountryCodeTarget;
-    if (userQualifiedPairCountryCodeTarget == "") countryBoxTarget.value = "--";
+    countryBoxTarget.value = (userQualifiedPairCountryCodeTarget == 0 || userQualifiedPairCountryCodeTarget == "") ? "--" : userQualifiedPairCountryCodeTarget;
     locale.appendChild(countryBoxTarget);
 
     var text3 = document.createElement("label");
