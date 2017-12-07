@@ -16,6 +16,7 @@
         <div id="userQualifiedPairQualificationLevel_{$i}">{$userQualifiedPair['qualification_level']}</div>
         {assign var="i" value=$i+1}
     {/foreach}
+    <div id="isSiteAdmin">{$isSiteAdmin}</div>
     <div id="langPrefSelectCodeSaved">{$langPrefSelectCode}</div>
 
     <!-- Templates... -->

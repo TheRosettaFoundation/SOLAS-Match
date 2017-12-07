@@ -138,6 +138,7 @@ function addSecondaryLanguage(
     qualificationLevel.id = "qualification_level_" + userQualifiedPairsCount;
     qualificationLevel.style.width = "82%";
     qualificationLevel.value = userQualifiedPairQualificationLevel;
+    if (!parseInt(getSetting("isSiteAdmin"))) qualificationLevel.disabled = true;
     locale.appendChild(qualificationLevel);
 
     var hr = document.createElement("hr");
