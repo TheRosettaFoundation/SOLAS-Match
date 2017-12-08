@@ -1001,6 +1001,9 @@ EOD;
                 try {
                     $i = 0;
                     while (!empty($post["language_code_source_$i"]) && !empty($post["language_code_target_$i"])) {
+                        if ($post["country_code_source_$i"] == '') $post["country_code_source_$i"] = '--'; // Any Language
+                        if ($post["country_code_target_$i"] == '') $post["country_code_target_$i"] = '--';
+
                         $found = false;
                         foreach ($userQualifiedPairs as $userQualifiedPair) {
                             if (($post["language_code_source_$i"] == $userQualifiedPair['language_code_source']) &&
