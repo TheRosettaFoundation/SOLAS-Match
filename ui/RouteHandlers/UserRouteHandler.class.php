@@ -1000,19 +1000,21 @@ EOD;
 
                 try {
                     $i = 0;
-                    while (!empty($post["language_code_source_$i"]) && !empty($post["country_code_source_$i"])) {
+                    while (!empty($post["language_code_source_$i"]) && !empty($post["language_code_target_$i"])) {
                         $found = false;
                         foreach ($userQualifiedPairs as $userQualifiedPair) {
-                            if (($post["language_code_source_$i"] == $userQualifiedPair->getLanguageCode()) && ($post["country_code_source_$i"] == $userQualifiedPair->getCountryCode())) {
+                            if (($post["language_code_source_$i"] == $userQualifiedPair['language_code_source']) &&
+                                ($post["country_code_source_$i"]  == $userQualifiedPair['country_code_source'])  &&
+                                ($post["language_code_target_$i"] == $userQualifiedPair['language_code_target']) &&
+                                ($post["country_code_target_$i"]  == $userQualifiedPair['country_code_target'])) {
                                 $found = true;
                             }
                         }
                         if (!$found) {
-                            $locale = new Common\Protobufs\Models\Locale();
-                            $locale->setLanguageCode($post["language_code_source_$i"]);
-                            $locale->setCountryCode($post["country_code_source_$i"]);
-                            $userDao->createSecondaryLanguage($user_id, $locale);
-createUserQualifiedPair($user_id, $language_id_source, $language_id_target, $country_id_source, $country_id_target, $qualification_level)
+                            $userDao->createUserQualifiedPair($user_id,
+                                $post["language_code_source_$i"], $post["country_code_source_$i"],
+                                $post["language_code_target_$i"], $post["country_code_target_$i"],
+                                $post["qualification_level_$i"]);
                         }
                         $i++;
                     }
@@ -1020,18 +1022,19 @@ createUserQualifiedPair($user_id, $language_id_source, $language_id_target, $cou
                     foreach ($userQualifiedPairs as $userQualifiedPair) {
                         $i = 0;
                         $found = false;
-                        while (!empty($post["language_code_source_$i"]) && !empty($post["country_code_source_$i"])) {
-                            if (($post["language_code_source_$i"] == $userQualifiedPair->getLanguageCode()) && ($post["country_code_source_$i"] == $userQualifiedPair->getCountryCode())) {
+                        while (!empty($post["language_code_source_$i"]) && !empty($post["language_code_target_$i"])) {
+                            if (($post["language_code_source_$i"] == $userQualifiedPair['language_code_source']) &&
+                                ($post["country_code_source_$i"]  == $userQualifiedPair['country_code_source'])  &&
+                                ($post["language_code_target_$i"] == $userQualifiedPair['language_code_target']) &&
+                                ($post["country_code_target_$i"]  == $userQualifiedPair['country_code_target'])) {
                                 $found = true;
                             }
                             $i++;
                         }
-                        if (!$found && $userQualifiedPair->getLanguageCode() && $userQualifiedPair->getCountryCode()) {
-                            $locale = new Common\Protobufs\Models\Locale();
-                            $locale->setLanguageCode($userQualifiedPair->getLanguageCode());
-                            $locale->setCountryCode($userQualifiedPair->getCountryCode());
-                            $userDao->deleteSecondaryLanguage($user_id, $locale);
-removeUserQualifiedPair($user_id, $language_id_source, $language_id_target, $country_id_source, $country_id_target)
+                        if (!$found) {
+                            $userDao->removeUserQualifiedPair($user_id,
+                                $userQualifiedPair['language_code_source'], $userQualifiedPair['country_code_source'],
+                                $userQualifiedPair['language_code_target'], $userQualifiedPair['country_code_target']);
                         }
                     }
 
