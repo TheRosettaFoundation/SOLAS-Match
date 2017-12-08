@@ -742,14 +742,25 @@ class UserDao extends BaseDao
         return $ret;
     }
     
-    public function createUserQualifiedPair($user_id, $language_id_source, $language_id_target, $country_id_source, $country_id_target, $qualification_level)
+    public function createUserQualifiedPair($user_id, $language_code_source, $country_code_source, $language_code_target, $country_code_target, $qualification_level)
     {
         LibAPI\PDOWrapper::call('createUserQualifiedPair',
             LibAPI\PDOWrapper::cleanse($user_id) . ',' .
-            LibAPI\PDOWrapper::cleanse($language_id_source) . ',' .
-            LibAPI\PDOWrapper::cleanse($language_id_target) . ',' .
-            LibAPI\PDOWrapper::cleanse($country_id_source) . ',' .
-            LibAPI\PDOWrapper::cleanse($country_id_target) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($language_code_source) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($country_code_source) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($language_code_target) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($country_code_target) . ',' .
+            LibAPI\PDOWrapper::cleanse($qualification_level));
+    }
+
+    public function updateUserQualifiedPair($user_id, $language_code_source, $country_code_source, $language_code_target, $country_code_target, $qualification_level)
+    {
+        LibAPI\PDOWrapper::call('createUserQualifiedPair',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($language_code_source) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($country_code_source) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($language_code_target) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($country_code_target) . ',' .
             LibAPI\PDOWrapper::cleanse($qualification_level));
     }
 
@@ -760,14 +771,14 @@ class UserDao extends BaseDao
         return $result;
     }
 
-    public function removeUserQualifiedPair($user_id, $language_id_source, $language_id_target, $country_id_source, $country_id_target)
+    public function removeUserQualifiedPair($user_id, $language_code_source, $country_code_source, $language_code_target, $country_code_target)
     {
         LibAPI\PDOWrapper::call('removeUserQualifiedPair',
             LibAPI\PDOWrapper::cleanse($user_id) . ',' .
-            LibAPI\PDOWrapper::cleanse($language_id_source) . ',' .
-            LibAPI\PDOWrapper::cleanse($language_id_target) . ',' .
-            LibAPI\PDOWrapper::cleanse($country_id_source) . ',' .
-            LibAPI\PDOWrapper::cleanse($country_id_target));
+            LibAPI\PDOWrapper::cleanseWrapStr($language_code_source) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($country_code_source) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($language_code_target) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($country_code_target));
     }
 
     public function deleteUser($userId)
