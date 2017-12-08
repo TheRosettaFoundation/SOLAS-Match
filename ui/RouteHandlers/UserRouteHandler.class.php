@@ -954,6 +954,13 @@ EOD;
             }
         }
 
+        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
+        if (!is_null($loggedInUserId)) {
+            $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
+        } else {
+            $isSiteAdmin = false;
+        }
+
         if ($post = $app->request()->post()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
                 $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
@@ -1011,9 +1018,18 @@ EOD;
                                 ($post["language_code_target_$i"] == $userQualifiedPair['language_code_target']) &&
                                 ($post["country_code_target_$i"]  == $userQualifiedPair['country_code_target'])) {
                                 $found = true;
+
+                                if ($isSiteAdmin && ($post["qualification_level_$i"] != $userQualifiedPair['qualification_level'])) {
+                                    $userDao->updateUserQualifiedPair($user_id,
+                                        $post["language_code_source_$i"], $post["country_code_source_$i"],
+                                        $post["language_code_target_$i"], $post["country_code_target_$i"],
+                                        $post["qualification_level_$i"]);
+                                }
                             }
                         }
                         if (!$found) {
+                            if (!$isSiteAdmin) $post["qualification_level_$i"] = 0;
+
                             $userDao->createUserQualifiedPair($user_id,
                                 $post["language_code_source_$i"], $post["country_code_source_$i"],
                                 $post["language_code_target_$i"], $post["country_code_target_$i"],
@@ -1099,13 +1115,6 @@ EOD;
 
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/UserPrivateProfile.js\"></script>";
-
-        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
-        if (!is_null($loggedInUserId)) {
-            $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
-        } else {
-            $isSiteAdmin = false;
-        }
 
         $app->view()->appendData(array(
             'siteLocation'     => Common\Lib\Settings::get('site.location'),
