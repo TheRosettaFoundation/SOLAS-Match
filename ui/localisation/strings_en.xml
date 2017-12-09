@@ -120,7 +120,7 @@
 	<string name="common_remove">Remove</string>
 	<string name="common_user_profile">User Profile</string>
 	<string name="common_native_language">Native Language</string>
-	<string name="common_secondary_languages">Secondary Language(s)</string>
+	<string name="common_secondary_languages">Language Pairs(s)</string>
     <string name="i_can_translate_from">I Can Translate From</string>
     <string name="qualification_level_for_above">Qualification Level for Above</string>
     <string name="user_qualification_level_1">Starter</string>
@@ -1022,7 +1022,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="user_private_profile_2">Invalid input, your display name cannot be blank.</string>
 	<string name="user_private_profile_please_note">Please Note:</string>
   <string name="user_private_profile_3">Please complete these optional fields.</string>
-    <string name="user_private_profile_4">Filling in your Language Pairs (I Can Translate From... To) is most important.</string>
+    <string name="user_private_profile_4">Filling in your Language Pairs (I Can Translate From... To) is most important. Click Update Profile Details when finished.</string>
     <string name="user_private_profile_add_secondary_language">Add Another Language Pair</string>
 	<string name="user_private_profile_task_type_preferences">Task Type Preferences:</string>
 	<string name="user_private_profile_translating">Translating</string>
