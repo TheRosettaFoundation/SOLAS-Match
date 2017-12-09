@@ -83,9 +83,9 @@ function addSecondaryLanguage(
     var locale = document.createElement("div");
     locale.id = "secondary_locale_" + userQualifiedPairsCount;
 
-    var hr0 = document.createElement("hr");
-    hr0.style.width = "60%";
-    locale.appendChild(hr0);
+    var hr = document.createElement("hr");
+    hr.style.width = "60%";
+    locale.appendChild(hr);
 
     var text1 = document.createElement("label");
     text1.innerHTML = "<strong>" + parameters.getTranslation("i_can_translate_from") + ":</strong>";
@@ -147,10 +147,6 @@ function addSecondaryLanguage(
     qualificationLevel.value = userQualifiedPairQualificationLevel;
     if (!parseInt(getSetting("isSiteAdmin"))) qualificationLevel.disabled = true;
     locale.appendChild(qualificationLevel);
-
-    var hr = document.createElement("hr");
-    hr.style.width = "60%";
-    locale.appendChild(hr);
 
     var button = document.getElementById("addLanguageButton");
     secondaryLanguageDiv.insertBefore(locale, button);
