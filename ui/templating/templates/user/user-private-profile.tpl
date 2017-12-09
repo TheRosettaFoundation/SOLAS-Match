@@ -58,8 +58,7 @@
 {/if}
 
 <div class="well alert-info">
-    <p><strong>{Localisation::getTranslation('user_private_profile_please_note')}</strong></p>
-    <p>{Localisation::getTranslation('user_private_profile_3')} {Localisation::getTranslation('user_private_profile_4')}</p>
+    <p><strong>{Localisation::getTranslation('user_private_profile_3')} {Localisation::getTranslation('user_private_profile_4')}</strong></p>
 </div>
 
 <div class="well">
