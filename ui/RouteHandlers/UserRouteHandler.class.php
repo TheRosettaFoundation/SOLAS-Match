@@ -931,7 +931,7 @@ EOD;
 
         $userQualifiedPairs = $userDao->getUserQualifiedPairs($user_id);
         if (empty($userQualifiedPairs)) {
-            $userQualifiedPairs[] = array('language_code_source' => '', 'country_code_source' => '', 'language_code_target' => '', 'country_code_target' => '', 'qualification_level' => 0);
+            $userQualifiedPairs[] = array('language_code_source' => '', 'country_code_source' => '--', 'language_code_target' => '', 'country_code_target' => '--', 'qualification_level' => 1);
         }
         $userQualifiedPairsCount = count($userQualifiedPairs);
 

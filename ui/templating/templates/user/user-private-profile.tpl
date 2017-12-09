@@ -35,9 +35,9 @@
     </div>
 
     <div id="template_qualification_options">
-        <option value="0">{Localisation::getTranslation('user_qualification_level_0')}</option>
         <option value="1">{Localisation::getTranslation('user_qualification_level_1')}</option>
         <option value="2">{Localisation::getTranslation('user_qualification_level_2')}</option>
+        <option value="3">{Localisation::getTranslation('user_qualification_level_3')}</option>
     </div>
 
 </span>
