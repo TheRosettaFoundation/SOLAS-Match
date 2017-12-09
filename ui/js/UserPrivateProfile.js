@@ -93,6 +93,7 @@ function addSecondaryLanguage(
     languageBox.name = "language_code_source_" + userQualifiedPairsCount;
     languageBox.id = "language_code_source_" + userQualifiedPairsCount;
     languageBox.style.width = "41%";
+    if (userQualifiedPairLanguageCodeSource === undefined) userQualifiedPairLanguageCodeSource = "";
     languageBox.value = userQualifiedPairLanguageCodeSource;
     locale.appendChild(languageBox);
 
@@ -101,6 +102,7 @@ function addSecondaryLanguage(
     countryBox.name = "country_code_source_" + userQualifiedPairsCount;
     countryBox.id = "country_code_source_" + userQualifiedPairsCount;
     countryBox.style.width = "41%";
+    if (userQualifiedPairCountryCodeSource === undefined) userQualifiedPairCountryCodeSource = "";
     countryBox.value = (userQualifiedPairCountryCodeSource == "") ? "--" : userQualifiedPairCountryCodeSource;
     locale.appendChild(countryBox);
 
@@ -114,6 +116,7 @@ function addSecondaryLanguage(
     languageBoxTarget.name = "language_code_target_" + userQualifiedPairsCount;
     languageBoxTarget.id = "language_code_target_" + userQualifiedPairsCount;
     languageBoxTarget.style.width = "41%";
+    if (userQualifiedPairLanguageCodeTarget === undefined) userQualifiedPairLanguageCodeTarget = "";
     languageBoxTarget.value = userQualifiedPairLanguageCodeTarget;
     locale.appendChild(languageBoxTarget);
 
@@ -122,6 +125,7 @@ function addSecondaryLanguage(
     countryBoxTarget.name = "country_code_target_" + userQualifiedPairsCount;
     countryBoxTarget.id = "country_code_target_" + userQualifiedPairsCount;
     countryBoxTarget.style.width = "41%";
+    if (userQualifiedPairCountryCodeTarget === undefined) userQualifiedPairCountryCodeTarget = "";
     countryBoxTarget.value = (userQualifiedPairCountryCodeTarget == "") ? "--" : userQualifiedPairCountryCodeTarget;
     locale.appendChild(countryBoxTarget);
 
@@ -135,6 +139,7 @@ function addSecondaryLanguage(
     qualificationLevel.name = "qualification_level_" + userQualifiedPairsCount;
     qualificationLevel.id = "qualification_level_" + userQualifiedPairsCount;
     qualificationLevel.style.width = "82%";
+    if (userQualifiedPairQualificationLevel === undefined) userQualifiedPairQualificationLevel = 0;
     qualificationLevel.value = userQualifiedPairQualificationLevel;
     if (!parseInt(getSetting("isSiteAdmin"))) qualificationLevel.disabled = true;
     locale.appendChild(qualificationLevel);
