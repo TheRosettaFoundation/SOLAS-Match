@@ -118,7 +118,7 @@ function addSecondaryLanguage(
     locale.appendChild(languageBoxTarget);
 
     var countryBoxTarget = document.createElement("select");
-    countryBoxTarget.innerHTML = document.getElementById("template_language_options").innerHTML;
+    countryBoxTarget.innerHTML = document.getElementById("template_country_options").innerHTML;
     countryBoxTarget.name = "country_code_target_" + userQualifiedPairsCount;
     countryBoxTarget.id = "country_code_target_" + userQualifiedPairsCount;
     countryBoxTarget.style.width = "82%";
