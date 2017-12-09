@@ -755,7 +755,7 @@ class UserDao extends BaseDao
 
     public function updateUserQualifiedPair($user_id, $language_code_source, $country_code_source, $language_code_target, $country_code_target, $qualification_level)
     {
-        LibAPI\PDOWrapper::call('createUserQualifiedPair',
+        LibAPI\PDOWrapper::call('updateUserQualifiedPair',
             LibAPI\PDOWrapper::cleanse($user_id) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($language_code_source) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($country_code_source) . ',' .
