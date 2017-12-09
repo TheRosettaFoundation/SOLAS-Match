@@ -1032,7 +1032,7 @@ EOD;
                             }
                         }
                         if (!$found) {
-                            if (!$isSiteAdmin) $post["qualification_level_$i"] = 0;
+                            if (!$isSiteAdmin) $post["qualification_level_$i"] = 1;
 
                             $userDao->createUserQualifiedPair($user_id,
                                 $post["language_code_source_$i"], $post["country_code_source_$i"],
