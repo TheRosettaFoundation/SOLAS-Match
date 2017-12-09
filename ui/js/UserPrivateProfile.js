@@ -83,6 +83,10 @@ function addSecondaryLanguage(
     var locale = document.createElement("div");
     locale.id = "secondary_locale_" + userQualifiedPairsCount;
 
+    var hr0 = document.createElement("hr");
+    hr0.style.width = "60%";
+    locale.appendChild(hr0);
+
     var text1 = document.createElement("label");
     text1.innerHTML = "<strong>" + parameters.getTranslation("i_can_translate_from") + ":</strong>";
     text1.style.width = "82%";
