@@ -142,7 +142,7 @@ function addSecondaryLanguage(
     qualificationLevel.innerHTML = document.getElementById("template_qualification_options").innerHTML;
     qualificationLevel.name = "qualification_level_" + userQualifiedPairsCount;
     qualificationLevel.id = "qualification_level_" + userQualifiedPairsCount;
-    qualificationLevel.style.width = "82%";
+    qualificationLevel.style.width = "41%";
     if (userQualifiedPairQualificationLevel === undefined) userQualifiedPairQualificationLevel = 0;
     qualificationLevel.value = userQualifiedPairQualificationLevel;
     if (!parseInt(getSetting("isSiteAdmin"))) qualificationLevel.disabled = true;
