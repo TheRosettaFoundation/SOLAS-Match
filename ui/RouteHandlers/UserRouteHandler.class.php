@@ -1023,7 +1023,10 @@ EOD;
                                 ($post["country_code_target_$i"]  == $userQualifiedPair['country_code_target'])) {
                                 $found = true;
 
+error_log($post["language_code_source_$i"] . $post["country_code_source_$i"] . $post["language_code_target_$i"] . $post["country_code_target_$i"] . $post["qualification_level_$i"]);
                                 if ($isSiteAdmin && ($post["qualification_level_$i"] != $userQualifiedPair['qualification_level'])) {
+error_log($post["language_code_source_$i"] . $post["country_code_source_$i"] . $post["language_code_target_$i"] . $post["country_code_target_$i"] . $post["qualification_level_$i"]);
+
                                     $userDao->updateUserQualifiedPair($user_id,
                                         $post["language_code_source_$i"], $post["country_code_source_$i"],
                                         $post["language_code_target_$i"], $post["country_code_target_$i"],
