@@ -48,6 +48,11 @@ function documentReady()
   siteAPI      = getSetting("siteAPI");
   user_id      = getSetting("user_id");
 
+  parameters = new Parameters(loadingComplete);
+}
+
+function loadingComplete()
+{
   var userQualifiedPairsCountDatabase = parseInt(getSetting("userQualifiedPairsCount"));
   for (var i = 0; i < userQualifiedPairsCountDatabase; i++) {
     addSecondaryLanguage(
@@ -59,11 +64,6 @@ function documentReady()
       );
   }
 
-  parameters = new Parameters(loadingComplete);
-}
-
-function loadingComplete()
-{
   document.getElementById("loading_warning").innerHTML = "";
   document.getElementById("loading_warning1").innerHTML = "";
 }
