@@ -1414,6 +1414,26 @@ CREATE TABLE IF NOT EXISTS `MatecatLanguagePairs` (
     CONSTRAINT FK_matecat_language_pair_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `UserQualifiedPairs` (
+  user_id              INT(10) UNSIGNED NOT NULL,
+  language_id_source   INT(10) UNSIGNED NOT NULL,
+  language_code_source VARCHAR(3) NOT NULL,
+  country_id_source    INT(10) UNSIGNED NOT NULL,
+  country_code_source  VARCHAR(2) NOT NULL,
+  language_id_target   INT(10) UNSIGNED NOT NULL,
+  language_code_target VARCHAR(3) NOT NULL,
+  country_id_target    INT(10) UNSIGNED NOT NULL,
+  country_code_target  VARCHAR(2) NOT NULL,
+  qualification_level  INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (user_id, language_code_source, country_code_source, language_code_target, country_code_target),
+  KEY `FK_user_qualified_pairs_user` (`user_id`),
+  CONSTRAINT `FK_user_qualified_pairs_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_UserQualifiedPairs_language_id_source` FOREIGN KEY (`language_id_source`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT `FK_UserQualifiedPairs_country_id_source`  FOREIGN KEY (`country_id_source`)  REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT `FK_UserQualifiedPairs_language_id_target` FOREIGN KEY (`language_id_target`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT `FK_UserQualifiedPairs_country_id_target`  FOREIGN KEY (`country_id_target`)  REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -6525,6 +6545,75 @@ JOIN TaskFileVersions tfv ON t.id=tfv.task_id AND tfv.version_id>0 AND tfv.versi
 WHERE t.`task-status_id`=4
 GROUP BY YEAR(tfv.`upload-time`), MONTH(tfv.`upload-time`)
 ORDER BY YEAR(tfv.`upload-time`) DESC, MONTH(tfv.`upload-time`) DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `createUserQualifiedPair`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createUserQualifiedPair`(IN userID INT, IN languageCodeSource VARCHAR(3), IN countryCodeSource VARCHAR(2), IN languageCodeTarget VARCHAR(3), IN countryCodeTarget VARCHAR(2), IN qualificationLevel INT)
+BEGIN
+    INSERT INTO UserQualifiedPairs (
+        user_id,
+        language_id_source,
+        language_code_source,
+        country_id_source,
+        country_code_source,
+        language_id_target,
+        language_code_target,
+        country_id_target,
+        country_code_target,
+        qualification_level
+    ) VALUES (
+        userID,
+        (SELECT id FROM Languages WHERE code=languageCodeSource),
+        languageCodeSource,
+        (SELECT id FROM Countries WHERE code=countryCodeSource),
+        countryCodeSource,
+        (SELECT id FROM Languages WHERE code=languageCodeTarget),
+        languageCodeTarget,
+        (SELECT id FROM Countries WHERE code=countryCodeTarget),
+        countryCodeTarget,
+        qualificationLevel
+    );
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `updateUserQualifiedPair`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateUserQualifiedPair`(IN userID INT, IN languageCodeSource VARCHAR(3), IN countryCodeSource VARCHAR(2), IN languageCodeTarget VARCHAR(3), IN countryCodeTarget VARCHAR(2), IN qualificationLevel INT)
+BEGIN
+    UPDATE UserQualifiedPairs SET qualification_level=qualificationLevel
+    WHERE
+        user_id=userID AND
+        language_code_source=languageCodeSource AND
+        country_code_source=countryCodeSource AND
+        language_code_target=languageCodeTarget AND
+        country_code_target=countryCodeTarget;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getUserQualifiedPairs`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserQualifiedPairs`(IN userID INT)
+BEGIN
+    SELECT *
+    FROM UserQualifiedPairs
+    WHERE user_id=userID
+    ORDER BY language_code_source, language_code_target, country_code_source, country_code_target;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `removeUserQualifiedPair`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeUserQualifiedPair`(IN userID INT, IN languageCodeSource VARCHAR(3), IN countryCodeSource VARCHAR(2), IN languageCodeTarget VARCHAR(3), IN countryCodeTarget VARCHAR(2))
+BEGIN
+    DELETE FROM UserQualifiedPairs
+    WHERE
+        user_id=userID AND
+        language_code_source=languageCodeSource AND
+        country_code_source=countryCodeSource AND
+        language_code_target=languageCodeTarget AND
+        country_code_target=countryCodeTarget;
 END//
 DELIMITER ;
 
