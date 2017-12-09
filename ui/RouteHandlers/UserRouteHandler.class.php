@@ -1008,6 +1008,10 @@ EOD;
                 try {
                     $i = 0;
                     while (!empty($post["language_code_source_$i"]) && !empty($post["language_code_target_$i"])) {
+                        $post["language_code_source_$i"] = strtolower($post["language_code_source_$i"]); // Just in case browser is manipulated...
+                        $post["language_code_target_$i"] = strtolower($post["language_code_target_$i"]);
+                        $post["country_code_source_$i"]  = strtoupper($post["country_code_source_$i"]);
+                        $post["country_code_target_$i"]  = strtoupper($post["country_code_target_$i"]);
                         if ($post["country_code_source_$i"] == '') $post["country_code_source_$i"] = '--'; // Any Language
                         if ($post["country_code_target_$i"] == '') $post["country_code_target_$i"] = '--';
 
