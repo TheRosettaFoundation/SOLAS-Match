@@ -6598,10 +6598,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserQualifiedPairs`(IN userID IN
 BEGIN
     SELECT uqp.*, l1.`en-name` AS language_source, c1.`en-name` AS country_source, l2.`en-name` AS language_target, c2.`en-name` AS country_target
     FROM UserQualifiedPairs uqp
-    JOIN Languages l1 ON upq.language_id_source=l1.id
-    JOIN Countries c1 ON upq.country_id_source=c1.id
-    JOIN Languages l2 ON upq.language_id_target=l2.id
-    JOIN Countries c2 ON upq.country_id_target=c2.id
+    JOIN Languages l1 ON uqp.language_id_source=l1.id
+    JOIN Countries c1 ON uqp.country_id_source=c1.id
+    JOIN Languages l2 ON uqp.language_id_target=l2.id
+    JOIN Countries c2 ON uqp.country_id_target=c2.id
     WHERE user_id=userID
     ORDER BY l1.`en-name`, l2.`en-name`, c1.`en-name`,c2.`en-name`;
 END//
