@@ -791,8 +791,8 @@ class UserDao extends BaseDao
     public function getRequiredOrgQualificationLevel($org_id)
     {
         $result = LibAPI\PDOWrapper::call('getRequiredOrgQualificationLevel', LibAPI\PDOWrapper::cleanse($org_id));
-        if (empty($result)) $result = array();
-        return $result;
+        if (empty($result)) return 1;
+        return $result[0]['required_qualification_level'];
     }
 
     public function deleteUser($userId)

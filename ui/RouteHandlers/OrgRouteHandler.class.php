@@ -1811,6 +1811,8 @@ class OrgRouteHandler
                 } else {
                     $start_dateError = Lib\Localisation::getTranslation('task_alter_8');
                 }
+            } elseif (($isSiteAdmin || $adminDao->isOrgAdmin($org_id, $currentUser->getId())) && !empty($post['required_qualification_level'])) {
+                $userDao->updateRequiredOrgQualificationLevel($org_id, $post['required_qualification_level']);
             }
         }
         $isMember = false;
@@ -1896,7 +1898,7 @@ class OrgRouteHandler
                 'extra_scripts' => $extra_scripts,
                 'no_subscription' => $no_subscription,
                 'subscription' => $subscription,
-                'required_qualification_level' => $required_qualification_level,
+                'required_qualification_level' => $userDao->getRequiredOrgQualificationLevel($org_id),
                 'siteName' => $siteName,
                 "membershipRequestUsers" => $user_list,
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation
