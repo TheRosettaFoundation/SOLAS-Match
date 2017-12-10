@@ -126,6 +126,9 @@
     <string name="user_qualification_level_1">Starter</string>
     <string name="user_qualification_level_2">Basic</string>
     <string name="user_qualification_level_3">Advanced</string>
+    <string name="required_qualification_level">Required Qualification Level For Translators</string>
+    <string name="set_default_required_qualification_level">Set default qualification level for volunteers working on tasks for this organisation (can be overridden on a per task basis).</string>
+    <string name="update_required_qualification_level">Update Required Qualification Level</string>
 	<string name="common_first_name">First Name</string>
 	<string name="common_last_name">Last Name</string>
 	<string name="common_mobile_number">Mobile Number</string>
