@@ -506,4 +506,18 @@ class TaskDao extends BaseDao
         $result = LibAPI\PDOWrapper::call('getMatecatLanguagePairs', LibAPI\PDOWrapper::cleanse($task_id));
         return $result;
     }
+
+    public function updateRequiredTaskQualificationLevel($task_id, $required_qualification_level)
+    {
+        LibAPI\PDOWrapper::call('updateRequiredTaskQualificationLevel',
+            LibAPI\PDOWrapper::cleanse($org_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($required_qualification_level));
+    }
+
+    public function getRequiredTaskQualificationLevel($task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getRequiredTaskQualificationLevel', LibAPI\PDOWrapper::cleanse($org_id));
+        if (empty($result)) return 1;
+        return $result[0]['required_qualification_level'];
+    }
 }
