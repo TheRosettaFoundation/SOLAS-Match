@@ -511,19 +511,19 @@ class TaskDao extends BaseDao
 
     public function inheritRequiredTaskQualificationLevel($task_id)
     {
-        LibAPI\PDOWrapper::call('inheritRequiredTaskQualificationLevel', LibAPI\PDOWrapper::cleanse($org_id));
+        LibAPI\PDOWrapper::call('inheritRequiredTaskQualificationLevel', LibAPI\PDOWrapper::cleanse($task_id));
     }
 
     public function updateRequiredTaskQualificationLevel($task_id, $required_qualification_level)
     {
         LibAPI\PDOWrapper::call('updateRequiredTaskQualificationLevel',
-            LibAPI\PDOWrapper::cleanse($org_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($task_id) . ',' .
             LibAPI\PDOWrapper::cleanse($required_qualification_level));
     }
 
     public function getRequiredTaskQualificationLevel($task_id)
     {
-        $result = LibAPI\PDOWrapper::call('getRequiredTaskQualificationLevel', LibAPI\PDOWrapper::cleanse($org_id));
+        $result = LibAPI\PDOWrapper::call('getRequiredTaskQualificationLevel', LibAPI\PDOWrapper::cleanse($task_id));
         if (empty($result)) return 1;
         return $result[0]['required_qualification_level'];
     }
