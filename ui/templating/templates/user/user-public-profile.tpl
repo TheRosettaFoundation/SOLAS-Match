@@ -107,11 +107,7 @@
                             <tr>
                                 <td>
                                     {foreach from=$userQualifiedPairs item=userQualifiedPair}
-                                        <p>{TemplateHelper::getLanguageAndCountry($language)}</p>
-[[
-{$userQualifiedPair['language_code_source']} - {$userQualifiedPair['country_code_source']} {Localisation::getTranslation('common_to')} {$userQualifiedPair['language_code_target']} - {$userQualifiedPair['country_code_target']}
-... English names (SQL)
-]]
+                                        <p>{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']} {Localisation::getTranslation('common_to')} {$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}</p>
                                     {/foreach}
                                 </td>
                             </tr>
