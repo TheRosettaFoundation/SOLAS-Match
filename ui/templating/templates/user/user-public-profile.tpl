@@ -107,7 +107,7 @@
                             <tr>
                                 <td>
                                     {foreach from=$userQualifiedPairs item=userQualifiedPair}
-                                        <p>{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']} {Localisation::getTranslation('common_to')} {$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}</p>
+                                        <p>{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']} &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; {$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}</p>
                                     {/foreach}
                                 </td>
                             </tr>
