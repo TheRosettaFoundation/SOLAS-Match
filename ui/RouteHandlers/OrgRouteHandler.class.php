@@ -1896,6 +1896,7 @@ class OrgRouteHandler
                 'extra_scripts' => $extra_scripts,
                 'no_subscription' => $no_subscription,
                 'subscription' => $subscription,
+                'required_qualification_level' => $required_qualification_level,
                 'siteName' => $siteName,
                 "membershipRequestUsers" => $user_list,
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation

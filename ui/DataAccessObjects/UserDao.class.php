@@ -781,6 +781,20 @@ class UserDao extends BaseDao
             LibAPI\PDOWrapper::cleanseWrapStr($country_code_target));
     }
 
+    public function updateRequiredOrgQualificationLevel($org_id, $required_qualification_level)
+    {
+        LibAPI\PDOWrapper::call('updateRequiredOrgQualificationLevel',
+            LibAPI\PDOWrapper::cleanse($org_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($required_qualification_level));
+    }
+
+    public function getRequiredOrgQualificationLevel($org_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getRequiredOrgQualificationLevel', LibAPI\PDOWrapper::cleanse($org_id));
+        if (empty($result)) $result = array();
+        return $result;
+    }
+
     public function deleteUser($userId)
     {
         $request = "{$this->siteApi}v0/users/$userId";
