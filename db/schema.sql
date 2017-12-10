@@ -6657,7 +6657,20 @@ DROP PROCEDURE IF EXISTS `inheritRequiredTaskQualificationLevel`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `inheritRequiredTaskQualificationLevel`(IN taskID BIGINT)
 BEGIN
-    REPLACE INTO RequiredTaskQualificationLevels (task_id, required_qualification_level) VALUES (taskID, requiredQualificationLevel);
+    INSERT INTO RequiredTaskQualificationLevels
+        (task_id, required_qualification_level)
+    VALUES (
+        taskID,
+        IFNULL(
+            (
+                SELECT oql.required_qualification_level
+                FROM Tasks t
+                JOIN Projects p ON t.project_id=p.id
+                JOIN RequiredOrgQualificationLevels oql ON p.organisation_id=oql.org_id
+                WHERE t.id=taskID
+            ),
+            1)
+    );
 END//
 DELIMITER ;
 
