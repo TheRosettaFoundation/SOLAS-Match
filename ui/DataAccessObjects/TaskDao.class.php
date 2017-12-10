@@ -169,6 +169,8 @@ class TaskDao extends BaseDao
         );
         if (!empty($response)) {
             if (get_class($response) === 'SolasMatch\Common\Protobufs\Models\Task') {
+                $this->inheritRequiredTaskQualificationLevel($response->getId());
+
                 error_log("TaskDAO::createTask id: " . $response->getId());
                 if ($response->getPublished()) {
                     error_log("TaskDAO::createTask published: True");
@@ -505,6 +507,11 @@ class TaskDao extends BaseDao
     {
         $result = LibAPI\PDOWrapper::call('getMatecatLanguagePairs', LibAPI\PDOWrapper::cleanse($task_id));
         return $result;
+    }
+
+    public function inheritRequiredTaskQualificationLevel($task_id)
+    {
+        LibAPI\PDOWrapper::call('inheritRequiredTaskQualificationLevel', LibAPI\PDOWrapper::cleanse($org_id));
     }
 
     public function updateRequiredTaskQualificationLevel($task_id, $required_qualification_level)
