@@ -1441,6 +1441,13 @@ CREATE TABLE IF NOT EXISTS `RequiredOrgQualificationLevels` (
   CONSTRAINT `FK_RequiredOrgQualificationLevels_org_id` FOREIGN KEY (`org_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `RequiredTaskQualificationLevels` (
+  task_id                      BIGINT(20) UNSIGNED NOT NULL,
+  required_qualification_level INT(10)    UNSIGNED NOT NULL,
+  PRIMARY KEY (task_id),
+  CONSTRAINT `FK_RequiredTaskQualificationLevels_task_id` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -6643,6 +6650,24 @@ BEGIN
     SELECT *
     FROM RequiredOrgQualificationLevels
     WHERE org_id=orgID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `updateRequiredTaskQualificationLevel`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateRequiredTaskQualificationLevel`(IN taskID BIGINT, IN requiredQualificationLevel INT)
+BEGIN
+    REPLACE INTO RequiredTaskQualificationLevels (task_id, required_qualification_level) VALUES (taskID, requiredQualificationLevel);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getRequiredTaskQualificationLevel`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getRequiredTaskQualificationLevel`(IN taskID BIGINT)
+BEGIN
+    SELECT *
+    FROM RequiredTaskQualificationLevels
+    WHERE task_id=taskID;
 END//
 DELIMITER ;
 
