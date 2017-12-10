@@ -6628,6 +6628,24 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `updateRequiredOrgQualificationLevel`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateRequiredOrgQualificationLevel`(IN orgID INT, IN requiredQualificationLevel INT)
+BEGIN
+    REPLACE INTO RequiredOrgQualificationLevels (org_id, required_qualification_level) VALUES (orgID, requiredQualificationLevel);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getRequiredOrgQualificationLevel`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getRequiredOrgQualificationLevel`(IN orgID INT)
+BEGIN
+    SELECT *
+    FROM RequiredOrgQualificationLevels
+    WHERE org_id=orgID;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
