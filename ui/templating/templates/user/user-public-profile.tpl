@@ -98,7 +98,7 @@
                         <tr>
                             <td style="padding-bottom: 10px"/>
                         </tr>
-                        {if isset($userQualifiedPairs)}
+                        {if !empty($userQualifiedPairs)}
                             <tr>
                                 <td>
                                     <h3>{Localisation::getTranslation('common_secondary_languages')}</h3>
