@@ -814,7 +814,7 @@
 {if $adminAccess}
     <p style="margin-bottom: 40px" />
     <h1 class="page-header">
-        {Localisation::getTranslation('required_qualification_level')}
+        {Localisation::getTranslation('required_qualification_level')}<br />
         <small>{Localisation::getTranslation('set_default_required_qualification_level')}</small>
     </h1>
     <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
