@@ -818,12 +818,13 @@
         <small>{Localisation::getTranslation('set_default_required_qualification_level')}</small>
     </h1>
     <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
-        <select name="required_qualification_level" id="required_qualification_level">
+        <select name="required_qualification_level" id="required_qualification_level" style="width: 41%">
             <option value="1" {if $required_qualification_level == 1}selected="selected"{/if}>{Localisation::getTranslation('user_qualification_level_1')}</option>
             <option value="2" {if $required_qualification_level == 2}selected="selected"{/if}>{Localisation::getTranslation('user_qualification_level_2')}</option>
             <option value="3" {if $required_qualification_level == 3}selected="selected"{/if}>{Localisation::getTranslation('user_qualification_level_3')}</option>
         </select>
-        <button type="submit" value="set_required_qualification_level" name="set_required_qualification_level" class="btn btn-primary">
+        <br />
+        <button type="submit" value="set_required_qualification_level" name="set_required_qualification_level" class="btn btn-primary" style="width: 41%">
             <i class="icon-refresh icon-white"></i> {Localisation::getTranslation('update_required_qualification_level')}
         </button>
         {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
