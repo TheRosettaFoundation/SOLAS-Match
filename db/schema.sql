@@ -6300,11 +6300,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `community_stats_secondary`()
 BEGIN
     SELECT
         u.id,
-        IFNULL(GROUP_CONCAT(l.code ORDER BY l.code SEPARATOR ', '), '') AS source_codes,
-        IFNULL(GROUP_CONCAT(l.`en-name` ORDER BY l.`en-name` SEPARATOR ', '), '') AS source_languages
+        IFNULL(GROUP_CONCAT(l1.code ORDER BY l1.code SEPARATOR ', '), '') AS source_codes,
+        IFNULL(GROUP_CONCAT(l1.`en-name` ORDER BY l1.`en-name` SEPARATOR ', '), '') AS source_languages,
+        IFNULL(GROUP_CONCAT(l2.code ORDER BY l2.code SEPARATOR ', '), '') AS target_codes,
+        IFNULL(GROUP_CONCAT(l2.`en-name` ORDER BY l2.`en-name` SEPARATOR ', '), '') AS target_languages
     FROM Users u
-    LEFT JOIN UserSecondaryLanguages usl ON u.id=usl.user_id
-    LEFT JOIN Languages l ON usl.language_id=l.id
+    LEFT JOIN UserQualifiedPairs uqp ON u.id=uqp.user_id
+    LEFT JOIN Languages l1 ON uqp.language_id_source=l1.id
+    LEFT JOIN Languages l2 ON uqp.language_id_target=l2.id
     GROUP BY u.id;
 END//
 DELIMITER ;
