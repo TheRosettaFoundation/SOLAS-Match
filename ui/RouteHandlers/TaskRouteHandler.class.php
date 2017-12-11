@@ -1235,6 +1235,7 @@ class TaskRouteHandler
         $app = \Slim\Slim::getInstance();
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
+        $adminDao = new DAO\AdminDao();
         $currentTask = $taskDao->getTask($task_id);
         $currentTaskStatus = $currentTask->getTaskStatus();
 
@@ -1282,6 +1283,8 @@ class TaskRouteHandler
                 }
             }
         }
+
+        $adminAccess = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID()) || $adminDao->isOrgAdmin($project->getOrganisationId(), Common\Lib\UserSession::getCurrentUserID());
 
         $app->view()->setData("task", $task);
 
@@ -1401,6 +1404,10 @@ class TaskRouteHandler
                     error_log("taskAlter (addTaskPreReq)");
                     $taskDao->updateTask($task);
 
+                    if ($adminAccess && ($task->getTaskStatus() <= Common\Enums\TaskStatusEnum::PENDING_CLAIM) && !empty($post['required_qualification_level'])) {
+                        $taskDao->updateRequiredTaskQualificationLevel($task_id, $post['required_qualification_level']);
+                    }
+
                     $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
                 } else {
                     //A deadlock occured
@@ -1476,6 +1483,8 @@ class TaskRouteHandler
             "publishStatus"      => $publishStatus,
             'showRestrictTask'    => $taskDao->organisationHasQualifiedBadge($project->getOrganisationId()),
             'restrictTaskStatus'  => $restrictTaskStatus,
+            'adminAccess'         => $adminAccess,
+            'required_qualification_level' => $taskDao->getRequiredTaskQualificationLevel($task_id),
             "taskTypeColours"     => $taskTypeColours
         ));
 
