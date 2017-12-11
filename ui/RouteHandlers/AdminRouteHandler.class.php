@@ -465,7 +465,7 @@ class AdminRouteHandler
         }
         unset($community_stats_words0);
 
-        $data = "\xEF\xBB\xBF" . '"Name","Email","Country","City","Created Time","Last Accessed","Words Translated","Words Proofread","Native Language","Secondary Languages"' . "\n";
+        $data = "\xEF\xBB\xBF" . '"Name","Email","Country","City","Created Time","Last Accessed","Words Translated","Words Proofread","Native Language","Source Languages","Target Languages"' . "\n";
 
         foreach ($all_users as $i => $user_row) {
             $data .= '"' . str_replace('"', '""', $user_row['display_name']) . '","' .
@@ -477,7 +477,8 @@ class AdminRouteHandler
                 $community_stats_words[$i]['words_translated'] . '","' .
                 $community_stats_words[$i]['words_proofread'] . '","' .
                 $user_row['native_code'] . '","' .
-                $community_stats_secondary[$i]['secondary_codes'] . '"' . "\n";
+                $community_stats_secondary[$i]['source_codes'] . '","' .
+                $community_stats_secondary[$i]['target_codes'] . '"' . "\n";
         }
 
         header('Content-type: text/csv');
