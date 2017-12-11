@@ -6239,11 +6239,28 @@ UNION
         l.`en-name` AS language_name,
         c.code AS country_code,
         c.`en-name` AS country_name,
-        'Secondary' AS native_or_secondary
+        'Source' AS native_or_secondary
     FROM Users                   u
-    JOIN UserSecondaryLanguages sl ON u.id=sl.user_id
-    JOIN Languages               l ON sl.language_id=l.id
-    JOIN Countries               c ON sl.country_id=c.id
+    JOIN UserQualifiedPairs    uqp ON u.id=uqp.user_id
+    JOIN Languages               l ON uqp.language_id_source=l.id
+    JOIN Countries               c ON uqp.country_id_source=c.id
+    WHERE languageCode IS NULL OR l.code=languageCode
+)
+UNION
+(
+    SELECT
+        u.id AS user_id,
+        u.`display-name` AS display_name,
+        u.email,
+        l.code AS language_code,
+        l.`en-name` AS language_name,
+        c.code AS country_code,
+        c.`en-name` AS country_name,
+        'Target' AS native_or_secondary
+    FROM Users                   u
+    JOIN UserQualifiedPairs    uqp ON u.id=uqp.user_id
+    JOIN Languages               l ON uqp.language_id_target=l.id
+    JOIN Countries               c ON uqp.country_id_target=c.id
     WHERE languageCode IS NULL OR l.code=languageCode
 )
 ORDER BY language_name, country_name, display_name;
