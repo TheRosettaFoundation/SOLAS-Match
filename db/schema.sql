@@ -2402,6 +2402,7 @@ BEGIN
             comment, `task-type_id` as taskType, `task-status_id` as taskStatus, published, t.deadline, t.`created-time` as createdTime
         FROM Tasks t 
         JOIN      Projects p ON t.project_id=p.id
+        JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
         LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
         WHERE NOT exists (SELECT 1 
                             FROM TaskClaims 
@@ -2409,6 +2410,7 @@ BEGIN
         AND t.published = 1 
         AND t.`task-status_id` = 2 
         AND r.restricted_task_id IS NULL
+        AND tq.required_qualification_level=1
         ORDER BY `created-time` DESC 
         LIMIT offset, lim;
 END//
@@ -2422,13 +2424,15 @@ BEGIN
     SELECT count(*) as result
         FROM Tasks t 
         JOIN      Projects p ON t.project_id=p.id
+        JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
         LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
         WHERE NOT exists (SELECT 1 
                             FROM TaskClaims 
                             WHERE TaskClaims.task_id = t.id) 
         AND t.published = 1 
         AND t.`task-status_id` = 2
-        AND r.restricted_task_id IS NULL;
+        AND r.restricted_task_id IS NULL
+        AND tq.required_qualification_level=1;
 END//
 DELIMITER ;
 
