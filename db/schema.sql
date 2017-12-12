@@ -3730,16 +3730,19 @@ BEGIN
         FROM TaskViews tv
         JOIN Tasks     t  ON
             t.id=tv.task_id AND
-            tv.user_id IN (SELECT DISTINCT user_id FROM TaskViews WHERE task_id=taskID) AND
+            tv.user_id IN (SELECT DISTINCT tv2.user_id FROM TaskViews tv2 WHERE tv2.task_id=taskID) AND
             t.id!=taskID AND
             t.`task-status_id`=2 AND
             t.`language_id-source`=current_task_langSource AND
             t.`language_id-target`=current_task_langTarget AND
             t.published=1
         JOIN      Projects p ON t.project_id=p.id
+        JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
         LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
-        WHERE r.restricted_task_id IS NULL
-        GROUP BY task_id
+        WHERE
+            r.restricted_task_id IS NULL AND
+            tq.required_qualification_level=1
+        GROUP BY tv.task_id
         ORDER BY task_count DESC
         ) AS t1
     JOIN Tasks t2 ON t1.id=t2.id
