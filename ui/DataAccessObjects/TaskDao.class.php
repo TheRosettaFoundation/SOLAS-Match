@@ -430,12 +430,11 @@ class TaskDao extends BaseDao
 
     public function isUserRestrictedFromTask($task_id, $user_id)
     {
-        $ret = 0;
         $result = LibAPI\PDOWrapper::call('isUserRestrictedFromTask', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($user_id));
         if (!empty($result)) {
-            $ret = 1;
+            return $result[0]['result'];
         }
-        return $ret;
+        return false;
     }
 
     public function insertWordCountRequestForProjects($project_id, $source_language, $target_languages, $user_word_count)
