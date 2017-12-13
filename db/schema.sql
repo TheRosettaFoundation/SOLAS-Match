@@ -6113,15 +6113,67 @@ DROP PROCEDURE IF EXISTS `isUserRestrictedFromTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserRestrictedFromTask`(IN `taskID` INT, IN `userID` INT)
 BEGIN
-    SELECT t.id
-    FROM Tasks            t
-    JOIN RestrictedTasks  r ON t.id=r.restricted_task_id
-    JOIN Projects         p ON t.project_id=p.id
-    JOIN Badges           b ON p.organisation_id=b.owner_id AND b.title='Qualified'
-    LEFT JOIN UserBadges ub ON b.id=ub.badge_id AND ub.user_id=userID
-    WHERE
-        t.id=taskID AND
-        ub.badge_id IS NULL;
+    IF EXISTS (
+        SELECT 1
+        FROM Admins
+        WHERE
+            user_id=userID AND
+            organisation_id IS NULL;
+    ) THEN
+        RETURN 0 AS result;
+    END IF;
+
+    IF EXISTS (
+        SELECT 1
+        FROM Tasks                t
+        JOIN Projects             p ON t.project_id=p.id
+        JOIN OrganisationMembers om ON p.organisation_id=om.organisation_id
+        WHERE
+            t.id=taskID AND
+            om.user_id=userID;
+    ) THEN
+        RETURN 0 AS result;
+    END IF;
+
+    IF EXISTS (
+        SELECT t.id
+        FROM Tasks            t
+        JOIN RestrictedTasks  r ON t.id=r.restricted_task_id
+        JOIN Projects         p ON t.project_id=p.id
+        JOIN Badges           b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+        LEFT JOIN UserBadges ub ON b.id=ub.badge_id AND ub.user_id=userID
+        WHERE
+            t.id=taskID AND
+            ub.badge_id IS NULL;
+    ) THEN
+        RETURN 1 AS result;
+    END IF;
+
+    IF EXISTS (
+        SELECT 1
+        FROM RequiredTaskQualificationLevels tq
+        WHERE
+            tq.task_id=taskID AND
+            tq.required_qualification_level=1;
+    ) THEN
+        RETURN 0 AS result;
+    END IF;
+
+    IF !EXISTS (
+        SELECT t.id
+        FROM Tasks t
+        JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
+        JOIN UserQualifiedPairs uqp ON
+            uqp.user_id=userID AND
+            t.`language_id-source`=uqp.language_id_source || uqp.language_id_source=0) AND
+            t.`language_id-target`=uqp.language_id_target || uqp.language_id_target=0)
+        WHERE
+            tq.required_qualification_level<=uqp.qualification_level
+    ) THEN
+        RETURN 1 AS result;
+    END IF;
+
+    RETURN 0 AS result;
 END//
 DELIMITER ;
 
