@@ -6118,9 +6118,9 @@ BEGIN
         FROM Admins
         WHERE
             user_id=userID AND
-            organisation_id IS NULL;
+            organisation_id IS NULL
     ) THEN
-        RETURN 0 AS result;
+        SELECT 0 AS result;
     END IF;
 
     IF EXISTS (
@@ -6130,9 +6130,9 @@ BEGIN
         JOIN OrganisationMembers om ON p.organisation_id=om.organisation_id
         WHERE
             t.id=taskID AND
-            om.user_id=userID;
+            om.user_id=userID
     ) THEN
-        RETURN 0 AS result;
+        SELECT 0 AS result;
     END IF;
 
     IF EXISTS (
@@ -6144,9 +6144,9 @@ BEGIN
         LEFT JOIN UserBadges ub ON b.id=ub.badge_id AND ub.user_id=userID
         WHERE
             t.id=taskID AND
-            ub.badge_id IS NULL;
+            ub.badge_id IS NULL
     ) THEN
-        RETURN 1 AS result;
+        SELECT 1 AS result;
     END IF;
 
     IF EXISTS (
@@ -6154,26 +6154,26 @@ BEGIN
         FROM RequiredTaskQualificationLevels tq
         WHERE
             tq.task_id=taskID AND
-            tq.required_qualification_level=1;
+            tq.required_qualification_level=1
     ) THEN
-        RETURN 0 AS result;
+        SELECT 0 AS result;
     END IF;
 
-    IF !EXISTS (
+    IF NOT EXISTS (
         SELECT t.id
         FROM Tasks t
         JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
         JOIN UserQualifiedPairs uqp ON
             uqp.user_id=userID AND
-            t.`language_id-source`=uqp.language_id_source || uqp.language_id_source=0) AND
-            t.`language_id-target`=uqp.language_id_target || uqp.language_id_target=0)
+            (t.`language_id-source`=uqp.language_id_source || uqp.language_id_source=0) AND
+            (t.`language_id-target`=uqp.language_id_target || uqp.language_id_target=0)
         WHERE
             tq.required_qualification_level<=uqp.qualification_level
     ) THEN
-        RETURN 1 AS result;
+        SELECT 1 AS result;
     END IF;
 
-    RETURN 0 AS result;
+    SELECT 0 AS result;
 END//
 DELIMITER ;
 
