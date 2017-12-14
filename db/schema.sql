@@ -6121,9 +6121,8 @@ BEGIN
             organisation_id IS NULL
     ) THEN
         SELECT 0 AS result;
-    END IF;
 
-    IF EXISTS (
+    ELSEIF EXISTS (
         SELECT 1
         FROM Tasks                t
         JOIN Projects             p ON t.project_id=p.id
@@ -6133,9 +6132,8 @@ BEGIN
             om.user_id=userID
     ) THEN
         SELECT 0 AS result;
-    END IF;
 
-    IF EXISTS (
+    ELSEIF EXISTS (
         SELECT t.id
         FROM Tasks            t
         JOIN RestrictedTasks  r ON t.id=r.restricted_task_id
@@ -6147,9 +6145,8 @@ BEGIN
             ub.badge_id IS NULL
     ) THEN
         SELECT 1 AS result;
-    END IF;
 
-    IF EXISTS (
+    ELSEIF EXISTS (
         SELECT 1
         FROM RequiredTaskQualificationLevels tq
         WHERE
@@ -6157,9 +6154,8 @@ BEGIN
             tq.required_qualification_level=1
     ) THEN
         SELECT 0 AS result;
-    END IF;
 
-    IF NOT EXISTS (
+    ELSEIF NOT EXISTS (
         SELECT t.id
         FROM Tasks t
         JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
@@ -6171,9 +6167,11 @@ BEGIN
             tq.required_qualification_level<=uqp.qualification_level
     ) THEN
         SELECT 1 AS result;
-    END IF;
 
+    ELSE
     SELECT 0 AS result;
+
+    END IF;
 END//
 DELIMITER ;
 
