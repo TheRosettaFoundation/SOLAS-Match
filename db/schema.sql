@@ -6164,6 +6164,7 @@ BEGIN
             (t.`language_id-source`=uqp.language_id_source || uqp.language_id_source=0) AND
             (t.`language_id-target`=uqp.language_id_target || uqp.language_id_target=0)
         WHERE
+            t.id=taskID AND
             tq.required_qualification_level<=uqp.qualification_level
     ) THEN
         SELECT 1 AS result;
