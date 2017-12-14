@@ -6161,8 +6161,8 @@ BEGIN
         JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
         JOIN UserQualifiedPairs uqp ON
             uqp.user_id=userID AND
-            (t.`language_id-source`=uqp.language_id_source || uqp.language_id_source=0) AND
-            (t.`language_id-target`=uqp.language_id_target || uqp.language_id_target=0)
+            t.`language_id-source`=uqp.language_id_source AND
+            t.`language_id-target`=uqp.language_id_target
         WHERE
             t.id=taskID AND
             tq.required_qualification_level<=uqp.qualification_level
