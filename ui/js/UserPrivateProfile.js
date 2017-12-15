@@ -10,7 +10,7 @@ var user_id;
 // Errors
 var alertError;
 
-var userQualifiedPairsLimit = 10;
+var userQualifiedPairsLimit = 120;
 var userQualifiedPairsCount = 0;
 
 $(document).ready(documentReady);
