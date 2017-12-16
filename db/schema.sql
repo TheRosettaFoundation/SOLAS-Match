@@ -3545,7 +3545,8 @@ BEGIN
     if sourceLanguage = '' then set sourceLanguage = null; end if;
     if targetLanguage = '' then set targetLanguage = null; end if;
 
-    (SELECT count(*) as `result`
+    SELECT COUNT(*) AS result FROM (
+        SELECT t.id
         FROM Tasks t
         JOIN      Projects p ON t.project_id=p.id
         JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
@@ -3570,7 +3571,7 @@ BEGIN
             b.id IS NULL OR
             b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
         )
-    GROUP BY t.id
+        GROUP BY t.id
     );
 END//
 DELIMITER ;
