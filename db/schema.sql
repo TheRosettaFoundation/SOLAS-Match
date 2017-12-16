@@ -3572,7 +3572,7 @@ BEGIN
             b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
         )
         GROUP BY t.id
-    );
+    ) AS tasks_to_be_counted;
 END//
 DELIMITER ;
 
