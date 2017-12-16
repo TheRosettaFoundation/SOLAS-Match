@@ -243,7 +243,8 @@ function validateForm()
     var languageCodeTarget = document.getElementById("language_code_target_" + i);
     var countryCodeTarget  = document.getElementById("country_code_target_" + i);
 
-    if ((languageCodeSource.value == "" && languageCodeTarget.value != "") || (languageCodeTarget.value == "" && languageCodeSource.value != "")) {
+    if ((languageCodeSource.value == "" && languageCodeTarget.value != "") || (languageCodeTarget.value == "" && languageCodeSource.value != "") ||
+        (languageCodeSource.value == languageCodeTarget.value && countryCodeSource.value == countryCodeTarget.value)) {
       alertError = parameters.getTranslation("user_private_profile_secondary_languages_failed");
       set_all_errors_for_submission();
       return false;
