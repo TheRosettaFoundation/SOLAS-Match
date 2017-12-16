@@ -3493,8 +3493,13 @@ BEGIN
         Users u,
         Tasks t
     JOIN      Projects p ON t.project_id=p.id
+    JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
     LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
     LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
+    LEFT JOIN UserQualifiedPairs uqp ON
+        uqp.user_id=uID AND
+        t.`language_id-source`=uqp.language_id_source AND
+        t.`language_id-target`=uqp.language_id_target
     WHERE
         u.id=uID AND
         t.id NOT IN (SELECT t.task_id FROM TaskClaims t) AND
@@ -3502,33 +3507,25 @@ BEGIN
         t.`task-status_id`=2 AND
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id=uID AND t.task_id=t.id) AND
         (taskType IS NULL OR t.`task-type_id`=taskType) AND
+        (tq.required_qualification_level=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
         (sourceLanguage IS NULL OR t.`language_id-source`=(SELECT l.id FROM Languages l WHERE l.code=sourceLanguage)) AND
         (targetLanguage IS NULL OR t.`language_id-target`=(SELECT l.id FROM Languages l WHERE l.code=targetLanguage)) AND
-        (
-            strict=0
-            OR
-            (
-                (
-                    t.`language_id-source` IN (SELECT language_id FROM Users                  WHERE id     =uID) OR
-                    t.`language_id-source` IN (SELECT language_id FROM UserSecondaryLanguages WHERE user_id=uID)
-                )
-                AND
-                (
-                    t.`language_id-target` IN (SELECT language_id FROM Users                  WHERE id     =uID) OR
-                    t.`language_id-target` IN (SELECT language_id FROM UserSecondaryLanguages WHERE user_id=uID)
-                )
-            )
-        ) AND
+        (strict=0 OR uqp.user_id IS NOT NULL) AND
         (
             r.restricted_task_id IS NULL OR
             b.id IS NULL OR
             b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
         )
+    GROUP BY t.id
     ORDER BY
-        IF(t.`language_id-target`=u.language_id, 1000 + IF(u.country_id=t.`country_id-target`, 100, 0), 0) +
-        IF(t.`language_id-source`=u.language_id,  750 + IF(u.country_id=t.`country_id-source`,  75, 0), 0) +
-        IF(t.`language_id-target` IN (SELECT language_id FROM UserSecondaryLanguages WHERE user_id=uID), 500 + IF(t.`country_id-target` IN (SELECT country_id FROM UserSecondaryLanguages WHERE user_id=uID), 50, 0), 0) +
-        IF(t.`language_id-source` IN (SELECT language_id FROM UserSecondaryLanguages WHERE user_id=uID), 500 + IF(t.`country_id-source` IN (SELECT country_id FROM UserSecondaryLanguages WHERE user_id=uID), 50, 0), 0) +
+        IF(t.`language_id-target`=u.language_id, 500 + IF(u.country_id=t.`country_id-target`, 50, 0), 0) +
+        IF(t.`language_id-source`=u.language_id, 250 + IF(u.country_id=t.`country_id-source`, 25, 0), 0) +
+        IF(COUNT(uqp.user_id), 1000,
+            IF(t.`language_id-target`=u.language_id, 500 + IF(u.country_id=t.`country_id-target`, 50, 0), 0) +
+            IF(t.`language_id-source`=u.language_id, 500 + IF(u.country_id=t.`country_id-source`, 50, 0), 0)
+        ) +
+        IF(SUM(IFNULL(uqp.country_id_target, 0)=t.`country_id-target`), 50, 0) +
+        IF(SUM(IFNULL(uqp.country_id_source, 0)=t.`country_id-source`), 50, 0) +
         (SELECT 250.*(1.0-POWER(0.75, COUNT(*)))/(1.0-0.75) FROM ProjectTags pt WHERE pt.project_id=t.project_id AND pt.tag_id IN (SELECT ut.tag_id FROM UserTags ut WHERE user_id=uID)) +
         LEAST(DATEDIFF(CURDATE(), t.`created-time`), 700)
         DESC
@@ -3551,30 +3548,29 @@ BEGIN
     (SELECT count(*) as `result`
         FROM Tasks t
         JOIN      Projects p ON t.project_id=p.id
+        JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
         LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
         LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
+        LEFT JOIN UserQualifiedPairs uqp ON
+            uqp.user_id=uID AND
+            t.`language_id-source`=uqp.language_id_source AND
+            t.`language_id-target`=uqp.language_id_target
         WHERE t.id NOT IN ( SELECT t.task_id FROM TaskClaims t)
         AND t.published = 1 
         AND t.`task-status_id` = 2 
         AND not exists( SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id = uID AND t.task_id = t.id)
         AND (taskType is null or t.`task-type_id` = taskType)
+        AND (tq.required_qualification_level=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level))
         AND (sourceLanguage is null or t.`language_id-source` = (SELECT l.id FROM Languages l WHERE l.code = sourceLanguage))
         AND (targetLanguage is null or t.`language_id-target` = (SELECT l.id FROM Languages l WHERE l.code = targetLanguage))
-        AND (strict = 0
-            OR ((t.`language_id-source` IN 
-                        (SELECT language_id FROM Users WHERE id =  uID)
-                    OR t.`language_id-source` IN 
-                        (SELECT language_id FROM UserSecondaryLanguages WHERE user_id =  uID))
-                AND (t.`language_id-target` IN 
-                        (SELECT language_id FROM Users WHERE id = uID)
-                    OR t.`language_id-target` IN 
-                        (SELECT language_id FROM UserSecondaryLanguages WHERE user_id = uID))))
+        AND (strict=0 OR uqp.user_id IS NOT NULL)
         AND
         (
             r.restricted_task_id IS NULL OR
             b.id IS NULL OR
             b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
         )
+    GROUP BY t.id
     );
 END//
 DELIMITER ;
