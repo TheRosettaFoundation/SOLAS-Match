@@ -32,7 +32,7 @@ function set_errors_for_submission(id)
   html = "";
   if (alertError != null) {
     html += '<p class="alert alert-error">';
-      html += '<strong>' + parameters.getTranslation('common_error') + ':</strong>';
+      html += '<strong>' + parameters.getTranslation('common_error') + ': </strong>';
       html += alertError;
     html += '</p>';
   }
