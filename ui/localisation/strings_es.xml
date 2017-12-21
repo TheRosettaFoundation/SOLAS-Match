@@ -92,7 +92,7 @@
 	<string name="common_cant_find_the_file_on_your_desktop">¿No encuentras el archivo en tu equipo?</string>
    	<string name="common_download_the_file">Descarga el <a href="%s">achivo</a> y guárdalo en tu equipo</string>
 	<string name="common_from">De</string>
-	<string name="common_to">Para</string>
+	<string name="common_to">A</string>
 	<string name="common_added">Añadido hace <strong>%s</strong></string>
     <string name="common_added_days">Añadido hace <strong>%s día(s)</strong></string>
     <string name="common_added_hours">Añadido hace <strong>%s horas(s)</strong></string>
