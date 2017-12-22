@@ -1654,6 +1654,7 @@ class ProjectRouteHandler
 'ht' => 'ht-HT',
 'ha' => 'ha-HAU',
 'US' => 'US-HI',
+'haw' => 'US-HI',
 'he' => 'he-IL',
 'mrj' => 'mrj-RU',
 'hi' => 'hi-IN',
