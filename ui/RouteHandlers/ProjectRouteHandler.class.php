@@ -1696,6 +1696,7 @@ class ProjectRouteHandler
 'ny' => 'ny-NYA',
 'oc' => 'oc-FR',
 'oc-ES' => 'oc-ES',
+'or' => 'or-IN',
 'pa' => 'pa-IN',
 'pap' => 'pap-CW',
 'ps' => 'ps-PK',
