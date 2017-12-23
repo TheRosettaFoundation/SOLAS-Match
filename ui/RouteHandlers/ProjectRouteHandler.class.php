@@ -1366,9 +1366,11 @@ class ProjectRouteHandler
 
         $app = \Slim\Slim::getInstance();
         $projectDao = new DAO\ProjectDao();
-        $orgDao = new DAO\OrganisationDao();
         $project = $projectDao->getProject($projectId);
-
+  $org_id = $project->getOrganisationId();
+        $orgDao = new DAO\OrganisationDao();
+  $org = $orgDao->getOrganisation($org_id);
+  $org_name = $org->getName();
 
   $langDao = new DAO\LanguageDao();
   $langcodearray = explode(',', $targetlanguages);
@@ -1385,7 +1387,7 @@ class ProjectRouteHandler
     'api_username' => Common\Lib\Settings::get('discourse.api_username'),
     'category' => '7',
     'title' => $project->getTitle(),
-    'raw' => "/"."/".$_SERVER['SERVER_NAME']."/project/$projectId/view ".$project->getDescription(),
+    'raw' => "Partner: $org_name. URL: /"."/".$_SERVER['SERVER_NAME']."/project/$projectId/view ".$project->getDescription(),
   );
   $fields = '';
   foreach($discourseapiparams as $name => $value){
@@ -1395,7 +1397,7 @@ class ProjectRouteHandler
     // We cannot pass the post fields as array because multiple languages mean duplicate tags[] keys
         $fields .= 'tags[]='.urlencode($language).'&';
   }
-  $fields = substr($fields, 0, strlen($fields)-1);
+      $fields .= 'tags[]=' . urlencode($org_name);
 
   $re = curl_init(Common\Lib\Settings::get('discourse.url').'/posts');
   curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
@@ -1416,21 +1418,18 @@ class ProjectRouteHandler
 
   //Asana
   $re = curl_init('https://app.asana.com/api/1.0/tasks');
-error_log("Asana step 1 " . curl_error($re));
   curl_setopt($re, CURLOPT_POSTFIELDS, array(
     'name' => $project->getTitle(),
-    'notes' => 'Partner: '.$project->getOrganisationId() .', Target: '.$targetlanguages.', Deadline: '.$project->getDeadline() . " https:/"."/".$_SERVER['SERVER_NAME']."/project/$projectId/view",
+    'notes' => "Partner: $org_name, Target: $targetlanguages, Deadline: ".$project->getDeadline() . ' https:/'.'/'.$_SERVER['SERVER_NAME']."/project/$projectId/view",
      'projects' => Common\Lib\Settings::get('asana.project')
     )
   );
 
-error_log("Asana step 2 " . curl_error($re));
 
   curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
   curl_setopt($re, CURLOPT_HEADER, true);
   curl_setopt($re, CURLOPT_HTTPHEADER, array("Authorization: Bearer " . Common\Lib\Settings::get('asana.api_key')));
         try {
-error_log("Asana step 3 " . curl_error($re));
             $res = curl_exec($re);
         } catch (Common\Exceptions\SolasMatchException $e) {
             $app->flash(
