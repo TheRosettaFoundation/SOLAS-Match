@@ -946,6 +946,9 @@ class ProjectRouteHandler
                                             }
                                         }
 
+                                // Create a topic in the Community forum (Discourse) and a project in Asana
+                                $this->create_discourse_topic($project->getId(), $target_languages);
+
                                         try {
                                             $app->redirect($app->urlFor('project-view', array('project_id' => $project->getId())));
                                         } catch (\Exception $e) { // redirect throws \Slim\Exception\Stop
@@ -1356,6 +1359,90 @@ class ProjectRouteHandler
             );
             $app->redirect($app->urlFor('home'));
         }
+    }
+
+    public function create_discourse_topic($projectId, $targetlanguages)
+    {
+
+        $app = \Slim\Slim::getInstance();
+        $projectDao = new DAO\ProjectDao();
+        $orgDao = new DAO\OrganisationDao();
+        $project = $projectDao->getProject($projectId);
+
+
+  $langDao = new DAO\LanguageDao();
+  $langcodearray = explode(',', $targetlanguages);
+  $i = 0;
+  $languages = array();
+        foreach($langcodearray as $langcode){
+                $langcode = substr($langcode,0,strpos($langcode."-","-"));
+    $language = $langDao->getLanguageByCode($langcode);
+    $languages[$i++] = $language->getName();
+  }
+
+  $discourseapiparams = array(
+    'api_key'      => Common\Lib\Settings::get('discourse.api_key'),
+    'api_username' => Common\Lib\Settings::get('discourse.api_username'),
+    'category' => '7',
+    'title' => $project->getTitle(),
+    'raw' => "/"."/".$_SERVER['SERVER_NAME']."/project/$projectId/view ".$project->getDescription(),
+  );
+  $fields = '';
+  foreach($discourseapiparams as $name => $value){
+        $fields .= urlencode($name).'='.urlencode($value).'&';
+  }
+  foreach($languages as $language){
+    // We cannot pass the post fields as array because multiple languages mean duplicate tags[] keys
+        $fields .= 'tags[]='.urlencode($language).'&';
+  }
+  $fields = substr($fields, 0, strlen($fields)-1);
+
+  $re = curl_init(Common\Lib\Settings::get('discourse.url').'/posts');
+  curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
+  curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
+
+        try {
+            $res = curl_exec($re);
+        } catch (Common\Exceptions\SolasMatchException $e) {
+            $app->flash(
+                "error",
+                sprintf("Problem creating Community forum topic")
+            );
+        }
+        if ($error_number = curl_errno($re)) {
+          error_log("Discourse API error ($error_number): " . curl_error($re));
+        }
+        curl_close($re);
+
+  //Asana
+  $re = curl_init('https://app.asana.com/api/1.0/tasks');
+error_log("Asana step 1 " . curl_error($re));
+  curl_setopt($re, CURLOPT_POSTFIELDS, array(
+    'name' => $project->getTitle(),
+    'notes' => 'Partner: '.$project->getOrganisationId() .', Target: '.$targetlanguages.', Deadline: '.$project->getDeadline() . " https:/"."/".$_SERVER['SERVER_NAME']."/project/$projectId/view",
+     'projects' => Common\Lib\Settings::get('asana.project')
+    )
+  );
+
+error_log("Asana step 2 " . curl_error($re));
+
+  curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
+  curl_setopt($re, CURLOPT_HEADER, true);
+  curl_setopt($re, CURLOPT_HTTPHEADER, array("Authorization: Bearer " . Common\Lib\Settings::get('asana.api_key')));
+        try {
+error_log("Asana step 3 " . curl_error($re));
+            $res = curl_exec($re);
+        } catch (Common\Exceptions\SolasMatchException $e) {
+            $app->flash(
+                "error",
+                sprintf("Problem creating Asana project")
+            );
+        }
+        if ($error_number = curl_errno($re)) {
+          error_log("Asana API error ($error_number): " . curl_error($re));
+        }
+        curl_close($re);
+  //End Asana
     }
 
     public function project_cron_1_minute()
