@@ -562,6 +562,8 @@ class UserDao extends BaseDao
 
     public function requestAuthCode($email)
     {
+        $this->verify_email_allowed_register($email);
+
         $app = \Slim\Slim::getInstance();
         $redirectUri = '';
         if (isset($_SERVER['HTTPS']) && !is_null($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
@@ -650,6 +652,8 @@ class UserDao extends BaseDao
 
     public function register($email, $password)
     {
+        $this->verify_email_allowed_register($email);
+
         $ret = null;
         $registerData = new Common\Protobufs\Models\Register();
         $registerData->setEmail($email);
@@ -661,6 +665,43 @@ class UserDao extends BaseDao
         } else {
             return false;
         }
+    }
+
+    public function verify_email_allowed_register($email)
+    {
+        error_log("verify_email_allowed_register($email)");
+        if ($this->getUserByEmail($email)) return;
+
+        require_once('/repo/neon-php/neon.php');
+
+        $neon = new Neon();
+
+        $credentials = array(
+            'orgId'  => Common\Lib\Settings::get('neon.org_id'),
+            'apiKey' => Common\Lib\Settings::get('neon.api_key')
+        );
+
+        $loginResult = $neon->login($credentials);
+        if (!isset($loginResult['operationResult']) || $loginResult['operationResult'] !== 'SUCCESS') {
+            error_log("Could not connect to NeonCRM for $email");
+            return;
+        }
+
+        $search = array(
+            'method' => 'account/listAccounts',
+            'columns' => array('standardFields' => array('Email 1'))
+        );
+        $search['criteria'] = array(array('Email', 'EQUAL', $email));
+
+        $result = $neon->search($search);
+
+        $neon->go(array('method' => 'common/logout'));
+
+        if (!empty($result) && !empty($result['searchResults'])) return;
+
+        error_log("verify_email_allowed_register($email) Not allowed!");
+        $app = \Slim\Slim::getInstance();
+        $app->redirect($app->urlFor('no_application'));
     }
 
     public function finishRegistration($uuid)
