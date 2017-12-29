@@ -96,8 +96,13 @@ class UserRouteHandler
 
         $app->get(
             '/no_application/',
-            array($this, "no_application")
+            array($this, 'no_application')
         )->name('no_application');
+
+        $app->get(
+            '/no_application_error/',
+            array($this, 'no_application_error')
+        )->name('no_application_error');
     }
     
     public function home($currentScrollPage = 1, $selectedTaskType = 0, $selectedSourceLanguageCode = 0, $selectedTargetLanguageCode = 0)
@@ -1409,6 +1414,12 @@ EOD;
     {
         $app = \Slim\Slim::getInstance();
         $app->render('user/no_application.tpl');
+    }
+
+    public function no_application_error()
+    {
+        $app = \Slim\Slim::getInstance();
+        $app->render('user/no_application_error.tpl');
     }
 }
 

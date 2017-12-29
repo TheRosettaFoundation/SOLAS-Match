@@ -669,6 +669,7 @@ class UserDao extends BaseDao
 
     public function verify_email_allowed_register($email)
     {
+        $app = \Slim\Slim::getInstance();
         error_log("verify_email_allowed_register($email)");
         if ($this->getUserByEmail($email)) return;
 
@@ -683,8 +684,8 @@ class UserDao extends BaseDao
 
         $loginResult = $neon->login($credentials);
         if (!isset($loginResult['operationResult']) || $loginResult['operationResult'] !== 'SUCCESS') {
-            error_log("Could not connect to NeonCRM for $email");
-            return;
+            error_log("verify_email_allowed_register($email), could not connect to NeonCRM");
+            $app->redirect($app->urlFor('no_application_error'));
         }
 
         $search = array(
@@ -700,7 +701,6 @@ class UserDao extends BaseDao
         if (!empty($result) && !empty($result['searchResults'])) return;
 
         error_log("verify_email_allowed_register($email) Not allowed!");
-        $app = \Slim\Slim::getInstance();
         $app->redirect($app->urlFor('no_application'));
     }
 

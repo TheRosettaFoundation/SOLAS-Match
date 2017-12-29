@@ -1020,6 +1020,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="register_3">You are already a verified user. Please <a href="%s">log in</a>.</string>
     <string name="register_4">A verification email has been sent to the email address you registered with. Please follow the link in that email to finish registration. Once you have verified your email address you can log in <a href="%s">here</a>.</string>
     <string name="register_no_application">You do not have an account with the specified email, you need to submit the <a href="https://translatorswithoutborders.org/volunteer/translators/">Translators Application Form (click here)</a> and afterwards come back to <a href="https://trommons.org/register/">https://trommons.org/register/</a> to create an account here.</string>
+    <string name="register_no_application_error">Failed to connect, please try again later.</string>
 
 	<string name="user_private_profile_private_profile">Private Profile</string>
 	<string name="user_private_profile_0">Update your personal details here.</string>
