@@ -93,6 +93,11 @@ class UserRouteHandler
             array($middleware, "authenticateUserForTask"),
             array($this, "userTaskReviews")
         )->name("user-task-reviews");
+
+        $app->get(
+            '/no_application/',
+            array($this, "no_application")
+        )->name('no_application');
     }
     
     public function home($currentScrollPage = 1, $selectedTaskType = 0, $selectedSourceLanguageCode = 0, $selectedTargetLanguageCode = 0)
@@ -1398,6 +1403,12 @@ EOD;
         ));
 
         $app->render("user/user.task-reviews.tpl");
+    }
+
+    public function no_application()
+    {
+        $app = \Slim\Slim::getInstance();
+        $app->render('user/no_application.tpl');
     }
 }
 
