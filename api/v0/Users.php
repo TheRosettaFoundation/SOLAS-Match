@@ -1627,6 +1627,7 @@ $NEON_LEVELFIELD      = 173;
                     } elseif (!empty($org_name)) {
                         $org = new Common\Protobufs\Models\Organisation();
                         $org->setName($org_name);
+                        $org->setEmail($email);
 
                         $org = DAO\OrganisationDao::insertAndUpdate($org);
                         error_log("update_user_with_neon_data($email), created Org: $org_name");
