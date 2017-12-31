@@ -1390,6 +1390,261 @@ class Users
         API\Dispatcher::sendResponse(null, $registered, null, $format);
     }
 
+    public static function update_user_with_neon_data($newUser, $userInfo)
+    {
+$from_neon_to_trommons_pair = array(
+'Afrikaans' => array('af', 'ZA'),
+'Albanian' => array('sq', 'AL'),
+'Amharic' => array('am', 'AM'),
+'Arabic' => array('ar', 'SA'),
+'Aragonese' => array('an', 'ES'),
+'Armenian' => array('hy', 'AM'),
+'Asturian' => array('ast', 'ES'),
+'Azerbaijani' => array('az', 'AZ'),
+'Basque' => array('eu', 'ES'),
+'Bengali' => array('bn', 'IN'),
+'Belarus' => array('be', 'BY'),
+'Belgian French' => array('fr', 'BE'),
+'Bosnian' => array('bs', 'BA'),
+'Breton' => array('br', 'FR'),
+'Bulgarian' => array('bg', 'BG'),
+'Burmese' => array('my', 'MM'),
+'Catalan' => array('ca', 'ES'),
+'Catalan Valencian' => array('ca', '--'),
+'Cebuano' => array('cb', 'PH'),
+'Chinese Simplified' => array('zh', 'CN'),
+'Chinese Traditional' => array('zh', 'TW'),
+'Croatian' => array('hr', 'HR'),
+'Czech' => array('cs', 'CZ'),
+'Danish' => array('da', 'DK'),
+'Dutch' => array('nl', 'NL'),
+'English' => array('en', 'GB'),
+'English US' => array('en', 'US'),
+'Esperanto' => array('eo', '--'),
+'Estonian' => array('et', 'EE'),
+'Faroese' => array('fo', 'FO'),
+'Fula' => array('ff', '--'),
+'Finnish' => array('fi', 'FI'),
+'Flemish' => array('nl', 'BE'),
+'French' => array('fr', 'FR'),
+'French Canada' => array('fr', 'CA'),
+'Galician' => array('gl', 'ES'),
+'Georgian' => array('ka', 'GE'),
+'German' => array('de', 'DE'),
+'Greek' => array('el', 'GR'),
+'Gujarati' => array('gu', 'IN'),
+'Haitian Creole French' => array('ht', 'HT'),
+'Hausa' => array('ha', '--'),
+'Hawaiian' => array('haw', 'US'),
+'Hebrew' => array('he', 'IL'),
+'Hindi' => array('hi', 'IN'),
+'Hungarian' => array('hu', 'HU'),
+'Icelandic' => array('is', 'IS'),
+'Indonesian' => array('id', 'ID'),
+'Irish Gaelic' => array('ga', 'IE'),
+'Italian' => array('it', 'IT'),
+'Japanese' => array('ja', 'JP'),
+'Kanuri' => array('kr', '--'),
+'Kazakh' => array('kk', 'KZ'),
+'Khmer' => array('km', 'KH'),
+'Korean' => array('ko', 'KR'),
+'Kurdish Kurmanji' => array('ku', '--'),
+'Kurdish Sorani' => array('ku', '--'),
+'Kyrgyz' => array('ky', 'KG'),
+'Latvian' => array('lv', 'LV'),
+'Lingala' => array('ln', '--'),
+'Lithuanian' => array('lt', 'LT'),
+'Macedonian' => array('mk', 'MK'),
+'Malagasy' => array('mg', 'MG'),
+'Malay' => array('ms', 'MY'),
+'Malayalam' => array('ml', 'IN'),
+'Maltese' => array('mt', 'MT'),
+'Maori' => array('mi', 'NZ'),
+'Mongolian' => array('mn', 'MN'),
+'Montenegrin' => array('sr', 'ME'),
+'Ndebele' => array('nr', 'ZA'),
+'Nepali' => array('ne', 'NP'),
+'Norwegian Bokmål' => array('no', 'NO'),
+'Norwegian Nynorsk' => array('nn', 'NO'),
+'Nyanja' => array('ny', '--'),
+'Occitan' => array('oc', 'FR'),
+'Occitan Aran' => array('oc', 'ES'),
+'Oriya' => array('or', 'IN'),
+'Panjabi' => array('pa', 'IN'),
+'Pashto' => array('ps', 'PK'),
+'Dari' => array('prs', '--'),
+'Persian' => array('fa', 'IR'),
+'Polish' => array('pl', 'PL'),
+'Portuguese' => array('pt', 'PT'),
+'Portuguese Brazil' => array('pt', 'BR'),
+'Quechua' => array('qu', '--'),
+'Rohingya' => array('rhg', 'MM'),
+'Rohingyalish' => array('rhl', 'MM'),
+'Romanian' => array('ro', 'RO'),
+'Russian' => array('ru', 'RU'),
+'Serbian Latin' => array('sr', '--'),
+'Serbian Cyrillic' => array('sr', 'RS'),
+'Sesotho' => array('nso', 'ZA'),
+'Setswana (South Africa)' => array('tn', 'ZA'),
+'Slovak' => array('sk', 'SK'),
+'Slovenian' => array('sl', 'SI'),
+'Somali' => array('so', 'SO'),
+'Spanish' => array('es', 'ES'),
+'Spanish Latin America' => array('es', 'MX'),
+'Spanish Colombia' => array('es', 'CO'),
+'Swahili' => array('sw', 'SZ'),
+'Swedish' => array('sv', 'SE'),
+'Swiss German' => array('de', 'CH'),
+'Tagalog' => array('tl', 'PH'),
+'Tamil' => array('ta', 'IN'),
+'Telugu' => array('te', 'IN'),
+'Tatar' => array('tt', 'RU'),
+'Thai' => array('th', 'TH'),
+'Tigrinya' => array('ti', '--'),
+'Tsonga' => array('ts', 'ZA'),
+'Turkish' => array('tr', 'TR'),
+'Turkmen' => array('tk', 'TM'),
+'Ukrainian' => array('uk', 'UA'),
+'Urdu' => array('ur', 'PK'),
+'Uzbek' => array('uz', 'UZ'),
+'Vietnamese' => array('vi', 'VN'),
+'Welsh' => array('cy', 'GB'),
+'Xhosa' => array('xh', 'ZA'),
+'Yoruba' => array('yo', 'NG'),
+'Zulu' => array('zu', 'ZA'),
+);
+
+$NEON_NATIVELANGFIELD = 64;
+$NEON_SOURCE1FIELD    = 167;
+$NEON_TARGET1FIELD    = 168;
+$NEON_SOURCE2FIELD    = 169;
+$NEON_TARGET2FIELD    = 170;
+$NEON_LEVELFIELD      = 173;
+
+        $email = $newUser->getEmail();
+        error_log("update_user_with_neon_data($email)");
+
+        $neon = new Neon();
+
+        $credentials = array(
+            'orgId'  => Common\Lib\Settings::get('neon.org_id'),
+            'apiKey' => Common\Lib\Settings::get('neon.api_key')
+        );
+
+        $loginResult = $neon->login($credentials);
+        if (isset($loginResult['operationResult']) && $loginResult['operationResult'] === 'SUCCESS') {
+            $search = array(
+                'method' => 'account/listAccounts',
+                'columns' => array(
+                'standardFields' => array(
+                    'Email 1',
+                    'First Name',
+                    'Last Name',
+                    'Preferred Name',
+                    'Company Name',
+                    'Company ID'),
+                'customFields' => array(
+                    $NEON_NATIVELANGFIELD,
+                    $NEON_SOURCE1FIELD,
+                    $NEON_TARGET1FIELD,
+                    $NEON_SOURCE2FIELD,
+                    $NEON_TARGET2FIELD,
+                    $NEON_LEVELFIELD),
+                )
+            );
+            $search['criteria'] = array(array('Email', 'EQUAL', $email));
+
+            $result = $neon->search($search);
+
+            $neon->go(array('method' => 'common/logout'));
+
+            if (empty($result) || empty($result['searchResults'])) {
+                error_log("update_user_with_neon_data($email), no results from NeonCRM");
+            } else {
+                $r = current($result['searchResults']);
+
+                $first_name = (empty($r['First Name'])) ? '' : $r['First Name'];
+                $last_name  = (empty($r['Last Name']))  ? '' : $r['Last Name'];
+                $userInfo->setFirstName($first_name);
+                $userInfo->setLastName($last_name);
+                DAO\UserDao::savePersonalInfo($userInfo);
+
+                $display_name = (empty($r['Preferred Name'])) ? '' : $r['Preferred Name'];
+                $newUser->setDisplayName($display_name);
+
+                $nativelang = (empty($r['Native language'])) ? '' : $r['Native language'];
+                if (!empty($from_neon_to_trommons_pair[$nativelang])) {
+                    $locale = new Common\Protobufs\Models\Locale();
+                    $locale->setLanguageCode($from_neon_to_trommons_pair[$nativelang][0]);
+                    $locale->setCountryCode($from_neon_to_trommons_pair[$nativelang][1]);
+                    $newUser->setNativeLocale($locale);
+                }
+
+                DAO\UserDao::save($newUser);
+
+                $org_name    = (empty($r['Company Name'])) ? '' : $r['Company Name'];
+                $org_id_neon = (empty($r['Company ID']))   ? '' : $r['Company ID'];
+
+                error_log("first_name: $first_name, last_name: $last_name, display_name: $display_name, nativelang: $nativelang, org_name: $org_name, org_id_neon: $org_id_neon");
+
+                $sourcelang1  = (empty($r['Primary Source Language']))   ? '' : $r['Primary Source Language'];
+                $targetlang1  = (empty($r['Primary Target Language']))   ? '' : $r['Primary Target Language'];
+                $sourcelang2  = (empty($r['Secondary Source Language'])) ? '' : $r['Secondary Source Language'];
+                $targetlang2  = (empty($r['Secondary Target Language'])) ? '' : $r['Secondary Target Language'];
+
+                $neon_quality_levels = array('unverified' => 1, 'verified' => 2, 'senior' => 3);
+                if (empty($r['Level']) || empty($neon_quality_levels[$r['Level']])) {
+                    $quality_level = 1;
+                } else {
+                    $quality_level = $neon_quality_levels[$r['Level']];
+                }
+
+                $user_id = $newUser->getId();
+                if (!empty($from_neon_to_trommons_pair[$sourcelang1]) && !empty($from_neon_to_trommons_pair[$targetlang1])) {
+                    DAO\UserDao::createUserQualifiedPair($user_id, $from_neon_to_trommons_pair[$sourcelang1][0], $from_neon_to_trommons_pair[$sourcelang1][1], $from_neon_to_trommons_pair[$targetlang1][0], $from_neon_to_trommons_pair[$targetlang1][1], $quality_level)
+                }
+                if (!empty($from_neon_to_trommons_pair[$sourcelang1]) && !empty($from_neon_to_trommons_pair[$targetlang2])) {
+                    DAO\UserDao::createUserQualifiedPair($user_id, $from_neon_to_trommons_pair[$sourcelang1][0], $from_neon_to_trommons_pair[$sourcelang1][1], $from_neon_to_trommons_pair[$targetlang2][0], $from_neon_to_trommons_pair[$targetlang2][1], $quality_level)
+                }
+                if (!empty($from_neon_to_trommons_pair[$sourcelang2]) && !empty($from_neon_to_trommons_pair[$targetlang1])) {
+                    DAO\UserDao::createUserQualifiedPair($user_id, $from_neon_to_trommons_pair[$sourcelang2][0], $from_neon_to_trommons_pair[$sourcelang2][1], $from_neon_to_trommons_pair[$targetlang1][0], $from_neon_to_trommons_pair[$targetlang1][1], $quality_level)
+                }
+                if (!empty($from_neon_to_trommons_pair[$sourcelang2]) && !empty($from_neon_to_trommons_pair[$targetlang2])) {
+                    DAO\UserDao::createUserQualifiedPair($user_id, $from_neon_to_trommons_pair[$sourcelang2][0], $from_neon_to_trommons_pair[$sourcelang2][1], $from_neon_to_trommons_pair[$targetlang2][0], $from_neon_to_trommons_pair[$targetlang2][1], $quality_level)
+                }
+
+                $org_name = trim(str_replace(array('"', '<', '>'), '', $org_name)); // Only Trommons value with limitations (not filtered on output)
+
+                if (!empty($org_id_neon) && $org_id_neon != 3783) { // Translators without Borders (TWb)
+
+                    if ($org_id_matching_neon = DAO\UserDao::getOrgIDMatchingNeon($org_id_neon)) {
+                        DAO\AdminDao::addOrgAdmin($user_id, $org_id_matching_neon);
+                        error_log("update_user_with_neon_data($email), addOrgAdmin($user_id, $org_id_matching_neon)");
+
+                    } elseif ($org = DAO\OrganisationDao::getOrg(null, $org_name)) { // unlikely?
+                        DAO\AdminDao::addOrgAdmin($user_id, $org->getId());
+
+                    } elseif (!empty($org_name)) {
+                        $org = new Common\Protobufs\Models\Organisation();
+                        $org->setName($org_name);
+
+                        $org = DAO\OrganisationDao::insertAndUpdate($org);
+                        error_log("update_user_with_neon_data($email), created Org: $org_name");
+                        if (!empty($org) && $org->getId() > 0) {
+                            DAO\UserDao::insertOrgIDMatchingNeon($org->getId(), $org_id_neon);
+
+                            DAO\AdminDao::addOrgAdmin($user_id, $org->getId());
+                            error_log("update_user_with_neon_data($email), addOrgAdmin($user_id, " . $org->getId() . ')');
+                            Lib\Notify::sendOrgCreatedNotifications($org->getId());
+                        }
+                    }
+                }
+            }
+        } else {
+            error_log("update_user_with_neon_data($email), could not connect to NeonCRM");
+        }
+    }
+
     public static function changeEmail($format = ".json")
     {
         $user = DAO\UserDao::getLoggedInUser();
