@@ -1622,7 +1622,10 @@ $NEON_LEVELFIELD      = 173;
                         error_log("update_user_with_neon_data($email), addOrgAdmin($user_id, $org_id_matching_neon)");
 
                     } elseif ($org = DAO\OrganisationDao::getOrg(null, $org_name)) { // unlikely?
+                        DAO\UserDao::insertOrgIDMatchingNeon($org->getId(), $org_id_neon);
+
                         DAO\AdminDao::addOrgAdmin($user_id, $org->getId());
+                        error_log("update_user_with_neon_data($email), addOrgAdmin($user_id, " . $org->getId() . "), $org_name existing");
 
                     } elseif (!empty($org_name)) {
                         $org = new Common\Protobufs\Models\Organisation();
