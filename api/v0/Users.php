@@ -16,6 +16,7 @@ require_once __DIR__."/../DataAccessObjects/UserDao.class.php";
 require_once __DIR__."/../DataAccessObjects/TaskDao.class.php";
 require_once __DIR__."/../lib/Notify.class.php";
 require_once __DIR__."/../lib/Middleware.php";
+require_once '/repo/neon-php/neon.php';
 
 
 class Users
@@ -1090,7 +1091,7 @@ class Users
             $userInfo->setUserId($newUser->getId());
             $userInfo->setLanguagePreference($english->getId());
             DAO\UserDao::savePersonalInfo($userInfo);
-            self::update_user_with_neon_data($userInfo);
+            self::update_user_with_neon_data($newUser, $userInfo);
         }
         $params = array();
         try {
@@ -1384,7 +1385,7 @@ class Users
         $userInfo->setUserId($newUser->getId());
         $userInfo->setLanguagePreference($english->getId());
         DAO\UserDao::savePersonalInfo($userInfo);
-        self::update_user_with_neon_data($userInfo);
+        self::update_user_with_neon_data($newUser, $userInfo);
         
         API\Dispatcher::sendResponse(null, $registered, null, $format);
     }

@@ -11,6 +11,8 @@ require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/../../Common/protobufs/models/OAuthResponse.php";
 require_once __DIR__."/BaseDao.php";
 require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
+require_once '/repo/neon-php/neon.php';
+
 
 class UserDao extends BaseDao
 {
@@ -672,8 +674,6 @@ class UserDao extends BaseDao
         $app = \Slim\Slim::getInstance();
         error_log("verify_email_allowed_register($email)");
         if ($this->getUserByEmail($email)) return;
-
-        require_once('/repo/neon-php/neon.php');
 
         $neon = new Neon();
 
