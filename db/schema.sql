@@ -1448,6 +1448,15 @@ CREATE TABLE IF NOT EXISTS `RequiredTaskQualificationLevels` (
   CONSTRAINT `FK_RequiredTaskQualificationLevels_task_id` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `OrgIDMatchingNeon` (
+  org_id_neon  INT(10) UNSIGNED NOT NULL,
+  org_id       INT(10) UNSIGNED NOT NULL,
+  created_time DATETIME DEFAULT NULL,
+  PRIMARY KEY (org_id_neon),
+  KEY FK_OrgIDMatchingNeon_Organisations (org_id),
+  CONSTRAINT FK_OrgIDMatchingNeon_Organisations FOREIGN KEY (org_id) REFERENCES Organisations (id) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
