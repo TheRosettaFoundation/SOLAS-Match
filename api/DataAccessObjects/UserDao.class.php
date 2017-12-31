@@ -89,6 +89,17 @@ class UserDao
         }
     }
 
+    public static function createUserQualifiedPair($user_id, $language_code_source, $country_code_source, $language_code_target, $country_code_target, $qualification_level)
+    {
+        Lib\PDOWrapper::call('createUserQualifiedPair',
+            Lib\PDOWrapper::cleanse($user_id) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($language_code_source) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($country_code_source) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($language_code_target) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($country_code_target) . ',' .
+            Lib\PDOWrapper::cleanse($qualification_level));
+    }
+
     private static function clearPasswordMatchesUsersPassword($user, $clear_password)
     {
         $hashed_input_password = Common\Lib\Authentication::hashPassword($clear_password, $user->getNonce());
