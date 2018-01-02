@@ -225,6 +225,7 @@ class UserRouteHandler
         $created_timestamps = array();
         $deadline_timestamps = array();
         $projectAndOrgs = array();
+        $projectTitle = array();
         $taskImages = array();
 
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
@@ -264,6 +265,7 @@ class UserRouteHandler
                     $orgUri,
                     htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
                 );
+                $projectTitle[$taskId] = $projectName;
 
                 $taskImages[$taskId] = '';
                 if ($project->getImageApproved() && $project->getImageUploaded()) {
@@ -294,6 +296,7 @@ class UserRouteHandler
             'created_timestamps' => $created_timestamps,
             'deadline_timestamps' => $deadline_timestamps,
             'projectAndOrgs' => $projectAndOrgs,
+            'projectTitle' => $projectTitle,
             'taskImages' => $taskImages,
             'currentScrollPage' => $currentScrollPage,
             'itemsPerScrollPage' => $itemsPerScrollPage,
