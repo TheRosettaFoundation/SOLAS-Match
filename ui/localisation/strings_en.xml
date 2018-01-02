@@ -113,7 +113,8 @@
 	<string name="common_no_comment_has_been_listed">No comment has been listed.</string>
 	<string name="common_no_description_has_been_listed">No description has been listed.</string>
     <string name="common_no_impact_has_been_listed">No impact has been listed.</string>
-	<string name="common_signin_or_create_new_account">Sign-in or Create New Account</string>
+    <string name="register_signin_or_create_new_account">Create New Account by clicking your account provider:</string>
+    <string name="common_signin_or_create_new_account">Or Sign-in by clicking your account provider:</string>
 	<string name="common_please_click_your_account_provider">Please click your account provider:</string>
 	<string name="common_openid_is_service_that_allows_you_to_logon_to_many_different_websites_using_a_single_indentity">OpenID is service that allows you to log-on to many different websites using a single indentity.</string>
 	<string name="common_display_name">Display Name</string>
@@ -1012,7 +1013,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="password_reset_4">The passwords entered do not match. Please try again.</string>
     <string name="password_reset_5">Please check the password provided and try again.</string>
 
-	<string name="register_register_on">Register on</string>
+    <string name="register_register_on">If you have previously submitted your email and other details using the <a href="https://translatorswithoutborders.org/volunteer/translators/">Translators Application Form (click here)</a>you can Register with that email and a new password to create an account here and login.<br />Or alternatively you can use that email with Google or other account providers to create an account here and login.</string>
 	<string name="register_your_email">Your email</string>
 	<string name="register_your_password">Your password</string>
     <string name="register_1">The email address you entered was not valid. Please try again.</string>
