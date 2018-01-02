@@ -968,4 +968,19 @@ class UserDao
             return null;
         }
     }
+
+    public static function getOrgIDMatchingNeon($org_id_neon)
+    {
+        $ord_id = 0;
+        $result = Lib\PDOWrapper::call('getOrgIDMatchingNeon', Lib\PDOWrapper::cleanse($org_id_neon));
+        if (!empty($result)) {
+            $ord_id = $result[0]['org_id'];
+        }
+        return $ord_id;
+    }
+
+    public static function insertOrgIDMatchingNeon($org_id, $org_id_neon)
+    {
+        Lib\PDOWrapper::call('insertOrgIDMatchingNeon', Lib\PDOWrapper::cleanse($org_id) . ',' . Lib\PDOWrapper::cleanse($org_id_neon));
+    }
 }
