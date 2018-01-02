@@ -6776,6 +6776,24 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getOrgIDMatchingNeon`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgIDMatchingNeon`(IN orgIDNeon INT)
+BEGIN
+    SELECT org_id FROM OrgIDMatchingNeon WHERE org_id_neon=orgIDNeon;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insertOrgIDMatchingNeon`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertOrgIDMatchingNeon`(IN orgID INT, IN orgIDNeon INT)
+BEGIN
+    INSERT INTO OrgIDMatchingNeon
+               (org_id_neon, org_id, created_time)
+        VALUES (  orgIDNeon,  orgID, NOW());
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
