@@ -564,7 +564,7 @@ class UserDao extends BaseDao
 
     public function requestAuthCode($email)
     {
-        $this->verify_email_allowed_register($email);
+//        $this->verify_email_allowed_register($email);
 
         $app = \Slim\Slim::getInstance();
         $redirectUri = '';
