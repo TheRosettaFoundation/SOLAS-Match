@@ -1,7 +1,7 @@
 <resources>
     <!-- Smarty Template Strings -->
     <string name="common_faq">FAQ</string>
-	<string name="common_forum">Forum</string>
+  <string name="common_forum">Community</string>
 	<string name="common_banned_by">Banned By</string>
 	<string name="common_ban_duration">Ban Duration</string>
 	<string name="common_ban_reason">Ban Reason</string>
