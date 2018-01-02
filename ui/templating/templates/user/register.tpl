@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 
 <div class="page-header">
-    <legend>{Localisation::getTranslation('register_register_on')}</legend>
+    <h2>{Localisation::getTranslation('register_register_on')}</h2>
 </div>
 
 {include file="handle-flash-messages.tpl"}
