@@ -675,7 +675,7 @@ class UserDao extends BaseDao
         error_log("verify_email_allowed_register($email)");
         if ($this->verifyUserByEmail($email)) return;
 
-        $neon = new Neon();
+        $neon = new \Neon();
 
         $credentials = array(
             'orgId'  => Common\Lib\Settings::get('neon.org_id'),

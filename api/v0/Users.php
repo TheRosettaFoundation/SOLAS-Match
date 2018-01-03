@@ -1524,7 +1524,7 @@ $NEON_LEVELFIELD      = 173;
         $email = $newUser->getEmail();
         error_log("update_user_with_neon_data($email)");
 
-        $neon = new Neon();
+        $neon = new \Neon();
 
         $credentials = array(
             'orgId'  => Common\Lib\Settings::get('neon.org_id'),
