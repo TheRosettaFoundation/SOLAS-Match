@@ -1090,8 +1090,8 @@ class Users
             $english = DAO\LanguageDao::getLanguage(null, "en");
             $userInfo->setUserId($newUser->getId());
             $userInfo->setLanguagePreference($english->getId());
-            DAO\UserDao::savePersonalInfo($userInfo);
-            self::update_user_with_neon_data($newUser, $userInfo);
+            $personal_info = DAO\UserDao::savePersonalInfo($userInfo);
+            self::update_user_with_neon_data($newUser, $personal_info);
         }
         $params = array();
         try {
@@ -1384,8 +1384,8 @@ class Users
         $english = DAO\LanguageDao::getLanguage(null, "en");
         $userInfo->setUserId($newUser->getId());
         $userInfo->setLanguagePreference($english->getId());
-        DAO\UserDao::savePersonalInfo($userInfo);
-        self::update_user_with_neon_data($newUser, $userInfo);
+        $personal_info = DAO\UserDao::savePersonalInfo($userInfo);
+        self::update_user_with_neon_data($newUser, $personal_info);
         
         API\Dispatcher::sendResponse(null, $registered, null, $format);
     }
