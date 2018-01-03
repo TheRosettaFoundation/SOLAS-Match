@@ -1522,6 +1522,7 @@ $NEON_TARGET2FIELD    = 170;
 $NEON_LEVELFIELD      = 173;
 
         $email = $newUser->getEmail();
+$email = 'mirko@translatorswithoutborders.org';
         error_log("update_user_with_neon_data($email)");
 
         $neon = new \Neon();
