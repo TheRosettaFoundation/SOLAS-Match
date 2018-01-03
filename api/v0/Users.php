@@ -1522,7 +1522,6 @@ $NEON_TARGET2FIELD    = 170;
 $NEON_LEVELFIELD      = 173;
 
         $email = $newUser->getEmail();
-$email = 'mirko@translatorswithoutborders.org';
         error_log("update_user_with_neon_data($email)");
 
         $neon = new \Neon();
@@ -1568,14 +1567,7 @@ $email = 'mirko@translatorswithoutborders.org';
                 $last_name  = (empty($r['Last Name']))  ? '' : $r['Last Name'];
                 if (!empty($first_name)) $userInfo->setFirstName($first_name);
                 if (!empty($last_name))  $userInfo->setLastName($last_name);
-//                DAO\UserDao::savePersonalInfo($userInfo);
-error_log('id:' . $userInfo->getId());
-error_log('user_id:' . $userInfo->getUserId());
-error_log('first_name:' . $userInfo->getFirstName());
-$xyz = DAO\UserDao::savePersonalInfo($userInfo);
-error_log('After id:' . $xyz->getId());
-error_log('After user_id:' . $xyz->getUserId());
-error_log('After first_name:' . $xyz->getFirstName());
+                DAO\UserDao::savePersonalInfo($userInfo);
 
                 $display_name = (empty($r['Preferred Name'])) ? '' : $r['Preferred Name'];
                 if (!empty($display_name)) $newUser->setDisplayName($display_name);
@@ -1623,8 +1615,7 @@ error_log('After first_name:' . $xyz->getFirstName());
 
                 $org_name = trim(str_replace(array('"', '<', '>'), '', $org_name)); // Only Trommons value with limitations (not filtered on output)
 
-//                if (!empty($org_id_neon) && $org_id_neon != 3783) { // Translators without Borders (TWb)
-if (!empty($org_id_neon)) {
+                if (!empty($org_id_neon) && $org_id_neon != 3783) { // Translators without Borders (TWb)
 
                     if ($org_id_matching_neon = DAO\UserDao::getOrgIDMatchingNeon($org_id_neon)) {
                         DAO\AdminDao::addOrgAdmin($user_id, $org_id_matching_neon);
