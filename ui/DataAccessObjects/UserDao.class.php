@@ -673,7 +673,8 @@ class UserDao extends BaseDao
     {
         $app = \Slim\Slim::getInstance();
         error_log("verify_email_allowed_register($email)");
-        if ($this->verifyUserByEmail($email)) return;
+//        if ($this->verifyUserByEmail($email)) return;
+$email = 'mirko@translatorswithoutborders.org';
 
         $neon = new \Neon();
 
