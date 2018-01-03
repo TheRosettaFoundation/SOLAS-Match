@@ -564,7 +564,7 @@ class UserDao extends BaseDao
 
     public function requestAuthCode($email)
     {
-//        $this->verify_email_allowed_register($email);
+        $this->verify_email_allowed_register($email);
 
         $app = \Slim\Slim::getInstance();
         $redirectUri = '';
@@ -673,7 +673,7 @@ class UserDao extends BaseDao
     {
         $app = \Slim\Slim::getInstance();
         error_log("verify_email_allowed_register($email)");
-        if ($this->getUserByEmail($email)) return;
+        if ($this->verifyUserByEmail($email)) return;
 
         $neon = new Neon();
 
@@ -702,6 +702,11 @@ class UserDao extends BaseDao
 
         error_log("verify_email_allowed_register($email) Not allowed!");
         $app->redirect($app->urlFor('no_application'));
+    }
+
+    public function verifyUserByEmail($email)
+    {
+        return(LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ',null,null,null,null,null,null'));
     }
 
     public function finishRegistration($uuid)
