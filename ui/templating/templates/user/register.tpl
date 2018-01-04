@@ -36,7 +36,7 @@
     <form action="{urlFor name='login'}" method="post" id="openid_form">
         <input type="hidden" name="action" value="verify" />
         <fieldset>
-            <legend>{Localisation::getTranslation('register_signin_or_create_new_account')}</legend>
+            <h3>{Localisation::getTranslation('register_signin_or_create_new_account')}</h3>
             <div id="openid_choice">
                  {if isset($gplus) && ($gplus === 'y')}
                     <div id="gSignInWrapper">
