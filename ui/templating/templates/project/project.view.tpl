@@ -224,11 +224,13 @@ Tweet</a>
                         <strong>{Localisation::getTranslation('common_forum')}</strong><hr/>
                     </td>
                 </tr>
+                {if $project_id > Settings::get("discourse.pre_discourse")}
                 <tr>
                     <td class="nav nav-list unstyled" style="padding-left: 0px; padding-right: 0px;" colspan="2">
                         <a href="https://community.translatorswb.org/t/{$discourse_slug}" target="_blank">https://community.translatorswb.org/t/{$discourse_slug}</a>
                     </td>
                 </tr>
+                {/if}
             </tbody>
         </table>
     </div>            
