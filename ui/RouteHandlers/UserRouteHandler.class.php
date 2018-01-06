@@ -225,7 +225,7 @@ class UserRouteHandler
         $created_timestamps = array();
         $deadline_timestamps = array();
         $projectAndOrgs = array();
-        $projectTitle = array();
+        $discourse_slug = array();
         $taskImages = array();
 
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
@@ -265,7 +265,7 @@ class UserRouteHandler
                     $orgUri,
                     htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
                 );
-                $projectTitle[$taskId] = $projectName;
+                $discourse_slug[$taskId] = $projectDao->discourse_parameterize($projectName);
 
                 $taskImages[$taskId] = '';
                 if ($project->getImageApproved() && $project->getImageUploaded()) {
@@ -296,7 +296,7 @@ class UserRouteHandler
             'created_timestamps' => $created_timestamps,
             'deadline_timestamps' => $deadline_timestamps,
             'projectAndOrgs' => $projectAndOrgs,
-            'projectTitle' => $projectTitle,
+            'discourse_slug' => $discourse_slug,
             'taskImages' => $taskImages,
             'currentScrollPage' => $currentScrollPage,
             'itemsPerScrollPage' => $itemsPerScrollPage,

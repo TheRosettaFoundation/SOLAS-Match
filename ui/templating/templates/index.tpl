@@ -203,7 +203,7 @@
                             <!-- <p class="task_details"><div class="process_created_time_utc" style="visibility: hidden">{$created_timestamps[$task_id]}</div></p> -->
                             <p><div class="process_deadline_utc" style="visibility: hidden">{$deadline_timestamps[$task_id]}</div></p>
                             <p id="parents_{$task_id}">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$task_id])}</p>
-                            <p>{Localisation::getTranslation('common_forum')}: <span id="discourselink{$task_id}"></span></p>
+                            <p>{Localisation::getTranslation('common_forum')}: <a href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">https://community.translatorswb.org/t/{$discourse_slug[$task_id]}</a></p>
                             <br />
                         </div>
                         {if $taskImages[$task_id]}
@@ -213,24 +213,6 @@
                         {else}
                             <div id="img_{$task_id}" class="pull-right task-stream-img" style="text-align:right"></div>
                         {/if}
-<script>
-var dlink = document.createElement("a");
-var projecttitle = "{TemplateHelper::uiCleanseNewlineAndTabs($projectTitle[$task_id])}";
-projecttitle = projecttitle.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
-projecttitle = projecttitle.replace(/äàáãâÄÀÁÃÂ/, "a");
-projecttitle = projecttitle.replace(/_/g, "-");
-projecttitle = projecttitle.replace(/\./g, "-");
-projecttitle = projecttitle.substring(0,255);
-projecttitle = projecttitle.replace('/\A-+|-+\z/','');
-projecttitle = projecttitle.replace(/'/g, "");
-projecttitle = projecttitle.replace(/\s+/g, "-");
-projecttitle = projecttitle.replace(/[:\/\?\[\]@!\$&\(\)\*\+,;=_~%\\`^\s|\}"<>]+/g, "-");
-projecttitle = projecttitle.replace(/-+/g, "-");
-dlink.setAttribute('href',"https://community.translatorswb.org/t/"+projecttitle);
-dlink.setAttribute('target',"_blank");
-dlink.innerHTML = "https://community.translatorswb.org/t/"+projecttitle;
-document.getElementById('discourselink{$task_id}').appendChild(dlink);
-</script>
                     </div>
                 {/for}
             </div>

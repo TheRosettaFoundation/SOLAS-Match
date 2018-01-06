@@ -226,25 +226,7 @@ Tweet</a>
                 </tr>
                 <tr>
                     <td class="nav nav-list unstyled" style="padding-left: 0px; padding-right: 0px;" colspan="2">
-      <span id="discourselink"></span>
-<script>
-var dlink = document.createElement("a");
-var projecttitle = "{TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getTitle())}";
-projecttitle = projecttitle.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
-projecttitle = projecttitle.replace(/äàáãâÄÀÁÃÂ/, "a");
-projecttitle = projecttitle.replace(/_/g, "-");
-projecttitle = projecttitle.replace(/\./g, "-");
-projecttitle = projecttitle.substring(0,255);
-projecttitle = projecttitle.replace('/\A-+|-+\z/','');
-projecttitle = projecttitle.replace(/'/g, "");
-projecttitle = projecttitle.replace(/\s+/g, "-");
-projecttitle = projecttitle.replace(/[:\/\?\[\]@!\$&\(\)\*\+,;=_~%\\`^\s|\}"<>]+/g, "-");
-projecttitle = projecttitle.replace(/-+/g, "-");
-dlink.setAttribute('href',"https://community.translatorswb.org/t/"+projecttitle);
-dlink.setAttribute('target',"_blank");
-dlink.innerHTML = "https://community.translatorswb.org/t/"+projecttitle;
-document.getElementById('discourselink').appendChild(dlink);
-</script>
+                        <a href="https://community.translatorswb.org/t/{$discourse_slug}" target="_blank">https://community.translatorswb.org/t/{$discourse_slug}</a>
                     </td>
                 </tr>
             </tbody>

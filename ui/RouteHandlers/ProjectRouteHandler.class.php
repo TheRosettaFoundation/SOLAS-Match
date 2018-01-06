@@ -363,6 +363,7 @@ class ProjectRouteHandler
                 "isAdmin"       => $isAdmin,
                 "isSiteAdmin"   => $isSiteAdmin,
                 "imgCacheToken" => $preventImageCacheToken,
+                'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation
         ));
         $app->render("project/project.view.tpl");

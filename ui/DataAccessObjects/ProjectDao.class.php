@@ -229,4 +229,124 @@ class ProjectDao extends BaseDao
                 throw new Common\Exceptions\SolasMatchException("No file!");
         }
     }
+
+    public function discourse_parameterize($a)
+    {
+        mb_internal_encoding('UTF-8');
+        mb_regex_encoding('UTF-8');
+
+        $a = str_replace("'", '', $a);
+
+        $a = mb_ereg_replace('[\x{0100}-\x{0105}]', 'a', $a);
+        $a = mb_ereg_replace('[\x{0106}-\x{010D}]', 'c', $a);
+        $a = mb_ereg_replace('[\x{010E}-\x{0111}]', 'd', $a);
+        $a = mb_ereg_replace('[\x{0112}-\x{011B}]', 'e', $a);
+        $a = mb_ereg_replace('[\x{011C}-\x{0123}]', 'g', $a);
+        $a = mb_ereg_replace('[\x{0124}-\x{0127}]', 'h', $a);
+        $a = mb_ereg_replace('[\x{0128}-\x{0131}]', 'i', $a);
+        $a = mb_ereg_replace('[\x{0132}-\x{0133}]', 'ij', $a);
+        $a = mb_ereg_replace('[\x{0134}-\x{0135}]', 'j', $a);
+        $a = mb_ereg_replace('[\x{0136}-\x{0138}]', 'k', $a);
+        $a = mb_ereg_replace('[\x{0139}-\x{0142}]', 'l', $a);
+        $a = mb_ereg_replace('[\x{0143}-\x{014B}]', 'n', $a);
+        $a = mb_ereg_replace('[\x{014C}-\x{0151}]', 'o', $a);
+        $a = mb_ereg_replace('[\x{0152}-\x{0153}]', 'oe', $a);
+        $a = mb_ereg_replace('[\x{0154}-\x{0159}]', 'r', $a);
+        $a = mb_ereg_replace('[\x{015A}-\x{0161}]', 's', $a);
+        $a = mb_ereg_replace('[\x{0162}-\x{0167}]', 't', $a);
+        $a = mb_ereg_replace('[\x{0168}-\x{0173}]', 'u', $a);
+        $a = mb_ereg_replace('[\x{0174}-\x{0175}]', 'w', $a);
+        $a = mb_ereg_replace('[\x{0176}-\x{0178}]', 'y', $a);
+        $a = mb_ereg_replace('[\x{0179}-\x{017E}]', 'z', $a);
+
+        $a = mb_ereg_replace('[^\x{0030}-\x{00FF}]', '-', $a);
+        $a = mb_ereg_replace('[\x{007B}-\x{00BF}]', '-', $a);
+
+        $a = iconv('UTF-8', 'ISO-8859-1', $a);
+
+$replace = array(
+':' => '-',
+';' => '-',
+'<' => '-',
+'=' => '-',
+'>' => '-',
+'?' => '-',
+'@' => '-',
+'[' => '-',
+'\\' => '-',
+']' => '-',
+'^' => '-',
+'_' => '-',
+'`' => '-',
+"\xC0" => 'a',
+"\xC1" => 'a',
+"\xC2" => 'a',
+"\xC3" => 'a',
+"\xC4" => 'a',
+"\xC5" => 'a',
+"\xC6" => 'ae',
+"\xC7" => 'c',
+"\xC8" => 'e',
+"\xC9" => 'e',
+"\xCA" => 'e',
+"\xCB" => 'e',
+"\xCC" => 'i',
+"\xCD" => 'i',
+"\xCE" => 'i',
+"\xCF" => 'i',
+"\xD0" => 'd',
+"\xD1" => 'n',
+"\xD2" => 'o',
+"\xD3" => 'o',
+"\xD4" => 'o',
+"\xD5" => 'o',
+"\xD6" => 'o',
+"\xD7" => 'x',
+"\xD8" => 'o',
+"\xD9" => 'u',
+"\xDA" => 'u',
+"\xDB" => 'u',
+"\xDC" => 'u',
+"\xDD" => 'y',
+"\xDE" => 'th',
+"\xDF" => 'ss',
+"\xE0" => 'a',
+"\xE1" => 'a',
+"\xE2" => 'a',
+"\xE3" => 'a',
+"\xE4" => 'a',
+"\xE5" => 'a',
+"\xE6" => 'ae',
+"\xE7" => 'c',
+"\xE8" => 'e',
+"\xE9" => 'e',
+"\xEA" => 'e',
+"\xEB" => 'e',
+"\xEC" => 'i',
+"\xED" => 'i',
+"\xEE" => 'i',
+"\xEF" => 'i',
+"\xF0" => 'd',
+"\xF1" => 'n',
+"\xF2" => 'o',
+"\xF3" => 'o',
+"\xF4" => 'o',
+"\xF5" => 'o',
+"\xF6" => 'o',
+"\xF7" => '-',
+"\xF8" => 'o',
+"\xF9" => 'u',
+"\xFA" => 'u',
+"\xFB" => 'u',
+"\xFC" => 'u',
+"\xFD" => 'y',
+"\xFE" => 'th',
+"\xFF" => 'y',
+);
+        $a = str_replace(array_keys($replace), $replace, $a);
+
+        $a = trim($a, '-');
+        $a = preg_replace('/-+/', '-', $a);
+        return strtolower($a);
+    }
 }
