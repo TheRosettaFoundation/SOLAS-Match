@@ -1030,6 +1030,16 @@ $from_neon_to_trommons_pair = array(
         }
     }
 
+    public function getOrgIDMatchingNeon($org_id_neon)
+    {
+        $org_id = 0;
+        $result = LibAPI\PDOWrapper::call('getOrgIDMatchingNeon', LibAPI\PDOWrapper::cleanse($org_id_neon));
+        if (!empty($result)) {
+            $org_id = $result[0]['org_id'];
+        }
+        return $org_id;
+    }
+
     public function finishRegistration($uuid)
     {
         $request = "{$this->siteApi}v0/users/$uuid/finishRegistration";
