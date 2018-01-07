@@ -1131,7 +1131,7 @@ EOD;
         }
 
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/UserPrivateProfile.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/UserPrivateProfile1.js\"></script>";
 
         $app->view()->appendData(array(
             'siteLocation'     => Common\Lib\Settings::get('site.location'),
