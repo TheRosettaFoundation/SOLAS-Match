@@ -1002,24 +1002,20 @@ $from_neon_to_trommons_pair = array(
                             $this->addOrgAdmin($user_id, $org_id_matching_neon);
                             error_log("process_neonwebhook($email), addOrgAdmin($user_id, $org_id_matching_neon)");
 
-                        } elseif ($org = $this->getOrg(null, $org_name)) { // unlikely?
-                            $this->insertOrgIDMatchingNeon($org->getId(), $org_id_neon);
+                        } elseif ($org_id_matching_neon = $this->getOrgIDUsingName($org_name)) { // unlikely?
+                            $this->insertOrgIDMatchingNeon($org_id_matching_neon, $org_id_neon);
 
-                            $this->addOrgAdmin($user_id, $org->getId());
-                            error_log("process_neonwebhook($email), addOrgAdmin($user_id, " . $org->getId() . "), $org_name existing");
+                            $this->addOrgAdmin($user_id, $org_id_matching_neon);
+                            error_log("process_neonwebhook($email), addOrgAdmin($user_id, $org_id_matching_neon), $org_name existing");
 
                         } elseif (!empty($org_name)) {
-                            $org = new Common\Protobufs\Models\Organisation();
-                            $org->setName($org_name);
-                            $org->setEmail($email);
-
-                            $org = $this->insertAndUpdate($org);
+                            $org_id_matching_neon = $this->insertOrg($org_name, $email);
                             error_log("process_neonwebhook($email), created Org: $org_name");
-                            if (!empty($org) && $org->getId() > 0) {
-                                $this->insertOrgIDMatchingNeon($org->getId(), $org_id_neon);
+                            if (!empty($org_id_matching_neon)) {
+                                $this->insertOrgIDMatchingNeon($org_id_matching_neon, $org_id_neon);
 
-                                $this->addOrgAdmin($user_id, $org->getId());
-                                error_log("process_neonwebhook($email), addOrgAdmin($user_id, " . $org->getId() . ')');
+                                $this->addOrgAdmin($user_id, $org_id_matching_neon);
+                                error_log("process_neonwebhook($email), addOrgAdmin($user_id, $org_id_matching_neon)");
                             }
                         }
                     }
@@ -1050,6 +1046,26 @@ $from_neon_to_trommons_pair = array(
         $args = LibAPI\PDOWrapper::cleanseNull($user_id) . ',' . LibAPI\PDOWrapper::cleanseNull($org_id);
         LibAPI\PDOWrapper::call('acceptMemRequest', $args);
         LibAPI\PDOWrapper::call('addAdmin', $args);
+    }
+
+    public function getOrgIDUsingName($org_name)
+    {
+        $org_id = 0;
+        $result = LibAPI\PDOWrapper::call('getOrg', 'null,' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($org_name) . ',null,null,null,null,null,null,null');
+        if (!empty($result)) {
+            $org_id = $result[0]['org_id'];
+        }
+        return $org_id;
+    }
+
+    public static function insertOrg($org_name, $email)
+    {
+        $org_id = 0;
+        $result = LibAPI\PDOWrapper::call('organisationInsertAndUpdate', 'null,null,' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($org_name) . ',null,' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ',null,null,null,null');
+        if (!empty($result)) {
+            $org_id = $result[0]['org_id'];
+        }
+        return $org_id;
     }
 
     public function finishRegistration($uuid)
