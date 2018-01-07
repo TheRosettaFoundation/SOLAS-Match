@@ -1045,6 +1045,13 @@ $from_neon_to_trommons_pair = array(
         LibAPI\PDOWrapper::call('insertOrgIDMatchingNeon', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($org_id_neon));
     }
 
+    public function addOrgAdmin($user_id, $org_id)
+    {
+        $args = LibAPI\PDOWrapper::cleanseNull($user_id) . ',' . LibAPI\PDOWrapper::cleanseNull($org_id);
+        LibAPI\PDOWrapper::call('acceptMemRequest', $args);
+        LibAPI\PDOWrapper::call('addAdmin', $args);
+    }
+
     public function finishRegistration($uuid)
     {
         $request = "{$this->siteApi}v0/users/$uuid/finishRegistration";
