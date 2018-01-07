@@ -103,6 +103,11 @@ class UserRouteHandler
             '/no_application_error/',
             array($this, 'no_application_error')
         )->name('no_application_error');
+
+        $app->get(
+            '/neonwebhook/',
+            array($this, 'neonwebhook')
+        )->via('POST')->name('neonwebhook');
     }
     
     public function home($currentScrollPage = 1, $selectedTaskType = 0, $selectedSourceLanguageCode = 0, $selectedTargetLanguageCode = 0)
@@ -1423,6 +1428,12 @@ EOD;
     {
         $app = \Slim\Slim::getInstance();
         $app->render('user/no_application_error.tpl');
+    }
+
+    public function neonwebhook()
+    {
+        $userDao = new DAO\UserDao();
+        $userDao->process_neonwebhook();
     }
 }
 
