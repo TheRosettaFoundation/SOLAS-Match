@@ -845,6 +845,7 @@ $from_neon_to_trommons_pair = array(
 'Ndebele' => array('nr', 'ZA'),
 'Nepali' => array('ne', 'NP'),
 'Norwegian Bokmål' => array('no', 'NO'),
+"Norwegian Bokm\xE5l" => array('no', 'NO'),
 'Norwegian Nynorsk' => array('nn', 'NO'),
 'Nyanja' => array('ny', '--'),
 'Occitan' => array('oc', 'FR'),
