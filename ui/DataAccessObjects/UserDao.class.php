@@ -706,7 +706,12 @@ class UserDao extends BaseDao
 
     public function verifyUserByEmail($email)
     {
-        return(LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ',null,null,null,null,null,null'));
+        $user = null;
+        $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ',null,null,null,null,null,null');
+        if (!empty($result)) {
+            $user = Common\Lib\ModelFactory::buildModel('User', $result[0]);
+        }
+        return $user
     }
 
     public function process_neonwebhook()
@@ -855,7 +860,6 @@ $from_neon_to_trommons_pair = array(
         $org_name     = '';
         $quality_level= 1;
 
-error_log(print_r($_POST, true));
         if (!empty($_POST['payload'])) {
             $result = json_decode($_POST['payload'], true);
 
