@@ -714,6 +714,55 @@ class UserDao extends BaseDao
         return $user;
     }
 
+    public function saveUser($user)
+    {
+        $userId = $user->getId();
+        $nativeLanguageCode = null;
+        $nativeCountryCode = null;
+        if (!is_null($userId) && !is_null($user->getNativeLocale())) {
+            $nativeLocale = $user->getNativeLocale();
+            $nativeLanguageCode = $nativeLocale->getLanguageCode();
+            $nativeCountryCode = $nativeLocale->getCountryCode();
+        }
+
+        $args = LibAPI\PDOWrapper::cleanseNullOrWrapStr($user->getEmail()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($user->getNonce()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($user->getPassword()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($user->getBiography()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($user->getDisplayName()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($nativeLanguageCode) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($nativeCountryCode) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($userId);
+        LibAPI\PDOWrapper::call('userInsertAndUpdate', $args);
+    }
+
+    public function getUserPersonalInformation($user_id)
+    {
+        userPersonalInfo = null;
+        $result = LibAPI\PDOWrapper::call('getUserPersonalInfo', 'null,' . LibAPI\PDOWrapper::cleanseNull($user_id) . ',null,null,null,null,null,null,null,null,null,null');
+        if (!empty($result)) {
+            userPersonalInfo = Common\Lib\ModelFactory::buildModel('UserPersonalInformation', $result[0]);
+        }
+        return userPersonalInfo;
+    }
+
+    public function saveUserPersonalInformation($userInfo)
+    {
+        $args = LibAPI\PDOWrapper::cleanseNull($userInfo->getId()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($userInfo->getUserId()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($userInfo->getFirstName()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($userInfo->getLastName()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($userInfo->getMobileNumber()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($userInfo->getBusinessNumber()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($userInfo->getLanguagePreference()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($userInfo->getJobTitle()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($userInfo->getAddress()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($userInfo->getCity()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($userInfo->getCountry()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($userInfo->getReceiveCredit() ? 1 : 0);
+        LibAPI\PDOWrapper::call('userPersonalInfoInsertAndUpdate', $args);
+    }
+
     public function process_neonwebhook()
     {
 $NEON_NATIVELANGFIELD = 64;
@@ -924,12 +973,12 @@ $from_neon_to_trommons_pair = array(
                         if (!empty($email) && $user = $this->verifyUserByEmail($email)) {
                             $user_id = $user->getId();
 
-                            $userInfo = $this->getPersonalInfo($user_id);
+                            $userInfo = $this->getUserPersonalInformation($user_id);
 
                             if (!empty($first_name)) $userInfo->setFirstName($first_name);
                             if (!empty($last_name))  $userInfo->setLastName($last_name);
 
-                            $this->savePersonalInfo($userInfo);
+                            $this->saveUserPersonalInformation($userInfo);
 
                             if (!empty($display_name)) $user->setDisplayName($display_name);
 
@@ -940,7 +989,7 @@ $from_neon_to_trommons_pair = array(
                                 $user->setNativeLocale($locale);
                             }
 
-                            DAO\UserDao::save($user);
+                            $this->saveUser($user);
 
                             if (!empty($from_neon_to_trommons_pair[$sourcelang1]) && !empty($from_neon_to_trommons_pair[$targetlang1])) {
                                 $this->createUserQualifiedPair($user_id, $from_neon_to_trommons_pair[$sourcelang1][0], $from_neon_to_trommons_pair[$sourcelang1][1], $from_neon_to_trommons_pair[$targetlang1][0], $from_neon_to_trommons_pair[$targetlang1][1], $quality_level);
