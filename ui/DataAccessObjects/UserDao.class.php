@@ -711,7 +711,7 @@ class UserDao extends BaseDao
         if (!empty($result)) {
             $user = Common\Lib\ModelFactory::buildModel('User', $result[0]);
         }
-        return $user
+        return $user;
     }
 
     public function process_neonwebhook()
