@@ -855,6 +855,7 @@ $from_neon_to_trommons_pair = array(
         $org_name     = '';
         $quality_level= 1;
 
+error_log(print_r($_POST, true));
         if (!empty($_POST['payload'])) {
             $result = json_decode($_POST['payload'], true);
 
