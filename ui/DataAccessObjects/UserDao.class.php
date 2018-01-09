@@ -1060,7 +1060,10 @@ $from_neon_to_trommons_pair = array(
 
                     error_log("Neon Account update... first_name: $first_name, last_name: $last_name, display_name: $display_name, org_name: $org_name");
 
-                    if (!empty($org_name) && !empty($org_id_neon) && $org_id_neon != 3783) { // Translators without Borders (TWb)
+$org_id_matching_neon = $this->getOrgIDUsingName($org_name);
+error_log("org_id_matching_neon, $org_id_matching_neon");
+if (!empty($org_name) && !empty($org_id_neon)) {
+//REDO                    if (!empty($org_name) && !empty($org_id_neon) && $org_id_neon != 3783) { // Translators without Borders (TWb)
                         if ($org_id_matching_neon = $this->getOrgIDMatchingNeon($org_id_neon)) {
                             $this->addOrgAdmin($user_id, $org_id_matching_neon);
                             error_log("process_neonwebhook($email), addOrgAdmin($user_id, $org_id_matching_neon)");
