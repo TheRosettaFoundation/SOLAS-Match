@@ -995,7 +995,7 @@ $from_neon_to_trommons_pair = array(
             }
         }
 
-        error_log("Neon Account update... email: $email, account_id: $account_id, nativelang: $nativelang, org_id_neon: $org_id_neon");
+        error_log("Neon Account update... email: $email, account_id: $account_id, user_id: $user_id, nativelang: $nativelang, org_id_neon: $org_id_neon");
         error_log("sourcelang1: $sourcelang1, sourcelang2: $sourcelang2, targetlang1: $targetlang1, targetlang2: $targetlang2, quality_level: $quality_level");
 
         if (!empty($account_id) && !empty($user_id)) {
