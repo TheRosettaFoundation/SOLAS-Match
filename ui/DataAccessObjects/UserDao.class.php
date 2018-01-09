@@ -738,12 +738,12 @@ class UserDao extends BaseDao
 
     public function getUserPersonalInformation($user_id)
     {
-        userPersonalInfo = null;
+        $userPersonalInfo = null;
         $result = LibAPI\PDOWrapper::call('getUserPersonalInfo', 'null,' . LibAPI\PDOWrapper::cleanseNull($user_id) . ',null,null,null,null,null,null,null,null,null,null');
         if (!empty($result)) {
-            userPersonalInfo = Common\Lib\ModelFactory::buildModel('UserPersonalInformation', $result[0]);
+            $userPersonalInfo = Common\Lib\ModelFactory::buildModel('UserPersonalInformation', $result[0]);
         }
-        return userPersonalInfo;
+        return $userPersonalInfo;
     }
 
     public function saveUserPersonalInformation($userInfo)
