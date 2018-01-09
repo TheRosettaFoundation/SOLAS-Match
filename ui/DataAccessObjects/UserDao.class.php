@@ -1097,7 +1097,7 @@ if (!empty($org_name) && !empty($org_id_neon)) {
         $org_id = 0;
         $result = LibAPI\PDOWrapper::call('getOrgIDMatchingNeon', LibAPI\PDOWrapper::cleanse($org_id_neon));
         if (!empty($result)) {
-            $org_id = $result[0]['org_id'];
+            $org_id = $result[0]['id'];
         }
         return $org_id;
     }
@@ -1119,7 +1119,7 @@ if (!empty($org_name) && !empty($org_id_neon)) {
         $org_id = 0;
         $result = LibAPI\PDOWrapper::call('getOrg', 'null,' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($org_name) . ',null,null,null,null,null,null,null');
         if (!empty($result)) {
-            $org_id = $result[0]['org_id'];
+            $org_id = $result[0]['id'];
         }
         return $org_id;
     }
@@ -1129,7 +1129,7 @@ if (!empty($org_name) && !empty($org_id_neon)) {
         $org_id = 0;
         $result = LibAPI\PDOWrapper::call('organisationInsertAndUpdate', 'null,null,' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($org_name) . ',null,' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ',null,null,null,null');
         if (!empty($result)) {
-            $org_id = $result[0]['org_id'];
+            $org_id = $result[0]['id'];
         }
         return $org_id;
     }
