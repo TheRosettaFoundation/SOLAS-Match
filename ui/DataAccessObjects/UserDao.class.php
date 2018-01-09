@@ -1097,7 +1097,7 @@ if (!empty($org_name) && !empty($org_id_neon)) {
         $org_id = 0;
         $result = LibAPI\PDOWrapper::call('getOrgIDMatchingNeon', LibAPI\PDOWrapper::cleanse($org_id_neon));
         if (!empty($result)) {
-            $org_id = $result[0]['id'];
+            $org_id = $result[0]['org_id'];
         }
         return $org_id;
     }
