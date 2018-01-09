@@ -945,10 +945,11 @@ $from_neon_to_trommons_pair = array(
                         if (!empty($account['primaryContact'])) {
                             $contact = $account['primaryContact'];
 
-                            if (!empty($contact['firstName']))     $first_name =   $contact['firstName'];
-                            if (!empty($contact['lastName']))      $last_name =    $contact['lastName'];
-                            if (!empty($contact['preferredName'])) $display_name = $contact['preferredName'];
-                            if (!empty($contact['email1']))        $email =        $contact['email1'];
+                            // These are in 8859-1 NOT UTF-8...
+                            //if (!empty($contact['firstName']))     $first_name =   $contact['firstName'];
+                            //if (!empty($contact['lastName']))      $last_name =    $contact['lastName'];
+                            //if (!empty($contact['preferredName'])) $display_name = $contact['preferredName'];
+                            if (!empty($contact['email1'])) $email = $contact['email1'];
                         }
 
                         if (!empty($account['customFieldDataList'])) {
@@ -974,24 +975,6 @@ $from_neon_to_trommons_pair = array(
                         if (!empty($email) && $user = $this->verifyUserByEmail($email)) {
                             $user_id = $user->getId();
 
-                            $userInfo = $this->getUserPersonalInformation($user_id);
-
-                            if (!empty($first_name)) $userInfo->setFirstName($first_name);
-                            if (!empty($last_name))  $userInfo->setLastName($last_name);
-
-                            $this->saveUserPersonalInformation($userInfo);
-
-                            if (!empty($display_name)) $user->setDisplayName($display_name);
-
-                            if (!empty($from_neon_to_trommons_pair[$nativelang])) {
-                                $locale = new Common\Protobufs\Models\Locale();
-                                $locale->setLanguageCode($from_neon_to_trommons_pair[$nativelang][0]);
-                                $locale->setCountryCode($from_neon_to_trommons_pair[$nativelang][1]);
-                                $user->setNativeLocale($locale);
-                            }
-
-                            $this->saveUser($user);
-
                             if (!empty($from_neon_to_trommons_pair[$sourcelang1]) && !empty($from_neon_to_trommons_pair[$targetlang1])) {
                                 $this->createUserQualifiedPair($user_id, $from_neon_to_trommons_pair[$sourcelang1][0], $from_neon_to_trommons_pair[$sourcelang1][1], $from_neon_to_trommons_pair[$targetlang1][0], $from_neon_to_trommons_pair[$targetlang1][1], $quality_level);
                             }
@@ -1012,10 +995,10 @@ $from_neon_to_trommons_pair = array(
             }
         }
 
-        error_log("Neon Account update... email: $email, account_id: $account_id, first_name: $first_name, last_name: $last_name, display_name: $display_name, nativelang: $nativelang, org_id_neon: $org_id_neon");
+        error_log("Neon Account update... email: $email, account_id: $account_id, nativelang: $nativelang, org_id_neon: $org_id_neon");
         error_log("sourcelang1: $sourcelang1, sourcelang2: $sourcelang2, targetlang1: $targetlang1, targetlang2: $targetlang2, quality_level: $quality_level");
 
-        if (!empty($account_id)) {
+        if (!empty($account_id) && !empty($user_id)) {
             $account_id_wanted = $account_id;
 
             $neon = new \Neon();
@@ -1032,6 +1015,9 @@ $from_neon_to_trommons_pair = array(
                     'columns' => array(
                         'standardFields' => array(
                             'Account ID',
+                            'First Name',
+                            'Last Name',
+                            'Preferred Name',
                             'Company Name',
                             'Company ID'),
                     )
@@ -1047,12 +1033,34 @@ $from_neon_to_trommons_pair = array(
                     error_log("No result found from NeonCRM (webhook), account_id: $account_id_wanted");
                 } else {
                     $r = current($result['searchResults']);
+                    $first_name   = (empty($r['First Name']))     ? '' : $r['First Name'];
+                    $last_name    = (empty($r['Last Name']))      ? '' : $r['Last Name'];
+                    $display_name = (empty($r['Preferred Name'])) ? '' : $r['Preferred Name'];
+
+                    $userInfo = $this->getUserPersonalInformation($user_id);
+
+                    if (!empty($first_name)) $userInfo->setFirstName($first_name);
+                    if (!empty($last_name))  $userInfo->setLastName($last_name);
+
+                    $this->saveUserPersonalInformation($userInfo);
+
+                    if (!empty($display_name)) $user->setDisplayName($display_name);
+
+                    if (!empty($from_neon_to_trommons_pair[$nativelang])) {
+                        $locale = new Common\Protobufs\Models\Locale();
+                        $locale->setLanguageCode($from_neon_to_trommons_pair[$nativelang][0]);
+                        $locale->setCountryCode($from_neon_to_trommons_pair[$nativelang][1]);
+                        $user->setNativeLocale($locale);
+                    }
+
+                    $this->saveUser($user);
+
                     $org_name = (empty($r['Company Name'])) ? '' : $r['Company Name'];
                     $org_name = trim(str_replace(array('"', '<', '>'), '', $org_name)); // Only Trommons value with limitations (not filtered on output)
 
-                    if (!empty($org_name) && !empty($org_id_neon) && $org_id_neon != 3783 && !empty($user_id)) { // Translators without Borders (TWb)
-                        error_log("org_name: $org_name");
+                    error_log("Neon Account update... first_name: $first_name, last_name: $last_name, display_name: $display_name, org_name: $org_name");
 
+                    if (!empty($org_name) && !empty($org_id_neon) && $org_id_neon != 3783) { // Translators without Borders (TWb)
                         if ($org_id_matching_neon = $this->getOrgIDMatchingNeon($org_id_neon)) {
                             $this->addOrgAdmin($user_id, $org_id_matching_neon);
                             error_log("process_neonwebhook($email), addOrgAdmin($user_id, $org_id_matching_neon)");
