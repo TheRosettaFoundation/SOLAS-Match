@@ -890,6 +890,7 @@ class TaskRouteHandler
             'siteLocation' => $siteLocation,
             'taskTypeTexts' => $taskTypeTexts,
             'projectAndOrgs' => $projectAndOrgs,
+            'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
             'taskStatusTexts' => $taskStatusTexts
         ));
 
@@ -1203,6 +1204,7 @@ class TaskRouteHandler
             "taskTypeColours"   => $taskTypeColours,
             'matecat_url' => $matecat_url,
             'matecat_download_url' => $matecat_download_url,
+            'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
             "file_previously_uploaded" => $file_previously_uploaded
         ));
 
@@ -1648,6 +1650,7 @@ class TaskRouteHandler
                 "isMember" => $isOrgMember,
                 "isSiteAdmin" => $isSiteAdmin,
                 'alsoViewedTasksCount' => $alsoViewedTasksCount,
+                'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
                 "userSubscribedToOrganisation" => $userSubscribedToOrganisation
         ));
 
