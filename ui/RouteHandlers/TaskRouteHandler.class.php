@@ -292,6 +292,7 @@ class TaskRouteHandler
         $created_timestamps = array();
         $deadline_timestamps = array();
         $projectAndOrgs = array();
+        $discourse_slug = array();
         $proofreadTaskIds = array();
 
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
@@ -332,6 +333,8 @@ class TaskRouteHandler
                     htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
                 );
 
+                $discourse_slug[$taskId] = $projectDao->discourse_parameterize($projectName);
+
                 if ($topTask->getTaskType() == 2) { // If current task is a translation task
                     try {
                         $proofreadTask = $taskDao->getProofreadTask($taskId);
@@ -370,6 +373,7 @@ class TaskRouteHandler
             'created_timestamps' => $created_timestamps,
             'deadline_timestamps' => $deadline_timestamps,
             'projectAndOrgs' => $projectAndOrgs,
+            'discourse_slug' => $discourse_slug,
             'proofreadTaskIds' => $proofreadTaskIds,
             'currentScrollPage' => $currentScrollPage,
             'itemsPerScrollPage' => $itemsPerScrollPage,
