@@ -120,12 +120,10 @@
             </tr>
             <tr>
                 <td>
-                    <strong>{Localisation::getTranslation('common_forum')}</strong><hr/>
+                    <strong>{Localisation::getTranslation('common_forum')}:</strong><hr/>
                 </td>
                 <td></td>
-                <td>
-                    <hr/>
-                </td>
+                <td></td>
             </tr>
             <tr valign="top">
                 <td>
