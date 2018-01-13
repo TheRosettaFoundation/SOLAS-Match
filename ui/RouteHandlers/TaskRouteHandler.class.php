@@ -656,7 +656,10 @@ class TaskRouteHandler
         $app->view()->setData("task", $task);
 
         $matecat_url = '';
-        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) {
+        $translate = 'translate';
+        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
+            if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
+
             $matecat_tasks = $taskDao->getMatecatLanguagePairs($task_id);
             if (!empty($matecat_tasks)) {
                 $matecat_langpair = $matecat_tasks[0]['matecat_langpair'];
@@ -664,7 +667,7 @@ class TaskRouteHandler
                 $matecat_id_job_password = $matecat_tasks[0]['matecat_id_job_password'];
                 //$matecat_id_file = $matecat_tasks[0]['matecat_id_file'];
                 if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
-                    $matecat_url = 'https://kato.translatorswb.org/translate/proj-' . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                    $matecat_url = "https://kato.translatorswb.org/$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
                 }
             }
         }
