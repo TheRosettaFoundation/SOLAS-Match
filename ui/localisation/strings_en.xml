@@ -1013,7 +1013,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="password_reset_4">The passwords entered do not match. Please try again.</string>
     <string name="password_reset_5">Please check the password provided and try again.</string>
 
-    <string name="register_register_on">If you have previously submitted your email and other details using the <a href="https://translatorswithoutborders.org/volunteer/translators/">Translators Application Form (click here)</a>,<br />you can Register with that email and a new password to create an account here and login.<br />Or alternatively you can use that email with Google or other account providers to create an account here and login.</string>
+    <string name="register_register_on">You can only create your Trommons account after filling in the <a href="https://translatorswithoutborders.org/volunteer/translators/">TWB Translators Application Form</a>, or after being announced to TWB as the contact for a partner organisation.<br />If you have already completed that step, register here with the email address that was provided to TWB and choose a password.<br />Or alternatively, create your Trommons account using one of the third-party account providers below, if your email address with that provider is the same.</string>
 	<string name="register_your_email">Your email</string>
 	<string name="register_your_password">Your password</string>
     <string name="register_1">The email address you entered was not valid. Please try again.</string>
