@@ -1144,7 +1144,7 @@ class TaskRouteHandler
 
         $matecat_url = '';
         $matecat_download_url = '';
-        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) {
+        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
             $matecat_tasks = $taskDao->getMatecatLanguagePairs($taskId);
             if (!empty($matecat_tasks)) {
                 $matecat_langpair = $matecat_tasks[0]['matecat_langpair'];
@@ -1183,7 +1183,9 @@ class TaskRouteHandler
 
                         if (!empty($response_data['stats']['DOWNLOAD_STATUS'])) {
                             if ($response_data['stats']['DOWNLOAD_STATUS'] === 'translated' || $response_data['stats']['DOWNLOAD_STATUS'] === 'approved') {
-                                $matecat_url = 'https://kato.translatorswb.org/translate/proj-' . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                                $translate = 'translate';
+                                if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
+                                $matecat_url = "https://kato.translatorswb.org/$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
                                 $matecat_download_url = "https://kato.translatorswb.org/?action=downloadFile&id_job=$matecat_id_job&id_file=$matecat_id_file&password=$matecat_id_job_password&download_type=all";
                             }
                         } else {
