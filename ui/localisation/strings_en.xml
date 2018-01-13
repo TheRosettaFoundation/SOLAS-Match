@@ -871,6 +871,9 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="task_simple_upload_copy_from_kato">Copy your translation from Kató to Trommons</string>
     <string name="task_simple_upload_view_on_kato">Click <a href="%s" target="_blank">here</a> to <strong>view your translation on Kató</strong>.</string>
     <string name="task_simple_upload_download_from_kato">Click <a href="%s">here</a> to <strong>download your translation from Kató and upload it to Trommons manually</strong>.</string>
+    <string name="task_simple_upload_copy_from_kato_proofread">Copy your proofread version from Kató to Trommons</string>
+    <string name="task_simple_upload_view_on_kato_proofread">Click <a href="%s" target="_blank">here</a> to <strong>view your proofread version on Kató</strong>.</string>
+    <string name="task_simple_upload_download_from_kato_proofread">Click <a href="%s">here</a> to <strong>download your proofread version from Kató and upload it to Trommons manually</strong>.</string>
 
     <string name="task_create_for_project">For Project <strong>%s</strong>.</string>
 	<string name="task_create_0">Provide a meaningful title for the task.</string>

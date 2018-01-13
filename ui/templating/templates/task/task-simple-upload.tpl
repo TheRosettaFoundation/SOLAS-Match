@@ -68,11 +68,19 @@
         <form class="well" method="post" action="{urlFor name="task-simple-upload" options="task_id.$task_id"}" enctype="application/x-www-form-urlencoded">
             <input type="hidden" name="task_id" value="{$task->getId()}" />
             <input type="hidden" name="copy_from_matecat" value="1" />
+            {if $type_id == TaskTypeEnum::TRANSLATION}
             {Localisation::getTranslation('task_claimed_alternative_option')} <button type="submit" value="submit" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> {Localisation::getTranslation('task_simple_upload_copy_from_kato')}</button>
             <p>
                 {sprintf(Localisation::getTranslation('task_simple_upload_view_on_kato'), {$matecat_url})}<br />
                 {sprintf(Localisation::getTranslation('task_simple_upload_download_from_kato'), {$matecat_download_url})}
             </p>
+            {elseif $type_id == TaskTypeEnum::PROOFREADING}
+            {Localisation::getTranslation('task_claimed_alternative_option')} <button type="submit" value="submit" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> {Localisation::getTranslation('task_simple_upload_copy_from_kato_proofread')}</button>
+            <p>
+                {sprintf(Localisation::getTranslation('task_simple_upload_view_on_kato_proofread'), {$matecat_url})}<br />
+                {sprintf(Localisation::getTranslation('task_simple_upload_download_from_kato_proofread'), {$matecat_download_url})}
+            </p>
+            {/if}
             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
         </form>
         {/if}

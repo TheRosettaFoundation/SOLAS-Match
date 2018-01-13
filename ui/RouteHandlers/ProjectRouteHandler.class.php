@@ -817,6 +817,9 @@ class ProjectRouteHandler
                                 $matecat_translation_task_ids         = array();
                                 $matecat_translation_target_languages = array();
                                 $matecat_translation_target_countrys  = array();
+                                $matecat_proofreading_task_ids        = array();
+                                $matecat_proofreading_target_languages= array();
+                                $matecat_proofreading_target_countrys = array();
                                 while (!empty($post["target_language_$targetCount"]) && !empty($post["target_country_$targetCount"])) {
 
                                     if (!empty($post["segmentation_$targetCount"])) {
@@ -878,6 +881,9 @@ class ProjectRouteHandler
                                                     $creatingTasksSuccess = false;
                                                     break;
                                                 }
+                                                $matecat_proofreading_task_ids[]         = $id;
+                                                $matecat_proofreading_target_languages[] = $post["target_language_$targetCount"];
+                                                $matecat_proofreading_target_countrys[]  = $post["target_country_$targetCount"];
                                             }
                                         } elseif (empty($post["translation_$targetCount"]) && !empty($post["proofreading_$targetCount"])) {
                                             // Only a proofreading task to be created
@@ -897,6 +903,9 @@ class ProjectRouteHandler
                                                 $creatingTasksSuccess = false;
                                                 break;
                                             }
+                                            $matecat_proofreading_task_ids[]         = $id;
+                                            $matecat_proofreading_target_languages[] = $post["target_language_$targetCount"];
+                                            $matecat_proofreading_target_countrys[]  = $post["target_country_$targetCount"];
                                         }
                                     }
                                     $targetCount++;
@@ -943,6 +952,16 @@ class ProjectRouteHandler
                                                 if (!empty($target_language) && ($target_language != $source_language) && !in_array($target_language, $target_list)) {
                                                     $target_list[] = $target_language;
                                                     $taskDao->insertMatecatLanguagePairs($matecat_translation_task_id, $project->getId(), Common\Enums\TaskTypeEnum::TRANSLATION, "$source_language|$target_language");
+                                                }
+                                            }
+                                        }
+                                        if (!empty($source_language) && !empty($matecat_proofreading_task_ids)) {
+                                            $target_list = array();
+                                            foreach ($matecat_proofreading_task_ids as $i => $matecat_proofreading_task_id) {
+                                                $target_language = $this->valid_language_for_matecat($matecat_proofreading_target_languages[$i] . '-' . $matecat_proofreading_target_countrys[$i]);
+                                                if (!empty($target_language) && ($target_language != $source_language) && !in_array($target_language, $target_list)) {
+                                                    $target_list[] = $target_language;
+                                                    $taskDao->insertMatecatLanguagePairs($matecat_proofreading_task_id, $project->getId(), Common\Enums\TaskTypeEnum::PROOFREADING, "$source_language|$target_language");
                                                 }
                                             }
                                         }
@@ -1507,6 +1526,7 @@ class ProjectRouteHandler
                                             // Set matecat_id_job, matecat_id_job_password, matecat_id_file
                                             // Note: SQL will not update if we were forced to use fake language pairs for word count purposes as they will not match
                                             $taskDao->updateMatecatLanguagePairs($project_id, Common\Enums\TaskTypeEnum::TRANSLATION, $langpair, $matecat_id_job, $matecat_id_job_password, $matecat_id_file);
+                                            $taskDao->updateMatecatLanguagePairs($project_id, Common\Enums\TaskTypeEnum::PROOFREADING, $langpair, $matecat_id_job, $matecat_id_job_password, $matecat_id_file);
                                         } else {
                                             error_log("project_cron /status ($project_id) matecat_id_job($matecat_id_job), matecat_id_job_password($matecat_id_job_password) or matecat_id_file($matecat_id_file) empty!");
                                         }
