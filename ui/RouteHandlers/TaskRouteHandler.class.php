@@ -1187,6 +1187,10 @@ class TaskRouteHandler
                                 if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
                                 $matecat_url = "https://kato.translatorswb.org/$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
                                 $matecat_download_url = "https://kato.translatorswb.org/?action=downloadFile&id_job=$matecat_id_job&id_file=$matecat_id_file&password=$matecat_id_job_password&download_type=all";
+
+                                if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $response_data['stats']['DOWNLOAD_STATUS'] === 'translated') {
+                                    $matecat_url = ''; // Disable Kató access for Proofreading if job file is only translated
+                                }
                             }
                         } else {
                             error_log("https://kato.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats ($taskId) DOWNLOAD_STATUS empty!");
