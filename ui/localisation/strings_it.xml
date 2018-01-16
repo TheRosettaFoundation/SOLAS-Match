@@ -1015,7 +1015,7 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@therosettafoun
     <string name="password_reset_4">Le password inserite non combaciano. Si prega di riprovare.</string>
     <string name="password_reset_5">Per favore, controlla la password inserita e prova di nuovo.</string>
 
-    <string name="register_register_on">Sarà possible creare un accunt su Trommons dopo aver compilato il <a href="https://translatorswithoutborders.org/volunteer/translators/">Modulo di iscrizione di TWB per traduttori</a><br />o dopo essersi presentato a TWB come il contatto di un’organizzazione associata<br />Se già hai completato questo passo, registrati qui con l’indirizzo email fornito a TWB e una password a tua scelta.<br />O, se preferisci, puoi creare il tuo account su Trommons usando uno dei provider indicati sotto,<br />se l’indirizzo email usato con quel provider è lo stesso.</string>
+    <string name="register_register_on">Sarà possible creare un accunt su Trommons dopo aver compilato il <a href="https://translatorswithoutborders.org/volunteer/translators/">Modulo di iscrizione di TWB per traduttori</a><br />o dopo essersi presentato a TWB come il contatto di un’organizzazione associata.<br />Se già hai completato questo passo, registrati qui con l’indirizzo email fornito a TWB e una password a tua scelta.<br />O, se preferisci, puoi creare il tuo account su Trommons usando uno dei provider indicati sotto,<br />se l’indirizzo email usato con quel provider è lo stesso.</string>
 	<string name="register_your_email">La tua email</string>
 	<string name="register_your_password">La tua password</string>
     <string name="register_1">L'indirizzo email inserito non è valido. Si prega di riprovare.</string>

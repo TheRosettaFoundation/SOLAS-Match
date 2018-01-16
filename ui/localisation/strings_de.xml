@@ -111,7 +111,7 @@
 	<string name="common_no_comment_has_been_listed">Es ist kein Kommentar verzeichnet.</string>
 	<string name="common_no_description_has_been_listed">Es ist keine Beschreibung verzeichnet.</string>
     <string name="common_no_impact_has_been_listed">Es ist keine Relevanz verzeichnet.</string>
-    <string name="register_signin_or_create_new_account">Erstelle ein neues Benutzerkonto, oder melde dich durch Klicken auf den Anbieter eines Benutzerkontos an:</string>
+    <string name="register_signin_or_create_new_account">Erstelle ein neues Benutzerkonto und melde dich an, indem du auf den Anbieter eines Benutzerkontos klickst:</string>
     <string name="common_signin_or_create_new_account">Oder melde dich durch Klicken auf den Anbieter eines Benutzerkontos an:</string>
 	<string name="common_please_click_your_account_provider">Wähle den Anbieter des Benutzerkontos:</string>
 	<string name="common_openid_is_service_that_allows_you_to_logon_to_many_different_websites_using_a_single_indentity">OpenID ist ein Dienst, der es Dir ermöglicht, Dich mit einer einzigen Identität auf vielen verschiedenen Webseiten anzumelden.</string>
