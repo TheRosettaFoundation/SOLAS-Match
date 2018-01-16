@@ -113,8 +113,8 @@
 	<string name="common_no_comment_has_been_listed">No se han especificado comentarios.</string>
 	<string name="common_no_description_has_been_listed">No se ha especificado una descripción.</string>
     <string name="common_no_impact_has_been_listed">No se ha especificado una repercusión.</string>
-<string name="register_signin_or_create_new_account"></string>
-<string name="common_signin_or_create_new_account">Inicia sesión o crea una cuenta</string>
+    <string name="register_signin_or_create_new_account">Cree una cuenta nueva y, para registrarse, seleccione su proveedor de cuenta:</string>
+    <string name="common_signin_or_create_new_account">O regístrese al hacer clic en su proveedor de cuenta:</string>
 	<string name="common_please_click_your_account_provider">Por favor, selecciona tu proveedor:</string>
 	<string name="common_openid_is_service_that_allows_you_to_logon_to_many_different_websites_using_a_single_indentity">OpenID es un servicio que te permite acceder a distintos sitios web con una única identificación.</string>
 	<string name="common_display_name">Nombre de usuario</string>
@@ -867,14 +867,14 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
 
     <string name="task_claimed_alternative_option">Opción alternativa:</string>
     <string name="task_claimed_translate_using_kato">Traducir utilzando Kató</string>
-<string name="task_claimed_proofread_using_kato"></string>
+    <string name="task_claimed_proofread_using_kato">Revisar el texto con la ayuda de Kató</string>
     <string name="task_claimed_please_read_kato">Kató es una plataforma de traducción de Translators without Borders (TWB). Por favor, lee <a href="https://kato.translatorswb.org/public/doc/translators.html" target="_blank">la siguiente guía</a> antes de usar Kató.</string>
     <string name="task_simple_upload_copy_from_kato">Copia tu traducción de Kató a Trommons</string>
     <string name="task_simple_upload_view_on_kato">Pulsa <a href="%s" target="_blank">aquí</a> para <strong>ver tu traducción en Kató</strong>.</string>
     <string name="task_simple_upload_download_from_kato">Pulsa <a href="%s">aquí</a> para <strong>descargar tu traducción de Kató y cargarla en Trommons manualmente</strong>.</string>
-<string name="task_simple_upload_copy_from_kato_proofread"></string>
-<string name="task_simple_upload_view_on_kato_proofread"></string>
-<string name="task_simple_upload_download_from_kato_proofread"></string>
+    <string name="task_simple_upload_copy_from_kato_proofread">Copie la versión ya revisada de Kató a Trommons</string>
+    <string name="task_simple_upload_view_on_kato_proofread">Haga clic <a href="%s" target="_blank">aquí</a> para<strong> ver la version revisada en Kató</strong>.</string>
+    <string name="task_simple_upload_download_from_kato_proofread">Haga clic <a href="%s">aquí</a> para<strong> descargar la version revisada de Kató y subirla a Trommons de forma manual</strong>.</string>
 
     <string name="task_create_for_project">Para el proyecto <strong>%s</strong>.</string>
 	<string name="task_create_0">Especifica un título relevante para la tarea.</string>
@@ -1018,15 +1018,15 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
     <string name="password_reset_4">Las contraseñas no coinciden. Inténtalo de nuevo.</string>
     <string name="password_reset_5">Comprueba la contraseña proporcionada e inténtalo de nuevo.</string>
 
-<string name="register_register_on"></string>
+    <string name="register_register_on">Solo podrá crear su cuenta en Trommons después de rellenar el <a href="https://translatorswithoutborders.org/volunteer/translators/"> TWB Formulario de Inscripción para Traductores</a><br />o bien, después de haber sido anunciado a TWB como el contacto de una organización asociada <br />Si ya ha realizado este paso, regístrese aquí  con la dirección de correo electrónico que suministró a TWB y seleccione una contraseña.<br />O, si lo prefiere, puede crear su cuenta en Trommons al usar uno de los proveedores de cuentas indicadas a continuación siempre que su cuenta de correo electrónico con ese proveedor sea la misma.</string>
 	<string name="register_your_email">Dirección de e-mail</string>
 	<string name="register_your_password">Contraseña</string>
     <string name="register_1">La dirección de e-mail que has especificado no es válida. Introduce la dirección correcta.</string>
     <string name="register_2">No introducida ninguna contraseña. Introduce la contraseña e inténtalo de nuevo.</string>
     <string name="register_3">Ya eres un usuario verificado. Por favor, <a href="%s">introduce tu usuario y contraseña</a>.</string>
     <string name="register_4">Te hemos enviado un e-mail de verificación a la dirección de e-mail con la que te has registrado. Haz clic en el enlace que encontrarás en el e-mail para completar el registro. Una vez hayas verificado tu dirección de e-mail, inicia sesión <a href="%s">aquí</a>.</string>
-<string name="register_no_application"></string>
-<string name="register_no_application_error"></string>
+    <string name="register_no_application">Si no ha registrado su cuenta con su dirección de correo electrónico, deberá enviar el <href="https://translatorswithoutborders.org/volunteer/translators/">(haga clic aquí)</a> Formulario de Inscripción para Traductores y luego regrese a <a href="https://trommons.org/register/">https://trommons.org/register/</a> para crear una cuenta en este enlace.</string>
+    <string name="register_no_application_error">Error de conexión, por favor, vuelva a intentar más tarde.</string>
 
 	<string name="user_private_profile_private_profile">Perfil privado</string>
 	<string name="user_private_profile_0">Aquí puedes actualizar tus datos personales.</string>
