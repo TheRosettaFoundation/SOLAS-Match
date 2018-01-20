@@ -15,13 +15,14 @@
 
 <table style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-    <th width="25%">Display Name</th>
-    <th width="25%">Email</th>
+    <th width="15%">Display Name</th>
+    <th width="21%">Email</th>
+    <th width="25%">Name</th>
     <th width="5%">Code</th>
-    <th width="15%">Language</th>
+    <th width="12%">Language</th>
     <th width="5%">Code</th>
-    <th width="15%">Country</th>
-    <th width="10%"></th>
+    <th width="12%">Country</th>
+    <th width="5%"></th>
   </thead>
 
   <tbody>
@@ -30,6 +31,7 @@
     <tr>
       <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['display_name'])}</a></td>
       <td>{$user_row['email']}</td>
+      <td>{TemplateHelper::uiCleanseHTML($user_row['first_name'])} {TemplateHelper::uiCleanseHTML($user_row['last_name'])}</td>
       <td>{$user_row['language_code']}</td>
       <td>{$user_row['language_name']}</td>
       <td>{$user_row['country_code']}</td>
