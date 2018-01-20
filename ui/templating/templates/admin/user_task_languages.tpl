@@ -19,8 +19,8 @@
     <th width="18%">Email</th>
     <th width="20%">Name</th>
     <th width="23%">Task Title</th>
-    <th width="7%">Task Type</th>
-    <th width="5%">Code</th>
+    <th width="8%">Task Type</th>
+    <th width="4%">Code</th>
     <th width="10%">Language</th>
     <th width="5%"></th>
   </thead>
