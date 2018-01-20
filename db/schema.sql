@@ -6400,6 +6400,67 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `user_task_languages`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `user_task_languages`(IN `languageCode` VARCHAR(3))
+BEGIN
+(
+    SELECT
+        u.id AS user_id,
+        u.`display-name` AS display_name,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`, '') AS last_name,
+        t.id AS task_id,
+        t.title AS task_title,
+        CASE
+            WHEN t.`task-type_id`=1 THEN 'Segmentation'
+            WHEN t.`task-type_id`=2 THEN 'Translation'
+            WHEN t.`task-type_id`=3 THEN 'Proofreading'
+            WHEN t.`task-type_id`=4 THEN 'Desegmentation'
+        END
+        AS task_type,
+        l.code AS language_code,
+        l.`en-name` AS language_name,
+        'Source' AS native_or_secondary
+    FROM Tasks       t
+    JOIN TaskClaims tc ON t.id=tc.task_id
+    JOIN Languages   l ON t.`language_id-source`=l.id
+    JOIN Users       u ON tc.user_id=u.id
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    WHERE languageCode IS NULL OR l.code=languageCode
+)
+UNION
+(
+    SELECT
+        u.id AS user_id,
+        u.`display-name` AS display_name,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`, '') AS last_name,
+        t.id AS task_id,
+        t.title AS task_title,
+        CASE
+            WHEN t.`task-type_id`=1 THEN 'Segmentation'
+            WHEN t.`task-type_id`=2 THEN 'Translation'
+            WHEN t.`task-type_id`=3 THEN 'Proofreading'
+            WHEN t.`task-type_id`=4 THEN 'Desegmentation'
+        END
+        AS task_type,
+        l.code AS language_code,
+        l.`en-name` AS language_name,
+        'Target' AS native_or_secondary
+    FROM Tasks       t
+    JOIN TaskClaims tc ON t.id=tc.task_id
+    JOIN Languages   l ON t.`language_id-target`=l.id
+    JOIN Users       u ON tc.user_id=u.id
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    WHERE languageCode IS NULL OR l.code=languageCode
+)
+    ORDER BY language_name, display_name, native_or_secondary, task_title;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `insertWordCountRequestForProjects`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insertWordCountRequestForProjects`(IN `pID` INT, IN sourceLanguage VARCHAR(10), IN targetLanguages VARCHAR(100), IN `userWordCount` INT)
