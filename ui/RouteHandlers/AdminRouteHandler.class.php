@@ -68,6 +68,18 @@ class AdminRouteHandler
         )->name('download_user_languages');
 
         $app->get(
+            '/user_task_languages/:code',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'user_task_languages')
+        )->via('POST')->name('user_task_languages');
+
+        $app->get(
+            '/download_user_task_languages/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_user_task_languages')
+        )->name('download_user_task_languages');
+
+        $app->get(
             '/download_all_users/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'download_all_users')
@@ -380,6 +392,46 @@ class AdminRouteHandler
 
         header('Content-type: text/csv');
         header('Content-Disposition: attachment; filename="user_languages.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
+    }
+
+    public function user_task_languages($code)
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        if ($code === 'full') $code = null;
+        $all_users = $statsDao->user_task_languages($code);
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('admin/user_task_languages.tpl');
+    }
+
+    public function download_user_task_languages()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $all_users = $statsDao->user_task_languages(null);
+
+        $data = "\xEF\xBB\xBF" . '"Display Name","Email","Name","Task Title","Task Type","Code","Language",""' . "\n";
+
+        foreach ($all_users as $user_row) {
+            $data .= '"' . str_replace('"', '""', $user_row['display_name']) . '","' .
+            $user_row['email'] . '","' .
+            str_replace('"', '""', $user_row['first_name']) . ' ' . str_replace('"', '""', $user_row['last_name']) . '","' .
+            str_replace('"', '""', $user_row['task_title']) . '","' .
+            $user_row['task_type'] . '","' .
+            $user_row['language_code'] . '","' .
+            $user_row['language_name'] . '","' .
+            $user_row['native_or_secondary'] . '"' . "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="user_task_languages.csv"');
         header('Content-length: ' . strlen($data));
         header('X-Frame-Options: ALLOWALL');
         header('Pragma: no-cache');
