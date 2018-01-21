@@ -1,7 +1,7 @@
 <resources>
     <!-- Smarty Template Strings -->
     <string name="common_faq">FAQ</string>
-	<string name="common_forum">Forum</string>
+  <string name="common_forum">Community</string>
 	<string name="common_banned_by">Banned By</string>
 	<string name="common_ban_duration">Ban Duration</string>
 	<string name="common_ban_reason">Ban Reason</string>
@@ -113,14 +113,23 @@
 	<string name="common_no_comment_has_been_listed">No comment has been listed.</string>
 	<string name="common_no_description_has_been_listed">No description has been listed.</string>
     <string name="common_no_impact_has_been_listed">No impact has been listed.</string>
-	<string name="common_signin_or_create_new_account">Sign-in or Create New Account</string>
+    <string name="register_signin_or_create_new_account">Create New Account and Sign-in by clicking your account provider:</string>
+    <string name="common_signin_or_create_new_account">Or Sign-in by clicking your account provider:</string>
 	<string name="common_please_click_your_account_provider">Please click your account provider:</string>
 	<string name="common_openid_is_service_that_allows_you_to_logon_to_many_different_websites_using_a_single_indentity">OpenID is service that allows you to log-on to many different websites using a single indentity.</string>
 	<string name="common_display_name">Display Name</string>
 	<string name="common_remove">Remove</string>
 	<string name="common_user_profile">User Profile</string>
 	<string name="common_native_language">Native Language</string>
-	<string name="common_secondary_languages">Secondary Language(s)</string>
+	<string name="common_secondary_languages">Language Pair(s)</string>
+    <string name="i_can_translate_from">I Can Translate From</string>
+    <string name="qualification_level_for_above">Qualification Level for Above</string>
+    <string name="user_qualification_level_1">Volunteer</string>
+    <string name="user_qualification_level_2">Verified</string>
+    <string name="user_qualification_level_3">Senior</string>
+    <string name="required_qualification_level">Required Qualification Level For Translators</string>
+    <string name="set_default_required_qualification_level">Set default qualification level for volunteers working on tasks for this organisation (can be overridden on a per task basis).</string>
+    <string name="update_required_qualification_level">Update Required Qualification Level</string>
 	<string name="common_first_name">First Name</string>
 	<string name="common_last_name">Last Name</string>
 	<string name="common_mobile_number">Mobile Number</string>
@@ -857,10 +866,14 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 
     <string name="task_claimed_alternative_option">Alternative option:</string>
     <string name="task_claimed_translate_using_kato">Translate using Kató</string>
+    <string name="task_claimed_proofread_using_kato">Proofread using Kató</string>
     <string name="task_claimed_please_read_kato">Kató is a Translators without Borders (TWB) translation platform. Please read <a href="https://kato.translatorswb.org/public/doc/translators.html" target="_blank">these guidelines</a> before using Kató.</string>
     <string name="task_simple_upload_copy_from_kato">Copy your translation from Kató to Trommons</string>
     <string name="task_simple_upload_view_on_kato">Click <a href="%s" target="_blank">here</a> to <strong>view your translation on Kató</strong>.</string>
     <string name="task_simple_upload_download_from_kato">Click <a href="%s">here</a> to <strong>download your translation from Kató and upload it to Trommons manually</strong>.</string>
+    <string name="task_simple_upload_copy_from_kato_proofread">Copy your proofread version from Kató to Trommons</string>
+    <string name="task_simple_upload_view_on_kato_proofread">Click <a href="%s" target="_blank">here</a> to <strong>view your proofread version on Kató</strong>.</string>
+    <string name="task_simple_upload_download_from_kato_proofread">Click <a href="%s">here</a> to <strong>download your proofread version from Kató and upload it to Trommons manually</strong>.</string>
 
     <string name="task_create_for_project">For Project <strong>%s</strong>.</string>
 	<string name="task_create_0">Provide a meaningful title for the task.</string>
@@ -919,10 +932,10 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
   <string name="task_twitter_0_org_dashboard">If you are on Twitter, click the following button to tell the world about Trommons (make sure to allow pop-ups):</string>
   <string name="task_twitter_0_project_view">If you are on Twitter, click the following button to tell the world about your project (make sure to allow pop-ups):</string>
   <string name="task_twitter_0_org_task_review">If you are on Twitter, click the following button to thank our volunteers (make sure to allow pop-ups):</string>
-  <string name="task_twitter_1">I’ve just completed a task as a volunteer with @TheRosettaFound #languagematters</string>
-  <string name="task_twitter_2">We’ve joined Trommons to connect with language volunteers @TheRosettaFound #languagematters</string>
-  <string name="task_twitter_3">Translators @TheRosettaFound can you help with our project on trommons.org%3F #languagematters</string>
-  <string name="task_twitter_4">Thanks to volunteers @TheRosettaFound for helping with translations #languagematters</string>
+  <string name="task_twitter_1">I’ve just completed a task as a volunteer with @TranslatorsWB #languagematters</string>
+  <string name="task_twitter_2">We’ve joined Trommons to connect with language volunteers @TranslatorsWB #languagematters</string>
+  <string name="task_twitter_3">Translators @TranslatorsWB can you help with our project on trommons.org%3F #languagematters</string>
+  <string name="task_twitter_4">Thanks to volunteers @TranslatorsWB for helping with translations #languagematters</string>
 	<string name="task_review_2">Please provide a rating for the file(s) you just</string>
 	<string name="task_review_3">based on the following criteria:</string>
     <string name="task_review_4">You have already submitted a review for this file.</string>
@@ -1004,21 +1017,23 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="password_reset_4">The passwords entered do not match. Please try again.</string>
     <string name="password_reset_5">Please check the password provided and try again.</string>
 
-	<string name="register_register_on">Register on</string>
+    <string name="register_register_on">You can only create your Trommons account after filling in the <a href="https://translatorswithoutborders.org/volunteer/translators/">TWB Translators Application Form</a><br />or after being announced to TWB as the contact for a partner organisation.<br />If you have already completed that step, register here with the email address that was provided to TWB and choose a password.<br />Or alternatively, create your Trommons account using one of the third-party account providers below,<br />if your email address with that provider is the same.</string>
 	<string name="register_your_email">Your email</string>
 	<string name="register_your_password">Your password</string>
     <string name="register_1">The email address you entered was not valid. Please try again.</string>
     <string name="register_2">You did not enter a password. Please try again.</string>
     <string name="register_3">You are already a verified user. Please <a href="%s">log in</a>.</string>
     <string name="register_4">A verification email has been sent to the email address you registered with. Please follow the link in that email to finish registration. Once you have verified your email address you can log in <a href="%s">here</a>.</string>
+    <string name="register_no_application">You do not have an account with the specified email, you need to submit the <a href="https://translatorswithoutborders.org/volunteer/translators/">Translators Application Form (click here)</a> and afterwards come back to <a href="https://trommons.org/register/">https://trommons.org/register/</a> to create an account here.</string>
+    <string name="register_no_application_error">Failed to connect, please try again later.</string>
 
 	<string name="user_private_profile_private_profile">Private Profile</string>
 	<string name="user_private_profile_0">Update your personal details here.</string>
 	<string name="user_private_profile_2">Invalid input, your display name cannot be blank.</string>
 	<string name="user_private_profile_please_note">Please Note:</string>
   <string name="user_private_profile_3">Please complete these optional fields.</string>
-  <string name="user_private_profile_4">Filling in your Native Language is most important. It will provide us with valuable information for matching you with more relevant tasks.</string>
-	<string name="user_private_profile_add_secondary_language">Add Secondary Language</string>
+    <string name="user_private_profile_4">Filling in your Language Pairs (I Can Translate From... To) is most important. Click Update Profile Details when finished.</string>
+    <string name="user_private_profile_add_secondary_language">Add Another Language Pair</string>
 	<string name="user_private_profile_task_type_preferences">Task Type Preferences:</string>
 	<string name="user_private_profile_translating">Translating</string>
 	<string name="user_private_profile_proofreading">Proofreading</string>
@@ -1026,7 +1041,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="user_private_profile_update_profile_details">Update Profile Details</string>
 	<string name="user_private_profile_6">Are you sure you want permanently delete your account?</string>
 	<string name="user_private_profile_delete_user_account">Delete User Account</string>
-    <string name="user_private_profile_secondary_languages_failed">Failed to save some data. Please make sure that your secondary languages have both a language and country selected, any blank entries will be ignored.</string>
+    <string name="user_private_profile_secondary_languages_failed">Please make sure that your pairs have both a source and a different target language selected.</string>
     <string name="user_private_profile_native_language_blanks">When setting your native language make sure to select a language and a country.</string>
     <string name="user_private_profile_receive_credit">Receive Credit</string>
 	<string name="user_private_profile_7">If you would like to receive credit for your work by name you will have to fill out the first name and last name fields.</string>

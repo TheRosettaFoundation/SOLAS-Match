@@ -15,13 +15,13 @@
 
 <table style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-    <th width="15%">Display Name</th>
-    <th width="21%">Email</th>
-    <th width="25%">Name</th>
-    <th width="5%">Code</th>
-    <th width="12%">Language</th>
-    <th width="5%">Code</th>
-    <th width="12%">Country</th>
+    <th width="12%">Display Name</th>
+    <th width="18%">Email</th>
+    <th width="20%">Name</th>
+    <th width="23%">Task Title</th>
+    <th width="8%">Task Type</th>
+    <th width="4%">Code</th>
+    <th width="10%">Language</th>
     <th width="5%"></th>
   </thead>
 
@@ -32,10 +32,10 @@
       <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['display_name'])}</a></td>
       <td>{$user_row['email']}</td>
       <td>{TemplateHelper::uiCleanseHTML($user_row['first_name'])} {TemplateHelper::uiCleanseHTML($user_row['last_name'])}</td>
+      <td><a href="{urlFor name="task-view" options="task_id.{$user_row['task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['task_title'])}</a></td>
+      <td>{$user_row['task_type']}</td>
       <td>{$user_row['language_code']}</td>
       <td>{$user_row['language_name']}</td>
-      <td>{$user_row['country_code']}</td>
-      <td>{$user_row['country_name']}</td>
       <td>{$user_row['native_or_secondary']}</td>
     </tr>
 

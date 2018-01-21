@@ -10,8 +10,8 @@ var user_id;
 // Errors
 var alertError;
 
-var secondaryLanguageLimit = 10;
-var secondaryLanguageCount = 0;
+var userQualifiedPairsLimit = 120;
+var userQualifiedPairsCount = 0;
 
 $(document).ready(documentReady);
 
@@ -32,7 +32,7 @@ function set_errors_for_submission(id)
   html = "";
   if (alertError != null) {
     html += '<p class="alert alert-error">';
-      html += '<strong>' + parameters.getTranslation('common_error') + ':</strong>';
+      html += '<strong>' + parameters.getTranslation('common_error') + ': </strong>';
       html += alertError;
     html += '</p>';
   }
@@ -48,16 +48,22 @@ function documentReady()
   siteAPI      = getSetting("siteAPI");
   user_id      = getSetting("user_id");
 
-  var secondaryLanguageCountDatabase = parseInt(getSetting("secondaryLanguageCount"));
-  for (var i = 0; i < secondaryLanguageCountDatabase; i++) {
-    addSecondaryLanguage(getSetting("userSecondaryLanguagesLanguageCode_" + i), getSetting("userSecondaryLanguagesCountryCode_" + i));
-  }
-
   parameters = new Parameters(loadingComplete);
 }
 
 function loadingComplete()
 {
+  var userQualifiedPairsCountDatabase = parseInt(getSetting("userQualifiedPairsCount"));
+  for (var i = 0; i < userQualifiedPairsCountDatabase; i++) {
+    addSecondaryLanguage(
+      getSetting("userQualifiedPairLanguageCodeSource_" + i),
+      getSetting("userQualifiedPairCountryCodeSource_" + i),
+      getSetting("userQualifiedPairLanguageCodeTarget_" + i),
+      getSetting("userQualifiedPairCountryCodeTarget_" + i),
+      getSetting("userQualifiedPairQualificationLevel_" + i)
+      );
+  }
+
   document.getElementById("loading_warning").innerHTML = "";
   document.getElementById("loading_warning1").innerHTML = "";
 }
@@ -65,28 +71,78 @@ function loadingComplete()
 /**
  * This method is used to add another secondary language selector to the page.
  */
-function addSecondaryLanguage(userSecondaryLanguagesLanguageCode, userSecondaryLanguagesCountryCode)
+function addSecondaryLanguage(
+  userQualifiedPairLanguageCodeSource,
+  userQualifiedPairCountryCodeSource,
+  userQualifiedPairLanguageCodeTarget,
+  userQualifiedPairCountryCodeTarget,
+  userQualifiedPairQualificationLevel)
 {
-  if (secondaryLanguageCount < secondaryLanguageLimit) {
+  if (userQualifiedPairsCount < userQualifiedPairsLimit) {
     var secondaryLanguageDiv = document.getElementById("secondaryLanguageDiv");
     var locale = document.createElement("div");
-    locale.id = "secondary_locale_" + secondaryLanguageCount;
+    locale.id = "secondary_locale_" + userQualifiedPairsCount;
+
+    var text1 = document.createElement("label");
+    text1.innerHTML = "<strong>" + parameters.getTranslation("i_can_translate_from") + ":</strong>";
+    text1.style.width = "82%";
+    locale.appendChild(text1);
 
     var languageBox = document.createElement("select");
     languageBox.innerHTML = document.getElementById("template_language_options").innerHTML;
-    languageBox.name = "secondary_language_" + secondaryLanguageCount;
-    languageBox.id = "secondary_language_" + secondaryLanguageCount;
-    languageBox.style.width = "82%";
-    languageBox.value = userSecondaryLanguagesLanguageCode;
+    languageBox.name = "language_code_source_" + userQualifiedPairsCount;
+    languageBox.id = "language_code_source_" + userQualifiedPairsCount;
+    languageBox.style.width = "41%";
+    if (userQualifiedPairLanguageCodeSource === undefined) userQualifiedPairLanguageCodeSource = "";
+    languageBox.value = userQualifiedPairLanguageCodeSource;
     locale.appendChild(languageBox);
 
     var countryBox = document.createElement("select");
     countryBox.innerHTML = document.getElementById("template_country_options").innerHTML;
-    countryBox.name = "secondary_country_" + secondaryLanguageCount;
-    countryBox.id = "secondary_country_" + secondaryLanguageCount;
-    countryBox.style.width = "82%";
-    countryBox.value = userSecondaryLanguagesCountryCode;
+    countryBox.name = "country_code_source_" + userQualifiedPairsCount;
+    countryBox.id = "country_code_source_" + userQualifiedPairsCount;
+    countryBox.style.width = "41%";
+    if (userQualifiedPairCountryCodeSource === undefined) userQualifiedPairCountryCodeSource = "";
+    countryBox.value = (userQualifiedPairCountryCodeSource == "") ? "--" : userQualifiedPairCountryCodeSource;
     locale.appendChild(countryBox);
+
+    var text2 = document.createElement("label");
+    text2.innerHTML = "<strong>" + parameters.getTranslation("common_to") + ":</strong>";
+    text2.style.width = "82%";
+    locale.appendChild(text2);
+
+    var languageBoxTarget = document.createElement("select");
+    languageBoxTarget.innerHTML = document.getElementById("template_language_options").innerHTML;
+    languageBoxTarget.name = "language_code_target_" + userQualifiedPairsCount;
+    languageBoxTarget.id = "language_code_target_" + userQualifiedPairsCount;
+    languageBoxTarget.style.width = "41%";
+    if (userQualifiedPairLanguageCodeTarget === undefined) userQualifiedPairLanguageCodeTarget = "";
+    languageBoxTarget.value = userQualifiedPairLanguageCodeTarget;
+    locale.appendChild(languageBoxTarget);
+
+    var countryBoxTarget = document.createElement("select");
+    countryBoxTarget.innerHTML = document.getElementById("template_country_options").innerHTML;
+    countryBoxTarget.name = "country_code_target_" + userQualifiedPairsCount;
+    countryBoxTarget.id = "country_code_target_" + userQualifiedPairsCount;
+    countryBoxTarget.style.width = "41%";
+    if (userQualifiedPairCountryCodeTarget === undefined) userQualifiedPairCountryCodeTarget = "";
+    countryBoxTarget.value = (userQualifiedPairCountryCodeTarget == "") ? "--" : userQualifiedPairCountryCodeTarget;
+    locale.appendChild(countryBoxTarget);
+
+    var text3 = document.createElement("label");
+    text3.innerHTML = "<strong>" + parameters.getTranslation("qualification_level_for_above") + ":</strong>";
+    text3.style.width = "82%";
+    locale.appendChild(text3);
+
+    var qualificationLevel = document.createElement("select");
+    qualificationLevel.innerHTML = document.getElementById("template_qualification_options").innerHTML;
+    qualificationLevel.name = "qualification_level_" + userQualifiedPairsCount;
+    qualificationLevel.id = "qualification_level_" + userQualifiedPairsCount;
+    qualificationLevel.style.width = "41%";
+    if (userQualifiedPairQualificationLevel === undefined) userQualifiedPairQualificationLevel = 1;
+    qualificationLevel.value = userQualifiedPairQualificationLevel;
+    if (!parseInt(getSetting("isSiteAdmin"))) qualificationLevel.disabled = true;
+    locale.appendChild(qualificationLevel);
 
     var hr = document.createElement("hr");
     hr.style.width = "60%";
@@ -94,8 +150,8 @@ function addSecondaryLanguage(userSecondaryLanguagesLanguageCode, userSecondaryL
 
     var button = document.getElementById("addLanguageButton");
     secondaryLanguageDiv.insertBefore(locale, button);
-    secondaryLanguageCount++;
-    if (secondaryLanguageCount >= secondaryLanguageLimit) {
+    userQualifiedPairsCount++;
+    if (userQualifiedPairsCount >= userQualifiedPairsLimit) {
       button.disabled = true;
     }
     button = document.getElementById("removeLanguageButton");
@@ -110,15 +166,15 @@ function addSecondaryLanguage(userSecondaryLanguagesLanguageCode, userSecondaryL
  */
 function removeSecondaryLanguage()
 {
-  if (secondaryLanguageCount > 0) {
-    secondaryLanguageCount--;
-    var element = document.getElementById("secondary_locale_" + secondaryLanguageCount);
+  if (userQualifiedPairsCount > 0) {
+    userQualifiedPairsCount--;
+    var element = document.getElementById("secondary_locale_" + userQualifiedPairsCount);
     element.parentNode.removeChild(element);
 
     button = document.getElementById("addLanguageButton");
     button.disabled = false;
 
-    if (secondaryLanguageCount < 2) {
+    if (userQualifiedPairsCount < 2) {
       button = document.getElementById("removeLanguageButton");
       button.disabled = true;
     }
@@ -181,11 +237,14 @@ function validateForm()
     }
   }
 
-  for (var i = 0; i < secondaryLanguageCount; i++) {
-    var secondaryLanguageSelect = document.getElementById("secondary_language_" + i);
-    var secondaryCountrySelect = document.getElementById("secondary_country_" + i);
-    if ((secondaryLanguageSelect.value != "" && secondaryCountrySelect.value == "") ||
-        (secondaryLanguageSelect.value == "" && secondaryCountrySelect.value != "")) {
+  for (var i = 0; i < userQualifiedPairsCount; i++) {
+    var languageCodeSource = document.getElementById("language_code_source_" + i);
+    var countryCodeSource  = document.getElementById("country_code_source_" + i);
+    var languageCodeTarget = document.getElementById("language_code_target_" + i);
+    var countryCodeTarget  = document.getElementById("country_code_target_" + i);
+
+    if ((languageCodeSource.value == "" && languageCodeTarget.value != "") || (languageCodeTarget.value == "" && languageCodeSource.value != "") ||
+        (languageCodeSource.value == languageCodeTarget.value && countryCodeSource.value == countryCodeTarget.value)) {
       alertError = parameters.getTranslation("user_private_profile_secondary_languages_failed");
       set_all_errors_for_submission();
       return false;

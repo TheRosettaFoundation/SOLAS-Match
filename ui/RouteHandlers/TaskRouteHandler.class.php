@@ -292,6 +292,7 @@ class TaskRouteHandler
         $created_timestamps = array();
         $deadline_timestamps = array();
         $projectAndOrgs = array();
+        $discourse_slug = array();
         $proofreadTaskIds = array();
 
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
@@ -332,6 +333,8 @@ class TaskRouteHandler
                     htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
                 );
 
+                $discourse_slug[$taskId] = $projectDao->discourse_parameterize($projectName);
+
                 if ($topTask->getTaskType() == 2) { // If current task is a translation task
                     try {
                         $proofreadTask = $taskDao->getProofreadTask($taskId);
@@ -352,7 +355,7 @@ class TaskRouteHandler
         }
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Home.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Home1.js\"></script>";
 
         $app->view()->appendData(array(
             'current_page' => 'claimed-tasks',
@@ -370,6 +373,7 @@ class TaskRouteHandler
             'created_timestamps' => $created_timestamps,
             'deadline_timestamps' => $deadline_timestamps,
             'projectAndOrgs' => $projectAndOrgs,
+            'discourse_slug' => $discourse_slug,
             'proofreadTaskIds' => $proofreadTaskIds,
             'currentScrollPage' => $currentScrollPage,
             'itemsPerScrollPage' => $itemsPerScrollPage,
@@ -481,7 +485,7 @@ class TaskRouteHandler
         }
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Home.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Home1.js\"></script>";
 
         $app->view()->appendData(array(
             'current_page' => 'recent-tasks',
@@ -652,7 +656,10 @@ class TaskRouteHandler
         $app->view()->setData("task", $task);
 
         $matecat_url = '';
-        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) {
+        $translate = 'translate';
+        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
+            if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
+
             $matecat_tasks = $taskDao->getMatecatLanguagePairs($task_id);
             if (!empty($matecat_tasks)) {
                 $matecat_langpair = $matecat_tasks[0]['matecat_langpair'];
@@ -660,7 +667,7 @@ class TaskRouteHandler
                 $matecat_id_job_password = $matecat_tasks[0]['matecat_id_job_password'];
                 //$matecat_id_file = $matecat_tasks[0]['matecat_id_file'];
                 if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
-                    $matecat_url = 'https://kato.translatorswb.org/translate/proj-' . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                    $matecat_url = "https://kato.translatorswb.org/$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
                 }
             }
         }
@@ -890,6 +897,7 @@ class TaskRouteHandler
             'siteLocation' => $siteLocation,
             'taskTypeTexts' => $taskTypeTexts,
             'projectAndOrgs' => $projectAndOrgs,
+            'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
             'taskStatusTexts' => $taskStatusTexts
         ));
 
@@ -1136,7 +1144,7 @@ class TaskRouteHandler
 
         $matecat_url = '';
         $matecat_download_url = '';
-        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) {
+        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
             $matecat_tasks = $taskDao->getMatecatLanguagePairs($taskId);
             if (!empty($matecat_tasks)) {
                 $matecat_langpair = $matecat_tasks[0]['matecat_langpair'];
@@ -1175,8 +1183,14 @@ class TaskRouteHandler
 
                         if (!empty($response_data['stats']['DOWNLOAD_STATUS'])) {
                             if ($response_data['stats']['DOWNLOAD_STATUS'] === 'translated' || $response_data['stats']['DOWNLOAD_STATUS'] === 'approved') {
-                                $matecat_url = 'https://kato.translatorswb.org/translate/proj-' . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                                $translate = 'translate';
+                                if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
+                                $matecat_url = "https://kato.translatorswb.org/$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
                                 $matecat_download_url = "https://kato.translatorswb.org/?action=downloadFile&id_job=$matecat_id_job&id_file=$matecat_id_file&password=$matecat_id_job_password&download_type=all";
+
+                                if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $response_data['stats']['DOWNLOAD_STATUS'] === 'translated') {
+                                    $matecat_url = ''; // Disable Kató access for Proofreading if job file is only translated
+                                }
                             }
                         } else {
                             error_log("https://kato.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats ($taskId) DOWNLOAD_STATUS empty!");
@@ -1203,6 +1217,7 @@ class TaskRouteHandler
             "taskTypeColours"   => $taskTypeColours,
             'matecat_url' => $matecat_url,
             'matecat_download_url' => $matecat_download_url,
+            'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
             "file_previously_uploaded" => $file_previously_uploaded
         ));
 
@@ -1235,6 +1250,7 @@ class TaskRouteHandler
         $app = \Slim\Slim::getInstance();
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
+        $adminDao = new DAO\AdminDao();
         $currentTask = $taskDao->getTask($task_id);
         $currentTaskStatus = $currentTask->getTaskStatus();
 
@@ -1282,6 +1298,8 @@ class TaskRouteHandler
                 }
             }
         }
+
+        $adminAccess = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID()) || $adminDao->isOrgAdmin($project->getOrganisationId(), Common\Lib\UserSession::getCurrentUserID());
 
         $app->view()->setData("task", $task);
 
@@ -1401,6 +1419,10 @@ class TaskRouteHandler
                     error_log("taskAlter (addTaskPreReq)");
                     $taskDao->updateTask($task);
 
+                    if ($adminAccess && ($task->getTaskStatus() <= Common\Enums\TaskStatusEnum::PENDING_CLAIM) && !empty($post['required_qualification_level'])) {
+                        $taskDao->updateRequiredTaskQualificationLevel($task_id, $post['required_qualification_level']);
+                    }
+
                     $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
                 } else {
                     //A deadlock occured
@@ -1476,6 +1498,8 @@ class TaskRouteHandler
             "publishStatus"      => $publishStatus,
             'showRestrictTask'    => $taskDao->organisationHasQualifiedBadge($project->getOrganisationId()),
             'restrictTaskStatus'  => $restrictTaskStatus,
+            'adminAccess'         => $adminAccess,
+            'required_qualification_level' => $taskDao->getRequiredTaskQualificationLevel($task_id),
             "taskTypeColours"     => $taskTypeColours
         ));
 
@@ -1639,6 +1663,7 @@ class TaskRouteHandler
                 "isMember" => $isOrgMember,
                 "isSiteAdmin" => $isSiteAdmin,
                 'alsoViewedTasksCount' => $alsoViewedTasksCount,
+                'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
                 "userSubscribedToOrganisation" => $userSubscribedToOrganisation
         ));
 

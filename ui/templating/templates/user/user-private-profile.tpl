@@ -6,13 +6,17 @@
     <div id="siteLocation">{$siteLocation}</div>
     <div id="siteAPI">{$siteAPI}</div>
     <div id="user_id">{$user_id}</div>
-    <div id="secondaryLanguageCount">{$secondaryLanguageCount}</div>
+    <div id="userQualifiedPairsCount">{$userQualifiedPairsCount}</div>
     {assign var="i" value=0}
-    {foreach $secondaryLanguages as $secondaryLanguage}
-        <div id="userSecondaryLanguagesLanguageCode_{$i}">{$secondaryLanguage->getLanguageCode()}</div>
-        <div id="userSecondaryLanguagesCountryCode_{$i}">{$secondaryLanguage->getCountryCode()}</div>
+    {foreach $userQualifiedPairs as $userQualifiedPair}
+        <div id="userQualifiedPairLanguageCodeSource_{$i}">{$userQualifiedPair['language_code_source']}</div>
+        <div id="userQualifiedPairCountryCodeSource_{$i}">{$userQualifiedPair['country_code_source']}</div>
+        <div id="userQualifiedPairLanguageCodeTarget_{$i}">{$userQualifiedPair['language_code_target']}</div>
+        <div id="userQualifiedPairCountryCodeTarget_{$i}">{$userQualifiedPair['country_code_target']}</div>
+        <div id="userQualifiedPairQualificationLevel_{$i}">{$userQualifiedPair['qualification_level']}</div>
         {assign var="i" value=$i+1}
     {/foreach}
+    <div id="isSiteAdmin">{if $isSiteAdmin}1{else}0{/if}</div>
     <div id="langPrefSelectCodeSaved">{$langPrefSelectCode}</div>
 
     <!-- Templates... -->
@@ -28,6 +32,12 @@
         {foreach $countries as $country}
             <option value="{$country->getCode()}">{$country->getName()}</option>
         {/foreach}
+    </div>
+
+    <div id="template_qualification_options">
+        <option value="1">{Localisation::getTranslation('user_qualification_level_1')}</option>
+        <option value="2">{Localisation::getTranslation('user_qualification_level_2')}</option>
+        <option value="3">{Localisation::getTranslation('user_qualification_level_3')}</option>
     </div>
 
 </span>
@@ -48,8 +58,7 @@
 {/if}
 
 <div class="well alert-info">
-    <p><strong>{Localisation::getTranslation('user_private_profile_please_note')}</strong></p>
-    <p>{Localisation::getTranslation('user_private_profile_3')} {Localisation::getTranslation('user_private_profile_4')}</p>
+    <p><strong>{Localisation::getTranslation('user_private_profile_3')} {Localisation::getTranslation('user_private_profile_4')}</strong></p>
 </div>
 
 <div class="well">
@@ -75,13 +84,13 @@
                     <div id="language_area">
                         <div id = "nativeLanguageDiv">
                             <label><strong>{Localisation::getTranslation('common_native_language')}: <span style="color: red">*</span></strong></label>
-                            <select name="nativeLanguageSelect" id="nativeLanguageSelect" style="width: 82%">
+                            <select name="nativeLanguageSelect" id="nativeLanguageSelect" style="width: 41%">
                                 <option value=""></option>
                                 {foreach $languages as $language}
                                     <option value="{$language->getCode()}" {if $language->getCode() == $nativeLanguageSelectCode}selected="selected"{/if}>{$language->getName()}</option>
                                 {/foreach}
                             </select>
-                            <select name="nativeCountrySelect" id="nativeCountrySelect" style="width: 82%">
+                            <select name="nativeCountrySelect" id="nativeCountrySelect" style="width: 41%">
                                 <option value=""></option>
                                 {foreach $countries as $country}
                                     <option value="{$country->getCode()}" {if $country->getCode() == $nativeCountrySelectCode}selected="selected"{/if}>{$country->getName()}</option>
@@ -89,13 +98,14 @@
                             </select>
                         </div>
                         <div id="secondaryLanguageDiv">
-                            <label><strong>{Localisation::getTranslation('common_secondary_languages')}:</strong></label>
-                            <button onclick="addSecondaryLanguage(); return false;" class="btn btn-success" id="addLanguageButton" {if $secondaryLanguageCount >= 10}disabled{/if}>
+                            <hr style="width: 60%" />
+                            <button onclick="addSecondaryLanguage(); return false;" class="btn btn-success" id="addLanguageButton" {if $userQualifiedPairsCount >= 120}disabled{/if}>
                                 <i class="icon-upload icon-white"></i> {Localisation::getTranslation('user_private_profile_add_secondary_language')}
                             </button>
-                            <button onclick="removeSecondaryLanguage(); return false;" class="btn btn-inverse" id="removeLanguageButton" {if $secondaryLanguageCount <= 1}disabled{/if}>
+                            <button onclick="removeSecondaryLanguage(); return false;" class="btn btn-inverse" id="removeLanguageButton" {if $userQualifiedPairsCount <= 1}disabled{/if}>
                                 <i class="icon-fire icon-white"></i> {Localisation::getTranslation('common_remove')}
                             </button>
+                            <hr style="width: 60%" />
                         </div>
                     </div>
 

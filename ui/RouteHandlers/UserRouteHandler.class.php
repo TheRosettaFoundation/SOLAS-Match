@@ -93,6 +93,21 @@ class UserRouteHandler
             array($middleware, "authenticateUserForTask"),
             array($this, "userTaskReviews")
         )->name("user-task-reviews");
+
+        $app->get(
+            '/no_application/',
+            array($this, 'no_application')
+        )->name('no_application');
+
+        $app->get(
+            '/no_application_error/',
+            array($this, 'no_application_error')
+        )->name('no_application_error');
+
+        $app->get(
+            '/neonwebhook/',
+            array($this, 'neonwebhook')
+        )->via('POST')->name('neonwebhook');
     }
     
     public function home($currentScrollPage = 1, $selectedTaskType = 0, $selectedSourceLanguageCode = 0, $selectedTargetLanguageCode = 0)
@@ -215,6 +230,7 @@ class UserRouteHandler
         $created_timestamps = array();
         $deadline_timestamps = array();
         $projectAndOrgs = array();
+        $discourse_slug = array();
         $taskImages = array();
 
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
@@ -254,6 +270,7 @@ class UserRouteHandler
                     $orgUri,
                     htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
                 );
+                $discourse_slug[$taskId] = $projectDao->discourse_parameterize($projectName);
 
                 $taskImages[$taskId] = '';
                 if ($project->getImageApproved() && $project->getImageUploaded()) {
@@ -267,7 +284,7 @@ class UserRouteHandler
         }
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Home.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Home1.js\"></script>";
 
 
         $app->view()->appendData(array(
@@ -284,6 +301,7 @@ class UserRouteHandler
             'created_timestamps' => $created_timestamps,
             'deadline_timestamps' => $deadline_timestamps,
             'projectAndOrgs' => $projectAndOrgs,
+            'discourse_slug' => $discourse_slug,
             'taskImages' => $taskImages,
             'currentScrollPage' => $currentScrollPage,
             'itemsPerScrollPage' => $itemsPerScrollPage,
@@ -929,15 +947,11 @@ EOD;
             $nativeCountrySelectCode = '999999999';
         }
 
-        $secondaryLanguages = $userDao->getSecondaryLanguages($user_id);
-        if (empty($secondaryLanguages)) {
-            $secondaryLanguages = array();
-            $locale = new Common\Protobufs\Models\Locale();
-            $locale->setLanguageCode('');
-            $locale->setCountryCode('');
-            $secondaryLanguages[] = $locale;
+        $userQualifiedPairs = $userDao->getUserQualifiedPairs($user_id);
+        if (empty($userQualifiedPairs)) {
+            $userQualifiedPairs[] = array('language_code_source' => '', 'country_code_source' => '--', 'language_code_target' => '', 'country_code_target' => '--', 'qualification_level' => 1);
         }
-        $secondaryLanguageCount = count($secondaryLanguages);
+        $userQualifiedPairsCount = count($userQualifiedPairs);
 
         $langPref = $langDao->getLanguage($userPersonalInfo->getLanguagePreference());
         $langPrefSelectCode = $langPref->getCode();
@@ -956,6 +970,13 @@ EOD;
                     $interpreter = true;
                 }
             }
+        }
+
+        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
+        if (!is_null($loggedInUserId)) {
+            $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
+        } else {
+            $isSiteAdmin = false;
         }
 
         if ($post = $app->request()->post()) {
@@ -1004,36 +1025,57 @@ EOD;
 
                 try {
                     $i = 0;
-                    while (!empty($post["secondary_language_$i"]) && !empty($post["secondary_country_$i"])) {
+                    while (!empty($post["language_code_source_$i"]) && !empty($post["language_code_target_$i"])) {
+                        $post["language_code_source_$i"] = strtolower($post["language_code_source_$i"]); // Just in case browser is manipulated...
+                        $post["language_code_target_$i"] = strtolower($post["language_code_target_$i"]);
+                        $post["country_code_source_$i"]  = strtoupper($post["country_code_source_$i"]);
+                        $post["country_code_target_$i"]  = strtoupper($post["country_code_target_$i"]);
+                        if ($post["country_code_source_$i"] == '') $post["country_code_source_$i"] = '--'; // Any Language
+                        if ($post["country_code_target_$i"] == '') $post["country_code_target_$i"] = '--';
+
                         $found = false;
-                        foreach ($secondaryLanguages as $secondaryLanguage) {
-                            if (($post["secondary_language_$i"] == $secondaryLanguage->getLanguageCode()) && ($post["secondary_country_$i"] == $secondaryLanguage->getCountryCode())) {
+                        foreach ($userQualifiedPairs as $userQualifiedPair) {
+                            if (($post["language_code_source_$i"] == $userQualifiedPair['language_code_source']) &&
+                                ($post["country_code_source_$i"]  == $userQualifiedPair['country_code_source'])  &&
+                                ($post["language_code_target_$i"] == $userQualifiedPair['language_code_target']) &&
+                                ($post["country_code_target_$i"]  == $userQualifiedPair['country_code_target'])) {
                                 $found = true;
+
+                                if ($isSiteAdmin && ($post["qualification_level_$i"] != $userQualifiedPair['qualification_level'])) {
+                                    $userDao->updateUserQualifiedPair($user_id,
+                                        $post["language_code_source_$i"], $post["country_code_source_$i"],
+                                        $post["language_code_target_$i"], $post["country_code_target_$i"],
+                                        $post["qualification_level_$i"]);
+                                }
                             }
                         }
                         if (!$found) {
-                            $locale = new Common\Protobufs\Models\Locale();
-                            $locale->setLanguageCode($post["secondary_language_$i"]);
-                            $locale->setCountryCode($post["secondary_country_$i"]);
-                            $userDao->createSecondaryLanguage($user_id, $locale);
+                            if (!$isSiteAdmin) $post["qualification_level_$i"] = 1;
+
+                            $userDao->createUserQualifiedPair($user_id,
+                                $post["language_code_source_$i"], $post["country_code_source_$i"],
+                                $post["language_code_target_$i"], $post["country_code_target_$i"],
+                                $post["qualification_level_$i"]);
                         }
                         $i++;
                     }
 
-                    foreach ($secondaryLanguages as $secondaryLanguage) {
+                    foreach ($userQualifiedPairs as $userQualifiedPair) {
                         $i = 0;
                         $found = false;
-                        while (!empty($post["secondary_language_$i"]) && !empty($post["secondary_country_$i"])) {
-                            if (($post["secondary_language_$i"] == $secondaryLanguage->getLanguageCode()) && ($post["secondary_country_$i"] == $secondaryLanguage->getCountryCode())) {
+                        while (!empty($post["language_code_source_$i"]) && !empty($post["language_code_target_$i"])) {
+                            if (($post["language_code_source_$i"] == $userQualifiedPair['language_code_source']) &&
+                                ($post["country_code_source_$i"]  == $userQualifiedPair['country_code_source'])  &&
+                                ($post["language_code_target_$i"] == $userQualifiedPair['language_code_target']) &&
+                                ($post["country_code_target_$i"]  == $userQualifiedPair['country_code_target'])) {
                                 $found = true;
                             }
                             $i++;
                         }
-                        if (!$found && $secondaryLanguage->getLanguageCode() && $secondaryLanguage->getCountryCode()) {
-                            $locale = new Common\Protobufs\Models\Locale();
-                            $locale->setLanguageCode($secondaryLanguage->getLanguageCode());
-                            $locale->setCountryCode($secondaryLanguage->getCountryCode());
-                            $userDao->deleteSecondaryLanguage($user_id, $locale);
+                        if (!$found) {
+                            $userDao->removeUserQualifiedPair($user_id,
+                                $userQualifiedPair['language_code_source'], $userQualifiedPair['country_code_source'],
+                                $userQualifiedPair['language_code_target'], $userQualifiedPair['country_code_target']);
                         }
                     }
 
@@ -1094,14 +1136,7 @@ EOD;
         }
 
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/UserPrivateProfile.js\"></script>";
-
-        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
-        if (!is_null($loggedInUserId)) {
-            $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
-        } else {
-            $isSiteAdmin = false;
-        }
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/UserPrivateProfile1.js\"></script>";
 
         $app->view()->appendData(array(
             'siteLocation'     => Common\Lib\Settings::get('site.location'),
@@ -1114,8 +1149,8 @@ EOD;
             'countries' => $countries,
             'nativeLanguageSelectCode' => $nativeLanguageSelectCode,
             'nativeCountrySelectCode'  => $nativeCountrySelectCode,
-            'secondaryLanguages'       => $secondaryLanguages,
-            'secondaryLanguageCount'   => $secondaryLanguageCount,
+            'userQualifiedPairs'       => $userQualifiedPairs,
+            'userQualifiedPairsCount'  => $userQualifiedPairsCount,
             'langPrefSelectCode'       => $langPrefSelectCode,
             'translator'  => $translator,
             'proofreader' => $proofreader,
@@ -1199,7 +1234,7 @@ EOD;
         $user_tags = $userDao->getUserTags($user_id);
         $user_orgs = $userDao->getUserOrgs($user_id);
         $badges = $userDao->getUserBadges($user_id);
-        $secondaryLanguages = $userDao->getSecondaryLanguages($user_id);
+        $userQualifiedPairs = $userDao->getUserQualifiedPairs($user_id);
 
         $orgList = array();
         if ($badges) {
@@ -1244,7 +1279,7 @@ EOD;
             "org_creation" => $org_creation,
             "userPersonalInfo" => $userPersonalInfo,
             "langPrefName" => $langPrefName,
-            "secondaryLanguages" => $secondaryLanguages,
+            "userQualifiedPairs" => $userQualifiedPairs,
             "taskTypeColours" => $taskTypeColours
         ));
                 
@@ -1381,6 +1416,24 @@ EOD;
         ));
 
         $app->render("user/user.task-reviews.tpl");
+    }
+
+    public function no_application()
+    {
+        $app = \Slim\Slim::getInstance();
+        $app->render('user/no_application.tpl');
+    }
+
+    public function no_application_error()
+    {
+        $app = \Slim\Slim::getInstance();
+        $app->render('user/no_application_error.tpl');
+    }
+
+    public function neonwebhook()
+    {
+        $userDao = new DAO\UserDao();
+        $userDao->process_neonwebhook();
     }
 }
 

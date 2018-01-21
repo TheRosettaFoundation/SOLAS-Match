@@ -48,6 +48,16 @@
                             <input type="hidden" name="deadline" id="deadline" />
                         </p>
                     </div>
+                    {if $adminAccess}
+                    <div style="margin-bottom:20px;">
+                        <label for="required_qualification_level" style="font-size: large"><strong>{Localisation::getTranslation('required_qualification_level')}</strong></label>
+                        <select name="required_qualification_level" id="required_qualification_level" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">
+                            <option value="1" {if $required_qualification_level == 1}selected="selected"{/if}>{Localisation::getTranslation('user_qualification_level_1')}</option>
+                            <option value="2" {if $required_qualification_level == 2}selected="selected"{/if}>{Localisation::getTranslation('user_qualification_level_2')}</option>
+                            <option value="3" {if $required_qualification_level == 3}selected="selected"{/if}>{Localisation::getTranslation('user_qualification_level_3')}</option>
+                        </select>
+                    </div>
+                    {/if}
                 </td>
                 <td>
                     <div style="margin-bottom:20px;">

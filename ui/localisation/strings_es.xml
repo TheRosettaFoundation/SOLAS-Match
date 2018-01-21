@@ -1,7 +1,7 @@
 <resources>
   <!-- Smarty Template Strings -->
   <string name="common_faq">Preguntas frecuentes</string>
-	<string name="common_forum">Foro</string>
+  <string name="common_forum">Community</string>
 	<string name="common_banned_by">Excluido por</string>
 	<string name="common_ban_duration">Duración de la exclusión</string>
 	<string name="common_ban_reason">Motivo de exclusión</string>
@@ -92,7 +92,7 @@
 	<string name="common_cant_find_the_file_on_your_desktop">¿No encuentras el archivo en tu equipo?</string>
    	<string name="common_download_the_file">Descarga el <a href="%s">achivo</a> y guárdalo en tu equipo</string>
 	<string name="common_from">De</string>
-	<string name="common_to">Para</string>
+	<string name="common_to">A</string>
 	<string name="common_added">Añadido hace <strong>%s</strong></string>
     <string name="common_added_days">Añadido hace <strong>%s día(s)</strong></string>
     <string name="common_added_hours">Añadido hace <strong>%s horas(s)</strong></string>
@@ -113,14 +113,23 @@
 	<string name="common_no_comment_has_been_listed">No se han especificado comentarios.</string>
 	<string name="common_no_description_has_been_listed">No se ha especificado una descripción.</string>
     <string name="common_no_impact_has_been_listed">No se ha especificado una repercusión.</string>
-	<string name="common_signin_or_create_new_account">Inicia sesión o crea una cuenta</string>
+    <string name="register_signin_or_create_new_account">Cree una cuenta nueva y, para registrarse, seleccione su proveedor de cuenta:</string>
+    <string name="common_signin_or_create_new_account">O regístrese al hacer clic en su proveedor de cuenta:</string>
 	<string name="common_please_click_your_account_provider">Por favor, selecciona tu proveedor:</string>
 	<string name="common_openid_is_service_that_allows_you_to_logon_to_many_different_websites_using_a_single_indentity">OpenID es un servicio que te permite acceder a distintos sitios web con una única identificación.</string>
 	<string name="common_display_name">Nombre de usuario</string>
 	<string name="common_remove">Eliminar</string>
 	<string name="common_user_profile">Perfil de usuario</string>
 	<string name="common_native_language">Lengua materna</string>
-	<string name="common_secondary_languages">Idiomas que manejas</string>
+    <string name="common_secondary_languages">Par lingüístico</string>
+    <string name="i_can_translate_from">Puedo traducir de</string>
+    <string name="qualification_level_for_above">Nivel de competencia en dicho par lingüístico</string>
+    <string name="user_qualification_level_1">Volunteer</string>
+    <string name="user_qualification_level_2">Verified</string>
+    <string name="user_qualification_level_3">Senior</string>
+    <string name="required_qualification_level">Nivel de competencia requerido para traductores</string>
+    <string name="set_default_required_qualification_level">Establezca el nivel de competencia requerido para voluntarios que trabajen tareas para esta organización (puede ser modificado para tareas en particular).</string>
+    <string name="update_required_qualification_level">Actualizar el nivel de competencia requerido</string>
 	<string name="common_first_name">Nombre</string>
 	<string name="common_last_name">Apellido(s)</string>
 	<string name="common_mobile_number">Teléfono móvil/celular</string>
@@ -858,10 +867,14 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
 
     <string name="task_claimed_alternative_option">Opción alternativa:</string>
     <string name="task_claimed_translate_using_kato">Traducir utilzando Kató</string>
+    <string name="task_claimed_proofread_using_kato">Revisar el texto con la ayuda de Kató</string>
     <string name="task_claimed_please_read_kato">Kató es una plataforma de traducción de Translators without Borders (TWB). Por favor, lee <a href="https://kato.translatorswb.org/public/doc/translators.html" target="_blank">la siguiente guía</a> antes de usar Kató.</string>
     <string name="task_simple_upload_copy_from_kato">Copia tu traducción de Kató a Trommons</string>
     <string name="task_simple_upload_view_on_kato">Pulsa <a href="%s" target="_blank">aquí</a> para <strong>ver tu traducción en Kató</strong>.</string>
     <string name="task_simple_upload_download_from_kato">Pulsa <a href="%s">aquí</a> para <strong>descargar tu traducción de Kató y cargarla en Trommons manualmente</strong>.</string>
+    <string name="task_simple_upload_copy_from_kato_proofread">Copie la versión ya revisada de Kató a Trommons</string>
+    <string name="task_simple_upload_view_on_kato_proofread">Haga clic <a href="%s" target="_blank">aquí</a> para<strong> ver la version revisada en Kató</strong>.</string>
+    <string name="task_simple_upload_download_from_kato_proofread">Haga clic <a href="%s">aquí</a> para<strong> descargar la version revisada de Kató y subirla a Trommons de forma manual</strong>.</string>
 
     <string name="task_create_for_project">Para el proyecto <strong>%s</strong>.</string>
 	<string name="task_create_0">Especifica un título relevante para la tarea.</string>
@@ -920,10 +933,10 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
   <string name="task_twitter_0_org_dashboard">Si tienes Twitter, haz clic en este botón para correr la voz sobre Trommons (asegúrate de habilitar las ventanas emergentes en tu navegador):</string>
   <string name="task_twitter_0_project_view">Si tienes Twitter, haz clic en este botón para que todo el mundo sepa de tu proyecto (asegúrate de habilitar las ventanas emergentes en tu navegador):</string>
   <string name="task_twitter_0_org_task_review">Si tienes Twitter, haz clic en este botón para decirle &quot;gracias&quot; a los voluntarios (asegúrate de habilitar las ventanas emergentes en tu navegador):</string>
-  <string name="task_twitter_1">Acabo de colaborar como voluntario/a con @TheRosettaFound #languagematters</string>
-  <string name="task_twitter_2">Nos hemos registrado en Trommons para contactar con traductores voluntarios @TheRosettaFound #languagematters</string>
-  <string name="task_twitter_3">Voluntarios de @TheRosettaFound: ¿nos ayudáis a traducir el proyecto que hemos creado en trommons.org%3F</string>
-  <string name="task_twitter_4">¡Gracias a los voluntarios de @TheRosettaFound por ayudarnos a traducir nuestro texto! #languagematters</string>
+  <string name="task_twitter_1">Acabo de colaborar como voluntario/a con @TranslatorsWB #languagematters</string>
+  <string name="task_twitter_2">Nos hemos registrado en Trommons para contactar con traductores voluntarios @TranslatorsWB #languagematters</string>
+  <string name="task_twitter_3">Voluntarios de @TranslatorsWB: ¿nos ayudáis a traducir el proyecto que hemos creado en trommons.org%3F</string>
+  <string name="task_twitter_4">¡Gracias a los voluntarios de @TranslatorsWB por ayudarnos a traducir nuestro texto! #languagematters</string>
   <string name="task_review_2">Por favor, puntúa el archivo o archivos que has</string>
 	<string name="task_review_3">en función de estos criterios:</string>
     <string name="task_review_4">Ya has enviado tu revisión de esta tarea.</string>
@@ -1005,21 +1018,23 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
     <string name="password_reset_4">Las contraseñas no coinciden. Inténtalo de nuevo.</string>
     <string name="password_reset_5">Comprueba la contraseña proporcionada e inténtalo de nuevo.</string>
 
-	<string name="register_register_on">Regístrate en</string>
+    <string name="register_register_on">Solo podrá crear su cuenta en Trommons después de rellenar el <a href="https://translatorswithoutborders.org/volunteer/translators/">TWB Formulario de Inscripción para Traductores</a><br />o bien, después de haber sido anunciado a TWB como el contacto de una organización asociada.<br />Si ya ha realizado este paso, regístrese aquí con la dirección de correo electrónico que suministró a TWB y seleccione una contraseña.<br />O, si lo prefiere, puede crear su cuenta en Trommons al usar uno de los proveedores de cuentas indicadas a continuación<br />siempre que su cuenta de correo electrónico con ese proveedor sea la misma.</string>
 	<string name="register_your_email">Dirección de e-mail</string>
 	<string name="register_your_password">Contraseña</string>
     <string name="register_1">La dirección de e-mail que has especificado no es válida. Introduce la dirección correcta.</string>
     <string name="register_2">No introducida ninguna contraseña. Introduce la contraseña e inténtalo de nuevo.</string>
     <string name="register_3">Ya eres un usuario verificado. Por favor, <a href="%s">introduce tu usuario y contraseña</a>.</string>
     <string name="register_4">Te hemos enviado un e-mail de verificación a la dirección de e-mail con la que te has registrado. Haz clic en el enlace que encontrarás en el e-mail para completar el registro. Una vez hayas verificado tu dirección de e-mail, inicia sesión <a href="%s">aquí</a>.</string>
+    <string name="register_no_application">Si no ha registrado su cuenta con su dirección de correo electrónico, deberá enviar el <a href="https://translatorswithoutborders.org/volunteer/translators/">(haga clic aquí) Formulario de Inscripción para Traductores</a> y luego regrese a <a href="https://trommons.org/register/">https://trommons.org/register/</a> para crear una cuenta en este enlace.</string>
+    <string name="register_no_application_error">Error de conexión, por favor, vuelva a intentar más tarde.</string>
 
 	<string name="user_private_profile_private_profile">Perfil privado</string>
 	<string name="user_private_profile_0">Aquí puedes actualizar tus datos personales.</string>
 	<string name="user_private_profile_2">Tienes que especificar un nombre de usuario.</string>
 	<string name="user_private_profile_please_note">Ten en cuenta que:</string>
   <string name="user_private_profile_3">Completa estos campos opcionales.</string>
-  <string name="user_private_profile_4">Indicar tu lengua materna en tu perfil es muy importante. Así podremos mostrarte tareas que se ajusten a los idiomas con los que trabajas.</string>
-	<string name="user_private_profile_add_secondary_language">Añade un idioma secundario</string>
+    <string name="user_private_profile_4">Es muy importante que añada sus pares lingüísticos («puedo traducir de... a...»). Haga click en «Actualizar información del perfil» una vez que haya terminado.</string>
+    <string name="user_private_profile_add_secondary_language">Añadir otro par lingüístico</string>
 	<string name="user_private_profile_task_type_preferences">Tareas que prefieres:</string>
 	<string name="user_private_profile_translating">Traducción</string>
 	<string name="user_private_profile_proofreading">Revisión</string>
@@ -1027,7 +1042,7 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
 	<string name="user_private_profile_update_profile_details">Actualizar detalles de perfil</string>
 	<string name="user_private_profile_6">¿Seguro que quieres cerrar tu cuenta de Trommons?</string>
 	<string name="user_private_profile_delete_user_account">Cerrar cuenta</string>
-    <string name="user_private_profile_secondary_languages_failed">Hay datos que no se han podido guardar. En &quot;Idiomas secundarios&quot;, asegúrate de seleccionar tanto el idioma como el país. El sistema ignorará los campos en blanco.</string>
+    <string name="user_private_profile_secondary_languages_failed">Asegúrese que la lengua de origen y la lengua meta sean diferentes.</string>
     <string name="user_private_profile_native_language_blanks">Cuando indiques tu lengua materna, asegúrate de seleccionar tanto el idioma como el país.</string>
     <string name="user_private_profile_receive_credit">Recibir reconocimiento</string>
 	<string name="user_private_profile_7">Si quieres recibir reconocimiento por tus contribuciones, tendrás que rellenar los campos de nombre y apellido(s).</string>

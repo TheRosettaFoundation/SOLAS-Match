@@ -216,6 +216,21 @@ Tweet</a>
                     {/if}
                     </td>                
                 </tr>
+                {if $project_id > Settings::get("discourse.pre_discourse")}
+                <tr>
+                    <td colspan="3" style="padding-bottom: 40px"></td>
+                </tr>
+                <tr valign="top">
+                    <td colspan="3">
+                        <strong>{Localisation::getTranslation('common_forum')}</strong><hr/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="nav nav-list unstyled" style="padding-left: 0px; padding-right: 0px;" colspan="2">
+                        <a href="https://community.translatorswb.org/t/{$discourse_slug}" target="_blank">https://community.translatorswb.org/t/{$discourse_slug}</a>
+                    </td>
+                </tr>
+                {/if}
             </tbody>
         </table>
     </div>            

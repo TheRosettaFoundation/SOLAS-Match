@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 
 <div class="page-header">
-    <h1>{Localisation::getTranslation('register_register_on')} {Settings::get('site.name')}</h1>
+    <h3>{Localisation::getTranslation('register_register_on')}</h3>
 </div>
 
 {include file="handle-flash-messages.tpl"}
@@ -36,9 +36,8 @@
     <form action="{urlFor name='login'}" method="post" id="openid_form">
         <input type="hidden" name="action" value="verify" />
         <fieldset>
-            <legend>{Localisation::getTranslation('common_signin_or_create_new_account')}</legend>
+            <h3>{Localisation::getTranslation('register_signin_or_create_new_account')}</h3>
             <div id="openid_choice">
-                <p>{Localisation::getTranslation('common_please_click_your_account_provider')}</p>
                  {if isset($gplus) && ($gplus === 'y')}
                     <div id="gSignInWrapper">
                         <div id="customGplusBtn" class="customGPlusSignIn">

@@ -1414,6 +1414,49 @@ CREATE TABLE IF NOT EXISTS `MatecatLanguagePairs` (
     CONSTRAINT FK_matecat_language_pair_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `UserQualifiedPairs` (
+  user_id              INT(10) UNSIGNED NOT NULL,
+  language_id_source   INT(10) UNSIGNED NOT NULL,
+  language_code_source VARCHAR(3) NOT NULL,
+  country_id_source    INT(10) UNSIGNED NOT NULL,
+  country_code_source  VARCHAR(2) NOT NULL,
+  language_id_target   INT(10) UNSIGNED NOT NULL,
+  language_code_target VARCHAR(3) NOT NULL,
+  country_id_target    INT(10) UNSIGNED NOT NULL,
+  country_code_target  VARCHAR(2) NOT NULL,
+  qualification_level  INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (user_id, language_code_source, country_code_source, language_code_target, country_code_target),
+  KEY `FK_user_qualified_pairs_user` (`user_id`),
+  CONSTRAINT `FK_user_qualified_pairs_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_UserQualifiedPairs_language_id_source` FOREIGN KEY (`language_id_source`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT `FK_UserQualifiedPairs_country_id_source`  FOREIGN KEY (`country_id_source`)  REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT `FK_UserQualifiedPairs_language_id_target` FOREIGN KEY (`language_id_target`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT `FK_UserQualifiedPairs_country_id_target`  FOREIGN KEY (`country_id_target`)  REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `RequiredOrgQualificationLevels` (
+  org_id                       INT(10) UNSIGNED NOT NULL,
+  required_qualification_level INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (org_id),
+  CONSTRAINT `FK_RequiredOrgQualificationLevels_org_id` FOREIGN KEY (`org_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `RequiredTaskQualificationLevels` (
+  task_id                      BIGINT(20) UNSIGNED NOT NULL,
+  required_qualification_level INT(10)    UNSIGNED NOT NULL,
+  PRIMARY KEY (task_id),
+  CONSTRAINT `FK_RequiredTaskQualificationLevels_task_id` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `OrgIDMatchingNeon` (
+  org_id_neon  INT(10) UNSIGNED NOT NULL,
+  org_id       INT(10) UNSIGNED NOT NULL,
+  created_time DATETIME DEFAULT NULL,
+  PRIMARY KEY (org_id_neon),
+  KEY FK_OrgIDMatchingNeon_Organisations (org_id),
+  CONSTRAINT FK_OrgIDMatchingNeon_Organisations FOREIGN KEY (org_id) REFERENCES Organisations (id) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -2368,6 +2411,7 @@ BEGIN
             comment, `task-type_id` as taskType, `task-status_id` as taskStatus, published, t.deadline, t.`created-time` as createdTime
         FROM Tasks t 
         JOIN      Projects p ON t.project_id=p.id
+        JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
         LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
         WHERE NOT exists (SELECT 1 
                             FROM TaskClaims 
@@ -2375,6 +2419,7 @@ BEGIN
         AND t.published = 1 
         AND t.`task-status_id` = 2 
         AND r.restricted_task_id IS NULL
+        AND tq.required_qualification_level=1
         ORDER BY `created-time` DESC 
         LIMIT offset, lim;
 END//
@@ -2388,13 +2433,15 @@ BEGIN
     SELECT count(*) as result
         FROM Tasks t 
         JOIN      Projects p ON t.project_id=p.id
+        JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
         LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
         WHERE NOT exists (SELECT 1 
                             FROM TaskClaims 
                             WHERE TaskClaims.task_id = t.id) 
         AND t.published = 1 
         AND t.`task-status_id` = 2
-        AND r.restricted_task_id IS NULL;
+        AND r.restricted_task_id IS NULL
+        AND tq.required_qualification_level=1;
 END//
 DELIMITER ;
 
@@ -3455,8 +3502,13 @@ BEGIN
         Users u,
         Tasks t
     JOIN      Projects p ON t.project_id=p.id
+    JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
     LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
     LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
+    LEFT JOIN UserQualifiedPairs uqp ON
+        uqp.user_id=uID AND
+        t.`language_id-source`=uqp.language_id_source AND
+        t.`language_id-target`=uqp.language_id_target
     WHERE
         u.id=uID AND
         t.id NOT IN (SELECT t.task_id FROM TaskClaims t) AND
@@ -3464,33 +3516,25 @@ BEGIN
         t.`task-status_id`=2 AND
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id=uID AND t.task_id=t.id) AND
         (taskType IS NULL OR t.`task-type_id`=taskType) AND
+        (tq.required_qualification_level=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
         (sourceLanguage IS NULL OR t.`language_id-source`=(SELECT l.id FROM Languages l WHERE l.code=sourceLanguage)) AND
         (targetLanguage IS NULL OR t.`language_id-target`=(SELECT l.id FROM Languages l WHERE l.code=targetLanguage)) AND
-        (
-            strict=0
-            OR
-            (
-                (
-                    t.`language_id-source` IN (SELECT language_id FROM Users                  WHERE id     =uID) OR
-                    t.`language_id-source` IN (SELECT language_id FROM UserSecondaryLanguages WHERE user_id=uID)
-                )
-                AND
-                (
-                    t.`language_id-target` IN (SELECT language_id FROM Users                  WHERE id     =uID) OR
-                    t.`language_id-target` IN (SELECT language_id FROM UserSecondaryLanguages WHERE user_id=uID)
-                )
-            )
-        ) AND
+        (strict=0 OR uqp.user_id IS NOT NULL) AND
         (
             r.restricted_task_id IS NULL OR
             b.id IS NULL OR
             b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
         )
+    GROUP BY t.id
     ORDER BY
-        IF(t.`language_id-target`=u.language_id, 1000 + IF(u.country_id=t.`country_id-target`, 100, 0), 0) +
-        IF(t.`language_id-source`=u.language_id,  750 + IF(u.country_id=t.`country_id-source`,  75, 0), 0) +
-        IF(t.`language_id-target` IN (SELECT language_id FROM UserSecondaryLanguages WHERE user_id=uID), 500 + IF(t.`country_id-target` IN (SELECT country_id FROM UserSecondaryLanguages WHERE user_id=uID), 50, 0), 0) +
-        IF(t.`language_id-source` IN (SELECT language_id FROM UserSecondaryLanguages WHERE user_id=uID), 500 + IF(t.`country_id-source` IN (SELECT country_id FROM UserSecondaryLanguages WHERE user_id=uID), 50, 0), 0) +
+        IF(t.`language_id-target`=u.language_id, 500 + IF(u.country_id=t.`country_id-target`, 50, 0), 0) +
+        IF(t.`language_id-source`=u.language_id, 250 + IF(u.country_id=t.`country_id-source`, 25, 0), 0) +
+        IF(COUNT(uqp.user_id), 1000,
+            IF(t.`language_id-target`=u.language_id, 500 + IF(u.country_id=t.`country_id-target`, 50, 0), 0) +
+            IF(t.`language_id-source`=u.language_id, 500 + IF(u.country_id=t.`country_id-source`, 50, 0), 0)
+        ) +
+        IF(SUM(IFNULL(uqp.country_id_target, 0)=t.`country_id-target`), 50, 0) +
+        IF(SUM(IFNULL(uqp.country_id_source, 0)=t.`country_id-source`), 50, 0) +
         (SELECT 250.*(1.0-POWER(0.75, COUNT(*)))/(1.0-0.75) FROM ProjectTags pt WHERE pt.project_id=t.project_id AND pt.tag_id IN (SELECT ut.tag_id FROM UserTags ut WHERE user_id=uID)) +
         LEAST(DATEDIFF(CURDATE(), t.`created-time`), 700)
         DESC
@@ -3510,34 +3554,34 @@ BEGIN
     if sourceLanguage = '' then set sourceLanguage = null; end if;
     if targetLanguage = '' then set targetLanguage = null; end if;
 
-    (SELECT count(*) as `result`
+    SELECT COUNT(*) AS result FROM (
+        SELECT t.id
         FROM Tasks t
         JOIN      Projects p ON t.project_id=p.id
+        JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
         LEFT JOIN Badges   b ON p.organisation_id=b.owner_id AND b.title='Qualified'
         LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
+        LEFT JOIN UserQualifiedPairs uqp ON
+            uqp.user_id=uID AND
+            t.`language_id-source`=uqp.language_id_source AND
+            t.`language_id-target`=uqp.language_id_target
         WHERE t.id NOT IN ( SELECT t.task_id FROM TaskClaims t)
         AND t.published = 1 
         AND t.`task-status_id` = 2 
         AND not exists( SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id = uID AND t.task_id = t.id)
         AND (taskType is null or t.`task-type_id` = taskType)
+        AND (tq.required_qualification_level=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level))
         AND (sourceLanguage is null or t.`language_id-source` = (SELECT l.id FROM Languages l WHERE l.code = sourceLanguage))
         AND (targetLanguage is null or t.`language_id-target` = (SELECT l.id FROM Languages l WHERE l.code = targetLanguage))
-        AND (strict = 0
-            OR ((t.`language_id-source` IN 
-                        (SELECT language_id FROM Users WHERE id =  uID)
-                    OR t.`language_id-source` IN 
-                        (SELECT language_id FROM UserSecondaryLanguages WHERE user_id =  uID))
-                AND (t.`language_id-target` IN 
-                        (SELECT language_id FROM Users WHERE id = uID)
-                    OR t.`language_id-target` IN 
-                        (SELECT language_id FROM UserSecondaryLanguages WHERE user_id = uID))))
+        AND (strict=0 OR uqp.user_id IS NOT NULL)
         AND
         (
             r.restricted_task_id IS NULL OR
             b.id IS NULL OR
             b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
         )
-    );
+        GROUP BY t.id
+    ) AS tasks_to_be_counted;
 END//
 DELIMITER ;
 
@@ -3696,16 +3740,19 @@ BEGIN
         FROM TaskViews tv
         JOIN Tasks     t  ON
             t.id=tv.task_id AND
-            tv.user_id IN (SELECT DISTINCT user_id FROM TaskViews WHERE task_id=taskID) AND
+            tv.user_id IN (SELECT DISTINCT tv2.user_id FROM TaskViews tv2 WHERE tv2.task_id=taskID) AND
             t.id!=taskID AND
             t.`task-status_id`=2 AND
             t.`language_id-source`=current_task_langSource AND
             t.`language_id-target`=current_task_langTarget AND
             t.published=1
         JOIN      Projects p ON t.project_id=p.id
+        JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
         LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
-        WHERE r.restricted_task_id IS NULL
-        GROUP BY task_id
+        WHERE
+            r.restricted_task_id IS NULL AND
+            tq.required_qualification_level=1
+        GROUP BY tv.task_id
         ORDER BY task_count DESC
         ) AS t1
     JOIN Tasks t2 ON t1.id=t2.id
@@ -6072,15 +6119,66 @@ DROP PROCEDURE IF EXISTS `isUserRestrictedFromTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserRestrictedFromTask`(IN `taskID` INT, IN `userID` INT)
 BEGIN
-    SELECT t.id
-    FROM Tasks            t
-    JOIN RestrictedTasks  r ON t.id=r.restricted_task_id
-    JOIN Projects         p ON t.project_id=p.id
-    JOIN Badges           b ON p.organisation_id=b.owner_id AND b.title='Qualified'
-    LEFT JOIN UserBadges ub ON b.id=ub.badge_id AND ub.user_id=userID
-    WHERE
-        t.id=taskID AND
-        ub.badge_id IS NULL;
+    IF EXISTS (
+        SELECT 1
+        FROM Admins
+        WHERE
+            user_id=userID AND
+            organisation_id IS NULL
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF EXISTS (
+        SELECT 1
+        FROM Tasks                t
+        JOIN Projects             p ON t.project_id=p.id
+        JOIN OrganisationMembers om ON p.organisation_id=om.organisation_id
+        WHERE
+            t.id=taskID AND
+            om.user_id=userID
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF EXISTS (
+        SELECT t.id
+        FROM Tasks            t
+        JOIN RestrictedTasks  r ON t.id=r.restricted_task_id
+        JOIN Projects         p ON t.project_id=p.id
+        JOIN Badges           b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+        LEFT JOIN UserBadges ub ON b.id=ub.badge_id AND ub.user_id=userID
+        WHERE
+            t.id=taskID AND
+            ub.badge_id IS NULL
+    ) THEN
+        SELECT 1 AS result;
+
+    ELSEIF EXISTS (
+        SELECT 1
+        FROM RequiredTaskQualificationLevels tq
+        WHERE
+            tq.task_id=taskID AND
+            tq.required_qualification_level=1
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF NOT EXISTS (
+        SELECT t.id
+        FROM Tasks t
+        JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
+        JOIN UserQualifiedPairs uqp ON
+            uqp.user_id=userID AND
+            t.`language_id-source`=uqp.language_id_source AND
+            t.`language_id-target`=uqp.language_id_target
+        WHERE
+            t.id=taskID AND
+            tq.required_qualification_level<=uqp.qualification_level
+    ) THEN
+        SELECT 1 AS result;
+
+    ELSE
+    SELECT 0 AS result;
+
+    END IF;
 END//
 DELIMITER ;
 
@@ -6185,12 +6283,15 @@ BEGIN
         u.id AS user_id,
         u.`display-name` AS display_name,
         u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`, '') AS last_name,
         l.code AS language_code,
         l.`en-name` AS language_name,
         c.code AS country_code,
         c.`en-name` AS country_name,
         'Native' AS native_or_secondary
     FROM Users     u
+    JOIN UserPersonalInformation i ON u.id=i.user_id
     JOIN Languages l ON u.language_id=l.id
     JOIN Countries c ON u.country_id=c.id
     WHERE languageCode IS NULL OR l.code=languageCode
@@ -6201,15 +6302,38 @@ UNION
         u.id AS user_id,
         u.`display-name` AS display_name,
         u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`, '') AS last_name,
         l.code AS language_code,
         l.`en-name` AS language_name,
         c.code AS country_code,
         c.`en-name` AS country_name,
-        'Secondary' AS native_or_secondary
+        'Source' AS native_or_secondary
     FROM Users                   u
-    JOIN UserSecondaryLanguages sl ON u.id=sl.user_id
-    JOIN Languages               l ON sl.language_id=l.id
-    JOIN Countries               c ON sl.country_id=c.id
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    JOIN UserQualifiedPairs    uqp ON u.id=uqp.user_id
+    JOIN Languages               l ON uqp.language_id_source=l.id
+    JOIN Countries               c ON uqp.country_id_source=c.id
+    WHERE languageCode IS NULL OR l.code=languageCode
+)
+UNION
+(
+    SELECT
+        u.id AS user_id,
+        u.`display-name` AS display_name,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`, '') AS last_name,
+        l.code AS language_code,
+        l.`en-name` AS language_name,
+        c.code AS country_code,
+        c.`en-name` AS country_name,
+        'Target' AS native_or_secondary
+    FROM Users                   u
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    JOIN UserQualifiedPairs    uqp ON u.id=uqp.user_id
+    JOIN Languages               l ON uqp.language_id_target=l.id
+    JOIN Countries               c ON uqp.country_id_target=c.id
     WHERE languageCode IS NULL OR l.code=languageCode
 )
 ORDER BY language_name, country_name, display_name;
@@ -6249,11 +6373,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `community_stats_secondary`()
 BEGIN
     SELECT
         u.id,
-        IFNULL(GROUP_CONCAT(l.code ORDER BY l.code SEPARATOR ', '), '') AS secondary_codes,
-        IFNULL(GROUP_CONCAT(l.`en-name` ORDER BY l.`en-name` SEPARATOR ', '), '') AS secondary_languages
+        IFNULL(GROUP_CONCAT(l1.code ORDER BY l1.code SEPARATOR ', '), '') AS source_codes,
+        IFNULL(GROUP_CONCAT(l1.`en-name` ORDER BY l1.`en-name` SEPARATOR ', '), '') AS source_languages,
+        IFNULL(GROUP_CONCAT(l2.code ORDER BY l2.code SEPARATOR ', '), '') AS target_codes,
+        IFNULL(GROUP_CONCAT(l2.`en-name` ORDER BY l2.`en-name` SEPARATOR ', '), '') AS target_languages
     FROM Users u
-    LEFT JOIN UserSecondaryLanguages usl ON u.id=usl.user_id
-    LEFT JOIN Languages l ON usl.language_id=l.id
+    LEFT JOIN UserQualifiedPairs uqp ON u.id=uqp.user_id
+    LEFT JOIN Languages l1 ON uqp.language_id_source=l1.id
+    LEFT JOIN Languages l2 ON uqp.language_id_target=l2.id
     GROUP BY u.id;
 END//
 DELIMITER ;
@@ -6270,6 +6397,67 @@ BEGIN
     LEFT JOIN TaskClaims tc ON u.id=tc.user_id
     LEFT JOIN Tasks t ON tc.task_id=t.id
     GROUP BY u.id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `user_task_languages`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `user_task_languages`(IN `languageCode` VARCHAR(3))
+BEGIN
+(
+    SELECT
+        u.id AS user_id,
+        u.`display-name` AS display_name,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`, '') AS last_name,
+        t.id AS task_id,
+        t.title AS task_title,
+        CASE
+            WHEN t.`task-type_id`=1 THEN 'Segmentation'
+            WHEN t.`task-type_id`=2 THEN 'Translation'
+            WHEN t.`task-type_id`=3 THEN 'Proofreading'
+            WHEN t.`task-type_id`=4 THEN 'Desegmentation'
+        END
+        AS task_type,
+        l.code AS language_code,
+        l.`en-name` AS language_name,
+        'Source' AS native_or_secondary
+    FROM Tasks       t
+    JOIN TaskClaims tc ON t.id=tc.task_id
+    JOIN Languages   l ON t.`language_id-source`=l.id
+    JOIN Users       u ON tc.user_id=u.id
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    WHERE languageCode IS NULL OR l.code=languageCode
+)
+UNION
+(
+    SELECT
+        u.id AS user_id,
+        u.`display-name` AS display_name,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`, '') AS last_name,
+        t.id AS task_id,
+        t.title AS task_title,
+        CASE
+            WHEN t.`task-type_id`=1 THEN 'Segmentation'
+            WHEN t.`task-type_id`=2 THEN 'Translation'
+            WHEN t.`task-type_id`=3 THEN 'Proofreading'
+            WHEN t.`task-type_id`=4 THEN 'Desegmentation'
+        END
+        AS task_type,
+        l.code AS language_code,
+        l.`en-name` AS language_name,
+        'Target' AS native_or_secondary
+    FROM Tasks       t
+    JOIN TaskClaims tc ON t.id=tc.task_id
+    JOIN Languages   l ON t.`language_id-target`=l.id
+    JOIN Users       u ON tc.user_id=u.id
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    WHERE languageCode IS NULL OR l.code=languageCode
+)
+    ORDER BY language_name, display_name, native_or_secondary, task_title;
 END//
 DELIMITER ;
 
@@ -6525,6 +6713,154 @@ JOIN TaskFileVersions tfv ON t.id=tfv.task_id AND tfv.version_id>0 AND tfv.versi
 WHERE t.`task-status_id`=4
 GROUP BY YEAR(tfv.`upload-time`), MONTH(tfv.`upload-time`)
 ORDER BY YEAR(tfv.`upload-time`) DESC, MONTH(tfv.`upload-time`) DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `createUserQualifiedPair`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createUserQualifiedPair`(IN userID INT, IN languageCodeSource VARCHAR(3), IN countryCodeSource VARCHAR(2), IN languageCodeTarget VARCHAR(3), IN countryCodeTarget VARCHAR(2), IN qualificationLevel INT)
+BEGIN
+    INSERT INTO UserQualifiedPairs (
+        user_id,
+        language_id_source,
+        language_code_source,
+        country_id_source,
+        country_code_source,
+        language_id_target,
+        language_code_target,
+        country_id_target,
+        country_code_target,
+        qualification_level
+    ) VALUES (
+        userID,
+        (SELECT id FROM Languages WHERE code=languageCodeSource),
+        languageCodeSource,
+        (SELECT id FROM Countries WHERE code=countryCodeSource),
+        countryCodeSource,
+        (SELECT id FROM Languages WHERE code=languageCodeTarget),
+        languageCodeTarget,
+        (SELECT id FROM Countries WHERE code=countryCodeTarget),
+        countryCodeTarget,
+        qualificationLevel
+    );
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `updateUserQualifiedPair`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateUserQualifiedPair`(IN userID INT, IN languageCodeSource VARCHAR(3), IN countryCodeSource VARCHAR(2), IN languageCodeTarget VARCHAR(3), IN countryCodeTarget VARCHAR(2), IN qualificationLevel INT)
+BEGIN
+    UPDATE UserQualifiedPairs SET qualification_level=qualificationLevel
+    WHERE
+        user_id=userID AND
+        language_code_source=languageCodeSource AND
+        country_code_source=countryCodeSource AND
+        language_code_target=languageCodeTarget AND
+        country_code_target=countryCodeTarget;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getUserQualifiedPairs`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserQualifiedPairs`(IN userID INT)
+BEGIN
+    SELECT uqp.*, l1.`en-name` AS language_source, c1.`en-name` AS country_source, l2.`en-name` AS language_target, c2.`en-name` AS country_target
+    FROM UserQualifiedPairs uqp
+    JOIN Languages l1 ON uqp.language_id_source=l1.id
+    JOIN Countries c1 ON uqp.country_id_source=c1.id
+    JOIN Languages l2 ON uqp.language_id_target=l2.id
+    JOIN Countries c2 ON uqp.country_id_target=c2.id
+    WHERE user_id=userID
+    ORDER BY l1.`en-name`, l2.`en-name`, c1.`en-name`,c2.`en-name`;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `removeUserQualifiedPair`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeUserQualifiedPair`(IN userID INT, IN languageCodeSource VARCHAR(3), IN countryCodeSource VARCHAR(2), IN languageCodeTarget VARCHAR(3), IN countryCodeTarget VARCHAR(2))
+BEGIN
+    DELETE FROM UserQualifiedPairs
+    WHERE
+        user_id=userID AND
+        language_code_source=languageCodeSource AND
+        country_code_source=countryCodeSource AND
+        language_code_target=languageCodeTarget AND
+        country_code_target=countryCodeTarget;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `updateRequiredOrgQualificationLevel`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateRequiredOrgQualificationLevel`(IN orgID INT, IN requiredQualificationLevel INT)
+BEGIN
+    REPLACE INTO RequiredOrgQualificationLevels (org_id, required_qualification_level) VALUES (orgID, requiredQualificationLevel);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getRequiredOrgQualificationLevel`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getRequiredOrgQualificationLevel`(IN orgID INT)
+BEGIN
+    SELECT *
+    FROM RequiredOrgQualificationLevels
+    WHERE org_id=orgID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `inheritRequiredTaskQualificationLevel`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `inheritRequiredTaskQualificationLevel`(IN taskID BIGINT)
+BEGIN
+    INSERT INTO RequiredTaskQualificationLevels
+        (task_id, required_qualification_level)
+    VALUES (
+        taskID,
+        IFNULL(
+            (
+                SELECT oql.required_qualification_level
+                FROM Tasks t
+                JOIN Projects p ON t.project_id=p.id
+                JOIN RequiredOrgQualificationLevels oql ON p.organisation_id=oql.org_id
+                WHERE t.id=taskID
+            ),
+            1)
+    );
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `updateRequiredTaskQualificationLevel`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateRequiredTaskQualificationLevel`(IN taskID BIGINT, IN requiredQualificationLevel INT)
+BEGIN
+    REPLACE INTO RequiredTaskQualificationLevels (task_id, required_qualification_level) VALUES (taskID, requiredQualificationLevel);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getRequiredTaskQualificationLevel`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getRequiredTaskQualificationLevel`(IN taskID BIGINT)
+BEGIN
+    SELECT *
+    FROM RequiredTaskQualificationLevels
+    WHERE task_id=taskID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getOrgIDMatchingNeon`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgIDMatchingNeon`(IN orgIDNeon INT)
+BEGIN
+    SELECT org_id FROM OrgIDMatchingNeon WHERE org_id_neon=orgIDNeon;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insertOrgIDMatchingNeon`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertOrgIDMatchingNeon`(IN orgID INT, IN orgIDNeon INT)
+BEGIN
+    INSERT INTO OrgIDMatchingNeon
+               (org_id_neon, org_id, created_time)
+        VALUES (  orgIDNeon,  orgID, NOW());
 END//
 DELIMITER ;
 

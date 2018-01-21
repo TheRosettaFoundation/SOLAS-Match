@@ -89,6 +89,17 @@ class UserDao
         }
     }
 
+    public static function createUserQualifiedPair($user_id, $language_code_source, $country_code_source, $language_code_target, $country_code_target, $qualification_level)
+    {
+        Lib\PDOWrapper::call('createUserQualifiedPair',
+            Lib\PDOWrapper::cleanse($user_id) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($language_code_source) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($country_code_source) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($language_code_target) . ',' .
+            Lib\PDOWrapper::cleanseWrapStr($country_code_target) . ',' .
+            Lib\PDOWrapper::cleanse($qualification_level));
+    }
+
     private static function clearPasswordMatchesUsersPassword($user, $clear_password)
     {
         $hashed_input_password = Common\Lib\Authentication::hashPassword($clear_password, $user->getNonce());
@@ -956,5 +967,20 @@ class UserDao
         } else {
             return null;
         }
+    }
+
+    public static function getOrgIDMatchingNeon($org_id_neon)
+    {
+        $org_id = 0;
+        $result = Lib\PDOWrapper::call('getOrgIDMatchingNeon', Lib\PDOWrapper::cleanse($org_id_neon));
+        if (!empty($result)) {
+            $org_id = $result[0]['org_id'];
+        }
+        return $org_id;
+    }
+
+    public static function insertOrgIDMatchingNeon($org_id, $org_id_neon)
+    {
+        Lib\PDOWrapper::call('insertOrgIDMatchingNeon', Lib\PDOWrapper::cleanse($org_id) . ',' . Lib\PDOWrapper::cleanse($org_id_neon));
     }
 }

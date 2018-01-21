@@ -98,7 +98,7 @@
                         <tr>
                             <td style="padding-bottom: 10px"/>
                         </tr>
-                        {if isset($secondaryLanguages)}
+                        {if !empty($userQualifiedPairs)}
                             <tr>
                                 <td>
                                     <h3>{Localisation::getTranslation('common_secondary_languages')}</h3>
@@ -106,8 +106,8 @@
                             </tr>
                             <tr>
                                 <td>
-                                    {foreach from=$secondaryLanguages item=language}
-                                        <p>{TemplateHelper::getLanguageAndCountry($language)}</p>
+                                    {foreach from=$userQualifiedPairs item=userQualifiedPair}
+                                        <p>{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']} &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; {$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}</p>
                                     {/foreach}
                                 </td>
                             </tr>

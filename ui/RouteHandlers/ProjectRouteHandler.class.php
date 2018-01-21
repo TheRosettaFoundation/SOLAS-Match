@@ -363,6 +363,7 @@ class ProjectRouteHandler
                 "isAdmin"       => $isAdmin,
                 "isSiteAdmin"   => $isSiteAdmin,
                 "imgCacheToken" => $preventImageCacheToken,
+                'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation
         ));
         $app->render("project/project.view.tpl");
@@ -816,6 +817,9 @@ class ProjectRouteHandler
                                 $matecat_translation_task_ids         = array();
                                 $matecat_translation_target_languages = array();
                                 $matecat_translation_target_countrys  = array();
+                                $matecat_proofreading_task_ids        = array();
+                                $matecat_proofreading_target_languages= array();
+                                $matecat_proofreading_target_countrys = array();
                                 while (!empty($post["target_language_$targetCount"]) && !empty($post["target_country_$targetCount"])) {
 
                                     if (!empty($post["segmentation_$targetCount"])) {
@@ -877,6 +881,9 @@ class ProjectRouteHandler
                                                     $creatingTasksSuccess = false;
                                                     break;
                                                 }
+                                                $matecat_proofreading_task_ids[]         = $id;
+                                                $matecat_proofreading_target_languages[] = $post["target_language_$targetCount"];
+                                                $matecat_proofreading_target_countrys[]  = $post["target_country_$targetCount"];
                                             }
                                         } elseif (empty($post["translation_$targetCount"]) && !empty($post["proofreading_$targetCount"])) {
                                             // Only a proofreading task to be created
@@ -896,6 +903,9 @@ class ProjectRouteHandler
                                                 $creatingTasksSuccess = false;
                                                 break;
                                             }
+                                            $matecat_proofreading_task_ids[]         = $id;
+                                            $matecat_proofreading_target_languages[] = $post["target_language_$targetCount"];
+                                            $matecat_proofreading_target_countrys[]  = $post["target_country_$targetCount"];
                                         }
                                     }
                                     $targetCount++;
@@ -945,6 +955,19 @@ class ProjectRouteHandler
                                                 }
                                             }
                                         }
+                                        if (!empty($source_language) && !empty($matecat_proofreading_task_ids)) {
+                                            $target_list = array();
+                                            foreach ($matecat_proofreading_task_ids as $i => $matecat_proofreading_task_id) {
+                                                $target_language = $this->valid_language_for_matecat($matecat_proofreading_target_languages[$i] . '-' . $matecat_proofreading_target_countrys[$i]);
+                                                if (!empty($target_language) && ($target_language != $source_language) && !in_array($target_language, $target_list)) {
+                                                    $target_list[] = $target_language;
+                                                    $taskDao->insertMatecatLanguagePairs($matecat_proofreading_task_id, $project->getId(), Common\Enums\TaskTypeEnum::PROOFREADING, "$source_language|$target_language");
+                                                }
+                                            }
+                                        }
+
+                                       // Create a topic in the Community forum (Discourse) and a project in Asana
+                                       $this->create_discourse_topic($project->getId(), $target_languages);
 
                                         try {
                                             $app->redirect($app->urlFor('project-view', array('project_id' => $project->getId())));
@@ -1358,6 +1381,74 @@ class ProjectRouteHandler
         }
     }
 
+    public function create_discourse_topic($projectId, $targetlanguages)
+    {
+        $app = \Slim\Slim::getInstance();
+        $projectDao = new DAO\ProjectDao();
+        $project = $projectDao->getProject($projectId);
+        $org_id = $project->getOrganisationId();
+        $orgDao = new DAO\OrganisationDao();
+        $org = $orgDao->getOrganisation($org_id);
+        $org_name = $org->getName();
+
+        $langDao = new DAO\LanguageDao();
+        $langcodearray = explode(',', $targetlanguages);
+        $i = 0;
+        $languages = array();
+        foreach($langcodearray as $langcode){
+            $langcode = substr($langcode,0,strpos($langcode."-","-"));
+            $language = $langDao->getLanguageByCode($langcode);
+            $languages[$i++] = $language->getName();
+        }
+
+        $discourseapiparams = array(
+            'api_key'      => Common\Lib\Settings::get('discourse.api_key'),
+            'api_username' => Common\Lib\Settings::get('discourse.api_username'),
+            'category' => '7',
+            'title' => $project->getTitle(),
+            'raw' => "Partner: $org_name. URL: /"."/".$_SERVER['SERVER_NAME']."/project/$projectId/view ".$project->getDescription(),
+        );
+        $fields = '';
+        foreach($discourseapiparams as $name => $value){
+            $fields .= urlencode($name).'='.urlencode($value).'&';
+        }
+        foreach($languages as $language){
+            // We cannot pass the post fields as array because multiple languages mean duplicate tags[] keys
+            $fields .= 'tags[]='.urlencode($language).'&';
+        }
+        $fields .= 'tags[]=' . urlencode($org_name);
+
+        $re = curl_init(Common\Lib\Settings::get('discourse.url').'/posts');
+        curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
+        curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
+
+        curl_exec($re);
+        if ($error_number = curl_errno($re)) {
+          error_log("Discourse API error ($error_number): " . curl_error($re));
+        }
+        curl_close($re);
+
+        //Asana
+        $re = curl_init('https://app.asana.com/api/1.0/tasks');
+        curl_setopt($re, CURLOPT_POSTFIELDS, array(
+            'name' => $project->getTitle(),
+            'notes' => "Partner: $org_name, Target: $targetlanguages, Deadline: ".$project->getDeadline() . ' https:/'.'/'.$_SERVER['SERVER_NAME']."/project/$projectId/view",
+            'projects' => Common\Lib\Settings::get('asana.project')
+            )
+        );
+
+
+        curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($re, CURLOPT_HEADER, true);
+        curl_setopt($re, CURLOPT_HTTPHEADER, array("Authorization: Bearer " . Common\Lib\Settings::get('asana.api_key')));
+        curl_exec($re);
+        if ($error_number = curl_errno($re)) {
+          error_log("Asana API error ($error_number): " . curl_error($re));
+        }
+        curl_close($re);
+        //End Asana
+    }
+
     public function project_cron_1_minute()
     {
       $fp_for_lock = fopen(__DIR__ . '/project_cron_1_minute_lock.txt', 'r');
@@ -1435,6 +1526,7 @@ class ProjectRouteHandler
                                             // Set matecat_id_job, matecat_id_job_password, matecat_id_file
                                             // Note: SQL will not update if we were forced to use fake language pairs for word count purposes as they will not match
                                             $taskDao->updateMatecatLanguagePairs($project_id, Common\Enums\TaskTypeEnum::TRANSLATION, $langpair, $matecat_id_job, $matecat_id_job_password, $matecat_id_file);
+                                            $taskDao->updateMatecatLanguagePairs($project_id, Common\Enums\TaskTypeEnum::PROOFREADING, $langpair, $matecat_id_job, $matecat_id_job_password, $matecat_id_file);
                                         } else {
                                             error_log("project_cron /status ($project_id) matecat_id_job($matecat_id_job), matecat_id_job_password($matecat_id_job_password) or matecat_id_file($matecat_id_file) empty!");
                                         }
@@ -1654,6 +1746,7 @@ class ProjectRouteHandler
 'ht' => 'ht-HT',
 'ha' => 'ha-HAU',
 'US' => 'US-HI',
+'haw' => 'US-HI',
 'he' => 'he-IL',
 'mrj' => 'mrj-RU',
 'hi' => 'hi-IN',
@@ -1695,6 +1788,7 @@ class ProjectRouteHandler
 'ny' => 'ny-NYA',
 'oc' => 'oc-FR',
 'oc-ES' => 'oc-ES',
+'or' => 'or-IN',
 'pa' => 'pa-IN',
 'pap' => 'pap-CW',
 'ps' => 'ps-PK',

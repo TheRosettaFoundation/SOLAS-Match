@@ -1,4 +1,5 @@
 var parameters; // Instance of Parameters Class holding data retrieved from Server (e.g. Translations)
+var parametersLoaded = false;
 
 // Passed from PHP
 var siteLocation;
@@ -36,6 +37,8 @@ function documentReady()
 
 function loadingComplete()
 {
+  parametersLoaded = true;
+
   renderTaskDetails();
 
   document.getElementById("loading_warning").innerHTML = "";
@@ -46,6 +49,8 @@ function loadingComplete()
  */
 function renderTaskDetails()
 {
+  if (!parametersLoaded) return;
+
   $(".process_created_time_utc").each(function ()
     {
       $(this).removeClass("process_created_time_utc");

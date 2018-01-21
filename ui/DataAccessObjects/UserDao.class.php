@@ -3,12 +3,16 @@
 namespace SolasMatch\UI\DAO;
 
 use \SolasMatch\UI\Lib as Lib;
+use \SolasMatch\API\Lib as LibAPI;
 use \SolasMatch\Common as Common;
 
 require_once __DIR__."/../../Common/Enums/HttpStatusEnum.class.php";
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/../../Common/protobufs/models/OAuthResponse.php";
 require_once __DIR__."/BaseDao.php";
+require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
+require_once '/repo/neon-php/neon.php';
+
 
 class UserDao extends BaseDao
 {
@@ -560,6 +564,8 @@ class UserDao extends BaseDao
 
     public function requestAuthCode($email)
     {
+        $this->verify_email_allowed_register($email);
+
         $app = \Slim\Slim::getInstance();
         $redirectUri = '';
         if (isset($_SERVER['HTTPS']) && !is_null($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
@@ -648,6 +654,8 @@ class UserDao extends BaseDao
 
     public function register($email, $password)
     {
+        $this->verify_email_allowed_register($email);
+
         $ret = null;
         $registerData = new Common\Protobufs\Models\Register();
         $registerData->setEmail($email);
@@ -659,6 +667,468 @@ class UserDao extends BaseDao
         } else {
             return false;
         }
+    }
+
+    public function verify_email_allowed_register($email)
+    {
+        $app = \Slim\Slim::getInstance();
+        error_log("verify_email_allowed_register($email)");
+        if ($this->verifyUserByEmail($email)) return;
+
+        $neon = new \Neon();
+
+        $credentials = array(
+            'orgId'  => Common\Lib\Settings::get('neon.org_id'),
+            'apiKey' => Common\Lib\Settings::get('neon.api_key')
+        );
+
+        $loginResult = $neon->login($credentials);
+        if (!isset($loginResult['operationResult']) || $loginResult['operationResult'] !== 'SUCCESS') {
+            error_log("verify_email_allowed_register($email), could not connect to NeonCRM");
+            $app->redirect($app->urlFor('no_application_error'));
+        }
+
+        $search = array(
+            'method' => 'account/listAccounts',
+            'columns' => array('standardFields' => array('Email 1'))
+        );
+        $search['criteria'] = array(array('Email', 'EQUAL', $email));
+
+        $result = $neon->search($search);
+
+        $neon->go(array('method' => 'common/logout'));
+
+        if (!empty($result) && !empty($result['searchResults'])) return;
+
+        error_log("verify_email_allowed_register($email) Not allowed!");
+        $app->redirect($app->urlFor('no_application'));
+    }
+
+    public function verifyUserByEmail($email)
+    {
+        $user = null;
+        $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ',null,null,null,null,null,null');
+        if (!empty($result)) {
+            $user = Common\Lib\ModelFactory::buildModel('User', $result[0]);
+        }
+        return $user;
+    }
+
+    public function saveUser($user)
+    {
+        $userId = $user->getId();
+        $nativeLanguageCode = null;
+        $nativeCountryCode = null;
+        if (!is_null($userId) && !is_null($user->getNativeLocale())) {
+            $nativeLocale = $user->getNativeLocale();
+            $nativeLanguageCode = $nativeLocale->getLanguageCode();
+            $nativeCountryCode = $nativeLocale->getCountryCode();
+        }
+
+        $args = LibAPI\PDOWrapper::cleanseNullOrWrapStr($user->getEmail()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($user->getNonce()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($user->getPassword()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($user->getBiography()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($user->getDisplayName()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($nativeLanguageCode) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($nativeCountryCode) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($userId);
+        LibAPI\PDOWrapper::call('userInsertAndUpdate', $args);
+    }
+
+    public function getUserPersonalInformation($user_id)
+    {
+        $userPersonalInfo = null;
+        $result = LibAPI\PDOWrapper::call('getUserPersonalInfo', 'null,' . LibAPI\PDOWrapper::cleanseNull($user_id) . ',null,null,null,null,null,null,null,null,null,null');
+        if (!empty($result)) {
+            $userPersonalInfo = Common\Lib\ModelFactory::buildModel('UserPersonalInformation', $result[0]);
+        }
+        return $userPersonalInfo;
+    }
+
+    public function saveUserPersonalInformation($userInfo)
+    {
+        $args = LibAPI\PDOWrapper::cleanseNull($userInfo->getId()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($userInfo->getUserId()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($userInfo->getFirstName()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($userInfo->getLastName()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($userInfo->getMobileNumber()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($userInfo->getBusinessNumber()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($userInfo->getLanguagePreference()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($userInfo->getJobTitle()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($userInfo->getAddress()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($userInfo->getCity()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($userInfo->getCountry()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($userInfo->getReceiveCredit() ? 1 : 0);
+        LibAPI\PDOWrapper::call('userPersonalInfoInsertAndUpdate', $args);
+    }
+
+    public function process_neonwebhook()
+    {
+$NEON_NATIVELANGFIELD = 64;
+$NEON_SOURCE1FIELD    = 167;
+$NEON_TARGET1FIELD    = 168;
+$NEON_SOURCE2FIELD    = 169;
+$NEON_TARGET2FIELD    = 170;
+$NEON_LEVELFIELD      = 173;
+
+$from_neon_to_trommons_pair = array(
+'Afrikaans' => array('af', 'ZA'),
+'Albanian' => array('sq', 'AL'),
+'Amharic' => array('am', 'AM'),
+'Arabic' => array('ar', 'SA'),
+'Aragonese' => array('an', 'ES'),
+'Armenian' => array('hy', 'AM'),
+'Asturian' => array('ast', 'ES'),
+'Azerbaijani' => array('az', 'AZ'),
+'Basque' => array('eu', 'ES'),
+'Bengali' => array('bn', 'IN'),
+'Belarus' => array('be', 'BY'),
+'Belgian French' => array('fr', 'BE'),
+'Bosnian' => array('bs', 'BA'),
+'Breton' => array('br', 'FR'),
+'Bulgarian' => array('bg', 'BG'),
+'Burmese' => array('my', 'MM'),
+'Catalan' => array('ca', 'ES'),
+'Catalan Valencian' => array('ca', '--'),
+'Cebuano' => array('cb', 'PH'),
+'Chinese Simplified' => array('zh', 'CN'),
+'Chinese Traditional' => array('zh', 'TW'),
+'Croatian' => array('hr', 'HR'),
+'Czech' => array('cs', 'CZ'),
+'Danish' => array('da', 'DK'),
+'Dutch' => array('nl', 'NL'),
+'English' => array('en', 'GB'),
+'English US' => array('en', 'US'),
+'Esperanto' => array('eo', '--'),
+'Estonian' => array('et', 'EE'),
+'Faroese' => array('fo', 'FO'),
+'Fula' => array('ff', '--'),
+'Finnish' => array('fi', 'FI'),
+'Flemish' => array('nl', 'BE'),
+'French' => array('fr', 'FR'),
+'French Canada' => array('fr', 'CA'),
+'Galician' => array('gl', 'ES'),
+'Georgian' => array('ka', 'GE'),
+'German' => array('de', 'DE'),
+'Greek' => array('el', 'GR'),
+'Gujarati' => array('gu', 'IN'),
+'Haitian Creole French' => array('ht', 'HT'),
+'Hausa' => array('ha', '--'),
+'Hawaiian' => array('haw', 'US'),
+'Hebrew' => array('he', 'IL'),
+'Hindi' => array('hi', 'IN'),
+'Hungarian' => array('hu', 'HU'),
+'Icelandic' => array('is', 'IS'),
+'Indonesian' => array('id', 'ID'),
+'Irish Gaelic' => array('ga', 'IE'),
+'Italian' => array('it', 'IT'),
+'Japanese' => array('ja', 'JP'),
+'Kanuri' => array('kr', '--'),
+'Kazakh' => array('kk', 'KZ'),
+'Khmer' => array('km', 'KH'),
+'Korean' => array('ko', 'KR'),
+'Kurdish Kurmanji' => array('ku', '--'),
+'Kurdish Sorani' => array('ku', '--'),
+'Kyrgyz' => array('ky', 'KG'),
+'Latvian' => array('lv', 'LV'),
+'Lingala' => array('ln', '--'),
+'Lithuanian' => array('lt', 'LT'),
+'Macedonian' => array('mk', 'MK'),
+'Malagasy' => array('mg', 'MG'),
+'Malay' => array('ms', 'MY'),
+'Malayalam' => array('ml', 'IN'),
+'Maltese' => array('mt', 'MT'),
+'Maori' => array('mi', 'NZ'),
+'Mongolian' => array('mn', 'MN'),
+'Montenegrin' => array('sr', 'ME'),
+'Ndebele' => array('nr', 'ZA'),
+'Nepali' => array('ne', 'NP'),
+'Norwegian Bokmål' => array('no', 'NO'),
+"Norwegian Bokm\xE5l" => array('no', 'NO'),
+'Norwegian Nynorsk' => array('nn', 'NO'),
+'Nyanja' => array('ny', '--'),
+'Occitan' => array('oc', 'FR'),
+'Occitan Aran' => array('oc', 'ES'),
+'Oriya' => array('or', 'IN'),
+'Panjabi' => array('pa', 'IN'),
+'Pashto' => array('ps', 'PK'),
+'Dari' => array('prs', '--'),
+'Persian' => array('fa', 'IR'),
+'Polish' => array('pl', 'PL'),
+'Portuguese' => array('pt', 'PT'),
+'Portuguese Brazil' => array('pt', 'BR'),
+'Quechua' => array('qu', '--'),
+'Rohingya' => array('rhg', 'MM'),
+'Rohingyalish' => array('rhl', 'MM'),
+'Romanian' => array('ro', 'RO'),
+'Russian' => array('ru', 'RU'),
+'Serbian Latin' => array('sr', '--'),
+'Serbian Cyrillic' => array('sr', 'RS'),
+'Sesotho' => array('nso', 'ZA'),
+'Setswana (South Africa)' => array('tn', 'ZA'),
+'Slovak' => array('sk', 'SK'),
+'Slovenian' => array('sl', 'SI'),
+'Somali' => array('so', 'SO'),
+'Spanish' => array('es', 'ES'),
+'Spanish Latin America' => array('es', 'MX'),
+'Spanish Colombia' => array('es', 'CO'),
+'Swahili' => array('sw', 'SZ'),
+'Swedish' => array('sv', 'SE'),
+'Swiss German' => array('de', 'CH'),
+'Tagalog' => array('tl', 'PH'),
+'Tamil' => array('ta', 'IN'),
+'Telugu' => array('te', 'IN'),
+'Tatar' => array('tt', 'RU'),
+'Thai' => array('th', 'TH'),
+'Tigrinya' => array('ti', '--'),
+'Tsonga' => array('ts', 'ZA'),
+'Turkish' => array('tr', 'TR'),
+'Turkmen' => array('tk', 'TM'),
+'Ukrainian' => array('uk', 'UA'),
+'Urdu' => array('ur', 'PK'),
+'Uzbek' => array('uz', 'UZ'),
+'Vietnamese' => array('vi', 'VN'),
+'Welsh' => array('cy', 'GB'),
+'Xhosa' => array('xh', 'ZA'),
+'Yoruba' => array('yo', 'NG'),
+'Zulu' => array('zu', 'ZA'),
+);
+
+        $account_id   = '';
+        $email        = '';
+        $user_id      = '';
+        $first_name   = '';
+        $last_name    = '';
+        $display_name = '';
+        $nativelang   = '';
+        $sourcelang1  = '';
+        $targetlang1  = '';
+        $sourcelang2  = '';
+        $targetlang2  = '';
+        $org_id_neon  = '';
+        $org_name     = '';
+        $quality_level= 1;
+
+        if (!empty($_POST['payload'])) {
+            $result = json_decode($_POST['payload'], true);
+
+            if (!empty($result['eventTrigger']) && $result['eventTrigger'] == 'editAccount') {
+
+                if (!empty($result['data'])) {
+                    $data = $result['data'];
+
+                    if (!empty($data['individualAccount'])) {
+
+                        if (!empty($result['customParameters'])) {
+                            $customParameters = $result['customParameters'];
+                            if (!empty($customParameters['apikey'])) {
+                                $apikey_in = $customParameters['apikey'];
+                                if (hash('sha512', $customParameters['apikey']) !== '42b1851be2de0ab64d18f9ad4ac7bef599343654345c20424794695af7db758ea9ad44de2e04375f6b5d6b6facb6e4797941db18383eae92bce032c896a20acb') {
+                                    error_log('apikey from Neon does not match');
+                                    return;
+                                }
+                            } else {
+                                error_log('apikey not in customParameters from Neon');
+                                return;
+                            }
+                        } else {
+                            error_log('No customParameters from Neon');
+                            return;
+                        }
+
+                        $account = $data['individualAccount'];
+
+                        if (!empty($account['accountId'])) $account_id = $account['accountId'];
+                        if (!empty($account['existingOrganizationId'])) $org_id_neon = $account['existingOrganizationId'];
+
+                        if (!empty($account['primaryContact'])) {
+                            $contact = $account['primaryContact'];
+
+                            // These are in 8859-1 NOT UTF-8...
+                            //if (!empty($contact['firstName']))     $first_name =   $contact['firstName'];
+                            //if (!empty($contact['lastName']))      $last_name =    $contact['lastName'];
+                            //if (!empty($contact['preferredName'])) $display_name = $contact['preferredName'];
+                            if (!empty($contact['email1'])) $email = $contact['email1'];
+                        }
+
+                        if (!empty($account['customFieldDataList'])) {
+                            $customFieldDataList = $account['customFieldDataList'];
+
+                            if (!empty($customFieldDataList['customFieldData'])) {
+                                $customFieldData = $customFieldDataList['customFieldData'];
+
+                                foreach ($customFieldData as $field) {
+                                    if ($field['fieldId'] == $NEON_NATIVELANGFIELD && !empty($field['fieldValue'])) $nativelang  = $field['fieldValue'];
+                                    if ($field['fieldId'] == $NEON_SOURCE1FIELD    && !empty($field['fieldValue'])) $sourcelang1 = $field['fieldValue'];
+                                    if ($field['fieldId'] == $NEON_TARGET1FIELD    && !empty($field['fieldValue'])) $targetlang1 = $field['fieldValue'];
+                                    if ($field['fieldId'] == $NEON_SOURCE2FIELD    && !empty($field['fieldValue'])) $sourcelang2 = $field['fieldValue'];
+                                    if ($field['fieldId'] == $NEON_TARGET2FIELD    && !empty($field['fieldValue'])) $targetlang2 = $field['fieldValue'];
+                                    if ($field['fieldId'] == $NEON_LEVELFIELD      && !empty($field['fieldOptionId'])) {
+                                        $levels = array('289' => 1, '290' => 2, '291' => 3);
+                                        if (!empty($levels[$field['fieldOptionId']])) $quality_level = $levels[$field['fieldOptionId']];
+                                    }
+                                }
+                            }
+                        }
+
+                        if (!empty($email) && $user = $this->verifyUserByEmail($email)) {
+                            $user_id = $user->getId();
+
+                            if (!empty($from_neon_to_trommons_pair[$sourcelang1]) && !empty($from_neon_to_trommons_pair[$targetlang1])) {
+                                $this->createUserQualifiedPair($user_id, $from_neon_to_trommons_pair[$sourcelang1][0], $from_neon_to_trommons_pair[$sourcelang1][1], $from_neon_to_trommons_pair[$targetlang1][0], $from_neon_to_trommons_pair[$targetlang1][1], $quality_level);
+                            }
+                            if (!empty($from_neon_to_trommons_pair[$sourcelang1]) && !empty($from_neon_to_trommons_pair[$targetlang2])) {
+                                $this->createUserQualifiedPair($user_id, $from_neon_to_trommons_pair[$sourcelang1][0], $from_neon_to_trommons_pair[$sourcelang1][1], $from_neon_to_trommons_pair[$targetlang2][0], $from_neon_to_trommons_pair[$targetlang2][1], $quality_level);
+                            }
+                            if (!empty($from_neon_to_trommons_pair[$sourcelang2]) && !empty($from_neon_to_trommons_pair[$targetlang1])) {
+                                $this->createUserQualifiedPair($user_id, $from_neon_to_trommons_pair[$sourcelang2][0], $from_neon_to_trommons_pair[$sourcelang2][1], $from_neon_to_trommons_pair[$targetlang1][0], $from_neon_to_trommons_pair[$targetlang1][1], $quality_level);
+                            }
+                            if (!empty($from_neon_to_trommons_pair[$sourcelang2]) && !empty($from_neon_to_trommons_pair[$targetlang2])) {
+                                $this->createUserQualifiedPair($user_id, $from_neon_to_trommons_pair[$sourcelang2][0], $from_neon_to_trommons_pair[$sourcelang2][1], $from_neon_to_trommons_pair[$targetlang2][0], $from_neon_to_trommons_pair[$targetlang2][1], $quality_level);
+                            }
+                        } else {
+                            error_log("No Trommons User found for Neon ID: $account_id ($email)");
+                        }
+                    }
+                }
+            }
+        }
+
+        error_log("Neon Account update... email: $email, account_id: $account_id, user_id: $user_id, nativelang: $nativelang, org_id_neon: $org_id_neon");
+        error_log("sourcelang1: $sourcelang1, sourcelang2: $sourcelang2, targetlang1: $targetlang1, targetlang2: $targetlang2, quality_level: $quality_level");
+
+        if (!empty($account_id) && !empty($user_id)) {
+            $account_id_wanted = $account_id;
+
+            $neon = new \Neon();
+
+            $credentials = array(
+                'orgId'  => Common\Lib\Settings::get('neon.org_id'),
+                'apiKey' => Common\Lib\Settings::get('neon.api_key')
+            );
+
+            $loginResult = $neon->login($credentials);
+            if (isset($loginResult['operationResult']) && $loginResult['operationResult'] === 'SUCCESS') {
+                $search = array(
+                    'method' => 'account/listAccounts',
+                    'columns' => array(
+                        'standardFields' => array(
+                            'Account ID',
+                            'First Name',
+                            'Last Name',
+                            'Preferred Name',
+                            'Company Name',
+                            'Company ID'),
+                    )
+                );
+
+                $search['criteria'] = array(array('Account ID', 'EQUAL', $account_id_wanted));
+
+                $result = $neon->search($search);
+
+                $neon->go(array('method' => 'common/logout'));
+
+                if (empty($result) || empty($result['searchResults'])) {
+                    error_log("No result found from NeonCRM (webhook), account_id: $account_id_wanted");
+                } else {
+                    $r = current($result['searchResults']);
+                    $first_name   = (empty($r['First Name']))     ? '' : $r['First Name'];
+                    $last_name    = (empty($r['Last Name']))      ? '' : $r['Last Name'];
+                    $display_name = (empty($r['Preferred Name'])) ? '' : $r['Preferred Name'];
+
+                    $userInfo = $this->getUserPersonalInformation($user_id);
+
+                    if (!empty($first_name)) $userInfo->setFirstName($first_name);
+                    if (!empty($last_name))  $userInfo->setLastName($last_name);
+
+                    $this->saveUserPersonalInformation($userInfo);
+
+                    if (!empty($display_name)) $user->setDisplayName($display_name);
+
+                    if (!empty($from_neon_to_trommons_pair[$nativelang])) {
+                        $locale = new Common\Protobufs\Models\Locale();
+                        $locale->setLanguageCode($from_neon_to_trommons_pair[$nativelang][0]);
+                        $locale->setCountryCode($from_neon_to_trommons_pair[$nativelang][1]);
+                        $user->setNativeLocale($locale);
+                    }
+
+                    $this->saveUser($user);
+
+                    $org_name = (empty($r['Company Name'])) ? '' : $r['Company Name'];
+                    $org_name = trim(str_replace(array('"', '<', '>'), '', $org_name)); // Only Trommons value with limitations (not filtered on output)
+
+                    error_log("Neon Account update... first_name: $first_name, last_name: $last_name, display_name: $display_name, org_name: $org_name");
+
+                    if (!empty($org_name) && !empty($org_id_neon) && $org_id_neon != 3783) { // Translators without Borders (TWb)
+                        if ($org_id_matching_neon = $this->getOrgIDMatchingNeon($org_id_neon)) {
+                            $this->addOrgAdmin($user_id, $org_id_matching_neon);
+                            error_log("process_neonwebhook($email), addOrgAdmin($user_id, $org_id_matching_neon)");
+
+                        } elseif ($org_id_matching_neon = $this->getOrgIDUsingName($org_name)) { // unlikely?
+                            $this->insertOrgIDMatchingNeon($org_id_matching_neon, $org_id_neon);
+
+                            $this->addOrgAdmin($user_id, $org_id_matching_neon);
+                            error_log("process_neonwebhook($email), addOrgAdmin($user_id, $org_id_matching_neon), $org_name existing");
+
+                        } elseif (!empty($org_name)) {
+                            $org_id_matching_neon = $this->insertOrg($org_name, $email);
+                            error_log("process_neonwebhook($email), created Org: $org_name");
+                            if (!empty($org_id_matching_neon)) {
+                                $this->insertOrgIDMatchingNeon($org_id_matching_neon, $org_id_neon);
+
+                                $this->addOrgAdmin($user_id, $org_id_matching_neon);
+                                error_log("process_neonwebhook($email), addOrgAdmin($user_id, $org_id_matching_neon)");
+                            }
+                        }
+                    }
+                }
+            } else {
+                error_log('There was a problem connecting to NeonCRM (webhook)');
+            }
+        }
+    }
+
+    public function getOrgIDMatchingNeon($org_id_neon)
+    {
+        $org_id = 0;
+        $result = LibAPI\PDOWrapper::call('getOrgIDMatchingNeon', LibAPI\PDOWrapper::cleanse($org_id_neon));
+        if (!empty($result)) {
+            $org_id = $result[0]['org_id'];
+        }
+        return $org_id;
+    }
+
+    public function insertOrgIDMatchingNeon($org_id, $org_id_neon)
+    {
+        LibAPI\PDOWrapper::call('insertOrgIDMatchingNeon', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($org_id_neon));
+    }
+
+    public function addOrgAdmin($user_id, $org_id)
+    {
+        $args = LibAPI\PDOWrapper::cleanseNull($user_id) . ',' . LibAPI\PDOWrapper::cleanseNull($org_id);
+        LibAPI\PDOWrapper::call('acceptMemRequest', $args);
+        LibAPI\PDOWrapper::call('addAdmin', $args);
+    }
+
+    public function getOrgIDUsingName($org_name)
+    {
+        $org_id = 0;
+        $result = LibAPI\PDOWrapper::call('getOrg', 'null,' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($org_name) . ',null,null,null,null,null,null,null');
+        if (!empty($result)) {
+            $org_id = $result[0]['id'];
+        }
+        return $org_id;
+    }
+
+    public static function insertOrg($org_name, $email)
+    {
+        $org_id = 0;
+        $result = LibAPI\PDOWrapper::call('organisationInsertAndUpdate', 'null,null,' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($org_name) . ',null,' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ',null,null,null,null');
+        if (!empty($result)) {
+            $org_id = $result[0]['id'];
+        }
+        return $org_id;
     }
 
     public function finishRegistration($uuid)
@@ -740,36 +1210,59 @@ class UserDao extends BaseDao
         return $ret;
     }
     
-    public function createSecondaryLanguage($userId, $locale)
+    public function createUserQualifiedPair($user_id, $language_code_source, $country_code_source, $language_code_target, $country_code_target, $qualification_level)
     {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/secondaryLanguages";
-        $ret = $this->client->call(
-            "\SolasMatch\Common\Protobufs\Models\Locale",
-            $request,
-            Common\Enums\HttpMethodEnum::POST,
-            $locale
-        );
-        return $ret;
+        LibAPI\PDOWrapper::call('createUserQualifiedPair',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($language_code_source) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($country_code_source) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($language_code_target) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($country_code_target) . ',' .
+            LibAPI\PDOWrapper::cleanse($qualification_level));
     }
-    
-    public function getSecondaryLanguages($userId)
+
+    public function updateUserQualifiedPair($user_id, $language_code_source, $country_code_source, $language_code_target, $country_code_target, $qualification_level)
     {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/secondaryLanguages";
-        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\Locale"), $request);
-        return $ret;
+        LibAPI\PDOWrapper::call('updateUserQualifiedPair',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($language_code_source) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($country_code_source) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($language_code_target) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($country_code_target) . ',' .
+            LibAPI\PDOWrapper::cleanse($qualification_level));
     }
-    
-    public function deleteSecondaryLanguage($userId, $locale)
+
+    public function getUserQualifiedPairs($user_id)
     {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/removeSecondaryLanguage/$userId/{$locale->getLanguageCode()}".
-            "/{$locale->getCountryCode()}";
-        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::DELETE);
-        return $ret;
+        $result = LibAPI\PDOWrapper::call('getUserQualifiedPairs', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) $result = array();
+        return $result;
     }
-    
+
+    public function removeUserQualifiedPair($user_id, $language_code_source, $country_code_source, $language_code_target, $country_code_target)
+    {
+        LibAPI\PDOWrapper::call('removeUserQualifiedPair',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($language_code_source) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($country_code_source) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($language_code_target) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($country_code_target));
+    }
+
+    public function updateRequiredOrgQualificationLevel($org_id, $required_qualification_level)
+    {
+        LibAPI\PDOWrapper::call('updateRequiredOrgQualificationLevel',
+            LibAPI\PDOWrapper::cleanse($org_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($required_qualification_level));
+    }
+
+    public function getRequiredOrgQualificationLevel($org_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getRequiredOrgQualificationLevel', LibAPI\PDOWrapper::cleanse($org_id));
+        if (empty($result)) return 1;
+        return $result[0]['required_qualification_level'];
+    }
+
     public function deleteUser($userId)
     {
         $request = "{$this->siteApi}v0/users/$userId";

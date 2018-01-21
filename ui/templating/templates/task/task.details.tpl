@@ -114,6 +114,25 @@
                     {/foreach}
                 </td>                    
             </tr>
+            {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && isset($discourse_slug)}
+            <tr>
+                <td colspan="3" style="padding-bottom: 40px"/>
+            </tr>
+            <tr>
+                <td>
+                    <strong>{Localisation::getTranslation('common_forum')}:</strong><hr/>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr valign="top">
+                <td>
+                    <a href="https://community.translatorswb.org/t/{$discourse_slug}" target="_blank">https://community.translatorswb.org/t/{$discourse_slug}</a>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            {/if}
         </tbody>
     </table>
 </div>
