@@ -15,13 +15,13 @@
 
 <table style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-    <th width="10%">Display Name</th>
+    <th width="9%">Display Name</th>
     <th width="16%">Email</th>
     <th width="16%">Name</th>
     <th width="16%">Task Title</th>
     <th width="8%">Task Type</th>
     <th width="8%">Word Count</th>
-    <th width="8%">Date Claimed</th>
+    <th width="9%">Date Claimed</th>
     <th width="5%">Codes</th>
     <th width="8%">Language</th>
     <th width="5%"></th>
