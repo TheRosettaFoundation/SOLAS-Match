@@ -6421,6 +6421,7 @@ BEGIN
         END
         AS task_type,
         t.`word-count` AS word_count,
+        tc.`claimed-time` AS claimed_time,
         CONCAT(l.code, '-', l2.code) AS language_code,
         l.`en-name` AS language_name,
         'Source' AS native_or_secondary
@@ -6450,6 +6451,7 @@ UNION
         END
         AS task_type,
         t.`word-count` AS word_count,
+        tc.`claimed-time` AS claimed_time,
         CONCAT(l2.code, '-', l.code) AS language_code,
         l.`en-name` AS language_name,
         'Target' AS native_or_secondary
