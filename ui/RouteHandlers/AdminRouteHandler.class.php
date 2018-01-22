@@ -417,7 +417,7 @@ class AdminRouteHandler
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->user_task_languages(null);
 
-        $data = "\xEF\xBB\xBF" . '"Display Name","Email","Name","Task Title","Task Type","Word Count","Date Claimed","Codes","Language",""' . "\n";
+        $data = "\xEF\xBB\xBF" . '"Display Name","Email","Name","Task Title","Task Type","Word Count","Date Claimed","Codes","Source","Target"' . "\n";
 
         foreach ($all_users as $user_row) {
             $data .= '"' . str_replace('"', '""', $user_row['display_name']) . '","' .
@@ -427,9 +427,9 @@ class AdminRouteHandler
             $user_row['task_type'] . '","' .
             $user_row['word_count'] . '","' .
             substr($user_row['claimed_time'], 0, 10) . '","' .
-            $user_row['language_code'] . '","' .
-            $user_row['language_name'] . '","' .
-            $user_row['native_or_secondary'] . '"' . "\n";
+            $user_row['language_pair'] . '","' .
+            $user_row['language_name_source'] . '","' .
+            $user_row['language_name_target'] . '"' . "\n";
         }
 
         header('Content-type: text/csv');

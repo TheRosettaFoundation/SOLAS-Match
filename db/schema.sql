@@ -6404,7 +6404,6 @@ DROP PROCEDURE IF EXISTS `user_task_languages`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `user_task_languages`(IN `languageCode` VARCHAR(3))
 BEGIN
-(
     SELECT
         u.id AS user_id,
         u.`display-name` AS display_name,
@@ -6422,48 +6421,17 @@ BEGIN
         AS task_type,
         t.`word-count` AS word_count,
         tc.`claimed-time` AS claimed_time,
-        CONCAT(l.code, '-', l2.code) AS language_code,
-        l.`en-name` AS language_name,
-        'Source' AS native_or_secondary
+        CONCAT(l.code, '-', l2.code) AS language_pair,
+        l.`en-name`  AS language_name_source,
+        l2.`en-name` AS language_name_target
     FROM Tasks       t
     JOIN TaskClaims tc ON t.id=tc.task_id
     JOIN Languages   l ON t.`language_id-source`=l.id
     JOIN Languages  l2 ON t.`language_id-target`=l2.id
     JOIN Users       u ON tc.user_id=u.id
     JOIN UserPersonalInformation i ON u.id=i.user_id
-    WHERE languageCode IS NULL OR l.code=languageCode
-)
-UNION
-(
-    SELECT
-        u.id AS user_id,
-        u.`display-name` AS display_name,
-        u.email,
-        IFNULL(i.`first-name`, '') AS first_name,
-        IFNULL(i.`last-name`, '') AS last_name,
-        t.id AS task_id,
-        t.title AS task_title,
-        CASE
-            WHEN t.`task-type_id`=1 THEN 'Segmentation'
-            WHEN t.`task-type_id`=2 THEN 'Translation'
-            WHEN t.`task-type_id`=3 THEN 'Proofreading'
-            WHEN t.`task-type_id`=4 THEN 'Desegmentation'
-        END
-        AS task_type,
-        t.`word-count` AS word_count,
-        tc.`claimed-time` AS claimed_time,
-        CONCAT(l2.code, '-', l.code) AS language_code,
-        l.`en-name` AS language_name,
-        'Target' AS native_or_secondary
-    FROM Tasks       t
-    JOIN TaskClaims tc ON t.id=tc.task_id
-    JOIN Languages   l ON t.`language_id-target`=l.id
-    JOIN Languages  l2 ON t.`language_id-source`=l2.id
-    JOIN Users       u ON tc.user_id=u.id
-    JOIN UserPersonalInformation i ON u.id=i.user_id
-    WHERE languageCode IS NULL OR l.code=languageCode
-)
-    ORDER BY language_code, display_name, task_title;
+    WHERE languageCode IS NULL OR l.code=languageCode OR l2.code=languageCode
+    ORDER BY language_name_source, language_name_target, display_name, task_title;
 END//
 DELIMITER ;
 
