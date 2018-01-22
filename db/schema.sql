@@ -6420,12 +6420,14 @@ BEGIN
             WHEN t.`task-type_id`=4 THEN 'Desegmentation'
         END
         AS task_type,
-        l.code AS language_code,
+        t.`word-count` AS word_count,
+        CONCAT(l.code, '-', l2.code) AS language_code,
         l.`en-name` AS language_name,
         'Source' AS native_or_secondary
     FROM Tasks       t
     JOIN TaskClaims tc ON t.id=tc.task_id
     JOIN Languages   l ON t.`language_id-source`=l.id
+    JOIN Languages  l2 ON t.`language_id-target`=l2.id
     JOIN Users       u ON tc.user_id=u.id
     JOIN UserPersonalInformation i ON u.id=i.user_id
     WHERE languageCode IS NULL OR l.code=languageCode
@@ -6447,17 +6449,19 @@ UNION
             WHEN t.`task-type_id`=4 THEN 'Desegmentation'
         END
         AS task_type,
-        l.code AS language_code,
+        t.`word-count` AS word_count,
+        CONCAT(l2.code, '-', l.code) AS language_code,
         l.`en-name` AS language_name,
         'Target' AS native_or_secondary
     FROM Tasks       t
     JOIN TaskClaims tc ON t.id=tc.task_id
     JOIN Languages   l ON t.`language_id-target`=l.id
+    JOIN Languages  l2 ON t.`language_id-source`=l2.id
     JOIN Users       u ON tc.user_id=u.id
     JOIN UserPersonalInformation i ON u.id=i.user_id
     WHERE languageCode IS NULL OR l.code=languageCode
 )
-    ORDER BY language_name, display_name, native_or_secondary, task_title;
+    ORDER BY language_code, display_name, task_title;
 END//
 DELIMITER ;
 
