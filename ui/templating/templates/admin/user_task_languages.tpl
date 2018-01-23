@@ -15,14 +15,16 @@
 
 <table style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-    <th width="12%">Display Name</th>
-    <th width="18%">Email</th>
-    <th width="20%">Name</th>
-    <th width="23%">Task Title</th>
+    <th width="9%">Display Name</th>
+    <th width="15%">Email</th>
+    <th width="15%">Name</th>
+    <th width="15%">Task Title</th>
     <th width="8%">Task Type</th>
-    <th width="4%">Code</th>
-    <th width="10%">Language</th>
-    <th width="5%"></th>
+    <th width="8%">Word Count</th>
+    <th width="9%">Date Claimed</th>
+    <th width="5%">Codes</th>
+    <th width="8%">Source</th>
+    <th width="8%">Target</th>
   </thead>
 
   <tbody>
@@ -34,9 +36,11 @@
       <td>{TemplateHelper::uiCleanseHTML($user_row['first_name'])} {TemplateHelper::uiCleanseHTML($user_row['last_name'])}</td>
       <td><a href="{urlFor name="task-view" options="task_id.{$user_row['task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['task_title'])}</a></td>
       <td>{$user_row['task_type']}</td>
-      <td>{$user_row['language_code']}</td>
-      <td>{$user_row['language_name']}</td>
-      <td>{$user_row['native_or_secondary']}</td>
+      <td>{$user_row['word_count']}</td>
+      <td>{substr($user_row['claimed_time'], 0, 10)}</td>
+      <td>{$user_row['language_pair']}</td>
+      <td>{$user_row['language_name_source']}</td>
+      <td>{$user_row['language_name_target']}</td>
     </tr>
 
   {/foreach}
