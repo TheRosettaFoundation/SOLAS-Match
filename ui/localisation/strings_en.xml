@@ -844,7 +844,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="task_claimed_proofreading_proofread_the_file_in">Proofread the file in <strong>%s</strong> to ensure spelling and grammatical correctness.</string>
 	<string name="task_claimed_proofreading_upload_the_proofread_file">Upload the proofread file to the task upload page.</string>
 	<string name="task_claimed_proofreading_4">When you have finished proofreading the file you downloaded:</string>
-	<string name="task_claimed_proofreading_upload_proofread_task">Upload Proofread Task</string>
+    <string name="task_claimed_proofreading_upload_proofread_task">Submit Proofread Task</string>
 
 	<string name="task_claimed_segmentation_segmentation_task_claimed">Segmentation task claimed</string>
 	<string name="task_claimed_segmentation_please_segment_it">Please segment it!</string>
@@ -862,7 +862,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="task_claimed_translation_translate_the_file_to">Translate the file to %s using your favourite translation software.</string>
 	<string name="task_claimed_translation_4">When you have finished translating the file you downloaded:</string>
     <string name="task_claimed_translation_5">Upload your finished translated file to the task page.</string>
-	<string name="task_claimed_translation_upload_translated_task">Upload Translated Task</string>
+    <string name="task_claimed_translation_upload_translated_task">Submit Translated Task</string>
 
     <string name="task_claimed_alternative_option">Alternative option:</string>
     <string name="task_claimed_translate_using_kato">Translate using Kató</string>
