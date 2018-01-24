@@ -1,7 +1,7 @@
 <resources>
   <!-- Smarty Template Strings -->
   <string name="common_faq">Preguntas frecuentes</string>
-  <string name="common_forum">Community</string>
+    <string name="common_forum">Kató Community</string>
 	<string name="common_banned_by">Excluido por</string>
 	<string name="common_ban_duration">Duración de la exclusión</string>
 	<string name="common_ban_reason">Motivo de exclusión</string>

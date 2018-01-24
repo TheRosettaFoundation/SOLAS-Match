@@ -1,5 +1,5 @@
 <resources><!-- Smarty Template Strings --><string name="common_faq">FAQ</string>
-  <string name="common_forum">Community</string>
+    <string name="common_forum">Kató Community</string>
 	<string name="common_banned_by">Gesperrt von</string>
 	<string name="common_ban_duration">Dauer der Sperrung</string>
 	<string name="common_ban_reason">Grund der Sperrung</string>
