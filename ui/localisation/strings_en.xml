@@ -865,15 +865,15 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="task_claimed_translation_upload_translated_task">Submit Translated Task</string>
 
     <string name="task_claimed_alternative_option">Alternative option:</string>
-    <string name="task_claimed_translate_using_kato">Translate using Kató</string>
-    <string name="task_claimed_proofread_using_kato">Proofread using Kató</string>
-    <string name="task_claimed_please_read_kato">Kató is a Translators without Borders (TWB) translation platform. Please read <a href="https://kato.translatorswb.org/public/doc/translators.html" target="_blank">these guidelines</a> before using Kató.</string>
-    <string name="task_simple_upload_copy_from_kato">Copy your translation from Kató to Trommons</string>
-    <string name="task_simple_upload_view_on_kato">Click <a href="%s" target="_blank">here</a> to <strong>view your translation on Kató</strong>.</string>
-    <string name="task_simple_upload_download_from_kato">Click <a href="%s">here</a> to <strong>download your translation from Kató and upload it to Trommons manually</strong>.</string>
-    <string name="task_simple_upload_copy_from_kato_proofread">Copy your proofread version from Kató to Trommons</string>
-    <string name="task_simple_upload_view_on_kato_proofread">Click <a href="%s" target="_blank">here</a> to <strong>view your proofread version on Kató</strong>.</string>
-    <string name="task_simple_upload_download_from_kato_proofread">Click <a href="%s">here</a> to <strong>download your proofread version from Kató and upload it to Trommons manually</strong>.</string>
+    <string name="task_claimed_translate_using_kato">Translate using Kató MT</string>
+    <string name="task_claimed_proofread_using_kato">Proofread using Kató MT</string>
+    <string name="task_claimed_please_read_kato">Kató MT is a Translators without Borders (TWB) translation platform. Please read <a href="https://kato.translatorswb.org/public/doc/translators.html" target="_blank">these guidelines</a> before using Kató MT.</string>
+    <string name="task_simple_upload_copy_from_kato">Copy your translation from Kató MT to Kató Trommons</string>
+    <string name="task_simple_upload_view_on_kato">Click <a href="%s" target="_blank">here</a> to <strong>view your translation on Kató MT</strong>.</string>
+    <string name="task_simple_upload_download_from_kato">Click <a href="%s">here</a> to <strong>download your translation from Kató MT and upload it to Kató Trommons manually</strong>.</string>
+    <string name="task_simple_upload_copy_from_kato_proofread">Copy your proofread version from Kató MT to Kató Trommons</string>
+    <string name="task_simple_upload_view_on_kato_proofread">Click <a href="%s" target="_blank">here</a> to <strong>view your proofread version on Kató MT</strong>.</string>
+    <string name="task_simple_upload_download_from_kato_proofread">Click <a href="%s">here</a> to <strong>download your proofread version from Kató MT and upload it to Kató Trommons manually</strong>.</string>
 
     <string name="task_create_for_project">For Project <strong>%s</strong>.</string>
 	<string name="task_create_0">Provide a meaningful title for the task.</string>
