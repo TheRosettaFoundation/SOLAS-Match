@@ -1118,7 +1118,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="header_notifications">Notifications:</string>
 	<string name="header_log_out">Log out</string>
 
-	<string name="index_translation_commons">Translation Commons</string>
+    <string name="index_translation_commons">Kató Translation Commons</string>
 	<string name="index_0">Empowering conversation in communities</string>
 	<string name="index_translation_tasks">Translation tasks</string>
 	<string name="index_1">Claim a task, translate it, upload it.</string>

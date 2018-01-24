@@ -1119,7 +1119,7 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
 	<string name="header_notifications">Notificaciones:</string>
 	<string name="header_log_out">Cerrar sesión</string>
 
-	<string name="index_translation_commons">Translation Commons</string>
+    <string name="index_translation_commons">Kató Translation Commons</string>
 	<string name="index_0">Facilitamos la comunicación entre todas las culturas</string>
 	<string name="index_translation_tasks">Tareas de traducción</string>
 	<string name="index_1">Asígnate una tarea, tradúcela y súbela a Trommons.</string>

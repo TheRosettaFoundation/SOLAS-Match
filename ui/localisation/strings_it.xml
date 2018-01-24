@@ -1116,7 +1116,7 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@therosettafoun
 	<string name="header_notifications">Notifiche:</string>
 	<string name="header_log_out">Logout</string>
 
-	<string name="index_translation_commons">Translation Commons</string>
+    <string name="index_translation_commons">Kató Translation Commons</string>
 	<string name="index_0">Consentire la comunicazione tra comunità</string>
 	<string name="index_translation_tasks">Attività di traduzione</string>
 	<string name="index_1">Scegli un'attività, traducila, manda la tua traduzione.</string>

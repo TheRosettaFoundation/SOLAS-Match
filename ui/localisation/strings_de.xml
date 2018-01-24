@@ -1108,7 +1108,7 @@ Bei Fragen schreiben Sie bitte an <a href="mailto:info@therosettafoundation.org"
 	<string name="header_notifications">Benachrichtigungen:</string>
 	<string name="header_log_out">Abmelden</string>
 
-	<string name="index_translation_commons">Übersetzungs-Commons</string>
+    <string name="index_translation_commons">Kató Übersetzungs-Commons</string>
 	<string name="index_0">Kommunikation in Gesellschaften unterstützen</string>
 	<string name="index_translation_tasks">Übersetzungsaufgaben</string>
 	<string name="index_1">Nimm eine Aufgabe an, übersetzen sie, lade sie hoch.</string>

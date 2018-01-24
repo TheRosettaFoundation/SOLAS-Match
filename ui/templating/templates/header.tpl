@@ -85,9 +85,6 @@
                                 <a href="{urlFor name="site-admin-dashboard" options="user_id.$user_id"}">{Localisation::getTranslation('header_admin')}</a>
                             </li>
                         {/if}
-                            <li {if isset($current_page) && $current_page == 'videos'}class="active" {/if}>
-                                <a href="{urlFor name="videos"}">{Localisation::getTranslation('header_videos')}</a>
-                            </li>
                              <li {if isset($current_page) && $current_page == 'faq'}class="active" {/if}>
                                 <a href="{urlFor name="faq"}">{Localisation::getTranslation('common_faq')}</a>
                             </li>
