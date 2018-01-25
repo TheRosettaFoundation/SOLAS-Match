@@ -842,7 +842,7 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@therosettafoun
     <string name="task_claimed_proofreading_proofread_the_file_in">Rivedi il file in <strong>%s</strong> per essere sicuro che non ci siano errori di ortografia o grammatica.</string>
 	<string name="task_claimed_proofreading_upload_the_proofread_file">Carica il file di cui hai fatto la revisione nella pagina dell'attività.</string>
 	<string name="task_claimed_proofreading_4">Quando avrai finito di fare la revisione del documento scaricato:</string>
-	<string name="task_claimed_proofreading_upload_proofread_task">Carica il file revisionato</string>
+    <string name="task_claimed_proofreading_upload_proofread_task">Invia il file revisionato</string>
 
 	<string name="task_claimed_segmentation_segmentation_task_claimed">attività di segmentazione assegnata</string>
 	<string name="task_claimed_segmentation_please_segment_it">Procedi alla segmentazione del documento!</string>
@@ -860,7 +860,7 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@therosettafoun
 	<string name="task_claimed_translation_translate_the_file_to">Traduci il documento in %s utilizzando il tuo software di traduzione preferito.</string>
 	<string name="task_claimed_translation_4">Quando avrai finito di tradurre il documento scaricato:</string>
     <string name="task_claimed_translation_5">Carica il file tradotto sulla pagina dell'attività.</string>
-	<string name="task_claimed_translation_upload_translated_task">Carica il file tradotto</string>
+    <string name="task_claimed_translation_upload_translated_task">Invia il file tradotto</string>
 
     <string name="task_claimed_alternative_option">Opzione alternativa:</string>
     <string name="task_claimed_translate_using_kato">Tradurre usando Kató MT</string>

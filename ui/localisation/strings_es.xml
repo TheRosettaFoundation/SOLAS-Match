@@ -845,7 +845,7 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
     <string name="task_claimed_proofreading_proofread_the_file_in">Revisa el texto en <strong>%s</strong> para asegurarte de que es correcto ortográfica y gramaticalmente.</string>
 	<string name="task_claimed_proofreading_upload_the_proofread_file">Sube el texto revisado a la página de la tarea.</string>
 	<string name="task_claimed_proofreading_4">Cuando termines de revisar el archivo que has descargado;</string>
-	<string name="task_claimed_proofreading_upload_proofread_task">sube tu revisión</string>
+    <string name="task_claimed_proofreading_upload_proofread_task">Entregue su revisión</string>
 
 	<string name="task_claimed_segmentation_segmentation_task_claimed">Tarea de fragmentación asignada.</string>
 	<string name="task_claimed_segmentation_please_segment_it">Ya puedes dividir el texto.</string>
@@ -863,7 +863,7 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
 	<string name="task_claimed_translation_translate_the_file_to">Traduce el texto a %s con el programa que prefieras.</string>
 	<string name="task_claimed_translation_4">Cuando termines de traducir el archivo que has descargado,</string>
     <string name="task_claimed_translation_5">Sube el texto traducido a la página de la tarea.</string>
-	<string name="task_claimed_translation_upload_translated_task">Sube tu traducción</string>
+    <string name="task_claimed_translation_upload_translated_task">Entregue su traducción</string>
 
     <string name="task_claimed_alternative_option">Opción alternativa:</string>
     <string name="task_claimed_translate_using_kato">Traducir utilzando Kató MT</string>
