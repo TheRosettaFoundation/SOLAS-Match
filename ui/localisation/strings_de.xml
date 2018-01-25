@@ -1,5 +1,5 @@
 <resources><!-- Smarty Template Strings --><string name="common_faq">FAQ</string>
-  <string name="common_forum">Community</string>
+    <string name="common_forum">Kató Community</string>
 	<string name="common_banned_by">Gesperrt von</string>
 	<string name="common_ban_duration">Dauer der Sperrung</string>
 	<string name="common_ban_reason">Grund der Sperrung</string>
@@ -854,15 +854,15 @@ Bei Fragen schreiben Sie bitte an <a href="mailto:info@therosettafoundation.org"
     <string name="task_claimed_translation_upload_translated_task">Übersetzte Aufgabe abliefern</string>
 
     <string name="task_claimed_alternative_option">Alternativ:</string>
-    <string name="task_claimed_translate_using_kato">In Kató übersetzen</string>
-    <string name="task_claimed_proofread_using_kato">In Kató korrekturlesen</string>
-    <string name="task_claimed_please_read_kato">Kató ist das Übersetzungssystem von Translators without Borders (TWB). Bitte vor dem Übersetzen in Kató <a href="https://kato.translatorswb.org/public/doc/translators.html" target="_blank">diese Hinweise</a> lesen.</string>
-    <string name="task_simple_upload_copy_from_kato">Die Übersetzung von Kató nach Trommons kopieren</string>
-    <string name="task_simple_upload_view_on_kato"><a href="%s" target="_blank">Hier</a> klicken, um die <strong>Übersetzung in Kató anzuzeigen</strong>.</string>
-    <string name="task_simple_upload_download_from_kato"><a href="%s">Hier</a> klicken, um die <strong>Übersetzung von Kató herunterzuladen und manuell in Trommons hochzuladen</strong>.</string>
-<string name="task_simple_upload_copy_from_kato_proofread">Korrigierte Version von Kató in Trommons kopieren</string>
-<string name="task_simple_upload_view_on_kato_proofread"><a href="%s" target="_blank">Hier</a> klicken, um die <strong>korrigierte Version in Kató anzuzeigen</strong>.</string>
-<string name="task_simple_upload_download_from_kato_proofread"><a href="%s">Hier</a> klicken, um die <strong>korrigierte Version von Kató herunterzuladen und selbst in Trommons hochzuladen</strong>.</string>
+    <string name="task_claimed_translate_using_kato">In Kató MT übersetzen</string>
+    <string name="task_claimed_proofread_using_kato">In Kató MT korrekturlesen</string>
+    <string name="task_claimed_please_read_kato">Kató MT ist das Übersetzungssystem von Translators without Borders (TWB). Bitte vor dem Übersetzen in Kató MT <a href="https://kato.translatorswb.org/public/doc/translators.html" target="_blank">diese Hinweise</a> lesen.</string>
+    <string name="task_simple_upload_copy_from_kato">Die Übersetzung von Kató MT nach Kató Trommons kopieren</string>
+    <string name="task_simple_upload_view_on_kato"><a href="%s" target="_blank">Hier</a> klicken, um die <strong>Übersetzung in Kató MT anzuzeigen</strong>.</string>
+    <string name="task_simple_upload_download_from_kato"><a href="%s">Hier</a> klicken, um die <strong>Übersetzung von Kató MT herunterzuladen und manuell in Kató Trommons hochzuladen</strong>.</string>
+    <string name="task_simple_upload_copy_from_kato_proofread">Korrigierte Version von Kató MT in Kató Trommons kopieren</string>
+    <string name="task_simple_upload_view_on_kato_proofread"><a href="%s" target="_blank">Hier</a> klicken, um die <strong>korrigierte Version in Kató MT anzuzeigen</strong>.</string>
+    <string name="task_simple_upload_download_from_kato_proofread"><a href="%s">Hier</a> klicken, um die <strong>korrigierte Version von Kató MT herunterzuladen und selbst in Kató Trommons hochzuladen</strong>.</string>
 
     <string name="task_create_for_project">Für Projekt <strong>%s</strong>.</string>
 	<string name="task_create_0">Gib einen aussagekräftigen Titel für die Aufgabe an.</string>
@@ -1108,7 +1108,7 @@ Bei Fragen schreiben Sie bitte an <a href="mailto:info@therosettafoundation.org"
 	<string name="header_notifications">Benachrichtigungen:</string>
 	<string name="header_log_out">Abmelden</string>
 
-	<string name="index_translation_commons">Übersetzungs-Commons</string>
+    <string name="index_translation_commons">Kató Übersetzungs-Commons</string>
 	<string name="index_0">Kommunikation in Gesellschaften unterstützen</string>
 	<string name="index_translation_tasks">Übersetzungsaufgaben</string>
 	<string name="index_1">Nimm eine Aufgabe an, übersetzen sie, lade sie hoch.</string>
