@@ -294,6 +294,7 @@ class TaskRouteHandler
         $projectAndOrgs = array();
         $discourse_slug = array();
         $proofreadTaskIds = array();
+        $matecat_urls = array();
 
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
         if ($currentScrollPage <= $lastScrollPage) {
@@ -332,6 +333,34 @@ class TaskRouteHandler
                     $orgUri,
                     htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
                 );
+
+[[[
+        $matecat_url = '';
+        $translate = 'translate';
+        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
+            if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
+
+            $matecat_tasks = $taskDao->getMatecatLanguagePairs($task_id);
+            if (!empty($matecat_tasks)) {
+                $matecat_langpair = $matecat_tasks[0]['matecat_langpair'];
+                $matecat_id_job = $matecat_tasks[0]['matecat_id_job'];
+                $matecat_id_job_password = $matecat_tasks[0]['matecat_id_job_password'];
+                //$matecat_id_file = $matecat_tasks[0]['matecat_id_file'];
+                if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
+                    $matecat_url = "https://kato.translatorswb.org/$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+
+                    if ($translate === 'revise') { // Make sure it has been translated in MateCat
+                        $download_status = $taskDao->getMatecatTaskStatus($task_id, $matecat_id_job, $matecat_id_job_password);
+
+                        if ($download_status !== 'translated' && $download_status !== 'approved') {
+                            $matecat_url = ''; // Disable Kató access for Proofreading if job file is not translated
+                        }
+                    }
+                }
+            }
+        }
+                $matecat_urls[$taskId] = $matecat_url;
+]]]
 
                 $discourse_slug[$taskId] = $projectDao->discourse_parameterize($projectName);
 
@@ -373,6 +402,7 @@ class TaskRouteHandler
             'created_timestamps' => $created_timestamps,
             'deadline_timestamps' => $deadline_timestamps,
             'projectAndOrgs' => $projectAndOrgs,
+            'matecat_urls' => $matecat_urls,
             'discourse_slug' => $discourse_slug,
             'proofreadTaskIds' => $proofreadTaskIds,
             'currentScrollPage' => $currentScrollPage,
