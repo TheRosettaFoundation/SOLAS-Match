@@ -544,10 +544,10 @@ class TaskDao extends BaseDao
             if (!empty($response_data['stats']['DOWNLOAD_STATUS'])) {
                 $download_status = $response_data['stats']['DOWNLOAD_STATUS'];
             } else {
-                error_log("https://kato.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats taskClaimed($task_id) DOWNLOAD_STATUS empty!");
+                error_log("https://kato.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats getMatecatTaskStatus($task_id) DOWNLOAD_STATUS empty!");
             }
         } else {
-            error_log("https://kato.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats taskClaimed($task_id) responseCode: $responseCode");
+            error_log("https://kato.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats getMatecatTaskStatus($task_id) responseCode: $responseCode");
         }
 
         return $download_status;

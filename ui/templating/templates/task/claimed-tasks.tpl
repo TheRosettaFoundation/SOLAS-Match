@@ -119,6 +119,17 @@
 
                             <p>
                                {if $status_id == 3 && ($type_id == 3 || $type_id == 2)}
+if... ON MATECAT
+                                    {if $type_id == 2)}
+                                        <a href="{$siteLocation}task/{$task_id}/simple-upload" class="btn btn-small btn-success">
+                                            {Localisation::getTranslation('task_claimed_translate_using_kato')}
+                                        </a>
+                                    {else}
+if proof... LIKE OTHER CODE)
+                                        <a href="{$siteLocation}task/{$task_id}/simple-upload" class="btn btn-small btn-success">
+                                            {Localisation::getTranslation('task_claimed_proofread_using_kato')}
+                                        </a>
+                                    {/if}
                                     <a href="{$siteLocation}task/{$task_id}/simple-upload" class="btn btn-small btn-success">
                                         {Localisation::getTranslation('claimed_tasks_submit_completed_task')}
                                     </a>
