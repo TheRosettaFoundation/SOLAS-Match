@@ -508,6 +508,51 @@ class TaskDao extends BaseDao
         return $result;
     }
 
+    public function getMatecatTaskStatus($task_id, $matecat_id_job, $matecat_id_job_password)
+    {
+        $download_status = '';
+
+        // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
+        $re = curl_init("https://kato.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
+
+        curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
+        curl_setopt($re, CURLOPT_COOKIESESSION, true);
+        curl_setopt($re, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($re, CURLOPT_AUTOREFERER, true);
+
+        $httpHeaders = array(
+            'Expect:'
+        );
+        curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
+
+        curl_setopt($re, CURLOPT_HEADER, true);
+        curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
+        $res = curl_exec($re);
+
+        $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
+        $header = substr($res, 0, $header_size);
+        $res = substr($res, $header_size);
+        $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
+
+        curl_close($re);
+
+        if ($responseCode == 200) {
+            $response_data = json_decode($res, true);
+
+            if (!empty($response_data['stats']['DOWNLOAD_STATUS'])) {
+                $download_status = $response_data['stats']['DOWNLOAD_STATUS'];
+            } else {
+                error_log("https://kato.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats taskClaimed($task_id) DOWNLOAD_STATUS empty!");
+            }
+        } else {
+            error_log("https://kato.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats taskClaimed($task_id) responseCode: $responseCode");
+        }
+
+        return $download_status;
+    }
+
     public function inheritRequiredTaskQualificationLevel($task_id)
     {
         LibAPI\PDOWrapper::call('inheritRequiredTaskQualificationLevel', LibAPI\PDOWrapper::cleanse($task_id));
