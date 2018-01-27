@@ -334,7 +334,7 @@ class TaskRouteHandler
                     htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
                 );
 
-                $matecat_urls[$taskId] = $taskDao->get_matecat_url($task);
+                $matecat_urls[$taskId] = $taskDao->get_matecat_url($topTask);
 
                 $discourse_slug[$taskId] = $projectDao->discourse_parameterize($projectName);
 
