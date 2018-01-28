@@ -2,7 +2,7 @@
 
 {assign var="taskId" value=$task->getId()}
 <div class="page-header">
-    <h1>{TemplateHelper::uiCleanseHTML($task->getTitle())} <small>{Localisation::getTranslation('org_task_review_review_this_completed_task')}</small></h1>
+    <h1>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())} <small>{Localisation::getTranslation('org_task_review_review_this_completed_task')}</small></h1>
 </div>
 
 <p>
