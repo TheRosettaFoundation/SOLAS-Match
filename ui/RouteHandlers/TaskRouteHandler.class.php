@@ -294,6 +294,7 @@ class TaskRouteHandler
         $projectAndOrgs = array();
         $discourse_slug = array();
         $proofreadTaskIds = array();
+        $matecat_urls = array();
 
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
         if ($currentScrollPage <= $lastScrollPage) {
@@ -332,6 +333,8 @@ class TaskRouteHandler
                     $orgUri,
                     htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
                 );
+
+                $matecat_urls[$taskId] = $taskDao->get_matecat_url($topTask);
 
                 $discourse_slug[$taskId] = $projectDao->discourse_parameterize($projectName);
 
@@ -373,6 +376,7 @@ class TaskRouteHandler
             'created_timestamps' => $created_timestamps,
             'deadline_timestamps' => $deadline_timestamps,
             'projectAndOrgs' => $projectAndOrgs,
+            'matecat_urls' => $matecat_urls,
             'discourse_slug' => $discourse_slug,
             'proofreadTaskIds' => $proofreadTaskIds,
             'currentScrollPage' => $currentScrollPage,
@@ -655,24 +659,8 @@ class TaskRouteHandler
         $task = $taskDao->getTask($task_id);
         $app->view()->setData("task", $task);
 
-        $matecat_url = '';
-        $translate = 'translate';
-        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
-            if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
-
-            $matecat_tasks = $taskDao->getMatecatLanguagePairs($task_id);
-            if (!empty($matecat_tasks)) {
-                $matecat_langpair = $matecat_tasks[0]['matecat_langpair'];
-                $matecat_id_job = $matecat_tasks[0]['matecat_id_job'];
-                $matecat_id_job_password = $matecat_tasks[0]['matecat_id_job_password'];
-                //$matecat_id_file = $matecat_tasks[0]['matecat_id_file'];
-                if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
-                    $matecat_url = "https://kato.translatorswb.org/$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
-                }
-            }
-        }
         $app->view()->appendData(array(
-            'matecat_url' => $matecat_url,
+            'matecat_url' => $taskDao->get_matecat_url($task),
         ));
 
         $app->render("task/task.claimed.tpl");

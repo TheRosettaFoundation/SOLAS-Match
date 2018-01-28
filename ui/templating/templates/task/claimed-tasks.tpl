@@ -119,6 +119,17 @@
 
                             <p>
                                {if $status_id == 3 && ($type_id == 3 || $type_id == 2)}
+                                    {if $matecat_urls[$task_id] != ''}
+                                        {if $type_id == 2}
+                                            <a href="{$matecat_urls[$task_id]}" class="btn btn-small btn-success">
+                                                {Localisation::getTranslation('task_claimed_translate_using_kato')}
+                                            </a>
+                                        {else}
+                                            <a href="{$matecat_urls[$task_id]}" class="btn btn-small btn-success">
+                                                {Localisation::getTranslation('task_claimed_proofread_using_kato')}
+                                            </a>
+                                        {/if}
+                                    {/if}
                                     <a href="{$siteLocation}task/{$task_id}/simple-upload" class="btn btn-small btn-success">
                                         {Localisation::getTranslation('claimed_tasks_submit_completed_task')}
                                     </a>

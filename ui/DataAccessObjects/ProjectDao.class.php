@@ -235,6 +235,8 @@ class ProjectDao extends BaseDao
         mb_internal_encoding('UTF-8');
         mb_regex_encoding('UTF-8');
 
+        $a = str_replace(array('\r\n', '\n', '\r', '\t'), '-', $a);
+
         $a = str_replace("'", '', $a);
 
         $a = mb_ereg_replace('[\x{0100}-\x{0105}]', 'a', $a);
