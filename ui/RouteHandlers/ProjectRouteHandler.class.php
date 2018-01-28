@@ -1405,8 +1405,8 @@ class ProjectRouteHandler
             'api_key'      => Common\Lib\Settings::get('discourse.api_key'),
             'api_username' => Common\Lib\Settings::get('discourse.api_username'),
             'category' => '7',
-            'title' => $project->getTitle(),
-            'raw' => "Partner: $org_name. URL: /"."/".$_SERVER['SERVER_NAME']."/project/$projectId/view ".$project->getDescription(),
+            'title' => str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getTitle()),
+            'raw' => "Partner: $org_name. URL: /"."/".$_SERVER['SERVER_NAME']."/project/$projectId/view ".str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getDescription()),
         );
         $fields = '';
         foreach($discourseapiparams as $name => $value){
