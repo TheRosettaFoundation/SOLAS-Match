@@ -963,7 +963,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="task_user_feedback_4">Unable to unclaim the task <a href="%s">%s</a>. Please try again later.</string>
     <string name="task_user_feedback_5">Feedback cannot be empty, please fill in the feedback form before continuing.</string>
 
-	<string name="task_view_download_task">Download Task</string>
+    <string name="task_view_download_task">Claim Task...</string>
 	<string name="task_view_edit_task_details">Edit Task Details</string>
 	<string name="task_view_source_document_preview">Source Document Preview</string>
     <string name="task_view_10">You are now tracking this task and will receive email notifications when its status changes.</string>

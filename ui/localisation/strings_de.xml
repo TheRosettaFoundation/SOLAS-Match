@@ -952,7 +952,7 @@ Bei Fragen schreiben Sie bitte an <a href="mailto:info@therosettafoundation.org"
     <string name="task_user_feedback_4">Die Aufgabe <a href="%s">%s</a> kann nicht abgelehnt werden. Bitte versuche es später noch einmal.</string>
     <string name="task_user_feedback_5">Das Feedback-Formular kann nicht leer sein, bitte fülle es aus, bevor Du fortfährst.</string>
 
-	<string name="task_view_download_task">Aufgabe herunterladen</string>
+    <string name="task_view_download_task">Aufgabe annehmen...</string>
 	<string name="task_view_edit_task_details">Details der Aufgabe bearbeiten</string>
 	<string name="task_view_source_document_preview">Vorschau des Ausgangsdokuments</string>
     <string name="task_view_10">Du verfolgst nun diese Aufgabe und wirst E-Mail-Benachrichtigungen zu Statusänderungen erhalten.</string>
