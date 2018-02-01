@@ -15,8 +15,8 @@
 
 <table style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-    <th width="20%">Name</th>
-    <th width="12%">Email</th>
+    <th width="17%">Name</th>
+    <th width="15%">Email</th>
     <th width="21%">Task Title</th>
     <th width="10%">Task Type</th>
     <th width="10%">Kató TM Status</th>
