@@ -71,6 +71,26 @@ class StatisticsDao extends BaseDao
         return $result;
     }
 
+    public function complete_matecat()
+    {
+        $result = LibAPI\PDOWrapper::call('complete_matecat', '');
+
+        foreach ($result as $index => $user_row) {
+           $stats = get_matecat_task_stats($user_row['task_id'], $user_row['task_type'], $user_row['project_id'], $user_row['matecat_langpair_or_blank'], $user_row['matecat_id_job_or_zero'], $user_row['matecat_id_job_password_or_blank']);
+
+           $result[$index]['DOWNLOAD_STATUS'] = '';
+           $result[$index]['TRANSLATED_PERC_FORMATTED'] = '';
+           $result[$index]['APPROVED_PERC_FORMATTED'] = '';
+           $result[$index]['matecat_url'] = '';
+
+            if (!empty($stats['DOWNLOAD_STATUS']))           $result[$index]['DOWNLOAD_STATUS']           = $stats['DOWNLOAD_STATUS'];
+            if (!empty($stats['TRANSLATED_PERC_FORMATTED'])) $result[$index]['TRANSLATED_PERC_FORMATTED'] = $stats['TRANSLATED_PERC_FORMATTED'] . '%';
+            if (!empty($stats['APPROVED_PERC_FORMATTED']))   $result[$index]['APPROVED_PERC_FORMATTED']   = $stats['APPROVED_PERC_FORMATTED'] . '%';
+            if (!empty($stats['matecat_url']))               $result[$index]['matecat_url']               = $stats['matecat_url'];
+        }
+        return $result;
+    }
+
     public function get_matecat_task_stats($task_id, $task_type, $project_id, $matecat_langpair, $matecat_id_job, $matecat_id_job_password)
     {
         $stats = array();
