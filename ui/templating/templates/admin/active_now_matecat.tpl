@@ -36,7 +36,7 @@
       <td>{$user_row['DOWNLOAD_STATUS']}</td>
       <td>{$user_row['TRANSLATED_PERC_FORMATTED']}</td>
       <td>{$user_row['APPROVED_PERC_FORMATTED']}</td>
-      <td><a href="{$user_row['matecat_url']}" target="_blank">{$user_row['matecat_langpair']}</a></td>
+      <td><a href="{$user_row['matecat_url']}" target="_blank">{$user_row['matecat_langpair_or_blank']}</a></td>
     </tr>
 
   {/foreach}
