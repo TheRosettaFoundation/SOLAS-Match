@@ -6260,7 +6260,7 @@ BEGIN
     JOIN UserPersonalInformation    i ON u.id=i.user_id
     LEFT JOIN MatecatLanguagePairs lp ON t.id=lp.task_id
     WHERE t.`task-status_id`=3
-    ORDER BY t.id DESC;
+    ORDER BY t.title, lp.matecat_langpair, t.`task-type_id`;
 END//
 DELIMITER ;
 
@@ -6297,7 +6297,7 @@ BEGIN
     JOIN UserPersonalInformation    i ON u.id=i.user_id
     LEFT JOIN MatecatLanguagePairs lp ON t.id=lp.task_id
     WHERE t.`task-status_id`=4
-    ORDER BY t.id DESC;
+    ORDER BY t.title, lp.matecat_langpair, t.`task-type_id`;
 END//
 DELIMITER ;
 
