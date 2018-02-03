@@ -15,9 +15,10 @@
 
 <table style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-    <th width="17%">Name</th>
+    <th width="15%">Name</th>
     <th width="15%">Email</th>
-    <th width="21%">Task Title</th>
+    <th width="19%">Task Title</th>
+    <th width="4%">Words</th>
     <th width="10%">Task Type</th>
     <th width="10%">Kató TM Status</th>
     <th width="10%">Translated</th>
@@ -32,6 +33,7 @@
       <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['first_name'])} {TemplateHelper::uiCleanseHTML($user_row['last_name'])}</a></td>
       <td>{$user_row['email']}</td>
       <td><a href="{urlFor name="task-view" options="task_id.{$user_row['task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['task_title'])}</a></td>
+      <td>{$user_row['word_count']}</td>
       <td>{$user_row['task_type_text']}</td>
       <td>{$user_row['DOWNLOAD_STATUS']}</td>
       <td>{$user_row['TRANSLATED_PERC_FORMATTED']}</td>
