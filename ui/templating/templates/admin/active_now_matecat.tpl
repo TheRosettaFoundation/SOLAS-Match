@@ -15,10 +15,10 @@
 
 <table style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-    <th width="15%">Name</th>
+    <th width="14%">Name</th>
     <th width="15%">Email</th>
     <th width="19%">Task Title</th>
-    <th width="4%">Words</th>
+    <th width="5%">Words</th>
     <th width="10%">Task Type</th>
     <th width="10%">Kató TM Status</th>
     <th width="10%">Translated</th>
