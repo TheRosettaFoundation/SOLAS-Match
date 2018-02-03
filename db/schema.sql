@@ -6239,6 +6239,9 @@ BEGIN
         IFNULL(i.`last-name`, '') AS last_name,
         t.title AS task_title,
         t.id AS task_id,
+        t.`word-count` AS word_count,
+        t.`created-time` AS created_time,
+        t.deadline,
         t.`task-type_id` AS task_type,
         CASE
             WHEN t.`task-type_id`=1 THEN 'Segmentation'
@@ -6276,6 +6279,9 @@ BEGIN
         IFNULL(i.`last-name`, '') AS last_name,
         t.title AS task_title,
         t.id AS task_id,
+        t.`word-count` AS word_count,
+        t.`created-time` AS created_time,
+        t.deadline,
         t.`task-type_id` AS task_type,
         CASE
             WHEN t.`task-type_id`=1 THEN 'Segmentation'
