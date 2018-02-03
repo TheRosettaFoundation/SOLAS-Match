@@ -6239,6 +6239,9 @@ BEGIN
         IFNULL(i.`last-name`, '') AS last_name,
         t.title AS task_title,
         t.id AS task_id,
+        t.`word-count` AS word_count,
+        t.`created-time` AS created_time,
+        t.deadline,
         t.`task-type_id` AS task_type,
         CASE
             WHEN t.`task-type_id`=1 THEN 'Segmentation'
@@ -6260,7 +6263,7 @@ BEGIN
     JOIN UserPersonalInformation    i ON u.id=i.user_id
     LEFT JOIN MatecatLanguagePairs lp ON t.id=lp.task_id
     WHERE t.`task-status_id`=3
-    ORDER BY t.id DESC;
+    ORDER BY t.title, lp.matecat_langpair, t.`task-type_id`;
 END//
 DELIMITER ;
 
@@ -6276,6 +6279,9 @@ BEGIN
         IFNULL(i.`last-name`, '') AS last_name,
         t.title AS task_title,
         t.id AS task_id,
+        t.`word-count` AS word_count,
+        t.`created-time` AS created_time,
+        t.deadline,
         t.`task-type_id` AS task_type,
         CASE
             WHEN t.`task-type_id`=1 THEN 'Segmentation'
@@ -6297,7 +6303,7 @@ BEGIN
     JOIN UserPersonalInformation    i ON u.id=i.user_id
     LEFT JOIN MatecatLanguagePairs lp ON t.id=lp.task_id
     WHERE t.`task-status_id`=4
-    ORDER BY t.id DESC;
+    ORDER BY t.title, lp.matecat_langpair, t.`task-type_id`;
 END//
 DELIMITER ;
 
