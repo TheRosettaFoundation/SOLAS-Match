@@ -1118,18 +1118,18 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="header_notifications">Notifications:</string>
 	<string name="header_log_out">Log out</string>
 
-    <string name="index_translation_commons">Kató Translation Commons</string>
-	<string name="index_0">Empowering conversation in communities</string>
-	<string name="index_translation_tasks">Translation tasks</string>
-	<string name="index_1">Claim a task, translate it, upload it.</string>
+    <string name="index_translation_commons">Kató Trommons</string>
+    <string name="index_0">Empowering conversation in communities</string>
+    <string name="index_translation_tasks">Translation tasks</string>
+    <string name="index_1">Claim a task, translate it, upload it</string>
 	<string name="index_any_task_type">Any Task Type</string>
     <string name="index_any_source_language">Any Source Language</string>
     <string name="index_any_target_language">Any Target Language</string>
     <string name="index_filter_available_tasks">Filter Available Tasks:</string>
 	<string name="index_filter_task_stream">Filter Task Stream</string>
 	<string name="index_no_tasks_available">No tasks available!</string>
-	<string name="index_6">Help us match you with the most suitable translation tasks.</string>
-	<string name="index_register_now"><a href="%s">Register now</a> to find the translation tasks best suited to you.</string>
+    <string name="index_6">Help us match you with the most suitable translation tasks</string>
+    <string name="index_register_now"><a href="%s">Register now</a> to find the translation tasks best suited to you</string>
     <string name="index_load_more">Load More</string>
 	<string name="index_donate_free_service"><strong>The Translation Commons match non-profit translation projects with language volunteers across the world. It is an open space maintained by</strong></string>
 	<string name="index_donate_support_us">You can show your appreciation and support future development by  becoming a Friend of The Rosetta Foundation or by making a once-off donation.</string>
@@ -1152,7 +1152,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="slim_error_2">with details of how you encountered the error, along with the technical details listed below.</string>
 	<string name="slim_error_3">Go </string>
 	<string name="slim_error_4">Back.</string>
-	<string name="slim_error_5">Show Details.</string>
+    <string name="slim_error_5">Show Details</string>
 	
 	<string name="gplus_error"><p>An internal error occurred while trying to sign in with Google. <a href="%s">Try logging in again</a> or <a href="%s">register</a> for an account.</p><p><strong>%s</strong></p></string>
   <string name="proz_error"><p>An internal error occurred while trying to sign in with ProZ. <a href="%s">Try logging in again</a> or <a href="%s">register</a> for an account.</p><p><strong>%s</strong></p></string>

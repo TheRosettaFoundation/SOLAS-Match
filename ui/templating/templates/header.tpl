@@ -53,11 +53,11 @@
         {/if}
     </head>
 
-        <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if} style="background-image:  url({urlFor name="home"}ui/img/bg.png); background-repeat: repeat">
+        <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if}>
         <div class="navbar navbar-fixed-top">
            <div class="navbar-inner">
                 <div class="container">
-                    <a class="brand" href="{urlFor name='home'}">{Settings::get('site.name')}</a>
+                    <a href="#" class="pull-left"><img height="40px" src="{urlFor name='home'}ui/img/logo_katotrommons.png"></a>
                     <ul class="nav">
                         <li {if isset($current_page) && $current_page == 'home'}class="active"{/if} >
                             <a href="{urlFor name="home"}">{Localisation::getTranslation('header_home')}</a>

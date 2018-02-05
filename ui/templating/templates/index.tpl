@@ -76,6 +76,7 @@
 
 <div class="row">
     <div class="span4 pull-right">
+<!--
         <section class="donate-block">
             <p>{Localisation::getTranslation('index_donate_free_service')}</p>
             <a href="https://www.therosettafoundation.org" target="_blank">
@@ -90,6 +91,7 @@
                 </div>
             </a>
         </section>
+-->
 
         {include file="tag/tags.user-tags.inc.tpl"}
         {include file="tag/tags.top-list.inc.tpl"}
@@ -204,7 +206,7 @@
                             <p><div class="process_deadline_utc" style="visibility: hidden">{$deadline_timestamps[$task_id]}</div></p>
                             <p id="parents_{$task_id}">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$task_id])}</p>
                             {if $task->getProjectId() > Settings::get("discourse.pre_discourse")}
-                            <p>{Localisation::getTranslation('common_forum')}: <a href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">https://community.translatorswb.org/t/{$discourse_slug[$task_id]}</a></p>
+                            <p><a class="btn btn-primary" href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">{Localisation::getTranslation('common_forum')}</a></p>
                             {/if}
                             <br />
                         </div>

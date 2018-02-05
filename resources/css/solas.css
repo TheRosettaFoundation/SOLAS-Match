@@ -132,13 +132,13 @@ table{
 
 .hero-unit {
     margin-top: 20px;
-   background-color: rgba(99,99,99,0.2) !important;
+   background-color: white;
  
 
 }
 
 .well{
-    background-color: rgba(99,99,99,0.1);
+    background-color: white;
 }
 
 .table-striped tbody tr:nth-child(odd) td,
@@ -160,7 +160,7 @@ table{
 .navbar .nav .active > a, 
 .navbar .nav  a:hover, 
 .navbar .nav .active > a:hover {
-    background-color: rgb(0,116,204);
+    background-color: #cb7500;
 }
 
 #trackedOrganisationForm {
