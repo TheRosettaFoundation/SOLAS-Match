@@ -76,9 +76,9 @@
     <string name="common_please_correct_errors">Corrige los siguientes errores</string>
 	<string name="common_provide_feedback">Envía tus comentarios</string>
 	<string name="common_here">aquí</string>
-	<string name="common_create_a_translation_task_for_volunteer_translators_to_pick_up">Crea una tarea de traducción para que un traductor voluntario la reclame.</string>
-	<string name="common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer">Crea una tarea de revisión para evaluar la traducción realizada por un voluntario.</string>
-	<string name="common_thanks_for_providing_your_translation_for_this_task">Gracias por traducir este texto.</string>
+    <string name="common_create_a_translation_task_for_volunteer_translators_to_pick_up">Crea una tarea de traducción para que un traductor voluntario la reclame</string>
+    <string name="common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer">Crea una tarea de revisión para evaluar la traducción realizada por un voluntario</string>
+    <string name="common_thanks_for_providing_your_translation_for_this_task">Gracias por traducir este texto</string>
 	<string name="common_maximum_file_size_is">El tamaño admitido para los archivos es <strong>%sMB</strong></string>
   <string name="common_maximum_file_total_size_is">Los archivos que subas no pueden superar los <strong>%s MB</strong> en total</string>
   <string name="common_maximum_file_total_size_vs_limit_is">Los archivos que quieres subir suman %1$s MB, pero el límite admitido es de %2$s MB.</string>
@@ -1119,18 +1119,18 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
 	<string name="header_notifications">Notificaciones:</string>
 	<string name="header_log_out">Cerrar sesión</string>
 
-    <string name="index_translation_commons">Kató Translation Commons</string>
-	<string name="index_0">Facilitamos la comunicación entre todas las culturas</string>
-	<string name="index_translation_tasks">Tareas de traducción</string>
-	<string name="index_1">Asígnate una tarea, tradúcela y súbela a Trommons.</string>
+    <string name="index_translation_commons">Kató Trommons</string>
+    <string name="index_0">Facilitamos la comunicación entre todas las culturas</string>
+    <string name="index_translation_tasks">Tareas de traducción</string>
+    <string name="index_1">Asígnate una tarea, tradúcela y súbela a Trommons</string>
 	<string name="index_any_task_type">Todo tipo de tareas</string>
     <string name="index_any_source_language">Cualquier idioma de origen</string>
     <string name="index_any_target_language">Cualquier idioma de destino</string>
     <string name="index_filter_available_tasks">Filtrar tareas disponibles:</string>
 	<string name="index_filter_task_stream">Filtrar lista de tareas</string>
 	<string name="index_no_tasks_available">No hay tareas disponibles</string>
-	<string name="index_6">Ayúdanos a enviarte las tareas que más se ajusten a tu experiencia e intereses.</string>
-	<string name="index_register_now"><a href="%s">Regístrate</a> para encontrar tareas de traducción que se ajusten a tu perfil.</string>
+    <string name="index_6">Ayúdanos a enviarte las tareas que más se ajusten a tu experiencia e intereses</string>
+    <string name="index_register_now"><a href="%s">Regístrate</a> para encontrar tareas de traducción que se ajusten a tu perfil</string>
     <string name="index_load_more">Cargar más</string>
 	<string name="index_donate_free_service"><strong>Translation Commons conecta a organizaciones sin ánimo de lucro con traductores y revisores voluntarios de todo el mundo. Se trata de una plataforma abierta mantenida por</strong></string>
 	<string name="index_donate_support_us">Puedes contribuir al futuro desarrollo de Trommons haciéndote amigo de The Rosetta Foundation o con un donativo. </string>
