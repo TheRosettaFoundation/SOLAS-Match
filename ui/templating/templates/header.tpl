@@ -86,7 +86,7 @@
                             </li>
                         {/if}
                              <li {if isset($current_page) && $current_page == 'faq'}class="active" {/if}>
-                                <a href="{urlFor name="faq"}">{Localisation::getTranslation('common_faq')}</a>
+                                <a href="https://community.translatorswb.org/c/kato-q-a">{Localisation::getTranslation('common_faq')}</a>
                             </li>
                            	{if Settings::get('site.forum_enabled') == 'y'}
 	                            <li>
