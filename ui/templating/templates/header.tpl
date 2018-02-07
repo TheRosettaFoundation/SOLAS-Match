@@ -57,7 +57,7 @@
         <div class="navbar navbar-fixed-top">
            <div class="navbar-inner">
                 <div class="container">
-                    <a href="#" class="pull-left"><img height="40px" src="{urlFor name='home'}ui/img/logo_katotrommons.png"></a>
+                    <a href="{urlFor name='home'}" class="pull-left"><img height="40px" src="{urlFor name='home'}ui/img/logo_katotrommons.png"></a>
                     <ul class="nav">
                         <li {if isset($current_page) && $current_page == 'home'}class="active"{/if} >
                             <a href="{urlFor name="home"}">{Localisation::getTranslation('header_home')}</a>
