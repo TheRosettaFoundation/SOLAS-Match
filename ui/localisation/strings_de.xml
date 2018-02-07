@@ -74,9 +74,9 @@
     <string name="common_please_correct_errors">Korrigiere bitte die folgenden Fehler</string>
 	<string name="common_provide_feedback">Feedback geben</string>
 	<string name="common_here">hier</string>
-	<string name="common_create_a_translation_task_for_volunteer_translators_to_pick_up">Erstelle eine Übersetzungsaufgabe, die freiwillige Übersetzer annehmen können.</string>
-	<string name="common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer">Erstelle eine Korrektur-Aufgabe, um die Übersetzung eines Freiwilligen zu bewerten.</string>
-	<string name="common_thanks_for_providing_your_translation_for_this_task">Danke für die Übersetzung dieser Aufgabe.</string>
+    <string name="common_create_a_translation_task_for_volunteer_translators_to_pick_up">Erstelle eine Übersetzungsaufgabe, die freiwillige Übersetzer annehmen können</string>
+    <string name="common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer">Erstelle eine Korrektur-Aufgabe, um die Übersetzung eines Freiwilligen zu bewerten</string>
+    <string name="common_thanks_for_providing_your_translation_for_this_task">Danke für die Übersetzung dieser Aufgabe</string>
 	<string name="common_maximum_file_size_is">Die maximale Dateigröße beträgt <strong>%s MB</strong></string>
   <string name="common_maximum_file_total_size_is">Die maximale Dateigröße aller hochgeladenen Dateien beträgt <strong>%sMB</strong></string>
   <string name="common_maximum_file_total_size_vs_limit_is">Die Größe der gewählten Datei beträgt %1$sMB, doch die Grenze ist %2$sMB.</string>
@@ -1108,18 +1108,18 @@ Bei Fragen schreiben Sie bitte an <a href="mailto:info@therosettafoundation.org"
 	<string name="header_notifications">Benachrichtigungen:</string>
 	<string name="header_log_out">Abmelden</string>
 
-    <string name="index_translation_commons">Kató Übersetzungs-Commons</string>
-	<string name="index_0">Kommunikation in Gesellschaften unterstützen</string>
-	<string name="index_translation_tasks">Übersetzungsaufgaben</string>
-	<string name="index_1">Nimm eine Aufgabe an, übersetzen sie, lade sie hoch.</string>
+    <string name="index_translation_commons">Kató Trommons</string>
+    <string name="index_0">Kommunikation in Gesellschaften unterstützen</string>
+    <string name="index_translation_tasks">Übersetzungsaufgaben</string>
+    <string name="index_1">Nimm eine Aufgabe an, übersetzen sie, lade sie hoch</string>
 	<string name="index_any_task_type">Alle Aufgabentypen</string>
     <string name="index_any_source_language">Alle Ausgangssprachen</string>
     <string name="index_any_target_language">Alle Zielsprachen</string>
     <string name="index_filter_available_tasks">Verfügbare Aufgaben filtern:</string>
 	<string name="index_filter_task_stream">Aufgabenliste filtern</string>
 	<string name="index_no_tasks_available">Keine Aufgaben verfügbar!</string>
-	<string name="index_6">Hilf uns, die passendsten Übersetzungsaufgaben für Dich auszuwählen.</string>
-	<string name="index_register_now"><a href="%s">Registriere Dich jetzt</a> und finde die Übersetzungsaufgaben, die am besten zu Dir passen.</string>
+    <string name="index_6">Hilf uns, die passendsten Übersetzungsaufgaben für Dich auszuwählen</string>
+    <string name="index_register_now"><a href="%s">Registriere Dich jetzt</a> und finde die Übersetzungsaufgaben, die am besten zu Dir passen</string>
     <string name="index_load_more">Weitere laden</string>
     <string name="index_dont_use_ie">Die Site wird am besten mit Firefox oder Google Chrome dargestellt, mit anderen Browsern sind nicht alle Funktionen verfügbar</string>
     <string name="index_still_using_ie">Wenn Du weiterhin Internet Explorer verwenden möchtest, empfehlen wir, <a href = "http://www.google.com/chromeframe">chrome frame</a> zu installieren.</string>
