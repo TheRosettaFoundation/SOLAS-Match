@@ -961,7 +961,7 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@therosettafoun
     <string name="task_user_feedback_4">Impossibile rinunciare a quest'attività <a href="%s">%s</a> . Si prega di riprovare più tardi.</string>
     <string name="task_user_feedback_5">Il campo del feedback non può rimanere vuoto. Lascia un feedback prima di proseguire.</string>
 
-	<string name="task_view_download_task">Scarica l'attività.</string>
+    <string name="task_view_download_task">Accettare compito...</string>
 	<string name="task_view_edit_task_details">Modifica i dettagli dell'attività.</string>
 	<string name="task_view_source_document_preview">Anteprima documento originale.</string>
     <string name="task_view_10">Stai seguendo quest'attività e riceverai notifiche via email quando il suo status verrà modificato.</string>
@@ -1116,18 +1116,18 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@therosettafoun
 	<string name="header_notifications">Notifiche:</string>
 	<string name="header_log_out">Logout</string>
 
-    <string name="index_translation_commons">Kató Translation Commons</string>
-	<string name="index_0">Consentire la comunicazione tra comunità</string>
-	<string name="index_translation_tasks">Attività di traduzione</string>
-	<string name="index_1">Scegli un'attività, traducila, manda la tua traduzione.</string>
+    <string name="index_translation_commons">Kató Trommons</string>
+    <string name="index_0">Consentire la comunicazione tra comunità</string>
+    <string name="index_translation_tasks">Attività di traduzione</string>
+    <string name="index_1">Scegli un'attività, traducila, manda la tua traduzione</string>
 	<string name="index_any_task_type">Qualsiasi tipo di attività</string>
     <string name="index_any_source_language">Qualsiasi lingua di partenza</string>
     <string name="index_any_target_language">Qualsiasi lingua di arrivo</string>
     <string name="index_filter_available_tasks">Filtra le attività disponibili:</string>
 	<string name="index_filter_task_stream">Filtra l'elenco delle attività disponibili</string>
 	<string name="index_no_tasks_available">Nessuna attività disponibile!</string>
-	<string name="index_6">Aiutaci a segnalarti le attività più affini alle tue preferenze.</string>
-	<string name="index_register_now"><a href="%s">Registrati ora</a> per trovare le attività di traduzione che fanno al caso tuo.</string>
+    <string name="index_6">Aiutaci a segnalarti le attività più affini alle tue preferenze</string>
+    <string name="index_register_now"><a href="%s">Registrati ora</a> per trovare le attività di traduzione che fanno al caso tuo</string>
     <string name="index_load_more">Carica altro</string>
 	<string name="index_donate_free_service"><strong>Translation Commons consente alle organizzazioni no profit di trovare traduttori e linguisti in tutto il mondo disposti a tradurre in modo volontario i loro progetti. È uno spazio aperto la cui manutenzione è a cura di</strong></string>
 	<string name="index_donate_support_us">Puoi supportare il lavoro di Translation Commons e il suo sviluppo futuro diventando un Amico di The Rosetta Foundation e facendo una donazione.</string>

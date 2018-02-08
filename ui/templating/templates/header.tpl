@@ -23,7 +23,7 @@
         <meta name="twitter:description" content="{Settings::get('twitter.description')}"/>
         <meta name="twitter:image" content="{Settings::get('twitter.image')}"/>
 
-        <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min1.css"/>
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.2.css"/>
         <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
 
@@ -35,7 +35,7 @@
         {/if}
 
         <!-- style overrides-->
-        <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas.css"/>
+        <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas1.css"/>
 
         {if isset($platformJS)}
             {$platformJS}
@@ -53,11 +53,11 @@
         {/if}
     </head>
 
-        <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if} style="background-image:  url({urlFor name="home"}ui/img/bg.png); background-repeat: repeat">
+        <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if}>
         <div class="navbar navbar-fixed-top">
            <div class="navbar-inner">
                 <div class="container">
-                    <a class="brand" href="{urlFor name='home'}">{Settings::get('site.name')}</a>
+                    <a href="{urlFor name='home'}" class="pull-left"><img height="40px" src="{urlFor name='home'}ui/img/logo_katotrommons.png"></a>
                     <ul class="nav">
                         <li {if isset($current_page) && $current_page == 'home'}class="active"{/if} >
                             <a href="{urlFor name="home"}">{Localisation::getTranslation('header_home')}</a>
@@ -86,7 +86,7 @@
                             </li>
                         {/if}
                              <li {if isset($current_page) && $current_page == 'faq'}class="active" {/if}>
-                                <a href="{urlFor name="faq"}">{Localisation::getTranslation('common_faq')}</a>
+                                <a href="https://community.translatorswb.org/c/kato-q-a">{Localisation::getTranslation('common_faq')}</a>
                             </li>
                            	{if Settings::get('site.forum_enabled') == 'y'}
 	                            <li>

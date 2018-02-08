@@ -24,7 +24,7 @@
         <meta name="twitter:image" content="{Settings::get('twitter.image')}">
         
         
-        <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min1.css"/>
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css"/>
         <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
         
@@ -35,7 +35,7 @@
         {/if}
         
         <!-- style overrides-->
-        <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas.css"/>
+        <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas1.css"/>
         
         <!-- google analytics -->
         <script type="text/javascript" src="{urlFor name="home"}ui/js/tracking.js"></script>
