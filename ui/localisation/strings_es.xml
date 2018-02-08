@@ -964,7 +964,7 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
     <string name="task_user_feedback_4">No se ha podido rechazar la tarea <a href="%s">%s</a>. Por favor, inténtalo de nuevo más tarde.</string>
     <string name="task_user_feedback_5">El formulario de valoración no puede estar en blanco. Por favor, rellénalo para continuar.</string>
 
-	<string name="task_view_download_task">Descargar tarea</string>
+    <string name="task_view_download_task">Aceptar tarea...</string>
 	<string name="task_view_edit_task_details">Modificar información de la tarea</string>
 	<string name="task_view_source_document_preview">Vista previa del archivo de origen</string>
     <string name="task_view_10">Estás siguiendo el progreso de este proyecto. Ahora recibirás notificaciones cada vez que cambie de estado.</string>

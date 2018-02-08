@@ -961,7 +961,7 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@therosettafoun
     <string name="task_user_feedback_4">Impossibile rinunciare a quest'attività <a href="%s">%s</a> . Si prega di riprovare più tardi.</string>
     <string name="task_user_feedback_5">Il campo del feedback non può rimanere vuoto. Lascia un feedback prima di proseguire.</string>
 
-	<string name="task_view_download_task">Scarica l'attività.</string>
+    <string name="task_view_download_task">Accettare compito...</string>
 	<string name="task_view_edit_task_details">Modifica i dettagli dell'attività.</string>
 	<string name="task_view_source_document_preview">Anteprima documento originale.</string>
     <string name="task_view_10">Stai seguendo quest'attività e riceverai notifiche via email quando il suo status verrà modificato.</string>
