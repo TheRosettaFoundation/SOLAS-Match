@@ -869,12 +869,12 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
     <string name="task_claimed_translate_using_kato">Traducir utilzando Kató TM</string>
     <string name="task_claimed_proofread_using_kato">Revisar el texto con la ayuda de Kató TM</string>
     <string name="task_claimed_please_read_kato">Kató TM es una plataforma de traducción de Translators without Borders (TWB). Por favor, lee <a href="https://kato.translatorswb.org/public/doc/translators.html" target="_blank">la siguiente guía</a> antes de usar Kató TM.</string>
-    <string name="task_simple_upload_copy_from_kato">Copia tu traducción de Kató TM a Kató Trommons</string>
+    <string name="task_simple_upload_copy_from_kato">Copia tu traducción de Kató TM a Kató</string>
     <string name="task_simple_upload_view_on_kato">Pulsa <a href="%s" target="_blank">aquí</a> para <strong>ver tu traducción en Kató TM</strong>.</string>
-    <string name="task_simple_upload_download_from_kato">Pulsa <a href="%s">aquí</a> para <strong>descargar tu traducción de Kató TM y cargarla en Kató Trommons manualmente</strong>.</string>
-    <string name="task_simple_upload_copy_from_kato_proofread">Copie la versión ya revisada de Kató TM a Kató Trommons</string>
+    <string name="task_simple_upload_download_from_kato">Pulsa <a href="%s">aquí</a> para <strong>descargar tu traducción de Kató TM y cargarla en Kató manualmente</strong>.</string>
+    <string name="task_simple_upload_copy_from_kato_proofread">Copie la versión ya revisada de Kató TM a Kató</string>
     <string name="task_simple_upload_view_on_kato_proofread">Haga clic <a href="%s" target="_blank">aquí</a> para<strong> ver la version revisada en Kató TM</strong>.</string>
-    <string name="task_simple_upload_download_from_kato_proofread">Haga clic <a href="%s">aquí</a> para<strong> descargar la version revisada de Kató TM y subirla a Kató Trommons de forma manual</strong>.</string>
+    <string name="task_simple_upload_download_from_kato_proofread">Haga clic <a href="%s">aquí</a> para<strong> descargar la version revisada de Kató TM y subirla a Kató de forma manual</strong>.</string>
 
     <string name="task_create_for_project">Para el proyecto <strong>%s</strong>.</string>
 	<string name="task_create_0">Especifica un título relevante para la tarea.</string>
@@ -1119,7 +1119,7 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
 	<string name="header_notifications">Notificaciones:</string>
 	<string name="header_log_out">Cerrar sesión</string>
 
-    <string name="index_translation_commons">Kató Trommons</string>
+    <string name="index_translation_commons">TWB Kató</string>
     <string name="index_0">Facilitamos la comunicación entre todas las culturas</string>
     <string name="index_translation_tasks">Tareas de traducción</string>
     <string name="index_1">Asígnate una tarea, tradúcela y súbela a Trommons</string>

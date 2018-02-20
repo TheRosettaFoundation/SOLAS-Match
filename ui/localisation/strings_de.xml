@@ -857,12 +857,12 @@ Bei Fragen schreiben Sie bitte an <a href="mailto:info@therosettafoundation.org"
     <string name="task_claimed_translate_using_kato">In Kató TM übersetzen</string>
     <string name="task_claimed_proofread_using_kato">In Kató TM korrekturlesen</string>
     <string name="task_claimed_please_read_kato">Kató TM ist das Übersetzungssystem von Translators without Borders (TWB). Bitte vor dem Übersetzen in Kató TM <a href="https://kato.translatorswb.org/public/doc/translators.html" target="_blank">diese Hinweise</a> lesen.</string>
-    <string name="task_simple_upload_copy_from_kato">Die Übersetzung von Kató TM nach Kató Trommons kopieren</string>
+    <string name="task_simple_upload_copy_from_kato">Die Übersetzung von Kató TM nach Kató kopieren</string>
     <string name="task_simple_upload_view_on_kato"><a href="%s" target="_blank">Hier</a> klicken, um die <strong>Übersetzung in Kató TM anzuzeigen</strong>.</string>
-    <string name="task_simple_upload_download_from_kato"><a href="%s">Hier</a> klicken, um die <strong>Übersetzung von Kató TM herunterzuladen und manuell in Kató Trommons hochzuladen</strong>.</string>
-    <string name="task_simple_upload_copy_from_kato_proofread">Korrigierte Version von Kató TM in Kató Trommons kopieren</string>
+    <string name="task_simple_upload_download_from_kato"><a href="%s">Hier</a> klicken, um die <strong>Übersetzung von Kató TM herunterzuladen und manuell in Kató hochzuladen</strong>.</string>
+    <string name="task_simple_upload_copy_from_kato_proofread">Korrigierte Version von Kató TM in Kató kopieren</string>
     <string name="task_simple_upload_view_on_kato_proofread"><a href="%s" target="_blank">Hier</a> klicken, um die <strong>korrigierte Version in Kató TM anzuzeigen</strong>.</string>
-    <string name="task_simple_upload_download_from_kato_proofread"><a href="%s">Hier</a> klicken, um die <strong>korrigierte Version von Kató TM herunterzuladen und selbst in Kató Trommons hochzuladen</strong>.</string>
+    <string name="task_simple_upload_download_from_kato_proofread"><a href="%s">Hier</a> klicken, um die <strong>korrigierte Version von Kató TM herunterzuladen und selbst in Kató hochzuladen</strong>.</string>
 
     <string name="task_create_for_project">Für Projekt <strong>%s</strong>.</string>
 	<string name="task_create_0">Gib einen aussagekräftigen Titel für die Aufgabe an.</string>
@@ -1108,7 +1108,7 @@ Bei Fragen schreiben Sie bitte an <a href="mailto:info@therosettafoundation.org"
 	<string name="header_notifications">Benachrichtigungen:</string>
 	<string name="header_log_out">Abmelden</string>
 
-    <string name="index_translation_commons">Kató Trommons</string>
+    <string name="index_translation_commons">TWB Kató</string>
     <string name="index_0">Kommunikation in Gesellschaften unterstützen</string>
     <string name="index_translation_tasks">Übersetzungsaufgaben</string>
     <string name="index_1">Nimm eine Aufgabe an, übersetzen sie, lade sie hoch</string>
