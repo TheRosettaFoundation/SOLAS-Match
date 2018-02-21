@@ -8,9 +8,9 @@
 {if !isset($user)}
     <div class="hero-unit">
         <h1>{Localisation::getTranslation('index_translation_commons')}</h1>
-        <p>{Localisation::getTranslation('index_0')}</p>
+        <p>Vital information, in the right language, at the right time. </p>
         <p>
-            <a class="btn btn-success btn-large" href="{urlFor name="register"}">
+            <a class="btn btn-primary btn-large" href="{urlFor name="register"}">
                 <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_register')}
             </a>
             <a class="btn btn-primary btn-large" href="{urlFor name="login"}">
@@ -76,6 +76,7 @@
 
 <div class="row">
     <div class="span4 pull-right">
+<!--
         <section class="donate-block">
             <p>{Localisation::getTranslation('index_donate_free_service')}</p>
             <a href="https://www.therosettafoundation.org" target="_blank">
@@ -90,6 +91,7 @@
                 </div>
             </a>
         </section>
+-->
 
         {include file="tag/tags.user-tags.inc.tpl"}
         {include file="tag/tags.top-list.inc.tpl"}
@@ -169,11 +171,10 @@
                         {assign var="task_id" value=$task->getId()}
                         {assign var="type_id" value=$task->getTaskType()}
                         {assign var="task_title" value=$task->getTitle()}
-
                         {if $taskImages[$task_id]}
-                        <div style="width:65%; word-break: break-word" class="pull-left" id="task_{$task_id}">
+                        <div style="background-color:#eee;padding:10px;margin:5px;width:61%; word-break: break-word;" class="pull-left" id="task_{$task_id}">
                         {else}
-                        <div style="width:100%; word-break: break-word" class="pull-left" id="task_{$task_id}">
+                        <div style="background-color:#eee;padding:10px;margin:5px;width:100%; word-break: break-word;" class="pull-left" id="task_{$task_id}">
                         {/if}
                             <h2>
                                 <a id="task-{$task_id}" href="{$siteLocation}task/{$task_id}/id">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task_title)}</a>
@@ -204,12 +205,12 @@
                             <p><div class="process_deadline_utc" style="visibility: hidden">{$deadline_timestamps[$task_id]}</div></p>
                             <p id="parents_{$task_id}">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$task_id])}</p>
                             {if $task->getProjectId() > Settings::get("discourse.pre_discourse")}
-                            <p>{Localisation::getTranslation('common_forum')}: <a href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">https://community.translatorswb.org/t/{$discourse_slug[$task_id]}</a></p>
+                            <p><a class="btn btn-primary" href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">{Localisation::getTranslation('common_forum')}</a></p>
                             {/if}
                             <br />
                         </div>
                         {if $taskImages[$task_id]}
-                            <div id="img_{$task_id}" class="pull-right task-stream-img" style="text-align:right; width:35%;">
+                            <div id="img_{$task_id}" class="pull-right task-stream-img" style="text-align:right; width:31%; padding:10px;margin:5px;background-color:#eee">
                                 <img src="{$taskImages[$task_id]}">
                             </div>
                         {else}

@@ -76,9 +76,9 @@
     <string name="common_please_correct_errors">Corrige los siguientes errores</string>
 	<string name="common_provide_feedback">Envía tus comentarios</string>
 	<string name="common_here">aquí</string>
-	<string name="common_create_a_translation_task_for_volunteer_translators_to_pick_up">Crea una tarea de traducción para que un traductor voluntario la reclame.</string>
-	<string name="common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer">Crea una tarea de revisión para evaluar la traducción realizada por un voluntario.</string>
-	<string name="common_thanks_for_providing_your_translation_for_this_task">Gracias por traducir este texto.</string>
+    <string name="common_create_a_translation_task_for_volunteer_translators_to_pick_up">Crea una tarea de traducción para que un traductor voluntario la reclame</string>
+    <string name="common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer">Crea una tarea de revisión para evaluar la traducción realizada por un voluntario</string>
+    <string name="common_thanks_for_providing_your_translation_for_this_task">Gracias por traducir este texto</string>
 	<string name="common_maximum_file_size_is">El tamaño admitido para los archivos es <strong>%sMB</strong></string>
   <string name="common_maximum_file_total_size_is">Los archivos que subas no pueden superar los <strong>%s MB</strong> en total</string>
   <string name="common_maximum_file_total_size_vs_limit_is">Los archivos que quieres subir suman %1$s MB, pero el límite admitido es de %2$s MB.</string>
@@ -866,15 +866,15 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
     <string name="task_claimed_translation_upload_translated_task">Entregue su traducción</string>
 
     <string name="task_claimed_alternative_option">Opción alternativa:</string>
-    <string name="task_claimed_translate_using_kato">Traducir utilzando Kató MT</string>
-    <string name="task_claimed_proofread_using_kato">Revisar el texto con la ayuda de Kató MT</string>
-    <string name="task_claimed_please_read_kato">Kató MT es una plataforma de traducción de Translators without Borders (TWB). Por favor, lee <a href="https://kato.translatorswb.org/public/doc/translators.html" target="_blank">la siguiente guía</a> antes de usar Kató MT.</string>
-    <string name="task_simple_upload_copy_from_kato">Copia tu traducción de Kató MT a Kató Trommons</string>
-    <string name="task_simple_upload_view_on_kato">Pulsa <a href="%s" target="_blank">aquí</a> para <strong>ver tu traducción en Kató MT</strong>.</string>
-    <string name="task_simple_upload_download_from_kato">Pulsa <a href="%s">aquí</a> para <strong>descargar tu traducción de Kató MT y cargarla en Kató Trommons manualmente</strong>.</string>
-    <string name="task_simple_upload_copy_from_kato_proofread">Copie la versión ya revisada de Kató MT a Kató Trommons</string>
-    <string name="task_simple_upload_view_on_kato_proofread">Haga clic <a href="%s" target="_blank">aquí</a> para<strong> ver la version revisada en Kató MT</strong>.</string>
-    <string name="task_simple_upload_download_from_kato_proofread">Haga clic <a href="%s">aquí</a> para<strong> descargar la version revisada de Kató MT y subirla a Kató Trommons de forma manual</strong>.</string>
+    <string name="task_claimed_translate_using_kato">Traducir utilzando Kató TM</string>
+    <string name="task_claimed_proofread_using_kato">Revisar el texto con la ayuda de Kató TM</string>
+    <string name="task_claimed_please_read_kato">Kató TM es una plataforma de traducción de Translators without Borders (TWB). Por favor, lee <a href="https://kato.translatorswb.org/public/doc/translators.html" target="_blank">la siguiente guía</a> antes de usar Kató TM.</string>
+    <string name="task_simple_upload_copy_from_kato">Copia tu traducción de Kató TM a Kató</string>
+    <string name="task_simple_upload_view_on_kato">Pulsa <a href="%s" target="_blank">aquí</a> para <strong>ver tu traducción en Kató TM</strong>.</string>
+    <string name="task_simple_upload_download_from_kato">Pulsa <a href="%s">aquí</a> para <strong>descargar tu traducción de Kató TM y cargarla en Kató manualmente</strong>.</string>
+    <string name="task_simple_upload_copy_from_kato_proofread">Copie la versión ya revisada de Kató TM a Kató</string>
+    <string name="task_simple_upload_view_on_kato_proofread">Haga clic <a href="%s" target="_blank">aquí</a> para<strong> ver la version revisada en Kató TM</strong>.</string>
+    <string name="task_simple_upload_download_from_kato_proofread">Haga clic <a href="%s">aquí</a> para<strong> descargar la version revisada de Kató TM y subirla a Kató de forma manual</strong>.</string>
 
     <string name="task_create_for_project">Para el proyecto <strong>%s</strong>.</string>
 	<string name="task_create_0">Especifica un título relevante para la tarea.</string>
@@ -964,7 +964,7 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
     <string name="task_user_feedback_4">No se ha podido rechazar la tarea <a href="%s">%s</a>. Por favor, inténtalo de nuevo más tarde.</string>
     <string name="task_user_feedback_5">El formulario de valoración no puede estar en blanco. Por favor, rellénalo para continuar.</string>
 
-	<string name="task_view_download_task">Descargar tarea</string>
+    <string name="task_view_download_task">Aceptar tarea...</string>
 	<string name="task_view_edit_task_details">Modificar información de la tarea</string>
 	<string name="task_view_source_document_preview">Vista previa del archivo de origen</string>
     <string name="task_view_10">Estás siguiendo el progreso de este proyecto. Ahora recibirás notificaciones cada vez que cambie de estado.</string>
@@ -1071,7 +1071,7 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
 	<string name="user_public_profile_list_all_archived_tasks">Todas las tareas archivadas</string>
     <string name="user_public_profile_reference_email">E-mail de referencia</string>
     <string name="user_public_profile_request_reference">Solicitar referencia</string>
-    <string name="user_public_profile_15">Haz clic en el botón de la derecha para solicitar un e-mail de resumen de las tareas que has completado en Trommons.</string>
+    <string name="user_public_profile_15">Haz clic en el botón de la derecha para solicitar un e-mail de resumen de las tareas que has completado en TWB Kató.</string>
     <string name="user_public_profile_16">Solicita un e-mail que describa tu trabajo con Trommons.</string>
     <string name="user_public_profile_reference_request_success">Tu solicitud se ha enviado correctamente: recibirás el e-mail en breve.</string>
     <string name="user_public_profile_17">Se ha actualizado tu suscripción a las notificaciones de tareas.</string>
@@ -1119,18 +1119,18 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
 	<string name="header_notifications">Notificaciones:</string>
 	<string name="header_log_out">Cerrar sesión</string>
 
-    <string name="index_translation_commons">Kató Translation Commons</string>
-	<string name="index_0">Facilitamos la comunicación entre todas las culturas</string>
-	<string name="index_translation_tasks">Tareas de traducción</string>
-	<string name="index_1">Asígnate una tarea, tradúcela y súbela a Trommons.</string>
+    <string name="index_translation_commons">TWB Kató</string>
+    <string name="index_0">Facilitamos la comunicación entre todas las culturas</string>
+    <string name="index_translation_tasks">Tareas de traducción</string>
+    <string name="index_1">Asígnate una tarea, tradúcela y súbela a Trommons</string>
 	<string name="index_any_task_type">Todo tipo de tareas</string>
     <string name="index_any_source_language">Cualquier idioma de origen</string>
     <string name="index_any_target_language">Cualquier idioma de destino</string>
     <string name="index_filter_available_tasks">Filtrar tareas disponibles:</string>
 	<string name="index_filter_task_stream">Filtrar lista de tareas</string>
 	<string name="index_no_tasks_available">No hay tareas disponibles</string>
-	<string name="index_6">Ayúdanos a enviarte las tareas que más se ajusten a tu experiencia e intereses.</string>
-	<string name="index_register_now"><a href="%s">Regístrate</a> para encontrar tareas de traducción que se ajusten a tu perfil.</string>
+    <string name="index_6">Ayúdanos a enviarte las tareas que más se ajusten a tu experiencia e intereses</string>
+    <string name="index_register_now"><a href="%s">Regístrate</a> para encontrar tareas de traducción que se ajusten a tu perfil</string>
     <string name="index_load_more">Cargar más</string>
 	<string name="index_donate_free_service"><strong>Translation Commons conecta a organizaciones sin ánimo de lucro con traductores y revisores voluntarios de todo el mundo. Se trata de una plataforma abierta mantenida por</strong></string>
 	<string name="index_donate_support_us">Puedes contribuir al futuro desarrollo de Trommons haciéndote amigo de The Rosetta Foundation o con un donativo. </string>

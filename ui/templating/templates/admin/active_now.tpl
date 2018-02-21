@@ -3,10 +3,10 @@
 
 <head>
     <meta charset="utf-8" content="application/xhtml+xml" />
-    <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min1.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css"/>
     <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
-    <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas.css"/>
+    <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas1.css"/>
 </head>
 
 <body>

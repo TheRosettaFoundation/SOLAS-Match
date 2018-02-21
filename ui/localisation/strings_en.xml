@@ -51,7 +51,7 @@
 	<string name="common_target_language">Target Language</string>
 	<string name="common_segmentation">Segmentation</string>
 	<string name="common_translation">Translation</string>
-	<string name="common_proofreading">Proofreading</string>
+	<string name="common_proofreading">Revising</string>
 	<string name="common_desegmentation">Desegmentation</string>
 	<string name="common_cancel">Cancel</string>
 	<string name="common_create_project">Create Project</string>
@@ -70,14 +70,14 @@
    	<string name="common_project">Project</string>
 	<string name="common_segmentation_task">Segmentation Task</string>
 	<string name="common_translation_task">Translation Task</string>
-	<string name="common_proofreading_task">Proofreading Task</string>
+	<string name="common_proofreading_task">Revising Task</string>
 	<string name="common_desegmentation_task">Desegmentation Task</string>
 	<string name="common_please_fill_in_all_required_fields">Please fill in all required fields</string>
     <string name="common_please_correct_errors">Please correct the following errors</string>
 	<string name="common_provide_feedback">Provide Feedback</string>
 	<string name="common_here">here</string>
 	<string name="common_create_a_translation_task_for_volunteer_translators_to_pick_up">Create a translation task for volunteer translators to pick up.</string>
-	<string name="common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer">Create a proofreading task for evaluating the translation provided by a volunteer.</string>
+	<string name="common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer">Create a revising task for evaluating the translation provided by a volunteer.</string>
 	<string name="common_thanks_for_providing_your_translation_for_this_task">Thanks for providing your translation for this task.</string>
 	<string name="common_maximum_file_size_is">Maximum file size is <strong>%sMB</strong></string>
   <string name="common_maximum_file_total_size_is">The maximum total MB that can be uploaded for all files is <strong>%sMB</strong></string>
@@ -514,7 +514,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="project_create_add_more_target_languages">Add More Target Languages</string>
     <string name="project_create_13"><strong>Failed to create segmentation task:</strong></string>
     <string name="project_create_14">Failed to create translation task</string>
-    <string name="project_create_15">Failed to create proofreading task</string>
+    <string name="project_create_15">Failed to create revising task</string>
     <string name="project_create_16">No project file uploaded.</string>
     <string name="project_create_17">The project file you uploaded is empty.</string>
     <string name="project_create_failed_to_create_project"><strong>Failed to create project</strong>: %s</string>
@@ -550,7 +550,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="project_create_failed_upload_file"><strong>Failed to upload %s file:</strong> %s</string>
     <string name="project_create_failed_upload_image"><strong>Failed to upload project image file:</strong> %s</string>
     <string name="project_create_failed_track_task"><strong>Failed to track %s task:</strong> %s</string>
-    <string name="project_create_failed_add_prereq"><strong>Failed to add prerequisite to proofreading task:</strong> %s</string>
+    <string name="project_create_failed_add_prereq"><strong>Failed to add prerequisite to revising task:</strong> %s</string>
     <string name="project_create_please_upload_valid_image_file">If you are uploading a project image, please upload a valid image file. %s files are not images.</string>
     <string name="project_create_image_file_empty">The image file you uploaded is empty.</string>
     <string name="project_create_upload_project_image">Optionally, you can upload an image to be associated with your project.</string>
@@ -738,7 +738,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="claimed_tasks_submit_completed_task">Submit Completed Task</string>
 	<string name="claimed_tasks_no_active_tasks_available">No Active Tasks available!</string>
     <string name="claimed_tasks_no_tasks_matching_filters">You do not have any claimed tasks which match the filter options you selected.</string>
-    <string name="claimed_tasks_download_proofread_task">Download Proofread Version</string>
+    <string name="claimed_tasks_download_proofread_task">Download Revised Version</string>
 
 	<string name="task_desegmentation_desegmentation_task_details">Desegmentation task details.</string>
 	<string name="task_desegmentation_download">Download</string>
@@ -761,14 +761,14 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="task_segmentation_15">You have not selected a <strong>Segmented File</strong> to upload.</string>
     <string name="task_segmentation_16">Each <strong>Segmented File</strong> that you upload must have a <strong>unique file name.</strong></string>
     <string name="task_segmentation_17">You have selected <strong>one or more</strong> files with the exact same <strong>file content</strong>.</string>
-    <string name="task_segmentation_18">At least one task type such as <strong>Translation</strong> and/or <strong>Proofreading</strong> must be set.</string>
+    <string name="task_segmentation_18">At least one task type such as <strong>Translation</strong> and/or <strong>Revising</strong> must be set.</string>
     <string name="task_segmentation_7">This task has already been segmented, you cannot resegment this task.</string>
 
 	<string name="task_simple_upload_finished_processing">Finished processing?</string>
 	<string name="task_simple_upload_provide_feedback">Provide Feedback</string>
 	<string name="task_simple_upload_upload_error">Upload error</string>
 	<string name="task_simple_upload_0">Upload your translated version of %s</string>
-    <string name="task_simple_upload_0_proofreading">Upload your proofread version of %s</string>
+    <string name="task_simple_upload_0_proofreading">Upload your revised version of %s</string>
 	<string name="task_simple_upload_upload">Upload</string>
 	<string name="task_simple_upload_1">%s will be able to use it for their benefit.</string>
 	<string name="task_simple_upload_2">Uploading a new version of the file will overwrite the old one.</string>
@@ -806,12 +806,12 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="task_claim_desegmentation_8">The files you need to merge can be downloaded after claiming.</string>
 	<string name="task_claim_desegmentation_9">Yes, I promise I will merge these files</string>
 
-	<string name="task_claim_proofreading_0">Do you want to proofread this file?</string>
-	<string name="task_claim_proofreading_1">Will you be able to proofread this file?</string>
-	<string name="task_claim_proofreading_2">Will you have enough time to proofread this file? Check how long the file is.</string>
-    <string name="task_claim_proofreading_3">Do you think you are capable of proofreading a file in <strong>%s?</strong></string>
-	<string name="task_claim_proofreading_4">When you are finished proofreading the file, you will need to upload it again.</string>
-	<string name="task_claim_proofreading_5">Yes, I promise I will proofread this file</string>
+	<string name="task_claim_proofreading_0">Do you want to revise this file?</string>
+	<string name="task_claim_proofreading_1">Will you be able to revise this file?</string>
+	<string name="task_claim_proofreading_2">Will you have enough time to revise this file? Check how long the file is.</string>
+    <string name="task_claim_proofreading_3">Do you think you are capable of revising a file in <strong>%s?</strong></string>
+	<string name="task_claim_proofreading_4">When you are finished revising the file, you will need to upload it again.</string>
+	<string name="task_claim_proofreading_5">Yes, I promise I will revise this file</string>
     <string name="task_claim_proofreading_6">If you would like to view the <strong>original file</strong> in its source language you can download it <a href="%s">here</a></string>
 
 	<string name="task_claim_segmentation_0">Do you want to segment this file?</string>
@@ -837,14 +837,14 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="task_claimed_desegmentation_merge_files">Merge Files</string>
 	<string name="task_claimed_desegmentation_5">Go back to Home page</string>
 
-	<string name="task_claimed_proofreading_proofreading_task_claimed">Proofreading task claimed</string>
-	<string name="task_claimed_proofreading_please_proofread_it">Please proofread it!</string>
-    <string name="task_claimed_proofreading_0">You have claimed the proofreading task <strong>%s</strong>.</string>
+	<string name="task_claimed_proofreading_proofreading_task_claimed">Revissing task claimed</string>
+	<string name="task_claimed_proofreading_please_proofread_it">Please revise it!</string>
+    <string name="task_claimed_proofreading_0">You have claimed the revising task <strong>%s</strong>.</string>
 	<string name="task_claimed_proofreading_1">Open the file that you have already saved to your computer.</string>
-    <string name="task_claimed_proofreading_proofread_the_file_in">Proofread the file in <strong>%s</strong> to ensure spelling and grammatical correctness.</string>
-	<string name="task_claimed_proofreading_upload_the_proofread_file">Upload the proofread file to the task upload page.</string>
-	<string name="task_claimed_proofreading_4">When you have finished proofreading the file you downloaded:</string>
-    <string name="task_claimed_proofreading_upload_proofread_task">Submit Proofread Task</string>
+    <string name="task_claimed_proofreading_proofread_the_file_in">Revise the file in <strong>%s</strong> to ensure spelling and grammatical correctness.</string>
+	<string name="task_claimed_proofreading_upload_the_proofread_file">Upload the revised file to the task upload page.</string>
+	<string name="task_claimed_proofreading_4">When you have finished revising the file you downloaded:</string>
+    <string name="task_claimed_proofreading_upload_proofread_task">Submit Revised Task</string>
 
 	<string name="task_claimed_segmentation_segmentation_task_claimed">Segmentation task claimed</string>
 	<string name="task_claimed_segmentation_please_segment_it">Please segment it!</string>
@@ -865,15 +865,15 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="task_claimed_translation_upload_translated_task">Submit Translated Task</string>
 
     <string name="task_claimed_alternative_option">Alternative option:</string>
-    <string name="task_claimed_translate_using_kato">Translate using Kató MT</string>
-    <string name="task_claimed_proofread_using_kato">Proofread using Kató MT</string>
-    <string name="task_claimed_please_read_kato">Kató MT is a Translators without Borders (TWB) translation platform. Please read <a href="https://kato.translatorswb.org/public/doc/translators.html" target="_blank">these guidelines</a> before using Kató MT.</string>
-    <string name="task_simple_upload_copy_from_kato">Copy your translation from Kató MT to Kató Trommons</string>
-    <string name="task_simple_upload_view_on_kato">Click <a href="%s" target="_blank">here</a> to <strong>view your translation on Kató MT</strong>.</string>
-    <string name="task_simple_upload_download_from_kato">Click <a href="%s">here</a> to <strong>download your translation from Kató MT and upload it to Kató Trommons manually</strong>.</string>
-    <string name="task_simple_upload_copy_from_kato_proofread">Copy your proofread version from Kató MT to Kató Trommons</string>
-    <string name="task_simple_upload_view_on_kato_proofread">Click <a href="%s" target="_blank">here</a> to <strong>view your proofread version on Kató MT</strong>.</string>
-    <string name="task_simple_upload_download_from_kato_proofread">Click <a href="%s">here</a> to <strong>download your proofread version from Kató MT and upload it to Kató Trommons manually</strong>.</string>
+    <string name="task_claimed_translate_using_kato">Translate using Kató TM</string>
+    <string name="task_claimed_proofread_using_kato">Revise using Kató TM</string>
+    <string name="task_claimed_please_read_kato">Kató TM is a Translators without Borders (TWB) translation platform. Please read <a href="https://kato.translatorswb.org/public/doc/translators.html" target="_blank">these guidelines</a> before using Kató TM.</string>
+    <string name="task_simple_upload_copy_from_kato">Copy your translation from Kató TM to Kató</string>
+    <string name="task_simple_upload_view_on_kato">Click <a href="%s" target="_blank">here</a> to <strong>view your translation on Kató TM</strong>.</string>
+    <string name="task_simple_upload_download_from_kato">Click <a href="%s">here</a> to <strong>download your translation from Kató TM and upload it to Kató manually</strong>.</string>
+    <string name="task_simple_upload_copy_from_kato_proofread">Copy your revised version from Kató TM to Kató</string>
+    <string name="task_simple_upload_view_on_kato_proofread">Click <a href="%s" target="_blank">here</a> to <strong>view your revised version on Kató TM</strong>.</string>
+    <string name="task_simple_upload_download_from_kato_proofread">Click <a href="%s">here</a> to <strong>download your revised version from Kató TM and upload it to Kató manually</strong>.</string>
 
     <string name="task_create_for_project">For Project <strong>%s</strong>.</string>
 	<string name="task_create_0">Provide a meaningful title for the task.</string>
@@ -910,7 +910,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="task_review_form_rating">Star rating of 1-5, where 1 = "Many Errors" and 5 = "Few Errors"</string>
     <string name="task_review_segmented">segmented</string>
     <string name="task_review_translated">translated</string>
-    <string name="task_review_proofread">proofread</string>
+    <string name="task_review_proofread">revised</string>
     <string name="task_review_merged">merged</string>
 	<string name="task_review_form_corrections">Corrections</string>
 	<string name="task_review_form_2">Were there many mistakes in the file?</string>
@@ -963,7 +963,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="task_user_feedback_4">Unable to unclaim the task <a href="%s">%s</a>. Please try again later.</string>
     <string name="task_user_feedback_5">Feedback cannot be empty, please fill in the feedback form before continuing.</string>
 
-	<string name="task_view_download_task">Download Task</string>
+    <string name="task_view_download_task">Claim Task...</string>
 	<string name="task_view_edit_task_details">Edit Task Details</string>
 	<string name="task_view_source_document_preview">Source Document Preview</string>
     <string name="task_view_10">You are now tracking this task and will receive email notifications when its status changes.</string>
@@ -1036,7 +1036,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="user_private_profile_add_secondary_language">Add Another Language Pair</string>
 	<string name="user_private_profile_task_type_preferences">Task Type Preferences:</string>
 	<string name="user_private_profile_translating">Translating</string>
-	<string name="user_private_profile_proofreading">Proofreading</string>
+	<string name="user_private_profile_proofreading">Revising</string>
 	<string name="user_private_profile_interpreting">Interpreting</string>
 	<string name="user_private_profile_update_profile_details">Update Profile Details</string>
 	<string name="user_private_profile_6">Are you sure you want permanently delete your account?</string>
@@ -1070,7 +1070,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="user_public_profile_list_all_archived_tasks">List All Archived Tasks</string>
     <string name="user_public_profile_reference_email">Reference Email</string>
     <string name="user_public_profile_request_reference">Request Reference</string>
-    <string name="user_public_profile_15">To request a reference e-mail summarising your completed work on Trommons, click the button on the right.</string>
+    <string name="user_public_profile_15">To request a reference e-mail summarising your completed work on TWB Kató, click the button on the right.</string>
     <string name="user_public_profile_16">Request an email outlining your work.</string>
     <string name="user_public_profile_reference_request_success">Your request was sent successfully, you will receive the email shortly.</string>
     <string name="user_public_profile_17">Successfully updated user task stream notification subscription.</string>
@@ -1105,7 +1105,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="footer_privacy_policy">Privacy Policy</string>
 	<string name="footer_community_forum">Community Forum</string>
     <string name="footer_feedback">Your <a href="%s">feedback</a> is appreciated.</string>
-    <string name="footer_powered_by">Powered by <a href="%s">%s</a></string>
+    <string name="footer_powered_by">Kató Platform is powered by <a href="%s">%s</a></string>
     <string name="footer_maintained_by">Maintained by <a href="%s">%s</a></string>
     <string name="footer_contact_us">Contact Us</string>
 
@@ -1118,18 +1118,18 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="header_notifications">Notifications:</string>
 	<string name="header_log_out">Log out</string>
 
-    <string name="index_translation_commons">Kató Translation Commons</string>
-	<string name="index_0">Empowering conversation in communities</string>
-	<string name="index_translation_tasks">Translation tasks</string>
-	<string name="index_1">Claim a task, translate it, upload it.</string>
+    <string name="index_translation_commons">TWB Kató</string>
+    <string name="index_0">Empowering conversation in communities</string>
+    <string name="index_translation_tasks">Translation tasks</string>
+    <string name="index_1">Claim a task, translate it, upload it</string>
 	<string name="index_any_task_type">Any Task Type</string>
     <string name="index_any_source_language">Any Source Language</string>
     <string name="index_any_target_language">Any Target Language</string>
     <string name="index_filter_available_tasks">Filter Available Tasks:</string>
 	<string name="index_filter_task_stream">Filter Task Stream</string>
 	<string name="index_no_tasks_available">No tasks available!</string>
-	<string name="index_6">Help us match you with the most suitable translation tasks.</string>
-	<string name="index_register_now"><a href="%s">Register now</a> to find the translation tasks best suited to you.</string>
+    <string name="index_6">Help us match you with the most suitable translation tasks</string>
+    <string name="index_register_now"><a href="%s">Register now</a> to find the translation tasks best suited to you</string>
     <string name="index_load_more">Load More</string>
 	<string name="index_donate_free_service"><strong>The Translation Commons match non-profit translation projects with language volunteers across the world. It is an open space maintained by</strong></string>
 	<string name="index_donate_support_us">You can show your appreciation and support future development by  becoming a Friend of The Rosetta Foundation or by making a once-off donation.</string>
@@ -1152,7 +1152,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="slim_error_2">with details of how you encountered the error, along with the technical details listed below.</string>
 	<string name="slim_error_3">Go </string>
 	<string name="slim_error_4">Back.</string>
-	<string name="slim_error_5">Show Details.</string>
+    <string name="slim_error_5">Show Details</string>
 	
 	<string name="gplus_error"><p>An internal error occurred while trying to sign in with Google. <a href="%s">Try logging in again</a> or <a href="%s">register</a> for an account.</p><p><strong>%s</strong></p></string>
   <string name="proz_error"><p>An internal error occurred while trying to sign in with ProZ. <a href="%s">Try logging in again</a> or <a href="%s">register</a> for an account.</p><p><strong>%s</strong></p></string>
@@ -1165,8 +1165,8 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name ="system_badge_native_language_desc">Filled in your native language on your user profile successfully.</string>
 	<string name ="system_badge_translator_title">Translator</string>
 	<string name ="system_badge_translator_desc">This volunteer is available for translation tasks.</string>
-	<string name ="system_badge_proofreader_title">Proofreader</string>
-	<string name ="system_badge_proofreader_desc">This volunteer is available for proofreading tasks.</string>
+	<string name ="system_badge_proofreader_title">Reviewer</string>
+	<string name ="system_badge_proofreader_desc">This volunteer is available for revising tasks.</string>
 	<string name ="system_badge_interpreter_title">Interpreter</string>
 	<string name ="system_badge_interpreter_desc">This volunteer is available for interpreting tasks.</string>
 	<string name ="system_badge_polyglot_title">Polyglot</string>

@@ -38,6 +38,18 @@ class AdminRouteHandler
         )->via('POST')->name('active_now');
 
         $app->get(
+            '/active_now_matecat/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'active_now_matecat')
+        )->via('POST')->name('active_now_matecat');
+
+        $app->get(
+            '/complete_matecat/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'complete_matecat')
+        )->via('POST')->name('complete_matecat');
+
+        $app->get(
             '/active_users/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'active_users')
@@ -328,6 +340,28 @@ class AdminRouteHandler
 
         $app->view()->appendData(array('all_users' => $all_users));
         $app->render('admin/active_now.tpl');
+    }
+
+    public function active_now_matecat()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->active_now_matecat();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('admin/active_now_matecat.tpl');
+    }
+
+    public function complete_matecat()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->complete_matecat();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('admin/active_now_matecat.tpl');
     }
 
     public function active_users()
