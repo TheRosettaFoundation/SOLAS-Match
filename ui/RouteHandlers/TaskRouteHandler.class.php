@@ -334,8 +334,7 @@ class TaskRouteHandler
                     htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
                 );
 
-//                $matecat_urls[$taskId] = $taskDao->get_matecat_url($topTask);
-$matecat_urls[$taskId] = '';
+                $matecat_urls[$taskId] = $taskDao->get_matecat_url($topTask);
 
                 $discourse_slug[$taskId] = $projectDao->discourse_parameterize($projectName);
 
@@ -660,12 +659,9 @@ $matecat_urls[$taskId] = '';
         $task = $taskDao->getTask($task_id);
         $app->view()->setData("task", $task);
 
-//        $app->view()->appendData(array(
-//            'matecat_url' => $taskDao->get_matecat_url($task),
-//        ));
-$app->view()->appendData(array(
-'matecat_url' => '',
-));
+        $app->view()->appendData(array(
+            'matecat_url' => $taskDao->get_matecat_url($task),
+        ));
 
         $app->render("task/task.claimed.tpl");
     }
