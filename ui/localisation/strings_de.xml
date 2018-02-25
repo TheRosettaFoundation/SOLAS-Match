@@ -856,7 +856,7 @@ Bei Fragen schreiben Sie bitte an <a href="mailto:info@therosettafoundation.org"
     <string name="task_claimed_alternative_option">Alternativ:</string>
     <string name="task_claimed_translate_using_kato">In Kató TM übersetzen</string>
     <string name="task_claimed_proofread_using_kato">In Kató TM korrekturlesen</string>
-    <string name="task_claimed_please_read_kato">Kató TM ist das Übersetzungssystem von Translators without Borders (TWB). Bitte vor dem Übersetzen in Kató TM <a href="https://tm.translatorswb.org/public/doc/translators.html" target="_blank">diese Hinweise</a> lesen.</string>
+    <string name="task_claimed_please_read_kato">Kató TM ist das Übersetzungssystem von Translators without Borders (TWB). Bitte vor dem Übersetzen in Kató TM <a href="https://kato.translatorswb.org/public/doc/translators.html" target="_blank">diese Hinweise</a> lesen.</string>
     <string name="task_simple_upload_copy_from_kato">Die Übersetzung von Kató TM nach Kató kopieren</string>
     <string name="task_simple_upload_view_on_kato"><a href="%s" target="_blank">Hier</a> klicken, um die <strong>Übersetzung in Kató TM anzuzeigen</strong>.</string>
     <string name="task_simple_upload_download_from_kato"><a href="%s">Hier</a> klicken, um die <strong>Übersetzung von Kató TM herunterzuladen und manuell in Kató hochzuladen</strong>.</string>
