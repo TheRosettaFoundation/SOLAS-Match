@@ -522,13 +522,13 @@ class TaskDao extends BaseDao
                 $matecat_id_job_password = $matecat_tasks[0]['matecat_id_job_password'];
                 //$matecat_id_file = $matecat_tasks[0]['matecat_id_file'];
                 if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
-                    $matecat_url = "https://kato.translatorswb.org/$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                    $matecat_url = "https://tm.translatorswb.org/$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
 
                     if ($translate === 'revise') { // Make sure it has been translated in MateCat
                         $download_status = $this->getMatecatTaskStatus($task->getId(), $matecat_id_job, $matecat_id_job_password);
 
                         if ($download_status !== 'translated' && $download_status !== 'approved') {
-                            $matecat_url = ''; // Disable Kató access for Proofreading if job file is not translated
+                            $matecat_url = ''; // Disable KatÃ³ access for Proofreading if job file is not translated
                         }
                     }
                 }
@@ -542,7 +542,7 @@ class TaskDao extends BaseDao
         $download_status = '';
 
         // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
-        $re = curl_init("https://kato.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
+        $re = curl_init("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
 
         curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
         curl_setopt($re, CURLOPT_COOKIESESSION, true);
@@ -573,10 +573,10 @@ class TaskDao extends BaseDao
             if (!empty($response_data['stats']['DOWNLOAD_STATUS'])) {
                 $download_status = $response_data['stats']['DOWNLOAD_STATUS'];
             } else {
-                error_log("https://kato.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats getMatecatTaskStatus($task_id) DOWNLOAD_STATUS empty!");
+                error_log("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats getMatecatTaskStatus($task_id) DOWNLOAD_STATUS empty!");
             }
         } else {
-            error_log("https://kato.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats getMatecatTaskStatus($task_id) responseCode: $responseCode");
+            error_log("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats getMatecatTaskStatus($task_id) responseCode: $responseCode");
         }
 
         return $download_status;

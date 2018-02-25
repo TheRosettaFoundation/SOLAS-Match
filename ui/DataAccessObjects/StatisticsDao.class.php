@@ -101,7 +101,7 @@ class StatisticsDao extends BaseDao
             if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
 
                 // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
-                $re = curl_init("https://kato.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
+                $re = curl_init("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
 
                 curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
                 curl_setopt($re, CURLOPT_COOKIESESSION, true);
@@ -130,12 +130,12 @@ class StatisticsDao extends BaseDao
 
                     if (!empty($response_data['stats'])) {
                         $stats = $response_data['stats'];
-                        $stats['matecat_url'] = "https://kato.translatorswb.org/$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                        $stats['matecat_url'] = "https://tm.translatorswb.org/$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
                     } else {
-                        error_log("https://kato.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats get_matecat_task_stats($task_id...) stats empty!");
+                        error_log("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats get_matecat_task_stats($task_id...) stats empty!");
                     }
                 } else {
-                    error_log("https://kato.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats get_matecat_task_stats($task_id...) responseCode: $responseCode");
+                    error_log("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats get_matecat_task_stats($task_id...) responseCode: $responseCode");
                 }
             }
         }

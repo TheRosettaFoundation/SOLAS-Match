@@ -1466,7 +1466,7 @@ class ProjectRouteHandler
 
                 // https://www.matecat.com/api/docs#!/Project/get_status (i.e. Word Count)
                 // $re = curl_init("https://www.matecat.com/api/status?id_project=$matecat_id_project&project_pass=$matecat_id_project_pass");
-                $re = curl_init("https://kato.translatorswb.org/api/status?id_project=$matecat_id_project&project_pass=$matecat_id_project_pass");
+                $re = curl_init("https://tm.translatorswb.org/api/status?id_project=$matecat_id_project&project_pass=$matecat_id_project_pass");
 
                 // http://php.net/manual/en/function.curl-setopt.php
                 curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
@@ -1593,7 +1593,7 @@ class ProjectRouteHandler
 
                 // https://www.matecat.com/api/docs#!/Project/post_new
                 // $re = curl_init('https://www.matecat.com/api/new');
-                $re = curl_init('https://kato.translatorswb.org/api/new');
+                $re = curl_init('https://tm.translatorswb.org/api/new');
 
                 // http://php.net/manual/en/function.curl-setopt.php
                 curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
@@ -1637,7 +1637,7 @@ class ProjectRouteHandler
                   'target_lang'  => $filtered_target_languages,
                   'tms_engine'   => '1',
                   'mt_engine'    => '1',
-                  'private_tm_key' => '81c6737631bb9c48dab5',
+                  'private_tm_key' => '58f97b6f65fb5c8c8522',
                   'subject'      => 'general',
                   'owner_email'  => 'info@trommons.org'
                 );
