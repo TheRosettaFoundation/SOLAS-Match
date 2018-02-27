@@ -798,13 +798,11 @@ class AdminRouteHandler
         $years = array();
         $words = array();
         foreach ($language_work_requested as $row) {
-error_log(print_r($row, true));
             $years[$row['created']] = $row['created'];
             $words[$row['language_pair']] = 0;
         }
         arsort($years);
-error_log(print_r($years, true));
-        list($current_year) = $years;
+        $current_year = reset($years);
 
         $template = array();
         foreach ($years as $year) {
