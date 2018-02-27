@@ -798,6 +798,7 @@ class AdminRouteHandler
         $years = array();
         $words = array();
         foreach ($language_work_requested as $row) {
+error_log(print_r($row, true));
             $years[$row['created']] = $row['created'];
             $words[$row['language_pair']] = 0;
         }
