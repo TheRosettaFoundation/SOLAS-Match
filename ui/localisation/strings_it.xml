@@ -124,9 +124,9 @@
     <string name="common_secondary_languages">Combinazioni linguistiche</string>
     <string name="i_can_translate_from">Traduco da</string>
     <string name="qualification_level_for_above">Livello di competenza per combinazione linguistica dichiarata sopra</string>
-    <string name="user_qualification_level_1">Volunteer</string>
-    <string name="user_qualification_level_2">Verified</string>
-    <string name="user_qualification_level_3">Senior</string>
+    <string name="user_qualification_level_1">Kató Translator</string>
+    <string name="user_qualification_level_2">Kató Verified Translator</string>
+    <string name="user_qualification_level_3">Kató Senior Translator</string>
     <string name="required_qualification_level">Livello di competenza richiesto ai traduttori</string>
     <string name="set_default_required_qualification_level">Stabilire livello di competenza per volontari che lavorano per questa organizzazione (può essere modificato in base al compito).</string>
     <string name="update_required_qualification_level">Aggiornare il livello di competenza richiesto</string>

@@ -122,9 +122,9 @@
     <string name="common_secondary_languages">Sprachpaar(e)</string>
     <string name="i_can_translate_from">Ich übersetze von</string>
     <string name="qualification_level_for_above">Qualifikationsniveau für obiges Sprachpaar</string>
-    <string name="user_qualification_level_1">Volunteer</string>
-    <string name="user_qualification_level_2">Verified</string>
-    <string name="user_qualification_level_3">Senior</string>
+    <string name="user_qualification_level_1">Kató Translator</string>
+    <string name="user_qualification_level_2">Kató Verified Translator</string>
+    <string name="user_qualification_level_3">Kató Senior Translator</string>
     <string name="required_qualification_level">Erforderliches Qualifikationsniveau der Übersetzer</string>
     <string name="set_default_required_qualification_level">Qualifikationsniveau-Standard für Übersetzer festlegen, die Aufgaben für diese Organisation annehmen können (Standard kann für einzelne Aufgaben abweichend eingestellt werden).</string>
     <string name="update_required_qualification_level">Erforderliches Qualifikationsniveau aktualisieren</string>
