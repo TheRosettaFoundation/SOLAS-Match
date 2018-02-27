@@ -834,8 +834,8 @@ class AdminRouteHandler
         foreach ($words as $key => $row) {
             $data .= '"' . $key . '"';
             foreach ($years as $year) {
-                $data .= ',"' . (empty($row[$year]['tasks']) ? '' : $row[$year]['tasks'] . '"';
-                $data .= ',"' . (empty($row[$year]['words']) ? '' : $row[$year]['words'] . '"';
+                $data .= ',"' . (empty($row[$year]['tasks']) ? '' : $row[$year]['tasks']) . '"';
+                $data .= ',"' . (empty($row[$year]['words']) ? '' : $row[$year]['words']) . '"';
             }
             $data .= "\n";
         }
