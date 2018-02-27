@@ -803,6 +803,7 @@ error_log(print_r($row, true));
             $words[$row['language_pair']] = 0;
         }
         arsort($years);
+error_log(print_r($years, true));
         list($current_year) = $years;
 
         $template = array();
