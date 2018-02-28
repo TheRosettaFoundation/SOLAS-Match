@@ -2,6 +2,7 @@
     <!-- ¿áéíóú Smarty Template Strings -->
     <string name="common_faq">FAQ</string>
     <string name="common_forum">Kató Community</string>
+    <string name="common_discuss_on_community">Discuss this task on Kató Community</string>
 	<string name="common_banned_by">Banned By</string>
 	<string name="common_ban_duration">Ban Duration</string>
 	<string name="common_ban_reason">Ban Reason</string>
@@ -136,7 +137,7 @@
 	<string name="common_business_number">Business Number</string>
 	<string name="common_job_title">Job Title</string>
 	<string name="common_badges">Badges</string>
-	<string name="common_strict">Strict</string>
+  <string name="common_strict">Selected language pairs only</string>
 	<string name="common_the_last_email_was_sent_on">The last email was sent on %s.</string>
    	<string name="common_no_emails_have_been_sent_yet">No e-mails have been sent yet.</string>
 	<string name="common_you_are_not_currently_receiving_task_stream_notification_emails">You are not currently receiving task stream notification emails.</string>
@@ -841,7 +842,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="task_claimed_proofreading_please_proofread_it">Please revise it!</string>
     <string name="task_claimed_proofreading_0">You have claimed the revising task <strong>%s</strong>.</string>
 	<string name="task_claimed_proofreading_1">Open the file that you have already saved to your computer.</string>
-    <string name="task_claimed_proofreading_proofread_the_file_in">Revise the file in <strong>%s</strong> to ensure spelling and grammatical correctness.</string>
+    <string name="task_claimed_proofreading_proofread_the_file_in">Revise the <strong>%s</strong> translation to ensure that it meets quality standards.</string>
 	<string name="task_claimed_proofreading_upload_the_proofread_file">Upload the revised file to the task upload page.</string>
 	<string name="task_claimed_proofreading_4">When you have finished revising the file you downloaded:</string>
     <string name="task_claimed_proofreading_upload_proofread_task">Submit Revised Task</string>
@@ -1094,7 +1095,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="user_task_stream_notification_edit_2">If you select strict notifications then you will only receive notifications for tasks that match a language you have expressed an interest in (i.e. by setting it as your native language or as a secondary language).</string>
     <string name="user_task_stream_notification_edit_5">What type of notifications would you like to receive?</string>
     <string name="user_task_stream_notification_edit_6">How often do you want to receive these types of notifications?</string>
-	<string name="user_task_stream_notification_edit_all">All</string>
+  <string name="user_task_stream_notification_edit_all">All tasks</string>
 	<string name="user_task_stream_notification_edit_never">Never</string>
 	<string name="user_task_stream_notification_edit_daily">Daily</string>
 	<string name="user_task_stream_notification_edit_weekly">Weekly</string>
