@@ -120,6 +120,18 @@ class AdminRouteHandler
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'community_dashboard')
         )->name('community_dashboard');
+
+        $app->get(
+            '/language_work_requested/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'language_work_requested')
+        )->name('language_work_requested');
+
+        $app->get(
+            '/translators_for_language_pairs/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'translators_for_language_pairs')
+        )->name('translators_for_language_pairs');
     }
     
     public function adminDashboard()
@@ -776,6 +788,103 @@ class AdminRouteHandler
 
         header('Content-type: text/csv');
         header('Content-Disposition: attachment; filename="community_dashboard.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
+    }
+
+    public function language_work_requested()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $language_work_requested = $statsDao->language_work_requested();
+
+        $years = array();
+        $words = array();
+        foreach ($language_work_requested as $row) {
+            $years[$row['created']] = $row['created'];
+            $words[$row['language_pair']] = 0;
+        }
+        arsort($years);
+        $current_year = reset($years);
+
+        $template = array();
+        foreach ($years as $year) {
+            $template[$year] = array('words' => 0, 'tasks' => 0);
+        }
+
+        foreach ($language_work_requested as $row) {
+            if ($row['created'] == $current_year) $words[$row['language_pair']] = $row['words'];
+        }
+
+        arsort($words);
+
+        foreach ($words as $language_pair => $data) {
+            $words[$language_pair] = $template;
+        }
+
+        foreach ($language_work_requested as $row) {
+            $words[$row['language_pair']][$row['created']]['words'] = $row['words'];
+            $words[$row['language_pair']][$row['created']]['tasks'] = $row['tasks'];
+        }
+
+        $data = "\xEF\xBB\xBF" . '"Language Pair"';
+
+        foreach ($years as $year) {
+            $data .= ',"' . $year . ' Tasks","Words"';
+        }
+        $data .= "\n";
+
+        foreach ($words as $key => $row) {
+            $data .= '"' . $key . '"';
+            foreach ($years as $year) {
+                $data .= ',"' . (empty($row[$year]['tasks']) ? '' : $row[$year]['tasks']) . '"';
+                $data .= ',"' . (empty($row[$year]['words']) ? '' : $row[$year]['words']) . '"';
+            }
+            $data .= "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="language_work_requested.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
+    }
+
+    public function translators_for_language_pairs()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $translators_for_language_pairs = $statsDao->translators_for_language_pairs();
+
+        $totals = array();
+        $breakdown = array();
+        foreach ($translators_for_language_pairs as $row) {
+            if (empty($totals[$row['pair']])) {
+                $totals[$row['pair']] = $row['number'];
+                $breakdown[$row['pair']] = $row['level'] . '(' . $row['number'] . ')';
+            } else {
+                $totals[$row['pair']] += $row['number'];
+                $breakdown[$row['pair']] .= ', ' . $row['level'] . '(' . $row['number'] . ')';
+            }
+        }
+
+        $data = "\xEF\xBB\xBF" . '"Language Pair","Number of Translators","Breakdown"';
+        $data .= "\n";
+
+        foreach ($totals as $pair => $total) {
+            $data .= '"' . $pair . '"';
+            $data .= ',"' . $total . '"';
+            $data .= ',"' . $breakdown[$pair] . '"';
+            $data .= "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="translators_for_language_pairs.csv"');
         header('Content-length: ' . strlen($data));
         header('X-Frame-Options: ALLOWALL');
         header('Pragma: no-cache');

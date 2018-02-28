@@ -1,7 +1,8 @@
 <resources>
-    <!-- Smarty Template Strings -->
+    <!-- ¿áéíóú Smarty Template Strings -->
     <string name="common_faq">FAQ</string>
     <string name="common_forum">Kató Community</string>
+    <string name="common_discuss_on_community">Discuss this task on Kató Community</string>
 	<string name="common_banned_by">Banned By</string>
 	<string name="common_ban_duration">Ban Duration</string>
 	<string name="common_ban_reason">Ban Reason</string>
@@ -124,9 +125,9 @@
 	<string name="common_secondary_languages">Language Pair(s)</string>
     <string name="i_can_translate_from">I Can Translate From</string>
     <string name="qualification_level_for_above">Qualification Level for Above</string>
-    <string name="user_qualification_level_1">Volunteer</string>
-    <string name="user_qualification_level_2">Verified</string>
-    <string name="user_qualification_level_3">Senior</string>
+    <string name="user_qualification_level_1">Kató Translator</string>
+    <string name="user_qualification_level_2">Kató Verified Translator</string>
+    <string name="user_qualification_level_3">Kató Senior Translator</string>
     <string name="required_qualification_level">Required Qualification Level For Translators</string>
     <string name="set_default_required_qualification_level">Set default qualification level for volunteers working on tasks for this organisation (can be overridden on a per task basis).</string>
     <string name="update_required_qualification_level">Update Required Qualification Level</string>
@@ -136,7 +137,7 @@
 	<string name="common_business_number">Business Number</string>
 	<string name="common_job_title">Job Title</string>
 	<string name="common_badges">Badges</string>
-	<string name="common_strict">Strict</string>
+  <string name="common_strict">Selected language pairs only</string>
 	<string name="common_the_last_email_was_sent_on">The last email was sent on %s.</string>
    	<string name="common_no_emails_have_been_sent_yet">No e-mails have been sent yet.</string>
 	<string name="common_you_are_not_currently_receiving_task_stream_notification_emails">You are not currently receiving task stream notification emails.</string>
@@ -841,7 +842,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="task_claimed_proofreading_please_proofread_it">Please revise it!</string>
     <string name="task_claimed_proofreading_0">You have claimed the revising task <strong>%s</strong>.</string>
 	<string name="task_claimed_proofreading_1">Open the file that you have already saved to your computer.</string>
-    <string name="task_claimed_proofreading_proofread_the_file_in">Revise the file in <strong>%s</strong> to ensure spelling and grammatical correctness.</string>
+    <string name="task_claimed_proofreading_proofread_the_file_in">Revise the <strong>%s</strong> translation to ensure that it meets quality standards.</string>
 	<string name="task_claimed_proofreading_upload_the_proofread_file">Upload the revised file to the task upload page.</string>
 	<string name="task_claimed_proofreading_4">When you have finished revising the file you downloaded:</string>
     <string name="task_claimed_proofreading_upload_proofread_task">Submit Revised Task</string>
@@ -929,11 +930,11 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="task_review_0">How would you rate this task?</string>
 	<string name="task_review_1">Thank you for contributing to this project.</string>
   <string name="task_twitter_0">If you are on Twitter, click the following button to tell the world about your contribution (make sure to allow pop-ups):</string>
-  <string name="task_twitter_0_org_dashboard">If you are on Twitter, click the following button to tell the world about Trommons (make sure to allow pop-ups):</string>
+  <string name="task_twitter_0_org_dashboard">If you are on Twitter, click the following button to tell the world about TWB Kató (make sure to allow pop-ups):</string>
   <string name="task_twitter_0_project_view">If you are on Twitter, click the following button to tell the world about your project (make sure to allow pop-ups):</string>
   <string name="task_twitter_0_org_task_review">If you are on Twitter, click the following button to thank our volunteers (make sure to allow pop-ups):</string>
   <string name="task_twitter_1">I’ve just completed a task as a volunteer with @TranslatorsWB #languagematters</string>
-  <string name="task_twitter_2">We’ve joined Trommons to connect with language volunteers @TranslatorsWB #languagematters</string>
+  <string name="task_twitter_2">We’ve joined TWB to connect with language volunteers @TranslatorsWB #languagematters</string>
   <string name="task_twitter_3">Translators @TranslatorsWB can you help with our project on trommons.org%3F #languagematters</string>
   <string name="task_twitter_4">Thanks to volunteers @TranslatorsWB for helping with translations #languagematters</string>
 	<string name="task_review_2">Please provide a rating for the file(s) you just</string>
@@ -1094,7 +1095,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="user_task_stream_notification_edit_2">If you select strict notifications then you will only receive notifications for tasks that match a language you have expressed an interest in (i.e. by setting it as your native language or as a secondary language).</string>
     <string name="user_task_stream_notification_edit_5">What type of notifications would you like to receive?</string>
     <string name="user_task_stream_notification_edit_6">How often do you want to receive these types of notifications?</string>
-	<string name="user_task_stream_notification_edit_all">All</string>
+  <string name="user_task_stream_notification_edit_all">All tasks</string>
 	<string name="user_task_stream_notification_edit_never">Never</string>
 	<string name="user_task_stream_notification_edit_daily">Daily</string>
 	<string name="user_task_stream_notification_edit_weekly">Weekly</string>

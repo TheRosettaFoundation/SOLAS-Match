@@ -222,7 +222,7 @@ Tweet</a>
                 </tr>
                 <tr valign="top">
                     <td colspan="3">
-                        <strong>{Localisation::getTranslation('common_forum')}</strong><hr/>
+                        <strong>{Localisation::getTranslation('common_discuss_on_community')}</strong><hr/>
                     </td>
                 </tr>
                 <tr>

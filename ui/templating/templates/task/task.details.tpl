@@ -120,7 +120,7 @@
             </tr>
             <tr>
                 <td>
-                    <strong>{Localisation::getTranslation('common_forum')}:</strong><hr/>
+                    <strong>{Localisation::getTranslation('common_discuss_on_community')}:</strong><hr/>
                 </td>
                 <td></td>
                 <td></td>

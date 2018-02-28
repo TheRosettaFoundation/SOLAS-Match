@@ -2,6 +2,7 @@
   <!-- Smarty Template Strings -->
   <string name="common_faq">Preguntas frecuentes</string>
     <string name="common_forum">Kató Community</string>
+    <string name="common_discuss_on_community">Discuss this task on Kató Community</string>
 	<string name="common_banned_by">Excluido por</string>
 	<string name="common_ban_duration">Duración de la exclusión</string>
 	<string name="common_ban_reason">Motivo de exclusión</string>
@@ -124,9 +125,9 @@
     <string name="common_secondary_languages">Par lingüístico</string>
     <string name="i_can_translate_from">Puedo traducir de</string>
     <string name="qualification_level_for_above">Nivel de competencia en dicho par lingüístico</string>
-    <string name="user_qualification_level_1">Volunteer</string>
-    <string name="user_qualification_level_2">Verified</string>
-    <string name="user_qualification_level_3">Senior</string>
+    <string name="user_qualification_level_1">Kató Translator</string>
+    <string name="user_qualification_level_2">Kató Verified Translator</string>
+    <string name="user_qualification_level_3">Kató Senior Translator</string>
     <string name="required_qualification_level">Nivel de competencia requerido para traductores</string>
     <string name="set_default_required_qualification_level">Establezca el nivel de competencia requerido para voluntarios que trabajen tareas para esta organización (puede ser modificado para tareas en particular).</string>
     <string name="update_required_qualification_level">Actualizar el nivel de competencia requerido</string>
@@ -930,11 +931,11 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
 	<string name="task_review_0">¿Qué puntuación le darías a esta tarea?</string>
   <string name="task_review_1">¡Gracias por contribuir a este proyecto!</string>
   <string name="task_twitter_0">Si tienes Twitter, haz clic en este botón para compartir tu contribución con el resto del mundo (asegúrate de habilitar las ventanas emergentes en tu navegador):</string>
-  <string name="task_twitter_0_org_dashboard">Si tienes Twitter, haz clic en este botón para correr la voz sobre Trommons (asegúrate de habilitar las ventanas emergentes en tu navegador):</string>
+  <string name="task_twitter_0_org_dashboard">Si tienes Twitter, haz clic en este botón para correr la voz sobre TWB Kató (asegúrate de habilitar las ventanas emergentes en tu navegador):</string>
   <string name="task_twitter_0_project_view">Si tienes Twitter, haz clic en este botón para que todo el mundo sepa de tu proyecto (asegúrate de habilitar las ventanas emergentes en tu navegador):</string>
   <string name="task_twitter_0_org_task_review">Si tienes Twitter, haz clic en este botón para decirle &quot;gracias&quot; a los voluntarios (asegúrate de habilitar las ventanas emergentes en tu navegador):</string>
   <string name="task_twitter_1">Acabo de colaborar como voluntario/a con @TranslatorsWB #languagematters</string>
-  <string name="task_twitter_2">Nos hemos registrado en Trommons para contactar con traductores voluntarios @TranslatorsWB #languagematters</string>
+  <string name="task_twitter_2">Nos hemos registrado en TWB para contactar con traductores voluntarios @TranslatorsWB #languagematters</string>
   <string name="task_twitter_3">Voluntarios de @TranslatorsWB: ¿nos ayudáis a traducir el proyecto que hemos creado en trommons.org%3F</string>
   <string name="task_twitter_4">¡Gracias a los voluntarios de @TranslatorsWB por ayudarnos a traducir nuestro texto! #languagematters</string>
   <string name="task_review_2">Por favor, puntúa el archivo o archivos que has</string>
