@@ -871,8 +871,6 @@ class AdminRouteHandler
                 $totals[$row['pair']] += $row['number'];
                 $breakdown[$row['pair']] .= ', ' . $row['level'] . '(' . $row['number'] . ')';
             }
-            $years[$row['created']] = $row['created'];
-            $words[$row['language_pair']] = 0;
         }
 
         $data = "\xEF\xBB\xBF" . '"Language Pair","Number of Translators","Breakdown"';
