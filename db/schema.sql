@@ -6515,6 +6515,25 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `language_work_requested`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `language_work_requested`()
+BEGIN
+    SELECT
+        COUNT(*) AS tasks,
+        SUM(`word-count`) AS words,
+        YEAR(t.`created-time`) AS created,
+        CONCAT(l.code, '-', l2.code) AS language_pair
+    FROM Tasks t
+    JOIN Languages l ON t.`language_id-source`=l.id
+    JOIN Languages l2 ON t.`language_id-target`=l2.id
+    WHERE
+        t.`task-type_id`=2
+    GROUP BY CONCAT(l.code, '-', l2.code), YEAR(t.`created-time`)
+    ORDER BY CONCAT(l.code, '-', l2.code), YEAR(t.`created-time`) DESC;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `insertWordCountRequestForProjects`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insertWordCountRequestForProjects`(IN `pID` INT, IN sourceLanguage VARCHAR(10), IN targetLanguages VARCHAR(100), IN `userWordCount` INT)
