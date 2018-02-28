@@ -893,6 +893,9 @@ $from_neon_to_trommons_pair = array(
 'Xhosa' => array('xh', 'ZA'),
 'Yoruba' => array('yo', 'NG'),
 'Zulu' => array('zu', 'ZA'),
+'Hmong' => array('hmn', 'CN'),
+'Karen' => array('kar', 'MM'),
+'Rundi' => array('run', 'BI'),
 );
 
         $account_id   = '';
