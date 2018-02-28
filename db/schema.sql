@@ -6534,6 +6534,24 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `translators_for_language_pairs`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `translators_for_language_pairs`()
+BEGIN
+    SELECT
+        CONCAT(language_code_source, '-', language_code_target) AS pair,
+        CASE
+            WHEN qualification_level=1 THEN 'Translator'
+            WHEN qualification_level=2 THEN 'Verified Translator'
+            WHEN qualification_level=3 THEN 'Senior Translator'
+        END AS level,
+        COUNT(*) AS number
+    FROM UserQualifiedPairs
+    GROUP BY language_code_source, language_code_target, qualification_level
+    ORDER BY language_code_source, language_code_target, qualification_level;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `insertWordCountRequestForProjects`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insertWordCountRequestForProjects`(IN `pID` INT, IN sourceLanguage VARCHAR(10), IN targetLanguages VARCHAR(100), IN `userWordCount` INT)

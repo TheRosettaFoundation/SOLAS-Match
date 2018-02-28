@@ -126,6 +126,12 @@ class AdminRouteHandler
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'language_work_requested')
         )->name('language_work_requested');
+
+        $app->get(
+            '/translators_for_language_pairs/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'translators_for_language_pairs')
+        )->name('translators_for_language_pairs');
     }
     
     public function adminDashboard()
@@ -842,6 +848,45 @@ class AdminRouteHandler
 
         header('Content-type: text/csv');
         header('Content-Disposition: attachment; filename="language_work_requested.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
+    }
+
+    public function translators_for_language_pairs()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $translators_for_language_pairs = $statsDao->translators_for_language_pairs();
+
+        $totals = array();
+        $breakdown = array();
+        foreach ($translators_for_language_pairs as $row) {
+            if (empty($totals[$row['pair']])) {
+                $totals[$row['pair']] = $row['number'];
+                $breakdown[$row['pair']] = $row['level'] . '(' . $row['number'] . ')';
+            } else {
+                $totals[$row['pair']] += $row['number'];
+                $breakdown[$row['pair']] .= ', ' . $row['level'] . '(' . $row['number'] . ')';
+            }
+            $years[$row['created']] = $row['created'];
+            $words[$row['language_pair']] = 0;
+        }
+
+        $data = "\xEF\xBB\xBF" . '"Language Pair","Number of Translators","Breakdown"';
+        $data .= "\n";
+
+        foreach ($totals as $pair => $total) {
+            $data .= '"' . $pair . '"';
+            $data .= ',"' . $total . '"';
+            $data .= ',"' . $breakdown[$pair] . '"';
+            $data .= "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="translators_for_language_pairs.csv"');
         header('Content-length: ' . strlen($data));
         header('X-Frame-Options: ALLOWALL');
         header('Pragma: no-cache');

@@ -250,6 +250,12 @@ class StatisticsDao extends BaseDao
         return $result;
     }
 
+    public function translators_for_language_pairs()
+    {
+        $result = LibAPI\PDOWrapper::call('translators_for_language_pairs', '');
+        return $result;
+    }
+
     public function search_user($name)
     {
         $result = LibAPI\PDOWrapper::call('search_user', LibAPI\PDOWrapper::cleanseNullOrWrapStr($name));
