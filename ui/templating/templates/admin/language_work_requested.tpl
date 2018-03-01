@@ -26,7 +26,7 @@
   {foreach from=$words key=key item=row}
 
     <tr>
-      <td>$key</td>
+      <td>{$key}</td>
       {foreach $years as $year}
       <td>{if !empty($row[$year]['tasks'])}{$row[$year]['tasks']}{/if}</td>
       <td>{if !empty($row[$year]['words'])}{$row[$year]['words']}{/if}</td>
