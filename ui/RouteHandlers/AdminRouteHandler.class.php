@@ -128,10 +128,22 @@ class AdminRouteHandler
         )->name('language_work_requested');
 
         $app->get(
+            '/download_language_work_requested/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_language_work_requested')
+        )->name('download_language_work_requested');
+
+        $app->get(
             '/translators_for_language_pairs/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'translators_for_language_pairs')
         )->name('translators_for_language_pairs');
+
+        $app->get(
+            '/download_translators_for_language_pairs/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_translators_for_language_pairs')
+        )->name('download_translators_for_language_pairs');
     }
     
     public function adminDashboard()
@@ -798,6 +810,46 @@ class AdminRouteHandler
 
     public function language_work_requested()
     {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+        $language_work_requested = $statsDao->language_work_requested();
+
+        $years = array();
+        $words = array();
+        foreach ($language_work_requested as $row) {
+            $years[$row['created']] = $row['created'];
+            $words[$row['language_pair']] = 0;
+        }
+        arsort($years);
+        $current_year = reset($years);
+
+        $template = array();
+        foreach ($years as $year) {
+            $template[$year] = array('words' => 0, 'tasks' => 0);
+        }
+
+        foreach ($language_work_requested as $row) {
+            if ($row['created'] == $current_year) $words[$row['language_pair']] = $row['words'];
+        }
+
+        arsort($words);
+
+        foreach ($words as $language_pair => $data) {
+            $words[$language_pair] = $template;
+        }
+
+        foreach ($language_work_requested as $row) {
+            $words[$row['language_pair']][$row['created']]['words'] = $row['words'];
+            $words[$row['language_pair']][$row['created']]['tasks'] = $row['tasks'];
+        }
+
+        $app->view()->appendData(array('words' => $words, 'years' => $years));
+        $app->render('admin/language_work_requested.tpl');
+
+    }
+
+    public function download_language_work_requested()
+    {
         $statsDao = new DAO\StatisticsDao();
         $language_work_requested = $statsDao->language_work_requested();
 
@@ -857,6 +909,28 @@ class AdminRouteHandler
     }
 
     public function translators_for_language_pairs()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+        $translators_for_language_pairs = $statsDao->translators_for_language_pairs();
+
+        $totals = array();
+        $breakdown = array();
+        foreach ($translators_for_language_pairs as $row) {
+            if (empty($totals[$row['pair']])) {
+                $totals[$row['pair']] = $row['number'];
+                $breakdown[$row['pair']] = $row['level'] . '(' . $row['number'] . ')';
+            } else {
+                $totals[$row['pair']] += $row['number'];
+                $breakdown[$row['pair']] .= ', ' . $row['level'] . '(' . $row['number'] . ')';
+            }
+        }
+
+        $app->view()->appendData(array('totals' => $totals, 'breakdown' => $breakdown));
+        $app->render('admin/translators_for_language_pairs.tpl');
+    }
+
+    public function download_translators_for_language_pairs()
     {
         $statsDao = new DAO\StatisticsDao();
         $translators_for_language_pairs = $statsDao->translators_for_language_pairs();
