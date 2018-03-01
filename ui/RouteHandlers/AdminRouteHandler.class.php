@@ -810,6 +810,7 @@ class AdminRouteHandler
 
     public function language_work_requested()
     {
+        $app = \Slim\Slim::getInstance();
         $statsDao = new DAO\StatisticsDao();
         $language_work_requested = $statsDao->language_work_requested();
 
@@ -909,6 +910,7 @@ class AdminRouteHandler
 
     public function translators_for_language_pairs()
     {
+        $app = \Slim\Slim::getInstance();
         $statsDao = new DAO\StatisticsDao();
         $translators_for_language_pairs = $statsDao->translators_for_language_pairs();
 
