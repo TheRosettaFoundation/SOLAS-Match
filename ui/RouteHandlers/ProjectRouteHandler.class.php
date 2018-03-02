@@ -1005,6 +1005,7 @@ class ProjectRouteHandler
 
         $subscription_text = null;
         $paypal_email = Common\Lib\Settings::get('banner.paypal_email');
+        $paypal_email = null;
         if (!empty($paypal_email)) {
             $text_start = '<p style="font-size: 14px">' . Lib\Localisation::getTranslation('project_subscription') . '<br />';
 
