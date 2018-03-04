@@ -6811,6 +6811,17 @@ DROP PROCEDURE IF EXISTS `createUserQualifiedPair`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `createUserQualifiedPair`(IN userID INT, IN languageCodeSource VARCHAR(3), IN countryCodeSource VARCHAR(2), IN languageCodeTarget VARCHAR(3), IN countryCodeTarget VARCHAR(2), IN qualificationLevel INT)
 BEGIN
+  if NOT EXISTS (
+    SELECT 1
+    FROM UserQualifiedPairs
+    WHERE
+        user_id=userID AND
+        language_code_source=languageCodeSource AND
+        country_code_source=countryCodeSource AND
+        language_code_target=languageCodeTarget AND
+        country_code_target=countryCodeTarget
+  )
+  THEN
     INSERT INTO UserQualifiedPairs (
         user_id,
         language_id_source,
@@ -6834,6 +6845,15 @@ BEGIN
         countryCodeTarget,
         qualificationLevel
     );
+  ELSE
+    UPDATE UserQualifiedPairs SET qualification_level=qualificationLevel
+    WHERE
+        user_id=userID AND
+        language_code_source=languageCodeSource AND
+        country_code_source=countryCodeSource AND
+        language_code_target=languageCodeTarget AND
+        country_code_target=countryCodeTarget;
+  END IF;
 END//
 DELIMITER ;
 
