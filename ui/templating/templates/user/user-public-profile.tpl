@@ -107,7 +107,12 @@
                             <tr>
                                 <td>
                                     {foreach from=$userQualifiedPairs item=userQualifiedPair}
-                                        <p>{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']} &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; {$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}</p>
+                                        <p>
+                                            {$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']} &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; {$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}&nbsp;&nbsp;
+                                            {if $userQualifiedPair['qualification_level'] == 1}{Localisation::getTranslation('user_qualification_level_1')}{/if}
+                                            {if $userQualifiedPair['qualification_level'] == 2}{Localisation::getTranslation('user_qualification_level_2')}{/if}
+                                            {if $userQualifiedPair['qualification_level'] == 3}{Localisation::getTranslation('user_qualification_level_3')}{/if}
+                                        </p>
                                     {/foreach}
                                 </td>
                             </tr>
