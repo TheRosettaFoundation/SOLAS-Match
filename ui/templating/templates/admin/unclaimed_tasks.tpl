@@ -37,7 +37,7 @@
       <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['creator_id']}"}" target="_blank">{$user_row['creator_email']}</a></td>
       <td>{$user_row['created_time']}</td>
       <td>{$user_row['status']}</td>
-      <td><a href="{$user_row['matecat_url']}" target="_blank">{$user_row['matecat_langpair_or_blank']}</a></td>
+      <td>{if !empty($user_row['matecat_url'])}<a href="{$user_row['matecat_url']}" target="_blank">{$user_row['matecat_langpair_or_blank']}</a>{else}$user_row['language_pair']{/if}</td>
     </tr>
 
   {/foreach}

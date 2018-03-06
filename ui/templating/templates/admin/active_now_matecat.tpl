@@ -41,7 +41,7 @@
       <td>{$user_row['DOWNLOAD_STATUS']}</td>
       <td>{$user_row['TRANSLATED_PERC_FORMATTED']}</td>
       <td>{$user_row['APPROVED_PERC_FORMATTED']}</td>
-      <td><a href="{$user_row['matecat_url']}" target="_blank">{$user_row['matecat_langpair_or_blank']}</a></td>
+      <td>{if !empty($user_row['matecat_url'])}<a href="{$user_row['matecat_url']}" target="_blank">{$user_row['matecat_langpair_or_blank']}</a>{else}$user_row['language_pair']{/if}</td>
     </tr>
 
   {/foreach}
