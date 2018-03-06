@@ -17,7 +17,7 @@
 <table style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
     <th width="13%">Partner</th>
-    <th width="10%">Name</th>
+    <th width="10%">Claimed</th>
     <th width="12%">Email</th>
     <th width="13%">Task Title</th>
     <th width="5%">Words</th>

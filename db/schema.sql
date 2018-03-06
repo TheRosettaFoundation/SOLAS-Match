@@ -6297,16 +6297,19 @@ BEGIN
         IFNULL(lp.matecat_id_job,           0) AS matecat_id_job_or_zero,
         IFNULL(lp.matecat_id_job_password, '') AS matecat_id_job_password_or_blank,
         IFNULL(lp.matecat_id_file,          0) AS matecat_id_file_or_zero,
+        o.id AS org_id,
+        o.name AS org_name,
         p.title AS project_title,
         p.id AS project_id
     FROM Projects    p
+    JOIN Organisations o ON p.organisation_id=o.id
     JOIN Tasks       t ON p.id=t.project_id
     JOIN TaskClaims tc ON t.id=tc.task_id
     JOIN Users       u ON tc.user_id=u.id
     JOIN UserPersonalInformation    i ON u.id=i.user_id
     LEFT JOIN MatecatLanguagePairs lp ON t.id=lp.task_id
     WHERE t.`task-status_id`=4
-    ORDER BY t.title, lp.matecat_langpair, t.`task-type_id`;
+    ORDER BY o.name, t.title, lp.matecat_langpair, t.`task-type_id`;
 END//
 DELIMITER ;
 
