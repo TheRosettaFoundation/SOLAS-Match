@@ -6254,6 +6254,7 @@ BEGIN
         IFNULL(lp.matecat_id_job,           0) AS matecat_id_job_or_zero,
         IFNULL(lp.matecat_id_job_password, '') AS matecat_id_job_password_or_blank,
         IFNULL(lp.matecat_id_file,          0) AS matecat_id_file_or_zero,
+        CONCAT(l.code, '|', l2.code) AS language_pair,
         o.id AS org_id,
         o.name AS org_name,
         p.title AS project_title,
@@ -6264,6 +6265,8 @@ BEGIN
     JOIN TaskClaims tc ON t.id=tc.task_id
     JOIN Users       u ON tc.user_id=u.id
     JOIN UserPersonalInformation    i ON u.id=i.user_id
+    JOIN Languages   l ON t.`language_id-source`=l.id
+    JOIN Languages  l2 ON t.`language_id-target`=l2.id
     LEFT JOIN MatecatLanguagePairs lp ON t.id=lp.task_id
     WHERE t.`task-status_id`=3
     ORDER BY o.name, t.title, lp.matecat_langpair, t.`task-type_id`;
@@ -6297,6 +6300,7 @@ BEGIN
         IFNULL(lp.matecat_id_job,           0) AS matecat_id_job_or_zero,
         IFNULL(lp.matecat_id_job_password, '') AS matecat_id_job_password_or_blank,
         IFNULL(lp.matecat_id_file,          0) AS matecat_id_file_or_zero,
+        CONCAT(l.code, '|', l2.code) AS language_pair,
         o.id AS org_id,
         o.name AS org_name,
         p.title AS project_title,
@@ -6307,6 +6311,8 @@ BEGIN
     JOIN TaskClaims tc ON t.id=tc.task_id
     JOIN Users       u ON tc.user_id=u.id
     JOIN UserPersonalInformation    i ON u.id=i.user_id
+    JOIN Languages   l ON t.`language_id-source`=l.id
+    JOIN Languages  l2 ON t.`language_id-target`=l2.id
     LEFT JOIN MatecatLanguagePairs lp ON t.id=lp.task_id
     WHERE t.`task-status_id`=4
     ORDER BY o.name, t.title, lp.matecat_langpair, t.`task-type_id`;
@@ -6362,6 +6368,7 @@ BEGIN
         IFNULL(lp.matecat_id_job,           0) AS matecat_id_job_or_zero,
         IFNULL(lp.matecat_id_job_password, '') AS matecat_id_job_password_or_blank,
         IFNULL(lp.matecat_id_file,          0) AS matecat_id_file_or_zero,
+        CONCAT(l.code, '|', l2.code) AS language_pair,
         o.id AS org_id,
         o.name AS org_name,
         p.id AS project_id,
@@ -6372,6 +6379,8 @@ BEGIN
     JOIN Tasks             t ON p.id=t.project_id
     JOIN TaskFileVersions tv ON t.id=tv.task_id AND tv.version_id=0
     JOIN Users            u2 ON tv.user_id=u2.id
+    JOIN Languages   l ON t.`language_id-source`=l.id
+    JOIN Languages  l2 ON t.`language_id-target`=l2.id
     LEFT JOIN MatecatLanguagePairs lp ON t.id=lp.task_id
     WHERE t.`task-status_id`<3
     ORDER BY o.name, t.title, lp.matecat_langpair, t.`task-type_id`;
