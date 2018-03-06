@@ -142,6 +142,20 @@ class StatisticsDao extends BaseDao
         return $stats;
     }
 
+    public function get_matecat_task_urls($task_id, $task_type, $project_id, $matecat_langpair, $matecat_id_job, $matecat_id_job_password)
+    {
+        $stats = array();
+        if ($task_type == Common\Enums\TaskTypeEnum::TRANSLATION || $task_type == Common\Enums\TaskTypeEnum::PROOFREADING) {
+            $translate = 'translate';
+            if ($task_type == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
+
+            if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
+                $stats['matecat_url'] = "https://tm.translatorswb.org/$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+            }
+        }
+        return $stats;
+    }
+
     public function active_users()
     {
         $result = LibAPI\PDOWrapper::call('active_users', '');
@@ -151,6 +165,14 @@ class StatisticsDao extends BaseDao
     public function unclaimed_tasks()
     {
         $result = LibAPI\PDOWrapper::call('unclaimed_tasks', '');
+
+        foreach ($result as $index => $user_row) {
+           $stats = $this->get_matecat_task_urls($user_row['task_id'], $user_row['task_type'], $user_row['project_id'], $user_row['matecat_langpair_or_blank'], $user_row['matecat_id_job_or_zero'], $user_row['matecat_id_job_password_or_blank']);
+
+           $result[$index]['matecat_url'] = '';
+            if (!empty($stats['matecat_url'])) $result[$index]['matecat_url'] = $stats['matecat_url'];
+        }
+
         return $result;
     }
 

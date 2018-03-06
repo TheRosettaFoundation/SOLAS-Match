@@ -16,20 +16,28 @@
 
 <table style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-    <th width="35%">Task Title</th>
-    <th width="25%">Creator Email</th>
+    <th width="17%">Partner</th>
+    <th width="18%">Task Title</th>
+    <th width="5%">Words</th>
+    <th width="10%">Task Type</th>
+    <th width="12%">Creator Email</th>
     <th width="15%">Created Time</th>
-    <th width="25%">Status</th>
+    <th width="15%">Status</th>
+    <th width="8%">URL</th>
   </thead>
 
   <tbody>
   {foreach $all_users as $user_row}
 
     <tr>
+      <td><a href="{urlFor name="org-public-profile" options="org_id.{$user_row['org_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['org_name'])}</a></td>
       <td><a href="{urlFor name="task-view" options="task_id.{$user_row['task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['task_title'])}</a></td>
+      <td>{$user_row['word_count']}</td>
+      <td>{$user_row['task_type_text']}</td>
       <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['creator_id']}"}" target="_blank">{$user_row['creator_email']}</a></td>
       <td>{$user_row['created_time']}</td>
       <td>{$user_row['status']}</td>
+      <td><a href="{$user_row['matecat_url']}" target="_blank">{$user_row['matecat_langpair_or_blank']}</a></td>
     </tr>
 
   {/foreach}
