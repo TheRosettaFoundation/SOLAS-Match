@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" >
 
 <head>
+    <!-- Editor Hint: ¿áéíóú -->
     <meta charset="utf-8" content="application/xhtml+xml" />
     <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min1.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css"/>
@@ -15,9 +16,10 @@
 
 <table style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-    <th width="14%">Name</th>
-    <th width="15%">Email</th>
-    <th width="19%">Task Title</th>
+    <th width="13%">Partner</th>
+    <th width="10%">Claimed</th>
+    <th width="12%">Email</th>
+    <th width="13%">Task Title</th>
     <th width="5%">Words</th>
     <th width="10%">Task Type</th>
     <th width="10%">Kató TM Status</th>
@@ -30,6 +32,7 @@
   {foreach $all_users as $user_row}
 
     <tr>
+      <td><a href="{urlFor name="org-public-profile" options="org_id.{$user_row['org_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['org_name'])}</a></td>
       <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['first_name'])} {TemplateHelper::uiCleanseHTML($user_row['last_name'])}</a></td>
       <td>{$user_row['email']}</td>
       <td><a href="{urlFor name="task-view" options="task_id.{$user_row['task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['task_title'])}</a></td>
