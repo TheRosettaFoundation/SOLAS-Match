@@ -31,11 +31,11 @@
   <thead>
     <th width="13%">Partner</th>
     <th width="10%">Claimed</th>
-    <th width="12%">Email</th>
-    <th width="13%">Task Title</th>
-    <th width="5%">Words</th>
+    <th width="10%">Email</th>
+    <th width="11%">Task Title</th>
+    <th width="7%">Words</th>
     <th width="10%">Task Type</th>
-    <th width="10%">Kató TM Status</th>
+    <th width="12%">Kató TM Status</th>
     <th width="10%">Translated</th>
     <th width="9%">Approved</th>
     <th width="8%">URL</th>
