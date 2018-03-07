@@ -8,21 +8,34 @@
     <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css"/>
     <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
     <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas1.css"/>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"/>
+    <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-1.9.0.js"></script>
+    <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-ui.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('#myTable').DataTable(
+          {
+            "paging": false
+          }
+        );
+      });
+    </script>
 </head>
 
 <body>
 
 {if isset($all_users) && count($all_users) > 0}
 
-<table style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
+<table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
     <th width="13%">Partner</th>
     <th width="10%">Claimed</th>
-    <th width="12%">Email</th>
-    <th width="13%">Task Title</th>
-    <th width="5%">Words</th>
+    <th width="10%">Email</th>
+    <th width="11%">Task Title</th>
+    <th width="7%">Words</th>
     <th width="10%">Task Type</th>
-    <th width="10%">Kató TM Status</th>
+    <th width="12%">Kató TM Status</th>
     <th width="10%">Translated</th>
     <th width="9%">Approved</th>
     <th width="8%">URL</th>
