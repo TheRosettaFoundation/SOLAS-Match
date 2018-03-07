@@ -29,9 +29,9 @@
 
 <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-    <th width="17%">Partner</th>
-    <th width="18%">Task Title</th>
-    <th width="5%">Words</th>
+    <th width="16%">Partner</th>
+    <th width="17%">Task Title</th>
+    <th width="7%">Words</th>
     <th width="10%">Task Type</th>
     <th width="12%">Creator Email</th>
     <th width="15%">Created Time</th>
