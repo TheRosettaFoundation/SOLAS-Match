@@ -385,7 +385,7 @@ class AdminRouteHandler
         $all_users = $statsDao->complete_matecat();
 
         $app->view()->appendData(array('all_users' => $all_users));
-        $app->render('admin/active_now_matecat.tpl');
+        $app->render('admin/complete_matecat.tpl');
     }
 
     public function active_users()
