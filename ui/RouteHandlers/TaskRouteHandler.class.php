@@ -689,6 +689,9 @@ class TaskRouteHandler
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
+        $adminDao = new DAO\AdminDao();
+        $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
+
         $task = $taskDao->getTask($taskId);
         if (is_null($task)) {
             $app->flash("error", sprintf(Lib\Localisation::getTranslation('task_view_5'), $taskId));
@@ -755,8 +758,9 @@ class TaskRouteHandler
                     break;
             }
         } else {
-            if (isset($post['userIdOrEmail']) && trim($post['userIdOrEmail']) != "") {
+            if ($isSiteAdmin && ((isset($post['userIdOrEmail']) && trim($post['userIdOrEmail']) != "") || !empty($post['assignUserSelect']))) {
                 $emailOrUserId = trim($post['userIdOrEmail']);
+                if (!empty($post['assignUserSelect'])) $emailOrUserId = $post['assignUserSelect'];
                 $userToBeAssigned = null;
                 $errorOccured = False;
                 if (ctype_digit($emailOrUserId)) { //checking for intergers in a string (user id)
@@ -795,8 +799,6 @@ class TaskRouteHandler
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $project = $projectDao->getProject($task->getProjectId());
-        $adminDao = new DAO\AdminDao();
-        $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
 
         /*Metadata required for Tracking Organisations*/
         $org_id = $project->getOrganisationId();
@@ -864,6 +866,9 @@ class TaskRouteHandler
     
             }
         }
+
+        $list_qualified_translators = array();
+        if ($isSiteAdmin) $list_qualified_translators = $taskDao->list_qualified_translators($taskId);
         
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView1.js");
 
@@ -886,6 +891,7 @@ class TaskRouteHandler
             'taskTypeTexts' => $taskTypeTexts,
             'projectAndOrgs' => $projectAndOrgs,
             'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
+            'list_qualified_translators' => $list_qualified_translators,
             'taskStatusTexts' => $taskStatusTexts
         ));
 

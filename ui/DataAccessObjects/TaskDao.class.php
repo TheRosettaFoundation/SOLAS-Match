@@ -600,4 +600,10 @@ class TaskDao extends BaseDao
         if (empty($result)) return 1;
         return $result[0]['required_qualification_level'];
     }
+
+    public function list_qualified_translators($task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('list_qualified_translators', LibAPI\PDOWrapper::cleanse($task_id));
+        return $result;
+    }
 }
