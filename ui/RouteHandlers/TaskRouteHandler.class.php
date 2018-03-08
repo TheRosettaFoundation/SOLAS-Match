@@ -685,12 +685,13 @@ class TaskRouteHandler
         $projectDao = new DAO\ProjectDao();
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
-        $adminDao = new DAO\AdminDao();
-        $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
+        $adminDao = new DAO\AdminDao();
+        $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
+
         $task = $taskDao->getTask($taskId);
         if (is_null($task)) {
             $app->flash("error", sprintf(Lib\Localisation::getTranslation('task_view_5'), $taskId));
