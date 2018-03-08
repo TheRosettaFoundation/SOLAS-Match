@@ -139,7 +139,7 @@
 		        <div class="well">
 		            <form id="assignTaskToUserForm" method="post" action="{urlFor name="task" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                     {Localisation::getTranslation('task_view_assign_label')}<br />
-                    <input type="text" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}" style="width: 500px;"><br />
+                    <input type="text" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
                     {if !empty($list_qualified_translators)}
                         <select name="assignUserSelect" id="assignUserSelect" style="width: 500px;">
                             <option value="">...</option>
