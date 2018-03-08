@@ -6206,6 +6206,27 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `list_qualified_translators`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_qualified_translators`(IN `taskID` INT)
+BEGIN
+        SELECT DISTINCT
+            uqp.user_id,
+            CONCAT(u.email, ' (', IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`, ''), ')') as name
+        FROM Tasks t
+        JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
+        JOIN UserQualifiedPairs uqp ON
+            t.`language_id-source`=uqp.language_id_source AND
+            t.`language_id-target`=uqp.language_id_target AND
+            tq.required_qualification_level<=uqp.qualification_level
+        JOIN Users u ON uqp.user_id=u.id
+        LEFT JOIN UserPersonalInformation i ON u.id=i.user_id
+        WHERE
+            t.id=taskID
+        ORDER BY u.email;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `active_now`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `active_now`()
