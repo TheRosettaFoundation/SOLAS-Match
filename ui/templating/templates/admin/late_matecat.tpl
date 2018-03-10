@@ -60,7 +60,7 @@
         rawurlencode('¿áéíóú";/?:@&=+,' .
         'The task ' . $user_row['task_title'] . "\r\n( https://trommons.org/task/" . $user_row['task_id'] . "/view/ )\r\n$text its deadline of " . $user_row['deadline'] . "\r\n")
       }">{$user_row['email']}</a>{/if}</td>
-      <td>{<a href="{urlFor name="task-view" options="task_id.{$user_row['task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['task_title'])}</a></td>
+      <td><a href="{urlFor name="task-view" options="task_id.{$user_row['task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['task_title'])}</a></td>
       <td>{$user_row['word_count']}</td>
       <td>{$user_row['task_type_text']}</td>
       <td><span {if $user_row['red'] == 1}style="color: red"{/if}>{$user_row['deadline']}</span></td>
