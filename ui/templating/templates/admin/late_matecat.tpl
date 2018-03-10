@@ -29,17 +29,17 @@
 
 <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-    <th width="12%">Partner</th>
+    <th width="11%">Partner</th>
     <th width="10%">Claimed</th>
     <th width="10%">Email</th>
     <th width="11%">Task Title</th>
     <th width="7%">Words</th>
-    <th width="10%">Task Type</th>
-    <th width="10%">Deadline</th>
-    <th width="10%">Kató TM Status</th>
-    <th width="7%">Translated</th>
-    <th width="7%">Approved</th>
-    <th width="6%">URL</th>
+    <th width="8%">Task Type</th>
+    <th width="8%">Deadline</th>
+    <th width="12%">Kató TM Status</th>
+    <th width="8%">Translated</th>
+    <th width="8%">Approved</th>
+    <th width="7%">URL</th>
   </thead>
 
   <tbody>
