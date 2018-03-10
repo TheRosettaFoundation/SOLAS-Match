@@ -6336,8 +6336,10 @@ BEGIN
     LEFT JOIN Users                    u ON tc.user_id=u.id
     LEFT JOIN UserPersonalInformation  i ON u.id=i.user_id
     LEFT JOIN MatecatLanguagePairs    lp ON t.id=lp.task_id
-    WHERE (t.`task-status_id`=3 OR (t.`task-status_id`=2 AND (t.`created-time` > NOW() - INTERVAL 3 MONTH))) AND
-    NOW() > t.deadline - INTERVAL 1 week
+    WHERE
+        (t.`task-status_id`=3 OR t.`task-status_id`=2) AND
+        (t.`created-time` > NOW() - INTERVAL 3 MONTH) AND
+        NOW() > t.deadline - INTERVAL 1 week
     ORDER BY o.name, t.title, lp.matecat_langpair, CONCAT(l.code, '|', l2.code), t.`task-type_id`;
 END//
 DELIMITER ;
