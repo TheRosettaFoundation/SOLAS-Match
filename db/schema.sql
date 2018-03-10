@@ -6294,6 +6294,54 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `late_matecat`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `late_matecat`()
+BEGIN
+    SELECT
+        u.id AS user_id,
+        u.`display-name` AS display_name,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`, '') AS last_name,
+        t.title AS task_title,
+        t.id AS task_id,
+        t.`word-count` AS word_count,
+        t.`created-time` AS created_time,
+        t.deadline,
+        IF(NOW()>t.deadline, 1, 0) AS red,
+        t.`task-type_id` AS task_type,
+        CASE
+            WHEN t.`task-type_id`=1 THEN 'Segmentation'
+            WHEN t.`task-type_id`=2 THEN 'Translation'
+            WHEN t.`task-type_id`=3 THEN 'Revising'
+            WHEN t.`task-type_id`=4 THEN 'Desegmentation'
+        END
+        AS task_type_text,
+        IFNULL(lp.matecat_langpair,        '') AS matecat_langpair_or_blank,
+        IFNULL(lp.matecat_id_job,           0) AS matecat_id_job_or_zero,
+        IFNULL(lp.matecat_id_job_password, '') AS matecat_id_job_password_or_blank,
+        IFNULL(lp.matecat_id_file,          0) AS matecat_id_file_or_zero,
+        CONCAT(l.code, '|', l2.code)           AS language_pair,
+        o.id AS org_id,
+        o.name AS org_name,
+        p.title AS project_title,
+        p.id AS project_id
+    FROM Projects    p
+    JOIN Organisations o ON p.organisation_id=o.id
+    JOIN Tasks       t ON p.id=t.project_id
+    JOIN Languages   l ON t.`language_id-source`=l.id
+    JOIN Languages  l2 ON t.`language_id-target`=l2.id
+    LEFT JOIN TaskClaims              tc ON t.id=tc.task_id
+    LEFT JOIN Users                    u ON tc.user_id=u.id
+    LEFT JOIN UserPersonalInformation  i ON u.id=i.user_id
+    LEFT JOIN MatecatLanguagePairs    lp ON t.id=lp.task_id
+    WHERE (t.`task-status_id`=3 OR (t.`task-status_id`=2 AND (t.`created-time` > NOW() - INTERVAL 3 MONTH))) AND
+    NOW() > t.deadline - INTERVAL 1 week
+    ORDER BY o.name, t.title, lp.matecat_langpair, CONCAT(l.code, '|', l2.code), t.`task-type_id`;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `complete_matecat`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `complete_matecat`()
