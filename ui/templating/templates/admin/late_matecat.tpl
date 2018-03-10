@@ -57,7 +57,7 @@
 
       <td>
         {if !empty($user_row['email'])}
-          <a href="mailto:{$user_row['email']}?subject={rawurlencode('¿áéíóú";/?:@&=+,$Deadline for ' . $user_row['task_title'])}">
+          <a href="mailto:{$user_row['email']}?subject={rawurlencode('¿áéíóú";/?:@&=+,$Deadline for ')}">
             {$user_row['email']}
           </a>
         {/if}
