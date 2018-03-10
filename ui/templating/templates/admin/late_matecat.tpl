@@ -54,7 +54,7 @@
     <tr>
       <td><a href="{urlFor name="org-public-profile" options="org_id.{$user_row['org_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['org_name'])}</a></td>
       <td>{if !empty($user_row['user_id'])}<a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['first_name'])} {TemplateHelper::uiCleanseHTML($user_row['last_name'])}</a>{/if}</td>
-      <td>{if !empty($user_row['email'])}<a href="mailto:{$user_row['email']}?subject={{rawurlencode('¿áéíóú";/?:@&=+,')}{rawurlencode($user_row['task_title'])}&body={rawurlencode('¿áéíóú";/?:@&=+,')}{rawurlencode("\r\n( https://trommons.org/task/")}" target="_blank">{$user_row['email']}</a>{/if}</td>
+      <td>{if !empty($user_row['email'])}<a href="mailto:{$user_row['email']}?subject={rawurlencode('¿áéíóú";/?:@&=+,')}{rawurlencode($user_row['task_title'])}&body={rawurlencode('¿áéíóú";/?:@&=+,')}{rawurlencode("\r\n( https://trommons.org/task/")}" target="_blank">{$user_row['email']}</a>{/if}</td>
       <td><a href="{urlFor name="task-view" options="task_id.{$user_row['task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['task_title'])}</a></td>
       <td>{$user_row['word_count']}</td>
       <td>{$user_row['task_type_text']}</td>
