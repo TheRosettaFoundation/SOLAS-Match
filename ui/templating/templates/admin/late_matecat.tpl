@@ -45,7 +45,7 @@
   <tbody>
   {foreach $all_users as $user_row}
 
-    {assign var="text" value='The task ' . $user_row['task_title'] . "\r\n( https://trommons.org/task/" . $user_row['task_id'] . "/view/ )\r\nhas passed its deadline of " . $user_row['deadline'] . "\r\n"}
+    {assign var="text" value=('The task ' . $user_row['task_title'] . "\r\n( https://trommons.org/task/" . $user_row['task_id'] . "/view/ )\r\nhas passed its deadline of " . $user_row['deadline'] . "\r\n")}
 
     <tr>
       <td><a href="{urlFor name="org-public-profile" options="org_id.{$user_row['org_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['org_name'])}</a></td>
