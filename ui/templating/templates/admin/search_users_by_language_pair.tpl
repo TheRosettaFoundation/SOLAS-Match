@@ -32,11 +32,11 @@
     <th width="11%">Display Name</th>
     <th width="11%">Email</th>
     <th width="10%">Name</th>
-    <th width="12%">Source Language</th>
+    <th width="14%">Source Language</th>
     <th width="8%">Country</th>
     <th width="12%">Target Language</th>
     <th width="8%">Country</th>
-    <th width="12%">Qualification Level</th>
+    <th width="10%">Qualification Level</th>
     <th width="8%">Native Language</th>
     <th width="8%">Country</th>
   </thead>
