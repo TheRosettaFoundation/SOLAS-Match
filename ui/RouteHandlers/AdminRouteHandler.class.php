@@ -458,7 +458,7 @@ class AdminRouteHandler
         if ($post = $app->request()->post() && !empty($post['search_users_language_pair'])) {
             Common\Lib\UserSession::checkCSRFKey($post, 'search_users_by_language_pair');
 
-            $source_target = explode(',', $post['search_users_language_pair']);
+            $source_target = explode('-', $post['search_users_language_pair']);
             if (!empty($source_target) && count($source_target) == 2) {
                 $all_users = $statsDao->search_users_by_language_pair($source_target[0], $source_target[1]);
                 $app->view()->appendData(array('all_users' => $all_users));
