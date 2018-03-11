@@ -51,8 +51,8 @@
       {assign var="deadline_text" value="is close to"}
     {/if}
 
-    {assign var="subject" value="Deadline for {$user_row['task_title']}"}
-    {assign var="body" value="The task {$user_row['task_title']}\r\n( https://trommons.org/task/{$user_row['task_id']}/id )\r\n{$deadline_text} its deadline of {$user_row['deadline']}\r\n"}
+    {assign var="subject" value="Deadline for '{$user_row['task_title']}' on the Kató Platform"}
+    {assign var="body" value="Your claimed task '{$user_row['task_title']}' on the Kató Platform\r\n{$deadline_text} its deadline of {$user_row['deadline']}.\r\n\r\nIf you are using Kató TM, here is the link: {$user_row['matecat_url']}\r\n\r\nYou can submit your completed work here: https://trommons.org/task/{$user_row['task_id']}/id\r\n"}
 
     <tr>
       <td><a href="{urlFor name="org-public-profile" options="org_id.{$user_row['org_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['org_name'])}</a></td>
