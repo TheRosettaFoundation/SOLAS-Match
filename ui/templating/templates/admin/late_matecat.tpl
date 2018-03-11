@@ -46,15 +46,18 @@
   {foreach $all_users as $user_row}
 
     {if $user_row['red'] == 1}
-      {assign var="text" value="has passed"}
+      {assign var="deadline_text" value="has passed"}
     {else}
-      {assign var="text" value="is close to"}
+      {assign var="deadline_text" value="is close to"}
     {/if}
+
+    {assign var="subject" value={'Deadline for '}{$user_row['task_title']}}
+    {assign var="body" value={'The task '}{$user_row['task_title']}{"\r\n( https://trommons.org/task/"}{$user_row['task_id']}{"/id )\r\n"}{$deadline_text}{' its deadline of '}{$user_row['deadline']}{"\r\n"}}
 
     <tr>
       <td><a href="{urlFor name="org-public-profile" options="org_id.{$user_row['org_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['org_name'])}</a></td>
       <td>{if !empty($user_row['user_id'])}<a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['first_name'])} {TemplateHelper::uiCleanseHTML($user_row['last_name'])}</a>{/if}</td>
-      <td>{if !empty($user_row['email'])}<a href="mailto:{$user_row['email']}?subject={rawurlencode('Deadline for ')}{rawurlencode($user_row['task_title'])}&body={rawurlencode('The task ')}{rawurlencode($user_row['task_title'])}{rawurlencode("\r\n( https://trommons.org/task/")}{rawurlencode($user_row['task_id'])}{rawurlencode("/view/ )\r\n")}{rawurlencode($text)}{rawurlencode(' its deadline of ')}{rawurlencode($user_row['deadline'])}{rawurlencode("\r\n")}" target="_blank">{$user_row['email']}</a>{/if}</td>
+      <td>{if !empty($user_row['email'])}<a href="mailto:{$user_row['email']}?subject={rawurlencode($subject)}&body={rawurlencode($body)}" target="_blank">{$user_row['email']}</a>{/if}</td>
       <td><a href="{urlFor name="task-view" options="task_id.{$user_row['task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['task_title'])}</a></td>
       <td>{$user_row['word_count']}</td>
       <td>{$user_row['task_type_text']}</td>
