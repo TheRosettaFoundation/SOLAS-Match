@@ -196,6 +196,12 @@ class StatisticsDao extends BaseDao
         return $result;
     }
 
+    public function search_users_by_language_pair($source, $target)
+    {
+        $result = LibAPI\PDOWrapper::call('search_users_by_language_pair', LibAPI\PDOWrapper::cleanseNullOrWrapStr($source) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($target));
+        return $result;
+    }
+
     public function user_languages($code)
     {
         $result = LibAPI\PDOWrapper::call('user_languages', LibAPI\PDOWrapper::cleanseNullOrWrapStr($code));
