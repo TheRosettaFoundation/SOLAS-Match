@@ -38,7 +38,7 @@
     <th width="10%">Target Country</th>
     <th width="10%">Qualification Level</th>
     <th width="10%">Native Language</th>
-     <th width="8%">Country</th>
+    <th width="8%">Country</th>
   </thead>
 
   <tbody>
