@@ -44,6 +44,12 @@ class AdminRouteHandler
         )->via('POST')->name('active_now_matecat');
 
         $app->get(
+            '/late_matecat/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'late_matecat')
+        )->via('POST')->name('late_matecat');
+
+        $app->get(
             '/complete_matecat/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'complete_matecat')
@@ -375,6 +381,17 @@ class AdminRouteHandler
 
         $app->view()->appendData(array('all_users' => $all_users));
         $app->render('admin/active_now_matecat.tpl');
+    }
+
+    public function late_matecat()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->late_matecat();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('admin/late_matecat.tpl');
     }
 
     public function complete_matecat()
