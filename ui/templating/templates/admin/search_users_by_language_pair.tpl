@@ -29,15 +29,15 @@
 
 <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-    <th width="10%">Display Name</th>
+    <th width="11%">Display Name</th>
     <th width="11%">Email</th>
-    <th width="11%">Name</th>
-    <th width="10%">Source Language</th>
-    <th width="10%">Source Country</th>
-    <th width="10%">Target Language</th>
-    <th width="10%">Target Country</th>
-    <th width="10%">Qualification Level</th>
-    <th width="10%">Native Language</th>
+    <th width="10%">Name</th>
+    <th width="12%">Source Language</th>
+    <th width="8%">Country</th>
+    <th width="12%">Target Language</th>
+    <th width="8%">Country</th>
+    <th width="12%">Qualification Level</th>
+    <th width="8%">Native Language</th>
     <th width="8%">Country</th>
   </thead>
 
@@ -52,7 +52,7 @@
       <td>{$user_row['country_name_source']}</td>
       <td>{$user_row['language_name_target']}</td>
       <td>{$user_row['country_name_target']}</td>
-      <td>{$user_row['qualification_level']}</td>
+      <td>{$user_row['level']}</td>
       <td>{$user_row['language_name_native']}</td>
       <td>{$user_row['country_name_native']}</td>
     </tr>

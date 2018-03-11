@@ -6539,6 +6539,11 @@ BEGIN
         l2.`en-name` AS language_name_target,
         c2.`en-name` AS country_name_target,
         uqp.qualification_level,
+        CASE
+            WHEN uqp.qualification_level=1 THEN 'Translator'
+            WHEN uqp.qualification_level=2 THEN 'Verified Translator'
+            WHEN uqp.qualification_level=3 THEN 'Senior Translator'
+        END AS level,
         IFNULL(ln.`en-name`, '') AS language_name_native,
         IFNULL(cn.`en-name`, '') AS country_name_native
     FROM Users                   u
