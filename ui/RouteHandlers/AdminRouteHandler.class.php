@@ -457,7 +457,7 @@ class AdminRouteHandler
 
 error_log($_POST['search_users_language_pair']);
         if (!empty($_POST['search_users_language_pair'])) {
-            Common\Lib\UserSession::checkCSRFKey($post, 'search_users_by_language_pair');
+            Common\Lib\UserSession::checkCSRFKey($_POST, 'search_users_by_language_pair');
 
             $source_target = explode('-', $_POST['search_users_language_pair']);
 error_log($source_target[0] . $source_target[1]);
