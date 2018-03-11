@@ -28,6 +28,24 @@
     <p><a href="{urlFor name="community_dashboard"}">[Download community dashboard report]</a></p>
     <hr />
 
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="search_users_by_language_pair"}" accept-charset="utf-8" target="_blank">
+        <table style="width: 40%">
+            <tr>
+                <td>
+                    <input type="text" name="search_users_language_pair" placeholder="Language pair e.g. en-fr" style="width: 95%"/>
+                </td>
+                <td valign="top">
+                    <button class="btn btn-success" type="submit" name="search_users_by_language_pair_submit" value="1">
+                        <i class="icon-search icon-white"></i>
+                        List all volunteers with given language pair
+                    </button>
+                </td>
+            </tr>
+        </table>
+        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+    </form>
+    <hr />
+
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">
         {if isset($flash['search_user_fail'])}
             <p class="alert alert-error">{$flash['search_user_fail']}</p>

@@ -6524,6 +6524,44 @@ ORDER BY language_name, country_name, display_name;
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `search_users_by_language_pair`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `search_users_by_language_pair`(IN `languageCodeSource` VARCHAR(3), IN `languageCodeTarget` VARCHAR(3))
+BEGIN
+    SELECT
+        u.id AS user_id,
+        u.`display-name` AS display_name,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`, '') AS last_name,
+        l1.`en-name` AS language_name_source,
+        c1.`en-name` AS country_name_source,
+        l2.`en-name` AS language_name_target,
+        c2.`en-name` AS country_name_target,
+        uqp.qualification_level,
+        CASE
+            WHEN uqp.qualification_level=1 THEN 'Translator'
+            WHEN uqp.qualification_level=2 THEN 'Verified Translator'
+            WHEN uqp.qualification_level=3 THEN 'Senior Translator'
+        END AS level,
+        IFNULL(ln.`en-name`, '') AS language_name_native,
+        IFNULL(cn.`en-name`, '') AS country_name_native
+    FROM Users                   u
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    JOIN UserQualifiedPairs    uqp ON u.id=uqp.user_id
+    JOIN Languages              l1 ON uqp.language_id_source=l1.id
+    JOIN Countries              c1 ON uqp.country_id_source=c1.id
+    JOIN Languages              l2 ON uqp.language_id_target=l2.id
+    JOIN Countries              c2 ON uqp.country_id_target=c2.id
+    LEFT JOIN Languages         ln ON u.language_id=ln.id
+    LEFT JOIN Countries         cn ON u.country_id=cn.id
+    WHERE
+        l1.code=languageCodeSource AND
+        l2.code=languageCodeTarget
+    ORDER BY u.email;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `community_stats`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `community_stats`()

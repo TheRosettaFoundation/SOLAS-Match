@@ -74,6 +74,12 @@ class AdminRouteHandler
         )->via('POST')->name('unclaimed_tasks');
 
         $app->get(
+            '/search_users_by_language_pair/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'search_users_by_language_pair')
+        )->via('POST')->name('search_users_by_language_pair');
+
+        $app->get(
             '/user_languages/:code',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'user_languages')
@@ -440,6 +446,26 @@ class AdminRouteHandler
 
         $app->view()->appendData(array('all_users' => $all_users));
         $app->render('admin/unclaimed_tasks.tpl');
+    }
+
+    public function search_users_by_language_pair()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
+        if (!empty($_POST['search_users_language_pair'])) {
+            Common\Lib\UserSession::checkCSRFKey($_POST, 'search_users_by_language_pair');
+
+            $source_target = explode('-', $_POST['search_users_language_pair']);
+            if (!empty($source_target) && count($source_target) == 2) {
+                $all_users = $statsDao->search_users_by_language_pair($source_target[0], $source_target[1]);
+                $app->view()->appendData(array('all_users' => $all_users));
+            }
+        }
+
+        $app->render('admin/search_users_by_language_pair.tpl');
     }
 
     public function user_languages($code)
