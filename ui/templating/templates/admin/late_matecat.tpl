@@ -52,7 +52,7 @@
     {/if}
 
     {assign var="subject" value="Deadline for {$user_row['task_title']}"}
-    {assign var="body" value={'The task '}{$user_row['task_title']}{"\r\n( https://trommons.org/task/"}{$user_row['task_id']}{"/id )\r\n"}{$deadline_text}{' its deadline of '}{$user_row['deadline']}{"\r\n"}}
+    {assign var="body" value="The task {$user_row['task_title']}\r\n( https://trommons.org/task/{$user_row['task_id']}/id )\r\n{$deadline_text} its deadline of {$user_row['deadline']}\r\n"}
 
     <tr>
       <td><a href="{urlFor name="org-public-profile" options="org_id.{$user_row['org_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['org_name'])}</a></td>
