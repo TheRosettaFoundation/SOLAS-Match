@@ -455,7 +455,7 @@ class AdminRouteHandler
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
-error_log($post['search_users_language_pair']);
+error_log($_POST['search_users_language_pair']);
         if ($post = $app->request()->post() && !empty($post['search_users_language_pair'])) {
             Common\Lib\UserSession::checkCSRFKey($post, 'search_users_by_language_pair');
 
