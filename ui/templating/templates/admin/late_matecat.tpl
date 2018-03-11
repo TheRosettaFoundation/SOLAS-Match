@@ -51,7 +51,7 @@
       {assign var="deadline_text" value="is close to"}
     {/if}
 
-    {assign var="subject" value={'Deadline for '}{$user_row['task_title']}}
+    {assign var="subject" value="Deadline for {$user_row['task_title']}"}
     {assign var="body" value={'The task '}{$user_row['task_title']}{"\r\n( https://trommons.org/task/"}{$user_row['task_id']}{"/id )\r\n"}{$deadline_text}{' its deadline of '}{$user_row['deadline']}{"\r\n"}}
 
     <tr>
