@@ -2089,6 +2089,21 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getAdminsForOrg`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAdminsForOrg`(IN `orgId` INT)
+BEGIN
+    SELECT u.id, u.`display-name` as display_name, u.email, u.password, u.biography,
+        (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`,
+        (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`,
+        (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`,
+        (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`,
+        u.nonce, u.`created-time` as created_time
+    FROM Users u JOIN Admins a ON a.user_id=u.id
+    WHERE a.organisation_id=orgId;
+END//
+DELIMITER ;
+
 -- Dumping structure for procedure Solas-Match-Dev.getAdmin
 DROP PROCEDURE IF EXISTS `getAdmin`;
 DELIMITER //
