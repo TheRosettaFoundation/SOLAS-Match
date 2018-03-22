@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 
     <h1 class="page-header">
-        <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block; word-break:break-all;">
+        <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getTitle())}
             <small>{Localisation::getTranslation('project_view_overview_of_project_details')}</small>
         </span>
@@ -52,7 +52,7 @@
 Tweet</a>
 </p>
 
-    <table class="table table-striped" style="overflow-wrap: break-word; word-break:break-all; table-layout: fixed;">
+    <table class="table table-striped" style="overflow-wrap: break-word; table-layout: fixed;">
         <thead>            
             <th style="text-align: left;"><strong>{Localisation::getTranslation('common_organisation')}</strong></th>
             <th>{Localisation::getTranslation('common_source_language')}</th>
@@ -66,8 +66,8 @@ Tweet</a>
 
         </thead>
         <tbody>
-            <tr style="overflow-wrap: break-word; word-break:break-all;">
-                <td style="text-align: left; overflow-wrap: break-word; word-break:break-all;">
+            <tr style="overflow-wrap: break-word;">
+                <td style="text-align: left; overflow-wrap: break-word;">
                     {if isset($org)}
                         {assign var="org_id" value=$org->getId()}
                         <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$org->getName()|escape:'html':'UTF-8'}</a>
@@ -126,7 +126,7 @@ Tweet</a>
     </table>            
             
     <div class="well">
-        <table border="0" width="100%" style="overflow-wrap: break-word; word-break:break-all; table-layout: fixed;">
+        <table border="0" width="100%" style="overflow-wrap: break-word; table-layout: fixed;">
             <thead>
             <th align="left" width="48%">{Localisation::getTranslation('common_description')}<hr/></th>
             <th></th>
@@ -267,13 +267,13 @@ Tweet</a>
             {if isset($projectTasks) && count($projectTasks) > 0}
                 {foreach from=$taskLanguageMap key=languageCountry item=tasks}           
 
-                    <div style="display: inline-block; overflow-wrap: break-word; word-break:break-all; 
+                    <div style="display: inline-block; overflow-wrap: break-word;
                                     font-weight: bold; font-size: large; max-width: 70%">
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
                     </div>                
                     <hr />  
  
-                    <table class="table table-striped" style="overflow-wrap: break-word; word-break:break-all; margin-bottom: 60px">
+                    <table class="table table-striped" style="overflow-wrap: break-word; margin-bottom: 60px">
                         <thead>
                             <tr>
                                 <th>{Localisation::getTranslation('common_title')}</th>
@@ -290,7 +290,7 @@ Tweet</a>
 
                             {foreach from=$tasks item=task}
                                 {assign var="task_id" value=$task->getId()}
-                                <tr style="overflow-wrap: break-word; word-break:break-all;">
+                                <tr style="overflow-wrap: break-word;">
                                     <td width="24%">
                                         <a href="{urlFor name="task-view" options="task_id.$task_id"}">
                                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}

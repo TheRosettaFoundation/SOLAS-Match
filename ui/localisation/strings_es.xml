@@ -2,7 +2,7 @@
   <!-- Smarty Template Strings -->
   <string name="common_faq">Preguntas frecuentes</string>
     <string name="common_forum">Kató Community</string>
-    <string name="common_discuss_on_community">Discuss this task on Kató Community</string>
+    <string name="common_discuss_on_community">Discutir esta tarea en Kató Community</string>
 	<string name="common_banned_by">Excluido por</string>
 	<string name="common_ban_duration">Duración de la exclusión</string>
 	<string name="common_ban_reason">Motivo de exclusión</string>
@@ -137,7 +137,7 @@
 	<string name="common_business_number">Nombre de la empresa</string>
 	<string name="common_job_title">Cargo</string>
 	<string name="common_badges">Medallas</string>
-	<string name="common_strict">Específicas</string>
+    <string name="common_strict">Solo los pares lingüísticos seleccionados</string>
 	<string name="common_the_last_email_was_sent_on">El último e-mail se envió el %s.</string>
    	<string name="common_no_emails_have_been_sent_yet">Aún no se ha enviado ningún e-mail.</string>
 	<string name="common_you_are_not_currently_receiving_task_stream_notification_emails">Actualmente no recibes notificaciones de tareas disponibles en tu correo.</string>
@@ -843,7 +843,7 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
 	<string name="task_claimed_proofreading_please_proofread_it">Ya puedes revisar el texto.</string>
     <string name="task_claimed_proofreading_0">Te has asignado la revisión de <strong>%s</strong>.</string>
 	<string name="task_claimed_proofreading_1">Abre el archivo que has guardado en tu equipo.</string>
-    <string name="task_claimed_proofreading_proofread_the_file_in">Revisa el texto en <strong>%s</strong> para asegurarte de que es correcto ortográfica y gramaticalmente.</string>
+    <string name="task_claimed_proofreading_proofread_the_file_in">Revisa la traducción al <strong>%s</strong> para garantizar que cumple con los estándares de calidad.</string>
 	<string name="task_claimed_proofreading_upload_the_proofread_file">Sube el texto revisado a la página de la tarea.</string>
 	<string name="task_claimed_proofreading_4">Cuando termines de revisar el archivo que has descargado;</string>
     <string name="task_claimed_proofreading_upload_proofread_task">Entregue su revisión</string>
@@ -1096,7 +1096,7 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
 	<string name="user_task_stream_notification_edit_2">Si seleccionas recibir notificaciones específicas, sólo te enviaremos aquellas tareas que se ajusten a los idiomas que has especificado en tu perfil (lengua materna o idiomas secundarios).</string>
     <string name="user_task_stream_notification_edit_5">¿Qué tipo de e-mails quieres recibir?</string>
     <string name="user_task_stream_notification_edit_6">¿Con qué frecuencia deseas recibir estos e-mails?</string>
-	<string name="user_task_stream_notification_edit_all">Todas</string>
+    <string name="user_task_stream_notification_edit_all">Todas las tareas</string>
 	<string name="user_task_stream_notification_edit_never">Nunca</string>
 	<string name="user_task_stream_notification_edit_daily">A diario</string>
 	<string name="user_task_stream_notification_edit_weekly">Cada semana</string>
