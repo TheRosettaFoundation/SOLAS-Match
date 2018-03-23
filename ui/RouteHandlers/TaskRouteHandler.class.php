@@ -896,6 +896,7 @@ class TaskRouteHandler
             'taskTypeTexts' => $taskTypeTexts,
             'projectAndOrgs' => $projectAndOrgs,
             'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
+            'matecat_url' => $taskDao->get_matecat_url_regardless($task),
             'list_qualified_translators' => $list_qualified_translators,
             'taskStatusTexts' => $taskStatusTexts
         ));
@@ -1663,6 +1664,7 @@ class TaskRouteHandler
                 "isSiteAdmin" => $isSiteAdmin,
                 'alsoViewedTasksCount' => $alsoViewedTasksCount,
                 'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
+                'matecat_url' => $taskDao->get_matecat_url_regardless($task),
                 "userSubscribedToOrganisation" => $userSubscribedToOrganisation
         ));
 

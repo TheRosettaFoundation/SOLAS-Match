@@ -537,6 +537,27 @@ class TaskDao extends BaseDao
         return $matecat_url;
     }
 
+    public function get_matecat_url_regardless($task)
+    {
+        $matecat_url = '';
+        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
+            $translate = 'translate';
+            if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
+
+            $matecat_tasks = $this->getMatecatLanguagePairs($task->getId());
+            if (!empty($matecat_tasks)) {
+                $matecat_langpair = $matecat_tasks[0]['matecat_langpair'];
+                $matecat_id_job = $matecat_tasks[0]['matecat_id_job'];
+                $matecat_id_job_password = $matecat_tasks[0]['matecat_id_job_password'];
+                //$matecat_id_file = $matecat_tasks[0]['matecat_id_file'];
+                if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
+                    $matecat_url = "https://tm.translatorswb.org/$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                }
+            }
+        }
+        return $matecat_url;
+    }
+
     public function getMatecatTaskStatus($task_id, $matecat_id_job, $matecat_id_job_password)
     {
         $download_status = '';
