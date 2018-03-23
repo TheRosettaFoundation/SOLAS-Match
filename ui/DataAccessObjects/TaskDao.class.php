@@ -594,17 +594,11 @@ class TaskDao extends BaseDao
                 if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
                     $download_status = $this->getMatecatTaskStatus($task->getId(), $matecat_id_job, $matecat_id_job_password);
 
-                    if ($download_status !== 'translated' && $download_status !== 'approved') {
-                        // Disable Kató access for Proofreading if job file is not translated
-                        LibAPI\PDOWrapper::call('record_task_not_translated_in_matecat', LibAPI\PDOWrapper::cleanse($task->getId()));
-                    } else {
+                    if ($download_status === 'translated' || $download_status === 'approved') {
+                        // Allow Kató access for Proofreading if job file is translated
                         LibAPI\PDOWrapper::call('record_task_translated_in_matecat', LibAPI\PDOWrapper::cleanse($task->getId()));
                     }
-                } else {
-                    LibAPI\PDOWrapper::call('record_task_not_translated_in_matecat', LibAPI\PDOWrapper::cleanse($task->getId()));
                 }
-            } else {
-                LibAPI\PDOWrapper::call('record_task_not_translated_in_matecat', LibAPI\PDOWrapper::cleanse($task->getId()));
             }
         }
     }
