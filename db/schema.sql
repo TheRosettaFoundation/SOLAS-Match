@@ -1457,6 +1457,11 @@ CREATE TABLE IF NOT EXISTS `OrgIDMatchingNeon` (
   CONSTRAINT FK_OrgIDMatchingNeon_Organisations FOREIGN KEY (org_id) REFERENCES Organisations (id) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `TaskTranslatedInMatecat` (
+  `task_id` BIGINT(20) UNSIGNED NOT NULL,
+  PRIMARY KEY (`task_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -7129,6 +7134,22 @@ BEGIN
     INSERT INTO OrgIDMatchingNeon
                (org_id_neon, org_id, created_time)
         VALUES (  orgIDNeon,  orgID, NOW());
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `record_task_translated_in_matecat`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `record_task_translated_in_matecat`(IN `taskId` INT)
+BEGIN
+    REPLACE INTO TaskTranslatedInMatecat (task_id) VALUES (taskId);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `is_task_translated_in_matecat`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `is_task_translated_in_matecat`(IN `taskId` INT)
+BEGIN
+    SELECT * FROM TaskTranslatedInMatecat WHERE task_id=taskId;
 END//
 DELIMITER ;
 
