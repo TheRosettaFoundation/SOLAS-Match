@@ -124,7 +124,7 @@
                 </td>
                 <td></td>
                 <td>
-                    {if $isSiteAdmin && $matecat_url != ''}Kató TM URL for Task:{/if}
+                    {if $isSiteAdmin && $matecat_url != ''}<strong>Kató TM URL for Task:</strong><hr/>{/if}
                 </td>
             </tr>
             <tr valign="top">
@@ -133,7 +133,7 @@
                 </td>
                 <td></td>
                 <td>
-                    {if $isSiteAdmin && $matecat_url != ''}<a href="{$matecat_url}" class="btn btn-primary" target="_blank">{$matecat_url}</a>{/if}
+                    {if $isSiteAdmin && $matecat_url != ''}<a href="{$matecat_url}" target="_blank">{$matecat_url}</a>{/if}
                 </td>
             </tr>
             {/if}
