@@ -123,14 +123,18 @@
                     <strong>{Localisation::getTranslation('common_discuss_on_community')}:</strong><hr/>
                 </td>
                 <td></td>
-                <td></td>
+                <td>
+                    {if $isSiteAdmin && $matecat_url != ''}Kató TM URL for Task:{/if}
+                </td>
             </tr>
             <tr valign="top">
                 <td>
                     <a href="https://community.translatorswb.org/t/{$discourse_slug}" target="_blank">https://community.translatorswb.org/t/{$discourse_slug}</a>
                 </td>
                 <td></td>
-                <td></td>
+                <td>
+                    {if $isSiteAdmin && $matecat_url != ''}<a href="{$matecat_url}" class="btn btn-primary" target="_blank">{$matecat_url}</a>{/if}
+                </td>
             </tr>
             {/if}
         </tbody>
