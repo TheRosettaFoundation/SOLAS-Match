@@ -56,6 +56,12 @@ class AdminRouteHandler
         )->via('POST')->name('complete_matecat');
 
         $app->get(
+            '/first_completed_task/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'first_completed_task')
+        )->via('POST')->name('first_completed_task');
+
+        $app->get(
             '/active_users/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'active_users')
@@ -401,6 +407,17 @@ class AdminRouteHandler
     }
 
     public function complete_matecat()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->complete_matecat();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('admin/complete_matecat.tpl');
+    }
+
+    public function first_completed_task()
     {
         $app = \Slim\Slim::getInstance();
         $statsDao = new DAO\StatisticsDao();
