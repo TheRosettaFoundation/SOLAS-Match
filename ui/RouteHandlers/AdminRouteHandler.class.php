@@ -424,6 +424,22 @@ class AdminRouteHandler
 
         $all_users = $statsDao->complete_matecat();
 
+        $earliest = array();
+        foreach ($all_users as $user) {
+            if (empty($earliest[$user['user_id']])) {
+                $earliest[$user['user_id']] = $user['claimed_time'];
+            } else {
+                if ($earliest[$user['user_id']] < $user['claimed_time']) $earliest[$user['user_id']] = $user['claimed_time'];
+            }
+        }
+        foreach ($all_users as $key => $user) {
+            if (!in_array($user['claimed_time'], $earliest)) {
+                unset($all_users[$key]);
+            } else {
+                $all_users[$key]['first_name'] = $user['claimed_time'] . ': ' . $user['first_name'];
+            }
+        }
+
         $app->view()->appendData(array('all_users' => $all_users));
         $app->render('admin/complete_matecat.tpl');
     }
