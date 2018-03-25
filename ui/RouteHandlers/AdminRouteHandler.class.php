@@ -429,7 +429,7 @@ class AdminRouteHandler
             if (empty($earliest[$user['user_id']])) {
                 $earliest[$user['user_id']] = $user['claimed_time'];
             } else {
-                if ($earliest[$user['user_id']] < $user['claimed_time']) $earliest[$user['user_id']] = $user['claimed_time'];
+                if ($earliest[$user['user_id']] > $user['claimed_time']) $earliest[$user['user_id']] = $user['claimed_time'];
             }
         }
         foreach ($all_users as $key => $user) {
