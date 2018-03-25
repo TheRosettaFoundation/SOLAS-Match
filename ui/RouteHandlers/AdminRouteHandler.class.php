@@ -436,7 +436,7 @@ class AdminRouteHandler
             if (!in_array($user['claimed_time'], $earliest)) {
                 unset($all_users[$key]);
             } else {
-                $all_users[$key]['first_name'] = $user['claimed_time'] . ': ' . $user['first_name'];
+                $all_users[$key]['first_name'] = $user['claimed_time'] . ' ' . $user['first_name'];
             }
         }
 
