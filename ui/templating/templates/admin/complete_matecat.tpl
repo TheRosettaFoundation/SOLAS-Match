@@ -27,7 +27,7 @@
 
 {if isset($all_users) && count($all_users) > 0}
 
-<table id="myTable" style="overflow-wrap: break-word;" class="container table table-striped">
+<table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
     <th width="13%">Partner</th>
     <th width="10%">Claimed</th>
