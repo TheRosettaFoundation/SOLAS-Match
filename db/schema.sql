@@ -6387,6 +6387,7 @@ BEGIN
             WHEN t.`task-type_id`=4 THEN 'Desegmentation'
         END
         AS task_type_text,
+        tc.`claimed-time` AS claimed_time,
         IFNULL(lp.matecat_langpair,        '') AS matecat_langpair_or_blank,
         IFNULL(lp.matecat_id_job,           0) AS matecat_id_job_or_zero,
         IFNULL(lp.matecat_id_job_password, '') AS matecat_id_job_password_or_blank,
