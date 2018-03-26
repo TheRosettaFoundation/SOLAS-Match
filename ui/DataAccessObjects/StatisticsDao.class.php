@@ -292,6 +292,12 @@ class StatisticsDao extends BaseDao
         return $result;
     }
 
+    public function users_who_logged_in()
+    {
+        $result = LibAPI\PDOWrapper::call('users_who_logged_in', '');
+        return $result;
+    }
+
     public function language_work_requested()
     {
         $result = LibAPI\PDOWrapper::call('language_work_requested', '');
