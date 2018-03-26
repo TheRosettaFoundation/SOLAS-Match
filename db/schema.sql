@@ -6970,6 +6970,18 @@ ORDER BY YEAR(tfv.`upload-time`) DESC, MONTH(tfv.`upload-time`) DESC;
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `users_who_logged_in`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `users_who_logged_in`()
+BEGIN
+SELECT COUNT(u.user_id) AS all_logins, COUNT(DISTINCT u.user_id) AS distinct_logins, CONCAT(SUBSTRING(MONTHNAME(u.`login-time`),1, 3), '-', SUBSTRING(YEAR(u.`login-time`), 3)) AS month
+FROM UserLogins u
+WHERE u.success=1
+GROUP BY YEAR(u.`login-time`), MONTH(u.`login-time`)
+ORDER BY YEAR(u.`login-time`) ASC, MONTH(u.`login-time`) ASC;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `createUserQualifiedPair`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `createUserQualifiedPair`(IN userID INT, IN languageCodeSource VARCHAR(3), IN countryCodeSource VARCHAR(2), IN languageCodeTarget VARCHAR(3), IN countryCodeTarget VARCHAR(2), IN qualificationLevel INT)

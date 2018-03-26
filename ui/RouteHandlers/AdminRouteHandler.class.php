@@ -773,6 +773,7 @@ class AdminRouteHandler
         $new_tasks                  = $statsDao->new_tasks();
         $average_time_to_assign     = $statsDao->average_time_to_assign();
         $average_time_to_turnaround = $statsDao->average_time_to_turnaround();
+        $users_who_logged_in        = $statsDao->users_who_logged_in();
 
         $all_months = array();
         foreach ($new_tasks as $new_tasks_month) { // new_tasks sorted newest first (like most of these)
@@ -785,6 +786,8 @@ class AdminRouteHandler
                     'new_tasks' => $new_tasks_month['new_tasks'],
                     'average_time_to_assign' => 0,
                     'average_time_to_turnaround' => 0,
+                    'all_logins' => 0,
+                    'distinct_logins' => 0,
                     );
             }
         }
@@ -792,7 +795,8 @@ class AdminRouteHandler
         $total = 0;
         $previous = 0;
         foreach ($users_signed_up as $users_signed_up_month) { // users_signed_up is sorted oldest first!
-            $total+= $users_signed_up_month['users_signed_up'];
+            if (empty($users_signed_up_month['users_signed_up'])) $users_signed_up_month['users_signed_up'] = 0;
+            $total += $users_signed_up_month['users_signed_up'];
 
             if (!empty($all_months[$users_signed_up_month['month']])) { // Don't add partial data
                 $all_months[$users_signed_up_month['month']]['users_signed_up'] = $users_signed_up_month['users_signed_up'];
@@ -826,7 +830,14 @@ class AdminRouteHandler
             }
         }
 
-        $data = "\xEF\xBB\xBF" . '"trommons.org Community"';
+        foreach ($users_who_logged_in as $users_who_logged_in_month) {
+            if (!empty($all_months[$users_who_logged_in_month['month']])) {
+                $all_months[$users_who_logged_in_month['month']]['all_logins'] = $users_who_logged_in_month['all_logins'];
+                $all_months[$users_who_logged_in_month['month']]['distinct_logins'] = $users_who_logged_in_month['distinct_logins'];
+            }
+        }
+
+        $data = "\xEF\xBB\xBF" . '"Kató Platform Community"';
         foreach ($all_months as $month => $month_data) {
             $data .= ',"' . $month . '"';
         }
@@ -841,6 +852,18 @@ class AdminRouteHandler
         $data .= '"Active Translators"';
         foreach ($all_months as $month_data) {
             $data .= ',"' . $month_data['users_active'] . '"';
+        }
+        $data .= "\n";
+
+        $data .= '"All Logins"';
+        foreach ($all_months as $month_data) {
+            $data .= ',"' . $month_data['all_logins'] . '"';
+        }
+        $data .= "\n";
+
+        $data .= '"Distinct Logins"';
+        foreach ($all_months as $month_data) {
+            $data .= ',"' . $month_data['distinct_logins'] . '"';
         }
         $data .= "\n";
 
