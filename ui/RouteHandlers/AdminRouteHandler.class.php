@@ -441,7 +441,7 @@ class AdminRouteHandler
         }
 
         $app->view()->appendData(array('all_users' => $all_users));
-        $app->render('admin/complete_matecat.tpl');
+        $app->render('admin/first_completed_task.tpl');
     }
 
     public function active_users()
