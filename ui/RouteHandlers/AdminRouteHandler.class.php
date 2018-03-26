@@ -795,7 +795,7 @@ class AdminRouteHandler
         $total = 0;
         $previous = 0;
         foreach ($users_signed_up as $users_signed_up_month) { // users_signed_up is sorted oldest first!
-            if (!empty($users_signed_up_month['users_signed_up'])) $users_signed_up_month['users_signed_up'] = 0;
+            if (empty($users_signed_up_month['users_signed_up'])) $users_signed_up_month['users_signed_up'] = 0;
             $total += $users_signed_up_month['users_signed_up'];
 
             if (!empty($all_months[$users_signed_up_month['month']])) { // Don't add partial data
