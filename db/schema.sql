@@ -1548,6 +1548,18 @@ END//
 DELIMITER ;
 
 
+DROP PROCEDURE IF EXISTS `get_creator`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_creator`(IN `projectID` INT)
+BEGIN
+    SELECT u.*
+    FROM ProjectFiles p
+    JOIN Users        u ON p.user_id=u.id
+    WHERE p.project_id=projectID;
+END//
+DELIMITER ;
+
+
 -- Dumping structure for procedure Solas-Match-Test.addProjectTag
 DROP PROCEDURE IF EXISTS `addProjectTag`;
 DELIMITER //
