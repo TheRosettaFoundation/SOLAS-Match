@@ -467,6 +467,11 @@ class TaskDao extends BaseDao
         LibAPI\PDOWrapper::call('updateWordCountForProject', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($matecat_word_count));
     }
 
+    public function get_creator($project_id) {
+        $result = LibAPI\PDOWrapper::call('get_creator', LibAPI\PDOWrapper::cleanse($project_id));
+        return $result[0];
+    }
+
     public function getProjectFileLocation($project_id) {
         $result = LibAPI\PDOWrapper::call('getProjectFile', LibAPI\PDOWrapper::cleanse($project_id) . ',NULL,NULL,NULL,NULL');
         if ($result) {

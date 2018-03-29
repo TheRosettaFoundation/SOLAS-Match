@@ -1588,6 +1588,8 @@ class ProjectRouteHandler
                     continue;
                 }
 
+                $creator = $taskDao->get_creator($project_id);
+
                 $source_language = $project['source_language'];
                 $source_language = $this->valid_language_for_matecat($source_language);
                 if (empty($source_language)) $source_language = 'en-US';
@@ -1640,8 +1642,10 @@ class ProjectRouteHandler
                   'mt_engine'    => '1',
                   'private_tm_key' => '58f97b6f65fb5c8c8522',
                   'subject'      => 'general',
-                  'owner_email'  => 'info@trommons.org'
+                  'owner_email'  => $creator['email']
+//                  'owner_email'  => 'info@trommons.org'
                 );
+                error_log("project_cron /new ($project_id) owner_email: " . $fields['owner_email']);
                 curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
 
                 curl_setopt($re, CURLOPT_HEADER, true);
