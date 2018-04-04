@@ -1089,11 +1089,11 @@ EOD;
                             $notifData = new Common\Protobufs\Models\UserTaskStreamNotification();
                             $notifData->setUserId($user_id);
                             $notifData->setInterval($post['interval']);
-                            if (isset($post['strictMode']) && $post['strictMode'] == 'enabled') {
+                            //if (isset($post['strictMode']) && $post['strictMode'] == 'enabled') {
                                 $notifData->setStrict(true);
-                            } else {
-                                $notifData->setStrict(false);
-                            }
+                            //} else {
+                            //    $notifData->setStrict(false);
+                            //}
                             $userDao->requestTaskStreamNotification($notifData);
                         }
                     }
@@ -1341,11 +1341,11 @@ EOD;
                     $notifData = new Common\Protobufs\Models\UserTaskStreamNotification();
                     $notifData->setUserId($userId);
                     $notifData->setInterval($post['interval']);
-                    if (isset($post['strictMode']) && $post['strictMode'] == 'enabled') {
+                    //if (isset($post['strictMode']) && $post['strictMode'] == 'enabled') {
                         $notifData->setStrict(true);
-                    } else {
-                        $notifData->setStrict(false);
-                    }
+                    //} else {
+                    //    $notifData->setStrict(false);
+                    //}
                     $success = $userDao->requestTaskStreamNotification($notifData);
                 }
 
