@@ -176,20 +176,6 @@
                         {Localisation::getTranslation('user_task_stream_notification_edit_1')}
                     </p>
                     <p>
-                        {Localisation::getTranslation('user_task_stream_notification_edit_2')}
-                    </p>
-                    <p>
-                        <label for='strictMode'><strong>{Localisation::getTranslation('user_task_stream_notification_edit_5')}:</strong></label>
-                        <select name="strictMode">
-                            <option value="disabled" {if (!$strict)}selected="true"{/if}>
-                                {Localisation::getTranslation('user_task_stream_notification_edit_all')}
-                            </option>
-                            <option value="enabled" {if ($strict)}selected="true"{/if}>
-                                {Localisation::getTranslation('common_strict')}
-                            </option>
-                        </select>
-                    </p>
-                    <p>
                         <label for='interval'><strong>{Localisation::getTranslation('user_task_stream_notification_edit_6')}:</strong></label>
                         <select name="interval">
                             <option value="0"

@@ -358,12 +358,6 @@
     <p>
         {if isset($interval)}
             <p>
-                {Localisation::getTranslation('common_what_type_of_emails')}
-                {if $strict}
-                    <strong>{Localisation::getTranslation('common_strict')}</strong>
-                {/if}            
-            </p>
-            <p>
                 {Localisation::getTranslation('common_how_often_receiving_emails')}
                 <strong>{$interval}</strong>
             </p>
