@@ -39,9 +39,6 @@
         <hr />
     </p>
     <p>
-        {Localisation::getTranslation('user_task_stream_notification_edit_5')}
-    </p>
-    <p>
         {Localisation::getTranslation('user_task_stream_notification_edit_6')}
     </p>
     <p>
