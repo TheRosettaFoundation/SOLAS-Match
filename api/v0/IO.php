@@ -448,7 +448,7 @@ class IO
 
         $project = DAO\ProjectDao::getProject($projectId);
         $project->setImageUploaded(1);
-        $project->setImageApproved(0);
+        $project->setImageApproved(1); // Automatically approve (was 0)
         $project = DAO\ProjectDao::save($project);
 
         try {
@@ -464,7 +464,7 @@ class IO
                 }
             $ext = pathinfo($filename, PATHINFO_EXTENSION);
             file_put_contents($destination."/image.$ext", $file);
-            Lib\Notify::sendProjectImageUploaded($projectId);
+            //Lib\Notify::sendProjectImageUploaded($projectId); // No notification
         } catch (\Exception $e) {
             $message = "You cannot upload an image file for project ($projectId), as one already exists.";
             throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::CONFLICT);
