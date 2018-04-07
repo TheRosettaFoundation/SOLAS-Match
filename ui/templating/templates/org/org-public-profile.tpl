@@ -628,7 +628,7 @@
 {/if}
       
 
-{if $isMember || $adminAccess}               
+{if false && ($isMember || $adminAccess)}
      <p style="margin-bottom: 40px" />         
      <h1 class="page-header">
          {Localisation::getTranslation('org_public_profile_membership_requests')}
@@ -695,6 +695,10 @@
     <h1 class="page-header">
         {Localisation::getTranslation('org_public_profile_organisation_members')}
         <small>{Localisation::getTranslation('org_public_profile_member_list')}</small>
+
+        <a href="{urlFor name="org-request-queue" options="org_id.$org_id"}" class='pull-right btn btn-success'>
+            <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_add_user')}
+        </a>
     </h1>
     {if isset($orgMembers) && count($orgMembers) > 0}
         <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">
