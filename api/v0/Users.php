@@ -1515,6 +1515,12 @@ $from_neon_to_trommons_pair = array(
 'Hmong' => array('hmn', 'CN'),
 'Karen' => array('kar', 'MM'),
 'Rundi' => array('run', 'BI'),
+'Assamese' => array('asm', 'IN'),
+'Garo' => array('grt', 'IN'),
+'Khasi' => array('kha', 'IN'),
+'Konkani' => array('kok', 'IN'),
+'Manipuri' => array('mni', 'IN'),
+'Mizo' => array('lus', 'IN'),
 );
 
 $NEON_NATIVELANGFIELD = 64;
