@@ -1846,6 +1846,12 @@ class ProjectRouteHandler
 'yi' => 'yi-YD',
 'yo' => 'yo-NG',
 'zu' => 'zu-ZA',
+'asm' => 'asm-IN',
+'grt' => 'grt-IN',
+'kha' => 'kha-IN',
+'kok' => 'kok-IN',
+'mni' => 'mni-IN',
+'lus' => 'lus-IN',
 );
         if (in_array($language_code, $matecat_acceptable_languages)) return $language_code;
         if (!empty($matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))])) return $matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))];
