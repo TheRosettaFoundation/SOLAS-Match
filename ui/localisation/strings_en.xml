@@ -838,7 +838,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="task_claimed_desegmentation_merge_files">Merge Files</string>
 	<string name="task_claimed_desegmentation_5">Go back to Home page</string>
 
-	<string name="task_claimed_proofreading_proofreading_task_claimed">Revissing task claimed</string>
+	<string name="task_claimed_proofreading_proofreading_task_claimed">Revising task claimed</string>
 	<string name="task_claimed_proofreading_please_proofread_it">Please revise it!</string>
     <string name="task_claimed_proofreading_0">You have claimed the revising task <strong>%s</strong>.</string>
 	<string name="task_claimed_proofreading_1">Open the file that you have already saved to your computer.</string>
