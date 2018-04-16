@@ -523,8 +523,14 @@ function validateLocalValues()
     success = false;
   }
 
-  if (project.sourceLocale.languageCode == 0) project_create_set_source_language = parameters.getTranslation("project_create_set_source_language");
-  if (project.sourceLocale.countryCode  == 0) project_create_set_source_country = parameters.getTranslation("project_create_set_source_country");
+  if (project.sourceLocale.languageCode == 0) {
+    project_create_set_source_language = parameters.getTranslation("project_create_set_source_language");
+    success = false;
+  }
+  if (project.sourceLocale.countryCode  == 0) {
+    project_create_set_source_country  = parameters.getTranslation("project_create_set_source_country");
+    success = false;
+  }
 
   var encounteredLocales = [];
   segmentationRequired   = [];
@@ -550,8 +556,14 @@ function validateLocalValues()
     targetCountryCode     [i] = document.getElementById("target_country_" + i).value;
     targetCountryCountry  [i] = $("#target_country_" + i + " option:selected").text();
 
-    if (targetLanguageCode[i] == 0) project_create_set_target_language = parameters.getTranslation("project_create_set_target_language");
-    if (targetCountryCode [i] == 0) project_create_set_target_country  = parameters.getTranslation("project_create_set_target_country");
+    if (targetLanguageCode[i] == 0) {
+      project_create_set_target_language = parameters.getTranslation("project_create_set_target_language");
+      success = false;
+    }
+    if (targetCountryCode [i] == 0) {
+      project_create_set_target_country  = parameters.getTranslation("project_create_set_target_country");
+      success = false;
+    }
 
     // If a duplicate locale is encountered, display error message
     var encounteredLocale = targetLanguageCode[i] + "_" + targetCountryCode[i];
