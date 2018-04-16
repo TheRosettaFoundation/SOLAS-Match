@@ -648,6 +648,7 @@ class TaskRouteHandler
                     "task"          => $task,
                     "sourceLanguage"=> $sourceLanguage,
                     "targetLanguage"=> $targetLanguage,
+                    'matecat_url'   => $taskDao->get_matecat_url($task),
                     "taskMetadata"  => $taskMetaData
         ));
 
