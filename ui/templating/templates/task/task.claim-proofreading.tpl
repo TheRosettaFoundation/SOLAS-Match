@@ -17,6 +17,11 @@
             <li>
                 {sprintf(Localisation::getTranslation('task_claim_proofreading_6'), $projectFileDownload)}
             </li>
+            {if $matecat_url != ''}
+            <li>
+                {sprintf(Localisation::getTranslation('task_claim_warning_kato'), {Localisation::getTranslation('task_claim_view_on_kato')}, {Localisation::getTranslation('common_download_file')}, {Localisation::getTranslation('task_claim_proofreading_5')})}
+            </li>
+            {/if}
         </ol>
     </section>
 

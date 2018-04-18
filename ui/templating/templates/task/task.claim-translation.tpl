@@ -12,11 +12,15 @@
         <ol>
             <li>{Localisation::getTranslation('task_claim_translation_2')}</li>
             <li>{sprintf(Localisation::getTranslation('task_claim_translation_3'), {TemplateHelper::getLanguage($task->getTargetLocale())})}</li>
+            {if $matecat_url != ''}
+            <li>{sprintf(Localisation::getTranslation('task_claim_warning_kato'), {Localisation::getTranslation('task_claim_view_on_kato')}, {Localisation::getTranslation('common_download_file')}, {Localisation::getTranslation('task_claim_translation_5')})}</li>
+            {/if}
         </ol>
     </section>
 
     <section>
         <form class="well" method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
+
             <a href="{urlFor name="download-task" options="task_id.$task_id"}" class=" btn btn-primary">
                 <i class="icon-download icon-white"></i> {Localisation::getTranslation('common_download_file')}</a>
             <h3>{Localisation::getTranslation('common_it_is_time_to_decide')}</h3>
