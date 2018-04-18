@@ -20,6 +20,11 @@
 
     <section>
         <form class="well" method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
+            {if $matecat_url != ''}
+            <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
+                <i class="icon-th-list icon-white"></i> {Localisation::getTranslation('task_claim_view_on_kato')}
+            </a>
+            {/if}
 
             <a href="{urlFor name="download-task" options="task_id.$task_id"}" class=" btn btn-primary">
                 <i class="icon-download icon-white"></i> {Localisation::getTranslation('common_download_file')}</a>
