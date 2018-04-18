@@ -830,6 +830,9 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
 	<string name="task_claim_translation_4">Cuando termines de traducirlo, tendrás que subir tu revisión.</string>
 	<string name="task_claim_translation_5">Sí, me comprometo a traducir este archivo</string>
 
+    <string name="task_claim_view_on_kato">View Task on Kató TM</string>
+    <string name="task_claim_warning_kato">If you select "%s" or "%s", please only start editing after you click "%s".</string>
+
 	<string name="task_claimed_desegmentation_desegmentation_task_claimed">Tarea de unificación aceptada</string>
 	<string name="task_claimed_desegmentation_0">Ya puedes unir los fragmentos del texto.</string>
     <string name="task_claimed_desegmentation_1">Te has asignado la tarea de fragmentación <strong>%s</strong>.</string>
