@@ -830,7 +830,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="task_claim_translation_5">Yes, I promise I will translate this file</string>
 
     <string name="task_claim_view_on_kato">View Task on Kató TM</string>
-    <string name="task_claim_warning_kato">If you select "%s" or "%s", please only start editing after you click "%s".</string>
+    <string name="task_claim_warning_kato">If you select "<strong>%s</strong>" or "<strong>%s</strong>", please only start editing after you click "<strong>%s</strong>".</string>
 
 	<string name="task_claimed_desegmentation_desegmentation_task_claimed">Desegmentation task claimed</string>
 	<string name="task_claimed_desegmentation_0">Please merge the relevent files!</string>
