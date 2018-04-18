@@ -17,11 +17,22 @@
             <li>
                 {sprintf(Localisation::getTranslation('task_claim_proofreading_6'), $projectFileDownload)}
             </li>
+            {if !empty($matecat_url)}
+            <li>
+                {sprintf(Localisation::getTranslation('task_claim_warning_kato'), {Localisation::getTranslation('task_claim_view_on_kato')}, {Localisation::getTranslation('common_download_file')}, {Localisation::getTranslation('task_claim_proofreading_5')})}
+            </li>
+            {/if}
         </ol>
     </section>
 
     <section>
         <form class="well" method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
+        {if !empty($matecat_url)}
+        <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
+            <i class="icon-th-list icon-white"></i> {Localisation::getTranslation('task_claim_view_on_kato')}
+        </a>
+        {/if}
+
          <a href="{urlFor name="download-task" options="task_id.$task_id"}" class=" btn btn-primary">
             <i class="icon-download icon-white"></i> {Localisation::getTranslation('common_download_file')}</a>
         <h3>{Localisation::getTranslation('common_it_is_time_to_decide')}</h3>

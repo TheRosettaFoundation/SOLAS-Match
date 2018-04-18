@@ -827,6 +827,9 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@therosettafoun
 	<string name="task_claim_translation_4">Quando avrai finito di fare la traduzione, dovrai caricare il file tradotto sul server.</string>
 	<string name="task_claim_translation_5">Si, mi impegno a tradurre questo documento</string>
 
+    <string name="task_claim_view_on_kato">View Task on Kató TM</string>
+    <string name="task_claim_warning_kato">If you select "%s" or "%s", please only start editing after you click "%s".</string>
+
 	<string name="task_claimed_desegmentation_desegmentation_task_claimed">Attività di desegmentazione assegnata</string>
 	<string name="task_claimed_desegmentation_0">Unisci i file in un unico documento!</string>
     <string name="task_claimed_desegmentation_1">Hai preso in carico l'attività di desegmentazione <strong>%s</strong></string>
