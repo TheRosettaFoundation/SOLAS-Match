@@ -12,7 +12,7 @@
         <ol>
             <li>{Localisation::getTranslation('task_claim_translation_2')}</li>
             <li>{sprintf(Localisation::getTranslation('task_claim_translation_3'), {TemplateHelper::getLanguage($task->getTargetLocale())})}</li>
-            {if $matecat_url != ''}
+            {if !empty($matecat_url)}
             <li>{sprintf(Localisation::getTranslation('task_claim_warning_kato'), {Localisation::getTranslation('task_claim_view_on_kato')}, {Localisation::getTranslation('common_download_file')}, {Localisation::getTranslation('task_claim_translation_5')})}</li>
             {/if}
         </ol>
@@ -20,7 +20,7 @@
 
     <section>
         <form class="well" method="post" action="{urlFor name="task-claim-page" options="task_id.$task_id"}">
-            {if $matecat_url != ''}
+            {if !empty($matecat_url)}
             <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
                 <i class="icon-th-list icon-white"></i> {Localisation::getTranslation('task_claim_view_on_kato')}
             </a>
