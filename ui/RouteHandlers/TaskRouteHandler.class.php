@@ -1678,6 +1678,45 @@ class TaskRouteHandler
         $app->render("task/task.view.tpl");
     }
 
+    public function task_search_translators($task_id)
+    {
+        $app = \Slim\Slim::getInstance();
+        $taskDao    = new DAO\TaskDao();
+        $projectDao = new DAO\ProjectDao();
+
+        $task    = $taskDao->getTask($task_id);
+        $project = $projectDao->getProject($task->getProjectId());
+
+        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
+        $taskTypeColours = array();
+        for ($i = 1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
+        }
+
+        $extra_scripts  = file_get_contents(__DIR__."/../js/TaskView1.js");
+        $extra_scripts .= "
+    <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css\"/>
+    <script type=\"text/javascript\" src=\"https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js\"></script>
+    <script type=\"text/javascript\">
+      $(document).ready(function(){
+        $('#myTable').DataTable(
+          {
+            \"paging\": false
+          }
+        );
+      });
+    </script>";
+
+        $app->view()->appendData(array(
+            'extra_scripts'   => $extra_scripts,
+            'task'            => $task,
+            'project'         => $project,
+            'taskTypeColours' => $taskTypeColours,
+        ));
+
+        $app->render("task/task.search_translators.tpl");
+    }
+
     public function taskCreate($project_id)
     {
         $app = \Slim\Slim::getInstance();
