@@ -4,7 +4,7 @@
     <h1 class="page-header" style="height: auto">
         <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
             {if $task->getTitle() != ''}
-                {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
+                <a href="{urlFor name="task-view" options="task_id.{$task->getId()}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}</a>
             {else}
                 {Localisation::getTranslation('common_task')} {$task->getId()}
             {/if}
@@ -34,40 +34,7 @@
         </div>
     </h1>
 
-    {if isset($flash['success'])}
-        <p class="alert alert-success">
-            <strong>{Localisation::getTranslation('common_success')}:</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
-        </p>
-    {/if}
-
-    {if isset($flash['error'])}
-        <p class="alert alert-error">
-            <strong>{Localisation::getTranslation('common_warning')}:</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
-        </p>
-    {/if}
-
 		{include file="task/task.details.tpl"} 
-
-    {if !isset($registered)}
-        <div class="well">
-            <form id="assignTaskToUserForm" method="post" action="{urlFor name="task" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
-                {Localisation::getTranslation('task_view_assign_label')}<br />
-                <input type="text" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
-                {if !empty($list_qualified_translators)}
-                    <select name="assignUserSelect" id="assignUserSelect" style="width: 500px;">
-                        <option value="">...</option>
-                        {foreach $list_qualified_translators as $list_qualified_translator}
-                            <option value="{$list_qualified_translator['user_id']}">{TemplateHelper::uiCleanseHTML($list_qualified_translator['name'])}</option>
-                        {/foreach}
-                    </select><br />
-                {/if}
-                <a class="btn btn-primary" onclick="$('#assignTaskToUserForm').submit();">
-                <i class="icon-user icon-white"></i>&nbsp;{Localisation::getTranslation('task_view_assign_button')}
-                </a>
-                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
-        </div>
-    {/if}
 
     <p style="margin-bottom: 40px"/>
 ==========================================================
@@ -97,19 +64,6 @@ User likes tags?
 Ordered by (words translated)(claimed task before?)
 Not claimed outstanding
 Randomly?
-
-$extra_scripts .???= "
-    <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css\"/>
-    <script type=\"text/javascript\" src=\"https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js\"></script>
-    <script type=\"text/javascript\">
-      $(document).ready(function(){
-        $('#myTable').DataTable(
-          {
-            \"paging\": false
-          }
-        );
-      });
-    </script>";
 
 {if isset($all_users) && count($all_users) > 0}
 

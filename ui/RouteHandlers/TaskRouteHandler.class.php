@@ -130,6 +130,12 @@ class TaskRouteHandler
         )->via("POST")->name("task-view");
 
         $app->get(
+            "/task/:task_id/search_translators/",
+            array($middleware, "authIsSiteAdmin"),
+            array($this, "task_search_translators")
+        )->via("POST")->name("task-search_translators");
+
+        $app->get(
             "/project/:project_id/create-task/",
             array($middleware, "authUserForOrgProject"),
             array($this, "taskCreate")
