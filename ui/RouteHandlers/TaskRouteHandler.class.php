@@ -1712,6 +1712,10 @@ class TaskRouteHandler
             'task'            => $task,
             'project'         => $project,
             'taskTypeColours' => $taskTypeColours,
+            'isSiteAdmin'     => 1,
+            'isMember'        => 1,
+            'discourse_slug'  => $projectDao->discourse_parameterize($project->getTitle()),
+            'matecat_url'     => $taskDao->get_matecat_url_regardless($task),
         ));
 
         $app->render("task/task.search_translators.tpl");
