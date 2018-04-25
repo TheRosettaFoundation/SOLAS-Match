@@ -1,3 +1,4 @@
+<!-- Editor Hint: ¿áéíóú -->
 {include file="header.tpl"}
 
     <h1 class="page-header" style="height: auto">
@@ -98,15 +99,8 @@ Not claimed outstanding
 Randomly?
 
 
-    <!-- Editor Hint: ¿áéíóú -->
-    <meta charset="utf-8" content="application/xhtml+xml" />
-    <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min1.css"/>
-    <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.1.css"/>
-    <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
-    <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas1.css"/>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"/>
-    <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-1.9.0.js"></script>
-    <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-ui.js"></script>
+
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript">
       $(document).ready(function(){
@@ -117,9 +111,6 @@ Randomly?
         );
       });
     </script>
-</head>
-
-<body>
 
 {if isset($all_users) && count($all_users) > 0}
 
@@ -159,9 +150,6 @@ Randomly?
 </table>
 
 {else}<p class="alert alert-info">No Users</p>{/if}
-
-</body>
-</html>
 ==========================================================
 
 {include file="footer.tpl"}
