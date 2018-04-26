@@ -38,7 +38,6 @@
 
     <p style="margin-bottom: 40px"/>
 ==========================================================
-Desired Qualification level
 
 Columns...
 When sent invite
