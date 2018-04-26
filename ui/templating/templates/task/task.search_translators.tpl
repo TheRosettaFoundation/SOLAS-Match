@@ -41,29 +41,23 @@
 {if !empty($sent_users)}
 <table style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-When sent invite
-Has viewed Task?
-Has claimed Task?
-    <th width="11%">Display Name</th>
-    <th width="11%">Email</th>
-    <th width="10%">Name</th>
+    <th width="15%">Date Sent Invite</th>
+    <th width="15%">Date Viewed Task</th>
+    <th width="15%">Date Claimed Task</th>
+    <th width="15%">Display Name</th>
+    <th width="20%">Email</th>
+    <th width="20%">Name</th>
   </thead>
 
   <tbody>
   {foreach $sent_users as $user_row}
     <tr>
-[[
+      <td>{$user_row['date_sent_invite']}</td>
+      <td>{$user_row['date_viewed_task']}</td>
+      <td>{$user_row['date_claimed_task']}</td>
       <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['display_name'])}</a></td>
       <td>{$user_row['email']}</td>
       <td>{TemplateHelper::uiCleanseHTML($user_row['first_name'])} {TemplateHelper::uiCleanseHTML($user_row['last_name'])}</td>
-      <td>{$user_row['language_name_source']}</td>
-      <td>{$user_row['country_name_source']}</td>
-      <td>{$user_row['language_name_target']}</td>
-      <td>{$user_row['country_name_target']}</td>
-      <td>{$user_row['level']}</td>
-      <td>{$user_row['language_name_native']}</td>
-      <td>{$user_row['country_name_native']}</td>
-]]
     </tr>
   {/foreach}
   </tbody>
@@ -73,36 +67,33 @@ Has claimed Task?
 {if !empty($all_users)}
 <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-Columns...
-CHECKBOX
-    <th width="11%">Display Name</th>
-    <th width="11%">Email</th>
-    <th width="10%">Name</th>
+    <th width="8%">Send Invite?</th>
+    <th width="15%">Display Name</th>
+    <th width="15%">Email</th>
+    <th width="15%">Name</th>
     <th width="10%">Qualification Level</th>
-code-code
-    <th width="8%">Native Language</th>
+    <th width="13%">Native Language</th>
     <th width="8%">Country</th>
-Words Delivered (and 3 months)
-User likes tags?
-
-Ordered by (words translated)(claimed task before?)
-Not claimed outstanding
-Randomly?
+    <th width="8%">Words Delivered (last 3 months)</th>
+    <th width="8%">User Liked Tags</th>
   </thead>
 
   <tbody>
   {foreach $all_users as $user_row}
     <tr>
+Ordered by (words translated)(claimed task before?)
+Not claimed outstanding
+Randomly?
+---
+CHECKBOX Send Invite?
       <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['display_name'])}</a></td>
       <td>{$user_row['email']}</td>
       <td>{TemplateHelper::uiCleanseHTML($user_row['first_name'])} {TemplateHelper::uiCleanseHTML($user_row['last_name'])}</td>
-      <td>{$user_row['language_name_source']}</td>
-      <td>{$user_row['country_name_source']}</td>
-      <td>{$user_row['language_name_target']}</td>
-      <td>{$user_row['country_name_target']}</td>
       <td>{$user_row['level']}</td>
       <td>{$user_row['language_name_native']}</td>
       <td>{$user_row['country_name_native']}</td>
+      <td>{$user_row['words_delivered']} ({$user_row['words_delivered_last_3_months']})</td>
+      <td>{$user_row['user_liked_tags']}</td>
     </tr>
   {/foreach}
   </tbody>
