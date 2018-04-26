@@ -1716,6 +1716,7 @@ class TaskRouteHandler
             'isMember'        => 1,
             'discourse_slug'  => $projectDao->discourse_parameterize($project->getTitle()),
             'matecat_url'     => $taskDao->get_matecat_url_regardless($task),
+            'required_qualification_for_details' => $taskDao->getRequiredTaskQualificationLevel($task_id),
         ));
 
         $app->render("task/task.search_translators.tpl");
