@@ -65,6 +65,11 @@
 {/if}
 
 {if !empty($all_users)}
+<p>
+  <button onclick="sendEmails(); return false;" class="btn btn-success" />
+    <i class="icon-list-alt icon-white"></i> Send Invite to Selected Users
+  </button>
+</p>
 <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
     <th width="8%">Send Invite?</th>
@@ -81,11 +86,7 @@
   <tbody>
   {foreach $all_users as $user_row}
     <tr>
-Ordered by (words translated)(claimed task before?)
-Not claimed outstanding
-Randomly?
----
-CHECKBOX Send Invite?
+      <td><input type="checkbox" class="translator_invite" id="{$user_row['user_id']}" /></td>
       <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['display_name'])}</a></td>
       <td>{$user_row['email']}</td>
       <td>{TemplateHelper::uiCleanseHTML($user_row['first_name'])} {TemplateHelper::uiCleanseHTML($user_row['last_name'])}</td>
