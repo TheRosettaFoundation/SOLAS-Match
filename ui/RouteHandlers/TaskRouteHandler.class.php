@@ -1713,13 +1713,13 @@ class TaskRouteHandler
             $users_in_invites_not_sent_words[$user['user_id']] = $user;
 
             if (!empty($users_in_invites_not_sent[$user['user_id']])) {
-                $user['display_name'] = $users_in_invites_not_sent[$user['user_id']]['display_name'];
-                $user['email'] = $users_in_invites_not_sent[$user['user_id']]['email'];
-                $user['first_name'] = $users_in_invites_not_sent[$user['user_id']]['first_name'];
-                $user['last_name'] = $users_in_invites_not_sent[$user['user_id']]['last_name'];
-                $user['level'] = $users_in_invites_not_sent[$user['user_id']]['level'];
+                $user['display_name']         = $users_in_invites_not_sent[$user['user_id']]['display_name'];
+                $user['email']                = $users_in_invites_not_sent[$user['user_id']]['email'];
+                $user['first_name']           = $users_in_invites_not_sent[$user['user_id']]['first_name'];
+                $user['last_name']            = $users_in_invites_not_sent[$user['user_id']]['last_name'];
+                $user['level']                = $users_in_invites_not_sent[$user['user_id']]['level'];
                 $user['language_name_native'] = $users_in_invites_not_sent[$user['user_id']]['language_name_native'];
-                $user['country_name_native'] = $users_in_invites_not_sent[$user['user_id']]['country_name_native'];
+                $user['country_name_native']  = $users_in_invites_not_sent[$user['user_id']]['country_name_native'];
                 if (!empty($users_in_invites_not_sent_tags[$user['user_id']])) {
                     $user['user_liked_tags'] = $users_in_invites_not_sent_tags[$user['user_id']]['user_liked_tags'];
                 } else {
