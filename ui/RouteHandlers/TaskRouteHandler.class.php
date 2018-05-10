@@ -1767,7 +1767,7 @@ class TaskRouteHandler
             'discourse_slug'  => $projectDao->discourse_parameterize($project->getTitle()),
             'matecat_url'     => $taskDao->get_matecat_url_regardless($task),
             'required_qualification_for_details' => $taskDao->getRequiredTaskQualificationLevel($task_id),
-            'sent_users'      => $sent_users,
+            'sent_users'      => $taskDao->list_task_invites_sent($task_id),
             'all_users'       => $all_users,
         ));
 
