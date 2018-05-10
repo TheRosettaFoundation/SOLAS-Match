@@ -1693,6 +1693,56 @@ class TaskRouteHandler
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
 
+        $invites_not_sent = $taskDao->list_task_invites_not_sent($task_id);
+        $users_in_invites_not_sent = array();
+        foreach ($invites_not_sent => $user) {
+            $users_in_invites_not_sent[$user['user_id']] = $user;
+        }
+
+        $invites_not_sent_tags = $taskDao->list_task_invites_not_sent_tags($task_id);
+        $users_in_invites_not_sent_tags = array();
+        foreach ($invites_not_sent_tags => $user) {
+            $users_in_invites_not_sent_tags[$user['user_id']] = $user;
+        }
+
+        $all_users = array();
+        $invites_not_sent_words = $taskDao->list_task_invites_not_sent_words($task_id);
+        $users_in_invites_not_sent_words = array();
+        // $all_users first has those with highest word count (assuming they were not already invited)
+        foreach ($invites_not_sent_words => $user) {
+            $users_in_invites_not_sent_words[$user['user_id']] = $user;
+
+            if (!empty($users_in_invites_not_sent[$user['user_id']])) {
+                $user['display_name'] = $users_in_invites_not_sent[$user['user_id']]['display_name'];
+                $user['email'] = $users_in_invites_not_sent[$user['user_id']]['email'];
+                $user['first_name'] = $users_in_invites_not_sent[$user['user_id']]['first_name'];
+                $user['last_name'] = $users_in_invites_not_sent[$user['user_id']]['last_name'];
+                $user['level'] = $users_in_invites_not_sent[$user['user_id']]['level'];
+                $user['language_name_native'] = $users_in_invites_not_sent[$user['user_id']]['language_name_native'];
+                $user['country_name_native'] = $users_in_invites_not_sent[$user['user_id']]['country_name_native'];
+                if (!empty($users_in_invites_not_sent_tags[$user['user_id']])) {
+                    $user['user_liked_tags'] = $users_in_invites_not_sent_tags[$user['user_id']]['user_liked_tags'];
+                } else {
+                    $user['user_liked_tags'] = '';
+                }
+                $all_users[] = $user;
+            }
+        }
+
+        // $all_users then has the remaining ones
+        foreach ($invites_not_sent => $user) {
+            if (empty($users_in_invites_not_sent_words[$user['user_id']])) {
+                $user['words_delivered'] = '';
+                $user['words_delivered_last_3_months'] = '';
+                if (!empty($users_in_invites_not_sent_tags[$user['user_id']])) {
+                    $user['user_liked_tags'] = $users_in_invites_not_sent_tags[$user['user_id']]['user_liked_tags'];
+                } else {
+                    $user['user_liked_tags'] = '';
+                }
+                $all_users[] = $user;
+            }
+        }
+
         $extra_scripts  = file_get_contents(__DIR__."/../js/TaskView1.js");
         $extra_scripts .= "
     <link rel=\"stylesheet\" href=\"https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css\"/>
@@ -1717,6 +1767,8 @@ class TaskRouteHandler
             'discourse_slug'  => $projectDao->discourse_parameterize($project->getTitle()),
             'matecat_url'     => $taskDao->get_matecat_url_regardless($task),
             'required_qualification_for_details' => $taskDao->getRequiredTaskQualificationLevel($task_id),
+            'sent_users'      => $sent_users,
+            'all_users'       => $all_users,
         ));
 
         $app->render("task/task.search_translators.tpl");
