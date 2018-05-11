@@ -1,4 +1,12 @@
 <!-- Editor Hint: ¿áéíóú -->
+
+{assign var="task_id" value=$task->getId()}
+
+<span class="hidden">
+    <div id="siteLocationURL">{Settings::get("site.location")}</div>
+    <div id="task_id_for_invites_sent">{$task_id}</div>
+</span>
+
 {include file="header.tpl"}
 
     <h1 class="page-header" style="height: auto">
@@ -25,7 +33,6 @@
                 </strong>
             </small>
         </span>
-        {assign var="task_id" value=$task->getId()}
 
         <div class="pull-right">
             <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='pull-right fixMargin btn btn-primary'>
