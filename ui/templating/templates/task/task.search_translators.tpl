@@ -50,7 +50,7 @@
   <tbody>
   {foreach $sent_users as $user_row}
     <tr>
-      <td>{$user_row['date_sent_invite']}</td>
+      <td><div class="convert_utc_to_local" style="visibility: hidden">{$user_row['date_sent_invite']}</div></td>
       <td><div class="convert_utc_to_local" style="visibility: hidden">{$user_row['date_viewed_task']}</div></td>
       <td><div class="convert_utc_to_local" style="visibility: hidden">{$user_row['date_claimed_task']}</div></td>
       <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['display_name'])}</a></td>
