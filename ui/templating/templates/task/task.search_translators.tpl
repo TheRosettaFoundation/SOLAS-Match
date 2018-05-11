@@ -64,7 +64,7 @@
 
 {if !empty($all_users)}
 <p>
-  <button onclick="sendEmails(); return false;" class="btn btn-success" />
+  <button onclick="sendEmails(); return false;" class="btn btn-success">
     <i class="icon-list-alt icon-white"></i> Send Invite to Selected Users
   </button>
 </p>
