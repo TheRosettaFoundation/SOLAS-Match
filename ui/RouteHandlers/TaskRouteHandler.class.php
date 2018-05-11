@@ -136,6 +136,12 @@ class TaskRouteHandler
         )->via("POST")->name("task-search_translators");
 
         $app->get(
+            "/task/:task_id/task_invites_sent/",
+            array($middleware, "authIsSiteAdmin"),
+            array($this, "task_invites_sent")
+        )->via("POST")->name("task-invites_sent");
+
+        $app->get(
             "/project/:project_id/create-task/",
             array($middleware, "authUserForOrgProject"),
             array($this, "taskCreate")
@@ -1772,6 +1778,23 @@ class TaskRouteHandler
         ));
 
         $app->render("task/task.search_translators.tpl");
+    }
+
+    public function task_invites_sent($task_id)
+    {
+        $app = \Slim\Slim::getInstance();
+        $user_ids = $app->request()->getBody()
+        if (!empty($user_ids)) {
+NEED SESSION ID?
+$user_ids = explode(',', $user_ids);
+NEED VERIFY INTS
+SET @x=
+    '(1133,68, NOW()),
+    (1134,68, NOW()),
+    (1132,43, NOW()),
+    (1134,43, NOW())';
+CALL insert_task_invite_sent_to_users(@x);
+        }
     }
 
     public function taskCreate($project_id)
