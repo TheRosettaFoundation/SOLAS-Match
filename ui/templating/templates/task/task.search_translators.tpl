@@ -36,8 +36,6 @@
 
 		{include file="task/task.details.tpl"} 
 
-    <!-- p style="margin-bottom: 40px"/ -->
-
 {if !empty($sent_users)}
 <table style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
