@@ -51,8 +51,8 @@
   {foreach $sent_users as $user_row}
     <tr>
       <td>{$user_row['date_sent_invite']}</td>
-      <td>{$user_row['date_viewed_task']}</td>
-      <td>{$user_row['date_claimed_task']}</td>
+      <td><div class="convert_utc_to_local" style="visibility: hidden">{$user_row['date_viewed_task']}</div></td>
+      <td><div class="convert_utc_to_local" style="visibility: hidden">{$user_row['date_claimed_task']}</div></td>
       <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['display_name'])}</a></td>
       <td>{$user_row['email']}</td>
       <td>{TemplateHelper::uiCleanseHTML($user_row['first_name'])} {TemplateHelper::uiCleanseHTML($user_row['last_name'])}</td>
