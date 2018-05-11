@@ -657,24 +657,28 @@ class TaskDao extends BaseDao
     public function list_task_invites_not_sent($task_id)
     {
         $result = LibAPI\PDOWrapper::call('list_task_invites_not_sent', LibAPI\PDOWrapper::cleanse($task_id));
+        if (empty($result)) $result = array();
         return $result;
     }
 
     public function list_task_invites_not_sent_words($task_id)
     {
         $result = LibAPI\PDOWrapper::call('list_task_invites_not_sent_words', LibAPI\PDOWrapper::cleanse($task_id));
+        if (empty($result)) $result = array();
         return $result;
     }
 
     public function list_task_invites_not_sent_tags($task_id)
     {
         $result = LibAPI\PDOWrapper::call('list_task_invites_not_sent_tags', LibAPI\PDOWrapper::cleanse($task_id));
+        if (empty($result)) $result = array();
         return $result;
     }
 
     public function list_task_invites_sent($task_id)
     {
         $result = LibAPI\PDOWrapper::call('list_task_invites_sent', LibAPI\PDOWrapper::cleanse($task_id));
+        if (empty($result)) $result = array();
         return $result;
     }
 }
