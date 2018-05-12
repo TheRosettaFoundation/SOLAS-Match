@@ -3,9 +3,12 @@
 {assign var="task_id" value=$task->getId()}
 
 <span class="hidden">
-    <div id="siteLocationURL">{Settings::get("site.location")}</div>
-    <div id="task_id_for_invites_sent">{$task_id}</div>
-    <div id="sesskey">{$sesskey}</div>
+  <div id="siteLocationURL">{Settings::get("site.location")}</div>
+  <div id="task_id_for_invites_sent">{$task_id}</div>
+  <div id="sesskey">{$sesskey}</div>
+  {assign var="subject" value="Request for you to claim the task '{$task->getTitle()}' on the Kató Platform"}
+  {assign var="body" value="We request your help with the task '{$task->getTitle()}' on the Kató Platform\r\nIts deadline is {$task->getDeadline()}.\r\n\r\nPlease check if the task is suitable for you and if you can meet the deadline.\r\nYou can view and potentially claim the task here: https://trommons.org/task/{$task_id}/id\r\n\r\n"}
+  <div id="mailto_subject_body">&subject={rawurlencode($subject)}&body={rawurlencode($body)}</div>
 </span>
 
 {include file="header.tpl"}
@@ -72,12 +75,6 @@
 
 {if !empty($all_users)}
 <p>
-  {assign var="subject" value="Request for you to claim the task '{$task->getTitle()}' on the Kató Platform"}
-  {assign var="body" value="We request your help with the task '{$task->getTitle()}' on the Kató Platform\r\nIts deadline is {$task->getDeadline()}.\r\n\r\nPlease check if the task is suitable for you and if you can meet the deadline.\r\nYou can view and potentially claim the task here: https://trommons.org/task/{$task_id}/id\r\n\r\n"}
-  <span class="hidden">
-    <div id="mailto_subject_body">&subject={rawurlencode($subject)}&body={rawurlencode($body)}</div>
-  </span>
-
   <a href="" id="mymailto" style="display:none"></a>
   <button onclick="sendEmails(); return false;" class="btn btn-success">
     <i class="icon-list-alt icon-white"></i> Send Invite to Selected Users
