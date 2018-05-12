@@ -681,4 +681,9 @@ class TaskDao extends BaseDao
         if (empty($result)) $result = array();
         return $result;
     }
+
+    public function insert_task_invite_sent_to_users($insert)
+    {
+        LibAPI\PDOWrapper::call('insert_task_invite_sent_to_users', LibAPI\PDOWrapper::cleanseWrapStr($insert));
+    }
 }

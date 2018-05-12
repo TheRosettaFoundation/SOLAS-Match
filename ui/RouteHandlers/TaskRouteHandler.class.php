@@ -1790,16 +1790,17 @@ class TaskRouteHandler
         Common\Lib\UserSession::checkCSRFKey($sesskey, 'task_invites_sent');
 
         $user_ids = $app->request()->getBody()
+        $insert = '';
+        $first = true;
         if (!empty($user_ids)) {
-NEED SESSION ID?
-$user_ids = explode(',', $user_ids);
-NEED VERIFY INTS
-SET @x=
-    '(1133,68, NOW()),
-    (1134,68, NOW()),
-    (1132,43, NOW()),
-    (1134,43, NOW())';
-CALL insert_task_invite_sent_to_users(@x);
+            $user_ids = explode(',', $user_ids);
+            foreach ($user_ids as $user_id) {
+                $user_id = (int)$user_id;
+                if ($user_id <= 1) break;
+                $insert .= ($first ? '' : ',') . "($task_id,$user_id,NOW())";
+                $first = false;
+            }
+            if (!empty($insert)) $taskDao->insert_task_invite_sent_to_users($insert);
         }
     }
 
