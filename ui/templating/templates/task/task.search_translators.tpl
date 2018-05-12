@@ -1,3 +1,4 @@
+{include file="header.tpl"}
 <!-- Editor Hint: ¿áéíóú -->
 
 {assign var="task_id" value=$task->getId()}
@@ -10,8 +11,6 @@
   {assign var="body" value="We request your help with the task '{$task->getTitle()}' on the Kató Platform\r\nIts deadline is {$task->getDeadline()}.\r\n\r\nPlease check if the task is suitable for you and if you can meet the deadline.\r\nYou can view and potentially claim the task here: https://trommons.org/task/{$task_id}/id\r\n\r\n"}
   <div id="mailto_subject_body">&subject={rawurlencode($subject)}&body={rawurlencode($body)}</div>
 </span>
-
-{include file="header.tpl"}
 
     <h1 class="page-header" style="height: auto">
         <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
