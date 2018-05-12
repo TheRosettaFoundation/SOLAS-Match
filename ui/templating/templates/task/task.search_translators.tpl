@@ -92,7 +92,7 @@
   <tbody>
   {foreach $all_users as $user_row}
     <tr>
-      <td><input type="checkbox" class="translator_invite" id="{$user_row['user_id']}" /></td>
+      <td><input type="checkbox" class="translator_invite" id="{$user_row['user_id']}" email="{$user_row['email']}" /></td>
       <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['display_name'])}</a></td>
       <td>{$user_row['email']}</td>
       <td>{TemplateHelper::uiCleanseHTML($user_row['first_name'])} {TemplateHelper::uiCleanseHTML($user_row['last_name'])}</td>
