@@ -5,6 +5,7 @@
 <span class="hidden">
     <div id="siteLocationURL">{Settings::get("site.location")}</div>
     <div id="task_id_for_invites_sent">{$task_id}</div>
+    <div id="sesskey">{$sesskey}</div>
 </span>
 
 {include file="header.tpl"}

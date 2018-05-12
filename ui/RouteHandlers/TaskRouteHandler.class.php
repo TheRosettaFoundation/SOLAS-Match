@@ -136,7 +136,7 @@ class TaskRouteHandler
         )->via("POST")->name("task-search_translators");
 
         $app->get(
-            "/task/:task_id/task_invites_sent/",
+            "/task/:task_id/task_invites_sent/:sesskey/",
             array($middleware, "authIsSiteAdmin"),
             array($this, "task_invites_sent")
         )->via("POST")->name("task-invites_sent");
@@ -1689,9 +1689,10 @@ class TaskRouteHandler
         $app = \Slim\Slim::getInstance();
         $taskDao    = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
+        $task       = $taskDao->getTask($task_id);
+        $project    = $projectDao->getProject($task->getProjectId());
 
-        $task    = $taskDao->getTask($task_id);
-        $project = $projectDao->getProject($task->getProjectId());
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
         $taskTypeColours = array();
@@ -1764,6 +1765,7 @@ class TaskRouteHandler
     </script>";
 
         $app->view()->appendData(array(
+            'sesskey'         => $sesskey,
             'extra_scripts'   => $extra_scripts,
             'task'            => $task,
             'project'         => $project,
@@ -1780,9 +1782,13 @@ class TaskRouteHandler
         $app->render("task/task.search_translators.tpl");
     }
 
-    public function task_invites_sent($task_id)
+    public function task_invites_sent($task_id, $sesskey)
     {
         $app = \Slim\Slim::getInstance();
+        $taskDao = new DAO\TaskDao();
+
+        Common\Lib\UserSession::checkCSRFKey($sesskey, 'task_invites_sent');
+
         $user_ids = $app->request()->getBody()
         if (!empty($user_ids)) {
 NEED SESSION ID?
