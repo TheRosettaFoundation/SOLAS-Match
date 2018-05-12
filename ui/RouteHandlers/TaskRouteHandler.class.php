@@ -1789,7 +1789,7 @@ class TaskRouteHandler
 
         Common\Lib\UserSession::checkCSRFKey($sesskey, 'task_invites_sent');
 
-        $user_ids = $app->request()->getBody()
+        $user_ids = $app->request()->getBody();
         $insert = '';
         $comma = '';
         if (!empty($user_ids)) {
