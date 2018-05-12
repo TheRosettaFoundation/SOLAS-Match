@@ -1791,14 +1791,14 @@ class TaskRouteHandler
 
         $user_ids = $app->request()->getBody()
         $insert = '';
-        $first = true;
+        $comma = '';
         if (!empty($user_ids)) {
             $user_ids = explode(',', $user_ids);
             foreach ($user_ids as $user_id) {
                 $user_id = (int)$user_id;
                 if ($user_id <= 1) break;
-                $insert .= ($first ? '' : ',') . "($task_id,$user_id,NOW())";
-                $first = false;
+                $insert .= ( ? '' : ',') . "$comma($task_id,$user_id,NOW())";
+                $comma = ',';
             }
             if (!empty($insert)) $taskDao->insert_task_invite_sent_to_users($insert);
         }
