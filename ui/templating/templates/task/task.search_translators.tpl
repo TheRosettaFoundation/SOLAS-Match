@@ -73,7 +73,7 @@
 {if !empty($all_users)}
 <p>
   {assign var="subject" value="Request for you to claim the task '{$task->getTitle()}' on the Kató Platform"}
-  {assign var="body" value="We request your help with the task '{$task->getTitle()}' on the Kató Platform\r\nIts deadline is {$user_row['deadline']}.\r\n\r\nPlease check if the task is suitable for you and if you can meet the deadline.\r\nYou can view and potentially claim the task here: https://trommons.org/task/{$task_id}/id\r\n\r\n"}
+  {assign var="body" value="We request your help with the task '{$task->getTitle()}' on the Kató Platform\r\nIts deadline is {$task->getDeadline()}.\r\n\r\nPlease check if the task is suitable for you and if you can meet the deadline.\r\nYou can view and potentially claim the task here: https://trommons.org/task/{$task_id}/id\r\n\r\n"}
   <div id="mailto_subject_body">&subject={rawurlencode($subject)}&body={rawurlencode($body)}</div>
 
   <a href="" id="mymailto" style="display:none"></a>
