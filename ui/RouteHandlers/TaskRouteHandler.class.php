@@ -1797,7 +1797,7 @@ class TaskRouteHandler
             foreach ($user_ids as $user_id) {
                 $user_id = (int)$user_id;
                 if ($user_id <= 1) break;
-                $insert .= ( ? '' : ',') . "$comma($task_id,$user_id,NOW())";
+                $insert .= "$comma($task_id,$user_id,NOW())";
                 $comma = ',';
             }
             if (!empty($insert)) $taskDao->insert_task_invite_sent_to_users($insert);
