@@ -110,6 +110,6 @@
   </tbody>
 </table>
 
-{else}<p class="alert alert-info">No Users Found</p>{/if}
+{else}<p class="alert alert-info">No Qualified Uninvited Users Found!</p>{/if}
 
 {include file="footer.tpl"}
