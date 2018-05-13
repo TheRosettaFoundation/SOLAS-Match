@@ -78,12 +78,64 @@ function DAOgetWordCount()
       }
     )
 }
+
+function functionOnSuccess()
+{
+  document.getElementById('mymailto').click();
+}
+
+function functionOnFail()
+{
+  console.log("Error: task/" + document.getElementById("task_id_for_invites_sent").innerHTML + "/task_invites_sent/ failed");
+}
+
+function sendEmails()
+{
+  var userIDs = "";
+  var emails  = "";
+  var comma = "";
+  $(".translator_invite:checked").each(function ()
+    {
+      userIDs += comma + $(this).attr("id");
+      emails  += comma + $(this).attr("email");
+      comma = ",";
+    }
+  );
+
+  if (emails != "") {
+    document.getElementById("mymailto").setAttribute("href", "mailto:?bcc=" + emails
+      + "&subject=" + document.getElementById("mailto_subject").innerHTML
+      + "&body="    + document.getElementById("mailto_body").innerHTML);
+  }
+
+  if (userIDs != "") DAOTaskInvitesSentToUsers(userIDs, functionOnSuccess, functionOnFail);
+}
+
+function DAOTaskInvitesSentToUsers(userIDs, functionOnSuccess, functionOnFail)
+{
+  $.ajax(
+    {
+      url: document.getElementById("siteLocationURL").innerHTML + "task/" + document.getElementById("task_id_for_invites_sent").innerHTML
+        + "/task_invites_sent/" + document.getElementById("sesskey").innerHTML + "/",
+      method: "POST",
+      xhrFields: {
+        withCredentials: true
+      },
+      contentType: 'text/plain; charset=UTF-8',
+      processData: false,
+      data: userIDs
+    }
+  )
+  .done(function (data, textStatus, jqXHR)
+      {
+        if (jqXHR.status < 400) {
+          functionOnSuccess();
+        } else {
+          functionOnFail();
+          console.log("Error: task/" + document.getElementById("task_id_for_invites_sent").innerHTML + "/task_invites_sent/ returned " + jqXHR.status + " " + jqXHR.statusText);
+        }
+      }
+    )
+  .fail(functionOnFail);
+}
 </script>
-
-
-
-
-
-
-
-

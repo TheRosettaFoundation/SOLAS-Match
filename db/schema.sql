@@ -1462,6 +1462,16 @@ CREATE TABLE IF NOT EXISTS `TaskTranslatedInMatecat` (
   PRIMARY KEY (`task_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `TaskInviteSentToUsers` (
+    task_id BIGINT(20) UNSIGNED NOT NULL,
+    user_id INT   (10) UNSIGNED NOT NULL,
+    date_sent_invite datetime NOT NULL,
+    KEY FK_invite_task_id (task_id),
+    CONSTRAINT FK_invite_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    KEY FK_invite_user_id (user_id),
+    CONSTRAINT FK_invite_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -7175,6 +7185,130 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `is_task_translated_in_matecat`(IN `taskId` INT)
 BEGIN
     SELECT * FROM TaskTranslatedInMatecat WHERE task_id=taskId;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_task_invite_sent_to_users`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_task_invite_sent_to_users`(IN `valueList` TEXT)
+BEGIN
+    SET @query = CONCAT(
+        'INSERT INTO TaskInviteSentToUsers
+        (task_id, user_id, date_sent_invite)
+        VALUES',
+        valueList);
+    PREPARE statement from @query;
+    execute statement;
+    DEALLOCATE PREPARE statement;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `list_task_invites_sent`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_task_invites_sent`(IN `taskID` INT)
+BEGIN
+    SELECT
+        ti.user_id,
+        MAX(ti.date_sent_invite) AS date_sent_invite,
+        IFNULL(MAX(tv.`viewed-time`),  '') AS date_viewed_task,
+        IFNULL(MAX(tc.`claimed-time`), '') AS date_claimed_task,
+        u.`display-name` AS display_name,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`, '') AS last_name
+    FROM TaskInviteSentToUsers       ti
+    JOIN Users                        u ON ti.user_id=u.id
+    LEFT JOIN UserPersonalInformation i ON ti.user_id=i.user_id
+    LEFT JOIN TaskClaims             tc ON ti.task_id=tc.task_id
+    LEFT JOIN TaskViews              tv ON ti.user_id=tv.user_id AND tv.task_id=taskID
+    WHERE
+        ti.task_id=taskID
+    GROUP BY ti.user_id
+    ORDER BY ti.date_sent_invite ASC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `list_task_invites_not_sent`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_task_invites_not_sent`(IN `taskID` INT)
+BEGIN
+    SELECT
+        u.id AS user_id,
+        u.`display-name` AS display_name,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`, '') AS last_name,
+        CASE
+            WHEN MAX(uqp.qualification_level=1) THEN 'Translator'
+            WHEN MAX(uqp.qualification_level=2) THEN 'Verified Translator'
+            WHEN MAX(uqp.qualification_level=3) THEN 'Senior Translator'
+        END AS level,
+        IFNULL(ln.`en-name`, '') AS language_name_native,
+        IFNULL(cn.`en-name`, '') AS country_name_native
+    FROM Tasks                            t
+    JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
+    JOIN UserQualifiedPairs             uqp ON
+        t.`language_id-source`=uqp.language_id_source AND
+        t.`language_id-target`=uqp.language_id_target AND
+        tq.required_qualification_level<=uqp.qualification_level
+    JOIN Users                            u ON uqp.user_id=u.id
+    LEFT JOIN Languages                  ln ON u.language_id=ln.id
+    LEFT JOIN Countries                  cn ON u.country_id=cn.id
+    LEFT JOIN UserPersonalInformation     i ON u.id=i.user_id
+    LEFT JOIN TaskInviteSentToUsers     tis ON u.id=tis.user_id AND tis.task_id=taskID
+    WHERE
+        t.id=taskID AND
+        tis.user_id IS NULL
+    GROUP BY uqp.user_id
+    ORDER BY uqp.user_id DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `list_task_invites_not_sent_words`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_task_invites_not_sent_words`(IN `taskID` INT)
+BEGIN
+    SELECT
+        tc.user_id,
+        SUM(IF((t.`task-type_id`=2 OR t.`task-type_id`=3) AND t.`task-status_id`=4,                                                             t.`word-count`, 0)) AS words_delivered,
+        SUM(IF((t.`task-type_id`=2 OR t.`task-type_id`=3) AND t.`task-status_id`=4 AND (tc.`claimed-time` > DATE_SUB(NOW(), INTERVAL 3 MONTH)), t.`word-count`, 0)) AS words_delivered_last_3_months
+    FROM Tasks       t
+    JOIN TaskClaims tc ON t.id=tc.task_id
+    WHERE
+        tc.user_id IN (
+            SELECT 
+                uqp1.user_id
+            FROM Tasks t1
+            JOIN UserQualifiedPairs uqp1 ON
+                t1.`language_id-source`=uqp1.language_id_source AND
+                t1.`language_id-target`=uqp1.language_id_target
+            WHERE
+                t1.id=taskID)
+    GROUP BY tc.user_id
+    ORDER BY words_delivered DESC, tc.user_id DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `list_task_invites_not_sent_tags`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_task_invites_not_sent_tags`(IN `taskID` INT)
+BEGIN
+    SELECT
+        ut.user_id,
+        GROUP_CONCAT(t.label ORDER BY t.label ASC SEPARATOR ', ') AS user_liked_tags
+    FROM UserTags ut
+    JOIN Tags      t ON ut.tag_id=t.id 
+    WHERE
+        ut.user_id IN (
+            SELECT 
+                uqp1.user_id
+            FROM Tasks t1
+            JOIN UserQualifiedPairs uqp1 ON
+                t1.`language_id-source`=uqp1.language_id_source AND
+                t1.`language_id-target`=uqp1.language_id_target
+            WHERE
+                t1.id=taskID)
+    GROUP BY ut.user_id;
 END//
 DELIMITER ;
 
