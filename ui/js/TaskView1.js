@@ -102,9 +102,10 @@ function sendEmails()
     }
   );
 
+alert("mailto:?bcc=" + emails + document.getElementById("mailto_subject_body").innerHTML);
   if (emails != "") document.getElementById("mymailto").setAttribute("href", "mailto:?bcc=" + emails + document.getElementById("mailto_subject_body").innerHTML);
 
-  if (userIDs != "") DAOTaskInvitesSentToUsers(userIDs, functionOnSuccess, functionOnFail);
+//  if (userIDs != "") DAOTaskInvitesSentToUsers(userIDs, functionOnSuccess, functionOnFail);
 }
 
 function DAOTaskInvitesSentToUsers(userIDs, functionOnSuccess, functionOnFail)
