@@ -35,7 +35,7 @@
     <th width="10%">Task Type</th>
     <th width="12%">Creator Email</th>
     <th width="15%">Created Time</th>
-    <th width="15%">Status</th>
+    <th width="15%">Status (Click to search for translators)</th>
     <th width="8%">URL</th>
   </thead>
 
@@ -49,7 +49,11 @@
       <td>{$user_row['task_type_text']}</td>
       <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['creator_id']}"}" target="_blank">{$user_row['creator_email']}</a></td>
       <td>{$user_row['created_time']}</td>
-      <td>{$user_row['status']}</td>
+      {if $user_row['status'] != 'Pending Claim'}
+        <td>{$user_row['status']}</td>
+      {else}
+        <td><a href="{urlFor name="task-search_translators" options="task_id.{$user_row['task_id']}"}" target="_blank">{$user_row['status']}</a></td>
+      {/if}
       <td>{if !empty($user_row['matecat_url'])}<a href="{$user_row['matecat_url']}" target="_blank">{$user_row['matecat_langpair_or_blank']}</a>{else}{$user_row['language_pair']}{/if}</td>
     </tr>
 
@@ -58,7 +62,7 @@
 
 </table>
 
-{else}<p class="alert alert-info">No Users</p>{/if}
+{else}<p class="alert alert-info">No Tasks</p>{/if}
 
 </body>
 </html>
