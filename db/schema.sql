@@ -7220,10 +7220,9 @@ BEGIN
     JOIN Users                        u ON ti.user_id=u.id
     LEFT JOIN UserPersonalInformation i ON ti.user_id=i.user_id
     LEFT JOIN TaskClaims             tc ON ti.task_id=tc.task_id
-    LEFT JOIN TaskViews              tv ON ti.user_id=tv.user_id
+    LEFT JOIN TaskViews              tv ON ti.user_id=tv.user_id AND tv.task_id=taskID
     WHERE
-        ti.task_id=taskID AND
-        tv.task_id=taskID
+        ti.task_id=taskID
     GROUP BY ti.user_id
     ORDER BY ti.date_sent_invite ASC;
 END//
