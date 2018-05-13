@@ -9,7 +9,8 @@
   <div id="sesskey">{$sesskey}</div>
   {assign var="subject" value="Request for you to claim the task '{$task->getTitle()}' on the Kató Platform"}
   {assign var="body" value="We request your help with the task '{$task->getTitle()}' on the Kató Platform\r\nIts deadline is {$task->getDeadline()}.\r\n\r\nPlease check if the task is suitable for you and if you can meet the deadline.\r\nYou can view and potentially claim the task here: https://trommons.org/task/{$task_id}/id\r\n\r\n"}
-  <div id="mailto_subject_body">&subject={rawurlencode($subject)}&body={rawurlencode($body)}</div>
+  <div id="mailto_subject">{rawurlencode($subject)}</div>
+  <div id="mailto_body"   >{rawurlencode($body)}</div>
 </span>
 
     <h1 class="page-header" style="height: auto">
