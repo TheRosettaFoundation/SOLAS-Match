@@ -7,8 +7,8 @@
   <div id="siteLocationURL">{Settings::get("site.location")}</div>
   <div id="task_id_for_invites_sent">{$task_id}</div>
   <div id="sesskey">{$sesskey}</div>
-  {assign var="subject" value="Request for you to claim the task '{$task->getTitle()}' on the Kató Platform"}
-  {assign var="body" value="We request your help with the task '{$task->getTitle()}' on the Kató Platform\r\nIts deadline is {$task->getDeadline()}.\r\n\r\nPlease check if the task is suitable for you and if you can meet the deadline.\r\nYou can view and potentially claim the task here: https://trommons.org/task/{$task_id}/id\r\n\r\n"}
+  {assign var="subject" value="New task '{$task->getTitle()}' on Kató Platform"}
+  {assign var="body" value="Dear Kató Translator,\r\n\r\nA new task is available for you on Kató Platform.\r\n\r\nTask name: {$task->getTitle()}\r\nLanguage pair: {TemplateHelper::getLanguageAndCountry($task->getSourceLocale())} to {TemplateHelper::getLanguageAndCountry($task->getTargetLocale())}\r\nType: {if $type_id == TaskTypeEnum::TRANSLATION}{Localisation::getTranslation('common_translation_task')}{elseif $type_id == TaskTypeEnum::PROOFREADING}{Localisation::getTranslation('common_proofreading_task')}{/if}\r\nTask delivery date: {$task->getDeadline()}\r\n\r\nTo learn more about the task, leave a comment, and/or claim this task,\r\nplease visit https://trommons.org/task/{$task_id}/id\r\n\r\n<b>Do not start translating until you have claimed the translation\r\non the page above.</b>\r\n\r\nIf you have any questions or comments about this task,\r\nyou can leave a message in the Kató Community forum:\r\nhttps://community.translatorswb.org/t/{$discourse_slug}\r\n\r\nThank you for your contribution and for your continued support!\r\n\r\n"}
   <div id="mailto_subject">{rawurlencode($subject)}</div>
   <div id="mailto_body"   >{rawurlencode($body)}</div>
 </span>
