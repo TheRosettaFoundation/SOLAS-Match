@@ -2,6 +2,7 @@
 <!-- Editor Hint: ¿áéíóú -->
 
 {assign var="task_id" value=$task->getId()}
+{assign var="type_id" value=$task->getTaskType()}
 
 <span class="hidden">
   <div id="siteLocationURL">{Settings::get("site.location")}</div>
@@ -24,7 +25,6 @@
             <small>
                 <strong>
                      -
-                    {assign var="type_id" value=$task->getTaskType()}
                     {if $type_id == TaskTypeEnum::SEGMENTATION}
                         <span style="color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">{Localisation::getTranslation('common_segmentation_task')}</span>
                     {elseif $type_id == TaskTypeEnum::TRANSLATION}
