@@ -705,32 +705,20 @@ class UserDao extends BaseDao
 
         $neon->go(array('method' => 'common/logout'));
 
-        if (!empty($result) && !empty($result['searchResults'])) return;
-[[[
-[[[[[[[[[[[[[[[[[MYCODE
-                $r = current($result['searchResults']);
-
-                $first_name = (empty($r['First Name'])) ? '' : $r['First Name'];
-                $last_name  = (empty($r['Last Name']))  ? '' : $r['Last Name'];
-                if (!empty($first_name)) $userInfo->setFirstName($first_name);
-                if (!empty($last_name))  $userInfo->setLastName($last_name);
-]]]]]]]]]]]]]]]]]
-       foreach($result['searchResults'] as $r){
-                $neonresult['codeofconduct'] = $r['I agree to abide by the TWB Translator Code of Conduct.'];
-}
-The value of `$neonresult['codeofconduct']` will be 'Yes', if the Code of Conduct has been accepted
-
->>No user
->>user AND !$terms_accepted
-
-3) A call is made to Neon to determine if the email exists in Neon and the users has accepted the terms and conditions if it does the login is allowed to proceed.
+        if (!empty($result) && !empty($result['searchResults'])) {
+            $r = current($result['searchResults']);
+            $terms_accepted = (empty($r['I agree to abide by the TWB Translator Code of Conduct.'])) ? false : ($r['I agree to abide by the TWB Translator Code of Conduct.'] === 'Yes');
 But acceptance is also recorded in Kató platform for future use in step (2).
-
+            if ($terms_accepted) {
+                return;
+          } else {
 4) If the user is known in Neon, but has not accepted terms and conditions,
 they are asked to go to the mini form  to do this (using the same email, to ensure it gets recorded correctly). They are also asked to come back later to login.
+          }
+        }
 
+>>No user
 5) If the user is not known in Neon they are asked to fill in the main form in Neon (using the same email). They are also asked to come back later to login.
-]]]
 
         error_log("verify_email_allowed_register($email) Not allowed!");
         $app->redirect($app->urlFor('no_application'));
