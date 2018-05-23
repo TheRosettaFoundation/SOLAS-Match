@@ -721,17 +721,16 @@ class UserDao extends BaseDao
                 // User is known in Neon, but has not accepted terms and conditions
                 error_log("verify_email_allowed_register($email) Ask to accept T&Cs");
                 $app->redirect('https://translatorswithoutborders.z2systems.com/np/clients/translatorswithoutborders/survey.jsp?surveyId=30&');
-===========================
-// NOT            $r = current($result['searchResults']);
-look up all matches, I will have to look at my old login and webhook code also, to see will it work?
-
-@nurangiz wrote "what about people who are not already in Neon?"
-... @mirko and I discussed yesterday that they should be brought to new form which is more or less the same as the new translator sign up form, but with some additional explanation
-===========================
-          }
+            }
         }
 
-        // User is not known in Neon, they will be asked to fill in the main form in Neon
+        if ($user) {
+            // They are a legacy Trommons user with no Neon account
+            error_log("verify_email_allowed_register($email) Legacy Trommons user needs to fill in Neon application form (with explanation)");
+            $app->redirect('https://translatorswithoutborders.z2systems.com/np/clients/translatorswithoutborders/survey.jsp?surveyId=30&');
+        }
+
+        // User is not known in Neon, they will be asked to fill in the Neon application form
         error_log("verify_email_allowed_register($email) Not allowed!");
         $app->redirect($app->urlFor('no_application'));
     }
