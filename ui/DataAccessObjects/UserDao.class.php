@@ -673,6 +673,24 @@ class UserDao extends BaseDao
     {
         $app = \Slim\Slim::getInstance();
         error_log("verify_email_allowed_register($email)");
+        $user = $this->verifyUserByEmail($email);
+        $terms_accepted = false;
+        if ($user) {
+            $terms_accepted = $this->terms_accepted($user->getId());
+        }
+        if ($user && $terms_accepted) return;
+
+>>No user
+>>user AND !$terms_accepted
+
+3) A call is made to Neon to determine if the email exists in Neon and the users has accepted the terms and conditions if it does the login is allowed to proceed.
+But acceptance is also recorded in Kató platform for future use in step (2).
+
+4) If the user is known in Neon, but has not accepted terms and conditions,
+they are asked to go to the mini form  to do this (using the same email, to ensure it gets recorded correctly). They are also asked to come back later to login.
+
+5) If the user is not known in Neon they are asked to fill in the main form in Neon (using the same email). They are also asked to come back later to login.
+===
         if ($this->verifyUserByEmail($email)) return;
 
         $neon = new \Neon();
@@ -712,6 +730,16 @@ class UserDao extends BaseDao
             $user = Common\Lib\ModelFactory::buildModel('User', $result[0]);
         }
         return $user;
+    }
+
+    public function terms_accepted($user_id)
+    {
+        $terms_accepted = false;
+        $result = LibAPI\PDOWrapper::call('terms_accepted', LibAPI\PDOWrapper::cleanse($user_id));
+        if (!empty($result)) {
+            $terms_accepted = $result[0]['accepted_level'] > 0;
+        }
+        return $terms_accepted;
     }
 
     public function saveUser($user)
