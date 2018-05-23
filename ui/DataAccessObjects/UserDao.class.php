@@ -696,14 +696,30 @@ class UserDao extends BaseDao
 
         $search = array(
             'method' => 'account/listAccounts',
-            'columns' => array('standardFields' => array('Email 1'))
+            'columns' => array('standardFields' => array('Email 1'),
+                               'customFields'   => array(209))
         );
         $search['criteria'] = array(array('Email', 'EQUAL', $email));
 
         $result = $neon->search($search);
 
         $neon->go(array('method' => 'common/logout'));
+
+        if (!empty($result) && !empty($result['searchResults'])) return;
 [[[
+[[[[[[[[[[[[[[[[[MYCODE
+                $r = current($result['searchResults']);
+
+                $first_name = (empty($r['First Name'])) ? '' : $r['First Name'];
+                $last_name  = (empty($r['Last Name']))  ? '' : $r['Last Name'];
+                if (!empty($first_name)) $userInfo->setFirstName($first_name);
+                if (!empty($last_name))  $userInfo->setLastName($last_name);
+]]]]]]]]]]]]]]]]]
+       foreach($result['searchResults'] as $r){
+                $neonresult['codeofconduct'] = $r['I agree to abide by the TWB Translator Code of Conduct.'];
+}
+The value of `$neonresult['codeofconduct']` will be 'Yes', if the Code of Conduct has been accepted
+
 >>No user
 >>user AND !$terms_accepted
 
@@ -715,8 +731,6 @@ they are asked to go to the mini form  to do this (using the same email, to ensu
 
 5) If the user is not known in Neon they are asked to fill in the main form in Neon (using the same email). They are also asked to come back later to login.
 ]]]
-
-        if (!empty($result) && !empty($result['searchResults'])) return;
 
         error_log("verify_email_allowed_register($email) Not allowed!");
         $app->redirect($app->urlFor('no_application'));
