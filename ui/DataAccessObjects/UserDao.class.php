@@ -679,7 +679,7 @@ class UserDao extends BaseDao
         if ($user) {
             $terms_accepted = $this->terms_accepted($user->getId());
         }
-        if ($user && $terms_accepted) return;
+        if ($user && $terms_accepted) return; // User has previously accepted terms and conditions
 
         $neon = new \Neon();
 
@@ -706,7 +706,6 @@ class UserDao extends BaseDao
         $neon->go(array('method' => 'common/logout'));
 
         if (!empty($result) && !empty($result['searchResults'])) {
-// NOT            $r = current($result['searchResults']);
             $terms_accepted = false;
             foreach ($result['searchResults'] as $r) {
                 if (!empty($r['I agree to abide by the TWB Translator Code of Conduct.']) && ($r['I agree to abide by the TWB Translator Code of Conduct.'] === 'Yes')) {
@@ -715,29 +714,24 @@ class UserDao extends BaseDao
             }
 
             if ($terms_accepted) {
-$user exists???
-                $this->update_terms_accepted($user->getId());
-                return;
-          } else {
-4) If the user is known in Neon, but has not accepted terms and conditions,
-they are asked to go to the mini form  to do this (using the same email, to ensure it gets recorded correctly). They are also asked to come back later to login.
-https://translatorswithoutborders.z2systems.com/np/clients/translatorswithoutborders/survey.jsp?surveyId=30&
+                if ($user) $this->update_terms_accepted($user->getId());
+                error_log("verify_email_allowed_register($email) Accepted T&Cs in Neon");
+                return; // User is known in Neon and has accepted terms and conditions
+            } else {
+                // User is known in Neon, but has not accepted terms and conditions
+                error_log("verify_email_allowed_register($email) Ask to accept T&Cs");
+                $app->redirect('https://translatorswithoutborders.z2systems.com/np/clients/translatorswithoutborders/survey.jsp?surveyId=30&');
 ===========================
-I can however change my new code to look up all matches, and if any of the results have accepted the conditions, I will let them continue... @mirko, will that work?
-If that does work, I will have to look at my old login and webhook code also, to see will it work?
+// NOT            $r = current($result['searchResults']);
+look up all matches, I will have to look at my old login and webhook code also, to see will it work?
 
-alanbarrett [3:49 PM]
-The webhook is triggered when an account is updated on Neon and I update the Kató Platform data. I will have to check that the second account doe snot cause issues for this
-
-alanbarrett [3:58 PM]
-@nurangiz wrote "what about people who are not already in Neon?"... @mirko and I discussed yesterday that they should be brought to new form which is more or less the same as the new translator sign up form, but with some additional explanation
+@nurangiz wrote "what about people who are not already in Neon?"
+... @mirko and I discussed yesterday that they should be brought to new form which is more or less the same as the new translator sign up form, but with some additional explanation
 ===========================
           }
         }
 
->>No user
-5) If the user is not known in Neon they are asked to fill in the main form in Neon (using the same email). They are also asked to come back later to login.
-
+        // User is not known in Neon, they will be asked to fill in the main form in Neon
         error_log("verify_email_allowed_register($email) Not allowed!");
         $app->redirect($app->urlFor('no_application'));
     }
