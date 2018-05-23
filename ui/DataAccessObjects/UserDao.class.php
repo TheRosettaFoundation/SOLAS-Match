@@ -706,14 +706,32 @@ class UserDao extends BaseDao
         $neon->go(array('method' => 'common/logout'));
 
         if (!empty($result) && !empty($result['searchResults'])) {
-            $r = current($result['searchResults']);
-            $terms_accepted = (empty($r['I agree to abide by the TWB Translator Code of Conduct.'])) ? false : ($r['I agree to abide by the TWB Translator Code of Conduct.'] === 'Yes');
-But acceptance is also recorded in Kató platform for future use in step (2).
+// NOT            $r = current($result['searchResults']);
+            $terms_accepted = false;
+            foreach ($result['searchResults'] as $r) {
+                if (!empty($r['I agree to abide by the TWB Translator Code of Conduct.']) && ($r['I agree to abide by the TWB Translator Code of Conduct.'] === 'Yes')) {
+                    $terms_accepted = true;
+                }
+            }
+
             if ($terms_accepted) {
+$user exists???
+                $this->update_terms_accepted($user->getId());
                 return;
           } else {
 4) If the user is known in Neon, but has not accepted terms and conditions,
 they are asked to go to the mini form  to do this (using the same email, to ensure it gets recorded correctly). They are also asked to come back later to login.
+https://translatorswithoutborders.z2systems.com/np/clients/translatorswithoutborders/survey.jsp?surveyId=30&
+===========================
+I can however change my new code to look up all matches, and if any of the results have accepted the conditions, I will let them continue... @mirko, will that work?
+If that does work, I will have to look at my old login and webhook code also, to see will it work?
+
+alanbarrett [3:49 PM]
+The webhook is triggered when an account is updated on Neon and I update the Kató Platform data. I will have to check that the second account doe snot cause issues for this
+
+alanbarrett [3:58 PM]
+@nurangiz wrote "what about people who are not already in Neon?"... @mirko and I discussed yesterday that they should be brought to new form which is more or less the same as the new translator sign up form, but with some additional explanation
+===========================
           }
         }
 
@@ -739,9 +757,14 @@ they are asked to go to the mini form  to do this (using the same email, to ensu
         $terms_accepted = false;
         $result = LibAPI\PDOWrapper::call('terms_accepted', LibAPI\PDOWrapper::cleanse($user_id));
         if (!empty($result)) {
-            $terms_accepted = $result[0]['accepted_level'] > 0;
+            $terms_accepted = $result[0]['accepted_level'] >= 1;
         }
         return $terms_accepted;
+    }
+
+    public function update_terms_accepted($user_id)
+    {
+        LibAPI\PDOWrapper::call('update_terms_accepted', LibAPI\PDOWrapper::cleanse($user_id) . ',1');
     }
 
     public function saveUser($user)
