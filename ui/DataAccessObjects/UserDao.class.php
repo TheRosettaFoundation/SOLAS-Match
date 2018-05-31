@@ -505,6 +505,8 @@ class UserDao extends BaseDao
     
     public function login($email, $password)
     {
+        $this->verify_email_allowed_register($email);
+
         $ret = null;
         $login = new Common\Protobufs\Models\Login();
         $login->setEmail($email);
