@@ -7319,6 +7319,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `update_terms_accepted`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_terms_accepted`(IN userID INT, IN acceptedLevel INT)
+BEGIN
+    REPLACE INTO TermsAcceptedUsers (user_id, accepted_level) VALUES (userID, acceptedLevel);
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
