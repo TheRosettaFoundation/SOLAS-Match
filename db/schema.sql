@@ -1968,13 +1968,39 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure debug-test3.deleteUser
 DROP PROCEDURE IF EXISTS `deleteUser`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteUser`(IN `userId` INT)
 BEGIN
     if EXISTS (select 1 from Users where Users.id = userId) then
-	    delete from Users where Users.id = userId;
+
+        UPDATE UserPersonalInformation SET
+           `first-name`='',
+           `last-name`='',
+           `mobile-number`='',
+           `business-number`='',
+           `language-preference`=1786,
+           `job-title`='',
+           `address`='',
+           `city`='',
+           `country`='',
+           `receive_credit`=0
+        WHERE user_id=userId;
+
+        UPDATE Users SET
+           `display-name`='',
+           `email`=CONCAT(FLOOR(RAND() * 1000000000000), '@aaa.bbb'),
+           `password`='',
+           `biography`='',
+           `language_id`=1786,
+           `country_id`=1,
+           `nonce`=0,
+           `created-time`='2000-01-01 01:01:01'
+        WHERE id=userId;
+
+        DELETE FROM UserLogins
+        WHERE user_id=userId;
+
         select 1 as result;
     else
         select 0 as result;
