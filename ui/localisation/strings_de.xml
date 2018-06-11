@@ -281,12 +281,12 @@
     <string name="create_org_invalid_name">Organisationsnamen dürfen keine ungültigen Zeichen enthalten.</string>
     <string name="create_org_created">Die Organisation <strong>%s</strong> wurde erstellt.</string>
 
-    <string name="thank_registering_organisation">Vielen Dank, dass Sie Ihre Organisation in Trommons registrieren möchten</string>
+    <string name="thank_registering_organisation">Vielen Dank, dass Sie Ihre Organisation in Kató Platform registrieren möchten</string>
     <string name="registrations_twb">Die Registrierung von Non-Profit-Organisationen wird zurzeit von Translators without Borders (TWB) durchgeführt.<br />
 <br />
 Bitte klicken Sie auf <a href="https://translatorswithoutborders.org/non-profit-application/">diesen Link, um die Webseite von Translators without Borders zu öffnen</a>.<br />
 <br />
-Bei Fragen schreiben Sie bitte an <a href="mailto:info@therosettafoundation.org">info@therosettafoundation.org</a><br /></string>
+Bei Fragen schreiben Sie bitte an <a href="mailto:info@translatorswithoutborders.org">info@translatorswithoutborders.org</a><br /></string>
 
 	<string name="org_private_profile_alter_profile_here">Ändere hier das Profil Deiner Organisation.</string>
 	<string name="org_private_profile_public_profile">Öffentliches Profil</string>
@@ -299,8 +299,8 @@ Bei Fragen schreiben Sie bitte an <a href="mailto:info@therosettafoundation.org"
     <string name="org_private_profile_delete_success">Die Organisation %s wurde gelöscht.</string>        
     <string name="org_private_profile_delete_fail">Die Organisation kann nicht gelöscht werden. Bitte versuche es später noch einmal.</string> 
 
-    <string name="org_private_profile_organisation_visible_by_all">Für alle registrierten Trommons-Benutzer sichtbar</string>
-    <string name="org_private_profile_organisation_visible_by_members">Nur für Mitglieder von Organisationen und Trommons-Administratoren sichtbar</string>
+    <string name="org_private_profile_organisation_visible_by_all">Für alle registrierten Kató Platform-Benutzer sichtbar</string>
+    <string name="org_private_profile_organisation_visible_by_members">Nur für Mitglieder von Organisationen und Kató Platform-Administratoren sichtbar</string>
     <string name="org_private_profile_organisation_overview">Organisationsübersicht einschließlich Vision, Mission<br />und begünstigte Zielgruppen</string>
     <string name="org_private_profile_organisation_activity">Tätigkeitsbereich</string>
     <string name="org_private_profile_organisation_multiple">Halte Strg (Windows)/die Befehlstaste (Mac) gedrückt, um mehrere Optionen auszuwählen</string>
@@ -1010,7 +1010,7 @@ Bei Fragen schreiben Sie bitte an <a href="mailto:info@therosettafoundation.org"
     <string name="password_reset_4">Die eingegebenen Passwörter sind nicht gleich. Bitte versuche es noch einmal.</string>
     <string name="password_reset_5">Bitte überprüfe das angegebene Passwort und versuche es erneut.</string>
 
-    <string name="register_register_on">Du kannst das Trommons-Benutzerkonto erst erstellen, nachdem du das <a href="https://translatorswithoutborders.org/volunteer/translators/">TWB-Übersetzerregistrierformular</a> ausgefüllt hast<br />oder nachdem du TWB als Kontaktperson für eine Partnerorganisation angekündigt worden bist.<br />Wenn du diesen Schritt abgeschlossen hast, kannst du dich hier mit der TWB dabei angegebenen Email-Addresse registrieren und dein Kennwort festlegen.<br />Alternativ kannst du dann ein Trommons-Benutzerkonto erstellen, indem du einen der Drittanbieter von Benutzerkonten unten anklickst,<br />sofern deine Email-Addresse bei diesem Anbieter dieselbe ist.<br />Wenn du bereits als Freiwilliger für TWB gearbeitet und jetzt Probleme beim Anmelden hast, bitte <a href="mailto:translators@translatorswithoutborders.org">translators@translatorswithoutborders.org</a> kontaktieren.</string>
+    <string name="register_register_on">Du kannst das Kató Platform-Benutzerkonto erst erstellen, nachdem du das <a href="https://translatorswithoutborders.org/volunteer/translators/">TWB-Übersetzerregistrierformular</a> ausgefüllt hast<br />oder nachdem du TWB als Kontaktperson für eine Partnerorganisation angekündigt worden bist.<br />Wenn du diesen Schritt abgeschlossen hast, kannst du dich hier mit der TWB dabei angegebenen Email-Addresse registrieren und dein Kennwort festlegen.<br />Alternativ kannst du dann ein Kató Platform-Benutzerkonto erstellen, indem du einen der Drittanbieter von Benutzerkonten unten anklickst,<br />sofern deine Email-Addresse bei diesem Anbieter dieselbe ist.<br />Wenn du bereits als Freiwilliger für TWB gearbeitet und jetzt Probleme beim Anmelden hast, bitte <a href="mailto:translators@translatorswithoutborders.org">translators@translatorswithoutborders.org</a> kontaktieren.</string>
 	<string name="register_your_email">Deine E-Mail-Adresse</string>
 	<string name="register_your_password">Dein Passwort</string>
     <string name="register_1">Die angegebene E-Mail-Adresse ist nicht gültig. Bitte versuche es noch einmal.</string>
