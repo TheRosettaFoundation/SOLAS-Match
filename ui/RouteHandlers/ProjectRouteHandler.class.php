@@ -1262,7 +1262,7 @@ class ProjectRouteHandler
                 $userDao->trackTask($user_id, $newTaskId);
             }
 
-            if (!empty($post['restrictTask'])) {
+            if (!empty($post['restrictTask']) && $newTask->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
                 $taskDao->setRestrictedTask($newTaskId);
             }
         } catch (\Exception $e) {
