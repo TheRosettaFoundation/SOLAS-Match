@@ -710,7 +710,7 @@ class UserDao extends BaseDao
         if (!empty($result) && !empty($result['searchResults'])) {
             $terms_accepted = false;
             foreach ($result['searchResults'] as $r) {
-                if (!empty($r['I agree to abide by the TWB Translator Code of Conduct.']) && ($r['I agree to abide by the TWB Translator Code of Conduct.'] === 'Yes')) {
+                if (!empty($r['Do you agree to abide by the Code of Conduct?']) && ($r['Do you agree to abide by the Code of Conduct?'] === 'Yes')) {
                     $terms_accepted = true;
                 }
             }
