@@ -1153,7 +1153,7 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@transl
 	<string name="statistics_tasks_archived">Tareas archivadas:</string>
 
 	<string name="slim_error_Oops_there_has">¡Vaya! Parece que hay un problema técnico.</string>
-	<string name="slim_error_1">Puedes informarnos del problema escribiendo a <a>info@trommons.org</a>.</string>
+  <string name="slim_error_1">Puedes informarnos del problema escribiendo a <a>translators@translatorswithoutborders.org</a>.</string>
 	<string name="slim_error_2">Proporciona tanta información como sea posible, además de la que te pedimos a continuacion.</string>
 	<string name="slim_error_3">Volver </string>
 	<string name="slim_error_4"></string>

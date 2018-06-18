@@ -1144,7 +1144,7 @@ Bei Fragen schreiben Sie bitte an <a href="mailto:info@translatorswithoutborders
 	<string name="statistics_tasks_archived">Archivierte Aufgaben:</string>
 		
 	<string name="slim_error_Oops_there_has">Upps! Es ist ein technisches Problem aufgetreten.</string>
-	<string name="slim_error_1">Du kannst dieses Problem per E-Mail melden <a>info@trommons.org</a>.</string>
+  <string name="slim_error_1">Du kannst dieses Problem per E-Mail melden <a>translators@translatorswithoutborders.org</a>.</string>
 	<string name="slim_error_2">Bitte gib die unten aufgelisteten technischen Details an und beschreibe, wie Du auf den Fehler gestoßen bist.</string>
 	<string name="slim_error_3">Gehe </string>
 	<string name="slim_error_4">zurück.</string>

@@ -1150,7 +1150,7 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@translatorswit
 	<string name="statistics_tasks_archived">Attività archiviate:</string>
     
 	<string name="slim_error_Oops_there_has">C'è un disguido! C'è un problema tecnico.</string>
-	<string name="slim_error_1">Puoi segnalare questo problema mandandoci un'email a <a>info@trommons.org</a></string>
+  <string name="slim_error_1">Puoi segnalare questo problema mandandoci un'email a <a>translators@translatorswithoutborders.org</a></string>
 	<string name="slim_error_2">con i dettagli dell'errore riscontrato, e i dati tecnici presenti qui sotto.</string>
 	<string name="slim_error_3">Vai</string>
 	<string name="slim_error_4">Indietro.</string>
