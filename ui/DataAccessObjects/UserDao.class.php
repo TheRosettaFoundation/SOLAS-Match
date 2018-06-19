@@ -722,14 +722,14 @@ class UserDao extends BaseDao
             } else {
                 // User is known in Neon, but has not accepted terms and conditions
                 error_log("verify_email_allowed_register($email) Ask to accept T&Cs");
-                $app->redirect('https://translatorswithoutborders.org/volunteer/acceptcoc?email=' . urlencode($email));
+                $app->redirect('https://kato.translatorswb.org/accept-code-of-conduct.html?email=' . urlencode($email));
             }
         }
 
         if ($user) {
             // They are a legacy Trommons user with no Neon account
             error_log("verify_email_allowed_register($email) Legacy Trommons user needs to fill in Neon application form (with explanation)");
-            $app->redirect('https://translatorswithoutborders.org/volunteer/rosettatranslators?email=' . urlencode($email));
+            $app->redirect('https://kato.translatorswb.org/rosetta-info-update.html?email=' . urlencode($email));
         }
 
         // User is not known in Neon, they will be asked to fill in the Neon application form
