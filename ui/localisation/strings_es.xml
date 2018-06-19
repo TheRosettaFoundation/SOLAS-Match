@@ -288,12 +288,12 @@
     <string name="create_org_invalid_name">El nombre de la organización no puede contener caracteres no válidos.</string>
     <string name="create_org_created">Se ha creado la organización <strong>%s</strong>.</string>
 
-    <string name="thank_registering_organisation">Gracias por su interés en registrarse como organización en Trommons</string>
+    <string name="thank_registering_organisation">Gracias por su interés en registrarse como organización en Kató Platform</string>
     <string name="registrations_twb">El registro para nuevas ONG será llevado a cabo por Translators without Borders (TWB).<br />
 <br />
 Haga click en <a href="https://translatorswithoutborders.org/non-profit-application/">este enlace para acceder a la página web de Translators without Borders</a>.<br /> 
 <br />
-Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@therosettafoundation.org">info@therosettafoundation.org</a><br />
+Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@translatorswithoutborders.org">info@translatorswithoutborders.org</a><br />
 </string>
 
 	<string name="org_private_profile_alter_profile_here">Modifica aquí el perfil de tu organización</string>
@@ -307,8 +307,8 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
     <string name="org_private_profile_delete_success">%s se ha eliminado correctamente.</string>
     <string name="org_private_profile_delete_fail">No ha sido posible eliminar esta organización. Por favor, inténtalo de nuevo más tarde.</string> 
 
-    <string name="org_private_profile_organisation_visible_by_all">Visible para todos los usuarios de Trommons</string>
-    <string name="org_private_profile_organisation_visible_by_members">Visible solo para los miembros de la organización y los administradores de Trommons.</string>
+    <string name="org_private_profile_organisation_visible_by_all">Visible para todos los usuarios de Kató Platform</string>
+    <string name="org_private_profile_organisation_visible_by_members">Visible solo para los miembros de la organización y los administradores de Kató Platform.</string>
     <string name="org_private_profile_organisation_overview">Descripción de la organización<br />(visión, misión y beneficiarios)</string>
     <string name="org_private_profile_organisation_activity">Ámbito de trabajo</string>
     <string name="org_private_profile_organisation_multiple">Mantén pulsada la tecla Ctrl (Windows) o Command (Mac) para seleccionar más de una opción</string>
@@ -1022,14 +1022,14 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
     <string name="password_reset_4">Las contraseñas no coinciden. Inténtalo de nuevo.</string>
     <string name="password_reset_5">Comprueba la contraseña proporcionada e inténtalo de nuevo.</string>
 
-    <string name="register_register_on">Solo podrá crear su cuenta en Trommons después de rellenar el <a href="https://translatorswithoutborders.org/volunteer/translators/">TWB Formulario de Inscripción para Traductores</a><br />o bien, después de haber sido anunciado a TWB como el contacto de una organización asociada.<br />Si ya ha realizado este paso, regístrese aquí con la dirección de correo electrónico que suministró a TWB y seleccione una contraseña.<br />O, si lo prefiere, puede crear su cuenta en Trommons al usar uno de los proveedores de cuentas indicadas a continuación<br />siempre que su cuenta de correo electrónico con ese proveedor sea la misma.<br />Si ya es voluntario y no puede iniciar sesión, envíe un correo electrónico a <a href="mailto:translators@translatorswithoutborders.org">translators@translatorswithoutborders.org</a>.</string>
+    <string name="register_register_on">Solo podrá crear su cuenta en Kató Platform después de rellenar el <a href="https://kato.translatorswb.org/signup.html">TWB Formulario de Inscripción para Traductores</a><br />o bien, después de haber sido anunciado a TWB como el contacto de una organización asociada.<br />Si ya ha realizado este paso, regístrese aquí con la dirección de correo electrónico que suministró a TWB y seleccione una contraseña.<br />O, si lo prefiere, puede crear su cuenta en Kató Platform al usar uno de los proveedores de cuentas indicadas a continuación<br />siempre que su cuenta de correo electrónico con ese proveedor sea la misma.<br />Si ya es voluntario y no puede iniciar sesión, envíe un correo electrónico a <a href="mailto:translators@translatorswithoutborders.org">translators@translatorswithoutborders.org</a>.</string>
 	<string name="register_your_email">Dirección de e-mail</string>
 	<string name="register_your_password">Contraseña</string>
     <string name="register_1">La dirección de e-mail que has especificado no es válida. Introduce la dirección correcta.</string>
     <string name="register_2">No introducida ninguna contraseña. Introduce la contraseña e inténtalo de nuevo.</string>
     <string name="register_3">Ya eres un usuario verificado. Por favor, <a href="%s">introduce tu usuario y contraseña</a>.</string>
     <string name="register_4">Te hemos enviado un e-mail de verificación a la dirección de e-mail con la que te has registrado. Haz clic en el enlace que encontrarás en el e-mail para completar el registro. Una vez hayas verificado tu dirección de e-mail, inicia sesión <a href="%s">aquí</a>.</string>
-    <string name="register_no_application">Si no ha registrado su cuenta con su dirección de correo electrónico, deberá enviar el <a href="https://translatorswithoutborders.org/volunteer/translators/">(haga clic aquí) Formulario de Inscripción para Traductores</a> y luego regrese a <a href="https://trommons.org/register/">https://trommons.org/register/</a> para crear una cuenta en este enlace.<br />Si ya es voluntario y no puede iniciar sesión, envíe un correo electrónico a <a href="mailto:translators@translatorswithoutborders.org">translators@translatorswithoutborders.org</a>.</string>
+    <string name="register_no_application">Si no ha registrado su cuenta con su dirección de correo electrónico, deberá enviar el <a href="https://kato.translatorswb.org/signup.html">(haga clic aquí) Formulario de Inscripción para Traductores</a> y luego regrese a <a href="https://trommons.org/register/">https://trommons.org/register/</a> para crear una cuenta en este enlace.<br />Si ya es voluntario y no puede iniciar sesión, envíe un correo electrónico a <a href="mailto:translators@translatorswithoutborders.org">translators@translatorswithoutborders.org</a>.</string>
     <string name="register_no_application_error">Error de conexión, por favor, vuelva a intentar más tarde.</string>
 
 	<string name="user_private_profile_private_profile">Perfil privado</string>
@@ -1153,7 +1153,7 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@theros
 	<string name="statistics_tasks_archived">Tareas archivadas:</string>
 
 	<string name="slim_error_Oops_there_has">¡Vaya! Parece que hay un problema técnico.</string>
-	<string name="slim_error_1">Puedes informarnos del problema escribiendo a <a>info@trommons.org</a>.</string>
+  <string name="slim_error_1">Puedes informarnos del problema escribiendo a <a>translators@translatorswithoutborders.org</a>.</string>
 	<string name="slim_error_2">Proporciona tanta información como sea posible, además de la que te pedimos a continuacion.</string>
 	<string name="slim_error_3">Volver </string>
 	<string name="slim_error_4"></string>

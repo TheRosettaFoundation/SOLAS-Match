@@ -1570,9 +1570,11 @@ $NEON_LEVELFIELD      = 173;
             if (empty($result) || empty($result['searchResults'])) {
                 error_log("update_user_with_neon_data($email), no results from NeonCRM");
             } else {
-                $r = current($result['searchResults']);
+                foreach ($result['searchResults'] as $r) {
+                    $first_name = (empty($r['First Name'])) ? '' : $r['First Name'];
+                    if (!empty($first_name)) break; // If we find a First Name, then we have found the good account and we should use this one "$r" (normally there will only be one account)
+                }
 
-                $first_name = (empty($r['First Name'])) ? '' : $r['First Name'];
                 $last_name  = (empty($r['Last Name']))  ? '' : $r['Last Name'];
                 if (!empty($first_name)) $userInfo->setFirstName($first_name);
                 if (!empty($last_name))  $userInfo->setLastName($last_name);

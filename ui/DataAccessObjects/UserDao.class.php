@@ -505,6 +505,8 @@ class UserDao extends BaseDao
     
     public function login($email, $password)
     {
+        $this->verify_email_allowed_register($email);
+
         $ret = null;
         $login = new Common\Protobufs\Models\Login();
         $login->setEmail($email);
@@ -673,7 +675,13 @@ class UserDao extends BaseDao
     {
         $app = \Slim\Slim::getInstance();
         error_log("verify_email_allowed_register($email)");
-        if ($this->verifyUserByEmail($email)) return;
+
+        $user = $this->verifyUserByEmail($email);
+        $terms_accepted = false;
+        if ($user) {
+            $terms_accepted = $this->terms_accepted($user->getId());
+        }
+        if ($user && $terms_accepted) return; // User has previously accepted terms and conditions
 
         $neon = new \Neon();
 
@@ -690,7 +698,8 @@ class UserDao extends BaseDao
 
         $search = array(
             'method' => 'account/listAccounts',
-            'columns' => array('standardFields' => array('Email 1'))
+            'columns' => array('standardFields' => array('Email 1'),
+                               'customFields'   => array(209))
         );
         $search['criteria'] = array(array('Email', 'EQUAL', $email));
 
@@ -698,8 +707,32 @@ class UserDao extends BaseDao
 
         $neon->go(array('method' => 'common/logout'));
 
-        if (!empty($result) && !empty($result['searchResults'])) return;
+        if (!empty($result) && !empty($result['searchResults'])) {
+            $terms_accepted = false;
+            foreach ($result['searchResults'] as $r) {
+                if (!empty($r['Do you agree to abide by the Code of Conduct?']) && ($r['Do you agree to abide by the Code of Conduct?'] === 'Yes')) {
+                    $terms_accepted = true;
+                }
+            }
 
+            if ($terms_accepted) {
+                if ($user) $this->update_terms_accepted($user->getId());
+                error_log("verify_email_allowed_register($email) Accepted T&Cs in Neon");
+                return; // User is known in Neon and has accepted terms and conditions
+            } else {
+                // User is known in Neon, but has not accepted terms and conditions
+                error_log("verify_email_allowed_register($email) Ask to accept T&Cs");
+                $app->redirect('https://kato.translatorswb.org/accept-code-of-conduct.html?email=' . urlencode($email));
+            }
+        }
+
+        if ($user) {
+            // They are a legacy Trommons user with no Neon account
+            error_log("verify_email_allowed_register($email) Legacy Trommons user needs to fill in Neon application form (with explanation)");
+            $app->redirect('https://kato.translatorswb.org/rosetta-info-update.html?email=' . urlencode($email));
+        }
+
+        // User is not known in Neon, they will be asked to fill in the Neon application form
         error_log("verify_email_allowed_register($email) Not allowed!");
         $app->redirect($app->urlFor('no_application'));
     }
@@ -712,6 +745,21 @@ class UserDao extends BaseDao
             $user = Common\Lib\ModelFactory::buildModel('User', $result[0]);
         }
         return $user;
+    }
+
+    public function terms_accepted($user_id)
+    {
+        $terms_accepted = false;
+        $result = LibAPI\PDOWrapper::call('terms_accepted', LibAPI\PDOWrapper::cleanse($user_id));
+        if (!empty($result)) {
+            $terms_accepted = $result[0]['accepted_level'] >= 1;
+        }
+        return $terms_accepted;
+    }
+
+    public function update_terms_accepted($user_id)
+    {
+        LibAPI\PDOWrapper::call('update_terms_accepted', LibAPI\PDOWrapper::cleanse($user_id) . ',1');
     }
 
     public function saveUser($user)

@@ -1472,6 +1472,13 @@ CREATE TABLE IF NOT EXISTS `TaskInviteSentToUsers` (
     CONSTRAINT FK_invite_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `TermsAcceptedUsers` (
+    user_id        INT (10) UNSIGNED NOT NULL,
+    accepted_level INT (10) UNSIGNED NOT NULL,
+    UNIQUE KEY FK_terms_user_id (user_id),
+    CONSTRAINT FK_terms_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -1961,13 +1968,39 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure debug-test3.deleteUser
 DROP PROCEDURE IF EXISTS `deleteUser`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteUser`(IN `userId` INT)
 BEGIN
     if EXISTS (select 1 from Users where Users.id = userId) then
-	    delete from Users where Users.id = userId;
+
+        UPDATE UserPersonalInformation SET
+           `first-name`='',
+           `last-name`='',
+           `mobile-number`='',
+           `business-number`='',
+           `language-preference`=1786,
+           `job-title`='',
+           `address`='',
+           `city`='',
+           `country`='',
+           `receive_credit`=0
+        WHERE user_id=userId;
+
+        UPDATE Users SET
+           `display-name`='',
+           `email`=CONCAT(FLOOR(RAND() * 1000000000000), '@aaa.bbb'),
+           `password`='',
+           `biography`='',
+           `language_id`=1786,
+           `country_id`=1,
+           `nonce`=0,
+           `created-time`='2000-01-01 01:01:01'
+        WHERE id=userId;
+
+        DELETE FROM UserLogins
+        WHERE user_id=userId;
+
         select 1 as result;
     else
         select 0 as result;
@@ -7309,6 +7342,35 @@ BEGIN
             WHERE
                 t1.id=taskID)
     GROUP BY ut.user_id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `terms_accepted`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `terms_accepted`(IN userID INT)
+BEGIN
+     SET @level = 0;
+     SELECT accepted_level INTO @level FROM TermsAcceptedUsers WHERE user_id=userID;
+
+     if @level=0 THEN
+         IF      EXISTS (SELECT 1 FROM Admins WHERE user_id=userID) THEN
+             REPLACE INTO TermsAcceptedUsers (user_id, accepted_level) VALUES (userID, 999999);
+             SELECT 999999 INTO @level;
+         ELSEIF EXISTS (SELECT 1 FROM OrganisationMembers WHERE user_id=userID) THEN
+             REPLACE INTO TermsAcceptedUsers (user_id, accepted_level) VALUES (userID, 99999);
+             SELECT 99999 INTO @level;
+         END IF;
+     END IF;
+
+     SELECT @level AS accepted_level;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_terms_accepted`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_terms_accepted`(IN userID INT, IN acceptedLevel INT)
+BEGIN
+    REPLACE INTO TermsAcceptedUsers (user_id, accepted_level) VALUES (userID, acceptedLevel);
 END//
 DELIMITER ;
 
