@@ -6948,6 +6948,23 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `org_stats_words_req`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `org_stats_words_req`()
+BEGIN
+    SELECT
+        p.organisation_id,
+        YEAR(t.`created-time`) AS year,
+        SUM(IF(`task-type_id`=2, t.`word-count`, 0)) AS words_translated_req,
+        SUM(IF(`task-type_id`=3, t.`word-count`, 0)) AS words_proofread_req
+    FROM Projects p
+    JOIN Tasks t ON p.id=t.project_id
+    WHERE
+        (t.`task-type_id`=2 OR t.`task-type_id`=3)
+    GROUP BY p.organisation_id, YEAR(t.`created-time`);
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `org_stats_languages`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `org_stats_languages`()
