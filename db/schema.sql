@@ -6392,6 +6392,7 @@ BEGIN
             WHEN t.`task-type_id`=3 THEN 'Revising'
             WHEN t.`task-type_id`=4 THEN 'Desegmentation'
         END
+        IFNULL(tc.`claimed-time`, '') AS claimed_time,
         AS task_type_text,
         IFNULL(lp.matecat_langpair,        '') AS matecat_langpair_or_blank,
         IFNULL(lp.matecat_id_job,           0) AS matecat_id_job_or_zero,
