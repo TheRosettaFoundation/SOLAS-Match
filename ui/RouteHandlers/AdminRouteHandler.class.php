@@ -686,6 +686,7 @@ class AdminRouteHandler
         $all_org_admins      = $statsDao->all_org_admins();
         $all_org_members     = $statsDao->all_org_members();
         $org_stats_words     = $statsDao->org_stats_words();
+        $org_stats_words_req = $statsDao->org_stats_words_req();
         $org_stats_languages = $statsDao->org_stats_languages();
 
         $all_orgs = array();
@@ -695,6 +696,8 @@ class AdminRouteHandler
             $all_orgs[$org_row['id']]['members'] = array();
             $all_orgs[$org_row['id']]['words_translated'] = array();
             $all_orgs[$org_row['id']]['words_proofread']  = array();
+            $all_orgs[$org_row['id']]['words_translated_req'] = array();
+            $all_orgs[$org_row['id']]['words_proofread_req']  = array();
             $all_orgs[$org_row['id']]['language_pairs']   = array();
         }
         unset($all_orgs0);
@@ -724,6 +727,16 @@ class AdminRouteHandler
         }
         unset($org_stats_words);
 
+        foreach ($org_stats_words_req as $words_row) {
+            if (!empty($all_orgs[$words_row['organisation_id']])) {
+                $year_list[$words_row['year']] = $words_row['year'];
+
+                $all_orgs[$words_row['organisation_id']]['words_translated_req'][$words_row['year']] = $words_row['words_translated_req'];
+                $all_orgs[$words_row['organisation_id']]['words_proofread_req'] [$words_row['year']] = $words_row['words_proofread_req'];
+            }
+        }
+        unset($org_stats_words_req);
+
         foreach ($org_stats_languages as $words_row) {
             if (!empty($all_orgs[$words_row['organisation_id']])) {
                 $year_list[$words_row['year']] = $words_row['year'];
@@ -737,7 +750,7 @@ class AdminRouteHandler
 
         rsort($year_list);
         foreach ($year_list as $year) {
-            $data .= ',"' . $year . ' Words Translated","Words Proofread","Language Pairs"';
+            $data .= ',"' . $year . ' Words Translated","Words Revised","Requested Words Translated","Requested Words Revised","Language Pairs"';
         }
         $data .= "\n";
 
@@ -750,6 +763,8 @@ class AdminRouteHandler
             foreach ($year_list as $year) {
                 $data .= ',"' . (empty($org_row['words_translated'][$year]) ? '' : $org_row['words_translated'][$year]) . '"';
                 $data .= ',"' . (empty($org_row['words_proofread'] [$year]) ? '' : $org_row['words_proofread'][$year]) . '"';
+                $data .= ',"' . (empty($org_row['words_translated_req'][$year]) ? '' : $org_row['words_translated_req'][$year]) . '"';
+                $data .= ',"' . (empty($org_row['words_proofread_req'] [$year]) ? '' : $org_row['words_proofread_req'][$year]) . '"';
                 $data .= ',"' . (empty($org_row['language_pairs']  [$year]) ? '' : implode(', ', $org_row['language_pairs'][$year])) . '"';
             }
             $data .= "\n";
