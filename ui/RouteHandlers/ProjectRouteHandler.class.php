@@ -1557,6 +1557,10 @@ class ProjectRouteHandler
                         }
                     } else {
                         error_log("project_cron /status ($project_id) status NOT DONE: " . $response_data['status']);
+                        if ($response_data['status'] === 'NO_SEGMENTS_FOUND') {
+                            // Change status to Complete (3), Give up!
+                            $taskDao->updateWordCountRequestForProjects($project_id, $matecat_id_project, $matecat_id_project_pass, 0, 3);
+                        }
                     }
                 } else {
                     error_log("project_cron /status ($project_id) responseCode: $responseCode");
