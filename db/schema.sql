@@ -6797,6 +6797,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getWordCountRequestForProject`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getWordCountRequestForProject`(IN `projectID` INT)
+BEGIN
+    SELECT * FROM WordCountRequestForProjects WHERE project_id=projectID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `updateWordCountForProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `updateWordCountForProject`(IN `pID` INT, IN `matecatWordCount` INT)

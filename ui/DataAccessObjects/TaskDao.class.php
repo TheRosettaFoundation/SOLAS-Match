@@ -462,6 +462,21 @@ class TaskDao extends BaseDao
         return $result;
     }
 
+    public function get_matecat_analyze_url($project_id)
+    {
+        $matecat_analyze_url = '';
+        $result = LibAPI\PDOWrapper::call('getWordCountRequestForProject', LibAPI\PDOWrapper::cleanse($project_id));
+        if (!empty($result)) {
+            $matecat_id_project      = $result[0]['matecat_id_project'];
+            $matecat_id_project_pass = $result[0]['matecat_id_project_pass'];
+            if (!empty($matecat_id_project) && !empty($matecat_id_project_pass)) {
+                $matecat_analyze_url = "https://tm.translatorswb.org/analyze/proj-$project_id/$matecat_id_project-$matecat_id_project_pass";
+            }
+        }
+
+        return $matecat_analyze_url;
+    }
+
     public function updateWordCountForProject($project_id, $matecat_word_count)
     {
         LibAPI\PDOWrapper::call('updateWordCountForProject', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($matecat_word_count));
