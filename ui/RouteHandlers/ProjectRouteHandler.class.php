@@ -364,6 +364,7 @@ class ProjectRouteHandler
                 "isSiteAdmin"   => $isSiteAdmin,
                 "imgCacheToken" => $preventImageCacheToken,
                 'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
+                'matecat_analyze_url' => $taskDao->get_matecat_analyze_url($project_id),
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation
         ));
         $app->render("project/project.view.tpl");
