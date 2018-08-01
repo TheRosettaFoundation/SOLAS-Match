@@ -7,6 +7,7 @@
         </span>
         {assign var="project_id" value=$project->getId()}
 		<div class="pull-right">
+        <div>
             {if $isSiteAdmin && !empty($matecat_analyze_url)}
                 <a href="{$matecat_analyze_url}" class="btn btn-primary" target="_blank">
                     <i class="icon-th-list icon-white"></i> Kató TM analysis
@@ -35,6 +36,7 @@
                 {/if}
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
+        </div>
 		</div>
     </h1>
 
