@@ -6,14 +6,13 @@
             <small>{Localisation::getTranslation('project_view_overview_of_project_details')}</small>
         </span>
         {assign var="project_id" value=$project->getId()}
-		<div class="pull-right">
-        <div>
-            {if $isSiteAdmin && !empty($matecat_analyze_url)}
-                <a href="{$matecat_analyze_url}" class="btn btn-primary" target="_blank">
-                    <i class="icon-th-list icon-white"></i> Kató TM analysis
-                </a>
-            {/if}
+        <div class="pull-right">
             <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                {if $isSiteAdmin && !empty($matecat_analyze_url)}
+                    <a href="{$matecat_analyze_url}" class="btn btn-primary" target="_blank">
+                        <i class="icon-th-list icon-white"></i> Kató TM analysis
+                    </a>
+                {/if}
                 {if (!$isOrgMember)}
                     {if false}
                         {if ($userSubscribedToOrganisation)}
@@ -37,7 +36,6 @@
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
         </div>
-		</div>
     </h1>
 
 {if isset($flash['success'])}
