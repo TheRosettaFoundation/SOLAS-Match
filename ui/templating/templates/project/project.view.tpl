@@ -29,7 +29,7 @@
                     {/if}
                 {/if}
                 {if ($isOrgMember || $isAdmin)}
-                    <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='pull-right btn btn-primary fixMargin'>
+                    <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='btn btn-primary fixMargin'>
                         <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('common_edit_project')}
                     </a> 
                 {/if}
