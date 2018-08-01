@@ -7,6 +7,11 @@
         </span>
         {assign var="project_id" value=$project->getId()}
 		<div class="pull-right">
+            {if $isSiteAdmin && !empty($matecat_analyze_url)}
+                <a href="{$matecat_analyze_url}" class="btn btn-primary" target="_blank">
+                    <i class="icon-th-list icon-white"></i> Kató TM analysis
+                </a>
+            {/if}
             <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                 {if (!$isOrgMember)}
                     {if false}
