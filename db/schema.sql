@@ -1414,6 +1414,20 @@ CREATE TABLE IF NOT EXISTS `MatecatLanguagePairs` (
     CONSTRAINT FK_matecat_language_pair_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `TaskChunks` (
+    task_id BIGINT(20) UNSIGNED NOT NULL,
+    project_id INT(10) UNSIGNED NOT NULL,
+    type_id    INT(10) UNSIGNED NOT NULL,
+    matecat_langpair   VARCHAR(50) NOT NULL,
+    matecat_id_job INT(10) UNSIGNED NOT NULL,
+    chunk_number   INT(10) UNSIGNED NOT NULL,
+    matecat_id_chunk_password VARCHAR(50) NOT NULL,
+    UNIQUE KEY FK_task_chunks_task_id (task_id),
+    CONSTRAINT FK_task_chunks_task_id FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    KEY FK_task_chunks_project_id (project_id),
+    CONSTRAINT FK_task_chunks_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS `UserQualifiedPairs` (
   user_id              INT(10) UNSIGNED NOT NULL,
   language_id_source   INT(10) UNSIGNED NOT NULL,
