@@ -422,7 +422,7 @@ class ProjectRouteHandler
                                                         Common\Enums\TaskTypeEnum::TRANSLATION,
                                                         $chunk_number,
                                                         $number_of_chunks);
-                                                    $taskDao->addChunkTask(
+                                                    $taskDao->insertTaskChunks(
                                                         $task_id,
                                                         $project_id,
                                                         Common\Enums\TaskTypeEnum::TRANSLATION,
@@ -437,7 +437,7 @@ class ProjectRouteHandler
                                                         Common\Enums\TaskTypeEnum::PROOFREADING,
                                                         $chunk_number,
                                                         $number_of_chunks);
-                                                    $taskDao->addChunkTask(
+                                                    $taskDao->insertTaskChunks(
                                                         $task_id,
                                                         $project_id,
                                                         Common\Enums\TaskTypeEnum::PROOFREADING,

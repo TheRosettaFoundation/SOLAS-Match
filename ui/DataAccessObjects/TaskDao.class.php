@@ -462,6 +462,34 @@ class TaskDao extends BaseDao
         return $result;
     }
 
+    public function getWordCountRequestForProject($project_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getWordCountRequestForProject', LibAPI\PDOWrapper::cleanse($project_id));
+        if ($result) {
+            return $result[0];
+        } else {
+            return false;
+        }
+    }
+
+    public function getTaskChunks($project_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getTaskChunks', LibAPI\PDOWrapper::cleanse($project_id));
+        return $result;
+    }
+
+    public function insertTaskChunks($task_id, $project_id, $type_id, $matecat_langpair, $matecat_id_job, $chunk_number, $chunk_password)
+    {
+        LibAPI\PDOWrapper::call('insertTaskChunks',
+            LibAPI\PDOWrapper::cleanse($task_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($type_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($matecat_langpair) . ',' .
+            LibAPI\PDOWrapper::cleanse($matecat_id_job) . ',' .
+            LibAPI\PDOWrapper::cleanse($chunk_number) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($chunk_password));
+    }
+
     public function get_matecat_analyze_url($project_id)
     {
         $matecat_analyze_url = '';
@@ -525,6 +553,12 @@ class TaskDao extends BaseDao
     public function getMatecatLanguagePairs($task_id)
     {
         $result = LibAPI\PDOWrapper::call('getMatecatLanguagePairs', LibAPI\PDOWrapper::cleanse($task_id));
+        return $result;
+    }
+
+    public function getMatecatLanguagePairsForProject($project_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getMatecatLanguagePairsForProject', LibAPI\PDOWrapper::cleanse($project_id));
         return $result;
     }
 

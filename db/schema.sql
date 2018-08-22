@@ -6918,6 +6918,32 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getMatecatLanguagePairsForProject`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getMatecatLanguagePairsForProject`(IN `pID` INT)
+BEGIN
+    SELECT * FROM MatecatLanguagePairs WHERE project_id=pID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insertTaskChunks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertTaskChunks`(IN `tID` BIGINT, IN `pID` INT, IN `typeID` INT, IN matecatLangpair VARCHAR(50), IN matecatIdJob INT, IN chunkNumber INT, IN chunkPassword VARCHAR(50))
+BEGIN
+    INSERT INTO TaskChunks
+               (task_id, project_id, type_id, matecat_langpair, matecat_id_job, chunk_number, chunk_password)
+        VALUES (    tID,        pID,  typeID,  matecatLangpair,   matecatIdJob,  chunkNumber,  chunkPassword);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getTaskChunks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskChunks`(IN `pID` INT)
+BEGIN
+    SELECT * FROM TaskChunks WHERE project_id=pID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `all_orgs`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `all_orgs`()
