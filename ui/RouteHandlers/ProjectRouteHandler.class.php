@@ -280,6 +280,10 @@ class ProjectRouteHandler
                     }
                 }
             }
+
+            if (!empty($post['copyChunks'])) {
+
+            }
         }
 
         $org = $orgDao->getOrganisation($project->getOrganisationId());
