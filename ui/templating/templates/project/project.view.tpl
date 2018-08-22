@@ -8,17 +8,12 @@
         </span>
         {assign var="project_id" value=$project->getId()}
         <div class="pull-right">
-            {if $isSiteAdmin && !empty($matecat_analyze_url)}
-                <form id="copyChunksProjectForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+            <form id="copyChunksProjectForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                {if $isSiteAdmin && !empty($matecat_analyze_url)}
                     <input type="hidden" name="copyChunks" value="1" />
                     <a class="btn btn-success" onclick="$('#copyChunksProjectForm').submit();" >
                         <i class="icon-upload icon-white"></i> Update any Task Chunks from Kató TM
                     </a>
-                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                </form>
-            {/if}
-            <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
-                {if $isSiteAdmin && !empty($matecat_analyze_url)}
                     <a href="{$matecat_analyze_url}" class="btn btn-primary" target="_blank">
                         <i class="icon-th-list icon-white"></i> Kató TM analysis
                     </a>
