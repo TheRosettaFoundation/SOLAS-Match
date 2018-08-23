@@ -283,10 +283,12 @@ class ProjectRouteHandler
 
             if (!empty($post['copyChunks'])) {
                 $matecat_language_pairs = $taskDao->getMatecatLanguagePairsForProject($project_id);
+error_log(print_r($matecat_language_pairs, true));
                 $matecat_language_pairs_populated = false;
                 if (!empty($matecat_matecat_language_pairs)) {
                     $matecat_language_pairs_populated = true;
                     foreach ($matecat_language_pairs as $matecat_language_pair) {
+error_log(print_r($matecat_language_pair, true));
                         if (empty($matecat_language_pair['matecat_id_job'])) $matecat_language_pairs_populated = false;
                     }
                 }
