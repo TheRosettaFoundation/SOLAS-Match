@@ -332,6 +332,9 @@ class ProjectRouteHandler
                         }
                     }
 
+error_log(print_r($task_chunks, true));
+error_log(print_r($job_was_chunked, true));
+error_log(print_r($parent_task_by_matecat_id_job_and_type, true));
                     $request_for_project = $taskDao->getWordCountRequestForProject($project_id);
                     if ($request_for_project && !empty($request_for_project->matecat_id_project) && !empty($request_for_project->matecat_id_project_pass)) {
                         $re = curl_init("https://tm.translatorswb.org/api/v2/projects/{$request_for_project->matecat_id_project}/{$request_for_project->matecat_id_project_pass}/urls");
@@ -385,6 +388,8 @@ class ProjectRouteHandler
                                                 }
                                             }
                                         }
+error_log("was_chunked: $was_chunked, chunked_now: $chunked_now");
+error_log(print_r($chunks, true));
 
                                         if (!$matched) {
                                             $parent_task_id_translation  = 0;
@@ -411,7 +416,7 @@ class ProjectRouteHandler
                                                     $parent_translation_task->setDeadline($deadline_less_3_days);
                                                 }
 
-                                                if ($was_chunked) {
+                                                if (false && $was_chunked) {
                                                     foreach ($task_chunks[$matecat_id_job] as $chunk_item) {
                                                         $taskDao->deleteTask($chunk_item[Common\Enums\TaskTypeEnum::TRANSLATION ]['task_id']);
                                                         $taskDao->deleteTask($chunk_item[Common\Enums\TaskTypeEnum::PROOFREADING]['task_id']);
@@ -419,7 +424,7 @@ class ProjectRouteHandler
                                                     // $taskDao->removeTaskChunks($matecat_id_job); WILL BE DONE BY DELETE CASCADE
                                                 }
 
-                                                if ($chunked_now) {
+                                                if (false && $chunked_now) {
                                                     foreach ($chunks as $chunk_number => $chunk) {
                                                         // Ideally Tasks should be created after the TaskChunks as there could, in theory, be an immediate attempt to claim the task linked to the chunk
                                                         // However we are not doing that here
