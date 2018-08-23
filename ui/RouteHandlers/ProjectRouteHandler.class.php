@@ -414,7 +414,7 @@ error_log(print_r($chunks, true));
                                                     $parent_translation_task->setDeadline($deadline_less_3_days);
                                                 }
 
-                                                if (false && $was_chunked) {
+                                                if ($was_chunked) {
                                                     foreach ($task_chunks[$matecat_id_job] as $chunk_item) {
                                                         $taskDao->deleteTask($chunk_item[Common\Enums\TaskTypeEnum::TRANSLATION ]['task_id']);
                                                         $taskDao->deleteTask($chunk_item[Common\Enums\TaskTypeEnum::PROOFREADING]['task_id']);
@@ -422,7 +422,7 @@ error_log(print_r($chunks, true));
                                                     // $taskDao->removeTaskChunks($matecat_id_job); WILL BE DONE BY DELETE CASCADE
                                                 }
 
-                                                if (false && $chunked_now) {
+                                                if ($chunked_now) {
                                                     foreach ($chunks as $chunk_number => $chunk) {
                                                         // Ideally Tasks should be created after the TaskChunks as there could, in theory, be an immediate attempt to claim the task linked to the chunk
                                                         // However we are not doing that here
