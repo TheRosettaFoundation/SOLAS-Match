@@ -386,6 +386,7 @@ class ProjectRouteHandler
                                             }
                                         }
 error_log("was_chunked: $was_chunked, chunked_now: $chunked_now");
+if ($matched) error_log("MATCHED"); else error_log("NOT MATCHED");
 error_log(print_r($chunks, true));
 
                                         if (!$matched) {
