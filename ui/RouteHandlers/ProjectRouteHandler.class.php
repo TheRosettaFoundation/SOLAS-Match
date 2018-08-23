@@ -372,6 +372,7 @@ class ProjectRouteHandler
 
                                         $was_chunked = !empty($job_was_chunked[$matecat_id_job]);
                                         $chunked_now = $number_of_chunks > 1;
+$chunked_now = $number_of_chunks > 0;
                                         if     (!$was_chunked && !$chunked_now) $matched = true;
                                         elseif (!$was_chunked &&  $chunked_now) $matched = false;
                                         elseif ( $was_chunked && !$chunked_now) $matched = false;
