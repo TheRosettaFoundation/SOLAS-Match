@@ -336,6 +336,7 @@ error_log(print_r($task_chunks, true));
 error_log(print_r($job_was_chunked, true));
 error_log(print_r($parent_task_by_matecat_id_job_and_type, true));
                     $request_for_project = $taskDao->getWordCountRequestForProject($project_id);
+error_log(print_r($request_for_project, true));
                     if ($request_for_project && !empty($request_for_project->matecat_id_project) && !empty($request_for_project->matecat_id_project_pass)) {
                         $re = curl_init("https://tm.translatorswb.org/api/v2/projects/{$request_for_project->matecat_id_project}/{$request_for_project->matecat_id_project_pass}/urls");
 
@@ -475,7 +476,7 @@ error_log(print_r($chunks, true));
                             $app->flashNow('error', "Could not get data from Kató TM, Response Code: $responseCode");
                         }
                     } else {
-                        $app->flashNow('error', 'Could no get matecat_id_project (WordCountRequestForProjects)');
+                        $app->flashNow('error', 'Could not get matecat_id_project (WordCountRequestForProjects)');
                     }
                 } else {
                     $app->flashNow('error', 'No MateCat project (MatecatLanguagePairs) found for this project in Kató Platform');
