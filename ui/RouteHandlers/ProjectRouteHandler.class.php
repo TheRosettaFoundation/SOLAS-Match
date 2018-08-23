@@ -290,7 +290,7 @@ class ProjectRouteHandler
                         if (empty($matecat_language_pair['matecat_id_job'])) $matecat_language_pairs_populated = false;
                     }
                 }
-                if ($language_pairs_populated) {
+                if ($matecat_language_pairs_populated) {
                     $project_chunks = $taskDao->getTaskChunks($project_id);
                     if (empty($project_chunks)) $project_chunks = array();
 
