@@ -332,9 +332,6 @@ class ProjectRouteHandler
                         }
                     }
 
-error_log(print_r($task_chunks, true));
-error_log(print_r($job_was_chunked, true));
-error_log(print_r($parent_task_by_matecat_id_job_and_type, true));
                     $request_for_project = $taskDao->getWordCountRequestForProject($project_id);
                     if ($request_for_project && !empty($request_for_project['matecat_id_project']) && !empty($request_for_project['matecat_id_project_pass'])) {
                         $re = curl_init("https://tm.translatorswb.org/api/v2/projects/{$request_for_project['matecat_id_project']}/{$request_for_project['matecat_id_project_pass']}/urls");
@@ -394,7 +391,7 @@ error_log(print_r($chunks, true));
                                         if (!$matched) {
                                             $parent_task_id_translation  = 0;
                                             $parent_task_id_proofreading = 0;
-                                        if (!empty($parent_task_by_matecat_id_job_and_type[$matecat_id_job][Common\Enums\TaskTypeEnum::TRANSLATION])) {
+                                            if (!empty($parent_task_by_matecat_id_job_and_type[$matecat_id_job][Common\Enums\TaskTypeEnum::TRANSLATION])) {
                                                 $parent_task_id_translation  = $parent_task_by_matecat_id_job_and_type[$matecat_id_job][Common\Enums\TaskTypeEnum::TRANSLATION];
                                             }
                                             if (!empty($parent_task_by_matecat_id_job_and_type[$matecat_id_job][Common\Enums\TaskTypeEnum::PROOFREADING])) {
