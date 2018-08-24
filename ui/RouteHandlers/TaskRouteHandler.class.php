@@ -661,6 +661,7 @@ class TaskRouteHandler
                     "sourceLanguage"=> $sourceLanguage,
                     "targetLanguage"=> $targetLanguage,
                     'matecat_url'   => $taskDao->get_matecat_url($task),
+                    'allow_download'=> $taskDao->get_allow_download($task),
                     "taskMetadata"  => $taskMetaData
         ));
 

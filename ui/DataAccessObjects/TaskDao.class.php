@@ -690,6 +690,16 @@ class TaskDao extends BaseDao
         }
     }
 
+    public function get_allow_download($task)
+    {
+        $allow = 1;
+        $matecat_tasks = $this->getTaskChunk($task->getId());
+        if (!empty($matecat_tasks)) {
+            $allow = 0;
+        }
+        return $allow;
+    }
+
     public function inheritRequiredTaskQualificationLevel($task_id)
     {
         LibAPI\PDOWrapper::call('inheritRequiredTaskQualificationLevel', LibAPI\PDOWrapper::cleanse($task_id));
