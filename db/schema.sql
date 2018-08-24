@@ -6944,6 +6944,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getTaskChunk`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskChunk`(IN `tID` INT)
+BEGIN
+    SELECT * FROM TaskChunks WHERE task_id=tID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `all_orgs`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `all_orgs`()

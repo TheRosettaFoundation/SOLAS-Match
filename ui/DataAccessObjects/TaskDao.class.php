@@ -478,6 +478,12 @@ class TaskDao extends BaseDao
         return $result;
     }
 
+    public function getTaskChunk($task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getTaskChunk', LibAPI\PDOWrapper::cleanse($task_id));
+        return $result;
+    }
+
     public function insertTaskChunks($task_id, $project_id, $type_id, $matecat_langpair, $matecat_id_job, $chunk_number, $chunk_password)
     {
         LibAPI\PDOWrapper::call('insertTaskChunks',
@@ -570,6 +576,12 @@ class TaskDao extends BaseDao
             if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
 
             $matecat_tasks = $this->getMatecatLanguagePairs($task->getId());
+            if (empty($matecat_tasks)) {
+                $matecat_tasks = $this->getTaskChunk($task->getId());
+                if (!empty($matecat_tasks)) {
+                    $matecat_tasks[0]['matecat_id_job_password'] = $matecat_tasks[0]['matecat_id_chunk_password'];
+                }
+            }
             if (!empty($matecat_tasks)) {
                 $matecat_langpair = $matecat_tasks[0]['matecat_langpair'];
                 $matecat_id_job = $matecat_tasks[0]['matecat_id_job'];
