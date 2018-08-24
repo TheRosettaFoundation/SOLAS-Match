@@ -372,7 +372,6 @@ class ProjectRouteHandler
 
                                         $was_chunked = !empty($job_was_chunked[$matecat_id_job]);
                                         $chunked_now = $number_of_chunks > 1;
-$chunked_now = $number_of_chunks > 0;
                                         if     (!$was_chunked && !$chunked_now) $matched = true;
                                         elseif (!$was_chunked &&  $chunked_now) $matched = false;
                                         elseif ( $was_chunked && !$chunked_now) $matched = false;
@@ -386,9 +385,6 @@ $chunked_now = $number_of_chunks > 0;
                                                 }
                                             }
                                         }
-error_log("was_chunked: $was_chunked, chunked_now: $chunked_now");
-if ($matched) error_log("MATCHED"); else error_log("NOT MATCHED");
-error_log(print_r($chunks, true));
 
                                         if (!$matched) {
                                             $parent_task_id_translation  = 0;
@@ -406,13 +402,12 @@ error_log(print_r($chunks, true));
                                                 $parent_translation_task  = $taskDao->getTask($parent_task_id_translation);
                                                 $parent_proofreading_task = $taskDao->getTask($parent_task_id_proofreading);
 
-                                                if (true || $parent_task_id_translation === $parent_task_id_proofreading) {
+                                                if ($parent_task_id_translation === $parent_task_id_proofreading) {
                                                     // Need to calculate Translation Deadline, 3 days earlier if it will fit
                                                     $deadline = strtotime($parent_proofreading_task->getDeadline());
                                                     $deadline_less_3_days = $deadline - 3*24*60*60;
                                                     if ($deadline_less_3_days < time())    $deadline_less_3_days = time() + 2*24*60*60;
                                                     if ($deadline_less_3_days > $deadline) $deadline_less_3_days = $deadline;
-$deadline_less_3_days = $deadline - 3*24*60*60+10;
                                                     $parent_translation_task->setDeadline(date("Y-m-d H:i:s", $deadline_less_3_days));
                                                 }
 
