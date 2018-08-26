@@ -43,14 +43,10 @@
             <a href="{urlFor name="task" options="task_id.$task_id"}" class="btn btn-primary">
                 <i class="icon-share-alt icon-white"></i> {Localisation::getTranslation('task_claimed_proofreading_upload_proofread_task')}
             </a>
-            <a href="{urlFor name="home"}" class="btn">
-                <i class="icon-arrow-left icon-black"></i> {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
-            </a>
-            {else}
-            <a href="{urlFor name="home"}" class="btn">
-                <i class="icon-arrow-left icon-black"></i> {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
-            </a>
             {/if}
+            <a href="{urlFor name="home"}" class="btn">
+                <i class="icon-arrow-left icon-black"></i> {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
+            </a>
         </p>
     </section>
 

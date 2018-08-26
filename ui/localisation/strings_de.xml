@@ -83,7 +83,7 @@
   <string name="common_maximum_file_total_size_vs_limit_is">Die Größe der gewählten Datei beträgt %1$sMB, doch die Grenze ist %2$sMB.</string>
 	<string name="common_assign">Zuweisen</string>
 	<string name="common_it_is_time_to_decide">Es ist Zeit, sich zu entscheiden</string>
-	<string name="common_no_just_bring_me_back_to_the_task_page">Nein, gehe zurück zur Aufgabenseite.</string>
+	<string name="common_no_just_bring_me_back_to_the_task_page">Gehe zurück zur Aufgabenseite.</string>
 	<string name="common_review_this_checklist_for_your_downloaded_file">Gehe für die heruntergeladene Datei diese Prüfliste durch.</string>
 	<string name="common_after_downloading">Nach dem Herunterladen</string>
 	<string name="common_this_is_what_you_need_to_do_as_soon_as_possible">Das solltest Du (so bald wie möglich) tun</string>

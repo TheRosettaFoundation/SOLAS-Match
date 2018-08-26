@@ -85,7 +85,7 @@
   <string name="common_maximum_file_total_size_vs_limit_is">You have selected to upload %1$sMB, but the limit is %2$sMB.</string>
 	<string name="common_assign">Assign</string>
 	<string name="common_it_is_time_to_decide">It is time to decide</string>
-	<string name="common_no_just_bring_me_back_to_the_task_page">No, just bring me back to the task page.</string>
+	<string name="common_no_just_bring_me_back_to_the_task_page">Just bring me back to the task page.</string>
 	<string name="common_review_this_checklist_for_your_downloaded_file">Review this checklist for your downloaded file.</string>
 	<string name="common_after_downloading">After downloading</string>
 	<string name="common_this_is_what_you_need_to_do_as_soon_as_possible">This is what you need to do (as soon as possible)</string>
