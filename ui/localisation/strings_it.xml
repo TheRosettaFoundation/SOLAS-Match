@@ -862,12 +862,14 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@translatorswit
 	<string name="task_claimed_translation_0">Hai preso in carico l'attività di traduzione</string>
 	<string name="task_claimed_translation_we_need_your_translation">Abbiamo bisogno della tua traduzione.</string>
 	<string name="task_claimed_translation_translate_the_file_to">Traduci il documento in %s utilizzando il tuo software di traduzione preferito.</string>
+    <string name="task_claimed_translation_translate_the_file_to_plain">Traduci il documento in %s.</string>
 	<string name="task_claimed_translation_4">Quando avrai finito di tradurre il documento scaricato:</string>
     <string name="task_claimed_translation_5">Carica il file tradotto sulla pagina dell'attività.</string>
     <string name="task_claimed_translation_upload_translated_task">Invia il file tradotto</string>
 
     <string name="task_claimed_alternative_option">Opzione alternativa:</string>
     <string name="task_claimed_translate_using_kato">Tradurre usando Kató TM</string>
+    <string name="task_claimed_click">Fai click</string>
     <string name="task_claimed_proofread_using_kato">Procedi alla revisione di questo documento usando Kató TM</string>
     <string name="task_claimed_please_read_kato">Kató TM è una piattaforma di traduzione di Translators without Borders (TWB). Leggi <a href="https://kato.translatorswb.org/public/doc/translators.html" target="_blank">queste linee guida</a> prima di iniziare a usare Kató TM.</string>
     <string name="task_simple_upload_copy_from_kato">Copia la tua traduzione da Kató TM a Kató</string>

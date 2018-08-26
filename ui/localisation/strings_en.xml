@@ -864,12 +864,14 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
 	<string name="task_claimed_translation_0">You have claimed the translation task</string>
 	<string name="task_claimed_translation_we_need_your_translation">We need your translation.</string>
 	<string name="task_claimed_translation_translate_the_file_to">Translate the file to %s using your favourite translation software.</string>
+  <string name="task_claimed_translation_translate_the_file_to_plain">Translate the file to %s.</string>
 	<string name="task_claimed_translation_4">When you have finished translating the file you downloaded:</string>
     <string name="task_claimed_translation_5">Upload your finished translated file to the task page.</string>
     <string name="task_claimed_translation_upload_translated_task">Submit Translated Task</string>
 
     <string name="task_claimed_alternative_option">Alternative option:</string>
     <string name="task_claimed_translate_using_kato">Translate using Kató TM</string>
+    <string name="task_claimed_click">Click</string>
     <string name="task_claimed_proofread_using_kato">Revise using Kató TM</string>
     <string name="task_claimed_please_read_kato">Kató TM is a Translators without Borders (TWB) translation platform. Please read <a href="https://kato.translatorswb.org/public/doc/translators.html" target="_blank">these guidelines</a> before using Kató TM.</string>
     <string name="task_simple_upload_copy_from_kato">Copy your translation from Kató TM to Kató</string>

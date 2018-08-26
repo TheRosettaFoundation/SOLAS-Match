@@ -14,8 +14,8 @@
             <p>{Localisation::getTranslation('common_this_is_what_you_need_to_do_as_soon_as_possible')}</p>
             <ol>
                 {if empty($allow_download)}
-                <li>{sprintf(Localisation::getTranslation('task_claimed_translation_translate_the_file_to'), {TemplateHelper::getLanguage($task->getTargetLocale())})}</li>
-                <li>??Click Translate using Kató TM</li>
+                <li>{Localisation::getTranslation('task_claimed_click')} <strong>{Localisation::getTranslation('task_claimed_translate_using_kato')}</strong></li>
+                <li>{sprintf(Localisation::getTranslation('task_claimed_translation_translate_the_file_to_plain'), {TemplateHelper::getLanguage($task->getTargetLocale())})}</li>
                 {else}
                 <li>{Localisation::getTranslation('common_can_you_open_file')}</li>
                 <li>{sprintf(Localisation::getTranslation('task_claimed_translation_translate_the_file_to'), {TemplateHelper::getLanguage($task->getTargetLocale())})}</li>
