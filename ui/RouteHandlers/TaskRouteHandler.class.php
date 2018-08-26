@@ -307,6 +307,7 @@ class TaskRouteHandler
         $discourse_slug = array();
         $proofreadTaskIds = array();
         $matecat_urls = array();
+        $allow_downloads = array();
 
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
         if ($currentScrollPage <= $lastScrollPage) {
@@ -347,6 +348,7 @@ class TaskRouteHandler
                 );
 
                 $matecat_urls[$taskId] = $taskDao->get_matecat_url($topTask);
+                $allow_downloads[$taskId] = $taskDao->get_allow_download($topTask);
 
                 $discourse_slug[$taskId] = $projectDao->discourse_parameterize($projectName);
 
@@ -389,6 +391,7 @@ class TaskRouteHandler
             'deadline_timestamps' => $deadline_timestamps,
             'projectAndOrgs' => $projectAndOrgs,
             'matecat_urls' => $matecat_urls,
+            'allow_downloads' => $allow_downloads,
             'discourse_slug' => $discourse_slug,
             'proofreadTaskIds' => $proofreadTaskIds,
             'currentScrollPage' => $currentScrollPage,
