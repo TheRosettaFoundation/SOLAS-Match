@@ -681,6 +681,7 @@ class TaskRouteHandler
 
         $app->view()->appendData(array(
             'matecat_url' => $taskDao->get_matecat_url($task),
+            'allow_download' => $taskDao->get_allow_download($task),
         ));
 
         $app->render("task/task.claimed.tpl");
