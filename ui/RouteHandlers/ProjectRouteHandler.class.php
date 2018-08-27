@@ -486,6 +486,7 @@ class ProjectRouteHandler
         $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
         $isAdmin = $adminDao->isOrgAdmin($project->getOrganisationId(), $user_id) || $isSiteAdmin;
 
+        $allow_downloads = array();
         if ($isOrgMember || $isAdmin) {
             $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);
             $taskMetaData = array();
@@ -506,6 +507,7 @@ class ProjectRouteHandler
                         $metaData['tracking'] = false;
                     }
                     $taskMetaData[$task_id] = $metaData;
+                    $allow_downloads[$task_id] = $taskDao->get_allow_download($task);
                 }
             }
 
@@ -561,6 +563,7 @@ class ProjectRouteHandler
                 "imgCacheToken" => $preventImageCacheToken,
                 'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
                 'matecat_analyze_url' => $taskDao->get_matecat_analyze_url($project_id),
+                'allow_downloads'     => $allow_downloads,
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation
         ));
         $app->render("project/project.view.tpl");

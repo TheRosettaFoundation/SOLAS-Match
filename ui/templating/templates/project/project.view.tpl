@@ -319,9 +319,13 @@ Tweet</a>
                                             </a>
                                         {elseif $status_id == TaskStatusEnum::COMPLETE}
                                             {assign var="org_id" value=$project->getOrganisationId()}
+                                            {if !empty($allow_downloads[$task_id])}
                                             <a href="{urlFor name="org-task-complete" options="task_id.$task_id|org_id.$org_id"}">
+                                            {/if}
                                                 {Localisation::getTranslation('common_complete')}
+                                            {if !empty($allow_downloads[$task_id])}
                                             </a>
+                                            {/if}
                                         {/if}
                                     </td>
                                     <td>
