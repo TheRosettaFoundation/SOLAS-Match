@@ -1424,6 +1424,7 @@ CREATE TABLE IF NOT EXISTS `TaskChunks` (
     matecat_id_chunk_password VARCHAR(50) NOT NULL,
     UNIQUE KEY FK_task_chunks_task_id (task_id),
     CONSTRAINT FK_task_chunks_task_id FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    KEY FK_task_chunks_matecat_id_job (matecat_id_job),
     KEY FK_task_chunks_project_id (project_id),
     CONSTRAINT FK_task_chunks_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
