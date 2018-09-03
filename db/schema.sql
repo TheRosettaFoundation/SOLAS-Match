@@ -6953,6 +6953,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getTaskSubChunks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskSubChunks`(IN `jID` INT)
+BEGIN
+    SELECT * FROM TaskChunks WHERE matecat_id_job=jID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `all_orgs`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `all_orgs`()
