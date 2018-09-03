@@ -484,6 +484,12 @@ class TaskDao extends BaseDao
         return $result;
     }
 
+    public function getTaskSubChunks($matecat_id_job)
+    {
+        $result = LibAPI\PDOWrapper::call('getTaskSubChunks', LibAPI\PDOWrapper::cleanse($matecat_id_job));
+        return $result;
+    }
+
     public function insertTaskChunks($task_id, $project_id, $type_id, $matecat_langpair, $matecat_id_job, $chunk_number, $chunk_password)
     {
         LibAPI\PDOWrapper::call('insertTaskChunks',
