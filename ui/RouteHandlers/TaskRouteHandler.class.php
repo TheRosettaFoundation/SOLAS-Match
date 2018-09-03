@@ -1172,7 +1172,7 @@ class TaskRouteHandler
                 if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password) && !empty($matecat_id_file)) {
                   if ($taskDao->getTaskSubChunks($matecat_id_job)) {
                     // This has been chunked, so need to accumulate status of all chunks
-$taskDao->getStatusOfSubChunks($matecat_id_job);
+$taskDao->getStatusOfSubChunks($task->getProjectId(), $task, $matecat_id_job);
 $matecat_url = '';
 $matecat_download_url = '';
                   } else {
