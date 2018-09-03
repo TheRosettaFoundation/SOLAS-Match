@@ -1170,6 +1170,12 @@ class TaskRouteHandler
                 $matecat_id_job_password = $matecat_tasks[0]['matecat_id_job_password'];
                 $matecat_id_file = $matecat_tasks[0]['matecat_id_file'];
                 if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password) && !empty($matecat_id_file)) {
+                  if ($taskDao->getTaskSubChunks($matecat_id_job)) {
+                    // This has been chunked, so need to accumulate status of all chunks
+$taskDao->getStatusOfSubChunks($matecat_id_job);
+$matecat_url = '';
+$matecat_download_url = '';
+                  } else {
                     // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
                     $re = curl_init("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
 
@@ -1216,6 +1222,7 @@ class TaskRouteHandler
                     } else {
                         error_log("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats ($taskId) responseCode: $responseCode");
                     }
+                  }
                 }
             }
         }
