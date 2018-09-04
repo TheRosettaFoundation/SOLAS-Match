@@ -851,6 +851,7 @@ class TaskRouteHandler
         $task_file_info = $taskDao->getTaskInfo($taskId);
         $siteLocation = Common\Lib\Settings::get("site.location");
         $file_path = "{$siteLocation}task/$taskId/download-file-user/";
+        if (!$taskDao->get_allow_download($task)) $file_path = '';
         
         $alsoViewedTasksCount = 0;
         
@@ -1555,6 +1556,7 @@ class TaskRouteHandler
         $task_file_info = $taskDao->getTaskInfo($task_id, 0);
         $siteLocation = Common\Lib\Settings::get("site.location");
         $file_path= "{$siteLocation}task/$task_id/download-file-user/";
+        if (!$taskDao->get_allow_download($task)) $file_path = '';
 
         $app->view()->appendData(array(
             "file_preview_path" => $file_path,
