@@ -1518,6 +1518,7 @@ class TaskRouteHandler
             'restrictTaskStatus'  => $restrictTaskStatus,
             'adminAccess'         => $adminAccess,
             'required_qualification_level' => $taskDao->getRequiredTaskQualificationLevel($task_id),
+            'allow_download'      => $taskDao->get_allow_download($task),
             "taskTypeColours"     => $taskTypeColours
         ));
 
