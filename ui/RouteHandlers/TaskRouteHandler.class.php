@@ -1162,7 +1162,6 @@ class TaskRouteHandler
 
         $matecat_url = '';
         $matecat_download_url = '';
-        $allow_copy_from_matecat = false;
         if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
             $matecat_tasks = $taskDao->getMatecatLanguagePairs($taskId);
             if (!empty($matecat_tasks)) {
@@ -1171,10 +1170,6 @@ class TaskRouteHandler
                 $matecat_id_job_password = $matecat_tasks[0]['matecat_id_job_password'];
                 $matecat_id_file = $matecat_tasks[0]['matecat_id_file'];
                 if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password) && !empty($matecat_id_file)) {
-                  if ($taskDao->getTaskSubChunks($matecat_id_job)) {
-                    // This has been chunked, so need to accumulate status of all chunks
-                    $allow_copy_from_matecat = $taskDao->getStatusOfSubChunks($task->getProjectId(), $matecat_id_job);
-                  } else {
                     // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
                     $re = curl_init("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
 
@@ -1221,7 +1216,6 @@ class TaskRouteHandler
                     } else {
                         error_log("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats ($taskId) responseCode: $responseCode");
                     }
-                  }
                 }
             }
         }
@@ -1241,7 +1235,6 @@ class TaskRouteHandler
             "taskTypeColours"   => $taskTypeColours,
             'matecat_url' => $matecat_url,
             'matecat_download_url' => $matecat_download_url,
-            'allow_copy_from_matecat' => $allow_copy_from_matecat,
             'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
             "file_previously_uploaded" => $file_previously_uploaded
         ));
