@@ -1028,6 +1028,11 @@ class TaskRouteHandler
         $userId = Common\Lib\UserSession::getCurrentUserID();
         $task = $taskDao->getTask($taskId);
         $project = $projectDao->getProject($task->getProjectId());
+
+        if ($is_chunk = $taskDao->is_chunk_or_parent_of_chunk($task->getProjectId(), $taskId)) {
+            $app->redirect($app->urlFor("task", array("task_id" => $taskId)));
+        }
+
         if ($app->request()->isPost()) {
           $post = $app->request()->post();
           Common\Lib\UserSession::checkCSRFKey($post, 'taskSimpleUpload');
