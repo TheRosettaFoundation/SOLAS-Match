@@ -490,6 +490,12 @@ class TaskDao extends BaseDao
         return $result;
     }
 
+    public function is_chunk_or_parent_of_chunk($project_id, $task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('is_chunk_or_parent_of_chunk', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
+        return $result;
+    }
+
     public function insertTaskChunks($task_id, $project_id, $type_id, $matecat_langpair, $matecat_id_job, $chunk_number, $chunk_password)
     {
         LibAPI\PDOWrapper::call('insertTaskChunks',
