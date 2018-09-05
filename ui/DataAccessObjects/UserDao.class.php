@@ -921,7 +921,7 @@ $from_neon_to_trommons_pair = array(
 'Spanish' => array('es', 'ES'),
 'Spanish Latin America' => array('es', 'MX'),
 'Spanish Colombia' => array('es', 'CO'),
-'Swahili' => array('sw', 'SZ'),
+'Swahili' => array('swh', 'KE'),
 'Swedish' => array('sv', 'SE'),
 'Swiss German' => array('de', 'CH'),
 'Tagalog' => array('tl', 'PH'),
@@ -950,6 +950,18 @@ $from_neon_to_trommons_pair = array(
 'Konkani' => array('kok', 'IN'),
 'Manipuri' => array('mni', 'IN'),
 'Mizo' => array('lus', 'IN'),
+'Chadian Arabic' => array('shu', 'TD'),
+'Kamba' => array('kam', 'KE'),
+'Margi' => array('mrt', 'NG'),
+'Borana' => array('gax', 'KE'),
+'Meru' => array('mer', 'KE'),
+'Kalenjin' => array('kln', 'KE'),
+'Luo' => array('luo', 'KE'),
+'Kikuyu' => array('ki', 'KE'),
+'Maa' => array('cma', 'KE'),
+'Mijikenda' => array('nyf', 'KE'),
+'Luhya' => array('luy', 'KE'),
+'Kisii' => array('guz', 'KE'),
 );
 
         $account_id   = '';
