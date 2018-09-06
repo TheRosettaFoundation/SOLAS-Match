@@ -772,7 +772,11 @@ class TaskRouteHandler
                     break;
                 case Common\Enums\TaskTypeEnum::TRANSLATION:
                 case Common\Enums\TaskTypeEnum::PROOFREADING:
+                  if ($taskDao->get_allow_download($task)) {
                     $app->redirect($app->urlFor("task-simple-upload", array("task_id" => $taskId)));
+                  } else {
+                    $app->redirect($app->urlFor("task-view", array("task_id" => $taskId)));
+                  }
                     break;
                 case Common\Enums\TaskTypeEnum::SEGMENTATION:
                     $app->redirect($app->urlFor("task-segmentation", array("task_id" => $taskId)));
@@ -1029,8 +1033,8 @@ class TaskRouteHandler
         $task = $taskDao->getTask($taskId);
         $project = $projectDao->getProject($task->getProjectId());
 
-        if ($is_chunk = $taskDao->is_chunk_or_parent_of_chunk($task->getProjectId(), $taskId)) {
-            $app->redirect($app->urlFor("task", array("task_id" => $taskId)));
+        if (!$taskDao->get_allow_download($task)) {
+            $app->redirect($app->urlFor("task-view", array("task_id" => $taskId)));
         }
 
         if ($app->request()->isPost()) {
