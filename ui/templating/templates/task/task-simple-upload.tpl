@@ -71,13 +71,17 @@
             {if $type_id == TaskTypeEnum::TRANSLATION}
             {Localisation::getTranslation('task_claimed_alternative_option')} <button type="submit" value="submit" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> {Localisation::getTranslation('task_simple_upload_copy_from_kato')}</button>
             <p>
+                {if !$is_chunked}
                 {sprintf(Localisation::getTranslation('task_simple_upload_view_on_kato'), {$matecat_url})}<br />
+                {/if}
                 {sprintf(Localisation::getTranslation('task_simple_upload_download_from_kato'), {$matecat_download_url})}
             </p>
             {elseif $type_id == TaskTypeEnum::PROOFREADING}
             {Localisation::getTranslation('task_claimed_alternative_option')} <button type="submit" value="submit" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> {Localisation::getTranslation('task_simple_upload_copy_from_kato_proofread')}</button>
             <p>
+                {if !$is_chunked}
                 {sprintf(Localisation::getTranslation('task_simple_upload_view_on_kato_proofread'), {$matecat_url})}<br />
+                {/if}
                 {sprintf(Localisation::getTranslation('task_simple_upload_download_from_kato_proofread'), {$matecat_download_url})}
             </p>
             {/if}
@@ -97,6 +101,12 @@
                 </p>
                 <p><strong>{Localisation::getTranslation('common_warning')}! </strong>{Localisation::getTranslation('task_simple_upload_2')}</p>
             </div>
+        {/if}
+
+        {if $is_chunked}
+            {foreach $chunks as $chunk}
+
+            {/foreach}
         {/if}
 
         <h3>{Localisation::getTranslation('task_simple_upload_3')} <small>{Localisation::getTranslation('task_simple_upload_4')}</small></h3>
