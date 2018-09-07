@@ -1193,9 +1193,9 @@ class TaskRouteHandler
                           $matecat_url = $chunk['translate_url']; // As we are chunked, the $matecat_url scalar string will not be used as a URL in the template, just for logic.
                           $matecat_download_url = $chunk['matecat_download_url'];
                       }
-If (!accumulated status???) {
-    $matecat_url = ''????;
-}
+
+                      if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION  && !$translated_status) $matecat_url = '';
+                      if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && !approved_status   ) $matecat_url = '';
                   } else {
                     // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
                     $re = curl_init("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
