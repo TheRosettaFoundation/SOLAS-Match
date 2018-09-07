@@ -109,14 +109,16 @@
             <table class="table table-striped">
                 <thead>
                     <th style="text-align: left">Chunk Number</th>
-                    <th>View on Kató TM</th>
+                    <th>Kató TM Translate URL</th>
+                    <th>Kató TM Revise URL</th>
                     <th>Kató TM Status</th>
                 </thead>
                 <tbody>
                     {foreach $chunks as $chunk}
                         <tr>
                             <td style="text-align: left; word-break:break-all; width: 50px">{$chunk_number}</td>
-                            <td><a href="{$chunk['matecat_url']}">{$chunk['matecat_url']}</a></td>
+                            <td><a href="{$chunk['translate_url']}">{$chunk['translate_url']}</a></td>
+                            <td><a href="{$chunk['revise_url']}"   >{$chunk['revise_url']}</a></td>
                             <td>{$chunk['DOWNLOAD_STATUS']}</td>
                         </tr>
                         {assign var="chunk_number" value=($chunk_number + 1)}

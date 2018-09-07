@@ -1190,11 +1190,7 @@ class TaskRouteHandler
                           if ($chunk['DOWNLOAD_STATUS'] === 'draft') $translated_status = false;
                           if ($chunk['DOWNLOAD_STATUS'] === 'draft' || $chunk['DOWNLOAD_STATUS'] === 'translated') $approved_status = false;
 
-                          // As we are chunked, the $matecat_url scalar string will not be used as a URL in the template, just for logic. The array value is used for display.
-$matecat_url = $chunk['translate_url'];
-$matecat_url = $chunk['revise_url'];
-                          $chunks[$index]['matecat_url'] = $matecat_url;
-
+                          $matecat_url = $chunk['translate_url']; // As we are chunked, the $matecat_url scalar string will not be used as a URL in the template, just for logic.
                           $matecat_download_url = $chunk['matecat_download_url'];
                       }
 If (!accumulated status???) {
