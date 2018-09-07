@@ -1189,11 +1189,13 @@ class TaskRouteHandler
                       foreach ($chunks as $chunk) {
                           if ($chunk['DOWNLOAD_STATUS'] === 'draft') $translated_status = false;
                           if ($chunk['DOWNLOAD_STATUS'] === 'draft' || $chunk['DOWNLOAD_STATUS'] === 'translated') $approved_status = false;
+
+                          $matecat_url = $chunk['matecat_url']; // As we are chunked, this scalar string will not be used as a URL, just for logic in the template
+                          $matecat_download_url = $chunk['matecat_download_url'];
                       }
-$chunk['matecat_url']
-$chunk['DOWNLOAD_STATUS']
-$matecat_url If accumulated status
-$matecat_download_url
+If (!accumulated status???) {
+    $matecat_url = ''????;
+}
                   } else {
                     // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
                     $re = curl_init("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
