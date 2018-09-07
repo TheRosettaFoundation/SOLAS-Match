@@ -687,6 +687,69 @@ class TaskDao extends BaseDao
         return $download_status;
     }
 
+    public function getStatusOfSubChunks($project_id, $matecat_id_job)
+    {
+        $chunks = array();
+
+        $result = LibAPI\PDOWrapper::call('getWordCountRequestForProject', LibAPI\PDOWrapper::cleanse($project_id));
+        if (!empty($result)) {
+            $matecat_id_project      = $result[0]['matecat_id_project'];
+            $matecat_id_project_pass = $result[0]['matecat_id_project_pass'];
+
+            // https://www.matecat.com/api/docs#/Project/get_api_v2_projects__id_project___password_
+            $re = curl_init("https://tm.translatorswb.org/api/v2/projects/$matecat_id_project/$matecat_id_project_pass");
+
+            curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
+            curl_setopt($re, CURLOPT_COOKIESESSION, true);
+            curl_setopt($re, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($re, CURLOPT_AUTOREFERER, true);
+
+            $httpHeaders = array(
+                'Expect:'
+            );
+            curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
+
+            curl_setopt($re, CURLOPT_HEADER, true);
+            curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
+            $res = curl_exec($re);
+
+            $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
+            $header = substr($res, 0, $header_size);
+            $res = substr($res, $header_size);
+            $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
+
+            curl_close($re);
+
+            if ($responseCode == 200) {
+                $response_data = json_decode($res, true);
+
+                if (!empty($response_data['project']['jobs'])) {
+                    $jobs = $response_data['project']['jobs'];
+                    foreach ($jobs as $job) {
+                        if ($job['id'] == $matecat_id_job) {
+                            $stats = $job['stats'];
+                            $urls  = $job['urls'];
+
+                            $chunks[] = array(
+                                'translate_url'        => $urls['translate_url'],
+                                'revise_url'           => $urls['revise_url'],
+                                'matecat_download_url' => $urls['translation_download_url'],
+                                'DOWNLOAD_STATUS'      => $stats['DOWNLOAD_STATUS']);
+                        }
+                    }
+                } else {
+                    error_log("https://tm.translatorswb.org/api/v2/projects/$matecat_id_project/$matecat_id_project_pass ($project_id) No Jobs!");
+                }
+            } else {
+                error_log("https://tm.translatorswb.org/api/v2/projects/$matecat_id_project/$matecat_id_project_pass ($project_id) responseCode: $responseCode");
+            }
+        }
+
+        return $chunks;
+    }
+
     public function record_task_if_translated_in_matecat($task)
     {
         if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {

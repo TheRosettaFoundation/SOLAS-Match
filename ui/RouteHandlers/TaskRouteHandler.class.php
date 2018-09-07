@@ -1186,11 +1186,15 @@ class TaskRouteHandler
                       $chunks = $taskDao->getStatusOfSubChunks($task->getProjectId(), $matecat_id_job);
                       $translated_status = true;
                       $approved_status   = true;
-                      foreach ($chunks as $chunk) {
+                      foreach ($chunks as $index => $chunk) {
                           if ($chunk['DOWNLOAD_STATUS'] === 'draft') $translated_status = false;
                           if ($chunk['DOWNLOAD_STATUS'] === 'draft' || $chunk['DOWNLOAD_STATUS'] === 'translated') $approved_status = false;
 
-                          $matecat_url = $chunk['matecat_url']; // As we are chunked, this scalar string will not be used as a URL, just for logic in the template
+                          // As we are chunked, the $matecat_url scalar string will not be used as a URL in the template, just for logic. The array value is used for display.
+$matecat_url = $chunk['translate_url'];
+$matecat_url = $chunk['revise_url'];
+                          $chunks[$index]['matecat_url'] = $matecat_url;
+
                           $matecat_download_url = $chunk['matecat_download_url'];
                       }
 If (!accumulated status???) {
