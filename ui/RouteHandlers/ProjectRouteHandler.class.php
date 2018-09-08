@@ -590,7 +590,8 @@ class ProjectRouteHandler
         $task->setWordCount($word_count);
 
         $task->setDeadline($parent_task->getDeadline());
-        $task->setPublished($parent_task->getPublished());
+        //$task->setPublished($parent_task->getPublished());
+        $task->setPublished(true);
 
         $newTask = $taskDao->createTask($task);
         $task_id = $newTask->getId();
