@@ -16,6 +16,7 @@
                 {if empty($allow_download)}
                 <li>{Localisation::getTranslation('task_claimed_click')} <strong>{Localisation::getTranslation('task_claimed_proofread_using_kato')}</strong></li>
                 <li>{sprintf(Localisation::getTranslation('task_claimed_proofreading_proofread_the_file_in'), {TemplateHelper::getLanguage($task->getTargetLocale())})}</li>
+                <li>Also please note that you must wait for translation to be complete (100% translated) before starting revising.</li>
                 {else}
                 <li>{Localisation::getTranslation('task_claimed_proofreading_1')}</li>
                 <li>{sprintf(Localisation::getTranslation('task_claimed_proofreading_proofread_the_file_in'), {TemplateHelper::getLanguage($task->getTargetLocale())})}</li>

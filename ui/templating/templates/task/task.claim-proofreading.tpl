@@ -22,6 +22,11 @@
                 {sprintf(Localisation::getTranslation('task_claim_warning_kato'), {Localisation::getTranslation('task_claim_view_on_kato')}, {Localisation::getTranslation('common_download_file')}, {Localisation::getTranslation('task_claim_proofreading_5')})}
             </li>
             {/if}
+            {if empty($allow_download)}
+            <li>
+                Also please note that you must wait for translation to be complete (100% translated) before starting revising.
+            </li>
+            {/if}
         </ol>
     </section>
 
