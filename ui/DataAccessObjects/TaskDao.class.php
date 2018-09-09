@@ -713,6 +713,7 @@ class TaskDao extends BaseDao
             curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
             curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($re, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because we may be called inside file lock
             $res = curl_exec($re);
 
             $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
