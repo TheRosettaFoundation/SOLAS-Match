@@ -752,6 +752,12 @@ class TaskDao extends BaseDao
         return $chunks;
     }
 
+    public function all_chunked_active_projects()
+    {
+        $result = LibAPI\PDOWrapper::call('all_chunked_active_projects', '');
+        return $result;
+    }
+
     public function record_task_if_translated_in_matecat($task)
     {
         if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
