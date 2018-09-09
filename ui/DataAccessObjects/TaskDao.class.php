@@ -687,7 +687,7 @@ class TaskDao extends BaseDao
         return $download_status;
     }
 
-    public function getStatusOfSubChunks($project_id, $matecat_id_job)
+    public function getStatusOfSubChunks($project_id, $matecat_id_job = 0)
     {
         $chunks = array();
 
@@ -728,11 +728,13 @@ class TaskDao extends BaseDao
                 if (!empty($response_data['project']['jobs'])) {
                     $jobs = $response_data['project']['jobs'];
                     foreach ($jobs as $job) {
-                        if ($job['id'] == $matecat_id_job) {
+                        if ($matecat_id_job == 0 || $job['id'] == $matecat_id_job) {
                             $stats = $job['stats'];
                             $urls  = $job['urls'];
 
                             $chunks[] = array(
+                                'matecat_id_job'            => $job['id'],
+                                'matecat_id_chunk_password' => $job['password'],
                                 'translate_url'        => $urls['translate_url'],
                                 'revise_url'           => $urls['revise_url'],
                                 'matecat_download_url' => $urls['translation_download_url'],
