@@ -6988,7 +6988,9 @@ BEGIN
         tc.project_id,
         tc.task_id,
         tc.matecat_id_job,
-        tc.matecat_id_chunk_password
+        tc.matecat_id_chunk_password,
+        t.`created-time` AS created,
+        t.deadline
     FROM TaskChunks tc
     JOIN Tasks       t ON tc.task_id=t.id
     WHERE
