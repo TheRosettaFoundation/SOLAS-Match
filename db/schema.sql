@@ -6980,6 +6980,22 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `all_chunked_active_projects`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `all_chunked_active_projects`()
+BEGIN
+    SELECT
+        tc.project_id,
+        tc.task_id,
+        tc.matecat_id_job,
+        tc.matecat_id_chunk_password
+    FROM TaskChunks tc
+    JOIN Tasks       t ON tc.task_id=t.id
+    WHERE
+        t.`task-status_id`=3;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `all_orgs`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `all_orgs`()
