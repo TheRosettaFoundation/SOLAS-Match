@@ -1936,6 +1936,29 @@ class ProjectRouteHandler
             }
         }
 
+        // See if any chunks have been finalised in MateCat, if so mark any corresponding IN_PROGRESS (active) task(s) as complete
+        $active_tasks_for_chunks = $taskDao->all_chunked_active_projects();
+        if (!empty($active_tasks_for_chunks)) {
+            $projects = array();
+            foreach ($active_tasks_for_chunks as $active_task) {
+                $projects[$active_task['project_id']] = $active_task['project_id'];
+            }
+            $project_id = array_rand($projects); // Pick a random Project, we don't want to do all at once.
+            $chunks = $taskDao->getStatusOfSubChunks($project_id);
+
+            foreach ($active_tasks_for_chunks as $active_task) {
+                foreach ($chunks as $chunk) {
+                    if ($active_task['matecat_id_job'] == $chunk['matecat_id_job'] && $active_task['matecat_id_chunk_password'] == $chunk['matecat_id_chunk_password']) {
+                        if (($active_task['type_id'] == Common\Enums\TaskTypeEnum::TRANSLATION  && ($chunk['DOWNLOAD_STATUS'] === 'translated' || $chunk['DOWNLOAD_STATUS'] === 'approved')) ||
+                            ($active_task['type_id'] == Common\Enums\TaskTypeEnum::PROOFREADING &&                                                $chunk['DOWNLOAD_STATUS'] === 'approved')) {
+
+                            $taskDao->setTaskStatus($active_task['task_id'], Common\Enums\TaskStatusEnum::COMPLETE);
+                            LibAPI\Notify::sendTaskUploadNotifications($active_task['task_id'], 1);
+                    }
+                }
+            }
+        }
+
         flock($fp_for_lock, LOCK_UN); // Release the lock
       }
       fclose($fp_for_lock);
