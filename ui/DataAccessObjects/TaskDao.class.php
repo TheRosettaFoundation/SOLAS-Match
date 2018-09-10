@@ -759,6 +759,13 @@ class TaskDao extends BaseDao
         return $result;
     }
 
+    public function setTaskStatus($task_id, $status)
+    {
+        LibAPI\PDOWrapper::call('setTaskStatus',
+            LibAPI\PDOWrapper::cleanse($task_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($status));
+    }
+
     public function record_task_if_translated_in_matecat($task)
     {
         if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
