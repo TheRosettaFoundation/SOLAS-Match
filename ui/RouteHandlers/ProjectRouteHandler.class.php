@@ -1954,6 +1954,7 @@ class ProjectRouteHandler
 
                             $taskDao->setTaskStatus($active_task['task_id'], Common\Enums\TaskStatusEnum::COMPLETE);
                             LibAPI\Notify::sendTaskUploadNotifications($active_task['task_id'], 1);
+                        }
                     }
                 }
             }
