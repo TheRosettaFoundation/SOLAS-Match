@@ -1181,7 +1181,7 @@ class TaskRouteHandler
                 $matecat_id_job_password = $matecat_tasks[0]['matecat_id_job_password'];
                 $matecat_id_file = $matecat_tasks[0]['matecat_id_file'];
                 if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password) && !empty($matecat_id_file)) {
-                  if (getTaskSubChunks($matecat_id_job) {
+                  if (getTaskSubChunks($matecat_id_job)) {
                       // This has been chunked, so need to accumulate status of all chunks
                       $chunks = $taskDao->getStatusOfSubChunks($task->getProjectId(), $matecat_id_job);
                       $translated_status = true;
