@@ -6999,6 +6999,68 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getMatchingTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getMatchingTask`(IN id_job INT, IN password VARCHAR(50), IN matching_type_id INT)
+BEGIN
+    SELECT
+        t.id,
+        t.project_id AS projectId,
+        t.title, `word-count` AS wordCount,
+        (SELECT `en-name` FROM Languages l where l.id = t.`language_id-source`) AS `sourceLanguageName`,
+        (SELECT  code     FROM Languages l where l.id = t.`language_id-source`) AS `sourceLanguageCode`,
+        (SELECT `en-name` FROM Languages l where l.id = t.`language_id-target`) AS `targetLanguageName`,
+        (SELECT  code     FROM Languages l where l.id = t.`language_id-target`) AS `targetLanguageCode`,
+        (SELECT `en-name` FROM Countries c where c.id = t.`country_id-source` ) AS `sourceCountryName`,
+        (SELECT  code     FROM Countries c where c.id = t.`country_id-source` ) AS `sourceCountryCode`,
+        (SELECT `en-name` FROM Countries c where c.id = t.`country_id-target` ) AS `targetCountryName`,
+        (SELECT  code     FROM Countries c where c.id = t.`country_id-target` ) AS `targetCountryCode`,
+        t.`comment`,
+        t.`task-type_id`   AS taskType,
+        t.`task-status_id` AS taskStatus,
+        t.published,
+        t.deadline,
+        t.`created-time`   AS createdTime
+    FROM Tasks       t
+    JOIN TaskChunks tc ON t.id=tc.task_id
+    WHERE
+        tc.matecat_id_job=id_job AND
+        tc.matecat_id_chunk_password=password AND
+        tc.type_id=matching_type_id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getParentTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getParentTask`(IN project INT, IN id_job INT, IN matching_type_id INT)
+BEGIN
+    SELECT
+        t.id,
+        t.project_id AS projectId,
+        t.title, `word-count` AS wordCount,
+        (SELECT `en-name` FROM Languages l where l.id = t.`language_id-source`) AS `sourceLanguageName`,
+        (SELECT  code     FROM Languages l where l.id = t.`language_id-source`) AS `sourceLanguageCode`,
+        (SELECT `en-name` FROM Languages l where l.id = t.`language_id-target`) AS `targetLanguageName`,
+        (SELECT  code     FROM Languages l where l.id = t.`language_id-target`) AS `targetLanguageCode`,
+        (SELECT `en-name` FROM Countries c where c.id = t.`country_id-source` ) AS `sourceCountryName`,
+        (SELECT  code     FROM Countries c where c.id = t.`country_id-source` ) AS `sourceCountryCode`,
+        (SELECT `en-name` FROM Countries c where c.id = t.`country_id-target` ) AS `targetCountryName`,
+        (SELECT  code     FROM Countries c where c.id = t.`country_id-target` ) AS `targetCountryCode`,
+        t.`comment`,
+        t.`task-type_id`   AS taskType,
+        t.`task-status_id` AS taskStatus,
+        t.published,
+        t.deadline,
+        t.`created-time`   AS createdTime
+    FROM Tasks                 t
+    JOIN MatecatLanguagePairs lp ON t.id=lp.task_id
+    WHERE
+        lp.project_id=project AND
+        lp.matecat_id_job=id_job AND
+        lp.type_id=matching_type_id;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `all_orgs`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `all_orgs`()
