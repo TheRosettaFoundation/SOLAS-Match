@@ -1944,16 +1944,22 @@ class ProjectRouteHandler
                 $projects[$active_task['project_id']] = $active_task['project_id'];
             }
             $project_id = array_rand($projects); // Pick a random Project, we don't want to do all at once.
+error_log("Random project_id: $project_id");
             $chunks = $taskDao->getStatusOfSubChunks($project_id);
 
             foreach ($active_tasks_for_chunks as $active_task) {
                 foreach ($chunks as $chunk) {
                     if ($active_task['matecat_id_job'] == $chunk['matecat_id_job'] && $active_task['matecat_id_chunk_password'] == $chunk['matecat_id_chunk_password']) {
+error_log("task_id: " . $active_task['task_id']);
+error_log("matecat_id_job: " . $active_task['matecat_id_job']);
+error_log("matecat_id_chunk_password: " . $chunk['matecat_id_chunk_password']);
+error_log("DOWNLOAD_STATUS: " . $chunk['DOWNLOAD_STATUS']);
                         if (($active_task['type_id'] == Common\Enums\TaskTypeEnum::TRANSLATION  && ($chunk['DOWNLOAD_STATUS'] === 'translated' || $chunk['DOWNLOAD_STATUS'] === 'approved')) ||
                             ($active_task['type_id'] == Common\Enums\TaskTypeEnum::PROOFREADING &&                                                $chunk['DOWNLOAD_STATUS'] === 'approved')) {
 
                             $taskDao->setTaskStatus($active_task['task_id'], Common\Enums\TaskStatusEnum::COMPLETE);
                             LibAPI\Notify::sendTaskUploadNotifications($active_task['task_id'], 1);
+error_log("MARKED COMPLETE task_id: " . $active_task['task_id']);
                         }
                     }
                 }
