@@ -687,7 +687,7 @@ class TaskDao extends BaseDao
         return $download_status;
     }
 
-    public function getStatusOfSubChunks($project_id, $matecat_id_job = 0)
+    public function getStatusOfSubChunks($project_id, $matecat_langpair = '', $matecat_id_job = 0, $matecat_id_job_password = '', $matecat_id_file = 0)
     {
         $chunks = array();
 
@@ -731,14 +731,18 @@ class TaskDao extends BaseDao
                     foreach ($jobs as $job) {
                         if ($matecat_id_job == 0 || $job['id'] == $matecat_id_job) {
                             $stats = $job['stats'];
-                            $urls  = $job['urls'];
+
+                            $matecat_id_chunk_password = $job['password'];
+                            $translate_url = "https://tm.translatorswb.org/translate/proj-$project_id/" . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_chunk_password";
+                            $revise_url    = "https://tm.translatorswb.org/revise/proj-$project_id/"    . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_chunk_password";
+                            $matecat_download_url = "https://tm.translatorswb.org/?action=downloadFile&id_job=$matecat_id_job&id_file=$matecat_id_file&password=$matecat_id_job_password&download_type=all";
 
                             $chunks[] = array(
                                 'matecat_id_job'            => $job['id'],
-                                'matecat_id_chunk_password' => $job['password'],
-                                'translate_url'        => $urls['translate_url'],
-                                'revise_url'           => $urls['revise_url'],
-                                'matecat_download_url' => $urls['translation_download_url'],
+                                'matecat_id_chunk_password' => $matecat_id_chunk_password,
+                                'translate_url'        => $translate_url,
+                                'revise_url'           => $revise_url,
+                                'matecat_download_url' => $matecat_download_url,
                                 'DOWNLOAD_STATUS'      => $stats['DOWNLOAD_STATUS']);
                         }
                     }

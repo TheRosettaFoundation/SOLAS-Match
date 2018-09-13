@@ -1183,7 +1183,7 @@ class TaskRouteHandler
                 if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password) && !empty($matecat_id_file)) {
                   if ($taskDao->getTaskSubChunks($matecat_id_job)) {
                       // This has been chunked, so need to accumulate status of all chunks
-                      $chunks = $taskDao->getStatusOfSubChunks($task->getProjectId(), $matecat_id_job);
+                      $chunks = $taskDao->getStatusOfSubChunks($task->getProjectId(), $matecat_langpair, $matecat_id_job, $matecat_id_job_password, $matecat_id_file);
                       $translated_status = true;
                       $approved_status   = true;
                       foreach ($chunks as $index => $chunk) {
