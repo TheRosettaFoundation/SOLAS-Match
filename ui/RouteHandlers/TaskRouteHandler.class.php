@@ -1320,7 +1320,10 @@ class TaskRouteHandler
 
         $project = $projectDao->getProject($task->getProjectId());
         $projectTasks = $projectDao->getProjectTasks($task->getProjectId());
+        $allow_downloads = array();
         foreach ($projectTasks as $projectTask) {
+            $allow_downloads[$projectTask->getId()] = $taskDao->get_allow_download($projectTask);
+
             if ($projectTask->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS ||
                         $projectTask->getTaskStatus() == Common\Enums\TaskStatusEnum::COMPLETE) {
                 $tasksEnabled[$projectTask->getId()] = false;
@@ -1547,7 +1550,7 @@ class TaskRouteHandler
             'restrictTaskStatus'  => $restrictTaskStatus,
             'adminAccess'         => $adminAccess,
             'required_qualification_level' => $taskDao->getRequiredTaskQualificationLevel($task_id),
-            'allow_download'      => $taskDao->get_allow_download($task),
+            'allow_downloads'     => $allow_downloads,
             "taskTypeColours"     => $taskTypeColours
         ));
 
