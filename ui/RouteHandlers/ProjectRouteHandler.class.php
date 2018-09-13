@@ -1950,13 +1950,11 @@ class ProjectRouteHandler
             foreach ($active_tasks_for_chunks as $active_task) {
                 foreach ($chunks as $chunk) {
                     if ($active_task['matecat_id_job'] == $chunk['matecat_id_job'] && $active_task['matecat_id_chunk_password'] == $chunk['matecat_id_chunk_password']) {
-$chunk['DOWNLOAD_STATUS'] = 'translated';
                         if (($active_task['type_id'] == Common\Enums\TaskTypeEnum::TRANSLATION  && ($chunk['DOWNLOAD_STATUS'] === 'translated' || $chunk['DOWNLOAD_STATUS'] === 'approved')) ||
                             ($active_task['type_id'] == Common\Enums\TaskTypeEnum::PROOFREADING &&                                                $chunk['DOWNLOAD_STATUS'] === 'approved')) {
 
                             $taskDao->setTaskStatus($active_task['task_id'], Common\Enums\TaskStatusEnum::COMPLETE);
                             LibAPI\Notify::sendTaskUploadNotifications($active_task['task_id'], 1);
-error_log("MARKED COMPLETE task_id: " . $active_task['task_id']);
                         }
                     }
                 }
