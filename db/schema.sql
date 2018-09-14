@@ -7001,12 +7001,13 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `getMatchingTask`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getMatchingTask`(IN id_job INT, IN password VARCHAR(50), IN matching_type_id INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getMatchingTask`(IN id_job INT, IN id_chunk_password VARCHAR(50), IN matching_type_id INT)
 BEGIN
     SELECT
         t.id,
         t.project_id AS projectId,
-        t.title, `word-count` AS wordCount,
+        t.title,
+        `word-count` AS wordCount,
         (SELECT `en-name` FROM Languages l where l.id = t.`language_id-source`) AS `sourceLanguageName`,
         (SELECT  code     FROM Languages l where l.id = t.`language_id-source`) AS `sourceLanguageCode`,
         (SELECT `en-name` FROM Languages l where l.id = t.`language_id-target`) AS `targetLanguageName`,
@@ -7025,7 +7026,7 @@ BEGIN
     JOIN TaskChunks tc ON t.id=tc.task_id
     WHERE
         tc.matecat_id_job=id_job AND
-        tc.matecat_id_chunk_password=password AND
+        tc.matecat_id_chunk_password=id_chunk_password AND
         tc.type_id=matching_type_id;
 END//
 DELIMITER ;
