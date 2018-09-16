@@ -4,11 +4,13 @@ namespace SolasMatch\UI\RouteHandlers;
 
 use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
+use \SolasMatch\API\Lib as LibAPI;
 use \SolasMatch\Common as Common;
 
 require_once __DIR__."/../../Common/Enums/TaskTypeEnum.class.php";
 require_once __DIR__."/../../Common/Enums/TaskStatusEnum.class.php";
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
+require_once __DIR__.'/../../api/lib/Notify.class.php';
 
 class ProjectRouteHandler
 {
@@ -280,6 +282,202 @@ class ProjectRouteHandler
                     }
                 }
             }
+
+            if (!empty($post['copyChunks'])) {
+                $matecat_language_pairs = $taskDao->getMatecatLanguagePairsForProject($project_id);
+                $matecat_language_pairs_populated = false;
+                if (!empty($matecat_language_pairs)) {
+                    $matecat_language_pairs_populated = true;
+                    foreach ($matecat_language_pairs as $matecat_language_pair) {
+                        if (empty($matecat_language_pair['matecat_id_job'])) $matecat_language_pairs_populated = false;
+                    }
+                }
+                if ($matecat_language_pairs_populated) {
+                    $project_chunks = $taskDao->getTaskChunks($project_id);
+                    if (empty($project_chunks)) $project_chunks = array();
+
+                    $task_chunks = array();
+                    foreach ($project_chunks as $task_chunk) {
+                        $task_chunks[$task_chunk['matecat_id_job']][$task_chunk['chunk_number']][$task_chunk['type_id']] = $task_chunk;
+                    }
+
+                    $parent_task_by_matecat_id_job_and_type = array();
+                    $job_was_chunked = array();
+                    foreach ($matecat_language_pairs as $matecat_language_pair) {
+                        $parent_task_by_matecat_id_job_and_type[$matecat_language_pair['matecat_id_job']][$matecat_language_pair['type_id']] = $matecat_language_pair['task_id'];
+
+                        $job_was_chunked[$matecat_language_pair['matecat_id_job']] = true;
+                    }
+
+                    foreach ($matecat_language_pairs as $matecat_language_pair) {
+                        if (empty($task_chunks[$matecat_language_pair['matecat_id_job']])) {
+                            $job_was_chunked[$matecat_language_pair['matecat_id_job']] = false;
+
+                            $task_chunks[$matecat_language_pair['matecat_id_job']][0][Common\Enums\TaskTypeEnum::TRANSLATION ] = array(
+                                'task_id' => 0,
+                                'project_id' => $project_id,
+                                'type_id' => Common\Enums\TaskTypeEnum::TRANSLATION,
+                                'matecat_langpair' => $matecat_language_pair['matecat_langpair'],
+                                'matecat_id_job' => $matecat_language_pair['matecat_id_job'],
+                                'chunk_number' => 0,
+                                'matecat_id_chunk_password' => $matecat_language_pair['matecat_id_job_password'],
+                            );
+                            $task_chunks[$matecat_language_pair['matecat_id_job']][0][Common\Enums\TaskTypeEnum::PROOFREADING] = array(
+                                'task_id' => 0,
+                                'project_id' => $project_id,
+                                'type_id' => Common\Enums\TaskTypeEnum::PROOFREADING,
+                                'matecat_langpair' => $matecat_language_pair['matecat_langpair'],
+                                'matecat_id_job' => $matecat_language_pair['matecat_id_job'],
+                                'chunk_number' => 0,
+                                'matecat_id_chunk_password' => $matecat_language_pair['matecat_id_job_password'],
+                            );
+                        }
+                    }
+
+                    $request_for_project = $taskDao->getWordCountRequestForProject($project_id);
+                    if ($request_for_project && !empty($request_for_project['matecat_id_project']) && !empty($request_for_project['matecat_id_project_pass'])) {
+                        $re = curl_init("https://tm.translatorswb.org/api/v2/projects/{$request_for_project['matecat_id_project']}/{$request_for_project['matecat_id_project_pass']}/urls");
+
+                        curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
+                        curl_setopt($re, CURLOPT_COOKIESESSION, true);
+                        curl_setopt($re, CURLOPT_FOLLOWLOCATION, true);
+                        curl_setopt($re, CURLOPT_AUTOREFERER, true);
+
+                        $httpHeaders = array(
+                            'Expect:'
+                        );
+                        curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
+
+                        curl_setopt($re, CURLOPT_HEADER, true);
+                        curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
+                        curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
+                        curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
+                        $res = curl_exec($re);
+
+                        $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
+                        $header = substr($res, 0, $header_size);
+                        $res = substr($res, $header_size);
+                        $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
+
+                        curl_close($re);
+
+                        if ($responseCode == 200) {
+                            $response_data = json_decode($res, true);
+                            if (!empty($response_data['urls']['jobs'])) {
+                                $jobs = $response_data['urls']['jobs'];
+                                foreach ($jobs as $job) {
+                                    if (!empty($job['chunks']) && !empty($job['id'])) {
+                                        $matecat_id_job = $job['id'];
+
+                                        $chunks = $job['chunks'];
+                                        $number_of_chunks = count($chunks);
+
+                                        $was_chunked = !empty($job_was_chunked[$matecat_id_job]);
+                                        $chunked_now = $number_of_chunks > 1;
+                                        if     (!$was_chunked && !$chunked_now) $matched = true;
+                                        elseif (!$was_chunked &&  $chunked_now) $matched = false;
+                                        elseif ( $was_chunked && !$chunked_now) $matched = false;
+                                        else { //$was_chunked &&  $chunked_now
+                                            $matched = true;
+                                            foreach ($chunks as $chunk_number => $chunk) {
+                                                if (empty($task_chunks[$matecat_id_job][$chunk_number][Common\Enums\TaskTypeEnum::TRANSLATION]['matecat_id_chunk_password']) ||
+                                                    $task_chunks[$matecat_id_job][$chunk_number][Common\Enums\TaskTypeEnum::TRANSLATION]['matecat_id_chunk_password'] != $chunk['password']) {
+
+                                                    $matched = false;
+                                                }
+                                            }
+                                        }
+
+                                        if (!$matched) {
+                                            $parent_task_id_translation  = 0;
+                                            $parent_task_id_proofreading = 0;
+                                            if (!empty($parent_task_by_matecat_id_job_and_type[$matecat_id_job][Common\Enums\TaskTypeEnum::TRANSLATION])) {
+                                                $parent_task_id_translation  = $parent_task_by_matecat_id_job_and_type[$matecat_id_job][Common\Enums\TaskTypeEnum::TRANSLATION];
+                                            }
+                                            if (!empty($parent_task_by_matecat_id_job_and_type[$matecat_id_job][Common\Enums\TaskTypeEnum::PROOFREADING])) {
+                                                $parent_task_id_proofreading = $parent_task_by_matecat_id_job_and_type[$matecat_id_job][Common\Enums\TaskTypeEnum::PROOFREADING];
+                                            }
+                                            if (!empty($parent_task_id_translation ) || !empty($parent_task_id_proofreading)) {
+                                                if (empty($parent_task_id_translation )) $parent_task_id_translation  = $parent_task_id_proofreading;
+                                                if (empty($parent_task_id_proofreading)) $parent_task_id_proofreading = $parent_task_id_translation;
+
+                                                $parent_translation_task  = $taskDao->getTask($parent_task_id_translation);
+                                                $parent_proofreading_task = $taskDao->getTask($parent_task_id_proofreading);
+
+                                                if ($parent_task_id_translation === $parent_task_id_proofreading) {
+                                                    // Need to calculate Translation Deadline, 3 days earlier if it will fit
+                                                    $deadline = strtotime($parent_proofreading_task->getDeadline());
+                                                    $deadline_less_3_days = $deadline - 3*24*60*60;
+                                                    if ($deadline_less_3_days < time())    $deadline_less_3_days = time() + 2*24*60*60;
+                                                    if ($deadline_less_3_days > $deadline) $deadline_less_3_days = $deadline;
+                                                    $parent_translation_task->setDeadline(date("Y-m-d H:i:s", $deadline_less_3_days));
+                                                }
+
+                                                if ($was_chunked) {
+                                                    foreach ($task_chunks[$matecat_id_job] as $chunk_item) {
+                                                        $taskDao->deleteTask($chunk_item[Common\Enums\TaskTypeEnum::TRANSLATION ]['task_id']);
+                                                        $taskDao->deleteTask($chunk_item[Common\Enums\TaskTypeEnum::PROOFREADING]['task_id']);
+                                                    }
+                                                    // $taskDao->removeTaskChunks($matecat_id_job); WILL BE DONE BY DELETE CASCADE
+                                                }
+
+                                                if ($chunked_now) {
+                                                    foreach ($chunks as $chunk_number => $chunk) {
+                                                        // Ideally Tasks should be created after the TaskChunks as there could, in theory, be an immediate attempt to claim the task linked to the chunk
+                                                        // However we are not doing that here
+                                                        $task_id = $this->addChunkTask(
+                                                            $taskDao,
+                                                            $project_id,
+                                                            $parent_translation_task,
+                                                            Common\Enums\TaskTypeEnum::TRANSLATION,
+                                                            $chunk_number,
+                                                            $number_of_chunks);
+                                                        $taskDao->insertTaskChunks(
+                                                            $task_id,
+                                                            $project_id,
+                                                            Common\Enums\TaskTypeEnum::TRANSLATION,
+                                                            $task_chunks[$matecat_id_job][0][Common\Enums\TaskTypeEnum::TRANSLATION ]['matecat_langpair'],
+                                                            $matecat_id_job,
+                                                            $chunk_number,
+                                                            $chunk['password']);
+                                                        $task_id = $this->addChunkTask(
+                                                            $taskDao,
+                                                            $project_id,
+                                                            $parent_proofreading_task,
+                                                            Common\Enums\TaskTypeEnum::PROOFREADING,
+                                                            $chunk_number,
+                                                            $number_of_chunks);
+                                                        $taskDao->insertTaskChunks(
+                                                            $task_id,
+                                                            $project_id,
+                                                            Common\Enums\TaskTypeEnum::PROOFREADING,
+                                                            $task_chunks[$matecat_id_job][0][Common\Enums\TaskTypeEnum::PROOFREADING]['matecat_langpair'],
+                                                            $matecat_id_job,
+                                                            $chunk_number,
+                                                            $chunk['password']);
+                                                    }
+                                                }
+                                            } else {
+                                                $app->flashNow('error', "Could not find parent translation or revising task for chunks (Job id: $matecat_id_job)");
+                                            }
+                                        }
+                                    } else {
+                                        $app->flashNow('error', 'No chunks or id found for job');
+                                    }
+                                }
+                            } else {
+                                $app->flashNow('error', 'No jobs found');
+                            }
+                        } else {
+                            $app->flashNow('error', "Could not get data from Kató TM, Response Code: $responseCode");
+                        }
+                    } else {
+                        $app->flashNow('error', 'Could not get matecat_id_project (WordCountRequestForProjects)');
+                    }
+                } else {
+                    $app->flashNow('error', 'No MateCat project (MatecatLanguagePairs) found for this project in Kató Platform');
+                }
+            }
         }
 
         $org = $orgDao->getOrganisation($project->getOrganisationId());
@@ -290,6 +488,7 @@ class ProjectRouteHandler
         $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
         $isAdmin = $adminDao->isOrgAdmin($project->getOrganisationId(), $user_id) || $isSiteAdmin;
 
+        $allow_downloads = array();
         if ($isOrgMember || $isAdmin) {
             $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);
             $taskMetaData = array();
@@ -310,6 +509,7 @@ class ProjectRouteHandler
                         $metaData['tracking'] = false;
                     }
                     $taskMetaData[$task_id] = $metaData;
+                    $allow_downloads[$task_id] = $taskDao->get_allow_download($task);
                 }
             }
 
@@ -365,9 +565,48 @@ class ProjectRouteHandler
                 "imgCacheToken" => $preventImageCacheToken,
                 'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
                 'matecat_analyze_url' => $taskDao->get_matecat_analyze_url($project_id),
+                'allow_downloads'     => $allow_downloads,
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation
         ));
         $app->render("project/project.view.tpl");
+    }
+
+    private function addChunkTask(
+        $taskDao,
+        $project_id,
+        $parent_task,
+        $type_id,
+        $chunk_number,
+        $number_of_chunks)
+    {
+        $task = new Common\Protobufs\Models\Task();
+        $task->setProjectId($project_id);
+        $task->setTitle("Chunk $chunk_number of " . $parent_task->getTitle());
+        $task->setTaskType($type_id);
+        $task->setSourceLocale($parent_task->getSourceLocale());
+        $task->setTargetLocale($parent_task->getTargetLocale());
+        $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+
+        $word_count = $parent_task->getWordCount() / $number_of_chunks;
+        if ($word_count < 1) $word_count = 1;
+        $task->setWordCount($word_count);
+
+        $task->setDeadline($parent_task->getDeadline());
+        //$task->setPublished($parent_task->getPublished());
+        $task->setPublished(true);
+
+        $newTask = $taskDao->createTask($task);
+        $task_id = $newTask->getId();
+
+        $taskDao->updateRequiredTaskQualificationLevel($task_id, $taskDao->getRequiredTaskQualificationLevel($parent_task->getId()));
+
+        if ($newTask->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $taskDao->getRestrictedTask($parent_task->getId())) {
+            $taskDao->setRestrictedTask($task_id);
+        }
+
+        // Trigger afterTaskCreate should update UserTrackedTasks based on UserTrackedProjects
+
+        return $task_id;
     }
 
     public function projectAlter($project_id)
@@ -1694,6 +1933,30 @@ class ProjectRouteHandler
                 } else {
                     // If this was a comms error, we will retry (as status is still 0)
                     error_log("project_cron /new ($project_id) responseCode: $responseCode");
+                }
+            }
+        }
+
+        // See if any chunks have been finalised in MateCat, if so mark any corresponding IN_PROGRESS (active) task(s) as complete
+        $active_tasks_for_chunks = $taskDao->all_chunked_active_projects();
+        if (!empty($active_tasks_for_chunks)) {
+            $projects = array();
+            foreach ($active_tasks_for_chunks as $active_task) {
+                $projects[$active_task['project_id']] = $active_task['project_id'];
+            }
+            $project_id = array_rand($projects); // Pick a random Project, we don't want to do all at once.
+            $chunks = $taskDao->getStatusOfSubChunks($project_id);
+
+            foreach ($active_tasks_for_chunks as $active_task) {
+                foreach ($chunks as $chunk) {
+                    if ($active_task['matecat_id_job'] == $chunk['matecat_id_job'] && $active_task['matecat_id_chunk_password'] == $chunk['matecat_id_chunk_password']) {
+                        if (($active_task['type_id'] == Common\Enums\TaskTypeEnum::TRANSLATION  && ($chunk['DOWNLOAD_STATUS'] === 'translated' || $chunk['DOWNLOAD_STATUS'] === 'approved')) ||
+                            ($active_task['type_id'] == Common\Enums\TaskTypeEnum::PROOFREADING &&                                                $chunk['DOWNLOAD_STATUS'] === 'approved')) {
+
+                            $taskDao->setTaskStatus($active_task['task_id'], Common\Enums\TaskStatusEnum::COMPLETE);
+                            LibAPI\Notify::sendTaskUploadNotifications($active_task['task_id'], 1);
+                        }
+                    }
                 }
             }
         }

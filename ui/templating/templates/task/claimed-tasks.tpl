@@ -130,9 +130,11 @@
                                             </a>
                                         {/if}
                                     {/if}
+                                    {if $allow_downloads[$task_id]}
                                     <a href="{$siteLocation}task/{$task_id}/simple-upload" class="btn btn-small btn-success">
                                         {Localisation::getTranslation('claimed_tasks_submit_completed_task')}
                                     </a>
+                                    {/if}
                                 {/if}
                                 {if $status_id == 3 && $type_id == 1}
                                     <a href="{$siteLocation}task/{$task_id}/segmentation" class="btn btn-small btn-primary">
@@ -154,9 +156,11 @@
                                 {/if}
                                 {if $type_id == 2}
                                     {if $proofreadTaskIds[$task_id]}
+                                        {if $allow_downloads[$task_id]}
                                         <a href="{$siteLocation}task/{$proofreadTaskIds[$task_id]}/download-task-latest-file/" class="btn btn-small btn-info">
                                             {Localisation::getTranslation('claimed_tasks_download_proofread_task')}
                                         </a>
+                                        {/if}
                                     {/if}
                                 {/if}
                             </p>

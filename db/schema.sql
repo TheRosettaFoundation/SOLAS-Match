@@ -1414,6 +1414,21 @@ CREATE TABLE IF NOT EXISTS `MatecatLanguagePairs` (
     CONSTRAINT FK_matecat_language_pair_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `TaskChunks` (
+    task_id BIGINT(20) UNSIGNED NOT NULL,
+    project_id INT(10) UNSIGNED NOT NULL,
+    type_id    INT(10) UNSIGNED NOT NULL,
+    matecat_langpair   VARCHAR(50) NOT NULL,
+    matecat_id_job INT(10) UNSIGNED NOT NULL,
+    chunk_number   INT(10) UNSIGNED NOT NULL,
+    matecat_id_chunk_password VARCHAR(50) NOT NULL,
+    UNIQUE KEY FK_task_chunks_task_id (task_id),
+    CONSTRAINT FK_task_chunks_task_id FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    KEY FK_task_chunks_matecat_id_job (matecat_id_job),
+    KEY FK_task_chunks_project_id (project_id),
+    CONSTRAINT FK_task_chunks_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS `UserQualifiedPairs` (
   user_id              INT(10) UNSIGNED NOT NULL,
   language_id_source   INT(10) UNSIGNED NOT NULL,
@@ -6901,6 +6916,149 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getMatecatLanguagePairs`(IN `tID` BIGINT)
 BEGIN
     SELECT * FROM MatecatLanguagePairs WHERE task_id=tID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getMatecatLanguagePairsForProject`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getMatecatLanguagePairsForProject`(IN `pID` INT)
+BEGIN
+    SELECT * FROM MatecatLanguagePairs WHERE project_id=pID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insertTaskChunks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertTaskChunks`(IN `tID` BIGINT, IN `pID` INT, IN `typeID` INT, IN matecatLangpair VARCHAR(50), IN matecatIdJob INT, IN chunkNumber INT, IN chunkPassword VARCHAR(50))
+BEGIN
+    INSERT INTO TaskChunks
+               (task_id, project_id, type_id, matecat_langpair, matecat_id_job, chunk_number, matecat_id_chunk_password)
+        VALUES (    tID,        pID,  typeID,  matecatLangpair,   matecatIdJob,  chunkNumber,             chunkPassword);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getTaskChunks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskChunks`(IN `pID` INT)
+BEGIN
+    SELECT * FROM TaskChunks WHERE project_id=pID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getTaskChunk`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskChunk`(IN `tID` INT)
+BEGIN
+    SELECT * FROM TaskChunks WHERE task_id=tID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getTaskSubChunks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskSubChunks`(IN `jID` INT)
+BEGIN
+    SELECT * FROM TaskChunks WHERE matecat_id_job=jID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `is_chunk_or_parent_of_chunk`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `is_chunk_or_parent_of_chunk`(IN `pID` INT, IN `tID` INT)
+BEGIN
+    SELECT
+        lp.task_id,
+        tc.task_id AS tc_task_id,
+        lp.matecat_id_job
+    FROM MatecatLanguagePairs lp
+    JOIN TaskChunks tc ON lp.matecat_id_job=tc.matecat_id_job
+    WHERE
+        lp.project_id=pID AND
+        (
+            lp.task_id=tID OR
+            tc.task_id=tID
+        );
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `all_chunked_active_projects`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `all_chunked_active_projects`()
+BEGIN
+    SELECT
+        tc.project_id,
+        tc.task_id,
+        tc.matecat_id_job,
+        tc.type_id,
+        tc.matecat_id_chunk_password,
+        t.`created-time` AS created,
+        t.deadline
+    FROM TaskChunks tc
+    JOIN Tasks       t ON tc.task_id=t.id
+    WHERE
+        t.`task-status_id`=3;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getMatchingTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getMatchingTask`(IN id_job INT, IN id_chunk_password VARCHAR(50), IN matching_type_id INT)
+BEGIN
+    SELECT
+        t.id,
+        t.project_id AS projectId,
+        t.title,
+        `word-count` AS wordCount,
+        (SELECT `en-name` FROM Languages l where l.id = t.`language_id-source`) AS `sourceLanguageName`,
+        (SELECT  code     FROM Languages l where l.id = t.`language_id-source`) AS `sourceLanguageCode`,
+        (SELECT `en-name` FROM Languages l where l.id = t.`language_id-target`) AS `targetLanguageName`,
+        (SELECT  code     FROM Languages l where l.id = t.`language_id-target`) AS `targetLanguageCode`,
+        (SELECT `en-name` FROM Countries c where c.id = t.`country_id-source` ) AS `sourceCountryName`,
+        (SELECT  code     FROM Countries c where c.id = t.`country_id-source` ) AS `sourceCountryCode`,
+        (SELECT `en-name` FROM Countries c where c.id = t.`country_id-target` ) AS `targetCountryName`,
+        (SELECT  code     FROM Countries c where c.id = t.`country_id-target` ) AS `targetCountryCode`,
+        t.`comment`,
+        t.`task-type_id`   AS taskType,
+        t.`task-status_id` AS taskStatus,
+        t.published,
+        t.deadline,
+        t.`created-time`   AS createdTime
+    FROM Tasks       t
+    JOIN TaskChunks tc ON t.id=tc.task_id
+    WHERE
+        tc.matecat_id_job=id_job AND
+        tc.matecat_id_chunk_password=id_chunk_password AND
+        tc.type_id=matching_type_id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getParentTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getParentTask`(IN project INT, IN id_job INT, IN matching_type_id INT)
+BEGIN
+    SELECT
+        t.id,
+        t.project_id AS projectId,
+        t.title, `word-count` AS wordCount,
+        (SELECT `en-name` FROM Languages l where l.id = t.`language_id-source`) AS `sourceLanguageName`,
+        (SELECT  code     FROM Languages l where l.id = t.`language_id-source`) AS `sourceLanguageCode`,
+        (SELECT `en-name` FROM Languages l where l.id = t.`language_id-target`) AS `targetLanguageName`,
+        (SELECT  code     FROM Languages l where l.id = t.`language_id-target`) AS `targetLanguageCode`,
+        (SELECT `en-name` FROM Countries c where c.id = t.`country_id-source` ) AS `sourceCountryName`,
+        (SELECT  code     FROM Countries c where c.id = t.`country_id-source` ) AS `sourceCountryCode`,
+        (SELECT `en-name` FROM Countries c where c.id = t.`country_id-target` ) AS `targetCountryName`,
+        (SELECT  code     FROM Countries c where c.id = t.`country_id-target` ) AS `targetCountryCode`,
+        t.`comment`,
+        t.`task-type_id`   AS taskType,
+        t.`task-status_id` AS taskStatus,
+        t.published,
+        t.deadline,
+        t.`created-time`   AS createdTime
+    FROM Tasks                 t
+    JOIN MatecatLanguagePairs lp ON t.id=lp.task_id
+    WHERE
+        lp.project_id=project AND
+        lp.matecat_id_job=id_job AND
+        lp.type_id=matching_type_id;
 END//
 DELIMITER ;
 

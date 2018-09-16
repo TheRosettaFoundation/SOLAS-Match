@@ -462,6 +462,52 @@ class TaskDao extends BaseDao
         return $result;
     }
 
+    public function getWordCountRequestForProject($project_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getWordCountRequestForProject', LibAPI\PDOWrapper::cleanse($project_id));
+        if ($result) {
+            return $result[0];
+        } else {
+            return false;
+        }
+    }
+
+    public function getTaskChunks($project_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getTaskChunks', LibAPI\PDOWrapper::cleanse($project_id));
+        return $result;
+    }
+
+    public function getTaskChunk($task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getTaskChunk', LibAPI\PDOWrapper::cleanse($task_id));
+        return $result;
+    }
+
+    public function getTaskSubChunks($matecat_id_job)
+    {
+        $result = LibAPI\PDOWrapper::call('getTaskSubChunks', LibAPI\PDOWrapper::cleanse($matecat_id_job));
+        return $result;
+    }
+
+    public function is_chunk_or_parent_of_chunk($project_id, $task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('is_chunk_or_parent_of_chunk', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
+        return $result;
+    }
+
+    public function insertTaskChunks($task_id, $project_id, $type_id, $matecat_langpair, $matecat_id_job, $chunk_number, $chunk_password)
+    {
+        LibAPI\PDOWrapper::call('insertTaskChunks',
+            LibAPI\PDOWrapper::cleanse($task_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($type_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($matecat_langpair) . ',' .
+            LibAPI\PDOWrapper::cleanse($matecat_id_job) . ',' .
+            LibAPI\PDOWrapper::cleanse($chunk_number) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($chunk_password));
+    }
+
     public function get_matecat_analyze_url($project_id)
     {
         $matecat_analyze_url = '';
@@ -528,6 +574,12 @@ class TaskDao extends BaseDao
         return $result;
     }
 
+    public function getMatecatLanguagePairsForProject($project_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getMatecatLanguagePairsForProject', LibAPI\PDOWrapper::cleanse($project_id));
+        return $result;
+    }
+
     public function get_matecat_url($task)
     {
         $matecat_url = '';
@@ -536,6 +588,12 @@ class TaskDao extends BaseDao
             if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
 
             $matecat_tasks = $this->getMatecatLanguagePairs($task->getId());
+            if (empty($matecat_tasks)) {
+                $matecat_tasks = $this->getTaskChunk($task->getId());
+                if (!empty($matecat_tasks)) {
+                    $matecat_tasks[0]['matecat_id_job_password'] = $matecat_tasks[0]['matecat_id_chunk_password'];
+                }
+            }
             if (!empty($matecat_tasks)) {
                 $matecat_langpair = $matecat_tasks[0]['matecat_langpair'];
                 $matecat_id_job = $matecat_tasks[0]['matecat_id_job'];
@@ -565,6 +623,12 @@ class TaskDao extends BaseDao
             if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
 
             $matecat_tasks = $this->getMatecatLanguagePairs($task->getId());
+            if (empty($matecat_tasks)) {
+                $matecat_tasks = $this->getTaskChunk($task->getId());
+                if (!empty($matecat_tasks)) {
+                    $matecat_tasks[0]['matecat_id_job_password'] = $matecat_tasks[0]['matecat_id_chunk_password'];
+                }
+            }
             if (!empty($matecat_tasks)) {
                 $matecat_langpair = $matecat_tasks[0]['matecat_langpair'];
                 $matecat_id_job = $matecat_tasks[0]['matecat_id_job'];
@@ -623,6 +687,89 @@ class TaskDao extends BaseDao
         return $download_status;
     }
 
+    public function getStatusOfSubChunks($project_id, $matecat_langpair = '', $matecat_id_job = 0, $matecat_id_job_password = '', $matecat_id_file = 0)
+    {
+        $chunks = array();
+
+        $result = LibAPI\PDOWrapper::call('getWordCountRequestForProject', LibAPI\PDOWrapper::cleanse($project_id));
+        if (!empty($result)) {
+            $matecat_id_project      = $result[0]['matecat_id_project'];
+            $matecat_id_project_pass = $result[0]['matecat_id_project_pass'];
+
+            // https://www.matecat.com/api/docs#/Project/get_api_v2_projects__id_project___password_
+            $re = curl_init("https://tm.translatorswb.org/api/v2/projects/$matecat_id_project/$matecat_id_project_pass");
+
+            curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
+            curl_setopt($re, CURLOPT_COOKIESESSION, true);
+            curl_setopt($re, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($re, CURLOPT_AUTOREFERER, true);
+
+            $httpHeaders = array(
+                'Expect:'
+            );
+            curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
+
+            curl_setopt($re, CURLOPT_HEADER, true);
+            curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($re, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because we may be called inside file lock
+            $res = curl_exec($re);
+
+            $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
+            $header = substr($res, 0, $header_size);
+            $res = substr($res, $header_size);
+            $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
+
+            curl_close($re);
+
+            if ($responseCode == 200) {
+                $response_data = json_decode($res, true);
+
+                if (!empty($response_data['project']['jobs'])) {
+                    $jobs = $response_data['project']['jobs'];
+                    foreach ($jobs as $job) {
+                        if ($matecat_id_job == 0 || $job['id'] == $matecat_id_job) {
+                            $stats = $job['stats'];
+
+                            $matecat_id_chunk_password = $job['password'];
+                            $translate_url = "https://tm.translatorswb.org/translate/proj-$project_id/" . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_chunk_password";
+                            $revise_url    = "https://tm.translatorswb.org/revise/proj-$project_id/"    . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_chunk_password";
+                            $matecat_download_url = "https://tm.translatorswb.org/?action=downloadFile&id_job=$matecat_id_job&id_file=$matecat_id_file&password=$matecat_id_job_password&download_type=all";
+
+                            $chunks[] = array(
+                                'matecat_id_job'            => $job['id'],
+                                'matecat_id_chunk_password' => $matecat_id_chunk_password,
+                                'translate_url'        => $translate_url,
+                                'revise_url'           => $revise_url,
+                                'matecat_download_url' => $matecat_download_url,
+                                'DOWNLOAD_STATUS'      => $stats['DOWNLOAD_STATUS']);
+                        }
+                    }
+                } else {
+                    error_log("https://tm.translatorswb.org/api/v2/projects/$matecat_id_project/$matecat_id_project_pass ($project_id) No Jobs!");
+                }
+            } else {
+                error_log("https://tm.translatorswb.org/api/v2/projects/$matecat_id_project/$matecat_id_project_pass ($project_id) responseCode: $responseCode");
+            }
+        }
+
+        return $chunks;
+    }
+
+    public function all_chunked_active_projects()
+    {
+        $result = LibAPI\PDOWrapper::call('all_chunked_active_projects', '');
+        return $result;
+    }
+
+    public function setTaskStatus($task_id, $status)
+    {
+        LibAPI\PDOWrapper::call('setTaskStatus',
+            LibAPI\PDOWrapper::cleanse($task_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($status));
+    }
+
     public function record_task_if_translated_in_matecat($task)
     {
         if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
@@ -642,6 +789,16 @@ class TaskDao extends BaseDao
                 }
             }
         }
+    }
+
+    public function get_allow_download($task)
+    {
+        $allow = 1;
+        $matecat_tasks = $this->getTaskChunk($task->getId());
+        if (!empty($matecat_tasks)) {
+            $allow = 0;
+        }
+        return $allow;
     }
 
     public function inheritRequiredTaskQualificationLevel($task_id)

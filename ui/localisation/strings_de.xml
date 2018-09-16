@@ -83,7 +83,7 @@
   <string name="common_maximum_file_total_size_vs_limit_is">Die Größe der gewählten Datei beträgt %1$sMB, doch die Grenze ist %2$sMB.</string>
 	<string name="common_assign">Zuweisen</string>
 	<string name="common_it_is_time_to_decide">Es ist Zeit, sich zu entscheiden</string>
-	<string name="common_no_just_bring_me_back_to_the_task_page">Nein, gehe zurück zur Aufgabenseite.</string>
+	<string name="common_no_just_bring_me_back_to_the_task_page">Gehe zurück zur Aufgabenseite.</string>
 	<string name="common_review_this_checklist_for_your_downloaded_file">Gehe für die heruntergeladene Datei diese Prüfliste durch.</string>
 	<string name="common_after_downloading">Nach dem Herunterladen</string>
 	<string name="common_this_is_what_you_need_to_do_as_soon_as_possible">Das solltest Du (so bald wie möglich) tun</string>
@@ -853,14 +853,16 @@ Bei Fragen schreiben Sie bitte an <a href="mailto:info@translatorswithoutborders
 	<string name="task_claimed_translation_0">Du hast die Übersetzungsaufgabe angenommen</string>
 	<string name="task_claimed_translation_we_need_your_translation">Wir brauchen Deine Übersetzung.</string>
 	<string name="task_claimed_translation_translate_the_file_to">Übersetze die Datei mit der Übersetzungssoftware Deiner Wahl in die folgende Sprache: %s.</string>
+    <string name="task_claimed_translation_translate_the_file_to_plain">Übersetze die Datei in die folgende Sprache: %s.</string>
 	<string name="task_claimed_translation_4">Nachdem Du die Übersetzung der heruntergeladenen Datei abgeschlossen hast:</string>
     <string name="task_claimed_translation_5">Lade die fertig übersetzte Datei auf die Seite der Aufgabe hoch.</string>
     <string name="task_claimed_translation_upload_translated_task">Übersetzte Aufgabe abliefern</string>
 
     <string name="task_claimed_alternative_option">Alternativ:</string>
     <string name="task_claimed_translate_using_kato">In Kató TM übersetzen</string>
+    <string name="task_claimed_click">Klicke auf</string>
     <string name="task_claimed_proofread_using_kato">In Kató TM korrekturlesen</string>
-    <string name="task_claimed_please_read_kato">Kató TM ist das Übersetzungssystem von Translators without Borders (TWB). Bitte vor dem Übersetzen in Kató TM <a href="https://kato.translatorswb.org/public/doc/translators.html" target="_blank">diese Hinweise</a> lesen.</string>
+    <string name="task_claimed_please_read_kato">Kató TM ist das Übersetzungssystem von Translators without Borders (TWB). Bitte vor dem Übersetzen in Kató TM <a href="https://community.translatorswb.org/t/useful-posts-index/2883" target="_blank">diese Hinweise</a> lesen.</string>
     <string name="task_simple_upload_copy_from_kato">Die Übersetzung von Kató TM nach Kató kopieren</string>
     <string name="task_simple_upload_view_on_kato"><a href="%s" target="_blank">Hier</a> klicken, um die <strong>Übersetzung in Kató TM anzuzeigen</strong>.</string>
     <string name="task_simple_upload_download_from_kato"><a href="%s">Hier</a> klicken, um die <strong>Übersetzung von Kató TM herunterzuladen und manuell in Kató hochzuladen</strong>.</string>

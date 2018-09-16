@@ -157,6 +157,7 @@
 		    {/if}
 		
 		    <p style="margin-bottom: 40px"/>        
+        {if !empty($file_preview_path)}
 		    <table width="100%">
 		        <thead>
                 <th>{Localisation::getTranslation('task_view_source_document_preview')} - {TemplateHelper::uiCleanseHTML($filename)}<hr/></th>
@@ -167,7 +168,7 @@
 		            </tr>
 		        </tbody>
 		    </table>
-		    
+        {/if}
 	{if ($alsoViewedTasksCount>0)}		    
 			</div>
 	    </div>
