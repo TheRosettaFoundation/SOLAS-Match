@@ -307,6 +307,7 @@ class TaskRouteHandler
         $discourse_slug = array();
         $proofreadTaskIds = array();
         $matecat_urls = array();
+        $allow_downloads = array();
 
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
         if ($currentScrollPage <= $lastScrollPage) {
@@ -347,6 +348,7 @@ class TaskRouteHandler
                 );
 
                 $matecat_urls[$taskId] = $taskDao->get_matecat_url($topTask);
+                $allow_downloads[$taskId] = $taskDao->get_allow_download($topTask);
 
                 $discourse_slug[$taskId] = $projectDao->discourse_parameterize($projectName);
 
@@ -389,6 +391,7 @@ class TaskRouteHandler
             'deadline_timestamps' => $deadline_timestamps,
             'projectAndOrgs' => $projectAndOrgs,
             'matecat_urls' => $matecat_urls,
+            'allow_downloads' => $allow_downloads,
             'discourse_slug' => $discourse_slug,
             'proofreadTaskIds' => $proofreadTaskIds,
             'currentScrollPage' => $currentScrollPage,
@@ -661,6 +664,7 @@ class TaskRouteHandler
                     "sourceLanguage"=> $sourceLanguage,
                     "targetLanguage"=> $targetLanguage,
                     'matecat_url'   => $taskDao->get_matecat_url($task),
+                    'allow_download'=> $taskDao->get_allow_download($task),
                     "taskMetadata"  => $taskMetaData
         ));
 
@@ -677,6 +681,7 @@ class TaskRouteHandler
 
         $app->view()->appendData(array(
             'matecat_url' => $taskDao->get_matecat_url($task),
+            'allow_download' => $taskDao->get_allow_download($task),
         ));
 
         $app->render("task/task.claimed.tpl");
@@ -767,7 +772,11 @@ class TaskRouteHandler
                     break;
                 case Common\Enums\TaskTypeEnum::TRANSLATION:
                 case Common\Enums\TaskTypeEnum::PROOFREADING:
+                  if ($taskDao->get_allow_download($task)) {
                     $app->redirect($app->urlFor("task-simple-upload", array("task_id" => $taskId)));
+                  } else {
+                    $app->redirect($app->urlFor("task-view", array("task_id" => $taskId)));
+                  }
                     break;
                 case Common\Enums\TaskTypeEnum::SEGMENTATION:
                     $app->redirect($app->urlFor("task-segmentation", array("task_id" => $taskId)));
@@ -846,6 +855,7 @@ class TaskRouteHandler
         $task_file_info = $taskDao->getTaskInfo($taskId);
         $siteLocation = Common\Lib\Settings::get("site.location");
         $file_path = "{$siteLocation}task/$taskId/download-file-user/";
+        if (!$taskDao->get_allow_download($task)) $file_path = '';
         
         $alsoViewedTasksCount = 0;
         
@@ -1022,6 +1032,11 @@ class TaskRouteHandler
         $userId = Common\Lib\UserSession::getCurrentUserID();
         $task = $taskDao->getTask($taskId);
         $project = $projectDao->getProject($task->getProjectId());
+
+        if (!$taskDao->get_allow_download($task)) {
+            $app->redirect($app->urlFor("task-view", array("task_id" => $taskId)));
+        }
+
         if ($app->request()->isPost()) {
           $post = $app->request()->post();
           Common\Lib\UserSession::checkCSRFKey($post, 'taskSimpleUpload');
@@ -1157,6 +1172,7 @@ class TaskRouteHandler
 
         $matecat_url = '';
         $matecat_download_url = '';
+        $chunks = array();
         if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
             $matecat_tasks = $taskDao->getMatecatLanguagePairs($taskId);
             if (!empty($matecat_tasks)) {
@@ -1165,6 +1181,22 @@ class TaskRouteHandler
                 $matecat_id_job_password = $matecat_tasks[0]['matecat_id_job_password'];
                 $matecat_id_file = $matecat_tasks[0]['matecat_id_file'];
                 if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password) && !empty($matecat_id_file)) {
+                  if ($taskDao->getTaskSubChunks($matecat_id_job)) {
+                      // This has been chunked, so need to accumulate status of all chunks
+                      $chunks = $taskDao->getStatusOfSubChunks($task->getProjectId(), $matecat_langpair, $matecat_id_job, $matecat_id_job_password, $matecat_id_file);
+                      $translated_status = true;
+                      $approved_status   = true;
+                      foreach ($chunks as $index => $chunk) {
+                          if ($chunk['DOWNLOAD_STATUS'] === 'draft') $translated_status = false;
+                          if ($chunk['DOWNLOAD_STATUS'] === 'draft' || $chunk['DOWNLOAD_STATUS'] === 'translated') $approved_status = false;
+
+                          $matecat_url = $chunk['translate_url']; // As we are chunked, the $matecat_url scalar string will not be used as a URL in the template, just for logic.
+                          $matecat_download_url = $chunk['matecat_download_url'];
+                      }
+
+                      if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION  && !$translated_status) $matecat_url = '';
+                      if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && !approved_status   ) $matecat_url = '';
+                  } else {
                     // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
                     $re = curl_init("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
 
@@ -1211,6 +1243,7 @@ class TaskRouteHandler
                     } else {
                         error_log("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats ($taskId) responseCode: $responseCode");
                     }
+                  }
                 }
             }
         }
@@ -1230,6 +1263,7 @@ class TaskRouteHandler
             "taskTypeColours"   => $taskTypeColours,
             'matecat_url' => $matecat_url,
             'matecat_download_url' => $matecat_download_url,
+            'chunks'               => $chunks,
             'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
             "file_previously_uploaded" => $file_previously_uploaded
         ));
@@ -1286,7 +1320,10 @@ class TaskRouteHandler
 
         $project = $projectDao->getProject($task->getProjectId());
         $projectTasks = $projectDao->getProjectTasks($task->getProjectId());
+        $allow_downloads = array();
         foreach ($projectTasks as $projectTask) {
+            $allow_downloads[$projectTask->getId()] = $taskDao->get_allow_download($projectTask);
+
             if ($projectTask->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS ||
                         $projectTask->getTaskStatus() == Common\Enums\TaskStatusEnum::COMPLETE) {
                 $tasksEnabled[$projectTask->getId()] = false;
@@ -1513,6 +1550,7 @@ class TaskRouteHandler
             'restrictTaskStatus'  => $restrictTaskStatus,
             'adminAccess'         => $adminAccess,
             'required_qualification_level' => $taskDao->getRequiredTaskQualificationLevel($task_id),
+            'allow_downloads'     => $allow_downloads,
             "taskTypeColours"     => $taskTypeColours
         ));
 
@@ -1549,6 +1587,7 @@ class TaskRouteHandler
         $task_file_info = $taskDao->getTaskInfo($task_id, 0);
         $siteLocation = Common\Lib\Settings::get("site.location");
         $file_path= "{$siteLocation}task/$task_id/download-file-user/";
+        if (!$taskDao->get_allow_download($task)) $file_path = '';
 
         $app->view()->appendData(array(
             "file_preview_path" => $file_path,

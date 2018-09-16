@@ -22,6 +22,11 @@
                 {sprintf(Localisation::getTranslation('task_claim_warning_kato'), {Localisation::getTranslation('task_claim_view_on_kato')}, {Localisation::getTranslation('common_download_file')}, {Localisation::getTranslation('task_claim_proofreading_5')})}
             </li>
             {/if}
+            {if empty($allow_download)}
+            <li>
+                Also please note that you must wait for translation to be complete (100% translated) before starting revising.
+            </li>
+            {/if}
         </ol>
     </section>
 
@@ -33,8 +38,10 @@
         </a>
         {/if}
 
+        {if !empty($allow_download)}
          <a href="{urlFor name="download-task" options="task_id.$task_id"}" class=" btn btn-primary">
             <i class="icon-download icon-white"></i> {Localisation::getTranslation('common_download_file')}</a>
+        {/if}
         <h3>{Localisation::getTranslation('common_it_is_time_to_decide')}</h3>
         <p> 
                 <button type="submit" class="btn btn-primary">

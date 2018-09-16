@@ -195,7 +195,7 @@
                                     {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
                                         <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">{Localisation::getTranslation('common_in_progress')}</a>
                                     {elseif $status_id == TaskStatusEnum::COMPLETE}
-                                        <a href="{urlFor name="home"}task/{$task_id}/download-task-latest-file/">{Localisation::getTranslation('common_complete')}</a>
+                                        {if !empty($allow_downloads[$task_id])}<a href="{urlFor name="home"}task/{$task_id}/download-task-latest-file/">{/if}{Localisation::getTranslation('common_complete')}{if !empty($allow_downloads[$task_id])}</a>{/if}
                                     {/if}
                                 </td>
                             </tr>

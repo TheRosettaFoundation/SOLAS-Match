@@ -1,4 +1,5 @@
 {include file="header.tpl"}
+<!-- Editor Hint: ¿áéíóú -->
 
     <h1 class="page-header">
         <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
@@ -7,8 +8,12 @@
         </span>
         {assign var="project_id" value=$project->getId()}
         <div class="pull-right">
-            <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+            <form id="copyChunksProjectForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                 {if $isSiteAdmin && !empty($matecat_analyze_url)}
+                    <input type="hidden" name="copyChunks" value="1" />
+                    <a class="btn btn-success" onclick="$('#copyChunksProjectForm').submit();" >
+                        <i class="icon-upload icon-white"></i> Update Chunks
+                    </a>
                     <a href="{$matecat_analyze_url}" class="btn btn-primary" target="_blank">
                         <i class="icon-th-list icon-white"></i> Kató TM analysis
                     </a>
@@ -314,9 +319,13 @@ Tweet</a>
                                             </a>
                                         {elseif $status_id == TaskStatusEnum::COMPLETE}
                                             {assign var="org_id" value=$project->getOrganisationId()}
+                                            {if !empty($allow_downloads[$task_id])}
                                             <a href="{urlFor name="org-task-complete" options="task_id.$task_id|org_id.$org_id"}">
+                                            {/if}
                                                 {Localisation::getTranslation('common_complete')}
+                                            {if !empty($allow_downloads[$task_id])}
                                             </a>
+                                            {/if}
                                         {/if}
                                     </td>
                                     <td>

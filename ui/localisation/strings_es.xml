@@ -85,7 +85,7 @@
   <string name="common_maximum_file_total_size_vs_limit_is">Los archivos que quieres subir suman %1$s MB, pero el límite admitido es de %2$s MB.</string>
 	<string name="common_assign">Asignar</string>
 	<string name="common_it_is_time_to_decide">Ahora tienes que decidir</string>
-	<string name="common_no_just_bring_me_back_to_the_task_page">No, quiero volver a la página de la tarea.</string>
+	<string name="common_no_just_bring_me_back_to_the_task_page">Quiero volver a la página de la tarea.</string>
 	<string name="common_review_this_checklist_for_your_downloaded_file">Antes de empezar, revisa estas instrucciones.</string>
 	<string name="common_after_downloading">Tras la descarga</string>
 	<string name="common_this_is_what_you_need_to_do_as_soon_as_possible">Esto es lo que tienes que hacer:</string>
@@ -865,14 +865,16 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@transl
 	<string name="task_claimed_translation_0">Te has asignado esta tarea de traducción</string>
 	<string name="task_claimed_translation_we_need_your_translation">Necesitamos tu traducción.</string>
 	<string name="task_claimed_translation_translate_the_file_to">Traduce el texto a %s con el programa que prefieras.</string>
+    <string name="task_claimed_translation_translate_the_file_to_plain">Traduce el texto a %s.</string>
 	<string name="task_claimed_translation_4">Cuando termines de traducir el archivo que has descargado,</string>
     <string name="task_claimed_translation_5">Sube el texto traducido a la página de la tarea.</string>
     <string name="task_claimed_translation_upload_translated_task">Entregue su traducción</string>
 
     <string name="task_claimed_alternative_option">Opción alternativa:</string>
     <string name="task_claimed_translate_using_kato">Traducir utilzando Kató TM</string>
+    <string name="task_claimed_click">Haz clic</string>
     <string name="task_claimed_proofread_using_kato">Revisar el texto con la ayuda de Kató TM</string>
-    <string name="task_claimed_please_read_kato">Kató TM es una plataforma de traducción de Translators without Borders (TWB). Por favor, lee <a href="https://kato.translatorswb.org/public/doc/translators.html" target="_blank">la siguiente guía</a> antes de usar Kató TM.</string>
+    <string name="task_claimed_please_read_kato">Kató TM es una plataforma de traducción de Translators without Borders (TWB). Por favor, lee <a href="https://community.translatorswb.org/t/useful-posts-index/2883" target="_blank">la siguiente guía</a> antes de usar Kató TM.</string>
     <string name="task_simple_upload_copy_from_kato">Copia tu traducción de Kató TM a Kató</string>
     <string name="task_simple_upload_view_on_kato">Pulsa <a href="%s" target="_blank">aquí</a> para <strong>ver tu traducción en Kató TM</strong>.</string>
     <string name="task_simple_upload_download_from_kato">Pulsa <a href="%s">aquí</a> para <strong>descargar tu traducción de Kató TM y cargarla en Kató manualmente</strong>.</string>
