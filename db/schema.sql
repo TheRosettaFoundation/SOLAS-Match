@@ -2016,6 +2016,9 @@ BEGIN
         DELETE FROM UserLogins
         WHERE user_id=userId;
 
+        DELETE FROM UserQualifiedPairs
+        WHERE user_id=userId;
+
         select 1 as result;
     else
         select 0 as result;
