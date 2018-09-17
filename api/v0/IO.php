@@ -86,9 +86,9 @@ class IO
                     );
 
                     $app->put(
-                        '/send_task_upload_notifications/:taskId/:version(:format)/',
+                        '/sendTaskUploadNotifications/:taskId/:version(:format)/',
                         '\SolasMatch\API\Lib\Middleware::isLoggedIn',
-                        '\SolasMatch\API\V0\IO::send_task_upload_notifications'
+                        '\SolasMatch\API\V0\IO::sendTaskUploadNotifications'
                     );
                 });
             });
@@ -526,7 +526,7 @@ class IO
         return $ret;
     }
 
-    private static function send_task_upload_notifications($taskId, $version, $format = ".json")
+    private static function sendTaskUploadNotifications($taskId, $version, $format = ".json")
     {
         if (!is_numeric($version) && strstr($version, '.')) {
             $version = explode('.', $version);
@@ -535,7 +535,7 @@ class IO
         }
 
         Lib\Notify::sendTaskUploadNotifications($taskId, $version);
-        error_log("send_task_upload_notifications($taskId, $version)");
+        error_log("sendTaskUploadNotifications($taskId, $version)");
         return 1;
     }
 

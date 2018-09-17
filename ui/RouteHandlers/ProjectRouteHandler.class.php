@@ -1952,7 +1952,7 @@ class ProjectRouteHandler
                             ($active_task['type_id'] == Common\Enums\TaskTypeEnum::PROOFREADING &&                                                $chunk['DOWNLOAD_STATUS'] === 'approved')) {
 
                             $taskDao->setTaskStatus($active_task['task_id'], Common\Enums\TaskStatusEnum::COMPLETE);
-                            $taskDao->send_task_upload_notifications($active_task['task_id'], 1);
+                            $taskDao->sendTaskUploadNotifications($active_task['task_id'], 1);
                             // LibAPI\Notify::sendTaskUploadNotifications($active_task['task_id'], 1);
                         }
                     }
