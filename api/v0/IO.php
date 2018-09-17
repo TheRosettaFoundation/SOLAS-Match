@@ -526,7 +526,7 @@ class IO
         return $ret;
     }
 
-    private static function sendTaskUploadNotifications($taskId, $version, $format = ".json")
+    public static function sendTaskUploadNotifications($taskId, $version, $format = ".json")
     {
         if (!is_numeric($version) && strstr($version, '.')) {
             $version = explode('.', $version);
