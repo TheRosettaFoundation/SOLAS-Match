@@ -84,6 +84,12 @@ class IO
                         '\SolasMatch\API\Lib\Middleware::isLoggedIn',
                         '\SolasMatch\API\V0\IO::saveOutputFile'
                     );
+
+                    $app->put(
+                        '/send_task_upload_notifications/:taskId/:version(:format)/',
+                        '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+                        '\SolasMatch\API\V0\IO::send_task_upload_notifications'
+                    );
                 });
             });
         });
@@ -518,6 +524,19 @@ class IO
         }
         Lib\Notify::sendTaskUploadNotifications($taskId, $version);
         return $ret;
+    }
+
+    private static function send_task_upload_notifications($taskId, $version, $format = ".json")
+    {
+        if (!is_numeric($version) && strstr($version, '.')) {
+            $version = explode('.', $version);
+            $format = '.'.$version[1];
+            $version = $version[0];
+        }
+
+        Lib\Notify::sendTaskUploadNotifications($taskId, $version);
+        error_log("send_task_upload_notifications($taskId, $version)");
+        return 1;
     }
 
     private static function detectMimeType($file, $filename)

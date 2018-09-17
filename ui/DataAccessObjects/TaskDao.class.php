@@ -368,7 +368,13 @@ class TaskDao extends BaseDao
         
         $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT, null, $args, $fileData);
     }
-    
+
+    public function send_task_upload_notifications($taskId, $version)
+    {
+        $request = "{$this->siteApi}v0/io/upload/send_task_upload_notifications/$taskId/$version";
+        $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
+    }
+
     public function getClaimedDate($taskId)
     {
         $ret = null;

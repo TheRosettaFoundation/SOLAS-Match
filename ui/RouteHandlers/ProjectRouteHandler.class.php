@@ -4,13 +4,11 @@ namespace SolasMatch\UI\RouteHandlers;
 
 use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
-use \SolasMatch\API\Lib as LibAPI;
 use \SolasMatch\Common as Common;
 
 require_once __DIR__."/../../Common/Enums/TaskTypeEnum.class.php";
 require_once __DIR__."/../../Common/Enums/TaskStatusEnum.class.php";
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
-require_once __DIR__.'/../../api/lib/Notify.class.php';
 
 class ProjectRouteHandler
 {
@@ -1954,7 +1952,8 @@ class ProjectRouteHandler
                             ($active_task['type_id'] == Common\Enums\TaskTypeEnum::PROOFREADING &&                                                $chunk['DOWNLOAD_STATUS'] === 'approved')) {
 
                             $taskDao->setTaskStatus($active_task['task_id'], Common\Enums\TaskStatusEnum::COMPLETE);
-                            LibAPI\Notify::sendTaskUploadNotifications($active_task['task_id'], 1);
+                            $taskDao->send_task_upload_notifications($active_task['task_id'], 1);
+                            // LibAPI\Notify::sendTaskUploadNotifications($active_task['task_id'], 1);
                         }
                     }
                 }
