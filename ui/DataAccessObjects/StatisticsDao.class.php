@@ -113,7 +113,7 @@ class StatisticsDao extends BaseDao
 
     public function get_matecat_task_stats($task_id, $task_type, $project_id, $matecat_langpair, $matecat_id_job, $matecat_id_job_password)
     {
-        $taskDao = new DAO\TaskDao();
+        $taskDao = new TaskDao();
         $stats = array();
         $we_are_a_subchunk = false;
         if ($task_type == Common\Enums\TaskTypeEnum::TRANSLATION || $task_type == Common\Enums\TaskTypeEnum::PROOFREADING) {
@@ -190,7 +190,7 @@ class StatisticsDao extends BaseDao
 
     public function get_matecat_task_urls($task_id, $task_type, $project_id, $matecat_langpair, $matecat_id_job, $matecat_id_job_password)
     {
-        $taskDao = new DAO\TaskDao();
+        $taskDao = new TaskDao();
         $stats = array();
         $we_are_a_subchunk = false;
         if ($task_type == Common\Enums\TaskTypeEnum::TRANSLATION || $task_type == Common\Enums\TaskTypeEnum::PROOFREADING) {
