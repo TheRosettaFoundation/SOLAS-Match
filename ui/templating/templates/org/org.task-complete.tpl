@@ -11,12 +11,16 @@
     {else}
         {Localisation::getTranslation("org_task_review_claimant_unavailable")}
     {/if}
+    {if !empty($allow_download)}
     {Localisation::getTranslation('org_task_review_0')}
+    {/if}
 </p>
 <p>
+    {if !empty($allow_download)}
     <a class="btn btn-primary" href="{urlFor name="download-task-latest-version" options="task_id.$taskId"}">
         <i class="icon-download icon-white"></i> {Localisation::getTranslation('org_task_review_download_output_file')}
     </a>
+    {/if}
 </p>
 
 <h2 class="page-header">
