@@ -1935,7 +1935,6 @@ class ProjectRouteHandler
             }
         }
 
-$taskDao->sendTaskUploadNotifications(1141, 1);//DELETE DELETE!!!!!!!!!!!!!!!!!!!!!
         // See if any chunks have been finalised in MateCat, if so mark any corresponding IN_PROGRESS (active) task(s) as complete
         $active_tasks_for_chunks = $taskDao->all_chunked_active_projects();
         if (!empty($active_tasks_for_chunks)) {
@@ -1952,6 +1951,7 @@ $taskDao->sendTaskUploadNotifications(1141, 1);//DELETE DELETE!!!!!!!!!!!!!!!!!!
                         if (($active_task['type_id'] == Common\Enums\TaskTypeEnum::TRANSLATION  && ($chunk['DOWNLOAD_STATUS'] === 'translated' || $chunk['DOWNLOAD_STATUS'] === 'approved')) ||
                             ($active_task['type_id'] == Common\Enums\TaskTypeEnum::PROOFREADING &&                                                $chunk['DOWNLOAD_STATUS'] === 'approved')) {
 
+                            error_log('Setting Task COMPLETE for: ' . $active_task['task_id']);
                             $taskDao->setTaskStatus($active_task['task_id'], Common\Enums\TaskStatusEnum::COMPLETE);
                             $taskDao->sendTaskUploadNotifications($active_task['task_id'], 1);
                             // LibAPI\Notify::sendTaskUploadNotifications($active_task['task_id'], 1);
