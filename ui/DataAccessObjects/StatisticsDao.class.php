@@ -113,13 +113,38 @@ class StatisticsDao extends BaseDao
 
     public function get_matecat_task_stats($task_id, $task_type, $project_id, $matecat_langpair, $matecat_id_job, $matecat_id_job_password)
     {
+        $taskDao = new TaskDao();
         $stats = array();
+        $we_are_a_subchunk = false;
         if ($task_type == Common\Enums\TaskTypeEnum::TRANSLATION || $task_type == Common\Enums\TaskTypeEnum::PROOFREADING) {
             $translate = 'translate';
             if ($task_type == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
 
-            if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
+            if (empty($matecat_id_job)) {
+                // Might be a chunk...
+                $matecat_tasks = $taskDao->getTaskChunk($task_id);
+                if (!empty($matecat_tasks)) {
+                    $we_are_a_subchunk = true;
+                    $matecat_langpair        = $matecat_tasks[0]['matecat_langpair'];
+                    $matecat_id_job          = $matecat_tasks[0]['matecat_id_job'];
+                    $matecat_id_job_password = $matecat_tasks[0]['matecat_id_chunk_password'];
+                }
+            }
 
+            if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
+                  if (!$we_are_a_subchunk && $taskDao->getTaskSubChunks($matecat_id_job)) {
+                      // This has been chunked, so need to accumulate status of all chunks
+                      $chunks = $taskDao->getStatusOfSubChunks($project_id, $matecat_langpair, $matecat_id_job, $matecat_id_job_password);
+                      $translated_status = true;
+                      $approved_status   = true;
+                      foreach ($chunks as $index => $chunk) {
+                          if ($chunk['DOWNLOAD_STATUS'] === 'draft') $translated_status = false;
+                          if ($chunk['DOWNLOAD_STATUS'] === 'draft' || $chunk['DOWNLOAD_STATUS'] === 'translated') $approved_status = false;
+                      }
+                      if     ($approved_status)   $stats['DOWNLOAD_STATUS'] = 'approved (Split Job)';
+                      elseif ($translated_status) $stats['DOWNLOAD_STATUS'] = 'translated (Split Job)';
+                      else                        $stats['DOWNLOAD_STATUS'] = 'draft (Split Job)';
+                  } else {
                 // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
                 $re = curl_init("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
 
@@ -157,6 +182,7 @@ class StatisticsDao extends BaseDao
                 } else {
                     error_log("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats get_matecat_task_stats($task_id...) responseCode: $responseCode");
                 }
+                  }
             }
         }
         return $stats;
@@ -164,13 +190,30 @@ class StatisticsDao extends BaseDao
 
     public function get_matecat_task_urls($task_id, $task_type, $project_id, $matecat_langpair, $matecat_id_job, $matecat_id_job_password)
     {
+        $taskDao = new TaskDao();
         $stats = array();
+        $we_are_a_subchunk = false;
         if ($task_type == Common\Enums\TaskTypeEnum::TRANSLATION || $task_type == Common\Enums\TaskTypeEnum::PROOFREADING) {
             $translate = 'translate';
             if ($task_type == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
 
+            if (empty($matecat_id_job)) {
+                // Might be a chunk...
+                $matecat_tasks = $taskDao->getTaskChunk($task_id);
+                if (!empty($matecat_tasks)) {
+                    $we_are_a_subchunk = true;
+                    $matecat_langpair        = $matecat_tasks[0]['matecat_langpair'];
+                    $matecat_id_job          = $matecat_tasks[0]['matecat_id_job'];
+                    $matecat_id_job_password = $matecat_tasks[0]['matecat_id_chunk_password'];
+                }
+            }
+
             if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
+                  if (!$we_are_a_subchunk && $taskDao->getTaskSubChunks($matecat_id_job)) {
+                      $stats['parent_of_chunked'] = 1;
+                  } else {
                 $stats['matecat_url'] = "https://tm.translatorswb.org/$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                  }
             }
         }
         return $stats;
@@ -191,6 +234,7 @@ class StatisticsDao extends BaseDao
 
            $result[$index]['matecat_url'] = '';
             if (!empty($stats['matecat_url'])) $result[$index]['matecat_url'] = $stats['matecat_url'];
+            if (!empty($stats['parent_of_chunked'])) $result[$index]['status'] .= ' (Split Job)';
         }
 
         return $result;

@@ -7110,9 +7110,11 @@ BEGIN
     FROM Projects p
     JOIN Tasks t ON p.id=t.project_id
     JOIN TaskClaims tc ON t.id=tc.task_id
+    LEFT JOIN TaskChunks c ON t.id=c.task_id
     WHERE
         (t.`task-type_id`=2 OR t.`task-type_id`=3) AND
-        t.`task-status_id`=4
+        t.`task-status_id`=4 AND
+        c.task_id IS NULL
     GROUP BY p.organisation_id, YEAR(tc.`claimed-time`);
 END//
 DELIMITER ;
@@ -7128,8 +7130,10 @@ BEGIN
         SUM(IF(`task-type_id`=3, t.`word-count`, 0)) AS words_proofread_req
     FROM Projects p
     JOIN Tasks t ON p.id=t.project_id
+    LEFT JOIN TaskChunks c ON t.id=c.task_id
     WHERE
-        (t.`task-type_id`=2 OR t.`task-type_id`=3)
+        (t.`task-type_id`=2 OR t.`task-type_id`=3) AND
+        c.task_id IS NULL
     GROUP BY p.organisation_id, YEAR(t.`created-time`);
 END//
 DELIMITER ;

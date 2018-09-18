@@ -2072,6 +2072,7 @@ class OrgRouteHandler
                 'claimant'          => $claimant,
                 'userName'          => $userName,
                 'claimantProfile'   => $claimantProfile,
+                'allow_download'    => $taskDao->get_allow_download($task),
                 "orgId"             => $orgId
         );
 
