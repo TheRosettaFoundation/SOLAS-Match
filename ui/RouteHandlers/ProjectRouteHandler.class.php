@@ -1935,6 +1935,7 @@ class ProjectRouteHandler
             }
         }
 
+$taskDao->sendTaskUploadNotifications(1141, 1);//DELETE DELETE!!!!!!!!!!!!!!!!!!!!!
         // See if any chunks have been finalised in MateCat, if so mark any corresponding IN_PROGRESS (active) task(s) as complete
         $active_tasks_for_chunks = $taskDao->all_chunked_active_projects();
         if (!empty($active_tasks_for_chunks)) {
