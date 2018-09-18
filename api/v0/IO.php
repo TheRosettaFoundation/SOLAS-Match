@@ -281,8 +281,11 @@ class IO
         $convert = API\Dispatcher::clenseArgs('convertFromXliff', Common\Enums\HttpMethodEnum::GET, false);
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         try {
+            error_log("Before uploadOutputFile($taskId..., $userId, $filename)");
         self::uploadOutputFile($task, $convert, $data, $userId, $filename);
+            error_log("After uploadOutputFile($taskId..., $userId, $filename)");
         } catch (Common\Exceptions\SolasMatchException $e) {
+            error_log("Catch uploadOutputFile($taskId..., $userId, $filename)");
             API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
             return;
         }
