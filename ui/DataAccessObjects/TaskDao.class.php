@@ -504,6 +504,17 @@ class TaskDao extends BaseDao
         return $result;
     }
 
+    public function getMatchingTask($id_job, $id_chunk_password, $matching_type_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getMatchingTask', LibAPI\PDOWrapper::cleanse($id_job) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($id_chunk_password) . ',' . LibAPI\PDOWrapper::cleanse($matching_type_id));
+        return $result;
+    }
+
+    public function addUserToTaskBlacklist($user_id, $task_id)
+    {
+        LibAPI\PDOWrapper::call('addUserToTaskBlacklist', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
+    }
+
     public function insertTaskChunks($task_id, $project_id, $type_id, $matecat_langpair, $matecat_id_job, $chunk_number, $chunk_password)
     {
         LibAPI\PDOWrapper::call('insertTaskChunks',
