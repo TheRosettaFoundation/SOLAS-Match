@@ -408,6 +408,22 @@ class UserDao extends BaseDao
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tasks/$taskId";
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
+
+        $taskDao = new TaskDao();
+        $matecat_tasks = $taskDao->getTaskChunk($taskId);
+        if (!empty($matecat_tasks)) {
+            // We are a chunk
+            $matecat_id_job          = $matecat_tasks[0]['matecat_id_job'];
+            $matecat_id_job_password = $matecat_tasks[0]['matecat_id_chunk_password'];
+            $type_id                 = $matecat_tasks[0]['type_id'];
+            $matching_type_id = Common\Enums\TaskTypeEnum::PROOFREADING;
+            if ($type_id == Common\Enums\TaskTypeEnum::PROOFREADING) $matching_type_id = Common\Enums\TaskTypeEnum::TRANSLATION;
+            $matching_tasks = $taskDao->getMatchingTask($matecat_id_job, $matecat_id_job_password, $matching_type_id);
+            if (!empty($matching_tasks)) {
+                $taskDao->addUserToTaskBlacklist($userId, $matching_tasks[0]['id']);
+            }
+        }
+
         return $ret;
     }
 

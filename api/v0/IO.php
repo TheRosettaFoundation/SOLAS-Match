@@ -280,7 +280,16 @@ class IO
         $filename = $projectFile->getFilename();
         $convert = API\Dispatcher::clenseArgs('convertFromXliff', Common\Enums\HttpMethodEnum::GET, false);
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        try {
+            error_log("Before uploadOutputFile($taskId..., $userId, $filename)");
         self::uploadOutputFile($task, $convert, $data, $userId, $filename);
+            error_log("After uploadOutputFile($taskId..., $userId, $filename)");
+        } catch (Common\Exceptions\SolasMatchException $e) {
+            error_log("Catch uploadOutputFile($taskId..., $userId, $filename)");
+            API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
+            return;
+        }
+        API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CREATED);
     }
 
     public static function saveProjectFile($projectId, $filename, $userId, $format = ".json")
@@ -490,7 +499,8 @@ class IO
         }
 
         if ($taskFileMime != $projectFileMime) {
-            API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::BAD_REQUEST);
+            //API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::BAD_REQUEST);
+            throw new Common\Exceptions\SolasMatchException("Mime type does not match.", Common\Enums\HttpStatusEnum::BAD_REQUEST);
         }
 
         if (is_null($version)) {
@@ -534,9 +544,15 @@ class IO
             $version = $version[0];
         }
 
-        Lib\Notify::sendTaskUploadNotifications($taskId, $version);
-        error_log("sendTaskUploadNotifications($taskId, $version)");
-        return 1;
+        try {
+            error_log("Before Notify::sendTaskUploadNotifications($taskId, $version)");
+            Lib\Notify::sendTaskUploadNotifications($taskId, $version);
+            error_log("sendTaskUploadNotifications($taskId, $version)");
+        } catch (Common\Exceptions\SolasMatchException $e) {
+            API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
+            return;
+        }
+        API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CREATED);
     }
 
     private static function detectMimeType($file, $filename)

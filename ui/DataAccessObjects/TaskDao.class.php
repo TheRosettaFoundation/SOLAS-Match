@@ -372,7 +372,9 @@ class TaskDao extends BaseDao
     public function sendTaskUploadNotifications($taskId, $version)
     {
         $request = "{$this->siteApi}v0/io/upload/sendTaskUploadNotifications/$taskId/$version";
+        error_log("Before API call sendTaskUploadNotifications($taskId, $version)");
         $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
+        error_log("After API call sendTaskUploadNotifications($taskId, $version)");
     }
 
     public function getClaimedDate($taskId)
@@ -500,6 +502,17 @@ class TaskDao extends BaseDao
     {
         $result = LibAPI\PDOWrapper::call('is_chunk_or_parent_of_chunk', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
         return $result;
+    }
+
+    public function getMatchingTask($id_job, $id_chunk_password, $matching_type_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getMatchingTask', LibAPI\PDOWrapper::cleanse($id_job) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($id_chunk_password) . ',' . LibAPI\PDOWrapper::cleanse($matching_type_id));
+        return $result;
+    }
+
+    public function addUserToTaskBlacklist($user_id, $task_id)
+    {
+        LibAPI\PDOWrapper::call('addUserToTaskBlacklist', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
     }
 
     public function insertTaskChunks($task_id, $project_id, $type_id, $matecat_langpair, $matecat_id_job, $chunk_number, $chunk_password)

@@ -1951,6 +1951,7 @@ class ProjectRouteHandler
                         if (($active_task['type_id'] == Common\Enums\TaskTypeEnum::TRANSLATION  && ($chunk['DOWNLOAD_STATUS'] === 'translated' || $chunk['DOWNLOAD_STATUS'] === 'approved')) ||
                             ($active_task['type_id'] == Common\Enums\TaskTypeEnum::PROOFREADING &&                                                $chunk['DOWNLOAD_STATUS'] === 'approved')) {
 
+                            error_log('Setting Task COMPLETE for: ' . $active_task['task_id']);
                             $taskDao->setTaskStatus($active_task['task_id'], Common\Enums\TaskStatusEnum::COMPLETE);
                             $taskDao->sendTaskUploadNotifications($active_task['task_id'], 1);
                             // LibAPI\Notify::sendTaskUploadNotifications($active_task['task_id'], 1);
