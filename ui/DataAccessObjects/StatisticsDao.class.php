@@ -235,9 +235,7 @@ class StatisticsDao extends BaseDao
             $result[$index]['matecat_url'] = '';
             if (!empty($stats['matecat_url'])) $result[$index]['matecat_url'] = $stats['matecat_url'];
             if (!empty($stats['parent_of_chunked'])) $result[$index]['status'] .= ' (Split Job)';
-error_log("result($index)matecat_url: " . $result[$index]['matecat_url']);
         }
-error_log("result(247)matecat_url: " . $result[247]['matecat_url']);
 
         return $result;
     }

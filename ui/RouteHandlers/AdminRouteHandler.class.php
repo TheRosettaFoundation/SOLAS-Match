@@ -478,7 +478,6 @@ class AdminRouteHandler
         $all_users = $statsDao->unclaimed_tasks();
 
         $app->view()->appendData(array('all_users' => $all_users));
-error_log("all_users(247)matecat_url: " . $all_users[247]['matecat_url']);
         $app->render('admin/unclaimed_tasks.tpl');
     }
 
