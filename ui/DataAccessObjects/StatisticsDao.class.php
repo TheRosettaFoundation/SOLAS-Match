@@ -198,6 +198,7 @@ class StatisticsDao extends BaseDao
             if ($task_type == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
 
             if (empty($matecat_id_job)) {
+error_log("Are we a chunk task_id: $task_id");
                 // Might be a chunk...
                 $matecat_tasks = $taskDao->getTaskChunk($task_id);
                 if (!empty($matecat_tasks)) {
@@ -205,6 +206,7 @@ class StatisticsDao extends BaseDao
                     $matecat_langpair        = $matecat_tasks[0]['matecat_langpair'];
                     $matecat_id_job          = $matecat_tasks[0]['matecat_id_job'];
                     $matecat_id_job_password = $matecat_tasks[0]['matecat_id_chunk_password'];
+error_log("YES chunk matecat_id_job_password: $matecat_id_job_password");
                 }
             }
 
@@ -213,6 +215,7 @@ class StatisticsDao extends BaseDao
                       $stats['parent_of_chunked'] = 1;
                   } else {
                 $stats['matecat_url'] = "https://tm.translatorswb.org/$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+error_log("YES chunk stats['matecat_url']: " . $stats['matecat_url']);
                   }
             }
         }
