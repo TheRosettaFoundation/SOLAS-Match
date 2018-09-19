@@ -369,12 +369,12 @@ class TaskDao extends BaseDao
         $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT, null, $args, $fileData);
     }
 
-    public function sendTaskUploadNotifications($taskId, $version)
+    public function sendTaskUploadNotifications($taskId, $type)
     {
-        $request = "{$this->siteApi}v0/io/upload/sendTaskUploadNotifications/$taskId/$version";
-        error_log("Before API call sendTaskUploadNotifications($taskId, $version)");
+        $request = "{$this->siteApi}v0/io/upload/sendTaskUploadNotifications/$taskId/$type";
+        error_log("Before API call sendTaskUploadNotifications($taskId, $type)");
         $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
-        error_log("After API call sendTaskUploadNotifications($taskId, $version)");
+        error_log("After API call sendTaskUploadNotifications($taskId, $type)");
     }
 
     public function getClaimedDate($taskId)

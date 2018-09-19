@@ -86,8 +86,7 @@ class IO
                     );
 
                     $app->put(
-                        '/sendTaskUploadNotifications/:taskId/:version(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+                        '/sendTaskUploadNotifications/:taskId/:type/',
                         '\SolasMatch\API\V0\IO::sendTaskUploadNotifications'
                     );
                 });
@@ -537,23 +536,23 @@ class IO
         return $ret;
     }
 
-    public static function sendTaskUploadNotifications($taskId, $version, $format = ".json")
+    public static function sendTaskUploadNotifications($taskId, $type, $format = ".json")
     {
-        if (!is_numeric($version) && strstr($version, '.')) {
-            $version = explode('.', $version);
-            $format = '.'.$version[1];
-            $version = $version[0];
+        if (!is_numeric($type) && strstr($type, '.')) {
+            $type = explode('.', $type);
+            $format = '.'.$type[1];
+            $type = $type[0];
         }
 
         try {
-            error_log("Before Notify::sendTaskUploadNotifications($taskId, $version)");
-            Lib\Notify::sendTaskUploadNotifications($taskId, $version);
-            error_log("sendTaskUploadNotifications($taskId, $version)");
+            error_log("Before Notify::sendTaskUploadNotifications($taskId, $type)");
+            Lib\Notify::sendTaskUploadNotifications($taskId, $type);
+            error_log("sendTaskUploadNotifications($taskId, $type)");
         } catch (Common\Exceptions\SolasMatchException $e) {
             API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
             return;
         }
-        API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CREATED);
+        API\Dispatcher::sendResponse(null, null, null, $format);
     }
 
     private static function detectMimeType($file, $filename)
