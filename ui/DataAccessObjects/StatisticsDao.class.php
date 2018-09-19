@@ -233,7 +233,8 @@ error_log("chunk stats['matecat_url']: " . $stats['matecat_url']);
         foreach ($result as $index => $user_row) {
            $stats = $this->get_matecat_task_urls($user_row['task_id'], $user_row['task_type'], $user_row['project_id'], $user_row['matecat_langpair_or_blank'], $user_row['matecat_id_job_or_zero'], $user_row['matecat_id_job_password_or_blank']);
 
-           $result[$index]['matecat_url'] = '';
+           $result[$index]['matecat_url'] = 'XXX';
+if (empty($result[$index]['matecat_url'])) error_log("index: $index is empty");
             if (!empty($stats['matecat_url'])) $result[$index]['matecat_url'] = $stats['matecat_url'];
             if (!empty($stats['parent_of_chunked'])) $result[$index]['status'] .= ' (Split Job)';
 error_log("stats['matecat_url']: " . $stats['matecat_url']);
