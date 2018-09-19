@@ -27,6 +27,7 @@
 
 {if isset($all_users) && count($all_users) > 0}
 
+all_users(247)matecat_url: {$all_users[247]['matecat_url']}
 <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
     <th width="16%">Partner</th>
