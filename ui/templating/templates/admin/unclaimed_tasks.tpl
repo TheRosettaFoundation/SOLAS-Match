@@ -28,6 +28,8 @@
 {if isset($all_users) && count($all_users) > 0}
 
 all_users(247)matecat_url: {$all_users[247]['matecat_url']}||{$all_users[247]['task_id']}||{$all_users[247]['task_title']}
+all_users(196)matecat_url: {$all_users[196]['matecat_url']}||{$all_users[196]['task_id']}||{$all_users[196]['task_title']}
+all_users(154)matecat_url: {$all_users[154]['matecat_url']}||{$all_users[154]['task_id']}||{$all_users[154]['task_title']}
 <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
     <th width="16%">Partner</th>
