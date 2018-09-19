@@ -213,6 +213,7 @@ class StatisticsDao extends BaseDao
                       $stats['parent_of_chunked'] = 1;
                   } else {
                 $stats['matecat_url'] = "https://tm.translatorswb.org/$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                $stats['matecat_langpair_or_blank'] = $matecat_langpair;
                   }
             }
         }
@@ -233,7 +234,8 @@ class StatisticsDao extends BaseDao
             $stats = $this->get_matecat_task_urls($user_row['task_id'], $user_row['task_type'], $user_row['project_id'], $user_row['matecat_langpair_or_blank'], $user_row['matecat_id_job_or_zero'], $user_row['matecat_id_job_password_or_blank']);
 
             $result[$index]['matecat_url'] = '';
-            if (!empty($stats['matecat_url'])) $result[$index]['matecat_url'] = $stats['matecat_url'];
+            if (!empty($stats['matecat_url']))               $result[$index]['matecat_url']               = $stats['matecat_url'];
+            if (!empty($stats['matecat_langpair_or_blank'])) $result[$index]['matecat_langpair_or_blank'] = $stats['matecat_langpair_or_blank'];
             if (!empty($stats['parent_of_chunked'])) $result[$index]['status'] .= ' (Split Job)';
         }
 
