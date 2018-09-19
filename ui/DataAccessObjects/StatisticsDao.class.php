@@ -67,6 +67,7 @@ class StatisticsDao extends BaseDao
             if (!empty($stats['TRANSLATED_PERC_FORMATTED'])) $result[$index]['TRANSLATED_PERC_FORMATTED'] = $stats['TRANSLATED_PERC_FORMATTED'] . '%';
             if (!empty($stats['APPROVED_PERC_FORMATTED']))   $result[$index]['APPROVED_PERC_FORMATTED']   = $stats['APPROVED_PERC_FORMATTED'] . '%';
             if (!empty($stats['matecat_url']))               $result[$index]['matecat_url']               = $stats['matecat_url'];
+            if (!empty($stats['matecat_langpair_or_blank'])) $result[$index]['matecat_langpair_or_blank'] = $stats['matecat_langpair_or_blank'];
         }
         return $result;
     }
@@ -87,6 +88,7 @@ class StatisticsDao extends BaseDao
             if (!empty($stats['TRANSLATED_PERC_FORMATTED'])) $result[$index]['TRANSLATED_PERC_FORMATTED'] = $stats['TRANSLATED_PERC_FORMATTED'] . '%';
             if (!empty($stats['APPROVED_PERC_FORMATTED']))   $result[$index]['APPROVED_PERC_FORMATTED']   = $stats['APPROVED_PERC_FORMATTED'] . '%';
             if (!empty($stats['matecat_url']))               $result[$index]['matecat_url']               = $stats['matecat_url'];
+            if (!empty($stats['matecat_langpair_or_blank'])) $result[$index]['matecat_langpair_or_blank'] = $stats['matecat_langpair_or_blank'];
         }
         return $result;
     }
@@ -107,6 +109,7 @@ class StatisticsDao extends BaseDao
             if (!empty($stats['TRANSLATED_PERC_FORMATTED'])) $result[$index]['TRANSLATED_PERC_FORMATTED'] = $stats['TRANSLATED_PERC_FORMATTED'] . '%';
             if (!empty($stats['APPROVED_PERC_FORMATTED']))   $result[$index]['APPROVED_PERC_FORMATTED']   = $stats['APPROVED_PERC_FORMATTED'] . '%';
             if (!empty($stats['matecat_url']))               $result[$index]['matecat_url']               = $stats['matecat_url'];
+            if (!empty($stats['matecat_langpair_or_blank'])) $result[$index]['matecat_langpair_or_blank'] = $stats['matecat_langpair_or_blank'];
         }
         return $result;
     }
@@ -176,6 +179,7 @@ class StatisticsDao extends BaseDao
                     if (!empty($response_data['stats'])) {
                         $stats = $response_data['stats'];
                         $stats['matecat_url'] = "https://tm.translatorswb.org/$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                        $stats['matecat_langpair_or_blank'] = $matecat_langpair;
                     } else {
                         error_log("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats get_matecat_task_stats($task_id...) stats empty!");
                     }
