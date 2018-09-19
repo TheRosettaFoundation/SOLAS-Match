@@ -6528,7 +6528,7 @@ BEGIN
             WHEN t.`task-type_id`=4 THEN 'Desegmentation'
         END
         AS task_type_text,
-        tv.user_id AS creator_id,
+        IFNULL(tv.user_id, '') AS creator_id,
         u2.email AS creator_email,
         IFNULL(lp.matecat_langpair,        '') AS matecat_langpair_or_blank,
         IFNULL(lp.matecat_id_job,           0) AS matecat_id_job_or_zero,
@@ -6543,11 +6543,11 @@ BEGIN
     FROM Projects          p
     JOIN Organisations     o ON p.organisation_id=o.id
     JOIN Tasks             t ON p.id=t.project_id
-    JOIN TaskFileVersions tv ON t.id=tv.task_id AND tv.version_id=0
-    JOIN Users            u2 ON tv.user_id=u2.id
     JOIN Languages   l ON t.`language_id-source`=l.id
     JOIN Languages  l2 ON t.`language_id-target`=l2.id
     LEFT JOIN MatecatLanguagePairs lp ON t.id=lp.task_id
+    LEFT JOIN TaskFileVersions tv ON t.id=tv.task_id AND tv.version_id=0
+    LEFT JOIN Users            u2 ON tv.user_id=u2.id
     WHERE t.`task-status_id`<3
     ORDER BY o.name, t.title, lp.matecat_langpair, t.`task-type_id`;
 END//

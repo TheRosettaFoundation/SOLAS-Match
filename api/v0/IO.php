@@ -500,7 +500,8 @@ class IO
 
         if ($taskFileMime != $projectFileMime) {
             //API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::BAD_REQUEST);
-            throw new Common\Exceptions\SolasMatchException("Mime type does not match.", Common\Enums\HttpStatusEnum::BAD_REQUEST);
+            //throw new Common\Exceptions\SolasMatchException("Mime type does not match.", Common\Enums\HttpStatusEnum::BAD_REQUEST);
+            // Previous code "API\" allowed the flow to proceed even though it gave an error, but there may be mismatches so we need to proceed uninterrupted 20180919
         }
 
         if (is_null($version)) {
