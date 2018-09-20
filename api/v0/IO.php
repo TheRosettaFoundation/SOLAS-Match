@@ -545,7 +545,6 @@ class IO
         }
 
         try {
-            error_log("Before Notify::sendTaskUploadNotifications($taskId, $type)");
             Lib\Notify::sendTaskUploadNotifications($taskId, $type);
             error_log("sendTaskUploadNotifications($taskId, $type)");
         } catch (Common\Exceptions\SolasMatchException $e) {
