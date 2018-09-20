@@ -190,7 +190,7 @@
     <string name="common_error_not_exist">You do not have sufficient privileges to access this page or the page does not exist.</string>
     <string name="common_error_already_claimed">This task has been claimed by another user.</string>
     <string name="common_error_cannot_claim_desegmentation">You cannot claim the desegmentation task <a href="%s">%s</a>, because you have worked on one of its prerequisite tasks.</string>
-    <string name="common_error_cannot_reclaim">You cannot reclaim the task <a href="%s">%s</a>, because you have previously unclaimed it.</string>
+    <string name="common_error_cannot_reclaim">You cannot claim the task <a href="%s">%s</a>, because you have previously claimed the matching translation or revision task.</string>
     <string name="common_error_cannot_reclaim_admin_revoked">You cannot reclaim the task <a href="%s">%s</a>, because an administrator has previously revoked it from you.</string>      
     <string name="common_error_unknown_task_type">Unknown task type.</string>
     <string name="common_error_language_code_expected">A valid language code was expected.</string>
