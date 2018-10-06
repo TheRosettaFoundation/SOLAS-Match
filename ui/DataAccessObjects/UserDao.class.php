@@ -994,10 +994,10 @@ $from_neon_to_trommons_pair = array(
         $org_id_neon  = '';
         $org_name     = '';
         $quality_level= 1;
-
+error_log('function process_neonwebhook()');
         if (!empty($_POST['payload'])) {
             $result = json_decode($_POST['payload'], true);
-
+error_log(print_r($result, true));
             if (!empty($result['eventTrigger']) && $result['eventTrigger'] == 'editAccount') {
 
                 if (!empty($result['data'])) {
