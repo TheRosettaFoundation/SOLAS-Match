@@ -1205,6 +1205,8 @@ class ProjectRouteHandler
                                             }
                                         }
 
+                                        if (!empty($post['private_tm_key'])) $taskDao->set_project_tm_key($project->getId(), $post['private_tm_key']);
+
                                        // Create a topic in the Community forum (Discourse) and a project in Asana
                                        $this->create_discourse_topic($project->getId(), $target_languages);
 
