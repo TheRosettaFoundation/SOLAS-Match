@@ -872,6 +872,7 @@ class ProjectRouteHandler
         $app = \Slim\Slim::getInstance();
         $user_id = Common\Lib\UserSession::getCurrentUserID();
 
+        $adminDao = new DAO\AdminDao();
         $projectDao = new DAO\ProjectDao();
         $orgDao = new DAO\OrganisationDao();
         $subscriptionDao = new DAO\SubscriptionDao();
@@ -1204,6 +1205,8 @@ class ProjectRouteHandler
                                             }
                                         }
 
+                                        if (!empty($post['private_tm_key'])) $taskDao->set_project_tm_key($project->getId(), $post['private_tm_key']);
+
                                        // Create a topic in the Community forum (Discourse) and a project in Asana
                                        $this->create_discourse_topic($project->getId(), $target_languages);
 
@@ -1427,6 +1430,7 @@ class ProjectRouteHandler
             'languages'      => $languages,
             'countries'      => $countries,
             'showRestrictTask' => $taskDao->organisationHasQualifiedBadge($org_id),
+            'isSiteAdmin'    => $adminDao->isSiteAdmin($user_id),
             'sesskey'        => $sesskey,
         ));
         $app->render("project/project.create.tpl");
@@ -1875,6 +1879,8 @@ class ProjectRouteHandler
                     }
                 }
 
+                $private_tm_key = $taskDao->get_project_tm_key($project_id);
+                if (empty($private_tm_key)) $private_tm_key = '58f97b6f65fb5c8c8522';
                 $fields = array(
                   'file'         => $cfile,
                   'project_name' => "proj-$project_id",
@@ -1882,7 +1888,7 @@ class ProjectRouteHandler
                   'target_lang'  => $filtered_target_languages,
                   'tms_engine'   => '1',
                   'mt_engine'    => '1',
-                  'private_tm_key' => '58f97b6f65fb5c8c8522',
+                  'private_tm_key' => $private_tm_key,
                   'subject'      => 'general',
                   'owner_email'  => $creator['email']
 //                  'owner_email'  => 'info@trommons.org'

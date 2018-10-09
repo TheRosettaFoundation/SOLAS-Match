@@ -1494,6 +1494,13 @@ CREATE TABLE IF NOT EXISTS `TermsAcceptedUsers` (
     CONSTRAINT FK_terms_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `PrivateTMKeys` (
+    project_id INT(10) UNSIGNED NOT NULL,
+    private_tm_key     VARCHAR(50) NOT NULL,
+    KEY FK_PrivateTMKeys_project_id (project_id),
+    CONSTRAINT FK_PrivateTMKeys_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -7562,6 +7569,22 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_terms_accepted`(IN userID INT, IN acceptedLevel INT)
 BEGIN
     REPLACE INTO TermsAcceptedUsers (user_id, accepted_level) VALUES (userID, acceptedLevel);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_project_tm_key`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_project_tm_key`(IN `projectID` INT, IN `privateTMKey` VARCHAR(50))
+BEGIN
+    INSERT INTO PrivateTMKeys (project_id, private_tm_key) VALUES (projectID, privateTMKey);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_project_tm_key`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_project_tm_key`(IN `projectID` INT)
+BEGIN
+    SELECT * FROM PrivateTMKeys WHERE project_id=projectID;
 END//
 DELIMITER ;
 
