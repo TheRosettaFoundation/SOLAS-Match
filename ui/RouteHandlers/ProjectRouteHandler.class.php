@@ -872,6 +872,7 @@ class ProjectRouteHandler
         $app = \Slim\Slim::getInstance();
         $user_id = Common\Lib\UserSession::getCurrentUserID();
 
+        $adminDao = new DAO\AdminDao();
         $projectDao = new DAO\ProjectDao();
         $orgDao = new DAO\OrganisationDao();
         $subscriptionDao = new DAO\SubscriptionDao();
@@ -1427,6 +1428,7 @@ class ProjectRouteHandler
             'languages'      => $languages,
             'countries'      => $countries,
             'showRestrictTask' => $taskDao->organisationHasQualifiedBadge($org_id),
+            'isSiteAdmin'    => $adminDao->isSiteAdmin($user_id),
             'sesskey'        => $sesskey,
         ));
         $app->render("project/project.create.tpl");

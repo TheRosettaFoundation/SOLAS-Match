@@ -147,6 +147,14 @@
                         <input type="text" name="tagList" id="tagList" style="width: 400px" />
                     </div>
                 </div>
+                {if $isSiteAdmin}
+                <div class="projFormInput">
+                    <div style="margin-bottom:25px;">
+                        <h2>private_tm_key:</h2>
+                        <input type="text" name="private_tm_key" id="private_tm_key" style="width: 400px" />
+                    </div>
+                </div>
+                {/if}
                 <div class="projFormInput">
                     <div style="margin-bottom:25px;">
                         <h2>{Localisation::getTranslation('project_create_publish_tasks')}:</h2>
