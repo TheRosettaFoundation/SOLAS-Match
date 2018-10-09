@@ -7572,6 +7572,22 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `set_project_tm_key`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_project_tm_key`(IN `projectID` INT, IN `privateTMKey` VARCHAR(50))
+BEGIN
+    INSERT INTO PrivateTMKeys (project_id, private_tm_key) VALUES (projectID, privateTMKey);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_project_tm_key`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_project_tm_key`(IN `projectID` INT)
+BEGIN
+    SELECT * FROM PrivateTMKeys WHERE project_id=projectID;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 

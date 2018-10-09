@@ -886,7 +886,7 @@ class TaskDao extends BaseDao
     public function get_project_tm_key($project_id)
     {
         $result = LibAPI\PDOWrapper::call('get_project_tm_key', LibAPI\PDOWrapper::cleanse($project_id));
-        if (empty($result)) $result = array();
+        if (!empty($result)) $result = $result[0]['private_tm_key'];
         return $result;
     }
 }

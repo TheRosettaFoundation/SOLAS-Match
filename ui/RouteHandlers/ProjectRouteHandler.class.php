@@ -1879,6 +1879,8 @@ class ProjectRouteHandler
                     }
                 }
 
+                $private_tm_key = $taskDao->get_project_tm_key($project_id);
+                if (empty($private_tm_key)) $private_tm_key ='58f97b6f65fb5c8c8522';
                 $fields = array(
                   'file'         => $cfile,
                   'project_name' => "proj-$project_id",
@@ -1886,7 +1888,7 @@ class ProjectRouteHandler
                   'target_lang'  => $filtered_target_languages,
                   'tms_engine'   => '1',
                   'mt_engine'    => '1',
-                  'private_tm_key' => '58f97b6f65fb5c8c8522',
+                  'private_tm_key' => $private_tm_key,
                   'subject'      => 'general',
                   'owner_email'  => $creator['email']
 //                  'owner_email'  => 'info@trommons.org'
