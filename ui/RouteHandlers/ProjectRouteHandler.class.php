@@ -1880,7 +1880,7 @@ class ProjectRouteHandler
                 }
 
                 $private_tm_key = $taskDao->get_project_tm_key($project_id);
-                if (empty($private_tm_key)) $private_tm_key ='58f97b6f65fb5c8c8522';
+                if (empty($private_tm_key)) $private_tm_key = '58f97b6f65fb5c8c8522';
                 $fields = array(
                   'file'         => $cfile,
                   'project_name' => "proj-$project_id",
