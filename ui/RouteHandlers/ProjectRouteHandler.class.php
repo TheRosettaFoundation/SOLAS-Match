@@ -1905,7 +1905,7 @@ class ProjectRouteHandler
                   'mt_engine'        => $mt_engine,
                   'private_tm_key'   => $private_tm_key,
                   'pretranslate_100' => $pretranslate_100,
-//                  'lexiqa'           => $lexiqa,
+                  'lexiqa'           => $lexiqa,
                   'subject'      => 'general',
                   'owner_email'  => $creator['email']
                 );
