@@ -1911,7 +1911,7 @@ class ProjectRouteHandler
                   'subject'      => 'general',
                   'owner_email'  => $creator['email']
                 );
-                error_log("project_cron /new ($project_id) owner_email: " . $fields['owner_email']);
+                error_log("project_cron /new ($project_id) fields: " . print_r($fields, true));
                 curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
 
                 curl_setopt($re, CURLOPT_HEADER, true);
