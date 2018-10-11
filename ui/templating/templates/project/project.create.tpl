@@ -150,8 +150,23 @@
                 {if $isSiteAdmin}
                 <div class="projFormInput">
                     <div style="margin-bottom:25px;">
-                        <h2>private_tm_key:</h2>
+                        <h2>Additional Private TM Keys</h2>
+                        <p class="desc">
+                            Zero or more additional TM keys, comma separated.
+                        </p>
                         <input type="text" name="private_tm_key" id="private_tm_key" style="width: 400px" />
+                    </div>
+                </div>
+                <div class="projFormInput">
+                    <div style="margin-bottom:25px;">
+                        <h2>Use MT Engine:</h2>
+                        <input type="checkbox" name="mt_engine" id="mt_engine" value="1" checked />
+                    </div>
+                </div>
+                <div class="projFormInput">
+                    <div style="margin-bottom:25px;">
+                        <h2>Pre-Translate 100%:</h2>
+                        <input type="checkbox" name="pretranslate_100" id="pretranslate_100" value="1" checked />
                     </div>
                 </div>
                 {/if}

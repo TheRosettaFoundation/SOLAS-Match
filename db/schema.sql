@@ -1496,7 +1496,10 @@ CREATE TABLE IF NOT EXISTS `TermsAcceptedUsers` (
 
 CREATE TABLE IF NOT EXISTS `PrivateTMKeys` (
     project_id INT(10) UNSIGNED NOT NULL,
-    private_tm_key     VARCHAR(50) NOT NULL,
+    mt_engine INT(10)  UNSIGNED NOT NULL,
+    pretranslate_100   INT(10) UNSIGNED NOT NULL,
+    lexiqa INT(10)     UNSIGNED NOT NULL,
+    private_tm_key     VARCHAR(255) NOT NULL,
     KEY FK_PrivateTMKeys_project_id (project_id),
     CONSTRAINT FK_PrivateTMKeys_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -7574,9 +7577,9 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `set_project_tm_key`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `set_project_tm_key`(IN `projectID` INT, IN `privateTMKey` VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_project_tm_key`(IN `projectID` INT, IN `mtEngine` INT, IN `preTranslate` INT, IN `lexi_QA` INT, IN `privateTMKey` VARCHAR(255))
 BEGIN
-    INSERT INTO PrivateTMKeys (project_id, private_tm_key) VALUES (projectID, privateTMKey);
+    INSERT INTO PrivateTMKeys (project_id, mt_engine, pretranslate_100, lexiqa, private_tm_key) VALUES (projectID, mtEngine, preTranslate, lexi_QA, privateTMKey);
 END//
 DELIMITER ;
 
