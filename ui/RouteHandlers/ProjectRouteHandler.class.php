@@ -1885,18 +1885,16 @@ class ProjectRouteHandler
                 }
 
                 $private_tm_key = $taskDao->get_project_tm_key($project_id);
-
-
                 if (empty($private_tm_key)) {
                     $mt_engine        = '1';
                     $pretranslate_100 = '1';
                     $lexiqa           = '1';
                     $private_tm_key   = '58f97b6f65fb5c8c8522';
                 } else {
-                    $mt_engine = $result[0]['mt_engine'];
-                    $pretranslate_100 = $result[0]['pretranslate_100'];
-                    $lexiqa = $result[0]['lexiqa'];
-                    $private_tm_key = $result[0]['private_tm_key'];
+                    $mt_engine        = $private_tm_key[0]['mt_engine'];
+                    $pretranslate_100 = $private_tm_key[0]['pretranslate_100'];
+                    $lexiqa           = $private_tm_key[0]['lexiqa'];
+                    $private_tm_key   = $private_tm_key[0]['private_tm_key'];
                 }
                 $fields = array(
                   'file'         => $cfile,
