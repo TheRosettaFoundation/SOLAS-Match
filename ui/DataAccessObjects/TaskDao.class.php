@@ -876,17 +876,20 @@ class TaskDao extends BaseDao
         LibAPI\PDOWrapper::call('insert_task_invite_sent_to_users', LibAPI\PDOWrapper::cleanseWrapStr($insert));
     }
 
-    public function set_project_tm_key($project_id, $private_tm_key)
+    public function set_project_tm_key($project_id, $mt_engine, $pretranslate_100, $lexiqa, $private_tm_key)
     {
         LibAPI\PDOWrapper::call('set_project_tm_key',
             LibAPI\PDOWrapper::cleanse($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($mt_engine) . ',' .
+            LibAPI\PDOWrapper::cleanse($pretranslate_100) . ',' .
+            LibAPI\PDOWrapper::cleanse($lexiqa) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($private_tm_key));
     }
 
     public function get_project_tm_key($project_id)
     {
         $result = LibAPI\PDOWrapper::call('get_project_tm_key', LibAPI\PDOWrapper::cleanse($project_id));
-        if (!empty($result)) $result = $result[0]['private_tm_key'];
+        if (empty($result)) $result = array();
         return $result;
     }
 }

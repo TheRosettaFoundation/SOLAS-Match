@@ -1205,7 +1205,12 @@ class ProjectRouteHandler
                                             }
                                         }
 
-                                        if (!empty($post['private_tm_key'])) $taskDao->set_project_tm_key($project->getId(), $post['private_tm_key']);
+                                        $mt_engine        = empty($post['mt_engine'])        ? '0' : '1';
+                                        $pretranslate_100 = empty($post['pretranslate_100']) ? '0' : '1';
+                                        $private_tm_key   = empty($post['private_tm_key'])   ? '58f97b6f65fb5c8c8522' : '58f97b6f65fb5c8c8522' . $post['private_tm_key'];
+                                        if (!empty($post['private_tm_key']) || empty($post['mt_engine']) || empty($post['pretranslate_100'])) {
+                                            $taskDao->set_project_tm_key($project->getId(), $mt_engine, $pretranslate_100, '1', $private_tm_key);
+                                        }
 
                                        // Create a topic in the Community forum (Discourse) and a project in Asana
                                        $this->create_discourse_topic($project->getId(), $target_languages);
@@ -1880,18 +1885,31 @@ class ProjectRouteHandler
                 }
 
                 $private_tm_key = $taskDao->get_project_tm_key($project_id);
-                if (empty($private_tm_key)) $private_tm_key = '58f97b6f65fb5c8c8522';
+
+
+                if (empty($private_tm_key)) {
+                    $mt_engine        = '1';
+                    $pretranslate_100 = '1';
+                    $lexiqa           = '1';
+                    $private_tm_key   = '58f97b6f65fb5c8c8522';
+                } else {
+                    $mt_engine = $result[0]['mt_engine'];
+                    $pretranslate_100 = $result[0]['pretranslate_100'];
+                    $lexiqa = $result[0]['lexiqa'];
+                    $private_tm_key = $result[0]['private_tm_key'];
+                }
                 $fields = array(
                   'file'         => $cfile,
                   'project_name' => "proj-$project_id",
                   'source_lang'  => $source_language,
                   'target_lang'  => $filtered_target_languages,
                   'tms_engine'   => '1',
-                  'mt_engine'    => '1',
-                  'private_tm_key' => $private_tm_key,
+                  'mt_engine'        => $mt_engine,
+                  'private_tm_key'   => $private_tm_key,
+                  'pretranslate_100' => $pretranslate_100,
+                  'lexiqa'           => $lexiqa,
                   'subject'      => 'general',
                   'owner_email'  => $creator['email']
-//                  'owner_email'  => 'info@trommons.org'
                 );
                 error_log("project_cron /new ($project_id) owner_email: " . $fields['owner_email']);
                 curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
