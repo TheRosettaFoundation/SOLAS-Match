@@ -1,4 +1,5 @@
 {include file='header.tpl'}
+<!-- Editor Hint: ¿áéíóú -->
 
 <span class="hidden">
     <!-- Parameters... -->
@@ -162,6 +163,11 @@
                                         </a>
                                         {/if}
                                     {/if}
+                                {/if}
+                                {if ($status_id == 3 || $status_id == 4) && ($type_id == 3 || $type_id == 2)}
+                                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdIEBza8C3RRsP0k75ISPm_urEHa0Fx_A3BGjkYNj8iwl4_mQ/viewform?{if isset($thisUser)}emailAddress={urlencode($thisUser->getEmail())}&{/if}entry.2005620554={$siteLocation}task/{$task_id}/view" class="btn btn-small btn-primary" target="_blank">
+                                        Kató Pre-Delivery Checklist
+                                    </a>
                                 {/if}
                             </p>
                             <br/>
