@@ -675,6 +675,7 @@ class TaskRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $taskDao = new DAO\TaskDao();
+        $adminDao = new DAO\AdminDao();
 
         $task = $taskDao->getTask($task_id);
         $app->view()->setData("task", $task);
@@ -682,6 +683,7 @@ class TaskRouteHandler
         $app->view()->appendData(array(
             'matecat_url' => $taskDao->get_matecat_url($task),
             'allow_download' => $taskDao->get_allow_download($task),
+            'isSiteAdmin'    => $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID()),
         ));
 
         $app->render("task/task.claimed.tpl");
