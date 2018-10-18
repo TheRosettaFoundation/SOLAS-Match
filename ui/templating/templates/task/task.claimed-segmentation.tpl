@@ -38,9 +38,11 @@
             {/if}
                 <i class="icon-arrow-left icon-black"></i> {Localisation::getTranslation('common_no_just_bring_me_back_to_claimed_tasks')}
             </a>
+            {if $isSiteAdmin}
             <a href="{urlFor name="project-view" options="project_id.{$task->getProjectId()}"}" class="btn">
                 <i class="icon-arrow-left icon-black"></i> Just bring me back to the project page.
             </a>
+            {/if}
             </p>
     </section>
 
