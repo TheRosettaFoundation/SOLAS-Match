@@ -1205,11 +1205,13 @@ class ProjectRouteHandler
                                             }
                                         }
 
-                                        $mt_engine        = empty($post['mt_engine'])        ? '0' : '1';
-                                        $pretranslate_100 = empty($post['pretranslate_100']) ? '0' : '1';
-                                        $private_tm_key   = empty($post['private_tm_key'])   ? '58f97b6f65fb5c8c8522' : '58f97b6f65fb5c8c8522,' . $post['private_tm_key'];
-                                        if (!empty($post['private_tm_key']) || empty($post['mt_engine']) || empty($post['pretranslate_100'])) {
-                                            $taskDao->set_project_tm_key($project->getId(), $mt_engine, $pretranslate_100, '1', $private_tm_key);
+                                        if ($adminDao->isSiteAdmin($user_id)) {
+                                            $mt_engine        = empty($post['mt_engine'])        ? '0' : '1';
+                                            $pretranslate_100 = empty($post['pretranslate_100']) ? '0' : '1';
+                                            $private_tm_key   = empty($post['private_tm_key'])   ? '58f97b6f65fb5c8c8522' : '58f97b6f65fb5c8c8522,' . $post['private_tm_key'];
+                                            if (!empty($post['private_tm_key']) || empty($post['mt_engine']) || empty($post['pretranslate_100'])) {
+                                                $taskDao->set_project_tm_key($project->getId(), $mt_engine, $pretranslate_100, '1', $private_tm_key);
+                                            }
                                         }
 
                                        // Create a topic in the Community forum (Discourse) and a project in Asana
