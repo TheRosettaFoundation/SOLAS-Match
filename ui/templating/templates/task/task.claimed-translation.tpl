@@ -45,8 +45,15 @@
                 <i class="icon-share-alt icon-white"></i> {Localisation::getTranslation('task_claimed_translation_upload_translated_task')}
             </a>
             {/if}
+            {if isset($user)}
+            <a href="{urlFor name="claimed-tasks" options="user_id.{$user->getId()}"}" class="btn">
+            {else}
             <a href="{urlFor name="home"}" class="btn">
-                <i class="icon-arrow-left icon-black"></i> {Localisation::getTranslation('common_no_just_bring_me_back_to_the_task_page')}
+            {/if}
+                <i class="icon-arrow-left icon-black"></i> {Localisation::getTranslation('common_no_just_bring_me_back_to_claimed_tasks')}
+            </a>
+            <a href="{urlFor name="project-view" options="project_id.{$task->getProjectId()}"}" class="btn">
+                <i class="icon-arrow-left icon-black"></i> Just bring me back to the project page.
             </a>
         </p>
     </section>

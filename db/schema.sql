@@ -3590,6 +3590,11 @@ BEGIN
     IF sourceLanguage='' THEN SET sourceLanguage = NULL; END IF;
     IF targetLanguage='' THEN SET targetLanguage = NULL; END IF;
 
+    SET @isSiteAdmin = 0;
+    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id IS NULL) THEN
+        SET @isSiteAdmin = 1;
+    END IF;
+
     SELECT
         t.id, t.project_id as projectId, t.title, t.`word-count` AS wordCount,
         (SELECT `en-name` FROM Languages l WHERE l.id=t.`language_id-source`) AS `sourceLanguageName`,
@@ -3619,11 +3624,12 @@ BEGIN
         t.`task-status_id`=2 AND
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id=uID AND t.task_id=t.id) AND
         (taskType IS NULL OR t.`task-type_id`=taskType) AND
-        (tq.required_qualification_level=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
+        (@isSiteAdmin=1 OR tq.required_qualification_level=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
         (sourceLanguage IS NULL OR t.`language_id-source`=(SELECT l.id FROM Languages l WHERE l.code=sourceLanguage)) AND
         (targetLanguage IS NULL OR t.`language_id-target`=(SELECT l.id FROM Languages l WHERE l.code=targetLanguage)) AND
         (strict=0 OR uqp.user_id IS NOT NULL) AND
         (
+            @isSiteAdmin=1 OR
             r.restricted_task_id IS NULL OR
             b.id IS NULL OR
             b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
@@ -3657,6 +3663,11 @@ BEGIN
     if sourceLanguage = '' then set sourceLanguage = null; end if;
     if targetLanguage = '' then set targetLanguage = null; end if;
 
+    SET @isSiteAdmin = 0;
+    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id IS NULL) THEN
+        SET @isSiteAdmin = 1;
+    END IF;
+
     SELECT COUNT(*) AS result FROM (
         SELECT t.id
         FROM Tasks t
@@ -3673,12 +3684,13 @@ BEGIN
         AND t.`task-status_id` = 2 
         AND not exists( SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id = uID AND t.task_id = t.id)
         AND (taskType is null or t.`task-type_id` = taskType)
-        AND (tq.required_qualification_level=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level))
+        AND (@isSiteAdmin=1 OR tq.required_qualification_level=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level))
         AND (sourceLanguage is null or t.`language_id-source` = (SELECT l.id FROM Languages l WHERE l.code = sourceLanguage))
         AND (targetLanguage is null or t.`language_id-target` = (SELECT l.id FROM Languages l WHERE l.code = targetLanguage))
         AND (strict=0 OR uqp.user_id IS NOT NULL)
         AND
         (
+            @isSiteAdmin=1 OR
             r.restricted_task_id IS NULL OR
             b.id IS NULL OR
             b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
