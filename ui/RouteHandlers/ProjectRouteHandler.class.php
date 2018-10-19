@@ -1215,6 +1215,7 @@ class ProjectRouteHandler
                                         }
 
                                        // Create a topic in the Community forum (Discourse) and a project in Asana
+                                       error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");
                                        $this->create_discourse_topic($project->getId(), $target_languages);
 
                                         try {
@@ -1224,6 +1225,7 @@ class ProjectRouteHandler
                                     } catch (\Exception $e) {
                                         $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), htmlspecialchars($_FILES['projectFile']['name'], ENT_COMPAT, 'UTF-8')));
                                         try {
+                                            error_log('projectCreate deleteProject(' . $project->getId() . ")");
                                             $projectDao->deleteProject($project->getId());
                                         } catch (\Exception $e) {
                                         }
