@@ -72,7 +72,7 @@ class Middleware
         }
         if ($claimant) {
             if ($user_id != $claimant->getId()) {
-error_log("Already claimed... task_id: $task_id, user_id: $user_id, claimant: " . $claimant->getId());
+//error_log("Already claimed... task_id: $task_id, user_id: $user_id, claimant: " . $claimant->getId());
                 $app->flash('error', Localisation::getTranslation('common_error_already_claimed'));
                 $app->redirect($app->urlFor('home'));
             }
