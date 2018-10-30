@@ -1809,6 +1809,7 @@ class TaskRouteHandler
             'sesskey'         => $sesskey,
             'extra_scripts'   => $extra_scripts,
             'task'            => $task,
+            'other_task_ids'  => $taskDao->getOtherPendingChunks($task_id),
             'project'         => $project,
             'taskTypeColours' => $taskTypeColours,
             'isSiteAdmin'     => 1,
