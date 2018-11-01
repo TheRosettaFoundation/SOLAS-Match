@@ -1835,8 +1835,8 @@ class TaskRouteHandler
         $insert = '';
         $comma = '';
         if (!empty($user_ids)) {
-            $user_ids = explode(',', $user_ids);
-            foreach ($user_ids as $user_id) {
+            $user_ids_array = explode(',', $user_ids);
+            foreach ($user_ids_array as $user_id) {
                 $user_id = (int)$user_id;
                 if ($user_id <= 1) break;
                 $insert .= "$comma($task_id,$user_id,NOW())";
@@ -1854,8 +1854,7 @@ error_log("HERE2");
             $comma = '';
 error_log("HERE3");
             if (!empty($user_ids)) {
-                $user_ids = explode(',', $user_ids);
-                foreach ($user_ids as $user_id) {
+                foreach ($user_ids_array as $user_id) {
                     $user_id = (int)$user_id;
                     if ($user_id <= 1) break;
                     $insert .= "$comma($task_id,$user_id,NOW())";
