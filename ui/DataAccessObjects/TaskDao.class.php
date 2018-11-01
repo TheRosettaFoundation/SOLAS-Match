@@ -508,6 +508,27 @@ class TaskDao extends BaseDao
         return $result;
     }
 
+    public function getOtherPendingChunks($task_id)
+    {
+        $matecat_tasks = $this->getTaskChunk($task_id);
+        if (empty($matecat_tasks)) return array();
+
+        $matecat_id_job = $matecat_tasks[0]['matecat_id_job'];
+        $type_id        = $matecat_tasks[0]['type_id'];
+
+        $result = LibAPI\PDOWrapper::call('getOtherPendingChunks',
+            LibAPI\PDOWrapper::cleanse($task_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($type_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($matecat_id_job);
+        if (empty($result)) return array();
+
+        $other_task_ids = array();
+        foreach ($result as $row) {
+            $other_task_ids[] = $row['task_id'];
+        }
+        return $other_task_ids;
+    }
+
     public function addUserToTaskBlacklist($user_id, $task_id)
     {
         LibAPI\PDOWrapper::call('addUserToTaskBlacklist', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
