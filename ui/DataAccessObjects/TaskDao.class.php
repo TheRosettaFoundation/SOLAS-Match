@@ -519,7 +519,7 @@ class TaskDao extends BaseDao
         $result = LibAPI\PDOWrapper::call('getOtherPendingChunks',
             LibAPI\PDOWrapper::cleanse($task_id) . ',' .
             LibAPI\PDOWrapper::cleanse($type_id) . ',' .
-            LibAPI\PDOWrapper::cleanse($matecat_id_job);
+            LibAPI\PDOWrapper::cleanse($matecat_id_job));
         if (empty($result)) return array();
 
         $other_task_ids = array();
