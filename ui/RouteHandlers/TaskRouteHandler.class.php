@@ -1844,6 +1844,23 @@ class TaskRouteHandler
             }
             if (!empty($insert)) $taskDao->insert_task_invite_sent_to_users($insert);
         }
+
+        // If this is a chunked task, the invites will have included other tasks
+        $other_task_ids = $taskDao->getOtherPendingChunks($task_id);
+        foreach ($other_task_ids as $task_id) {
+            $insert = '';
+            $comma = '';
+            if (!empty($user_ids)) {
+                $user_ids = explode(',', $user_ids);
+                foreach ($user_ids as $user_id) {
+                    $user_id = (int)$user_id;
+                    if ($user_id <= 1) break;
+                    $insert .= "$comma($task_id,$user_id,NOW())";
+                    $comma = ',';
+                }
+                if (!empty($insert)) $taskDao->insert_task_invite_sent_to_users($insert);
+            }
+        }
     }
 
     public function taskCreate($project_id)
