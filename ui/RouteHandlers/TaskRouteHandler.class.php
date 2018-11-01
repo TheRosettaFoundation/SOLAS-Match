@@ -1809,6 +1809,7 @@ class TaskRouteHandler
             'sesskey'         => $sesskey,
             'extra_scripts'   => $extra_scripts,
             'task'            => $task,
+            'other_task_ids'  => $taskDao->getOtherPendingChunks($task_id),
             'project'         => $project,
             'taskTypeColours' => $taskTypeColours,
             'isSiteAdmin'     => 1,
@@ -1834,14 +1835,30 @@ class TaskRouteHandler
         $insert = '';
         $comma = '';
         if (!empty($user_ids)) {
-            $user_ids = explode(',', $user_ids);
-            foreach ($user_ids as $user_id) {
+            $user_ids_array = explode(',', $user_ids);
+            foreach ($user_ids_array as $user_id) {
                 $user_id = (int)$user_id;
                 if ($user_id <= 1) break;
                 $insert .= "$comma($task_id,$user_id,NOW())";
                 $comma = ',';
             }
             if (!empty($insert)) $taskDao->insert_task_invite_sent_to_users($insert);
+        }
+
+        // If this is a chunked task, the invites will have included other tasks
+        $other_task_ids = $taskDao->getOtherPendingChunks($task_id);
+        foreach ($other_task_ids as $task_id) {
+            $insert = '';
+            $comma = '';
+            if (!empty($user_ids)) {
+                foreach ($user_ids_array as $user_id) {
+                    $user_id = (int)$user_id;
+                    if ($user_id <= 1) break;
+                    $insert .= "$comma($task_id,$user_id,NOW())";
+                    $comma = ',';
+                }
+                if (!empty($insert)) $taskDao->insert_task_invite_sent_to_users($insert);
+            }
         }
     }
 

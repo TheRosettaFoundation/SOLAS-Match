@@ -7087,6 +7087,22 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getOtherPendingChunks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOtherPendingChunks`(IN `tID` BIGINT, IN `typeID` INT, IN `matecatIdJob` INT)
+BEGIN
+    SELECT tc.task_id
+    FROM TaskChunks tc
+    JOIN Tasks t ON tc.task_id=t.id
+    WHERE
+        tc.matecat_id_job=matecatIdJob AND
+        tc.type_id=typeID AND
+        t.`task-status_id`=2 AND
+        tc.task_id!=tID
+    ORDER BY chunk_number ASC;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `all_orgs`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `all_orgs`()
