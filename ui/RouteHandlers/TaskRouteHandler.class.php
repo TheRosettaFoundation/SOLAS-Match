@@ -1845,14 +1845,11 @@ class TaskRouteHandler
             if (!empty($insert)) $taskDao->insert_task_invite_sent_to_users($insert);
         }
 
-error_log("HERE1");
         // If this is a chunked task, the invites will have included other tasks
         $other_task_ids = $taskDao->getOtherPendingChunks($task_id);
-error_log("HERE2");
         foreach ($other_task_ids as $task_id) {
             $insert = '';
             $comma = '';
-error_log("HERE3");
             if (!empty($user_ids)) {
                 foreach ($user_ids_array as $user_id) {
                     $user_id = (int)$user_id;
@@ -1860,12 +1857,9 @@ error_log("HERE3");
                     $insert .= "$comma($task_id,$user_id,NOW())";
                     $comma = ',';
                 }
-error_log("HERE4:$insert");
                 if (!empty($insert)) $taskDao->insert_task_invite_sent_to_users($insert);
-error_log("HERE5:$insert");
             }
         }
-error_log("HERE6");
     }
 
     public function taskCreate($project_id)
