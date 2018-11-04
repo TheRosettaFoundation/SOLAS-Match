@@ -443,4 +443,84 @@ Tweet</a>
     {/if}
 {/if}
 
+{if !empty($volunteerTaskLanguageMap)}
+    <hr />
+    <h1 class="page-header" style="margin-bottom: 60px">
+        {Localisation::getTranslation('project_view_tasks')}
+        <small>{Localisation::getTranslation('project_view_0')}</small>
+    </h1>
+                {foreach from=$volunteerTaskLanguageMap key=languageCountry item=tasks}
+
+                    <div style="display: inline-block; overflow-wrap: break-word;
+                                    font-weight: bold; font-size: large; max-width: 70%">
+                        {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
+                    </div>
+                    <hr />
+
+                    <table class="table table-striped" style="overflow-wrap: break-word; margin-bottom: 60px">
+                        <thead>
+                            <tr>
+                                <th>{Localisation::getTranslation('common_title')}</th>
+                                <th>{Localisation::getTranslation('common_status')}</th>
+                                <th>{Localisation::getTranslation('common_type')}</th>
+                                <th>{Localisation::getTranslation('common_task_deadline')}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            {foreach from=$tasks item=task}
+                                {assign var="task_id" value=$task->getId()}
+                                <tr style="overflow-wrap: break-word;">
+                                    <td width="24%">
+                                        <a href="{urlFor name="task-view" options="task_id.$task_id"}">
+                                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
+                                        </a>
+                                        <br/>
+                                    </td>
+                                    <td>
+                                        {assign var="status_id" value=$task->getTaskStatus()}
+                                        {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
+                                            {Localisation::getTranslation('common_waiting')}
+                                        {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
+                                            {Localisation::getTranslation('common_unclaimed')}
+                                        {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
+                                            {Localisation::getTranslation('common_in_progress')}
+                                        {elseif $status_id == TaskStatusEnum::COMPLETE}
+                                            {Localisation::getTranslation('common_complete')}
+                                        {/if}
+                                    </td>
+                                    <td>
+                                        <strong>
+                                            <small>
+                                                {assign var="type_id" value=$task->getTaskType()}
+                                                {if $type_id == TaskTypeEnum::SEGMENTATION}
+                                                    <span style="color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">
+                                                        {Localisation::getTranslation('common_segmentation')}
+                                                    </span>
+                                                {elseif $type_id == TaskTypeEnum::TRANSLATION}
+                                                    <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">
+                                                        {Localisation::getTranslation('common_translation')}
+                                                    </span>
+                                                {elseif $type_id == TaskTypeEnum::PROOFREADING}
+                                                    <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">
+                                                        {Localisation::getTranslation('common_proofreading')}
+                                                    </span>
+                                                {elseif $type_id == TaskTypeEnum::DESEGMENTATION}
+                                                    <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">
+                                                        {Localisation::getTranslation('common_desegmentation')}
+                                                    </span>
+                                                {/if}
+                                            </small>
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        <div class="convert_utc_to_local" style="visibility: hidden">{$task->getDeadline()}</div>
+                                    </td>
+                                </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
+                {/foreach}
+{/if}
+
 {include file="footer.tpl"}
