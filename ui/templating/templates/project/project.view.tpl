@@ -469,16 +469,16 @@ Tweet</a>
                         <tbody>
 
                             {foreach from=$tasks item=task}
-                                {assign var="task_id" value=$task->getId()}
+                                {assign var="task_id" value=$task['task_id']}
                                 <tr style="overflow-wrap: break-word;">
                                     <td width="24%">
                                         <a href="{urlFor name="task-view" options="task_id.$task_id"}">
-                                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
+                                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task['title'])}
                                         </a>
                                         <br/>
                                     </td>
                                     <td>
-                                        {assign var="status_id" value=$task->getTaskStatus()}
+                                        {assign var="status_id" value=$task['status_id']}
                                         {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
                                             {Localisation::getTranslation('common_waiting')}
                                         {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
@@ -492,7 +492,7 @@ Tweet</a>
                                     <td>
                                         <strong>
                                             <small>
-                                                {assign var="type_id" value=$task->getTaskType()}
+                                                {assign var="type_id" value=$task['type_id']}
                                                 {if $type_id == TaskTypeEnum::SEGMENTATION}
                                                     <span style="color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">
                                                         {Localisation::getTranslation('common_segmentation')}
@@ -514,7 +514,7 @@ Tweet</a>
                                         </strong>
                                     </td>
                                     <td>
-                                        <div class="convert_utc_to_local" style="visibility: hidden">{$task->getDeadline()}</div>
+                                        <div class="convert_utc_to_local" style="visibility: hidden">{$task['deadline']}</div>
                                     </td>
                                 </tr>
                             {/foreach}
