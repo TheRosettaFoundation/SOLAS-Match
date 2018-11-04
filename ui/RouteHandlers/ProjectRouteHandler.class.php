@@ -540,6 +540,12 @@ class ProjectRouteHandler
                     "taskLanguageMap" => $taskLanguageMap
             ));
         } else {
+            $project_tasks = $taskDao->getVolunteerProjectTasks($project_id, $user_id);
+            $volunteerTaskLanguageMap = array();
+            foreach ($project_tasks as $task) {
+                $volunteerTaskLanguageMap[$task['target_language_code'] . ',' . $task['target_country_code']][] = $task;
+            }
+
             $extra_scripts = file_get_contents(__DIR__."/../js/TaskView1.js");
             // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
             $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
@@ -547,6 +553,7 @@ class ProjectRouteHandler
             $app->view()->appendData(array(
                 "extra_scripts" => $extra_scripts,
                 "org" => $org,
+                'volunteerTaskLanguageMap' => $volunteerTaskLanguageMap,
                 "project_tags" => $project_tags
             ));
         }
