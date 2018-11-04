@@ -913,4 +913,11 @@ class TaskDao extends BaseDao
         if (empty($result)) $result = array();
         return $result;
     }
+
+    public function getVolunteerProjectTasks($project_id, $user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getVolunteerProjectTasks', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) $result = array();
+        return $result;
+    }
 }
