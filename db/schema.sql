@@ -3074,7 +3074,7 @@ BEGIN
             b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
         )
     GROUP BY t.id
-    ORDER BY target_language_name, target_country_name;
+    ORDER BY target_language_name, target_country_name, t.id;
 END//
 DELIMITER ;
 
