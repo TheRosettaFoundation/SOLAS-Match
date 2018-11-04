@@ -3040,6 +3040,43 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getVolunteerProjectTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getVolunteerProjectTasks`(IN `projectID` INT, IN `uID` INT)
+BEGIN
+    SELECT
+        t.id AS task_id,
+        t.title,
+        (SELECT code      FROM Languages l WHERE l.id=t.`language_id-target`) AS target_language_code,
+        (SELECT code      FROM Countries c WHERE c.id=t.`country_id-target` ) AS target_country_code,
+        (SELECT `en-name` FROM Languages l WHERE l.id=t.`language_id-target`) AS target_language_name,
+        (SELECT `en-name` FROM Countries c WHERE c.id=t.`country_id-target` ) AS target_country_name,
+        t.`task-type_id`   AS type_id,
+        t.`task-status_id` AS status_id,
+        t.deadline
+    FROM      Tasks                            t
+    JOIN      Projects                         p ON t.project_id=p.id
+    JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
+    LEFT JOIN Badges                           b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+    LEFT JOIN RestrictedTasks                  r ON t.id=r.restricted_task_id
+    LEFT JOIN UserQualifiedPairs             uqp ON
+        uqp.user_id=uID AND
+        t.`language_id-source`=uqp.language_id_source AND
+        t.`language_id-target`=uqp.language_id_target
+    WHERE
+        t.project_id=projectID AND
+        t.published=1 AND
+        NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id=uID AND t.task_id=t.id) AND
+        (tq.required_qualification_level=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
+        (
+            r.restricted_task_id IS NULL OR
+            b.id IS NULL OR
+            b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
+        )
+    GROUP BY t.id
+    ORDER BY target_language_name, target_country_name;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure debug-test3.getTaskClaimedTime
 DROP PROCEDURE IF EXISTS `getTaskClaimedTime`;
