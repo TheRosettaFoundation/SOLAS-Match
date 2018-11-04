@@ -486,6 +486,12 @@ class ProjectRouteHandler
         $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
         $isAdmin = $adminDao->isOrgAdmin($project->getOrganisationId(), $user_id) || $isSiteAdmin;
 
+        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
+        $taskTypeColours = array();
+        for ($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
+        }
+
         //$allow_downloads = array();
         if ($isOrgMember || $isAdmin) {
             $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);
@@ -522,13 +528,6 @@ class ProjectRouteHandler
             $extra_scripts .= file_get_contents(__DIR__."/../js/TaskView1.js");
             // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
             $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
-
-            $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
-            $taskTypeColours = array();
-
-            for ($i=1; $i <= $numTaskTypes; $i++) {
-                $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
-            }
 
             $app->view()->appendData(array(
                     "org" => $org,
