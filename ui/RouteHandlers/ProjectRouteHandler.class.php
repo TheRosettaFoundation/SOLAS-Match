@@ -535,7 +535,6 @@ class ProjectRouteHandler
                     "extra_scripts" => $extra_scripts,
                     "projectTasks" => $project_tasks,
                     "taskMetaData" => $taskMetaData,
-                    "taskTypeColours" => $taskTypeColours,
                     "userSubscribedToProject" => $userSubscribedToProject,
                     "project_tags" => $project_tags,
                     "taskLanguageMap" => $taskLanguageMap
@@ -559,6 +558,7 @@ class ProjectRouteHandler
                 "isOrgMember"   => $isOrgMember,
                 "isAdmin"       => $isAdmin,
                 "isSiteAdmin"   => $isSiteAdmin,
+                'taskTypeColours' => $taskTypeColours,
                 "imgCacheToken" => $preventImageCacheToken,
                 'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
                 'matecat_analyze_url' => $taskDao->get_matecat_analyze_url($project_id),
