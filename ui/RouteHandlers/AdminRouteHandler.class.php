@@ -56,6 +56,12 @@ class AdminRouteHandler
         )->via('POST')->name('complete_matecat');
 
         $app->get(
+            '/user_task_reviews/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'user_task_reviews')
+        )->via('POST')->name('user_task_reviews');
+
+        $app->get(
             '/first_completed_task/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'first_completed_task')
@@ -415,6 +421,17 @@ class AdminRouteHandler
 
         $app->view()->appendData(array('all_users' => $all_users));
         $app->render('admin/complete_matecat.tpl');
+    }
+
+    public function user_task_reviews()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->user_task_reviews();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('admin/user_task_reviews.tpl');
     }
 
     public function first_completed_task()
