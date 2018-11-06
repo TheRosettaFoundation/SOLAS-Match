@@ -6544,6 +6544,32 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `user_task_reviews`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `user_task_reviews`()
+BEGIN
+    SELECT
+        u.id AS user_id,
+        u.`display-name` AS display_name,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`, '') AS last_name,
+        AVG(tr.corrections) AS cor,
+        AVG(tr.grammar)     AS gram,
+        AVG(tr.spelling)    AS spell,
+        AVG(tr.consistency) AS cons,
+        COUNT(*)            AS num
+    FROM TaskReviews            tr
+    JOIN Tasks                   t  ON tr.task_id=t.id
+    JOIN TaskClaims             tc  ON tr.task_id=tc.task_id
+    JOIN Users                   u  ON tc.user_id=u.id
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    WHERE t.`task-status_id`=4
+    GROUP BY u.id
+    ORDER BY u.email;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `active_users`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `active_users`()

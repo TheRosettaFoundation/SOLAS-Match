@@ -383,4 +383,9 @@ class StatisticsDao extends BaseDao
         $result = LibAPI\PDOWrapper::call('search_project', LibAPI\PDOWrapper::cleanseNullOrWrapStr($name));
         return $result;
     }
+
+    public function user_task_reviews()
+    {
+        $result = LibAPI\PDOWrapper::call('user_task_reviews', '');
+    }
 }
