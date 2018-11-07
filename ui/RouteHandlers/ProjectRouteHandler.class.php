@@ -501,7 +501,7 @@ class ProjectRouteHandler
             $taskLanguageMap = array();
             if ($project_tasks) {
 $ser = serialize($project);
-error_log("Project: $ser");
+error_log("Project: " . preg_replace('/[\x00-\x1F\x7F]/u', '?', $ser));
 error_log(print_r($project, true));
 error_log(print_r(unserialize($ser), true));
                 foreach ($project_tasks as $task) {
