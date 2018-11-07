@@ -408,6 +408,7 @@ class ProjectRouteHandler
                                                     $deadline_less_3_days = $deadline - 3*24*60*60;
                                                     if ($deadline_less_3_days < time())    $deadline_less_3_days = time() + 2*24*60*60;
                                                     if ($deadline_less_3_days > $deadline) $deadline_less_3_days = $deadline;
+                                                    error_log("Parent task_id: $parent_task_id_translation, deadline will be inherited: " . date("Y-m-d H:i:s", $deadline_less_3_days));
                                                     $parent_translation_task->setDeadline(date("Y-m-d H:i:s", $deadline_less_3_days));
                                                 }
 
@@ -601,6 +602,7 @@ class ProjectRouteHandler
 
         $newTask = $taskDao->createTask($task);
         $task_id = $newTask->getId();
+        error_log("addChunkTask $chunk_number: $task_id, deadline: " . $task->getDeadline());
 
         $taskDao->updateRequiredTaskQualificationLevel($task_id, $taskDao->getRequiredTaskQualificationLevel($parent_task->getId()));
 
