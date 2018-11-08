@@ -509,9 +509,11 @@ error_log(print_r(unserialize($ser), true));
 $pj->setImpact(1);
 $pj->setImageUploaded(1);
 $pj->setImageApproved('1');
-$pj->setOrganisationId('22');
+$pj->setOrganisationId('2a2');
 $pj->setId('99');
 $pj->setId(555);
+$pj->setDeadline(555);
+$pj->setTitle(NULL);
 $ser = serialize($pj);
 error_log("Project After sets: " . preg_replace('/[\x00-\x1F\x7F]/u', '?', $ser));
 
