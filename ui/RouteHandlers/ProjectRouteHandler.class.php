@@ -500,6 +500,11 @@ class ProjectRouteHandler
             $project_tasks = $projectDao->getProjectTasks($project_id);
             $taskLanguageMap = array();
             if ($project_tasks) {
+$pj = new Common\Protobufs\Emails\UserBadgeAwardedEmail();
+$ser = serialize($pj);
+error_log("new UserBadgeAwardedEmail(): " . preg_replace('/[\x00-\x1F\x7F]/u', '?', $ser));
+error_log(print_r($pj, true));
+
 //$pj = new Common\Protobufs\Models\Project();
 //$ser = serialize($pj);
 //error_log("new Project(): " . preg_replace('/[\x00-\x1F\x7F]/u', '?', $ser));
