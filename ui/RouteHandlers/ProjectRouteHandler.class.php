@@ -506,6 +506,13 @@ error_log("new Project(): " . preg_replace('/[\x00-\x1F\x7F]/u', '?', $ser));
 error_log(print_r($pj, true));
 error_log(print_r(unserialize($ser), true));
 
+$pj->setImpact(1);
+$pj->setImageUploaded(1);
+$pj->setImageApproved(true);
+$pj->setOrganisationId('22');
+$ser = serialize($pj);
+error_log("Project After sets: " . preg_replace('/[\x00-\x1F\x7F]/u', '?', $ser));
+
 $ser = serialize($project);
 error_log("Project: " . preg_replace('/[\x00-\x1F\x7F]/u', '?', $ser));
 error_log(print_r($project, true));
