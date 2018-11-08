@@ -513,7 +513,7 @@ $pj->setOrganisationId('2a2');
 $pj->setId('99');
 $pj->setId(555);
 $pj->setDeadline(555);
-$pj->setTitle(NULL);
+//$pj->setTitle(NULL);
 $ser = serialize($pj);
 error_log("Project After sets: " . preg_replace('/[\x00-\x1F\x7F]/u', '?', $ser));
 
