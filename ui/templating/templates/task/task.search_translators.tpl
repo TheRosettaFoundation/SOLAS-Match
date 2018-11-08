@@ -50,17 +50,19 @@
 {if !empty($sent_users)}
 <table style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
+    <th width="8%">Send Invite?</th>
     <th width="15%">Date Sent Invite</th>
     <th width="15%">Date Viewed Task</th>
     <th width="15%">Date Claimed Task</th>
     <th width="15%">Display Name</th>
-    <th width="20%">Email</th>
-    <th width="20%">Name</th>
+    <th width="16%">Email</th>
+    <th width="16%">Name</th>
   </thead>
 
   <tbody>
   {foreach $sent_users as $user_row}
     <tr>
+      <td><input type="checkbox" class="translator_invite" id="{$user_row['user_id']}" email="{$user_row['email']}" /></td>
       <td><div class="convert_utc_to_local" style="visibility: hidden">{$user_row['date_sent_invite']}</div></td>
       <td><div {if $user_row['date_viewed_task']  != ''}class="convert_utc_to_local" style="visibility: hidden"{/if}>{$user_row['date_viewed_task']}</div></td>
       <td><div {if $user_row['date_claimed_task'] != ''}class="convert_utc_to_local" style="visibility: hidden"{/if}>{$user_row['date_claimed_task']}</div></td>
