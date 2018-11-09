@@ -501,10 +501,14 @@ class ProjectRouteHandler
             $taskLanguageMap = array();
             if ($project_tasks) {
 require_once __DIR__."/../../Common/protobufs/notifications/TaskRevokedNotification.php";
+require_once __DIR__."/../../Common/protobufs/notifications/TaskRevokedNotificationx.php";
 $pj = new Common\Protobufs\Notifications\TaskRevokedNotification();
 $ser = serialize($pj);
 error_log("new TaskRevokedNotification(): " . preg_replace('/[\x00-\x1F\x7F]/u', '?', $ser));
-error_log(print_r($pj, true));
+//error_log(print_r($pj, true));
+$pj = new Common\Protobufs\Notifications\TaskRevokedNotificatioX();
+$ser = serialize($pj);
+error_log("new TaskRevokedNotificatioX(): " . preg_replace('/[\x00-\x1F\x7F]/u', '?', $ser));
 
 //require_once __DIR__."/../../Common/protobufs/emails/UserBadgeAwardedEmail.php";
 //$pj = new Common\Protobufs\Emails\UserBadgeAwardedEmail();
