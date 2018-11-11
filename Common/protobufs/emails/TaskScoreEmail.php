@@ -11,6 +11,14 @@ class TaskScoreEmail
     $this->body = '';
   }
 
+  public function getEmailType() {
+    return $this->email_type;
+  }
+
+  public function setEmailType($email_type) {
+    $this->email_type = $email_type;
+  }
+
   public function getBody() {
     return $this->body;
   }

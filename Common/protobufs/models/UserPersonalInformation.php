@@ -119,11 +119,11 @@ class UserPersonalInformation
     $this->country = (string)$country;
   }
 
-  public function getReceive_credit() {
+  public function getReceiveCredit() {
     return $this->receive_credit;
   }
 
-  public function setReceive_credit($receive_credit) {
+  public function setReceiveCredit($receive_credit) {
     $this->receive_credit = (boolean)$receive_credit;
   }
 

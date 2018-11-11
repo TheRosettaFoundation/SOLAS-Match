@@ -23,27 +23,27 @@ class TaskReview
     $this->comment = '';
   }
 
-  public function getProject_id() {
+  public function getProjectId() {
     return $this->project_id;
   }
 
-  public function setProject_id($project_id) {
+  public function setProjectId($project_id) {
     $this->project_id = $project_id;
   }
 
-  public function getTask_id() {
+  public function getTaskId() {
     return $this->task_id;
   }
 
-  public function setTask_id($task_id) {
+  public function setTaskId($task_id) {
     $this->task_id = $task_id;
   }
 
-  public function getUser_id() {
+  public function getUserId() {
     return $this->user_id;
   }
 
-  public function setUser_id($user_id) {
+  public function setUserId($user_id) {
     $this->user_id = $user_id;
   }
 

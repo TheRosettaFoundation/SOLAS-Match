@@ -17,19 +17,27 @@ class OrgFeedback
     $this->user_id = null;
   }
 
-  public function getTask_id() {
+  public function getEmailType() {
+    return $this->email_type;
+  }
+
+  public function setEmailType($email_type) {
+    $this->email_type = $email_type;
+  }
+
+  public function getTaskId() {
     return $this->task_id;
   }
 
-  public function setTask_id($task_id) {
+  public function setTaskId($task_id) {
     $this->task_id = $task_id;
   }
 
-  public function getClaimant_id() {
+  public function getClaimantId() {
     return $this->claimant_id;
   }
 
-  public function setClaimant_id($claimant_id) {
+  public function setClaimantId($claimant_id) {
     $this->claimant_id = $claimant_id;
   }
 
@@ -41,11 +49,11 @@ class OrgFeedback
     $this->feedback = (string)$feedback;
   }
 
-  public function getUser_id() {
+  public function getUserId() {
     return $this->user_id;
   }
 
-  public function setUser_id($user_id) {
+  public function setUserId($user_id) {
     $this->user_id = $user_id;
   }
 

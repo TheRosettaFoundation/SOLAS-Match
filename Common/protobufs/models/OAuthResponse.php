@@ -23,11 +23,11 @@ class OAuthResponse
     $this->token = (string)$token;
   }
 
-  public function getToken_type() {
+  public function getTokenType() {
     return $this->token_type;
   }
 
-  public function setToken_type($token_type) {
+  public function setTokenType($token_type) {
     $this->token_type = (string)$token_type;
   }
 
@@ -39,11 +39,11 @@ class OAuthResponse
     $this->expires = (string)$expires;
   }
 
-  public function getExpires_in() {
+  public function getExpiresIn() {
     return $this->expires_in;
   }
 
-  public function setExpires_in($expires_in) {
+  public function setExpiresIn($expires_in) {
     $this->expires_in = (string)$expires_in;
   }
 

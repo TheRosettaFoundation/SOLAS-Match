@@ -13,19 +13,27 @@ class ProjectImageApprovedEmail
     $this->user_id = null;
   }
 
-  public function getProject_id() {
+  public function getEmailType() {
+    return $this->email_type;
+  }
+
+  public function setEmailType($email_type) {
+    $this->email_type = $email_type;
+  }
+
+  public function getProjectId() {
     return $this->project_id;
   }
 
-  public function setProject_id($project_id) {
+  public function setProjectId($project_id) {
     $this->project_id = $project_id;
   }
 
-  public function getUser_id() {
+  public function getUserId() {
     return $this->user_id;
   }
 
-  public function setUser_id($user_id) {
+  public function setUserId($user_id) {
     $this->user_id = $user_id;
   }
 

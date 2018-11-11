@@ -11,11 +11,19 @@ class CalculateProjectDeadlinesRequest
     $this->project_id = null;
   }
 
-  public function getProject_id() {
+  public function getClassName() {
+    return $this->class_name;
+  }
+
+  public function setClassName($class_name) {
+    $this->class_name = $class_name;
+  }
+
+  public function getProjectId() {
     return $this->project_id;
   }
 
-  public function setProject_id($project_id) {
+  public function setProjectId($project_id) {
     $this->project_id = $project_id;
   }
 

@@ -13,19 +13,27 @@ class TaskUploadNotificationRequest
     $this->file_version = null;
   }
 
-  public function getTask_id() {
+  public function getClassName() {
+    return $this->class_name;
+  }
+
+  public function setClassName($class_name) {
+    $this->class_name = $class_name;
+  }
+
+  public function getTaskId() {
     return $this->task_id;
   }
 
-  public function setTask_id($task_id) {
+  public function setTaskId($task_id) {
     $this->task_id = $task_id;
   }
 
-  public function getFile_version() {
+  public function getFileVersion() {
     return $this->file_version;
   }
 
-  public function setFile_version($file_version) {
+  public function setFileVersion($file_version) {
     $this->file_version = $file_version;
   }
 

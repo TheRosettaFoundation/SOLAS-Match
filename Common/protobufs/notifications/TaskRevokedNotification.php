@@ -13,19 +13,27 @@ class TaskRevokedNotification
     $this->claimant_id = null;
   }
 
-  public function getTask_id() {
+  public function getClassName() {
+    return $this->class_name;
+  }
+
+  public function setClassName($class_name) {
+    $this->class_name = $class_name;
+  }
+
+  public function getTaskId() {
     return $this->task_id;
   }
 
-  public function setTask_id($task_id) {
+  public function setTaskId($task_id) {
     $this->task_id = $task_id;
   }
 
-  public function getClaimant_id() {
+  public function getClaimantId() {
     return $this->claimant_id;
   }
 
-  public function setClaimant_id($claimant_id) {
+  public function setClaimantId($claimant_id) {
     $this->claimant_id = $claimant_id;
   }
 

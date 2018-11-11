@@ -33,11 +33,11 @@ class User
     $this->	id = $	id;
   }
 
-  public function getDisplay_name() {
+  public function getDisplayName() {
     return $this->display_name;
   }
 
-  public function setDisplay_name($display_name) {
+  public function setDisplayName($display_name) {
     $this->display_name = (string)$display_name;
   }
 
@@ -73,11 +73,11 @@ class User
     $this->nonce = (string)$nonce;
   }
 
-  public function getCreated_time() {
+  public function getCreatedTime() {
     return $this->created_time;
   }
 
-  public function setCreated_time($created_time) {
+  public function setCreatedTime($created_time) {
     $this->created_time = (string)$created_time;
   }
 

@@ -39,11 +39,11 @@ class Badge
     $this->description = (string)$description;
   }
 
-  public function getOwner_id() {
+  public function getOwnerId() {
     return $this->owner_id;
   }
 
-  public function setOwner_id($owner_id) {
+  public function setOwnerId($owner_id) {
     $this->owner_id = $owner_id;
   }
 

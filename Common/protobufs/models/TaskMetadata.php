@@ -43,27 +43,27 @@ class TaskMetadata
     $this->filename = (string)$filename;
   }
 
-  public function getContent_type() {
+  public function getContentType() {
     return $this->content_type;
   }
 
-  public function setContent_type($content_type) {
+  public function setContentType($content_type) {
     $this->content_type = (string)$content_type;
   }
 
-  public function getUser_id() {
+  public function getUserId() {
     return $this->user_id;
   }
 
-  public function setUser_id($user_id) {
+  public function setUserId($user_id) {
     $this->user_id = $user_id;
   }
 
-  public function getUpload_time() {
+  public function getUploadTime() {
     return $this->upload_time;
   }
 
-  public function setUpload_time($upload_time) {
+  public function setUploadTime($upload_time) {
     $this->upload_time = (string)$upload_time;
   }
 

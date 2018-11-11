@@ -11,11 +11,19 @@ class BannedLogin
     $this->user_id = null;
   }
 
-  public function getUser_id() {
+  public function getEmailType() {
+    return $this->email_type;
+  }
+
+  public function setEmailType($email_type) {
+    $this->email_type = $email_type;
+  }
+
+  public function getUserId() {
     return $this->user_id;
   }
 
-  public function setUser_id($user_id) {
+  public function setUserId($user_id) {
     $this->user_id = $user_id;
   }
 

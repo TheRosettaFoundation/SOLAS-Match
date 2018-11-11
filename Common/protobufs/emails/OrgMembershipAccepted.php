@@ -13,19 +13,27 @@ class OrgMembershipAccepted
     $this->org_id = null;
   }
 
-  public function getUser_id() {
+  public function getEmailType() {
+    return $this->email_type;
+  }
+
+  public function setEmailType($email_type) {
+    $this->email_type = $email_type;
+  }
+
+  public function getUserId() {
     return $this->user_id;
   }
 
-  public function setUser_id($user_id) {
+  public function setUserId($user_id) {
     $this->user_id = $user_id;
   }
 
-  public function getOrg_id() {
+  public function getOrgId() {
     return $this->org_id;
   }
 
-  public function setOrg_id($org_id) {
+  public function setOrgId($org_id) {
     $this->org_id = $org_id;
   }
 
