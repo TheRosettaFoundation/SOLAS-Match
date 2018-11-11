@@ -3,11 +3,11 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class ProjectFile
 {
-  protected $projectId;
-  protected $filename;
-  protected $token;
-  protected $userId;
-  protected $mime;
+  public $projectId;
+  public $filename;
+  public $token;
+  public $userId;
+  public $mime;
 
   public function __construct() {
     $this->projectId = null;

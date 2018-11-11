@@ -3,25 +3,25 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class ArchivedProject
 {
-  protected $id;
-  protected $title;
-  protected $description;
-  protected $impact;
-  protected $deadline;
-  protected $organisationId;
-  protected $reference;
-  protected $wordCount;
-  protected $createdTime;
-  protected $sourceLocale;
-  protected $userIdArchived;
-  protected $userIdProjectCreator;
-  protected $fileName;
-  protected $fileToken;
-  protected $mimeType;
-  protected $archivedDate;
-  protected $tags;
-  protected $imageUploaded;
-  protected $imageApproved;
+  public $id;
+  public $title;
+  public $description;
+  public $impact;
+  public $deadline;
+  public $organisationId;
+  public $reference;
+  public $wordCount;
+  public $createdTime;
+  public $sourceLocale;
+  public $userIdArchived;
+  public $userIdProjectCreator;
+  public $fileName;
+  public $fileToken;
+  public $mimeType;
+  public $archivedDate;
+  public $tags;
+  public $imageUploaded;
+  public $imageApproved;
 
   public function __construct() {
     $this->id = null;

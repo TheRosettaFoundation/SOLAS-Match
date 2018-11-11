@@ -3,9 +3,9 @@ namespace SolasMatch\Common\Protobufs\Emails;
 
 class ProjectImageApprovedEmail
 {
-  protected $email_type;
-  protected $project_id;
-  protected $user_id;
+  public $email_type;
+  public $project_id;
+  public $user_id;
 
   public function __construct() {
     $this->email_type = 31;

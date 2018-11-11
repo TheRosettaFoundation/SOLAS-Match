@@ -3,9 +3,9 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class WorkflowGraph
 {
-  protected $rootNode;
-  protected $projectId;
-  protected $allNodes;
+  public $rootNode;
+  public $projectId;
+  public $allNodes;
 
   public function __construct() {
     $this->rootNode = array();

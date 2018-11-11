@@ -3,8 +3,8 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class PasswordReset
 {
-  protected $password;
-  protected $key;
+  public $password;
+  public $key;
 
   public function __construct() {
     $this->password = '';

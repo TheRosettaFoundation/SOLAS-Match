@@ -3,8 +3,8 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class Statistic
 {
-  protected $name;
-  protected $value;
+  public $name;
+  public $value;
 
   public function __construct() {
     $this->name = '';

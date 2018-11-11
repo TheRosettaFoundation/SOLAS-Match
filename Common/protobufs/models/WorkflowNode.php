@@ -3,10 +3,10 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class WorkflowNode
 {
-  protected $taskId;
-  protected $task;
-  protected $next;
-  protected $previous;
+  public $taskId;
+  public $task;
+  public $next;
+  public $previous;
 
   public function __construct() {
     $this->taskId = null;

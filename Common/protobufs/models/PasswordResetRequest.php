@@ -3,9 +3,9 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class PasswordResetRequest
 {
-  protected $user_id;
-  protected $key;
-  protected $requestTime;
+  public $user_id;
+  public $key;
+  public $requestTime;
 
   public function __construct() {
     $this->user_id = null;

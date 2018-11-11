@@ -3,10 +3,10 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class MembershipRequest
 {
-  protected $id;
-  protected $user_id;
-  protected $org_id;
-  protected $request_time;
+  public $id;
+  public $user_id;
+  public $org_id;
+  public $request_time;
 
   public function __construct() {
     $this->id = null;

@@ -3,9 +3,9 @@ namespace SolasMatch\Common\Protobufs\Emails;
 
 class OrgMembershipAccepted
 {
-  protected $email_type;
-  protected $user_id;
-  protected $org_id;
+  public $email_type;
+  public $user_id;
+  public $org_id;
 
   public function __construct() {
     $this->email_type = 3;

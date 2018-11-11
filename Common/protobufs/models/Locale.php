@@ -3,10 +3,10 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class Locale
 {
-  protected $languageName;
-  protected $languageCode;
-  protected $countryName;
-  protected $countryCode;
+  public $languageName;
+  public $languageCode;
+  public $countryName;
+  public $countryCode;
 
   public function __construct() {
     $this->languageName = '';

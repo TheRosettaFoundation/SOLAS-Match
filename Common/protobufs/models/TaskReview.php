@@ -3,14 +3,14 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class TaskReview
 {
-  protected $project_id;
-  protected $task_id;
-  protected $user_id;
-  protected $corrections;
-  protected $grammar;
-  protected $spelling;
-  protected $consistency;
-  protected $comment;
+  public $project_id;
+  public $task_id;
+  public $user_id;
+  public $corrections;
+  public $grammar;
+  public $spelling;
+  public $consistency;
+  public $comment;
 
   public function __construct() {
     $this->project_id = null;

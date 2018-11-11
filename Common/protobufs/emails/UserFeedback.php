@@ -3,10 +3,10 @@ namespace SolasMatch\Common\Protobufs\Emails;
 
 class UserFeedback
 {
-  protected $email_type;
-  protected $task_id;
-  protected $claimant_id;
-  protected $feedback;
+  public $email_type;
+  public $task_id;
+  public $claimant_id;
+  public $feedback;
 
   public function __construct() {
     $this->email_type = 11;

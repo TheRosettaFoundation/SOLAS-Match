@@ -3,9 +3,9 @@ namespace SolasMatch\Common\Protobufs\Requests;
 
 class TaskUploadNotificationRequest
 {
-  protected $class_name;
-  protected $task_id;
-  protected $file_version;
+  public $class_name;
+  public $task_id;
+  public $file_version;
 
   public function __construct() {
     $this->class_name = 'TaskUploadNotificationRequest';

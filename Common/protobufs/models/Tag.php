@@ -3,8 +3,8 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class Tag
 {
-  protected $id;
-  protected $label;
+  public $id;
+  public $label;
 
   public function __construct() {
     $this->id = null;

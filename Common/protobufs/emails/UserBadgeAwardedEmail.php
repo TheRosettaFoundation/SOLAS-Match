@@ -3,9 +3,9 @@ namespace SolasMatch\Common\Protobufs\Emails;
 
 class UserBadgeAwardedEmail
 {
-  protected $email_type;
-  protected $user_id;
-  protected $badge_id;
+  public $email_type;
+  public $user_id;
+  public $badge_id;
 
   public function __construct() {
     $this->email_type = 22;

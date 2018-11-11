@@ -3,8 +3,8 @@ namespace SolasMatch\Common\Protobufs\Requests;
 
 class UserTaskScoreRequest
 {
-  protected $class_name;
-  protected $task_id;
+  public $class_name;
+  public $task_id;
 
   public function __construct() {
     $this->class_name = 'UserTaskScoreRequest';

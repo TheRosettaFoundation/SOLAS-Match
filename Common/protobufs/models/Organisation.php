@@ -3,15 +3,15 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class Organisation
 {
-  protected $id;
-  protected $name;
-  protected $biography;
-  protected $homepage;
-  protected $email;
-  protected $address;
-  protected $city;
-  protected $country;
-  protected $regionalFocus;
+  public $id;
+  public $name;
+  public $biography;
+  public $homepage;
+  public $email;
+  public $address;
+  public $city;
+  public $country;
+  public $regionalFocus;
 
   public function __construct() {
     $this->id = null;

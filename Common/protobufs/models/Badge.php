@@ -3,10 +3,10 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class Badge
 {
-  protected $id;
-  protected $title;
-  protected $description;
-  protected $owner_id;
+  public $id;
+  public $title;
+  public $description;
+  public $owner_id;
 
   public function __construct() {
     $this->id = null;

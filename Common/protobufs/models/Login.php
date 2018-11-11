@@ -3,8 +3,8 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class Login
 {
-  protected $email;
-  protected $password;
+  public $email;
+  public $password;
 
   public function __construct() {
     $this->email = '';

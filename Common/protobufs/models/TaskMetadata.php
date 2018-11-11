@@ -3,12 +3,12 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class TaskMetadata
 {
-  protected $id;
-  protected $version;
-  protected $filename;
-  protected $content_type;
-  protected $user_id;
-  protected $upload_time;
+  public $id;
+  public $version;
+  public $filename;
+  public $content_type;
+  public $user_id;
+  public $upload_time;
 
   public function __construct() {
     $this->id = null;

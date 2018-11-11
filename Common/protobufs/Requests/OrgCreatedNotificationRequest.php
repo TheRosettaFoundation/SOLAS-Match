@@ -3,8 +3,8 @@ namespace SolasMatch\Common\Protobufs\Requests;
 
 class OrgCreatedNotificationRequest
 {
-  protected $class_name;
-  protected $org_id;
+  public $class_name;
+  public $org_id;
 
   public function __construct() {
     $this->class_name = 'OrgCreatedNotificationRequest';

@@ -3,18 +3,18 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class Task
 {
-  protected $id;
-  protected $projectId;
-  protected $title;
-  protected $comment;
-  protected $deadline;
-  protected $wordCount;
-  protected $createdTime;
-  protected $sourceLocale;
-  protected $targetLocale;
-  protected $taskType;
-  protected $taskStatus;
-  protected $published;
+  public $id;
+  public $projectId;
+  public $title;
+  public $comment;
+  public $deadline;
+  public $wordCount;
+  public $createdTime;
+  public $sourceLocale;
+  public $targetLocale;
+  public $taskType;
+  public $taskStatus;
+  public $published;
 
   public function __construct() {
     $this->id = null;

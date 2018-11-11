@@ -3,20 +3,20 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class Project
 {
-  protected $id;
-  protected $title;
-  protected $description;
-  protected $deadline;
-  protected $organisationId;
-  protected $impact;
-  protected $reference;
-  protected $wordCount;
-  protected $createdTime;
-  protected $status;
-  protected $sourceLocale;
-  protected $tag;
-  protected $imageUploaded;
-  protected $imageApproved;
+  public $id;
+  public $title;
+  public $description;
+  public $deadline;
+  public $organisationId;
+  public $impact;
+  public $reference;
+  public $wordCount;
+  public $createdTime;
+  public $status;
+  public $sourceLocale;
+  public $tag;
+  public $imageUploaded;
+  public $imageApproved;
 
   public function __construct() {
     $this->id = null;

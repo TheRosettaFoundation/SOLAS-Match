@@ -3,8 +3,8 @@ namespace SolasMatch\Common\Protobufs\Requests;
 
 class CalculateProjectDeadlinesRequest
 {
-  protected $class_name;
-  protected $project_id;
+  public $class_name;
+  public $project_id;
 
   public function __construct() {
     $this->class_name = 'CalculateProjectDeadlinesRequest';

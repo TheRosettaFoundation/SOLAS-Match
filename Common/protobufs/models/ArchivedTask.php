@@ -3,27 +3,27 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class ArchivedTask
 {
-  protected $id;
-  protected $projectId;
-  protected $title;
-  protected $comment;
-  protected $deadline;
-  protected $wordCount;
-  protected $createdTime;
-  protected $sourceLocale;
-  protected $targetLocale;
-  protected $taskType;
-  protected $taskStatus;
-  protected $published;
-  protected $version;
-  protected $fileName;
-  protected $contentType;
-  protected $uploadTime;
-  protected $userIdClaimed;
-  protected $userIdArchived;
-  protected $prerequisites;
-  protected $userIdTaskCreator;
-  protected $archivedDate;
+  public $id;
+  public $projectId;
+  public $title;
+  public $comment;
+  public $deadline;
+  public $wordCount;
+  public $createdTime;
+  public $sourceLocale;
+  public $targetLocale;
+  public $taskType;
+  public $taskStatus;
+  public $published;
+  public $version;
+  public $fileName;
+  public $contentType;
+  public $uploadTime;
+  public $userIdClaimed;
+  public $userIdArchived;
+  public $prerequisites;
+  public $userIdTaskCreator;
+  public $archivedDate;
 
   public function __construct() {
     $this->id = null;

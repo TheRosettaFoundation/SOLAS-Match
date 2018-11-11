@@ -3,15 +3,15 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class User
 {
-  protected $	id;
-  protected $display_name;
-  protected $email;
-  protected $password;
-  protected $biography;
-  protected $nonce;
-  protected $created_time;
-  protected $nativeLocale;
-  protected $secondaryLocales;
+  public $	id;
+  public $display_name;
+  public $email;
+  public $password;
+  public $biography;
+  public $nonce;
+  public $created_time;
+  public $nativeLocale;
+  public $secondaryLocales;
 
   public function __construct() {
     $this->	id = null;

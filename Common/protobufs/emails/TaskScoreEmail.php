@@ -3,8 +3,8 @@ namespace SolasMatch\Common\Protobufs\Emails;
 
 class TaskScoreEmail
 {
-  protected $email_type;
-  protected $body;
+  public $email_type;
+  public $body;
 
   public function __construct() {
     $this->email_type = 1;

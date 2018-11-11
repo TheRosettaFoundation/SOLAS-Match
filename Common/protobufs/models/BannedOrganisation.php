@@ -3,11 +3,11 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class BannedOrganisation
 {
-  protected $orgId;
-  protected $userIdAdmin;
-  protected $banType;
-  protected $comment;
-  protected $bannedDate;
+  public $orgId;
+  public $userIdAdmin;
+  public $banType;
+  public $comment;
+  public $bannedDate;
 
   public function __construct() {
     $this->orgId = null;

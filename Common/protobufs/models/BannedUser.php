@@ -3,11 +3,11 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class BannedUser
 {
-  protected $userId;
-  protected $userIdAdmin;
-  protected $banType;
-  protected $comment;
-  protected $bannedDate;
+  public $userId;
+  public $userIdAdmin;
+  public $banType;
+  public $comment;
+  public $bannedDate;
 
   public function __construct() {
     $this->userId = null;

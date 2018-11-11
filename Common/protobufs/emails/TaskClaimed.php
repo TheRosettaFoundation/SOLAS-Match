@@ -3,10 +3,10 @@ namespace SolasMatch\Common\Protobufs\Emails;
 
 class TaskClaimed
 {
-  protected $email_type;
-  protected $user_id;
-  protected $translator_id;
-  protected $task_id;
+  public $email_type;
+  public $user_id;
+  public $translator_id;
+  public $task_id;
 
   public function __construct() {
     $this->email_type = 7;

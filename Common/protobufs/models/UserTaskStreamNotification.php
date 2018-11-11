@@ -3,10 +3,10 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class UserTaskStreamNotification
 {
-  protected $user_id;
-  protected $interval;
-  protected $last_sent;
-  protected $strict;
+  public $user_id;
+  public $interval;
+  public $last_sent;
+  public $strict;
 
   public function __construct() {
     $this->user_id = null;

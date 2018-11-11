@@ -3,9 +3,9 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class Language
 {
-  protected $id;
-  protected $code;
-  protected $name;
+  public $id;
+  public $code;
+  public $name;
 
   public function __construct() {
     $this->id = null;

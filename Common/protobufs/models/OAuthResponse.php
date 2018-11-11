@@ -3,10 +3,10 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class OAuthResponse
 {
-  protected $token;
-  protected $token_type;
-  protected $expires;
-  protected $expires_in;
+  public $token;
+  public $token_type;
+  public $expires;
+  public $expires_in;
 
   public function __construct() {
     $this->token = '';

@@ -3,31 +3,31 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class OrganisationExtendedProfile
 {
-  protected $id;
-  protected $facebook;
-  protected $linkedin;
-  protected $primaryContactName;
-  protected $primaryContactTitle;
-  protected $primaryContactEmail;
-  protected $primaryContactPhone;
-  protected $otherContacts;
-  protected $structure;
-  protected $affiliations;
-  protected $urlVideo1;
-  protected $urlVideo2;
-  protected $urlVideo3;
-  protected $subjectMatters;
-  protected $activitys;
-  protected $employees;
-  protected $fundings;
-  protected $finds;
-  protected $translations;
-  protected $requests;
-  protected $contents;
-  protected $pages;
-  protected $sources;
-  protected $targets;
-  protected $oftens;
+  public $id;
+  public $facebook;
+  public $linkedin;
+  public $primaryContactName;
+  public $primaryContactTitle;
+  public $primaryContactEmail;
+  public $primaryContactPhone;
+  public $otherContacts;
+  public $structure;
+  public $affiliations;
+  public $urlVideo1;
+  public $urlVideo2;
+  public $urlVideo3;
+  public $subjectMatters;
+  public $activitys;
+  public $employees;
+  public $fundings;
+  public $finds;
+  public $translations;
+  public $requests;
+  public $contents;
+  public $pages;
+  public $sources;
+  public $targets;
+  public $oftens;
 
   public function __construct() {
     $this->id = null;

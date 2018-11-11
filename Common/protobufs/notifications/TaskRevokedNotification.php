@@ -3,9 +3,9 @@ namespace SolasMatch\Common\Protobufs\Notifications;
 
 class TaskRevokedNotification
 {
-  protected $class_name;
-  protected $task_id;
-  protected $claimant_id;
+  public $class_name;
+  public $task_id;
+  public $claimant_id;
 
   public function __construct() {
     $this->class_name = 'TaskRevokedNotification';

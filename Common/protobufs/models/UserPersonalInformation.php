@@ -3,18 +3,18 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class UserPersonalInformation
 {
-  protected $	id;
-  protected $userId;
-  protected $firstName;
-  protected $lastName;
-  protected $mobileNumber;
-  protected $businessNumber;
-  protected $languagePreference;
-  protected $jobTitle;
-  protected $address;
-  protected $city;
-  protected $country;
-  protected $receive_credit;
+  public $	id;
+  public $userId;
+  public $firstName;
+  public $lastName;
+  public $mobileNumber;
+  public $businessNumber;
+  public $languagePreference;
+  public $jobTitle;
+  public $address;
+  public $city;
+  public $country;
+  public $receive_credit;
 
   public function __construct() {
     $this->	id = null;
