@@ -11,7 +11,7 @@ mb_internal_encoding("UTF-8");
 
 require __DIR__."/vendor/autoload.php";
 
-\DrSlump\Protobuf::autoload();
+//\DrSlump\Protobuf::autoload();
 
 require_once __DIR__."/lib/Middleware.php";
 require_once __DIR__."/OAuth2/Client.php";

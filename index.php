@@ -10,7 +10,7 @@ header("Content-Type:application/xhtml+xml;charset=UTF-8");
 
 require_once __DIR__."/ui/vendor/autoload.php";
 
-\DrSlump\Protobuf::autoload();
+//\DrSlump\Protobuf::autoload();
 
 require_once 'Common/lib/Settings.class.php';
 require_once 'Common/lib/ModelFactory.class.php';

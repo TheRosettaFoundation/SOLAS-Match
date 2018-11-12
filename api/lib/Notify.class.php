@@ -10,7 +10,7 @@ require_once __DIR__."/MessagingClient.class.php";
 require_once __DIR__."/../../Common/lib/Settings.class.php";
 require_once __DIR__."/../vendor/autoload.php";
 
-\DrSlump\Protobuf::autoload();
+//\DrSlump\Protobuf::autoload();
 
 require_once __DIR__."/../../Common/protobufs/emails/UserTaskClaim.php";
 require_once __DIR__."/../../Common/protobufs/emails/PasswordResetEmail.php";
