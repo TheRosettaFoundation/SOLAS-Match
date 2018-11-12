@@ -7,10 +7,10 @@ use \SolasMatch\Common\Exceptions as Exceptions;
 
 require_once __DIR__."/../Enums/FormatEnum.class.php";
 require_once __DIR__."/JSONSerializer.class.php";
-require_once __DIR__."/XMLSerializer.class.php";
-require_once __DIR__."/HTMLSerializer.class.php";
-require_once __DIR__."/PHPSerializer.class.php";
-require_once __DIR__."/ProtobufSerializer.class.php";
+//require_once __DIR__."/XMLSerializer.class.php";
+//require_once __DIR__."/HTMLSerializer.class.php";
+//require_once __DIR__."/PHPSerializer.class.php";
+//require_once __DIR__."/ProtobufSerializer.class.php";
 
 class APIHelper
 {
@@ -29,18 +29,18 @@ class APIHelper
             case Enums\FormatEnum::JSON:
                 $this->serializer = new JSONSerializer();
                 break;
-            case Enums\FormatEnum::XML:
-                $this->serializer = new XMLSerializer();
-                break;
-            case Enums\FormatEnum::HTML:
-                $this->serializer = new HTMLSerializer();
-                break;
-            case Enums\FormatEnum::PHP:
-                $this->serializer = new PHPSerializer();
-                break;
-            case Enums\FormatEnum::PROTOBUFS:
-                $this->serializer = new ProtobufSerializer();
-                break;
+//            case Enums\FormatEnum::XML:
+//                $this->serializer = new XMLSerializer();
+//                break;
+//            case Enums\FormatEnum::HTML:
+//                $this->serializer = new HTMLSerializer();
+//                break;
+//            case Enums\FormatEnum::PHP:
+//                $this->serializer = new PHPSerializer();
+//                break;
+//            case Enums\FormatEnum::PROTOBUFS:
+//                $this->serializer = new ProtobufSerializer();
+//                break;
         }
     }
     
@@ -234,14 +234,14 @@ class APIHelper
     {
         if ($format == ".json") {
             $format = Enums\FormatEnum::JSON;
-        } elseif (strcasecmp($format, '.xml') == 0) {
-            $format = Enums\FormatEnum::XML;
-        } elseif (strcasecmp($format, '.php') == 0) {
-            $format = Enums\FormatEnum::PHP;
-        } elseif (strcasecmp($format, '.html') == 0) {
-            $format = Enums\FormatEnum::HTML;
-        } elseif (strcasecmp($format, '.proto') == 0) {
-            $format = Enums\FormatEnum::PROTOBUFS;//change when implmented.
+//        } elseif (strcasecmp($format, '.xml') == 0) {
+//            $format = Enums\FormatEnum::XML;
+//        } elseif (strcasecmp($format, '.php') == 0) {
+//            $format = Enums\FormatEnum::PHP;
+//        } elseif (strcasecmp($format, '.html') == 0) {
+//            $format = Enums\FormatEnum::HTML;
+//        } elseif (strcasecmp($format, '.proto') == 0) {
+//            $format = Enums\FormatEnum::PROTOBUFS;//change when implmented.
         } else {
             $format = Enums\FormatEnum::JSON;
         }
