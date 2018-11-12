@@ -3,7 +3,7 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class UserPersonalInformation
 {
-  public $	id;
+  public $id;
   public $userId;
   public $firstName;
   public $lastName;
@@ -17,7 +17,7 @@ class UserPersonalInformation
   public $receive_credit;
 
   public function __construct() {
-    $this->	id = null;
+    $this->id = null;
     $this->userId = null;
     $this->firstName = '';
     $this->lastName = '';
@@ -31,12 +31,12 @@ class UserPersonalInformation
     $this->receive_credit = false;
   }
 
-  public function get	id() {
-    return $this->	id;
+  public function getId() {
+    return $this->id;
   }
 
-  public function set	id($	id) {
-    $this->	id = $	id;
+  public function setId($id) {
+    $this->id = $id;
   }
 
   public function getUserId() {

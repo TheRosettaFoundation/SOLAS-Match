@@ -3,7 +3,7 @@ namespace SolasMatch\Common\Protobufs\Models;
 
 class User
 {
-  public $	id;
+  public $id;
   public $display_name;
   public $email;
   public $password;
@@ -14,7 +14,7 @@ class User
   public $secondaryLocales;
 
   public function __construct() {
-    $this->	id = null;
+    $this->id = null;
     $this->display_name = '';
     $this->email = '';
     $this->password = '';
@@ -25,12 +25,12 @@ class User
     $this->secondaryLocales = array();
   }
 
-  public function get	id() {
-    return $this->	id;
+  public function getId() {
+    return $this->id;
   }
 
-  public function set	id($	id) {
-    $this->	id = $	id;
+  public function setId($id) {
+    $this->id = $id;
   }
 
   public function getDisplayName() {
