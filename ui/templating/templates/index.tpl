@@ -189,7 +189,7 @@
                                 {Localisation::getTranslation('common_to')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
                             </p>
                             <p>
-                                {if count($taskTags[$task_id]) gt 0}
+                                {if !empty($taskTags[$task_id]) && count($taskTags[$task_id]) gt 0}
                                     {foreach $taskTags[$task_id] as $tag}
                                         <a href="{$siteLocation}tag/{$tag->getId()}" class="label"><span class="label">{trim(trim(TemplateHelper::uiCleanseHTML($tag->getLabel())),",")}</span></a>
                                     {/foreach}

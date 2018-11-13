@@ -134,6 +134,7 @@ class TagRouteHandler
         $tag_id = $tag->getId();
 
         $tasks = $tagDao->getTasksWithTag($tag_id, 10);
+        if (empty($tasks)) $tasks = array();
         $taskTags = array();
         $taskProjTitles = array();
         $taskOrgs = array();

@@ -602,15 +602,15 @@ class TaskDao
         $ret = true;
         $task = self::getTasks($node->getTaskId());
         $dependantNodes = $node->getNext();
-        if (count($dependantNodes) > 0) {
+        if (!empty($dependantNodes) && count($dependantNodes) > 0) {
             $builder = new Lib\APIWorkflowBuilder();
             foreach ($dependantNodes as $dependantId) {
                 $dTask = self::getTasks($dependantId);
                 $index = $builder->find($dependantId, $graph);
                 $dependant = $graph->getAllNodes($index);
                 $preReqs = $dependant->getPrevious();
-                if ((count($preReqs) == 2 && $dTask->getTaskType() == Common\Enums\TaskTypeEnum::DESEGMENTATION) ||
-                        count($preReqs) == 1) {
+                if (!empty($preReqs) && ((count($preReqs) == 2 && $dTask->getTaskType() == Common\Enums\TaskTypeEnum::DESEGMENTATION) ||
+                        count($preReqs) == 1)) {
                     $ret = $ret && (self::archiveTaskNode($dependant, $graph, $userId));
                 }
             }

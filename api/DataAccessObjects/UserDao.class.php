@@ -836,8 +836,21 @@ class UserDao
         if ($result) {
             $ret = Common\Lib\ModelFactory::buildModel("Locale", $result[0]);
         }
-        if (count(self::getSecondaryLanguages($userId)) > 1) {
+        if (count(self::getSecondaryLanguagesArray($userId)) > 1) {
             BadgeDao::assignBadge($userId, Common\Enums\BadgeTypes::POLYGLOT);
+        }
+        return $ret;
+    }
+
+    public static function getSecondaryLanguagesArray($userId = null)
+    {
+        $ret = array();
+        $args = Lib\PDOWrapper::cleanseNull($userId);
+        $result = Lib\PDOWrapper::call("getUserSecondaryLanguages", $args);
+        if ($result) {
+            foreach ($result as $locale) {
+                $ret[] = Common\Lib\ModelFactory::buildModel("Locale", $locale);
+            }
         }
         return $ret;
     }

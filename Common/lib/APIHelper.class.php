@@ -54,7 +54,7 @@ class APIHelper
         $headers = array()
     ){
         $url = $url.$this->serializer->getFormat()."/?";
-        if (count($query_args) > 0) {
+        if (!empty($query_args) && count($query_args) > 0) {
             $first = true;
             foreach ($query_args as $key => $val) {
                 if (!$first) {
@@ -134,7 +134,7 @@ class APIHelper
         $headers = array()
     ) {
         $url = $url."/?";
-        if (count($query_args) > 0) {
+        if (!empty($query_args) && count($query_args) > 0) {
             $first = true;
             foreach ($query_args as $key => $val) {
                 if (!$first) {
@@ -293,7 +293,7 @@ class APIHelper
                 continue;
             }
             $parts = preg_split('/\s+/', $line);
-            if (count($parts) == 1) {
+            if (empty($parts) || count($parts) == 1) {
                 continue;
             }
             $type = array_shift($parts);

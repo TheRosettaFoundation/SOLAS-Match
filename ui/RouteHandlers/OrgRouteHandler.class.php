@@ -595,7 +595,7 @@ class OrgRouteHandler
         }
         $requests = $orgDao->getMembershipRequests($org_id);
         $user_list = array();
-        if (count($requests) > 0) {
+        if (!empty($requests) && count($requests) > 0) {
             foreach ($requests as $memRequest) {
                 $user_list[] =  $userDao->getUser($memRequest->getId());
             }
@@ -1818,7 +1818,7 @@ class OrgRouteHandler
         }
         $isMember = false;
         $orgMemberList = $orgDao->getOrgMembers($org_id);
-        if (count($orgMemberList) > 0) {
+        if (!empty($orgMemberList) && count($orgMemberList) > 0) {
             foreach ($orgMemberList as $member) {
                 if ($currentUser->getId() ==  $member->getId()) {
                     $isMember = true;
@@ -1839,7 +1839,7 @@ class OrgRouteHandler
 
         if ($isMember || $adminAccess) {
             $requests = $orgDao->getMembershipRequests($org_id);
-            if (count($requests) > 0) {
+            if (!empty($requests) && count($requests) > 0) {
                 foreach ($requests as $memRequest) {
                     $user = $userDao->getUser($memRequest->getUserId());
                     $user_list[] = $user;
@@ -2020,7 +2020,7 @@ class OrgRouteHandler
             
             if (isset($post['search_name']) && $post['search_name'] != '') {
                 $foundOrgs = $orgDao->searchForOrgByName(urlencode($post['search_name']));
-                if (count($foundOrgs) < 1) {
+                if (empty($foundOrgs)) {
                     $app->flashNow("error", Lib\Localisation::getTranslation('org_search_34'));
                 }
                 $app->view()->appendData(array('searchedText' => $post['search_name']));

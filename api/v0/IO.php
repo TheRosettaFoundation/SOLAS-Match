@@ -139,7 +139,7 @@ class IO
 
         $project = DAO\ProjectDao::getProject($projectId);
         $imageFileList = glob(Common\Lib\Settings::get("files.upload_path")."proj-$projectId/image/image.*");
-        if (count($imageFileList) > 0) {
+        if (!empty($imageFileList) && count($imageFileList) > 0) {
             $currentImageFile = $imageFileList[0];
             $currentFileName = pathinfo($currentImageFile, PATHINFO_FILENAME);
             $currentfileExt = pathinfo($currentImageFile, PATHINFO_EXTENSION);
@@ -467,7 +467,7 @@ class IO
 
         try {
              $imageFileList = glob(Common\Lib\Settings::get("files.upload_path")."proj-$projectId/image/image.*");
-                if (count($imageFileList)>0)
+                if (!empty($imageFileList) && count($imageFileList)>0)
                 {
                     $currentImageFile = $imageFileList[0];
                     $currentfileName = pathinfo($currentImageFile, PATHINFO_FILENAME);

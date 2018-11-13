@@ -11,7 +11,7 @@
 </p>
 
 <div class="well">
-    {if count($reviews) == 0}
+    {if !empty($reviews) && count($reviews) == 0}
         <span class="alert alert-info">{Localisation::getTranslation('user_task_reviews_4')}</span>
     {else}
         {assign var="count" value=1}
