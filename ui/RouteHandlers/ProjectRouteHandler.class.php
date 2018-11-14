@@ -500,31 +500,7 @@ class ProjectRouteHandler
             $project_tasks = $projectDao->getProjectTasks($project_id);
             $taskLanguageMap = array();
             if ($project_tasks) {
-//$pj = new Common\Protobufs\Models\Project();
-//$ser = serialize($pj);
-//error_log("new Project(): " . preg_replace('/[\x00-\x1F\x7F]/u', '?', $ser));
-//error_log(print_r($pj, true));
-//error_log(print_r(unserialize($ser), true));
-//
-//$pj->setImpact(1);
-//$pj->setImageUploaded(1);
-//$pj->setImageApproved('1');
-//$pj->setOrganisationId('2a2');
-//$pj->setId('99');
-//$pj->setId(555);
-//$pj->setDeadline(555);
-////$pj->setTitle(NULL);
-//$ser = serialize($pj);
-//error_log("Project After sets: " . preg_replace('/[\x00-\x1F\x7F]/u', '?', $ser));
-//
-//$ser = serialize($project);
-//error_log("Project: " . preg_replace('/[\x00-\x1F\x7F]/u', '?', $ser));
-//error_log(print_r($project, true));
-//error_log(print_r(unserialize($ser), true));
                 foreach ($project_tasks as $task) {
-//$ser = serialize($task);
-//error_log("Task: " . preg_replace('/[\x00-\x1F\x7F]/u', '?', $ser));
-//error_log(print_r($task, true));
                     $targetLocale = $task->getTargetLocale();
                     $taskTargetLanguage = $targetLocale->getLanguageCode();
                     $taskTargetCountry = $targetLocale->getCountryCode();
@@ -543,10 +519,6 @@ class ProjectRouteHandler
             }
 
             $graph = $projectDao->getProjectGraph($project_id);
-//$ser = serialize($graph);
-//error_log("WorkflowGraph: " . preg_replace('/[\x00-\x1F\x7F]/u', '?', $ser));
-//error_log(print_r($graph, true));
-//error_log(print_r(unserialize($ser), true));
             $viewer = new Lib\GraphViewer($graph);
             $graphView = $viewer->constructView();
 
@@ -2196,6 +2168,10 @@ class ProjectRouteHandler
 'nyf' => 'nyf-KE',
 'luy' => 'luy-KE',
 'guz' => 'guz-KE',
+'fj' => 'fj-FJ',
+'bi' => 'bi-VU',
+'tpi' => 'tpi-PG',
+'to' => 'ton-TO',
 );
         if (in_array($language_code, $matecat_acceptable_languages)) return $language_code;
         if (!empty($matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))])) return $matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))];
