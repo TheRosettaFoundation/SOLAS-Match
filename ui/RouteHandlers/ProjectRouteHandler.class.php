@@ -2168,6 +2168,10 @@ class ProjectRouteHandler
 'nyf' => 'nyf-KE',
 'luy' => 'luy-KE',
 'guz' => 'guz-KE',
+'fj' => 'fj-FJ',
+'bi' => 'bi-VU',
+'tpi' => 'tpi-PG',
+'to' => 'ton-TO',
 );
         if (in_array($language_code, $matecat_acceptable_languages)) return $language_code;
         if (!empty($matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))])) return $matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))];
