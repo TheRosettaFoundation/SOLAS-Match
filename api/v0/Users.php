@@ -1332,8 +1332,11 @@ error_log(print_r($loginData, true));
 error_log(print_r($params, true));
         try {
             $server = API\Dispatcher::getOauthServer();
+error_log(print_r($server, true));
             $response = $server->getGrantType('password')->completeFlow($params);
+error_log(print_r($response, true));
             $oAuthResponse = new Common\Protobufs\Models\OAuthResponse();
+error_log(print_r($oAuthResponse, true));
             $oAuthResponse->setToken($response['access_token']);
             $oAuthResponse->setTokenType($response['token_type']);
             $oAuthResponse->setExpires($response['expires']);
