@@ -102,8 +102,6 @@ class Dispatcher
     
     public static function getOauthServer()
     {
-error_log("HERE getOauthServer");
-if (isset(self::$oauthServer)) error_log("oauthServer SET");
         return self::$oauthServer;
     }
     
