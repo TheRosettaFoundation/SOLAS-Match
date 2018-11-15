@@ -1323,11 +1323,13 @@ class Users
         $body = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper($format);
         $loginData = $client->deserialize($body, "\SolasMatch\Common\Protobufs\Models\Login");
+error_log(print_r($loginData, true));
         $params = array();
         $params['client_id'] = API\Dispatcher::clenseArgs('client_id', Common\Enums\HttpMethodEnum::GET, null);
         $params['client_secret'] = API\Dispatcher::clenseArgs('client_secret', Common\Enums\HttpMethodEnum::GET, null);
         $params['username'] = $loginData->getEmail();
         $params['password'] = $loginData->getPassword();
+error_log(print_r($params, true));
         try {
             $server = API\Dispatcher::getOauthServer();
             $response = $server->getGrantType('password')->completeFlow($params);
@@ -1336,6 +1338,7 @@ class Users
             $oAuthResponse->setTokenType($response['token_type']);
             $oAuthResponse->setExpires($response['expires']);
             $oAuthResponse->setExpiresIn($response['expires_in']);
+error_log(print_r($oAuthResponse, true));
 
             $user = DAO\UserDao::getLoggedInUser($response['access_token']);
             $user->setPassword("");
