@@ -39,7 +39,6 @@ class JSONSerializer extends Serializer
         if (is_null($type)) {
             return $data;
         }
-error_log($data);
         $result = unserialize($data);
         return $result;
     }
