@@ -89,7 +89,8 @@ class User
     $this->nativeLocale = $nativeLocale;
   }
 
-  public function getSecondaryLocales() {
+  public function getSecondaryLocales($index = null) {
+    if (!is_null($index)) return $this->secondaryLocales[$index];
     return $this->secondaryLocales;
   }
 

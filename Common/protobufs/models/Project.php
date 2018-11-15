@@ -123,7 +123,8 @@ class Project
     $this->sourceLocale = $sourceLocale;
   }
 
-  public function getTag() {
+  public function getTag($index = null) {
+    if (!is_null($index)) return $this->tag[$index];
     return $this->tag;
   }
 

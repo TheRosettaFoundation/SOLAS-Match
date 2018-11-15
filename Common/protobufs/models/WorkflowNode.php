@@ -31,7 +31,8 @@ class WorkflowNode
     $this->task = $task;
   }
 
-  public function getNext() {
+  public function getNext($index = null) {
+    if (!is_null($index)) return $this->next[$index];
     return $this->next;
   }
 
@@ -55,7 +56,8 @@ class WorkflowNode
     $this->next[] = $next;
   }
 
-  public function getPrevious() {
+  public function getPrevious($index = null) {
+    if (!is_null($index)) return $this->previous[$index];
     return $this->previous;
   }
 

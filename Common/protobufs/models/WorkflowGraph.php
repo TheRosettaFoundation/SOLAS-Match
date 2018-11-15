@@ -13,7 +13,8 @@ class WorkflowGraph
     $this->allNodes = array();
   }
 
-  public function getRootNode() {
+  public function getRootNode($index = null) {
+    if (!is_null($index)) return $this->rootNode[$index];
     return $this->rootNode;
   }
 
@@ -45,7 +46,8 @@ class WorkflowGraph
     $this->projectId = $projectId;
   }
 
-  public function getAllNodes() {
+  public function getAllNodes($index = null) {
+    if (!is_null($index)) return $this->allNodes[$index];
     return $this->allNodes;
   }
 
