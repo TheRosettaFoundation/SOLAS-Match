@@ -325,7 +325,6 @@ class TemplateHelper
     {
         $display_max_size = self::maxUploadSizeFromPHPSettings();
         $bytes = substr($display_max_size, 0, -1);
-error_log("bytes $bytes;");
 
         switch (substr($display_max_size, -1)) {
             case "G":   // no break
@@ -338,7 +337,6 @@ error_log("bytes $bytes;");
                 $bytes = $bytes * 1024;
                 break;
         }
-error_log("bytes $bytes;");
         return $bytes;
     }
 
