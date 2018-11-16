@@ -155,6 +155,7 @@ Tweet</a>
                     </td>
                     <td></td>
                     <td style = "text-align:center;">
+{serialize($project)}
                     	{if $project->getImageUploaded()}
 	                        {if $isSiteAdmin}
 	                        	<img class="project-image" src="{urlFor name="download-project-image" options="project_id.$project_id"}?{$imgCacheToken}"/>
