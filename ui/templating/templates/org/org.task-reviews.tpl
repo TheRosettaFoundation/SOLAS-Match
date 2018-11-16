@@ -9,9 +9,11 @@
 <p>The following are a list of reviews provided for the input file(s) of this task</p>
 {if isset($preReqTasks) && count($preReqTasks) > 0}
     {foreach $preReqTasks as $reviewedTask}
+      {if !empty($reviewedTask->getId()) && !empty($reviews[$reviewedTask->getId()])}
         {foreach $reviews[$reviewedTask->getId()] as $review}
             {include file="task/task.review-form.tpl"}
         {/foreach}
+      {/if}
     {/foreach}
 {elseif isset($projectData) && isset($projectReviews) && count($projectReviews) > 0}
     {assign var="reviewedTask" value=$projectData}
@@ -25,7 +27,7 @@
 <h2>Output file reviews</h2>
 <br />
 <p>The following are a list of reviews provided for the output file(s) of this task</p>
-{if isset($reviews[$task->getId()]) && count($reviews[$task->getId()]) > 0}
+{if !empty($task->getId()) && isset($reviews[$task->getId()]) && count($reviews[$task->getId()]) > 0}
     {assign var="reviewedTask" value=$task}
     {foreach $reviews[$task->getId()] as $review}
         {include file="task/task.review-form.tpl"}
