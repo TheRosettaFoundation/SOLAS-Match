@@ -781,6 +781,8 @@ class ModelFactory
 error_log("model imageUploaded");        
         if (isset($modelData['imageUploaded'])) {
 if ($modelData['imageUploaded']) error_log("model imageUploaded TRUE, " . $modelData['imageUploaded']); else error_log("model imageUploaded FALSE, " . $modelData['imageUploaded']);
+error_log(print_r($modelData, true));
+error_log("AAA" . "\x01" . "AAA");
             $ret->setImageUploaded($modelData['imageUploaded'] == "\x01" ? 1 : 0);
         }
         
