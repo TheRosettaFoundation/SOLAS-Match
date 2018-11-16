@@ -324,19 +324,22 @@ class TemplateHelper
     public static function maxFileSizeBytes()
     {
         $display_max_size = self::maxUploadSizeFromPHPSettings();
+        $bytes = substr($display_max_size, 0, -1);
+error_log("bytes $bytes;");
 
         switch (substr($display_max_size, -1)) {
             case "G":   // no break
-                $display_max_size = $display_max_size * 1024;
+                $bytes = $bytes * 1024;
                 // no break
             case "M":
-                $display_max_size = $display_max_size * 1024;
+                $bytes = $bytes * 1024;
                 // no break
             case "K":
-                $display_max_size = $display_max_size * 1024;
+                $bytes = $bytes * 1024;
                 break;
         }
-        return $display_max_size;
+error_log("bytes $bytes;");
+        return $bytes;
     }
 
     /**
