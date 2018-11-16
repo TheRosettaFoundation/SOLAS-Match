@@ -695,9 +695,11 @@ class TaskRouteHandler
         $taskDao = new DAO\TaskDao();
 
         $headerArr = $taskDao->downloadTaskVersion($taskId, $version, $convert);
-        $headerArr = json_decode($headerArr);
-        foreach ($headerArr as $key => $val) {
-            $app->response->headers->set($key, $val);
+        if (!empty($headerArr)) {
+            $headerArr = unserialize($headerArr);
+            foreach ($headerArr as $key => $val) {
+                $app->response->headers->set($key, $val);
+            }
         }
     }
 

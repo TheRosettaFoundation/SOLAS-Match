@@ -1599,9 +1599,11 @@ class ProjectRouteHandler
         try {
             $headArr = $projectDao->downloadProjectFile($projectId);
             //Convert header data to array and set headers appropriately
-            $headArr = json_decode($headArr);
-            foreach ($headArr as $key => $val) {
-                $app->response->headers->set($key, $val);
+            if (!empty($headArr)) {
+                $headArr = unserialize($headArr);
+                foreach ($headArr as $key => $val) {
+                    $app->response->headers->set($key, $val);
+                }
             }
         } catch (Common\Exceptions\SolasMatchException $e) {
             $app->flash(
@@ -1624,9 +1626,11 @@ class ProjectRouteHandler
         try {
             $headArr = $projectDao->downloadProjectImageFile($projectId);
             //Convert header data to array and set headers appropriately
-            $headArr = json_decode($headArr);
-            foreach ($headArr as $key => $val) {
-                $app->response->headers->set($key, $val);
+            if (!empty($headArr)) {
+                $headArr = unserialize($headArr);
+                foreach ($headArr as $key => $val) {
+                    $app->response->headers->set($key, $val);
+                }
             }
         } catch (Common\Exceptions\SolasMatchException $e) {
             $app->flash(
