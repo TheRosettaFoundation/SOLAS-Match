@@ -3,6 +3,7 @@
   <string name="common_faq">Preguntas frecuentes</string>
     <string name="common_forum">Kató Community</string>
     <string name="common_discuss_on_community">Discutir esta tarea en Kató Community</string>
+    <string name="common_analytics">Kató Analytics</string>
 	<string name="common_banned_by">Excluido por</string>
 	<string name="common_ban_duration">Duración de la exclusión</string>
 	<string name="common_ban_reason">Motivo de exclusión</string>

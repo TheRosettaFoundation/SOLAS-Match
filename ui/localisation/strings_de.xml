@@ -1,6 +1,7 @@
 <resources><!-- Smarty Template Strings --><string name="common_faq">FAQ</string>
     <string name="common_forum">Kató Community</string>
     <string name="common_discuss_on_community">Diese Aufgabe in Kató Community diskutieren</string>
+    <string name="common_analytics">Kató Analytics</string>
 	<string name="common_banned_by">Gesperrt von</string>
 	<string name="common_ban_duration">Dauer der Sperrung</string>
 	<string name="common_ban_reason">Grund der Sperrung</string>

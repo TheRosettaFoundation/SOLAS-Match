@@ -16,3 +16,4 @@ ui/dart/deploy/web/conf/conf.json
 .buildpath
 /.settings
 .vagrant
+.idea/
