@@ -74,7 +74,7 @@ Tweet</a>
                         <div class="convert_utc_to_local" style="visibility: hidden">{$data['project']->getDeadline()}</div>
                     </td>
                     <td>
-                        {assign var="projectStatus" value=intval(($data['project']->getStatus()*100))}
+                        {assign var="projectStatus" value=intval((is_numeric($data['project']->getStatus()) ? $data['project']->getStatus() : 0) * 100)}
                         
                         {if $projectStatus == 100}                            
                             <strong style="color: #2F8518">{$projectStatus}%</strong>
