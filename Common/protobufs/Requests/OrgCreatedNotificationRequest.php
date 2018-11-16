@@ -23,6 +23,10 @@ class OrgCreatedNotificationRequest
     return $this->org_id;
   }
 
+  public function hasOrgId() {
+    return $this->org_id != null;
+  }
+
   public function setOrgId($org_id) {
     $this->org_id = $org_id;
   }

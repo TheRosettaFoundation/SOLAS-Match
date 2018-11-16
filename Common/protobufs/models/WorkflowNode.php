@@ -19,12 +19,20 @@ class WorkflowNode
     return $this->taskId;
   }
 
+  public function hasTaskId() {
+    return $this->taskId != null;
+  }
+
   public function setTaskId($taskId) {
     $this->taskId = $taskId;
   }
 
   public function getTask() {
     return $this->task;
+  }
+
+  public function hasTask() {
+    return $this->task != null;
   }
 
   public function setTask($task) {

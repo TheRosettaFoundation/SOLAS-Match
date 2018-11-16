@@ -19,6 +19,10 @@ class Badge
     return $this->id;
   }
 
+  public function hasId() {
+    return $this->id != null;
+  }
+
   public function setId($id) {
     $this->id = $id;
   }
@@ -41,6 +45,10 @@ class Badge
 
   public function getOwnerId() {
     return $this->owner_id;
+  }
+
+  public function hasOwnerId() {
+    return $this->owner_id != null;
   }
 
   public function setOwnerId($owner_id) {

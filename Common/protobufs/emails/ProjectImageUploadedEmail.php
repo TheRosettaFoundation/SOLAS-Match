@@ -23,6 +23,10 @@ class ProjectImageUploadedEmail
     return $this->project_id;
   }
 
+  public function hasProjectId() {
+    return $this->project_id != null;
+  }
+
   public function setProjectId($project_id) {
     $this->project_id = $project_id;
   }

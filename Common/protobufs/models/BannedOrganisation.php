@@ -21,12 +21,20 @@ class BannedOrganisation
     return $this->orgId;
   }
 
+  public function hasOrgId() {
+    return $this->orgId != null;
+  }
+
   public function setOrgId($orgId) {
     $this->orgId = $orgId;
   }
 
   public function getUserIdAdmin() {
     return $this->userIdAdmin;
+  }
+
+  public function hasUserIdAdmin() {
+    return $this->userIdAdmin != null;
   }
 
   public function setUserIdAdmin($userIdAdmin) {

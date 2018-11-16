@@ -29,6 +29,10 @@ class User
     return $this->id;
   }
 
+  public function hasId() {
+    return $this->id != null;
+  }
+
   public function setId($id) {
     $this->id = $id;
   }
@@ -83,6 +87,10 @@ class User
 
   public function getNativeLocale() {
     return $this->nativeLocale;
+  }
+
+  public function hasNativeLocale() {
+    return $this->nativeLocale != null;
   }
 
   public function setNativeLocale($nativeLocale) {

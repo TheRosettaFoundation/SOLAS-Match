@@ -23,12 +23,20 @@ class TaskMetadata
     return $this->id;
   }
 
+  public function hasId() {
+    return $this->id != null;
+  }
+
   public function setId($id) {
     $this->id = $id;
   }
 
   public function getVersion() {
     return $this->version;
+  }
+
+  public function hasVersion() {
+    return $this->version != null;
   }
 
   public function setVersion($version) {
@@ -53,6 +61,10 @@ class TaskMetadata
 
   public function getUserId() {
     return $this->user_id;
+  }
+
+  public function hasUserId() {
+    return $this->user_id != null;
   }
 
   public function setUserId($user_id) {

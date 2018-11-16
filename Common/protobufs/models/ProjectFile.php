@@ -21,6 +21,10 @@ class ProjectFile
     return $this->projectId;
   }
 
+  public function hasProjectId() {
+    return $this->projectId != null;
+  }
+
   public function setProjectId($projectId) {
     $this->projectId = $projectId;
   }
@@ -43,6 +47,10 @@ class ProjectFile
 
   public function getUserId() {
     return $this->userId;
+  }
+
+  public function hasUserId() {
+    return $this->userId != null;
   }
 
   public function setUserId($userId) {

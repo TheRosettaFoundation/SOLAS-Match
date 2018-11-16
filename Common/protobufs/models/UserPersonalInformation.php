@@ -35,12 +35,20 @@ class UserPersonalInformation
     return $this->id;
   }
 
+  public function hasId() {
+    return $this->id != null;
+  }
+
   public function setId($id) {
     $this->id = $id;
   }
 
   public function getUserId() {
     return $this->userId;
+  }
+
+  public function hasUserId() {
+    return $this->userId != null;
   }
 
   public function setUserId($userId) {
@@ -81,6 +89,10 @@ class UserPersonalInformation
 
   public function getLanguagePreference() {
     return $this->languagePreference;
+  }
+
+  public function hasLanguagePreference() {
+    return $this->languagePreference != null;
   }
 
   public function setLanguagePreference($languagePreference) {

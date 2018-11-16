@@ -53,12 +53,20 @@ class ArchivedTask
     return $this->id;
   }
 
+  public function hasId() {
+    return $this->id != null;
+  }
+
   public function setId($id) {
     $this->id = $id;
   }
 
   public function getProjectId() {
     return $this->projectId;
+  }
+
+  public function hasProjectId() {
+    return $this->projectId != null;
   }
 
   public function setProjectId($projectId) {
@@ -93,6 +101,10 @@ class ArchivedTask
     return $this->wordCount;
   }
 
+  public function hasWordCount() {
+    return $this->wordCount != null;
+  }
+
   public function setWordCount($wordCount) {
     $this->wordCount = $wordCount;
   }
@@ -109,6 +121,10 @@ class ArchivedTask
     return $this->sourceLocale;
   }
 
+  public function hasSourceLocale() {
+    return $this->sourceLocale != null;
+  }
+
   public function setSourceLocale($sourceLocale) {
     $this->sourceLocale = $sourceLocale;
   }
@@ -117,12 +133,20 @@ class ArchivedTask
     return $this->targetLocale;
   }
 
+  public function hasTargetLocale() {
+    return $this->targetLocale != null;
+  }
+
   public function setTargetLocale($targetLocale) {
     $this->targetLocale = $targetLocale;
   }
 
   public function getTaskType() {
     return $this->taskType;
+  }
+
+  public function hasTaskType() {
+    return $this->taskType != null;
   }
 
   public function setTaskType($taskType) {
@@ -147,6 +171,10 @@ class ArchivedTask
 
   public function getVersion() {
     return $this->version;
+  }
+
+  public function hasVersion() {
+    return $this->version != null;
   }
 
   public function setVersion($version) {
@@ -181,12 +209,20 @@ class ArchivedTask
     return $this->userIdClaimed;
   }
 
+  public function hasUserIdClaimed() {
+    return $this->userIdClaimed != null;
+  }
+
   public function setUserIdClaimed($userIdClaimed) {
     $this->userIdClaimed = $userIdClaimed;
   }
 
   public function getUserIdArchived() {
     return $this->userIdArchived;
+  }
+
+  public function hasUserIdArchived() {
+    return $this->userIdArchived != null;
   }
 
   public function setUserIdArchived($userIdArchived) {
@@ -203,6 +239,10 @@ class ArchivedTask
 
   public function getUserIdTaskCreator() {
     return $this->userIdTaskCreator;
+  }
+
+  public function hasUserIdTaskCreator() {
+    return $this->userIdTaskCreator != null;
   }
 
   public function setUserIdTaskCreator($userIdTaskCreator) {

@@ -23,6 +23,10 @@ class UserTaskScoreRequest
     return $this->task_id;
   }
 
+  public function hasTaskId() {
+    return $this->task_id != null;
+  }
+
   public function setTaskId($task_id) {
     $this->task_id = $task_id;
   }

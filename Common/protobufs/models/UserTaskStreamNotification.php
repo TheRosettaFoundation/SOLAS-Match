@@ -19,12 +19,20 @@ class UserTaskStreamNotification
     return $this->user_id;
   }
 
+  public function hasUserId() {
+    return $this->user_id != null;
+  }
+
   public function setUserId($user_id) {
     $this->user_id = $user_id;
   }
 
   public function getInterval() {
     return $this->interval;
+  }
+
+  public function hasInterval() {
+    return $this->interval != null;
   }
 
   public function setInterval($interval) {

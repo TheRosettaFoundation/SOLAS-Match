@@ -29,12 +29,20 @@ class OrgFeedback
     return $this->task_id;
   }
 
+  public function hasTaskId() {
+    return $this->task_id != null;
+  }
+
   public function setTaskId($task_id) {
     $this->task_id = $task_id;
   }
 
   public function getClaimantId() {
     return $this->claimant_id;
+  }
+
+  public function hasClaimantId() {
+    return $this->claimant_id != null;
   }
 
   public function setClaimantId($claimant_id) {
@@ -51,6 +59,10 @@ class OrgFeedback
 
   public function getUserId() {
     return $this->user_id;
+  }
+
+  public function hasUserId() {
+    return $this->user_id != null;
   }
 
   public function setUserId($user_id) {

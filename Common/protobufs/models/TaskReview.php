@@ -27,12 +27,20 @@ class TaskReview
     return $this->project_id;
   }
 
+  public function hasProjectId() {
+    return $this->project_id != null;
+  }
+
   public function setProjectId($project_id) {
     $this->project_id = $project_id;
   }
 
   public function getTaskId() {
     return $this->task_id;
+  }
+
+  public function hasTaskId() {
+    return $this->task_id != null;
   }
 
   public function setTaskId($task_id) {
@@ -43,12 +51,20 @@ class TaskReview
     return $this->user_id;
   }
 
+  public function hasUserId() {
+    return $this->user_id != null;
+  }
+
   public function setUserId($user_id) {
     $this->user_id = $user_id;
   }
 
   public function getCorrections() {
     return $this->corrections;
+  }
+
+  public function hasCorrections() {
+    return $this->corrections != null;
   }
 
   public function setCorrections($corrections) {
@@ -59,6 +75,10 @@ class TaskReview
     return $this->grammar;
   }
 
+  public function hasGrammar() {
+    return $this->grammar != null;
+  }
+
   public function setGrammar($grammar) {
     $this->grammar = $grammar;
   }
@@ -67,12 +87,20 @@ class TaskReview
     return $this->spelling;
   }
 
+  public function hasSpelling() {
+    return $this->spelling != null;
+  }
+
   public function setSpelling($spelling) {
     $this->spelling = $spelling;
   }
 
   public function getConsistency() {
     return $this->consistency;
+  }
+
+  public function hasConsistency() {
+    return $this->consistency != null;
   }
 
   public function setConsistency($consistency) {

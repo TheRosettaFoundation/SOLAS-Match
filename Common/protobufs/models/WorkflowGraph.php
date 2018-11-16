@@ -42,6 +42,10 @@ class WorkflowGraph
     return $this->projectId;
   }
 
+  public function hasProjectId() {
+    return $this->projectId != null;
+  }
+
   public function setProjectId($projectId) {
     $this->projectId = $projectId;
   }

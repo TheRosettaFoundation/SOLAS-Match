@@ -25,12 +25,20 @@ class ProjectImageDisapprovedEmail
     return $this->project_id;
   }
 
+  public function hasProjectId() {
+    return $this->project_id != null;
+  }
+
   public function setProjectId($project_id) {
     $this->project_id = $project_id;
   }
 
   public function getUserId() {
     return $this->user_id;
+  }
+
+  public function hasUserId() {
+    return $this->user_id != null;
   }
 
   public function setUserId($user_id) {

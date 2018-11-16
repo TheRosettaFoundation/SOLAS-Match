@@ -35,12 +35,20 @@ class Task
     return $this->id;
   }
 
+  public function hasId() {
+    return $this->id != null;
+  }
+
   public function setId($id) {
     $this->id = $id;
   }
 
   public function getProjectId() {
     return $this->projectId;
+  }
+
+  public function hasProjectId() {
+    return $this->projectId != null;
   }
 
   public function setProjectId($projectId) {
@@ -75,6 +83,10 @@ class Task
     return $this->wordCount;
   }
 
+  public function hasWordCount() {
+    return $this->wordCount != null;
+  }
+
   public function setWordCount($wordCount) {
     $this->wordCount = $wordCount;
   }
@@ -91,12 +103,20 @@ class Task
     return $this->sourceLocale;
   }
 
+  public function hasSourceLocale() {
+    return $this->sourceLocale != null;
+  }
+
   public function setSourceLocale($sourceLocale) {
     $this->sourceLocale = $sourceLocale;
   }
 
   public function getTargetLocale() {
     return $this->targetLocale;
+  }
+
+  public function hasTargetLocale() {
+    return $this->targetLocale != null;
   }
 
   public function setTargetLocale($targetLocale) {
@@ -107,12 +127,20 @@ class Task
     return $this->taskType;
   }
 
+  public function hasTaskType() {
+    return $this->taskType != null;
+  }
+
   public function setTaskType($taskType) {
     $this->taskType = $taskType;
   }
 
   public function getTaskStatus() {
     return $this->taskStatus;
+  }
+
+  public function hasTaskStatus() {
+    return $this->taskStatus != null;
   }
 
   public function setTaskStatus($taskStatus) {

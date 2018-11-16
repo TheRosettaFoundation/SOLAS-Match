@@ -19,6 +19,10 @@ class MembershipRequest
     return $this->id;
   }
 
+  public function hasId() {
+    return $this->id != null;
+  }
+
   public function setId($id) {
     $this->id = $id;
   }
@@ -27,12 +31,20 @@ class MembershipRequest
     return $this->user_id;
   }
 
+  public function hasUserId() {
+    return $this->user_id != null;
+  }
+
   public function setUserId($user_id) {
     $this->user_id = $user_id;
   }
 
   public function getOrgId() {
     return $this->org_id;
+  }
+
+  public function hasOrgId() {
+    return $this->org_id != null;
   }
 
   public function setOrgId($org_id) {

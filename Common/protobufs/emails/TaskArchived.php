@@ -25,12 +25,20 @@ class TaskArchived
     return $this->user_id;
   }
 
+  public function hasUserId() {
+    return $this->user_id != null;
+  }
+
   public function setUserId($user_id) {
     $this->user_id = $user_id;
   }
 
   public function getTaskId() {
     return $this->task_id;
+  }
+
+  public function hasTaskId() {
+    return $this->task_id != null;
   }
 
   public function setTaskId($task_id) {

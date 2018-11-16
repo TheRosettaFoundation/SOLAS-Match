@@ -49,6 +49,10 @@ class ArchivedProject
     return $this->id;
   }
 
+  public function hasId() {
+    return $this->id != null;
+  }
+
   public function setId($id) {
     $this->id = $id;
   }
@@ -89,6 +93,10 @@ class ArchivedProject
     return $this->organisationId;
   }
 
+  public function hasOrganisationId() {
+    return $this->organisationId != null;
+  }
+
   public function setOrganisationId($organisationId) {
     $this->organisationId = $organisationId;
   }
@@ -103,6 +111,10 @@ class ArchivedProject
 
   public function getWordCount() {
     return $this->wordCount;
+  }
+
+  public function hasWordCount() {
+    return $this->wordCount != null;
   }
 
   public function setWordCount($wordCount) {
@@ -121,6 +133,10 @@ class ArchivedProject
     return $this->sourceLocale;
   }
 
+  public function hasSourceLocale() {
+    return $this->sourceLocale != null;
+  }
+
   public function setSourceLocale($sourceLocale) {
     $this->sourceLocale = $sourceLocale;
   }
@@ -129,12 +145,20 @@ class ArchivedProject
     return $this->userIdArchived;
   }
 
+  public function hasUserIdArchived() {
+    return $this->userIdArchived != null;
+  }
+
   public function setUserIdArchived($userIdArchived) {
     $this->userIdArchived = $userIdArchived;
   }
 
   public function getUserIdProjectCreator() {
     return $this->userIdProjectCreator;
+  }
+
+  public function hasUserIdProjectCreator() {
+    return $this->userIdProjectCreator != null;
   }
 
   public function setUserIdProjectCreator($userIdProjectCreator) {

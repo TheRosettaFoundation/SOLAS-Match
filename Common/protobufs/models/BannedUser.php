@@ -21,6 +21,10 @@ class BannedUser
     return $this->userId;
   }
 
+  public function hasUserId() {
+    return $this->userId != null;
+  }
+
   public function setUserId($userId) {
     $this->userId = $userId;
   }
@@ -29,12 +33,20 @@ class BannedUser
     return $this->userIdAdmin;
   }
 
+  public function hasUserIdAdmin() {
+    return $this->userIdAdmin != null;
+  }
+
   public function setUserIdAdmin($userIdAdmin) {
     $this->userIdAdmin = $userIdAdmin;
   }
 
   public function getBanType() {
     return $this->banType;
+  }
+
+  public function hasBanType() {
+    return $this->banType != null;
   }
 
   public function setBanType($banType) {

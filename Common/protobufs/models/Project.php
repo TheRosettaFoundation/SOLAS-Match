@@ -39,6 +39,10 @@ class Project
     return $this->id;
   }
 
+  public function hasId() {
+    return $this->id != null;
+  }
+
   public function setId($id) {
     $this->id = $id;
   }
@@ -71,6 +75,10 @@ class Project
     return $this->organisationId;
   }
 
+  public function hasOrganisationId() {
+    return $this->organisationId != null;
+  }
+
   public function setOrganisationId($organisationId) {
     $this->organisationId = $organisationId;
   }
@@ -95,6 +103,10 @@ class Project
     return $this->wordCount;
   }
 
+  public function hasWordCount() {
+    return $this->wordCount != null;
+  }
+
   public function setWordCount($wordCount) {
     $this->wordCount = $wordCount;
   }
@@ -117,6 +129,10 @@ class Project
 
   public function getSourceLocale() {
     return $this->sourceLocale;
+  }
+
+  public function hasSourceLocale() {
+    return $this->sourceLocale != null;
   }
 
   public function setSourceLocale($sourceLocale) {

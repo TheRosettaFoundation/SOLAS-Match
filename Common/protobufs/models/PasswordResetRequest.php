@@ -17,6 +17,10 @@ class PasswordResetRequest
     return $this->user_id;
   }
 
+  public function hasUserId() {
+    return $this->user_id != null;
+  }
+
   public function setUserId($user_id) {
     $this->user_id = $user_id;
   }

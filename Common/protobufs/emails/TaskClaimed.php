@@ -27,6 +27,10 @@ class TaskClaimed
     return $this->user_id;
   }
 
+  public function hasUserId() {
+    return $this->user_id != null;
+  }
+
   public function setUserId($user_id) {
     $this->user_id = $user_id;
   }
@@ -35,12 +39,20 @@ class TaskClaimed
     return $this->translator_id;
   }
 
+  public function hasTranslatorId() {
+    return $this->translator_id != null;
+  }
+
   public function setTranslatorId($translator_id) {
     $this->translator_id = $translator_id;
   }
 
   public function getTaskId() {
     return $this->task_id;
+  }
+
+  public function hasTaskId() {
+    return $this->task_id != null;
   }
 
   public function setTaskId($task_id) {

@@ -25,12 +25,20 @@ class UserBadgeAwardedEmail
     return $this->user_id;
   }
 
+  public function hasUserId() {
+    return $this->user_id != null;
+  }
+
   public function setUserId($user_id) {
     $this->user_id = $user_id;
   }
 
   public function getBadgeId() {
     return $this->badge_id;
+  }
+
+  public function hasBadgeId() {
+    return $this->badge_id != null;
   }
 
   public function setBadgeId($badge_id) {
