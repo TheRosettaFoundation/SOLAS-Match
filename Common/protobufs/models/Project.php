@@ -153,6 +153,7 @@ class Project
   }
 
   public function setImageUploaded($imageUploaded) {
+if ($imageUploaded) error_log("imageUploaded TRUE, $imageUploaded"); else error_log("imageUploaded FALSE, $imageUploaded");
     $this->imageUploaded = (boolean)$imageUploaded;
   }
 
