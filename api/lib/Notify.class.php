@@ -220,7 +220,7 @@ class Notify
 
     public static function sendTaskArchivedNotifications($taskId, $subscribedUsers)
     {
-        if (!empty(subscribedUsers) && count($subscribedUsers) > 0) {
+        if (!empty($subscribedUsers) && count($subscribedUsers) > 0) {
             $messagingClient = new Lib\MessagingClient();
             if ($messagingClient->init()) {
                 $message_type = new Common\Protobufs\Emails\TaskArchived();
