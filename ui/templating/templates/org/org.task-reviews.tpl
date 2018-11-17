@@ -27,7 +27,7 @@
 <h2>Output file reviews</h2>
 <br />
 <p>The following are a list of reviews provided for the output file(s) of this task</p>
-{if !empty($task->getId()) && isset($reviews[$task->getId()]) && count($reviews[$task->getId()]) > 0}
+{if !empty($task->getId()) && !empty($reviews[$task->getId()]) && count($reviews[$task->getId()]) > 0}
     {assign var="reviewedTask" value=$task}
     {foreach $reviews[$task->getId()] as $review}
         {include file="task/task.review-form.tpl"}
