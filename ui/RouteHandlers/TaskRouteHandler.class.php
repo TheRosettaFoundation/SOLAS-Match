@@ -2611,7 +2611,6 @@ class TaskRouteHandler
 
         $formAction = $app->urlFor("task-review", array('task_id' => $taskId));
 
-error_log(print_r($preReqTasks, true));
         $app->view()->appendData(array(
             'sesskey'       => $sesskey,
             'extra_scripts' => $extra_scripts,
