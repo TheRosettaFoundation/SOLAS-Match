@@ -1222,10 +1222,13 @@ class ProjectRouteHandler
                                             }
                                         }
 
-                                       // Create a topic in the Community forum (Discourse) and a project in Asana
-                                       error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");
-                                       $this->create_discourse_topic($project->getId(), $target_languages);
-
+                                        // Create a topic in the Community forum (Discourse) and a project in Asana
+                                        error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");
+                                        try {
+                                           $this->create_discourse_topic($project->getId(), $target_languages);
+                                        } catch (\Exception $e) {
+                                            error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
+                                        }
                                         try {
                                             $app->redirect($app->urlFor('project-view', array('project_id' => $project->getId())));
                                         } catch (\Exception $e) { // redirect throws \Slim\Exception\Stop
