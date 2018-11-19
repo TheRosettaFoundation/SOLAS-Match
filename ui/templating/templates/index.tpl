@@ -16,6 +16,7 @@
             <a class="btn btn-primary btn-large" href="{urlFor name="login"}">
                 <i class="icon-share icon-white"></i> {Localisation::getTranslation('common_log_in')}
             </a>
+            <a href="https://community.translatorswb.org/t/how-to-solve-your-login-issues/4385">Click here if you are having problems logging in</a>
         </p>
     </div>
 
