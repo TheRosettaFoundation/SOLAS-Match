@@ -1538,167 +1538,61 @@ $from_neon_to_trommons_pair = array(
 'Tongan' => array('ton', 'TO'),
 
 'Saint Lucian Creole French' => array('acf', 'LC'),
-'acf' => 'acf-LC',
-
 'Antigua and Barbuda Creole English' => array('aig', 'AG'),
-'aig' => 'aig-AG',
-
 'Bahamas Creole English' => array('bah', 'BS'),
-'bah' => 'bah-BS',
-
 'Bemba' => array('bem', 'ZM'),
-'bem' => 'bem-ZM',
-
 'Bajan' => array('bjs', 'BB'),
-'bjs' => 'bjs-BB',
-
 'Tibetan' => array('bo', 'CN'),
-'bo' => 'bod-CN',
-
 'Chamorro' => array('ch', 'GU'),
-'ch' => 'cha-GU',
-
 'Coptic' => array('cop', 'EG'),
-'cop' => 'cop-XNA',
-
 'Seselwa Creole French' => array('crs', 'SC'),
-'crs' => 'crs-SC',
-
 'Maldivian' => array('dv', 'MV'),
-'dv' => 'div-DV',
-
 'Dzongkha' => array('dz', 'BT'),
-'dz' => 'dzo-BT',
-
 'Jamaican Creole English' => array('jam', 'JM'),
-'jam' => 'jam-JM',
-
 'Filipino' => array('fil', 'PH'),
-'fil' => 'fil-',
-
 'Fanagalo' => array('fng', 'ZA'),
-'fng' => 'fn-FNG',
-
 'Grenadian Creole English' => array('gcl', 'GD'),
-'gcl' => 'gcl-GD',
-
 'Manx Gaelic' => array('gv', 'IM'),
-'gv' => 'gv-IM',
-
 'Guyanese Creole English' => array('gyn', 'GY'),
-'gyn' => 'gyn-',
-
 'Kabylian' => array('kab', 'DZ'),
-'kab' => 'kab-DZ',
-
 'Kabuverdianu' => array('kea', 'CV'),
-'kea' => 'kea-CV',
-
 'Inuktitut Greenlandic' => array('kl', 'GL'),
-'kl' => 'kal-GL',
-
 'Mende' => array('men', 'SL'),
-'men' => 'men-MEN',
-
 'Morisyen' => array('mfe', 'MU'),
-'mfe' => 'mfe-MU',
-
 'Marshallese' => array('mh', 'MH'),
-'mh' => 'mh-MH',
-
-'Niuean' => array('niu', 'NIU'),
-'niu' => 'niu-',
-
+'Niuean' => array('niu', 'NU'),
 'Norwegian' => array('no', 'NO'),
-'no' => 'no-NO',
-
 'Norwegian Bokmål' => array('nb', 'NO'),
 "Norwegian Bokm\xE5l" => array('nb', 'NO'),
-'nb' => 'nb-NO',
-
 'Norwegian Nynorsk' => array('nn', 'NO'),
-'nn' => 'nn-NO',
-
-'ory' => array('ory', 'IN'),
-'Odia' => 'ory-IN',
-
+'Odia' => array('ory', 'IN'),
 'Palauan' => array('pau', 'PW'),
-'pau' => 'pau-PW',
-
 'Pijin' => array('pis', 'SB'),
-'pis' => 'pis-PIS',
-
 'Potawatomi' => array('pot', 'US'),
-'pot' => 'pot-US',
-
 'Crioulo Upper Guinea' => array('pov', 'GW'),
-'pov' => 'pov-POV',
-
 'Uma' => array('ppk', 'ID'),
-'ppk' => 'ppk-ID',
-
 'Balkan Gipsy' => array('rm', 'RO'),
-'rm' => 'rm-RO',
-
 'Kirundi' => array('run', 'RW'),
-'run-RW' => 'run-RN',
-
 'Kinyarwanda' => array('rw', 'RW'),
-'rw' => 'rw-KIN',
-
 'Sango' => array('sg', 'SG'),
-'sg' => 'sg-SG',
-
 'Samoan' => array('sm', 'WS'),
-'sm' => 'smo-WS',
-
 'Shona' => array('sn', 'ZW'),
-'sn' => 'sna-ZW',
-
 'Sranan Tongo' => array('srn', 'SR'),
-'srn' => 'srn-SRN',
-
 'Sotho Southern' => array('st', 'ST'),
-'st' => 'st-ST',
-
 'Vincentian Creole English' => array('svc', 'VC'),
-'svc' => 'svc-VC',
-
 'Syriac (Aramaic)' => array('syc', 'TR'),
-'syc' => 'syc-TR',
-
 'Tetum' => array('tet', 'TL'),
-'tet' => 'tet-TET',
-
 'Tokelauan' => array('tkl', 'TK'),
-'tkl' => 'tkl-TKL',
-
 'Tamashek (Tuareg)' => array('tmh', 'DZ'),
-'tmh' => 'tmh-DZ',
-
 'Tswana' => array('tn', 'BW'),
-'tn' => 'tsn-BW',
-
 'Tuvaluan' => array('tvl', 'TV'),
-'tvl' => 'tvl-TVL',
-
 'Virgin Islands Creole English' => array('vic', 'US'),
-'vic' => 'vic-US',
-
 'Wallisian' => array('wls', 'WF'),
-'wls' => 'wls-WLS',
-
 'Wolof' => array('wo', 'SN'),
-'wo' => 'wo-SN',
-
 'Classical Greek' => array('grc', 'GR'),
-'grc' => 'grc-GR',
-
 'Comorian Ngazidja' => array('zdj', 'KM'),
-'zdj' => 'zdj-KM',
-
 'Chinese Trad. (Hong Kong)' => array('zh', 'HK'),
-'zh' => 'zh-HK',
+'zh-HK' => 'zh-HK',
 );
 
 $NEON_NATIVELANGFIELD = 64;
