@@ -2092,8 +2092,6 @@ class ProjectRouteHandler
 'sr-ME' => 'sr-ME',
 'nr' => 'nr-ZA',
 'ne' => 'ne-NP',
-'nb' => 'nb-NO',
-'nn' => 'nn-NO',
 'ny' => 'ny-NYA',
 'oc' => 'oc-FR',
 'oc-ES' => 'oc-ES',

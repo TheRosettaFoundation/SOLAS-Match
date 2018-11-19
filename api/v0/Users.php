@@ -1464,8 +1464,6 @@ $from_neon_to_trommons_pair = array(
 'Montenegrin' => array('sr', 'ME'),
 'Ndebele' => array('nr', 'ZA'),
 'Nepali' => array('ne', 'NP'),
-'Norwegian Bokmål' => array('no', 'NO'),
-'Norwegian Nynorsk' => array('nn', 'NO'),
 'Nyanja' => array('ny', '--'),
 'Occitan' => array('oc', 'FR'),
 'Occitan Aran' => array('oc', 'ES'),
@@ -1554,28 +1552,23 @@ $from_neon_to_trommons_pair = array(
 'Bajan' => array('bjs', 'BB'),
 'bjs' => 'bjs-BB',
 
-Tibetan bo  bod-CN
-'' => array('', ''),
-'' => '-',
+'Tibetan' => array('bo', 'CN'),
+'bo' => 'bod-CN',
 
-Chamorro  ch  cha-GU
-'' => array('', ''),
-'' => '-',
+'Chamorro' => array('ch', 'GU'),
+'ch' => 'cha-GU',
 
-Coptic  cop cop-XNA
-'' => array('', ''),
-'' => '-',
+'Coptic' => array('cop', 'EG'),
+'cop' => 'cop-XNA',
 
 'Seselwa Creole French' => array('crs', 'SC'),
 'crs' => 'crs-SC',
 
-Maldivian dv  div-DV
-'' => array('', ''),
-'' => '-',
+'Maldivian' => array('dv', 'MV'),
+'dv' => 'div-DV',
 
-Dzongkha  dz  dzo-BT
-'' => array('', ''),
-'' => '-',
+'Dzongkha' => array('dz', 'BT'),
+'dz' => 'dzo-BT',
 
 Jamaican Creole English en  jam-JM
 '' => array('', ''),
@@ -1620,40 +1613,15 @@ Mende men men-MEN
 'Niuean' => array('niu', 'NIU'),
 'niu' => 'niu-',
 
-Norwegian no  nb-NO
-'' => array('', ''),
-'' => '-',
-[[[
-        {
-            "localized":[{
-                "en":"Norwegian"
-            }],
-            "isocode":"no",
-            "enabled":true,
-            "rtl":false,
-            "rfc3066code":"no-NO"
-        }
-    ,
-        {
-            "localized":[{
-                "en":"Norwegian Bokmål"
-            }],
-            "isocode":"nb",
-            "enabled":true,
-            "rtl":false,
-            "rfc3066code":"nb-NO"
-        }
-    ,
-        {
-            "localized":[{
-                "en":"Norwegian Nynorsk"
-            }],
-            "isocode":"nn",
-            "enabled":true,
-            "rtl":false,
-            "rfc3066code":"nn-NO"
-        }
-]]]
+'Norwegian' => array('no', 'NO'),
+'no' => 'no-NO',
+
+'Norwegian Bokmål' => array('nb', 'NO'),
+"Norwegian Bokm\xE5l" => array('nb', 'NO'),
+'nb' => 'nb-NO',
+
+'Norwegian Nynorsk' => array('nn', 'NO'),
+'nn' => 'nn-NO',
 
 'ory' => array('ory', 'IN'),
 'Odia' => 'ory-IN',
@@ -1661,15 +1629,13 @@ Norwegian no  nb-NO
 'Palauan' => array('pau', 'PW'),
 'pau' => 'pau-PW',
 
-!!'PIS' not a Trommons contry
-'Pijin' => array('pis', 'PIS'),
+'Pijin' => array('pis', 'SB'),
 'pis' => 'pis-PIS',
 
 'Potawatomi' => array('pot', 'US'),
 'pot' => 'pot-US',
 
-!!'POV' not a trmmons country
-'Crioulo Upper Guinea' => array('', 'POV'),
+'Crioulo Upper Guinea' => array('pov', 'GW'),
 'pov' => 'pov-POV',
 
 Uma ppk ps-PK
@@ -1683,12 +1649,8 @@ Kirundi rn  run-RN
 '' => array('', ''),
 '' => '-',
 
-'KIN' not a trommons country
-'Kinyarwanda' => array('rw', 'KIN'),
+'Kinyarwanda' => array('rw', 'RW'),
 'rw' => 'rw-KIN',
-[[
-('RWANDA','RW')
-]]
 
 'Sango' => array('sg', 'SG'),
 'sg' => 'sg-SG',
@@ -1714,20 +1676,17 @@ Sranan Tongo  srn srn-SRN
 'Syriac (Aramaic)' => array('syc', 'TR'),
 'syc' => 'syc-TR',
 
-NO 'TET' Country
-'Tetum' => array('tet', 'TET'),
-'tet' => 'tet-',
+'Tetum' => array('tet', 'TL'),
+'tet' => 'tet-TET',
 
-NO 'TKL' country
-'Tokelauan' => array('tkl', 'TKL'),
+'Tokelauan' => array('tkl', 'TK'),
 'tkl' => 'tkl-TKL',
 
 'Tamashek (Tuareg)' => array('tmh', 'DZ'),
 'tmh' => 'tmh-DZ',
 
-Tswana  tn  tsn-BW
-'' => array('', ''),
-'' => '-',
+'Tswana' => array('tn', 'BW'),
+'tn' => 'tsn-BW',
 
 'Tuvaluan' => array('tvl', 'TV'),
 'tvl' => 'tvl-TVL',
@@ -1735,9 +1694,8 @@ Tswana  tn  tsn-BW
 'Virgin Islands Creole English' => array('vic', 'US'),
 'vic' => 'vic-US',
 
-NO 'WLS' Country
-'Wallisian' => array('wls', 'WLS'),
-'wls' => 'wls-',
+'Wallisian' => array('wls', 'WF'),
+'wls' => 'wls-WLS',
 
 'Wolof' => array('wo', 'SN'),
 'wo' => 'wo-SN',
