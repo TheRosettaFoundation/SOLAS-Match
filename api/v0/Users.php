@@ -1593,6 +1593,15 @@ $from_neon_to_trommons_pair = array(
 'Comorian Ngazidja' => array('zdj', 'KM'),
 'Chinese Trad. (Hong Kong)' => array('zh', 'HK'),
 'Chittagonian' => array('ctg', 'BD'),
+'Austrian German' => array('de', 'AT'),
+'English Australia' => array('en', 'AU'),
+'English Canada' => array('en', 'CA'),
+'English India' => array('en', 'IN'),
+'English Ireland' => array('en', 'IE'),
+'English New Zealand' => array('en', 'NZ'),
+'English Singapore' => array('en', 'SG'),
+'French Swiss' => array('fr', 'CH'),
+'Italian Swiss' => array('it', 'CH'),
 );
 
 $NEON_NATIVELANGFIELD = 64;

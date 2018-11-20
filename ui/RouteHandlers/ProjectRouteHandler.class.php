@@ -2228,6 +2228,15 @@ class ProjectRouteHandler
 'zdj' => 'zdj-KM',
 'zh-HK' => 'zh-HK',
 'ctg' => 'ctg-BD',
+'de-AT' => 'de-AT',
+'en-AU' => 'en-AU',
+'en-CA' => 'en-CA',
+'en-IN' => 'en-IN',
+'en-IE' => 'en-IE',
+'en-NZ' => 'en-NZ',
+'en-SG' => 'en-SG',
+'fr-CH' => 'fr-CH',
+'it-CH' => 'it-CH',
 );
         if (in_array($language_code, $matecat_acceptable_languages)) return $language_code;
         // Special case...
