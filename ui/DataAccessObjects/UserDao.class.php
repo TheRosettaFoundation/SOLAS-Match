@@ -1036,6 +1036,7 @@ $from_neon_to_trommons_pair = array(
 'Classical Greek' => array('grc', 'GR'),
 'Comorian Ngazidja' => array('zdj', 'KM'),
 'Chinese Trad. (Hong Kong)' => array('zh', 'HK'),
+'Chittagonian' => array('ctg', 'BD'),
 );
 
         $account_id   = '';

@@ -2219,7 +2219,7 @@ class ProjectRouteHandler
 'tet' => 'tet-TET',
 'tkl' => 'tkl-TKL',
 'tmh' => 'tmh-DZ',
-'tn' => 'tsn-BW',
+'tn-BW' => 'tsn-BW',
 'tvl' => 'tvl-TVL',
 'vic' => 'vic-US',
 'wls' => 'wls-WLS',
@@ -2227,8 +2227,12 @@ class ProjectRouteHandler
 'grc' => 'grc-GR',
 'zdj' => 'zdj-KM',
 'zh-HK' => 'zh-HK',
+'ctg' => 'ctg-BD',
 );
         if (in_array($language_code, $matecat_acceptable_languages)) return $language_code;
+        // Special case...
+        if ($language_code === 'tn-BW') return 'tsn-BW';
+
         if (!empty($matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))])) return $matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))];
         return '';
     }
