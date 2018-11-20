@@ -4230,7 +4230,7 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.oauthGetClient
 DROP PROCEDURE IF EXISTS `oauthGetClient`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthGetClient`(IN `clientId` CHAR(40), IN `clientSecret` CHAR(40), IN `redirectUri` VARCHAR(255))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthGetClient`(IN `clientId` CHAR(40), IN `clientSecret` CHAR(42), IN `redirectUri` VARCHAR(255))
     READS SQL DATA
 BEGIN
     IF clientSecret = '' then
@@ -4245,7 +4245,7 @@ BEGIN
         JOIN `oauth_client_endpoints`
         ON `oauth_clients`.id = `oauth_client_endpoints`.client_id
         WHERE `oauth_clients`.id = clientId
-        AND (clientSecret IS NULL OR `oauth_clients`.secret = clientSecret)
+        AND (clientSecret IS NULL OR `oauth_clients`.secret = SUBSTRING(clientSecret, 1, 40))
         AND (redirectUri IS NULL OR `oauth_client_endpoints`.redirect_uri = redirectUri);
 END//
 DELIMITER ;
