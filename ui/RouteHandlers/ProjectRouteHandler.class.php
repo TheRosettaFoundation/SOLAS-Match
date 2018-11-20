@@ -2196,7 +2196,7 @@ class ProjectRouteHandler
 'mfe' => 'mfe-MU',
 'mh' => 'mh-MH',
 'niu' => 'niu-NIU',
-'no' => 'no-NO',
+'no' => 'nb-NO',
 
 
 'nn' => 'nn-NO',
