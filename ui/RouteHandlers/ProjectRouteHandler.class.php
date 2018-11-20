@@ -2197,7 +2197,8 @@ class ProjectRouteHandler
 'mh' => 'mh-MH',
 'niu' => 'niu-NIU',
 'no' => 'no-NO',
-'nb' => 'nb-NO',
+
+
 'nn' => 'nn-NO',
 'ory' => 'ory-IN',
 'pau' => 'pau-PW',
@@ -2225,7 +2226,7 @@ class ProjectRouteHandler
 'wo' => 'wo-SN',
 'grc' => 'grc-GR',
 'zdj' => 'zdj-KM',
-'zh' => 'zh-HK',
+'zh-HK' => 'zh-HK',
 );
         if (in_array($language_code, $matecat_acceptable_languages)) return $language_code;
         if (!empty($matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))])) return $matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))];
