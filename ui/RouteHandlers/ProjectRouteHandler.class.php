@@ -761,7 +761,7 @@ class ProjectRouteHandler
                                 if (!empty($post['analyse_url'])) {
                                     $request_for_project = $taskDao->getWordCountRequestForProject($project_id);
                                     if ($request_for_project && empty($request_for_project['matecat_id_project']) && empty($request_for_project['matecat_id_project_pass']) && $request_for_project['state'] == 3) {
-                                        $found = preg_match('|^https://tm.translatorswb.org/analyze/proj-([0-9]+)/([0-9]+)-([0-9]+)$|', $post['analyse_url'], $matches);
+                                        $found = preg_match('|^https://tm.translatorswb.org/analyze/proj-([0-9]+)/([0-9]+)-([0-9a-z]+)$|', $post['analyse_url'], $matches);
                                         if ($found && $matches[1] == $project_id) {
                                             $matecat_id_project = $matches[2];
                                             $matecat_id_project_pass = $matches[3];
