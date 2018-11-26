@@ -64,7 +64,7 @@
                     </button>
                     {/if}
                     {if $enter_analyse_url}
-                    <br />
+                    <br /><br />
                     <label for="analyse_url" style="font-size: large"><strong>Enter Analysis URL</strong></label>
                     <input type="text" style="width: 400px;  margin-bottom: 20px" name="analyse_url" id="analyse_url" />
                     {/if}
