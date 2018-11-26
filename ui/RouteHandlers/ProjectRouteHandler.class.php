@@ -766,7 +766,7 @@ class ProjectRouteHandler
                                             $matecat_id_project = $matches[2];
                                             $matecat_id_project_pass = $matches[3];
                                             $taskDao->updateWordCountRequestForProjects($project_id, $matecat_id_project, $matecat_id_project_pass, 0, 1);
-                                            $app->flash('success', 'ID/Password updated!');
+                                            $app->flash('success', 'Matecat Project ID/Password updated!');
                                         } else {
                                             $app->flash('error', 'URL did not match project and expected pattern!');
                                         }
