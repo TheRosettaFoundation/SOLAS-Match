@@ -621,6 +621,7 @@ class ProjectRouteHandler
         $user_id = Common\Lib\UserSession::getCurrentUserID();
 
         $projectDao = new DAO\ProjectDao();
+        $taskDao    = new DAO\TaskDao();
 
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
             $_SESSION['SESSION_CSRF_KEY'] = $this->random_string(10);
@@ -757,6 +758,20 @@ class ProjectRouteHandler
                             } else {
                                 // Continue here whether there is, or is not, an image file uploaded as long as there was not an explicit failure
 
+                                if (!empty($post['analyse_url'])) {
+                                    $request_for_project = $taskDao->getWordCountRequestForProject($project_id);
+                                    if ($request_for_project && empty($request_for_project['matecat_id_project']) && empty($request_for_project['matecat_id_project_pass']) && $request_for_project['state'] == 3) {
+                                        $found = preg_match('|^https://tm.translatorswb.org/analyze/proj-([0-9]+)/([0-9]+)-([0-9a-z]+)$|', $post['analyse_url'], $matches);
+                                        if ($found && $matches[1] == $project_id) {
+                                            $matecat_id_project = $matches[2];
+                                            $matecat_id_project_pass = $matches[3];
+                                            $taskDao->updateWordCountRequestForProjects($project_id, $matecat_id_project, $matecat_id_project_pass, 0, 1);
+                                            $app->flash('success', 'Matecat Project ID/Password updated!');
+                                        } else {
+                                            $app->flash('error', 'URL did not match project and expected pattern!');
+                                        }
+                                    }
+                                }
                                 try {
                                      $app->redirect($app->urlFor('project-view', array('project_id' => $project->getId())));
                                 } catch (\Exception $e) { // redirect throws \Slim\Exception\Stop
@@ -833,8 +848,14 @@ class ProjectRouteHandler
         $userIsAdmin = $adminDao->isSiteAdmin($user_id);
         // For some reason the existing Dart code excludes this case...
         //$userIsAdmin = $adminDao->isOrgAdmin($project->getOrganisationId(), $user_id) || $userIsAdmin;
+        $enter_analyse_url = 0;
         if ($userIsAdmin) {
             $userIsAdmin = 1; // Just to be sure what will appear in the template and then the JavaScript
+
+            $request_for_project = $taskDao->getWordCountRequestForProject($project_id);
+            if ($request_for_project && empty($request_for_project['matecat_id_project']) && empty($request_for_project['matecat_id_project_pass']) && $request_for_project['state'] == 3) {
+                $enter_analyse_url = 1;
+            }
         } else {
             $userIsAdmin = 0;
         }
@@ -869,6 +890,7 @@ class ProjectRouteHandler
             'sourceLanguageSelectCode' => $sourceLanguageSelectCode,
             'sourceCountrySelectCode'  => $sourceCountrySelectCode,
             'userIsAdmin'    => $userIsAdmin,
+            'enter_analyse_url' => $enter_analyse_url,
             'sesskey'        => $sesskey,
         ));
 

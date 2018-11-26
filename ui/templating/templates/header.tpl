@@ -93,6 +93,11 @@
 	                                <a href="{Settings::get('site.forum_link')}" target="_blank">{Localisation::getTranslation('common_forum')}</a>
 	                            </li>
                             {/if}
+                        {if isset($site_admin)}
+                            <li>
+                                <a href="https://analytics.translatorswb.org">Kató Analytics</a>
+                            </li>
+                        {/if}
                     </ul>
                     <ul class="nav pull-right" style="max-height: 38px">
                         {if isset($userNotifications)}   
