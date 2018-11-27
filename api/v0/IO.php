@@ -406,12 +406,16 @@ error_log("Exception: " . $e->getMessage());
     private static function saveProjectFileToFs($projectId, $file, $filename, $userId)
     {
         $destination = Common\Lib\Settings::get("files.upload_path")."proj-$projectId/";
+error_log($destination);
         if (!file_exists($destination)) {
             mkdir($destination, 0755);
+error_log("After mkdir: $destination");
         }
         $mime = self::detectMimeType($file, $filename);
+error_log("self::detectMimeType(..., $filename)");
         $apiHelper = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
         $canonicalMime = $apiHelper->getCanonicalMime($filename);
+error_log("canonicalMime: $canonicalMime");
 
         if (!is_null($canonicalMime) && $mime != $canonicalMime) {
             $message = "The content type ($mime) of the file you are trying to upload does not";
@@ -579,8 +583,10 @@ error_log("Exception: " . $e->getMessage());
                 ,"xls"  => "application/vnd.ms-excel"
         );
 
+error_log("Before finfo(FILEINFO_MIME_TYPE)");
         $finfo = new \finfo(FILEINFO_MIME_TYPE);
         $mime = $finfo->buffer($file);
+error_log("mime: $mime");
 
         $extension = explode(".", $filename);
         $extension = $extension[count($extension)-1];
@@ -592,6 +598,7 @@ error_log("Exception: " . $e->getMessage());
             $result = $mime;
         }
 
+error_log("result: $result");
         return $result;
     }
 }
