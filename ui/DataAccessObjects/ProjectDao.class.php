@@ -101,7 +101,6 @@ class ProjectDao extends BaseDao
     {
         $filename = urlencode($filename);
         $request = "{$this->siteApi}v0/io/upload/project/{$project->getId()}/file/{$filename}/{$userId}";
-error_log($request);
         $response = $this->client->call(
             null,
             $request,
@@ -110,7 +109,6 @@ error_log($request);
             null,
             $fileData
         );
-error_log(print_r($response, true));
         return $response;
     }
 

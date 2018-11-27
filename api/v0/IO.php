@@ -293,20 +293,19 @@ class IO
 
     public static function saveProjectFile($projectId, $filename, $userId, $format = ".json")
     {
+        error_log("saveProjectFile($projectId, $filename, $userId...)");
         if (!is_numeric($userId) && strstr($userId, '.')) {
             $userId = explode('.', $userId);
             $format = '.'.$userId[1];
             $userId = $userId[0];
         }
-error_log("saveProjectFile($projectId, $filename, $userId, format = .json)");
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
-error_log("data length: " . strlen($data));
         try {
             $token = self::saveProjectFileToFs($projectId, $data, urldecode($filename), $userId);
-error_log(print_r($token, true));
+            error_log('CREATED');
             API\Dispatcher::sendResponse(null, $token, Common\Enums\HttpStatusEnum::CREATED, $format);
         } catch (Exception $e) {
-error_log("Exception: " . $e->getMessage());
+            error_log('Exception: ' . $e->getMessage());
             API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
         }
     }
@@ -406,20 +405,22 @@ error_log("Exception: " . $e->getMessage());
     private static function saveProjectFileToFs($projectId, $file, $filename, $userId)
     {
         $destination = Common\Lib\Settings::get("files.upload_path")."proj-$projectId/";
-error_log($destination);
         if (!file_exists($destination)) {
             mkdir($destination, 0755);
-error_log("After mkdir: $destination");
         }
+        error_log("destination: $destination");
+
         $mime = self::detectMimeType($file, $filename);
-error_log("self::detectMimeType(..., $filename)");
+        error_log("detectMimeType: $mime");
+
         $apiHelper = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
         $canonicalMime = $apiHelper->getCanonicalMime($filename);
-error_log("canonicalMime: $canonicalMime");
+        error_log("getCanonicalMime: $canonicalMime");
 
         if (!is_null($canonicalMime) && $mime != $canonicalMime) {
             $message = "The content type ($mime) of the file you are trying to upload does not";
             $message .= " match the content type ($canonicalMime) expected from its extension.";
+            error_log($message);
             throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::BAD_REQUEST);
         }
             $token = DAO\ProjectDao::recordProjectFileInfo($projectId, $filename, $userId, $mime);
@@ -432,10 +433,12 @@ error_log("canonicalMime: $canonicalMime");
             }
             if ($physical_pointer === false) {
                 $message = "Failed to write file data ($projectId).";
+                error_log($message);
                 throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::INTERNAL_SERVER_ERROR);
             }
         } catch (\Exception $e) {
             $message = "You cannot upload a project file for project ($projectId), as one already exists.";
+            error_log($message);
             throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::CONFLICT);
         }
 
@@ -583,10 +586,8 @@ error_log("canonicalMime: $canonicalMime");
                 ,"xls"  => "application/vnd.ms-excel"
         );
 
-error_log("Before finfo(FILEINFO_MIME_TYPE)");
         $finfo = new \finfo(FILEINFO_MIME_TYPE);
         $mime = $finfo->buffer($file);
-error_log("mime: $mime");
 
         $extension = explode(".", $filename);
         $extension = $extension[count($extension)-1];
@@ -598,7 +599,6 @@ error_log("mime: $mime");
             $result = $mime;
         }
 
-error_log("result: $result");
         return $result;
     }
 }
