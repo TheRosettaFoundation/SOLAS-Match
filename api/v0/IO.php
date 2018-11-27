@@ -298,11 +298,15 @@ class IO
             $format = '.'.$userId[1];
             $userId = $userId[0];
         }
+error_log("saveProjectFile($projectId, $filename, $userId, format = .json)");
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
+error_log("data length: " . strlen($data));
         try {
             $token = self::saveProjectFileToFs($projectId, $data, urldecode($filename), $userId);
+error_log(print_r($token, true));
             API\Dispatcher::sendResponse(null, $token, Common\Enums\HttpStatusEnum::CREATED, $format);
         } catch (Exception $e) {
+error_log("Exception: " . $e->getMessage());
             API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
         }
     }
