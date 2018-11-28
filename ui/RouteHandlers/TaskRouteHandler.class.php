@@ -1354,7 +1354,8 @@ class TaskRouteHandler
             }
         }
 
-        $adminAccess = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID()) || $adminDao->isOrgAdmin($project->getOrganisationId(), Common\Lib\UserSession::getCurrentUserID());
+        $site_admin = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
+        $adminAccess = $site_admin || $adminDao->isOrgAdmin($project->getOrganisationId(), Common\Lib\UserSession::getCurrentUserID());
 
         $app->view()->setData("task", $task);
 
@@ -1390,7 +1391,9 @@ class TaskRouteHandler
                 }
 
                 $task->setTargetLocale($targetLocale);
+            }
 
+            if ($site_admin || $task->getTaskStatus() < Common\Enums\TaskStatusEnum::IN_PROGRESS) {
                 if (isset($post['word_count']) && ctype_digit($post['word_count'])) {
                     $task->setWordCount($post['word_count']);
                 } elseif (isset($post['word_count']) && $post['word_count'] != "") {
@@ -1553,6 +1556,7 @@ class TaskRouteHandler
             "publishStatus"      => $publishStatus,
             'showRestrictTask'    => $taskDao->organisationHasQualifiedBadge($project->getOrganisationId()),
             'restrictTaskStatus'  => $restrictTaskStatus,
+            'site_admin'          => $site_admin,
             'adminAccess'         => $adminAccess,
             'required_qualification_level' => $taskDao->getRequiredTaskQualificationLevel($task_id),
             'allow_downloads'     => $allow_downloads,
