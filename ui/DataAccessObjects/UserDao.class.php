@@ -855,7 +855,7 @@ $from_neon_to_trommons_pair = array(
 'Burmese' => array('my', 'MM'),
 'Catalan' => array('ca', 'ES'),
 'Catalan Valencian' => array('ca', '--'),
-'Cebuano' => array('cb', 'PH'),
+'Cebuano' => array('ceb', 'PH'),
 'Chinese Simplified' => array('zh', 'CN'),
 'Chinese Traditional' => array('zh', 'TW'),
 'Croatian' => array('hr', 'HR'),
@@ -979,7 +979,7 @@ $from_neon_to_trommons_pair = array(
 'Fijian' => array('fj', 'FJ'),
 'Bislama' => array('bi', 'VU'),
 'Tok Pisin' => array('tpi', 'PG'),
-'Tongan' => array('ton', 'TO'),
+'Tongan' => array('to', 'TO'),
 
 'Saint Lucian Creole French' => array('acf', 'LC'),
 'Antigua and Barbuda Creole English' => array('aig', 'AG'),
