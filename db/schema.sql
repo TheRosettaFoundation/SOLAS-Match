@@ -6653,7 +6653,8 @@ BEGIN
         l.`en-name` AS language_name,
         c.code AS country_code,
         c.`en-name` AS country_name,
-        'Native' AS native_or_secondary
+        'Native' AS native_or_secondary,
+        '' AS level
     FROM Users     u
     JOIN UserPersonalInformation i ON u.id=i.user_id
     JOIN Languages l ON u.language_id=l.id
@@ -6672,7 +6673,12 @@ UNION
         l.`en-name` AS language_name,
         c.code AS country_code,
         c.`en-name` AS country_name,
-        'Source' AS native_or_secondary
+        'Source' AS native_or_secondary,
+        CASE
+            WHEN uqp.qualification_level=1 THEN 'Translator'
+            WHEN uqp.qualification_level=2 THEN 'Verified Translator'
+            WHEN uqp.qualification_level=3 THEN 'Senior Translator'
+        END AS level
     FROM Users                   u
     JOIN UserPersonalInformation i ON u.id=i.user_id
     JOIN UserQualifiedPairs    uqp ON u.id=uqp.user_id
@@ -6692,7 +6698,12 @@ UNION
         l.`en-name` AS language_name,
         c.code AS country_code,
         c.`en-name` AS country_name,
-        'Target' AS native_or_secondary
+        'Target' AS native_or_secondary,
+        CASE
+            WHEN uqp.qualification_level=1 THEN 'Translator'
+            WHEN uqp.qualification_level=2 THEN 'Verified Translator'
+            WHEN uqp.qualification_level=3 THEN 'Senior Translator'
+        END AS level
     FROM Users                   u
     JOIN UserPersonalInformation i ON u.id=i.user_id
     JOIN UserQualifiedPairs    uqp ON u.id=uqp.user_id
