@@ -1716,7 +1716,7 @@ class ProjectRouteHandler
         //Asana
         $re = curl_init('https://app.asana.com/api/1.0/tasks');
         curl_setopt($re, CURLOPT_POSTFIELDS, array(
-            'name' => $project->getTitle(),
+            'name' => str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getTitle()),
             'notes' => "Partner: $org_name, Target: $targetlanguages, Deadline: ".$project->getDeadline() . ' https:/'.'/'.$_SERVER['SERVER_NAME']."/project/$projectId/view",
             'projects' => Common\Lib\Settings::get('asana.project')
             )
