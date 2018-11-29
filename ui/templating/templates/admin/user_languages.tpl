@@ -15,14 +15,15 @@
 
 <table style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-    <th width="15%">Display Name</th>
+    <th width="12%">Display Name</th>
     <th width="21%">Email</th>
-    <th width="25%">Name</th>
+    <th width="20%">Name</th>
     <th width="5%">Code</th>
-    <th width="12%">Language</th>
+    <th width="10%">Language</th>
     <th width="5%">Code</th>
     <th width="12%">Country</th>
     <th width="5%"></th>
+    <th width="10%">Level</th>
   </thead>
 
   <tbody>
@@ -37,6 +38,7 @@
       <td>{$user_row['country_code']}</td>
       <td>{$user_row['country_name']}</td>
       <td>{$user_row['native_or_secondary']}</td>
+      <td>{$user_row['level']}</td>
     </tr>
 
   {/foreach}
