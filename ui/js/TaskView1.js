@@ -79,6 +79,18 @@ function DAOgetWordCount()
     )
 }
 
+function check15More()
+{
+  var count = 0;
+  $(".not_sent:not(:checked)").each(function ()
+    {
+      if (count++ < 2) {
+        $(this).attr("checked", "checked");
+      }
+    }
+  );
+}
+
 function functionOnSuccess()
 {
   document.getElementById('mymailto').click();
@@ -108,7 +120,7 @@ function sendEmails()
       + "&body="    + document.getElementById("mailto_body").innerHTML);
   }
 
-  if (userIDs != "") DAOTaskInvitesSentToUsers(userIDs, functionOnSuccess, functionOnFail);
+//  if (userIDs != "") DAOTaskInvitesSentToUsers(userIDs, functionOnSuccess, functionOnFail);
 }
 
 function DAOTaskInvitesSentToUsers(userIDs, functionOnSuccess, functionOnFail)
