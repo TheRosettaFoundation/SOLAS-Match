@@ -120,6 +120,7 @@ function sendEmails()
       + "&body="    + document.getElementById("mailto_body").innerHTML);
   }
 
+functionOnSuccess();
 //  if (userIDs != "") DAOTaskInvitesSentToUsers(userIDs, functionOnSuccess, functionOnFail);
 }
 
