@@ -7560,7 +7560,7 @@ BEGIN
     WHERE
         ti.task_id=taskID
     GROUP BY ti.user_id
-    ORDER BY ti.date_sent_invite ASC;
+    ORDER BY MAX(ti.date_sent_invite) ASC;
 END//
 DELIMITER ;
 
