@@ -79,6 +79,18 @@ function DAOgetWordCount()
     )
 }
 
+function check15More()
+{
+  var count = 0;
+  $(".not_sent:not(:checked)").each(function ()
+    {
+      if (count++ < 15) {
+        $(this).attr("checked", "checked");
+      }
+    }
+  );
+}
+
 function functionOnSuccess()
 {
   document.getElementById('mymailto').click();

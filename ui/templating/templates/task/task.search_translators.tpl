@@ -81,6 +81,9 @@
   <button onclick="sendEmails(); return false;" class="btn btn-success">
     <i class="icon-list-alt icon-white"></i> Send Invite to Selected Users
   </button>
+  <button onclick="check15More(); return false;" class="btn btn-success">
+    <i class="icon-list-alt icon-white"></i> Check the next 15
+  </button>
 </p>
 <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
@@ -98,7 +101,7 @@
   <tbody>
   {foreach $all_users as $user_row}
     <tr>
-      <td><input type="checkbox" class="translator_invite" id="{$user_row['user_id']}" email="{$user_row['email']}" /></td>
+      <td><input type="checkbox" class="translator_invite not_sent" id="{$user_row['user_id']}" email="{$user_row['email']}" /></td>
       <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['display_name'])}</a></td>
       <td>{$user_row['email']}</td>
       <td>{TemplateHelper::uiCleanseHTML($user_row['first_name'])} {TemplateHelper::uiCleanseHTML($user_row['last_name'])}</td>
