@@ -82,8 +82,8 @@ $app->configureMode('production', function () use ($app) {
         'cookies.lifetime' => Common\Lib\Settings::get('site.cookie_timeout'),
         'cookies.encrypt' => true,
         'cookies.secret_key' => Common\Lib\Settings::get('session.site_key'),
-        'cookies.cipher' => MCRYPT_RIJNDAEL_256,
-        'cookies.cipher_mode' => MCRYPT_MODE_CBC
+        'cookies.cipher' => '',
+        'cookies.cipher_mode' => ''
     ));
 });
 
@@ -94,8 +94,8 @@ $app->configureMode('development', function () use ($app) {
         'cookies.lifetime' => Common\Lib\Settings::get('site.cookie_timeout'),
         'cookies.encrypt' => true,
         'cookies.secret_key' => Common\Lib\Settings::get('session.site_key'),
-        'cookies.cipher' => MCRYPT_RIJNDAEL_256,
-        'cookies.cipher_mode' => MCRYPT_MODE_CBC
+        'cookies.cipher' => '',
+        'cookies.cipher_mode' => ''
     ));
 });
 
@@ -108,8 +108,8 @@ $app->add(new \Slim\Middleware\SessionCookie(array(
     'name' => 'slim_session',
     'encrypt' => true,
     'secret' => Common\Lib\Settings::get('session.site_key'),
-    'cipher' => MCRYPT_RIJNDAEL_256,
-    'cipher_mode' => MCRYPT_MODE_CBC
+    'cipher' => '',
+    'cipher_mode' => ''
 )));
 
 // Register static classes so they can be used in smarty templates

@@ -56,8 +56,8 @@ class Dispatcher
                     'cookies.lifetime' => Common\Lib\Settings::get('site.cookie_timeout'),
                     'cookies.encrypt' => true,
                     'cookies.secret_key' => Common\Lib\Settings::get('session.site_key'),
-                    'cookies.cipher' => MCRYPT_RIJNDAEL_256,
-                    'cookies.cipher_mode' => MCRYPT_MODE_CBC
+                    'cookies.cipher' => '',
+                    'cookies.cipher_mode' => ''
                 ));
             });
         }
