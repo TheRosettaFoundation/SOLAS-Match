@@ -216,6 +216,7 @@ class UserDao
         $args = Lib\PDOWrapper::cleanseNull($userId);
         $response = Lib\PDOWrapper::call('finishRegistration', $args);
         BadgeDao::assignBadge($userId, Common\Enums\BadgeTypes::REGISTERED);
+        Lib\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', Lib\PDOWrapper::cleanse($userId) . ',2,1');
         return $response[0]['result'];
     }
 
@@ -225,6 +226,7 @@ class UserDao
         $response = Lib\PDOWrapper::call('finishRegistrationManually', $args);
         if ($response[0]['result']) {
             BadgeDao::assignBadge($response[0]['result'], Common\Enums\BadgeTypes::REGISTERED);
+            Lib\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', Lib\PDOWrapper::cleanse($response[0]['result']) . ',2,1');
         }
         return $response[0]['result'];
     }
