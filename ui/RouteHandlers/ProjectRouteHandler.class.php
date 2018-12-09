@@ -2280,9 +2280,11 @@ class ProjectRouteHandler
         $projectDao = new DAO\ProjectDao();
         $project = $projectDao->getProject($project_id);
 
+        if (!empty($project)) {
         $this->project_cron_1_minute(); // Trigger update
 
         $word_count = $project->getWordCount();
+        }
         if (empty($word_count) || $word_count == 1) $word_count = '-';
 
         \Slim\Slim::getInstance()->response()->body($word_count);
