@@ -98,7 +98,9 @@ class StatisticsDao extends BaseDao
         $result = LibAPI\PDOWrapper::call('complete_matecat', '');
 
         foreach ($result as $index => $user_row) {
-           $stats = $this->get_matecat_task_stats($user_row['task_id'], $user_row['task_type'], $user_row['project_id'], $user_row['matecat_langpair_or_blank'], $user_row['matecat_id_job_or_zero'], $user_row['matecat_id_job_password_or_blank']);
+           //$stats = $this->get_matecat_task_stats($user_row['task_id'], $user_row['task_type'], $user_row['project_id'], $user_row['matecat_langpair_or_blank'], $user_row['matecat_id_job_or_zero'], $user_row['matecat_id_job_password_or_blank']);
+           // Above takes too long...
+           $stats = $this->get_matecat_task_urls($user_row['task_id'], $user_row['task_type'], $user_row['project_id'], $user_row['matecat_langpair_or_blank'], $user_row['matecat_id_job_or_zero'], $user_row['matecat_id_job_password_or_blank']);
 
            $result[$index]['DOWNLOAD_STATUS'] = '';
            $result[$index]['TRANSLATED_PERC_FORMATTED'] = '';
