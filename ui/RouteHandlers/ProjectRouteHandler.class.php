@@ -127,7 +127,7 @@ class ProjectRouteHandler
 
         $project = $projectDao->getProject($project_id);
         if (empty($project)) {
-            $app->flash('error', 'This project does not exist!');
+            $app->flash('error', 'That project does not exist!');
             $app->redirect($app->urlFor('home'));
         }
 
