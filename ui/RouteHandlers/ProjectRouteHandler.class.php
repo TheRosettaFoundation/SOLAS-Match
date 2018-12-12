@@ -126,6 +126,11 @@ class ProjectRouteHandler
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $project = $projectDao->getProject($project_id);
+        if (empty($project)) {
+            $app->flash('error', 'That project does not exist!');
+            $app->redirect($app->urlFor('home'));
+        }
+
         $app->view()->setData("project", $project);
 
         if ($app->request()->isPost()) {
