@@ -153,8 +153,18 @@
 		                </a>
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 		            </form> 
+                <a href="{urlFor name="task-search_translators" options="task_id.$task_id"}" target="_blank" class="btn btn-primary">
+                    <i class="icon-user icon-white"></i>&nbsp;Search for Translators
+                </a>
 		        </div>
 		    {/if}
+        {if $isSiteAdmin && isset($registered)}
+            <div class="well">
+                <a href="{urlFor name="task-search_translators" options="task_id.$task_id"}" target="_blank" class="btn btn-primary">
+                    <i class="icon-user icon-white"></i>&nbsp;Search for Translators
+                </a>
+            </div>
+        {/if}
 		
 		    <p style="margin-bottom: 40px"/>        
         {if !empty($file_preview_path)}
