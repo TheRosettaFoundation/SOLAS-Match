@@ -75,16 +75,20 @@
 </table>
 {/if}
 
-{if !empty($all_users)}
+{if !empty($all_users) || !empty($sent_users)}
 <p>
   <a href="" id="mymailto" style="display:none"></a>
   <button onclick="sendEmails(); return false;" class="btn btn-success">
     <i class="icon-list-alt icon-white"></i> Send Invite to Selected Users
   </button>
+  {if !empty($all_users)}
   <button onclick="check15More(); return false;" class="btn btn-success">
     <i class="icon-list-alt icon-white"></i> Check the next 15
   </button>
+  {/if}
 </p>
+{/if}
+{if !empty($all_users)}
 <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
     <th width="8%">Send Invite?</th>

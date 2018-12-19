@@ -127,7 +127,7 @@ class ProjectRouteHandler
 
         $project = $projectDao->getProject($project_id);
         if (empty($project)) {
-            $app->flash('error', 'This project does not exist!');
+            $app->flash('error', 'That project does not exist!');
             $app->redirect($app->urlFor('home'));
         }
 
@@ -2010,7 +2010,9 @@ class ProjectRouteHandler
             foreach ($active_tasks_for_chunks as $active_task) {
                 $projects[$active_task['project_id']] = $active_task['project_id'];
             }
-            $project_id = array_rand($projects); // Pick a random Project, we don't want to do all at once.
+
+          if (count($projects) > 10) $projects = array_rand($projects, 10); // Pick random Projects, we don't want to do too many at once.
+          foreach ($projects as $project_id) {
             $chunks = $taskDao->getStatusOfSubChunks($project_id);
 
             foreach ($active_tasks_for_chunks as $active_task) {
@@ -2027,6 +2029,7 @@ class ProjectRouteHandler
                     }
                 }
             }
+          }
         }
 
         flock($fp_for_lock, LOCK_UN); // Release the lock
@@ -2104,8 +2107,10 @@ class ProjectRouteHandler
 'kk' => 'kk-KZ',
 'km' => 'km-KH',
 'ko' => 'ko-KR',
-'ku' => 'ku-KMR',
-'ku-CKB' => 'ku-CKB',
+'ku' => 'ku-CKB',
+'ckb' => 'ku-CKB',
+'kmr' => 'ku-KMR',
+'sdh' => 'ku-CKB',
 'ky' => 'ky-KG',
 'kar' => 'kar-MM',
 'lo' => 'lo-LA',
@@ -2136,8 +2141,8 @@ class ProjectRouteHandler
 'prs' => 'fa-PRS',
 'fa' => 'fa-IR',
 'pl' => 'pl-PL',
-'pt-PT' => 'pt-PT',
-'pt' => 'pt-BR',
+'pt' => 'pt-PT',
+'pt-BR' => 'pt-BR',
 'qu' => 'qu-XN',
 'rhg' => 'rhg-MM',
 'rhl' => 'rhl-MM',
@@ -2153,8 +2158,8 @@ class ProjectRouteHandler
 'sk' => 'sk-SK',
 'sl' => 'sl-SI',
 'so' => 'so-SO',
-'es-ES' => 'es-ES',
-'es' => 'es-MX',
+'es' => 'es-ES',
+'es-MX' => 'es-MX',
 'es-CO' => 'es-CO',
 'su' => 'su-ID',
 'sw' => 'sw-KE',
