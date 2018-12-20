@@ -695,9 +695,11 @@ class TaskRouteHandler
         $taskDao = new DAO\TaskDao();
 
         $headerArr = $taskDao->downloadTaskVersion($taskId, $version, $convert);
-        $headerArr = json_decode($headerArr);
-        foreach ($headerArr as $key => $val) {
-            $app->response->headers->set($key, $val);
+        if (!empty($headerArr)) {
+            $headerArr = unserialize($headerArr);
+            foreach ($headerArr as $key => $val) {
+                $app->response->headers->set($key, $val);
+            }
         }
     }
 
@@ -1302,6 +1304,7 @@ class TaskRouteHandler
         $adminDao = new DAO\AdminDao();
         $currentTask = $taskDao->getTask($task_id);
         $currentTaskStatus = $currentTask->getTaskStatus();
+        $taskPreReqIds = array();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
@@ -1500,7 +1503,7 @@ class TaskRouteHandler
             $currentRow = $node->getPrevious();
             $previousRow = array();
 
-            while (count($currentRow) > 0) {
+            while (!empty($currentRow) && count($currentRow) > 0) {
                 foreach ($currentRow as $nodeId) {
                     $index = $graphBuilder->find($nodeId, $graph);
                     $node = $graph->getAllNodes($index);
@@ -2498,7 +2501,7 @@ class TaskRouteHandler
             }
         }
 
-        if (count($reviews) > 0) {
+        if (!empty($reviews) && count($reviews) > 0) {
             $app->flashNow("info", Lib\Localisation::getTranslation('task_review_4'));
         }
 

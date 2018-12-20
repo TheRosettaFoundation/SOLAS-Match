@@ -139,7 +139,7 @@ class IO
 
         $project = DAO\ProjectDao::getProject($projectId);
         $imageFileList = glob(Common\Lib\Settings::get("files.upload_path")."proj-$projectId/image/image.*");
-        if (count($imageFileList) > 0) {
+        if (!empty($imageFileList) && count($imageFileList) > 0) {
             $currentImageFile = $imageFileList[0];
             $currentFileName = pathinfo($currentImageFile, PATHINFO_FILENAME);
             $currentfileExt = pathinfo($currentImageFile, PATHINFO_EXTENSION);
@@ -293,6 +293,7 @@ class IO
 
     public static function saveProjectFile($projectId, $filename, $userId, $format = ".json")
     {
+        error_log("saveProjectFile($projectId, $filename, $userId...)");
         if (!is_numeric($userId) && strstr($userId, '.')) {
             $userId = explode('.', $userId);
             $format = '.'.$userId[1];
@@ -301,8 +302,10 @@ class IO
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         try {
             $token = self::saveProjectFileToFs($projectId, $data, urldecode($filename), $userId);
+            error_log('CREATED');
             API\Dispatcher::sendResponse(null, $token, Common\Enums\HttpStatusEnum::CREATED, $format);
         } catch (Exception $e) {
+            error_log('Exception: ' . $e->getMessage());
             API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
         }
     }
@@ -405,13 +408,19 @@ class IO
         if (!file_exists($destination)) {
             mkdir($destination, 0755);
         }
+        error_log("destination: $destination");
+
         $mime = self::detectMimeType($file, $filename);
+        error_log("detectMimeType: $mime");
+
         $apiHelper = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
         $canonicalMime = $apiHelper->getCanonicalMime($filename);
+        error_log("getCanonicalMime: $canonicalMime");
 
         if (!is_null($canonicalMime) && $mime != $canonicalMime) {
             $message = "The content type ($mime) of the file you are trying to upload does not";
             $message .= " match the content type ($canonicalMime) expected from its extension.";
+            error_log($message);
             throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::BAD_REQUEST);
         }
             $token = DAO\ProjectDao::recordProjectFileInfo($projectId, $filename, $userId, $mime);
@@ -424,10 +433,12 @@ class IO
             }
             if ($physical_pointer === false) {
                 $message = "Failed to write file data ($projectId).";
+                error_log($message);
                 throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::INTERNAL_SERVER_ERROR);
             }
         } catch (\Exception $e) {
             $message = "You cannot upload a project file for project ($projectId), as one already exists.";
+            error_log($message);
             throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::CONFLICT);
         }
 
@@ -467,7 +478,7 @@ class IO
 
         try {
              $imageFileList = glob(Common\Lib\Settings::get("files.upload_path")."proj-$projectId/image/image.*");
-                if (count($imageFileList)>0)
+                if (!empty($imageFileList) && count($imageFileList)>0)
                 {
                     $currentImageFile = $imageFileList[0];
                     $currentfileName = pathinfo($currentImageFile, PATHINFO_FILENAME);

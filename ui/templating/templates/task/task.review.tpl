@@ -28,7 +28,7 @@ Tweet</a>
 
 {foreach $tasks as $task}
     {assign var="reviewedTask" value=$task}
-    {if isset($reviews[$task->getId()])}
+    {if !empty($task->getId()) && !empty($reviews[$task->getId()])}
         {assign var="review" value=$reviews[$task->getId()]}
     {else}
         {assign var="review" value=null}

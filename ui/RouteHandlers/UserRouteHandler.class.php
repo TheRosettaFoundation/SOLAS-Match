@@ -1123,11 +1123,7 @@ EOD;
 
         $notifData = $userDao->getUserTaskStreamNotification($user_id);
         if ($notifData) {
-            if ($notifData->hasStrict()) {
-                $strict = $notifData->getStrict();
-            } else {
-                $strict = false;
-            }
+            $strict = $notifData->getStrict();
 
             $app->view()->appendData(array(
                 'intervalId' => $notifData->getInterval(),
@@ -1375,11 +1371,7 @@ EOD;
                 $lastSent = date(Common\Lib\Settings::get("ui.date_format"), strtotime($notifData->getLastSent()));
             }
 
-            if ($notifData->hasStrict()) {
-                $strict = $notifData->getStrict();
-            } else {
-                $strict = false;
-            }
+            $strict = $notifData->getStrict();
 
             $app->view()->appendData(array(
                 "interval"  => $interval,

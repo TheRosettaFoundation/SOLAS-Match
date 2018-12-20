@@ -689,7 +689,7 @@ class ModelFactory
             $ret->setTaskStatus($modelData['taskStatus']);
         }
         if (isset($modelData['published'])) {
-            $ret->setPublished($modelData['published'] == "\x01" ? 1 : 0);
+            $ret->setPublished($modelData['published'] ? 1 : 0);
         }
         
         return $ret;
@@ -779,11 +779,11 @@ class ModelFactory
         $ret->setSourceLocale($sourceLocale);
         
         if (isset($modelData['imageUploaded'])) {
-            $ret->setImageUploaded($modelData['imageUploaded'] == "\x01" ? 1 : 0);
+            $ret->setImageUploaded($modelData['imageUploaded'] ? 1 : 0);
         }
         
         if (isset($modelData['imageApproved'])) {
-            $ret->setImageApproved($modelData['imageApproved']  == "\x01" ? 1 : 0);
+            $ret->setImageApproved($modelData['imageApproved'] ? 1 : 0);
         }
         
         if (isset($modelData['tag'])) {
@@ -867,11 +867,11 @@ class ModelFactory
         }
 
         if (isset($modelData['imageUploaded'])) {
-            $ret->setImageUploaded($modelData['imageUploaded'] == "\x01" ? 1 : 0);
+            $ret->setImageUploaded($modelData['imageUploaded'] ? 1 : 0);
         }
         
         if (isset($modelData['imageApproved'])) {
-            $ret->setImageApproved($modelData['imageApproved']  == "\x01" ? 1 : 0);
+            $ret->setImageApproved($modelData['imageApproved'] ? 1 : 0);
         }
 
         return $ret;
@@ -955,7 +955,7 @@ class ModelFactory
             $ret->setCountry($modelData['country']);
         }
         if (isset($modelData['receive_credit'])) {
-            $ret->setReceiveCredit($modelData['receive_credit'] == "\x01" ? true : false);
+            $ret->setReceiveCredit($modelData['receive_credit'] ? true : false);
         }
         
         return $ret;

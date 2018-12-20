@@ -22,7 +22,7 @@
 
     <div class="row">
         <div class="span8">
-            {if isset($tasks)}
+            {if !empty($tasks)}
                 <div id="tasks">
                     {foreach from=$tasks item=task}
                             {include file="task/task.summary-link.tpl" task=$task}

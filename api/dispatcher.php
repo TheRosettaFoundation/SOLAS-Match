@@ -11,7 +11,7 @@ mb_internal_encoding("UTF-8");
 
 require __DIR__."/vendor/autoload.php";
 
-\DrSlump\Protobuf::autoload();
+//\DrSlump\Protobuf::autoload();
 
 require_once __DIR__."/lib/Middleware.php";
 require_once __DIR__."/OAuth2/Client.php";
@@ -56,8 +56,8 @@ class Dispatcher
                     'cookies.lifetime' => Common\Lib\Settings::get('site.cookie_timeout'),
                     'cookies.encrypt' => true,
                     'cookies.secret_key' => Common\Lib\Settings::get('session.site_key'),
-                    'cookies.cipher' => MCRYPT_RIJNDAEL_256,
-                    'cookies.cipher_mode' => MCRYPT_MODE_CBC
+                    'cookies.cipher' => '',
+                    'cookies.cipher_mode' => ''
                 ));
             });
         }
@@ -224,7 +224,7 @@ class Dispatcher
         $ret = array();
         foreach ($temp as $provider) {
             if ($provider != "." && $provider != ".." && strncmp($provider, ".", 1)) {
-                $ret[] = substr($provider, 0, sizeof($provider)-5);
+                $ret[] = substr($provider, 0, -4);
             }
         }
         return $ret;

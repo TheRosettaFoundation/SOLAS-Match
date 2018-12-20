@@ -7592,9 +7592,13 @@ BEGIN
     LEFT JOIN Countries                  cn ON u.country_id=cn.id
     LEFT JOIN UserPersonalInformation     i ON u.id=i.user_id
     LEFT JOIN TaskInviteSentToUsers     tis ON u.id=tis.user_id AND tis.task_id=taskID
+    LEFT JOIN Admins                      a ON uqp.user_id=a.user_id
+    LEFT JOIN OrganisationMembers         o ON uqp.user_id=o.user_id
     WHERE
         t.id=taskID AND
-        tis.user_id IS NULL
+        tis.user_id IS NULL AND
+        a.user_id IS NULL AND
+        o.user_id IS NULL
     GROUP BY uqp.user_id
     ORDER BY uqp.user_id DESC;
 END//
