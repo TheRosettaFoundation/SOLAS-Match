@@ -2136,7 +2136,8 @@ BEGIN
         FROM Languages
         WHERE id IN (SELECT `language_id-source`
                         FROM Tasks
-                        WHERE published = 1 AND `task-status_id` = 2);
+                        WHERE published = 1 AND `task-status_id` = 2)
+    ORDER BY `en-name`;
 END//
 DELIMITER ;
 
@@ -2151,7 +2152,8 @@ BEGIN
         FROM Languages
         WHERE id IN (SELECT `language_id-target`
                         FROM Tasks
-                        WHERE published = 1 AND `task-status_id` = 2);
+                        WHERE published = 1 AND `task-status_id` = 2)
+    ORDER BY `en-name`;
 END//
 DELIMITER ;
 
