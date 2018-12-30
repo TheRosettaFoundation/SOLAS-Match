@@ -760,6 +760,8 @@ class UserDao extends BaseDao
 
     public function get_neon_account($user)
     {
+        if (strpos($user->getEmail(), '@aaa.bbb')) return 0; // Deleted User
+
         $account_id = 0;
         $result = LibAPI\PDOWrapper::call('get_neon_account', LibAPI\PDOWrapper::cleanse($user->getId()));
         if (!empty($result)) {
