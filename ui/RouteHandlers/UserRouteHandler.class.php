@@ -1188,8 +1188,10 @@ EOD;
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         if (!is_null($loggedInUserId)) {
-            $app->view()->setData("isSiteAdmin", $adminDao->isSiteAdmin($loggedInUserId));
+            $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
+            $app->view()->setData('isSiteAdmin', $isSiteAdmin);
         } else {
+            $isSiteAdmin = 0;
             $app->view()->setData('isSiteAdmin', 0);
         }
         $user = null;
@@ -1261,6 +1263,12 @@ EOD;
         else {
             $langPrefName = '';
         }
+
+        if ($isSiteAdmin) {
+            $account_id = $userDao->get_neon_account($user);
+        } else {
+            $account_id = 0;
+        }
         
         $app->view()->appendData(array(
             'sesskey' => $sesskey,
@@ -1276,6 +1284,7 @@ EOD;
             "userPersonalInfo" => $userPersonalInfo,
             "langPrefName" => $langPrefName,
             "userQualifiedPairs" => $userQualifiedPairs,
+            'account_id' => $account_id,
             "taskTypeColours" => $taskTypeColours
         ));
                 
