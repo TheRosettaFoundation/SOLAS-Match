@@ -1504,6 +1504,14 @@ CREATE TABLE IF NOT EXISTS `PrivateTMKeys` (
     CONSTRAINT FK_PrivateTMKeys_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `UserNeonAccount` (
+  user_id    INT(10) UNSIGNED NOT NULL,
+  account_id INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY FK_UserNeonAccount_user_id (user_id),
+  KEY         account_id                 (account_id),
+  CONSTRAINT FK_UserNeonAccount_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -2136,7 +2144,8 @@ BEGIN
         FROM Languages
         WHERE id IN (SELECT `language_id-source`
                         FROM Tasks
-                        WHERE published = 1 AND `task-status_id` = 2);
+                        WHERE published = 1 AND `task-status_id` = 2)
+    ORDER BY `en-name`;
 END//
 DELIMITER ;
 
@@ -2151,7 +2160,8 @@ BEGIN
         FROM Languages
         WHERE id IN (SELECT `language_id-target`
                         FROM Tasks
-                        WHERE published = 1 AND `task-status_id` = 2);
+                        WHERE published = 1 AND `task-status_id` = 2)
+    ORDER BY `en-name`;
 END//
 DELIMITER ;
 
@@ -7694,6 +7704,22 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_project_tm_key`(IN `projectID` INT)
 BEGIN
     SELECT * FROM PrivateTMKeys WHERE project_id=projectID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_neon_account`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_neon_account`(IN userID INT)
+BEGIN
+     SELECT * FROM UserNeonAccount WHERE user_id=userID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_neon_account`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_neon_account`(IN userID INT, IN accountID INT)
+BEGIN
+    REPLACE INTO UserNeonAccount (user_id, account_id) VALUES (userID, accountID);
 END//
 DELIMITER ;
 

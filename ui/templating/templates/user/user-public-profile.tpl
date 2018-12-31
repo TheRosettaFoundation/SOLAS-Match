@@ -153,7 +153,7 @@
             </div>
         </td>
         
-        {if isset($userPersonalInfo) && (isset($private_access)  || $isSiteAdmin)}
+        {if isset($userPersonalInfo) && (isset($private_access)  || $isSiteAdmin) || $account_id}
             <td style="width: 4%"/>
             <td style="width: 48%">            
                 <div>
@@ -273,6 +273,21 @@
                             <tr>
                                 <td>
                                     {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCountry())}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 10px"/>
+                            </tr>
+                        {/if}
+                        {if $account_id}
+                            <tr>
+                                <td>
+                                    <h3>Neon Account</h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="https://translatorswithoutborders.z2systems.com/np/admin/account/accountDetails.do?id={$account_id}#attributes" target="_blank">https://translatorswithoutborders.z2systems.com/np/admin/account/accountDetails.do?id={$account_id}#attributes</a>
                                 </td>
                             </tr>
                             <tr>

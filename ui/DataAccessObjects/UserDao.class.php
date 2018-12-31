@@ -753,6 +753,65 @@ class UserDao extends BaseDao
         $app->redirect($app->urlFor('no_application'));
     }
 
+    public function set_neon_account($user_id, $account_id)
+    {
+        LibAPI\PDOWrapper::call('set_neon_account', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($account_id));
+    }
+
+    public function get_neon_account($user)
+    {
+        if (strpos($user->getEmail(), '@aaa.bbb')) return 0; // Deleted User
+
+        $account_id = 0;
+        $result = LibAPI\PDOWrapper::call('get_neon_account', LibAPI\PDOWrapper::cleanse($user->getId()));
+        if (!empty($result)) {
+            $account_id = $result[0]['account_id'];
+        }
+
+        if ($account_id === 0) {
+            $neon = new \Neon();
+
+            $credentials = array(
+                'orgId'  => Common\Lib\Settings::get('neon.org_id'),
+                'apiKey' => Common\Lib\Settings::get('neon.api_key')
+            );
+
+            $loginResult = $neon->login($credentials);
+            if (isset($loginResult['operationResult']) && $loginResult['operationResult'] === 'SUCCESS') {
+                $search = array(
+                    'method' => 'account/listAccounts',
+                    'columns' => array(
+                        'standardFields' => array(
+                            'Email 1',
+                            'First Name',
+                            'Account ID'),
+                    )
+                );
+
+                $search['criteria'] = array(array('Email', 'EQUAL', $user->getEmail()));
+
+                $result = $neon->search($search);
+
+                $neon->go(array('method' => 'common/logout'));
+
+                if (!empty($result) && !empty($result['searchResults'])) {
+                    foreach ($result['searchResults'] as $r) {
+                        if (!empty($r['First Name'])) break; // If we find a First Name, then we have found the good account and we should use this one "$r" (normally there will only be one account)
+                    }
+
+                    if (!empty($r['Account ID'])) {
+                        $account_id = $r['Account ID'];
+                        $this->set_neon_account($user->getId(), $account_id);
+                    }
+                }
+            } else {
+                error_log("get_neon_account(), there was a problem connecting to NeonCRM");
+            }
+        }
+
+        return $account_id;
+    }
+
     public function verifyUserByEmail($email)
     {
         $user = null;
