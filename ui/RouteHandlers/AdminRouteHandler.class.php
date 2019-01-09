@@ -44,6 +44,12 @@ class AdminRouteHandler
         )->via('POST')->name('active_now_matecat');
 
         $app->get(
+            '/matecat_analyse_status/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'matecat_analyse_status')
+        )->via('POST')->name('matecat_analyse_status');
+
+        $app->get(
             '/late_matecat/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'late_matecat')
@@ -1096,6 +1102,17 @@ class AdminRouteHandler
         header('Cache-control: no-cache, must-revalidate, no-transform');
         echo $data;
         die;
+    }
+
+    public function matecat_analyse_status()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->matecat_analyse_status();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('admin/matecat_analyse_status.tpl');
     }
 }
 
