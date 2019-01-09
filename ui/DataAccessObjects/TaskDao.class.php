@@ -462,6 +462,14 @@ class TaskDao extends BaseDao
             LibAPI\PDOWrapper::cleanse($state));
     }
 
+    public function insertWordCountRequestForProjectsErrors($project_id, $status, $message)
+    {
+        LibAPI\PDOWrapper::call('insertWordCountRequestForProjectsErrors',
+            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($status) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($message);
+    }
+
     public function getWordCountRequestForProjects($state)
     {
         $result = LibAPI\PDOWrapper::call('getWordCountRequestForProjects', LibAPI\PDOWrapper::cleanse($state));

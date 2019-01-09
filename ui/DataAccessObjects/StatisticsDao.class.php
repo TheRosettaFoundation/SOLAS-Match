@@ -391,4 +391,10 @@ class StatisticsDao extends BaseDao
         $result = LibAPI\PDOWrapper::call('user_task_reviews', '');
         return $result;
     }
+
+    public function matecat_analyse_status()
+    {
+        $result = LibAPI\PDOWrapper::call('matecat_analyse_status', '');
+        return $result;
+    }
 }
