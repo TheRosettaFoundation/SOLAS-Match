@@ -1853,6 +1853,7 @@ class ProjectRouteHandler
                         if ($response_data['status'] === 'NO_SEGMENTS_FOUND') {
                             // Change status to Complete (3), Give up!
                             $taskDao->updateWordCountRequestForProjects($project_id, $matecat_id_project, $matecat_id_project_pass, 0, 3);
+                            $taskDao->insertWordCountRequestForProjectsErrors($project_id, $response_data['status'], empty($response_data['message']) ? '' : $response_data['message']);
                         }
                     }
                 } else {
@@ -1984,11 +1985,13 @@ class ProjectRouteHandler
                         error_log("project_cron /new ($project_id) status message: " . $response_data['message']);
                         // Change status to Complete (3), if there was an error!
                         $taskDao->updateWordCountRequestForProjects($project_id, 0, 0, 0, 3);
+                        $taskDao->insertWordCountRequestForProjectsErrors($project_id, $response_data['status'], $response_data['message']);
                     }
                     elseif (empty($response_data['id_project']) || empty($response_data['project_pass'])) {
                         error_log("project_cron /new ($project_id) id_project or project_pass empty!");
                         // Change status to Complete (3), if there was an error!
                         $taskDao->updateWordCountRequestForProjects($project_id, 0, 0, 0, 3);
+                        $taskDao->insertWordCountRequestForProjectsErrors($project_id, $response_data['status'], 'id_project or project_pass empty');
                     } else {
                         $matecat_id_project      = $response_data['id_project'];
                         $matecat_id_project_pass = $response_data['project_pass'];
