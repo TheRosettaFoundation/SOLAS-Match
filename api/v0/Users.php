@@ -1187,6 +1187,7 @@ class Users
     {
         try {
             $data = API\Dispatcher::getDispatcher()->request()->getBody();
+error_log("data: $data");
             $parsed_data = array();
             parse_str($data, $parsed_data);
             $access_token = $parsed_data['token'];
@@ -1208,6 +1209,7 @@ class Users
             );
 
             $response = json_decode($ret);
+error_log("response: " . print_r($response, true));
             $email = "";
             if(isset($response->audience))
             {
@@ -1232,6 +1234,7 @@ class Users
                             $access_token
                         );
                         $userInfo = json_decode($ret);
+error_log("userInfo: " . print_r($userInfo, true));
                         $email = $userInfo->email;
                     }
                 }
