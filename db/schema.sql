@@ -1400,6 +1400,14 @@ CREATE TABLE IF NOT EXISTS `WordCountRequestForProjects` (
     CONSTRAINT FK_WordCountRequestForProjects_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `WordCountRequestForProjectsErrors` (
+    project_id INT(10) UNSIGNED NOT NULL,
+    status  VARCHAR(30)  NOT NULL,
+    message VARCHAR(255) NOT NULL,
+    KEY FK_WordCountRequestForProjectsErrors_project_id (project_id),
+    CONSTRAINT FK_WordCountRequestForProjectsErrors_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS `MatecatLanguagePairs` (
     task_id BIGINT(20) UNSIGNED NOT NULL,
     project_id INT(10) UNSIGNED NOT NULL,
@@ -6902,6 +6910,33 @@ BEGIN
     INSERT INTO WordCountRequestForProjects
                (project_id, matecat_id_project, matecat_id_project_pass, source_language, target_languages, user_word_count, matecat_word_count, state)
         VALUES (pID,                         0,                      '',  sourceLanguage,  targetLanguages,   userWordCount,                  0,     0);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insertWordCountRequestForProjectsErrors`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertWordCountRequestForProjectsErrors`(IN `pID` INT, IN statusIN VARCHAR(30), IN messageIN VARCHAR(255))
+BEGIN
+    INSERT INTO WordCountRequestForProjectsErrors
+               (project_id, status,    message)
+        VALUES (pID,        statusIN,  messageIN);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `matecat_analyse_status`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `matecat_analyse_status`()
+BEGIN
+    SELECT
+        wc.*,
+        p.title,
+        IFNULL(wce.status,  '') AS status,
+        IFNULL(wce.message, '') AS message
+    FROM      WordCountRequestForProjects        wc
+    JOIN      Projects                            p ON wc.project_id=p.id
+    LEFT JOIN WordCountRequestForProjectsErrors wce ON wc.project_id=wce.project_id
+    ORDER BY project_id DESC
+    LIMIT 250;
 END//
 DELIMITER ;
 
