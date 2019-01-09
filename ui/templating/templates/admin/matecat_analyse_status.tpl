@@ -50,7 +50,12 @@
       <td></td>
       {/if}
       <td>{$user_row['matecat_word_count']}</td>
-      <td>{$user_row['state']}</td>
+      <td>
+      {if $user_row['state'] == 0}<span                                 >Waiting</span>{/if}
+      {if $user_row['state'] == 1}<span style="background-color:Yellow;">Uploaded</span>{/if}
+      {if $user_row['state'] == 2}<span style="background-color:Green;" >Success</span>{/if}
+      {if $user_row['state'] == 3}<span style="background-color:Red;"   >Fail</span>{/if}
+      </td>
       <td>{$user_row['status']}</td>
       <td>{$user_row['message']}</td>
     </tr>
