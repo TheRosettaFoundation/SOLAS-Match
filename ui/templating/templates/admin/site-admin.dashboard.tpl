@@ -28,6 +28,7 @@
     <p><a href="{urlFor name="community_stats"}">[Download community report]</a></p>
     <p><a href="{urlFor name="org_stats"}">[Download NGO report]</a></p>
     <p><a href="{urlFor name="community_dashboard"}">[Download community dashboard report]</a></p>
+    <p><a href="{urlFor name="matecat_analyse_status"}">List projects with MateCat analyse status</a></p>
     <hr />
 
     <form method="post" enctype="multipart/form-data" action="{urlFor name="search_users_by_language_pair"}" accept-charset="utf-8" target="_blank">

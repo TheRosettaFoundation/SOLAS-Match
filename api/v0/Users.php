@@ -1208,6 +1208,7 @@ class Users
             );
 
             $response = json_decode($ret);
+error_log("oauth2/v1/tokeninfo response: " . print_r($response, true));
             $email = "";
             if(isset($response->audience))
             {
