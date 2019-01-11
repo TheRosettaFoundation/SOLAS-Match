@@ -25,7 +25,7 @@
 
 <body>
 
-{if isset($all_users) && count($all_users) > 0}
+{if !empty($all_users)}
 
 <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
