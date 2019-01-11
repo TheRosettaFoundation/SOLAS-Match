@@ -6928,13 +6928,23 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `matecat_analyse_status`()
 BEGIN
     SELECT
-        wc.*,
-        p.title,
-        IFNULL(wce.status,  '') AS status,
-        IFNULL(wce.message, '') AS message
+        wc.project_id,
+        MIN(wc.matecat_id_project)      AS matecat_id_project,
+        MIN(wc.matecat_id_project_pass) AS matecat_id_project_pass,
+        MIN(wc.matecat_word_count)      AS matecat_word_count,
+        MIN(wc.state)                   AS state,
+        MIN(p.title)                    AS title,
+        IFNULL(MIN(tv.user_id), '')     AS creator_id,
+        IFNULL(MIN(u.email), '')        AS creator_email,
+        IFNULL(MIN(wce.status),  '')    AS status,
+        IFNULL(MIN(wce.message), '')    AS message
     FROM      WordCountRequestForProjects        wc
     JOIN      Projects                            p ON wc.project_id=p.id
+    JOIN      Tasks                               t ON wc.project_id=t.project_id
     LEFT JOIN WordCountRequestForProjectsErrors wce ON wc.project_id=wce.project_id
+    LEFT JOIN TaskFileVersions                   tv ON t.id=tv.task_id AND tv.version_id=0
+    LEFT JOIN Users                               u ON tv.user_id=u.id
+    GROUP BY wc.project_id
     ORDER BY project_id DESC
     LIMIT 250;
 END//
