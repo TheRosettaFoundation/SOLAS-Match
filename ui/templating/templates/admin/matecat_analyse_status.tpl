@@ -20,11 +20,12 @@
   <thead>
     <th width="10%">ID</th>
     <th width="20%">Title</th>
-    <th width="15%">Analyze URL</th>
+    <th width="20%">Creator</th>
+    <th width="10%">Analyze URL</th>
     <th width="10%">Word Count</th>
-    <th width="15%">State</th>
+    <th width="10%">State</th>
     <th width="10%">Status</th>
-    <th width="20%">Message</th>
+    <th width="10%">Message</th>
   </thead>
 
   <tbody>
@@ -33,6 +34,7 @@
     <tr>
       <td>{$user_row['project_id']}</td>
       <td><a href="{urlFor name="project-view" options="project_id.{$user_row['project_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['title'])}</a></td>
+      <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['creator_id']}"}" target="_blank">{$user_row['creator_email']}</a></td>
       {if !empty($user_row['matecat_id_project']) && !empty($user_row['matecat_id_project_pass'])}
       <td><a href="https://tm.translatorswb.org/analyze/proj-{$user_row['project_id']}/{$user_row['matecat_id_project']}-{$user_row['matecat_id_project_pass']}" target="_blank">Analyze URL</td>
       {else}
