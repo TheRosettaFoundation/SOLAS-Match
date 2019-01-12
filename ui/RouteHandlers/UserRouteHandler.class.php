@@ -861,7 +861,7 @@ class UserRouteHandler
             function render() {
                 gapi.signin2.render('g-signin2', {
                     scope: '$scope',
-                    width: 120,
+                    width: 219,
                     height: 36,
                     longtitle: true,
                     theme: 'dark',
