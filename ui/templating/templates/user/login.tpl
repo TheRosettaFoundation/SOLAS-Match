@@ -52,9 +52,7 @@
                 <div id="openid_choice">
                     {if isset($gplus) && ($gplus === 'y')}
 	                    <div id="gSignInWrapper">
-	                        <div id="customGplusBtn" class="customGPlusSignIn">
-	                           <span id="customGplusBtnIcon"></span>
-	                           <span id="customGplusBtnText">Google</span>
+                          <div id="g-signin2" class="g-signin2">
 	                        </div>
 	                    </div>
                     {/if}

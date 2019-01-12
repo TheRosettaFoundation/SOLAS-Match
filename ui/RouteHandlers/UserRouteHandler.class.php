@@ -858,7 +858,7 @@ class UserRouteHandler
         $script = <<<EOD
             <script type="text/javascript">
             function render() {
-                gapi.signin2.render('customGplusBtn', {
+                gapi.signin2.render('g-signin2', {
                     scope: Common\Lib\Settings::get('googlePlus.scope'),
                     width: 120,
                     height: 36,
