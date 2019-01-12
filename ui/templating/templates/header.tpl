@@ -2,6 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" >
     <head>
         <meta charset="utf-8" content="application/xhtml+xml" />
+
+        <meta name="google-signin-client_id" content="{Settings::get('googlePlus.client_id')}" />
 <!--        <meta name="google-translate-customization" content="d0b5975e5905d60f-4e4c167261d2937a-g4574d0ff41a34d5b-10" />-->
 
         <!-- css -->
