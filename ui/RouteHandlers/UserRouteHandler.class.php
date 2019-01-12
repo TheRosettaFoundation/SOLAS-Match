@@ -847,6 +847,7 @@ class UserRouteHandler
     private static function createGooglePlusJavaScript()
     {
         $app = \Slim\Slim::getInstance();    
+        $scope = Common\Lib\Settings::get("googlePlus.scope");
         $redirectUri = '';
         if (isset($_SERVER['HTTPS']) && !is_null($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
             $redirectUri = 'https://';
@@ -859,7 +860,7 @@ class UserRouteHandler
             <script type="text/javascript">
             function render() {
                 gapi.signin2.render('g-signin2', {
-                    scope: Common\Lib\Settings::get('googlePlus.scope'),
+                    scope: '$scope',
                     width: 120,
                     height: 36,
                     longtitle: true,
