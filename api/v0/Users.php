@@ -1188,6 +1188,7 @@ class Users
     {
         try {
             $data = API\Dispatcher::getDispatcher()->request()->getBody();
+error_log($data);
             $parsed_data = array();
             parse_str($data, $parsed_data);
 
@@ -1196,6 +1197,7 @@ class Users
             $client_id     = Common\Lib\Settings::get('googlePlus.client_id');
             $client_secret = Common\Lib\Settings::get('googlePlus.client_secret');
             $data = "code=$access_token&client_id=$client_id&client_secret=$client_secret&redirect_uri=&grant_type=authorization_code";
+error_log($data);
 
             $re = curl_init($request);
             curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
