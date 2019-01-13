@@ -872,6 +872,7 @@ class UserRouteHandler
 
             function onSignIn(googleUser) {
                 $('#gSignInWrapper').attr('style', 'display: none');
+                console.log('$redirectUri?gplustoken=' + googleUser.getAuthResponse(true).access_token);
                 window.location.replace('$redirectUri?gplustoken=' + googleUser.getAuthResponse(true).access_token);
             }
 
