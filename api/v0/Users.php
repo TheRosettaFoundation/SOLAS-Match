@@ -1195,7 +1195,7 @@ class Users
             $access_token  = $parsed_data['token'];
             $client_id     = Common\Lib\Settings::get('googlePlus.client_id');
             $client_secret = Common\Lib\Settings::get('googlePlus.client_secret');
-            $data = "code=$access_token&client_id=$client_id&client_secret=&redirect_uri=&grant_type=authorization_code";
+            $data = "code=$access_token&client_id=$client_id&client_secret=$client_secret&redirect_uri=&grant_type=authorization_code";
 
             $re = curl_init($request);
             curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
@@ -1210,12 +1210,12 @@ class Users
             curl_setopt($re, CURLOPT_HEADER, true);
             $res = curl_exec($re);
             $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
-error_log($res);
             $res = substr($res, $header_size);
             $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
             curl_close($re);
-error_log("responseCode: $responseCode");
             if ($responseCode != 200) {
+error_log("oauth2/v4/token responseCode: $responseCode");
+error_log($res);
                 throw new Exceptions\SolasMatchException($res, $responseCode);
             }
 
