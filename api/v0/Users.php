@@ -7,6 +7,7 @@ use \SolasMatch\API\DAO as DAO;
 use \SolasMatch\API\Lib as Lib;
 use \SolasMatch\API as API;
 use SolasMatch\API\DAO\AdminDao;
+use \SolasMatch\Common\Exceptions as Exceptions;
 
 require_once __DIR__.'/../../Common/protobufs/models/OAuthResponse.php';
 require_once __DIR__."/../../Common/protobufs/models/PasswordResetRequest.php";
@@ -1209,15 +1210,17 @@ class Users
             curl_setopt($re, CURLOPT_HEADER, true);
             $res = curl_exec($re);
             $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
+error_log($res);
             $res = substr($res, $header_size);
             $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
             curl_close($re);
-            if ($responseCode == 200) {
-                $response = json_decode($res);
-            } else {
-                throw new Exceptions\SolasMatchException($res, $this->responseCode);
+error_log("responseCode: $responseCode");
+            if ($responseCode != 200) {
+                throw new Exceptions\SolasMatchException($res, $responseCode);
             }
-error_log("oauth2/v1/tokeninfo response: " . print_r($response, true));
+
+            $response = json_decode($res);
+error_log("oauth2/v4/token response: " . print_r($response, true));
 
             $email = "";
             if(isset($response->audience))
