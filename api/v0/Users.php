@@ -1189,26 +1189,36 @@ class Users
             $data = API\Dispatcher::getDispatcher()->request()->getBody();
             $parsed_data = array();
             parse_str($data, $parsed_data);
-            $access_token = $parsed_data['token'];
-            
-            //validate token
-            $client = new Common\Lib\APIHelper("");
-            $request =  Common\Lib\Settings::get('googlePlus.token_validation_endpoint');
-            $args = null;
-            if ($access_token) {
-                $args = array("access_token" =>  $access_token );
-            } 
-            
-            $ret = $client->externalCall(
-                null,
-                $request,
-                Common\Enums\HttpMethodEnum::GET,
-                null,
-                $args
-            );
 
-            $response = json_decode($ret);
+            $request       = Common\Lib\Settings::get('googlePlus.token_endpoint');
+            $access_token  = $parsed_data['token'];
+            $client_id     = Common\Lib\Settings::get('googlePlus.client_id');
+            $client_secret = Common\Lib\Settings::get('googlePlus.client_secret');
+            $data = "code=$access_token&client_id=$client_id&client_secret=&redirect_uri=&grant_type=authorization_code";
+
+            $re = curl_init($request);
+            curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
+            curl_setopt($re, CURLOPT_POSTFIELDS, $data);
+            curl_setopt($re, CURLOPT_COOKIESESSION, true);
+            $httpHeaders = array(
+                'Content-Type: application/x-www-form-urlencoded',
+                'Content-Length: ' . strlen($data)
+            );
+            curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
+            curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($re, CURLOPT_HEADER, true);
+            $res = curl_exec($re);
+            $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
+            $res = substr($res, $header_size);
+            $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
+            curl_close($re);
+            if ($responseCode == 200) {
+                $response = json_decode($res);
+            } else {
+                throw new Exceptions\SolasMatchException($res, $this->responseCode);
+            }
 error_log("oauth2/v1/tokeninfo response: " . print_r($response, true));
+
             $email = "";
             if(isset($response->audience))
             {
