@@ -1196,7 +1196,8 @@ error_log($data);
             $access_token  = $parsed_data['token'];
             $client_id     = Common\Lib\Settings::get('googlePlus.client_id');
             $client_secret = Common\Lib\Settings::get('googlePlus.client_secret');
-            $data = urlencode("code=$access_token&client_id=$client_id&client_secret=$client_secret&redirect_uri=https://lingometer.com&grant_type=authorization_code");
+            $redirect_uri  = urlencode('https://lingometer.com');
+            $data = "code=$access_token&client_id=$client_id&client_secret=$client_secret&redirect_uri=$redirect_uri&grant_type=authorization_code";
 error_log($data);
 
             $re = curl_init($request);
