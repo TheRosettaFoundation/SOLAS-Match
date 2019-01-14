@@ -1188,80 +1188,31 @@ class Users
     {
         try {
             $data = API\Dispatcher::getDispatcher()->request()->getBody();
-error_log($data);
             $parsed_data = array();
             parse_str($data, $parsed_data);
+            $id_token = $parsed_data['token'];
 
-            $request       = Common\Lib\Settings::get('googlePlus.token_endpoint');
-            $access_token  = $parsed_data['token'];
-$dc = json_decode($access_token);
-error_log("id_token: " . print_r($dc, true));
-            $client_id     = Common\Lib\Settings::get('googlePlus.client_id');
-            $client_secret = Common\Lib\Settings::get('googlePlus.client_secret');
-            $redirect_uri  = urlencode('https://lingometer.com');
-            $data = "code=$access_token&client_id=$client_id&client_secret=$client_secret&redirect_uri=$redirect_uri&grant_type=authorization_code";
-error_log($data);
-
-            $re = curl_init($request);
-            curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
-            curl_setopt($re, CURLOPT_POSTFIELDS, $data);
-            curl_setopt($re, CURLOPT_COOKIESESSION, true);
-            $httpHeaders = array(
-                'Content-Type: application/x-www-form-urlencoded',
-                'Content-Length: ' . strlen($data)
+            $request =  Common\Lib\Settings::get('googlePlus.token_validation_endpoint');
+            $client = new Common\Lib\APIHelper('');
+            $ret = $client->externalCall(
+                null,
+                $request,
+                Common\Enums\HttpMethodEnum::GET,
+                null,
+                array('id_token' => $id_token)
             );
-            curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
-            curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($re, CURLOPT_HEADER, true);
-            $res = curl_exec($re);
-            $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
-            $res = substr($res, $header_size);
-            $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
-            curl_close($re);
-            if ($responseCode != 200) {
-error_log("oauth2/v4/token responseCode: $responseCode");
-error_log($res);
-                throw new Exceptions\SolasMatchException($res, $responseCode);
-            }
+            $response = json_decode($ret);
+error_log("oauth2/v3/tokeninfo response: " . print_r($response, true));
 
-            $response = json_decode($res);
-error_log("oauth2/v4/token response: " . print_r($response, true));
-
-            $email = "";
-            if(isset($response->audience))
-            {
-                $client_id = Common\Lib\Settings::get('googlePlus.client_id'); 
-                if ($client_id != $response->audience)
-                {
-                    throw new \Exception("Received token is not intended for this application.");
-                } else {
-                    if (isset($response->email))
-                    {
-                        $email = $response->email;
-                    } else {
-                        //see https://developers.google.com/accounts/docs/OAuth2UserAgent#callinganapi
-                        $request = Common\Lib\Settings::get('googlePlus.userinfo_endpoint');
-                        $ret = $client->externalCall(
-                            null,
-                            $request,
-                            Common\Enums\HttpMethodEnum::GET,
-                            null,
-                            null,
-                            null,
-                            $access_token
-                        );
-                        $userInfo = json_decode($ret);
-                        $email = $userInfo->email;
-                    }
-                }
+            $client_id = Common\Lib\Settings::get('googlePlus.client_id');
+            if ($client_id != $response->aud) {
+                throw new \Exception("Received token is not intended for this application.");
             }
-    
-            if (empty($email)) {
+            if (empty($response->email)) {
                 throw new \Exception("Unable to obtain user's email address from Google.");
-            } else {
-                 API\Dispatcher::sendResponse(null, $email, null, $format, null);    
-            }
+           }
 
+            API\Dispatcher::sendResponse(null, $response->email, null, $format, null);
         } catch (\Exception $e) {
             API\Dispatcher::sendResponse(null, $e->getMessage(), Common\Enums\HttpStatusEnum::BAD_REQUEST, $format);
         }
