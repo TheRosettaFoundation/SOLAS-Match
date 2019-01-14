@@ -1194,6 +1194,8 @@ error_log($data);
 
             $request       = Common\Lib\Settings::get('googlePlus.token_endpoint');
             $access_token  = $parsed_data['token'];
+$dc = json_decode($access_token);
+error_log("id_token: " . print_r($dc, true));
             $client_id     = Common\Lib\Settings::get('googlePlus.client_id');
             $client_secret = Common\Lib\Settings::get('googlePlus.client_secret');
             $redirect_uri  = urlencode('https://lingometer.com');
