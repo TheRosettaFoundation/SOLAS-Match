@@ -51,12 +51,10 @@
                 <legend>{Localisation::getTranslation('common_signin_or_create_new_account')}</legend>
                 <div id="openid_choice">
                     {if isset($gplus) && ($gplus === 'y')}
-	                    <div id="gSignInWrapper">
-	                        <div id="customGplusBtn" class="customGPlusSignIn">
-	                           <span id="customGplusBtnIcon"></span>
-	                           <span id="customGplusBtnText">Google</span>
-	                        </div>
-	                    </div>
+                        <div id="gSignInWrapper" style="margin-bottom: 10px;">
+                            <div id="g-signin2" class="g-signin2">
+                            </div>
+                        </div>
                     {/if}
                     <div id="pSignInWrapper">
                         <div id="customProZBtn" class="customProZSignIn">

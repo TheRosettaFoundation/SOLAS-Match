@@ -7,6 +7,7 @@ use \SolasMatch\API\DAO as DAO;
 use \SolasMatch\API\Lib as Lib;
 use \SolasMatch\API as API;
 use SolasMatch\API\DAO\AdminDao;
+use \SolasMatch\Common\Exceptions as Exceptions;
 
 require_once __DIR__.'/../../Common/protobufs/models/OAuthResponse.php';
 require_once __DIR__."/../../Common/protobufs/models/PasswordResetRequest.php";
@@ -1189,61 +1190,29 @@ class Users
             $data = API\Dispatcher::getDispatcher()->request()->getBody();
             $parsed_data = array();
             parse_str($data, $parsed_data);
-            $access_token = $parsed_data['token'];
-            
-            //validate token
-            $client = new Common\Lib\APIHelper("");
+            $id_token = $parsed_data['token'];
+
             $request =  Common\Lib\Settings::get('googlePlus.token_validation_endpoint');
-            $args = null;
-            if ($access_token) {
-                $args = array("access_token" =>  $access_token );
-            } 
-            
+            $client = new Common\Lib\APIHelper('');
             $ret = $client->externalCall(
                 null,
                 $request,
                 Common\Enums\HttpMethodEnum::GET,
                 null,
-                $args
+                array('id_token' => $id_token)
             );
-
             $response = json_decode($ret);
-error_log("oauth2/v1/tokeninfo response: " . print_r($response, true));
-            $email = "";
-            if(isset($response->audience))
-            {
-                $client_id = Common\Lib\Settings::get('googlePlus.client_id'); 
-                if ($client_id != $response->audience)
-                {
-                    throw new \Exception("Received token is not intended for this application.");
-                } else {
-                    if (isset($response->email))
-                    {
-                        $email = $response->email;
-                    } else {
-                        //see https://developers.google.com/accounts/docs/OAuth2UserAgent#callinganapi
-                        $request = Common\Lib\Settings::get('googlePlus.userinfo_endpoint');
-                        $ret = $client->externalCall(
-                            null,
-                            $request,
-                            Common\Enums\HttpMethodEnum::GET,
-                            null,
-                            null,
-                            null,
-                            $access_token
-                        );
-                        $userInfo = json_decode($ret);
-                        $email = $userInfo->email;
-                    }
-                }
-            }
-    
-            if (empty($email)) {
-                throw new \Exception("Unable to obtain user's email address from Google.");
-            } else {
-                 API\Dispatcher::sendResponse(null, $email, null, $format, null);    
-            }
+error_log("oauth2/v3/tokeninfo response: " . print_r($response, true));
 
+            $client_id = Common\Lib\Settings::get('googlePlus.client_id');
+            if ($client_id != $response->aud) {
+                throw new \Exception("Received token is not intended for this application.");
+            }
+            if (empty($response->email)) {
+                throw new \Exception("Unable to obtain user's email address from Google.");
+           }
+
+            API\Dispatcher::sendResponse(null, $response->email, null, $format, null);
         } catch (\Exception $e) {
             API\Dispatcher::sendResponse(null, $e->getMessage(), Common\Enums\HttpStatusEnum::BAD_REQUEST, $format);
         }

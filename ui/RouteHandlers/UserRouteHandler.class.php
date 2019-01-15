@@ -847,7 +847,6 @@ class UserRouteHandler
     private static function createGooglePlusJavaScript()
     {
         $app = \Slim\Slim::getInstance();    
-        $client_id = Common\Lib\Settings::get("googlePlus.client_id");
         $scope = Common\Lib\Settings::get("googlePlus.scope");
         $redirectUri = '';
         if (isset($_SERVER['HTTPS']) && !is_null($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
@@ -860,24 +859,25 @@ class UserRouteHandler
         $script = <<<EOD
             <script type="text/javascript">
             function render() {
-                gapi.signin.render('customGplusBtn', {
-                    'callback': 'signInCallback',
-                    'clientid': '$client_id',
-                    'cookiepolicy': 'single_host_origin',
-                    'scope': '$scope'
+                gapi.signin2.render('g-signin2', {
+                    scope: '$scope',
+                    width: 219,
+                    height: 36,
+                    longtitle: true,
+                    theme: 'dark',
+                    onsuccess: onSignIn,
+                    onfailure: onSignInFailure
                 });
             }
-            function signInCallback(authResult) {
-                if (authResult['code']) {
-                    $('#gSignInWrapper').attr('style', 'display: none');
-                    window.location.replace('$redirectUri?gplustoken='+authResult['access_token']);
-                } else if (authResult['error']) {
-                    if (authResult['error'] != 'immediate_failed') {
-                        console.log('There was an error: ' + authResult['error']);
-                    }
-                }
+
+            function onSignIn(googleUser) {
+                $('#gSignInWrapper').attr('style', 'display: none');
+                window.location.replace('$redirectUri?gplustoken=' + googleUser.getAuthResponse().id_token);
             }
-            
+
+            function onSignInFailure() {
+                console.log('Google SignIn Failure');
+            }
             </script>
             <script src="https://apis.google.com/js/client:platform.js?onload=render" async defer></script>
 EOD;
