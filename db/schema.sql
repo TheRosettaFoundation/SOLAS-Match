@@ -3700,7 +3700,8 @@ BEGIN
         IF(SUM(IFNULL(uqp.country_id_target, 0)=t.`country_id-target`), 50, 0) +
         IF(SUM(IFNULL(uqp.country_id_source, 0)=t.`country_id-source`), 50, 0) +
         (SELECT 250.*(1.0-POWER(0.75, COUNT(*)))/(1.0-0.75) FROM ProjectTags pt WHERE pt.project_id=t.project_id AND pt.tag_id IN (SELECT ut.tag_id FROM UserTags ut WHERE user_id=uID)) +
-        LEAST(DATEDIFF(CURDATE(), t.`created-time`), 700)
+        LEAST(DATEDIFF(CURDATE(), t.`created-time`), 700) +
+        IF(DATEDIFF(CURDATE(), t.deadline) > 91, -5000, 0)
         DESC
     LIMIT offset, lim;
 END//
