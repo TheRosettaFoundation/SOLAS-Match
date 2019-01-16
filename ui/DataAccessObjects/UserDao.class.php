@@ -1261,7 +1261,8 @@ error_log(print_r($result, true));
                     if (!empty($from_neon_to_trommons_pair[$nativelang])) {
                         $locale = new Common\Protobufs\Models\Locale();
                         $locale->setLanguageCode($from_neon_to_trommons_pair[$nativelang][0]);
-                        $locale->setCountryCode($from_neon_to_trommons_pair[$nativelang][1]);
+                        //$locale->setCountryCode($from_neon_to_trommons_pair[$nativelang][1]); Meeting 20180110...
+                        $locale->setCountryCode('--');
                         $user->setNativeLocale($locale);
                     }
 
