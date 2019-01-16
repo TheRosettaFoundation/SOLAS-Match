@@ -1122,6 +1122,28 @@ $from_neon_to_trommons_pair = array(
         $org_name     = '';
         $quality_level= 1;
 error_log('function process_neonwebhook()');
+//[[
+$email = 'alanabarrett0@gmail.com';
+$nativelang = 'Kinyarwanda'; 
+if (!empty($email) && $user = $this->verifyUserByEmail($email)) {
+    $user_id = $user->getId();
+    error_log('GOT USER');
+                    if (!empty($from_neon_to_trommons_pair[$nativelang])) {
+                        $new_country_code = '--'; // Meeting 20180110...
+                        $original_locale = $user->getNativeLocale();
+                        if ($original_locale && $original_locale->getCountryCode()) {
+                            $new_country_code = $original_locale->getCountryCode();
+                        }
+                        $locale = new Common\Protobufs\Models\Locale();
+                        $locale->setLanguageCode($from_neon_to_trommons_pair[$nativelang][0]);
+                        //$locale->setCountryCode($from_neon_to_trommons_pair[$nativelang][1]); Meeting 20180110...
+                        $locale->setCountryCode($new_country_code);
+                        $user->setNativeLocale($locale);
+                    }
+
+                    $this->saveUser($user);
+}
+//]]
         if (!empty($_POST['payload'])) {
             $result = json_decode($_POST['payload'], true);
 error_log(print_r($result, true));
