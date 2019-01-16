@@ -1259,10 +1259,15 @@ error_log(print_r($result, true));
                     if (!empty($display_name)) $user->setDisplayName($display_name);
 
                     if (!empty($from_neon_to_trommons_pair[$nativelang])) {
+                        $new_country_code = '--'; // Meeting 20180110...
+                        $original_locale = $user->getNativeLocale();
+                        if ($original_locale && $original_locale->getCountryCode()) {
+                            $new_country_code = $original_locale->getCountryCode();
+                        }
                         $locale = new Common\Protobufs\Models\Locale();
                         $locale->setLanguageCode($from_neon_to_trommons_pair[$nativelang][0]);
                         //$locale->setCountryCode($from_neon_to_trommons_pair[$nativelang][1]); Meeting 20180110...
-                        $locale->setCountryCode('--');
+                        $locale->setCountryCode($new_country_code);
                         $user->setNativeLocale($locale);
                     }
 
