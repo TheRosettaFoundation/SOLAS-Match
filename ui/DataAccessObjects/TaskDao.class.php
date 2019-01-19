@@ -825,6 +825,24 @@ error_log('insertWordCountRequestForProjectsErrors...' .
         return $chunks;
     }
 
+    public function insertMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password, $job_status)
+    {
+        LibAPI\PDOWrapper::call('insertMatecatRecordedJobStatus',
+            LibAPI\PDOWrapper::cleanse($matecat_id_job) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($matecat_id_job_password) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($job_status));
+    }
+
+    public function getMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password)
+    {
+        $result = LibAPI\PDOWrapper::call('getMatecatRecordedJobStatus', LibAPI\PDOWrapper::cleanse($matecat_id_job) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($matecat_id_job_password));
+        if ($result) {
+            return $result[0];
+        } else {
+            return 'draft';
+        }
+    }
+
     public function all_chunked_active_projects()
     {
         $result = LibAPI\PDOWrapper::call('all_chunked_active_projects', '');
