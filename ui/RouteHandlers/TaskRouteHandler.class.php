@@ -1584,10 +1584,12 @@ class TaskRouteHandler
         $projectDao = new DAO\ProjectDao();
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
+        $adminDao = new DAO\AdminDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
+        $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
 
         if ($taskDao->isUserRestrictedFromTask($task_id, $user_id)) {
             $app->flash('error', "You are not authorized to view this page");
@@ -1689,6 +1691,15 @@ class TaskRouteHandler
                     }
                 }
             }
+            if (isset($post['treat_as_translated']) && $isSiteAdmin) {
+                if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) {
+                    $translated = 'translated';
+                } else {
+                    $translated = 'approved'
+                }
+                $taskDao->insertMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password, $translated);
+                $app->flashNow('success', "Task will be treated as fully $translated in Kató TM.");
+            }
         }
 
         $taskMetaData = array();
@@ -1715,8 +1726,6 @@ class TaskRouteHandler
         }
 
         $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
-        $adminDao = new DAO\AdminDao();
-        $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
         if ($isOrgMember || $isSiteAdmin) {
             $app->view()->appendData(array("isOrgMember" => $isOrgMember));
         }
