@@ -1201,6 +1201,13 @@ class TaskRouteHandler
                       if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION  && !$translated_status) $matecat_url = '';
                       if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && !approved_status   ) $matecat_url = '';
                   } else {
+                   $recorded_status = $taskDao->getMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password);
+                   if ($recorded_status === 'approved') { // We do not need to query MateCat...
+                       $translate = 'translate';
+                       if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
+                       $matecat_url = "https://tm.translatorswb.org/$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                       $matecat_download_url = "https://tm.translatorswb.org/?action=downloadFile&id_job=$matecat_id_job&id_file=$matecat_id_file&password=$matecat_id_job_password&download_type=all";
+                   } else {
                     // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
                     $re = curl_init("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
 
@@ -1231,6 +1238,9 @@ class TaskRouteHandler
                         $response_data = json_decode($res, true);
 
                         if (!empty($response_data['stats']['DOWNLOAD_STATUS'])) {
+                            if ($response_data['stats']['DOWNLOAD_STATUS'] === 'draft') {
+                                $response_data['stats']['DOWNLOAD_STATUS'] = $recorded_status; // getMatecatRecordedJobStatus() MIGHT have a "better" status
+                            }
                             if ($response_data['stats']['DOWNLOAD_STATUS'] === 'translated' || $response_data['stats']['DOWNLOAD_STATUS'] === 'approved') {
                                 $translate = 'translate';
                                 if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
@@ -1247,6 +1257,7 @@ class TaskRouteHandler
                     } else {
                         error_log("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats ($taskId) responseCode: $responseCode");
                     }
+                   }
                   }
                 }
             }

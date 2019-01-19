@@ -696,6 +696,11 @@ error_log('insertWordCountRequestForProjectsErrors...' .
 
     public function getMatecatTaskStatus($task_id, $matecat_id_job, $matecat_id_job_password)
     {
+        $taskDao = new TaskDao();
+        $recorded_status = $taskDao->getMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password);
+        if ($recorded_status === 'approved') { // We do not need to query MateCat...
+            return 'approved';
+        }
         $download_status = '';
 
         // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
@@ -729,6 +734,9 @@ error_log('insertWordCountRequestForProjectsErrors...' .
 
             if (!empty($response_data['stats']['DOWNLOAD_STATUS'])) {
                 $download_status = $response_data['stats']['DOWNLOAD_STATUS'];
+                if ($download_status === 'draft') {
+                    $download_status = $recorded_status; // getMatecatRecordedJobStatus() MIGHT have a "better" status
+                }
             } else {
                 error_log("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats getMatecatTaskStatus($task_id) DOWNLOAD_STATUS empty!");
             }
@@ -789,6 +797,14 @@ error_log('insertWordCountRequestForProjectsErrors...' .
                             $revise_url    = "https://tm.translatorswb.org/revise/proj-$project_id/"    . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_chunk_password";
                             $matecat_download_url = "https://tm.translatorswb.org/?action=downloadFile&id_job=$matecat_id_job&id_file=$matecat_id_file&password=$matecat_id_job_password&download_type=all";
 
+                            $taskDao = new TaskDao();
+                            $recorded_status = $taskDao->getMatecatRecordedJobStatus($job['id'], $job['password']);
+                            if ($recorded_status === 'approved') {
+                                $stats['DOWNLOAD_STATUS'] = 'approved';
+                            }
+                            if ($stats['DOWNLOAD_STATUS'] === 'draft') {
+                                $stats['DOWNLOAD_STATUS'] = $recorded_status; // getMatecatRecordedJobStatus() MIGHT have a "better" status
+                            }
                             $chunks[] = array(
                                 'matecat_id_job'            => $job['id'],
                                 'matecat_id_chunk_password' => $matecat_id_chunk_password,
