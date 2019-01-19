@@ -1520,6 +1520,13 @@ CREATE TABLE IF NOT EXISTS `UserNeonAccount` (
   CONSTRAINT FK_UserNeonAccount_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `MatecatRecordedJobStatus` (
+    matecat_id_job          INT(10) UNSIGNED NOT NULL,
+    matecat_id_job_password VARCHAR(50) NOT NULL,
+    job_status              VARCHAR(20) NOT NULL,
+    UNIQUE KEY job_job_password (matecat_id_job, matecat_id_job_password)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -7230,6 +7237,22 @@ BEGIN
         t.`task-status_id`=2 AND
         tc.task_id!=tID
     ORDER BY chunk_number ASC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insertMatecatRecordedJobStatus`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertMatecatRecordedJobStatus`(IN jobID INT, IN jobPassword VARCHAR(50), IN jobStatus VARCHAR(20))
+BEGIN
+    REPLACE INTO MatecatRecordedJobStatus (matecat_id_job, matecat_id_job_password, job_status) VALUES (jobID, jobPassword, jobStatus);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getMatecatRecordedJobStatus`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getMatecatRecordedJobStatus`(IN jobID INT, IN jobPassword VARCHAR(50))
+BEGIN
+    SELECT job_status FROM MatecatRecordedJobStatus WHERE matecat_id_job=jobID AND matecat_id_job_password=jobPassword;
 END//
 DELIMITER ;
 
