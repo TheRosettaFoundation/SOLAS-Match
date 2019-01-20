@@ -516,6 +516,12 @@ error_log('insertWordCountRequestForProjectsErrors...' .
         return $result;
     }
 
+    public function is_parent_of_chunk($project_id, $task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('is_parent_of_chunk', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
+        return $result;
+    }
+
     public function getMatchingTask($id_job, $id_chunk_password, $matching_type_id)
     {
         $result = LibAPI\PDOWrapper::call('getMatchingTask', LibAPI\PDOWrapper::cleanse($id_job) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($id_chunk_password) . ',' . LibAPI\PDOWrapper::cleanse($matching_type_id));
