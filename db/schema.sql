@@ -7142,6 +7142,22 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `is_parent_of_chunk`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `is_parent_of_chunk`(IN `pID` INT, IN `tID` INT)
+BEGIN
+    SELECT
+        lp.task_id,
+        tc.task_id AS tc_task_id,
+        lp.matecat_id_job
+    FROM MatecatLanguagePairs lp
+    JOIN TaskChunks tc ON lp.matecat_id_job=tc.matecat_id_job
+    WHERE
+        lp.project_id=pID AND
+        lp.task_id=tID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `all_chunked_active_projects`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `all_chunked_active_projects`()
