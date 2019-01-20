@@ -863,7 +863,7 @@ error_log('insertWordCountRequestForProjectsErrors...' .
                 $matecat_id_job = $matecat_tasks[0]['matecat_id_job'];
                 $matecat_id_job_password = $matecat_tasks[0]['matecat_id_job_password'];
                 if (!empty($matecat_id_job) && !empty($matecat_id_job_password)) {
-                    $recorded_status = $taskDao->getMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password);
+                    $recorded_status = $this->getMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password);
                     return array($matecat_id_job, $matecat_id_job_password, $recorded_status);
                 }
             }
