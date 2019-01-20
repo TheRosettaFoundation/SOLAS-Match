@@ -1697,12 +1697,12 @@ class TaskRouteHandler
             }
             if (isset($post['treat_as_translated']) && $isSiteAdmin && !empty($matecat_id_job)) {
                 if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) {
-                    $translated = 'translated';
+                    $recorded_status = 'translated';
                 } else {
-                    $translated = 'approved';
+                    $recorded_status = 'approved';
                 }
-                $taskDao->insertMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password, $translated);
-                $app->flashNow('success', "Task will be treated as fully $translated in Kató TM.");
+                $taskDao->insertMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password, $recorded_status);
+                $app->flashNow('success', "Task will be treated as fully $recorded_status in Kató TM.");
             }
         }
 
