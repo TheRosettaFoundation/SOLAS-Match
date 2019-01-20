@@ -1750,7 +1750,7 @@ class TaskRouteHandler
                 'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
                 'matecat_url' => $taskDao->get_matecat_url_regardless($task),
                 'recorded_status' => $recorded_status,
-                'display_treat_as_translated' => !empty($matecat_id_job) && empty(is_parent_of_chunk($task->getProjectId(), $task_id)),
+                'display_treat_as_translated' => !empty($matecat_id_job) && empty($taskDao->is_parent_of_chunk($task->getProjectId(), $task_id)),
                 "userSubscribedToOrganisation" => $userSubscribedToOrganisation
         ));
 
