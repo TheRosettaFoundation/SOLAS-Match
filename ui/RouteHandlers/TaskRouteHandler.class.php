@@ -1746,6 +1746,7 @@ class TaskRouteHandler
                 'alsoViewedTasksCount' => $alsoViewedTasksCount,
                 'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
                 'matecat_url' => $taskDao->get_matecat_url_regardless($task),
+                'display_treat_as_translated' => !is_parent_of_chunk($task->getProjectId(), $task_id) && ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING),
                 "userSubscribedToOrganisation" => $userSubscribedToOrganisation
         ));
 

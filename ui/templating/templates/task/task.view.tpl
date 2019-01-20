@@ -156,6 +156,15 @@
                 <a href="{urlFor name="task-search_translators" options="task_id.$task_id"}" class="btn btn-primary">
                     <i class="icon-user icon-white"></i>&nbsp;Search for Translators
                 </a>
+                {if $display_treat_as_translated}
+                    <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                        <input type="hidden" name="treat_as_translated" value="treat_as_translated" />
+                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
+                            <i class="icon-check icon-black"></i> Treat as if fully {if $type_id == TaskTypeEnum::TRANSLATION}translated{else}approved{/if} in Kató TM
+                        </a>
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                {/if}
 		        </div>
 		    {/if}
         {if $isSiteAdmin && isset($registered)}
@@ -163,6 +172,15 @@
                 <a href="{urlFor name="task-search_translators" options="task_id.$task_id"}" class="btn btn-primary">
                     <i class="icon-user icon-white"></i>&nbsp;Search for Translators
                 </a>
+                {if $display_treat_as_translated}
+                    <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                        <input type="hidden" name="treat_as_translated" value="treat_as_translated" />
+                        <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
+                            <i class="icon-check icon-black"></i> Treat as if fully {if $type_id == TaskTypeEnum::TRANSLATION}translated{else}approved{/if} in Kató TM
+                        </a>
+                        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                    </form>
+                {/if}
             </div>
         {/if}
 		
