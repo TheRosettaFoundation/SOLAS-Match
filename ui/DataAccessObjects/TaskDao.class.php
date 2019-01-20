@@ -464,10 +464,16 @@ class TaskDao extends BaseDao
 
     public function insertWordCountRequestForProjectsErrors($project_id, $status, $message)
     {
+error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $message)");
         LibAPI\PDOWrapper::call('insertWordCountRequestForProjectsErrors',
             LibAPI\PDOWrapper::cleanse($project_id) . ',' .
             LibAPI\PDOWrapper::cleanseNullOrWrapStr($status) . ',' .
             LibAPI\PDOWrapper::cleanseNullOrWrapStr($message));
+error_log('insertWordCountRequestForProjectsErrors...' .
+            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($status) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($message)
+);
     }
 
     public function getWordCountRequestForProjects($state)
@@ -507,6 +513,12 @@ class TaskDao extends BaseDao
     public function is_chunk_or_parent_of_chunk($project_id, $task_id)
     {
         $result = LibAPI\PDOWrapper::call('is_chunk_or_parent_of_chunk', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
+        return $result;
+    }
+
+    public function is_parent_of_chunk($project_id, $task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('is_parent_of_chunk', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
         return $result;
     }
 
@@ -690,6 +702,11 @@ class TaskDao extends BaseDao
 
     public function getMatecatTaskStatus($task_id, $matecat_id_job, $matecat_id_job_password)
     {
+        $taskDao = new TaskDao();
+        $recorded_status = $taskDao->getMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password);
+        if ($recorded_status === 'approved') { // We do not need to query MateCat...
+            return 'approved';
+        }
         $download_status = '';
 
         // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
@@ -723,6 +740,9 @@ class TaskDao extends BaseDao
 
             if (!empty($response_data['stats']['DOWNLOAD_STATUS'])) {
                 $download_status = $response_data['stats']['DOWNLOAD_STATUS'];
+                if ($download_status === 'draft') {
+                    $download_status = $recorded_status; // getMatecatRecordedJobStatus() MIGHT have a "better" status
+                }
             } else {
                 error_log("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats getMatecatTaskStatus($task_id) DOWNLOAD_STATUS empty!");
             }
@@ -783,6 +803,14 @@ class TaskDao extends BaseDao
                             $revise_url    = "https://tm.translatorswb.org/revise/proj-$project_id/"    . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_chunk_password";
                             $matecat_download_url = "https://tm.translatorswb.org/?action=downloadFile&id_job=$matecat_id_job&id_file=$matecat_id_file&password=$matecat_id_job_password&download_type=all";
 
+                            $taskDao = new TaskDao();
+                            $recorded_status = $taskDao->getMatecatRecordedJobStatus($job['id'], $job['password']);
+                            if ($recorded_status === 'approved') {
+                                $stats['DOWNLOAD_STATUS'] = 'approved';
+                            }
+                            if ($stats['DOWNLOAD_STATUS'] === 'draft') {
+                                $stats['DOWNLOAD_STATUS'] = $recorded_status; // getMatecatRecordedJobStatus() MIGHT have a "better" status
+                            }
                             $chunks[] = array(
                                 'matecat_id_job'            => $job['id'],
                                 'matecat_id_chunk_password' => $matecat_id_chunk_password,
@@ -801,6 +829,46 @@ class TaskDao extends BaseDao
         }
 
         return $chunks;
+    }
+
+    public function insertMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password, $job_status)
+    {
+        LibAPI\PDOWrapper::call('insertMatecatRecordedJobStatus',
+            LibAPI\PDOWrapper::cleanse($matecat_id_job) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($matecat_id_job_password) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($job_status));
+    }
+
+    public function getMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password)
+    {
+        $result = LibAPI\PDOWrapper::call('getMatecatRecordedJobStatus', LibAPI\PDOWrapper::cleanse($matecat_id_job) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($matecat_id_job_password));
+        if ($result) {
+            return $result[0];
+        } else {
+            return 'draft';
+        }
+    }
+
+    public function get_matecat_job_id_recorded_status($task)
+    {
+        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
+            $matecat_tasks = $this->getMatecatLanguagePairs($task->getId());
+            if (empty($matecat_tasks)) {
+                $matecat_tasks = $this->getTaskChunk($task->getId());
+                if (!empty($matecat_tasks)) {
+                    $matecat_tasks[0]['matecat_id_job_password'] = $matecat_tasks[0]['matecat_id_chunk_password'];
+                }
+            }
+            if (!empty($matecat_tasks)) {
+                $matecat_id_job = $matecat_tasks[0]['matecat_id_job'];
+                $matecat_id_job_password = $matecat_tasks[0]['matecat_id_job_password'];
+                if (!empty($matecat_id_job) && !empty($matecat_id_job_password)) {
+                    $recorded_status = $taskDao->getMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password);
+                    return array($matecat_id_job, $matecat_id_job_password, $recorded_status);
+                }
+            }
+        }
+        return array (0, '', 'draft');
     }
 
     public function all_chunked_active_projects()

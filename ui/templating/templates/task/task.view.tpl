@@ -135,8 +135,10 @@
 		
 		    {include file="task/task.details.tpl"} 
 		
+        {if $isSiteAdmin}
+            <div class="well">
+        {/if}
 		    {if $isSiteAdmin and !isset($registered)}
-		        <div class="well">
 		            <form id="assignTaskToUserForm" method="post" action="{urlFor name="task" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                     {Localisation::getTranslation('task_view_assign_label')}<br />
                     <input type="text" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
@@ -153,19 +155,27 @@
 		                </a>
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 		            </form> 
-                <a href="{urlFor name="task-search_translators" options="task_id.$task_id"}" class="btn btn-primary">
-                    <i class="icon-user icon-white"></i>&nbsp;Search for Translators
-                </a>
-		        </div>
 		    {/if}
-        {if $isSiteAdmin && isset($registered)}
-            <div class="well">
+        {if $isSiteAdmin}
                 <a href="{urlFor name="task-search_translators" options="task_id.$task_id"}" class="btn btn-primary">
                     <i class="icon-user icon-white"></i>&nbsp;Search for Translators
                 </a>
+                {if $display_treat_as_translated}
+                    {if $recorded_status == 'draft'}
+                        <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                            <input type="hidden" name="treat_as_translated" value="treat_as_translated" />
+                            <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
+                                <i class="icon-check icon-black"></i> Treat as if fully {if $type_id == TaskTypeEnum::TRANSLATION}translated{else}approved{/if} in Kató TM
+                            </a>
+                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                        </form>
+                    {else}
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note: This task is being treated as if fully {$recorded_status} in Kató TM.
+                    {/if}
+                {/if}
             </div>
         {/if}
-		
+
 		    <p style="margin-bottom: 40px"/>        
         {if !empty($file_preview_path)}
 		    <table width="100%">

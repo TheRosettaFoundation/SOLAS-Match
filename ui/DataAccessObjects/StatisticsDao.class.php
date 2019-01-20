@@ -150,6 +150,16 @@ class StatisticsDao extends BaseDao
                       elseif ($translated_status) $stats['DOWNLOAD_STATUS'] = 'translated (Split Job)';
                       else                        $stats['DOWNLOAD_STATUS'] = 'draft (Split Job)';
                   } else {
+                $recorded_status = $taskDao->getMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password);
+                if ($recorded_status === 'approved') { // We do not need to query MateCat...
+                    $stats = array();
+                    $stats['DOWNLOAD_STATUS']           = 'approved';
+                    $stats['TRANSLATED_PERC_FORMATTED'] = '100';
+                    $stats['APPROVED_PERC_FORMATTED']   = '100';
+                    $stats['matecat_url'] = "https://tm.translatorswb.org/$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                    $stats['matecat_langpair_or_blank'] = $matecat_langpair;
+                    return $stats;
+                }
                 // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
                 $re = curl_init("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
 
@@ -182,6 +192,9 @@ class StatisticsDao extends BaseDao
                         $stats = $response_data['stats'];
                         $stats['matecat_url'] = "https://tm.translatorswb.org/$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
                         $stats['matecat_langpair_or_blank'] = $matecat_langpair;
+                        if ($stats['DOWNLOAD_STATUS'] === 'draft') {
+                            $stats['DOWNLOAD_STATUS'] = $recorded_status; // getMatecatRecordedJobStatus() MIGHT have a "better" status
+                        }
                     } else {
                         error_log("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats get_matecat_task_stats($task_id...) stats empty!");
                     }
