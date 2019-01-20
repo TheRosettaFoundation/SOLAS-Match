@@ -925,6 +925,7 @@ class TaskRouteHandler
             'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
             'matecat_url' => $taskDao->get_matecat_url_regardless($task),
             'list_qualified_translators' => $list_qualified_translators,
+            'display_treat_as_translated' => 0,
             'taskStatusTexts' => $taskStatusTexts
         ));
 
