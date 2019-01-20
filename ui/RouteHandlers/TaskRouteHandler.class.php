@@ -1698,7 +1698,7 @@ class TaskRouteHandler
                 if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) {
                     $translated = 'translated';
                 } else {
-                    $translated = 'approved'
+                    $translated = 'approved';
                 }
                 $taskDao->insertMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password, $translated);
                 $app->flashNow('success', "Task will be treated as fully $translated in Kató TM.");
