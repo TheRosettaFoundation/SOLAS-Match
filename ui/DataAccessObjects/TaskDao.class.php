@@ -843,7 +843,7 @@ error_log('insertWordCountRequestForProjectsErrors...' .
     {
         $result = LibAPI\PDOWrapper::call('getMatecatRecordedJobStatus', LibAPI\PDOWrapper::cleanse($matecat_id_job) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($matecat_id_job_password));
         if ($result) {
-            return $result[0];
+            return $result[0]['job_status'];
         } else {
             return 'draft';
         }
