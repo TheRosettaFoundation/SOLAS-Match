@@ -849,6 +849,28 @@ error_log('insertWordCountRequestForProjectsErrors...' .
         }
     }
 
+    public function get_matecat_job_id_recorded_status($task)
+    {
+        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
+            $matecat_tasks = $this->getMatecatLanguagePairs($task->getId());
+            if (empty($matecat_tasks)) {
+                $matecat_tasks = $this->getTaskChunk($task->getId());
+                if (!empty($matecat_tasks)) {
+                    $matecat_tasks[0]['matecat_id_job_password'] = $matecat_tasks[0]['matecat_id_chunk_password'];
+                }
+            }
+            if (!empty($matecat_tasks)) {
+                $matecat_id_job = $matecat_tasks[0]['matecat_id_job'];
+                $matecat_id_job_password = $matecat_tasks[0]['matecat_id_job_password'];
+                if (!empty($matecat_id_job) && !empty($matecat_id_job_password)) {
+                    $recorded_status = $taskDao->getMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password);
+                    return array($matecat_id_job, $matecat_id_job_password, $recorded_status);
+                }
+            }
+        }
+        return array (0, '', 'draft');
+    }
+
     public function all_chunked_active_projects()
     {
         $result = LibAPI\PDOWrapper::call('all_chunked_active_projects', '');
