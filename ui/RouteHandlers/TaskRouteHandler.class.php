@@ -1599,6 +1599,9 @@ class TaskRouteHandler
         $task = $taskDao->getTask($task_id);
         $project = $projectDao->getProject($task->getProjectId());
         $user = $userDao->getUser($user_id);
+
+        list ($matecat_id_job, $matecat_id_job_password, $recorded_status) = $taskDao->get_matecat_job_id_recorded_status($task);
+
         $trackTaskView = $taskDao->recordTaskView($task_id,$user_id);
         if ($task_file_info = $taskDao->getTaskInfo($task_id)) {
             $app->view()->appendData(array(
@@ -1691,7 +1694,7 @@ class TaskRouteHandler
                     }
                 }
             }
-            if (isset($post['treat_as_translated']) && $isSiteAdmin) {
+            if (isset($post['treat_as_translated']) && $isSiteAdmin && !empty($matecat_id_job)) {
                 if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) {
                     $translated = 'translated';
                 } else {
@@ -1746,7 +1749,8 @@ class TaskRouteHandler
                 'alsoViewedTasksCount' => $alsoViewedTasksCount,
                 'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
                 'matecat_url' => $taskDao->get_matecat_url_regardless($task),
-                'display_treat_as_translated' => empty(is_parent_of_chunk($task->getProjectId(), $task_id)) && ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING),
+                'recorded_status' => $recorded_status,
+                'display_treat_as_translated' => !empty($matecat_id_job) && empty(is_parent_of_chunk($task->getProjectId(), $task_id)),
                 "userSubscribedToOrganisation" => $userSubscribedToOrganisation
         ));
 
