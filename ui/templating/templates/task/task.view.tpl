@@ -161,6 +161,7 @@
                     <i class="icon-user icon-white"></i>&nbsp;Search for Translators
                 </a>
                 {if $display_treat_as_translated}
+                    <br /><br />
                     {if $recorded_status == 'draft'}
                         <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                             <input type="hidden" name="treat_as_translated" value="treat_as_translated" />
@@ -170,7 +171,7 @@
                             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                         </form>
                     {else}
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note: This task is being treated as if fully {$recorded_status} in Kató TM.
+                        Note: This task is being treated as if fully {$recorded_status} in Kató TM.
                     {/if}
                 {/if}
             </div>
