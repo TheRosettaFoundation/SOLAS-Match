@@ -851,7 +851,8 @@ error_log('insertWordCountRequestForProjectsErrors...' .
 
     public function get_matecat_job_id_recorded_status($task)
     {
-        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
+        if (($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) &&
+            ($task->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS || $task->getTaskStatus() == Common\Enums\TaskStatusEnum::COMPLETE)) {
             $matecat_tasks = $this->getMatecatLanguagePairs($task->getId());
             if (empty($matecat_tasks)) {
                 $matecat_tasks = $this->getTaskChunk($task->getId());
