@@ -925,6 +925,7 @@ class TaskRouteHandler
             'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
             'matecat_url' => $taskDao->get_matecat_url_regardless($task),
             'list_qualified_translators' => $list_qualified_translators,
+            'display_treat_as_translated' => 0,
             'taskStatusTexts' => $taskStatusTexts
         ));
 
@@ -1201,6 +1202,13 @@ class TaskRouteHandler
                       if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION  && !$translated_status) $matecat_url = '';
                       if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && !approved_status   ) $matecat_url = '';
                   } else {
+                   $recorded_status = $taskDao->getMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password);
+                   if ($recorded_status === 'approved') { // We do not need to query MateCat...
+                       $translate = 'translate';
+                       if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
+                       $matecat_url = "https://tm.translatorswb.org/$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                       $matecat_download_url = "https://tm.translatorswb.org/?action=downloadFile&id_job=$matecat_id_job&id_file=$matecat_id_file&password=$matecat_id_job_password&download_type=all";
+                   } else {
                     // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
                     $re = curl_init("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
 
@@ -1231,6 +1239,9 @@ class TaskRouteHandler
                         $response_data = json_decode($res, true);
 
                         if (!empty($response_data['stats']['DOWNLOAD_STATUS'])) {
+                            if ($response_data['stats']['DOWNLOAD_STATUS'] === 'draft') {
+                                $response_data['stats']['DOWNLOAD_STATUS'] = $recorded_status; // getMatecatRecordedJobStatus() MIGHT have a "better" status
+                            }
                             if ($response_data['stats']['DOWNLOAD_STATUS'] === 'translated' || $response_data['stats']['DOWNLOAD_STATUS'] === 'approved') {
                                 $translate = 'translate';
                                 if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
@@ -1247,6 +1258,7 @@ class TaskRouteHandler
                     } else {
                         error_log("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats ($taskId) responseCode: $responseCode");
                     }
+                   }
                   }
                 }
             }
@@ -1573,10 +1585,12 @@ class TaskRouteHandler
         $projectDao = new DAO\ProjectDao();
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
+        $adminDao = new DAO\AdminDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
+        $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
 
         if ($taskDao->isUserRestrictedFromTask($task_id, $user_id)) {
             $app->flash('error', "You are not authorized to view this page");
@@ -1586,6 +1600,9 @@ class TaskRouteHandler
         $task = $taskDao->getTask($task_id);
         $project = $projectDao->getProject($task->getProjectId());
         $user = $userDao->getUser($user_id);
+
+        list ($matecat_id_job, $matecat_id_job_password, $recorded_status) = $taskDao->get_matecat_job_id_recorded_status($task);
+
         $trackTaskView = $taskDao->recordTaskView($task_id,$user_id);
         if ($task_file_info = $taskDao->getTaskInfo($task_id)) {
             $app->view()->appendData(array(
@@ -1678,6 +1695,15 @@ class TaskRouteHandler
                     }
                 }
             }
+            if (isset($post['treat_as_translated']) && $isSiteAdmin && !empty($matecat_id_job)) {
+                if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) {
+                    $recorded_status = 'translated';
+                } else {
+                    $recorded_status = 'approved';
+                }
+                $taskDao->insertMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password, $recorded_status);
+                $app->flashNow('success', "Task will be treated as fully $recorded_status in Kató TM.");
+            }
         }
 
         $taskMetaData = array();
@@ -1704,8 +1730,6 @@ class TaskRouteHandler
         }
 
         $isOrgMember = $orgDao->isMember($project->getOrganisationId(), $user_id);
-        $adminDao = new DAO\AdminDao();
-        $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
         if ($isOrgMember || $isSiteAdmin) {
             $app->view()->appendData(array("isOrgMember" => $isOrgMember));
         }
@@ -1726,6 +1750,8 @@ class TaskRouteHandler
                 'alsoViewedTasksCount' => $alsoViewedTasksCount,
                 'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
                 'matecat_url' => $taskDao->get_matecat_url_regardless($task),
+                'recorded_status' => $recorded_status,
+                'display_treat_as_translated' => !empty($matecat_id_job) && empty($taskDao->is_parent_of_chunk($task->getProjectId(), $task_id)),
                 "userSubscribedToOrganisation" => $userSubscribedToOrganisation
         ));
 
