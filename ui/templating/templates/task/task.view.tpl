@@ -157,9 +157,11 @@
 		            </form> 
 		    {/if}
         {if $isSiteAdmin}
+                {if $task->getTaskStatus() != TaskStatusEnum::COMPLETE && $task->getTaskStatus() != TaskStatusEnum::IN_PROGRESS}
                 <a href="{urlFor name="task-search_translators" options="task_id.$task_id"}" class="btn btn-primary">
                     <i class="icon-user icon-white"></i>&nbsp;Search for Translators
                 </a>
+                {/if}
                 {if $display_treat_as_translated}
                     <br /><br />
                     {if $recorded_status == 'draft'}
