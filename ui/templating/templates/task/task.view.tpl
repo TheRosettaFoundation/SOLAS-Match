@@ -163,7 +163,6 @@
                 </a>
                 {/if}
                 {if $display_treat_as_translated}
-                    <br /><br />
                     {if $recorded_status == 'draft'}
                         <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                             <input type="hidden" name="treat_as_translated" value="treat_as_translated" />
