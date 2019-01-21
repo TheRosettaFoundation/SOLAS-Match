@@ -163,7 +163,7 @@
                 </a>
                 {/if}
                 {if $display_treat_as_translated}
-                    {if $recorded_status == 'draft'}
+                    {if $recorded_status == 'draft' || ($recorded_status == 'translated' && $type_id == TaskTypeEnum::PROOFREADING)}
                         <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
                             <input type="hidden" name="treat_as_translated" value="treat_as_translated" />
                             <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
