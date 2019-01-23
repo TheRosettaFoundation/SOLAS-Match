@@ -287,7 +287,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <a href="$certificate" target="_blank">$certificate</a>
+                                    <a href="{$certificate}" target="_blank">{$certificate}</a>
                                 </td>
                             </tr>
                             <tr>
