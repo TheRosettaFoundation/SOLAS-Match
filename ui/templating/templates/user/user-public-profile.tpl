@@ -287,7 +287,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <a href="{$certificate}" target="_blank">{$certificate}</a>
+                                    <img src="{$certificate}" />
                                 </td>
                             </tr>
                             <tr>
