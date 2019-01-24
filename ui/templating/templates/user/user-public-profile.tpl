@@ -282,7 +282,7 @@
                         {if isset($private_access) || $isSiteAdmin}
                             <tr>
                                 <td>
-                                    <h3>Volunteer Certificate</h3>
+                                    <h3>Translator Badge</h3>
                                 </td>
                             </tr>
                             <tr>

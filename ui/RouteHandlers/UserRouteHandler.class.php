@@ -1329,7 +1329,7 @@ EOD;
         if ($private_access || $isSiteAdmin) {
             $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
             $encrypted = openssl_encrypt("$user_id", 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
-            $certificate = 'http://badge.translatorswb.org/index.php?volunteer_id=' . base64_encode("$encrypted::$iv");
+            $certificate = 'http://badge.translatorswb.org/index.php?volunteer_id=' . urlencode(base64_encode("$encrypted::$iv"));
         }
         $app->view()->appendData(array(
             'certificate' => $certificate,
