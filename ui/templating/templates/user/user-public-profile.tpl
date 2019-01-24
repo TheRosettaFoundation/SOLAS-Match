@@ -279,7 +279,7 @@
                                 <td style="padding-bottom: 10px"/>
                             </tr>
                         {/if}
-                        {if isset($private_access) || $isSiteAdmin}
+                        {if false && (   isset($private_access) || $isSiteAdmin   )}
                             <tr>
                                 <td>
                                     <h3>Translator Badge</h3>
