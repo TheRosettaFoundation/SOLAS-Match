@@ -153,7 +153,7 @@
             </div>
         </td>
         
-        {if isset($userPersonalInfo) && (isset($private_access)  || $isSiteAdmin) || $account_id}
+        {if isset($userPersonalInfo) && (isset($private_access) || $isSiteAdmin) || $account_id || isset($private_access) || $isSiteAdmin}
             <td style="width: 4%"/>
             <td style="width: 48%">            
                 <div>
@@ -273,6 +273,21 @@
                             <tr>
                                 <td>
                                     {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCountry())}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 10px"/>
+                            </tr>
+                        {/if}
+                        {if false && (   isset($private_access) || $isSiteAdmin   )}
+                            <tr>
+                                <td>
+                                    <h3>Translator Badge</h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="{$certificate}" />
                                 </td>
                             </tr>
                             <tr>
