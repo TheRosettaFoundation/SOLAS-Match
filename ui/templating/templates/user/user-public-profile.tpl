@@ -287,7 +287,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <img src="{$certificate}" />
+                                    <img src="{$certificate}" width="50%" />
                                 </td>
                             </tr>
                             <tr>
