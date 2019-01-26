@@ -5458,6 +5458,49 @@ BEGIN
       INSERT INTO TaskUnclaims (id, task_id, user_id, `unclaim-comment`, `unclaimed-time`) VALUES (NULL, tID, uID, userFeedback, NOW());
       update Tasks set `task-status_id`=2 where id = tID;
       COMMIT;
+
+    SELECT
+        t.project_id,
+        t.`language_id-source`,
+        t.`language_id-target`,
+        t.`country_id-source`,
+        t.`country_id-target`,
+        IF(t.`task-type_id`=2, 3, 2),
+        tc.chunk_number
+    INTO
+        @projectid,
+        @language_source,
+        @language_target,
+        @country_source,
+        @country_target,
+        @bl_type_to_delete,
+        @chunknumber
+    FROM      Tasks       t
+    LEFT JOIN TaskChunks tc ON task_id=t.id
+    WHERE
+    t.id=tID AND
+    t.`task-type_id` IN (2, 3);
+
+    SELECT
+        MAX(t.id) INTO @bl_id_to_delete
+    FROM      Tasks       t
+    LEFT JOIN TaskChunks tc ON task_id=t.id
+    WHERE
+        t.project_id          =@projectid AND
+        t.`language_id-source`=@language_source AND
+        t.`language_id-target`=@language_target AND
+        t.`country_id-source` =@country_source AND
+        t.`country_id-target` =@country_target AND
+        t.`task-type_id`      =@bl_type_to_delete AND
+        (tc.chunk_number      =@chunknumber OR tc.chunk_number IS NULL);
+
+    IF @bl_id_to_delete IS NOT NULL THEN
+        DELETE FROM TaskTranslatorBlacklist
+        WHERE
+            user_id=uID AND
+            task_id=@bl_id_to_delete;
+    END IF;
+
 		select 1 as result;
 	else
 		select 0 as result;
