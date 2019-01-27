@@ -7720,6 +7720,7 @@ BEGIN
         IFNULL(ln.`en-name`, '') AS language_name_native,
         IFNULL(cn.`en-name`, '') AS country_name_native
     FROM Tasks                            t
+    JOIN Projects                         p ON t.project_id=p.id
     JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
     JOIN UserQualifiedPairs             uqp ON
         t.`language_id-source`=uqp.language_id_source AND
@@ -7732,11 +7733,19 @@ BEGIN
     LEFT JOIN TaskInviteSentToUsers     tis ON u.id=tis.user_id AND tis.task_id=taskID
     LEFT JOIN Admins                      a ON uqp.user_id=a.user_id
     LEFT JOIN OrganisationMembers         o ON uqp.user_id=o.user_id
+    LEFT JOIN Badges                      b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+    LEFT JOIN RestrictedTasks             r ON t.id=r.restricted_task_id
     WHERE
         t.id=taskID AND
         tis.user_id IS NULL AND
         a.user_id IS NULL AND
-        o.user_id IS NULL
+        o.user_id IS NULL AND
+        NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tbl WHERE tbl.user_id=uqp.user_id AND tbl.task_id=t.id) AND
+        (
+            r.restricted_task_id IS NULL OR
+            b.id IS NULL OR
+            b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uqp.user_id)
+        )
     GROUP BY uqp.user_id
     ORDER BY uqp.user_id DESC;
 END//
