@@ -5458,6 +5458,49 @@ BEGIN
       INSERT INTO TaskUnclaims (id, task_id, user_id, `unclaim-comment`, `unclaimed-time`) VALUES (NULL, tID, uID, userFeedback, NOW());
       update Tasks set `task-status_id`=2 where id = tID;
       COMMIT;
+
+    SELECT
+        t.project_id,
+        t.`language_id-source`,
+        t.`language_id-target`,
+        t.`country_id-source`,
+        t.`country_id-target`,
+        IF(t.`task-type_id`=2, 3, 2),
+        tc.chunk_number
+    INTO
+        @projectid,
+        @language_source,
+        @language_target,
+        @country_source,
+        @country_target,
+        @bl_type_to_delete,
+        @chunknumber
+    FROM      Tasks       t
+    LEFT JOIN TaskChunks tc ON task_id=t.id
+    WHERE
+    t.id=tID AND
+    t.`task-type_id` IN (2, 3);
+
+    SELECT
+        MAX(t.id) INTO @bl_id_to_delete
+    FROM      Tasks       t
+    LEFT JOIN TaskChunks tc ON task_id=t.id
+    WHERE
+        t.project_id          =@projectid AND
+        t.`language_id-source`=@language_source AND
+        t.`language_id-target`=@language_target AND
+        t.`country_id-source` =@country_source AND
+        t.`country_id-target` =@country_target AND
+        t.`task-type_id`      =@bl_type_to_delete AND
+        (tc.chunk_number      =@chunknumber OR tc.chunk_number IS NULL);
+
+    IF @bl_id_to_delete IS NOT NULL THEN
+        DELETE FROM TaskTranslatorBlacklist
+        WHERE
+            user_id=uID AND
+            task_id=@bl_id_to_delete;
+    END IF;
+
 		select 1 as result;
 	else
 		select 0 as result;
@@ -7677,6 +7720,7 @@ BEGIN
         IFNULL(ln.`en-name`, '') AS language_name_native,
         IFNULL(cn.`en-name`, '') AS country_name_native
     FROM Tasks                            t
+    JOIN Projects                         p ON t.project_id=p.id
     JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
     JOIN UserQualifiedPairs             uqp ON
         t.`language_id-source`=uqp.language_id_source AND
@@ -7689,11 +7733,19 @@ BEGIN
     LEFT JOIN TaskInviteSentToUsers     tis ON u.id=tis.user_id AND tis.task_id=taskID
     LEFT JOIN Admins                      a ON uqp.user_id=a.user_id
     LEFT JOIN OrganisationMembers         o ON uqp.user_id=o.user_id
+    LEFT JOIN Badges                      b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+    LEFT JOIN RestrictedTasks             r ON t.id=r.restricted_task_id
     WHERE
         t.id=taskID AND
         tis.user_id IS NULL AND
         a.user_id IS NULL AND
-        o.user_id IS NULL
+        o.user_id IS NULL AND
+        NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tbl WHERE tbl.user_id=uqp.user_id AND tbl.task_id=t.id) AND
+        (
+            r.restricted_task_id IS NULL OR
+            b.id IS NULL OR
+            b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uqp.user_id)
+        )
     GROUP BY uqp.user_id
     ORDER BY uqp.user_id DESC;
 END//
