@@ -464,17 +464,11 @@ class TaskDao extends BaseDao
 
     public function insertWordCountRequestForProjectsErrors($project_id, $status, $message)
     {
-        if (empty($message)) $message = '';
 error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $message)");
         LibAPI\PDOWrapper::call('insertWordCountRequestForProjectsErrors',
             LibAPI\PDOWrapper::cleanse($project_id) . ',' .
-            LibAPI\PDOWrapper::cleanseNullOrWrapStr($status) . ',' .
-            LibAPI\PDOWrapper::cleanseNullOrWrapStr($message));
-error_log('insertWordCountRequestForProjectsErrors...' .
-            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
-            LibAPI\PDOWrapper::cleanseNullOrWrapStr($status) . ',' .
-            LibAPI\PDOWrapper::cleanseNullOrWrapStr($message)
-);
+            LibAPI\PDOWrapper::cleanseWrapStr($status) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($message));
     }
 
     public function getWordCountRequestForProjects($state)
