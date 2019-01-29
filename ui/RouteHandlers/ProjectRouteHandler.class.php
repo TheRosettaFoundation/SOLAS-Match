@@ -115,6 +115,7 @@ class ProjectRouteHandler
 
     public function projectView($project_id)
     {
+        $matecat_api = Common\Lib\Settings::get('matecat.url');
         $app = \Slim\Slim::getInstance();
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $adminDao = new DAO\AdminDao();
@@ -339,7 +340,7 @@ class ProjectRouteHandler
 
                     $request_for_project = $taskDao->getWordCountRequestForProject($project_id);
                     if ($request_for_project && !empty($request_for_project['matecat_id_project']) && !empty($request_for_project['matecat_id_project_pass'])) {
-                        $re = curl_init("https://tm.translatorswb.org/api/v2/projects/{$request_for_project['matecat_id_project']}/{$request_for_project['matecat_id_project_pass']}/urls");
+                        $re = curl_init("{$matecat_api}api/v2/projects/{$request_for_project['matecat_id_project']}/{$request_for_project['matecat_id_project_pass']}/urls");
 
                         curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
                         curl_setopt($re, CURLOPT_COOKIESESSION, true);
@@ -622,6 +623,7 @@ class ProjectRouteHandler
 
     public function projectAlter($project_id)
     {
+        $matecat_api = Common\Lib\Settings::get('matecat.url');
         $app = \Slim\Slim::getInstance();
         $user_id = Common\Lib\UserSession::getCurrentUserID();
 
@@ -766,7 +768,7 @@ class ProjectRouteHandler
                                 if (!empty($post['analyse_url'])) {
                                     $request_for_project = $taskDao->getWordCountRequestForProject($project_id);
                                     if ($request_for_project && empty($request_for_project['matecat_id_project']) && empty($request_for_project['matecat_id_project_pass']) && $request_for_project['state'] == 3) {
-                                        $found = preg_match('|^http[s]?://tm.translatorswb.org/analyze/proj-([0-9]+)/([0-9]+)-([0-9a-z]+)$|', $post['analyse_url'], $matches);
+                                        $found = preg_match('|^http[s]?' . substr($matecat_api, strpos($matecat_api, ':')) . 'analyze/proj-([0-9]+)/([0-9]+)-([0-9a-z]+)$|', $post['analyse_url'], $matches);
                                         if ($found && $matches[1] == $project_id) {
                                             $matecat_id_project = $matches[2];
                                             $matecat_id_project_pass = $matches[3];
@@ -1745,6 +1747,8 @@ class ProjectRouteHandler
 
     public function project_cron_1_minute()
     {
+      $matecat_api = Common\Lib\Settings::get('matecat.url');
+
       $fp_for_lock = fopen(__DIR__ . '/project_cron_1_minute_lock.txt', 'r');
       if (flock($fp_for_lock, LOCK_EX | LOCK_NB)) { // Acquire an exclusive lock, if possible, if not we will wait for next time
 
@@ -1760,7 +1764,7 @@ class ProjectRouteHandler
 
                 // https://www.matecat.com/api/docs#!/Project/get_status (i.e. Word Count)
                 // $re = curl_init("https://www.matecat.com/api/status?id_project=$matecat_id_project&project_pass=$matecat_id_project_pass");
-                $re = curl_init("https://tm.translatorswb.org/api/status?id_project=$matecat_id_project&project_pass=$matecat_id_project_pass");
+                $re = curl_init("{$matecat_api}api/status?id_project=$matecat_id_project&project_pass=$matecat_id_project_pass");
 
                 // http://php.net/manual/en/function.curl-setopt.php
                 curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
@@ -1894,7 +1898,7 @@ class ProjectRouteHandler
 
                 // https://www.matecat.com/api/docs#!/Project/post_new
                 // $re = curl_init('https://www.matecat.com/api/new');
-                $re = curl_init('https://tm.translatorswb.org/api/new');
+                $re = curl_init("{$matecat_api}api/new");
 
                 // http://php.net/manual/en/function.curl-setopt.php
                 curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');

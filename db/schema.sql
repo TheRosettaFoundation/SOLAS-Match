@@ -2660,14 +2660,24 @@ DROP PROCEDURE IF EXISTS `getOrgMembers`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgMembers`(IN `orgId` INT)
 BEGIN
-    select u.id,`display-name` as display_name,email,password,biography,
+    SELECT id, `display-name` AS display_name, email, password, biography,
             (select `en-name` from Languages where id =u.`language_id`) as `languageName`, 
             (select code from Languages where id =u.`language_id`) as `languageCode`, 
             (select `en-name` from Countries where id =u.`country_id`) as `countryName`, 
             (select code from Countries where id =u.`country_id`) as `countryCode`, 
             nonce,`created-time` as created_time
-    	FROM OrganisationMembers om JOIN Users u ON om.user_id = u.id
-	    WHERE organisation_id=orgId;
+    FROM OrganisationMembers om JOIN Users u ON om.user_id=u.id
+    WHERE organisation_id=orgId
+    UNION
+    SELECT id, `display-name` AS display_name, email, password, biography,
+            (select `en-name` from Languages where id =u.`language_id`) as `languageName`,
+            (select code from Languages where id =u.`language_id`) as `languageCode`,
+            (select `en-name` from Countries where id =u.`country_id`) as `countryName`,
+            (select code from Countries where id =u.`country_id`) as `countryCode`,
+            nonce,`created-time` as created_time
+    FROM Admins om JOIN Users u ON om.user_id=u.id
+    WHERE organisation_id=orgId
+    ORDER BY 2;
 END//
 DELIMITER ;
 

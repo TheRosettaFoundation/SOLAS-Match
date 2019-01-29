@@ -118,6 +118,7 @@ class StatisticsDao extends BaseDao
 
     public function get_matecat_task_stats($task_id, $task_type, $project_id, $matecat_langpair, $matecat_id_job, $matecat_id_job_password)
     {
+        $matecat_api = Common\Lib\Settings::get('matecat.url');
         $taskDao = new TaskDao();
         $stats = array();
         $we_are_a_subchunk = false;
@@ -156,12 +157,12 @@ class StatisticsDao extends BaseDao
                     $stats['DOWNLOAD_STATUS']           = 'approved';
                     $stats['TRANSLATED_PERC_FORMATTED'] = '100';
                     $stats['APPROVED_PERC_FORMATTED']   = '100';
-                    $stats['matecat_url'] = "https://tm.translatorswb.org/$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                    $stats['matecat_url'] = "{$matecat_api}$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
                     $stats['matecat_langpair_or_blank'] = $matecat_langpair;
                     return $stats;
                 }
                 // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
-                $re = curl_init("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
+                $re = curl_init("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
 
                 curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
                 curl_setopt($re, CURLOPT_COOKIESESSION, true);
@@ -190,16 +191,16 @@ class StatisticsDao extends BaseDao
 
                     if (!empty($response_data['stats'])) {
                         $stats = $response_data['stats'];
-                        $stats['matecat_url'] = "https://tm.translatorswb.org/$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                        $stats['matecat_url'] = "{$matecat_api}$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
                         $stats['matecat_langpair_or_blank'] = $matecat_langpair;
                         if ($stats['DOWNLOAD_STATUS'] === 'draft') {
                             $stats['DOWNLOAD_STATUS'] = $recorded_status; // getMatecatRecordedJobStatus() MIGHT have a "better" status
                         }
                     } else {
-                        error_log("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats get_matecat_task_stats($task_id...) stats empty!");
+                        error_log("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats get_matecat_task_stats($task_id...) stats empty!");
                     }
                 } else {
-                    error_log("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats get_matecat_task_stats($task_id...) responseCode: $responseCode");
+                    error_log("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats get_matecat_task_stats($task_id...) responseCode: $responseCode");
                 }
                   }
             }
@@ -209,6 +210,7 @@ class StatisticsDao extends BaseDao
 
     public function get_matecat_task_urls($task_id, $task_type, $project_id, $matecat_langpair, $matecat_id_job, $matecat_id_job_password)
     {
+        $matecat_api = Common\Lib\Settings::get('matecat.url');
         $taskDao = new TaskDao();
         $stats = array();
         $we_are_a_subchunk = false;
@@ -231,7 +233,7 @@ class StatisticsDao extends BaseDao
                   if (!$we_are_a_subchunk && $taskDao->getTaskSubChunks($matecat_id_job)) {
                       $stats['parent_of_chunked'] = 1;
                   } else {
-                $stats['matecat_url'] = "https://tm.translatorswb.org/$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                $stats['matecat_url'] = "{$matecat_api}$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
                 $stats['matecat_langpair_or_blank'] = $matecat_langpair;
                   }
             }
