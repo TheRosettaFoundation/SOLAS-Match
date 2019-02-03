@@ -1481,16 +1481,16 @@ class TaskRouteHandler
 
         $app->view()->appendData(array(
             'sesskey'       => $sesskey,
-            "extra_scripts" => $extra_scripts,
-            "task"          => $task,
-            "project"       => $project,
-            "org"           => $org,
-            "filename"      => $filename,
-            "converter"     => $converter,
-            "taskTypeColours"   => $taskTypeColours,
+            'extra_scripts' => $extra_scripts,
+            'task'          => $task,
+            'project'       => $project,
+            'org'           => $org,
+            'filename'      => $filename,
+            'converter'     => $converter,
+            'taskTypeColours'   => $taskTypeColours,
             'matecat_url' => $matecat_url,
             'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
-            "file_previously_uploaded" => $file_previously_uploaded
+            'file_previously_uploaded' => $file_previously_uploaded
         ));
 
         $app->render("task/task-chunk-complete.tpl");
