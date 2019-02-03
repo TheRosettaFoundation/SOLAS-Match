@@ -68,18 +68,12 @@
             {if $type_id == TaskTypeEnum::TRANSLATION}
             {Localisation::getTranslation('task_claimed_alternative_option')} <button type="submit" value="submit" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> {Localisation::getTranslation('task_simple_upload_copy_from_kato')}</button>
             <p>
-                {if empty($chunks)}
                 {sprintf(Localisation::getTranslation('task_simple_upload_view_on_kato'), {$matecat_url})}<br />
-                {/if}
-                {sprintf(Localisation::getTranslation('task_simple_upload_download_from_kato'), {$matecat_download_url})}
             </p>
             {elseif $type_id == TaskTypeEnum::PROOFREADING}
             {Localisation::getTranslation('task_claimed_alternative_option')} <button type="submit" value="submit" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> {Localisation::getTranslation('task_simple_upload_copy_from_kato_proofread')}</button>
             <p>
-                {if empty($chunks)}
                 {sprintf(Localisation::getTranslation('task_simple_upload_view_on_kato_proofread'), {$matecat_url})}<br />
-                {/if}
-                {sprintf(Localisation::getTranslation('task_simple_upload_download_from_kato_proofread'), {$matecat_download_url})}
             </p>
             {/if}
             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -98,29 +92,6 @@
                 </p>
                 <p><strong>{Localisation::getTranslation('common_warning')}! </strong>{Localisation::getTranslation('task_simple_upload_2')}</p>
             </div>
-        {/if}
-
-        {if !empty($chunks)}
-            {assign var="chunk_number" value=0}
-            <table class="table table-striped">
-                <thead>
-                    <th style="text-align: left">Chunk Number</th>
-                    <th>Kató TM Translate URL</th>
-                    <th>Kató TM Revise URL</th>
-                    <th>Kató TM Status</th>
-                </thead>
-                <tbody>
-                    {foreach $chunks as $chunk}
-                        <tr>
-                            <td style="text-align: left; word-break:break-all; width: 50px">{$chunk_number}</td>
-                            <td><a href="{$chunk['translate_url']}">{$chunk['translate_url']}</a></td>
-                            <td><a href="{$chunk['revise_url']}"   >{$chunk['revise_url']}</a></td>
-                            <td>{$chunk['DOWNLOAD_STATUS']}</td>
-                        </tr>
-                        {assign var="chunk_number" value=($chunk_number + 1)}
-                    {/foreach}
-                </tbody>
-            </table>
         {/if}
 
         <h3>{Localisation::getTranslation('task_simple_upload_3')} <small>{Localisation::getTranslation('task_simple_upload_4')}</small></h3>
