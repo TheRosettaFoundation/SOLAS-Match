@@ -1411,8 +1411,6 @@ class TaskRouteHandler
         $converter = Common\Lib\Settings::get("converter.converter_enabled");
 
         $matecat_url = '';
-        $matecat_download_url = '';
-        $chunks = array();
         if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
             $matecat_tasks = $taskDao->getTaskChunk($taskId);
             if (!empty($matecat_tasks)) {
@@ -1425,7 +1423,6 @@ class TaskRouteHandler
                        $translate = 'translate';
                        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
                        $matecat_url = "{$matecat_api}$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
-                       $matecat_download_url = "{$matecat_api}?action=downloadFile&id_job=$matecat_id_job&id_file=$matecat_id_file&password=$matecat_id_job_password&download_type=all";
                    } else {
                     // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
                     $re = curl_init("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
@@ -1492,8 +1489,6 @@ class TaskRouteHandler
             "converter"     => $converter,
             "taskTypeColours"   => $taskTypeColours,
             'matecat_url' => $matecat_url,
-            'matecat_download_url' => $matecat_download_url,
-            'chunks'               => $chunks,
             'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
             "file_previously_uploaded" => $file_previously_uploaded
         ));
