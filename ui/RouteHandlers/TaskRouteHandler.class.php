@@ -1329,54 +1329,9 @@ class TaskRouteHandler
           Common\Lib\UserSession::checkCSRFKey($post, 'taskChunkComplete');
 
           if (!empty($post['copy_from_matecat'])) {
-            $matecat_tasks = $taskDao->getMatecatLanguagePairs($taskId);
+            $matecat_tasks = $taskDao->getTaskChunk($taskId);
             if (!empty($matecat_tasks)) {
-                $matecat_id_job = $matecat_tasks[0]['matecat_id_job'];
-                $matecat_id_job_password = $matecat_tasks[0]['matecat_id_job_password'];
-                $matecat_id_file = $matecat_tasks[0]['matecat_id_file'];
-                if (!empty($matecat_id_job) && !empty($matecat_id_job_password) && !empty($matecat_id_file)) {
-                    $re = curl_init("{$matecat_api}?action=downloadFile&id_job=$matecat_id_job&id_file=$matecat_id_file&password=$matecat_id_job_password&download_type=all");
-
-                    curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
-                    curl_setopt($re, CURLOPT_COOKIESESSION, true);
-                    curl_setopt($re, CURLOPT_FOLLOWLOCATION, true);
-                    curl_setopt($re, CURLOPT_AUTOREFERER, true);
-
-                    $httpHeaders = array(
-                        'Expect:'
-                    );
-                    curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
-
-                    curl_setopt($re, CURLOPT_HEADER, false);
-                    curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
-                    curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
-                    curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
-                    $res = curl_exec($re);
-                    if( $res !== false) {
-                        $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
-
-                        curl_close($re);
-
-                        if ($responseCode == 200) {
-                            try {
-                                $taskDao->uploadOutputFile($taskId, >>>>$userId<<<<, $res);
-                            } catch (\Exception  $e) {
-                                $errorMessage = Lib\Localisation::getTranslation('task_simple_upload_7') . $e->getMessage();
-                                error_log($errorMessage);
-                            }
-                        } else {
-                            $errorMessage = "Curl error ($taskId) responseCode: $responseCode";
-                            error_log($errorMessage);
-                        }
-                    } else {
-                        $errorMessage = "Curl error ($taskId): " . curl_error($re);
-                        error_log($errorMessage);
-                        curl_close($re);
-                    }
-                } else {
-                    $errorMessage = "Curl error ($taskId) matecat_id_job($matecat_id_job), matecat_id_job_password($matecat_id_job_password) or matecat_id_file($matecat_id_file) empty!";
-                    error_log($errorMessage);
-                }
+>>>>>$taskDao->uploadOutputFile($taskId, >>>>$userId<<<<, $res);
             } else {
                 $errorMessage = "Curl error ($taskId) MateCat data not found!";
                 error_log($errorMessage);
