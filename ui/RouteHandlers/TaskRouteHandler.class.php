@@ -1325,26 +1325,25 @@ class TaskRouteHandler
         }
 
         if ($app->request()->isPost()) {
-          $post = $app->request()->post();
-          Common\Lib\UserSession::checkCSRFKey($post, 'taskChunkComplete');
+            $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post, 'taskChunkComplete');
 
-          if (!empty($post['copy_from_matecat'])) {
+            if (!empty($post['copy_from_matecat'])) {
 >>>>>$taskDao->uploadOutputFile($taskId, >>>>$userId<<<<, $res);
-          }
+            }
 
-          $app->redirect($app->urlFor("task-review", array("task_id" => $taskId)));
+            $app->redirect($app->urlFor("task-review", array("task_id" => $taskId)));
         }
 
         $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
-
         $taskTypeColours = array();
         for ($i = 1; $i <= $numTaskTypes; $i++) {
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
 
         $matecat_url = '';
-        $matecat_langpair = $matecat_tasks[0]['matecat_langpair'];
-        $matecat_id_job = $matecat_tasks[0]['matecat_id_job'];
+        $matecat_langpair        = $matecat_tasks[0]['matecat_langpair'];
+        $matecat_id_job          = $matecat_tasks[0]['matecat_id_job'];
         $matecat_id_job_password = $matecat_tasks[0]['matecat_id_chunk_password'];
         if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
             $recorded_status = $taskDao->getMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password);
