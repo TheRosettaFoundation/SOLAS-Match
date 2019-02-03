@@ -1316,7 +1316,6 @@ class TaskRouteHandler
             $app->redirect($app->urlFor("task", array("task_id" => $taskId)));
         }
 
-        $fieldName = "fileUpload";
         $errorMessage = null;
         $userId = Common\Lib\UserSession::getCurrentUserID();
         $task = $taskDao->getTask($taskId);
@@ -1328,7 +1327,7 @@ class TaskRouteHandler
 
         if ($app->request()->isPost()) {
           $post = $app->request()->post();
-          Common\Lib\UserSession::checkCSRFKey($post, 'taskSimpleUpload');
+          Common\Lib\UserSession::checkCSRFKey($post, 'taskChunkComplete');
 
           if (!empty($post['copy_from_matecat'])) {
             $matecat_tasks = $taskDao->getMatecatLanguagePairs($taskId);
@@ -1382,54 +1381,6 @@ class TaskRouteHandler
             } else {
                 $errorMessage = "Curl error ($taskId) MateCat data not found!";
                 error_log($errorMessage);
-            }
-          } else {
-            try {
-                Lib\TemplateHelper::validateFileHasBeenSuccessfullyUploaded($fieldName);
-                $projectFile = $projectDao->getProjectFileInfo($project->getId());
-                $projectFileMimeType = $projectFile->getMime();
-                $projectFileType = pathinfo($projectFile->getFilename(), PATHINFO_EXTENSION);
-
-                $fileUploadType = pathinfo($_FILES[$fieldName]["name"], PATHINFO_EXTENSION);
-
-                //Call API to determine MIME type of file contents
-                $helper = new Common\Lib\APIHelper(Common\Lib\Settings::get('ui.api_format'));
-                $siteApi = Common\Lib\Settings::get("site.api");
-                $filename = urlencode($_FILES[$fieldName]["name"]);
-                $request = $siteApi."v0/io/contentMime/$filename";
-                $data = file_get_contents($_FILES[$fieldName]["tmp_name"]);
-                $fileUploadMime = $helper->call(null, $request, Common\Enums\HttpMethodEnum::POST, null, null, $data);
-                if (strcasecmp($fileUploadType, $projectFileType) != 0) {
-                    throw new \Exception(sprintf(
-                        Lib\Localisation::getTranslation('common_task_file_extension_mismatch'),
-                        $projectFileType
-                    ));
-                } elseif ($fileUploadMime != $projectFileMimeType) {
-                    throw new \Exception(
-                        sprintf(
-                            Lib\Localisation::getTranslation('task_simple_upload_6'),
-                            $projectFileType,
-                            $projectFileType
-                        )
-                    );
-                }
-            } catch (\Exception $e) {
-                $errorMessage = $e->getMessage();
-            }
-
-            if (is_null($errorMessage)) {
-                try {
-                    $filedata = file_get_contents($_FILES[$fieldName]["tmp_name"]);
-
-                    if ($post['submit'] == 'XLIFF') {
-                        $taskDao->uploadOutputFile($taskId, $userId, $filedata, true);
-                    } elseif ($post['submit'] == 'submit') {
-                        $taskDao->uploadOutputFile($taskId, $userId, $filedata);
-                    }
-
-                } catch (\Exception  $e) {
-                    $errorMessage = Lib\Localisation::getTranslation('task_simple_upload_7') . $e->getMessage();
-                }
             }
           }
 
@@ -1558,8 +1509,6 @@ class TaskRouteHandler
             "org"           => $org,
             "filename"      => $filename,
             "converter"     => $converter,
-            "fieldName"     => $fieldName,
-            "max_file_size" => Lib\TemplateHelper::maxFileSizeMB(),
             "taskTypeColours"   => $taskTypeColours,
             'matecat_url' => $matecat_url,
             'matecat_download_url' => $matecat_download_url,

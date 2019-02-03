@@ -54,10 +54,6 @@
         {/if}   
         <form class="well" method="post" action="{urlFor name="task-simple-upload" options="task_id.$task_id"}" enctype="multipart/form-data">
                 <input type="hidden" name="task_id" value="{$task->getId()}"/>
-                <input type="file" name="{$fieldName}" id="{$fieldName}"/>
-                <p class="help-block">
-                        {sprintf(Localisation::getTranslation('common_maximum_file_size_is'), {$max_file_size})}
-                </p> 
                 <button type="submit" value="submit" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> {Localisation::getTranslation('task_simple_upload_upload')}</button>
             {if ($converter == "y")}
                 <button type="submit" value="XLIFF" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> {Localisation::getTranslation('task_simple_upload_as_xliff')}</button>
