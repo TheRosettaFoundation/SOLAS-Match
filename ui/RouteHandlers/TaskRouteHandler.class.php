@@ -1315,13 +1315,13 @@ class TaskRouteHandler
             $app->redirect($app->urlFor("task", array("task_id" => $taskId)));
         }
 
-        $errorMessage = null;
 >>>>        $userId = Common\Lib\UserSession::getCurrentUserID();
         $task = $taskDao->getTask($taskId);
         $project = $projectDao->getProject($task->getProjectId());
 
-        if (!$taskDao->get_allow_download($task)) {
-            $app->redirect($app->urlFor("task-view", array("task_id" => $taskId)));
+        $matecat_tasks = $taskDao->getTaskChunk($taskId);
+        if (empty($matecat_tasks)) {
+            $app->redirect($app->urlFor('task-view', array('task_id' => $taskId)));
         }
 
         if ($app->request()->isPost()) {
@@ -1329,20 +1329,10 @@ class TaskRouteHandler
           Common\Lib\UserSession::checkCSRFKey($post, 'taskChunkComplete');
 
           if (!empty($post['copy_from_matecat'])) {
-            $matecat_tasks = $taskDao->getTaskChunk($taskId);
-            if (!empty($matecat_tasks)) {
 >>>>>$taskDao->uploadOutputFile($taskId, >>>>$userId<<<<, $res);
-            } else {
-                $errorMessage = "Curl error ($taskId) MateCat data not found!";
-                error_log($errorMessage);
-            }
           }
 
-          if (is_null($errorMessage)) {
-              $app->redirect($app->urlFor("task-review", array("task_id" => $taskId)));
-          } else {
-              $app->flashNow("error", $errorMessage);
-          }
+          $app->redirect($app->urlFor("task-review", array("task_id" => $taskId)));
         }
 
         $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
@@ -1353,68 +1343,63 @@ class TaskRouteHandler
         }
 
         $matecat_url = '';
-        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
-            $matecat_tasks = $taskDao->getTaskChunk($taskId);
-            if (!empty($matecat_tasks)) {
-                $matecat_langpair = $matecat_tasks[0]['matecat_langpair'];
-                $matecat_id_job = $matecat_tasks[0]['matecat_id_job'];
-                $matecat_id_job_password = $matecat_tasks[0]['matecat_id_chunk_password'];
-                if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
-                   $recorded_status = $taskDao->getMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password);
-                   if ($recorded_status === 'approved') { // We do not need to query MateCat...
-                       $translate = 'translate';
-                       if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
-                       $matecat_url = "{$matecat_api}$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
-                   } else {
-                    // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
-                    $re = curl_init("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
+        $matecat_langpair = $matecat_tasks[0]['matecat_langpair'];
+        $matecat_id_job = $matecat_tasks[0]['matecat_id_job'];
+        $matecat_id_job_password = $matecat_tasks[0]['matecat_id_chunk_password'];
+        if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
+            $recorded_status = $taskDao->getMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password);
+            if ($recorded_status === 'approved') { // We do not need to query MateCat...
+                $translate = 'translate';
+                if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
+                $matecat_url = "{$matecat_api}$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+            } else {
+                // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
+                $re = curl_init("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
 
-                    curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
-                    curl_setopt($re, CURLOPT_COOKIESESSION, true);
-                    curl_setopt($re, CURLOPT_FOLLOWLOCATION, true);
-                    curl_setopt($re, CURLOPT_AUTOREFERER, true);
+                curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
+                curl_setopt($re, CURLOPT_COOKIESESSION, true);
+                curl_setopt($re, CURLOPT_FOLLOWLOCATION, true);
+                curl_setopt($re, CURLOPT_AUTOREFERER, true);
 
-                    $httpHeaders = array(
-                        'Expect:'
-                    );
-                    curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
+                $httpHeaders = array(
+                    'Expect:'
+                );
+                curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
 
-                    curl_setopt($re, CURLOPT_HEADER, true);
-                    curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
-                    curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
-                    curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
-                    $res = curl_exec($re);
+                curl_setopt($re, CURLOPT_HEADER, true);
+                curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
+                curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
+                $res = curl_exec($re);
 
-                    $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
-                    $header = substr($res, 0, $header_size);
-                    $res = substr($res, $header_size);
-                    $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
+                $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
+                $header = substr($res, 0, $header_size);
+                $res = substr($res, $header_size);
+                $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
 
-                    curl_close($re);
+                curl_close($re);
 
-                    if ($responseCode == 200) {
-                        $response_data = json_decode($res, true);
+                if ($responseCode == 200) {
+                    $response_data = json_decode($res, true);
 
-                        if (!empty($response_data['stats']['DOWNLOAD_STATUS'])) {
-                            if ($response_data['stats']['DOWNLOAD_STATUS'] === 'draft') {
-                                $response_data['stats']['DOWNLOAD_STATUS'] = $recorded_status; // getMatecatRecordedJobStatus() MIGHT have a "better" status
+                    if (!empty($response_data['stats']['DOWNLOAD_STATUS'])) {
+                        if ($response_data['stats']['DOWNLOAD_STATUS'] === 'draft') {
+                            $response_data['stats']['DOWNLOAD_STATUS'] = $recorded_status; // getMatecatRecordedJobStatus() MIGHT have a "better" status
+                        }
+                        if ($response_data['stats']['DOWNLOAD_STATUS'] === 'translated' || $response_data['stats']['DOWNLOAD_STATUS'] === 'approved') {
+                            $translate = 'translate';
+                            if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
+                            $matecat_url = "{$matecat_api}$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+
+                            if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $response_data['stats']['DOWNLOAD_STATUS'] === 'translated') {
+                                $matecat_url = ''; // Disable Kató access for Proofreading if job file is only translated
                             }
-                            if ($response_data['stats']['DOWNLOAD_STATUS'] === 'translated' || $response_data['stats']['DOWNLOAD_STATUS'] === 'approved') {
-                                $translate = 'translate';
-                                if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
-                                $matecat_url = "{$matecat_api}$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
-
-                                if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $response_data['stats']['DOWNLOAD_STATUS'] === 'translated') {
-                                    $matecat_url = ''; // Disable Kató access for Proofreading if job file is only translated
-                                }
-                            }
-                        } else {
-                            error_log("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats ($taskId) DOWNLOAD_STATUS empty!");
                         }
                     } else {
-                        error_log("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats ($taskId) responseCode: $responseCode");
+                        error_log("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats ($taskId) DOWNLOAD_STATUS empty!");
                     }
-                   }
+                } else {
+                    error_log("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats ($taskId) responseCode: $responseCode");
                 }
             }
         }

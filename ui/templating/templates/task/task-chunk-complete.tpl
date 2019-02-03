@@ -41,11 +41,6 @@
 
             </div>
         </div>
->>>        {if isset($upload_error)}
->>>                <div class="alert alert-error">
->>>                        <strong>{Localisation::getTranslation('task_simple_upload_upload_error')}</strong> {$upload_error}
->>>                </div>
->>>        {/if}
 
         {if $matecat_url != ''}
         <form class="well" method="post" action="{urlFor name="task-simple-upload" options="task_id.$task_id"}" enctype="application/x-www-form-urlencoded">
