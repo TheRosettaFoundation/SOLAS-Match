@@ -1316,7 +1316,7 @@ class TaskRouteHandler
         }
 
         $errorMessage = null;
-        $userId = Common\Lib\UserSession::getCurrentUserID();
+>>>>        $userId = Common\Lib\UserSession::getCurrentUserID();
         $task = $taskDao->getTask($taskId);
         $project = $projectDao->getProject($task->getProjectId());
 
@@ -1359,7 +1359,7 @@ class TaskRouteHandler
 
                         if ($responseCode == 200) {
                             try {
-                                $taskDao->uploadOutputFile($taskId, $userId, $res);
+                                $taskDao->uploadOutputFile($taskId, >>>>$userId<<<<, $res);
                             } catch (\Exception  $e) {
                                 $errorMessage = Lib\Localisation::getTranslation('task_simple_upload_7') . $e->getMessage();
                                 error_log($errorMessage);
@@ -1390,23 +1390,12 @@ class TaskRouteHandler
           }
         }
 
-        $taskVersion = $taskDao->getTaskVersion($task->getId());
-
-        $file_previously_uploaded = false;
-        if ($taskVersion > 0) {
-            $file_previously_uploaded = true;
-        }
-
-        $taskFileInfo = $taskDao->getTaskInfo($taskId, 0);
-        $filename = $taskFileInfo->getFilename();
         $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
 
         $taskTypeColours = array();
         for ($i = 1; $i <= $numTaskTypes; $i++) {
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
-
-        $converter = Common\Lib\Settings::get("converter.converter_enabled");
 
         $matecat_url = '';
         if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
