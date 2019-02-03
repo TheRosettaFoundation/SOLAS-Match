@@ -1307,7 +1307,6 @@ class TaskRouteHandler
         $app = \Slim\Slim::getInstance();
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
-        $orgDao = new DAO\OrganisationDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
@@ -1391,7 +1390,6 @@ class TaskRouteHandler
           }
         }
 
-        $org = $orgDao->getOrganisation($project->getOrganisationId());
         $taskVersion = $taskDao->getTaskVersion($task->getId());
 
         $file_previously_uploaded = false;
@@ -1480,17 +1478,12 @@ class TaskRouteHandler
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
 
         $app->view()->appendData(array(
-            'sesskey'       => $sesskey,
-            'extra_scripts' => $extra_scripts,
-            'task'          => $task,
-            'project'       => $project,
-            'org'           => $org,
-            'filename'      => $filename,
-            'converter'     => $converter,
-            'taskTypeColours'   => $taskTypeColours,
-            'matecat_url' => $matecat_url,
-            'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
-            'file_previously_uploaded' => $file_previously_uploaded
+            'sesskey'         => $sesskey,
+            'extra_scripts'   => $extra_scripts,
+            'task'            => $task,
+            'taskTypeColours' => $taskTypeColours,
+            'matecat_url'     => $matecat_url,
+            'discourse_slug'  => $projectDao->discourse_parameterize($project->getTitle()),
         ));
 
         $app->render("task/task-chunk-complete.tpl");

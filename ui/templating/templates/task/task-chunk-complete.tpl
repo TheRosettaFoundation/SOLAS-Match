@@ -46,20 +46,6 @@
                         <strong>{Localisation::getTranslation('task_simple_upload_upload_error')}</strong> {$upload_error}
                 </div>
         {/if}
-        {if $type_id == TaskTypeEnum::TRANSLATION}
-            <h3>{sprintf(Localisation::getTranslation('task_simple_upload_0'), {TemplateHelper::uiCleanseHTML($filename)})}</h3>
-        {else}
-            <h3>{sprintf(Localisation::getTranslation('task_simple_upload_0_proofreading'), {TemplateHelper::uiCleanseHTML($filename)})}</h3>
-            <p>{Localisation::getTranslation('task_simple_upload_clean_upload')}</p>
-        {/if}   
-        <form class="well" method="post" action="{urlFor name="task-simple-upload" options="task_id.$task_id"}" enctype="multipart/form-data">
-                <input type="hidden" name="task_id" value="{$task->getId()}"/>
-                <button type="submit" value="submit" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> {Localisation::getTranslation('task_simple_upload_upload')}</button>
-            {if ($converter == "y")}
-                <button type="submit" value="XLIFF" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> {Localisation::getTranslation('task_simple_upload_as_xliff')}</button>
-            {/if}
-            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-        </form>
 
         {if $matecat_url != ''}
         <form class="well" method="post" action="{urlFor name="task-simple-upload" options="task_id.$task_id"}" enctype="application/x-www-form-urlencoded">
@@ -78,46 +64,6 @@
             {/if}
             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
         </form>
-        {/if}
-
-        {if isset($file_previously_uploaded) && $file_previously_uploaded}
-            <br />
-            <div class="alert">
-                <p>{Localisation::getTranslation('common_thanks_for_providing_your_translation_for_this_task')}
-                {if $org != null && $org->getName() != ''}
-                    {sprintf(Localisation::getTranslation('task_simple_upload_1'), {$org->getName()})}
-                {else}
-                    {Localisation::getTranslation('task_simple_upload_8')}
-                {/if}
-                </p>
-                <p><strong>{Localisation::getTranslation('common_warning')}! </strong>{Localisation::getTranslation('task_simple_upload_2')}</p>
-            </div>
-        {/if}
-
-        <h3>{Localisation::getTranslation('task_simple_upload_3')} <small>{Localisation::getTranslation('task_simple_upload_4')}</small></h3>
-        <br />
-        <p>             
-            {sprintf(Localisation::getTranslation('task_simple_upload_original_project_file'), {"{urlFor name="home"}project/{$task->getProjectId()}/file/"})}
-        </p>
-        
-        <p>
-            {sprintf(Localisation::getTranslation('task_simple_upload_original_task_file'), {urlFor name="download-task" options="task_id.$task_id"})}
-        </p> 
-
-        {if ($converter == "y")}
-        <p>  
-            {sprintf(Localisation::getTranslation('task_simple_upload_original_task_file'), {"{urlFor name="download-task" options="task_id.$task_id"}?convertToXliff=true"})} - {Localisation::getTranslation('task_simple_upload_as_xliff')}
-        </p>     
-        {/if}  
-
-        <p>
-            {sprintf(Localisation::getTranslation('task_simple_upload_latest_uploaded_file'), {urlFor name="download-task-latest-version" options="task_id.$task_id"})}
-        </p> 
-
-        {if ($converter == "y")}
-        <p>
-            {sprintf(Localisation::getTranslation('task_simple_upload_latest_uploaded_file'), {"{urlFor name="download-task-latest-version" options="task_id.$task_id"}?convertToXliff=true"})} - {Localisation::getTranslation('task_simple_upload_as_xliff')}
-        </p>     
         {/if}
     </div>
 
