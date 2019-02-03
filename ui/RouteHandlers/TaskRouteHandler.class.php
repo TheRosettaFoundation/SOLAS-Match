@@ -1414,29 +1414,12 @@ class TaskRouteHandler
         $matecat_download_url = '';
         $chunks = array();
         if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
-            $matecat_tasks = $taskDao->getMatecatLanguagePairs($taskId);
+            $matecat_tasks = $taskDao->getTaskChunk($taskId);
             if (!empty($matecat_tasks)) {
                 $matecat_langpair = $matecat_tasks[0]['matecat_langpair'];
                 $matecat_id_job = $matecat_tasks[0]['matecat_id_job'];
-                $matecat_id_job_password = $matecat_tasks[0]['matecat_id_job_password'];
-                $matecat_id_file = $matecat_tasks[0]['matecat_id_file'];
-                if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password) && !empty($matecat_id_file)) {
-                  if ($taskDao->getTaskSubChunks($matecat_id_job)) {
-                      // This has been chunked, so need to accumulate status of all chunks
-                      $chunks = $taskDao->getStatusOfSubChunks($task->getProjectId(), $matecat_langpair, $matecat_id_job, $matecat_id_job_password, $matecat_id_file);
-                      $translated_status = true;
-                      $approved_status   = true;
-                      foreach ($chunks as $index => $chunk) {
-                          if ($chunk['DOWNLOAD_STATUS'] === 'draft') $translated_status = false;
-                          if ($chunk['DOWNLOAD_STATUS'] === 'draft' || $chunk['DOWNLOAD_STATUS'] === 'translated') $approved_status = false;
-
-                          $matecat_url = $chunk['translate_url']; // As we are chunked, the $matecat_url scalar string will not be used as a URL in the template, just for logic.
-                          $matecat_download_url = $chunk['matecat_download_url'];
-                      }
-
-                      if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION  && !$translated_status) $matecat_url = '';
-                      if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && !approved_status   ) $matecat_url = '';
-                  } else {
+                $matecat_id_job_password = $matecat_tasks[0]['matecat_id_chunk_password'];
+                if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
                    $recorded_status = $taskDao->getMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password);
                    if ($recorded_status === 'approved') { // We do not need to query MateCat...
                        $translate = 'translate';
@@ -1481,7 +1464,6 @@ class TaskRouteHandler
                                 $translate = 'translate';
                                 if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
                                 $matecat_url = "{$matecat_api}$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
-                                $matecat_download_url = "{$matecat_api}?action=downloadFile&id_job=$matecat_id_job&id_file=$matecat_id_file&password=$matecat_id_job_password&download_type=all";
 
                                 if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $response_data['stats']['DOWNLOAD_STATUS'] === 'translated') {
                                     $matecat_url = ''; // Disable Kató access for Proofreading if job file is only translated
@@ -1494,7 +1476,6 @@ class TaskRouteHandler
                         error_log("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats ($taskId) responseCode: $responseCode");
                     }
                    }
-                  }
                 }
             }
         }
