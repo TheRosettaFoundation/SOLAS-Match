@@ -1419,7 +1419,7 @@ class TaskRouteHandler
             'discourse_slug'  => $projectDao->discourse_parameterize($project->getTitle()),
         ));
 
-        $app->render("task/task-chunk-complete.tpl");
+        $app->render('task/task-chunk-complete.tpl');
     }
 
     public function taskUploaded($task_id)
@@ -1457,11 +1457,11 @@ class TaskRouteHandler
         $tip = $tipDao->getTip();
 
         $app->view()->appendData(array(
-            "org_name" => $org->getName(),
-            "tip"      => $tip
+            'org_name' => $org->getName(),
+            'tip'      => $tip
         ));
 
-        $app->render("task/task-chunk-completed.tpl");
+        $app->render('task/task-chunk-completed.tpl');
     }
 
     public function taskAlter($task_id)
@@ -2762,14 +2762,22 @@ class TaskRouteHandler
                         "success",
                         sprintf(Lib\Localisation::getTranslation('task_review_10'), $pTask->getTitle())
                     );
-                    $app->redirect($app->urlFor('task-uploaded', array("task_id" => $taskId)));
+                    if ($taskDao->getTaskChunk($taskId)) {
+                        $app->redirect($app->urlFor('task-chunk-completed', array('task_id' => $taskId)));
+                    } else {
+                        $app->redirect($app->urlFor('task-uploaded', array("task_id" => $taskId)));
+                    }
                 } else {
                     $app->flashNow("error", $error);
                 }
             }
 
             if (isset($post['skip'])) {
-                $app->redirect($app->urlFor('task-uploaded', array("task_id" => $taskId)));
+                if ($taskDao->getTaskChunk($taskId)) {
+                    $app->redirect($app->urlFor('task-chunk-completed', array('task_id' => $taskId)));
+                } else {
+                    $app->redirect($app->urlFor('task-uploaded', array("task_id" => $taskId)));
+                }
             }
         }
 
