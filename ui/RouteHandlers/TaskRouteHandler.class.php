@@ -1315,7 +1315,6 @@ class TaskRouteHandler
             $app->redirect($app->urlFor("task", array("task_id" => $taskId)));
         }
 
->>>>        $userId = Common\Lib\UserSession::getCurrentUserID();
         $task = $taskDao->getTask($taskId);
         $project = $projectDao->getProject($task->getProjectId());
 
@@ -1324,15 +1323,21 @@ class TaskRouteHandler
             $app->redirect($app->urlFor('task-view', array('task_id' => $taskId)));
         }
 
+        if ($task->getTaskStatus() != Common\Enums\TaskStatusEnum::IN_PROGRESS) {
+            $app->redirect($app->urlFor('task-chunk-completed', array('task_id' => $taskId)));
+        }
+
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
             Common\Lib\UserSession::checkCSRFKey($post, 'taskChunkComplete');
 
             if (!empty($post['copy_from_matecat'])) {
->>>>>$taskDao->uploadOutputFile($taskId, >>>>$userId<<<<, $res);
+                error_log("Setting Task COMPLETE for: $taskId");
+                $taskDao->setTaskStatus($taskId, Common\Enums\TaskStatusEnum::COMPLETE);
+                $taskDao->sendTaskUploadNotifications($taskId, 1);
+                $taskDao->set_task_complete_date($taskId);
+                $app->redirect($app->urlFor('task-review', array('task_id' => $taskId)));
             }
-
-            $app->redirect($app->urlFor("task-review", array("task_id" => $taskId)));
         }
 
         $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
