@@ -792,7 +792,7 @@ class TaskRouteHandler
                   if ($taskDao->get_allow_download($task)) {
                     $app->redirect($app->urlFor("task-simple-upload", array("task_id" => $taskId)));
                   } else {
-                    $app->redirect($app->urlFor("task-view", array("task_id" => $taskId)));
+                    $app->redirect($app->urlFor('task-chunk-complete', array('task_id' => $taskId)));
                   }
                     break;
                 case Common\Enums\TaskTypeEnum::SEGMENTATION:
