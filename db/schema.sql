@@ -1531,7 +1531,7 @@ CREATE TABLE IF NOT EXISTS `TaskCompleteDates` (
   task_id       BIGINT(20) UNSIGNED NOT NULL,
   complete_date DATETIME NOT NULL,
   PRIMARY KEY (`task_id`),
-  CONSTRAINT `FK_TaskCompleteDates_task_id` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_TaskCompleteDates_task_id` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*---------------------------------------end of tables---------------------------------------------*/
