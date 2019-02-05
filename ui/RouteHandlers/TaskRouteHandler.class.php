@@ -1414,6 +1414,7 @@ class TaskRouteHandler
             'sesskey'         => $sesskey,
             'extra_scripts'   => $extra_scripts,
             'task'            => $task,
+            'project'         => $project,
             'taskTypeColours' => $taskTypeColours,
             'matecat_url'     => $matecat_url,
             'discourse_slug'  => $projectDao->discourse_parameterize($project->getTitle()),
