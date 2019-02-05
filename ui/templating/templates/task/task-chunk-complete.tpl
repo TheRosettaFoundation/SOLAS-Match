@@ -53,7 +53,7 @@
             {elseif $type_id == TaskTypeEnum::PROOFREADING}
             <button type="submit" value="submit" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> Mark Chunk Complete so revised version can later be copied from Kató TM to Kató</button>
             <p>
-                {sprintf(Localisation::getTranslation('task_simple_upload_view_on_kato_proofread'), {$matecat_url})}<br />
+                <br />{sprintf(Localisation::getTranslation('task_simple_upload_view_on_kato_proofread'), {$matecat_url})}<br />
             </p>
             {/if}
             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
