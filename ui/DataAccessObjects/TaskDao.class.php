@@ -872,6 +872,11 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
         return array (0, '', 'draft');
     }
 
+    public function set_task_complete_date($task_id)
+    {
+        LibAPI\PDOWrapper::call('set_task_complete_date', LibAPI\PDOWrapper::cleanse($task_id));
+    }
+
     public function all_chunked_active_projects()
     {
         $result = LibAPI\PDOWrapper::call('all_chunked_active_projects', '');
