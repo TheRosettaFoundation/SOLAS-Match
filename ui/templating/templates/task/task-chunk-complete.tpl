@@ -46,12 +46,12 @@
             <input type="hidden" name="task_id" value="{$task->getId()}" />
             <input type="hidden" name="copy_from_matecat" value="1" />
             {if $type_id == TaskTypeEnum::TRANSLATION}
-            {Localisation::getTranslation('task_claimed_alternative_option')} <button type="submit" value="submit" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> {Localisation::getTranslation('task_simple_upload_copy_from_kato')}</button>
+            <button type="submit" value="submit" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> Mark Chunk Complete so translation can later be copied from Kató TM to Kató</button>
             <p>
                 {sprintf(Localisation::getTranslation('task_simple_upload_view_on_kato'), {$matecat_url})}<br />
             </p>
             {elseif $type_id == TaskTypeEnum::PROOFREADING}
-            {Localisation::getTranslation('task_claimed_alternative_option')} <button type="submit" value="submit" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> {Localisation::getTranslation('task_simple_upload_copy_from_kato_proofread')}</button>
+            <button type="submit" value="submit" name="submit" class="btn btn-success"><i class="icon-upload icon-white"></i> Mark Chunk Complete so revised version can later be copied from Kató TM to Kató</button>
             <p>
                 {sprintf(Localisation::getTranslation('task_simple_upload_view_on_kato_proofread'), {$matecat_url})}<br />
             </p>
