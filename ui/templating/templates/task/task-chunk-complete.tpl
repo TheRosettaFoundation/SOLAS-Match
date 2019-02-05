@@ -42,8 +42,7 @@
             </div>
         </div>
 
-        {if $matecat_url != ''}
-        <form class="well" method="post" action="{urlFor name="task-simple-upload" options="task_id.$task_id"}" enctype="application/x-www-form-urlencoded">
+        <form class="well" method="post" action="{urlFor name="task-chunk-complete" options="task_id.$task_id"}" enctype="application/x-www-form-urlencoded">
             <input type="hidden" name="task_id" value="{$task->getId()}" />
             <input type="hidden" name="copy_from_matecat" value="1" />
             {if $type_id == TaskTypeEnum::TRANSLATION}
@@ -59,7 +58,6 @@
             {/if}
             {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
         </form>
-        {/if}
     </div>
 
 {include file="footer.tpl"}
