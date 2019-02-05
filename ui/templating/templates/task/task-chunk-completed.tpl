@@ -5,7 +5,7 @@
     </div>
 
     <div class="alert alert-success">
-        <strong>{Localisation::getTranslation('common_success')}</strong> {Localisation::getTranslation('task_uploaded_1')}
+        <strong>{Localisation::getTranslation('common_success')}</strong> Your chunk has been marked complete.
     </div>
 
     {include file="handle-flash-messages.tpl"}
@@ -15,7 +15,7 @@
             <p>{Localisation::getTranslation('common_here_is_what_will_now_happen')}</p>
             <ol>
                 <li>{Localisation::getTranslation('task_uploaded_is_complete')}</li>
-                <li>{Localisation::getTranslation('task_uploaded_3')}</li>
+                <li>The organisation will receive your work.</li>
                 <li>{sprintf(Localisation::getTranslation('task_uploaded_4'), {$org_name})}</li>
             </ol>
     </section>
