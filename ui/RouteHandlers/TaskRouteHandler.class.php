@@ -1346,16 +1346,16 @@ class TaskRouteHandler
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
 
+        $matecat_url = '';
         $matecat_langpair        = $matecat_tasks[0]['matecat_langpair'];
         $matecat_id_job          = $matecat_tasks[0]['matecat_id_job'];
         $matecat_id_job_password = $matecat_tasks[0]['matecat_id_chunk_password'];
-        $translate = 'translate';
-        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
-        $matecat_url = "{$matecat_api}$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
-
         if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
             $recorded_status = $taskDao->getMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password);
             if ($recorded_status === 'approved') { // We do not need to query MateCat...
+                $translate = 'translate';
+                if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
+                $matecat_url = "{$matecat_api}$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
             } else {
                 // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
                 $re = curl_init("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
@@ -1391,14 +1391,12 @@ class TaskRouteHandler
                             $response_data['stats']['DOWNLOAD_STATUS'] = $recorded_status; // getMatecatRecordedJobStatus() MIGHT have a "better" status
                         }
                         if ($response_data['stats']['DOWNLOAD_STATUS'] === 'translated' || $response_data['stats']['DOWNLOAD_STATUS'] === 'approved') {
-                            if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
-[[[[CODE FROM CLAIMED TASKS...
-                                if ($response_data['stats']['DOWNLOAD_STATUS'] !== 'translated' && $response_data['stats']['DOWNLOAD_STATUS'] !== 'approved') {
-                            $matecat_url = ''; // Disable Kató access for Proofreading if job file is not translated
-BUT WHAAT IF GOT HERE FROM DIFFERENTREDIRECT ANYWAY
-DONT?SHOW/REDIRECT
-                                }
-]]]]
+                            $translate = 'translate';
+                            if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
+                            $matecat_url = "{$matecat_api}$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+
+                            if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $response_data['stats']['DOWNLOAD_STATUS'] === 'translated') {
+                                $matecat_url = ''; // Disable Kató access for Proofreading if job file is only translated
                             }
                         }
                     } else {
