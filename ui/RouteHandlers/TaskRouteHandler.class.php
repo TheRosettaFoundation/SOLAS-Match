@@ -1407,6 +1407,7 @@ class TaskRouteHandler
                 }
             }
         }
+        if (empty($matecat_url)) $app->redirect($app->urlFor('task-view', array('task_id' => $taskId)));
 
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
 
