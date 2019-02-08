@@ -321,6 +321,7 @@ class TaskRouteHandler
         $proofreadTaskIds = array();
         $matecat_urls = array();
         $allow_downloads = array();
+        $show_mark_chunk_complete = array();
 
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
         if ($currentScrollPage <= $lastScrollPage) {
@@ -362,6 +363,17 @@ class TaskRouteHandler
 
                 $matecat_urls[$taskId] = $taskDao->get_matecat_url($topTask);
                 $allow_downloads[$taskId] = $taskDao->get_allow_download($topTask);
+                $show_mark_chunk_complete[$taskId] = 0;
+                if (!$allow_downloads[$taskId] && $matecat_urls[$taskId]) { // it's a chunk && a bit of optimisation
+                    $matecat_tasks = $taskDao->getTaskChunk($taskId);
+                    $matecat_id_job = $matecat_tasks[0]['matecat_id_job'];
+                    $matecat_id_job_password = $matecat_tasks[0]['matecat_id_chunk_password'];
+
+                    $download_status = $this->getMatecatTaskStatus($taskId, $matecat_id_job, $matecat_id_job_password);
+                    if ($download_status === 'approved' || ($topTask->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION && $download_status === 'translated')) {
+                        $show_mark_chunk_complete[$taskId] = 1;
+                    }
+                }
 
                 $discourse_slug[$taskId] = $projectDao->discourse_parameterize($projectName);
 
@@ -405,6 +417,7 @@ class TaskRouteHandler
             'projectAndOrgs' => $projectAndOrgs,
             'matecat_urls' => $matecat_urls,
             'allow_downloads' => $allow_downloads,
+            'show_mark_chunk_complete' => $show_mark_chunk_complete,
             'discourse_slug' => $discourse_slug,
             'proofreadTaskIds' => $proofreadTaskIds,
             'currentScrollPage' => $currentScrollPage,
