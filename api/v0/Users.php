@@ -1202,7 +1202,7 @@ class Users
                 array('id_token' => $id_token)
             );
             $response = json_decode($ret);
-error_log("oauth2/v3/tokeninfo response: " . print_r($response, true));
+            // error_log("oauth2/v3/tokeninfo response: " . print_r($response, true));
 
             $client_id = Common\Lib\Settings::get('googlePlus.client_id');
             if ($client_id != $response->aud) {

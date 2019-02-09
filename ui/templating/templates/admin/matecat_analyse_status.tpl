@@ -36,7 +36,7 @@
       <td><a href="{urlFor name="project-view" options="project_id.{$user_row['project_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['title'])}</a></td>
       <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['creator_id']}"}" target="_blank">{$user_row['creator_email']}</a></td>
       {if !empty($user_row['matecat_id_project']) && !empty($user_row['matecat_id_project_pass'])}
-      <td><a href="https://tm.translatorswb.org/analyze/proj-{$user_row['project_id']}/{$user_row['matecat_id_project']}-{$user_row['matecat_id_project_pass']}" target="_blank">Analyze URL</td>
+      <td><a href="{Settings::get('matecat.url')}analyze/proj-{$user_row['project_id']}/{$user_row['matecat_id_project']}-{$user_row['matecat_id_project_pass']}" target="_blank">Analyze URL</td>
       {else}
       <td></td>
       {/if}

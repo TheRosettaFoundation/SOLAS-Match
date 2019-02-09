@@ -569,7 +569,8 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
             $matecat_id_project      = $result[0]['matecat_id_project'];
             $matecat_id_project_pass = $result[0]['matecat_id_project_pass'];
             if (!empty($matecat_id_project) && !empty($matecat_id_project_pass)) {
-                $matecat_analyze_url = "https://tm.translatorswb.org/analyze/proj-$project_id/$matecat_id_project-$matecat_id_project_pass";
+                $matecat_api = Common\Lib\Settings::get('matecat.url');
+                $matecat_analyze_url = "{$matecat_api}analyze/proj-$project_id/$matecat_id_project-$matecat_id_project_pass";
             }
         }
 
@@ -653,7 +654,8 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
                 $matecat_id_job_password = $matecat_tasks[0]['matecat_id_job_password'];
                 //$matecat_id_file = $matecat_tasks[0]['matecat_id_file'];
                 if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
-                    $matecat_url = "https://tm.translatorswb.org/$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                    $matecat_api = Common\Lib\Settings::get('matecat.url');
+                    $matecat_url = "{$matecat_api}$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
 
                     if ($translate === 'revise') { // Make sure it has been translated in MateCat
                         $download_status = $this->getMatecatTaskStatus($task->getId(), $matecat_id_job, $matecat_id_job_password);
@@ -688,7 +690,8 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
                 $matecat_id_job_password = $matecat_tasks[0]['matecat_id_job_password'];
                 //$matecat_id_file = $matecat_tasks[0]['matecat_id_file'];
                 if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
-                    $matecat_url = "https://tm.translatorswb.org/$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                    $matecat_api = Common\Lib\Settings::get('matecat.url');
+                    $matecat_url = "{$matecat_api}$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
                 }
             }
         }
@@ -705,7 +708,8 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
         $download_status = '';
 
         // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
-        $re = curl_init("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
+        $matecat_api = Common\Lib\Settings::get('matecat.url');
+        $re = curl_init("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
 
         curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
         curl_setopt($re, CURLOPT_COOKIESESSION, true);
@@ -739,10 +743,10 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
                     $download_status = $recorded_status; // getMatecatRecordedJobStatus() MIGHT have a "better" status
                 }
             } else {
-                error_log("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats getMatecatTaskStatus($task_id) DOWNLOAD_STATUS empty!");
+                error_log("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats getMatecatTaskStatus($task_id) DOWNLOAD_STATUS empty!");
             }
         } else {
-            error_log("https://tm.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats getMatecatTaskStatus($task_id) responseCode: $responseCode");
+            error_log("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats getMatecatTaskStatus($task_id) responseCode: $responseCode");
         }
 
         return $download_status;
@@ -758,7 +762,8 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
             $matecat_id_project_pass = $result[0]['matecat_id_project_pass'];
 
             // https://www.matecat.com/api/docs#/Project/get_api_v2_projects__id_project___password_
-            $re = curl_init("https://tm.translatorswb.org/api/v2/projects/$matecat_id_project/$matecat_id_project_pass");
+            $matecat_api = Common\Lib\Settings::get('matecat.url');
+            $re = curl_init("{$matecat_api}api/v2/projects/$matecat_id_project/$matecat_id_project_pass");
 
             curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
             curl_setopt($re, CURLOPT_COOKIESESSION, true);
@@ -794,9 +799,9 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
                             $stats = $job['stats'];
 
                             $matecat_id_chunk_password = $job['password'];
-                            $translate_url = "https://tm.translatorswb.org/translate/proj-$project_id/" . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_chunk_password";
-                            $revise_url    = "https://tm.translatorswb.org/revise/proj-$project_id/"    . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_chunk_password";
-                            $matecat_download_url = "https://tm.translatorswb.org/?action=downloadFile&id_job=$matecat_id_job&id_file=$matecat_id_file&password=$matecat_id_job_password&download_type=all";
+                            $translate_url = "{$matecat_api}translate/proj-$project_id/" . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_chunk_password";
+                            $revise_url    = "{$matecat_api}revise/proj-$project_id/"    . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_chunk_password";
+                            $matecat_download_url = "{$matecat_api}?action=downloadFile&id_job=$matecat_id_job&id_file=$matecat_id_file&password=$matecat_id_job_password&download_type=all";
 
                             $taskDao = new TaskDao();
                             $recorded_status = $taskDao->getMatecatRecordedJobStatus($job['id'], $job['password']);
@@ -816,10 +821,10 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
                         }
                     }
                 } else {
-                    error_log("https://tm.translatorswb.org/api/v2/projects/$matecat_id_project/$matecat_id_project_pass ($project_id) No Jobs!");
+                    error_log("{$matecat_api}api/v2/projects/$matecat_id_project/$matecat_id_project_pass ($project_id) No Jobs!");
                 }
             } else {
-                error_log("https://tm.translatorswb.org/api/v2/projects/$matecat_id_project/$matecat_id_project_pass ($project_id) responseCode: $responseCode");
+                error_log("{$matecat_api}api/v2/projects/$matecat_id_project/$matecat_id_project_pass ($project_id) responseCode: $responseCode");
             }
         }
 
@@ -865,6 +870,11 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
             }
         }
         return array (0, '', 'draft');
+    }
+
+    public function set_task_complete_date($task_id)
+    {
+        LibAPI\PDOWrapper::call('set_task_complete_date', LibAPI\PDOWrapper::cleanse($task_id));
     }
 
     public function all_chunked_active_projects()

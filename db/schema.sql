@@ -1527,6 +1527,13 @@ CREATE TABLE IF NOT EXISTS `MatecatRecordedJobStatus` (
     UNIQUE KEY job_job_password (matecat_id_job, matecat_id_job_password)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `TaskCompleteDates` (
+  task_id       BIGINT(20) UNSIGNED NOT NULL,
+  complete_date DATETIME NOT NULL,
+  PRIMARY KEY (`task_id`),
+  CONSTRAINT `FK_TaskCompleteDates_task_id` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -2660,14 +2667,24 @@ DROP PROCEDURE IF EXISTS `getOrgMembers`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgMembers`(IN `orgId` INT)
 BEGIN
-    select u.id,`display-name` as display_name,email,password,biography,
+    SELECT id, `display-name` AS display_name, email, password, biography,
             (select `en-name` from Languages where id =u.`language_id`) as `languageName`, 
             (select code from Languages where id =u.`language_id`) as `languageCode`, 
             (select `en-name` from Countries where id =u.`country_id`) as `countryName`, 
             (select code from Countries where id =u.`country_id`) as `countryCode`, 
             nonce,`created-time` as created_time
-    	FROM OrganisationMembers om JOIN Users u ON om.user_id = u.id
-	    WHERE organisation_id=orgId;
+    FROM OrganisationMembers om JOIN Users u ON om.user_id=u.id
+    WHERE organisation_id=orgId
+    UNION
+    SELECT id, `display-name` AS display_name, email, password, biography,
+            (select `en-name` from Languages where id =u.`language_id`) as `languageName`,
+            (select code from Languages where id =u.`language_id`) as `languageCode`,
+            (select `en-name` from Countries where id =u.`country_id`) as `countryName`,
+            (select code from Countries where id =u.`country_id`) as `countryCode`,
+            nonce,`created-time` as created_time
+    FROM Admins om JOIN Users u ON om.user_id=u.id
+    WHERE organisation_id=orgId
+    ORDER BY 2;
 END//
 DELIMITER ;
 
@@ -7312,6 +7329,14 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getMatecatRecordedJobStatus`(IN jobID INT, IN jobPassword VARCHAR(50))
 BEGIN
     SELECT job_status FROM MatecatRecordedJobStatus WHERE matecat_id_job=jobID AND matecat_id_job_password=jobPassword;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_task_complete_date`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_task_complete_date`(IN `tID` INT)
+BEGIN
+    REPLACE INTO TaskCompleteDates (task_id, complete_date) VALUES (tID, now());
 END//
 DELIMITER ;
 
