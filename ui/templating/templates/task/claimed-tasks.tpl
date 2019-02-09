@@ -136,9 +136,11 @@
                                         {Localisation::getTranslation('claimed_tasks_submit_completed_task')}
                                     </a>
                                     {else}
+                                    {if $show_mark_chunk_complete[$task_id]}
                                     <a href="{$siteLocation}task/{$task_id}/chunk-complete" class="btn btn-small btn-success">
                                         Mark Chunk Complete
                                     </a>
+                                    {/if}
                                     {/if}
                                 {/if}
                                 {if $status_id == 3 && $type_id == 1}
