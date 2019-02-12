@@ -1104,6 +1104,7 @@ class TaskRouteHandler
 
                         if ($responseCode == 200) {
                             try {
+                                error_log("taskSimpleUpload copy_from_matecat ($taskId)");
                                 $taskDao->uploadOutputFile($taskId, $userId, $res);
                             } catch (\Exception  $e) {
                                 $errorMessage = Lib\Localisation::getTranslation('task_simple_upload_7') . $e->getMessage();
@@ -1164,6 +1165,7 @@ class TaskRouteHandler
                 try {
                     $filedata = file_get_contents($_FILES[$fieldName]["tmp_name"]);
 
+                    error_log("taskSimpleUpload _FILES ($taskId)");
                     if ($post['submit'] == 'XLIFF') {
                         $taskDao->uploadOutputFile($taskId, $userId, $filedata, true);
                     } elseif ($post['submit'] == 'submit') {
