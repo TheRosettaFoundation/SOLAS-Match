@@ -1329,6 +1329,12 @@ error_log(print_r($result, true));
         LibAPI\PDOWrapper::call('addAdmin', $args);
     }
 
+    public function is_admin_or_org_member($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('is_admin_or_org_member', LibAPI\PDOWrapper::cleanse($user_id));
+        return $result[0]['result'];
+    }
+
     public function getOrgIDUsingName($org_name)
     {
         $org_id = 0;

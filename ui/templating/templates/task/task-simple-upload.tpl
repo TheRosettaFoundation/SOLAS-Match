@@ -1,11 +1,9 @@
 {include file="header.tpl"}
+<!-- Editor Hint: ¿áéíóú -->
 
 {assign var="task_id" value=$task->getId()}
 
 {include file="handle-flash-messages.tpl"}
-
-{include file="header.tpl"}
-<!-- Editor Hint: ¿áéíóú -->
 
     <h1 class="page-header">
         {if $task->getTitle() != ''}

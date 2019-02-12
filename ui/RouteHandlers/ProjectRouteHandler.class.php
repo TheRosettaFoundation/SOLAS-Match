@@ -2011,7 +2011,8 @@ class ProjectRouteHandler
         }
 
         // See if any chunks have been finalised in MateCat, if so mark any corresponding IN_PROGRESS (active) task(s) as complete
-        $active_tasks_for_chunks = $taskDao->all_chunked_active_projects();
+        // $active_tasks_for_chunks = $taskDao->all_chunked_active_projects();
+        $active_tasks_for_chunks = array(); // It is now desired to have tranlators manually mark as COMPLETE
         if (!empty($active_tasks_for_chunks)) {
             $projects = array();
             foreach ($active_tasks_for_chunks as $active_task) {

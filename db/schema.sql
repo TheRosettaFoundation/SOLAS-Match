@@ -1527,6 +1527,13 @@ CREATE TABLE IF NOT EXISTS `MatecatRecordedJobStatus` (
     UNIQUE KEY job_job_password (matecat_id_job, matecat_id_job_password)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `TaskCompleteDates` (
+  task_id       BIGINT(20) UNSIGNED NOT NULL,
+  complete_date DATETIME NOT NULL,
+  PRIMARY KEY (`task_id`),
+  CONSTRAINT `FK_TaskCompleteDates_task_id` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -4031,6 +4038,21 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `is_admin_or_org_member`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `is_admin_or_org_member`(IN `uID` INT)
+BEGIN
+    SELECT EXISTS (
+        SELECT user_id
+        FROM Admins
+        WHERE user_id=uID
+        UNION
+        SELECT user_id
+        FROM OrganisationMembers
+        WHERE user_id=uID
+    ) AS result;
+END//
+DELIMITER ;
 
 -- Dumping structure for function Solas-Match-Dev.isNullOrEqual
 DROP FUNCTION IF EXISTS `isNullOrEqual`;
@@ -7322,6 +7344,14 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getMatecatRecordedJobStatus`(IN jobID INT, IN jobPassword VARCHAR(50))
 BEGIN
     SELECT job_status FROM MatecatRecordedJobStatus WHERE matecat_id_job=jobID AND matecat_id_job_password=jobPassword;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_task_complete_date`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_task_complete_date`(IN `tID` INT)
+BEGIN
+    REPLACE INTO TaskCompleteDates (task_id, complete_date) VALUES (tID, now());
 END//
 DELIMITER ;
 
