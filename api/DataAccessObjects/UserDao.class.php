@@ -57,6 +57,16 @@ class UserDao
     public static function save($user)
     {
         $userId = $user->getId();
+//[[
+        if (!self::is_admin_or_org_member($userId)) {
+        error_log("I AM NOT ADMIN $userId"):
+        } else {
+        error_log("I AM ADMIN $userId"):
+        }
+        if (!self::is_admin_or_org_member(20941)) {
+        error_log("20941 IS NOT ADMIN"):
+        }
+//]]
         $nativeLanguageCode = null;
         $nativeCountryCode = null;
         if (!is_null($userId) && !is_null($user->getNativeLocale())) {
@@ -216,7 +226,9 @@ class UserDao
         $args = Lib\PDOWrapper::cleanseNull($userId);
         $response = Lib\PDOWrapper::call('finishRegistration', $args);
         BadgeDao::assignBadge($userId, Common\Enums\BadgeTypes::REGISTERED);
+        if (!self::is_admin_or_org_member($userId)) {
         Lib\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', Lib\PDOWrapper::cleanse($userId) . ',2,1');
+        }
         return $response[0]['result'];
     }
 
@@ -226,9 +238,17 @@ class UserDao
         $response = Lib\PDOWrapper::call('finishRegistrationManually', $args);
         if ($response[0]['result']) {
             BadgeDao::assignBadge($response[0]['result'], Common\Enums\BadgeTypes::REGISTERED);
+            if (!self::is_admin_or_org_member($response[0]['result'])) {
             Lib\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', Lib\PDOWrapper::cleanse($response[0]['result']) . ',2,1');
+            }
         }
         return $response[0]['result'];
+    }
+
+    public static function is_admin_or_org_member($userId)
+    {
+        $result = Lib\PDOWrapper::call('is_admin_or_org_member', Lib\PDOWrapper::cleanse($userId));
+        return $result[0]['result'];
     }
 
     public static function getRegisteredUser($uuid)

@@ -614,7 +614,6 @@ class UserRouteHandler
                         $app->redirect($request);
                     } else {
                       if ($userDao->is_admin_or_org_member($user->getId())) {
-                          error_log('IS ADMIN!!!');
                           $app->redirect($app->urlFor('home'));
                       } else {
                         $nativeLocale = $user->getNativeLocale();
@@ -683,7 +682,6 @@ class UserRouteHandler
                     $app->redirect($request);
                 } else {
                   if ($userDao->is_admin_or_org_member($user->getId())) {
-                      error_log('IS ADMIN!!!');
                       $app->redirect($app->urlFor('home'));
                   } else {
                     $nativeLocale = $user->getNativeLocale();
