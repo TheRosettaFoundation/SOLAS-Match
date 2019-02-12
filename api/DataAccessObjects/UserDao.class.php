@@ -59,12 +59,12 @@ class UserDao
         $userId = $user->getId();
 //[[
         if (!self::is_admin_or_org_member($userId)) {
-        error_log("I AM NOT ADMIN $userId"):
+        error_log("I AM NOT ADMIN $userId");
         } else {
-        error_log("I AM ADMIN $userId"):
+        error_log("I AM ADMIN $userId");
         }
         if (!self::is_admin_or_org_member(20941)) {
-        error_log("20941 IS NOT ADMIN"):
+        error_log("20941 IS NOT ADMIN");
         }
 //]]
         $nativeLanguageCode = null;
