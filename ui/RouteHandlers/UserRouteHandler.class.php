@@ -613,12 +613,17 @@ class UserRouteHandler
                     if ($request) {
                         $app->redirect($request);
                     } else {
+                      if ($userDao->is_admin_or_org_member($user->getId())) {
+                          error_log('IS ADMIN!!!');
+                          $app->redirect($app->urlFor('home'));
+                      } else {
                         $nativeLocale = $user->getNativeLocale();
                         if ($nativeLocale && $nativeLocale->getLanguageCode()) {
                             $app->redirect($app->urlFor("home"));
                         } else {
                             $app->redirect($app->urlFor('user-private-profile', array('user_id' => $user->getId())));
                         }
+                      }
                     }
                 }
             } elseif (isset($post['password_reset'])) {
@@ -677,12 +682,17 @@ class UserRouteHandler
                 if ($request) {
                     $app->redirect($request);
                 } else {
+                  if ($userDao->is_admin_or_org_member($user->getId())) {
+                      error_log('IS ADMIN!!!');
+                      $app->redirect($app->urlFor('home'));
+                  } else {
                     $nativeLocale = $user->getNativeLocale();
                     if ($nativeLocale && $nativeLocale->getLanguageCode()) {
                         $app->redirect($app->urlFor("home"));
                     } else {
                         $app->redirect($app->urlFor('user-private-profile', array('user_id' => $user->getId())));
                     }
+                  }
                 }
             }
             
