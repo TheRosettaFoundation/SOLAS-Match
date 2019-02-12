@@ -57,16 +57,6 @@ class UserDao
     public static function save($user)
     {
         $userId = $user->getId();
-//[[
-        if (!self::is_admin_or_org_member($userId)) {
-        error_log("I AM NOT ADMIN $userId");
-        } else {
-        error_log("I AM ADMIN $userId");
-        }
-        if (!self::is_admin_or_org_member(20941)) {
-        error_log("20941 IS NOT ADMIN");
-        }
-//]]
         $nativeLanguageCode = null;
         $nativeCountryCode = null;
         if (!is_null($userId) && !is_null($user->getNativeLocale())) {
