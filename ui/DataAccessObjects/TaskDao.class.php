@@ -801,6 +801,7 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
                             $matecat_id_chunk_password = $job['password'];
                             $translate_url = "{$matecat_api}translate/proj-$project_id/" . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_chunk_password";
                             $revise_url    = "{$matecat_api}revise/proj-$project_id/"    . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_chunk_password";
+                            $matecat_id_file = ''; // Need all files in job to be downloaded
                             $matecat_download_url = "{$matecat_api}?action=downloadFile&id_job=$matecat_id_job&id_file=$matecat_id_file&password=$matecat_id_job_password&download_type=all";
 
                             $taskDao = new TaskDao();

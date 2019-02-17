@@ -1080,6 +1080,7 @@ class TaskRouteHandler
                 $matecat_id_job_password = $matecat_tasks[0]['matecat_id_job_password'];
                 $matecat_id_file = $matecat_tasks[0]['matecat_id_file'];
                 if (!empty($matecat_id_job) && !empty($matecat_id_job_password) && !empty($matecat_id_file)) {
+                    $matecat_id_file = ''; // Need all files in job to be downloaded
                     $re = curl_init("{$matecat_api}?action=downloadFile&id_job=$matecat_id_job&id_file=$matecat_id_file&password=$matecat_id_job_password&download_type=all");
 
                     curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
@@ -1236,6 +1237,7 @@ class TaskRouteHandler
                        $translate = 'translate';
                        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
                        $matecat_url = "{$matecat_api}$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                       $matecat_id_file = ''; // Need all files in job to be downloaded
                        $matecat_download_url = "{$matecat_api}?action=downloadFile&id_job=$matecat_id_job&id_file=$matecat_id_file&password=$matecat_id_job_password&download_type=all";
                    } else {
                     // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
@@ -1275,6 +1277,7 @@ class TaskRouteHandler
                                 $translate = 'translate';
                                 if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
                                 $matecat_url = "{$matecat_api}$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                                $matecat_id_file = ''; // Need all files in job to be downloaded
                                 $matecat_download_url = "{$matecat_api}?action=downloadFile&id_job=$matecat_id_job&id_file=$matecat_id_file&password=$matecat_id_job_password&download_type=all";
 
                                 if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $response_data['stats']['DOWNLOAD_STATUS'] === 'translated') {
