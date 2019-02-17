@@ -1814,7 +1814,7 @@ class ProjectRouteHandler
                                         if (!empty($response_data['data']['jobs'][$matecat_id_job]['chunks'][$matecat_id_job_password])) {
                                             foreach ($response_data['data']['jobs'][$matecat_id_job]['chunks'][$matecat_id_job_password] as $i => $filename_array) {
                                                 $matecat_id_file = $i;
-                                                break; // Should only be one
+                                                break; // Should only be one... actually now not used and could be more than one for ZIP file
                                             }
                                         } else {
                                             error_log("project_cron /status ($project_id) ['data']['jobs'][$matecat_id_job]['chunks'][$matecat_id_job_password] empty!");
