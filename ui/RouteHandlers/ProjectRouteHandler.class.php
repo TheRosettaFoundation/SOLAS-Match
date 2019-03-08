@@ -2054,6 +2054,7 @@ class ProjectRouteHandler
 
     public function valid_language_for_matecat($language_code)
     {
+        global $matecat_acceptable_languages;
         if (in_array($language_code, $matecat_acceptable_languages)) return $language_code;
         // Special case...
         if ($language_code === 'tn-BW') return 'tsn-BW';

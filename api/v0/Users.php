@@ -736,6 +736,7 @@ class Users
 
     public static function getUserTopTasks($userId, $format = ".json")
     {
+global $from_neon_to_trommons_pair;
 error_log($from_neon_to_trommons_pair['Afrikaans'][0] . '((USERS))' . $from_neon_to_trommons_pair['Afrikaans'][1]);
         $limit = API\Dispatcher::clenseArgs('limit', Common\Enums\HttpMethodEnum::GET, 5);
         $offset = API\Dispatcher::clenseArgs('offset', Common\Enums\HttpMethodEnum::GET, 0);
@@ -1364,6 +1365,7 @@ error_log($from_neon_to_trommons_pair['Afrikaans'][0] . '((USERS))' . $from_neon
 
     public static function update_user_with_neon_data($newUser, $userInfo)
     {
+        global $from_neon_to_trommons_pair;
 $NEON_NATIVELANGFIELD = 64;
 $NEON_SOURCE1FIELD    = 167;
 $NEON_TARGET1FIELD    = 168;
