@@ -815,6 +815,7 @@ class UserDao extends BaseDao
 
     public function verifyUserByEmail($email)
     {
+global $from_neon_to_trommons_pair;
 error_log($from_neon_to_trommons_pair['Afrikaans'][0] . '(())' . $from_neon_to_trommons_pair['Afrikaans'][1]);
         $user = null;
         $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ',null,null,null,null,null,null');
@@ -890,6 +891,7 @@ error_log($from_neon_to_trommons_pair['Afrikaans'][0] . '(())' . $from_neon_to_t
 
     public function process_neonwebhook()
     {
+        global $from_neon_to_trommons_pair;
 $NEON_NATIVELANGFIELD = 64;
 $NEON_SOURCE1FIELD    = 167;
 $NEON_TARGET1FIELD    = 168;
