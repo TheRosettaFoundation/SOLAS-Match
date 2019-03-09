@@ -735,8 +735,6 @@ class Users
 
     public static function getUserTopTasks($userId, $format = ".json")
     {
-global $from_neon_to_trommons_pair;
-error_log($from_neon_to_trommons_pair['Afrikaans'][0] . '((USERS))' . $from_neon_to_trommons_pair['Afrikaans'][1]);
         $limit = API\Dispatcher::clenseArgs('limit', Common\Enums\HttpMethodEnum::GET, 5);
         $offset = API\Dispatcher::clenseArgs('offset', Common\Enums\HttpMethodEnum::GET, 0);
         $filter = API\Dispatcher::clenseArgs('filter', Common\Enums\HttpMethodEnum::GET, '');

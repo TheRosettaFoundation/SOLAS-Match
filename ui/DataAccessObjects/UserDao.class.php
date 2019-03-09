@@ -815,8 +815,6 @@ class UserDao extends BaseDao
 
     public function verifyUserByEmail($email)
     {
-global $from_neon_to_trommons_pair;
-error_log($from_neon_to_trommons_pair['Afrikaans'][0] . '(())' . $from_neon_to_trommons_pair['Afrikaans'][1]);
         $user = null;
         $result = LibAPI\PDOWrapper::call('getUser', 'null,null,' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ',null,null,null,null,null,null');
         if (!empty($result)) {
