@@ -24,6 +24,8 @@ require_once __DIR__."/../Common/lib/APIHelper.class.php";
 require_once __DIR__."/../Common/lib/UserSession.class.php";
 require_once __DIR__."/../Common/Enums/HttpMethodEnum.class.php";
 require_once __DIR__."/../Common/Enums/HttpStatusEnum.class.php";
+require_once __DIR__.'/../Common/from_neon_to_trommons_pair.php';
+
 
 class Dispatcher
 {

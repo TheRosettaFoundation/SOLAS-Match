@@ -18,7 +18,6 @@ require_once __DIR__."/../DataAccessObjects/TaskDao.class.php";
 require_once __DIR__."/../lib/Notify.class.php";
 require_once __DIR__."/../lib/Middleware.php";
 require_once '/repo/neon-php/neon.php';
-require_once __DIR__ . '/../../Common/from_neon_to_trommons_pair.php';
 
 
 class Users
