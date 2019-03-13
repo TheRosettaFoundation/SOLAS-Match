@@ -210,4 +210,5 @@ $from_neon_to_trommons_pair = array(
 'English Singapore' => array('en', 'SG'),
 'French Swiss' => array('fr', 'CH'),
 'Italian Swiss' => array('it', 'CH'),
+'Luganda' => array('lg', 'UG'),
 );
