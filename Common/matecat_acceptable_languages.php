@@ -230,4 +230,5 @@
 'en-SG' => 'en-SG',
 'fr-CH' => 'fr-CH',
 'it-CH' => 'it-CH',
+'lg' => 'lug-UG',
 );
