@@ -211,4 +211,8 @@ $from_neon_to_trommons_pair = array(
 'French Swiss' => array('fr', 'CH'),
 'Italian Swiss' => array('it', 'CH'),
 'Luganda' => array('lg', 'UG'),
+'Sena' => array('seh', 'MZ'),
+'Tswa' => array('tsc', 'MZ'),
+'Ndau' => array('ndc', 'MZ'),
+'Marathi' => array('mr', 'IN'),
 );
