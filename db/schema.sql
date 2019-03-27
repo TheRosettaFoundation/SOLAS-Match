@@ -7907,6 +7907,22 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `set_discourse_id`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_discourse_id`(IN projectID INT, IN topicID INT)
+BEGIN
+    INSERT INTO DiscourseID (project_id, topic_id) VALUES (projectID, topicID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_discourse_id`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_discourse_id`(IN projectID INT)
+BEGIN
+    SELECT * FROM DiscourseID WHERE project_id=projectID;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
