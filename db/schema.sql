@@ -1534,6 +1534,13 @@ CREATE TABLE IF NOT EXISTS `TaskCompleteDates` (
   CONSTRAINT `FK_TaskCompleteDates_task_id` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `DiscourseID` (
+  project_id INT(10) UNSIGNED NOT NULL,
+  topic_id   INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (project_id),
+  CONSTRAINT FK_DiscourseID_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -7897,6 +7904,22 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `set_neon_account`(IN userID INT, IN accountID INT)
 BEGIN
     REPLACE INTO UserNeonAccount (user_id, account_id) VALUES (userID, accountID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_discourse_id`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_discourse_id`(IN projectID INT, IN topicID INT)
+BEGIN
+    INSERT INTO DiscourseID (project_id, topic_id) VALUES (projectID, topicID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_discourse_id`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_discourse_id`(IN projectID INT)
+BEGIN
+    SELECT * FROM DiscourseID WHERE project_id=projectID;
 END//
 DELIMITER ;
 
