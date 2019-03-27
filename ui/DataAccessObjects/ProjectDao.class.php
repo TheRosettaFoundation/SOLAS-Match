@@ -351,7 +351,7 @@ $replace = array(
         $a = preg_replace('/-+/', '-', $a);
         $a = strtolower($a);
 
-        $topic_id = $this->get_discourse_id($project_id)
+        $topic_id = $this->get_discourse_id($project_id);
         if (!empty($topic_id)) $a .= "/$topic_id";
 
         return $a;
