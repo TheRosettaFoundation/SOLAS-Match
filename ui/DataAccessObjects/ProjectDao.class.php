@@ -351,4 +351,15 @@ $replace = array(
         $a = preg_replace('/-+/', '-', $a);
         return strtolower($a);
     }
+
+    public function set_discourse_id($project_id, $topic_id)
+    {
+        LibAPI\PDOWrapper::call('set_discourse_id', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($topic_id));
+    }
+
+    public function get_discourse_id($project_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_discourse_id', LibAPI\PDOWrapper::cleanse($project_id));
+        return $result;
+    }
 }
