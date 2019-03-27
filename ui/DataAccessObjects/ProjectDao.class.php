@@ -349,7 +349,12 @@ $replace = array(
 
         $a = trim($a, '-');
         $a = preg_replace('/-+/', '-', $a);
-        return strtolower($a);
+        $a = strtolower($a);
+
+        $topic_id = $this->get_discourse_id($project_id)
+        if (!empty($topic_id)) $a .= "/$topic_id";
+
+        return $a;
     }
 
     public function set_discourse_id($project_id, $topic_id)
@@ -359,7 +364,11 @@ $replace = array(
 
     public function get_discourse_id($project_id)
     {
+        $topic_id = 0;
         $result = LibAPI\PDOWrapper::call('get_discourse_id', LibAPI\PDOWrapper::cleanse($project_id));
-        return $result;
+        if (!empty($result)) {
+            $topic_id = $result[0]['topic_id'];
+        }
+        return $topic_id;
     }
 }
