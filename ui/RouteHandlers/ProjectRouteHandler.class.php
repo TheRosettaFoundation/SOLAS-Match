@@ -575,7 +575,7 @@ class ProjectRouteHandler
                 "isSiteAdmin"   => $isSiteAdmin,
                 'taskTypeColours' => $taskTypeColours,
                 "imgCacheToken" => $preventImageCacheToken,
-                'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
+                'discourse_slug' => $projectDao->discourse_parameterize($project),
                 'matecat_analyze_url' => $taskDao->get_matecat_analyze_url($project_id),
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation
         ));
