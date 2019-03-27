@@ -375,7 +375,7 @@ class TaskRouteHandler
                     }
                 }
 
-                $discourse_slug[$taskId] = $projectDao->discourse_parameterize($projectName);
+                $discourse_slug[$taskId] = $projectDao->discourse_parameterize($project);
 
                 if ($topTask->getTaskType() == 2) { // If current task is a translation task
                     try {
@@ -948,7 +948,7 @@ class TaskRouteHandler
             'siteLocation' => $siteLocation,
             'taskTypeTexts' => $taskTypeTexts,
             'projectAndOrgs' => $projectAndOrgs,
-            'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
+            'discourse_slug' => $projectDao->discourse_parameterize($project),
             'matecat_url' => $taskDao->get_matecat_url_regardless($task),
             'list_qualified_translators' => $list_qualified_translators,
             'display_treat_as_translated' => 0,
@@ -1312,7 +1312,7 @@ class TaskRouteHandler
             'matecat_url' => $matecat_url,
             'matecat_download_url' => $matecat_download_url,
             'chunks'               => $chunks,
-            'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
+            'discourse_slug' => $projectDao->discourse_parameterize($project),
             "file_previously_uploaded" => $file_previously_uploaded
         ));
 
@@ -1436,7 +1436,7 @@ class TaskRouteHandler
             'project'         => $project,
             'taskTypeColours' => $taskTypeColours,
             'matecat_url'     => $matecat_url,
-            'discourse_slug'  => $projectDao->discourse_parameterize($project->getTitle()),
+            'discourse_slug'  => $projectDao->discourse_parameterize($project),
         ));
 
         $app->render('task/task-chunk-complete.tpl');
@@ -1924,7 +1924,7 @@ class TaskRouteHandler
                 "isMember" => $isOrgMember,
                 "isSiteAdmin" => $isSiteAdmin,
                 'alsoViewedTasksCount' => $alsoViewedTasksCount,
-                'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
+                'discourse_slug' => $projectDao->discourse_parameterize($project),
                 'matecat_url' => $taskDao->get_matecat_url_regardless($task),
                 'recorded_status' => $recorded_status,
                 'display_treat_as_translated' => !empty($matecat_id_job) && empty($taskDao->is_parent_of_chunk($task->getProjectId(), $task_id)),
@@ -2023,7 +2023,7 @@ class TaskRouteHandler
             'taskTypeColours' => $taskTypeColours,
             'isSiteAdmin'     => 1,
             'isMember'        => 1,
-            'discourse_slug'  => $projectDao->discourse_parameterize($project->getTitle()),
+            'discourse_slug'  => $projectDao->discourse_parameterize($project),
             'matecat_url'     => $taskDao->get_matecat_url_regardless($task),
             'required_qualification_for_details' => $taskDao->getRequiredTaskQualificationLevel($task_id),
             'sent_users'      => $taskDao->list_task_invites_sent($task_id),

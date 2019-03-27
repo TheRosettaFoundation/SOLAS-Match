@@ -270,7 +270,7 @@ class UserRouteHandler
                     $orgUri,
                     htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
                 );
-                $discourse_slug[$taskId] = $projectDao->discourse_parameterize($projectName);
+                $discourse_slug[$taskId] = $projectDao->discourse_parameterize($project);
 
                 $taskImages[$taskId] = '';
                 if ($project->getImageApproved() && $project->getImageUploaded()) {

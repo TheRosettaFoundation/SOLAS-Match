@@ -230,8 +230,10 @@ class ProjectDao extends BaseDao
         }
     }
 
-    public function discourse_parameterize($a)
+    public function discourse_parameterize($project)
     {
+        $a = $project->getTitle();
+
         mb_internal_encoding('UTF-8');
         mb_regex_encoding('UTF-8');
 
@@ -351,7 +353,7 @@ $replace = array(
         $a = preg_replace('/-+/', '-', $a);
         $a = strtolower($a);
 
-        $topic_id = $this->get_discourse_id($project_id);
+        $topic_id = $this->get_discourse_id($project->getId());
         if (!empty($topic_id)) $a .= "/$topic_id";
 
         return $a;
