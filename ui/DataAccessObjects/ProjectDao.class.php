@@ -2,10 +2,12 @@
 
 namespace SolasMatch\UI\DAO;
 
+use \SolasMatch\API\Lib as LibAPI;
 use \SolasMatch\Common as Common;
 
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/BaseDao.php";
+require_once __DIR__.'/../../api/lib/PDOWrapper.class.php';
 
 class ProjectDao extends BaseDao
 {
@@ -230,8 +232,10 @@ class ProjectDao extends BaseDao
         }
     }
 
-    public function discourse_parameterize($a)
+    public function discourse_parameterize($project)
     {
+        $a = $project->getTitle();
+
         mb_internal_encoding('UTF-8');
         mb_regex_encoding('UTF-8');
 
@@ -349,6 +353,26 @@ $replace = array(
 
         $a = trim($a, '-');
         $a = preg_replace('/-+/', '-', $a);
-        return strtolower($a);
+        $a = strtolower($a);
+
+        $topic_id = $this->get_discourse_id($project->getId());
+        if (!empty($topic_id)) $a .= "/$topic_id";
+
+        return $a;
+    }
+
+    public function set_discourse_id($project_id, $topic_id)
+    {
+        LibAPI\PDOWrapper::call('set_discourse_id', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($topic_id));
+    }
+
+    public function get_discourse_id($project_id)
+    {
+        $topic_id = 0;
+        $result = LibAPI\PDOWrapper::call('get_discourse_id', LibAPI\PDOWrapper::cleanse($project_id));
+        if (!empty($result)) {
+            $topic_id = $result[0]['topic_id'];
+        }
+        return $topic_id;
     }
 }
