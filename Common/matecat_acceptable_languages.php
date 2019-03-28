@@ -231,4 +231,7 @@
 'fr-CH' => 'fr-CH',
 'it-CH' => 'it-CH',
 'lg' => 'lug-UG',
+'seh' => 'seh-ZW',
 );
+//'tsc' => 'tsc-MZ',
+//'ndc' => 'ndc-MZ',
