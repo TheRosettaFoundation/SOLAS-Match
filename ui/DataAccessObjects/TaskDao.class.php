@@ -523,6 +523,16 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
         return $result;
     }
 
+    public function get_parent_transation_task($task)
+    {
+        $task_id = 0;
+        $result = LibAPI\PDOWrapper::call('get_parent_transation_task', LibAPI\PDOWrapper::cleanse($task->getId()));
+        if (!empty($result)) {
+            $task_id = $result[0]['task_id'];
+        }
+        return $task_id;
+    }
+
     public function getOtherPendingChunks($task_id)
     {
         $matecat_tasks = $this->getTaskChunk($task_id);
