@@ -182,7 +182,7 @@
         {if !empty($file_preview_path)}
 		    <table width="100%">
 		        <thead>
-                <th>{Localisation::getTranslation('task_view_source_document_preview')} - {TemplateHelper::uiCleanseHTML($filename)}<hr/></th>
+                <th>{Localisation::getTranslation('task_view_source_document_preview')} {$chunked_message} - {TemplateHelper::uiCleanseHTML($filename)}<hr/></th>
 		        </thead>
 		        <tbody>
 		            <tr>
