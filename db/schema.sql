@@ -7322,6 +7322,21 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_parent_transation_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_parent_transation_task`(IN tID INT)
+BEGIN
+    SELECT
+        lp.task_id
+    FROM TaskChunks tc
+    JOIN MatecatLanguagePairs lp ON tc.project_id=lp.project_id
+    WHERE
+        tc.task_id=tID AND
+        tc.matecat_id_job=lp.matecat_id_job AND
+        lp.type_id=2;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `getOtherPendingChunks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOtherPendingChunks`(IN `tID` BIGINT, IN `typeID` INT, IN `matecatIdJob` INT)

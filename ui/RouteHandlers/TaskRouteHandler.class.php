@@ -882,11 +882,18 @@ class TaskRouteHandler
 
         $converter = Common\Lib\Settings::get("converter.converter_enabled");
 
-        $task_file_info = $taskDao->getTaskInfo($taskId);
         $siteLocation = Common\Lib\Settings::get("site.location");
-        $file_path = "{$siteLocation}task/$taskId/download-file-user/";
-        if (!$taskDao->get_allow_download($task)) $file_path = '';
-        
+
+        if ($parent_translation_id = $taskDao->get_parent_transation_task($task)) {
+            $task_file_info = $taskDao->getTaskInfo($parent_translation_id);
+            $file_path = "{$siteLocation}task/$parent_translation_id/download-file-user/";
+            $chunked_message = '(each translator will work on a specific chunk)';
+        } else {
+            $task_file_info = $taskDao->getTaskInfo($taskId);
+            $file_path = "{$siteLocation}task/$taskId/download-file-user/";
+            $chunked_message = '';
+        }
+
         $alsoViewedTasksCount = 0;
         
         $alsoViewedTasks = $taskDao->getAlsoViewedTasks($taskId, 3, 0); //get first three tasks only
@@ -938,6 +945,7 @@ class TaskRouteHandler
             "converter" => $converter,
             "task" => $task,
             "file_preview_path" => $file_path,
+            'chunked_message' => $chunked_message,
             "filename" => $task_file_info->getFilename(),
             "isMember" => $isMember,
             "isSiteAdmin"   => $isSiteAdmin,
@@ -1780,19 +1788,22 @@ class TaskRouteHandler
         list ($matecat_id_job, $matecat_id_job_password, $recorded_status) = $taskDao->get_matecat_job_id_recorded_status($task);
 
         $trackTaskView = $taskDao->recordTaskView($task_id,$user_id);
-        if ($task_file_info = $taskDao->getTaskInfo($task_id)) {
-            $app->view()->appendData(array(
-                'task_file_info' => $task_file_info,
-                'latest_version' => $taskDao->getTaskVersion($task_id)
-            ));
-        }
-        $task_file_info = $taskDao->getTaskInfo($task_id, 0);
+
         $siteLocation = Common\Lib\Settings::get("site.location");
-        $file_path= "{$siteLocation}task/$task_id/download-file-user/";
-        if (!$taskDao->get_allow_download($task)) $file_path = '';
+
+        if ($parent_translation_id = $taskDao->get_parent_transation_task($task)) {
+            $task_file_info = $taskDao->getTaskInfo($parent_translation_id, 0);
+            $file_path = "{$siteLocation}task/$parent_translation_id/download-file-user/";
+            $chunked_message = '(each translator will work on a specific chunk)';
+        } else {
+            $task_file_info = $taskDao->getTaskInfo($task_id, 0);
+            $file_path = "{$siteLocation}task/$task_id/download-file-user/";
+            $chunked_message = '';
+        }
 
         $app->view()->appendData(array(
             "file_preview_path" => $file_path,
+            'chunked_message' => $chunked_message,
             "filename" => $task_file_info->getFilename()
         ));
 
