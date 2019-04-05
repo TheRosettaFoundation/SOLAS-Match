@@ -1718,10 +1718,17 @@ class ProjectRouteHandler
         $re = curl_init(Common\Lib\Settings::get('discourse.url').'/posts');
         curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
         curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
 
-        curl_exec($re);
+        $res = curl_exec($re);
         if ($error_number = curl_errno($re)) {
           error_log("Discourse API error ($error_number): " . curl_error($re));
+        } else {
+            $response_data = json_decode($res, true);
+            if (!empty($response_data['topic_id'])) {
+                $topic_id = $response_data['topic_id'];
+                $projectDao->set_discourse_id($projectId, $topic_id);
+            }
         }
         curl_close($re);
 
