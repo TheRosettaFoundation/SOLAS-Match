@@ -237,4 +237,5 @@
 
 'pt-MZ' => 'pt-MZ',
 'glw' => 'glw-NG',
+'hig' => 'hig-NG',
 );
