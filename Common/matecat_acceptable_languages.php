@@ -234,4 +234,8 @@
 'seh' => 'seh-ZW',
 'tsc' => 'tsc-MZ',
 'ndc' => 'ndc-MZ',
+
+'pt-MZ' => 'pt-MZ',
+'glw' => 'glw-NG',
+'hig' => 'hig-NG',
 );
