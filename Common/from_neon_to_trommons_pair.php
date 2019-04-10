@@ -218,4 +218,5 @@ $from_neon_to_trommons_pair = array(
 
 'Kannada' => array('kn', 'IN'),
 'Mozambican Portuguese' => array('pt', 'MZ'),
+'Glavda' => array('glw', 'NG'),
 );
