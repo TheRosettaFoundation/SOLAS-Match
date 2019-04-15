@@ -220,4 +220,6 @@ $from_neon_to_trommons_pair = array(
 'Portuguese Mozambique' => array('pt', 'MZ'),
 'Glavda' => array('glw', 'NG'),
 'Higi' => array('hig', 'NG'),
+'Mandara' => array('mfi', 'CM'),
+'Gamargu' => array('mf0', 'NG'),
 );
