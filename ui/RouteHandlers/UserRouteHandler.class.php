@@ -771,6 +771,8 @@ class UserRouteHandler
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
 
+        error_log("login_proz() Redirect from ProZ");
+
         $bad_message = '';
 
         $code = $app->request()->get('code');
