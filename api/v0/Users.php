@@ -1105,6 +1105,7 @@ class Users
             $authCode = $authCodeGrant->newAuthoriseRequest('user', $user->getId(), $params);
         } catch (\Exception $e) {
             DAO\UserDao::logLoginAttempt($user->getId(), $email, 0);
+            error_log("Exception $email");
             if (!isset($params['redirect_uri'])) {
                 API\Dispatcher::getDispatcher()->redirect(
                     API\Dispatcher::getDispatcher()->request()->getReferrer().
@@ -1239,6 +1240,7 @@ class Users
 
             API\Dispatcher::sendResponse(null, $user, null, $format, $oAuthToken);
         } catch (\Exception $e) {
+            error_log("Exception getAccessToken");
             API\Dispatcher::sendResponse(null, $e->getMessage(), Common\Enums\HttpStatusEnum::BAD_REQUEST, $format);
         }
     }
