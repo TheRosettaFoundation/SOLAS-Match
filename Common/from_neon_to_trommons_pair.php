@@ -222,4 +222,17 @@ $from_neon_to_trommons_pair = array(
 'Higi' => array('hig', 'NG'),
 'Mandara' => array('mfi', 'CM'),
 'Gamargu' => array('mf0', 'NG'),
+
+'Arabic Sudan' => array('apd', 'SD'),
+'Bura-Pabir' => array('bwr', 'NG'),
+'Cibak' => array('ckl', 'NG'),
+'Lamang' => array('hia', 'NG'),
+'North Levantine Arabic' => array('apc', 'SY'),
+'Central Makhuwa' => array('vmw', 'MZ'),
+'Makhuwa-Meetto' => array('mgh', 'MZ'),
+'Makhuwa-Saka' => array('xsq', 'MZ'),
+'Makonde' => array('kde', 'MZ'),
+'Mwani' => array('wmw', 'MZ'),
+'Swahili Congo' => array('swc', 'CD'),
+'Tewe' => array('twx', 'MZ'),
 );
