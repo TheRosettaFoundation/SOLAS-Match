@@ -240,4 +240,17 @@
 'hig' => 'hig-NG',
 'mfi' => 'mfi-CM',
 'mf0' => 'mfi-NG',
+
+'apd' => 'apd-SD',
+'bwr' => 'bwr-NG',
+'ckl' => 'ckl-NG',
+'hia' => 'hia-NG',
+'apc' => 'apc-SY',
+'vmw' => 'vmw-MZ',
+'mgh' => 'mgh-MZ',
+'xsq' => 'xsq-MZ',
+'kde' => 'kde-MZ',
+'wmw' => 'wmw-MZ',
+'swc' => 'swc-CD',
+'twx' => 'twx-MZ',
 );
