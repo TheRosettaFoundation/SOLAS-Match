@@ -571,6 +571,7 @@ class IO
 
         $mimeMap = array(
                 "xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                ,"xlsm" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                 ,"xltx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.template"
                 ,"potx" => "application/vnd.openxmlformats-officedocument.presentationml.template"
                 ,"ppsx" => "application/vnd.openxmlformats-officedocument.presentationml.slideshow"
