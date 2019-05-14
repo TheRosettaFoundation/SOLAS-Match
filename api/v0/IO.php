@@ -81,7 +81,7 @@ class IO
 
                     $app->put(
                         '/taskOutput/:taskId/:userId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+                        '\SolasMatch\API\Lib\Middleware::authUserForClaimedTask',
                         '\SolasMatch\API\V0\IO::saveOutputFile'
                     );
 
