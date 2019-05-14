@@ -69,13 +69,13 @@ class IO
 
                     $app->put(
                         '/task/:taskId/:userId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+                        '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgTask',
                         '\SolasMatch\API\V0\IO::saveTaskFile'
                     );
 
                     $app->put(
                         '/taskfromproject/:taskId/:userId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+                        '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgTask',
                         '\SolasMatch\API\V0\IO::saveTaskFileFromProject'
                     );
 
