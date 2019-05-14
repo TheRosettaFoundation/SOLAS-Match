@@ -57,13 +57,13 @@ class IO
                 $app->group('/upload', function () use ($app) {
                     $app->put(
                         '/project/:projectId/file/:filename/:userId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+                        '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgProject',
                         '\SolasMatch\API\V0\IO::saveProjectFile'
                     );
 
                     $app->put(
                         '/project/:projectId/image/:filename/:userId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+                        '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgProject',
                         '\SolasMatch\API\V0\IO::saveProjectImageFile'
                     );
 
