@@ -38,10 +38,18 @@ class UserDao extends BaseDao
             Common\Lib\CacheHelper::GET_USER.$userId,
             Common\Enums\TimeToLiveEnum::MINUTE,
             function ($args) {
-                $request = "{$args[2]}v0/users/$args[1]";
-                return $args[0]->call("\SolasMatch\Common\Protobufs\Models\User", $request);
+                $user = null;
+                $result = LibAPI\PDOWrapper::call('getUser', LibAPI\PDOWrapper::cleanseNull($args[0]) . 'null,null,null,null,null,null,null,null');
+                if (!empty($result)) {
+                    $user = Common\Lib\ModelFactory::buildModel('User', $result[0]);
+                    if (!is_null($user)) {
+                        $user->setPassword('');
+                        $user->setNonce('');
+                    }
+                }
+                return $user;
             },
-            array($this->client, $userId, $this->siteApi)
+            array($userId)
         );
         return $ret;
     }
