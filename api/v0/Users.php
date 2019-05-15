@@ -405,6 +405,7 @@ class Users
 
                 $app->put(
                     '/assignBadge/:email/:badgeId/',
+                    '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgBadge',
                     '\SolasMatch\API\V0\Users::assignBadge'
                 );
 
@@ -473,6 +474,7 @@ class Users
 
                 $app->post(
                     '/changeEmail(:format)/',
+                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
                     '\SolasMatch\API\V0\Users::changeEmail'
                 );
 
