@@ -478,11 +478,12 @@ class Users
                     '\SolasMatch\API\V0\Users::changeEmail'
                 );
 
-                $app->get(
-                    '/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Users::getUser'
-                );
+                // Security (work done directly in ui/DataAccessObjects/UserDao.class.php: getUser($userId) )
+                //$app->get(
+                //    '/:userId/',
+                //    '\SolasMatch\API\Lib\Middleware::isloggedIn',
+                //    '\SolasMatch\API\V0\Users::getUser'
+                //);
 
                 $app->put(
                     '/:userId/',
