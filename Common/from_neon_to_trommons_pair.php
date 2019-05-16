@@ -235,4 +235,6 @@ $from_neon_to_trommons_pair = array(
 'Mwani' => array('wmw', 'MZ'),
 'Swahili Congo' => array('swc', 'CD'),
 'Tewe' => array('twx', 'MZ'),
+
+'Chuwabu' => array('chw', 'MZ'),
 );
