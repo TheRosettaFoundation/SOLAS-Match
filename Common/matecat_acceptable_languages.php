@@ -253,4 +253,6 @@
 'wmw' => 'wmw-MZ',
 'swc' => 'swc-CD',
 'twx' => 'twx-MZ',
+
+'chw' => 'chw-MZ',
 );
