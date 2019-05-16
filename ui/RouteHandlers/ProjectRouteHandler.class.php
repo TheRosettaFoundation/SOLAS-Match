@@ -1099,7 +1099,7 @@ class ProjectRouteHandler
                                 $matecat_proofreading_target_countrys = array();
                                 while (!empty($post["target_language_$targetCount"]) && !empty($post["target_country_$targetCount"])) {
 
-                                    if (!empty($post["segmentation_$targetCount"])) {
+                                    if (false && !empty($post["segmentation_$targetCount"])) {
                                         // Create segmentation task
                                         $id = $this->addProjectTask(
                                             $project,
