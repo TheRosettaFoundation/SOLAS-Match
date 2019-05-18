@@ -6400,6 +6400,17 @@ BEGIN
         SELECT 0 AS result;
 
     ELSEIF EXISTS (
+        SELECT 1
+        FROM Tasks                t
+        JOIN Projects             p ON t.project_id=p.id
+        JOIN Admins              oa ON p.organisation_id=oa.organisation_id
+        WHERE
+            t.id=taskID AND
+            oa.user_id=userID
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF EXISTS (
         SELECT t.id
         FROM Tasks            t
         JOIN RestrictedTasks  r ON t.id=r.restricted_task_id
