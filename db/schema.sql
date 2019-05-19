@@ -6453,6 +6453,71 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `isUserRestrictedFromProject`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserRestrictedFromProject`(IN `projectID` INT, IN `userID` INT)
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM Admins
+        WHERE
+            user_id=userID AND
+            organisation_id IS NULL
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF EXISTS (
+        SELECT 1
+        FROM Projects             p
+        JOIN OrganisationMembers om ON p.organisation_id=om.organisation_id
+        WHERE
+            p.id=projectID AND
+            om.user_id=userID
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF EXISTS (
+        SELECT 1
+        FROM Projects             p
+        JOIN Admins              oa ON p.organisation_id=oa.organisation_id
+        WHERE
+            p.id=projectID AND
+            oa.user_id=userID
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF EXISTS (
+        SELECT t.id
+        FROM      Tasks                            t
+        JOIN      Projects                         p ON t.project_id=p.id
+        JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
+        LEFT JOIN Badges                           b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+        LEFT JOIN RestrictedTasks                  r ON t.id=r.restricted_task_id
+        LEFT JOIN UserQualifiedPairs             uqp ON
+            uqp.user_id=userID AND
+            t.`language_id-source`=uqp.language_id_source AND
+            t.`language_id-target`=uqp.language_id_target
+        WHERE
+            t.project_id=projectID AND
+            t.published=1 AND
+            NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tb WHERE tb.user_id=userID AND tb.task_id=t.id) AND
+            (tq.required_qualification_level=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
+            (
+                r.restricted_task_id IS NULL OR
+                b.id IS NULL OR
+                b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=userID)
+            )
+        GROUP BY t.id
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSE
+        SELECT 1 AS result;
+
+    END IF;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `getUsers`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUsers`()
