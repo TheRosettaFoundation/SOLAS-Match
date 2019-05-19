@@ -133,6 +133,11 @@ class ProjectRouteHandler
             $app->redirect($app->urlFor('home'));
         }
 
+        if ($taskDao->isUserRestrictedFromProject($project_id, $user_id)) {
+            $app->flash('error', 'You cannot access this project!');
+            $app->redirect($app->urlFor('home'));
+        }
+
         $app->view()->setData("project", $project);
 
         if ($app->request()->isPost()) {
