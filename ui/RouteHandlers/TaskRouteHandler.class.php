@@ -706,6 +706,12 @@ class TaskRouteHandler
         $app = \Slim\Slim::getInstance();
         $taskDao = new DAO\TaskDao();
 
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
+        if (is_null($user_id) || $taskDao->isUserRestrictedFromTask($taskId, $user_id)) {
+            $app->flash('error', "You are not authorized to view this page");
+            $app->redirect($app->urlFor('home'));
+        }
+
         $headerArr = $taskDao->downloadTaskVersion($taskId, $version, $convert);
         if (!empty($headerArr)) {
             $headerArr = unserialize($headerArr);

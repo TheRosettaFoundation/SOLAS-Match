@@ -1633,6 +1633,12 @@ class ProjectRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $projectDao = new DAO\ProjectDao();
+        $taskDao = new DAO\TaskDao();
+
+        if ($taskDao->isUserRestrictedFromProject($projectId, Common\Lib\UserSession::getCurrentUserID())) {
+            $app->flash('error', 'You cannot access this project!');
+            $app->redirect($app->urlFor('home'));
+        }
 
         try {
             $headArr = $projectDao->downloadProjectFile($projectId);
