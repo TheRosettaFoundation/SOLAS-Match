@@ -67,6 +67,11 @@ class TaskRouteHandler
         )->name("download-task");
 
         $app->get(
+            '/task/:task_id/download-task-external/',
+            array($this, 'downloadTaskExternal')
+        )->name('download-task-external');
+
+        $app->get(
             "/task/:task_id/claim/",
             array($middleware, "isBlackListed"),
             array($this, "taskClaim")
@@ -614,6 +619,46 @@ class TaskRouteHandler
         }
     }
 
+    public function downloadTaskExternal($taskId)
+    {
+        $app = \Slim\Slim::getInstance();
+        $convert = $app->request()->get("convertToXliff");
+
+        try {
+            $this->downloadTaskVersion($this->decrypt_task_id($taskId), 0, $convert);
+        } catch (Common\Exceptions\SolasMatchException $e) {
+            $app->flash(
+                "error",
+                sprintf(
+                    Lib\Localisation::getTranslation('common_error_file_not_found'),
+                    Lib\Localisation::getTranslation('common_original_task_file'),
+                    Common\Lib\Settings::get("site.system_email_address")
+                )
+            );
+            $app->redirect($app->urlFor('home'));
+        }
+    }
+
+    private function encrypt_task_id($task_id) {
+        $key = Common\Lib\Settings::get('session.site_key');
+        $iv = openssl_random_pseudo_bytes(16);
+        $ciphertext_raw = openssl_encrypt("$task_id", 'AES-128-CBC', $key, OPENSSL_RAW_DATA, $iv);
+        $hmac = hash_hmac('sha256', $ciphertext_raw, $key, true);
+        return urlencode(base64_encode($iv . $hmac . $ciphertext_raw));
+    }
+
+    private function decrypt_task_id($ciphertext) {
+        $key = Common\Lib\Settings::get('session.site_key');
+        $c = base64_decode($ciphertext);
+        $iv = substr($c, 0, 16);
+        $hmac = substr($c, 16, 32);
+        $ciphertext_raw = substr($c, 48);
+        $original_plaintext = openssl_decrypt($ciphertext_raw, 'AES-128-CBC', $key, OPENSSL_RAW_DATA, $iv);
+        $calcmac = hash_hmac('sha256', $ciphertext_raw, $key, true);
+        if (hash_equals($hmac, $calcmac)) return $original_plaintext;
+        return 999999999;
+    }
+
     /*
      *  Claim and download a task
      */
@@ -880,11 +925,11 @@ class TaskRouteHandler
 
         if ($parent_translation_id = $taskDao->get_parent_transation_task($task)) {
             $task_file_info = $taskDao->getTaskInfo($parent_translation_id);
-            $file_path = "{$siteLocation}task/$parent_translation_id/download-file-user/";
+            $file_path = "{$siteLocation}task/" . $this->encrypt_task_id($parent_translation_id) . '/download-task-external/';
             $chunked_message = '(each translator will work on a specific chunk)';
         } else {
             $task_file_info = $taskDao->getTaskInfo($taskId);
-            $file_path = "{$siteLocation}task/$taskId/download-file-user/";
+            $file_path = "{$siteLocation}task/" . $this->encrypt_task_id($taskId) . '/download-task-external/';
             $chunked_message = '';
         }
 
@@ -1703,11 +1748,11 @@ class TaskRouteHandler
 
         if ($parent_translation_id = $taskDao->get_parent_transation_task($task)) {
             $task_file_info = $taskDao->getTaskInfo($parent_translation_id, 0);
-            $file_path = "{$siteLocation}task/$parent_translation_id/download-file-user/";
+            $file_path = "{$siteLocation}task/" . $this->encrypt_task_id($parent_translation_id) . '/download-task-external/';
             $chunked_message = '(each translator will work on a specific chunk)';
         } else {
             $task_file_info = $taskDao->getTaskInfo($task_id, 0);
-            $file_path = "{$siteLocation}task/$task_id/download-file-user/";
+            $file_path = "{$siteLocation}task/" . $this->encrypt_task_id($task_id) . '/download-task-external/';
             $chunked_message = '';
         }
 
