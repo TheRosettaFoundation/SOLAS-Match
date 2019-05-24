@@ -40,7 +40,7 @@ error_log("user_id: $userId");
             Common\Enums\TimeToLiveEnum::MINUTE,
             function ($args) {
                 $user = null;
-                $result = LibAPI\PDOWrapper::call('getUser', LibAPI\PDOWrapper::cleanseNull($args[0]) . 'null,null,null,null,null,null,null,null');
+                $result = LibAPI\PDOWrapper::call('getUser', LibAPI\PDOWrapper::cleanseNull($args[0]) . ',null,null,null,null,null,null,null,null');
 error_log('result');
 error_log(print_r($result, true));
                 if (!empty($result)) {
