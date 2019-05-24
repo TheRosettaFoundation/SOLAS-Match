@@ -32,6 +32,7 @@ class UserDao extends BaseDao
     
     public function getUser($userId)
     {
+error_log("user_id: $userId");
         $ret = null;
         
         $ret = Common\Lib\CacheHelper::getCached(
@@ -40,6 +41,8 @@ class UserDao extends BaseDao
             function ($args) {
                 $user = null;
                 $result = LibAPI\PDOWrapper::call('getUser', LibAPI\PDOWrapper::cleanseNull($args[0]) . 'null,null,null,null,null,null,null,null');
+error_log('result');
+error_log(print_r($result, true));
                 if (!empty($result)) {
                     $user = Common\Lib\ModelFactory::buildModel('User', $result[0]);
                     if (!is_null($user)) {
@@ -47,10 +50,14 @@ class UserDao extends BaseDao
                         $user->setNonce('');
                     }
                 }
+error_log('user');
+error_log(print_r($user, true));
                 return $user;
             },
             array($userId)
         );
+error_log('ret');
+error_log(print_r($ret, true));
         return $ret;
     }
     
