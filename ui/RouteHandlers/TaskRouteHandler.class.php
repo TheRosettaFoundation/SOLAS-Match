@@ -622,10 +622,17 @@ class TaskRouteHandler
     public function downloadTaskExternal($taskId)
     {
         $app = \Slim\Slim::getInstance();
+        $taskDao = new DAO\TaskDao();
         $convert = $app->request()->get("convertToXliff");
 
         try {
-            $this->downloadTaskVersion($this->decrypt_task_id($taskId), 0, $convert);
+            $headerArr = $taskDao->downloadTaskVersion($this->decrypt_task_id($taskId), 0, $convert);
+            if (!empty($headerArr)) {
+                $headerArr = unserialize($headerArr);
+                foreach ($headerArr as $key => $val) {
+                    $app->response->headers->set($key, $val);
+                }
+            }
         } catch (Common\Exceptions\SolasMatchException $e) {
             $app->flash(
                 "error",
