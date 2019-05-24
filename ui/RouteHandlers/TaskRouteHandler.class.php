@@ -644,12 +644,12 @@ class TaskRouteHandler
         $iv = openssl_random_pseudo_bytes(16);
         $ciphertext_raw = openssl_encrypt("$task_id", 'AES-128-CBC', $key, OPENSSL_RAW_DATA, $iv);
         $hmac = hash_hmac('sha256', $ciphertext_raw, $key, true);
-        return urlencode(base64_encode($iv . $hmac . $ciphertext_raw));
+        return bin2hex($iv . $hmac . $ciphertext_raw);
     }
 
     private function decrypt_task_id($ciphertext) {
         $key = Common\Lib\Settings::get('session.site_key');
-        $c = base64_decode($ciphertext);
+        $c = hex2bin($ciphertext);
         $iv = substr($c, 0, 16);
         $hmac = substr($c, 16, 32);
         $ciphertext_raw = substr($c, 48);
