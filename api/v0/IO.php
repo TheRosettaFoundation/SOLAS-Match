@@ -57,31 +57,31 @@ class IO
                 $app->group('/upload', function () use ($app) {
                     $app->put(
                         '/project/:projectId/file/:filename/:userId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+                        '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgProject',
                         '\SolasMatch\API\V0\IO::saveProjectFile'
                     );
 
                     $app->put(
                         '/project/:projectId/image/:filename/:userId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+                        '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgProject',
                         '\SolasMatch\API\V0\IO::saveProjectImageFile'
                     );
 
                     $app->put(
                         '/task/:taskId/:userId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+                        '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgTask',
                         '\SolasMatch\API\V0\IO::saveTaskFile'
                     );
 
                     $app->put(
                         '/taskfromproject/:taskId/:userId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+                        '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgTask',
                         '\SolasMatch\API\V0\IO::saveTaskFileFromProject'
                     );
 
                     $app->put(
                         '/taskOutput/:taskId/:userId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+                        '\SolasMatch\API\Lib\Middleware::authUserForClaimedTask',
                         '\SolasMatch\API\V0\IO::saveOutputFile'
                     );
 

@@ -133,6 +133,11 @@ class ProjectRouteHandler
             $app->redirect($app->urlFor('home'));
         }
 
+        if ($taskDao->isUserRestrictedFromProject($project_id, $user_id)) {
+            $app->flash('error', 'You cannot access this project!');
+            $app->redirect($app->urlFor('home'));
+        }
+
         $app->view()->setData("project", $project);
 
         if ($app->request()->isPost()) {
@@ -1099,7 +1104,7 @@ class ProjectRouteHandler
                                 $matecat_proofreading_target_countrys = array();
                                 while (!empty($post["target_language_$targetCount"]) && !empty($post["target_country_$targetCount"])) {
 
-                                    if (!empty($post["segmentation_$targetCount"])) {
+                                    if (false && !empty($post["segmentation_$targetCount"])) {
                                         // Create segmentation task
                                         $id = $this->addProjectTask(
                                             $project,
@@ -1457,7 +1462,7 @@ class ProjectRouteHandler
         }
 
         $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/ProjectCreate3.js\"></script>";
+        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/ProjectCreate4.js\"></script>";
 
         $app->view()->appendData(array(
             "siteLocation"          => Common\Lib\Settings::get('site.location'),
@@ -1628,6 +1633,12 @@ class ProjectRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $projectDao = new DAO\ProjectDao();
+        $taskDao = new DAO\TaskDao();
+
+        if ($taskDao->isUserRestrictedFromProject($projectId, Common\Lib\UserSession::getCurrentUserID())) {
+            $app->flash('error', 'You cannot access this project!');
+            $app->redirect($app->urlFor('home'));
+        }
 
         try {
             $headArr = $projectDao->downloadProjectFile($projectId);

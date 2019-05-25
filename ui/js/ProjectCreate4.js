@@ -262,7 +262,7 @@ function addMoreTargetLanguages()
     proofreadingRequiredDiv.appendChild(proofreadingCheckbox);
 
     // Put each checkbox div into the div that is to contain them all
-    taskTypesRow.appendChild(segmentationRequiredDiv);
+    // taskTypesRow.appendChild(segmentationRequiredDiv);
     taskTypesRow.appendChild(translationRequiredDiv);
     taskTypesRow.appendChild(proofreadingRequiredDiv);
 
@@ -457,7 +457,7 @@ function validateLocalValues()
     if (project.wordCount > 5000) {
       var i = 0;
       var segmentationMissing = false;
-      while (i < targetCount && !segmentationMissing) {
+      while (false && i < targetCount && !segmentationMissing) {
         var segmentationCheckbox = document.getElementById("segmentation_" + i);
         if (!segmentationCheckbox.checked) {
           segmentationMissing = true;
@@ -541,7 +541,8 @@ function validateLocalValues()
   targetCountryCode      = [];
   targetCountryCountry   = [];
   for (var i = 0; i < targetCount; i++) {
-    segmentationRequired[i] = document.getElementById("segmentation_" + i).checked;
+    // segmentationRequired[i] = document.getElementById("segmentation_" + i).checked;
+    segmentationRequired[i] = false;
     translationRequired [i] = document.getElementById("translation_" + i).checked;
     proofreadingRequired[i] = document.getElementById("proofreading_" + i).checked;
 

@@ -67,6 +67,11 @@ class TaskRouteHandler
         )->name("download-task");
 
         $app->get(
+            '/task/:task_id/download-task-external/',
+            array($this, 'downloadTaskExternal')
+        )->name('download-task-external');
+
+        $app->get(
             "/task/:task_id/claim/",
             array($middleware, "isBlackListed"),
             array($this, "taskClaim")
@@ -91,13 +96,6 @@ class TaskRouteHandler
         )->via("POST")->name("task");
 
         $app->get(
-            "/task/:task_id/desegmentation/",
-            array($middleware, "authUserIsLoggedIn"),
-            array($middleware, 'authenticateUserForTask'),
-            array($this, "desegmentationTask")
-        )->via("POST")->name("task-desegmentation");
-
-        $app->get(
             "/task/:task_id/simple-upload/",
             array($middleware, "authUserIsLoggedIn"),
             array($middleware, 'authenticateUserForTask'),
@@ -110,13 +108,6 @@ class TaskRouteHandler
             array($middleware, 'authenticateUserForTask'),
             array($this, 'taskChunkComplete')
         )->via('POST')->name('task-chunk-complete');
-
-        $app->get(
-            "/task/:task_id/segmentation/",
-            array($middleware, "authUserIsLoggedIn"),
-            array($middleware, 'authenticateUserForTask'),
-            array($this, "taskSegmentation")
-        )->via("POST")->name("task-segmentation");
 
         $app->get(
             "/task/:task_id/uploaded/",
@@ -628,6 +619,53 @@ class TaskRouteHandler
         }
     }
 
+    public function downloadTaskExternal($taskId)
+    {
+        $app = \Slim\Slim::getInstance();
+        $taskDao = new DAO\TaskDao();
+        $convert = $app->request()->get("convertToXliff");
+
+        try {
+            $headerArr = $taskDao->downloadTaskVersion($this->decrypt_task_id($taskId), 0, $convert);
+            if (!empty($headerArr)) {
+                $headerArr = unserialize($headerArr);
+                foreach ($headerArr as $key => $val) {
+                    $app->response->headers->set($key, $val);
+                }
+            }
+        } catch (Common\Exceptions\SolasMatchException $e) {
+            $app->flash(
+                "error",
+                sprintf(
+                    Lib\Localisation::getTranslation('common_error_file_not_found'),
+                    Lib\Localisation::getTranslation('common_original_task_file'),
+                    Common\Lib\Settings::get("site.system_email_address")
+                )
+            );
+            $app->redirect($app->urlFor('home'));
+        }
+    }
+
+    private function encrypt_task_id($task_id) {
+        $key = Common\Lib\Settings::get('session.site_key');
+        $iv = openssl_random_pseudo_bytes(16);
+        $ciphertext_raw = openssl_encrypt("$task_id", 'AES-128-CBC', $key, OPENSSL_RAW_DATA, $iv);
+        $hmac = hash_hmac('sha256', $ciphertext_raw, $key, true);
+        return bin2hex($iv . $hmac . $ciphertext_raw);
+    }
+
+    private function decrypt_task_id($ciphertext) {
+        $key = Common\Lib\Settings::get('session.site_key');
+        $c = hex2bin($ciphertext);
+        $iv = substr($c, 0, 16);
+        $hmac = substr($c, 16, 32);
+        $ciphertext_raw = substr($c, 48);
+        $original_plaintext = openssl_decrypt($ciphertext_raw, 'AES-128-CBC', $key, OPENSSL_RAW_DATA, $iv);
+        $calcmac = hash_hmac('sha256', $ciphertext_raw, $key, true);
+        if (hash_equals($hmac, $calcmac)) return $original_plaintext;
+        return 999999999;
+    }
+
     /*
      *  Claim and download a task
      */
@@ -720,6 +758,12 @@ class TaskRouteHandler
         $app = \Slim\Slim::getInstance();
         $taskDao = new DAO\TaskDao();
 
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
+        if (is_null($user_id) || $taskDao->isUserRestrictedFromTask($taskId, $user_id)) {
+            $app->flash('error', "You are not authorized to view this page");
+            $app->redirect($app->urlFor('home'));
+        }
+
         $headerArr = $taskDao->downloadTaskVersion($taskId, $version, $convert);
         if (!empty($headerArr)) {
             $headerArr = unserialize($headerArr);
@@ -798,7 +842,8 @@ class TaskRouteHandler
             $app->flashKeep();
             switch ($task->getTaskType()) {
                 case Common\Enums\TaskTypeEnum::DESEGMENTATION:
-                    $app->redirect($app->urlFor("task-desegmentation", array("task_id" => $taskId)));
+                    // $app->redirect($app->urlFor("task-desegmentation", array("task_id" => $taskId)));
+                    $app->redirect($app->urlFor('home'));
                     break;
                 case Common\Enums\TaskTypeEnum::TRANSLATION:
                 case Common\Enums\TaskTypeEnum::PROOFREADING:
@@ -809,7 +854,8 @@ class TaskRouteHandler
                   }
                     break;
                 case Common\Enums\TaskTypeEnum::SEGMENTATION:
-                    $app->redirect($app->urlFor("task-segmentation", array("task_id" => $taskId)));
+                    // $app->redirect($app->urlFor("task-segmentation", array("task_id" => $taskId)));
+                    $app->redirect($app->urlFor('home'));
                     break;
             }
         } else {
@@ -886,11 +932,11 @@ class TaskRouteHandler
 
         if ($parent_translation_id = $taskDao->get_parent_transation_task($task)) {
             $task_file_info = $taskDao->getTaskInfo($parent_translation_id);
-            $file_path = "{$siteLocation}task/$parent_translation_id/download-file-user/";
+            $file_path = "{$siteLocation}task/" . $this->encrypt_task_id($parent_translation_id) . '/download-task-external/';
             $chunked_message = '(each translator will work on a specific chunk)';
         } else {
             $task_file_info = $taskDao->getTaskInfo($taskId);
-            $file_path = "{$siteLocation}task/$taskId/download-file-user/";
+            $file_path = "{$siteLocation}task/" . $this->encrypt_task_id($taskId) . '/download-task-external/';
             $chunked_message = '';
         }
 
@@ -966,90 +1012,6 @@ class TaskRouteHandler
         $app->render("task/task.view.tpl");
 
         }
-    }
-
-    public function desegmentationTask($taskId)
-    {
-        $app = \Slim\Slim::getInstance();
-        $taskDao = new DAO\TaskDao();
-        $projectDao = new DAO\ProjectDao();
-
-        $sesskey = Common\Lib\UserSession::getCSRFKey();
-
-        $userId = Common\Lib\UserSession::getCurrentUserID();
-        $fieldName = "mergedFile";
-        $errorMessage = null;
-        $task = $taskDao->getTask($taskId);
-        $project = $projectDao->getProject($task->getProjectId());
-
-        if ($app->request()->isPost()) {
-            $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post, 'desegmentationTask');
-
-            $uploadError = false;
-            try {
-                Lib\TemplateHelper::validateFileHasBeenSuccessfullyUploaded($fieldName);
-            } catch (\Exception $e) {
-                $uploadError = true;
-                $errorMessage = $e->getMessage();
-            }
-
-            if (!$uploadError) {
-                try {
-                    $filedata = file_get_contents($_FILES[$fieldName]['tmp_name']);
-                    $taskDao->saveTaskFile($taskId, $userId, $filedata);
-                } catch (\Exception  $e) {
-                    $uploadError = true;
-                    $errorMessage = $e->getMessage();
-                }
-            }
-
-            if (is_null($errorMessage)) {
-                $app->redirect($app->urlFor("task-review", array("task_id" => $taskId)));
-            } else {
-                $app->flashNow("error", $errorMessage);
-            }
-        }
-
-        $graphBuilder = new Lib\UIWorkflowBuilder();
-        $graph = $projectDao->getProjectGraph($task->getProjectId());
-        $index = $graphBuilder->find($task->getId(), $graph);
-        $node = $graph->getAllNodes($index);
-
-        $preReqTasks = array();
-        if ($node) {
-            foreach ($node->getPrevious() as $nodeId) {
-                $pTask = $taskDao->getTask($nodeId);
-                if (is_object($pTask)) {
-                    $preReqTasks[] = $pTask;
-                }
-            }
-        }
-
-        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
-
-        $taskTypeColours = array();
-        for ($i = 1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
-        }
-
-        $converter = Common\Lib\Settings::get("converter.converter_enabled");
-
-        $extra_scripts = file_get_contents(__DIR__."/../js/TaskView.js");
-
-        $app->view()->appendData(array(
-            'sesskey'       => $sesskey,
-            "extra_scripts" => $extra_scripts,
-            "task"          => $task,
-            "project"       => $project,
-            "preReqTasks"   => $preReqTasks,
-            "fieldName"     => $fieldName,
-            "errorMessage"  => $errorMessage,
-            "converter"     => $converter,
-            "taskTypeColours"   => $taskTypeColours
-        ));
-
-        $app->render("task/task-desegmentation.tpl");
     }
 
     public function taskSimpleUpload($taskId)
@@ -1793,11 +1755,11 @@ class TaskRouteHandler
 
         if ($parent_translation_id = $taskDao->get_parent_transation_task($task)) {
             $task_file_info = $taskDao->getTaskInfo($parent_translation_id, 0);
-            $file_path = "{$siteLocation}task/$parent_translation_id/download-file-user/";
+            $file_path = "{$siteLocation}task/" . $this->encrypt_task_id($parent_translation_id) . '/download-task-external/';
             $chunked_message = '(each translator will work on a specific chunk)';
         } else {
             $task_file_info = $taskDao->getTaskInfo($task_id, 0);
-            $file_path = "{$siteLocation}task/$task_id/download-file-user/";
+            $file_path = "{$siteLocation}task/" . $this->encrypt_task_id($task_id) . '/download-task-external/';
             $chunked_message = '';
         }
 
@@ -2253,213 +2215,6 @@ class TaskRouteHandler
         $app->render("task/task.created.tpl");
     }
 
-    public function taskSegmentation($task_id)
-    {
-        $app = \Slim\Slim::getInstance();
-        $taskDao = new DAO\TaskDao();
-        $projectDao = new DAO\ProjectDao();
-
-        $sesskey = Common\Lib\UserSession::getCSRFKey();
-
-        $user_id = Common\Lib\UserSession::getCurrentUserID();
-        $taskTypeErr = null;
-
-        $task = $taskDao->getTask($task_id);
-        $project = $projectDao->getProject($task->getProjectId());
-        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
-        $maxSegments = Common\Lib\Settings::get("site.max_segmentation");
-        $taskTypeColours = array();
-
-        for ($i=1; $i <= $numTaskTypes; $i++) {
-            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
-        }
-
-        $language_list = Lib\TemplateHelper::getLanguageList();
-        $countries = Lib\TemplateHelper::getCountryList();
-
-        if ($app->request()->isPost() && $task->getTaskStatus() != Common\Enums\TaskStatusEnum::COMPLETE) {
-            $post = $app->request()->post();
-            Common\Lib\UserSession::checkCSRFKey($post, 'taskSegmentation');
-
-            $fileInfo = $projectDao->getProjectFileInfo($project->getId());
-            $canonicalExtension = explode(".", $fileInfo->getFilename());
-            $canonicalExtension = strtolower($canonicalExtension[count($canonicalExtension)-1]);
-
-            $errors = array();
-            $fileNames = array();
-            $fileHashes = array();
-            foreach ($_FILES as $file) {
-                $extension = explode(".", $file["name"]);
-                $extension = strtolower($extension[count($extension)-1]);
-                if ($extension != $canonicalExtension) {
-                    $errors["incorrectExtension"] = sprintf(
-                        Lib\Localisation::getTranslation("common_task_file_extension_mismatch"),
-                        $canonicalExtension
-                    );
-                    break;
-                }
-
-                if ($file["error"] != UPLOAD_ERR_OK) {
-                    $errors["missingFile"] = Lib\Localisation::getTranslation('task_segmentation_15');
-                    break;
-                }
-                if (!in_array($file["name"], $fileNames)) {
-                    $fileNames[] = $file["name"];
-                } else {
-                    $errors["uniqueFileName"] = Lib\Localisation::getTranslation('task_segmentation_16');
-                    break;
-                }
-
-                $hash = md5_file($file["tmp_name"]);
-                if (!in_array($hash, $fileHashes)) {
-                    $fileHashes[] = $hash;
-                } else {
-                    $errors["duplicateFileContent"] = Lib\Localisation::getTranslation('task_segmentation_17');
-                    break;
-                }
-            }
-
-            if (!isset($post["translation_0"]) && !isset($post["proofreading_0"])) {
-                $errors["taskTypeSet"] = Lib\Localisation::getTranslation('task_segmentation_18');
-            }
-
-            if (empty($errors)) {
-                $segmentationValue = $post["segmentationValue"];
-                $upload_error = false;
-                $translationTaskIds = array();
-                $proofreadTaskIds = array();
-                for ($i=0; $i < $segmentationValue; $i++) {
-                    try {
-                        Lib\TemplateHelper::validateFileHasBeenSuccessfullyUploaded("segmentationUpload_".$i);
-                        $taskModel = new Common\Protobufs\Models\Task();
-                        $this->setTaskModelData($taskModel, $project, $task, $i, $segmentationValue);
-                        if (isset($post["translation_0"])) {
-                            $taskModel->setTaskType(Common\Enums\TaskTypeEnum::TRANSLATION);
-                            $taskModel->setWordCount($post["wordCount_$i"]);
-                            error_log("taskSegmentation translation_0");
-                            $createdTranslation = $taskDao->createTask($taskModel);
-                            if ($taskDao->getRestrictedTask($task_id)) {
-                                $taskDao->setRestrictedTask($createdTranslation->getId());
-                            }
-                            $translationTaskIds[] = $createdTranslation->getId();
-                            try {
-                                $filedata = file_get_contents($_FILES['segmentationUpload_'.$i]['tmp_name']);
-                                $taskDao->saveTaskFile($createdTranslation->getId(), $user_id, $filedata);
-                            } catch (\Exception  $e) {
-                                $upload_error = true;
-                                $errors["transTask$i"] = "<strong>File #$i:</strong> {$e->getMessage()}";
-                            }
-
-                        }
-
-                        if (isset($post["proofreading_0"])) {
-                            $taskModel->setTaskType(Common\Enums\TaskTypeEnum::PROOFREADING);
-                            $taskModel->setWordCount($post["wordCount_$i"]);
-                            error_log("taskSegmentation proofreading_0");
-                            $createdProofReading = $taskDao->createTask($taskModel);
-                            if ($taskDao->getRestrictedTask($task_id)) {
-                                $taskDao->setRestrictedTask($createdProofReading->getId());
-                            }
-                            $proofreadTaskIds[] = $createdProofReading->getId();
-                            try {
-                                $filedata = file_get_contents($_FILES['segmentationUpload_'.$i]['tmp_name']);
-                                $taskDao->saveTaskFile($createdProofReading->getId(), $user_id, $filedata);
-                            } catch (\Exception  $e) {
-                                $upload_error = true;
-                                $errors["proofTask$i"] = "<strong>File #$i:</strong> {$e->getMessage()}";
-                                $taskDao->deleteTask($createdProofReading->getId());
-                            }
-                        }
-                    } catch (\Exception $e) {
-                        $upload_error = true;
-                        $error_message = $e->getMessage();
-                    }
-                }
-
-                if (!$upload_error) {
-
-                    $taskModel = new Common\Protobufs\Models\Task();
-                    $this->setTaskModelData($taskModel, $project, $task);
-                    $taskModel->setWordCount($task->getWordCount());
-                    $taskModel->setTaskType(Common\Enums\TaskTypeEnum::DESEGMENTATION);
-                    error_log("taskSegmentation DESEGMENTATION");
-                    $createdDesegmentation = $taskDao->createTask($taskModel);
-                    if ($taskDao->getRestrictedTask($task_id)) {
-                        $taskDao->setRestrictedTask($createdDesegmentation->getId());
-                    }
-                    $createdDesegmentationId = $createdDesegmentation->getId();
-
-                    try {
-                        $filedata = file_get_contents($_FILES["segmentationUpload_0"]["tmp_name"]);
-                        $error_message = $taskDao->saveTaskFile($createdDesegmentation->getId(), $user_id, $filedata);
-                    } catch (Common\Exceptions\SolasMatchException  $e) {
-                        $upload_error = true;
-                        $error_message = "File error: " . $e->getMessage();
-                    }
-
-                    $task->setTaskStatus(Common\Enums\TaskStatusEnum::COMPLETE);
-                    error_log("taskSegmentation COMPLETE");
-                    $taskDao->updateTask($task);
-                    for ($i=0; $i < $segmentationValue; $i++) {
-                        if (isset($post["translation_0"]) && isset($post["proofreading_0"])) {
-                            $taskDao->addTaskPreReq($translationTaskIds[$i], $task_id);
-                            $taskDao->addTaskPreReq($proofreadTaskIds[$i], $translationTaskIds[$i]);
-                            $taskDao->addTaskPreReq($createdDesegmentationId, $proofreadTaskIds[$i]);
-                        }
-                        if (!isset($post["translation_0"]) && isset($post["proofreading_0"])) {
-                            $taskDao->addTaskPreReq($proofreadTaskIds[$i], $task_id);
-                            $taskDao->addTaskPreReq($createdDesegmentationId, $proofreadTaskIds[$i]);
-                        }
-                        if (isset($post["translation_0"]) && !isset($post["proofreading_0"])) {
-                            $taskDao->addTaskPreReq($translationTaskIds[$i], $task_id);
-                            $taskDao->addTaskPreReq($createdDesegmentationId, $translationTaskIds[$i]);
-                        }
-                    }
-                    error_log('taskSegmentation calculateProjectDeadlines: ' . $project->getId());
-                    $projectDao->calculateProjectDeadlines($project->getId());
-                    $app->redirect($app->urlFor("task-review", array("task_id" => $task->getId())));
-                } else {
-                    if (!empty($translationTaskIds)) {
-                        foreach ($translationTaskIds as $taskId) {
-                            $taskDao->deleteTask($taskId);
-                        }
-                    }
-                    if (!empty($proofreadTaskIds)) {
-                        foreach ($proofreadTaskIds as $taskId) {
-                            $taskDao->deleteTask($taskId);
-                        }
-                    }
-                    $app->view()->appendData(array(
-                        "errors" => $errors
-                    ));
-                }
-            } else {
-                $app->view()->appendData(array(
-                    "errors" => $errors
-                ));
-            }
-        }
-
-        $extraScripts  = '<script type="text/javascript">' . file_get_contents(__DIR__."/../js/Parameters.js") . '</script>';
-        $extraScripts .= file_get_contents(__DIR__."/../js/task-segmentation.js");
-        $extraScripts .= file_get_contents(__DIR__."/../js/TaskView.js");
-
-        $app->view()->appendData(array(
-            'sesskey'           => $sesskey,
-            "project"           => $project,
-            "task"              => $task,
-            "taskTypeColours"   => $taskTypeColours,
-            'siteLocation'      => Common\Lib\Settings::get('site.location'),
-            'maxFileSize'       => Lib\TemplateHelper::maxFileSizeBytes(),
-            "maxSegmentation"   => $maxSegments,
-            "languages"         => $language_list,
-            "countries"         => $countries,
-            "extra_scripts"     => $extraScripts
-        ));
-
-        $app->render("task/task-segmentation.tpl");
-    }
-
     public function taskOrgFeedback($task_id)
     {
         $app = \Slim\Slim::getInstance();
@@ -2847,23 +2602,6 @@ class TaskRouteHandler
         ));
 
         $app->render("task/task.review.tpl");
-    }
-
-    private function setTaskModelData($taskModel, $project, $task, $i = null, $segmentationValue = null)
-    {
-        if (is_null($i) && is_null($segmentationValue)) {
-            $taskModel->setTitle($project->getTitle());
-        } else {
-            $taskModel->setTitle($project->getTitle()." (".($i+1)." of $segmentationValue)");
-        }
-
-        $taskModel->setSourceLocale($project->getSourceLocale());
-        $taskModel->setTargetLocale($task->getTargetLocale());
-
-        $taskModel->setProjectId($project->getId());
-        $taskModel->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
-
-        $taskModel->setPublished(1);
     }
 }
 

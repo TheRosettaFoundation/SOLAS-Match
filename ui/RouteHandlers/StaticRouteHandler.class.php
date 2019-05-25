@@ -21,7 +21,7 @@ class StaticRouteHandler
         $app->get("/static/siteLanguage/", array($this, "siteLanguage"))->via("POST")->name("siteLanguage");
         $app->get("/static/getDefaultStrings/", array($this, "getDefaultStrings"))->name("staticGetDefaultStrings");
         $app->get("/static/getUserStrings/", array($this, "getUserStrings"))->name("staticGetUserStrings");
-        $app->get("/static/getUser/", array($this, "getUser"))->name("staticGetUser");
+        // Security: $app->get("/static/getUser/", array($this, "getUser"))->name("staticGetUser");
         $app->get("/static/getUserHash/", array($this, "getUserHash"))->name("staticGetUserHash");
         $app->notFound("\SolasMatch\UI\Lib\Middleware::notFound");
     }

@@ -405,6 +405,7 @@ class Users
 
                 $app->put(
                     '/assignBadge/:email/:badgeId/',
+                    '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgBadge',
                     '\SolasMatch\API\V0\Users::assignBadge'
                 );
 
@@ -473,14 +474,16 @@ class Users
 
                 $app->post(
                     '/changeEmail(:format)/',
+                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
                     '\SolasMatch\API\V0\Users::changeEmail'
                 );
 
-                $app->get(
-                    '/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Users::getUser'
-                );
+                // Security (work done directly in ui/DataAccessObjects/UserDao.class.php: getUser($userId) )
+                //$app->get(
+                //    '/:userId/',
+                //    '\SolasMatch\API\Lib\Middleware::isloggedIn',
+                //    '\SolasMatch\API\V0\Users::getUser'
+                //);
 
                 $app->put(
                     '/:userId/',

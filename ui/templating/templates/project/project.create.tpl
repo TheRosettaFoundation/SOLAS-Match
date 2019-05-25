@@ -225,9 +225,11 @@
                 <p class="desc" style ="margin-bottom:63px">{Localisation::getTranslation('project_create_9')}</p>
                 <div> <!-- <table border="0" width="100%"> -->
                     <div>
+                        <!--
                         <div class="proj-task-type-text pull-left" title="{Localisation::getTranslation('project_create_10')}">
                             <strong>{Localisation::getTranslation('common_segmentation')}</strong>
                         </div>
+                        -->
                         <div class="proj-task-type-text pull-left" title="{Localisation::getTranslation('common_create_a_translation_task_for_volunteer_translators_to_pick_up')}">
                             <strong>{Localisation::getTranslation('common_translation')}</strong>
                         </div>

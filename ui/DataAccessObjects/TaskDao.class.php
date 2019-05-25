@@ -443,6 +443,15 @@ class TaskDao extends BaseDao
         return false;
     }
 
+    public function isUserRestrictedFromProject($project_id, $user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('isUserRestrictedFromProject', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($user_id));
+        if (!empty($result)) {
+            return $result[0]['result'];
+        }
+        return false;
+    }
+
     public function insertWordCountRequestForProjects($project_id, $source_language, $target_languages, $user_word_count)
     {
         LibAPI\PDOWrapper::call('insertWordCountRequestForProjects',
