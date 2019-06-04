@@ -2076,6 +2076,7 @@ class ProjectRouteHandler
         if (in_array($language_code, $matecat_acceptable_languages)) return $language_code;
         // Special case...
         if ($language_code === 'tn-BW') return 'tsn-BW';
+        if ($language_code === 'ca---') return 'cav-ES';
 
         if (!empty($matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))])) return $matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))];
         return '';
