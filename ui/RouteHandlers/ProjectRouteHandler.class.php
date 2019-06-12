@@ -1824,7 +1824,7 @@ class ProjectRouteHandler
                                 $word_count = $response_data['data']['summary']['TOTAL_RAW_WC'];
 
                                 if (!empty($response_data['jobs']['langpairs'])) {
-                                    $langpairs = count($response_data['jobs']['langpairs']);
+                                    $langpairs = count(array_unique($response_data['jobs']['langpairs']));
 
                                     foreach ($response_data['jobs']['langpairs'] as $job_password => $langpair) {
                                         $matecat_id_job          = substr($job_password, 0, strpos($job_password, '-'));
