@@ -272,8 +272,11 @@ Galician
 Inuktitut Greenlandic
 Irish Gaelic
 Italian Swiss
-Kirundi SAME AS Same as Rundi
-Korache ???????? ISO code
+//Kirundi SAME AS Same as Rundi
+//Keep as different or synonym?
+//'Rundi' => array('run', 'BI'),
+//'Kirundi' => array('run', 'RW'),
+//Can't remove Korache ISO code?
 Manx Gaelic
 Marshallese
 Mijikenda
