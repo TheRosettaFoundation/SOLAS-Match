@@ -240,12 +240,12 @@ $from_neon_to_trommons_pair = array(
 );
 
 $language_options_changes = [
-  'de-AT#' => 'German Austrian',
-  'rm-RO' => 'Romansh',
-  'fr-BE#' => 'French Belgian',
+  //'de-AT#' => 'German Austrian',
+  //'rm-RO' => 'Romansh',
+  //'fr-BE#' => 'French Belgian',
   'vmw-MZ#' => 'Makhuwa Central',
   'shu-TD#' => 'Arabic Chad',
-  'grc-GR' => 'Greek Classical',
+  //'grc-GR' => 'Greek Classical',
   'apc-SY#' => 'Arabic North Levantine',
   'de-CH#' => 'German Swiss',
   'sr-ME#' => 'Montenegrin',
@@ -283,24 +283,18 @@ Ndebele South
 Niuean
 Occitan
 Occitan Aran
-
 Odia  From what I see Odia and Oriya might be the same language
 Oriya
 Ossetian  Hide it or add it?
 Palauan
 Potawatomi
-
 Sesotho
 Setswana (South Africa) The same as Tswana
-
 Sotho Southern  Issue, this is the same as Sesotho, but the iso on matecat  for Sesotho is that of Sotho North or Pedi
-
 Syriac (Aramaic)
-
 Tamil   Better Tamil India
 Tokelauan
 Tswana  Same as Setswana
-
 Tuvaluan
 Uma
 Wallisian
