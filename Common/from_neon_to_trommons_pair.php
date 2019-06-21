@@ -251,6 +251,7 @@ $language_options_changes = [
   'sr-ME#' => 'Montenegrin',
   'no-NO#' => 'Norwegian',
   'xen---' => 'Plain English',
+  'ta-IN' => 'Tamil India',
 ];
 
 $from_neon_to_trommons_pair_options_removed = [
@@ -280,22 +281,21 @@ Italian Swiss
 Manx Gaelic
 Marshallese
 Mijikenda
-Ndebele Has to be divided between North and South
-Ndebele North
-Ndebele South
+//Wait... Ndebele Has to be divided between North and South
+//Ndebele North
+//Ndebele South
 Niuean
 Occitan
 Occitan Aran
-Odia  From what I see Odia and Oriya might be the same language
-Oriya
-Ossetian  Hide it or add it?
+//Odia  From what I see Odia and Oriya might be the same language
+//Oriya
+//Ossetian Hide it or add it?
 Palauan
 Potawatomi
 Sesotho
 Setswana (South Africa) The same as Tswana
 Sotho Southern  Issue, this is the same as Sesotho, but the iso on matecat  for Sesotho is that of Sotho North or Pedi
 Syriac (Aramaic)
-Tamil   Better Tamil India
 Tokelauan
 Tswana  Same as Setswana
 Tuvaluan
