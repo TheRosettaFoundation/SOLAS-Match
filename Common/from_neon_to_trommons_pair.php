@@ -255,54 +255,54 @@ $language_options_changes = [
 ];
 
 $from_neon_to_trommons_pair_options_removed = [
-Aragonese
-Asturian
-Austrian German
-Balkan Gipsy
-Belgian French
-Breton
-Catalan Valencian
-Chamorro
-Chinese Trad. (Hong Kong)
-Classical Greek
-Coptic
-Esperanto
-Fanagalo
-Faroese
-Galician
-Inuktitut Greenlandic
-Irish Gaelic
-Italian Swiss
+  'Aragonese',
+  'Asturian',
+  'Austrian German',
+  'Balkan Gipsy',
+  'Belgian French',
+  'Breton',
+  'Catalan Valencian',
+  'Chamorro',
+  'Chinese Trad. (Hong Kong)',
+  'Classical Greek',
+  'Coptic',
+  'Esperanto',
+  'Fanagalo',
+  'Faroese',
+  'Galician',
+  'Inuktitut Greenlandic',
+  'Irish Gaelic',
+  'Italian Swiss',
 //Kirundi Same as Rundi
 //Keep as different or synonym?
 //'Rundi' => array('run', 'BI'),
 //'Kirundi' => array('run', 'RW'),
 //Can't remove Korache ISO code?
-Manx Gaelic
-Marshallese
-Mijikenda
+  'Manx Gaelic',
+  'Marshallese',
+  'Mijikenda',
 //Wait... Ndebele Has to be divided between North and South
 //Ndebele North
 //Ndebele South
-Niuean
-Occitan
-Occitan Aran
+  'Niuean',
+  'Occitan',
+  'Occitan Aran',
 //Odia  From what I see Odia and Oriya might be the same language
 //Oriya
 //Ossetian Hide it or add it?
-Palauan
-Potawatomi
+  'Palauan',
+  'Potawatomi',
 //Sesotho See below
 //'Sesotho' => array('nso', 'ZA'),
 //Setswana (South Africa) The same as Tswana
 //Sotho Southern  Issue, this is the same as Sesotho, but the iso on matecat  for Sesotho is that of Sotho North or Pedi
 //'Sotho Southern' => array('st', 'ST'),
-Syriac (Aramaic)
-Tokelauan
+  'Syriac (Aramaic)',
+  'Tokelauan',
 //Tswana Same as Setswana
 //'Setswana (South Africa)' => array('tn', 'ZA'),
 //'Tswana' => array('tn', 'BW'),
-Tuvaluan
-Uma
-Wallisian
+  'Tuvaluan',
+  'Uma',
+  'Wallisian',
 ];
