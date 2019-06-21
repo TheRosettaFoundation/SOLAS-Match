@@ -238,3 +238,57 @@ $from_neon_to_trommons_pair = array(
 
 'Chuwabu' => array('chw', 'MZ'),
 );
+
+$from_neon_to_trommons_pair_remove_from_selection = [
+Aragonese
+Asturian
+Austrian German
+Balkan Gipsy
+Belgian French
+Breton
+Catalan Valencian
+Chadian Arabic ACTUALLY ARABIC CHAD
+Chamorro
+Chinese Trad. (Hong Kong)
+Classical Greek
+Coptic
+Esperanto
+Fanagalo
+Faroese
+Galician
+Inuktitut Greenlandic
+Irish Gaelic
+Italian Swiss
+Kirundi SAME AS Same as Rundi
+Korache ???????? ISO code
+Manx Gaelic
+Marshallese
+Mijikenda
+Ndebele Has to be divided between North and South
+Ndebele North
+Ndebele South
+Niuean
+Occitan
+Occitan Aran
+
+Odia  From what I see Odia and Oriya might be the same language
+Oriya
+Ossetian  Hide it or add it?
+Palauan
+Potawatomi
+
+Sesotho
+Setswana (South Africa) The same as Tswana
+
+Sotho Southern  Issue, this is the same as Sesotho, but the iso on matecat  for Sesotho is that of Sotho North or Pedi
+
+Syriac (Aramaic)
+
+Tamil   Better Tamil India
+Tokelauan
+Tswana  Same as Setswana
+
+Tuvaluan
+Uma
+Wallisian
+];
