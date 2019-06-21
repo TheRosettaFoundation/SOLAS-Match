@@ -254,7 +254,7 @@ $language_options_changes = [
   'ta-IN' => 'Tamil India',
 ];
 
-$from_neon_to_trommons_pair_options_removed = [
+$from_neon_to_trommons_pair_options_remove = [
   'Aragonese',
   'Asturian',
   'Austrian German',
@@ -289,6 +289,12 @@ $from_neon_to_trommons_pair_options_removed = [
   'Occitan Aran',
 //Odia  From what I see Odia and Oriya might be the same language
 //Oriya
+//Odia formerly known as Oriya
+//'Oriya' => array('or', 'IN'),
+//('Oriya macrolanguage','or')
+//Oriya or(2 code) [, ori(3 code)]
+//'Odia' => array('ory', 'IN'),
+//('Oriya individual language','ory')
 //Ossetian Hide it or add it?
   'Palauan',
   'Potawatomi',
