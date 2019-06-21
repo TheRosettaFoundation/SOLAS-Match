@@ -239,7 +239,21 @@ $from_neon_to_trommons_pair = array(
 'Chuwabu' => array('chw', 'MZ'),
 );
 
-$from_neon_to_trommons_pair_remove_from_selection = [
+$language_options_changes = [
+  'de-AT#' => 'German Austrian',
+  'rm-RO' => 'Romansh',
+  'fr-BE#' => 'French Belgian',
+  'vmw-MZ#' => 'Makhuwa Central',
+  'shu-TD#' => 'Arabic Chad',
+  'grc-GR' => 'Greek Classical',
+  'apc-SY#' => 'Arabic North Levantine',
+  'de-CH#' => 'German Swiss',
+  'sr-ME#' => 'Montenegrin',
+  'no-NO#' => 'Norwegian',
+  'xen---' => 'Plain English',
+];
+
+$from_neon_to_trommons_pair_options_removed = [
 Aragonese
 Asturian
 Austrian German
@@ -247,7 +261,6 @@ Balkan Gipsy
 Belgian French
 Breton
 Catalan Valencian
-Chadian Arabic ACTUALLY ARABIC CHAD
 Chamorro
 Chinese Trad. (Hong Kong)
 Classical Greek
