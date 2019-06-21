@@ -273,7 +273,7 @@ Galician
 Inuktitut Greenlandic
 Irish Gaelic
 Italian Swiss
-//Kirundi SAME AS Same as Rundi
+//Kirundi Same as Rundi
 //Keep as different or synonym?
 //'Rundi' => array('run', 'BI'),
 //'Kirundi' => array('run', 'RW'),
@@ -292,12 +292,16 @@ Occitan Aran
 //Ossetian Hide it or add it?
 Palauan
 Potawatomi
-Sesotho
-Setswana (South Africa) The same as Tswana
-Sotho Southern  Issue, this is the same as Sesotho, but the iso on matecat  for Sesotho is that of Sotho North or Pedi
+//Sesotho See below
+//'Sesotho' => array('nso', 'ZA'),
+//Setswana (South Africa) The same as Tswana
+//Sotho Southern  Issue, this is the same as Sesotho, but the iso on matecat  for Sesotho is that of Sotho North or Pedi
+//'Sotho Southern' => array('st', 'ST'),
 Syriac (Aramaic)
 Tokelauan
-Tswana  Same as Setswana
+//Tswana Same as Setswana
+//'Setswana (South Africa)' => array('tn', 'ZA'),
+//'Tswana' => array('tn', 'BW'),
 Tuvaluan
 Uma
 Wallisian
