@@ -238,3 +238,77 @@ $from_neon_to_trommons_pair = array(
 
 'Chuwabu' => array('chw', 'MZ'),
 );
+
+$language_options_changes = [
+  //'de-AT#' => 'German Austrian',
+  //'rm-RO' => 'Romansh',
+  //'fr-BE#' => 'French Belgian',
+  'vmw-MZ#' => 'Makhuwa Central',
+  'shu-TD#' => 'Arabic Chad',
+  //'grc-GR' => 'Greek Classical',
+  'apc-SY#' => 'Arabic North Levantine',
+  'de-CH#' => 'German Swiss',
+  'sr-ME#' => 'Montenegrin',
+  'no-NO#' => 'Norwegian',
+  'xen---' => 'Plain English',
+  'ta-IN' => 'Tamil India',
+];
+
+$from_neon_to_trommons_pair_options_remove = [
+  'Aragonese',
+  'Asturian',
+  'Austrian German',
+  'Balkan Gipsy',
+  'Belgian French',
+  'Breton',
+  'Catalan Valencian',
+  'Chamorro',
+  'Chinese Trad. (Hong Kong)',
+  'Classical Greek',
+  'Coptic',
+  'Esperanto',
+  'Fanagalo',
+  'Faroese',
+  'Galician',
+  'Inuktitut Greenlandic',
+  'Irish Gaelic',
+  'Italian Swiss',
+//Kirundi Same as Rundi
+//Keep as different or synonym?
+//'Rundi' => array('run', 'BI'),
+//'Kirundi' => array('run', 'RW'),
+//Can't remove Korache ISO code?
+  'Manx Gaelic',
+  'Marshallese',
+  'Mijikenda',
+//Wait... Ndebele Has to be divided between North and South
+//Ndebele North
+//Ndebele South
+  'Niuean',
+  'Occitan',
+  'Occitan Aran',
+//Odia  From what I see Odia and Oriya might be the same language
+//Oriya
+//Odia formerly known as Oriya
+//'Oriya' => array('or', 'IN'),
+//('Oriya macrolanguage','or')
+//Oriya or(2 code) [, ori(3 code)]
+//'Odia' => array('ory', 'IN'),
+//('Oriya individual language','ory')
+//Ossetian Hide it or add it?
+  'Palauan',
+  'Potawatomi',
+//Sesotho See below
+//'Sesotho' => array('nso', 'ZA'),
+//Setswana (South Africa) The same as Tswana
+//Sotho Southern  Issue, this is the same as Sesotho, but the iso on matecat  for Sesotho is that of Sotho North or Pedi
+//'Sotho Southern' => array('st', 'ST'),
+  'Syriac (Aramaic)',
+  'Tokelauan',
+//Tswana Same as Setswana
+//'Setswana (South Africa)' => array('tn', 'ZA'),
+//'Tswana' => array('tn', 'BW'),
+  'Tuvaluan',
+  'Uma',
+  'Wallisian',
+];
