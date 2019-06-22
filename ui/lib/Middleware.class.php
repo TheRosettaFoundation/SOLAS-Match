@@ -50,6 +50,8 @@ class Middleware
 
         $app = \Slim\Slim::getInstance();
         $app->flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
+
+        Common\Lib\UserSession::setReferer($app->request()->getUrl() . $app->request()->getScriptName() . $app->request()->getPathInfo());
         $app->redirect($app->urlFor('login'));
     }
 
