@@ -375,4 +375,10 @@ $replace = array(
         }
         return $topic_id;
     }
+
+    public function getOrgProjects($org_id, $months)
+    {
+        $result = LibAPI\PDOWrapper::call('getOrgProjects', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($months));
+        return $result;
+    }
 }

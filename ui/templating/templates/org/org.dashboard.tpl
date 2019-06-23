@@ -34,6 +34,11 @@ Tweet</a>
             <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
                 <i class="icon-briefcase"></i> {$org->getName()}
             </a>
+            {if !isset($beyond_3_months)}
+            <a href="{urlFor name="org-projects" options="org_id.$org_id"}">
+                (<i class="icon-briefcase"></i> Include projects beyond 3 months)
+            </a>
+            {/if}
         </div>
         <div style="display: inline-block; float: right; font-weight: bold; font-size: large">
 
@@ -66,16 +71,16 @@ Tweet</a>
             {foreach from=$projectsData item=data}
                 <tr style="overflow-wrap: break-word;">
                 {assign var="projectObject" value=$data['project']}
-                {assign var="project_id" value=$projectObject->getId()}
+                {assign var="project_id" value=$projectObject['id']}
                 <td width="27.5%">
-                        <a href="{urlFor name="project-view" options="project_id.$project_id"}">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($projectObject->getTitle())}</a>
+                        <a href="{urlFor name="project-view" options="project_id.$project_id"}">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($projectObject['title'])}</a>
                     </td> 
                     <td>
-                        <div class="convert_utc_to_local" style="visibility: hidden">{$data['project']->getDeadline()}</div>
+                        <div class="convert_utc_to_local" style="visibility: hidden">{$data['project']['deadline']}</div>
                     </td>
                     <td>
-                        {if is_numeric($data['project']->getStatus())}
-                        {assign var="projectStatus" value=intval(($data['project']->getStatus()*100))}
+                        {if is_numeric($data['project']['status'])}
+                        {assign var="projectStatus" value=intval(($data['project']['status']*100))}
                         {else}
                         {assign var="projectStatus" value=0}
                         {/if}
@@ -91,14 +96,14 @@ Tweet</a>
                         {/if}
                     </td>
                     <td>                      
-                        {if $data['project']->getWordCount() != ''}
-                            {$data['project']->getWordCount()}
+                        {if $data['project']['wordCount'] != ''}
+                            {$data['project']['wordCount']}
                         {else}
                             -
                         {/if}
                     </td>
                     <td>
-                        <div class="convert_utc_to_local" style="visibility: hidden">{$data['project']->getCreatedTime()}</div>
+                        <div class="convert_utc_to_local" style="visibility: hidden">{$data['project']['createdTime']}</div>
                     </td>
                     <td>
                         <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class="btn btn-small">
