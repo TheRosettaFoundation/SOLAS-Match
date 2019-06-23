@@ -405,7 +405,6 @@ class OrgRouteHandler
         
         $current_user = $userDao->getUser($current_user_id);
         $my_organisations = $userDao->getUserOrgs($current_user_id);
-        $org_projects = array();
         
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
@@ -455,8 +454,7 @@ class OrgRouteHandler
             $orgs = array();
             $templateData = array();
             foreach ($my_organisations as $org) {
-                $my_org_projects = $orgDao->getOrgProjects($org->getId());
-                $org_projects[$org->getId()] = $my_org_projects;
+                $my_org_projects = $projectDao->getOrgProjects($org->getId(), 3);
                 $orgs[$org->getId()] = $org;
 
                 $taskData = array();
