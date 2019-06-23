@@ -34,6 +34,11 @@ Tweet</a>
             <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
                 <i class="icon-briefcase"></i> {$org->getName()}
             </a>
+            {if !isset($beyond_3_months)}
+            <a href="{urlFor name="org-projects" options="org_id.$org_id"}">
+                (<i class="icon-briefcase"></i> Include projects beyond 3 months)
+            </a>
+            {/if}
         </div>
         <div style="display: inline-block; float: right; font-weight: bold; font-size: large">
 

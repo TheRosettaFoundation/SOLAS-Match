@@ -2845,6 +2845,30 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getOrgProjects`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgProjects`(IN `orgId` INT, IN `months` INT)
+BEGIN
+    SELECT
+        id,
+        title,
+        description,
+        impact,
+        deadline,
+        organisation_id AS organisationId,
+        reference,
+        `word-count` AS wordCount,
+        created AS createdTime,
+        (SELECT SUM(tsk.`task-status_id`)/(COUNT(tsk.`task-status_id`)*4) FROM Tasks tsk WHERE tsk.project_id=p.id) AS status,
+        image_uploaded AS imageUploaded,
+        image_approved AS imageApproved
+    FROM Projects p
+    WHERE
+        p.organisation_id=orgId AND
+        p.deadline > DATE_SUB(NOW(), INTERVAL months MONTH)
+    ORDER BY p.created DESC;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.getProjectByTag
 DROP PROCEDURE IF EXISTS `getProjectByTag`;
