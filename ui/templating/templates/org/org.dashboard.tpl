@@ -34,6 +34,9 @@ Tweet</a>
             <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">
                 <i class="icon-briefcase"></i> {$org->getName()}
             </a>
+            <a href="{urlFor name="org-projects" options="org_id.$org_id"}">
+                (<i class="icon-briefcase"></i> All Projects)
+            </a>
         </div>
         <div style="display: inline-block; float: right; font-weight: bold; font-size: large">
 

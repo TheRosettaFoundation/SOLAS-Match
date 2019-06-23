@@ -28,6 +28,12 @@ class OrgRouteHandler
         )->via("POST")->name("org-dashboard");
 
         $app->get(
+            '/org/:org_id/org_dashboard/',
+            array($middleware, "authUserIsLoggedIn"),
+            array($this, 'org_orgDashboard')
+        )->via('POST')->name('org-projects');
+
+        $app->get(
             "/org/:org_id/request/",
             array($middleware, "authUserIsLoggedIn"),
             array($this, "orgRequestMembership")
