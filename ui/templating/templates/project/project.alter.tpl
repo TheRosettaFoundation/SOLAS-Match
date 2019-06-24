@@ -103,23 +103,6 @@
                     </div>
                     <p style="margin-bottom:20px;"/>
 
-<span class="hidden">
-                    <div id="sourceLanguageDiv">
-                    <h2>{Localisation::getTranslation('common_source_language')}: <span style="color: red">*</span></h2>
-                    <select name="sourceLanguageSelect" id="sourceLanguageSelect" style="width: 400px">
-                        {foreach $languages as $language}
-                            <option value="{$language->getCode()}" {if $language->getCode() == $sourceLanguageSelectCode}selected="selected"{/if}>{$language->getName()}</option>
-                        {/foreach}
-                    </select>
-                    <select name="sourceCountrySelect" id="sourceCountrySelect" style="width: 400px">
-                        {foreach $countries as $country}
-                            <option value="{$country->getCode()}" {if $country->getCode() == $sourceCountrySelectCode}selected="selected"{/if}>{$country->getName()}</option>
-                        {/foreach}
-                    </select>
-                    </div>
-                    <p style="margin-bottom:20px;"/>
-</span>
-
                     <div style="margin-bottom:20px;">
                         <label for="proj-image" style="font-size: large"><strong>{Localisation::getTranslation('common_project_image')}</strong></label>
                         <div id="proj-image-display">
