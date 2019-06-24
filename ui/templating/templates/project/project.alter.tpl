@@ -103,6 +103,7 @@
                     </div>
                     <p style="margin-bottom:20px;"/>
 
+<span class="hidden">
                     <div id="sourceLanguageDiv">
                     <h2>{Localisation::getTranslation('common_source_language')}: <span style="color: red">*</span></h2>
                     <select name="sourceLanguageSelect" id="sourceLanguageSelect" style="width: 400px">
@@ -117,6 +118,7 @@
                     </select>
                     </div>
                     <p style="margin-bottom:20px;"/>
+</span>
 
                     <div style="margin-bottom:20px;">
                         <label for="proj-image" style="font-size: large"><strong>{Localisation::getTranslation('common_project_image')}</strong></label>
