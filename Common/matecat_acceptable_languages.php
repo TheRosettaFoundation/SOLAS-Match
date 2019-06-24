@@ -2,7 +2,7 @@
         $matecat_acceptable_languages = array(
 'af' => 'af-ZA',
 'sq' => 'sq-AL',
-'am' => 'am-AM',
+'am' => 'am-ET',
 'ar' => 'ar-SA',
 'an' => 'an-ES',
 'hy' => 'hy-AM',
