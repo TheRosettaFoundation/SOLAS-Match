@@ -646,7 +646,7 @@ class ProjectRouteHandler
         if ($post = $app->request()->post()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
                     || empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact'])
-                    || empty($post['sourceCountrySelect']) || empty($post['sourceLanguageSelect']) || empty($post['project_deadline'])
+                    || empty($post['project_deadline'])
                     || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $post['project_deadline'])) {
                 // Note the deadline date validation above is only partial (these checks have been done more rigorously on client size, if that is to be trusted)
                 $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_to_create_project'), htmlspecialchars($post['project_title'], ENT_COMPAT, 'UTF-8')));
@@ -660,10 +660,6 @@ class ProjectRouteHandler
                 $project->setReference($post['project_reference']);
                 // Done by DAOupdateProjectWordCount(), which only saves it conditionally...
                 // $project->setWordCount($post['wordCountInput']);
-
-                $sourceLocale->setCountryCode($post['sourceCountrySelect']);
-                $sourceLocale->setLanguageCode($post['sourceLanguageSelect']);
-                $project->setSourceLocale($sourceLocale);
 
                 $project->clearTag();
                 if (!empty($post['tagList'])) {
