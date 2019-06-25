@@ -925,10 +925,9 @@ class ProjectRouteHandler
         if ($post = $app->request()->post()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
                     || empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact'])
-                    || empty($post['sourceCountrySelect']) || empty($post['sourceLanguageSelect']) || empty($post['project_deadline'])
+                    || empty($post['sourceLanguageSelect']) || empty($post['project_deadline'])
                     || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $post['project_deadline'])
                     ) {
-                    // || empty($post['wordCountInput']) || !ctype_digit($post['wordCountInput'])
                 // Note the deadline date validation above is only partial (these checks have been done more rigorously on client size, if that is to be trusted)
                 $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_to_create_project'), htmlspecialchars($post['project_title'], ENT_COMPAT, 'UTF-8')));
             } else {
@@ -940,11 +939,13 @@ class ProjectRouteHandler
                 $project->setDeadline($post['project_deadline']);
                 $project->setImpact($post['project_impact']);
                 $project->setReference($post['project_reference']);
-                // $project->setWordCount($post['wordCountInput']);
                 $project->setWordCount(1); // Code in taskInsertAndUpdate() does not support 0, so use 1 as placeholder
 
-                $sourceLocale->setCountryCode($post['sourceCountrySelect']);
-                $sourceLocale->setLanguageCode($post['sourceLanguageSelect']);
+                $language_code = str_replace('#', '', $post['sourceLanguageSelect']); // Alternative language name uses # in code
+                $trommons_language_code = substr($language_code, 0, strpos($language_code, '-'));
+                $trommons_country_code  = substr($language_code, strpos($language_code, '-') + 1);
+                $sourceLocale->setCountryCode($trommons_country_code);
+                $sourceLocale->setLanguageCode($trommons_language_code);
                 $project->setSourceLocale($sourceLocale);
 
                 $project->setOrganisationId($org_id);
@@ -1098,15 +1099,13 @@ class ProjectRouteHandler
                                 $matecat_proofreading_task_ids        = array();
                                 $matecat_proofreading_target_languages= array();
                                 $matecat_proofreading_target_countrys = array();
-                                while (!empty($post["target_language_$targetCount"]) && !empty($post["target_country_$targetCount"])) {
-
-                                    if (false && !empty($post["segmentation_$targetCount"])) {
-                                        // Create segmentation task
-                                        $id = $this->addProjectTask(
+                                while (!empty($post["target_language_$targetCount"])) {
+                                    if (!empty($post["translation_$targetCount"])) {
+                                        $translation_Task_Id = $this->addProjectTask(
                                             $project,
                                             $post["target_language_$targetCount"],
                                             $post["target_country_$targetCount"],
-                                            Common\Enums\TaskTypeEnum::SEGMENTATION,
+                                            Common\Enums\TaskTypeEnum::TRANSLATION,
                                             0,
                                             $createdTasks,
                                             $user_id,
@@ -1114,63 +1113,21 @@ class ProjectRouteHandler
                                             $taskDao,
                                             $app,
                                             $post);
-                                        if (!$id) {
+                                        if (!$translation_Task_Id) {
                                             $creatingTasksSuccess = false;
                                             break;
                                         }
+                                        $matecat_translation_task_ids[]         = $translation_Task_Id;
+                                        $matecat_translation_target_languages[] = $post["target_language_$targetCount"];
+                                        $matecat_translation_target_countrys[]  = $post["target_country_$targetCount"];
 
-                                    } else {
-                                        // Not a segmentation task, so translation and/or proofreading will be created.
-                                        if (!empty($post["translation_$targetCount"])) {
-                                            $translation_Task_Id = $this->addProjectTask(
-                                                $project,
-                                                $post["target_language_$targetCount"],
-                                                $post["target_country_$targetCount"],
-                                                Common\Enums\TaskTypeEnum::TRANSLATION,
-                                                0,
-                                                $createdTasks,
-                                                $user_id,
-                                                $projectDao,
-                                                $taskDao,
-                                                $app,
-                                                $post);
-                                            if (!$translation_Task_Id) {
-                                                $creatingTasksSuccess = false;
-                                                break;
-                                            }
-                                            $matecat_translation_task_ids[]         = $translation_Task_Id;
-                                            $matecat_translation_target_languages[] = $post["target_language_$targetCount"];
-                                            $matecat_translation_target_countrys[]  = $post["target_country_$targetCount"];
-
-                                            if (!empty($post["proofreading_$targetCount"])) {
-                                                $id = $this->addProjectTask(
-                                                    $project,
-                                                    $post["target_language_$targetCount"],
-                                                    $post["target_country_$targetCount"],
-                                                    Common\Enums\TaskTypeEnum::PROOFREADING,
-                                                    $translation_Task_Id,
-                                                    $createdTasks,
-                                                    $user_id,
-                                                    $projectDao,
-                                                    $taskDao,
-                                                    $app,
-                                                    $post);
-                                                if (!$id) {
-                                                    $creatingTasksSuccess = false;
-                                                    break;
-                                                }
-                                                $matecat_proofreading_task_ids[]         = $id;
-                                                $matecat_proofreading_target_languages[] = $post["target_language_$targetCount"];
-                                                $matecat_proofreading_target_countrys[]  = $post["target_country_$targetCount"];
-                                            }
-                                        } elseif (empty($post["translation_$targetCount"]) && !empty($post["proofreading_$targetCount"])) {
-                                            // Only a proofreading task to be created
+                                        if (!empty($post["proofreading_$targetCount"])) {
                                             $id = $this->addProjectTask(
                                                 $project,
                                                 $post["target_language_$targetCount"],
                                                 $post["target_country_$targetCount"],
                                                 Common\Enums\TaskTypeEnum::PROOFREADING,
-                                                0,
+                                                $translation_Task_Id,
                                                 $createdTasks,
                                                 $user_id,
                                                 $projectDao,
@@ -1185,6 +1142,27 @@ class ProjectRouteHandler
                                             $matecat_proofreading_target_languages[] = $post["target_language_$targetCount"];
                                             $matecat_proofreading_target_countrys[]  = $post["target_country_$targetCount"];
                                         }
+                                    } elseif (empty($post["translation_$targetCount"]) && !empty($post["proofreading_$targetCount"])) {
+                                        // Only a proofreading task to be created
+                                        $id = $this->addProjectTask(
+                                            $project,
+                                            $post["target_language_$targetCount"],
+                                            $post["target_country_$targetCount"],
+                                            Common\Enums\TaskTypeEnum::PROOFREADING,
+                                            0,
+                                            $createdTasks,
+                                            $user_id,
+                                            $projectDao,
+                                            $taskDao,
+                                            $app,
+                                            $post);
+                                        if (!$id) {
+                                            $creatingTasksSuccess = false;
+                                            break;
+                                        }
+                                        $matecat_proofreading_task_ids[]         = $id;
+                                        $matecat_proofreading_target_languages[] = $post["target_language_$targetCount"];
+                                        $matecat_proofreading_target_countrys[]  = $post["target_country_$targetCount"];
                                     }
                                     $targetCount++;
                                 }
