@@ -941,9 +941,7 @@ class ProjectRouteHandler
                 $project->setReference($post['project_reference']);
                 $project->setWordCount(1); // Code in taskInsertAndUpdate() does not support 0, so use 1 as placeholder
 
-                $language_code = str_replace('#', '', $post['sourceLanguageSelect']); // Alternative language name uses # in code
-                $trommons_language_code = substr($language_code, 0, strpos($language_code, '-'));
-                $trommons_country_code  = substr($language_code, strpos($language_code, '-') + 1);
+                list($trommons_language_code, $trommons_country_code) = $projectDao->convert_selection_to_language_country($post['sourceLanguageSelect']);
                 $sourceLocale->setCountryCode($trommons_country_code);
                 $sourceLocale->setLanguageCode($trommons_language_code);
                 $project->setSourceLocale($sourceLocale);
