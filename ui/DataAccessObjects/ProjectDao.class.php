@@ -381,4 +381,12 @@ $replace = array(
         $result = LibAPI\PDOWrapper::call('getOrgProjects', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($months));
         return $result;
     }
+
+    public function convert_selection_to_language_country($selection)
+    {
+        $language_code = str_replace('#', '', $selection); // Alternative language name uses # in code
+        $trommons_language_code = substr($language_code, 0, strpos($language_code, '-'));
+        $trommons_country_code  = substr($language_code, strpos($language_code, '-') + 1);
+        return [$trommons_language_code, $trommons_country_code];
+    }
 }
