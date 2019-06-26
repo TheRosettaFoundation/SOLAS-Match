@@ -1188,12 +1188,14 @@ class ProjectRouteHandler
                                         $source_language = $trommons_source_language_code . '-' . $trommons_source_country_code;
                                         $target_languages = '';
                                         $targetCount = 0;
-                                        if (!empty($post["target_language_$targetCount"]) && !empty($post["target_country_$targetCount"])) {
-                                            $target_languages = $post["target_language_$targetCount"] . '-' . $post["target_country_$targetCount"];
+                                        if (!empty($post["target_language_$targetCount"])) {
+                                            list($trommons_language_code, $trommons_country_code) = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
+                                            $target_languages = $trommons_language_code . '-' . $trommons_country_code;
                                         }
                                         $targetCount++;
-                                        while (!empty($post["target_language_$targetCount"]) && !empty($post["target_country_$targetCount"])) {
-                                            $target_languages .= ',' . $post["target_language_$targetCount"] . '-' . $post["target_country_$targetCount"];
+                                        while (!empty($post["target_language_$targetCount"])) {
+                                            list($trommons_language_code, $trommons_country_code) = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
+                                            $target_languages .= ',' . $trommons_language_code . '-' . $trommons_country_code;
                                             $targetCount++;
                                         }
                                         // $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, $post['wordCountInput']);
