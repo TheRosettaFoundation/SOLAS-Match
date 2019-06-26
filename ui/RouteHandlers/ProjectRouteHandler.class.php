@@ -1098,11 +1098,12 @@ class ProjectRouteHandler
                                 $matecat_proofreading_target_languages= array();
                                 $matecat_proofreading_target_countrys = array();
                                 while (!empty($post["target_language_$targetCount"])) {
+                                    list($trommons_language_code, $trommons_country_code) = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
                                         if (!empty($post["translation_$targetCount"])) {
                                             $translation_Task_Id = $this->addProjectTask(
                                                 $project,
-                                                $post["target_language_$targetCount"],
-                                                $post["target_country_$targetCount"],
+                                                $trommons_language_code,
+                                                $trommons_country_code,
                                                 Common\Enums\TaskTypeEnum::TRANSLATION,
                                                 0,
                                                 $createdTasks,
@@ -1116,14 +1117,14 @@ class ProjectRouteHandler
                                                 break;
                                             }
                                             $matecat_translation_task_ids[]         = $translation_Task_Id;
-                                            $matecat_translation_target_languages[] = $post["target_language_$targetCount"];
-                                            $matecat_translation_target_countrys[]  = $post["target_country_$targetCount"];
+                                            $matecat_translation_target_languages[] = $trommons_language_code;
+                                            $matecat_translation_target_countrys[]  = $trommons_country_code;
 
                                             if (!empty($post["proofreading_$targetCount"])) {
                                                 $id = $this->addProjectTask(
                                                     $project,
-                                                    $post["target_language_$targetCount"],
-                                                    $post["target_country_$targetCount"],
+                                                    $trommons_language_code,
+                                                    $trommons_country_code,
                                                     Common\Enums\TaskTypeEnum::PROOFREADING,
                                                     $translation_Task_Id,
                                                     $createdTasks,
@@ -1137,15 +1138,15 @@ class ProjectRouteHandler
                                                     break;
                                                 }
                                                 $matecat_proofreading_task_ids[]         = $id;
-                                                $matecat_proofreading_target_languages[] = $post["target_language_$targetCount"];
-                                                $matecat_proofreading_target_countrys[]  = $post["target_country_$targetCount"];
+                                                $matecat_proofreading_target_languages[] = $trommons_language_code;
+                                                $matecat_proofreading_target_countrys[]  = $trommons_country_code;
                                             }
                                         } elseif (empty($post["translation_$targetCount"]) && !empty($post["proofreading_$targetCount"])) {
                                             // Only a proofreading task to be created
                                             $id = $this->addProjectTask(
                                                 $project,
-                                                $post["target_language_$targetCount"],
-                                                $post["target_country_$targetCount"],
+                                                $trommons_language_code,
+                                                $trommons_country_code,
                                                 Common\Enums\TaskTypeEnum::PROOFREADING,
                                                 0,
                                                 $createdTasks,
@@ -1159,8 +1160,8 @@ class ProjectRouteHandler
                                                 break;
                                             }
                                             $matecat_proofreading_task_ids[]         = $id;
-                                            $matecat_proofreading_target_languages[] = $post["target_language_$targetCount"];
-                                            $matecat_proofreading_target_countrys[]  = $post["target_country_$targetCount"];
+                                            $matecat_proofreading_target_languages[] = $trommons_language_code;
+                                            $matecat_proofreading_target_countrys[]  = $trommons_country_code;
                                         }
                                     $targetCount++;
                                 }
