@@ -941,9 +941,9 @@ class ProjectRouteHandler
                 $project->setReference($post['project_reference']);
                 $project->setWordCount(1); // Code in taskInsertAndUpdate() does not support 0, so use 1 as placeholder
 
-                list($trommons_language_code, $trommons_country_code) = $projectDao->convert_selection_to_language_country($post['sourceLanguageSelect']);
-                $sourceLocale->setCountryCode($trommons_country_code);
-                $sourceLocale->setLanguageCode($trommons_language_code);
+                list($trommons_source_language_code, $trommons_source_country_code) = $projectDao->convert_selection_to_language_country($post['sourceLanguageSelect']);
+                $sourceLocale->setCountryCode($trommons_source_country_code);
+                $sourceLocale->setLanguageCode($trommons_source_language_code);
                 $project->setSourceLocale($sourceLocale);
 
                 $project->setOrganisationId($org_id);
@@ -1185,7 +1185,7 @@ class ProjectRouteHandler
                                         error_log('projectCreate calculateProjectDeadlines: ' . $project->getId());
                                         $projectDao->calculateProjectDeadlines($project->getId());
 
-                                        $source_language = $post['sourceLanguageSelect'] . '-' . $post['sourceCountrySelect'];
+                                        $source_language = $trommons_source_language_code . '-' . $trommons_source_country_code;
                                         $target_languages = '';
                                         $targetCount = 0;
                                         if (!empty($post["target_language_$targetCount"]) && !empty($post["target_country_$targetCount"])) {
