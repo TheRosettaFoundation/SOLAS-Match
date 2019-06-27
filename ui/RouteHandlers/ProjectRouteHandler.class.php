@@ -1430,7 +1430,7 @@ class ProjectRouteHandler
         }
 
         $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/ProjectCreate4.js\"></script>";
+        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/ProjectCreate5.js\"></script>";
 
         $app->view()->appendData(array(
             "siteLocation"          => Common\Lib\Settings::get('site.location'),
