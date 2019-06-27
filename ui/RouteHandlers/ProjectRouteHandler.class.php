@@ -1413,13 +1413,6 @@ class ProjectRouteHandler
             }
         }
 
-        // $languages = Lib\TemplateHelper::getLanguageList(); // (code) is added to name because of settings
-        // $countries = Lib\TemplateHelper::getCountryList();
-        $langDao = new DAO\LanguageDao();
-        $languages = $langDao->getLanguages();
-        $countryDao = new DAO\CountryDao();
-        $countries = $countryDao->getCountries();
-
         $year_list = array();
         $yeari = (int)date('Y');
         for ($i = 0; $i < 10; $i++) {
@@ -1457,8 +1450,7 @@ class ProjectRouteHandler
             'selected_hour'  => 0,
             'minute_list'    => $minute_list,
             'selected_minute'=> 0,
-            'languages'      => $languages,
-            'countries'      => $countries,
+            'languages'      => $projectDao->function generate_language_selection(),
             'showRestrictTask' => $taskDao->organisationHasQualifiedBadge($org_id),
             'isSiteAdmin'    => $adminDao->isSiteAdmin($user_id),
             'sesskey'        => $sesskey,
