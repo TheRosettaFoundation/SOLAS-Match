@@ -8,6 +8,8 @@ use \SolasMatch\Common as Common;
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/BaseDao.php";
 require_once __DIR__.'/../../api/lib/PDOWrapper.class.php';
+require_once __DIR__ . '/../../Common/from_neon_to_trommons_pair.php';
+
 
 class ProjectDao extends BaseDao
 {
@@ -380,6 +382,28 @@ $replace = array(
     {
         $result = LibAPI\PDOWrapper::call('getOrgProjects', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($months));
         return $result;
+    }
+
+    public function generate_language_selection()
+    {
+        global $from_neon_to_trommons_pair;
+        unset($from_neon_to_trommons_pair["Norwegian Bokm\xE5l"]); // Remove as it is just here to support bad Neon hook
+
+        foreach ($from_neon_to_trommons_pair_options_remove as $remove) {
+            unset($from_neon_to_trommons_pair[$remove]);
+        }
+
+        $language_options = [];
+        foreach ($from_neon_to_trommons_pair as $language => $trommons_pair) {
+            $language_options[$trommons_pair[0] . '-' . $trommons_pair[1]] = $language;
+        }
+
+        foreach ($language_options_changes as $key => $language) {
+            $language_options[$key] = $language;
+        }
+
+        asort($language_options);
+        return $language_options;
     }
 
     public function convert_selection_to_language_country($selection)
