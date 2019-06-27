@@ -552,7 +552,7 @@ function validateLocalValues()
     }
 
     // If a duplicate locale is encountered, display error message
-    var encounteredLocale = targetLanguageCode[i] + "_" + targetCountryCode[i];
+    var encounteredLocale = targetLanguageCode[i].replace("#", "");
     if ($.inArray(encounteredLocale, encounteredLocales) >= 0) {
       duplicateLocale = parameters.getTranslation("project_create_28");
       success = false;
