@@ -366,8 +366,6 @@ function validateForm()
   var sourceLocale = new Object();
   sourceLocale.languageName = $("#sourceLanguageSelect option:selected").text();
   sourceLocale.languageCode = document.getElementById("sourceLanguageSelect").value;
-  sourceLocale.countryName  = $("#sourceCountrySelect option:selected").text();
-  sourceLocale.countryCode  = document.getElementById("sourceCountrySelect").value;
   project.sourceLocale = sourceLocale;
 
   project.tag = [];
@@ -547,15 +545,9 @@ function validateLocalValues()
 
     targetLanguageCode    [i] = document.getElementById("target_language_" + i).value;
     targetLanguageLanguage[i] = $("#target_language_" + i + " option:selected").text();
-    targetCountryCode     [i] = document.getElementById("target_country_" + i).value;
-    targetCountryCountry  [i] = $("#target_country_" + i + " option:selected").text();
 
     if (targetLanguageCode[i] == 0) {
       project_create_set_target_language = parameters.getTranslation("project_create_set_target_language");
-      success = false;
-    }
-    if (targetCountryCode [i] == 0) {
-      project_create_set_target_country  = parameters.getTranslation("project_create_set_target_country");
       success = false;
     }
 
