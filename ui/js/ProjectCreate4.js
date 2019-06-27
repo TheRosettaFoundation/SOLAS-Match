@@ -206,12 +206,6 @@ function addMoreTargetLanguages()
     targetLanguageSelect.id   = "target_language_" + targetCount;
     targetLanguageSelect.innerHTML = document.getElementById("template_language_options").innerHTML;
 
-    var targetCountrySelect = document.createElement("select");
-    targetCountrySelect.style.width = "400px";
-    targetCountrySelect.name = "target_country_" + targetCount;
-    targetCountrySelect.id   = "target_country_" + targetCount;
-    targetCountrySelect.innerHTML = document.getElementById("template_country_options").innerHTML;
-
     var taskTypesRow = document.createElement("div"); // Sub-div for task type checkboxes, holds individual divs for each checkox
     taskTypesRow.id = "task-type-checkboxes";
     taskTypesRow.className = "pull-left width-50";
@@ -251,7 +245,6 @@ function addMoreTargetLanguages()
 
     // Put the Select Elements into their div
     targetLanguageCell.appendChild(targetLanguageSelect);
-    targetLanguageCell.appendChild(targetCountrySelect);
 
     // Put the Select Elements' div into the main div
     targetLanguageRow.appendChild(targetLanguageCell);
