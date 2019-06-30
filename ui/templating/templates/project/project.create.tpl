@@ -204,8 +204,8 @@
                         {/foreach}
                     </select>
                 </div>
-                <h2>{Localisation::getTranslation('project_create_target_languages')}: <span style="color: red">*</span></h2>
                 <br />
+                <h2>{Localisation::getTranslation('project_create_target_languages')}: <span style="color: red">*</span></h2>
             </div>
             <div id="projFormBottomBlockRight">
                 <h2>{Localisation::getTranslation('common_task_type')}: <span style="color: red">*</span></h2>
