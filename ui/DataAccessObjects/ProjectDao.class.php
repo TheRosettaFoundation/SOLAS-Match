@@ -386,7 +386,7 @@ $replace = array(
 
     public function generate_language_selection()
     {
-        global $from_neon_to_trommons_pair, $from_neon_to_trommons_pair_options_remove;
+        global $from_neon_to_trommons_pair, $from_neon_to_trommons_pair_options_remove, $language_options_changes;
         unset($from_neon_to_trommons_pair["Norwegian Bokm\xE5l"]); // Remove as it is just here to support bad Neon hook
 
         foreach ($from_neon_to_trommons_pair_options_remove as $remove) {
