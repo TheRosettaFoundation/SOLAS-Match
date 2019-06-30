@@ -1450,7 +1450,7 @@ class ProjectRouteHandler
             'selected_hour'  => 0,
             'minute_list'    => $minute_list,
             'selected_minute'=> 0,
-            'languages'      => $projectDao->function generate_language_selection(),
+            'languages'      => $projectDao->generate_language_selection(),
             'showRestrictTask' => $taskDao->organisationHasQualifiedBadge($org_id),
             'isSiteAdmin'    => $adminDao->isSiteAdmin($user_id),
             'sesskey'        => $sesskey,
