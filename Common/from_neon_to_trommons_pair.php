@@ -239,7 +239,7 @@ $from_neon_to_trommons_pair = array(
 'Chuwabu' => array('chw', 'MZ'),
 
 'Afar' => array('aa', 'ET'),
-'' => array('', ''),
+'Arabic Juba' => array('pga', 'SS'),
 '' => array('', ''),
 '' => array('', ''),
 '' => array('', ''),
