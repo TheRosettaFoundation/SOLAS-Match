@@ -240,8 +240,8 @@ $from_neon_to_trommons_pair = array(
 
 'Afar' => array('aa', 'ET'),
 'Arabic Juba' => array('pga', 'SS'),
-'' => array('', ''),
-'' => array('', ''),
+'Baatonum' => array('bba', 'BJ'),
+'Balinese' => array('ban', 'ID'),
 '' => array('', ''),
 '' => array('', ''),
 '' => array('', ''),
