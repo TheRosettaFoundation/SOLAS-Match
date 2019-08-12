@@ -237,6 +237,32 @@ $from_neon_to_trommons_pair = array(
 'Tewe' => array('twx', 'MZ'),
 
 'Chuwabu' => array('chw', 'MZ'),
+
+'Afar' => array('aa', 'ET'),
+'' => array('', ''),
+'' => array('', ''),
+'' => array('', ''),
+'' => array('', ''),
+'' => array('', ''),
+'' => array('', ''),
+'' => array('', ''),
+'' => array('', ''),
+'' => array('', ''),
+'' => array('', ''),
+'' => array('', ''),
+'' => array('', ''),
+'' => array('', ''),
+'' => array('', ''),
+'' => array('', ''),
+'' => array('', ''),
+'' => array('', ''),
+'' => array('', ''),
+'' => array('', ''),
+'' => array('', ''),
+'' => array('', ''),
+'' => array('', ''),
+'' => array('', ''),
+'' => array('', ''),
 );
 
 $language_options_changes = [
