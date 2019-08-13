@@ -70,7 +70,6 @@ $from_neon_to_trommons_pair = array(
 'Maori' => array('mi', 'NZ'),
 'Mongolian' => array('mn', 'MN'),
 'Montenegrin' => array('sr', 'ME'),
-'Ndebele' => array('nr', 'ZA'),
 'Nepali' => array('ne', 'NP'),
 'Nyanja' => array('ny', '--'),
 'Occitan' => array('oc', 'FR'),
@@ -257,7 +256,9 @@ $from_neon_to_trommons_pair = array(
 'Kongo' => array('kg', 'CG'),
 'Krache' => array('kye', 'GH'),
 'Maay Maay' => array('ymm', 'SO'),
-'' => array('', ''),
+'Ndebele' => array('nr', 'ZA'),
+'Ndebele South' => array('nr', 'ZA'),
+'Ndebele North' => array('nd', 'ZW'),
 '' => array('', ''),
 '' => array('', ''),
 '' => array('', ''),
@@ -267,7 +268,6 @@ $from_neon_to_trommons_pair = array(
 
 $language_options_changes = [
   //'de-AT#' => 'German Austrian',
-  //'rm-RO' => 'Romansh',
   //'fr-BE#' => 'French Belgian',
   'vmw-MZ#' => 'Makhuwa Central',
   //'shu-TD#' => 'Arabic Chad',
@@ -305,9 +305,6 @@ $from_neon_to_trommons_pair_options_remove = [
   'Manx Gaelic',
   'Marshallese',
   'Mijikenda',
-//Wait... Ndebele Has to be divided between North and South
-//Ndebele North
-//Ndebele South
   'Niuean',
   'Occitan',
   'Occitan Aran',
