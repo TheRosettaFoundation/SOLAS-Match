@@ -180,7 +180,7 @@ $from_neon_to_trommons_pair = array(
 'Crioulo Upper Guinea' => array('pov', 'GW'),
 'Uma' => array('ppk', 'ID'),
 'Balkan Gipsy' => array('rm', 'RO'),
-'Kirundi' => array('run', 'RW'),
+'Kirundi' => array('run', 'BI'),
 'Kinyarwanda' => array('rw', 'RW'),
 'Sango' => array('sg', 'SG'),
 'Samoan' => array('sm', 'WS'),
@@ -275,6 +275,8 @@ $language_options_changes = [
   'apc-SY#' => 'Arabic North Levantine',
   'de-CH#' => 'German Swiss',
   'bin-NG#' => 'Bini',
+  'run-BI' => 'Rundi',
+  'run-BI#' => 'Kirundi',
   'sr-ME#' => 'Montenegrin',
   'no-NO#' => 'Norwegian',
   'xen---' => 'Plain English',
@@ -300,10 +302,6 @@ $from_neon_to_trommons_pair_options_remove = [
   'Faroese',
   'Inuktitut Greenlandic',
   'Italian Swiss',
-//Kirundi Same as Rundi
-//Keep as different or synonym?
-//'Rundi' => array('run', 'BI'),
-//'Kirundi' => array('run', 'RW'),
 //Can't remove Korache ISO code?
   'Manx Gaelic',
   'Marshallese',

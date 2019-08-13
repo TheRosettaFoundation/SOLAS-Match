@@ -200,7 +200,6 @@
 'pov' => 'pov-POV',
 'ppk' => 'ppk-ID',
 'rm' => 'rm-RO',
-'run-RW' => 'run-RN',
 'rw' => 'rw-KIN',
 'sg' => 'sg-SG',
 'sm' => 'smo-WS',
