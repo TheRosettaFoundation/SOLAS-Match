@@ -298,7 +298,6 @@ $from_neon_to_trommons_pair_options_remove = [
   'Esperanto',
   'Fanagalo',
   'Faroese',
-  'Galician',
   'Inuktitut Greenlandic',
   'Irish Gaelic',
   'Italian Swiss',
