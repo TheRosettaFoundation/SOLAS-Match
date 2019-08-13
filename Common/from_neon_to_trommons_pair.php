@@ -74,7 +74,7 @@ $from_neon_to_trommons_pair = array(
 'Nyanja' => array('ny', '--'),
 'Occitan' => array('oc', 'FR'),
 'Occitan Aran' => array('oc', 'ES'),
-'Oriya' => array('or', 'IN'),
+//'Oriya' => array('or', 'IN'),
 'Panjabi' => array('pa', 'IN'),
 'Pashto' => array('ps', 'PK'),
 'Dari' => array('prs', '--'),
@@ -308,14 +308,6 @@ $from_neon_to_trommons_pair_options_remove = [
   'Niuean',
   'Occitan',
   'Occitan Aran',
-//Odia  From what I see Odia and Oriya might be the same language
-//Oriya
-//Odia formerly known as Oriya
-//'Oriya' => array('or', 'IN'),
-//('Oriya macrolanguage','or')
-//Oriya or(2 code) [, ori(3 code)]
-//'Odia' => array('ory', 'IN'),
-//('Oriya individual language','ory')
 //Ossetian Hide it or add it?
   'Palauan',
   'Potawatomi',
