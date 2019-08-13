@@ -282,6 +282,7 @@ $language_options_changes = [
 
 $from_neon_to_trommons_pair_options_remove = [
   'Aragonese',
+  'Arabic Sudan',
   'Asturian',
   'Austrian German',
   'Balkan Gipsy',
