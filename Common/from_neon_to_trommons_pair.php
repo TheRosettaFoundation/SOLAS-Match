@@ -252,7 +252,7 @@ $from_neon_to_trommons_pair = array(
 'Hiligaynon' => array('hil', 'PH'),
 'Igbo' => array('ig', 'NG'),
 'Ilocano' => array('ilo', 'PH'),
-'' => array('', ''),
+'Izon' => array('ijc', 'NG'),
 '' => array('', ''),
 '' => array('', ''),
 '' => array('', ''),
@@ -299,7 +299,6 @@ $from_neon_to_trommons_pair_options_remove = [
   'Fanagalo',
   'Faroese',
   'Inuktitut Greenlandic',
-  'Irish Gaelic',
   'Italian Swiss',
 //Kirundi Same as Rundi
 //Keep as different or synonym?
