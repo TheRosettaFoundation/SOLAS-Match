@@ -308,7 +308,6 @@ $from_neon_to_trommons_pair_options_remove = [
   'Niuean',
   'Occitan',
   'Occitan Aran',
-//Ossetian Hide it or add it?
   'Palauan',
   'Potawatomi',
 //Sesotho See below
