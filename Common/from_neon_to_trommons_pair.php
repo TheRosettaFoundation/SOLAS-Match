@@ -262,8 +262,8 @@ $from_neon_to_trommons_pair = array(
 'Serer' => array('srr', 'SN'),
 'Sindhi' => array('sd', 'IN'),
 'Sinhala' => array('si', 'LK'),
-'' => array('', ''),
-'' => array('', ''),
+'Sylheti' => array('syl', 'BD'),
+'Tajik' => array('tg', 'TJ'),
 );
 
 $language_options_changes = [
