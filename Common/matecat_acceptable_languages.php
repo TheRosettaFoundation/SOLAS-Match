@@ -205,7 +205,7 @@
 'sm' => 'smo-WS',
 'sn' => 'sna-ZW',
 'srn' => 'srn-SRN',
-'st' => 'st-ST',
+'st' => 'st-ZA',
 'svc' => 'svc-VC',
 'syc' => 'syc-TR',
 'tet' => 'tet-TET',

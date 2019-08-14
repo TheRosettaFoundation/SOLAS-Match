@@ -89,7 +89,7 @@ $from_neon_to_trommons_pair = array(
 'Russian' => array('ru', 'RU'),
 'Serbian Latin' => array('sr', 'ME'),
 'Serbian Cyrillic' => array('sr', 'RS'),
-'Sesotho' => array('nso', 'ZA'),
+'Sotho Northern' => array('nso', 'ZA'),
 'Setswana (South Africa)' => array('tn', 'ZA'),
 'Slovak' => array('sk', 'SK'),
 'Slovenian' => array('sl', 'SI'),
@@ -185,7 +185,7 @@ $from_neon_to_trommons_pair = array(
 'Samoan' => array('sm', 'WS'),
 'Shona' => array('sn', 'ZW'),
 'Sranan Tongo' => array('srn', 'SR'),
-'Sotho Southern' => array('st', 'ST'),
+'Sotho Southern' => array('st', 'ZA'),
 'Vincentian Creole English' => array('svc', 'VC'),
 'Syriac (Aramaic)' => array('syc', 'TR'),
 'Tetum' => array('tet', 'TL'),
@@ -310,11 +310,7 @@ $from_neon_to_trommons_pair_options_remove = [
   'Occitan Aran',
   'Palauan',
   'Potawatomi',
-//Sesotho See below
-//'Sesotho' => array('nso', 'ZA'),
 //Setswana (South Africa) The same as Tswana
-//Sotho Southern  Issue, this is the same as Sesotho, but the iso on matecat  for Sesotho is that of Sotho North or Pedi
-//'Sotho Southern' => array('st', 'ST'),
   'Syriac (Aramaic)',
   'Tokelauan',
 //Tswana Same as Setswana
