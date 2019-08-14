@@ -90,7 +90,7 @@ $from_neon_to_trommons_pair = array(
 'Serbian Latin' => array('sr', 'ME'),
 'Serbian Cyrillic' => array('sr', 'RS'),
 'Sotho Northern' => array('nso', 'ZA'),
-'Setswana (South Africa)' => array('tn', 'ZA'),
+'Setswana (South Africa)' => array('tn', 'BW'),
 'Slovak' => array('sk', 'SK'),
 'Slovenian' => array('sl', 'SI'),
 'Somali' => array('so', 'SO'),
@@ -280,6 +280,7 @@ $language_options_changes = [
   'sr-ME#' => 'Montenegrin',
   'no-NO#' => 'Norwegian',
   'xen---' => 'Plain English',
+  'tn-BW#' => 'Tswana',
   'ta-IN' => 'Tamil India',
 ];
 
@@ -310,12 +311,8 @@ $from_neon_to_trommons_pair_options_remove = [
   'Occitan Aran',
   'Palauan',
   'Potawatomi',
-//Setswana (South Africa) The same as Tswana
   'Syriac (Aramaic)',
   'Tokelauan',
-//Tswana Same as Setswana
-//'Setswana (South Africa)' => array('tn', 'ZA'),
-//'Tswana' => array('tn', 'BW'),
   'Tuvaluan',
   'Uma',
   'Wallisian',

@@ -107,7 +107,7 @@
 'sr-Latn-RS' => 'sr-Latn-RS',
 'sr' => 'sr-Cyrl-RS',
 'nso' => 'nso-ZA',
-'tn' => 'tn-ZA',
+'tn' => 'tsn-BW',
 'si' => 'si-LK',
 'sk' => 'sk-SK',
 'sl' => 'sl-SI',
