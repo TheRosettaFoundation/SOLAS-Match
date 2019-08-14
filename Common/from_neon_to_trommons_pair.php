@@ -281,7 +281,6 @@ $language_options_changes = [
   'no-NO#' => 'Norwegian',
   'xen---' => 'Plain English',
   'tn-BW#' => 'Tswana',
-  'ta-IN' => 'Tamil India',
 ];
 
 $from_neon_to_trommons_pair_options_remove = [
