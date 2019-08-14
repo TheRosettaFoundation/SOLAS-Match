@@ -260,8 +260,8 @@ $from_neon_to_trommons_pair = array(
 'Ndebele South' => array('nr', 'ZA'),
 'Ndebele North' => array('nd', 'ZW'),
 'Serer' => array('srr', 'SN'),
-'' => array('', ''),
-'' => array('', ''),
+'Sindhi' => array('sd', 'IN'),
+'Sinhala' => array('si', 'LK'),
 '' => array('', ''),
 '' => array('', ''),
 );
