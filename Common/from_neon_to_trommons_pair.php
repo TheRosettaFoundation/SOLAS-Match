@@ -280,7 +280,6 @@ $language_options_changes = [
   'sr-ME#' => 'Montenegrin',
   'no-NO#' => 'Norwegian',
   'xen---' => 'Plain English',
-  'tn-BW#' => 'Tswana',
 ];
 
 $from_neon_to_trommons_pair_options_remove = [
