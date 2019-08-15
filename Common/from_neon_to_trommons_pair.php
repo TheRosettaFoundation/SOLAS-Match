@@ -3,7 +3,7 @@
 $from_neon_to_trommons_pair = array(
 'Afrikaans' => array('af', 'ZA'),
 'Albanian' => array('sq', 'AL'),
-'Amharic' => array('am', 'AM'),
+'Amharic' => array('am', 'ET'),
 'Arabic' => array('ar', 'SA'),
 'Aragonese' => array('an', 'ES'),
 'Armenian' => array('hy', 'AM'),
