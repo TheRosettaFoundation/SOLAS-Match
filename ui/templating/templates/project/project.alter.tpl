@@ -24,9 +24,10 @@
             </span>
             <div class="pull-right">
                 {if $userIsAdmin}
-                <a href="{urlFor name="archive-project" options="project_id.$project_id|sesskey.{$sesskey}"}" class="pull-right btn btn-danger" style="margin-right: 5px;" onclick="return confirm('{Localisation::getTranslation('org_dashboard_1')}')">
+                <a href="{urlFor name="archive-project" options="project_id.$project_id|sesskey.{$sesskey}"}" class="pull-right btn btn-danger" onclick="return confirm('{Localisation::getTranslation('org_dashboard_1')}')">
                     <i class="icon-fire icon-white"></i> {Localisation::getTranslation('org_dashboard_archive_project')}
                 </a>
+                <p style="margin-right: 5px;" />
                 {/if}
                 <a href="{urlFor name="project-view" options="project_id.$project_id"}" class="pull-right btn btn-primary">
                     <i class="icon-list icon-white"></i> {Localisation::getTranslation('project_alter_view_project_details')}
