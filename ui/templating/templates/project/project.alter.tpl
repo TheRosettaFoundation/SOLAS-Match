@@ -28,7 +28,7 @@
                     <i class="icon-fire icon-white"></i> {Localisation::getTranslation('org_dashboard_archive_project')}
                 </a>
                 {/if}
-                <a href="{urlFor name="project-view" options="project_id.$project_id"}" class="pull-right btn btn-primary">
+                &nbsp;<a href="{urlFor name="project-view" options="project_id.$project_id"}" class="pull-right btn btn-primary">
                     <i class="icon-list icon-white"></i> {Localisation::getTranslation('project_alter_view_project_details')}
                 </a>
             </div>
