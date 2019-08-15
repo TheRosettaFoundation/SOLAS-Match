@@ -23,7 +23,7 @@
                 <small>{Localisation::getTranslation('project_alter_alter_project_details_here')}</small>
             </span>
             <div class="pull-right">
-                {if $isSiteAdmin}
+                {if $userIsAdmin}
                 <a href="{urlFor name="archive-project" options="project_id.$project_id|sesskey.{$sesskey}"}" class="btn btn-danger" onclick="return confirm('{Localisation::getTranslation('org_dashboard_1')}')">
                     <i class="icon-fire icon-white"></i> {Localisation::getTranslation('org_dashboard_archive_project')}
                 </a>
