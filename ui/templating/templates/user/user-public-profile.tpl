@@ -19,6 +19,11 @@
                 </td>
                 <td>                    
                     <div class="pull-right">
+                        {if $isSiteAdmin}
+                            <a href="{urlFor name="claimed-tasks" options="user_id.{$this_user->getId()}"}" class="btn btn-primary">
+                                <i class="icon-list icon-white"></i> {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
+                            </a>
+                        {/if}
                         {if isset($private_access) && isset($org_creation)}
                             {if $org_creation == 'y'}
                                 <a href="{urlFor name="create-org"}" class="btn btn-success"
