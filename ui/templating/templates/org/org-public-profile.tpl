@@ -34,6 +34,11 @@
                                 <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('org_public_profile_edit_organisation_details')}
                             </a>
                             {/if}
+                            {if $isSiteAdmin}
+                            <a class="btn btn-success" href="{urlFor name="project-create" options="org_id.$org_id"}">
+                                <i class="icon-upload icon-white"></i> {Localisation::getTranslation('common_create_project')}
+                            </a>
+                            {/if}
                             {if false}
                             <a href="{urlFor name="org-request-membership" options="org_id.$org_id"}" class='btn btn-primary'>
                                 <i class="icon-ok-circle icon-white"></i> {Localisation::getTranslation('org_public_profile_request_membership')}
@@ -58,7 +63,7 @@
                             <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('org_public_profile_edit_organisation_details')}
                         </a>
                     {/if}
-                            {if $isSiteAdmin}
+                            {if $isMember && $isSiteAdmin}
                             <a class="btn btn-success" href="{urlFor name="project-create" options="org_id.$org_id"}">
                                 <i class="icon-upload icon-white"></i> {Localisation::getTranslation('common_create_project')}
                             </a>
