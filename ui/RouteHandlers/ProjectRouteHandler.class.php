@@ -1247,9 +1247,18 @@ class ProjectRouteHandler
                                         if ($adminDao->isSiteAdmin($user_id)) {
                                             $mt_engine        = empty($post['mt_engine'])        ? '0' : '1';
                                             $pretranslate_100 = empty($post['pretranslate_100']) ? '0' : '1';
+                                            $lexiqa           = '1';
                                             $private_tm_key   = empty($post['private_tm_key'])   ? '58f97b6f65fb5c8c8522' : '58f97b6f65fb5c8c8522,' . $post['private_tm_key'];
+
+                                            if (!empty($post['testing_center'])) {
+                                                $mt_engine        = '0';
+                                                $pretranslate_100 = '0';
+                                                $lexiqa           = '0';
+                                                $private_tm_key   = 'new';
+                                            }
+
                                             if (!empty($post['private_tm_key']) || empty($post['mt_engine']) || empty($post['pretranslate_100'])) {
-                                                $taskDao->set_project_tm_key($project->getId(), $mt_engine, $pretranslate_100, '1', $private_tm_key);
+                                                $taskDao->set_project_tm_key($project->getId(), $mt_engine, $pretranslate_100, $lexiqa, $private_tm_key);
                                             }
                                         }
 
@@ -1975,6 +1984,10 @@ class ProjectRouteHandler
                   'subject'      => 'general',
                   'owner_email'  => $creator['email']
                 );
+                if ($private_tm_key === 'new') { // Testing Center Project
+                    $fields['tms_engine']         = '0';
+                    $fields['get_public_matches'] = '0';
+                }
                 error_log("project_cron /new ($project_id) fields: " . print_r($fields, true));
                 curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
 
