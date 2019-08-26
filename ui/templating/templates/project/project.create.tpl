@@ -195,6 +195,15 @@
                     </div>
                 </div>
                 {/if}
+                {if $isSiteAdmin}
+                <div class="projFormInput">
+                    <div style="margin-bottom:25px;">
+                        <h2>Testing Center Project:</h2>
+                        <p class="desc">If checked, this will become a Testing Center Project revised by Senior Translators.</p>
+                        <input type="checkbox" name="testing_center" id="testing_center" value="1" checked />
+                    </div>
+                </div>
+                {/if}
             </div>
         </div>
         <div id ="projFormBottom">
