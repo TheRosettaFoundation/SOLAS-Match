@@ -2454,7 +2454,7 @@ class TaskRouteHandler
                 $dummyTask->setTitle($matching_tasks[0]['title']);
                 $preReqTasks = array();
                 $preReqTasks[] = $dummyTask;
-                error_log('preReqTasks for chunked PROOFREADING Task... print_r($preReqTasks, true));
+                error_log('preReqTasks for chunked PROOFREADING Task... ' . print_r($preReqTasks, true));
             }
         }
         if ($preReqTasks == null || count($preReqTasks) == 0) {
