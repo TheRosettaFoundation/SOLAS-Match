@@ -2442,6 +2442,21 @@ class TaskRouteHandler
 
         $reviews = array();
         $preReqTasks = $taskDao->getTaskPreReqs($taskId);
+        if (empty($preReqTasks) && $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && !empty($matecat_tasks = $taskDao->getTaskChunk($taskId))) {
+            // We are a chunk, so need to manually find the matching translation task
+            $matecat_id_job          = $matecat_tasks[0]['matecat_id_job'];
+            $matecat_id_job_password = $matecat_tasks[0]['matecat_id_chunk_password'];
+            $matching_tasks = $taskDao->getMatchingTask($matecat_id_job, $matecat_id_job_password, Common\Enums\TaskTypeEnum::TRANSLATION);
+            if (!empty($matching_tasks)) {
+                $dummyTask = new Common\Protobufs\Models\Task();
+                $dummyTask->setId($matching_tasks[0]['id']);
+                $dummyTask->setProjectId($matching_tasks[0]['projectId']);
+                $dummyTask->setTitle($matching_tasks[0]['title']);
+                $preReqTasks = array();
+                $preReqTasks[] = $dummyTask;
+                error_log('preReqTasks for chunked PROOFREADING Task... ' . print_r($preReqTasks, true));
+            }
+        }
         if ($preReqTasks == null || count($preReqTasks) == 0) {
             $projectDao = new \SolasMatch\UI\DAO\ProjectDao();
             $project = $projectDao->getProject($task->getProjectId());
