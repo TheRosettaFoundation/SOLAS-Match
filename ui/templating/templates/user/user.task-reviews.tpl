@@ -24,6 +24,72 @@
                 {sprintf({Localisation::getTranslation('task_review_form_0')}, {urlFor name="download-task-latest-version" options="task_id.$id"})}
             </p>
 
+          {if $review->isNewReviewType()}
+            <h3>
+                Accuracy
+                <small>Does the translation communicate the meaning of the original text correctly and precisely? Does it add or omit any information?</small>
+            </h3>
+            <p>
+                <i> Star rating of 1-5, where 1 = "Poor" and 5 = "Excellent"</i>
+            </p>
+            <div class="rateit" data-rateit-value="{$review->getAccuracy()}" data-rateit-step="1" data-rateit-ispreset=true 
+                    data-rateit-resetable=false data-rateit-readonly=true>
+            </div>
+
+            <h3>
+                Fluency
+                <small>Does the translation have standard (correct and generally accepted) spelling, punctuation, and grammar?</small>
+            </h3>
+            <p>
+                <i> Star rating of 1-5, where 1 = "Poor" and 5 = "Excellent"</i>
+            </p>
+            <div class="rateit" data-rateit-value="{$review->getFluency()}" data-rateit-step="1" data-rateit-ispreset=true 
+                    data-rateit-resetable=false data-rateit-readonly=true>
+            </div>
+
+            <h3>
+                Terminology
+                <small>Are the keywords and phrases in the translation (especially humanitarian terms) translated accurately? Is the same translation used for each term throughout the text?</small>
+            </h3>
+            <p>
+                <i> Star rating of 1-5, where 1 = "Poor" and 5 = "Excellent"</i>
+            </p>
+            <div class="rateit" data-rateit-value="{$review->getTerminology()}" data-rateit-step="1" data-rateit-ispreset=true 
+                    data-rateit-resetable=false data-rateit-readonly=true>
+            </div>
+
+            <h3>
+                Style
+                <small>Does the translation sound idiomatic (natural) when you read it? Is the style appropriate for the readers (not too formal or too informal)?</small>
+            </h3>
+            <p>
+                <i> Star rating of 1-5, where 1 = "Poor" and 5 = "Excellent"</i>
+            </p>
+            <div class="rateit" data-rateit-value="{$review->getStyle()}" data-rateit-step="1" data-rateit-ispreset=true 
+                    data-rateit-resetable=false data-rateit-readonly=true>
+            </div>
+
+            <h3>
+                Design
+                <small>Is the translation formatted appropriately? If it contains tables, images, or other visual elements, are those translated and easy to read and follow?</small>
+            </h3>
+            <p>
+                <i> Star rating of 1-5, where 1 = "Poor" and 5 = "Excellent"</i>
+            </p>
+            <div class="rateit" data-rateit-value="{$review->getDesign()}" data-rateit-step="1" data-rateit-ispreset=true 
+                    data-rateit-resetable=false data-rateit-readonly=true>
+            </div>
+
+            <h3>
+                General feedback
+                <small>Optional comments, suggestions or congratulations</small>
+            </h3>
+            {if $review->getComment() != ''}
+                <p>{TemplateHelper::uiCleanseHTML($review->getComment())}</p>
+            {else}
+                <p>No general feedback has been listed.</p>
+            {/if}
+          {else}
             <h3>
                 {Localisation::getTranslation('task_review_form_corrections')} 
                 <small>{Localisation::getTranslation('task_review_form_2')}</small>
@@ -77,6 +143,7 @@
             {else}
                 <p>{Localisation::getTranslation('common_no_comment_has_been_listed')}</p>
             {/if}
+          {/if}
             {assign var="count" value=($count + 1)}
             <hr />
             <br />
