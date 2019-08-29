@@ -2538,7 +2538,7 @@ class TaskRouteHandler
                     }
                     if (isset($post["consistency_$id"]) && ctype_digit($post["consistency_$id"])) {
                         $value = intval($post["consistency_$id"]);
-                        if ($value > 0 && $value <= 5) {
+                        if ($value > 0 && $value <= 55) {
                             $review->setConsistency($value);
                         } else {
                             $error = Lib\Localisation::getTranslation('task_review_8');
