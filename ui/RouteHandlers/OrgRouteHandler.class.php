@@ -2282,6 +2282,23 @@ class OrgRouteHandler
         $preReqTasks = array();
         $preReqs = $taskDao->getTaskPreReqs($taskId);
         $reviews = array();
+
+        if (empty($preReqs) && $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && !empty($matecat_tasks = $taskDao->getTaskChunk($taskId))) {
+            // We are a chunk, so need to manually find the matching translation task
+            $matecat_id_job          = $matecat_tasks[0]['matecat_id_job'];
+            $matecat_id_job_password = $matecat_tasks[0]['matecat_id_chunk_password'];
+            $matching_tasks = $taskDao->getMatchingTask($matecat_id_job, $matecat_id_job_password, Common\Enums\TaskTypeEnum::TRANSLATION);
+            if (!empty($matching_tasks)) {
+                $dummyTask = new Common\Protobufs\Models\Task();
+                $dummyTask->setId($matching_tasks[0]['id']);
+                $dummyTask->setProjectId($matching_tasks[0]['projectId']);
+                $dummyTask->setTitle($matching_tasks[0]['title']);
+                $preReqs = array();
+                $preReqs[] = $dummyTask;
+                error_log('preReqs for chunked PROOFREADING Task... ' . print_r($preReqs, true));
+            }
+        }
+
         if (!is_null($preReqs) && count($preReqs) > 0) {
             foreach ($preReqs as $preReq) {
                 $taskReviews = $taskDao->getTaskReviews($preReq->getId());
