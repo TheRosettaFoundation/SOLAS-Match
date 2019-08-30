@@ -11,7 +11,7 @@
     </p>
 {/if}
 
-{if $review->isNewReviewType()}
+{if empty($review) || $review->isNewReviewType()}
 
 {if isset($review)}
     {assign var='value' value=$review->getAccuracy()}
