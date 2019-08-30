@@ -2,7 +2,9 @@
 {if $reviewedTask->getId() != null}
     {assign var="id" value=$reviewedTask->getId()}
     <p>
+        {if empty($is_chunked)}
         {sprintf(Localisation::getTranslation('task_review_form_0'), {urlFor name="download-task-latest-version" options="task_id.$id"})}
+        {/if}
     </p>
 {else}
     {assign var="id" value=$reviewedTask->getProjectId()}

@@ -2612,6 +2612,7 @@ class TaskRouteHandler
             'extra_scripts' => $extra_scripts,
             'taskId'        => $taskId,
             'tasks'         => $preReqTasks,
+            'is_chunked'    => !empty($matecat_tasks),
             'reviews'       => $reviews,
             'formAction'    => $formAction,
             'action'        => $action
