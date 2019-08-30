@@ -15,24 +15,34 @@
 
 <table style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-    <th width="16%">Display Name</th>
-    <th width="20%">Email</th>
-    <th width="25%">Task Title</th>
-    <th width="7%">Task ID</th>
-    <th width="25%">Project Title</th>
-    <th width="7%">Project ID</th>
+    <th width="10%">Task Title</th>
+    <th width="10%">Type</th>
+    <th width="10%">Status</th>
+    <th width="10%">Email</th>
+    <th width="10%">Display Name</th>
+    <th width="6%">Accuracy</th>
+    <th width="6%">Fluency</th>
+    <th width="6%">Terminology</th>
+    <th width="6%">Style</th>
+    <th width="6%">Design</th>
+    <th width="20%">Feedback</th>
   </thead>
 
   <tbody>
   {foreach $all_users as $user_row}
 
     <tr>
-      <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['display_name'])}</a></td>
-      <td>{$user_row['email']}</td>
       <td><a href="{urlFor name="task-view" options="task_id.{$user_row['task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['task_title'])}</a></td>
-      <td>{TemplateHelper::uiCleanseHTML($user_row['task_id'])}</td>
-      <td><a href="{urlFor name="project-view" options="project_id.{$user_row['project_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['project_title'])}</a></td>
-      <td>{TemplateHelper::uiCleanseHTML($user_row['project_id'])}</td>
+      <td>{$user_row['task_type']}</td>
+      <td>{$user_row['task_status']}</td>
+      <td>{$user_row['user_email']}</td>
+      <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['display_name'])}</a></td>
+      <td>{$user_row['accuracy']}</td>
+      <td>{$user_row['fluency']}</td>
+      <td>{$user_row['terminology']}</td>
+      <td>{$user_row['style']}</td>
+      <td>{$user_row['design']}</td>
+      <td>{TemplateHelper::uiCleanseHTML($user_row['comment'])}</td>
     </tr>
 
   {/foreach}

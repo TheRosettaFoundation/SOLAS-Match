@@ -6654,6 +6654,41 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `testing_center`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `testing_center`()
+BEGIN
+    SELECT
+        t.title AS task_title,
+        t.id    AS task_id,
+        p.id    AS project_id,
+        p.title AS project_title,
+        IF(t.`task-type_id`=2, 'Translation', 'Revising') AS task_type,
+        CASE
+            WHEN t.`task-status_id`=1 THEN 'Waiting'
+            WHEN t.`task-status_id`=2 THEN 'Pending'
+            WHEN t.`task-status_id`=3 THEN 'In Progress'
+            WHEN t.`task-status_id`=4 THEN 'Complete'
+        END                                               AS task_status,
+        IFNULL(u.email, '')          AS user_email,
+        IFNULL(u.`display-name`, '') AS display_name,
+        IFNULL(u.id, '')             AS user_id,
+        IFNULL(tr.corrections,        '') AS accuracy,
+        IFNULL(tr.grammar,            '') AS fluency,
+        IFNULL(tr.spelling,           '') AS terminology,
+        IFNULL(tr.consistency   % 10, '') AS style,
+        IFNULL(tr.consistency DIV 10, '') AS design,
+        IFNULL(tr.comment,            '') AS comment
+    FROM      Projects        p
+    JOIN      PrivateTMKeys tmk ON p.id=tmk.project_id AND tmk.private_tm_key='new'
+    JOIN      Tasks           t ON p.id=t.project_id
+    LEFT JOIN TaskClaims     tc ON t.id=tc.task_id
+    LEFT JOIN Users           u ON tc.user_id=u.id
+    LEFT JOIN TaskReviews    tr ON t.id=tr.task_id
+    ORDER BY t.id DESC;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `late_matecat`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `late_matecat`()
