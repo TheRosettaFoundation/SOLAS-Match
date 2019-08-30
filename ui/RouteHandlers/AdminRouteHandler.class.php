@@ -44,6 +44,12 @@ class AdminRouteHandler
         )->via('POST')->name('active_now_matecat');
 
         $app->get(
+            '/testing_center/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'testing_center')
+        )->via('POST')->name('testing_center');
+
+        $app->get(
             '/matecat_analyse_status/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'matecat_analyse_status')
@@ -405,6 +411,17 @@ class AdminRouteHandler
 
         $app->view()->appendData(array('all_users' => $all_users));
         $app->render('admin/active_now_matecat.tpl');
+    }
+
+    public function testing_center()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->testing_center();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('admin/testing_center.tpl');
     }
 
     public function late_matecat()
