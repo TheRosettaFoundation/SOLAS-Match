@@ -26,7 +26,7 @@
     Accuracy
     <small>Does the translation communicate the meaning of the original text correctly and precisely? Does it add or omit any information?</small>
 </h3>
-<p><i>Star rating of 1-5, where 1 = "Poor" and 5 = "Excellent"</i></p>
+<p><i>Star rating of 1-5, where 1 = "Poor", 2 = "Needs work", 3 = "Satisfactory", 4 = "Good" and 5 = "Excellent"</i></p>
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_accuracy_{$id}" {$readonly}>
 </div>
@@ -42,7 +42,7 @@
     Fluency
     <small>Does the translation have standard (correct and generally accepted) spelling, punctuation, and grammar?</small>
 </h3>
-<p><i>Star rating of 1-5, where 1 = "Poor" and 5 = "Excellent"</i></p>
+<p><i>Star rating of 1-5, where 1 = "Poor", 2 = "Needs work", 3 = "Satisfactory", 4 = "Good" and 5 = "Excellent"</i></p>
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_fluency_{$id}" {$readonly}>
 </div>
@@ -58,7 +58,7 @@
     Terminology
     <small>Are the keywords and phrases in the translation (especially humanitarian terms) translated accurately? Is the same translation used for each term throughout the text?</small>
 </h3>
-<p><i>Star rating of 1-5, where 1 = "Poor" and 5 = "Excellent"</i></p>
+<p><i>Star rating of 1-5, where 1 = "Poor", 2 = "Needs work", 3 = "Satisfactory", 4 = "Good" and 5 = "Excellent"</i></p>
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_terminology_{$id}" {$readonly}>
 </div>
@@ -74,7 +74,7 @@
     Style
     <small>Does the translation sound idiomatic (natural) when you read it? Is the style appropriate for the readers (not too formal or too informal)?</small>
 </h3>
-<p><i>Star rating of 1-5, where 1 = "Poor" and 5 = "Excellent"</i></p>
+<p><i>Star rating of 1-5, where 1 = "Poor", 2 = "Needs work", 3 = "Satisfactory", 4 = "Good" and 5 = "Excellent"</i></p>
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_style_{$id}" {$readonly}>
 </div>
@@ -90,7 +90,7 @@
     Design
     <small>Is the translation formatted appropriately? If it contains tables, images, or other visual elements, are those translated and easy to read and follow?</small>
 </h3>
-<p><i>Star rating of 1-5, where 1 = "Poor" and 5 = "Excellent"</i></p>
+<p><i>Star rating of 1-5, where 1 = "Poor", 2 = "Needs work", 3 = "Satisfactory", 4 = "Good" and 5 = "Excellent"</i></p>
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_design_{$id}" {$readonly}>
 </div>

@@ -30,7 +30,7 @@
                 <small>Does the translation communicate the meaning of the original text correctly and precisely? Does it add or omit any information?</small>
             </h3>
             <p>
-                <i> Star rating of 1-5, where 1 = "Poor" and 5 = "Excellent"</i>
+                <i> Star rating of 1-5, where 1 = "Poor", 2 = "Needs work", 3 = "Satisfactory", 4 = "Good" and 5 = "Excellent"</i>
             </p>
             <div class="rateit" data-rateit-value="{$review->getAccuracy()}" data-rateit-step="1" data-rateit-ispreset=true 
                     data-rateit-resetable=false data-rateit-readonly=true>
@@ -41,7 +41,7 @@
                 <small>Does the translation have standard (correct and generally accepted) spelling, punctuation, and grammar?</small>
             </h3>
             <p>
-                <i> Star rating of 1-5, where 1 = "Poor" and 5 = "Excellent"</i>
+                <i> Star rating of 1-5, where 1 = "Poor", 2 = "Needs work", 3 = "Satisfactory", 4 = "Good" and 5 = "Excellent"</i>
             </p>
             <div class="rateit" data-rateit-value="{$review->getFluency()}" data-rateit-step="1" data-rateit-ispreset=true 
                     data-rateit-resetable=false data-rateit-readonly=true>
@@ -52,7 +52,7 @@
                 <small>Are the keywords and phrases in the translation (especially humanitarian terms) translated accurately? Is the same translation used for each term throughout the text?</small>
             </h3>
             <p>
-                <i> Star rating of 1-5, where 1 = "Poor" and 5 = "Excellent"</i>
+                <i> Star rating of 1-5, where 1 = "Poor", 2 = "Needs work", 3 = "Satisfactory", 4 = "Good" and 5 = "Excellent"</i>
             </p>
             <div class="rateit" data-rateit-value="{$review->getTerminology()}" data-rateit-step="1" data-rateit-ispreset=true 
                     data-rateit-resetable=false data-rateit-readonly=true>
@@ -63,7 +63,7 @@
                 <small>Does the translation sound idiomatic (natural) when you read it? Is the style appropriate for the readers (not too formal or too informal)?</small>
             </h3>
             <p>
-                <i> Star rating of 1-5, where 1 = "Poor" and 5 = "Excellent"</i>
+                <i> Star rating of 1-5, where 1 = "Poor", 2 = "Needs work", 3 = "Satisfactory", 4 = "Good" and 5 = "Excellent"</i>
             </p>
             <div class="rateit" data-rateit-value="{$review->getStyle()}" data-rateit-step="1" data-rateit-ispreset=true 
                     data-rateit-resetable=false data-rateit-readonly=true>
@@ -74,7 +74,7 @@
                 <small>Is the translation formatted appropriately? If it contains tables, images, or other visual elements, are those translated and easy to read and follow?</small>
             </h3>
             <p>
-                <i> Star rating of 1-5, where 1 = "Poor" and 5 = "Excellent"</i>
+                <i> Star rating of 1-5, where 1 = "Poor", 2 = "Needs work", 3 = "Satisfactory", 4 = "Good" and 5 = "Excellent"</i>
             </p>
             <div class="rateit" data-rateit-value="{$review->getDesign()}" data-rateit-step="1" data-rateit-ispreset=true 
                     data-rateit-resetable=false data-rateit-readonly=true>
