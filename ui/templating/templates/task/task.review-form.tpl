@@ -107,7 +107,7 @@
 
 <h3>
     General feedback
-    <small>Optional comments, suggestions or congratulations</small>
+    <small>Optional comments, suggestions or congratulations[[[You can use the space below to leave comments, suggestions, or congratulations for your colleague on his/her translation. Please remember to be considerate and constructive in your feedback. Use specific examples whenever possible.]]]</small>
 </h3>
     <textarea name="comment_{$id}" cols='40' rows='10' style="width: 80%"></textarea>
 {/if}

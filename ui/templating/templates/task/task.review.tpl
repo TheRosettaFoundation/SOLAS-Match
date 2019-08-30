@@ -19,6 +19,28 @@ Tweet</a>
     {Localisation::getTranslation('task_review_2')}
     {$action} {Localisation::getTranslation('task_review_3')}
 </p>
+<p>
+[[[
+Please provide a general review of your colleague's work.
+We trust that you will do your best to provide a fair evaluation and constructive comments.
+The goal is to learn from one another and grow together.
+</p>
+<p>
+If you collaborate with TWB regularly, you may review several translations.
+Please use the same standards for all reviews.
+You can follow <a href="https://www.therosettafoundation.org" target="_blank">this link to read more about our Quality Standards</a>.
+</p>
+Think about the readers of the translation as you review it.
+Would they find the text clear and easy to read?
+<p>
+Does the translation communicate the message of the original text clearly, accurately and effectively?
+Please remember: the translation does not have to be "perfect" to be good.
+</p>
+<hr />
+<p>
+How would you rate the translation in each of the following categories?
+]]]
+</p>
 
 {if isset($formAction)}
     <form class="well" method="post" action="{$formAction}"  onsubmit="createHiddenFields()" id="TaskReviewForm" accept-charset="utf-8">
