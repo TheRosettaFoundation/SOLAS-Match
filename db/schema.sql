@@ -6762,10 +6762,10 @@ BEGIN
         u.email,
         IFNULL(i.`first-name`, '') AS first_name,
         IFNULL(i.`last-name`, '') AS last_name,
-        AVG(tr.corrections) AS cor,
-        AVG(tr.grammar)     AS gram,
-        AVG(tr.spelling)    AS spell,
-        AVG(tr.consistency) AS cons,
+        FORMAT(AVG(tr.corrections), 1) AS cor,
+        FORMAT(AVG(tr.grammar), 1)     AS gram,
+        FORMAT(AVG(tr.spelling), 1)    AS spell,
+        FORMAT(AVG(tr.consistency), 1) AS cons,
         COUNT(*)            AS num
     FROM TaskReviews            tr
     JOIN Tasks                   t  ON tr.task_id=t.id
