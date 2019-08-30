@@ -16,13 +16,19 @@
 
 <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-    <th width="25%">Email</th>
-    <th width="25%">Name</th>
-    <th width="10%">Corrections</th>
-    <th width="10%">Grammar</th>
-    <th width="10%">Spelling</th>
-    <th width="10%">consistency</th>
-    <th width="10%">Number</th>
+    <th width="17%">Email</th>
+    <th width="17%">Name</th>
+    <th width="6%">Accuracy</th>
+    <th width="6%">Fluency</th>
+    <th width="6%">Terminology</th>
+    <th width="6%">Style</th>
+    <th width="6%">Design</th>
+    <th width="6%">Number</th>
+    <th width="6%">Corrections</th>
+    <th width="6%">Grammar</th>
+    <th width="6%">Spelling</th>
+    <th width="6%">consistency</th>
+    <th width="6%">Number</th>
   </thead>
 
   <tbody>
@@ -31,11 +37,17 @@
     <tr>
       <td>{$user_row['email']}</td>
       <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['first_name'])} {TemplateHelper::uiCleanseHTML($user_row['last_name'])}</a></td>
+      <td>{$user_row['accuracy']}</td>
+      <td>{$user_row['fluency']}</td>
+      <td>{$user_row['terminology']}</td>
+      <td>{$user_row['style']}</td>
+      <td>{$user_row['design']}</td>
+      <td>{$user_row['num_new']}</td>
       <td>{$user_row['cor']}</td>
       <td>{$user_row['gram']}</td>
       <td>{$user_row['spell']}</td>
       <td>{$user_row['cons']}</td>
-      <td>{$user_row['num']}</td>
+      <td>{$user_row['num_legacy']}</td>
     </tr>
 
   {/foreach}
