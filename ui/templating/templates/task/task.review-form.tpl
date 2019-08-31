@@ -13,7 +13,7 @@
     </p>
 {/if}
 
-{if empty($review) || $review->isNewReviewType()}
+{if $reviewedTask->getId() != null && (empty($review) || $review->isNewReviewType())}
 
 {if isset($review)}
     {assign var='value' value=$review->getAccuracy()}

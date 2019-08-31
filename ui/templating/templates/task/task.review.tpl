@@ -15,12 +15,13 @@
   data-size="large" data-counturl="https://trommons.org">
 Tweet</a>
 
+{if $action === Localisation::getTranslation('task_review_translated')}
 <p>
     {Localisation::getTranslation('task_review_2')}
     {$action} {Localisation::getTranslation('task_review_3')}
 </p>
+{else}
 <p>
-[[[
 Please provide a general review of your colleague's work.
 We trust that you will do your best to provide a fair evaluation and constructive comments.
 The goal is to learn from one another and grow together.
@@ -39,8 +40,8 @@ Please remember: the translation does not have to be "perfect" to be good.
 <hr />
 <p>
 How would you rate the translation in each of the following categories?
-]]]
 </p>
+{/if}
 
 {if isset($formAction)}
     <form class="well" method="post" action="{$formAction}"  onsubmit="createHiddenFields()" id="TaskReviewForm" accept-charset="utf-8">
