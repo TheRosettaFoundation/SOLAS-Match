@@ -29,7 +29,7 @@ The goal is to learn from one another and grow together.
 <p>
 If you collaborate with TWB regularly, you may review several translations.
 Please use the same standards for all reviews.
-You can follow <a href="https://www.therosettafoundation.org" target="_blank">this link to read more about our Quality Standards</a>.
+You can follow <a href="https://community.translatorswb.org/t/what-is-translation-quality-for-twb/10295" target="_blank">this link to read more about our Quality Standards</a>.
 </p>
 Think about the readers of the translation as you review it.
 Would they find the text clear and easy to read?

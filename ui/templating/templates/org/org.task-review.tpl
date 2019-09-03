@@ -5,7 +5,7 @@
     <h1>{TemplateHelper::uiCleanseHTML($task->getTitle())} <small>{Localisation::getTranslation('org_task_review_review_this_completed_task')}</small></h1>
 </div>
 
-<h2 class="page-header">{Localisation::getTranslation('org_task_review_review_this_file')} <small>{Localisation::getTranslation('org_task_review_1')}</small></h2>
+<h2 class="page-header">{if $task->getTaskType() == TaskTypeEnum::TRANSLATION}Review this translation task{else}Review this revising task{/if} <small>{Localisation::getTranslation('org_task_review_1')}</small></h2>
 {include file="handle-flash-messages.tpl"}
 
 <p>
