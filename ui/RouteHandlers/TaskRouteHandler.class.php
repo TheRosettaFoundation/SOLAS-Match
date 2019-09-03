@@ -2458,14 +2458,12 @@ class TaskRouteHandler
             }
         }
         if ($preReqTasks == null || count($preReqTasks) == 0) {
-error_log('No preReqs');
             $projectDao = new \SolasMatch\UI\DAO\ProjectDao();
             $project = $projectDao->getProject($task->getProjectId());
 
             $reviews = $projectDao->getProjectReviews($task->getProjectId());
             if ($reviews) {
                 foreach ($reviews as $projectReview) {
-error_log('projectReview... ' . print_r($projectReview, true));
                     if ($projectReview->getTaskId() == null
                             && $projectReview->getUserId() == $userId) {
                         $reviews[$task->getProjectId()] = $projectReview;
@@ -2488,7 +2486,6 @@ error_log('projectReview... ' . print_r($projectReview, true));
         }
 
         if (!empty($reviews) && count($reviews) > 0) {
-error_log('flash');
             $app->flashNow("info", Lib\Localisation::getTranslation('task_review_4'));
         }
 
