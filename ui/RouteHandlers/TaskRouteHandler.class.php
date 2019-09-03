@@ -2461,9 +2461,9 @@ class TaskRouteHandler
             $projectDao = new \SolasMatch\UI\DAO\ProjectDao();
             $project = $projectDao->getProject($task->getProjectId());
 
-            $reviews = $projectDao->getProjectReviews($task->getProjectId());
-            if ($reviews) {
-                foreach ($reviews as $projectReview) {
+            $project_reviews = $projectDao->getProjectReviews($task->getProjectId());
+            if ($project_reviews) {
+                foreach ($project_reviews as $projectReview) {
                     if ($projectReview->getTaskId() == null
                             && $projectReview->getUserId() == $userId) {
                         $reviews[$task->getProjectId()] = $projectReview;
