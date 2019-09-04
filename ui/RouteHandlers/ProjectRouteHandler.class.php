@@ -1257,7 +1257,7 @@ class ProjectRouteHandler
                                                 $private_tm_key   = 'new';
                                             }
 
-                                            if (!empty($post['private_tm_key']) || empty($post['mt_engine']) || empty($post['pretranslate_100'])) {
+                                            if (!empty($post['testing_center']) || !empty($post['private_tm_key']) || empty($post['mt_engine']) || empty($post['pretranslate_100'])) {
                                                 $taskDao->set_project_tm_key($project->getId(), $mt_engine, $pretranslate_100, $lexiqa, $private_tm_key);
                                             }
                                         }
