@@ -8,9 +8,10 @@
             var corrRate;
             try {
                 corrRate = $("#rateit_corrections_" + taskIds[i].toString()).rateit('value');
+                if (isNaN(corrRate)) {
+                    corrRate = $("#rateit_accuracy_"    + taskIds[i].toString()).rateit('value');
+                }
             } catch (err) {
-alert("#rateit_accuracy_"    + taskIds[i].toString());
-alert($('#rateit_accuracy_29409').rateit('value'));
                 corrRate = $("#rateit_accuracy_"    + taskIds[i].toString()).rateit('value');
             }
 alert(corrRate);
@@ -20,6 +21,9 @@ alert(corrRate);
             var gramRate;
             try {
                 gramRate = $("#rateit_grammar_" + taskIds[i].toString()).rateit('value');
+                if (isNaN(gramRate)) {
+                    gramRate = $("#rateit_fluency_" + taskIds[i].toString()).rateit('value');
+                }
             } catch (err) {
                 gramRate = $("#rateit_fluency_" + taskIds[i].toString()).rateit('value');
             }
@@ -29,6 +33,9 @@ alert(corrRate);
             var spellRate;
             try {
                 spellRate = $("#rateit_spelling_"    + taskIds[i].toString()).rateit('value');
+                if (isNaN(spellRate)) {
+                    spellRate = $("#rateit_terminology_" + taskIds[i].toString()).rateit('value');
+                }
             } catch (err) {
                 spellRate = $("#rateit_terminology_" + taskIds[i].toString()).rateit('value');
             }
@@ -38,9 +45,13 @@ alert(corrRate);
             var consRate;
             try {
                 consRate = $("#rateit_consistency_"    + taskIds[i].toString()).rateit('value');
+                if (isNaN(consRate)) {
+                    consRate = parseInt($("#rateit_style_" + taskIds[i].toString()).rateit('value')) + 10*parseInt($("#rateit_design_" + taskIds[i].toString()).rateit('value'));
+                }
             } catch (err) {
                 consRate = parseInt($("#rateit_style_" + taskIds[i].toString()).rateit('value')) + 10*parseInt($("#rateit_design_" + taskIds[i].toString()).rateit('value'));
             }
+alert(consRate);
             var consistency = $("<input type=\"hidden\" name=\"consistency_" + taskIds[i] + "\" />").attr("value", consRate);
             form.append(consistency);
         }
