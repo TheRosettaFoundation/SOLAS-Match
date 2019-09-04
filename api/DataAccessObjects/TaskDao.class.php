@@ -151,7 +151,9 @@ class TaskDao
             Lib\PDOWrapper::cleanseNull($review->getSpelling()).",".
             Lib\PDOWrapper::cleanseNull($review->getConsistency()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($review->getComment());
+error_log($args);
         $result = Lib\PDOWrapper::call('submitTaskReview', $args);
+error_log(print_r($args, true));
         if ($result) {
             $ret = $result[0]['result'];
         }
