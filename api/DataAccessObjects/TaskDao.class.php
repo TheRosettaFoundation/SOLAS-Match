@@ -153,7 +153,7 @@ class TaskDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($review->getComment());
 error_log($args);
         $result = Lib\PDOWrapper::call('submitTaskReview', $args);
-error_log(print_r($args, true));
+error_log(print_r($result, true));
         if ($result) {
             $ret = $result[0]['result'];
         }

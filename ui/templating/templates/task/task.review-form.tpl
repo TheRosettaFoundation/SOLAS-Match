@@ -99,12 +99,13 @@
 {if !is_null($review->getComment())}
 <h3>
     General feedback
-    <small>Optional comments, suggestions or congratulations</small>
+    <small>You can use the space below to leave comments, suggestions, or congratulations for your colleague on his/her translation. Please remember to be considerate and constructive in your feedback. Use specific examples whenever possible.</small>
 </h3>
     <p>{TemplateHelper::uiCleanseHTML($review->getComment())}</p>
 {/if}
 {else}
 
+<button onclick="alert($('#rateit_accuracy_29409').rateit('value'))">Get id rateit_accuracy_29409</button>
 <h3>
     General feedback
     <small>You can use the space below to leave comments, suggestions, or congratulations for your colleague on his/her translation. Please remember to be considerate and constructive in your feedback. Use specific examples whenever possible.</small>
