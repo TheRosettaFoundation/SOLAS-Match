@@ -9,8 +9,11 @@
             try {
                 corrRate = $("#rateit_corrections_" + taskIds[i].toString()).rateit('value');
             } catch (err) {
+alert("#rateit_accuracy_"    + taskIds[i].toString());
+alert($('#rateit_accuracy_29409').rateit('value'));
                 corrRate = $("#rateit_accuracy_"    + taskIds[i].toString()).rateit('value');
             }
+alert(corrRate);
             var corrections = $("<input type=\"hidden\" name=\"corrections_" + taskIds[i] + "\" />").attr("value", corrRate);
             form.append(corrections);
 
