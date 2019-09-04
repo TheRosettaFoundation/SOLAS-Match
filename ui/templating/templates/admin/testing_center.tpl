@@ -15,12 +15,12 @@
 
 <table style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-    <th width="10%">Task Title</th>
-    <th width="10%">Type</th>
-    <th width="10%">Status</th>
-    <th width="10%">Email</th>
+    <th width="12%">Task Title</th>
+    <th width="8%">Type</th>
+    <th width="8%">Status</th>
+    <th width="11%">Claimant Email</th>
     <th width="10%">Display Name</th>
-    <th width="6%">Accuracy</th>
+    <th width="7%">Accuracy</th>
     <th width="6%">Fluency</th>
     <th width="6%">Terminology</th>
     <th width="6%">Style</th>
