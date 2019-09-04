@@ -105,8 +105,6 @@
 {/if}
 {else}
 
-<button onclick="alert($('#rateit_corrections_29409').rateit('value'))">Get id rateit_corrections_29409</button>
-<button onclick="alert($('#rateit_accuracy_29409').rateit('value'))">Get id rateit_accuracy_29409</button>
 <h3>
     General feedback
     <small>You can use the space below to leave comments, suggestions, or congratulations for your colleague on his/her translation. Please remember to be considerate and constructive in your feedback. Use specific examples whenever possible.</small>

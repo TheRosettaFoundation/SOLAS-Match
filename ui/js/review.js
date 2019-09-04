@@ -14,7 +14,6 @@
             } catch (err) {
                 corrRate = $("#rateit_accuracy_"    + taskIds[i].toString()).rateit('value');
             }
-alert(corrRate);
             var corrections = $("<input type=\"hidden\" name=\"corrections_" + taskIds[i] + "\" />").attr("value", corrRate);
             form.append(corrections);
 
@@ -51,7 +50,6 @@ alert(corrRate);
             } catch (err) {
                 consRate = parseInt($("#rateit_style_" + taskIds[i].toString()).rateit('value')) + 10*parseInt($("#rateit_design_" + taskIds[i].toString()).rateit('value'));
             }
-alert(consRate);
             var consistency = $("<input type=\"hidden\" name=\"consistency_" + taskIds[i] + "\" />").attr("value", consRate);
             form.append(consistency);
         }
