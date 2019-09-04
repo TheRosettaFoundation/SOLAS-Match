@@ -105,6 +105,7 @@
 {/if}
 {else}
 
+<button onclick="alert($('#rateit_corrections_29409').rateit('value'))">Get id rateit_corrections_29409</button>
 <button onclick="alert($('#rateit_accuracy_29409').rateit('value'))">Get id rateit_accuracy_29409</button>
 <h3>
     General feedback
