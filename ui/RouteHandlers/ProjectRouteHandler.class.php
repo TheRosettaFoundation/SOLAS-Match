@@ -1546,11 +1546,12 @@ class ProjectRouteHandler
         try {
             error_log("addProjectTask");
             $newTask = $taskDao->createTask($task);
+            $newTaskId = $newTask->getId();
+
             if (!empty($post['testing_center']) && $taskType == Common\Enums\TaskTypeEnum::PROOFREADING) {
-                $taskDao->updateRequiredTaskQualificationLevel($task_id, 3); // Reviser Needs to be Senior
+                $taskDao->updateRequiredTaskQualificationLevel($newTaskId, 3); // Reviser Needs to be Senior
             }
 
-            $newTaskId = $newTask->getId();
             $createdTasks[] = $newTaskId;
 
             $upload_error = $taskDao->saveTaskFileFromProject(
