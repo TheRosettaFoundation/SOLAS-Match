@@ -255,7 +255,6 @@ error_log('ArchivedTasks: ' . print_r(ProjectDao::getArchivedTask($projectId), t
 $result = array();
 $result[0]['result'] = 1;
 error_log('result: ' . print_r($result, true));
-error_log('not set: ' . print_r($xxx, true));
 error_log('END');
         if ($result) {
             return $result[0]['result'];
