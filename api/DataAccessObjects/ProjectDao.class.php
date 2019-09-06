@@ -252,11 +252,14 @@ error_log('Project: ' . print_r(ProjectDao::getProject($projectId), true));
 error_log('ArchivedProject: ' . print_r(ProjectDao::getArchivedProject($projectId), true));
 error_log('Tasks: ' . print_r(ProjectDao::getProjectTasks($projectId), true));
 error_log('ArchivedTasks: ' . print_r(ProjectDao::getArchivedTask($projectId), true));
+$result = array();
+$result[0]['result'] = 1;
+error_log('result: ' . print_r($result, true));
+error_log('not set: ' . print_r($xxx, true));
+error_log('END');
         if ($result) {
-error_log('Success');
             return $result[0]['result'];
         } else {
-error_log('Fail');
             return "0";
         }
     }
