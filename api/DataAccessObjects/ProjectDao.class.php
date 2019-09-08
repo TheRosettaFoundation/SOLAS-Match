@@ -242,21 +242,7 @@ class ProjectDao
     {
         $args = Lib\PDOWrapper::cleanseNull($projectId).",".
             Lib\PDOWrapper::cleanseNull($userId);
-error_log("call archiveProject($args)");
-error_log('Project: ' . print_r(ProjectDao::getProject($projectId), true));
-error_log('ArchivedProject: ' . print_r(ProjectDao::getArchivedProject($projectId), true));
-error_log('Tasks: ' . print_r(ProjectDao::getProjectTasks($projectId), true));
-error_log('ArchivedTasks: ' . print_r(ProjectDao::getArchivedTask($projectId), true));
         $result = Lib\PDOWrapper::call("archiveProject", $args);
-error_log('Project: ' . print_r(ProjectDao::getProject($projectId), true));
-error_log('ArchivedProject: ' . print_r(ProjectDao::getArchivedProject($projectId), true));
-error_log('Tasks: ' . print_r(ProjectDao::getProjectTasks($projectId), true));
-error_log('ArchivedTasks: ' . print_r(ProjectDao::getArchivedTask($projectId), true));
-if (!empty($result)) {
-    error_log('result: ' . print_r($result, true));
-} else {
-    error_log('$result empty()');
-}
         if ($result) {
             return $result[0]['result'];
         } else {
