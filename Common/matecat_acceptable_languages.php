@@ -200,7 +200,7 @@
 'pot' => 'pot-US',
 'pov' => 'pov-POV',
 'ppk' => 'ppk-ID',
-'rm' => 'rm-RO',
+'rmn' => 'rmn-RO',
 'rw' => 'rw-KIN',
 'sg' => 'sg-SG',
 'sm' => 'smo-WS',
