@@ -147,6 +147,7 @@
 'mni' => 'mni-IN',
 'lus' => 'lus-IN',
 'shu' => 'shu-TD',
+//'shu-NG' => 'shu-NG',
 'kam' => 'kam-KE',
 'mrt' => 'mrt-NG',
 'gax' => 'gax-KE',
@@ -277,5 +278,6 @@
 'nd' => 'nd-ZW',
 'srr' => 'srr-SN',
 'sd' => 'sd-IN',
+//'sd-PK' => 'sd-PK',
 'syl' => 'syl-BD',
 );
