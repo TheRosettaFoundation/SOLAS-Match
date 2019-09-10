@@ -14,15 +14,8 @@
         <!-- Templates... -->
         <div id="template_language_options">
             <option value="0"></option>
-            {foreach $languages as $language}
-                <option value="{$language->getCode()}" >{$language->getName()}</option>
-            {/foreach}
-        </div>
-
-        <div id="template_country_options">
-            <option value="0"></option>
-            {foreach $countries as $country}
-                <option value="{$country->getCode()}">{$country->getName()}</option>
+            {foreach from=$languages key=codes item=language}
+                <option value="{$codes}" >{$language}</option>
             {/foreach}
         </div>
 
@@ -206,19 +199,13 @@
                     <h2>{Localisation::getTranslation('common_source_language')}: <span style="color: red">*</span></h2>
                     <select name="sourceLanguageSelect" id="sourceLanguageSelect" style="width: 400px">
                         <option value="0"></option>
-                        {foreach $languages as $language}
-                            <option value="{$language->getCode()}" >{$language->getName()}</option>
-                        {/foreach}
-                    </select>
-                    <select name="sourceCountrySelect" id="sourceCountrySelect" style="width: 400px">
-                        <option value="0"></option>
-                        {foreach $countries as $country}
-                            <option value="{$country->getCode()}">{$country->getName()}</option>
+                        {foreach from=$languages key=codes item=language}
+                            <option value="{$codes}" >{$language}</option>
                         {/foreach}
                     </select>
                 </div>
-                <h2>{Localisation::getTranslation('project_create_target_languages')}: <span style="color: red">*</span></h2>
                 <br />
+                <h2>{Localisation::getTranslation('project_create_target_languages')}: <span style="color: red">*</span></h2>
             </div>
             <div id="projFormBottomBlockRight">
                 <h2>{Localisation::getTranslation('common_task_type')}: <span style="color: red">*</span></h2>
