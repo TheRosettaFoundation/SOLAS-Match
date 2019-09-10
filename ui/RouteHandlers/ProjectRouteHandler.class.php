@@ -925,10 +925,9 @@ class ProjectRouteHandler
         if ($post = $app->request()->post()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
                     || empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact'])
-                    || empty($post['sourceCountrySelect']) || empty($post['sourceLanguageSelect']) || empty($post['project_deadline'])
+                    || empty($post['sourceLanguageSelect']) || empty($post['project_deadline'])
                     || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $post['project_deadline'])
                     ) {
-                    // || empty($post['wordCountInput']) || !ctype_digit($post['wordCountInput'])
                 // Note the deadline date validation above is only partial (these checks have been done more rigorously on client size, if that is to be trusted)
                 $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_to_create_project'), htmlspecialchars($post['project_title'], ENT_COMPAT, 'UTF-8')));
             } else {
@@ -940,11 +939,11 @@ class ProjectRouteHandler
                 $project->setDeadline($post['project_deadline']);
                 $project->setImpact($post['project_impact']);
                 $project->setReference($post['project_reference']);
-                // $project->setWordCount($post['wordCountInput']);
                 $project->setWordCount(1); // Code in taskInsertAndUpdate() does not support 0, so use 1 as placeholder
 
-                $sourceLocale->setCountryCode($post['sourceCountrySelect']);
-                $sourceLocale->setLanguageCode($post['sourceLanguageSelect']);
+                list($trommons_source_language_code, $trommons_source_country_code) = $projectDao->convert_selection_to_language_country($post['sourceLanguageSelect']);
+                $sourceLocale->setCountryCode($trommons_source_country_code);
+                $sourceLocale->setLanguageCode($trommons_source_language_code);
                 $project->setSourceLocale($sourceLocale);
 
                 $project->setOrganisationId($org_id);
@@ -1098,34 +1097,13 @@ class ProjectRouteHandler
                                 $matecat_proofreading_task_ids        = array();
                                 $matecat_proofreading_target_languages= array();
                                 $matecat_proofreading_target_countrys = array();
-                                while (!empty($post["target_language_$targetCount"]) && !empty($post["target_country_$targetCount"])) {
-
-                                    if (false && !empty($post["segmentation_$targetCount"])) {
-                                        // Create segmentation task
-                                        $id = $this->addProjectTask(
-                                            $project,
-                                            $post["target_language_$targetCount"],
-                                            $post["target_country_$targetCount"],
-                                            Common\Enums\TaskTypeEnum::SEGMENTATION,
-                                            0,
-                                            $createdTasks,
-                                            $user_id,
-                                            $projectDao,
-                                            $taskDao,
-                                            $app,
-                                            $post);
-                                        if (!$id) {
-                                            $creatingTasksSuccess = false;
-                                            break;
-                                        }
-
-                                    } else {
-                                        // Not a segmentation task, so translation and/or proofreading will be created.
+                                while (!empty($post["target_language_$targetCount"])) {
+                                    list($trommons_language_code, $trommons_country_code) = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
                                         if (!empty($post["translation_$targetCount"])) {
                                             $translation_Task_Id = $this->addProjectTask(
                                                 $project,
-                                                $post["target_language_$targetCount"],
-                                                $post["target_country_$targetCount"],
+                                                $trommons_language_code,
+                                                $trommons_country_code,
                                                 Common\Enums\TaskTypeEnum::TRANSLATION,
                                                 0,
                                                 $createdTasks,
@@ -1139,14 +1117,14 @@ class ProjectRouteHandler
                                                 break;
                                             }
                                             $matecat_translation_task_ids[]         = $translation_Task_Id;
-                                            $matecat_translation_target_languages[] = $post["target_language_$targetCount"];
-                                            $matecat_translation_target_countrys[]  = $post["target_country_$targetCount"];
+                                            $matecat_translation_target_languages[] = $trommons_language_code;
+                                            $matecat_translation_target_countrys[]  = $trommons_country_code;
 
                                             if (!empty($post["proofreading_$targetCount"])) {
                                                 $id = $this->addProjectTask(
                                                     $project,
-                                                    $post["target_language_$targetCount"],
-                                                    $post["target_country_$targetCount"],
+                                                    $trommons_language_code,
+                                                    $trommons_country_code,
                                                     Common\Enums\TaskTypeEnum::PROOFREADING,
                                                     $translation_Task_Id,
                                                     $createdTasks,
@@ -1160,15 +1138,15 @@ class ProjectRouteHandler
                                                     break;
                                                 }
                                                 $matecat_proofreading_task_ids[]         = $id;
-                                                $matecat_proofreading_target_languages[] = $post["target_language_$targetCount"];
-                                                $matecat_proofreading_target_countrys[]  = $post["target_country_$targetCount"];
+                                                $matecat_proofreading_target_languages[] = $trommons_language_code;
+                                                $matecat_proofreading_target_countrys[]  = $trommons_country_code;
                                             }
                                         } elseif (empty($post["translation_$targetCount"]) && !empty($post["proofreading_$targetCount"])) {
                                             // Only a proofreading task to be created
                                             $id = $this->addProjectTask(
                                                 $project,
-                                                $post["target_language_$targetCount"],
-                                                $post["target_country_$targetCount"],
+                                                $trommons_language_code,
+                                                $trommons_country_code,
                                                 Common\Enums\TaskTypeEnum::PROOFREADING,
                                                 0,
                                                 $createdTasks,
@@ -1182,10 +1160,9 @@ class ProjectRouteHandler
                                                 break;
                                             }
                                             $matecat_proofreading_task_ids[]         = $id;
-                                            $matecat_proofreading_target_languages[] = $post["target_language_$targetCount"];
-                                            $matecat_proofreading_target_countrys[]  = $post["target_country_$targetCount"];
+                                            $matecat_proofreading_target_languages[] = $trommons_language_code;
+                                            $matecat_proofreading_target_countrys[]  = $trommons_country_code;
                                         }
-                                    }
                                     $targetCount++;
                                 }
 
@@ -1208,15 +1185,17 @@ class ProjectRouteHandler
                                         error_log('projectCreate calculateProjectDeadlines: ' . $project->getId());
                                         $projectDao->calculateProjectDeadlines($project->getId());
 
-                                        $source_language = $post['sourceLanguageSelect'] . '-' . $post['sourceCountrySelect'];
+                                        $source_language = $trommons_source_language_code . '-' . $trommons_source_country_code;
                                         $target_languages = '';
                                         $targetCount = 0;
-                                        if (!empty($post["target_language_$targetCount"]) && !empty($post["target_country_$targetCount"])) {
-                                            $target_languages = $post["target_language_$targetCount"] . '-' . $post["target_country_$targetCount"];
+                                        if (!empty($post["target_language_$targetCount"])) {
+                                            list($trommons_language_code, $trommons_country_code) = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
+                                            $target_languages = $trommons_language_code . '-' . $trommons_country_code;
                                         }
                                         $targetCount++;
-                                        while (!empty($post["target_language_$targetCount"]) && !empty($post["target_country_$targetCount"])) {
-                                            $target_languages .= ',' . $post["target_language_$targetCount"] . '-' . $post["target_country_$targetCount"];
+                                        while (!empty($post["target_language_$targetCount"])) {
+                                            list($trommons_language_code, $trommons_country_code) = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
+                                            $target_languages .= ',' . $trommons_language_code . '-' . $trommons_country_code;
                                             $targetCount++;
                                         }
                                         // $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, $post['wordCountInput']);
@@ -1434,13 +1413,6 @@ class ProjectRouteHandler
             }
         }
 
-        // $languages = Lib\TemplateHelper::getLanguageList(); // (code) is added to name because of settings
-        // $countries = Lib\TemplateHelper::getCountryList();
-        $langDao = new DAO\LanguageDao();
-        $languages = $langDao->getLanguages();
-        $countryDao = new DAO\CountryDao();
-        $countries = $countryDao->getCountries();
-
         $year_list = array();
         $yeari = (int)date('Y');
         for ($i = 0; $i < 10; $i++) {
@@ -1458,7 +1430,7 @@ class ProjectRouteHandler
         }
 
         $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/ProjectCreate4.js\"></script>";
+        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/ProjectCreate5.js\"></script>";
 
         $app->view()->appendData(array(
             "siteLocation"          => Common\Lib\Settings::get('site.location'),
@@ -1478,8 +1450,7 @@ class ProjectRouteHandler
             'selected_hour'  => 0,
             'minute_list'    => $minute_list,
             'selected_minute'=> 0,
-            'languages'      => $languages,
-            'countries'      => $countries,
+            'languages'      => $projectDao->generate_language_selection(),
             'showRestrictTask' => $taskDao->organisationHasQualifiedBadge($org_id),
             'isSiteAdmin'    => $adminDao->isSiteAdmin($user_id),
             'sesskey'        => $sesskey,
