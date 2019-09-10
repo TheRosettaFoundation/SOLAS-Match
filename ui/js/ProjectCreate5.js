@@ -206,12 +206,6 @@ function addMoreTargetLanguages()
     targetLanguageSelect.id   = "target_language_" + targetCount;
     targetLanguageSelect.innerHTML = document.getElementById("template_language_options").innerHTML;
 
-    var targetCountrySelect = document.createElement("select");
-    targetCountrySelect.style.width = "400px";
-    targetCountrySelect.name = "target_country_" + targetCount;
-    targetCountrySelect.id   = "target_country_" + targetCount;
-    targetCountrySelect.innerHTML = document.getElementById("template_country_options").innerHTML;
-
     var taskTypesRow = document.createElement("div"); // Sub-div for task type checkboxes, holds individual divs for each checkox
     taskTypesRow.id = "task-type-checkboxes";
     taskTypesRow.className = "pull-left width-50";
@@ -251,7 +245,6 @@ function addMoreTargetLanguages()
 
     // Put the Select Elements into their div
     targetLanguageCell.appendChild(targetLanguageSelect);
-    targetLanguageCell.appendChild(targetCountrySelect);
 
     // Put the Select Elements' div into the main div
     targetLanguageRow.appendChild(targetLanguageCell);
@@ -373,8 +366,6 @@ function validateForm()
   var sourceLocale = new Object();
   sourceLocale.languageName = $("#sourceLanguageSelect option:selected").text();
   sourceLocale.languageCode = document.getElementById("sourceLanguageSelect").value;
-  sourceLocale.countryName  = $("#sourceCountrySelect option:selected").text();
-  sourceLocale.countryCode  = document.getElementById("sourceCountrySelect").value;
   project.sourceLocale = sourceLocale;
 
   project.tag = [];
@@ -554,20 +545,14 @@ function validateLocalValues()
 
     targetLanguageCode    [i] = document.getElementById("target_language_" + i).value;
     targetLanguageLanguage[i] = $("#target_language_" + i + " option:selected").text();
-    targetCountryCode     [i] = document.getElementById("target_country_" + i).value;
-    targetCountryCountry  [i] = $("#target_country_" + i + " option:selected").text();
 
     if (targetLanguageCode[i] == 0) {
       project_create_set_target_language = parameters.getTranslation("project_create_set_target_language");
       success = false;
     }
-    if (targetCountryCode [i] == 0) {
-      project_create_set_target_country  = parameters.getTranslation("project_create_set_target_country");
-      success = false;
-    }
 
     // If a duplicate locale is encountered, display error message
-    var encounteredLocale = targetLanguageCode[i] + "_" + targetCountryCode[i];
+    var encounteredLocale = targetLanguageCode[i].replace("#", "");
     if ($.inArray(encounteredLocale, encounteredLocales) >= 0) {
       duplicateLocale = parameters.getTranslation("project_create_28");
       success = false;
