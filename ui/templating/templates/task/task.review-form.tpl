@@ -14,6 +14,7 @@
 {/if}
 
 {if $reviewedTask->getId() != null && (empty($review) || $review->isNewReviewType())}
+<p>Star rating of 1-5, where 1 = "Poor", 2 = "Needs work", 3 = "Satisfactory", 4 = "Good" and 5 = "Excellent"</p>
 
 {if isset($review)}
     {assign var='value' value=$review->getAccuracy()}
@@ -113,6 +114,7 @@
 {/if}
 
 {else}
+<p>{Localisation::getTranslation('task_review_form_rating')}</p>
 
 {if isset($review)}
     {assign var='value' value=$review->getCorrections()}
@@ -125,7 +127,7 @@
     {Localisation::getTranslation('task_review_form_corrections')} 
     <small>{Localisation::getTranslation('task_review_form_2')}</small>
 </h3>
-<p><i>{Localisation::getTranslation("task_review_form_rating")}</i></p>
+<p><i>{Localisation::getTranslation('task_review_form_rating')}</i></p>
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_corrections_{$id}" {$readonly}>
 </div>
