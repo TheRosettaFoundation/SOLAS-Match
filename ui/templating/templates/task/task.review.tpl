@@ -17,8 +17,7 @@ Tweet</a>
 
 {if $action === Localisation::getTranslation('task_review_translated')}
 <p>
-    {Localisation::getTranslation('task_review_2')}
-    {$action} {Localisation::getTranslation('task_review_3')}
+    Please provide a rating for the source file(s) you just translated based on the following criteria:
 </p>
 {else}
 <p>
