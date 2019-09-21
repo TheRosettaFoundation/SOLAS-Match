@@ -16,8 +16,9 @@
 
 <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-    <th width="17%">Email</th>
-    <th width="17%">Name</th>
+    <th width="14%">Email</th>
+    <th width="14%">Name</th>
+    <th width="6%">Pair</th>
     <th width="6%">Accuracy</th>
     <th width="6%">Fluency</th>
     <th width="6%">Terminology</th>
@@ -37,6 +38,7 @@
     <tr>
       <td>{$user_row['email']}</td>
       <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['first_name'])} {TemplateHelper::uiCleanseHTML($user_row['last_name'])}</a></td>
+      <td>{$user_row['language_pair']}</td>
       <td>{$user_row['accuracy']}</td>
       <td>{$user_row['fluency']}</td>
       <td>{$user_row['terminology']}</td>
