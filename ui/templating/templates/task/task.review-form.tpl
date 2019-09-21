@@ -25,9 +25,8 @@
 {/if}
 <h3>
     Accuracy
-    <small>Does the translation communicate the meaning of the original text correctly and precisely? Does it add or omit any information?</small>
 </h3>
-<p><i>Star rating of 1-5, where 1 = "Poor", 2 = "Needs work", 3 = "Satisfactory", 4 = "Good" and 5 = "Excellent"</i></p>
+<p><i>Does the translation communicate the meaning of the original text correctly and precisely? Does it add or omit any information?</i></p>
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_accuracy_{$id}" {$readonly}>
 </div>
@@ -41,9 +40,8 @@
 {/if}
 <h3>
     Fluency
-    <small>Does the translation have standard (correct and generally accepted) spelling, punctuation, and grammar?</small>
 </h3>
-<p><i>Star rating of 1-5, where 1 = "Poor", 2 = "Needs work", 3 = "Satisfactory", 4 = "Good" and 5 = "Excellent"</i></p>
+<p><i>Does the translation have standard (correct and generally accepted) spelling, punctuation, and grammar?</i></p>
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_fluency_{$id}" {$readonly}>
 </div>
@@ -57,9 +55,8 @@
 {/if}
 <h3>
     Terminology
-    <small>Are the keywords and phrases in the translation (especially humanitarian terms) translated accurately? Is the same translation used for each term throughout the text?</small>
 </h3>
-<p><i>Star rating of 1-5, where 1 = "Poor", 2 = "Needs work", 3 = "Satisfactory", 4 = "Good" and 5 = "Excellent"</i></p>
+<p><i>Are the keywords and phrases in the translation (especially humanitarian terms) translated accurately? Is the same translation used for each term throughout the text?</i></p>
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_terminology_{$id}" {$readonly}>
 </div>
@@ -73,9 +70,8 @@
 {/if}
 <h3>
     Style
-    <small>Does the translation sound idiomatic (natural) when you read it? Is the style appropriate for the readers (not too formal or too informal)?</small>
 </h3>
-<p><i>Star rating of 1-5, where 1 = "Poor", 2 = "Needs work", 3 = "Satisfactory", 4 = "Good" and 5 = "Excellent"</i></p>
+<p><i>Does the translation sound idiomatic (natural) when you read it? Is the style appropriate for the readers (not too formal or too informal)?</i></p>
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_style_{$id}" {$readonly}>
 </div>
@@ -89,9 +85,8 @@
 {/if}
 <h3>
     Design
-    <small>Is the translation formatted appropriately? If it contains tables, images, or other visual elements, are those translated and easy to read and follow?</small>
 </h3>
-<p><i>Star rating of 1-5, where 1 = "Poor", 2 = "Needs work", 3 = "Satisfactory", 4 = "Good" and 5 = "Excellent"</i></p>
+<p><i>Is the translation formatted appropriately? If it contains tables, images, or other visual elements, are those translated and easy to read and follow?</i></p>
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_design_{$id}" {$readonly}>
 </div>
@@ -125,9 +120,8 @@
 {/if}
 <h3>
     {Localisation::getTranslation('task_review_form_corrections')} 
-    <small>{Localisation::getTranslation('task_review_form_2')}</small>
 </h3>
-<p><i>{Localisation::getTranslation('task_review_form_rating')}</i></p>
+<p><i>{Localisation::getTranslation('task_review_form_2')}</i></p>
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_corrections_{$id}" {$readonly}>
 </div>
@@ -141,9 +135,8 @@
 {/if}
 <h3>
     {Localisation::getTranslation('task_review_form_grammar')} 
-    <small>{Localisation::getTranslation('task_review_form_3')}</small>
 </h3>
-<p><i>{Localisation::getTranslation('task_review_form_rating')}</i></p>
+<p><i>{Localisation::getTranslation('task_review_form_3')}</i></p>
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_grammar_{$id}" {$readonly}>
 </div>
@@ -157,9 +150,8 @@
 {/if}
 <h3>
     {Localisation::getTranslation('task_review_form_spelling')}
-    <small>{Localisation::getTranslation('task_review_form_4')}</small>
 </h3>
-<p><i>{Localisation::getTranslation('task_review_form_rating')}</i></p>
+<p><i>{Localisation::getTranslation('task_review_form_4')}</i></p>
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_spelling_{$id}" {$readonly}>
 </div>
@@ -173,9 +165,8 @@
 {/if}
 <h3>
     {Localisation::getTranslation('task_review_form_consistency')}
-    <small>{Localisation::getTranslation('task_review_form_5')}</small>
 </h3>
-<p><i>{Localisation::getTranslation('task_review_form_rating')}</i></p>
+<p><i>{Localisation::getTranslation('task_review_form_5')}</i></p>
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_consistency_{$id}" {$readonly}>
 </div>
