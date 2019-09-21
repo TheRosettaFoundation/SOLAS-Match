@@ -20,7 +20,7 @@ Tweet</a>
 </p>
 
 {if isset($formAction)}
-    <form class="well" method="post" action="{$formAction}"  onsubmit="createHiddenFields()" id="TaskReviewForm" accept-charset="utf-8">
+    <form class="well" method="post" action="{$formAction}"  onsubmit="return areRatingsSetThenCreateHiddenFields()" id="TaskReviewForm" accept-charset="utf-8">
 {else}
     <div class="well">
 {/if}

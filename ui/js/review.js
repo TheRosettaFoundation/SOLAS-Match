@@ -1,6 +1,6 @@
 <script type="text/javascript">
 
-    function createHiddenFields()
+    function areRatingsSetThenCreateHiddenFields()
     {
         for (var i = 0; i < taskIds.length; i++) {
             var form = $("#TaskReviewForm");
