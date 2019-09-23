@@ -15,6 +15,14 @@ alert(
 ((typeof document.forms["TaskReviewForm"]["submitReview"] === "undefined") ? "submitReview undefined, " : "submitReview Defined, ") +
 ((typeof document.forms["TaskReviewForm"]["skip"] === "undefined") ? "skip undefined, " : "skip Defined, ")
 );
+alert(
+"[[[" +
+document.forms["TaskReviewForm"]["comment_8799"].value +
+document.forms["TaskReviewForm"]["submitReview"].value +
+document.forms["TaskReviewForm"]["skip"].value +
+"]]]"
+);
+
 return false;
 //TEST
         for (i = 0; i < taskIds.length; i++) {
