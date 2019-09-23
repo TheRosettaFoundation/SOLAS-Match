@@ -9,7 +9,18 @@
         var i;
 
 //TEST
-var form = $("#TaskReviewForm");
+var buttonpressed = "skip Not Pressed";
+
+$(document).ready(documentReady);
+
+function documentReady()
+{
+$("#skipbutton").click(function() {
+    buttonpressed = "skip Is Pressed";
+});
+}
+
+
 alert(
 ((typeof document.forms["TaskReviewForm"]["comment_8799"] === "undefined") ? "8799 undefined, " : "8799 Defined, ") +
 ((typeof document.forms["TaskReviewForm"]["submitReview"] === "undefined") ? "submitReview undefined, " : "submitReview Defined, ") +
@@ -22,6 +33,8 @@ document.forms["TaskReviewForm"]["submitReview"].value +
 document.forms["TaskReviewForm"]["skip"].value +
 "]]]"
 );
+
+alert("[[[" + buttonpressed + "]]]");
 
 return false;
 //TEST
