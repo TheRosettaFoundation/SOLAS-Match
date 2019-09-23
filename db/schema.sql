@@ -6797,6 +6797,7 @@ BEGIN
         u.email,
         IFNULL(i.`first-name`, '') AS first_name,
         IFNULL(i.`last-name`, '') AS last_name,
+        CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) AS language_pair,
         IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.corrections, 0))/SUM(consistency<10), 1), '') AS cor,
         IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.grammar,     0))/SUM(consistency<10), 1), '') AS gram,
         IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.spelling,    0))/SUM(consistency<10), 1), '') AS spell,
@@ -6811,12 +6812,16 @@ BEGIN
         COUNT(*)             AS num
     FROM TaskReviews            tr
     JOIN Tasks                   t  ON tr.task_id=t.id
+    JOIN Languages              l1 ON t.`language_id-source`=l1.id
+    JOIN Languages              l2 ON t.`language_id-target`=l2.id
+    JOIN Countries              c1 ON t.`country_id-source`=c1.id
+    JOIN Countries              c2 ON t.`country_id-target`=c2.id
     JOIN TaskClaims             tc  ON tr.task_id=tc.task_id
     JOIN Users                   u  ON tc.user_id=u.id
     JOIN UserPersonalInformation i ON u.id=i.user_id
     WHERE t.`task-status_id`=4
-    GROUP BY u.id
-    ORDER BY u.email;
+    GROUP BY u.id, l1.code, c1.code, l2.code, c2.code
+    ORDER BY u.email, l1.code, c1.code, l2.code, c2.code;
 END//
 DELIMITER ;
 
