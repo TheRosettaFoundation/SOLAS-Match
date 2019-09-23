@@ -95,16 +95,16 @@
 {if !is_null($review->getComment())}
 <h3>
     General feedback
-    <small>You can use the space below to leave comments, suggestions, or congratulations for your colleague on his/her translation. Please remember to be considerate and constructive in your feedback. Use specific examples whenever possible.</small>
 </h3>
+    <p><i>You can use the space below to leave comments, suggestions, or congratulations for your colleague on his/her translation. Please remember to be considerate and constructive in your feedback. Use specific examples whenever possible.</i></p>
     <p>{TemplateHelper::uiCleanseHTML($review->getComment())}</p>
 {/if}
 {else}
 
 <h3>
     General feedback
-    <small>You can use the space below to leave comments, suggestions, or congratulations for your colleague on his/her translation. Please remember to be considerate and constructive in your feedback. Use specific examples whenever possible.</small>
 </h3>
+    <p><i>You can use the space below to leave comments, suggestions, or congratulations for your colleague on his/her translation. Please remember to be considerate and constructive in your feedback. Use specific examples whenever possible.</i></p>
     <textarea name="comment_{$id}" cols='40' rows='10' style="width: 80%"></textarea>
 {/if}
 
@@ -175,16 +175,16 @@
 {if !is_null($review->getComment())}
 <h3>
     {Localisation::getTranslation('task_review_form_comment')}
-    <small>{Localisation::getTranslation('task_review_form_6')}</small>
 </h3>
+    <p><i>{Localisation::getTranslation('task_review_form_6')}</i></p>
     <p>{TemplateHelper::uiCleanseHTML($review->getComment())}</p>
 {/if}
 {else}
 
 <h3>
     {Localisation::getTranslation('task_review_form_comment')}
-    <small>{Localisation::getTranslation('task_review_form_6')}</small>
 </h3>
+    <p><i>{Localisation::getTranslation('task_review_form_6')}</i></p>
     <textarea name="comment_{$id}" cols='40' rows='10' style="width: 80%"></textarea>
 {/if}
 
