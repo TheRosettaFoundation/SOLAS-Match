@@ -16,9 +16,9 @@
 
 <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-    <th width="15%">Email</th>
+    <th width="14%">Email</th>
     <th width="15%">Name</th>
-    <th width="4%">Pair</th>
+    <th width="5%">Pair</th>
     <th width="6%">Accuracy</th>
     <th width="6%">Fluency</th>
     <th width="6%">Terminology</th>
