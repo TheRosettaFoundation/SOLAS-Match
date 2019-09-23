@@ -35,7 +35,7 @@ Tweet</a>
                 <i class="icon-upload icon-white"></i> {Localisation::getTranslation('task_review_form_submit_review')}
             </button>
         {/if}
-        <button class="btn btn-inverse" type="submit" name="skip">
+        <button class="btn btn-inverse" type="submit" name="skip" id="skipbutton">
             <i class="icon-circle-arrow-right icon-white"></i> {Localisation::getTranslation('task_review_form_skip')}
         </button>
     {/if}
