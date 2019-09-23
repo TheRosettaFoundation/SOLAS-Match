@@ -1,9 +1,9 @@
 <script type="text/javascript">
-    var buttonpressed = "skip Not Pressed";
+    var skipButtonPressed = false;
 
     function noteSkipClicked()
     {
-        buttonpressed = "skip Is Pressed";
+        skipButtonPressed = true;
     }
 
     function areRatingsSetThenCreateHiddenFields()
@@ -15,7 +15,11 @@
         var i;
 
 //TEST
-alert("[[[" + buttonpressed + "]]]");
+        if (skipButtonPressed) {
+            alert("[[[skipButtonPressed]]]");
+            return true;
+        }
+        alert("[[[NOT skipButtonPressed]]]");
 
 return false;
 //TEST
