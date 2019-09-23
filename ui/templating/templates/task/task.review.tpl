@@ -43,7 +43,7 @@ How would you rate the translation in each of the following categories?
 {/if}
 
 {if isset($formAction)}
-    <form class="well" method="post" action="{$formAction}"  onsubmit="return areRatingsSetThenCreateHiddenFields()" id="TaskReviewForm" accept-charset="utf-8">
+    <form class="well" method="post" action="{$formAction}"  onsubmit="return areRatingsSetThenCreateHiddenFields()" id="TaskReviewForm" name="TaskReviewForm" accept-charset="utf-8">
 {else}
     <div class="well">
 {/if}
