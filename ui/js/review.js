@@ -9,6 +9,7 @@
         var i;
 
 //TEST
+var form = $("#TaskReviewForm");
 alert(
 ((typeof form.comment_29417.value === "undefined") ? "29417 undefined, " : "29417 Defined, ") +
 ((typeof form.comment_29418.value === "undefined") ? "29418 undefined, " : "29418 Defined, ") +
