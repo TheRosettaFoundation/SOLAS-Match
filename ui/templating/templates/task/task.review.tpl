@@ -44,6 +44,7 @@ How would you rate the translation in each of the following categories?
 
 {if isset($formAction)}
     <form class="well" method="post" action="{$formAction}"  onsubmit="return areRatingsSetThenCreateHiddenFields()" id="TaskReviewForm" accept-charset="utf-8">
+        <div id="placeholder_for_errors_1"></div>
 {else}
     <div class="well">
 {/if}
@@ -59,6 +60,7 @@ How would you rate the translation in each of the following categories?
 {/foreach}
 
     {if isset($formAction)}
+        <div id="placeholder_for_errors_2"></div>
       
         {if !isset($review)}
             <button class="btn btn-primary" type="submit" name="submitReview">

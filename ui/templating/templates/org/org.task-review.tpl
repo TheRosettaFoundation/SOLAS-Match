@@ -21,6 +21,7 @@ Tweet</a>
 
 {if isset($formAction)}
     <form class="well" method="post" action="{$formAction}"  onsubmit="return areRatingsSetThenCreateHiddenFields()" id="TaskReviewForm" accept-charset="utf-8">
+        <div id="placeholder_for_errors_1"></div>
 {else}
     <div class="well">
 {/if}
@@ -29,6 +30,7 @@ Tweet</a>
 {include file="task/task.review-form.tpl"}
 
  {if isset($formAction)}
+        <div id="placeholder_for_errors_2"></div>
       
         {if !isset($review)}
             <button class="btn btn-primary" type="submit" name="submitReview">
