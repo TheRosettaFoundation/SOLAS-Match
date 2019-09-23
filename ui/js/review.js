@@ -11,9 +11,9 @@
 //TEST
 var form = $("#TaskReviewForm");
 alert(
-((typeof form.comment_8799 === "undefined") ? "8799 undefined, " : "8799 Defined, ") +
-((typeof form.submitReview === "undefined") ? "submitReview undefined, " : "submitReview Defined, ") +
-((typeof form.skip === "undefined") ? "skip undefined, " : "skip Defined, ")
+((typeof form["comment_8799"] === "undefined") ? "8799 undefined, " : "8799 Defined, ") +
+((typeof form["submitReview"] === "undefined") ? "submitReview undefined, " : "submitReview Defined, ") +
+((typeof form["skip"] === "undefined") ? "skip undefined, " : "skip Defined, ")
 );
 return false;
 //TEST
