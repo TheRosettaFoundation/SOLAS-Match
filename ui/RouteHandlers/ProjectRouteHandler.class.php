@@ -1543,6 +1543,10 @@ class ProjectRouteHandler
             $task->setPublished(0);
         }
 
+        if (!empty($post['testing_center']) && $taskType == Common\Enums\TaskTypeEnum::TRANSLATION) {
+            $task->setPublished(0);
+        }
+
         try {
             error_log("addProjectTask");
             $newTask = $taskDao->createTask($task);
