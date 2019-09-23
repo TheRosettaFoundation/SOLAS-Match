@@ -11,10 +11,9 @@
 //TEST
 var form = $("#TaskReviewForm");
 alert(
-((typeof form.comment_29417 === "undefined") ? "29417 undefined, " : "29417 Defined, ") +
-((typeof form.comment_29418 === "undefined") ? "29418 undefined, " : "29418 Defined, ") +
-((typeof form.submitReview === "undefined") ? "submitReview undefned, " : "submitReview Defined, ") +
-((typeof form.skip === "undefined") ? "skip undefned, " : "skip Defined, ")
+((typeof form.comment_8799 === "undefined") ? "8799 undefined, " : "8799 Defined, ") +
+((typeof form.submitReview === "undefined") ? "submitReview undefined, " : "submitReview Defined, ") +
+((typeof form.skip === "undefined") ? "skip undefined, " : "skip Defined, ")
 );
 return false;
 //TEST
