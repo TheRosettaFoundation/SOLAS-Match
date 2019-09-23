@@ -14,15 +14,10 @@
         var consRate;
         var i;
 
-//TEST
         if (skipButtonPressed) {
-            alert("[[[skipButtonPressed]]]");
             return true;
         }
-        alert("[[[NOT skipButtonPressed]]]");
 
-return false;
-//TEST
         for (i = 0; i < taskIds.length; i++) {
             try {
                 corrRate = $("#rateit_corrections_" + taskIds[i].toString()).rateit('value');
