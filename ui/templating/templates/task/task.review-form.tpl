@@ -30,7 +30,7 @@
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_accuracy_{$id}" {$readonly}>
 </div>
-<br />
+<br /><br />
 
 {if isset($review)}
     {assign var='value' value=$review->getFluency()}
@@ -46,7 +46,7 @@
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_fluency_{$id}" {$readonly}>
 </div>
-<br />
+<br /><br />
 
 {if isset($review)}
     {assign var='value' value=$review->getTerminology()}
@@ -62,7 +62,7 @@
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_terminology_{$id}" {$readonly}>
 </div>
-<br />
+<br /><br />
 
 {if isset($review)}
     {assign var='value' value=$review->getStyle()}
@@ -78,7 +78,7 @@
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_style_{$id}" {$readonly}>
 </div>
-<br />
+<br /><br />
 
 {if isset($review)}
     {assign var='value' value=$review->getDesign()}
@@ -94,7 +94,7 @@
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_design_{$id}" {$readonly}>
 </div>
-<br />
+<br /><br />
 
 {if isset($review)}
 {if !is_null($review->getComment())}
@@ -130,7 +130,7 @@
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_corrections_{$id}" {$readonly}>
 </div>
-<br />
+<br /><br />
 
 {if isset($review)}
     {assign var='value' value=$review->getGrammar()}
@@ -146,7 +146,7 @@
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_grammar_{$id}" {$readonly}>
 </div>
-<br />
+<br /><br />
 
 {if isset($review)}
     {assign var='value' value=$review->getSpelling()}
@@ -162,7 +162,7 @@
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_spelling_{$id}" {$readonly}>
 </div>
-<br />
+<br /><br />
 
 {if isset($review)}
     {assign var='value' value=$review->getConsistency()}
@@ -178,7 +178,7 @@
 <div class="rateit" data-rateit-value="{$value}" data-rateit-step="1" data-rateit-ispreset=true 
         data-rateit-resetable=false id="rateit_consistency_{$id}" {$readonly}>
 </div>
-<br />
+<br /><br />
 
 {if isset($review)}
 {if !is_null($review->getComment())}
