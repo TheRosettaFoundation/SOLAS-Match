@@ -6477,6 +6477,102 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `isUserRestrictedFromTaskButAllowTranslatorToDownload`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserRestrictedFromTaskButAllowTranslatorToDownload`(IN `taskID` INT, IN `userID` INT)
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM Admins
+        WHERE
+            user_id=userID AND
+            organisation_id IS NULL
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF EXISTS (
+        SELECT 1
+        FROM Tasks                t
+        JOIN Projects             p ON t.project_id=p.id
+        JOIN OrganisationMembers om ON p.organisation_id=om.organisation_id
+        WHERE
+            t.id=taskID AND
+            om.user_id=userID
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF EXISTS (
+        SELECT 1
+        FROM Tasks                t
+        JOIN Projects             p ON t.project_id=p.id
+        JOIN Admins              oa ON p.organisation_id=oa.organisation_id
+        WHERE
+            t.id=taskID AND
+            oa.user_id=userID
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF EXISTS (
+        SELECT t.id
+        FROM Tasks            t
+        JOIN RestrictedTasks  r ON t.id=r.restricted_task_id
+        JOIN Projects         p ON t.project_id=p.id
+        JOIN Badges           b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+        LEFT JOIN UserBadges ub ON b.id=ub.badge_id AND ub.user_id=userID
+        WHERE
+            t.id=taskID AND
+            ub.badge_id IS NULL
+    ) THEN
+        SELECT 1 AS result;
+
+    ELSEIF EXISTS (
+        SELECT 1
+        FROM RequiredTaskQualificationLevels tq
+        WHERE
+            tq.task_id=taskID AND
+            tq.required_qualification_level=1
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF EXISTS (
+        SELECT 1
+        FROM Tasks  t
+        JOIN Tasks t2 ON t.project_id=t2.project_id AND
+                         t.`language_id-source`=t2.`language_id-source` AND
+                         t.`language_id-target`=t2.`language_id-target` AND
+                         t.`country_id-source` =t2.`country_id-source`  AND
+                         t.`country_id-target` =t2.`country_id-target`  AND
+                         t2.`task-type_id`=2
+        JOIN      TaskClaims tcl ON tcl.user_id=userID AND t2.id=tcl.task_id
+        LEFT JOIN TaskChunks  tc ON t.id=tc.task_id
+        WHERE
+            t.id=taskID AND
+            t.`task-type_id`=3 AND
+            tc.task_id IS NULL
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF NOT EXISTS (
+        SELECT t.id
+        FROM Tasks t
+        JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
+        JOIN UserQualifiedPairs uqp ON
+            uqp.user_id=userID AND
+            t.`language_id-source`=uqp.language_id_source AND
+            t.`language_id-target`=uqp.language_id_target
+        WHERE
+            t.id=taskID AND
+            tq.required_qualification_level<=uqp.qualification_level
+    ) THEN
+        SELECT 1 AS result;
+
+    ELSE
+    SELECT 0 AS result;
+
+    END IF;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `isUserRestrictedFromProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserRestrictedFromProject`(IN `projectID` INT, IN `userID` INT)
