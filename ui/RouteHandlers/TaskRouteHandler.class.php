@@ -760,7 +760,7 @@ class TaskRouteHandler
         $taskDao = new DAO\TaskDao();
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
-        if (is_null($user_id) || $taskDao->isUserRestrictedFromTask($taskId, $user_id)) {
+        if (is_null($user_id) || $taskDao->isUserRestrictedFromTaskButAllowTranslatorToDownload($taskId, $user_id)) {
             $app->flash('error', "You are not authorized to view this page");
             $app->redirect($app->urlFor('home'));
         }
