@@ -6821,6 +6821,11 @@ BEGIN
             WHEN t.`task-type_id`=4 THEN 'Desegmentation'
         END
         AS task_type_text,
+        CASE
+            WHEN tq.required_qualification_level=1 THEN ''
+            WHEN tq.required_qualification_level=2 THEN 'Verified'
+            WHEN tq.required_qualification_level=3 THEN 'Senior'
+        END AS level,
         IFNULL(tv.user_id, '') AS creator_id,
         u2.email AS creator_email,
         IFNULL(lp.matecat_langpair,        '') AS matecat_langpair_or_blank,
@@ -6838,6 +6843,7 @@ BEGIN
     JOIN Tasks             t ON p.id=t.project_id
     JOIN Languages   l ON t.`language_id-source`=l.id
     JOIN Languages  l2 ON t.`language_id-target`=l2.id
+    JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
     LEFT JOIN MatecatLanguagePairs lp ON t.id=lp.task_id
     LEFT JOIN TaskFileVersions tv ON t.id=tv.task_id AND tv.version_id=0
     LEFT JOIN Users            u2 ON tv.user_id=u2.id
