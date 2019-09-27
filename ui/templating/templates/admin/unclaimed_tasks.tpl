@@ -30,13 +30,14 @@
 <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
     <th width="16%">Partner</th>
-    <th width="17%">Task Title</th>
+    <th width="15%">Task Title</th>
     <th width="7%">Words</th>
     <th width="10%">Task Type</th>
     <th width="12%">Creator Email</th>
-    <th width="15%">Created Time</th>
-    <th width="15%">Status (Click to search for translators)</th>
-    <th width="8%">URL</th>
+    <th width="13%">Created Time</th>
+    <th width="14%">Status (Click to search for translators)</th>
+    <th width="7%">URL</th>
+    <th width="6%">Level</th>
   </thead>
 
   <tbody>
@@ -55,6 +56,7 @@
         <td><a href="{urlFor name="task-search_translators" options="task_id.{$user_row['task_id']}"}" target="_blank">{$user_row['status']}</a></td>
       {/if}
       <td>{if !empty($user_row['matecat_url'])}<a href="{$user_row['matecat_url']}" target="_blank">{$user_row['matecat_langpair_or_blank']}</a>{else}{$user_row['language_pair']}{/if}</td>
+      <td>{$user_row['level']}</td>
     </tr>
 
   {/foreach}
