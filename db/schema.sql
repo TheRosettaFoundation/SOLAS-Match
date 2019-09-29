@@ -1310,6 +1310,13 @@ CREATE TABLE IF NOT EXISTS `UserTaskStreamNotifications` (
   CONSTRAINT `FK_user_task_stream_notification_interval1` FOREIGN KEY (`interval`) REFERENCES `NotificationIntervals` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `SpecialTranslators` (
+    user_id INT (10) UNSIGNED NOT NULL,
+    type    INT (10) UNSIGNED DEFAULT 0,
+    KEY FK_special_user_id (user_id),
+    CONSTRAINT FK_special_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 -- Data exporting was unselected.
 
 
