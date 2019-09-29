@@ -1093,8 +1093,9 @@ EOD;
                     $userDao->updatePersonalInfo($user_id, $userPersonalInfo);
 
                     if (isset($post['interval'])) {
-                        if ($post['interval'] == 0) {
+                        if ($post['interval'] == 0 || $post['interval'] == 10) {
                             $userDao->removeTaskStreamNotification($user_id);
+                            if ($isSiteAdmin) $userDao->set_special_translator($user_id, 1);
                         } else {
                             $notifData = new Common\Protobufs\Models\UserTaskStreamNotification();
                             $notifData->setUserId($user_id);
@@ -1105,6 +1106,7 @@ EOD;
                             //    $notifData->setStrict(false);
                             //}
                             $userDao->requestTaskStreamNotification($notifData);
+                            if ($isSiteAdmin) $userDao->set_special_translator($user_id, 0);
                         }
                     }
 
@@ -1161,6 +1163,7 @@ EOD;
             'translator'  => $translator,
             'proofreader' => $proofreader,
             'interpreter' => $interpreter,
+            'in_kind'     => $userDao->get_special_translator($user_id),
             'extra_scripts' => $extra_scripts,
             'sesskey'       => $sesskey,
         ));

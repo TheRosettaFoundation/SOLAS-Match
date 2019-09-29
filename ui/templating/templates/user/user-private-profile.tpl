@@ -206,7 +206,14 @@
                             >
                                 {Localisation::getTranslation('user_task_stream_notification_edit_monthly')}
                             </option>
+
+                            {if $isSiteAdmin}
+                            <option value="10">
+                                Set this volunteer as in-kind sponsor
+                            </option>
+                            {/if}
                         </select>
+                        {if $in_kind}&nbsp;In-kind Sponsor{/if}
                     </p>
                     <hr/>
                 </td>

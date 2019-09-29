@@ -1310,6 +1310,13 @@ CREATE TABLE IF NOT EXISTS `UserTaskStreamNotifications` (
   CONSTRAINT `FK_user_task_stream_notification_interval1` FOREIGN KEY (`interval`) REFERENCES `NotificationIntervals` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `SpecialTranslators` (
+    user_id INT (10) UNSIGNED NOT NULL,
+    type    INT (10) UNSIGNED DEFAULT 0,
+    PRIMARY KEY FK_special_user_id (user_id),
+    CONSTRAINT FK_special_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 -- Data exporting was unselected.
 
 
@@ -3672,6 +3679,21 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `set_special_translator`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_special_translator`(IN userID INT, IN typeID INT)
+BEGIN
+    REPLACE INTO SpecialTranslators (user_id, type) VALUES (userID, typeID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_special_translator`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_special_translator`(IN `userID` INT)
+BEGIN
+    SELECT * FROM SpecialTranslators WHERE user_id=userID;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.getUserTaskScore
 DROP PROCEDURE IF EXISTS `getUserTaskScore`;
@@ -7899,6 +7921,7 @@ BEGIN
     LEFT JOIN Countries                  cn ON u.country_id=cn.id
     LEFT JOIN UserPersonalInformation     i ON u.id=i.user_id
     LEFT JOIN TaskInviteSentToUsers     tis ON u.id=tis.user_id AND tis.task_id=taskID
+    LEFT JOIN SpecialTranslators     st ON u.id=st.user_id
     LEFT JOIN Admins                      a ON uqp.user_id=a.user_id
     LEFT JOIN OrganisationMembers         o ON uqp.user_id=o.user_id
     LEFT JOIN Badges                      b ON p.organisation_id=b.owner_id AND b.title='Qualified'
@@ -7906,6 +7929,7 @@ BEGIN
     WHERE
         t.id=taskID AND
         tis.user_id IS NULL AND
+        (st.user_id IS NULL OR st.type=0) AND
         a.user_id IS NULL AND
         o.user_id IS NULL AND
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tbl WHERE tbl.user_id=uqp.user_id AND tbl.task_id=t.id) AND
