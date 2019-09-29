@@ -7921,6 +7921,7 @@ BEGIN
     LEFT JOIN Countries                  cn ON u.country_id=cn.id
     LEFT JOIN UserPersonalInformation     i ON u.id=i.user_id
     LEFT JOIN TaskInviteSentToUsers     tis ON u.id=tis.user_id AND tis.task_id=taskID
+    LEFT JOIN SpecialTranslators     st ON u.id=st.user_id
     LEFT JOIN Admins                      a ON uqp.user_id=a.user_id
     LEFT JOIN OrganisationMembers         o ON uqp.user_id=o.user_id
     LEFT JOIN Badges                      b ON p.organisation_id=b.owner_id AND b.title='Qualified'
@@ -7928,6 +7929,7 @@ BEGIN
     WHERE
         t.id=taskID AND
         tis.user_id IS NULL AND
+        (st.user_id IS NULL OR st.type=0) AND
         a.user_id IS NULL AND
         o.user_id IS NULL AND
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tbl WHERE tbl.user_id=uqp.user_id AND tbl.task_id=t.id) AND
