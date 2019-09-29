@@ -1095,7 +1095,7 @@ EOD;
                     if (isset($post['interval'])) {
                         if ($post['interval'] == 0 || $post['interval'] == 10) {
                             $userDao->removeTaskStreamNotification($user_id);
-                            if ($isSiteAdmin) $userDao->set_special_translator($user_id, 1);
+                            if ($post['interval'] == 10 && $isSiteAdmin) $userDao->set_special_translator($user_id, 1);
                         } else {
                             $notifData = new Common\Protobufs\Models\UserTaskStreamNotification();
                             $notifData->setUserId($user_id);
