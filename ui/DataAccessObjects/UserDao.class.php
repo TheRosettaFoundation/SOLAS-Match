@@ -396,6 +396,21 @@ class UserDao extends BaseDao
         return $ret;
     }
 
+    public function set_special_translator($user_id, $type)
+    {
+        LibAPI\PDOWrapper::call('set_special_translator', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($type));
+    }
+
+    public function get_special_translator($user_id)
+    {
+        $type = 0;
+        $result = LibAPI\PDOWrapper::call('get_special_translator', LibAPI\PDOWrapper::cleanse($user_id));
+        if (!empty($result)) {
+            $type = $result[0]['type'];
+        }
+        return $type;
+    }
+
     public function requestTaskStreamNotification($notifData)
     {
         $ret = null;
