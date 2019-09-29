@@ -1313,7 +1313,7 @@ CREATE TABLE IF NOT EXISTS `UserTaskStreamNotifications` (
 CREATE TABLE IF NOT EXISTS `SpecialTranslators` (
     user_id INT (10) UNSIGNED NOT NULL,
     type    INT (10) UNSIGNED DEFAULT 0,
-    KEY FK_special_user_id (user_id),
+    PRIMARY KEY FK_special_user_id (user_id),
     CONSTRAINT FK_special_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -3679,6 +3679,21 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `set_special_translator`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_special_translator`(IN userID INT, IN typeID INT)
+BEGIN
+    REPLACE INTO SpecialTranslators (user_id, type) VALUES (userID, typeID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_special_translator`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_special_translator`(IN `userID` INT)
+BEGIN
+    SELECT * FROM SpecialTranslators WHERE user_id=userID;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.getUserTaskScore
 DROP PROCEDURE IF EXISTS `getUserTaskScore`;
