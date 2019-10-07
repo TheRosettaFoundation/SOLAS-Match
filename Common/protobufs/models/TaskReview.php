@@ -115,4 +115,28 @@ class TaskReview
     $this->comment = (string)$comment;
   }
 
+  public function isNewReviewType() {
+    return $this->consistency != null && $this->consistency >= 10;
+  }
+
+  public function getAccuracy() {
+    return $this->corrections;
+  }
+
+  public function getFluency() {
+    return $this->grammar;
+  }
+
+  public function getTerminology() {
+    return $this->spelling;
+  }
+
+  public function getStyle() {
+    return $this->consistency % 10;
+  }
+
+  public function getDesign() {
+    return intdiv($this->consistency, 10);
+  }
+
 }

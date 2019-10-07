@@ -2461,9 +2461,9 @@ class TaskRouteHandler
             $projectDao = new \SolasMatch\UI\DAO\ProjectDao();
             $project = $projectDao->getProject($task->getProjectId());
 
-            $reviews = $projectDao->getProjectReviews($task->getProjectId());
-            if ($reviews) {
-                foreach ($reviews as $projectReview) {
+            $project_reviews = $projectDao->getProjectReviews($task->getProjectId());
+            if ($project_reviews) {
+                foreach ($project_reviews as $projectReview) {
                     if ($projectReview->getTaskId() == null
                             && $projectReview->getUserId() == $userId) {
                         $reviews[$task->getProjectId()] = $projectReview;
@@ -2538,7 +2538,7 @@ class TaskRouteHandler
                     }
                     if (isset($post["consistency_$id"]) && ctype_digit($post["consistency_$id"])) {
                         $value = intval($post["consistency_$id"]);
-                        if ($value > 0 && $value <= 5) {
+                        if ($value > 0 && $value <= 55) {
                             $review->setConsistency($value);
                         } else {
                             $error = Lib\Localisation::getTranslation('task_review_8');
@@ -2612,6 +2612,7 @@ class TaskRouteHandler
             'extra_scripts' => $extra_scripts,
             'taskId'        => $taskId,
             'tasks'         => $preReqTasks,
+            'is_chunked'    => !empty($matecat_tasks),
             'reviews'       => $reviews,
             'formAction'    => $formAction,
             'action'        => $action

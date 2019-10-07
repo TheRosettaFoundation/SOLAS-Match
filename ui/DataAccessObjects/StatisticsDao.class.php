@@ -72,6 +72,12 @@ class StatisticsDao extends BaseDao
         return $result;
     }
 
+    public function testing_center()
+    {
+        $result = LibAPI\PDOWrapper::call('testing_center', '');
+        return $result;
+    }
+
     public function late_matecat()
     {
         $result = LibAPI\PDOWrapper::call('late_matecat', '');

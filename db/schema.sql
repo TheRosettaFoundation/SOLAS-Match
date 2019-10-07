@@ -618,14 +618,14 @@ CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
 -- Dumping structure for table debug-test.ArchivedTasksMetadata
 CREATE TABLE IF NOT EXISTS `ArchivedTasksMetadata` (
   `archivedTask_id` bigint(20) unsigned NOT NULL,
-  `version` int(10) unsigned NOT NULL,
-  `filename` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `content-type` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `upload-time` datetime NOT NULL,
+  `version` int(10) unsigned DEFAULT NULL,
+  `filename` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `content-type` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `upload-time` datetime DEFAULT NULL,
   `user_id-claimed` int(10) unsigned DEFAULT NULL,
   `user_id-archived` int(10) unsigned NOT NULL,
   `prerequisites` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `user_id-taskCreator` int(10) unsigned NOT NULL,
+  `user_id-taskCreator` int(10) unsigned DEFAULT NULL,
   `archived-date` datetime NOT NULL,
   UNIQUE KEY `archivedTask_id` (`archivedTask_id`),
   KEY `FK_ArchivedTasksMetadata_Users` (`user_id-claimed`),
@@ -6499,6 +6499,102 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `isUserRestrictedFromTaskButAllowTranslatorToDownload`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserRestrictedFromTaskButAllowTranslatorToDownload`(IN `taskID` INT, IN `userID` INT)
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM Admins
+        WHERE
+            user_id=userID AND
+            organisation_id IS NULL
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF EXISTS (
+        SELECT 1
+        FROM Tasks                t
+        JOIN Projects             p ON t.project_id=p.id
+        JOIN OrganisationMembers om ON p.organisation_id=om.organisation_id
+        WHERE
+            t.id=taskID AND
+            om.user_id=userID
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF EXISTS (
+        SELECT 1
+        FROM Tasks                t
+        JOIN Projects             p ON t.project_id=p.id
+        JOIN Admins              oa ON p.organisation_id=oa.organisation_id
+        WHERE
+            t.id=taskID AND
+            oa.user_id=userID
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF EXISTS (
+        SELECT t.id
+        FROM Tasks            t
+        JOIN RestrictedTasks  r ON t.id=r.restricted_task_id
+        JOIN Projects         p ON t.project_id=p.id
+        JOIN Badges           b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+        LEFT JOIN UserBadges ub ON b.id=ub.badge_id AND ub.user_id=userID
+        WHERE
+            t.id=taskID AND
+            ub.badge_id IS NULL
+    ) THEN
+        SELECT 1 AS result;
+
+    ELSEIF EXISTS (
+        SELECT 1
+        FROM RequiredTaskQualificationLevels tq
+        WHERE
+            tq.task_id=taskID AND
+            tq.required_qualification_level=1
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF EXISTS (
+        SELECT 1
+        FROM Tasks  t
+        JOIN Tasks t2 ON t.project_id=t2.project_id AND
+                         t.`language_id-source`=t2.`language_id-source` AND
+                         t.`language_id-target`=t2.`language_id-target` AND
+                         t.`country_id-source` =t2.`country_id-source`  AND
+                         t.`country_id-target` =t2.`country_id-target`  AND
+                         t2.`task-type_id`=2
+        JOIN      TaskClaims tcl ON tcl.user_id=userID AND t2.id=tcl.task_id
+        LEFT JOIN TaskChunks  tc ON t.id=tc.task_id
+        WHERE
+            t.id=taskID AND
+            t.`task-type_id`=3 AND
+            tc.task_id IS NULL
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF NOT EXISTS (
+        SELECT t.id
+        FROM Tasks t
+        JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
+        JOIN UserQualifiedPairs uqp ON
+            uqp.user_id=userID AND
+            t.`language_id-source`=uqp.language_id_source AND
+            t.`language_id-target`=uqp.language_id_target
+        WHERE
+            t.id=taskID AND
+            tq.required_qualification_level<=uqp.qualification_level
+    ) THEN
+        SELECT 1 AS result;
+
+    ELSE
+    SELECT 0 AS result;
+
+    END IF;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `isUserRestrictedFromProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserRestrictedFromProject`(IN `projectID` INT, IN `userID` INT)
@@ -6676,6 +6772,41 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `testing_center`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `testing_center`()
+BEGIN
+    SELECT
+        t.title AS task_title,
+        t.id    AS task_id,
+        p.id    AS project_id,
+        p.title AS project_title,
+        IF(t.`task-type_id`=2, 'Translation', 'Revising') AS task_type,
+        CASE
+            WHEN t.`task-status_id`=1 THEN 'Waiting'
+            WHEN t.`task-status_id`=2 THEN 'Pending'
+            WHEN t.`task-status_id`=3 THEN 'In Progress'
+            WHEN t.`task-status_id`=4 THEN 'Complete'
+        END                                               AS task_status,
+        IFNULL(u.email, '')          AS user_email,
+        IFNULL(u.`display-name`, '') AS display_name,
+        IFNULL(u.id, '')             AS user_id,
+        IFNULL(tr.corrections,        '') AS accuracy,
+        IFNULL(tr.grammar,            '') AS fluency,
+        IFNULL(tr.spelling,           '') AS terminology,
+        IFNULL(tr.consistency   % 10, '') AS style,
+        IFNULL(tr.consistency DIV 10, '') AS design,
+        IFNULL(tr.comment,            '') AS comment
+    FROM      Projects        p
+    JOIN      PrivateTMKeys tmk ON p.id=tmk.project_id AND tmk.private_tm_key='new'
+    JOIN      Tasks           t ON p.id=t.project_id
+    LEFT JOIN TaskClaims     tc ON t.id=tc.task_id
+    LEFT JOIN Users           u ON tc.user_id=u.id
+    LEFT JOIN TaskReviews    tr ON t.id=tr.task_id
+    ORDER BY t.id DESC;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `late_matecat`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `late_matecat`()
@@ -6784,19 +6915,31 @@ BEGIN
         u.email,
         IFNULL(i.`first-name`, '') AS first_name,
         IFNULL(i.`last-name`, '') AS last_name,
-        AVG(tr.corrections) AS cor,
-        AVG(tr.grammar)     AS gram,
-        AVG(tr.spelling)    AS spell,
-        AVG(tr.consistency) AS cons,
-        COUNT(*)            AS num
+        CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) AS language_pair,
+        IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.corrections, 0))/SUM(consistency<10), 1), '') AS cor,
+        IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.grammar,     0))/SUM(consistency<10), 1), '') AS gram,
+        IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.spelling,    0))/SUM(consistency<10), 1), '') AS spell,
+        IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.consistency, 0))/SUM(consistency<10), 1), '') AS cons,
+        SUM(consistency<10) AS num_legacy,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.corrections,        0))/SUM(consistency>=10), 1), '') AS accuracy,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.grammar,            0))/SUM(consistency>=10), 1), '') AS fluency,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.spelling,           0))/SUM(consistency>=10), 1), '') AS terminology,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.consistency   % 10, 0))/SUM(consistency>=10), 1), '') AS style,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.consistency DIV 10, 0))/SUM(consistency>=10), 1), '') AS design,
+        SUM(consistency>=10) AS num_new,
+        COUNT(*)             AS num
     FROM TaskReviews            tr
     JOIN Tasks                   t  ON tr.task_id=t.id
+    JOIN Languages              l1 ON t.`language_id-source`=l1.id
+    JOIN Languages              l2 ON t.`language_id-target`=l2.id
+    JOIN Countries              c1 ON t.`country_id-source`=c1.id
+    JOIN Countries              c2 ON t.`country_id-target`=c2.id
     JOIN TaskClaims             tc  ON tr.task_id=tc.task_id
     JOIN Users                   u  ON tc.user_id=u.id
     JOIN UserPersonalInformation i ON u.id=i.user_id
     WHERE t.`task-status_id`=4
-    GROUP BY u.id
-    ORDER BY u.email;
+    GROUP BY u.id, l1.code, c1.code, l2.code, c2.code
+    ORDER BY u.email, l1.code, c1.code, l2.code, c2.code;
 END//
 DELIMITER ;
 
