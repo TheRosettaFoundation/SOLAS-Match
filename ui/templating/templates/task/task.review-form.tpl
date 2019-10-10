@@ -101,7 +101,7 @@
 <h3>
     General feedback
 </h3>
-    <p><i>You can use the space below to leave comments, suggestions, or congratulations for your colleague on his/her translation. Please remember to be considerate and constructive in your feedback. Use specific examples whenever possible.</i></p>
+    <p><i>You can use the space below to leave comments, suggestions, or congratulations for your colleague on his/her translation. Please remember to be considerate and constructive in your feedback. Check our <a href="https://community.translatorswb.org/t/giving-constructive-and-respectful-feedback/10825" target="_blank">Guidelines for Giving Constructive Feedback</a> before submitting your review.</i></p>
     <p>{TemplateHelper::uiCleanseHTML($review->getComment())}</p>
 {/if}
 {else}
@@ -109,7 +109,7 @@
 <h3>
     General feedback
 </h3>
-    <p><i>You can use the space below to leave comments, suggestions, or congratulations for your colleague on his/her translation. Please remember to be considerate and constructive in your feedback. Use specific examples whenever possible.</i></p>
+    <p><i>You can use the space below to leave comments, suggestions, or congratulations for your colleague on his/her translation. Please remember to be considerate and constructive in your feedback. Check our <a href="https://community.translatorswb.org/t/giving-constructive-and-respectful-feedback/10825" target="_blank">Guidelines for Giving Constructive Feedback</a> before submitting your review.</i></p>
     <textarea name="comment_{$id}" cols='40' rows='10' style="width: 80%"></textarea>
 {/if}
 
