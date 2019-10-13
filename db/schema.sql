@@ -7227,6 +7227,42 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `user_words_by_language`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `user_words_by_language`()
+BEGIN
+    SELECT
+        u.id AS user_id,
+        u.`display-name` AS display_name,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`,  '') AS last_name,
+        MAX(CASE
+            WHEN uqp.qualification_level=1 THEN ''
+            WHEN uqp.qualification_level=2 THEN 'Verified'
+            WHEN uqp.qualification_level=3 THEN 'Senior'
+        END) AS level,
+        SUM(IF(t.`task-type_id`=2 AND t.`task-status_id`=4, t.`word-count`, 0)) AS words_translated,
+        SUM(IF(t.`task-type_id`=3 AND t.`task-status_id`=4, t.`word-count`, 0)) AS words_proofread,
+        CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) AS language_pair
+    FROM Tasks       t
+    JOIN TaskClaims tc ON t.id=tc.task_id
+    JOIN Users       u ON tc.user_id=u.id
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    JOIN UserQualifiedPairs    uqp ON u.id=uqp.user_id
+    JOIN Languages  l1 ON t.`language_id-source`=l1.id
+    JOIN Languages  l2 ON t.`language_id-target`=l2.id
+    JOIN Countries  c1 ON t.`country_id-source` =c1.id
+    JOIN Countries  c2 ON t.`country_id-target` =c2.id
+    WHERE
+        t.`task-status_id`=4 AND
+       (t.`task-type_id`=2 OR
+        t.`task-type_id`=3)
+    GROUP BY u.id, l1.code, c1.code, l2.code, c2.code
+    ORDER BY u.email, l1.code, c1.code, l2.code, c2.code;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `language_work_requested`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `language_work_requested`()
