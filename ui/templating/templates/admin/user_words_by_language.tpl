@@ -15,12 +15,12 @@
 
 <table style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-    <th width="20%">Display Name</th>
+    <th width="18%">Display Name</th>
     <th width="20%">Email</th>
     <th width="20%">Name</th>
-    <th width="10%">Pair</th>
-    <th width="10%">Qualification Level</th>
-    <th width="10%">Words Translated</th>
+    <th width="9%">Pair</th>
+    <th width="12%">Qualification Level</th>
+    <th width="11%">Words Translated</th>
     <th width="10%">Words Revised</th>
   </thead>
 
