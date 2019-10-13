@@ -122,6 +122,12 @@ class AdminRouteHandler
         )->via('POST')->name('user_task_languages');
 
         $app->get(
+            '/user_words_by_language/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'user_words_by_language')
+        )->via('POST')->name('user_words_by_language');
+
+        $app->get(
             '/download_user_task_languages/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'download_user_task_languages')
@@ -584,6 +590,17 @@ class AdminRouteHandler
 
         $app->view()->appendData(array('all_users' => $all_users));
         $app->render('admin/user_task_languages.tpl');
+    }
+
+    public function user_words_by_language()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->user_words_by_language();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('admin/user_words_by_language.tpl');
     }
 
     public function download_user_task_languages()
