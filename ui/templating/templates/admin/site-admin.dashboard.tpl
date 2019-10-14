@@ -22,7 +22,7 @@
     <p><a href="{urlFor name="all_users_plain"}" target="_blank">(Same as above but plain layout.)</a></p>
     <p><a href="{urlFor name="user_languages" options="code.full"}" target="_blank">List all languages indicated on user's profiles showing information about the user (if you replace the "full" in the URL with a language code like "es", you will just get that language).</a> <a href="{urlFor name="download_user_languages"}">[Download]</a></p>
     <p><a href="{urlFor name="user_task_languages" options="code.full"}" target="_blank">List users who worked on tasks for a language (if you replace the "full" in the URL with a language code like "es", you will just get that language).</a> <a href="{urlFor name="download_user_task_languages"}">[Download]</a></p>
-    <p><a href="{urlFor name="user_words_by_language"}" target="_blank">List all translator's translated and revised words by language pair.</a></p>
+    <p><a href="{urlFor name="user_words_by_language"}" target="_blank">List all translator's translated and revised words by language pair.</a> <a href="{urlFor name="download_user_words_by_language"}">[Download]</a></p>
     <p><a href="{urlFor name="first_completed_task"}" target="_blank">List all translator's first completed task.</a></p>
     <p><a href="{urlFor name="user_task_reviews"}" target="_blank">List average reviews for volunteers</a></p>
     <p><a href="{urlFor name="language_work_requested"}" target="_blank">List language pairs with translation work requested in those pairs.</a> <a href="{urlFor name="download_language_work_requested"}">[Download]</a></p>
