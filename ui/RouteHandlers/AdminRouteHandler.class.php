@@ -128,6 +128,12 @@ class AdminRouteHandler
         )->via('POST')->name('user_words_by_language');
 
         $app->get(
+            '/download_user_words_by_language/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_user_words_by_language')
+        )->name('download_user_words_by_language');
+
+        $app->get(
             '/download_user_task_languages/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'download_user_task_languages')
@@ -601,6 +607,27 @@ class AdminRouteHandler
 
         $app->view()->appendData(array('all_users' => $all_users));
         $app->render('admin/user_words_by_language.tpl');
+    }
+
+    public function download_user_words_by_language()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $all_users = $statsDao->user_words_by_language();
+
+        $data = "\xEF\xBB\xBF" . '"Display Name","Email","Name","Pair","Qualification Level","Words Translated","Words Revised"' . "\n";
+
+        foreach ($all_users as $user_row) {
+            $data .= '"' . str_replace('"', '""', $user_row['display_name']) . '","' . $user_row['email'] . '","' . str_replace('"', '""', $user_row['first_name']) . ' ' . str_replace('"', '""', $user_row['last_name']) . '","' . $user_row['language_pair'] . '","' . $user_row['level'] . '","' . $user_row['words_translated'] . '","' . $user_row['words_proofread'] . '"' . "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="user_words_by_language.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
     }
 
     public function download_user_task_languages()
