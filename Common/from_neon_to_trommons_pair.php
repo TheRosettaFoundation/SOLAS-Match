@@ -266,6 +266,8 @@ $from_neon_to_trommons_pair = array(
 'Sinhala' => array('si', 'LK'),
 'Sylheti' => array('syl', 'BD'),
 'Tajik' => array('tg', 'TJ'),
+
+'Dyula' => array('dyu', 'CI'),
 );
 
 $language_options_changes = [

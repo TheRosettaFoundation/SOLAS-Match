@@ -280,4 +280,6 @@
 'sd' => 'sd-IN',
 'sd-PK' => 'sd-PK',
 'syl' => 'syl-BD',
+
+'dyu' => 'dyu-CI',
 );
