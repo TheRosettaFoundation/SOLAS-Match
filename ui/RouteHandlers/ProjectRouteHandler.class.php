@@ -1958,6 +1958,7 @@ error_log("project_id: $project_id");
                     error_log("project_cron ($project_id) getProjectFileLocation FAILED");
                     continue;
                 }
+                $file = str_replace('/Common/lib/../..', '', $file);
 
                 $creator = $taskDao->get_creator($project_id);
 
