@@ -1756,6 +1756,7 @@ class ProjectRouteHandler
       $fp_for_lock = fopen(__DIR__ . '/project_cron_1_minute_lock.txt', 'r');
       if (flock($fp_for_lock, LOCK_EX | LOCK_NB)) { // Acquire an exclusive lock, if possible, if not we will wait for next time
 //[[
+error_log("Top project_cron_1_minute()");
 $file = "/repo/SOLAS-Match/backup/uploads/files/proj-9122/Test MS &$% doc.docx";
 $filename = "Test MS &$% doc.docx";
 
@@ -1822,9 +1823,11 @@ $filename = "Test MS &$% doc.docx";
 
         // status 1 => Uploaded to MateCat [This call will happen one minute after getWordCountRequestForProjects(0)]
         $projects = $taskDao->getWordCountRequestForProjects(1);
+error_log("Before loop");
         if (!empty($projects)) {
             foreach ($projects as $project) {
                 $project_id = $project['project_id'];
+error_log("project_id: $project_id");
                 $matecat_id_project = $project['matecat_id_project'];
                 $matecat_id_project_pass = $project['matecat_id_project_pass'];
 
