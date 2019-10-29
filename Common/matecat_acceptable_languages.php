@@ -280,4 +280,11 @@
 'sd' => 'sd-IN',
 'sd-PK' => 'sd-PK',
 'syl' => 'syl-BD',
+
+'dyu' => 'dyu-CI',
+
+'led' => 'led-CD',
+'nnb' => 'nnb-CD',
+'shr' => 'shr-CD',
+'nix' => 'nix-CD',
 );
