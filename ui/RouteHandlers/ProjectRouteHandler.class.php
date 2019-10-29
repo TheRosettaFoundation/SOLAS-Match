@@ -1901,8 +1901,8 @@ class ProjectRouteHandler
                 if (empty($source_language)) $source_language = 'en-US';
 
                 // https://www.matecat.com/api/docs#!/Project/post_new
-                // $re = curl_init('https://www.matecat.com/api/new');
-                $re = curl_init("{$matecat_api}api/new");
+                // $re = curl_init('https://www.matecat.com/api/new'); ... api/v1/new 20191029
+                $re = curl_init("{$matecat_api}api/v1/new");
 
                 // http://php.net/manual/en/function.curl-setopt.php
                 curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
