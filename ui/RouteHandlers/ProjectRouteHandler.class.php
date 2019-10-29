@@ -1755,6 +1755,68 @@ class ProjectRouteHandler
 
       $fp_for_lock = fopen(__DIR__ . '/project_cron_1_minute_lock.txt', 'r');
       if (flock($fp_for_lock, LOCK_EX | LOCK_NB)) { // Acquire an exclusive lock, if possible, if not we will wait for next time
+//[[
+$file = "/repo/SOLAS-Match/backup/uploads/files/proj-9122/Test MS &$% doc.docx";
+$filename = "Test MS &$% doc.docx";
+
+                $re = curl_init("https://kato3.translatorswb.org/test.php");
+
+                curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
+                curl_setopt($re, CURLOPT_COOKIESESSION, true);
+                curl_setopt($re, CURLOPT_FOLLOWLOCATION, true);
+                curl_setopt($re, CURLOPT_AUTOREFERER, true);
+
+                $httpHeaders = array(
+                    'Expect:'
+                );
+                curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
+
+                // http://php.net/manual/en/class.curlfile.php
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $mime = finfo_file($finfo, $file);
+                finfo_close($finfo);
+                $cfile = new \CURLFile($file, $mime, $filename);
+
+                    $mt_engine        = '1';
+                    $pretranslate_100 = '1';
+                    $lexiqa           = '1';
+                    $private_tm_key   = '58f97b6f65fb5c8c8522';
+
+                $fields = array(
+                  'file'         => $cfile,
+                  'project_name' => "alantest0",
+                  'source_lang'  => "en-GB",
+                  'target_lang'  => "fr-FR",
+                  'tms_engine'   => '1',
+                  'mt_engine'        => $mt_engine,
+                  'private_tm_key'   => $private_tm_key,
+                  'pretranslate_100' => $pretranslate_100,
+                  'lexiqa'           => $lexiqa,
+                  'subject'      => 'general',
+                  'owner_email'  => "alanabarrett0@gmail.com"
+                );
+
+                error_log("project_cron /new () fields: " . print_r($fields, true));
+                curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
+
+                curl_setopt($re, CURLOPT_HEADER, true);
+                curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
+                curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($re, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
+
+                $res = curl_exec($re);
+                if ($error_number = curl_errno($re)) {
+                    error_log("project_cron /new () Curl error ($error_number): " . curl_error($re)); // $responseCode will be 0, so error will be caught below
+                }
+
+                $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
+                $header = substr($res, 0, $header_size);
+                $res = substr($res, $header_size);
+                $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
+
+                curl_close($re);
+//]]
 
         $taskDao = new DAO\TaskDao();
 
