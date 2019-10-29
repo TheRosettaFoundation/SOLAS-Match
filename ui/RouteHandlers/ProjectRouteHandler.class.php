@@ -1757,7 +1757,7 @@ class ProjectRouteHandler
       if (flock($fp_for_lock, LOCK_EX | LOCK_NB)) { // Acquire an exclusive lock, if possible, if not we will wait for next time
 //[[
 error_log("Top project_cron_1_minute()");
-$file = "/repo/SOLAS-Match/backup/uploads/files/proj-9122/Test MS &$% doc.docx";
+$file = "/repo/SOLAS-Match/backup/uploads/files/proj-9126/Test MS &$% doc.docx";
 $filename = "Test MS &$% doc.docx";
 
                 $re = curl_init("https://kato3.translatorswb.org/test.php");
@@ -1785,7 +1785,7 @@ $filename = "Test MS &$% doc.docx";
 
                 $fields = array(
                   'file'         => $cfile,
-                  'project_name' => "alantest0",
+                  'project_name' => "proj-9126",
                   'source_lang'  => "en-GB",
                   'target_lang'  => "fr-FR",
                   'tms_engine'   => '1',
