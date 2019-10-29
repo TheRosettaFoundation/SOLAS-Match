@@ -268,6 +268,11 @@ $from_neon_to_trommons_pair = array(
 'Tajik' => array('tg', 'TJ'),
 
 'Dyula' => array('dyu', 'CI'),
+
+'Lendu' => array('led', 'CD'),
+'Nande' => array('nnb', 'CD'),
+'Shi' => array('shr', 'CD'),
+'Hema' => array('nix', 'CD'),
 );
 
 $language_options_changes = [
