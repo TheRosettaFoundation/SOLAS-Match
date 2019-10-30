@@ -2057,6 +2057,7 @@ class ProjectRouteHandler
         //    'body' => 'Dummy',
         //));
         //$app->render('nothing.tpl');
+      die;
     }
 
     public function valid_language_for_matecat($language_code)
