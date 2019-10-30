@@ -1851,39 +1851,7 @@ $re = curl_init("{$matecat_api}test.php");
                     error_log("project_cron /new ($project_id) Curl error ($error_number): " . curl_error($re)); // $responseCode will be 0, so error will be caught below
                 }
 
-                $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
-                $header = substr($res, 0, $header_size);
-                $res = substr($res, $header_size);
-                $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
-
                 curl_close($re);
-
-                if ($responseCode == 200) {
-                    $response_data = json_decode($res, true);
-
-                    if ($response_data['status'] !== 'OK') {
-                        error_log("project_cron /new ($project_id) status NOT OK: " . $response_data['status']);
-                        error_log("project_cron /new ($project_id) status message: " . $response_data['message']);
-                        // Change status to Complete (3), if there was an error!
-//                        $taskDao->updateWordCountRequestForProjects($project_id, 0, 0, 0, 3);
-//                        $taskDao->insertWordCountRequestForProjectsErrors($project_id, $response_data['status'], $response_data['message']);
-                    }
-                    elseif (empty($response_data['id_project']) || empty($response_data['project_pass'])) {
-                        error_log("project_cron /new ($project_id) id_project or project_pass empty!");
-                        // Change status to Complete (3), if there was an error!
-//                        $taskDao->updateWordCountRequestForProjects($project_id, 0, 0, 0, 3);
-//                        $taskDao->insertWordCountRequestForProjectsErrors($project_id, $response_data['status'], 'id_project or project_pass empty');
-                    } else {
-                        $matecat_id_project      = $response_data['id_project'];
-                        $matecat_id_project_pass = $response_data['project_pass'];
-
-                        // Change status to Uploaded (1), 0 is still placeholder for new word count
-//                        $taskDao->updateWordCountRequestForProjects($project_id, $matecat_id_project, $matecat_id_project_pass, 0, 1);
-                    }
-                } else {
-                    // If this was a comms error, we will retry (as status is still 0)
-                    error_log("project_cron /new ($project_id) responseCode: $responseCode");
-                }
 
         flock($fp_for_lock, LOCK_UN); // Release the lock
       }
