@@ -1866,36 +1866,6 @@ $re = curl_init("{$matecat_api}test.php");
                 finfo_close($finfo);
                 $cfile = new \CURLFile($file, $mime, $filename);
 
-                $target_languages = explode(',', "fr-FR");
-                $filtered_target_languages = array();
-                foreach ($target_languages as $target_language) {
-                    $target_language = $this->valid_language_for_matecat($target_language);
-                    if (!empty($target_language) && ($target_language != $source_language)) {
-                        $filtered_target_languages[$target_language] = $target_language;
-                    }
-                }
-                if (!empty($filtered_target_languages)) {
-                    $filtered_target_languages = implode(',', $filtered_target_languages);
-                } else {
-                    if ($source_language != 'es-ES') {
-                        $filtered_target_languages = 'es-ES';
-                    } else {
-                        $filtered_target_languages = 'en-US';
-                    }
-                }
-
-                $private_tm_key = $taskDao->get_project_tm_key($project_id);
-                if (empty($private_tm_key)) {
-                    $mt_engine        = '1';
-                    $pretranslate_100 = '1';
-                    $lexiqa           = '1';
-                    $private_tm_key   = '58f97b6f65fb5c8c8522';
-                } else {
-                    $mt_engine        = $private_tm_key[0]['mt_engine'];
-                    $pretranslate_100 = $private_tm_key[0]['pretranslate_100'];
-                    $lexiqa           = $private_tm_key[0]['lexiqa'];
-                    $private_tm_key   = $private_tm_key[0]['private_tm_key'];
-                }
                 error_log("project_cron /new ($project_id) fields: " . print_r($fields, true));
                 curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
 
