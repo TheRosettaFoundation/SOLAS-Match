@@ -1840,7 +1840,7 @@ error_log("Before loop");
 
                 $creator = $taskDao->get_creator($project_id);
 
-                $source_language = $project['source_language'];
+                $source_language = "en-GB";
                 $source_language = $this->valid_language_for_matecat($source_language);
                 if (empty($source_language)) $source_language = 'en-US';
 
@@ -1866,7 +1866,7 @@ $re = curl_init("{$matecat_api}test.php");
                 finfo_close($finfo);
                 $cfile = new \CURLFile($file, $mime, $filename);
 
-                $target_languages = explode(',', $project['target_languages']);
+                $target_languages = explode(',', "fr-FR");
                 $filtered_target_languages = array();
                 foreach ($target_languages as $target_language) {
                     $target_language = $this->valid_language_for_matecat($target_language);
