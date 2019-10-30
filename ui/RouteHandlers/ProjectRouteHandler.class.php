@@ -1832,11 +1832,9 @@ error_log("Before loop");
                     $file = $taskDao->getPhysicalProjectFilePath($project_id, $filename);
                     if (!$file) {
                         error_log("project_cron ($project_id) getPhysicalProjectFilePath FAILED");
-                        continue;
                     }
                 } else {
                     error_log("project_cron ($project_id) getProjectFileLocation FAILED");
-                    continue;
                 }
                 $file = str_replace('/Common/lib/../..', '', $file);
 
