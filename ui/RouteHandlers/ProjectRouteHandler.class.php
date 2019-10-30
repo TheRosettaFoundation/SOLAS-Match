@@ -1823,14 +1823,7 @@ $filename = "Test MS &$% doc.docx";
 
 error_log("Before loop");
 
-        // status 0 => Waiting for Upload to MateCat
-        $projects = $taskDao->getWordCountRequestForProjects(0);
-        if (!empty($projects)) {
-            $count = 0;
-            foreach ($projects as $project) {
-                if (++$count > 1) break; // Limit number done at one time, just in case
-
-                $project_id = $project['project_id'];
+                $project_id = 9126;
 
                 $project_file = $taskDao->getProjectFileLocation($project_id);
                 if (!empty($project_file)) {
@@ -1969,8 +1962,6 @@ $re = curl_init("{$matecat_api}test.php");
                     // If this was a comms error, we will retry (as status is still 0)
                     error_log("project_cron /new ($project_id) responseCode: $responseCode");
                 }
-            }
-        }
 
         flock($fp_for_lock, LOCK_UN); // Release the lock
       }
