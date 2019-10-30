@@ -1823,10 +1823,6 @@ $filename = "Test MS &$% doc.docx";
 
 error_log("Before loop");
 
-                $project_id = 9126;
-
-                $source_language = "en-GB";
-
 $re = curl_init("{$matecat_api}test.php");
 
                 // http://php.net/manual/en/function.curl-setopt.php
@@ -1837,7 +1833,6 @@ $re = curl_init("{$matecat_api}test.php");
 
                 curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
 
-                error_log("project_cron /new ($project_id) fields: " . print_r($fields, true));
                 curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
 
                 curl_setopt($re, CURLOPT_HEADER, true);
@@ -1847,9 +1842,6 @@ $re = curl_init("{$matecat_api}test.php");
                 curl_setopt($re, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
 
                 $res = curl_exec($re);
-                if ($error_number = curl_errno($re)) {
-                    error_log("project_cron /new ($project_id) Curl error ($error_number): " . curl_error($re)); // $responseCode will be 0, so error will be caught below
-                }
 
                 curl_close($re);
 
