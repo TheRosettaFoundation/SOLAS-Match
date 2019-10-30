@@ -1755,13 +1755,156 @@ class ProjectRouteHandler
 
       $fp_for_lock = fopen(__DIR__ . '/project_cron_1_minute_lock.txt', 'r');
       if (flock($fp_for_lock, LOCK_EX | LOCK_NB)) { // Acquire an exclusive lock, if possible, if not we will wait for next time
-//[[
-error_log("Top project_cron_1_minute()");
-$file = "/repo/SOLAS-Match/backup/uploads/files/proj-9126/Test MS &$% doc.docx";
-$filename = "Test MS &$% doc.docx";
 
-                $re = curl_init("https://kato3.translatorswb.org/test.php");
+        $taskDao = new DAO\TaskDao();
 
+        // status 1 => Uploaded to MateCat [This call will happen one minute after getWordCountRequestForProjects(0)]
+        $projects = $taskDao->getWordCountRequestForProjects(1);
+        if (!empty($projects)) {
+            foreach ($projects as $project) {
+                $project_id = $project['project_id'];
+                $matecat_id_project = $project['matecat_id_project'];
+                $matecat_id_project_pass = $project['matecat_id_project_pass'];
+
+                // https://www.matecat.com/api/docs#!/Project/get_status (i.e. Word Count)
+                // $re = curl_init("https://www.matecat.com/api/status?id_project=$matecat_id_project&project_pass=$matecat_id_project_pass");
+                $re = curl_init("{$matecat_api}api/status?id_project=$matecat_id_project&project_pass=$matecat_id_project_pass");
+
+                // http://php.net/manual/en/function.curl-setopt.php
+                curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
+                curl_setopt($re, CURLOPT_COOKIESESSION, true);
+                curl_setopt($re, CURLOPT_FOLLOWLOCATION, true);
+                curl_setopt($re, CURLOPT_AUTOREFERER, true);
+
+                $httpHeaders = array(
+                    'Expect:'
+                );
+                curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
+
+                curl_setopt($re, CURLOPT_HEADER, true);
+                curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
+                curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($re, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
+
+                $res = curl_exec($re);
+                if ($error_number = curl_errno($re)) {
+                    error_log("project_cron /status ($project_id) Curl error ($error_number): " . curl_error($re)); // $responseCode will be 0, so error will be caught below
+                }
+
+                $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
+                $header = substr($res, 0, $header_size);
+                $res = substr($res, $header_size);
+                $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
+
+                curl_close($re);
+
+                $word_count = 0;
+                if ($responseCode == 200) {
+                    $response_data = json_decode($res, true);
+
+                    if ($response_data['status'] === 'DONE') {
+                        if (empty($response_data['errors'])) {
+                            if (!empty($response_data['data']['summary']['TOTAL_RAW_WC'])) {
+                                $word_count = $response_data['data']['summary']['TOTAL_RAW_WC'];
+
+                                if (!empty($response_data['jobs']['langpairs'])) {
+                                    $langpairs = count(array_unique($response_data['jobs']['langpairs']));
+
+                                    foreach ($response_data['jobs']['langpairs'] as $job_password => $langpair) {
+                                        $matecat_id_job          = substr($job_password, 0, strpos($job_password, '-'));
+                                        $matecat_id_job_password = substr($job_password, strpos($job_password, '-') + 1);
+                                        $matecat_id_file         = 0;
+                                        if (!empty($response_data['data']['jobs'][$matecat_id_job]['chunks'][$matecat_id_job_password])) {
+                                            foreach ($response_data['data']['jobs'][$matecat_id_job]['chunks'][$matecat_id_job_password] as $i => $filename_array) {
+                                                $matecat_id_file = $i;
+                                                break; // Should only be one... actually now not used and could be more than one for ZIP file
+                                            }
+                                        } else {
+                                            error_log("project_cron /status ($project_id) ['data']['jobs'][$matecat_id_job]['chunks'][$matecat_id_job_password] empty!");
+                                        }
+
+                                        if (!empty($matecat_id_job) && !empty($matecat_id_job_password) && !empty($matecat_id_file)) {
+                                            // Set matecat_id_job, matecat_id_job_password, matecat_id_file
+                                            // Note: SQL will not update if we were forced to use fake language pairs for word count purposes as they will not match
+                                            $taskDao->updateMatecatLanguagePairs($project_id, Common\Enums\TaskTypeEnum::TRANSLATION, $langpair, $matecat_id_job, $matecat_id_job_password, $matecat_id_file);
+                                            $taskDao->updateMatecatLanguagePairs($project_id, Common\Enums\TaskTypeEnum::PROOFREADING, $langpair, $matecat_id_job, $matecat_id_job_password, $matecat_id_file);
+                                        } else {
+                                            error_log("project_cron /status ($project_id) matecat_id_job($matecat_id_job), matecat_id_job_password($matecat_id_job_password) or matecat_id_file($matecat_id_file) empty!");
+                                        }
+                                    }
+
+                                    $word_count = $word_count / $langpairs;
+
+                                    if (!empty($word_count)) {
+                                        // Set word count for the Project and its Tasks
+                                        $taskDao->updateWordCountForProject($project_id, $word_count);
+
+                                        // Change status to Complete (2)
+                                        $taskDao->updateWordCountRequestForProjects($project_id, $matecat_id_project, $matecat_id_project_pass, $word_count, 2);
+                                    } else {
+                                        error_log("project_cron /status ($project_id) calculated wordcount empty!");
+                                    }
+                                } else {
+                                    error_log("project_cron /status ($project_id) langpairs empty!");
+                                }
+                            } else {
+                                error_log("project_cron /status ($project_id) TOTAL_RAW_WC empty!");
+                            }
+                        } else {
+                            foreach ($response_data['errors'] as $error) {
+                                error_log("project_cron /status ($project_id) error: " . $error);
+                            }
+                        }
+                    } else {
+                        error_log("project_cron /status ($project_id) status NOT DONE: " . $response_data['status']);
+                        if ($response_data['status'] === 'NO_SEGMENTS_FOUND') {
+                            // Change status to Complete (3), Give up!
+                            $taskDao->updateWordCountRequestForProjects($project_id, $matecat_id_project, $matecat_id_project_pass, 0, 3);
+                            $taskDao->insertWordCountRequestForProjectsErrors($project_id, $response_data['status'], empty($response_data['message']) ? '' : $response_data['message']);
+                        }
+                    }
+                } else {
+                    error_log("project_cron /status ($project_id) responseCode: $responseCode");
+                }
+                // Note, we will retry if there was an error and hope it is temporary and/or the analysis is not complete yet
+            }
+        }
+
+        // status 0 => Waiting for Upload to MateCat
+        $projects = $taskDao->getWordCountRequestForProjects(0);
+        if (!empty($projects)) {
+            $count = 0;
+            foreach ($projects as $project) {
+                if (++$count > 1) break; // Limit number done at one time, just in case
+
+                $project_id = $project['project_id'];
+
+                $project_file = $taskDao->getProjectFileLocation($project_id);
+                if (!empty($project_file)) {
+                    $filename = $project_file['filename'];
+                    //$file = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/$filename";
+                    $file = $taskDao->getPhysicalProjectFilePath($project_id, $filename);
+                    if (!$file) {
+                        error_log("project_cron ($project_id) getPhysicalProjectFilePath FAILED");
+                        continue;
+                    }
+                } else {
+                    error_log("project_cron ($project_id) getProjectFileLocation FAILED");
+                    continue;
+                }
+
+                $creator = $taskDao->get_creator($project_id);
+
+                $source_language = $project['source_language'];
+                $source_language = $this->valid_language_for_matecat($source_language);
+                if (empty($source_language)) $source_language = 'en-US';
+
+                // https://www.matecat.com/api/docs#!/Project/post_new
+                // $re = curl_init('https://www.matecat.com/api/new'); ... api/v1/new 20191029
+                $re = curl_init("{$matecat_api}api/v1/new");
+
+                // http://php.net/manual/en/function.curl-setopt.php
                 curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
                 curl_setopt($re, CURLOPT_COOKIESESSION, true);
                 curl_setopt($re, CURLOPT_FOLLOWLOCATION, true);
@@ -1778,26 +1921,54 @@ $filename = "Test MS &$% doc.docx";
                 finfo_close($finfo);
                 $cfile = new \CURLFile($file, $mime, $filename);
 
+                $target_languages = explode(',', $project['target_languages']);
+                $filtered_target_languages = array();
+                foreach ($target_languages as $target_language) {
+                    $target_language = $this->valid_language_for_matecat($target_language);
+                    if (!empty($target_language) && ($target_language != $source_language)) {
+                        $filtered_target_languages[$target_language] = $target_language;
+                    }
+                }
+                if (!empty($filtered_target_languages)) {
+                    $filtered_target_languages = implode(',', $filtered_target_languages);
+                } else {
+                    if ($source_language != 'es-ES') {
+                        $filtered_target_languages = 'es-ES';
+                    } else {
+                        $filtered_target_languages = 'en-US';
+                    }
+                }
+
+                $private_tm_key = $taskDao->get_project_tm_key($project_id);
+                if (empty($private_tm_key)) {
                     $mt_engine        = '1';
                     $pretranslate_100 = '1';
                     $lexiqa           = '1';
                     $private_tm_key   = '58f97b6f65fb5c8c8522';
-
+                } else {
+                    $mt_engine        = $private_tm_key[0]['mt_engine'];
+                    $pretranslate_100 = $private_tm_key[0]['pretranslate_100'];
+                    $lexiqa           = $private_tm_key[0]['lexiqa'];
+                    $private_tm_key   = $private_tm_key[0]['private_tm_key'];
+                }
                 $fields = array(
                   'file'         => $cfile,
-                  'project_name' => "proj-9126",
-                  'source_lang'  => "en-GB",
-                  'target_lang'  => "fr-FR",
+                  'project_name' => "proj-$project_id",
+                  'source_lang'  => $source_language,
+                  'target_lang'  => $filtered_target_languages,
                   'tms_engine'   => '1',
                   'mt_engine'        => $mt_engine,
                   'private_tm_key'   => $private_tm_key,
                   'pretranslate_100' => $pretranslate_100,
                   'lexiqa'           => $lexiqa,
                   'subject'      => 'general',
-                  'owner_email'  => "alanabarrett0@gmail.com"
+                  'owner_email'  => $creator['email']
                 );
-
-                error_log("project_cron /new () fields: " . print_r($fields, true));
+                if ($private_tm_key === 'new') { // Testing Center Project
+                    $fields['tms_engine']         = '0';
+                    $fields['get_public_matches'] = '0';
+                }
+                error_log("project_cron /new ($project_id) fields: " . print_r($fields, true));
                 curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
 
                 curl_setopt($re, CURLOPT_HEADER, true);
@@ -1807,33 +1978,75 @@ $filename = "Test MS &$% doc.docx";
                 curl_setopt($re, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
 
                 $res = curl_exec($re);
+                if ($error_number = curl_errno($re)) {
+                    error_log("project_cron /new ($project_id) Curl error ($error_number): " . curl_error($re)); // $responseCode will be 0, so error will be caught below
+                }
+
+                $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
+                $header = substr($res, 0, $header_size);
+                $res = substr($res, $header_size);
+                $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
 
                 curl_close($re);
-//]]
 
-error_log("Before 2nd: {$matecat_api}test.php");
+                if ($responseCode == 200) {
+                    $response_data = json_decode($res, true);
 
-$re = curl_init("{$matecat_api}test.php");
+                    if ($response_data['status'] !== 'OK') {
+                        error_log("project_cron /new ($project_id) status NOT OK: " . $response_data['status']);
+                        error_log("project_cron /new ($project_id) status message: " . $response_data['message']);
+                        // Change status to Complete (3), if there was an error!
+                        $taskDao->updateWordCountRequestForProjects($project_id, 0, 0, 0, 3);
+                        $taskDao->insertWordCountRequestForProjectsErrors($project_id, $response_data['status'], $response_data['message']);
+                    }
+                    elseif (empty($response_data['id_project']) || empty($response_data['project_pass'])) {
+                        error_log("project_cron /new ($project_id) id_project or project_pass empty!");
+                        // Change status to Complete (3), if there was an error!
+                        $taskDao->updateWordCountRequestForProjects($project_id, 0, 0, 0, 3);
+                        $taskDao->insertWordCountRequestForProjectsErrors($project_id, $response_data['status'], 'id_project or project_pass empty');
+                    } else {
+                        $matecat_id_project      = $response_data['id_project'];
+                        $matecat_id_project_pass = $response_data['project_pass'];
 
-                // http://php.net/manual/en/function.curl-setopt.php
-                curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
-                curl_setopt($re, CURLOPT_COOKIESESSION, true);
-                curl_setopt($re, CURLOPT_FOLLOWLOCATION, true);
-                curl_setopt($re, CURLOPT_AUTOREFERER, true);
+                        // Change status to Uploaded (1), 0 is still placeholder for new word count
+                        $taskDao->updateWordCountRequestForProjects($project_id, $matecat_id_project, $matecat_id_project_pass, 0, 1);
+                    }
+                } else {
+                    // If this was a comms error, we will retry (as status is still 0)
+                    error_log("project_cron /new ($project_id) responseCode: $responseCode");
+                }
+            }
+        }
 
-                curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
+        // See if any chunks have been finalised in MateCat, if so mark any corresponding IN_PROGRESS (active) task(s) as complete
+        // $active_tasks_for_chunks = $taskDao->all_chunked_active_projects();
+        $active_tasks_for_chunks = array(); // It is now desired to have tranlators manually mark as COMPLETE
+        if (!empty($active_tasks_for_chunks)) {
+            $projects = array();
+            foreach ($active_tasks_for_chunks as $active_task) {
+                $projects[$active_task['project_id']] = $active_task['project_id'];
+            }
 
-                curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
+          if (count($projects) > 10) $projects = array_rand($projects, 10); // Pick random Projects, we don't want to do too many at once.
+          foreach ($projects as $project_id) {
+            $chunks = $taskDao->getStatusOfSubChunks($project_id);
 
-                curl_setopt($re, CURLOPT_HEADER, true);
-                curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
-                curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
-                curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($re, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
+            foreach ($active_tasks_for_chunks as $active_task) {
+                foreach ($chunks as $chunk) {
+                    if ($active_task['matecat_id_job'] == $chunk['matecat_id_job'] && $active_task['matecat_id_chunk_password'] == $chunk['matecat_id_chunk_password']) {
+                        if (($active_task['type_id'] == Common\Enums\TaskTypeEnum::TRANSLATION  && ($chunk['DOWNLOAD_STATUS'] === 'translated' || $chunk['DOWNLOAD_STATUS'] === 'approved')) ||
+                            ($active_task['type_id'] == Common\Enums\TaskTypeEnum::PROOFREADING &&                                                $chunk['DOWNLOAD_STATUS'] === 'approved')) {
 
-                $res = curl_exec($re);
-
-                curl_close($re);
+                            error_log('Setting Task COMPLETE for: ' . $active_task['task_id']);
+                            $taskDao->setTaskStatus($active_task['task_id'], Common\Enums\TaskStatusEnum::COMPLETE);
+                            $taskDao->sendTaskUploadNotifications($active_task['task_id'], 1);
+                            // LibAPI\Notify::sendTaskUploadNotifications($active_task['task_id'], 1);
+                        }
+                    }
+                }
+            }
+          }
+        }
 
         flock($fp_for_lock, LOCK_UN); // Release the lock
       }
