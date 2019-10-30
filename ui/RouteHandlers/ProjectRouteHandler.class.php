@@ -1825,28 +1825,8 @@ error_log("Before loop");
 
                 $project_id = 9126;
 
-                $project_file = $taskDao->getProjectFileLocation($project_id);
-                if (!empty($project_file)) {
-                    $filename = $project_file['filename'];
-                    //$file = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/$filename";
-                    $file = $taskDao->getPhysicalProjectFilePath($project_id, $filename);
-                    if (!$file) {
-                        error_log("project_cron ($project_id) getPhysicalProjectFilePath FAILED");
-                    }
-                } else {
-                    error_log("project_cron ($project_id) getProjectFileLocation FAILED");
-                }
-                $file = str_replace('/Common/lib/../..', '', $file);
-
-                $creator = $taskDao->get_creator($project_id);
-
                 $source_language = "en-GB";
-                $source_language = $this->valid_language_for_matecat($source_language);
-                if (empty($source_language)) $source_language = 'en-US';
 
-                // https://www.matecat.com/api/docs#!/Project/post_new
-                // $re = curl_init('https://www.matecat.com/api/new'); ... api/v1/new 20191029
-//                $re = curl_init("{$matecat_api}api/v1/new");
 $re = curl_init("{$matecat_api}test.php");
 
                 // http://php.net/manual/en/function.curl-setopt.php
