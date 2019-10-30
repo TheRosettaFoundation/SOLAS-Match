@@ -1855,16 +1855,7 @@ $re = curl_init("{$matecat_api}test.php");
                 curl_setopt($re, CURLOPT_FOLLOWLOCATION, true);
                 curl_setopt($re, CURLOPT_AUTOREFERER, true);
 
-                $httpHeaders = array(
-                    'Expect:'
-                );
                 curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
-
-                // http://php.net/manual/en/class.curlfile.php
-                $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                $mime = finfo_file($finfo, $file);
-                finfo_close($finfo);
-                $cfile = new \CURLFile($file, $mime, $filename);
 
                 error_log("project_cron /new ($project_id) fields: " . print_r($fields, true));
                 curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
