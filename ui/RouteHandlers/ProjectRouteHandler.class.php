@@ -1896,23 +1896,6 @@ $re = curl_init("{$matecat_api}test.php");
                     $lexiqa           = $private_tm_key[0]['lexiqa'];
                     $private_tm_key   = $private_tm_key[0]['private_tm_key'];
                 }
-                $fields = array(
-                  'file'         => $cfile,
-                  'project_name' => "proj-$project_id",
-                  'source_lang'  => $source_language,
-                  'target_lang'  => $filtered_target_languages,
-                  'tms_engine'   => '1',
-                  'mt_engine'        => $mt_engine,
-                  'private_tm_key'   => $private_tm_key,
-                  'pretranslate_100' => $pretranslate_100,
-                  'lexiqa'           => $lexiqa,
-                  'subject'      => 'general',
-                  'owner_email'  => $creator['email']
-                );
-                if ($private_tm_key === 'new') { // Testing Center Project
-                    $fields['tms_engine']         = '0';
-                    $fields['get_public_matches'] = '0';
-                }
                 error_log("project_cron /new ($project_id) fields: " . print_r($fields, true));
                 curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
 
