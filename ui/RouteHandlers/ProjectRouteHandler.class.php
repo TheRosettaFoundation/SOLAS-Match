@@ -382,6 +382,13 @@ class ProjectRouteHandler
                                         $chunks = $job['chunks'];
                                         $number_of_chunks = count($chunks);
 
+                                        foreach ($chunks as $chunk_number => $chunk) {
+                                            if (empty($chunks[$chunk_number]['password']) && !empty($chunks[$chunk_number]['translate_url'])) {
+                                                // 20191102 MateCat 2.9.2e no longer has "password" key here, need to extract it from "translate_url"
+                                                $chunks[$chunk_number]['password'] = substr($chunks[$chunk_number]['translate_url'], strrpos($chunks[$chunk_number]['translate_url'], '-') + 1);
+                                            }
+                                        }
+
                                         $was_chunked = !empty($job_was_chunked[$matecat_id_job]);
                                         $chunked_now = $number_of_chunks > 1;
                                         if     (!$was_chunked && !$chunked_now) $matched = true;
