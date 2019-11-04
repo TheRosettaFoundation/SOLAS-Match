@@ -139,9 +139,9 @@
 	<string name="common_job_title">Job Title</string>
   <string name="common_badges">Achievements</string>
   <string name="common_strict">Selected language pairs only</string>
-    <string name="common_the_last_email_was_sent_on">The last search for these tasks was made on %s. See <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">Signing up for Kató Platform email notifications</a></string>
-    <string name="common_no_emails_have_been_sent_yet">No notification e-mails have been sent yet. See <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">Signing up for Kató Platform email notifications</a></string>
-	<string name="common_you_are_not_currently_receiving_task_stream_notification_emails">You are not currently receiving task stream notification emails.</string>
+    <string name="common_the_last_email_was_sent_on">The last search for these tasks was made on %s. See <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">Signing up for Kató Platform email notifications</a>.</string>
+    <string name="common_no_emails_have_been_sent_yet">No notification e-mails have been sent yet. See <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">Signing up for Kató Platform email notifications</a>.</string>
+    <string name="common_you_are_not_currently_receiving_task_stream_notification_emails">You are not currently receiving task stream notification emails. See <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">Signing up for Kató Platform email notifications</a>.</string>
 	<string name="common_submit">Submit</string>
 	<string name="common_log_in">Log In</string>
     <string name="log_in_with_proz">Login with TWB Workspace</string>
