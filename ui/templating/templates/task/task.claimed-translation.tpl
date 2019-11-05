@@ -15,8 +15,8 @@
             <ol>
                 {if $matecat_url != ''}
                 <li>{Localisation::getTranslation('task_claimed_please_read_kato')}</li>
-                <li>{sprintf(Localisation::getTranslation('task_claimed_translation_translate_the_file_to_plain'), {TemplateHelper::getLanguage($task->getTargetLocale())})}</li>
-                <li><a href="{$matecat_url}" class="btn btn-primary" target="_blank">
+                <li>{sprintf(Localisation::getTranslation('task_claimed_translation_translate_the_file_to_plain'), {TemplateHelper::getLanguage($task->getTargetLocale())})}:
+                    <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
                     <i class="icon-th-list icon-white"></i> {Localisation::getTranslation('task_claimed_translate_using_kato')}</a></li>
                 {else}
                 <li>{Localisation::getTranslation('common_can_you_open_file')}</li>
