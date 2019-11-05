@@ -15,9 +15,9 @@
         <ol>
                 {if $matecat_url != ''}
                 <li>{Localisation::getTranslation('task_claimed_please_read_kato')}</li>
-                <li>{sprintf(Localisation::getTranslation('task_claimed_proofreading_proofread_the_file_in'), {TemplateHelper::getLanguage($task->getTargetLocale())})}</li>
                 <li>Also please note that you must wait for translation to be complete (100% translated) before starting revising.</li>
-                <li><a href="{$matecat_url}" class="btn btn-primary" target="_blank">
+                <li>{sprintf(Localisation::getTranslation('task_claimed_proofreading_proofread_the_file_in'), {TemplateHelper::getLanguage($task->getTargetLocale())})}
+                    <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
                     <i class="icon-th-list icon-white"></i> {Localisation::getTranslation('task_claimed_proofread_using_kato')}</a></li>
                 {else}
                 <li>{Localisation::getTranslation('task_claimed_proofreading_1')}</li>
