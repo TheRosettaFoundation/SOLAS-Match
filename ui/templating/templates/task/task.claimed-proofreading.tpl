@@ -13,10 +13,12 @@
         <h1>{Localisation::getTranslation('common_what_happens_now')}</h1>
         <p>{Localisation::getTranslation('common_this_is_what_you_need_to_do_as_soon_as_possible')}</p>
         <ol>
-                {if empty($allow_download)}
-                <li>{Localisation::getTranslation('task_claimed_click')} <strong>{Localisation::getTranslation('task_claimed_proofread_using_kato')}</strong></li>
+                {if $matecat_url != ''}
+                <li>{Localisation::getTranslation('task_claimed_please_read_kato')}</li>
                 <li>{sprintf(Localisation::getTranslation('task_claimed_proofreading_proofread_the_file_in'), {TemplateHelper::getLanguage($task->getTargetLocale())})}</li>
                 <li>Also please note that you must wait for translation to be complete (100% translated) before starting revising.</li>
+                <li><a href="{$matecat_url}" class="btn btn-primary" target="_blank">
+                    <i class="icon-th-list icon-white"></i> {Localisation::getTranslation('task_claimed_proofread_using_kato')}</a></li>
                 {else}
                 <li>{Localisation::getTranslation('task_claimed_proofreading_1')}</li>
                 <li>{sprintf(Localisation::getTranslation('task_claimed_proofreading_proofread_the_file_in'), {TemplateHelper::getLanguage($task->getTargetLocale())})}</li>
@@ -26,25 +28,14 @@
         {if isset($user)}
             <p>{sprintf(Localisation::getTranslation('common_we_have_also_emailed_you_these_instructions_to'), {$user->getEmail()})}</p>
         {/if}
-        {if $matecat_url != ''}
-            <p>{if !empty($allow_download)}{Localisation::getTranslation('task_claimed_alternative_option')} {/if}<a href="{$matecat_url}" class="btn btn-primary" target="_blank">
-                <i class="icon-th-list icon-white"></i> {Localisation::getTranslation('task_claimed_proofread_using_kato')}</a><br />
-                {Localisation::getTranslation('task_claimed_please_read_kato')}
-            </p>
-        {/if}
     </section>
 
     <section>
-        {if !empty($allow_download)}
-        <h3>{Localisation::getTranslation('task_claimed_proofreading_4')}</h3>
-        {/if}
-        <p></p>
+        <h3>When you have finished revising:</h3>
         <p>
-            {if !empty($allow_download)}
             <a href="{urlFor name="task" options="task_id.$task_id"}" class="btn btn-primary">
                 <i class="icon-share-alt icon-white"></i> {Localisation::getTranslation('task_claimed_proofreading_upload_proofread_task')}
             </a>
-            {/if}
             {if isset($user)}
             <a href="{urlFor name="claimed-tasks" options="user_id.{$user->getId()}"}" class="btn">
             {else}
