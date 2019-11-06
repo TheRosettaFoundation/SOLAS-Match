@@ -846,7 +846,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
 	<string name="task_claimed_proofreading_please_proofread_it">Please revise it!</string>
     <string name="task_claimed_proofreading_0">You have claimed the revising task <strong>%s</strong>.</string>
 	<string name="task_claimed_proofreading_1">Open the file that you have already saved to your computer.</string>
-    <string name="task_claimed_proofreading_proofread_the_file_in">Revise the <strong>%s</strong> translation to ensure that it meets quality standards:</string>
+    <string name="task_claimed_proofreading_proofread_the_file_in">Revise the <strong>%s</strong> translation to ensure that it meets <a href="https://community.translatorswb.org/t/what-is-translation-quality-for-translators-without-borders/10295" target="_blank">quality standards</a>:</string>
 	<string name="task_claimed_proofreading_upload_the_proofread_file">Upload the revised file to the task upload page.</string>
 	<string name="task_claimed_proofreading_4">When you have finished revising the file you downloaded:</string>
     <string name="task_claimed_proofreading_upload_proofread_task">Submit Revised Task</string>
