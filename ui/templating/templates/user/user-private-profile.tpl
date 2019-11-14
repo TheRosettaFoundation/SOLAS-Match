@@ -174,6 +174,7 @@
                     </p>
                     <p>
                         {Localisation::getTranslation('user_task_stream_notification_edit_1')}
+                        See <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">Signing up for Kató Platform email notifications</a>.
                     </p>
                     <p>
                         <label for='interval'><strong>{Localisation::getTranslation('user_task_stream_notification_edit_6')}:</strong></label>
