@@ -139,9 +139,9 @@
 	<string name="common_job_title">Job Title</string>
   <string name="common_badges">Achievements</string>
   <string name="common_strict">Selected language pairs only</string>
-	<string name="common_the_last_email_was_sent_on">The last email was sent on %s.</string>
-   	<string name="common_no_emails_have_been_sent_yet">No e-mails have been sent yet.</string>
-	<string name="common_you_are_not_currently_receiving_task_stream_notification_emails">You are not currently receiving task stream notification emails.</string>
+    <string name="common_the_last_email_was_sent_on">The last search for these tasks was made on %s. See <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">Signing up for Kató Platform email notifications</a>.</string>
+    <string name="common_no_emails_have_been_sent_yet">No notification e-mails have been sent yet. See <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">Signing up for Kató Platform email notifications</a>.</string>
+    <string name="common_you_are_not_currently_receiving_task_stream_notification_emails">You are not currently receiving task stream notification emails. See <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">Signing up for Kató Platform email notifications</a>.</string>
 	<string name="common_submit">Submit</string>
 	<string name="common_log_in">Log In</string>
     <string name="log_in_with_proz">Login with TWB Workspace</string>
@@ -846,7 +846,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
 	<string name="task_claimed_proofreading_please_proofread_it">Please revise it!</string>
     <string name="task_claimed_proofreading_0">You have claimed the revising task <strong>%s</strong>.</string>
 	<string name="task_claimed_proofreading_1">Open the file that you have already saved to your computer.</string>
-    <string name="task_claimed_proofreading_proofread_the_file_in">Revise the <strong>%s</strong> translation to ensure that it meets quality standards.</string>
+    <string name="task_claimed_proofreading_proofread_the_file_in">Revise the <strong>%s</strong> translation to ensure that it meets <a href="https://community.translatorswb.org/t/what-is-translation-quality-for-translators-without-borders/10295" target="_blank">quality standards</a>:</string>
 	<string name="task_claimed_proofreading_upload_the_proofread_file">Upload the revised file to the task upload page.</string>
 	<string name="task_claimed_proofreading_4">When you have finished revising the file you downloaded:</string>
     <string name="task_claimed_proofreading_upload_proofread_task">Submit Revised Task</string>
@@ -865,7 +865,7 @@ Should you have any questions please contact <a href="mailto:info@translatorswit
 	<string name="task_claimed_translation_0">You have claimed the translation task</string>
 	<string name="task_claimed_translation_we_need_your_translation">We need your translation.</string>
 	<string name="task_claimed_translation_translate_the_file_to">Translate the file to %s using your favourite translation software.</string>
-  <string name="task_claimed_translation_translate_the_file_to_plain">Translate the file to %s.</string>
+  <string name="task_claimed_translation_translate_the_file_to_plain">Translate the file to %s:</string>
 	<string name="task_claimed_translation_4">When you have finished translating the file you downloaded:</string>
     <string name="task_claimed_translation_5">Upload your finished translated file to the task page.</string>
     <string name="task_claimed_translation_upload_translated_task">Submit Translated Task</string>

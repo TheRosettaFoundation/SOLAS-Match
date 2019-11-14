@@ -42,7 +42,7 @@
 'el' => 'el-GR',
 'gu' => 'gu-IN',
 'ht' => 'ht-HT',
-'ha' => 'ha-HAU',
+'ha' => 'ha-NG',
 'US' => 'US-HI',
 'haw' => 'US-HI',
 'he' => 'he-IL',

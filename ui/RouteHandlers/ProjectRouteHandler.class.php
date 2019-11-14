@@ -382,6 +382,13 @@ class ProjectRouteHandler
                                         $chunks = $job['chunks'];
                                         $number_of_chunks = count($chunks);
 
+                                        foreach ($chunks as $chunk_number => $chunk) {
+                                            if (empty($chunks[$chunk_number]['password']) && !empty($chunks[$chunk_number]['translate_url'])) {
+                                                // 20191102 MateCat 2.9.2e no longer has "password" key here, need to extract it from "translate_url"
+                                                $chunks[$chunk_number]['password'] = substr($chunks[$chunk_number]['translate_url'], strrpos($chunks[$chunk_number]['translate_url'], '-') + 1);
+                                            }
+                                        }
+
                                         $was_chunked = !empty($job_was_chunked[$matecat_id_job]);
                                         $chunked_now = $number_of_chunks > 1;
                                         if     (!$was_chunked && !$chunked_now) $matched = true;
@@ -1901,8 +1908,8 @@ class ProjectRouteHandler
                 if (empty($source_language)) $source_language = 'en-US';
 
                 // https://www.matecat.com/api/docs#!/Project/post_new
-                // $re = curl_init('https://www.matecat.com/api/new');
-                $re = curl_init("{$matecat_api}api/new");
+                // $re = curl_init('https://www.matecat.com/api/new'); ... api/v1/new 20191029
+                $re = curl_init("{$matecat_api}api/v1/new");
 
                 // http://php.net/manual/en/function.curl-setopt.php
                 curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
@@ -2057,6 +2064,7 @@ class ProjectRouteHandler
         //    'body' => 'Dummy',
         //));
         //$app->render('nothing.tpl');
+      die;
     }
 
     public function valid_language_for_matecat($language_code)
