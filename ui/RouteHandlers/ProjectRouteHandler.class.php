@@ -2002,9 +2002,11 @@ class ProjectRouteHandler
                     if ($response_data['status'] !== 'OK') {
                         error_log("project_cron /new ($project_id) status NOT OK: " . $response_data['status']);
                         error_log("project_cron /new ($project_id) status message: " . $response_data['message']);
+                        if ($response_data['status'] !== 'FAIL' || $response_data['message'] !== 'Project Conversion Failure') { // 20191118, we think this might be a tempory failure?
                         // Change status to Complete (3), if there was an error!
                         $taskDao->updateWordCountRequestForProjects($project_id, 0, 0, 0, 3);
                         $taskDao->insertWordCountRequestForProjectsErrors($project_id, $response_data['status'], $response_data['message']);
+                        }
                     }
                     elseif (empty($response_data['id_project']) || empty($response_data['project_pass'])) {
                         error_log("project_cron /new ($project_id) id_project or project_pass empty!");
