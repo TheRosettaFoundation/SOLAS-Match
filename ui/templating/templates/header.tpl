@@ -46,8 +46,14 @@
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-1.9.0.js"></script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-ui.js"></script>
 
-        <!-- google analytics -->
-        <script type="text/javascript" src="{urlFor name="home"}ui/js/tracking.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-149484461-6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-149484461-6');
+</script>
 
         <!-- extra Scripts -->
         {if isset($extra_scripts)}
