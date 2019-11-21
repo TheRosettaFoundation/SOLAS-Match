@@ -713,6 +713,8 @@ class UserDao extends BaseDao
 
     public function verify_email_allowed_register($email)
     {
+        return; // No longer check with Neon
+
         $app = \Slim\Slim::getInstance();
         error_log("verify_email_allowed_register($email)");
 
