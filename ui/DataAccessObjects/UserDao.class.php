@@ -856,6 +856,13 @@ class UserDao extends BaseDao
         return $terms_accepted;
     }
 
+    public setRequiredProfileCompletedinSESSION($user_id)
+    {
+        if ($this->terms_accepted($user_id)) {
+            $_SESSION['profile_completed'] = 1;
+        }
+    }
+
     public function update_terms_accepted($user_id)
     {
         LibAPI\PDOWrapper::call('update_terms_accepted', LibAPI\PDOWrapper::cleanse($user_id) . ',1');

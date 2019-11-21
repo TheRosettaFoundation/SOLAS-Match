@@ -607,7 +607,9 @@ class UserRouteHandler
                     if ($currentSiteLang != $preferredLang) {
                         Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
                     }
-                    
+
+                    $userDao->setRequiredProfileCompletedinSESSION($user->getId());
+
                     //Redirect to homepage, or the page the page user was previously on e.g. if their
                     //session timed out and they are logging in again.
                     if ($request) {
@@ -677,6 +679,8 @@ class UserRouteHandler
                 if ($currentSiteLang != $preferredLang) {
                     Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
                 }
+
+                $userDao->setRequiredProfileCompletedinSESSION($user->getId());
                 
                 if ($request) {
                     $app->redirect($request);
