@@ -78,7 +78,7 @@ class UserRouteHandler
 
         $app->get(
             "/:user_id/privateProfile/",
-            array($middleware, "authUserIsLoggedIn"),
+            array($middleware, "authUserIsLoggedInNoProfile"),
             array($this, "userPrivateProfile")
         )->via("POST")->name("user-private-profile");
 
