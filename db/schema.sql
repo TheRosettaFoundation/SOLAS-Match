@@ -8176,17 +8176,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `terms_accepted`(IN userID INT)
 BEGIN
      SET @level = 0;
      SELECT accepted_level INTO @level FROM TermsAcceptedUsers WHERE user_id=userID;
-
-     if @level=0 THEN
-         IF      EXISTS (SELECT 1 FROM Admins WHERE user_id=userID) THEN
-             REPLACE INTO TermsAcceptedUsers (user_id, accepted_level) VALUES (userID, 999999);
-             SELECT 999999 INTO @level;
-         ELSEIF EXISTS (SELECT 1 FROM OrganisationMembers WHERE user_id=userID) THEN
-             REPLACE INTO TermsAcceptedUsers (user_id, accepted_level) VALUES (userID, 99999);
-             SELECT 99999 INTO @level;
-         END IF;
-     END IF;
-
      SELECT @level AS accepted_level;
 END//
 DELIMITER ;
