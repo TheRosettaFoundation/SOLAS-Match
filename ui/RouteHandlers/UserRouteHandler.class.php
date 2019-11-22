@@ -1281,11 +1281,11 @@ EOD;
             $langPrefName = '';
         }
 
-        if ($isSiteAdmin) {
-            $account_id = $userDao->get_neon_account($user);
-        } else {
+        //if ($isSiteAdmin) {
+        //    $account_id = $userDao->get_neon_account($user);
+        //} else {
             $account_id = 0;
-        }
+        //}
         
         $app->view()->appendData(array(
             'sesskey' => $sesskey,
