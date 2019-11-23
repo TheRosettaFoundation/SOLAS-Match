@@ -83,6 +83,10 @@ If you have any questions about submitting the form, please email <a href="mailt
                     <label for='displayName'><strong>{Localisation::getTranslation('common_display_name')}: <span style="color: red">*</span></strong></label>
                     <input type='text' style="width: 80%" value="{$user->getDisplayName()|escape:'html':'UTF-8'}" name="displayName" id="displayName" />
 
+                    <label for='over18'><strong>Please confirm you are over the age of 18 years old: <span style="color: red">*</span></strong></label>
+                    <p class="desc">Translators without Borders (TWB) is a non-profit organization with strong child protection principles, and we cannot consider for volunteer work anyone below the age of 18.</p>
+                    <input type="checkbox" style="width: 80%" value="1" name="over18" id="over18" {if $over18}checked="checked"{/if} /> I confirm I am over the age of 18.
+
                     <div id="language_area">
                         <div id = "nativeLanguageDiv">
                             <label><strong>{Localisation::getTranslation('common_native_language')}: <span style="color: red">*</span></strong></label>
