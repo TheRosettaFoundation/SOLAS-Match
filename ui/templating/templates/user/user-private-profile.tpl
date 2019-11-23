@@ -1,3 +1,4 @@
+<!-- Editor Hint: ¿áéíóú -->
 {include file='header.tpl'}
 
 <span class="hidden">
@@ -51,14 +52,15 @@
             {else}
                 {Localisation::getTranslation('user_private_profile_private_profile')}
             {/if}
-            <small>{Localisation::getTranslation('user_private_profile_0')}</small><br>
+            <small>Translator Registration Form</small><br>
             <small>{Localisation::getTranslation('common_denotes_a_required_field')}</small>
         </h1>
     </div>
 {/if}
 
 <div class="well alert-info">
-    <p><strong>{Localisation::getTranslation('user_private_profile_3')} {Localisation::getTranslation('user_private_profile_4')}</strong></p>
+    <p><strong>Thank you for your interest in Translators without Borders! Please fill out the form below to join the TWB Kató Translator community. Anyone fluent in at least two languages is welcome to apply.<br /><br />
+If you have any questions about submitting the form, please email <a href="mailto:translators@translatorswithoutborders.org?subject={rawurlencode('Translator Registration Form')}" target="_blank">translators@translatorswithoutborders.org</a></strong></p>
 </div>
 
 <div class="well">
