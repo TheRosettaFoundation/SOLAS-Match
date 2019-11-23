@@ -90,16 +90,11 @@ If you have any questions about submitting the form, please email <a href="mailt
                     <div id="language_area">
                         <div id = "nativeLanguageDiv">
                             <label><strong>{Localisation::getTranslation('common_native_language')}: <span style="color: red">*</span></strong></label>
+                            <p class="desc">Your native language is a language you have been exposed to from birth or within a long period of your life or education. It generally is the language you are more fluent in.</p>
                             <select name="nativeLanguageSelect" id="nativeLanguageSelect" style="width: 41%">
-                                <option value=""></option>
-                                {foreach $languages as $language}
-                                    <option value="{$language->getCode()}" {if $language->getCode() == $nativeLanguageSelectCode}selected="selected"{/if}>{$language->getName()}</option>
-                                {/foreach}
-                            </select>
-                            <select name="nativeCountrySelect" id="nativeCountrySelect" style="width: 41%">
-                                <option value=""></option>
-                                {foreach $countries as $country}
-                                    <option value="{$country->getCode()}" {if $country->getCode() == $nativeCountrySelectCode}selected="selected"{/if}>{$country->getName()}</option>
+                                <option value="0"></option>
+                                {foreach from=$languages key=codes item=language}
+                                    <option value="{$codes}" >{$language} {if $codes == $nativeLanguageSelectCode}selected="selected"{/if}>{{$language}}</option>
                                 {/foreach}
                             </select>
                         </div>
