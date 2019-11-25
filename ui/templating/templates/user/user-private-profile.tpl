@@ -11,9 +11,7 @@
     {assign var="i" value=0}
     {foreach $userQualifiedPairs as $userQualifiedPair}
         <div id="userQualifiedPairLanguageCodeSource_{$i}">{$userQualifiedPair['language_code_source']}</div>
-        <div id="userQualifiedPairCountryCodeSource_{$i}">{$userQualifiedPair['country_code_source']}</div>
         <div id="userQualifiedPairLanguageCodeTarget_{$i}">{$userQualifiedPair['language_code_target']}</div>
-        <div id="userQualifiedPairCountryCodeTarget_{$i}">{$userQualifiedPair['country_code_target']}</div>
         <div id="userQualifiedPairQualificationLevel_{$i}">{$userQualifiedPair['qualification_level']}</div>
         {assign var="i" value=$i+1}
     {/foreach}
@@ -22,16 +20,9 @@
 
     <!-- Templates... -->
     <div id="template_language_options">
-        <option value=""></option>
-        {foreach $languages as $language}
-            <option value="{$language->getCode()}">{$language->getName()}</option>
-        {/foreach}
-    </div>
-
-    <div id="template_country_options">
-        <option value=""></option>
-        {foreach $countries as $country}
-            <option value="{$country->getCode()}">{$country->getName()}</option>
+        <option value="0"></option>
+        {foreach from=$languages key=codes item=language}
+            <option value="{$codes}" >{$language}</option>
         {/foreach}
     </div>
 

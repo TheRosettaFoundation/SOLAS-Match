@@ -57,9 +57,7 @@ function loadingComplete()
   for (var i = 0; i < userQualifiedPairsCountDatabase; i++) {
     addSecondaryLanguage(
       getSetting("userQualifiedPairLanguageCodeSource_" + i),
-      getSetting("userQualifiedPairCountryCodeSource_" + i),
       getSetting("userQualifiedPairLanguageCodeTarget_" + i),
-      getSetting("userQualifiedPairCountryCodeTarget_" + i),
       getSetting("userQualifiedPairQualificationLevel_" + i)
       );
   }
@@ -73,9 +71,7 @@ function loadingComplete()
  */
 function addSecondaryLanguage(
   userQualifiedPairLanguageCodeSource,
-  userQualifiedPairCountryCodeSource,
   userQualifiedPairLanguageCodeTarget,
-  userQualifiedPairCountryCodeTarget,
   userQualifiedPairQualificationLevel)
 {
   if (userQualifiedPairsCount < userQualifiedPairsLimit) {
@@ -97,15 +93,6 @@ function addSecondaryLanguage(
     languageBox.value = userQualifiedPairLanguageCodeSource;
     locale.appendChild(languageBox);
 
-    var countryBox = document.createElement("select");
-    countryBox.innerHTML = document.getElementById("template_country_options").innerHTML;
-    countryBox.name = "country_code_source_" + userQualifiedPairsCount;
-    countryBox.id = "country_code_source_" + userQualifiedPairsCount;
-    countryBox.style.width = "41%";
-    if (userQualifiedPairCountryCodeSource === undefined) userQualifiedPairCountryCodeSource = "";
-    countryBox.value = (userQualifiedPairCountryCodeSource == "") ? "--" : userQualifiedPairCountryCodeSource;
-    locale.appendChild(countryBox);
-
     var text2 = document.createElement("label");
     text2.innerHTML = "<strong>" + parameters.getTranslation("common_to") + ":</strong>";
     text2.style.width = "82%";
@@ -119,15 +106,6 @@ function addSecondaryLanguage(
     if (userQualifiedPairLanguageCodeTarget === undefined) userQualifiedPairLanguageCodeTarget = "";
     languageBoxTarget.value = userQualifiedPairLanguageCodeTarget;
     locale.appendChild(languageBoxTarget);
-
-    var countryBoxTarget = document.createElement("select");
-    countryBoxTarget.innerHTML = document.getElementById("template_country_options").innerHTML;
-    countryBoxTarget.name = "country_code_target_" + userQualifiedPairsCount;
-    countryBoxTarget.id = "country_code_target_" + userQualifiedPairsCount;
-    countryBoxTarget.style.width = "41%";
-    if (userQualifiedPairCountryCodeTarget === undefined) userQualifiedPairCountryCodeTarget = "";
-    countryBoxTarget.value = (userQualifiedPairCountryCodeTarget == "") ? "--" : userQualifiedPairCountryCodeTarget;
-    locale.appendChild(countryBoxTarget);
 
     var text3 = document.createElement("label");
     text3.innerHTML = "<strong>" + parameters.getTranslation("qualification_level_for_above") + ":</strong>";
@@ -239,12 +217,10 @@ function validateForm()
 
   for (var i = 0; i < userQualifiedPairsCount; i++) {
     var languageCodeSource = document.getElementById("language_code_source_" + i);
-    var countryCodeSource  = document.getElementById("country_code_source_" + i);
     var languageCodeTarget = document.getElementById("language_code_target_" + i);
-    var countryCodeTarget  = document.getElementById("country_code_target_" + i);
 
     if ((languageCodeSource.value == "" && languageCodeTarget.value != "") || (languageCodeTarget.value == "" && languageCodeSource.value != "") ||
-        (languageCodeSource.value == languageCodeTarget.value && countryCodeSource.value == countryCodeTarget.value)) {
+        (languageCodeSource.value == languageCodeTarget.value)) {
       alertError = parameters.getTranslation("user_private_profile_secondary_languages_failed");
       set_all_errors_for_submission();
       return false;
