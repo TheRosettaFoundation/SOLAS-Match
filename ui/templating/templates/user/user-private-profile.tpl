@@ -100,6 +100,7 @@ If you have any questions about submitting the form, please email <a href="mailt
                         </div>
                         <div id="secondaryLanguageDiv">
                             <hr style="width: 60%" />
+                            <p class="desc">In general, people translate from any language they are proficient in, into their first/native language. For example, if the language you are more fluent in is Spanish, and you are also fluent in English and French, you can translate from English to Spanish and from French to Spanish</p>
                             <button onclick="addSecondaryLanguage(); return false;" class="btn btn-success" id="addLanguageButton" {if $userQualifiedPairsCount >= 120}disabled{/if}>
                                 <i class="icon-upload icon-white"></i> {Localisation::getTranslation('user_private_profile_add_secondary_language')}
                             </button>
