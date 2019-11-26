@@ -17,6 +17,7 @@
     {/foreach}
     <div id="isSiteAdmin">{if $isSiteAdmin}1{else}0{/if}</div>
     <div id="langPrefSelectCodeSaved">{$langPrefSelectCode}</div>
+    <input type='text' value="{$langPrefSelectCode}" id="langPrefSelect"/>
 
     <!-- Templates... -->
     <div id="template_language_options">
@@ -111,15 +112,6 @@ If you have any questions about submitting the form, please email <a href="mailt
                     <label for='biography'><strong>About Me:</strong></label>
                     <textarea cols='40' rows='7' style="width: 80%" name="biography" id="biography">{$user->getBiography()|escape:'html':'UTF-8'}</textarea>
 
-                    <div id="siteLangSelectDiv">
-                        <label for='languagePreference' style="margin-top:6px;"'><strong>{Localisation::getTranslation('common_language_preference')}:</strong></label>
-                        <select name="langPrefSelect" id="langPrefSelect" style="width: 80%">
-                            {foreach $locs as $loc}
-                                <option value="{$loc->getCode()}" {if $loc->getCode() == $langPrefSelectCode}selected="selected"{/if}>{$loc->getName()}</option>
-                            {/foreach}
-                        </select>
-
-                    </div>
                     <div id="loading_warning1">
                         <p><i>{Localisation::getTranslation('common_loading')}</i></p>
                     </div>
