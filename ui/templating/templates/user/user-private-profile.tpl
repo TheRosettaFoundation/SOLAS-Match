@@ -108,7 +108,7 @@ If you have any questions about submitting the form, please email <a href="mailt
                         </div>
                     </div>
 
-                    <label for='biography'><strong>{Localisation::getTranslation('common_biography')}:</strong></label>
+                    <label for='biography'><strong>About Me:</strong></label>
                     <textarea cols='40' rows='7' style="width: 80%" name="biography" id="biography">{$user->getBiography()|escape:'html':'UTF-8'}</textarea>
 
                     <div id="siteLangSelectDiv">

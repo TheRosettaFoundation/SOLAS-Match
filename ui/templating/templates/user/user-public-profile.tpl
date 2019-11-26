@@ -129,7 +129,7 @@
                         {if isset($bio)}
                             <tr>
                                 <td>
-                                    <h3>{Localisation::getTranslation('common_biography')}</h3>
+                                    <h3>About Me</h3>
                                 </td>
                             </tr>
                             <tr>
@@ -469,7 +469,7 @@
                 </div>
                 <div class="span8">
                     <p>
-                        <strong>{Localisation::getTranslation('common_biography')}</strong><br/>
+                        <strong>About Me</strong><br/>
                         
                         {if $org->getBiography() == ''}
                             {Localisation::getTranslation('org_public_profile_no_biography_listed')}
