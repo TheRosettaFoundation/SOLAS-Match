@@ -226,7 +226,7 @@ If you have any questions about submitting the form, please email <a href="mailt
                     <table>
                         <tr>
                             <td colspan="3" align="center" style="font-weight: bold">
-                                {Localisation::getTranslation('user_private_profile_task_type_preferences')}:
+                                Services I can provide:
                             </td>
                         </tr>
                         <tr align="center">
