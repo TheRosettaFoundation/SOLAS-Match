@@ -311,6 +311,34 @@ Other
                                 <hr/>
                             </td>
                         </tr>
+                        <tr>
+                            <td colspan="1" align="center" style="font-weight: bold">
+                                Certifications
+                                <p class="desc">If you hold a certification or membership from any of the organizations below, you could qualify to be a verified translator. Please select the organization and submit a proof of certification/membership.</p>
+                            </td>
+                        </tr>
+                        <tr align="center">
+                            <td>
+ATA...
+                                <input type="checkbox" {if $translator}checked="checked"{/if} name="translator" id="translator" /> General
+                            </td>
+                        </tr>
+                        <tr align="center">
+                            <td>
+                                <input type="checkbox" {if $proofreader}checked="checked"{/if} name="proofreader" id="proofreader" /> Accounting & Finance
+                            </td>
+                        </tr>
+                        <tr align="center">
+                            <td>
+                                <input type="checkbox" {if $interpreter}checked="checked"{/if} name="interpreter" id="interpreter" /> {Localisation::getTranslation('user_private_profile_interpreting')}
+                                <hr/>
+                            </td>
+                        </tr>
+
+
+
+
+
                     </table>
                 </td>
             </tr>
