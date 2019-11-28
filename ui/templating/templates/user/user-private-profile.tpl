@@ -225,30 +225,46 @@ If you have any questions about submitting the form, please email <a href="mailt
                 <td colspan="2">
                     <table>
                         <tr>
-                            <td colspan="3" align="center" style="font-weight: bold">
+                            <td colspan="1" align="center" style="font-weight: bold">
                                 Services I can provide:
                             </td>
                         </tr>
                         <tr align="center">
                             <td>
-                                {Localisation::getTranslation('user_private_profile_translating')}
-                            </td>
-                            <td>
-                                {Localisation::getTranslation('user_private_profile_proofreading')}
-                            </td>
-                            <td>
-                                {Localisation::getTranslation('user_private_profile_interpreting')}
+                                <input type="checkbox" {if $translator}checked="checked"{/if} name="translator" id="translator" /> {Localisation::getTranslation('user_private_profile_translating')}
                             </td>
                         </tr>
                         <tr align="center">
                             <td>
-                                <input type="checkbox" {if $translator}checked="checked"{/if} name="translator" id="translator" />
+                                <input type="checkbox" {if $proofreader}checked="checked"{/if} name="proofreader" id="proofreader" /> {Localisation::getTranslation('user_private_profile_proofreading')}
                             </td>
+                        </tr>
+                        <tr align="center">
                             <td>
-                                <input type="checkbox" {if $proofreader}checked="checked"{/if} name="proofreader" id="proofreader" />
+                                <input type="checkbox" {if $interpreter}checked="checked"{/if} name="interpreter" id="interpreter" /> {Localisation::getTranslation('user_private_profile_interpreting')}
+                                <hr/>
                             </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="1" align="center" style="font-weight: bold">
+                                My fields of expertise are:
+                            </td>
+                        </tr>
+                        <tr align="center">
                             <td>
-                                <input type="checkbox" {if $interpreter}checked="checked"{/if} name="interpreter" id="interpreter" />
+                                <input type="checkbox" {if $translator}checked="checked"{/if} name="translator" id="translator" /> General
+                            </td>
+                        </tr>
+                        <tr align="center">
+                            <td>
+                                <input type="checkbox" {if $proofreader}checked="checked"{/if} name="proofreader" id="proofreader" /> Accounting & Finance
+                            </td>
+                        </tr>
+                        <tr align="center">
+                            <td>
+                                <input type="checkbox" {if $interpreter}checked="checked"{/if} name="interpreter" id="interpreter" /> {Localisation::getTranslation('user_private_profile_interpreting')}
+                                <hr/>
                             </td>
                         </tr>
                     </table>
