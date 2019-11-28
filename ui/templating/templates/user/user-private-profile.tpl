@@ -275,6 +275,43 @@ If you have any questions about submitting the form, please email <a href="mailt
                     <label for='twbprivacy'><strong>Please read the <a href="https://translatorswithoutborders.org/privacy-policy/" target="_blank">TWB Privacy Policy</a>: <span style="color: red">*</span></strong></label>
                     <p class="desc">TWB is committed to protecting personal data and will use the information you provide to send you updates, information and news from Translators without Borders, including our newsletter, volunteer and job opportunities, and crisis alerts. If at any point you wish to unsubscribe from TWB communications, you can always do that.</p>
                     <input type="checkbox" style="width: 80%" value="1" name="twbprivacy" id="twbprivacy" {if $twbprivacy}checked="checked"{/if} /> I agree to communications from Translators without Borders by email
+                    <hr/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <table>
+                        <tr>
+                            <td colspan="1" align="center" style="font-weight: bold">
+                                Where did you hear about TWB?
+                            </td>
+                        </tr>
+                        <tr align="center">
+                            <td>
+Twitter
+Facebook
+LinkedIn
+Event/Conference
+Word of mouth/Referral
+TWB Newsletter
+Internet search
+Contacted by TWB staff
+Other
+                                <input type="checkbox" {if $translator}checked="checked"{/if} name="translator" id="translator" /> General
+                            </td>
+                        </tr>
+                        <tr align="center">
+                            <td>
+                                <input type="checkbox" {if $proofreader}checked="checked"{/if} name="proofreader" id="proofreader" /> Accounting & Finance
+                            </td>
+                        </tr>
+                        <tr align="center">
+                            <td>
+                                <input type="checkbox" {if $interpreter}checked="checked"{/if} name="interpreter" id="interpreter" /> {Localisation::getTranslation('user_private_profile_interpreting')}
+                                <hr/>
+                            </td>
+                        </tr>
+                    </table>
                 </td>
             </tr>
             <tr>
