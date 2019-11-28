@@ -271,6 +271,13 @@ If you have any questions about submitting the form, please email <a href="mailt
                 </td>
             </tr>
             <tr>
+                <td colspan="2">
+                    <label for='twbprivacy'><strong>Please read the <a href="https://translatorswithoutborders.org/privacy-policy/" target="_blank">TWB Privacy Policy</a>: <span style="color: red">*</span></strong></label>
+                    <p class="desc">TWB is committed to protecting personal data and will use the information you provide to send you updates, information and news from Translators without Borders, including our newsletter, volunteer and job opportunities, and crisis alerts. If at any point you wish to unsubscribe from TWB communications, you can always do that.</p>
+                    <input type="checkbox" style="width: 80%" value="1" name="twbprivacy" id="twbprivacy" {if $twbprivacy}checked="checked"{/if} /> I agree to communications from Translators without Borders by email
+                </td>
+            </tr>
+            <tr>
                 <td colspan="2" style="padding-bottom: 20px">
                     <hr/>
                     <div id="placeholder_for_errors_2"></div>
