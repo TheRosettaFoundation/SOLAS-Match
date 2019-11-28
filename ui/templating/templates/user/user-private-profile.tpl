@@ -334,11 +334,16 @@ ATA...
                                 <hr/>
                             </td>
                         </tr>
-
-
-
-
-
+                        <tr align="center">
+                            <td colspan="1" align="center" style="font-weight: bold">
+                                Please submit a proof of certification
+                                <p class="desc">If you hold any translation certification, please upload it here. You will be upgraded to Verified Translator, which will give you immediate access to all projects available, for the verified combination. if you have any questions or can't upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject={rawurlencode('Translation Certification')}" target="_blank">translators@translatorswithoutborders.org</a></p>
+                            </td>
+                            <td>
+                                Certificate Description: <input type='text' value="" name="certificateDescription" id="certificateDescription" /> <input type="file" name="certificateFile" id="certificateFile" />
+                                <hr/>
+                            </td>
+                        </tr>
                     </table>
                 </td>
             </tr>
