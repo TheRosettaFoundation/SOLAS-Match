@@ -272,6 +272,14 @@ If you have any questions about submitting the form, please email <a href="mailt
             </tr>
             <tr>
                 <td colspan="2">
+                    <label for='communityvisible'><strong>Do you want all the above to be visible to all members(?) of the TWB community?: </strong></label>
+                    <p class="desc">If at any point you wish to change this setting, you can always do that. Additionally you will be able to have a link to this information which you can share with selected people.</p>
+                    <input type="checkbox" style="width: 80%" value="1" name="communityvisible" id="communityvisible" {if $communityvisible}checked="checked"{/if} /> Make the above information visibae to TWB comminity
+                    <hr/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
                     <label for='twbprivacy'><strong>Please read the <a href="https://translatorswithoutborders.org/privacy-policy/" target="_blank">TWB Privacy Policy</a>: <span style="color: red">*</span></strong></label>
                     <p class="desc">TWB is committed to protecting personal data and will use the information you provide to send you updates, information and news from Translators without Borders, including our newsletter, volunteer and job opportunities, and crisis alerts. If at any point you wish to unsubscribe from TWB communications, you can always do that.</p>
                     <input type="checkbox" style="width: 80%" value="1" name="twbprivacy" id="twbprivacy" {if $twbprivacy}checked="checked"{/if} /> I agree to communications from Translators without Borders by email
