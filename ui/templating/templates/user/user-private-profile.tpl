@@ -320,6 +320,7 @@ Other
                         <tr align="center">
                             <td>
 ATA...
+Click here to upload proof for... [Already uploaded mark]
                                 <input type="checkbox" {if $translator}checked="checked"{/if} name="translator" id="translator" /> General
                             </td>
                         </tr>
