@@ -274,7 +274,7 @@ If you have any questions about submitting the form, please email <a href="mailt
                 <td colspan="2">
                     <label for='communityvisible'><strong>Do you want all the above to be visible to all members(?) of the TWB community?: </strong></label>
                     <p class="desc">If at any point you wish to change this setting, you can always do that. Additionally you will be able to have a link to this information which you can share with selected people.</p>
-                    <input type="checkbox" style="width: 80%" value="1" name="communityvisible" id="communityvisible" {if $communityvisible}checked="checked"{/if} /> Make the above information visibae to TWB comminity
+                    <input type="checkbox" style="width: 80%" value="1" name="communityvisible" id="communityvisible" {if $communityvisible}checked="checked"{/if} /> Make the above information visible to TWB community
                     <hr/>
                 </td>
             </tr>
