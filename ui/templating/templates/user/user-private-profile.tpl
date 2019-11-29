@@ -123,26 +123,15 @@ If you have any questions about submitting the form, please email <a href="mailt
                     <label for='lastName'><strong>{Localisation::getTranslation('common_last_name')}:</strong></label>
                     <input type='text' value="{$userPersonalInfo->getLastName()|escape:'html':'UTF-8'}" style="width: 80%" name="lastName" id="lastName" />
 
-                    <label for='mobileNumber'><strong>Your ProZ.com URL (if you have one):</strong></label>
-                    <input type='text' value="{$userPersonalInfo->getMobileNumber()|escape:'html':'UTF-8'}" style="width: 80%" name="mobileNumber" id="mobileNumber" />
-                    <label for='mobileNumber'><strong>Your LinkedIn URL (if you have one):</strong></label>
-                    <input type='text' value="{$userPersonalInfo->getMobileNumber()|escape:'html':'UTF-8'}" style="width: 80%" name="mobileNumber" id="mobileNumber" />
-                    <label for='mobileNumber'><strong>Other URL:</strong></label>
-                    <input type='text' value="{$userPersonalInfo->getMobileNumber()|escape:'html':'UTF-8'}" style="width: 80%" name="mobileNumber" id="mobileNumber" />
+                    <label for='businessNumber'><strong>Your ProZ.com URL (if you have one):</strong></label>
+                    <input type='text' value="{$userPersonalInfo->getBusinessNumber()|escape:'html':'UTF-8'}" style="width: 80%" name="businessNumber" id="businessNumber" />
+                    <label for='jobTitle'><strong>Your LinkedIn URL (if you have one):</strong></label>
+                    <input type='text' value="{$userPersonalInfo->getJobTitle()|escape:'html':'UTF-8'}" style="width: 80%" name="jobTitle" id="jobTitle" />
+                    <label for='address'><strong>Other URL:</strong></label>
+                    <input type='text' value="{$userPersonalInfo->getAddress()|escape:'html':'UTF-8'}" style="width: 80%" name="address" id="address" />
 
                     <label for='mobileNumber'><strong>{Localisation::getTranslation('common_mobile_number')}:</strong></label>
                     <input type='text' value="{$userPersonalInfo->getMobileNumber()|escape:'html':'UTF-8'}" style="width: 80%" name="mobileNumber" id="mobileNumber" />
-
-<!--
-                    <label for='businessNumber'><strong>{Localisation::getTranslation('common_business_number')}:</strong></label>
-                    <input type='text' value="{$userPersonalInfo->getBusinessNumber()|escape:'html':'UTF-8'}" style="width: 80%" name="businessNumber" id="businessNumber" />
-
-                    <label for='jobTitle'><strong>{Localisation::getTranslation('common_job_title')}:</strong></label>
-                    <input type='text' value="{$userPersonalInfo->getJobTitle()|escape:'html':'UTF-8'}" style="width: 80%" name="jobTitle" id="jobTitle" />
-
-                    <label for='address'><strong>{Localisation::getTranslation('common_address')}:</strong></label>
-                    <textarea cols='40' rows='5' style="width: 80%" name="address" id="address">{$userPersonalInfo->getAddress()|escape:'html':'UTF-8'}</textarea>
--->
 
                     <label for='city'><strong>{Localisation::getTranslation('common_city')}:</strong></label>
                     <input type='text' value="{$userPersonalInfo->getCity()|escape:'html':'UTF-8'}" style="width: 80%" name="city" id="city" />
@@ -150,10 +139,6 @@ If you have any questions about submitting the form, please email <a href="mailt
                     <label for='country'><strong>{Localisation::getTranslation('common_country')}:</strong></label>
                     <input type='text' value="{$userPersonalInfo->getCountry()|escape:'html':'UTF-8'}" style="width: 80%" name="country" id="country" />
 
-<!--
-                    <label for="receiveCredit"><strong>{Localisation::getTranslation('user_private_profile_receive_credit')}:</strong></label>
-                    <input type="checkbox" {if $userPersonalInfo->getReceiveCredit()}checked="checked"{/if} name="receiveCredit" id="receiveCredit" />
--->
                 </td>
             </tr>
             <tr>
@@ -272,9 +257,9 @@ If you have any questions about submitting the form, please email <a href="mailt
             </tr>
             <tr>
                 <td colspan="2">
-                    <label for='communityvisible'><strong>Do you want all the above to be visible to all members(?) of the TWB community?: </strong></label>
+                    <label for='receiveCredit'><strong>Do you want all the above to be visible to all members(?) of the TWB community?:</strong></label>
                     <p class="desc">If at any point you wish to change this setting, you can always do that. Additionally you will be able to have a link to this information which you can share with selected people.</p>
-                    <input type="checkbox" style="width: 80%" value="1" name="communityvisible" id="communityvisible" {if $communityvisible}checked="checked"{/if} /> Make the above information visible to TWB community
+                    <input type="checkbox" style="width: 80%" value="1" name="receiveCredit" id="receiveCredit" {if $userPersonalInfo->getReceiveCredit()}checked="checked"{/if} /> Make the above information visible to TWB community
                     <hr/>
                 </td>
             </tr>
