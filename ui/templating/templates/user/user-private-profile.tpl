@@ -209,36 +209,15 @@ If you have any questions about submitting the form, please email <a href="mailt
             <tr>
                 <td colspan="2">
                     <table>
-                        <tr>
-                            <td colspan="1" align="center" style="font-weight: bold">
-                                Services I can provide:
-                            </td>
-                        </tr>
+                        <tr><td colspan="1" align="center" style="font-weight: bold">Services I can provide:</td></tr>
                         {foreach from=$capability_list key=name item=capability}
                             <tr align="center"><td><input type="checkbox" {if $capability['state']}checked="checked"{/if} name="{$name}" id="{$name}" /> {$capability['desc']}</td></tr>
                         {/foreach}
 
-                        <tr>
-                            <td colspan="1" align="center" style="font-weight: bold">
-                                My fields of expertise are:
-                            </td>
-                        </tr>
-                        <tr align="center">
-                            <td>
-                                <input type="checkbox" {if $translator}checked="checked"{/if} name="translator" id="translator" /> General
-                            </td>
-                        </tr>
-                        <tr align="center">
-                            <td>
-                                <input type="checkbox" {if $proofreader}checked="checked"{/if} name="proofreader" id="proofreader" /> Accounting & Finance
-                            </td>
-                        </tr>
-                        <tr align="center">
-                            <td>
-                                <input type="checkbox" {if $interpreter}checked="checked"{/if} name="interpreter" id="interpreter" /> {Localisation::getTranslation('user_private_profile_interpreting')}
-                                <hr/>
-                            </td>
-                        </tr>
+                        <tr><td colspan="1" align="center" style="font-weight: bold">My fields of expertise are:</td></tr>
+                        {foreach from=$expertise_list key=name item=expertise}
+                            <tr align="center"><td><input type="checkbox" {if $expertise['state']}checked="checked"{/if} name="{$name}" id="{$name}" /> {$expertise['desc']}</td></tr>
+                        {/foreach}
                     </table>
                 </td>
             </tr>
