@@ -124,6 +124,7 @@ If you have any questions about submitting the form, please email <a href="mailt
                     <input type='text' value="{$userPersonalInfo->getLastName()|escape:'html':'UTF-8'}" style="width: 80%" name="lastName" id="lastName" />
 
                     <label for='businessNumber'><strong>Your ProZ.com URL (if you have one):</strong></label>
+NO MAKE URL TABLE
                     <input type='text' value="{$userPersonalInfo->getBusinessNumber()|escape:'html':'UTF-8'}" style="width: 80%" name="businessNumber" id="businessNumber" />
                     <label for='jobTitle'><strong>Your LinkedIn URL (if you have one):</strong></label>
                     <input type='text' value="{$userPersonalInfo->getJobTitle()|escape:'html':'UTF-8'}" style="width: 80%" name="jobTitle" id="jobTitle" />
@@ -240,36 +241,13 @@ If you have any questions about submitting the form, please email <a href="mailt
             <tr>
                 <td colspan="2">
                     <table>
-                        <tr>
-                            <td colspan="1" align="center" style="font-weight: bold">
-                                Where did you hear about TWB?
-                            </td>
-                        </tr>
-                        <tr align="center">
-                            <td>
-Twitter
-Facebook
-LinkedIn
-Event/Conference
-Word of mouth/Referral
-TWB Newsletter
-Internet search
-Contacted by TWB staff
-Other
-                                <input type="checkbox" {if $translator}checked="checked"{/if} name="translator" id="translator" /> General
-                            </td>
-                        </tr>
-                        <tr align="center">
-                            <td>
-                                <input type="checkbox" {if $proofreader}checked="checked"{/if} name="proofreader" id="proofreader" /> Accounting & Finance
-                            </td>
-                        </tr>
-                        <tr align="center">
-                            <td>
-                                <input type="checkbox" {if $interpreter}checked="checked"{/if} name="interpreter" id="interpreter" /> {Localisation::getTranslation('user_private_profile_interpreting')}
-                                <hr/>
-                            </td>
-                        </tr>
+                        <tr><td colspan="1" align="center" style="font-weight: bold">Where did you hear about TWB? <span style="color: red">*</span></td></tr>
+                        <tr align="center"><td><select name="howheard" id="howheard">
+                                <option value="0"></option>
+                                {foreach from=$howheard_list key=name item=howheard}
+                                    <option value="{$name}" {if $howheard['state']}selected="selected"{/if}>{$howheard['desc']}</option>
+                                {/foreach}
+                        </select></td></tr>
                         <tr>
                             <td colspan="1" align="center" style="font-weight: bold">
                                 Certifications
