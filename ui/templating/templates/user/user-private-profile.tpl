@@ -214,22 +214,9 @@ If you have any questions about submitting the form, please email <a href="mailt
                                 Services I can provide:
                             </td>
                         </tr>
-                        <tr align="center">
-                            <td>
-                                <input type="checkbox" {if $translator}checked="checked"{/if} name="translator" id="translator" /> {Localisation::getTranslation('user_private_profile_translating')}
-                            </td>
-                        </tr>
-                        <tr align="center">
-                            <td>
-                                <input type="checkbox" {if $proofreader}checked="checked"{/if} name="proofreader" id="proofreader" /> {Localisation::getTranslation('user_private_profile_proofreading')}
-                            </td>
-                        </tr>
-                        <tr align="center">
-                            <td>
-                                <input type="checkbox" {if $interpreter}checked="checked"{/if} name="interpreter" id="interpreter" /> {Localisation::getTranslation('user_private_profile_interpreting')}
-                                <hr/>
-                            </td>
-                        </tr>
+                        {foreach from=$capability_list key=name item=capability}
+                            <tr align="center"><td><input type="checkbox" {if $capability['state']}checked="checked"{/if} name="{$name}" id="{$name}" /> {$capability['desc']}</td></tr>
+                        {/foreach}
 
                         <tr>
                             <td colspan="1" align="center" style="font-weight: bold">
