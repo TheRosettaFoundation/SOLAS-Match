@@ -945,7 +945,6 @@ EOD;
         try {
             $userPersonalInfo = $userDao->getPersonalInfo($user_id);
         } catch (Common\Exceptions\SolasMatchException $e) {
-            // error_log("Error getting user personal info: $e");
         }
 
         $languages = $langDao->getLanguages();
