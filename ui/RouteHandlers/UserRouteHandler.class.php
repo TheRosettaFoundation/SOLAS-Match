@@ -927,6 +927,7 @@ EOD;
         $adminDao = new DAO\AdminDao();
         $langDao = new DAO\LanguageDao();
         $countryDao = new DAO\CountryDao();
+        $projectDao = new DAO\projectDao();
 
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
             $_SESSION['SESSION_CSRF_KEY'] = UserRouteHandler::random_string(10);
@@ -949,6 +950,7 @@ EOD;
 
         $languages = $langDao->getLanguages();
         $countries = $countryDao->getCountries();
+        $language_selection = $projectDao->generate_language_selection();
 
         $nativeLocale = $user->getNativeLocale();
         if ($nativeLocale) {
@@ -961,8 +963,14 @@ EOD;
         }
 
         $userQualifiedPairs = $userDao->getUserQualifiedPairs($user_id);
+        foreach ($userQualifiedPairs as $index => $userQualifiedPair) {
+            $userQualifiedPairs[$index]['language_code_source'] = $userQualifiedPair['language_code_source'] . '-' . $userQualifiedPair['country_code_source'];
+            $userQualifiedPairs[$index]['language_code_target'] = $userQualifiedPair['language_code_target'] . '-' . $userQualifiedPair['country_code_target'];
+            if (empty($language_selection[$userQualifiedPairs[$index]['language_code_source']])) $language_selection[$userQualifiedPairs[$index]['language_code_source']] = $userQualifiedPairs[$index]['language_code_source'];
+            if (empty($language_selection[$userQualifiedPairs[$index]['language_code_target']])) $language_selection[$userQualifiedPairs[$index]['language_code_target']] = $userQualifiedPairs[$index]['language_code_target'];
+        }
         if (empty($userQualifiedPairs)) {
-            $userQualifiedPairs[] = array('language_code_source' => '', 'country_code_source' => '--', 'language_code_target' => '', 'country_code_target' => '--', 'qualification_level' => 1);
+            $userQualifiedPairs[] = array('language_code_source' => '', 'language_code_target' => '', 'qualification_level' => 1);
         }
         $userQualifiedPairsCount = count($userQualifiedPairs);
 
