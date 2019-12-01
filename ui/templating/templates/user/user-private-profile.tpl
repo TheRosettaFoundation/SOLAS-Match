@@ -22,7 +22,7 @@
     <!-- Templates... -->
     <div id="template_language_options">
         <option value="0"></option>
-        {foreach from=$languages key=codes item=language}
+        {foreach from=$language_selection key=codes item=language}
             <option value="{$codes}" >{$language}</option>
         {/foreach}
     </div>

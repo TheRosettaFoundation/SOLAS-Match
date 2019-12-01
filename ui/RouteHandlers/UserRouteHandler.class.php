@@ -1166,6 +1166,7 @@ EOD;
             'userPersonalInfo' => $userPersonalInfo,
             'languages' => $languages,
             'countries' => $countries,
+            'language_selection' => $language_selection,
             'nativeLanguageSelectCode' => $nativeLanguageSelectCode,
             'nativeCountrySelectCode'  => $nativeCountrySelectCode,
             'userQualifiedPairs'       => $userQualifiedPairs,
