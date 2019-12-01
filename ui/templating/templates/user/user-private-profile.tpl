@@ -241,8 +241,8 @@ NO MAKE URL TABLE
             <tr>
                 <td colspan="2">
                     <table>
-                        <tr><td colspan="1" align="center" style="font-weight: bold">Where did you hear about TWB? <span style="color: red">*</span></td></tr>
-                        <tr align="center"><td><select name="howheard" id="howheard">
+                        <tr align="center"><td colspan="1" align="center" style="font-weight: bold">Where did you hear about TWB? <span style="color: red">*</span></td></tr>
+                        <tr align="center"><td colspan="1" align="center"><select name="howheard" id="howheard">
                             <option value="0"></option>
                             {foreach from=$howheard_list key=name item=howheard}
                                 <option value="{$name}" {if $howheard['state']}selected="selected"{/if}>{$howheard['desc']}</option>
@@ -250,25 +250,11 @@ NO MAKE URL TABLE
                         </select></td></tr>
 
                         <tr><td colspan="1" align="center" style="font-weight: bold">Certifications
-                            <p class="desc">If you hold a certification or membership from any of the organizations below, you could qualify to be a verified translator. Please select the organization and submit a proof of certification/membership.</p>
+                            <p class="desc">If you hold a certification or membership from any of the organizations below, you could qualify to be a verified translator. Please select the organization and click to submit a proof of certification/membership. You will be upgraded to Verified Translator, which will give you immediate access to all projects available, for the verified combination. if you have any questions or can't upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject={rawurlencode('Translation Certification')}" target="_blank">translators@translatorswithoutborders.org</a></p>
                         </td></tr>
-
                         {foreach from=$cerification_list key=name item=cerification}
-????                            <tr align="center"><td><input type="checkbox" {if $cerification['state']}checked="checked"{/if} name="{$name}" id="{$name}" /> {$cerification['desc']}</td></tr>
+                            <tr align="center"><td colspan="1" align="center">{if $cerification['state']}Already submitted: {/if}<a href="{urlFor name="user-public-profile" options="user_id.$user_id|page_no.$name"}" target="_blank">{$cerification['desc']}</a></td></tr>
                         {/foreach}
-Click here to upload proof for... [Already uploaded mark]
-
-                        <tr align="center">
-                            <td colspan="1" align="center" style="font-weight: bold">
-                                Please submit a proof of certification
-                                <p class="desc">If you hold any translation certification, please upload it here. You will be upgraded to Verified Translator, which will give you immediate access to all projects available, for the verified combination. if you have any questions or can't upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject={rawurlencode('Translation Certification')}" target="_blank">translators@translatorswithoutborders.org</a></p>
-                            </td>
-                            <td>
-                                Certificate Description: <input type='text' value="" name="certificateDescription" id="certificateDescription" /> <input type="file" name="certificateFile" id="certificateFile" /><br />
-                                (If you want to submit proof for more than one organization, come back to this page again and submit another one)
-                                <hr/>
-                            </td>
-                        </tr>
                     </table>
                 </td>
             </tr>
