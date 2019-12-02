@@ -331,6 +331,7 @@ class ProjectRouteHandler
                                 'matecat_id_job' => $matecat_language_pair['matecat_id_job'],
                                 'chunk_number' => 0,
                                 'matecat_id_chunk_password' => $matecat_language_pair['matecat_id_job_password'],
+                                'job_first_segment' => '',
                             );
                             $task_chunks[$matecat_language_pair['matecat_id_job']][0][Common\Enums\TaskTypeEnum::PROOFREADING] = array(
                                 'task_id' => 0,
@@ -340,6 +341,7 @@ class ProjectRouteHandler
                                 'matecat_id_job' => $matecat_language_pair['matecat_id_job'],
                                 'chunk_number' => 0,
                                 'matecat_id_chunk_password' => $matecat_language_pair['matecat_id_job_password'],
+                                'job_first_segment' => '',
                             );
                         }
                     }
