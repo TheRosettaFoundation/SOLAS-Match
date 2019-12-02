@@ -129,6 +129,7 @@ class StatisticsDao extends BaseDao
         $stats = array();
         $we_are_a_subchunk = false;
         if ($task_type == Common\Enums\TaskTypeEnum::TRANSLATION || $task_type == Common\Enums\TaskTypeEnum::PROOFREADING) {
+            $job_first_segment = '';
             $translate = 'translate';
             if ($task_type == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
 
@@ -140,6 +141,7 @@ class StatisticsDao extends BaseDao
                     $matecat_langpair        = $matecat_tasks[0]['matecat_langpair'];
                     $matecat_id_job          = $matecat_tasks[0]['matecat_id_job'];
                     $matecat_id_job_password = $matecat_tasks[0]['matecat_id_chunk_password'];
+                    $job_first_segment       = $matecat_tasks[0]['job_first_segment'];
                 }
             }
 
@@ -163,7 +165,7 @@ class StatisticsDao extends BaseDao
                     $stats['DOWNLOAD_STATUS']           = 'approved';
                     $stats['TRANSLATED_PERC_FORMATTED'] = '100';
                     $stats['APPROVED_PERC_FORMATTED']   = '100';
-                    $stats['matecat_url'] = "{$matecat_api}$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                    $stats['matecat_url'] = "{$matecat_api}$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password$job_first_segment";
                     $stats['matecat_langpair_or_blank'] = $matecat_langpair;
                     return $stats;
                 }
@@ -197,7 +199,7 @@ class StatisticsDao extends BaseDao
 
                     if (!empty($response_data['stats'])) {
                         $stats = $response_data['stats'];
-                        $stats['matecat_url'] = "{$matecat_api}$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                        $stats['matecat_url'] = "{$matecat_api}$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password$job_first_segment";
                         $stats['matecat_langpair_or_blank'] = $matecat_langpair;
                         if ($stats['DOWNLOAD_STATUS'] === 'draft') {
                             $stats['DOWNLOAD_STATUS'] = $recorded_status; // getMatecatRecordedJobStatus() MIGHT have a "better" status
