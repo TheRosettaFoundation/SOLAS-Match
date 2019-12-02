@@ -824,11 +824,14 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
                     $jobs = $response_data['project']['jobs'];
                     foreach ($jobs as $job) {
                         if ($matecat_id_job == 0 || $job['id'] == $matecat_id_job) {
+                            $job_first_segment = '';
+                            if (!empty($job['job_first_segment'])) $job_first_segment = '#' . $job['job_first_segment'];
+
                             $stats = $job['stats'];
 
                             $matecat_id_chunk_password = $job['password'];
-                            $translate_url = "{$matecat_api}translate/proj-$project_id/" . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_chunk_password";
-                            $revise_url    = "{$matecat_api}revise/proj-$project_id/"    . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_chunk_password";
+                            $translate_url = "{$matecat_api}translate/proj-$project_id/" . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_chunk_password$job_first_segment";
+                            $revise_url    = "{$matecat_api}revise/proj-$project_id/"    . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_chunk_password$job_first_segment";
                             $matecat_id_file = ''; // Need all files in job to be downloaded
                             $matecat_download_url = "{$matecat_api}?action=downloadFile&id_job=$matecat_id_job&id_file=$matecat_id_file&password=$matecat_id_job_password&download_type=all";
 
@@ -843,6 +846,7 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
                             $chunks[] = array(
                                 'matecat_id_job'            => $job['id'],
                                 'matecat_id_chunk_password' => $matecat_id_chunk_password,
+                                'job_first_segment'         => $job_first_segment,
                                 'translate_url'        => $translate_url,
                                 'revise_url'           => $revise_url,
                                 'matecat_download_url' => $matecat_download_url,
@@ -857,6 +861,7 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
             }
         }
 
+error_log(print_r($chunks, true));
         return $chunks;
     }
 
