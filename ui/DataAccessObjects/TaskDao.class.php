@@ -861,7 +861,6 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
             }
         }
 
-error_log(print_r($chunks, true));
         return $chunks;
     }
 
