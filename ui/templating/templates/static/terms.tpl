@@ -113,7 +113,7 @@
 
     <p><h3>{Localisation::getTranslation('terms_privacy_policy')}</h3></p>
     <p>
-        {sprintf(Localisation::getTranslation('terms_54'), {urlFor name='privacy'})}
+        {sprintf(Localisation::getTranslation('terms_54'), "https://translatorswithoutborders.org/privacy-policy/")}
     </p>
     <p>
        {Localisation::getTranslation('terms_56')}
