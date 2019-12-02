@@ -193,6 +193,12 @@ function validateForm()
     return false;
   }
 
+  if (!document.getElementById("over18").checked) {
+    alertError = "You must confirm you are over the age of 18 years to proceed.";
+    set_all_errors_for_submission();
+    return false;
+  }
+
   var nativeLanguageSelect = document.getElementById("nativeLanguageSelect");
   var nativeCountrySelect = document.getElementById("nativeCountrySelect");
   if ((nativeLanguageSelect.value != "" && nativeCountrySelect.value == "") ||
