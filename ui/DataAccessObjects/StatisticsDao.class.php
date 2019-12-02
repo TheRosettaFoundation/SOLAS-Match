@@ -223,6 +223,7 @@ class StatisticsDao extends BaseDao
         $stats = array();
         $we_are_a_subchunk = false;
         if ($task_type == Common\Enums\TaskTypeEnum::TRANSLATION || $task_type == Common\Enums\TaskTypeEnum::PROOFREADING) {
+            $job_first_segment = '';
             $translate = 'translate';
             if ($task_type == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
 
@@ -234,6 +235,7 @@ class StatisticsDao extends BaseDao
                     $matecat_langpair        = $matecat_tasks[0]['matecat_langpair'];
                     $matecat_id_job          = $matecat_tasks[0]['matecat_id_job'];
                     $matecat_id_job_password = $matecat_tasks[0]['matecat_id_chunk_password'];
+                    $job_first_segment       = $matecat_tasks[0]['job_first_segment'];
                 }
             }
 
@@ -241,7 +243,7 @@ class StatisticsDao extends BaseDao
                   if (!$we_are_a_subchunk && $taskDao->getTaskSubChunks($matecat_id_job)) {
                       $stats['parent_of_chunked'] = 1;
                   } else {
-                $stats['matecat_url'] = "{$matecat_api}$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                $stats['matecat_url'] = "{$matecat_api}$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password$job_first_segment";
                 $stats['matecat_langpair_or_blank'] = $matecat_langpair;
                   }
             }
