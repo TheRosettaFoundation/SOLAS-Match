@@ -1301,7 +1301,7 @@ class TaskRouteHandler
 
         $taskClaimed = $taskDao->isTaskClaimed($taskId);
         if (!$taskClaimed) { // Protect against someone inappropriately creating URL for this route
-//            $app->redirect($app->urlFor("task", array("task_id" => $taskId)));
+            $app->redirect($app->urlFor("task", array("task_id" => $taskId)));
         }
 
         $task = $taskDao->getTask($taskId);
@@ -1313,7 +1313,7 @@ class TaskRouteHandler
         }
 
         if ($task->getTaskStatus() != Common\Enums\TaskStatusEnum::IN_PROGRESS) {
-//            $app->redirect($app->urlFor('task-chunk-completed', array('task_id' => $taskId)));
+            $app->redirect($app->urlFor('task-chunk-completed', array('task_id' => $taskId)));
         }
 
         if ($app->request()->isPost()) {
@@ -1342,7 +1342,6 @@ class TaskRouteHandler
         $job_first_segment       = $matecat_tasks[0]['job_first_segment'];
         if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
             $recorded_status = $taskDao->getMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password);
-$recorded_status = 'approved';
             if ($recorded_status === 'approved') { // We do not need to query MateCat...
                 $translate = 'translate';
                 if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
