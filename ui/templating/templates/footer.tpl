@@ -27,7 +27,7 @@
                         <a href="{urlFor name='terms'}">
                             {Localisation::getTranslation('footer_terms_and_conditons')}
                         </a> |
-                        <a href="{urlFor name='privacy'}">
+                        <a href="https://translatorswithoutborders.org/privacy-policy/">
                             {Localisation::getTranslation('footer_privacy_policy')}
                         </a>
                         {if Settings::get('site.forum_enabled') == 'y'}

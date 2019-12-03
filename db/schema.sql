@@ -1437,6 +1437,7 @@ CREATE TABLE IF NOT EXISTS `TaskChunks` (
     matecat_id_job INT(10) UNSIGNED NOT NULL,
     chunk_number   INT(10) UNSIGNED NOT NULL,
     matecat_id_chunk_password VARCHAR(50) NOT NULL,
+    job_first_segment         VARCHAR(50) NOT NULL DEFAULT '',
     UNIQUE KEY FK_task_chunks_task_id (task_id),
     CONSTRAINT FK_task_chunks_task_id FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     KEY FK_task_chunks_matecat_id_job (matecat_id_job),
@@ -7480,11 +7481,11 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `insertTaskChunks`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insertTaskChunks`(IN `tID` BIGINT, IN `pID` INT, IN `typeID` INT, IN matecatLangpair VARCHAR(50), IN matecatIdJob INT, IN chunkNumber INT, IN chunkPassword VARCHAR(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertTaskChunks`(IN `tID` BIGINT, IN `pID` INT, IN `typeID` INT, IN matecatLangpair VARCHAR(50), IN matecatIdJob INT, IN chunkNumber INT, IN chunkPassword VARCHAR(50), IN firstSegment VARCHAR(50))
 BEGIN
     INSERT INTO TaskChunks
-               (task_id, project_id, type_id, matecat_langpair, matecat_id_job, chunk_number, matecat_id_chunk_password)
-        VALUES (    tID,        pID,  typeID,  matecatLangpair,   matecatIdJob,  chunkNumber,             chunkPassword);
+               (task_id, project_id, type_id, matecat_langpair, matecat_id_job, chunk_number, matecat_id_chunk_password, job_first_segment)
+        VALUES (    tID,        pID,  typeID,  matecatLangpair,   matecatIdJob,  chunkNumber,             chunkPassword,      firstSegment);
 END//
 DELIMITER ;
 
