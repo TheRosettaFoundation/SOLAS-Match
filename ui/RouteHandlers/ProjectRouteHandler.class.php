@@ -376,6 +376,12 @@ class ProjectRouteHandler
                         if ($responseCode == 200) {
                             $response_data = json_decode($res, true);
                             if (!empty($response_data['urls']['jobs'])) {
+                                $chunks = $taskDao->getStatusOfSubChunks($project_id); // It is possible that this should have been used instead of /urls above, but would involve recode/retest
+                                $segment_by_job_and_password = [];
+                                foreach ($chunks as $chunk) {
+                                    $segment_by_job_and_password[$chunk['matecat_id_job'] . '|' . $chunk['matecat_id_chunk_password']] = $chunk['job_first_segment'];
+                                }
+
                                 $jobs = $response_data['urls']['jobs'];
                                 foreach ($jobs as $job) {
                                     if (!empty($job['chunks']) && !empty($job['id'])) {
