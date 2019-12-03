@@ -397,7 +397,7 @@ $chunks = [
 'revise_url' => 'https://tm.translatorswb.org/revise/proj-9140/en-GB-fr-FR/7944-2dcf190c7389#1117019',
 'matecat_download_url' => 'https://tm.translatorswb.org/?action=downloadFile&id_job=7944&id_file=&password=667dc6f4601b&download_type=all',
 'DOWNLOAD_STATUS' => 'translated',
-]
+],
 ];
 
                                 $segment_by_job_and_password = [];
@@ -406,14 +406,15 @@ $chunks = [
                                 }
 
                                 //#############$jobs = $response_data['urls']['jobs'];
-$jobs =
+$jobs = [
     ["id" => "7944",
      "chunks" =>
           [
             ["password" => "667dc6f4601b", "translate_url" => "https://tm.translatorswb.org/translate/proj-9140/en-GB-fr-FR/7944-667dc6f4601b"],
             ["password" => "2dcf190c7389", "translate_url" => "https://tm.translatorswb.org/translate/proj-9140/en-GB-fr-FR/7944-2dcf190c7389"],
-          ]
-    ];
+          ],
+    ],
+];
                                 foreach ($jobs as $job) {
                                     if (!empty($job['chunks']) && !empty($job['id'])) {
                                         $matecat_id_job = $job['id'];
