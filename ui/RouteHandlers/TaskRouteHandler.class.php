@@ -1339,12 +1339,13 @@ class TaskRouteHandler
         $matecat_langpair        = $matecat_tasks[0]['matecat_langpair'];
         $matecat_id_job          = $matecat_tasks[0]['matecat_id_job'];
         $matecat_id_job_password = $matecat_tasks[0]['matecat_id_chunk_password'];
+        $job_first_segment       = $matecat_tasks[0]['job_first_segment'];
         if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
             $recorded_status = $taskDao->getMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password);
             if ($recorded_status === 'approved') { // We do not need to query MateCat...
                 $translate = 'translate';
                 if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
-                $matecat_url = "{$matecat_api}$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                $matecat_url = "{$matecat_api}$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password$job_first_segment";
             } else {
                 // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
                 $re = curl_init("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
@@ -1382,7 +1383,7 @@ class TaskRouteHandler
                         if ($response_data['stats']['DOWNLOAD_STATUS'] === 'translated' || $response_data['stats']['DOWNLOAD_STATUS'] === 'approved') {
                             $translate = 'translate';
                             if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
-                            $matecat_url = "{$matecat_api}$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                            $matecat_url = "{$matecat_api}$translate/proj-" . $task->getProjectId() . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password$job_first_segment";
 
                             if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $response_data['stats']['DOWNLOAD_STATUS'] === 'translated') {
                                 $matecat_url = ''; // Disable Kató access for Proofreading if job file is only translated
