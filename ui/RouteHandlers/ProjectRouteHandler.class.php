@@ -348,7 +348,6 @@ class ProjectRouteHandler
 
                     $request_for_project = $taskDao->getWordCountRequestForProject($project_id);
                     if ($request_for_project && !empty($request_for_project['matecat_id_project']) && !empty($request_for_project['matecat_id_project_pass'])) {
-/* ###########################################
                         $re = curl_init("{$matecat_api}api/v2/projects/{$request_for_project['matecat_id_project']}/{$request_for_project['matecat_id_project_pass']}/urls");
 
                         curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
@@ -373,48 +372,17 @@ class ProjectRouteHandler
                         $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
 
                         curl_close($re);
-################ */
-                        if (TRUE) {
-                            //$response_data = json_decode($res, true);
-                            if (TRUE) {
-//##########################                                $chunks = $taskDao->getStatusOfSubChunks($project_id); // It is possible that this should have been used instead of /urls above, but would involve recode/retest
-//################################################################################################
-$chunks = [
-[
-'matecat_id_job' => 7944,
-'matecat_id_chunk_password' => '667dc6f4601b',
-'job_first_segment' => '#1116976',
-'translate_url' => 'https://tm.translatorswb.org/translate/proj-9140/en-GB-fr-FR/7944-667dc6f4601b#1116976',
-'revise_url' => 'https://tm.translatorswb.org/revise/proj-9140/en-GB-fr-FR/7944-667dc6f4601b#1116976',
-'matecat_download_url' => 'https://tm.translatorswb.org/?action=downloadFile&id_job=7944&id_file=&password=667dc6f4601b&download_type=all',
-'DOWNLOAD_STATUS' => 'translated',
-],
-[
-'matecat_id_job' => 7944,
-'matecat_id_chunk_password' => '2dcf190c7389',
-'job_first_segment' => '#1117019',
-'translate_url' => 'https://tm.translatorswb.org/translate/proj-9140/en-GB-fr-FR/7944-2dcf190c7389#1117019',
-'revise_url' => 'https://tm.translatorswb.org/revise/proj-9140/en-GB-fr-FR/7944-2dcf190c7389#1117019',
-'matecat_download_url' => 'https://tm.translatorswb.org/?action=downloadFile&id_job=7944&id_file=&password=667dc6f4601b&download_type=all',
-'DOWNLOAD_STATUS' => 'translated',
-],
-];
 
+                        if ($responseCode == 200) {
+                            $response_data = json_decode($res, true);
+                            if (!empty($response_data['urls']['jobs'])) {
+                                $chunks = $taskDao->getStatusOfSubChunks($project_id); // It is possible that this should have been used instead of /urls above, but would involve recode/retest
                                 $segment_by_job_and_password = [];
                                 foreach ($chunks as $chunk) {
                                     $segment_by_job_and_password[$chunk['matecat_id_job'] . '|' . $chunk['matecat_id_chunk_password']] = $chunk['job_first_segment'];
                                 }
 
-                                //#############$jobs = $response_data['urls']['jobs'];
-$jobs = [
-    ["id" => "7944",
-     "chunks" =>
-          [
-            ["password" => "667dc6f4601b", "translate_url" => "https://tm.translatorswb.org/translate/proj-9140/en-GB-fr-FR/7944-667dc6f4601b"],
-            ["password" => "2dcf190c7389", "translate_url" => "https://tm.translatorswb.org/translate/proj-9140/en-GB-fr-FR/7944-2dcf190c7389"],
-          ],
-    ],
-];
+                                $jobs = $response_data['urls']['jobs'];
                                 foreach ($jobs as $job) {
                                     if (!empty($job['chunks']) && !empty($job['id'])) {
                                         $matecat_id_job = $job['id'];
