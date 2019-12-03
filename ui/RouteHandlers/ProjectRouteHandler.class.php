@@ -331,6 +331,7 @@ class ProjectRouteHandler
                                 'matecat_id_job' => $matecat_language_pair['matecat_id_job'],
                                 'chunk_number' => 0,
                                 'matecat_id_chunk_password' => $matecat_language_pair['matecat_id_job_password'],
+                                'job_first_segment' => '',
                             );
                             $task_chunks[$matecat_language_pair['matecat_id_job']][0][Common\Enums\TaskTypeEnum::PROOFREADING] = array(
                                 'task_id' => 0,
@@ -340,6 +341,7 @@ class ProjectRouteHandler
                                 'matecat_id_job' => $matecat_language_pair['matecat_id_job'],
                                 'chunk_number' => 0,
                                 'matecat_id_chunk_password' => $matecat_language_pair['matecat_id_job_password'],
+                                'job_first_segment' => '',
                             );
                         }
                     }
@@ -374,6 +376,12 @@ class ProjectRouteHandler
                         if ($responseCode == 200) {
                             $response_data = json_decode($res, true);
                             if (!empty($response_data['urls']['jobs'])) {
+                                $chunks = $taskDao->getStatusOfSubChunks($project_id); // It is possible that this should have been used instead of /urls above, but would involve recode/retest
+                                $segment_by_job_and_password = [];
+                                foreach ($chunks as $chunk) {
+                                    $segment_by_job_and_password[$chunk['matecat_id_job'] . '|' . $chunk['matecat_id_chunk_password']] = $chunk['job_first_segment'];
+                                }
+
                                 $jobs = $response_data['urls']['jobs'];
                                 foreach ($jobs as $job) {
                                     if (!empty($job['chunks']) && !empty($job['id'])) {
@@ -441,6 +449,9 @@ class ProjectRouteHandler
 
                                                 if ($chunked_now) {
                                                     foreach ($chunks as $chunk_number => $chunk) {
+                                                        $job_first_segment = '';
+                                                        if (!empty($segment_by_job_and_password[$matecat_id_job . '|' . $chunk['password']])) $job_first_segment = $segment_by_job_and_password[$matecat_id_job . '|' . $chunk['password']];
+
                                                         // Ideally Tasks should be created after the TaskChunks as there could, in theory, be an immediate attempt to claim the task linked to the chunk
                                                         // However we are not doing that here
                                                         $task_id = $this->addChunkTask(
@@ -457,7 +468,8 @@ class ProjectRouteHandler
                                                             $task_chunks[$matecat_id_job][0][Common\Enums\TaskTypeEnum::TRANSLATION ]['matecat_langpair'],
                                                             $matecat_id_job,
                                                             $chunk_number,
-                                                            $chunk['password']);
+                                                            $chunk['password'],
+                                                            $job_first_segment);
                                                         $task_id = $this->addChunkTask(
                                                             $taskDao,
                                                             $project_id,
@@ -472,7 +484,8 @@ class ProjectRouteHandler
                                                             $task_chunks[$matecat_id_job][0][Common\Enums\TaskTypeEnum::PROOFREADING]['matecat_langpair'],
                                                             $matecat_id_job,
                                                             $chunk_number,
-                                                            $chunk['password']);
+                                                            $chunk['password'],
+                                                            $job_first_segment);
                                                     }
                                                 }
                                             } else {
