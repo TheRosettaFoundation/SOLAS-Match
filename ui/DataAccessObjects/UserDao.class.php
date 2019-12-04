@@ -867,6 +867,7 @@ class UserDao extends BaseDao
 
     public function update_terms_accepted($user_id)
     {
+        $_SESSION['profile_completed'] = 1;
         LibAPI\PDOWrapper::call('update_terms_accepted', LibAPI\PDOWrapper::cleanse($user_id) . ',1');
     }
 

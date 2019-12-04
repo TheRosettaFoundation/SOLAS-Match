@@ -1137,6 +1137,8 @@ EOD;
                         $userDao->addUserBadgeById($user_id, 8);
                     }
 
+                    $userDao->update_terms_accepted($user_id);
+
                     $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user_id)));
                 } catch (\Exception $e) {
                     $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
