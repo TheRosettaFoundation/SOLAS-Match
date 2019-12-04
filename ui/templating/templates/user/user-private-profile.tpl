@@ -18,6 +18,7 @@
     <div id="isSiteAdmin">{if $isSiteAdmin}1{else}0{/if}</div>
     <div id="langPrefSelectCodeSaved">{$langPrefSelectCode}</div>
     <input type='text' value="{$langPrefSelectCode}" id="langPrefSelect"/>
+    <div id="capabilityCount">{$capabilityCount}</div>
 
     <!-- Templates... -->
     <div id="template_language_options">
@@ -117,10 +118,10 @@ If you have any questions about submitting the form, please email <a href="mailt
                     </div>
                 </td>
                 <td width="50%">
-                    <label for='firstName'><strong>{Localisation::getTranslation('common_first_name')}: <span style="color: red">*</span></strong></label></strong></label>
+                    <label for='firstName'><strong>{Localisation::getTranslation('common_first_name')}: <span style="color: red">*</span></strong></label>
                     <input type='text' value="{$userPersonalInfo->getFirstName()|escape:'html':'UTF-8'}" style="width: 80%" name="firstName" id="firstName"/>
 
-                    <label for='lastName'><strong>{Localisation::getTranslation('common_last_name')}: <span style="color: red">*</span></strong></label></strong></label>
+                    <label for='lastName'><strong>{Localisation::getTranslation('common_last_name')}: <span style="color: red">*</span></strong></label>
                     <input type='text' value="{$userPersonalInfo->getLastName()|escape:'html':'UTF-8'}" style="width: 80%" name="lastName" id="lastName" />
 
                     {foreach from=$url_list key=name item=url}
@@ -207,12 +208,14 @@ If you have any questions about submitting the form, please email <a href="mailt
             <tr>
                 <td colspan="2">
                     <table>
-                        <tr><td colspan="1" align="center" style="font-weight: bold">Services I can provide:</td></tr>
+                        <tr><td colspan="1" align="center" style="font-weight: bold">Services I can provide: <span style="color: red">*</span></td></tr>
+                        {assign var="i" value=0}
                         {foreach from=$capability_list key=name item=capability}
-                            <tr align="center"><td><input type="checkbox" {if $capability['state']}checked="checked"{/if} name="{$name}" id="{$name}" /> {$capability['desc']}</td></tr>
+                            <tr align="center"><td><input type="checkbox" {if $capability['state']}checked="checked"{/if} name="{$name}" id="capability{$i}" /> {$capability['desc']}</td></tr>
+                            {assign var="i" value=$i+1}
                         {/foreach}
 
-                        <tr><td colspan="1" align="center" style="font-weight: bold">My fields of expertise are:</td></tr>
+                        <tr><td colspan="1" align="center" style="font-weight: bold">My fields of expertise are: <span style="color: red">*</span></td></tr>
                         {foreach from=$expertise_list key=name item=expertise}
                             <tr align="center"><td><input type="checkbox" {if $expertise['state']}checked="checked"{/if} name="{$name}" id="{$name}" /> {$expertise['desc']}</td></tr>
                         {/foreach}

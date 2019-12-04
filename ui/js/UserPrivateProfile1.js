@@ -235,6 +235,17 @@ function validateForm()
     }
   }
 
+  var capabilityCount = parseInt(getSetting("capabilityCount"));
+  var checkedCount = 0;
+  for (var i = 0; i < capabilityCount; i++) {
+    if (document.getElementById("capability" + i).checked) checkedCount++;
+  }
+  if (!checkedCount) {
+    alertError = "You must indicate that you can provide at least one service such as translation.";
+    set_all_errors_for_submission();
+    return false;
+  }
+
   if (document.getElementById("receiveCredit").checked) {
     if (document.getElementById("firstName").value == "" || document.getElementById("lastName").value == "") {
       alertError = parameters.getTranslation("user_private_profile_7");

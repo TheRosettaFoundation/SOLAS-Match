@@ -1201,6 +1201,8 @@ EOD;
             'in_kind'     => $userDao->get_special_translator($user_id),
             'profile_completed' => !empty($_SESSION['profile_completed']),
             'url_list'          => $url_list,
+            'capability_list'   => $capability_list,
+            'capabilityCount'   => count($capability_list),
             'extra_scripts' => $extra_scripts,
             'sesskey'       => $sesskey,
         ));
