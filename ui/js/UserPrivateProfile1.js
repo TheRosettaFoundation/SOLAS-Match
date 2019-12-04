@@ -193,6 +193,12 @@ function validateForm()
     return false;
   }
 
+  if (document.getElementById("firstName").value == "" || document.getElementById("lastName").value == "") {
+      alertError = "You must fill out the first name and last name fields.";
+      set_all_errors_for_submission();
+      return false;
+  }
+
   if (!document.getElementById("over18").checked) {
     alertError = "You must confirm you are over the age of 18 years to proceed.";
     set_all_errors_for_submission();
@@ -217,20 +223,6 @@ function validateForm()
     window.alert(parameters.getTranslation("user_private_profile_language_preference_updated"));
   }
 
-  if (document.getElementById("firstName").value == "" || document.getElementById("lastName").value == "") {
-      alertError = "You must fill out the first name and last name fields.";
-      set_all_errors_for_submission();
-      return false;
-  }
-
-  if (document.getElementById("receiveCredit").checked) {
-    if (document.getElementById("firstName").value == "" || document.getElementById("lastName").value == "") {
-      alertError = parameters.getTranslation("user_private_profile_7");
-      set_all_errors_for_submission();
-      return false;
-    }
-  }
-
   for (var i = 0; i < userQualifiedPairsCount; i++) {
     var languageCodeSource = document.getElementById("language_code_source_" + i);
     var languageCodeTarget = document.getElementById("language_code_target_" + i);
@@ -238,6 +230,14 @@ function validateForm()
     if ((languageCodeSource.value == "" && languageCodeTarget.value != "") || (languageCodeTarget.value == "" && languageCodeSource.value != "") ||
         (languageCodeSource.value == languageCodeTarget.value)) {
       alertError = parameters.getTranslation("user_private_profile_secondary_languages_failed");
+      set_all_errors_for_submission();
+      return false;
+    }
+  }
+
+  if (document.getElementById("receiveCredit").checked) {
+    if (document.getElementById("firstName").value == "" || document.getElementById("lastName").value == "") {
+      alertError = parameters.getTranslation("user_private_profile_7");
       set_all_errors_for_submission();
       return false;
     }
