@@ -200,10 +200,8 @@ function validateForm()
   }
 
   var nativeLanguageSelect = document.getElementById("nativeLanguageSelect");
-  var nativeCountrySelect = document.getElementById("nativeCountrySelect");
-  if ((nativeLanguageSelect.value != "" && nativeCountrySelect.value == "") ||
-      (nativeLanguageSelect.value == "" && nativeCountrySelect.value != "")) {
-    alertError = parameters.getTranslation("user_private_profile_native_language_blanks");
+  if (nativeLanguageSelect.value == "") {
+    alertError = "You must select a Native Language";
     set_all_errors_for_submission();
     return false;
   }

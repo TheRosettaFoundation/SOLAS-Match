@@ -1007,7 +1007,8 @@ EOD;
                 $user->setDisplayName($post['displayName']);
                 $user->setBiography($post['biography']);
 
-                if (!empty($post['nativeLanguageSelect']) && !empty($post['nativeCountrySelect'])) {
+                if (!empty($post['nativeLanguageSelect'])) {
+                    if (empty($post['nativeCountrySelect'])) $post['nativeCountrySelect'] = '--';
                     $locale = new Common\Protobufs\Models\Locale();
                     $locale->setLanguageCode($post['nativeLanguageSelect']);
                     $locale->setCountryCode($post['nativeCountrySelect']);
