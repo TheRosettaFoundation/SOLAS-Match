@@ -123,8 +123,12 @@ If you have any questions about submitting the form, please email <a href="mailt
                     <label for='lastName'><strong>{Localisation::getTranslation('common_last_name')}: <span style="color: red">*</span></strong></label></strong></label>
                     <input type='text' value="{$userPersonalInfo->getLastName()|escape:'html':'UTF-8'}" style="width: 80%" name="lastName" id="lastName" />
 
+                    {foreach from=$url_list key=name item=url}
+                    <label for='{$name}'><strong>{$url['desc']}:</strong></label>
+                    <input type='text' value="{$url['state']|escape:'html':'UTF-8'}" style="width: 80%" name="{$name}" id="{$name}" />
+                    {/foreach}
+
                     <label for='businessNumber'><strong>Your ProZ.com URL (if you have one):</strong></label>
-NO MAKE URL TABLE
                     <input type='text' value="{$userPersonalInfo->getBusinessNumber()|escape:'html':'UTF-8'}" style="width: 80%" name="businessNumber" id="businessNumber" />
                     <label for='jobTitle'><strong>Your LinkedIn URL (if you have one):</strong></label>
                     <input type='text' value="{$userPersonalInfo->getJobTitle()|escape:'html':'UTF-8'}" style="width: 80%" name="jobTitle" id="jobTitle" />
@@ -253,7 +257,7 @@ NO MAKE URL TABLE
                             <p class="desc">If you hold a certification or membership from any of the organizations below, you could qualify to be a verified translator. Please select the organization and click to submit a proof of certification/membership. You will be upgraded to Verified Translator, which will give you immediate access to all projects available, for the verified combination. if you have any questions or can't upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject={rawurlencode('Translation Certification')}" target="_blank">translators@translatorswithoutborders.org</a></p>
                         </td></tr>
                         {foreach from=$cerification_list key=name item=cerification}
-                            <tr align="center"><td colspan="1" align="center">{if $cerification['state']}Already submitted: {/if}<a href="{urlFor name="user-public-profile" options="user_id.$user_id|page_no.$name"}" target="_blank">{$cerification['desc']}</a></td></tr>
+                            <tr align="center"><td colspan="1" align="center">{if $cerification['state']}Already submitted: {/if}<a href="{urlFor name="user-public-profile" options="user_id.$user_id|cert_id.$name"}" target="_blank">{$cerification['desc']}</a></td></tr>
                         {/foreach}
                     </table>
                 </td>
