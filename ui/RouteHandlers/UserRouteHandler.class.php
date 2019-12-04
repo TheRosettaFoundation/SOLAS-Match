@@ -977,6 +977,16 @@ EOD;
         $langPref = $langDao->getLanguage($userPersonalInfo->getLanguagePreference());
         $langPrefSelectCode = $langPref->getCode();
 
+        $url_list = [];
+        $url_list['proz']   = ['desc' => 'Your ProZ.com URL (if you have one)', 'state' => ''];
+        $url_list['linked'] = ['desc' => 'Your LinkedIn URL (if you have one)', 'state' => ''];
+        $url_list['other']  = ['desc' => 'Other URL', 'state' => ''];
+        $urls = $userDao->getUserURLs($user_id);
+        if (empty($urls)) $urls = [];
+        foreach ($urls as $url) {
+            $url_list[$url['url_key']]['state'] = $url['url'];
+        }
+
         $badges = $userDao->getUserBadges($user_id);
         $translator = false;
         $proofreader = false;
@@ -1107,6 +1117,10 @@ EOD;
                         }
                     }
 
+                    foreach ($url_list as $name => $url) {
+                        if ($post[$name] != $url['url']) $userDao->insertUserURLs($user_id, $name, $post[$name]);
+                    }
+
                     $userDao->updateUser($user);
                     $userDao->updatePersonalInfo($user_id, $userPersonalInfo);
 
@@ -1186,6 +1200,7 @@ EOD;
             'interpreter' => $interpreter,
             'in_kind'     => $userDao->get_special_translator($user_id),
             'profile_completed' => !empty($_SESSION['profile_completed']),
+            'url_list'          => $url_list,
             'extra_scripts' => $extra_scripts,
             'sesskey'       => $sesskey,
         ));

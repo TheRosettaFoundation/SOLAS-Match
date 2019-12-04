@@ -128,13 +128,6 @@ If you have any questions about submitting the form, please email <a href="mailt
                     <input type='text' value="{$url['state']|escape:'html':'UTF-8'}" style="width: 80%" name="{$name}" id="{$name}" />
                     {/foreach}
 
-                    <label for='businessNumber'><strong>Your ProZ.com URL (if you have one):</strong></label>
-                    <input type='text' value="{$userPersonalInfo->getBusinessNumber()|escape:'html':'UTF-8'}" style="width: 80%" name="businessNumber" id="businessNumber" />
-                    <label for='jobTitle'><strong>Your LinkedIn URL (if you have one):</strong></label>
-                    <input type='text' value="{$userPersonalInfo->getJobTitle()|escape:'html':'UTF-8'}" style="width: 80%" name="jobTitle" id="jobTitle" />
-                    <label for='address'><strong>Other URL:</strong></label>
-                    <input type='text' value="{$userPersonalInfo->getAddress()|escape:'html':'UTF-8'}" style="width: 80%" name="address" id="address" />
-
                     <label for='mobileNumber'><strong>{Localisation::getTranslation('common_mobile_number')}:</strong></label>
                     <input type='text' value="{$userPersonalInfo->getMobileNumber()|escape:'html':'UTF-8'}" style="width: 80%" name="mobileNumber" id="mobileNumber" />
 
