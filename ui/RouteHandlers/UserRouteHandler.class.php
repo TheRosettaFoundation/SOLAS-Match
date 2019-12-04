@@ -1033,9 +1033,9 @@ EOD;
                 $userPersonalInfo->setFirstName($post['firstName']);
                 $userPersonalInfo->setLastName($post['lastName']);
                 $userPersonalInfo->setMobileNumber($post['mobileNumber']);
-                $userPersonalInfo->setBusinessNumber($post['businessNumber']);
-                $userPersonalInfo->setJobTitle($post['jobTitle']);
-                $userPersonalInfo->setAddress($post['address']);
+                //$userPersonalInfo->setBusinessNumber($post['businessNumber']);
+                //$userPersonalInfo->setJobTitle($post['jobTitle']);
+                //$userPersonalInfo->setAddress($post['address']);
                 $userPersonalInfo->setCity($post['city']);
                 $userPersonalInfo->setCountry($post['country']);
 
