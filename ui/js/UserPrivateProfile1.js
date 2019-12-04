@@ -201,14 +201,26 @@ function validateForm()
 
   var nativeLanguageSelect = document.getElementById("nativeLanguageSelect");
   if (nativeLanguageSelect.value == "") {
-    alertError = "You must select a Native Language";
+    alertError = "You must select a native language";
     set_all_errors_for_submission();
     return false;
+  }
+
+  if (userQualifiedPairsCount == 0)
+      alertError = "You must fill out the languages you can translate from and to.";
+      set_all_errors_for_submission();
+      return false;
   }
 
   // Check if the user has changed their language preference
   if (document.getElementById("langPrefSelect").value != getSetting("langPrefSelectCodeSaved")) {
     window.alert(parameters.getTranslation("user_private_profile_language_preference_updated"));
+  }
+
+  if (document.getElementById("firstName").value == "" || document.getElementById("lastName").value == "") {
+      alertError = "You must fill out the first name and last name fields.";
+      set_all_errors_for_submission();
+      return false;
   }
 
   if (document.getElementById("receiveCredit").checked) {

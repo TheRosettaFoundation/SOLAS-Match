@@ -117,10 +117,10 @@ If you have any questions about submitting the form, please email <a href="mailt
                     </div>
                 </td>
                 <td width="50%">
-                    <label for='firstName'><strong>{Localisation::getTranslation('common_first_name')}:</strong></label>
+                    <label for='firstName'><strong>{Localisation::getTranslation('common_first_name')}: <span style="color: red">*</span></strong></label></strong></label>
                     <input type='text' value="{$userPersonalInfo->getFirstName()|escape:'html':'UTF-8'}" style="width: 80%" name="firstName" id="firstName"/>
 
-                    <label for='lastName'><strong>{Localisation::getTranslation('common_last_name')}:</strong></label>
+                    <label for='lastName'><strong>{Localisation::getTranslation('common_last_name')}: <span style="color: red">*</span></strong></label></strong></label>
                     <input type='text' value="{$userPersonalInfo->getLastName()|escape:'html':'UTF-8'}" style="width: 80%" name="lastName" id="lastName" />
 
                     <label for='businessNumber'><strong>Your ProZ.com URL (if you have one):</strong></label>
