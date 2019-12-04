@@ -1048,25 +1048,28 @@ EOD;
                 try {
                     $i = 0;
                     while (!empty($post["language_code_source_$i"]) && !empty($post["language_code_target_$i"])) {
-                        $post["language_code_source_$i"] = strtolower($post["language_code_source_$i"]); // Just in case browser is manipulated...
-                        $post["language_code_target_$i"] = strtolower($post["language_code_target_$i"]);
-                        $post["country_code_source_$i"]  = strtoupper($post["country_code_source_$i"]);
-                        $post["country_code_target_$i"]  = strtoupper($post["country_code_target_$i"]);
-                        if ($post["country_code_source_$i"] == '') $post["country_code_source_$i"] = '--'; // Any Language
-                        if ($post["country_code_target_$i"] == '') $post["country_code_target_$i"] = '--';
+                        list($language_code_source, $country_code_source) = $projectDao->convert_selection_to_language_country($post["language_code_source_$i"]);
+                        list($language_code_target, $country_code_target) = $projectDao->convert_selection_to_language_country($post["language_code_target_$i"]);
+
+                        $language_code_source = strtolower($language_code_source); // Just in case browser is manipulated...
+                        $language_code_target = strtolower($language_code_target);
+                        $country_code_source  = strtoupper($country_code_source);
+                        $country_code_target  = strtoupper($country_code_target);
+                        if ($country_code_source == '') $country_code_source = '--'; // Any Language
+                        if ($country_code_target == '') $country_code_target = '--';
 
                         $found = false;
                         foreach ($userQualifiedPairs as $userQualifiedPair) {
-                            if (($post["language_code_source_$i"] == $userQualifiedPair['language_code_source']) &&
-                                ($post["country_code_source_$i"]  == $userQualifiedPair['country_code_source'])  &&
-                                ($post["language_code_target_$i"] == $userQualifiedPair['language_code_target']) &&
-                                ($post["country_code_target_$i"]  == $userQualifiedPair['country_code_target'])) {
+                            if (($language_code_source == $userQualifiedPair['language_code_source']) &&
+                                ($country_code_source  == $userQualifiedPair['country_code_source'])  &&
+                                ($language_code_target == $userQualifiedPair['language_code_target']) &&
+                                ($country_code_target  == $userQualifiedPair['country_code_target'])) {
                                 $found = true;
 
                                 if ($isSiteAdmin && ($post["qualification_level_$i"] != $userQualifiedPair['qualification_level'])) {
                                     $userDao->updateUserQualifiedPair($user_id,
-                                        $post["language_code_source_$i"], $post["country_code_source_$i"],
-                                        $post["language_code_target_$i"], $post["country_code_target_$i"],
+                                        $language_code_source, $country_code_source,
+                                        $language_code_target, $country_code_target,
                                         $post["qualification_level_$i"]);
                                 }
                             }
@@ -1075,8 +1078,8 @@ EOD;
                             if (!$isSiteAdmin) $post["qualification_level_$i"] = 1;
 
                             $userDao->createUserQualifiedPair($user_id,
-                                $post["language_code_source_$i"], $post["country_code_source_$i"],
-                                $post["language_code_target_$i"], $post["country_code_target_$i"],
+                                $language_code_source, $country_code_source,
+                                $language_code_target, $country_code_target,
                                 $post["qualification_level_$i"]);
                         }
                         $i++;
@@ -1086,10 +1089,13 @@ EOD;
                         $i = 0;
                         $found = false;
                         while (!empty($post["language_code_source_$i"]) && !empty($post["language_code_target_$i"])) {
-                            if (($post["language_code_source_$i"] == $userQualifiedPair['language_code_source']) &&
-                                ($post["country_code_source_$i"]  == $userQualifiedPair['country_code_source'])  &&
-                                ($post["language_code_target_$i"] == $userQualifiedPair['language_code_target']) &&
-                                ($post["country_code_target_$i"]  == $userQualifiedPair['country_code_target'])) {
+                            list($language_code_source, $country_code_source) = $projectDao->convert_selection_to_language_country($post["language_code_source_$i"]);
+                            list($language_code_target, $country_code_target) = $projectDao->convert_selection_to_language_country($post["language_code_target_$i"]);
+
+                            if (($language_code_source == $userQualifiedPair['language_code_source']) &&
+                                ($country_code_source  == $userQualifiedPair['country_code_source'])  &&
+                                ($language_code_target == $userQualifiedPair['language_code_target']) &&
+                                ($country_code_target  == $userQualifiedPair['country_code_target'])) {
                                 $found = true;
                             }
                             $i++;
