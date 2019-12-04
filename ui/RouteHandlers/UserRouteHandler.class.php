@@ -1178,6 +1178,7 @@ EOD;
             'proofreader' => $proofreader,
             'interpreter' => $interpreter,
             'in_kind'     => $userDao->get_special_translator($user_id),
+            'profile_completed' => !empty($_SESSION['profile_completed']),
             'extra_scripts' => $extra_scripts,
             'sesskey'       => $sesskey,
         ));
