@@ -1004,6 +1004,38 @@ EOD;
             }
         }
 
+        $expertise_list = [];
+        $expertise_list['General']            = ['desc' => 'General', 'state' => 0];
+        $expertise_list['Accounting']         = ['desc' => 'Accounting & Finance', 'state' => 0];
+        $expertise_list['Certificates']       = ['desc' => 'Certificates, diplomas, licenses, CVs, etc.', 'state' => 0];
+        $expertise_list['Chemical']           = ['desc' => 'Chemical', 'state' => 0];
+        $expertise_list['Civil']              = ['desc' => 'Civil Engineering / Construction', 'state' => 0];
+        $expertise_list['Corporate']          = ['desc' => 'Corporate Social Responsibility', 'state' => 0];
+        $expertise_list['Electronics']        = ['desc' => 'Electronics / Electrical Engineering', 'state' => 0];
+        $expertise_list['Energy']             = ['desc' => 'Energy / Power Generation / Oil & Gas', 'state' => 0];
+        $expertise_list['Environment']        = ['desc' => 'Environment', 'state' => 0];
+        $expertise_list['Games']              = ['desc' => 'Games / Video Games / Casino', 'state' => 0];
+        $expertise_list['Business']           = ['desc' => 'General Business / Commerce', 'state' => 0];
+        $expertise_list['History']            = ['desc' => 'History / Archaeology', 'state' => 0];
+        $expertise_list['Information']        = ['desc' => 'Information Technology', 'state' => 0];
+        $expertise_list['Insurance']          = ['desc' => 'Insurance', 'state' => 0];
+        $expertise_list['Internet']           = ['desc' => 'Internet, e-commerce', 'state' => 0];
+        $expertise_list['Legal']              = ['desc' => 'Legal Documents / Contracts', 'state' => 0];
+        $expertise_list['Literary']           = ['desc' => 'Literary Translation', 'state' => 0];
+        $expertise_list['Marketing']          = ['desc' => 'Marketing & Advertising Material / Public Relations', 'state' => 0];
+        $expertise_list['Mechanical']         = ['desc' => 'Mechanical / Manufacturing', 'state' => 0];
+        $expertise_list['Media']              = ['desc' => 'Media / Journalism / Publishing', 'state' => 0];
+        $expertise_list['Medical']            = ['desc' => 'Medical / Pharmaceutical', 'state' => 0];
+        $expertise_list['Private']            = ['desc' => 'Private Correspondence, Letters', 'state' => 0];
+        $expertise_list['Science']            = ['desc' => 'Science', 'state' => 0];
+        $expertise_list['Shipping']           = ['desc' => 'Shipping / Sailing / Maritime', 'state' => 0];
+        $expertise_list['Social']             = ['desc' => 'Social Science', 'state' => 0];
+        $expertise_list['Telecommunications'] = ['desc' => 'Telecommunications', 'state' => 0];
+        $expertise_list['Travel']             = ['desc' => 'Travel and Tourism', 'state' => 0];
+
+
+
+
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
         if (!is_null($loggedInUserId)) {
             $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
