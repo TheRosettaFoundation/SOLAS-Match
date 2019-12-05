@@ -987,18 +987,19 @@ EOD;
             $url_list[$url['url_key']]['state'] = $url['url'];
         }
 
+        $capability_list = [];
+        $capability_list['badge_id_6']  = ['desc' => 'Translation',         'state' => 0, 'id' =>  6];
+        $capability_list['badge_id_7']  = ['desc' => 'Revision',            'state' => 0, 'id' =>  7];
+        $capability_list['badge_id_10'] = ['desc' => 'Subtitling',          'state' => 0, 'id' => 10];
+        $capability_list['badge_id_11'] = ['desc' => 'Monolingual editing', 'state' => 0, 'id' => 11];
+        $capability_list['badge_id_12'] = ['desc' => 'DTP',                 'state' => 0, 'id' => 12];
+        $capability_list['badge_id_13'] = ['desc' => 'Voiceover',           'state' => 0, 'id' => 13];
+        $capability_list['badge_id_8']  = ['desc' => 'Interpretation',      'state' => 0, 'id' =>  8];
         $badges = $userDao->getUserBadges($user_id);
-        $translator = false;
-        $proofreader = false;
-        $interpreter = false;
         if (!empty($badges)) {
             foreach ($badges as $badge) {
-                if ($badge->getId() == 6) {
-                    $translator = true;
-                } elseif ($badge->getId() == 7) {
-                    $proofreader = true;
-                } elseif ($badge->getId() == 8) {
-                    $interpreter = true;
+                if ($badge->getId() >= 6 && $badge->getId() != 9 && $badge->getId() <= 13) {
+                    $capability_list['badge_id_' . $badge->getId()]['state'] = 1;
                 }
             }
         }
@@ -1142,20 +1143,12 @@ EOD;
                         }
                     }
 
-                    if ($translator && empty($post['translator'])) {
-                        $userDao->removeUserBadge($user_id, 6);
-                    } elseif (!$translator && !empty($post['translator'])) {
-                        $userDao->addUserBadgeById($user_id, 6);
-                    }
-                    if ($proofreader && empty($post['proofreader'])) {
-                        $userDao->removeUserBadge($user_id, 7);
-                    } elseif (!$proofreader && !empty($post['proofreader'])) {
-                        $userDao->addUserBadgeById($user_id, 7);
-                    }
-                    if ($interpreter && empty($post['interpreter'])) {
-                        $userDao->removeUserBadge($user_id, 8);
-                    } elseif (!$interpreter && !empty($post['interpreter'])) {
-                        $userDao->addUserBadgeById($user_id, 8);
+                    foreach ($capability_list as $name => $capability) {
+                        if ($capability['state'] && empty($post[$name])) {
+                            $userDao->removeUserBadge($user_id, $capability['id']);
+                        } elseif (!$capability['state'] && !empty($post[$name])) {
+                            $userDao->addUserBadgeById($user_id, $capability['id']);
+                        }
                     }
 
                     $userDao->update_terms_accepted($user_id);
@@ -1195,14 +1188,11 @@ EOD;
             'userQualifiedPairs'       => $userQualifiedPairs,
             'userQualifiedPairsCount'  => $userQualifiedPairsCount,
             'langPrefSelectCode'       => $langPrefSelectCode,
-            'translator'  => $translator,
-            'proofreader' => $proofreader,
-            'interpreter' => $interpreter,
-            'in_kind'     => $userDao->get_special_translator($user_id),
-            'profile_completed' => !empty($_SESSION['profile_completed']),
             'url_list'          => $url_list,
             'capability_list'   => $capability_list,
             'capabilityCount'   => count($capability_list),
+            'in_kind'           => $userDao->get_special_translator($user_id),
+            'profile_completed' => !empty($_SESSION['profile_completed']),
             'extra_scripts' => $extra_scripts,
             'sesskey'       => $sesskey,
         ));
