@@ -235,6 +235,12 @@ function validateForm()
     }
   }
 
+  if (!document.getElementById("conduct").checked) {
+    alertError = "You must agree to the TWB code of conduct to proceed.";
+    set_all_errors_for_submission();
+    return false;
+  }
+
   var capabilityCount = parseInt(getSetting("capabilityCount"));
   var checkedCount = 0;
   for (var i = 0; i < capabilityCount; i++) {

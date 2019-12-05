@@ -111,6 +111,9 @@ If you have any questions about submitting the form, please email <a href="mailt
                         </div>
                     </div>
 
+                    <label for='conduct'><strong>Please read the <a href="http://translatorswithoutborders.org/wp-content/uploads/2018/05/Code-of-Conduct-for-Translators-May-2018.pdf" target="_blank">TWB Code of Conduct for Translators</a>: <span style="color: red">*</span></strong></label>
+                    <input type="checkbox" style="width: 80%" value="1" name="conduct" id="conduct" {if $profile_completed}checked="checked"{/if} /> I agree to abide by the TWB Code of Conduct for translators.
+
                     <label for='biography'><strong>About Me:</strong></label>
                     <textarea cols='40' rows='7' style="width: 80%" name="biography" id="biography">{$user->getBiography()|escape:'html':'UTF-8'}</textarea>
 
