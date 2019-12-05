@@ -705,11 +705,11 @@ REPLACE INTO `Badges` (`id`, `owner_id`, `title`, `description`) VALUES
     ( 6, NULL, 'Translator',          'This volunteer is available for translation tasks.'),
     ( 7, NULL, 'Reviewer',            'This volunteer is available for revising tasks.'),
     ( 8, NULL, 'Interpreter',         'This volunteer is available for interpreting tasks.'),
-    ( 9, NULL, 'Polyglot',            'One or more secondary languages selected on your profile.');
-    (10, NULL, 'Subtitling',          'This volunteer is available for subtitling tasks.');
-    (11, NULL, 'Monolingual editing', 'This volunteer is available for monolingual editing tasks.');
-    (12, NULL, 'DTP',                 'This volunteer is available for DTP tasks.');
-    (12, NULL, 'Voiceover',           'This volunteer is available for voiceover tasks.');
+    ( 9, NULL, 'Polyglot',            'One or more secondary languages selected on your profile.'),
+    (10, NULL, 'Subtitling',          'This volunteer is available for subtitling tasks.'),
+    (11, NULL, 'Monolingual editing', 'This volunteer is available for monolingual editing tasks.'),
+    (12, NULL, 'DTP',                 'This volunteer is available for DTP tasks.'),
+    (13, NULL, 'Voiceover',           'This volunteer is available for voiceover tasks.');
 ALTER TABLE `Badges` AUTO_INCREMENT=100;
 
 -- Dumping structure for table Solas-Match-Test.Countries
