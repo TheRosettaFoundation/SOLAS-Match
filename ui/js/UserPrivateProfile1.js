@@ -257,14 +257,6 @@ function validateForm()
     return false;
   }
 
-  if (document.getElementById("receiveCredit").checked) {
-    if (document.getElementById("firstName").value == "" || document.getElementById("lastName").value == "") {
-      alertError = parameters.getTranslation("user_private_profile_7");
-      set_all_errors_for_submission();
-      return false;
-    }
-  }
-
   return true;
 }
 
