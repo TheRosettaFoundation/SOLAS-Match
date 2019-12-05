@@ -1039,13 +1039,18 @@ EOD;
         }
 
         $howheard_list = [];
-        $howheard_list['proz']   = ['desc' => 'Your ProZ.com howheard (if you have one)', 'state' => ''];
-        $howheard_list['linked'] = ['desc' => 'Your LinkedIn howheard (if you have one)', 'state' => ''];
-        $howheard_list['other']  = ['desc' => 'Other howheard', 'state' => ''];
-        $howheards = $userDao->getUserhowheards($user_id);
-        if (empty($howheards)) $howheards = [];
-        foreach ($howheards as $howheard) {
-            $howheard_list[$howheard['howheard_key']]['state'] = $howheard['howheard'];
+        $howheard_list['Twitter']    = ['desc' => 'Twitter', 'state' => 0];
+        $howheard_list['Facebook']   = ['desc' => 'Facebook', 'state' => 0];
+        $howheard_list['LinkedIn']   = ['desc' => 'LinkedIn', 'state' => 0];
+        $howheard_list['Event']      = ['desc' => 'Event/Conference', 'state' => 0];
+        $howheard_list['Referral']   = ['desc' => 'Word of mouth/Referral', 'state' => 0];
+        $howheard_list['Newsletter'] = ['desc' => 'TWB Newsletter', 'state' => 0];
+        $howheard_list['Internet']   = ['desc' => 'Internet search', 'state' => 0];
+        $howheard_list['staff']      = ['desc' => 'Contacted by TWB staff', 'state' => 0];
+        $howheard_list['Other']      = ['desc' => 'Other', 'state' => 0];
+        $howheards = $userDao->getUserHowheard($user_id);
+        if (!empty($howheards)) {
+            $howheard_list[$howheards[0]['howheard_key']]['state'] = 1;
         }
 
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
@@ -1203,9 +1208,7 @@ EOD;
                         }
                     }
 
-                    foreach ($howheard_list as $name => $howheard) {
-                        if ($post[$name] != $howheard['howheard']) $userDao->insertUserhowheards($user_id, $name, $post[$name]);
-                    }
+                    if (!empty($post['howheard'])) $userDao->insertUserhowheard($user_id, $post['howheard']);
 
                     $userDao->update_terms_accepted($user_id);
 
