@@ -1053,6 +1053,28 @@ EOD;
             $howheard_list[$howheards[0]['howheard_key']]['state'] = 1;
         }
 
+        $cerification_list = [];
+        $cerification_list['ATA']     = ['desc' => 'American Translators Association (ATA) - ATA Certified', 'state' => 0];
+        $cerification_list['APTS']    = ['desc' => 'Arab Professional Translators Society (APTS) - Certified Translator, Certified Translator/Interpreter or Certified Associate', 'state' => 0];
+        $cerification_list['ATIO']    = ['desc' => 'Association of Translators and Interpreters of Ontario (ATIO) - Certified Translators or Candidates', 'state' => 0];
+        $cerification_list['ABRATES'] = ['desc' => 'Brazilian Association of Translators and Interpreters (ABRATES) - Accredited Translators (Credenciado)', 'state' => 0];
+        $cerification_list['CIOL']    = ['desc' => 'Chartered Institute of Linguists (CIOL) - Member, Fellow, Chartered Linguist, or DipTrans IOL Certificate holder', 'state' => 0];
+        $cerification_list['ITIA']    = ['desc' => 'Irish Translators’ and Interpreters’ Association (ITIA) - Professional Member', 'state' => 0];
+        $cerification_list['ITI']     = ['desc' => 'Institute of Translation and Interpreting (ITI) - ITI Assessed', 'state' => 0];
+        $cerification_list['NAATI']   = ['desc' => 'National Accreditation Authority for Translators and Interpreters (NAATI) - Certified Translator or Advanced Certified Translator', 'state' => 0];
+        $cerification_list['NZSTI']   = ['desc' => 'New Zealand Society of Translators and Interpreters (NZSTI) - Full Members', 'state' => 0];
+        $cerification_list['ProZ']    = ['desc' => 'ProZ Certified PRO members', 'state' => 0];
+        $cerification_list['Austria'] = ['desc' => 'UNIVERSITAS Austria Interpreters’ and Translators’ Association - Certified Members', 'state' => 0];
+        $cerification_list['ETLA']    = ['desc' => 'Egyptian Translators and Linguists Association (ETLA) - Members', 'state' => 0];
+        $cerification_list['SATI']    = ['desc' => 'South African Translators’ Institute (SATI) - Accredited Translators or Sworn Translators', 'state' => 0];
+        $cerification_list['CATTI']   = ['desc' => 'China Accreditation Test for Translators and Interpreters (CATTI) - Senior Translators or Level 1 Translators', 'state' => 0];
+        $cerification_list['STIBC']   = ['desc' => 'Society of Translators and Interpreters of British Columbia (STIBC) - Certified Translators or Associate Members', 'state' => 0];
+        $cerifications = $userDao->getCerifications($user_id);
+        if (empty($cerifications)) $cerifications = [];
+        foreach ($cerifications as $cerification) {
+            $cerification_list[$cerification['cerification_key']]['state'] = 1;
+        }
+
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
         if (!is_null($loggedInUserId)) {
             $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
