@@ -207,7 +207,7 @@ function validateForm()
 
   var nativeLanguageSelect = document.getElementById("nativeLanguageSelect");
   if (nativeLanguageSelect.value == "") {
-    alertError = "You must select a native language";
+    alertError = "You must select a native language.";
     set_all_errors_for_submission();
     return false;
   }
@@ -265,6 +265,13 @@ function validateForm()
 
   if (!document.getElementById("twbprivacy").checked) {
     alertError = "You must agree to the TWB privacy policy to proceed.";
+    set_all_errors_for_submission();
+    return false;
+  }
+
+  var howheard = document.getElementById("howheard");
+  if (howheard.value == 0) {
+    alertError = "You must indicate where you heard about TWB.";
     set_all_errors_for_submission();
     return false;
   }

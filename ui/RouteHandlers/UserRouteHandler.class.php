@@ -1038,6 +1038,16 @@ EOD;
             $expertise_list[$expertise['expertise_key']]['state'] = 1;
         }
 
+        $howheard_list = [];
+        $howheard_list['proz']   = ['desc' => 'Your ProZ.com howheard (if you have one)', 'state' => ''];
+        $howheard_list['linked'] = ['desc' => 'Your LinkedIn howheard (if you have one)', 'state' => ''];
+        $howheard_list['other']  = ['desc' => 'Other howheard', 'state' => ''];
+        $howheards = $userDao->getUserhowheards($user_id);
+        if (empty($howheards)) $howheards = [];
+        foreach ($howheards as $howheard) {
+            $howheard_list[$howheard['howheard_key']]['state'] = $howheard['howheard'];
+        }
+
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
         if (!is_null($loggedInUserId)) {
             $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
@@ -1193,6 +1203,10 @@ EOD;
                         }
                     }
 
+                    foreach ($howheard_list as $name => $howheard) {
+                        if ($post[$name] != $howheard['howheard']) $userDao->insertUserhowheards($user_id, $name, $post[$name]);
+                    }
+
                     $userDao->update_terms_accepted($user_id);
 
                     $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user_id)));
@@ -1233,8 +1247,9 @@ EOD;
             'url_list'          => $url_list,
             'capability_list'   => $capability_list,
             'capabilityCount'   => count($capability_list),
-            'expertise_list'   => $expertise_list,
-            'expertiseCount'   => count($expertise_list),
+            'expertise_list'    => $expertise_list,
+            'expertiseCount'    => count($expertise_list),
+            'howheard_list'     => $howheard_list,
             'in_kind'           => $userDao->get_special_translator($user_id),
             'profile_completed' => !empty($_SESSION['profile_completed']),
             'extra_scripts' => $extra_scripts,
