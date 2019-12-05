@@ -372,8 +372,8 @@
                 </h3>
                 <p>{TemplateHelper::uiCleanseHTML($badge->getDescription())}</p>
             {else}
-                <h3>{Settings::get('site.name')} - {TemplateHelper::uiCleanseHTML(Localisation::getTranslation($badge->getTitle()))}</h3>
-                <p>{TemplateHelper::uiCleanseHTML(Localisation::getTranslation($badge->getDescription()))}</p>
+                <h3>{Settings::get('site.name')} - {TemplateHelper::uiCleanseHTML($badge->getTitle())}</h3>
+                <p>{TemplateHelper::uiCleanseHTML($badge->getDescription())}</p>
             {/if}
             <p style="margin-bottom:20px;"/>
         {/foreach}
