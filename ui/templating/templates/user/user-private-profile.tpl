@@ -19,6 +19,7 @@
     <div id="langPrefSelectCodeSaved">{$langPrefSelectCode}</div>
     <input type='text' value="{$langPrefSelectCode}" id="langPrefSelect"/>
     <div id="capabilityCount">{$capabilityCount}</div>
+    <div id="expertiseCount">{$expertiseCount}</div>
 
     <!-- Templates... -->
     <div id="template_language_options">
@@ -216,8 +217,10 @@ If you have any questions about submitting the form, please email <a href="mailt
                         {/foreach}
 
                         <tr><td colspan="1" align="center" style="font-weight: bold">My fields of expertise are: <span style="color: red">*</span></td></tr>
+                        {assign var="i" value=0}
                         {foreach from=$expertise_list key=name item=expertise}
-                            <tr align="center"><td><input type="checkbox" {if $expertise['state']}checked="checked"{/if} name="{$name}" id="{$name}" /> {$expertise['desc']}</td></tr>
+                            <tr align="center"><td><input type="checkbox" {if $expertise['state']}checked="checked"{/if} name="{$name}" id="expertise{$i}" /> {$expertise['desc']}</td></tr>
+                            {assign var="i" value=$i+1}
                         {/foreach}
                     </table>
                 </td>

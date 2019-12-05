@@ -1032,9 +1032,11 @@ EOD;
         $expertise_list['Social']             = ['desc' => 'Social Science', 'state' => 0];
         $expertise_list['Telecommunications'] = ['desc' => 'Telecommunications', 'state' => 0];
         $expertise_list['Travel']             = ['desc' => 'Travel and Tourism', 'state' => 0];
-
-
-
+        $expertises = $userDao->getExpertises($user_id);
+        if (empty($expertises)) $expertises = [];
+        foreach ($expertises as $expertise) {
+            $expertise_list[$expertise['expertise_key']]['state'] = 1;
+        }
 
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
         if (!is_null($loggedInUserId)) {
@@ -1183,6 +1185,14 @@ EOD;
                         }
                     }
 
+                    foreach ($expertise_list as $name => $expertise) {
+                        if ($expertise['state'] && empty($post[$name])) {
+                            $userDao->removeExpertise($user_id, $name);
+                        } elseif (!$expertise['state'] && !empty($post[$name])) {
+                            $userDao->addExpertise($user_id, $name);
+                        }
+                    }
+
                     $userDao->update_terms_accepted($user_id);
 
                     $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user_id)));
@@ -1223,6 +1233,8 @@ EOD;
             'url_list'          => $url_list,
             'capability_list'   => $capability_list,
             'capabilityCount'   => count($capability_list),
+            'expertise_list'   => $expertise_list,
+            'expertiseCount'   => count($expertise_list),
             'in_kind'           => $userDao->get_special_translator($user_id),
             'profile_completed' => !empty($_SESSION['profile_completed']),
             'extra_scripts' => $extra_scripts,

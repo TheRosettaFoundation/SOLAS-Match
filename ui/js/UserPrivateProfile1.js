@@ -246,6 +246,17 @@ function validateForm()
     return false;
   }
 
+  var expertiseCount = parseInt(getSetting("expertiseCount"));
+  checkedCount = 0;
+  for (var i = 0; i < expertiseCount; i++) {
+    if (document.getElementById("expertise" + i).checked) checkedCount++;
+  }
+  if (!checkedCount) {
+    alertError = "You must indicate at least one field of expertise such as general.";
+    set_all_errors_for_submission();
+    return false;
+  }
+
   if (document.getElementById("receiveCredit").checked) {
     if (document.getElementById("firstName").value == "" || document.getElementById("lastName").value == "") {
       alertError = parameters.getTranslation("user_private_profile_7");
