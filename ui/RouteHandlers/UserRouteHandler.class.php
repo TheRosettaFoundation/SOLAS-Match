@@ -1067,7 +1067,7 @@ EOD;
         $cerification_list['SATI']    = ['desc' => 'South African Translators’ Institute (SATI) - Accredited Translators or Sworn Translators', 'state' => 0];
         $cerification_list['CATTI']   = ['desc' => 'China Accreditation Test for Translators and Interpreters (CATTI) - Senior Translators or Level 1 Translators', 'state' => 0];
         $cerification_list['STIBC']   = ['desc' => 'Society of Translators and Interpreters of British Columbia (STIBC) - Certified Translators or Associate Members', 'state' => 0];
-        $cerifications = $userDao->getUserCerifications($user_id);
+        $cerifications = $userDao->getUserCertifications($user_id);
         foreach ($cerifications as $cerification) {
             $cerification_list[$cerification['cerification_key']]['state'] = 1;
         }
@@ -1187,7 +1187,7 @@ EOD;
                     }
 
                     foreach ($url_list as $name => $url) {
-                        if ($post[$name] != $url['url']) $userDao->insertUserURLs($user_id, $name, $post[$name]);
+                        if ($post[$name] != $url['url']) $userDao->insertUserURL($user_id, $name, $post[$name]);
                     }
 
                     $userDao->updateUser($user);
@@ -1227,7 +1227,7 @@ EOD;
                         }
                     }
 
-                    if (!empty($post['howheard'])) $userDao->insertUserhowheard($user_id, $post['howheard']);
+                    if (!empty($post['howheard'])) $userDao->insertUserHowheard($user_id, $post['howheard']);
 
                     $userDao->update_terms_accepted($user_id);
 
