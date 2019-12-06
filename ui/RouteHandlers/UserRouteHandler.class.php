@@ -1031,7 +1031,7 @@ EOD;
         $expertise_list['Social']             = ['desc' => 'Social Science', 'state' => 0];
         $expertise_list['Telecommunications'] = ['desc' => 'Telecommunications', 'state' => 0];
         $expertise_list['Travel']             = ['desc' => 'Travel and Tourism', 'state' => 0];
-        $expertises = $userDao->getExpertises($user_id);
+        $expertises = $userDao->getUserExpertises($user_id);
         foreach ($expertises as $expertise) {
             $expertise_list[$expertise['expertise_key']]['state'] = 1;
         }
@@ -1067,7 +1067,7 @@ EOD;
         $cerification_list['SATI']    = ['desc' => 'South African Translators’ Institute (SATI) - Accredited Translators or Sworn Translators', 'state' => 0];
         $cerification_list['CATTI']   = ['desc' => 'China Accreditation Test for Translators and Interpreters (CATTI) - Senior Translators or Level 1 Translators', 'state' => 0];
         $cerification_list['STIBC']   = ['desc' => 'Society of Translators and Interpreters of British Columbia (STIBC) - Certified Translators or Associate Members', 'state' => 0];
-        $cerifications = $userDao->getCerifications($user_id);
+        $cerifications = $userDao->getUserCerifications($user_id);
         foreach ($cerifications as $cerification) {
             $cerification_list[$cerification['cerification_key']]['state'] = 1;
         }
@@ -1221,9 +1221,9 @@ EOD;
 
                     foreach ($expertise_list as $name => $expertise) {
                         if ($expertise['state'] && empty($post[$name])) {
-                            $userDao->removeExpertise($user_id, $name);
+                            $userDao->removeUserExpertise($user_id, $name);
                         } elseif (!$expertise['state'] && !empty($post[$name])) {
-                            $userDao->addExpertise($user_id, $name);
+                            $userDao->addUserExpertise($user_id, $name);
                         }
                     }
 
