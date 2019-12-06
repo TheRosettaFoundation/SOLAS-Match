@@ -982,7 +982,6 @@ EOD;
         $url_list['linked'] = ['desc' => 'Your LinkedIn URL (if you have one)', 'state' => ''];
         $url_list['other']  = ['desc' => 'Other URL', 'state' => ''];
         $urls = $userDao->getUserURLs($user_id);
-        if (empty($urls)) $urls = [];
         foreach ($urls as $url) {
             $url_list[$url['url_key']]['state'] = $url['url'];
         }
@@ -1033,7 +1032,6 @@ EOD;
         $expertise_list['Telecommunications'] = ['desc' => 'Telecommunications', 'state' => 0];
         $expertise_list['Travel']             = ['desc' => 'Travel and Tourism', 'state' => 0];
         $expertises = $userDao->getExpertises($user_id);
-        if (empty($expertises)) $expertises = [];
         foreach ($expertises as $expertise) {
             $expertise_list[$expertise['expertise_key']]['state'] = 1;
         }
@@ -1048,7 +1046,7 @@ EOD;
         $howheard_list['Internet']   = ['desc' => 'Internet search', 'state' => 0];
         $howheard_list['staff']      = ['desc' => 'Contacted by TWB staff', 'state' => 0];
         $howheard_list['Other']      = ['desc' => 'Other', 'state' => 0];
-        $howheards = $userDao->getUserHowheard($user_id);
+        $howheards = $userDao->getUserHowheards($user_id);
         if (!empty($howheards)) {
             $howheard_list[$howheards[0]['howheard_key']]['state'] = 1;
         }
@@ -1070,7 +1068,6 @@ EOD;
         $cerification_list['CATTI']   = ['desc' => 'China Accreditation Test for Translators and Interpreters (CATTI) - Senior Translators or Level 1 Translators', 'state' => 0];
         $cerification_list['STIBC']   = ['desc' => 'Society of Translators and Interpreters of British Columbia (STIBC) - Certified Translators or Associate Members', 'state' => 0];
         $cerifications = $userDao->getCerifications($user_id);
-        if (empty($cerifications)) $cerifications = [];
         foreach ($cerifications as $cerification) {
             $cerification_list[$cerification['cerification_key']]['state'] = 1;
         }
