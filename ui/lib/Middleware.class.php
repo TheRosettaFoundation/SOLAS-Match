@@ -26,7 +26,7 @@ class Middleware
             $userDao = new DAO\UserDao();
             if ($userDao->is_admin_or_org_member($_SESSION['user_id'])) {
                 $app->flash('error', 'You must accept the Code of Conduct before continuing');
-                $app->redirect($app->urlFor('user-code-of_conduct', array('user_id' => $_SESSION['user_id'])));
+                $app->redirect($app->urlFor('user-code-of-conduct', array('user_id' => $_SESSION['user_id'])));
             } else {
                 $app->flash('error', 'You must fill in your profile including Code of Conduct before continuing');
                 $app->redirect($app->urlFor('user-private-profile', array('user_id' => $_SESSION['user_id'])));
