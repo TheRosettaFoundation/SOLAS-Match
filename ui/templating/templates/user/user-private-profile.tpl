@@ -53,7 +53,8 @@
 {/if}
 
 <div class="well alert-info">
-    <p><strong>Thank you for your interest in Translators without Borders! Please fill out the form below to join the TWB Kató Translator community. Anyone fluent in at least two languages is welcome to apply.<br /><br />
+    <p><strong>Thank you for your interest in Translators without Borders! Please fill out the form below to join the TWB Kató Translator community.<br />
+Anyone fluent in at least two languages is welcome to apply.<br /><br />
 If you have any questions about submitting the form, please email <a href="mailto:translators@translatorswithoutborders.org?subject={rawurlencode('Translator Registration Form')}" target="_blank">translators@translatorswithoutborders.org</a></strong></p>
 </div>
 
@@ -69,7 +70,7 @@ If you have any questions about submitting the form, please email <a href="mailt
 
     <form method="post" action="{urlFor name="user-private-profile" options="user_id.$user_id"}" enctype="multipart/form-data" accept-charset="utf-8">
         <table>
-            <tr valign="top" align="center">
+            <tr valign="top">
                 <td>
                     <div id="loading_warning">
                         <p><i>{Localisation::getTranslation('common_loading')}</i></p>
