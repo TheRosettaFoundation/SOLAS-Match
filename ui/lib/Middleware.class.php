@@ -22,9 +22,11 @@ class Middleware
             $app->redirect($app->urlFor('login'));
         }
 
+// THIS NEEDED TEMP 24 HOURS AFTER GO LIVE ON TROMMONS BECAUSE NEEDS TO BE LOGIN CYCLE
+//$userDao = new DAO\UserDao();
+//REMOVE ABOVE BELOW TEMP
+//$userDao->setRequiredProfileCompletedinSESSION($_SESSION['user_id']);
         if (empty($_SESSION['profile_completed'])) {
-error_log('$_SESSION in authUserIsLoggedIn()');
-error_log(print_r($_SESSION, true));
             $userDao = new DAO\UserDao();
             if ($userDao->is_admin_or_org_member($_SESSION['user_id'])) {
                 $app->flash('error', 'You must accept the Code of Conduct before continuing');
