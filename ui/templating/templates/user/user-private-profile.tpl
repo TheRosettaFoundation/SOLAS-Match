@@ -70,16 +70,36 @@ If you have any questions about submitting the form, please email <a href="mailt
     <form method="post" action="{urlFor name="user-private-profile" options="user_id.$user_id"}" enctype="multipart/form-data" accept-charset="utf-8">
         <table>
             <tr valign="top" align="center">
-                <td width="50%">
+                <td>
                     <div id="loading_warning">
                         <p><i>{Localisation::getTranslation('common_loading')}</i></p>
                     </div>
                     <label for='displayName'><strong>{Localisation::getTranslation('common_display_name')}: <span style="color: red">*</span></strong></label>
                     <input type='text' style="width: 80%" value="{$user->getDisplayName()|escape:'html':'UTF-8'}" name="displayName" id="displayName" />
 
+                    <label for='firstName'><strong>{Localisation::getTranslation('common_first_name')}: <span style="color: red">*</span></strong></label>
+                    <input type='text' value="{$userPersonalInfo->getFirstName()|escape:'html':'UTF-8'}" style="width: 80%" name="firstName" id="firstName"/>
+
+                    <label for='lastName'><strong>{Localisation::getTranslation('common_last_name')}: <span style="color: red">*</span></strong></label>
+                    <input type='text' value="{$userPersonalInfo->getLastName()|escape:'html':'UTF-8'}" style="width: 80%" name="lastName" id="lastName" />
+
                     <label for='over18'><strong>Please confirm you are over the age of 18 years old: <span style="color: red">*</span></strong></label>
                     <p class="desc">Translators without Borders (TWB) is a non-profit organization with strong child protection principles, and we cannot consider for volunteer work anyone below the age of 18.</p>
                     <input type="checkbox" style="width: 80%" value="1" name="over18" id="over18" {if $profile_completed}checked="checked"{/if} /> I confirm I am over the age of 18.
+
+                    {foreach from=$url_list key=name item=url}
+                    <label for='{$name}'><strong>{$url['desc']}:</strong></label>
+                    <input type='text' value="{$url['state']|escape:'html':'UTF-8'}" style="width: 80%" name="{$name}" id="{$name}" />
+                    {/foreach}
+
+                    <label for='mobileNumber'><strong>{Localisation::getTranslation('common_mobile_number')}:</strong></label>
+                    <input type='text' value="{$userPersonalInfo->getMobileNumber()|escape:'html':'UTF-8'}" style="width: 80%" name="mobileNumber" id="mobileNumber" />
+
+                    <label for='city'><strong>{Localisation::getTranslation('common_city')}:</strong></label>
+                    <input type='text' value="{$userPersonalInfo->getCity()|escape:'html':'UTF-8'}" style="width: 80%" name="city" id="city" />
+
+                    <label for='country'><strong>{Localisation::getTranslation('common_country')}:</strong></label>
+                    <input type='text' value="{$userPersonalInfo->getCountry()|escape:'html':'UTF-8'}" style="width: 80%" name="country" id="country" />
 
                     <div id="language_area">
                         <div id = "nativeLanguageDiv">
@@ -100,7 +120,7 @@ If you have any questions about submitting the form, please email <a href="mailt
                         </div>
                         <div id="secondaryLanguageDiv">
                             <hr style="width: 60%" />
-                            <p class="desc">In general, people translate from any language they are proficient in, into their first/native language. For example, if the language you are more fluent in is Spanish, and you are also fluent in English and French, you can translate from English to Spanish and from French to Spanish</p>
+                            <p class="desc">In general, people translate from any language they are proficient in, into their first/native language. For example, if the language you are more fluent in is Spanish, and you are also fluent in English and French, you can translate from English to Spanish and from French to Spanish.</p>
                             <button onclick="addSecondaryLanguage(); return false;" class="btn btn-success" id="addLanguageButton" {if $userQualifiedPairsCount >= 120}disabled{/if}>
                                 <i class="icon-upload icon-white"></i> {Localisation::getTranslation('user_private_profile_add_secondary_language')}
                             </button>
@@ -120,28 +140,6 @@ If you have any questions about submitting the form, please email <a href="mailt
                     <div id="loading_warning1">
                         <p><i>{Localisation::getTranslation('common_loading')}</i></p>
                     </div>
-                </td>
-                <td width="50%">
-                    <label for='firstName'><strong>{Localisation::getTranslation('common_first_name')}: <span style="color: red">*</span></strong></label>
-                    <input type='text' value="{$userPersonalInfo->getFirstName()|escape:'html':'UTF-8'}" style="width: 80%" name="firstName" id="firstName"/>
-
-                    <label for='lastName'><strong>{Localisation::getTranslation('common_last_name')}: <span style="color: red">*</span></strong></label>
-                    <input type='text' value="{$userPersonalInfo->getLastName()|escape:'html':'UTF-8'}" style="width: 80%" name="lastName" id="lastName" />
-
-                    {foreach from=$url_list key=name item=url}
-                    <label for='{$name}'><strong>{$url['desc']}:</strong></label>
-                    <input type='text' value="{$url['state']|escape:'html':'UTF-8'}" style="width: 80%" name="{$name}" id="{$name}" />
-                    {/foreach}
-
-                    <label for='mobileNumber'><strong>{Localisation::getTranslation('common_mobile_number')}:</strong></label>
-                    <input type='text' value="{$userPersonalInfo->getMobileNumber()|escape:'html':'UTF-8'}" style="width: 80%" name="mobileNumber" id="mobileNumber" />
-
-                    <label for='city'><strong>{Localisation::getTranslation('common_city')}:</strong></label>
-                    <input type='text' value="{$userPersonalInfo->getCity()|escape:'html':'UTF-8'}" style="width: 80%" name="city" id="city" />
-
-                    <label for='country'><strong>{Localisation::getTranslation('common_country')}:</strong></label>
-                    <input type='text' value="{$userPersonalInfo->getCountry()|escape:'html':'UTF-8'}" style="width: 80%" name="country" id="country" />
-
                 </td>
             </tr>
             <tr>
