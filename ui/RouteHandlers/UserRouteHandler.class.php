@@ -89,6 +89,12 @@ class UserRouteHandler
         )->via("POST")->name('user-code-of-conduct');
 
         $app->get(
+            '/:user_id/user-uploads/:cert_id/',
+            array($middleware, 'authUserIsLoggedInNoProfile'),
+            array($this, 'userUploads')
+        )->via("POST")->name('user-uploads');
+
+        $app->get(
             "/:user_id/notification/stream/",
             array($middleware, "authUserIsLoggedIn"),
             array($this, "editTaskStreamNotification")
@@ -1357,6 +1363,78 @@ EOD;
         ));
 
         $app->render('user/user-code-of-conduct.tpl');
+    }
+
+    public static function userUploads($user_id, $cert_id)
+    {
+        $app = \Slim\Slim::getInstance();
+
+        $userDao = new DAO\UserDao();
+        $adminDao = new DAO\AdminDao();
+
+        if (empty($_SESSION['SESSION_CSRF_KEY'])) {
+            $_SESSION['SESSION_CSRF_KEY'] = UserRouteHandler::random_string(10);
+        }
+        $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
+
+        $user = $userDao->getUser($user_id);
+        Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER.$user_id);
+
+        if (!is_object($user)) {
+            $app->flash("error", Lib\Localisation::getTranslation('common_login_required_to_access_page'));
+            $app->redirect($app->urlFor("login"));
+        }
+
+        $userPersonalInfo = null;
+        try {
+            $userPersonalInfo = $userDao->getPersonalInfo($user_id);
+        } catch (Common\Exceptions\SolasMatchException $e) {
+        }
+
+        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
+        if (!is_null($loggedInUserId)) {
+            $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
+        } else {
+            $isSiteAdmin = false;
+        }
+
+        if ($post = $app->request()->post()) {
+            if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
+                $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
+            } else {
+                $user->setDisplayName($post['displayName']);
+                $userPersonalInfo->setFirstName($post['firstName']);
+                $userPersonalInfo->setLastName($post['lastName']);
+
+                try {
+                    $userDao->updateUser($user);
+                    $userDao->updatePersonalInfo($user_id, $userPersonalInfo);
+
+                    $userDao->update_terms_accepted($user_id);
+
+                    $app->redirect($app->urlFor('org-dashboard'));
+                } catch (\Exception $e) {
+                    $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
+                }
+            }
+        }
+
+        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/UserPrivateProfile1.js\"></script>";
+
+        $app->view()->appendData(array(
+            'siteLocation'      => Common\Lib\Settings::get('site.location'),
+            'siteAPI'           => Common\Lib\Settings::get('site.api'),
+            'isSiteAdmin'       => $isSiteAdmin,
+            'user'              => $user,
+            'user_id'           => $user_id,
+            'userPersonalInfo'  => $userPersonalInfo,
+            'profile_completed' => !empty($_SESSION['profile_completed']),
+            'extra_scripts'     => $extra_scripts,
+            'sesskey'           => $sesskey,
+        ));
+
+        $app->render('user/user-uploads.tpl');
     }
 
     /**
