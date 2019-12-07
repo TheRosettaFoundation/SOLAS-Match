@@ -57,9 +57,7 @@ function loadingComplete()
   for (var i = 0; i < userQualifiedPairsCountDatabase; i++) {
     addSecondaryLanguage(
       getSetting("userQualifiedPairLanguageCodeSource_" + i),
-      getSetting("userQualifiedPairCountryCodeSource_" + i),
       getSetting("userQualifiedPairLanguageCodeTarget_" + i),
-      getSetting("userQualifiedPairCountryCodeTarget_" + i),
       getSetting("userQualifiedPairQualificationLevel_" + i)
       );
   }
@@ -73,9 +71,7 @@ function loadingComplete()
  */
 function addSecondaryLanguage(
   userQualifiedPairLanguageCodeSource,
-  userQualifiedPairCountryCodeSource,
   userQualifiedPairLanguageCodeTarget,
-  userQualifiedPairCountryCodeTarget,
   userQualifiedPairQualificationLevel)
 {
   if (userQualifiedPairsCount < userQualifiedPairsLimit) {
@@ -97,15 +93,6 @@ function addSecondaryLanguage(
     languageBox.value = userQualifiedPairLanguageCodeSource;
     locale.appendChild(languageBox);
 
-    var countryBox = document.createElement("select");
-    countryBox.innerHTML = document.getElementById("template_country_options").innerHTML;
-    countryBox.name = "country_code_source_" + userQualifiedPairsCount;
-    countryBox.id = "country_code_source_" + userQualifiedPairsCount;
-    countryBox.style.width = "41%";
-    if (userQualifiedPairCountryCodeSource === undefined) userQualifiedPairCountryCodeSource = "";
-    countryBox.value = (userQualifiedPairCountryCodeSource == "") ? "--" : userQualifiedPairCountryCodeSource;
-    locale.appendChild(countryBox);
-
     var text2 = document.createElement("label");
     text2.innerHTML = "<strong>" + parameters.getTranslation("common_to") + ":</strong>";
     text2.style.width = "82%";
@@ -119,15 +106,6 @@ function addSecondaryLanguage(
     if (userQualifiedPairLanguageCodeTarget === undefined) userQualifiedPairLanguageCodeTarget = "";
     languageBoxTarget.value = userQualifiedPairLanguageCodeTarget;
     locale.appendChild(languageBoxTarget);
-
-    var countryBoxTarget = document.createElement("select");
-    countryBoxTarget.innerHTML = document.getElementById("template_country_options").innerHTML;
-    countryBoxTarget.name = "country_code_target_" + userQualifiedPairsCount;
-    countryBoxTarget.id = "country_code_target_" + userQualifiedPairsCount;
-    countryBoxTarget.style.width = "41%";
-    if (userQualifiedPairCountryCodeTarget === undefined) userQualifiedPairCountryCodeTarget = "";
-    countryBoxTarget.value = (userQualifiedPairCountryCodeTarget == "") ? "--" : userQualifiedPairCountryCodeTarget;
-    locale.appendChild(countryBoxTarget);
 
     var text3 = document.createElement("label");
     text3.innerHTML = "<strong>" + parameters.getTranslation("qualification_level_for_above") + ":</strong>";
@@ -215,13 +193,29 @@ function validateForm()
     return false;
   }
 
-  var nativeLanguageSelect = document.getElementById("nativeLanguageSelect");
-  var nativeCountrySelect = document.getElementById("nativeCountrySelect");
-  if ((nativeLanguageSelect.value != "" && nativeCountrySelect.value == "") ||
-      (nativeLanguageSelect.value == "" && nativeCountrySelect.value != "")) {
-    alertError = parameters.getTranslation("user_private_profile_native_language_blanks");
+  if (document.getElementById("firstName").value == "" || document.getElementById("lastName").value == "") {
+      alertError = "You must fill out the first name and last name fields.";
+      set_all_errors_for_submission();
+      return false;
+  }
+
+  if (!document.getElementById("over18").checked) {
+    alertError = "You must confirm you are over the age of 18 years to proceed.";
     set_all_errors_for_submission();
     return false;
+  }
+
+  var nativeLanguageSelect = document.getElementById("nativeLanguageSelect");
+  if (nativeLanguageSelect.value == "") {
+    alertError = "You must select a native language.";
+    set_all_errors_for_submission();
+    return false;
+  }
+
+  if (userQualifiedPairsCount == 0 || document.getElementById("language_code_source_0").value == "" || document.getElementById("language_code_target_0").value == "") {
+      alertError = "You must fill out the languages you can translate from and to.";
+      set_all_errors_for_submission();
+      return false;
   }
 
   // Check if the user has changed their language preference
@@ -229,26 +223,57 @@ function validateForm()
     window.alert(parameters.getTranslation("user_private_profile_language_preference_updated"));
   }
 
-  if (document.getElementById("receiveCredit").checked) {
-    if (document.getElementById("firstName").value == "" || document.getElementById("lastName").value == "") {
-      alertError = parameters.getTranslation("user_private_profile_7");
+  for (var i = 0; i < userQualifiedPairsCount; i++) {
+    var languageCodeSource = document.getElementById("language_code_source_" + i);
+    var languageCodeTarget = document.getElementById("language_code_target_" + i);
+
+    if ((languageCodeSource.value == "" && languageCodeTarget.value != "") || (languageCodeTarget.value == "" && languageCodeSource.value != "") ||
+        (languageCodeSource.value == languageCodeTarget.value)) {
+      alertError = parameters.getTranslation("user_private_profile_secondary_languages_failed");
       set_all_errors_for_submission();
       return false;
     }
   }
 
-  for (var i = 0; i < userQualifiedPairsCount; i++) {
-    var languageCodeSource = document.getElementById("language_code_source_" + i);
-    var countryCodeSource  = document.getElementById("country_code_source_" + i);
-    var languageCodeTarget = document.getElementById("language_code_target_" + i);
-    var countryCodeTarget  = document.getElementById("country_code_target_" + i);
+  if (!document.getElementById("conduct").checked) {
+    alertError = "You must agree to the TWB code of conduct to proceed.";
+    set_all_errors_for_submission();
+    return false;
+  }
 
-    if ((languageCodeSource.value == "" && languageCodeTarget.value != "") || (languageCodeTarget.value == "" && languageCodeSource.value != "") ||
-        (languageCodeSource.value == languageCodeTarget.value && countryCodeSource.value == countryCodeTarget.value)) {
-      alertError = parameters.getTranslation("user_private_profile_secondary_languages_failed");
-      set_all_errors_for_submission();
-      return false;
-    }
+  var capabilityCount = parseInt(getSetting("capabilityCount"));
+  var checkedCount = 0;
+  for (var i = 0; i < capabilityCount; i++) {
+    if (document.getElementById("capability" + i).checked) checkedCount++;
+  }
+  if (!checkedCount) {
+    alertError = "You must indicate that you can provide at least one service such as translation.";
+    set_all_errors_for_submission();
+    return false;
+  }
+
+  var expertiseCount = parseInt(getSetting("expertiseCount"));
+  checkedCount = 0;
+  for (var i = 0; i < expertiseCount; i++) {
+    if (document.getElementById("expertise" + i).checked) checkedCount++;
+  }
+  if (!checkedCount) {
+    alertError = "You must indicate at least one field of expertise such as general.";
+    set_all_errors_for_submission();
+    return false;
+  }
+
+  if (!document.getElementById("twbprivacy").checked) {
+    alertError = "You must agree to the TWB privacy policy to proceed.";
+    set_all_errors_for_submission();
+    return false;
+  }
+
+  var howheard = document.getElementById("howheard");
+  if (howheard.value == 0) {
+    alertError = "You must indicate where you heard about TWB.";
+    set_all_errors_for_submission();
+    return false;
   }
 
   return true;

@@ -713,6 +713,8 @@ class UserDao extends BaseDao
 
     public function verify_email_allowed_register($email)
     {
+        return; // No longer check with Neon
+
         $app = \Slim\Slim::getInstance();
         error_log("verify_email_allowed_register($email)");
 
@@ -856,8 +858,16 @@ class UserDao extends BaseDao
         return $terms_accepted;
     }
 
+    public setRequiredProfileCompletedinSESSION($user_id)
+    {
+        if ($this->terms_accepted($user_id)) {
+            $_SESSION['profile_completed'] = 1;
+        }
+    }
+
     public function update_terms_accepted($user_id)
     {
+        $_SESSION['profile_completed'] = 1;
         LibAPI\PDOWrapper::call('update_terms_accepted', LibAPI\PDOWrapper::cleanse($user_id) . ',1');
     }
 
@@ -1351,5 +1361,62 @@ error_log(print_r($result, true));
         $request = "{$this->siteApi}v0/users/subscribedToOrganisation/$userId/$organisationId";
         $ret = $this->client->call(null, $request);
         return $ret;
+    }
+
+    public function getUserURLs($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getUserURLs', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) $result = [];
+        return $result;
+    }
+
+    public function insertUserURL($user_id, $key, $value)
+    {
+        LibAPI\PDOWrapper::call('insertUserURL',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($key) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($value));
+    }
+
+    public function getUserExpertises($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getUserExpertises', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) $result = [];
+        return $result;
+    }
+
+    public function addUserExpertise($user_id, $key)
+    {
+        LibAPI\PDOWrapper::call('addUserExpertise',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($key));
+    }
+
+    public function removeUserExpertise($user_id, $key)
+    {
+        LibAPI\PDOWrapper::call('removeUserExpertise',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($key));
+    }
+
+    public function getUserHowheards($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getUserHowheards', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) $result = [];
+        return $result;
+    }
+
+    public function insertUserHowheard($user_id, $key)
+    {
+        LibAPI\PDOWrapper::call('insertUserHowheard',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($key));
+    }
+
+    public function getUserCertifications($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getUserCertifications', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) $result = [];
+        return $result;
     }
 }

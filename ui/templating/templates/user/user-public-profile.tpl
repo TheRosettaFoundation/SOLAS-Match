@@ -129,7 +129,7 @@
                         {if isset($bio)}
                             <tr>
                                 <td>
-                                    <h3>{Localisation::getTranslation('common_biography')}</h3>
+                                    <h3>About Me</h3>
                                 </td>
                             </tr>
                             <tr>
@@ -372,8 +372,8 @@
                 </h3>
                 <p>{TemplateHelper::uiCleanseHTML($badge->getDescription())}</p>
             {else}
-                <h3>{Settings::get('site.name')} - {TemplateHelper::uiCleanseHTML(Localisation::getTranslation($badge->getTitle()))}</h3>
-                <p>{TemplateHelper::uiCleanseHTML(Localisation::getTranslation($badge->getDescription()))}</p>
+                <h3>{Settings::get('site.name')} - {TemplateHelper::uiCleanseHTML($badge->getTitle())}</h3>
+                <p>{TemplateHelper::uiCleanseHTML($badge->getDescription())}</p>
             {/if}
             <p style="margin-bottom:20px;"/>
         {/foreach}
@@ -469,7 +469,7 @@
                 </div>
                 <div class="span8">
                     <p>
-                        <strong>{Localisation::getTranslation('common_biography')}</strong><br/>
+                        <strong>About Me</strong><br/>
                         
                         {if $org->getBiography() == ''}
                             {Localisation::getTranslation('org_public_profile_no_biography_listed')}
