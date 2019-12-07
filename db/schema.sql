@@ -2113,6 +2113,15 @@ BEGIN
         DELETE FROM UserQualifiedPairs
         WHERE user_id=userId;
 
+        DELETE FROM UserURLs
+        WHERE user_id=userId;
+
+        DELETE FROM UserExpertises
+        WHERE user_id=userId;
+
+        DELETE FROM UserHowheards
+        WHERE user_id=userId;
+
         select 1 as result;
     else
         select 0 as result;
