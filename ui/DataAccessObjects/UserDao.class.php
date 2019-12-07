@@ -863,8 +863,6 @@ class UserDao extends BaseDao
         if ($this->terms_accepted($user_id)) {
             $_SESSION['profile_completed'] = 1;
         }
-error_log("_SESSION in setRequiredProfileCompletedinSESSION($user_id)");
-error_log(print_r($_SESSION, true));
     }
 
     public function update_terms_accepted($user_id)
