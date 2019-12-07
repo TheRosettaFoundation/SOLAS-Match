@@ -23,6 +23,8 @@ class Middleware
         }
 
         if (empty($_SESSION['profile_completed'])) {
+error_log('$_SESSION in authUserIsLoggedIn()');
+error_log(print_r($_SESSION, true));
             $userDao = new DAO\UserDao();
             if ($userDao->is_admin_or_org_member($_SESSION['user_id'])) {
                 $app->flash('error', 'You must accept the Code of Conduct before continuing');
