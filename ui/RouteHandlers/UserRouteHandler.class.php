@@ -83,6 +83,12 @@ class UserRouteHandler
         )->via("POST")->name("user-private-profile");
 
         $app->get(
+            '/:user_id/user-code-of-conduct/',
+            array($middleware, 'authUserIsLoggedInNoProfile'),
+            array($this, 'userCodeOfConduct')
+        )->via("POST")->name('user-code-of-conduct');
+
+        $app->get(
             "/:user_id/notification/stream/",
             array($middleware, "authUserIsLoggedIn"),
             array($this, "editTaskStreamNotification")
@@ -1279,6 +1285,103 @@ EOD;
         ));
        
         $app->render('user/user-private-profile.tpl');
+    }
+
+    public static function userCodeOfConduct($user_id)
+    {
+        $app = \Slim\Slim::getInstance();
+
+        $userDao = new DAO\UserDao();
+        $adminDao = new DAO\AdminDao();
+        $langDao = new DAO\LanguageDao();
+        $countryDao = new DAO\CountryDao();
+        $projectDao = new DAO\projectDao();
+
+        if (empty($_SESSION['SESSION_CSRF_KEY'])) {
+            $_SESSION['SESSION_CSRF_KEY'] = UserRouteHandler::random_string(10);
+        }
+        $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
+
+        $user = $userDao->getUser($user_id);
+        Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER.$user_id);
+
+        if (!is_object($user)) {
+            $app->flash("error", Lib\Localisation::getTranslation('common_login_required_to_access_page'));
+            $app->redirect($app->urlFor("login"));
+        }
+
+        $userPersonalInfo = null;
+        try {
+            $userPersonalInfo = $userDao->getPersonalInfo($user_id);
+        } catch (Common\Exceptions\SolasMatchException $e) {
+        }
+
+        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
+        if (!is_null($loggedInUserId)) {
+            $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
+        } else {
+            $isSiteAdmin = false;
+        }
+
+        if ($post = $app->request()->post()) {
+            if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
+                $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
+            } else {
+                $user->setDisplayName($post['displayName']);
+
+                $userPersonalInfo->setFirstName($post['firstName']);
+                $userPersonalInfo->setLastName($post['lastName']);
+                $userPersonalInfo->setMobileNumber($post['mobileNumber']);
+                //$userPersonalInfo->setBusinessNumber($post['businessNumber']);
+                //$userPersonalInfo->setJobTitle($post['jobTitle']);
+                //$userPersonalInfo->setAddress($post['address']);
+                $userPersonalInfo->setCity($post['city']);
+                $userPersonalInfo->setCountry($post['country']);
+
+                try {
+                    $userDao->updateUser($user);
+                    $userDao->updatePersonalInfo($user_id, $userPersonalInfo);
+
+                    $userDao->update_terms_accepted($user_id);
+
+                    $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user_id)));
+                } catch (\Exception $e) {
+                    $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
+                }
+            }
+        }
+
+        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/UserPrivateProfile1.js\"></script>";
+
+        $app->view()->appendData(array(
+            'siteLocation'     => Common\Lib\Settings::get('site.location'),
+            'siteAPI'          => Common\Lib\Settings::get('site.api'),
+            'isSiteAdmin'      => $isSiteAdmin,
+            'user'             => $user,
+            'user_id'          => $user_id,
+            'userPersonalInfo' => $userPersonalInfo,
+            'languages' => $languages,
+            'countries' => $countries,
+            'language_selection' => $language_selection,
+            'nativeLanguageSelectCode' => $nativeLanguageSelectCode,
+            'nativeCountrySelectCode'  => $nativeCountrySelectCode,
+            'userQualifiedPairs'       => $userQualifiedPairs,
+            'userQualifiedPairsCount'  => $userQualifiedPairsCount,
+            'langPrefSelectCode'       => $langPrefSelectCode,
+            'url_list'          => $url_list,
+            'capability_list'   => $capability_list,
+            'capabilityCount'   => count($capability_list),
+            'expertise_list'    => $expertise_list,
+            'expertiseCount'    => count($expertise_list),
+            'howheard_list'     => $howheard_list,
+            'in_kind'           => $userDao->get_special_translator($user_id),
+            'profile_completed' => !empty($_SESSION['profile_completed']),
+            'extra_scripts' => $extra_scripts,
+            'sesskey'       => $sesskey,
+        ));
+
+        $app->render('user/user-code-of-conduct.tpl');
     }
 
     /**
