@@ -1553,6 +1553,41 @@ CREATE TABLE IF NOT EXISTS `DiscourseID` (
   CONSTRAINT FK_DiscourseID_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `UserURLs` (
+  user_id INT(10) UNSIGNED NOT NULL,
+  url_key VARCHAR(20)  COLLATE utf8_unicode_ci NOT NULL,
+  url     VARCHAR(255) COLLATE utf8_unicode_ci NOT NULL,
+  UNIQUE KEY `UserURLs` (`user_id`, `url_key`),
+  KEY `FK_UserURLs_Users` (`user_id`),
+  CONSTRAINT `FK_UserURLs_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `UserExpertises` (
+  user_id       INT(10) UNSIGNED NOT NULL,
+  expertise_key VARCHAR(20) COLLATE utf8_unicode_ci NOT NULL,
+  UNIQUE KEY `UserExpertises` (`user_id`, `expertise_key`),
+  KEY `FK_UserExpertises_Users` (`user_id`),
+  CONSTRAINT `FK_UserExpertises_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `UserHowheards` (
+  user_id      INT(10) UNSIGNED NOT NULL,
+  howheard_key VARCHAR(20) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY `FK_UserHowheards_Users` (`user_id`),
+  CONSTRAINT `FK_UserHowheards_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `UserCertifications` (
+  user_id           INT(10) UNSIGNED NOT NULL,
+  vid               INT(10) UNSIGNED NOT NULL default 0,
+  certification_key VARCHAR(20)  COLLATE utf8_unicode_ci NOT NULL,
+  filename          VARCHAR(128) COLLATE utf8_unicode_ci NOT NULL,
+  mimetype          VARCHAR(128) COLLATE utf8_unicode_ci NOT NULL,
+  note              TEXT         COLLATE utf8_unicode_ci NOT NULL,
+  KEY `FK_UserCertifications_Users` (`user_id`),
+  CONSTRAINT `FK_UserCertifications_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -8238,6 +8273,93 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_discourse_id`(IN projectID INT)
 BEGIN
     SELECT * FROM DiscourseID WHERE project_id=projectID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getUserURLs`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserURLs`(IN uID INT)
+BEGIN
+    SELECT * FROM UserURLs WHERE user_id=uID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insertUserURL`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertUserURL`(IN uID INT, IN ukey VARCHAR(20), IN value VARCHAR(255))
+BEGIN
+    REPLACE INTO UserURLs
+               (user_id, url_key,   url)
+        VALUES (    uID,    ukey, value);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getUserExpertises`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserExpertises`(IN uID INT)
+BEGIN
+    SELECT * FROM UserExpertises WHERE user_id=uID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `addUserExpertise`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addUserExpertise`(IN uID INT, IN ekey VARCHAR(20))
+BEGIN
+    REPLACE INTO UserExpertises
+               (user_id, expertise_key)
+        VALUES (    uID,          ekey);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `removeUserExpertise`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeUserExpertise`(IN uID INT, IN ekey VARCHAR(20))
+BEGIN
+    DELETE
+    FROM UserExpertises
+    WHERE
+        user_id=uID AND
+        expertise_key=ekey;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getUserHowheards`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserHowheards`(IN uID INT)
+BEGIN
+    SELECT * FROM UserHowheards WHERE user_id=uID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insertUserHowheard`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertUserHowheard`(IN uID INT, IN hkey VARCHAR(20))
+BEGIN
+    REPLACE INTO UserHowheards
+               (user_id, howheard_key)
+        VALUES (    uID,         hkey);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getUserCertifications`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserCertifications`(IN uID INT)
+BEGIN
+    SELECT *
+    FROM UserCertifications
+    WHERE user_id=uID
+    ORDER BY vid;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insertUserCertification`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertUserCertification`(IN uID INT, IN `versionID` INT, IN ckey VARCHAR(20), IN file VARCHAR(128), IN mime VARCHAR(128), IN n TEXT)
+BEGIN
+    REPLACE INTO UserCertifications
+               (user_id,       vid, certification_key, filename, mimetype,  note)
+        VALUES (    uID, versionID,              ckey, file,     mime,         n);
 END//
 DELIMITER ;
 
