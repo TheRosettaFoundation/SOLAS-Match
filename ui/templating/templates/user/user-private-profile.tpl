@@ -258,7 +258,7 @@ If you have any questions about submitting the form, please email <a href="mailt
                             <p class="desc">If you hold a certification or membership from any of the organizations below, you could qualify to be a verified translator. Please select the organization and click to submit a proof of certification/membership. You will be upgraded to Verified Translator, which will give you immediate access to all projects available, for the verified combination. if you have any questions or can't upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject={rawurlencode('Translation Certification')}" target="_blank">translators@translatorswithoutborders.org</a></p>
                         </td></tr>
                         {foreach from=$certification_list key=name item=certification}
-                            <tr align="center"><td colspan="1" align="center">{if $certification['state']}Already submitted: {/if}<a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$name"}" target="_blank">{$certification['desc']}</a></td></tr>
+                            <tr align="center"><td colspan="1" align="center">{if $certification['state']}Already submitted{if $certification['reviewed']} and reviewed{/if}: {/if}<a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$name"}" target="_blank">{$certification['desc']}</a></td></tr>
                         {/foreach}
                     </table>
                 </td>
