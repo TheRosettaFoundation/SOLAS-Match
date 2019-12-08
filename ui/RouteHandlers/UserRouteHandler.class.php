@@ -978,8 +978,8 @@ EOD;
         foreach ($userQualifiedPairs as $index => $userQualifiedPair) {
             $userQualifiedPairs[$index]['language_code_source'] = $userQualifiedPair['language_code_source'] . '-' . $userQualifiedPair['country_code_source'];
             $userQualifiedPairs[$index]['language_code_target'] = $userQualifiedPair['language_code_target'] . '-' . $userQualifiedPair['country_code_target'];
-            if (empty($language_selection[$userQualifiedPairs[$index]['language_code_source']])) $language_selection[$userQualifiedPairs[$index]['language_code_source']] = $userQualifiedPairs[$index]['language_code_source'];
-            if (empty($language_selection[$userQualifiedPairs[$index]['language_code_target']])) $language_selection[$userQualifiedPairs[$index]['language_code_target']] = $userQualifiedPairs[$index]['language_code_target'];
+            if (empty($language_selection[$userQualifiedPairs[$index]['language_code_source']])) $language_selection[$userQualifiedPairs[$index]['language_code_source']] = $languages[$userQualifiedPair['language_code_source']];
+            if (empty($language_selection[$userQualifiedPairs[$index]['language_code_target']])) $language_selection[$userQualifiedPairs[$index]['language_code_target']] = $languages[$userQualifiedPair['language_code_target']];
         }
         if (empty($userQualifiedPairs)) {
             $userQualifiedPairs[] = array('language_code_source' => '', 'language_code_target' => '', 'qualification_level' => 1);
