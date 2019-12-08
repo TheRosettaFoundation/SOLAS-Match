@@ -1413,6 +1413,13 @@ error_log(print_r($result, true));
             LibAPI\PDOWrapper::cleanseWrapStr($key));
     }
 
+    public function updateUserHowheard($user_id, $reviewed)
+    {
+        LibAPI\PDOWrapper::call('updateUserHowheard',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($reviewed));
+    }
+
     public function getUserCertifications($user_id)
     {
         $result = LibAPI\PDOWrapper::call('getUserCertifications', LibAPI\PDOWrapper::cleanse($user_id));

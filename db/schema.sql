@@ -8353,6 +8353,16 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `updateUserHowheard`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateUserHowheard`(IN uID INT, IN r INT)
+BEGIN
+    UPDATE UserHowheards
+    SET reviewed=r
+    WHERE user_id=uID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `getUserCertifications`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserCertifications`(IN uID INT)
