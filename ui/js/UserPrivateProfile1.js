@@ -123,7 +123,6 @@ function addSecondaryLanguage(
     locale.appendChild(qualificationLevel);
 
     var hr = document.createElement("hr");
-    hr.style.width = "60%";
     locale.appendChild(hr);
 
     var button = document.getElementById("addLanguageButton");

@@ -120,7 +120,8 @@ If you have any questions about submitting the form, please email <a href="mailt
                             </select>
                         </div>
                         <div id="secondaryLanguageDiv">
-                            <hr style="width: 60%" />
+                            <hr/>
+                            <label><strong>Language Pairs (From/To): <span style="color: red">*</span></strong></label>
                             <p class="desc">In general, people translate from any language they are proficient in, into their first/native language. For example, if the language you are more fluent in is Spanish, and you are also fluent in English and French, you can translate from English to Spanish and from French to Spanish.</p>
                             <button onclick="addSecondaryLanguage(); return false;" class="btn btn-success" id="addLanguageButton" {if $userQualifiedPairsCount >= 120}disabled{/if}>
                                 <i class="icon-upload icon-white"></i> {Localisation::getTranslation('user_private_profile_add_secondary_language')}
@@ -128,7 +129,7 @@ If you have any questions about submitting the form, please email <a href="mailt
                             <button onclick="removeSecondaryLanguage(); return false;" class="btn btn-inverse" id="removeLanguageButton" {if $userQualifiedPairsCount <= 1}disabled{/if}>
                                 <i class="icon-fire icon-white"></i> {Localisation::getTranslation('common_remove')}
                             </button>
-                            <hr style="width: 60%" />
+                            <hr/>
                         </div>
                     </div>
 
