@@ -118,6 +118,7 @@ If you have any questions about submitting the form, please email <a href="mailt
                             {/foreach}
                         </select>
                     </div>
+
                     <div id="secondaryLanguageDiv">
                         <hr/>
                         <label><strong>Language Pairs (From/To): <span style="color: red">*</span></strong></label>
@@ -137,8 +138,9 @@ If you have any questions about submitting the form, please email <a href="mailt
 
                 <label for='biography'><strong>About Me:</strong></label>
                 <textarea cols='40' rows='7' style="width: 80%" name="biography" id="biography">{$user->getBiography()|escape:'html':'UTF-8'}</textarea>
-        </td></tr>
-        <tr><td>
+            </td></tr>
+
+            <tr><td>
                 <hr/>
                 {if $isSiteAdmin}
                     {if !(isset($strict))}
@@ -201,57 +203,58 @@ If you have any questions about submitting the form, please email <a href="mailt
                 </p>
                 <hr/>
             </td></tr>
-            <tr><td>
-                <table>
-                    <tr><td style="font-weight: bold">Services I can provide: <span style="color: red">*</span></td></tr>
-                    {assign var="i" value=0}
-                    {foreach from=$capability_list key=name item=capability}
-                        <tr><td><input type="checkbox" {if $capability['state']}checked="checked"{/if} name="{$name}" id="capability{$i}" /> {$capability['desc']}</td></tr>
-                        {assign var="i" value=$i+1}
-                    {/foreach}
 
-                    <tr><td style="font-weight: bold">My fields of expertise are: <span style="color: red">*</span></td></tr>
-                    {assign var="i" value=0}
-                    {foreach from=$expertise_list key=name item=expertise}
-                        <tr><td><input type="checkbox" {if $expertise['state']}checked="checked"{/if} name="{$name}" id="expertise{$i}" /> {$expertise['desc']}</td></tr>
-                        {assign var="i" value=$i+1}
-                    {/foreach}
-                </table>
-            </td></tr>
+            <tr><td style="font-weight: bold">Services I can provide: <span style="color: red">*</span></td></tr>
+                {assign var="i" value=0}
+                {foreach from=$capability_list key=name item=capability}
+                    <tr><td><input type="checkbox" {if $capability['state']}checked="checked"{/if} name="{$name}" id="capability{$i}" /> {$capability['desc']}</td></tr>
+                    {assign var="i" value=$i+1}
+                {/foreach}
+
+            <tr><td style="font-weight: bold"><br />My fields of expertise are: <span style="color: red">*</span></td></tr>
+                {assign var="i" value=0}
+                {foreach from=$expertise_list key=name item=expertise}
+                    <tr><td><input type="checkbox" {if $expertise['state']}checked="checked"{/if} name="{$name}" id="expertise{$i}" /> {$expertise['desc']}</td></tr>
+                    {assign var="i" value=$i+1}
+                {/foreach}
+
             <tr><td>
-                <label for='receiveCredit'><strong>Do you want all the above to be visible to all members(?) of the TWB community?:</strong></label>
+                <hr/>
+                <label for='receiveCredit'><strong>Do you want all the above to be visible to all members of the TWB community?:</strong></label>
                 <p class="desc">If at any point you wish to change this setting, you can always do that. Additionally you will be able to have a link to this information which you can share with selected people.</p>
                 <input type="checkbox" value="1" name="receiveCredit" id="receiveCredit" {if $userPersonalInfo->getReceiveCredit()}checked="checked"{/if} /> Make the above information visible to TWB community
                 <hr/>
             </td></tr>
+
             <tr><td>
                 <label for='twbprivacy'><strong>Please read the <a href="https://translatorswithoutborders.org/privacy-policy/" target="_blank">TWB Privacy Policy</a>: <span style="color: red">*</span></strong></label>
                 <p class="desc">TWB is committed to protecting personal data and will use the information you provide to send you updates, information and news from Translators without Borders, including our newsletter, volunteer and job opportunities, and crisis alerts. If at any point you wish to unsubscribe from TWB communications, you can always do that.</p>
                 <input type="checkbox" value="1" name="twbprivacy" id="twbprivacy" {if $profile_completed}checked="checked"{/if} /> I agree to communications from Translators without Borders by email
                 <hr/>
             </td></tr>
-            <tr><td>
-                <table>
-                    <tr><td style="font-weight: bold">Where did you hear about TWB? <span style="color: red">*</span></td></tr>
-                    <tr><td><select name="howheard" id="howheard">
-                        <option value="0"></option>
-                        {foreach from=$howheard_list key=name item=howheard}
-                            <option value="{$name}" {if $howheard['state']}selected="selected"{/if}>{$howheard['desc']}</option>
-                        {/foreach}
-                    </select></td></tr>
 
-                    <tr><td style="font-weight: bold">Certifications
-                        <p class="desc">If you hold a certification or membership from any of the organizations below, you could qualify to be a verified translator. Please select the organization and click to submit a proof of certification/membership. You will be upgraded to Verified Translator, which will give you immediate access to all projects available, for the verified combination. if you have any questions or can't upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject={rawurlencode('Translation Certification')}" target="_blank">translators@translatorswithoutborders.org</a></p>
-                    </td></tr>
-                    {foreach from=$certification_list key=name item=certification}
-                        <tr><td>{if $certification['state']}Already submitted{if $certification['reviewed']} and reviewed{/if}: {/if}<a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$name"}" target="_blank">{$certification['desc']}</a></td></tr>
-                    {/foreach}
-                </table>
+            <tr><td style="font-weight: bold">Where did you hear about TWB? <span style="color: red">*</span></td></tr>
+            <tr><td>
+                <select name="howheard" id="howheard">
+                <option value="0"></option>
+                {foreach from=$howheard_list key=name item=howheard}
+                    <option value="{$name}" {if $howheard['state']}selected="selected"{/if}>{$howheard['desc']}</option>
+                {/foreach}
+                </select>
+            <hr/>
             </td></tr>
+
+            <tr><td style="font-weight: bold">Certifications</td></tr>
+            <tr><td><p class="desc">If you hold a certification or membership from any of the organizations below, you could qualify to be a verified translator. Please select the organization and click to submit a proof of certification/membership. You will be upgraded to Verified Translator, which will give you immediate access to all projects available, for the verified combination. if you have any questions or can't upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject={rawurlencode('Translation Certification')}" target="_blank">translators@translatorswithoutborders.org</a></p></td></tr>
+            {foreach from=$certification_list key=name item=certification}
+                <tr><td>{if $certification['state']}Already submitted{if $certification['reviewed']} and reviewed{/if}: {/if}<a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$name"}" target="_blank">{$certification['desc']}</a></td></tr>
+            {/foreach}
+
             <tr><td style="padding-bottom: 20px">
                 <hr/>
                 <div id="placeholder_for_errors_2"></div>
             </td></tr>
+
             <tr><td align="center">
                 <div id="loading_warning1">
                     <p><i>{Localisation::getTranslation('common_loading')}</i></p>
