@@ -1,94 +1,76 @@
-        $certification_list['ATA']     = ['desc' => 'American Translators Association (ATA) - ATA Certified', 'state' => 0, 'reviewed' => 0];
-CREATE TABLE IF NOT EXISTS `UserCertifications` (
-  user_id           INT(10) UNSIGNED NOT NULL,
-  vid               INT(10) UNSIGNED NOT NULL default 0,
-  reviewed          INT(10) UNSIGNED NOT NULL DEFAULT 0,
-  certification_key VARCHAR(20)  COLLATE utf8_unicode_ci NOT NULL,
-  filename          VARCHAR(128) COLLATE utf8_unicode_ci NOT NULL,
-  mimetype          VARCHAR(128) COLLATE utf8_unicode_ci NOT NULL,
-  note              TEXT         COLLATE utf8_unicode_ci NOT NULL,
-{include file="header.tpl"}
+<!-- Editor Hint: ¿áéíóú -->
+{include file='header.tpl'}
 
-    <span class="hidden">
+<span class="hidden">
 
-        <!-- Parameters... -->
-        <div id="siteLocation">{$siteLocation}</div>
-        <div id="siteAPI">{$siteAPI}</div>
-        <div id="maxfilesize">{$maxFileSize}</div>
-        <div id="user_id">{$user_id}</div>
-    </span>
+    <!-- Parameters... -->
+    <div id="siteLocation">{$siteLocation}</div>
+    <div id="siteAPI">{$siteAPI}</div>
+    <div id="user_id">{$user_id}</div>
+    <div id="isSiteAdmin">{if $isSiteAdmin}1{else}0{/if}</div>
+</span>
 
-    <div class="grid_8">
-        <div class="page-header">
-            <h1>
-                {Localisation::getTranslation('project_create_create_a_project')} <small>{Localisation::getTranslation('project_create_0')}</small><br>   
-                <small>
-                    {Localisation::getTranslation('common_denotes_a_required_field')}
-                </small>
-            </h1>
-        </div>           
-    </div>  
-
-    <div class="well pull-left" style="margin-bottom: 50px">
-
-        {if isset($flash['error'])}
-            <p class="alert alert-error">
-                {$flash['error']}
-            </p>
-        {/if}
-
-        <div id="placeholder_for_errors_1"></div>
-
-        <form method="post" action="{urlFor name="project-create" options="org_id.$org_id"}" enctype="multipart/form-data" accept-charset="utf-8">
-
-            <div id ="projFormTop" class="pull-left">
-            <div class="projFormTopBlock">
-                <div class="projFormInput">
-                    <h2>{Localisation::getTranslation('common_title')}: <span style="color: red">*</span></h2>
-                    <p class="desc">{Localisation::getTranslation('project_create_1')}</p>
-                    <textarea wrap="soft" cols="1" rows="3" style="width: 400px" name="project_title" id="project_title" onblur="checkTitleNotUsed();"></textarea>
-                    <p style="margin-bottom:40px;"></p>
-                </div>
-            </div>
-
-            <div class="projFormTopBlock">
-                <div class="projFormInput">
-                    <div style="margin-bottom:25px;">
-                        <h2>{Localisation::getTranslation('project_create_source_text')}: <span style="color: red">*</span></h2>
-                        <p id="source_text_desc" class="desc"></p>
-                        <input type="file" name="projectFile" id="projectFile" />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id ="projFormBottom">
-            <div id="loading_warning">
-                <p>{Localisation::getTranslation('common_loading')}</p>
-            </div>
-        </div>
-???            </div>
-
-            <div id="placeholder_for_errors_2"></div>
-
-            <div class="" style="text-align:center; width:100%">
-                <div class="pull-left width-50">
-                    <p style="margin-bottom:20px;"></p>
-                    <a href="{$siteLocation}org/dashboard" class="btn btn-danger">
-                        <i class="icon-ban-circle icon-white"></i>
-                        {Localisation::getTranslation('common_cancel')}
-                    </a>
-                    <p style="margin-bottom:20px;"></p>
-                </div>
-                <div class="pull-left width-50">
-                    <p style="margin-bottom:20px;"></p>
-                    <button type="submit" onclick="return validateForm();" class="btn btn-success">
-                        <i class="icon-upload icon-white"></i> {Localisation::getTranslation('common_create_project')}
-                    </button>
-                    <p style="margin-bottom:20px;"></p>
-                </div>
-            </div>
-            <input type="hidden" name="sesskey" value="{$sesskey}" />
-        </form>
+{if isset($user)}
+    <div class="page-header">
+        <h1>
+            <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=80&r=g" alt="" />
+            {if $user->getDisplayName() != ''}
+                {$user->getDisplayName()|escape:'html':'UTF-8'}
+            {else}
+                {Localisation::getTranslation('user_private_profile_private_profile')}
+            {/if}
+            <small>Upload Certification Form</small><br>
+            <small>{Localisation::getTranslation('common_denotes_a_required_field')}</small>
+        </h1>
     </div>
-    
-{include file="footer.tpl"}
+{/if}
+
+<div class="well">
+
+    {if isset($flash['error'])}
+        <p class="alert alert-error">
+            {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
+        </p>
+    {/if}
+
+    <div id="placeholder_for_errors_1"></div>
+
+    <form method="post" action="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$name"}" enctype="multipart/form-data" accept-charset="utf-8">
+        <table>
+            <tr><td>
+                <div id="loading_warning">
+                    <p><i>{Localisation::getTranslation('common_loading')}</i></p>
+                </div>
+Note if admin or different PM
+                <label for='firstName'><strong>{Localisation::getTranslation('common_first_name')}: <span style="color: red">*</span></strong></label>
+                <input type='text' value="{$userPersonalInfo->getFirstName()|escape:'html':'UTF-8'}" style="width: 80%" name="firstName" id="firstName"/>
+            </td></tr>
+
+            <tr><td style="font-weight: bold">Please submit a proof of certification</td></tr>
+            <tr><td><p class="desc">Please upload (translation certification)it here. You will be upgraded to Verified Translator, which will give you immediate access to all projects available, for the verified combination.</p></td></tr>
+            <tr><td><input type="file" name="projectFile" id="projectFile" /></td></tr>
+
+
+            <tr><td style="padding-bottom: 20px">
+                <hr/>
+                <div id="placeholder_for_errors_2"></div>
+            </td></tr>
+
+            <tr><td align="center">
+                <div id="loading_warning1">
+                    <p><i>{Localisation::getTranslation('common_loading')}</i></p>
+                </div>
+                <button type="submit" onclick="return validateForm();" class='btn btn-primary' id="updateBtn">
+                    <i class="icon-refresh icon-white"></i> {Localisation::getTranslation('user_private_profile_update_profile_details')}
+                </button>
+                <button onclick="deleteUser(); return false;" class="btn btn-inverse" id="deleteBtn">
+                    <i class="icon-fire icon-white"></i> {Localisation::getTranslation('user_private_profile_delete_user_account')}
+                </button>
+            </td></tr>
+        </table>
+
+        <input type="hidden" name="sesskey" value="{$sesskey}" />
+    </form>
+</div>
+
+{include file='footer.tpl'}
