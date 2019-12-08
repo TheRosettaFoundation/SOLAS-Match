@@ -1419,4 +1419,119 @@ error_log(print_r($result, true));
         if (empty($result)) $result = [];
         return $result;
     }
+
+    public function getURLList($user_id)
+    {
+        $url_list = [];
+        $url_list['proz']   = ['desc' => 'Your ProZ.com URL (if you have one)', 'state' => ''];
+        $url_list['linked'] = ['desc' => 'Your LinkedIn URL (if you have one)', 'state' => ''];
+        $url_list['other']  = ['desc' => 'Other URL', 'state' => ''];
+        $urls = $this->getUserURLs($user_id);
+        foreach ($urls as $url) {
+            $url_list[$url['url_key']]['state'] = $url['url'];
+        }
+        return $url_list;
+    }
+
+    public function getCapabilityList($user_id)
+    {
+        $capability_list = [];
+        $capability_list['badge_id_6']  = ['desc' => 'Translation',         'state' => 0, 'id' =>  6];
+        $capability_list['badge_id_7']  = ['desc' => 'Revision',            'state' => 0, 'id' =>  7];
+        $capability_list['badge_id_10'] = ['desc' => 'Subtitling',          'state' => 0, 'id' => 10];
+        $capability_list['badge_id_11'] = ['desc' => 'Monolingual editing', 'state' => 0, 'id' => 11];
+        $capability_list['badge_id_12'] = ['desc' => 'DTP',                 'state' => 0, 'id' => 12];
+        $capability_list['badge_id_13'] = ['desc' => 'Voiceover',           'state' => 0, 'id' => 13];
+        $capability_list['badge_id_8']  = ['desc' => 'Interpretation',      'state' => 0, 'id' =>  8];
+        $badges = $this->getUserBadges($user_id);
+        if (!empty($badges)) {
+            foreach ($badges as $badge) {
+                if ($badge->getId() >= 6 && $badge->getId() != 9 && $badge->getId() <= 13) {
+                    $capability_list['badge_id_' . $badge->getId()]['state'] = 1;
+                }
+            }
+        }
+        return $capability_list;
+    }
+
+    public function getExpertiseList($user_id)
+    {
+        $expertise_list = [];
+        $expertise_list['General']            = ['desc' => 'General', 'state' => 0];
+        $expertise_list['Accounting']         = ['desc' => 'Accounting & Finance', 'state' => 0];
+        $expertise_list['Certificates']       = ['desc' => 'Certificates, diplomas, licenses, CVs, etc.', 'state' => 0];
+        $expertise_list['Chemical']           = ['desc' => 'Chemical', 'state' => 0];
+        $expertise_list['Civil']              = ['desc' => 'Civil Engineering / Construction', 'state' => 0];
+        $expertise_list['Corporate']          = ['desc' => 'Corporate Social Responsibility', 'state' => 0];
+        $expertise_list['Electronics']        = ['desc' => 'Electronics / Electrical Engineering', 'state' => 0];
+        $expertise_list['Energy']             = ['desc' => 'Energy / Power Generation / Oil & Gas', 'state' => 0];
+        $expertise_list['Environment']        = ['desc' => 'Environment', 'state' => 0];
+        $expertise_list['Games']              = ['desc' => 'Games / Video Games / Casino', 'state' => 0];
+        $expertise_list['Business']           = ['desc' => 'General Business / Commerce', 'state' => 0];
+        $expertise_list['History']            = ['desc' => 'History / Archaeology', 'state' => 0];
+        $expertise_list['Information']        = ['desc' => 'Information Technology', 'state' => 0];
+        $expertise_list['Insurance']          = ['desc' => 'Insurance', 'state' => 0];
+        $expertise_list['Internet']           = ['desc' => 'Internet, e-commerce', 'state' => 0];
+        $expertise_list['Legal']              = ['desc' => 'Legal Documents / Contracts', 'state' => 0];
+        $expertise_list['Literary']           = ['desc' => 'Literary Translation', 'state' => 0];
+        $expertise_list['Marketing']          = ['desc' => 'Marketing & Advertising Material / Public Relations', 'state' => 0];
+        $expertise_list['Mechanical']         = ['desc' => 'Mechanical / Manufacturing', 'state' => 0];
+        $expertise_list['Media']              = ['desc' => 'Media / Journalism / Publishing', 'state' => 0];
+        $expertise_list['Medical']            = ['desc' => 'Medical / Pharmaceutical', 'state' => 0];
+        $expertise_list['Private']            = ['desc' => 'Private Correspondence, Letters', 'state' => 0];
+        $expertise_list['Science']            = ['desc' => 'Science', 'state' => 0];
+        $expertise_list['Shipping']           = ['desc' => 'Shipping / Sailing / Maritime', 'state' => 0];
+        $expertise_list['Social']             = ['desc' => 'Social Science', 'state' => 0];
+        $expertise_list['Telecommunications'] = ['desc' => 'Telecommunications', 'state' => 0];
+        $expertise_list['Travel']             = ['desc' => 'Travel and Tourism', 'state' => 0];
+        $expertises = $this->getUserExpertises($user_id);
+        foreach ($expertises as $expertise) {
+            $expertise_list[$expertise['expertise_key']]['state'] = 1;
+        }
+        return $expertise_list;
+    }
+
+    public function getHowheardList($user_id)
+    {
+        $howheard_list = [];
+        $howheard_list['Twitter']    = ['desc' => 'Twitter', 'state' => 0];
+        $howheard_list['Facebook']   = ['desc' => 'Facebook', 'state' => 0];
+        $howheard_list['LinkedIn']   = ['desc' => 'LinkedIn', 'state' => 0];
+        $howheard_list['Event']      = ['desc' => 'Event/Conference', 'state' => 0];
+        $howheard_list['Referral']   = ['desc' => 'Word of mouth/Referral', 'state' => 0];
+        $howheard_list['Newsletter'] = ['desc' => 'TWB Newsletter', 'state' => 0];
+        $howheard_list['Internet']   = ['desc' => 'Internet search', 'state' => 0];
+        $howheard_list['staff']      = ['desc' => 'Contacted by TWB staff', 'state' => 0];
+        $howheard_list['Other']      = ['desc' => 'Other', 'state' => 0];
+        $howheards = $this->getUserHowheards($user_id);
+        if (!empty($howheards)) {
+            $howheard_list[$howheards[0]['howheard_key']]['state'] = 1;
+        }
+        return $howheard_list;
+    }
+
+    public function getcertificationList($user_id)
+    {
+        $certification_list = [];
+        $certification_list['ATA']     = ['desc' => 'American Translators Association (ATA) - ATA Certified', 'state' => 0];
+        $certification_list['APTS']    = ['desc' => 'Arab Professional Translators Society (APTS) - Certified Translator, Certified Translator/Interpreter or Certified Associate', 'state' => 0];
+        $certification_list['ATIO']    = ['desc' => 'Association of Translators and Interpreters of Ontario (ATIO) - Certified Translators or Candidates', 'state' => 0];
+        $certification_list['ABRATES'] = ['desc' => 'Brazilian Association of Translators and Interpreters (ABRATES) - Accredited Translators (Credenciado)', 'state' => 0];
+        $certification_list['CIOL']    = ['desc' => 'Chartered Institute of Linguists (CIOL) - Member, Fellow, Chartered Linguist, or DipTrans IOL Certificate holder', 'state' => 0];
+        $certification_list['ITIA']    = ['desc' => 'Irish Translators’ and Interpreters’ Association (ITIA) - Professional Member', 'state' => 0];
+        $certification_list['ITI']     = ['desc' => 'Institute of Translation and Interpreting (ITI) - ITI Assessed', 'state' => 0];
+        $certification_list['NAATI']   = ['desc' => 'National Accreditation Authority for Translators and Interpreters (NAATI) - Certified Translator or Advanced Certified Translator', 'state' => 0];
+        $certification_list['NZSTI']   = ['desc' => 'New Zealand Society of Translators and Interpreters (NZSTI) - Full Members', 'state' => 0];
+        $certification_list['ProZ']    = ['desc' => 'ProZ Certified PRO members', 'state' => 0];
+        $certification_list['Austria'] = ['desc' => 'UNIVERSITAS Austria Interpreters’ and Translators’ Association - Certified Members', 'state' => 0];
+        $certification_list['ETLA']    = ['desc' => 'Egyptian Translators and Linguists Association (ETLA) - Members', 'state' => 0];
+        $certification_list['SATI']    = ['desc' => 'South African Translators’ Institute (SATI) - Accredited Translators or Sworn Translators', 'state' => 0];
+        $certification_list['CATTI']   = ['desc' => 'China Accreditation Test for Translators and Interpreters (CATTI) - Senior Translators or Level 1 Translators', 'state' => 0];
+        $certification_list['STIBC']   = ['desc' => 'Society of Translators and Interpreters of British Columbia (STIBC) - Certified Translators or Associate Members', 'state' => 0];
+        $certifications = $this->getUserCertifications($user_id);
+        foreach ($certifications as $certification) {
+            $certification_list[$certification['certification_key']]['state'] = 1;
+        }
+        return $certification_list;
+    }
 }
