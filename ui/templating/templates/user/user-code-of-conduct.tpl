@@ -57,8 +57,8 @@
                 <p class="desc">Translators without Borders (TWB) is a non-profit organization with strong child protection principles, and we cannot consider for volunteer work anyone below the age of 18.</p>
                 <input type="checkbox" value="1" name="over18" id="over18" {if $profile_completed}checked="checked"{/if} /> I confirm I am over the age of 18.<br /><br />
 
-                <label for='conduct'><strong>Please read the <a href="http://translatorswithoutborders.org/wp-content/uploads/2018/05/Code-of-Conduct-for-Translators-May-2018.pdf" target="_blank">TWB Code of Conduct for Translators</a>: <span style="color: red">*</span></strong></label>
-                <input type="checkbox" value="1" name="conduct" id="conduct" {if $profile_completed}checked="checked"{/if} /> I agree to abide by the TWB Code of Conduct for translators.<br /><br />
+                <label for='conduct'><strong>Please read the <a href="http://translatorswithoutborders.org/wp-content/uploads/2018/05/Code-of-Conduct-for-Translators-May-2018.pdf" target="_blank">TWB Code of Conduct</a>: <span style="color: red">*</span></strong></label>
+                <input type="checkbox" value="1" name="conduct" id="conduct" {if $profile_completed}checked="checked"{/if} /> I agree to abide by the TWB Code of Conduct.<br /><br />
             </td></tr>
 
             <tr><td>
