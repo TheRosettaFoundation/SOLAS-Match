@@ -86,7 +86,7 @@ If you have any questions about submitting the form, please email <a href="mailt
 
                     <label for='over18'><strong>Please confirm you are over the age of 18 years old: <span style="color: red">*</span></strong></label>
                     <p class="desc">Translators without Borders (TWB) is a non-profit organization with strong child protection principles, and we cannot consider for volunteer work anyone below the age of 18.</p>
-                    <input type="checkbox" value="1" name="over18" id="over18" {if $profile_completed}checked="checked"{/if} /> I confirm I am over the age of 18.
+                    <input type="checkbox" value="1" name="over18" id="over18" {if $profile_completed}checked="checked"{/if} /> I confirm I am over the age of 18.<br />
 
                     {foreach from=$url_list key=name item=url}
                     <label for='{$name}'><strong>{$url['desc']}:</strong></label>
