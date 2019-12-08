@@ -1582,11 +1582,13 @@ CREATE TABLE IF NOT EXISTS `UserHowheards` (
 CREATE TABLE IF NOT EXISTS `UserCertifications` (
   user_id           INT(10) UNSIGNED NOT NULL,
   vid               INT(10) UNSIGNED NOT NULL default 0,
+  reviewed          INT(10) UNSIGNED NOT NULL DEFAULT 0,
   certification_key VARCHAR(20)  COLLATE utf8_unicode_ci NOT NULL,
   filename          VARCHAR(128) COLLATE utf8_unicode_ci NOT NULL,
   mimetype          VARCHAR(128) COLLATE utf8_unicode_ci NOT NULL,
   note              TEXT         COLLATE utf8_unicode_ci NOT NULL,
   KEY `FK_UserCertifications_Users` (`user_id`),
+  KEY `FK_UserCertifications_reviewed` (`reviewed`),
   CONSTRAINT `FK_UserCertifications_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
