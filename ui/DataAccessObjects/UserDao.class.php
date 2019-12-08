@@ -1517,7 +1517,7 @@ error_log(print_r($result, true));
         return $howheard_list;
     }
 
-    public function getcertificationList($user_id)
+    public function getCertificationList($user_id)
     {
         $certification_list = [];
         $certification_list['ATA']     = ['desc' => 'American Translators Association (ATA) - ATA Certified', 'state' => 0, 'reviewed' => 0];

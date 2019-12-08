@@ -993,7 +993,7 @@ EOD;
         $capability_list    = $userDao->getCapabilityList($user_id);
         $expertise_list     = $userDao->getExpertiseList($user_id);
         $howheard_list      = $userDao->getHowheardList($user_id);
-        $certification_list = $userDao->getcertificationList($user_id);
+        $certification_list = $userDao->getCertificationList($user_id);
 
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
         if (!is_null($loggedInUserId)) {
