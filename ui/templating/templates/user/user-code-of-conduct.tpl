@@ -25,8 +25,7 @@
 {/if}
 
 <div class="well alert-info">
-    <p><strong>Please take a few moments to accept the Translator Code of Conduct. You will need to fill in this form to continue accessing Kató Platform. Thank you!<br />
-<a href="https://translatorswithoutborders.org/wp-content/uploads/2018/05/Code-of-Conduct-for-Translators-May-2018.pdf" target="_blank">Click here to read the TWB Code of Conduct</a></p>
+    <p><strong>Please take a few moments to accept the Translator Code of Conduct. You will need to fill in this form to continue accessing Kató Platform. Thank you!
 </div>
 
 <div class="well">
@@ -78,7 +77,6 @@
             </td></tr>
 
             <tr><td style="padding-bottom: 20px">
-                <hr/>
                 <div id="placeholder_for_errors_2"></div>
             </td></tr>
 
