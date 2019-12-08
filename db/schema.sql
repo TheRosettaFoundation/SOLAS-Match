@@ -1572,9 +1572,11 @@ CREATE TABLE IF NOT EXISTS `UserExpertises` (
 
 CREATE TABLE IF NOT EXISTS `UserHowheards` (
   user_id      INT(10) UNSIGNED NOT NULL,
+  reviewed     INT(10) UNSIGNED NOT NULL DEFAULT 0,
   howheard_key VARCHAR(20) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY `FK_UserHowheards_Users` (`user_id`),
-  CONSTRAINT `FK_UserHowheards_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY         `FK_UserHowheards_reviewed` (`reviewed`),
+  CONSTRAINT  `FK_UserHowheards_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `UserCertifications` (
