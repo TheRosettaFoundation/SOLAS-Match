@@ -1216,6 +1216,10 @@ EOD;
         $userDao = new DAO\UserDao();
         $adminDao = new DAO\AdminDao();
 
+        if (!$userDao->is_admin_or_org_member($user_id)) {
+            $app->redirect($app->urlFor('user-private-profile', array('user_id' => $user_id)));
+        }
+
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
             $_SESSION['SESSION_CSRF_KEY'] = UserRouteHandler::random_string(10);
         }
@@ -1264,7 +1268,7 @@ EOD;
         }
 
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/UserPrivateProfile1.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/user-code-of-conduct.js\"></script>";
 
         $app->view()->appendData(array(
             'siteLocation'      => Common\Lib\Settings::get('site.location'),
