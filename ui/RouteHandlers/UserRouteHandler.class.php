@@ -1513,6 +1513,7 @@ window.close();
         }
         $app->view()->appendData(array(
             'certificate' => $certificate,
+            'is_admin_or_org_member' => $userDao->is_admin_or_org_member($user_id),
         ));
 
         $app->render("user/user-public-profile.tpl");
