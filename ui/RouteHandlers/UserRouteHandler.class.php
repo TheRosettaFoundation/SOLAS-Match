@@ -1308,18 +1308,13 @@ EOD;
                 $userFileName = $_FILES['userFile']['name'];
                 $extensionStartIndex = strrpos($userFileName, '.');
                 if ($extensionStartIndex > 0) {
-                     $extension = substr($userFileName, $extensionStartIndex + 1);
-                     $extension = strtolower($extension);
-                     $userFileName = substr($userFileName, 0, $extensionStartIndex + 1) . $extension;
+                    $extension = substr($userFileName, $extensionStartIndex + 1);
+                    $extension = strtolower($extension);
+                    $userFileName = substr($userFileName, 0, $extensionStartIndex + 1) . $extension;
                 }
-                try {
-                    $projectDao->saveuserFile($project, $user_id, $userFileName, $data);
-empty($post['note'])
+                if (empty($post['note'])) $post['note'] = '';
+                $userDao->saveUserFile($user_id, $cert_id, $post['note'], $userFileName, $data);
 $app->redirect($app->urlFor('org-dashboard'));
-                } catch (\Exception $e) {
-                    error_log("Project File Save Error($user_id): " . $post['project_title']);
-                    $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('common_error_file_stopped_by_extension')));
-                }
             }
         }
 
