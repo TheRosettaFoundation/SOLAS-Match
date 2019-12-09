@@ -1,15 +1,6 @@
 <!-- Editor Hint: ¿áéíóú -->
 {include file='header.tpl'}
 
-<span class="hidden">
-
-    <!-- Parameters... -->
-    <div id="siteLocation">{$siteLocation}</div>
-    <div id="siteAPI">{$siteAPI}</div>
-    <div id="user_id">{$user_id}</div>
-    <div id="isSiteAdmin">{if $isSiteAdmin}1{else}0{/if}</div>
-</span>
-
 <div class="page-header">
     <h1>
         <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=80&r=g" alt="" />

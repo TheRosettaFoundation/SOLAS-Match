@@ -1305,12 +1305,6 @@ EOD;
             $app->redirect($app->urlFor("login"));
         }
 
-        $userPersonalInfo = null;
-        try {
-            $userPersonalInfo = $userDao->getPersonalInfo($user_id);
-        } catch (Common\Exceptions\SolasMatchException $e) {
-        }
-
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
         if (!is_null($loggedInUserId)) {
             $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
@@ -1326,31 +1320,20 @@ EOD;
                 $userPersonalInfo->setFirstName($post['firstName']);
                 $userPersonalInfo->setLastName($post['lastName']);
 
-                try {
-                    $userDao->updateUser($user);
-                    $userDao->updatePersonalInfo($user_id, $userPersonalInfo);
-
-                    $userDao->update_terms_accepted($user_id);
-
-                    $app->redirect($app->urlFor('org-dashboard'));
-                } catch (\Exception $e) {
-                    $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
-                }
+                $app->redirect($app->urlFor('org-dashboard'));
             }
         }
 
-        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/UserPrivateProfile1.js\"></script>";
-
+[[[
+    <form method="post" action="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$name"}" enctype="multipart/form-data" accept-charset="utf-8">
+                <label for='note'><strong>{Localisation::getTranslation('common_first_name')}: <span style="color: red">*</span></strong></label>
+                <input type='text' value="" style="width: 80%" name="note" id="note" />
+            <tr><td><input type="file" name="userFile" id="userFile" /></td></tr>
+]]]
         $app->view()->appendData(array(
-            'siteLocation'      => Common\Lib\Settings::get('site.location'),
-            'siteAPI'           => Common\Lib\Settings::get('site.api'),
             'isSiteAdmin'       => $isSiteAdmin,
             'user'              => $user,
             'user_id'           => $user_id,
-            'userPersonalInfo'  => $userPersonalInfo,
-            'profile_completed' => !empty($_SESSION['profile_completed']),
-            'extra_scripts'     => $extra_scripts,
             'sesskey'           => $sesskey,
         ));
 
