@@ -1313,58 +1313,41 @@ EOD;
         }
 
         if ($post = $app->request()->post()) {
-            if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
-                $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
+            if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($_FILES['userFile']['name']) || !empty($_FILES['userFile']['error'])
+                    || (($data = file_get_contents($_FILES['userFile']['tmp_name'])) === false)) {
+                $app->flashNow('error', 'Could not upload file.');
+...
             } else {
-                $user->setDisplayName($post['displayName']);
-                $userPersonalInfo->setFirstName($post['firstName']);
-                $userPersonalInfo->setLastName($post['lastName']);
-
-                $app->redirect($app->urlFor('org-dashboard'));
+                $userFileName = $_FILES['userFile']['name'];
+                $extensionStartIndex = strrpos($userFileName, '.');
+                // Check that file has an extension
+                if ($extensionStartIndex > 0) {
+                     $extension = substr($userFileName, $extensionStartIndex + 1);
+                     $extension = strtolower($extension);
+                     $userFileName = substr($userFileName, 0, $extensionStartIndex + 1) . $extension;
+                }
+                try {
+empty($post['note'])
+                    $projectDao->saveuserFile($project, $user_id, $userFileName, $data);
+                    error_log("Project File Saved($user_id): " . $post['project_title']);
+                    $success = true;
+                } catch (\Exception $e) {
+                    error_log("Project File Save Error($user_id): " . $post['project_title']);
+                    $success = false;
+                }
+                if (!$success) {
+                    $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('common_error_file_stopped_by_extension')));
+                }
             }
+$app->redirect($app->urlFor('org-dashboard'));
         }
 
-[[[
-    <form method="post" action="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$name"}" enctype="multipart/form-data" accept-charset="utf-8">
-                <label for='note'><strong>{Localisation::getTranslation('common_first_name')}: <span style="color: red">*</span></strong></label>
-                <input type='text' value="" style="width: 80%" name="note" id="note" />
-            <tr><td><input type="file" name="userFile" id="userFile" /></td></tr>
-
-                    if (empty($_FILES['projectFile']['name']) || !empty($_FILES['projectFile']['error']) || empty($_FILES['projectFile']['tmp_name'])
-                            || (($data = file_get_contents($_FILES['projectFile']['tmp_name'])) === false)) {
-                        $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), htmlspecialchars($_FILES['projectFile']['name'], ENT_COMPAT, 'UTF-8')));
-                        error_log('Project Upload Error: ' . $post['project_title']);
-                        try {
-                            $projectDao->deleteProject($project->getId());
-                        } catch (\Exception $e) {
-                        }
-                    } else {
-                        $projectFileName = $_FILES['projectFile']['name'];
-                        $extensionStartIndex = strrpos($projectFileName, '.');
-                        // Check that file has an extension
-                        if ($extensionStartIndex > 0) {
-                             $extension = substr($projectFileName, $extensionStartIndex + 1);
-                             $extension = strtolower($extension);
-                             $projectFileName = substr($projectFileName, 0, $extensionStartIndex + 1) . $extension;
-                        }
-                        try {
-                            $projectDao->saveProjectFile($project, $user_id, $projectFileName, $data);
-                            error_log("Project File Saved($user_id): " . $post['project_title']);
-                            $success = true;
-                        } catch (\Exception $e) {
-                            error_log("Project File Save Error($user_id): " . $post['project_title']);
-                            $success = false;
-                        }
-                        if (!$success) {
-                            $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('common_error_file_stopped_by_extension')));
-                        }
-                    }
-]]]
         $app->view()->appendData(array(
-            'isSiteAdmin'       => $isSiteAdmin,
-            'user'              => $user,
-            'user_id'           => $user_id,
-            'sesskey'           => $sesskey,
+            'isSiteAdmin' => $isSiteAdmin,
+            'user'        => $user,
+            'user_id'     => $user_id,
+            'cert_id'     => $cert_id,
+            'sesskey'     => $sesskey,
         ));
 
         $app->render('user/user-uploads.tpl');

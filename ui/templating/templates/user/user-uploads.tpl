@@ -20,11 +20,11 @@
 
     <div id="placeholder_for_errors_1"></div>
 
-    <form method="post" action="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$name"}" enctype="multipart/form-data" accept-charset="utf-8">
+    <form method="post" action="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$cert_id"}" enctype="multipart/form-data" accept-charset="utf-8">
         <table>
             {if $isSiteAdmin}
             <tr><td>
-                <label for='note'><strong>{Localisation::getTranslation('common_first_name')}: <span style="color: red">*</span></strong></label>
+                <label for='note'><strong>Note: <span style="color: red">*</span></strong></label>
                 <input type='text' value="" style="width: 80%" name="note" id="note" />
             </td></tr>
             {/if}
