@@ -1300,6 +1300,8 @@ EOD;
         $user = $userDao->getUser($user_id);
         $isSiteAdmin = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
 
+        $extra_scripts = '';
+
         if ($post = $app->request()->post()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($_FILES['userFile']['name']) || !empty($_FILES['userFile']['error'])
                     || (($data = file_get_contents($_FILES['userFile']['tmp_name'])) === false)) {
@@ -1314,16 +1316,23 @@ EOD;
                 }
                 if (empty($post['note'])) $post['note'] = '';
                 $userDao->saveUserFile($user_id, $cert_id, $post['note'], $userFileName, $data);
-$app->redirect($app->urlFor('org-dashboard'));
+                $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
+<script type="text/javascript">
+if (!window.opener.closed) {
+window.opener.location.reload();
+window.opener.focus();
+}
+window.close();
             }
         }
 
         $app->view()->appendData(array(
-            'isSiteAdmin' => $isSiteAdmin,
-            'user'        => $user,
-            'user_id'     => $user_id,
-            'cert_id'     => $cert_id,
-            'sesskey'     => $sesskey,
+            'isSiteAdmin'   => $isSiteAdmin,
+            'user'          => $user,
+            'user_id'       => $user_id,
+            'cert_id'       => $cert_id,
+            'extra_scripts' => $extra_scripts,
+            'sesskey'       => $sesskey,
         ));
 
         $app->render('user/user-uploads.tpl');
