@@ -1427,6 +1427,77 @@ error_log(print_r($result, true));
         return $result;
     }
 
+    public function saveUserFile($user_id, $cert_id, $note, $filename, $file);
+    {
+       $destination = Common\Lib\Settings::get('files.upload_path') . "certs/$user_id/$cert_id";
+       if (!file_exists($destination)) mkdir($destination, 0755, true);
+
+        $vid = 0;
+        while (true) { // Find next free vid
+            $destination = Common\Lib\Settings::get('files.upload_path') . "certs/$user_id/$cert_id/$vid";
+            if (!file_exists($destination)) break;
+            $vid++;
+        }
+
+        $mime = $this->detectMimeType($file, $filename);
+        $canonicalMime = $this->client->getCanonicalMime($filename);
+        error_log("saveUserFile($user_id, $cert_id, $note, $filename, ...)");
+
+        if (!is_null($canonicalMime) && $mime != $canonicalMime) {
+            error_log("content type ($mime) of file does not match ($canonicalMime) expected from extension");
+            return;
+        }
+
+        mkdir($destination, 0755);
+        file_put_contents("$destination/$filename", $file);
+
+        LibAPI\PDOWrapper::call('insertUserCertification',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($vid) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($cert_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($filename) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($mime) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($note));
+    }
+
+    public function detectMimeType($file, $filename)
+    {
+        $result = null;
+
+        $mimeMap = array(
+                "xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                ,"xlsm" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                ,"xltx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.template"
+                ,"potx" => "application/vnd.openxmlformats-officedocument.presentationml.template"
+                ,"ppsx" => "application/vnd.openxmlformats-officedocument.presentationml.slideshow"
+                ,"pptx" => "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                ,"sldx" => "application/vnd.openxmlformats-officedocument.presentationml.slide"
+                ,"docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                ,"dotx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.template"
+                ,"xlam" => "application/vnd.ms-excel.addin.macroEnabled.12"
+                ,"xlsb" => "application/vnd.ms-excel.sheet.binary.macroEnabled.12"
+                ,"xlf"  => "application/xliff+xml"
+                ,"doc"  => "application/msword"
+                ,"ppt"  => "application/vnd.ms-powerpoint"
+                ,"xls"  => "application/vnd.ms-excel"
+        );
+
+        $finfo = new \finfo(FILEINFO_MIME_TYPE);
+        $mime = $finfo->buffer($file);
+
+        $extension = explode(".", $filename);
+        $extension = $extension[count($extension)-1];
+
+        if (($mime == "application/octet-stream" || $mime == "application/zip" || $extension == "doc" || $extension == "xlf")
+            && (array_key_exists($extension, $mimeMap))) {
+            $result = $mimeMap[$extension];
+        } else {
+            $result = $mime;
+        }
+
+        return $result;
+    }
+
     public function getURLList($user_id)
     {
         $url_list = [];
