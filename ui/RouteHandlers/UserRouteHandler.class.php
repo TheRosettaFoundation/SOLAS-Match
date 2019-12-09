@@ -1316,13 +1316,13 @@ EOD;
                 }
                 if (empty($post['note'])) $post['note'] = '';
                 $userDao->saveUserFile($user_id, $cert_id, $post['note'], $userFileName, $data);
-                $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-<script type="text/javascript">
+                $extra_scripts  = '<script type="text/javascript">
 if (!window.opener.closed) {
 window.opener.location.reload();
 window.opener.focus();
 }
 window.close();
+</script>';
             }
         }
 
