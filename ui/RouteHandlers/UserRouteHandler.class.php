@@ -1298,7 +1298,6 @@ EOD;
         $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
 
         $user = $userDao->getUser($user_id);
-        Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER.$user_id);
 
         if (!is_object($user)) {
             $app->flash("error", Lib\Localisation::getTranslation('common_login_required_to_access_page'));
@@ -1315,31 +1314,25 @@ EOD;
         if ($post = $app->request()->post()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($_FILES['userFile']['name']) || !empty($_FILES['userFile']['error'])
                     || (($data = file_get_contents($_FILES['userFile']['tmp_name'])) === false)) {
-                $app->flashNow('error', 'Could not upload file.');
-...
+                $app->flashNow('error', 'Could not upload file');
             } else {
                 $userFileName = $_FILES['userFile']['name'];
                 $extensionStartIndex = strrpos($userFileName, '.');
-                // Check that file has an extension
                 if ($extensionStartIndex > 0) {
                      $extension = substr($userFileName, $extensionStartIndex + 1);
                      $extension = strtolower($extension);
                      $userFileName = substr($userFileName, 0, $extensionStartIndex + 1) . $extension;
                 }
                 try {
-empty($post['note'])
                     $projectDao->saveuserFile($project, $user_id, $userFileName, $data);
+empty($post['note'])
                     error_log("Project File Saved($user_id): " . $post['project_title']);
-                    $success = true;
+$app->redirect($app->urlFor('org-dashboard'));
                 } catch (\Exception $e) {
                     error_log("Project File Save Error($user_id): " . $post['project_title']);
-                    $success = false;
-                }
-                if (!$success) {
                     $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('common_error_file_stopped_by_extension')));
                 }
             }
-$app->redirect($app->urlFor('org-dashboard'));
         }
 
         $app->view()->appendData(array(
