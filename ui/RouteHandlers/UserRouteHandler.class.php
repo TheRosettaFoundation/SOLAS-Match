@@ -1298,18 +1298,7 @@ EOD;
         $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
 
         $user = $userDao->getUser($user_id);
-
-        if (!is_object($user)) {
-            $app->flash("error", Lib\Localisation::getTranslation('common_login_required_to_access_page'));
-            $app->redirect($app->urlFor("login"));
-        }
-
-        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
-        if (!is_null($loggedInUserId)) {
-            $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
-        } else {
-            $isSiteAdmin = false;
-        }
+        $isSiteAdmin = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
 
         if ($post = $app->request()->post()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($_FILES['userFile']['name']) || !empty($_FILES['userFile']['error'])
@@ -1326,7 +1315,6 @@ EOD;
                 try {
                     $projectDao->saveuserFile($project, $user_id, $userFileName, $data);
 empty($post['note'])
-                    error_log("Project File Saved($user_id): " . $post['project_title']);
 $app->redirect($app->urlFor('org-dashboard'));
                 } catch (\Exception $e) {
                     error_log("Project File Save Error($user_id): " . $post['project_title']);
