@@ -33,7 +33,7 @@
                             {else if $org_creation == 'h'}
                             {/if}
                         {/if} 
-                        {if isset($private_access) || $isSiteAdmin}
+                        {if (isset($private_access) && !$is_admin_or_org_member) || $isSiteAdmin}
                             <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-primary'>
                                 <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
                             </a>

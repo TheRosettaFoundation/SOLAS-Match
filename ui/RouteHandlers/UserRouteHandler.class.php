@@ -982,8 +982,8 @@ EOD;
         foreach ($userQualifiedPairs as $index => $userQualifiedPair) {
             $userQualifiedPairs[$index]['language_code_source'] = $userQualifiedPair['language_code_source'] . '-' . $userQualifiedPair['country_code_source'];
             $userQualifiedPairs[$index]['language_code_target'] = $userQualifiedPair['language_code_target'] . '-' . $userQualifiedPair['country_code_target'];
-            if (empty($language_selection[$userQualifiedPairs[$index]['language_code_source']])) $language_selection[$userQualifiedPairs[$index]['language_code_source']] = $languages_array[$userQualifiedPair['language_code_source']];
-            if (empty($language_selection[$userQualifiedPairs[$index]['language_code_target']])) $language_selection[$userQualifiedPairs[$index]['language_code_target']] = $languages_array[$userQualifiedPair['language_code_target']];
+            if (empty($language_selection[$userQualifiedPairs[$index]['language_code_source']])) $language_selection[$userQualifiedPairs[$index]['language_code_source']] = $languages_array[$userQualifiedPair['language_code_source']] . ($userQualifiedPair['country_code_source'] === '--' ? '' : ('-' . $userQualifiedPair['country_code_source']));
+            if (empty($language_selection[$userQualifiedPairs[$index]['language_code_target']])) $language_selection[$userQualifiedPairs[$index]['language_code_target']] = $languages_array[$userQualifiedPair['language_code_target']] . ($userQualifiedPair['country_code_target'] === '--' ? '' : ('-' . $userQualifiedPair['country_code_target']));
         }
         if (empty($userQualifiedPairs)) {
             $userQualifiedPairs[] = array('language_code_source' => '', 'language_code_target' => '', 'qualification_level' => 1);
@@ -1298,60 +1298,41 @@ EOD;
         $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
 
         $user = $userDao->getUser($user_id);
-        Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER.$user_id);
+        $isSiteAdmin = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
 
-        if (!is_object($user)) {
-            $app->flash("error", Lib\Localisation::getTranslation('common_login_required_to_access_page'));
-            $app->redirect($app->urlFor("login"));
-        }
-
-        $userPersonalInfo = null;
-        try {
-            $userPersonalInfo = $userDao->getPersonalInfo($user_id);
-        } catch (Common\Exceptions\SolasMatchException $e) {
-        }
-
-        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
-        if (!is_null($loggedInUserId)) {
-            $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
-        } else {
-            $isSiteAdmin = false;
-        }
+        $extra_scripts = '';
 
         if ($post = $app->request()->post()) {
-            if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
-                $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
+            if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($_FILES['userFile']['name']) || !empty($_FILES['userFile']['error'])
+                    || (($data = file_get_contents($_FILES['userFile']['tmp_name'])) === false)) {
+                $app->flashNow('error', 'Could not upload file');
             } else {
-                $user->setDisplayName($post['displayName']);
-                $userPersonalInfo->setFirstName($post['firstName']);
-                $userPersonalInfo->setLastName($post['lastName']);
-
-                try {
-                    $userDao->updateUser($user);
-                    $userDao->updatePersonalInfo($user_id, $userPersonalInfo);
-
-                    $userDao->update_terms_accepted($user_id);
-
-                    $app->redirect($app->urlFor('org-dashboard'));
-                } catch (\Exception $e) {
-                    $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
+                $userFileName = $_FILES['userFile']['name'];
+                $extensionStartIndex = strrpos($userFileName, '.');
+                if ($extensionStartIndex > 0) {
+                    $extension = substr($userFileName, $extensionStartIndex + 1);
+                    $extension = strtolower($extension);
+                    $userFileName = substr($userFileName, 0, $extensionStartIndex + 1) . $extension;
                 }
+                if (empty($post['note'])) $post['note'] = '';
+                $userDao->saveUserFile($user_id, $cert_id, $post['note'], $userFileName, $data);
+                $extra_scripts  = '<script type="text/javascript">
+if (!window.opener.closed) {
+window.opener.location.reload();
+window.opener.focus();
+}
+window.close();
+</script>';
             }
         }
 
-        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/UserPrivateProfile1.js\"></script>";
-
         $app->view()->appendData(array(
-            'siteLocation'      => Common\Lib\Settings::get('site.location'),
-            'siteAPI'           => Common\Lib\Settings::get('site.api'),
-            'isSiteAdmin'       => $isSiteAdmin,
-            'user'              => $user,
-            'user_id'           => $user_id,
-            'userPersonalInfo'  => $userPersonalInfo,
-            'profile_completed' => !empty($_SESSION['profile_completed']),
-            'extra_scripts'     => $extra_scripts,
-            'sesskey'           => $sesskey,
+            'isSiteAdmin'   => $isSiteAdmin,
+            'user'          => $user,
+            'user_id'       => $user_id,
+            'cert_id'       => $cert_id,
+            'extra_scripts' => $extra_scripts,
+            'sesskey'       => $sesskey,
         ));
 
         $app->render('user/user-uploads.tpl');
@@ -1532,6 +1513,7 @@ EOD;
         }
         $app->view()->appendData(array(
             'certificate' => $certificate,
+            'is_admin_or_org_member' => $userDao->is_admin_or_org_member($user_id),
         ));
 
         $app->render("user/user-public-profile.tpl");
