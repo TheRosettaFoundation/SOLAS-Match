@@ -183,6 +183,13 @@
                             </tr>
                         {/if}
 
+                            <tr>
+                                <td>
+                                    <ul>
+                                    <li>test list</li>
+                                    </ul>
+                                </td>
+                            </tr>
 
 
                         </tbody>
