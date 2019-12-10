@@ -103,24 +103,28 @@
                             {if $url['state']}<tr><td><a href="{$url['state']}" target="_blank">{$url['state']|escape:'html':'UTF-8'}</a></td></tr>{/if}
                         {/foreach}
 
+                        {assign var=bio value={TemplateHelper::uiCleanseHTMLNewlineAndTabs($this_user->getBiography())}}
+                        {if !empty($bio)}
+                        <tr>
+                            <td>
+                                <h3>About Me</h3>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                {$bio}
+                            </td>
+                        </tr>
+                        {/if}
 
+                        {if $this_user->getNativeLocale() != null}
                         <tr>
                             <td>
-                                <h3>{Localisation::getTranslation('common_native_language')}</h3>
+                                Native in {strong}{TemplateHelper::getLanguageAndCountry($this_user->getNativeLocale())}{/strong}
                             </td>
                         </tr>
-                        <tr>
-                            <td>
-                                {if $this_user->getNativeLocale() != null}
-                                    {TemplateHelper::getLanguageAndCountry($this_user->getNativeLocale())}
-                                {else}
-                                    <i>{Localisation::getTranslation('user_public_profile_3')}</i>
-                                {/if}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding-bottom: 10px"/>
-                        </tr>
+                        {/if}
+
                         {if !empty($userQualifiedPairs)}
                             <tr>
                                 <td>
@@ -132,42 +136,13 @@
                                     {foreach from=$userQualifiedPairs item=userQualifiedPair}
                                         <p>
                                             {$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']} &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; {$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}&nbsp;&nbsp;&nbsp;&nbsp;
+                                            {strong}
                                             {if $userQualifiedPair['qualification_level'] == 1}({Localisation::getTranslation('user_qualification_level_1')}){/if}
                                             {if $userQualifiedPair['qualification_level'] == 2}({Localisation::getTranslation('user_qualification_level_2')}){/if}
                                             {if $userQualifiedPair['qualification_level'] == 3}({Localisation::getTranslation('user_qualification_level_3')}){/if}
+                                            {/strong}
                                         </p>
                                     {/foreach}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding-bottom: 10px"/>
-                            </tr>
-                        {/if}
-                        {assign var=bio value={TemplateHelper::uiCleanseHTMLNewlineAndTabs($this_user->getBiography())}}
-                        {if isset($bio)}
-                            <tr>
-                                <td>
-                                    <h3>About Me</h3>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td> 
-                                    {$bio}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding-bottom: 20px"/>
-                            </tr>
-                        {/if}
-                        {if isset($userPersonalInfo) && $userPersonalInfo->getLanguagePreference() != null}
-                            <tr>
-                                <td>
-                                    <h3>{Localisation::getTranslation('common_language_preference')}</h3>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    {$langPrefName}
                                 </td>
                             </tr>
                         {/if}
