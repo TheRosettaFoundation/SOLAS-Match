@@ -146,6 +146,24 @@
                                 </td>
                             </tr>
                         {/if}
+
+                            <tr>
+                                <td>
+                                    <h3>Services</h3>
+                                </td>
+                            </tr>
+                            {foreach from=$capability_list item=capability}
+                                {if $capability['state']}<tr><td>{$capability['desc']|escape:'html':'UTF-8'}</td></tr>{/if}
+                            {/foreach}
+
+                            <tr>
+                                <td>
+                                    <h3>Experienced in</h3>
+                                </td>
+                            </tr>
+                            {foreach from=$expertise_list item=expertise}
+                                {if $expertise['state']}<tr><td>{$expertise['desc']|escape:'html':'UTF-8'}</td></tr>{/if}
+                            {/foreach}
                     </tbody>
                 </table>
             </div>
@@ -160,18 +178,13 @@
                         {if $private_access || $isSiteAdmin}
                             <tr>
                                 <td>
-                                    <h3>Translator Badge</h3>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
                                     <img src="{$certificate}" width="50%" />
                                 </td>
                             </tr>
-                            <tr>
-                                <td style="padding-bottom: 10px"/>
-                            </tr>
                         {/if}
+
+
+
                         </tbody>
                     </table>
                 </div>
