@@ -1427,7 +1427,7 @@ error_log(print_r($result, true));
         return $result;
     }
 
-    public function saveUserFile($user_id, $cert_id, $note, $filename, $file);
+    public function saveUserFile($user_id, $cert_id, $note, $filename, $file)
     {
        $destination = Common\Lib\Settings::get('files.upload_path') . "certs/$user_id/$cert_id";
        if (!file_exists($destination)) mkdir($destination, 0755, true);
