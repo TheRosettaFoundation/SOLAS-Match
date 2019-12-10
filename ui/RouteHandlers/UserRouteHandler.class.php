@@ -1444,12 +1444,6 @@ window.close();
             $langPrefName = '';
         }
 
-        //if ($isSiteAdmin) {
-        //    $account_id = $userDao->get_neon_account($user);
-        //} else {
-            $account_id = 0;
-        //}
-        
         $app->view()->appendData(array(
             'sesskey' => $sesskey,
             "badges" => $badges,
@@ -1464,7 +1458,6 @@ window.close();
             "userPersonalInfo" => $userPersonalInfo,
             "langPrefName" => $langPrefName,
             "userQualifiedPairs" => $userQualifiedPairs,
-            'account_id' => $account_id,
             "taskTypeColours" => $taskTypeColours
         ));
 

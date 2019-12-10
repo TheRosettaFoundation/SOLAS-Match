@@ -53,7 +53,7 @@
 
 <table border="0">
     <tr valign="top">
-        <td style="{if isset($userPersonalInfo) && ($private_access|| $isSiteAdmin)} width: 48%  {else} width: 100% {/if}">
+        <td style="{if $private_access || $isSiteAdmin} width: 48%  {else} width: 100% {/if}">
             <div>
                 <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
                     <tbody>
@@ -151,7 +151,7 @@
             </div>
         </td>
         
-        {if isset($userPersonalInfo) && ($private_access || $isSiteAdmin) || $account_id || $private_access || $isSiteAdmin}
+        {if $private_access || $isSiteAdmin}
             <td style="width: 4%"/>
             <td style="width: 48%">            
                 <div>
@@ -166,21 +166,6 @@
                             <tr>
                                 <td>
                                     <img src="{$certificate}" width="50%" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding-bottom: 10px"/>
-                            </tr>
-                        {/if}
-                        {if $account_id}
-                            <tr>
-                                <td>
-                                    <h3>Neon Account</h3>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="https://translatorswithoutborders.z2systems.com/np/admin/account/accountDetails.do?id={$account_id}#attributes" target="_blank">https://translatorswithoutborders.z2systems.com/np/admin/account/accountDetails.do?id={$account_id}#attributes</a>
                                 </td>
                             </tr>
                             <tr>
