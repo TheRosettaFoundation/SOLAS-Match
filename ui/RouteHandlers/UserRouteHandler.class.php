@@ -95,6 +95,12 @@ class UserRouteHandler
         )->via("POST")->name('user-uploads');
 
         $app->get(
+            '/:id/user-download/',
+            array($middleware, 'authUserIsLoggedIn'),
+            array($this, 'userDownload')
+        )->name('user-download');
+
+        $app->get(
             "/:user_id/notification/stream/",
             array($middleware, "authUserIsLoggedIn"),
             array($this, "editTaskStreamNotification")

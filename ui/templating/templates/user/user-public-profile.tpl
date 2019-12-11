@@ -206,7 +206,7 @@
                                 </td>
                             </tr>
                             {foreach from=$certifications item=certification}
-                            <tr><td><a href="{urlFor name="user-download" options="id.{$certification['id']}"}" target="_blank">{$certification['note']|escape:'html':'UTF-8'}</a></td></tr>
+                            <tr><td><a href="{urlFor name="user-download" options="id.{$certification['id']}"}">{$certification['note']|escape:'html':'UTF-8'}</a></td></tr>
                             {/foreach}
                         </tbody>
                     </table>
