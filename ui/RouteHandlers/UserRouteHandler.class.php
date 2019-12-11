@@ -1200,6 +1200,7 @@ EOD;
             'expertiseCount'    => count($expertise_list),
             'howheard_list'     => $howheard_list,
             'certification_list' => $certification_list,
+            'supported_ngos'    => $userDao->supported_ngos($user_id),
             'in_kind'           => $userDao->get_special_translator($user_id),
             'profile_completed' => !empty($_SESSION['profile_completed']),
             'extra_scripts' => $extra_scripts,
@@ -1444,12 +1445,6 @@ window.close();
             $langPrefName = '';
         }
 
-        //if ($isSiteAdmin) {
-        //    $account_id = $userDao->get_neon_account($user);
-        //} else {
-            $account_id = 0;
-        //}
-        
         $app->view()->appendData(array(
             'sesskey' => $sesskey,
             "badges" => $badges,
@@ -1464,7 +1459,6 @@ window.close();
             "userPersonalInfo" => $userPersonalInfo,
             "langPrefName" => $langPrefName,
             "userQualifiedPairs" => $userQualifiedPairs,
-            'account_id' => $account_id,
             "taskTypeColours" => $taskTypeColours
         ));
 

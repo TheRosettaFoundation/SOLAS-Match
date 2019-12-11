@@ -8386,6 +8386,24 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `supported_ngos`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `supported_ngos`(IN uID INT)
+BEGIN
+    SELECT DISTINCT
+        o.name AS org_name,
+        o.id AS org_id
+    FROM TaskClaims   tc
+    JOIN Tasks         t ON tc.task_id=t.id
+    JOIN Projects      p ON t.project_id=p.id
+    JOIN Organisations o ON p.organisation_id=o.id
+    WHERE
+        tc.user_id=uID AND
+        t.`task-status_id`=4
+    ORDER BY o.name;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 

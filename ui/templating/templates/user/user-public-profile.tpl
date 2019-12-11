@@ -24,7 +24,7 @@
                                 <i class="icon-list icon-white"></i> {Localisation::getTranslation('claimed_tasks_claimed_tasks')}
                             </a>
                         {/if}
-                        {if isset($private_access) && isset($org_creation)}
+                        {if $private_access && isset($org_creation)}
                             {if $org_creation == 'y'}
                                 <a href="{urlFor name="create-org"}" class="btn btn-success"
                                    onclick="return confirm('{Localisation::getTranslation('user_public_profile_1')}')">
@@ -33,7 +33,7 @@
                             {else if $org_creation == 'h'}
                             {/if}
                         {/if} 
-                        {if (isset($private_access) && !$is_admin_or_org_member) || $isSiteAdmin}
+                        {if ($private_access && !$is_admin_or_org_member) || $isSiteAdmin}
                             <a href='{urlFor name="user-private-profile" options="user_id.$user_id"}' class='btn btn-primary'>
                                 <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
                             </a>
@@ -49,29 +49,22 @@
     <div class='page-header'><h1>{Localisation::getTranslation('common_user_profile')} <small>{Localisation::getTranslation('user_public_profile_2')}</small></h1></div>
 {/if}
 
+{if $show}
+
 <table border="0">
     <tr valign="top">
-        <td style="{if isset($userPersonalInfo) && (isset($private_access)|| $isSiteAdmin)} width: 48%  {else} width: 100% {/if}">
+        <td style="{if $private_access || $isSiteAdmin} width: 48%  {else} width: 100% {/if}">
             <div>
                 <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
-                    <thead>                
-                    <th align="left"><h3>{Localisation::getTranslation('common_display_name')}</h3></th>
-                    </thead>
                     <tbody>
-                        <tr>
-                            <td>
-                                {TemplateHelper::uiCleanseHTML($this_user->getDisplayName())}
-                            </td>
-                        </tr>
-                        {if isset($private_access) || $isSiteAdmin}
+                        {if isset($userPersonalInfo)}
                             <tr>
-                                <td style="padding-bottom: 10px"/>
-                            </tr> 
-                            <tr>
-                                <td>
-                                    <h3>{Localisation::getTranslation('common_email')}</h3>
-                                </td>
-                            </tr>
+                                 <td>
+                                     <h3>{if !empty($userPersonalInfo->getFirstName())}{TemplateHelper::uiCleanseHTML($userPersonalInfo->getFirstName())}{/if} {if !empty($userPersonalInfo->getLastName())}{TemplateHelper::uiCleanseHTML($userPersonalInfo->getLastName())}{/if}</h3>
+                                 </td>
+                             </tr>
+                        {/if}
+                        {if $private_access || $isSiteAdmin}
                             <tr>
                                 <td>
                                     {mailto address={$this_user->getEmail()} encode='hex' text={$this_user->getEmail()}}
@@ -83,26 +76,55 @@
                                 </td>
                             </tr>
                         {/if}
-                        <tr>
-                            <td style="padding-bottom: 10px"/>
-                        </tr> 
+                        {if isset($userPersonalInfo)}
+                        {if !empty($userPersonalInfo->getMobileNumber())}
+                            <tr>
+                                <td>
+                                    {TemplateHelper::uiCleanseHTML($userPersonalInfo->getMobileNumber())}
+                                </td>
+                            </tr>
+                        {/if}
+                        {if !empty($userPersonalInfo->getCity()))}
+                                <td>
+                                    {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCity())}
+                                </td>
+                            </tr>
+                        {/if}
+                        {if !empty($userPersonalInfo->getCountry())}
+                            <tr>
+                                <td>
+                                    {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCountry())}
+                                </td>
+                            </tr>
+                        {/if}
+                        {/if}
+
+                        {foreach from=$url_list item=url}
+                            {if $url['state']}<tr><td><a href="{$url['state']}" target="_blank">{$url['state']|escape:'html':'UTF-8'}</a></td></tr>{/if}
+                        {/foreach}
+
+                        {assign var=bio value={TemplateHelper::uiCleanseHTMLNewlineAndTabs($this_user->getBiography())}}
+                        {if !empty($bio)}
                         <tr>
                             <td>
-                                <h3>{Localisation::getTranslation('common_native_language')}</h3>
+                                <h3>About Me</h3>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                {if $this_user->getNativeLocale() != null}
-                                    {TemplateHelper::getLanguageAndCountry($this_user->getNativeLocale())}
-                                {else}
-                                    <i>{Localisation::getTranslation('user_public_profile_3')}</i>
-                                {/if}
+                                {$bio}
                             </td>
                         </tr>
+                        {/if}
+
+                        {if $this_user->getNativeLocale() != null}
                         <tr>
-                            <td style="padding-bottom: 10px"/>
+                            <td>
+                                Native in {strong}{TemplateHelper::getLanguageAndCountry($this_user->getNativeLocale())}{/strong}
+                            </td>
                         </tr>
+                        {/if}
+
                         {if !empty($userQualifiedPairs)}
                             <tr>
                                 <td>
@@ -114,206 +136,83 @@
                                     {foreach from=$userQualifiedPairs item=userQualifiedPair}
                                         <p>
                                             {$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']} &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; {$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}&nbsp;&nbsp;&nbsp;&nbsp;
+                                            {strong}
                                             {if $userQualifiedPair['qualification_level'] == 1}({Localisation::getTranslation('user_qualification_level_1')}){/if}
                                             {if $userQualifiedPair['qualification_level'] == 2}({Localisation::getTranslation('user_qualification_level_2')}){/if}
                                             {if $userQualifiedPair['qualification_level'] == 3}({Localisation::getTranslation('user_qualification_level_3')}){/if}
+                                            {/strong}
                                         </p>
                                     {/foreach}
                                 </td>
                             </tr>
-                            <tr>
-                                <td style="padding-bottom: 10px"/>
-                            </tr>
                         {/if}
-                        {assign var=bio value={TemplateHelper::uiCleanseHTMLNewlineAndTabs($this_user->getBiography())}}
-                        {if isset($bio)}
+
                             <tr>
                                 <td>
-                                    <h3>About Me</h3>
+                                    <h3>Services</h3>
                                 </td>
                             </tr>
-                            <tr>
-                                <td> 
-                                    {$bio}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding-bottom: 20px"/>
-                            </tr>
-                        {/if}
-                        {if isset($userPersonalInfo) && $userPersonalInfo->getLanguagePreference() != null}
+                            {foreach from=$capability_list item=capability}
+                                {if $capability['state']}<tr><td>{$capability['desc']|escape:'html':'UTF-8'}</td></tr>{/if}
+                            {/foreach}
+
                             <tr>
                                 <td>
-                                    <h3>{Localisation::getTranslation('common_language_preference')}</h3>
+                                    <h3>Experienced in</h3>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    {$langPrefName}
-                                </td>
-                            </tr>
-                        {/if}
+                            {foreach from=$expertise_list item=expertise}
+                                {if $expertise['state']}<tr><td>{$expertise['desc']|escape:'html':'UTF-8'}</td></tr>{/if}
+                            {/foreach}
                     </tbody>
                 </table>
             </div>
         </td>
         
-        {if isset($userPersonalInfo) && (isset($private_access) || $isSiteAdmin) || $account_id || isset($private_access) || $isSiteAdmin}
+        {if $private_access || $isSiteAdmin}
             <td style="width: 4%"/>
             <td style="width: 48%">            
                 <div>
                     <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
                         <tbody align="left" width="48%">
-                        {if $userPersonalInfo->getFirstName() != null}
-                            <tr>                                  
-                                <td ><h3>{Localisation::getTranslation('common_first_name')}</h3></td>
-                            </tr>
-                            <tr>
-                                 <td>
-                                     {TemplateHelper::uiCleanseHTML($userPersonalInfo->getFirstName())}
-                                 </td>
-                             </tr>
-                             <tr>
-                                 <td style="padding-bottom: 10px"/>
-                             </tr>
-                        {/if}
-                        {if $userPersonalInfo->getLastName() != null}
-                            <tr>
-                                <td>
-                                    <h3>{Localisation::getTranslation('common_last_name')}</h3>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    {TemplateHelper::uiCleanseHTML($userPersonalInfo->getLastName())}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding-bottom: 10px"/>
-                            </tr>
-                        {/if}
-                        {if $userPersonalInfo->getMobileNumber() != null}
-                            <tr>
-                                <td>
-                                    <h3>{Localisation::getTranslation('common_mobile_number')}</h3>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    {TemplateHelper::uiCleanseHTML($userPersonalInfo->getMobileNumber())}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding-bottom: 10px"/>
-                            </tr>
-                         {/if}
-                         {if $userPersonalInfo->getBusinessNumber() != null}
-                            <tr>
-                                <td>
-                                    <h3>{Localisation::getTranslation('common_business_number')}</h3>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    {TemplateHelper::uiCleanseHTML($userPersonalInfo->getBusinessNumber())}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding-bottom: 10px"/>
-                            </tr>
-                        {/if}
-                        {if $userPersonalInfo->getJobTitle() != null}
-                            <tr>
-                                <td>
-                                    <h3>{Localisation::getTranslation('common_job_title')}</h3>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    {TemplateHelper::uiCleanseHTML($userPersonalInfo->getJobTitle())}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding-bottom: 10px"/>
-                            </tr>
-                        {/if}
-                        {if $userPersonalInfo->getAddress() != null}
-                            <tr>
-                                <td>
-                                    <h3>{Localisation::getTranslation('common_address')}</h3>
-                                </td>
-                            </tr>  
-                            <tr>
-                                <td>
-                                    {if $userPersonalInfo->getAddress() != null}
-                                        {TemplateHelper::uiCleanseHTMLNewlineAndTabs($userPersonalInfo->getAddress())}
-                                    {/if}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding-bottom: 10px"/>
-                            </tr>
-                        {/if}
-                        {if $userPersonalInfo->getCity() != null}
-                            <tr>
-                                <td>
-                                    <h3>{Localisation::getTranslation('common_city')}</h3>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCity())}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding-bottom: 10px"/>
-                            </tr>
-                        {/if}
-                        {if $userPersonalInfo->getCountry() != null}
-                            <tr>
-                                <td>
-                                    <h3>{Localisation::getTranslation('common_country')}</h3>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCountry())}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="padding-bottom: 10px"/>
-                            </tr>
-                        {/if}
-                        {if isset($private_access) || $isSiteAdmin}
-                            <tr>
-                                <td>
-                                    <h3>Translator Badge</h3>
-                                </td>
-                            </tr>
+                        {if $private_access || $isSiteAdmin}
                             <tr>
                                 <td>
                                     <img src="{$certificate}" width="50%" />
                                 </td>
                             </tr>
-                            <tr>
-                                <td style="padding-bottom: 10px"/>
-                            </tr>
                         {/if}
-                        {if $account_id}
+
                             <tr>
                                 <td>
-                                    <h3>Neon Account</h3>
+                                    <h3>Supported NGOs</h3>
                                 </td>
                             </tr>
+                            {foreach from=$supported_ngos item=supported_ngo}
+                             <tr><td>{$supported_ngo['desc']|escape:'html':'UTF-8'}</td></tr>
+                            {/foreach}
                             <tr>
                                 <td>
-                                    <a href="https://translatorswithoutborders.z2systems.com/np/admin/account/accountDetails.do?id={$account_id}#attributes" target="_blank">https://translatorswithoutborders.z2systems.com/np/admin/account/accountDetails.do?id={$account_id}#attributes</a>
+                                    <ul>
+                                    <li>test list</li>
+                                    <li>test list</li>
+                                    </ul>
                                 </td>
                             </tr>
+
                             <tr>
-                                <td style="padding-bottom: 10px"/>
+                                <td>
+                                    <h3>Certificates and training courses</h3>
+                                </td>
                             </tr>
-                        {/if}
+[[
+                            {foreach from=$supported_ngos item=supported_ngo}
+                             <tr><td>{$supported_ngo['desc']|escape:'html':'UTF-8'}</td></tr>
+                            {/foreach}
+            {foreach from=$certification_list key=name item=certification}
+                <tr><td>{if $certification['state']}Already submitted{if $certification['reviewed'] == 1} and reviewed{/if}: {/if}<a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$name"}" target="_blank">{$certification['desc']}</a></td></tr>
+            {/foreach}
+]]
                         </tbody>
                     </table>
                 </div>
@@ -355,7 +254,7 @@
         {foreach $badges as $badge}
             {if !is_null($badge->getOwnerId())}
                 {assign var="user_id" value=$this_user->getId()} 
-                    {if isset($private_access)}
+                    {if $private_access}
                         <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="pull-right">
                             <i class="icon-fire icon-white" style="position:relative; right:-25px; top:1px;"></i>
                             <input type="hidden" name="badge_id" value="{$badge->getId()}" />
@@ -382,7 +281,7 @@
     {/if}
 {/if}
 
-{if isset($private_access)}
+{if $private_access}
     <div class="page-header">
         <h1>{Localisation::getTranslation('user_public_profile_task_stream_notifications')} <small>{Localisation::getTranslation('user_public_profile_6')}</small>
             <a href="{urlFor name="stream-notification-edit" options="user_id.$user_id"}" class="pull-right btn btn-primary">
@@ -458,7 +357,7 @@
                 </div>
                 <div class="row">
                     <form method="post" class="pull-right" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                        {if isset($private_access)}
+                        {if $private_access}
                             <i class="icon-fire icon-white" style="position:relative; right:-25px; top:1px;"></i>
                             <input type="hidden" name="org_id" value="{$org_id}" />
                             <input type="submit" class='btn btn-inverse' name="revoke" value="    {Localisation::getTranslation('user_public_profile_leave_organisation')}" 
@@ -499,7 +398,7 @@
     {if count($archivedJobs) > 0}
         <div class='page-header'>
             <h1>{Localisation::getTranslation('common_archived_tasks')} <small>{Localisation::getTranslation('user_public_profile_14')}</small>
-                {if isset($private_access)}
+                {if $private_access}
                     <a href='{urlFor name="archived-tasks" options="page_no.1"}' class='pull-right btn btn-primary'>
                         <i class="icon-list icon-white"></i> {Localisation::getTranslation('user_public_profile_list_all_archived_tasks')}
                     </a>
@@ -512,6 +411,8 @@
         {/foreach}
         <p style="margin-bottom:50px;"/>
     {/if}
+{/if}
+
 {/if}
 
 {include file='footer.tpl'}
