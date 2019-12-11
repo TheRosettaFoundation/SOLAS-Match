@@ -185,7 +185,16 @@
 
                             <tr>
                                 <td>
+                                    <h3>Supported NGOs</h3>
+                                </td>
+                            </tr>
+                            {foreach from=$supported_ngos item=supported_ngo}
+                             <tr><td>{$supported_ngo['desc']|escape:'html':'UTF-8'}</td></tr>
+                            {/foreach}
+                            <tr>
+                                <td>
                                     <ul>
+                                    <li>test list</li>
                                     <li>test list</li>
                                     </ul>
                                 </td>

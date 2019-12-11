@@ -1200,6 +1200,7 @@ EOD;
             'expertiseCount'    => count($expertise_list),
             'howheard_list'     => $howheard_list,
             'certification_list' => $certification_list,
+            'supported_ngos'    => $userDao->supported_ngos($user_id),
             'in_kind'           => $userDao->get_special_translator($user_id),
             'profile_completed' => !empty($_SESSION['profile_completed']),
             'extra_scripts' => $extra_scripts,
