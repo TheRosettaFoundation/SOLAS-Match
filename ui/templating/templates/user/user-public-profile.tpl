@@ -200,7 +200,24 @@
                                 </td>
                             </tr>
 
-
+                            <tr>
+                                <td>
+                                    <h3>Certificates and training courses</h3>
+                                </td>
+                            </tr>
+{{
+                            {foreach from=$supported_ngos item=supported_ngo}
+                             <tr><td>{$supported_ngo['desc']|escape:'html':'UTF-8'}</td></tr>
+                            {/foreach}
+            {foreach from=$certification_list key=name item=certification}
+                <tr><td>{if $certification['state']}Already submitted{if $certification['reviewed']} and reviewed{/if}: {/if}<a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$name"}" target="_blank">{$certification['desc']}</a></td></tr>
+            {/foreach}
+@Ambra, @Manuel,
+I have a question about "Certificates and training courses" on the translator's public profile
+I will only show certificates that have been reviewed by TWB, I assume.
+Should this list also show files uploaded by TWB Admins? Are these "training courses"?
+Or are some of those supposed to be in the admin section?... I'm not sure what I am doing here.
+]]
                         </tbody>
                     </table>
                 </div>
