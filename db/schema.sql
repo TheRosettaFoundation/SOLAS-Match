@@ -1580,6 +1580,7 @@ CREATE TABLE IF NOT EXISTS `UserHowheards` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `UserCertifications` (
+  id                INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   user_id           INT(10) UNSIGNED NOT NULL,
   vid               INT(10) UNSIGNED NOT NULL default 0,
   reviewed          INT(10) UNSIGNED NOT NULL DEFAULT 0,
@@ -1587,6 +1588,7 @@ CREATE TABLE IF NOT EXISTS `UserCertifications` (
   filename          VARCHAR(128) COLLATE utf8_unicode_ci NOT NULL,
   mimetype          VARCHAR(128) COLLATE utf8_unicode_ci NOT NULL,
   note              TEXT         COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
   KEY `FK_UserCertifications_Users` (`user_id`),
   KEY `FK_UserCertifications_reviewed` (`reviewed`),
   CONSTRAINT `FK_UserCertifications_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
