@@ -8378,6 +8378,16 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getUserCertificationByID`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserCertificationByID`(IN primaryID INT)
+BEGIN
+    SELECT *
+    FROM UserCertifications
+    WHERE id=primaryID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `insertUserCertification`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insertUserCertification`(IN uID INT, IN `versionID` INT, IN ckey VARCHAR(20), IN file VARCHAR(128), IN mime VARCHAR(128), IN n TEXT)

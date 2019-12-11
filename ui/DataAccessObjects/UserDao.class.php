@@ -1427,6 +1427,12 @@ error_log(print_r($result, true));
         return $result;
     }
 
+    public function getUserCertificationByID($id)
+    {
+        $result = LibAPI\PDOWrapper::call('getUserCertificationByID', LibAPI\PDOWrapper::cleanse($id));
+        return $result[0];
+    }
+
     public function saveUserFile($user_id, $cert_id, $note, $filename, $file)
     {
        $destination = Common\Lib\Settings::get('files.upload_path') . "certs/$user_id/$cert_id";
