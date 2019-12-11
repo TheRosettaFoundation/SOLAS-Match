@@ -8372,7 +8372,7 @@ BEGIN
     SELECT *
     FROM UserCertifications
     WHERE user_id=uID
-    ORDER BY vid;
+    ORDER BY note, vid;
 END//
 DELIMITER ;
 
