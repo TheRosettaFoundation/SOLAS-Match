@@ -242,7 +242,7 @@ If you have any questions about submitting the form, please email <a href="mailt
                 <tr><td>{if $certification['state']}Already submitted{if $certification['reviewed'] == 1} and reviewed{/if}: {/if}<a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$name"}" target="_blank">{$certification['desc']}</a></td></tr>
             {/foreach}
 
-            <tr><td style="font-weight: bold">Other Certificates and Documentation</td></tr>
+            <tr><td style="font-weight: bold"><br />Other Certificates and Documentation</td></tr>
             <tr><td><p class="desc">Certificates or other relevant documents about your translation qualifications. Please provide a short title for your qualification and upload the corresponding file. Project Officers will also upload here any certificates you obtain while volunteering with TWB. If you have any questions or can’t upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject={rawurlencode('Translation Certification')}" target="_blank">translators@translatorswithoutborders.org</a></p></td></tr>
             <tr><td><a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TRANSLATOR"}" target="_blank">Upload file</a></td></tr>
 
