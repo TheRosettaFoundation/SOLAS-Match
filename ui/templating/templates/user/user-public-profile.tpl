@@ -205,14 +205,9 @@
                                     <h3>Certificates and training courses</h3>
                                 </td>
                             </tr>
-[[
-                            {foreach from=$supported_ngos item=supported_ngo}
-                             <tr><td>{$supported_ngo['desc']|escape:'html':'UTF-8'}</td></tr>
+                            {foreach from=$certifications item=certification}
+                            <tr><td>{if $certification['state']}Already submitted{if $certification['reviewed'] == 1} and reviewed{/if}: {/if}<a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$name"}" target="_blank">{$certification['note']|escape:'html':'UTF-8'}</a></td></tr>
                             {/foreach}
-            {foreach from=$certification_list key=name item=certification}
-                <tr><td>{if $certification['state']}Already submitted{if $certification['reviewed'] == 1} and reviewed{/if}: {/if}<a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$name"}" target="_blank">{$certification['desc']}</a></td></tr>
-            {/foreach}
-]]
                         </tbody>
                     </table>
                 </div>

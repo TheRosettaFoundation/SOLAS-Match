@@ -1200,7 +1200,6 @@ EOD;
             'expertiseCount'    => count($expertise_list),
             'howheard_list'     => $howheard_list,
             'certification_list' => $certification_list,
-            'supported_ngos'    => $userDao->supported_ngos($user_id),
             'in_kind'           => $userDao->get_special_translator($user_id),
             'profile_completed' => !empty($_SESSION['profile_completed']),
             'extra_scripts' => $extra_scripts,
@@ -1508,6 +1507,8 @@ window.close();
         $app->view()->appendData(array(
             'certificate' => $certificate,
             'is_admin_or_org_member' => $userDao->is_admin_or_org_member($user_id),
+            'supported_ngos'         => $userDao->supported_ngos($user_id),
+            'certifications'         => $userDao->getUserCertifications($user_id),
         ));
 
         $app->render("user/user-public-profile.tpl");
