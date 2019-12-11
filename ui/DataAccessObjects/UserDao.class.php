@@ -1613,4 +1613,11 @@ error_log(print_r($result, true));
         }
         return $certification_list;
     }
+
+    public function supported_ngos($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('supported_ngos', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) $result = [];
+        return $result;
+    }
 }
