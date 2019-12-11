@@ -219,6 +219,7 @@ If you have any questions about submitting the form, please email <a href="mailt
                 {/foreach}
 
             <tr><td>
+                <hr/>
                 <label for='twbprivacy'><strong>Please read the <a href="https://translatorswithoutborders.org/privacy-policy/" target="_blank">TWB Privacy Policy</a>: <span style="color: red">*</span></strong></label>
                 <p class="desc">TWB is committed to protecting personal data and will use the information you provide to send you updates, information and news from Translators without Borders, including our newsletter, volunteer and job opportunities, and crisis alerts. If at any point you wish to unsubscribe from TWB communications, you can always do that.</p>
                 <input type="checkbox" value="1" name="twbprivacy" id="twbprivacy" {if $profile_completed}checked="checked"{/if} /> I agree to communications from Translators without Borders by email
@@ -251,7 +252,6 @@ If you have any questions about submitting the form, please email <a href="mailt
                 <label for='receiveCredit'><strong>Do you want all the above to be visible to all members of the TWB community?:</strong></label>
                 <p class="desc">If at any point you wish to change this setting, you can always do that. Additionally you will be able to have a link to this information which you can share with selected people.</p>
                 <input type="checkbox" value="1" name="receiveCredit" id="receiveCredit" {if $userPersonalInfo->getReceiveCredit()}checked="checked"{/if} /> Make the above information visible to TWB community
-                <hr/>
             </td></tr>
 
             <tr><td style="padding-bottom: 20px">
