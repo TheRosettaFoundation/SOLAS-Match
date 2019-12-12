@@ -1629,8 +1629,10 @@ error_log(print_r($result, true));
         $certification_list['STIBC']   = ['desc' => 'Society of Translators and Interpreters of British Columbia (STIBC) - Certified Translators or Associate Members', 'state' => 0, 'reviewed' => 0];
         $certifications = $this->getUserCertifications($user_id);
         foreach ($certifications as $certification) {
-            $certification_list[$certification['certification_key']]['state'] = 1;
-            $certification_list[$certification['certification_key']]['reviewed'] = $certification['reviewed'];
+            if (!empty($certification_list[$certification['certification_key']])) {
+                $certification_list[$certification['certification_key']]['state'] = 1;
+                $certification_list[$certification['certification_key']]['reviewed'] = $certification['reviewed'];
+            }
         }
         return $certification_list;
     }
