@@ -1440,10 +1440,12 @@ window.close();
 
         $orgList = array();
         if ($badges) {
-            foreach ($badges as $badge) {
+            foreach ($badges as $index => $badge) {
                 if ($badge->getOwnerId() != null) {
                     $org = $orgDao->getOrganisation($badge->getOwnerId());
                     $orgList[$badge->getOwnerId()] = $org;
+                } else {
+                    unset($badges[$index]);
                 }
             }
         }

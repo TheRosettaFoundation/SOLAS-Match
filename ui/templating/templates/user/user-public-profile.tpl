@@ -238,6 +238,7 @@
     <p style="margin-bottom:50px;"/>
 {/if}
 
+{if $private_access || $isSiteAdmin}
 {if isset($badges)}
     {if count($badges) > 0}
         <div class='page-header'>
@@ -249,7 +250,6 @@
         </div>
 
         {foreach $badges as $badge}
-            {if !is_null($badge->getOwnerId())}
                 {assign var="user_id" value=$this_user->getId()} 
                     {if $private_access}
                         <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="pull-right">
@@ -267,10 +267,6 @@
                         {$org->getName()}</a> - {TemplateHelper::uiCleanseHTML($badge->getTitle())}
                 </h3>
                 <p>{TemplateHelper::uiCleanseHTML($badge->getDescription())}</p>
-            {else}
-                <h3>{Settings::get('site.name')} - {TemplateHelper::uiCleanseHTML($badge->getTitle())}</h3>
-                <p>{TemplateHelper::uiCleanseHTML($badge->getDescription())}</p>
-            {/if}
             <p style="margin-bottom:20px;"/>
         {/foreach}
         
@@ -408,6 +404,7 @@
         {/foreach}
         <p style="margin-bottom:50px;"/>
     {/if}
+{/if}
 {/if}
 
 {/if}
