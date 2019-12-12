@@ -1344,6 +1344,19 @@ window.close();
         $app->render('user/user-uploads.tpl');
     }
 
+    public static function userDownload($id)
+    {
+        $userDao = new DAO\UserDao();
+        $adminDao = new DAO\AdminDao();
+
+        $certification = $userDao->getUserCertificationByID($id);
+
+        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
+        if (empty($certification) || ($certification['user_id'] != $loggedInUserId && !$adminDao->isSiteAdmin($loggedInUserId))) return;
+
+        $userDao->userDownload($certification);
+    }
+
     /**
      * Generate and return a random string of the specified length.
      *
