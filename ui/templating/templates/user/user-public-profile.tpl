@@ -218,7 +218,7 @@
     </tr>
 </table>
 <p style="margin-bottom:50px;"/>
-{if $this_user->getId() == UserSession::getCurrentUserID()}
+{if $private_access}
     <div class="page-header">
         <h1>
             {Localisation::getTranslation('user_public_profile_reference_email')} 
@@ -413,4 +413,3 @@
 {/if}
 
 {include file='footer.tpl'}
-
