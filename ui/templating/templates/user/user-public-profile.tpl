@@ -49,7 +49,7 @@
     <div class='page-header'><h1>{Localisation::getTranslation('common_user_profile')} <small>{Localisation::getTranslation('user_public_profile_2')}</small></h1></div>
 {/if}
 
-{if $show}
+{if $private_access || $isSiteAdmin || $receive_credit}
 
 <table border="0">
     <tr valign="top">

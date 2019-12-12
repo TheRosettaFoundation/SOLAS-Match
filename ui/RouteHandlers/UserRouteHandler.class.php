@@ -1405,8 +1405,10 @@ window.close();
             $app->redirect($app->urlFor('login'));
         }
         $userPersonalInfo = null;
+        $receive_credit = 0;
         try {
             $userPersonalInfo = $userDao->getPersonalInfo($user_id);
+            if ($userPersonalInfo->getReceiveCredit()) $receive_credit = 1;
         } catch (Common\Exceptions\SolasMatchException $e) {
             // error_log("Error getting user personal info: $e");
         }
@@ -1528,6 +1530,7 @@ window.close();
         $app->view()->appendData(array(
             'certificate' => $certificate,
             'private_access'         => $private_access,
+            'receive_credit'         => $receive_credit,
             'is_admin_or_org_member' => $userDao->is_admin_or_org_member($user_id),
             'supported_ngos'         => $userDao->supported_ngos($user_id),
             'certifications'         => $userDao->getUserCertifications($user_id),
