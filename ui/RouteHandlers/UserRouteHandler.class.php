@@ -1303,15 +1303,17 @@ EOD;
         }
         $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
 
+        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
+        if ($user_id != $loggedInUserId && !$adminDao->isSiteAdmin($loggedInUserId)) return;
+
         $user = $userDao->getUser($user_id);
-        $isSiteAdmin = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
 
         $extra_scripts = '';
 
         if ($post = $app->request()->post()) {
-            if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($_FILES['userFile']['name']) || !empty($_FILES['userFile']['error'])
+            if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['note']) || empty($_FILES['userFile']['name']) || !empty($_FILES['userFile']['error'])
                     || (($data = file_get_contents($_FILES['userFile']['tmp_name'])) === false)) {
-                $app->flashNow('error', 'Could not upload file');
+                $app->flashNow('error', 'Could not upload file, you must specify a file and a note');
             } else {
                 $userFileName = $_FILES['userFile']['name'];
                 $extensionStartIndex = strrpos($userFileName, '.');
@@ -1320,7 +1322,6 @@ EOD;
                     $extension = strtolower($extension);
                     $userFileName = substr($userFileName, 0, $extensionStartIndex + 1) . $extension;
                 }
-                if (empty($post['note'])) $post['note'] = '';
                 $userDao->saveUserFile($user_id, $cert_id, $post['note'], $userFileName, $data);
                 $extra_scripts  = '<script type="text/javascript">
 if (!window.opener.closed) {
@@ -1335,7 +1336,6 @@ window.close();
         $certification_list = $userDao->getCertificationList($user_id);
 
         $app->view()->appendData(array(
-            'isSiteAdmin'   => $isSiteAdmin,
             'user'          => $user,
             'user_id'       => $user_id,
             'cert_id'       => $cert_id,

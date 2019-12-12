@@ -22,13 +22,10 @@
 
     <form method="post" action="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$cert_id"}" enctype="multipart/form-data" accept-charset="utf-8">
         <table>
-            {if $isSiteAdmin}
             <tr><td>
                 <label for='note'><strong>Note: <span style="color: red">*</span></strong></label>
-HIDDEN IF
-                <input type='text' value="{$desc}" style="width: 80%" name="note" id="note" />
+                <input type='text' value="{$desc}" style="width: 80%" name="note" id="note" {if !empty($desc)}readonly="readonly"{/if}/>
             </td></tr>
-            {/if}
 
             <tr><td style="font-weight: bold">Please submit a proof of certification</td></tr> <span style="color: red">*</span></strong></label>
             <tr><td><p class="desc">You will be upgraded to Verified Translator, which will give you immediate access to all projects available, for the verified combination.</p></td></tr>
