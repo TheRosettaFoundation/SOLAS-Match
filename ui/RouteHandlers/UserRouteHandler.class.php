@@ -1483,9 +1483,9 @@ window.close();
             "taskTypeColours" => $taskTypeColours
         ));
 
-        $private_access = false;
+        $private_access = 0;
         if (Common\Lib\UserSession::getCurrentUserID() == $user_id) {
-            $private_access = true;
+            $private_access = 1;
 
             $notifData = $userDao->getUserTaskStreamNotification($user_id);
             $interval = null;
@@ -1516,7 +1516,6 @@ window.close();
                 "interval"       => $interval,
                 "lastSent"       => $lastSent,
                 "strict"         => $strict,
-                "private_access" => true
             ));
         }
 
@@ -1528,6 +1527,7 @@ window.close();
         }
         $app->view()->appendData(array(
             'certificate' => $certificate,
+            'private_access'         => $private_access,
             'is_admin_or_org_member' => $userDao->is_admin_or_org_member($user_id),
             'supported_ngos'         => $userDao->supported_ngos($user_id),
             'certifications'         => $userDao->getUserCertifications($user_id),
