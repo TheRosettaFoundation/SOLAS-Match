@@ -1332,11 +1332,14 @@ window.close();
             }
         }
 
+        $certification_list = $userDao->getCertificationList($user_id);
+
         $app->view()->appendData(array(
             'isSiteAdmin'   => $isSiteAdmin,
             'user'          => $user,
             'user_id'       => $user_id,
             'cert_id'       => $cert_id,
+            'desc'          => empty($certification_list[$cert_id]['desc']) ? '' : $certification_list[$cert_id]['desc'],
             'extra_scripts' => $extra_scripts,
             'sesskey'       => $sesskey,
         ));

@@ -25,7 +25,8 @@
             {if $isSiteAdmin}
             <tr><td>
                 <label for='note'><strong>Note: <span style="color: red">*</span></strong></label>
-                <input type='text' value="" style="width: 80%" name="note" id="note" />
+HIDDEN IF
+                <input type='text' value="{$desc}" style="width: 80%" name="note" id="note" />
             </td></tr>
             {/if}
 

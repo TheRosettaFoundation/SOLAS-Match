@@ -206,7 +206,11 @@
                                 </td>
                             </tr>
                             {foreach from=$certifications item=certification}
+                            {if $private_access || $isSiteAdmin}
                             <tr><td><a href="{urlFor name="user-download" options="id.{$certification['id']}"}">{$certification['note']|escape:'html':'UTF-8'}</a></td></tr>
+                            {else}
+                            <tr><td>{$certification['note']|escape:'html':'UTF-8'}</td></tr>
+                            {/if}
                             {/foreach}
                         </tbody>
                     </table>
