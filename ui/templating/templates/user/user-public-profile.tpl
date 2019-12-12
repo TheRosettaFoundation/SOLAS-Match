@@ -53,7 +53,7 @@
 
 <table border="0">
     <tr valign="top">
-        <td style="{if $private_access || $isSiteAdmin} width: 48%  {else} width: 100% {/if}">
+        <td style="width: 48%">
             <div>
                 <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
                     <tbody>
@@ -169,54 +169,52 @@
             </div>
         </td>
         
-        {if $private_access || $isSiteAdmin}
-            <td style="width: 4%"/>
-            <td style="width: 48%">            
-                <div>
-                    <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
-                        <tbody align="left" width="48%">
-                        {if $private_access || $isSiteAdmin}
-                            <tr>
-                                <td>
-                                    <img src="{$certificate}" width="50%" />
-                                </td>
-                            </tr>
+        <td style="width: 4%"/>
+        <td style="width: 48%">
+            <div>
+                <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
+                    <tbody align="left" width="48%">
+                        {if !empty($certificate)}
+                        <tr>
+                            <td>
+                                <img src="{$certificate}" width="50%" />
+                            </td>
+                        </tr>
                         {/if}
 
-                            <tr>
-                                <td>
-                                    <h3>Supported NGOs</h3>
-                                </td>
-                            </tr>
-                            {foreach from=$supported_ngos item=supported_ngo}
-                             <tr><td>{$supported_ngo['desc']|escape:'html':'UTF-8'}</td></tr>
-                            {/foreach}
-                            <tr>
-                                <td>
-                                    <ul>
-                                    <li>test list</li>
-                                    <li>test list</li>
-                                    </ul>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                <h3>Supported NGOs</h3>
+                            </td>
+                        </tr>
+                        {foreach from=$supported_ngos item=supported_ngo}
+                        <tr><td>{$supported_ngo['desc']|escape:'html':'UTF-8'}</td></tr>
+                        {/foreach}
+                        <tr>
+                            <td>
+                                <ul>
+                                <li>test list</li>
+                                <li>test list</li>
+                                </ul>
+                            </td>
+                        </tr>
 
-                            <tr>
-                                <td>
-                                    <h3>Certificates and training courses</h3>
-                                </td>
-                            </tr>
-                            {foreach from=$certifications item=certification}
-                            {if $private_access || $isSiteAdmin}
-                            <tr><td><a href="{urlFor name="user-download" options="id.{$certification['id']}"}">{$certification['note']|escape:'html':'UTF-8'}</a></td></tr>
-                            {else}
-                            <tr><td>{$certification['note']|escape:'html':'UTF-8'}</td></tr>
-                            {/if}
-                            {/foreach}
-                        </tbody>
-                    </table>
-                </div>
-            </td>
-        {/if}
+                        <tr>
+                            <td>
+                                <h3>Certificates and training courses</h3>
+                            </td>
+                        </tr>
+                        {foreach from=$certifications item=certification}
+                        {if $private_access || $isSiteAdmin}
+                        <tr><td><a href="{urlFor name="user-download" options="id.{$certification['id']}"}">{$certification['note']|escape:'html':'UTF-8'}</a></td></tr>
+                        {else}
+                        <tr><td>{$certification['note']|escape:'html':'UTF-8'}</td></tr>
+                        {/if}
+                        {/foreach}
+                    </tbody>
+                </table>
+            </div>
+        </td>
     </tr>
 </table>
 <p style="margin-bottom:50px;"/>
