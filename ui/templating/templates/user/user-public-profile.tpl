@@ -211,6 +211,14 @@
                         <tr><td>{$certification['note']|escape:'html':'UTF-8'}</td></tr>
                         {/if}
                         {/foreach}
+
+                        {if $private_access || $isSiteAdmin}
+                        <tr>
+                            <td>
+                                Quality score {$quality_score} / 5
+                            </td>
+                        </tr>
+                        {/if}
                     </tbody>
                 </table>
             </div>
