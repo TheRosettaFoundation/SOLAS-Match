@@ -225,6 +225,24 @@
         </td>
     </tr>
 </table>
+
+<table border="0">
+    <tr valign="top">
+        <td><h3>Administrative Section</h3></td><td></td>
+    </tr>
+    <tr valign="top">
+<td>Willingness to work again score out of 5</td><td>Comment</td>
+    </tr>
+    <tr valign="top">
+<td>ENTER</td><td>ENTER</td>
+    </tr>
+foreach
+    <tr valign="top">
+<td>OLD</td><td>OLD</td>
+    </tr>
+end
+</table>
+
 <p style="margin-bottom:50px;"/>
 {if $private_access}
     <div class="page-header">
