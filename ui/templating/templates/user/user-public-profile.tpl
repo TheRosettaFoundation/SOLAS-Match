@@ -214,8 +214,7 @@
                         {foreach from=$certifications item=certification}
                         {if $private_access || $isSiteAdmin}
                         <tr><td>
-                            {if $isSiteAdmin && $certification['reviewed'] == 0}
-What about non reviewable ones
+                            {if $isSiteAdmin && $certification['reviewed'] == 0 && $certification['certification_key'] != 'TRANSLATOR' && $certification['certification_key'] != 'TWB'}
                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                                 <i class="icon-wrench icon-white"></i> Mark Certificate as Reviewed
                                 <input type="submit" class="btn btn-primary" name="mark_certification_reviewed" value="Submit" />
