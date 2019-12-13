@@ -1431,12 +1431,16 @@ window.close();
                 $app->view()->appendData(array("requestSuccess" => true));
             }
 
-            if (!empty($post['admin_comment'])) {
+            if ($isSiteAdmin && !empty($post['admin_comment'])) {
                 if (empty($post['comment']) || (int)$post['work_again'] < 1 || (int)$post['work_again'] > 5) {
                     $app->flashNow('error', 'You must enter a comment and a score between 1 and 5');
                 } else {
                     $userDao->insert_admin_comment($user_id, $loggedInUserId, (int)$post['work_again'], $post['comment']);
                 }
+            }
+
+            if ($isSiteAdmin && !empty($post['mark_reviewed'])) {
+                $userDao->updateUserHowheard($user_id, 1);
             }
         }
                     
@@ -1537,11 +1541,20 @@ window.close();
             $encrypted = openssl_encrypt("$user_id", 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
             $certificate = 'https://badge.translatorswb.org/index.php?volunteer_id=' . urlencode(base64_encode("$encrypted::$iv"));
         }
+
+        $howheard = $userDao->getUserHowheards($user_id);
+        if (empty($howheard)) {
+            $howheard = ['reviewed' => 1, 'howheard_key' => '']
+        } else {
+            $howheard = $howheard[0];
+        }
+
         $app->view()->appendData(array(
             'certificate' => $certificate,
             'private_access'         => $private_access,
             'receive_credit'         => $receive_credit,
             'is_admin_or_org_member' => $userDao->is_admin_or_org_member($user_id),
+            'howheard'               => $howheard,
             'expertise_list'         => $userDao->getExpertiseList($user_id),
             'capability_list'        => $userDao->getCapabilityList($user_id),
             'supported_ngos'         => $userDao->supported_ngos($user_id),
