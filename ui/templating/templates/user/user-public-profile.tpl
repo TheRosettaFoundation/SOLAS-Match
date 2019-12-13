@@ -226,6 +226,7 @@
     </tr>
 </table>
 
+{if $isSiteAdmin}
 <table border="0">
     <tr valign="top">
         <td><h3>Administrative Section</h3></td><td></td>
@@ -242,6 +243,7 @@ foreach
     </tr>
 end
 </table>
+{/if}
 
 <p style="margin-bottom:50px;"/>
 {if $private_access}
