@@ -1650,4 +1650,20 @@ error_log(print_r($result, true));
         if (empty($result)) return ['cor' => '', 'gram' => '', 'spell' => '', 'cons' => '', 'num_legacy' => 0, 'accuracy' => '', 'fluency' => '', 'terminology' => '', 'style' => '', 'design' => '', 'num_new' => 0, 'num' => 0];
          return $result[0];
     }
+
+    public function admin_comments($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('admin_comments', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) $result = [];
+        return $result;
+    }
+
+    public function insert_admin_comment($user_id, $admin_id, $work_again, $comment)
+    {
+        LibAPI\PDOWrapper::call('insert_admin_comment',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($admin_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($work_again) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($comment));
+    }
 }
