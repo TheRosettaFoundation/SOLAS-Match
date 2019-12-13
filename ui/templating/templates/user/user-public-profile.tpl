@@ -215,7 +215,14 @@
                         {if $private_access || $isSiteAdmin}
                         <tr>
                             <td>
-                                Quality score {$quality_score} / 5
+                               <table>
+                                   <tr><td>Quality metric</td><td>Average score out of 5</td></tr>
+                                   <tr><td>Accuracy</td><td>{$quality_score['accuracy']}</td></tr>
+                                   <tr><td>Fluency</td><td>{$quality_score['fluency']}</td></tr>
+                                   <tr><td>Terminology</td><td>{$quality_score['terminology']}</td></tr>
+                                   <tr><td>Style</td><td>{$quality_score['style']}</td></tr>
+                                   <tr><td>Design</td><td>{$quality_score['design']}</td></tr>
+                               </table>
                             </td>
                         </tr>
                         {/if}
