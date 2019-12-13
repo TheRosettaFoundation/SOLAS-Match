@@ -227,22 +227,31 @@
 </table>
 
 {if $isSiteAdmin}
+<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
 <table border="0">
     <tr valign="top">
         <td><h3>Administrative Section</h3></td><td></td>
     </tr>
     <tr valign="top">
-<td>Willingness to work again score out of 5</td><td>Comment</td>
+        <td>Comment</td>
+        <td>Willingness to work again score out of 5</td>
     </tr>
     <tr valign="top">
-<td>ENTER</td><td>ENTER</td>
+        <td><input type='text' value="" name="comment" id="comment" /></td>
+        <td><input type='text' value="" name="work_again" id="work_again" />
+            <i class="icon-upload icon-white" style="position:relative; right:-30px; top:12px;"></i>
+            <input type="submit" class="pull-right btn btn-primary" name="admin_comment" value="Submit" />
+        </td>
     </tr>
-foreach
+{foreach $admin_comments as $admin_comment}
     <tr valign="top">
-<td>OLD</td><td>OLD</td>
+        <td>$admin_comment['admin_comment']</td>
+        <td>$admin_comment['work_again']</td>
     </tr>
-end
+{/foreach}
 </table>
+{if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+</form>
 {/if}
 
 <p style="margin-bottom:50px;"/>
