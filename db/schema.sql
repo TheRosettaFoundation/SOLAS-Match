@@ -8452,6 +8452,24 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `admin_comments`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `admin_comments`(IN uID INT)
+BEGIN
+    SELECT * FROM admin_comment WHERE user_id=uID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_admin_comment`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_admin_comment`(IN uID INT, IN aID INT, IN work INT, IN comment VARCHAR(2000))
+BEGIN
+    INSERT INTO admin_comment
+               (user_id, admin_id, work_again, admin_comment)
+        VALUES (    uID,      aID,       work,       comment);
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
