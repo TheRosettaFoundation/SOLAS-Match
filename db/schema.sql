@@ -8416,6 +8416,33 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `quality_score`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `quality_score`(IN `uID` INT)
+BEGIN
+    SELECT
+        IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.corrections, 0))/SUM(consistency<10), 1), '') AS cor,
+        IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.grammar,     0))/SUM(consistency<10), 1), '') AS gram,
+        IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.spelling,    0))/SUM(consistency<10), 1), '') AS spell,
+        IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.consistency, 0))/SUM(consistency<10), 1), '') AS cons,
+        SUM(consistency<10) AS num_legacy,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.corrections,        0))/SUM(consistency>=10), 1), '') AS accuracy,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.grammar,            0))/SUM(consistency>=10), 1), '') AS fluency,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.spelling,           0))/SUM(consistency>=10), 1), '') AS terminology,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.consistency   % 10, 0))/SUM(consistency>=10), 1), '') AS style,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.consistency DIV 10, 0))/SUM(consistency>=10), 1), '') AS design,
+        SUM(consistency>=10) AS num_new,
+        COUNT(*)             AS num
+    FROM TaskReviews            tr
+    JOIN Tasks                   t  ON tr.task_id=t.id
+    JOIN TaskClaims             tc  ON tr.task_id=tc.task_id
+    WHERE
+        t.`task-status_id`=4 AND
+        tc.user_id=uID
+    GROUP BY tc.user_id;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
