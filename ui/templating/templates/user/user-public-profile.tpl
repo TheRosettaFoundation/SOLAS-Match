@@ -216,15 +216,12 @@
                         <tr><td>
                             {if $isSiteAdmin && $certification['reviewed'] == 0}
 What about non reviewable ones
-            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-        <td><input type='text' value="" name="comment" id="comment" /></td>
-        <td><input type='text' value="" name="work_again" id="work_again" />
-            <i class="icon-upload icon-white" style="position:relative; right:-30px; top:12px;"></i>
-            <input type="submit" class="pull-right btn btn-primary" name="admin_comment" value="Submit" />
-$certification['id']
-
-                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-            </form>
+                            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                                <i class="icon-wrench icon-white"></i> Mark Certificate as Reviewed
+                                <input type="submit" class="btn btn-primary" name="mark_certification_reviewed" value="Submit" />
+                                <input type="hidden" name="certification_id" value="{$certification['id']}" />
+                                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                            </form>
                            {/if}
                             <a href="{urlFor name="user-download" options="id.{$certification['id']}"}">{$certification['note']|escape:'html':'UTF-8'}</a>
                         </td></tr>
