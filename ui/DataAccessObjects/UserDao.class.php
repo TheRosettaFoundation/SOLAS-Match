@@ -1643,4 +1643,11 @@ error_log(print_r($result, true));
         if (empty($result)) $result = [];
         return $result;
     }
+
+    public function quality_score($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('quality_score', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) return ['cor' => '', 'gram' => '', 'spell' => '', 'cons' => '', 'num_legacy' => 0, 'accuracy' => '', 'fluency' => '', 'terminology' => '', 'style' => '', 'design' => '', 'num_new' => 0, 'num' => 0];
+         return $result[0];
+    }
 }
