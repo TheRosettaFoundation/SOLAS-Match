@@ -1430,6 +1430,14 @@ window.close();
                 $userDao->requestReferenceEmail($user_id);
                 $app->view()->appendData(array("requestSuccess" => true));
             }
+
+            if (!empty($post['admin_comment'])) {
+                if (empty($post['comment']) || (int)$post['work_again'] < 1 || (int)$post['work_again'] > 5) {
+                    $app->flashNow('error', 'You must enter a comment and a score between 1 and 5');
+                } else {
+                    $userDao->insert_admin_comment($user_id, $loggedInUserId, (int)$post['work_again'], $post['comment']);
+                }
+            }
         }
                     
         $archivedJobs = $userDao->getUserArchivedTasks($user_id, 0, 10);

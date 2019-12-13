@@ -241,7 +241,7 @@
     </tr>
     <tr valign="top">
         <td>Comment</td>
-        <td>Willingness to work again score out of 5</td>
+        <td>Willingness to work again score (1 to 5)</td>
     </tr>
     <tr valign="top">
         <td><input type='text' value="" name="comment" id="comment" /></td>
