@@ -101,6 +101,12 @@ class UserRouteHandler
         )->name('user-download');
 
         $app->get(
+            '/users_review/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'users_review')
+        )->name('users_review');
+
+        $app->get(
             "/:user_id/notification/stream/",
             array($middleware, "authUserIsLoggedIn"),
             array($this, "editTaskStreamNotification")
@@ -1358,6 +1364,17 @@ window.close();
         if (empty($certification) || ($certification['user_id'] != $loggedInUserId && !$adminDao->isSiteAdmin($loggedInUserId))) return;
 
         $userDao->userDownload($certification);
+    }
+
+    public function users_review()
+    {
+        $app = \Slim\Slim::getInstance();
+        $userDao = new DAO\UserDao();
+
+        $all_users = $userDao->users_review();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('user/users_review.tpl');
     }
 
     /**
