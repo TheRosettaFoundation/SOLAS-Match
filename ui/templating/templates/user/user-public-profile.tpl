@@ -171,6 +171,19 @@
                             {foreach from=$expertise_list item=expertise}
                                 {if $expertise['state']}<tr><td>{$expertise['desc']|escape:'html':'UTF-8'}</td></tr>{/if}
                             {/foreach}
+
+                            {if $private_access || $isSiteAdmin}
+                            <tr>
+                                <td>
+                                    <h3>Share this link with anyone you wish to see your profile:</h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank">{urlFor name="shared_with_key" options="key.{$key}"}</a>
+                                </td>
+                            </tr>
+                            {/if}
                     </tbody>
                 </table>
             </div>
