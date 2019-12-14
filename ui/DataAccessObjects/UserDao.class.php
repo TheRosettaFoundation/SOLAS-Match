@@ -1433,6 +1433,13 @@ error_log(print_r($result, true));
         return $result[0];
     }
 
+    public function users_review()
+    {
+        $result = LibAPI\PDOWrapper::call('users_review', '');
+        if (empty($result)) $result = [];
+        return $result;
+    }
+
     public function saveUserFile($user_id, $cert_id, $note, $filename, $file)
     {
        $destination = Common\Lib\Settings::get('files.upload_path') . "certs/$user_id/$cert_id";
