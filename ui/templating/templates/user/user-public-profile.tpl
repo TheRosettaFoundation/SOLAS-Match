@@ -229,6 +229,10 @@
                         {/if}
                         {/foreach}
 
+                        {if $isSiteAdmin}
+                        <tr><td><a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank">Upload a new file for this user</a></td></tr>
+                        {/if}
+
                         {if $private_access || $isSiteAdmin}
                         <tr>
                             <td>
