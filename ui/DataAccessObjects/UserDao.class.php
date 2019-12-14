@@ -1466,6 +1466,13 @@ error_log(print_r($result, true));
             LibAPI\PDOWrapper::cleanseWrapStr($note));
     }
 
+    public function updateCertification($id, $reviewed)
+    {
+        LibAPI\PDOWrapper::call('updateCertification',
+            LibAPI\PDOWrapper::cleanse($id) . ',' .
+            LibAPI\PDOWrapper::cleanse($reviewed);
+    }
+
     public function userDownload($certification)
     {
         $app = \Slim\Slim::getInstance();

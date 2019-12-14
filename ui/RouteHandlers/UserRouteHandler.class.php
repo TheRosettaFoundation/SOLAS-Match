@@ -1442,6 +1442,10 @@ window.close();
             if ($isSiteAdmin && !empty($post['mark_reviewed'])) {
                 $userDao->updateUserHowheard($user_id, 1);
             }
+
+            if ($isSiteAdmin && !empty($post['mark_certification_reviewed'])) {
+                $userDao->updateCertification($post['certification_id'], 1);
+            }
         }
                     
         $archivedJobs = $userDao->getUserArchivedTasks($user_id, 0, 10);

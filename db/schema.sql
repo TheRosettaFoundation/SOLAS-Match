@@ -8407,6 +8407,16 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `updateCertification`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateCertification`(IN primaryID INT, IN r INT)
+BEGIN
+    UPDATE UserCertifications
+    SET reviewed=r
+    WHERE id=primaryID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `supported_ngos`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `supported_ngos`(IN uID INT)
