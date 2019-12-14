@@ -8417,6 +8417,48 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `users_review`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `users_review`()
+BEGIN
+(
+    SELECT
+        0    AS cert_id,
+        ''   AS certificate,
+        u.id AS user_id,
+        CONCAT (IFNULL(i.`first-name`, ''), IFNULL(i.`last-name`, '')) AS name,
+        CONCAT (l.`en-name`, '(' , c.`en-name`, ')')                   AS native_language,
+        IFNULL(i.country, '')                                          AS country_address
+    FROM UserHowheards          hh
+    JOIN Users                   u ON hh.user_id=u.id
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    JOIN Languages               l ON u.language_id=l.id
+    JOIN Countries               c ON u.country_id=c.id
+    WHERE
+        hh.reviewed=0
+)
+UNION
+(
+    SELECT
+        uc.id   AS cert_id,
+        uc.note AS certificate,
+        u.id    AS user_id,
+        CONCAT (IFNULL(i.`first-name`, ''), IFNULL(i.`last-name`, '')) AS name,
+        CONCAT (l.`en-name`, '(' , c.`en-name`, ')')                   AS native_language,
+        IFNULL(i.country, '')                                          AS country_address
+    FROM UserCertifications     uc
+    JOIN Users                   u ON uc.user_id=u.id
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    JOIN Languages               l ON u.language_id=l.id
+    JOIN Countries               c ON u.country_id=c.id
+    WHERE
+        uc.reviewed=0 AND
+        uc.certification_key NOT IN ('TRANSLATOR', 'TWB')
+)
+ORDER BY user_id, certificate;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `supported_ngos`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `supported_ngos`(IN uID INT)
