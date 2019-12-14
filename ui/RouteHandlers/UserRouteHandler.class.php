@@ -1568,6 +1568,11 @@ window.close();
             $certificate = 'https://badge.translatorswb.org/index.php?volunteer_id=' . urlencode(base64_encode("$encrypted::$iv"));
         }
 
+        $euser_id = $user_id + 999999; // Ensure we don't use identical (shared profile) key as word count badge (for a bit of extra security)
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+        $encrypted = openssl_encrypt("$euser_id", 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
+        $key = urlencode(base64_encode("$encrypted::$iv"));
+
         $howheard = $userDao->getUserHowheards($user_id);
         if (empty($howheard)) {
             $howheard = ['reviewed' => 1, 'howheard_key' => '']
@@ -1576,7 +1581,8 @@ window.close();
         }
 
         $app->view()->appendData(array(
-            'certificate' => $certificate,
+            'certificate'            => $certificate,
+            'key'                    => $key,
             'private_access'         => $private_access,
             'receive_credit'         => $receive_credit,
             'is_admin_or_org_member' => $userDao->is_admin_or_org_member($user_id),
@@ -1590,6 +1596,44 @@ window.close();
         ));
 
         $app->render("user/user-public-profile.tpl");
+    }
+
+    public static function profile_shared_with_key($key)
+    {
+        $key = base64_decode($key);
+        $iv = substr($key, -16);
+        $encrypted = substr($key, 0, -18);
+        $user_id = (int)openssl_decrypt($encrypted, 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
+        $user_id -= 999999; // Ensure we don't use identical key to word count badge
+
+        $app = \Slim\Slim::getInstance();
+        $userDao = new DAO\UserDao();
+
+        $user = $userDao->getUser($user_id);
+        $userPersonalInfo = $userDao->getPersonalInfo($user_id);
+        $userQualifiedPairs = $userDao->getUserQualifiedPairs($user_id);
+
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+        $encrypted = openssl_encrypt("$user_id", 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
+        $certificate = 'https://badge.translatorswb.org/index.php?volunteer_id=' . urlencode(base64_encode("$encrypted::$iv"));
+
+        $app->view()->appendData(array(
+            'current_page' => 'user-profile',
+            'this_user' => $user,
+            'userPersonalInfo' => $userPersonalInfo,
+            'userQualifiedPairs' => $userQualifiedPairs,
+            'certificate' => $certificate,
+            'isSiteAdmin'            => 0,
+            'private_access'         => 0,
+            'receive_credit'         => 1,
+            'expertise_list'         => $userDao->getExpertiseList($user_id),
+            'capability_list'        => $userDao->getCapabilityList($user_id),
+            'supported_ngos'         => $userDao->supported_ngos($user_id),
+            'quality_score'          => $userDao->quality_score($user_id),
+            'certifications'         => $userDao->getUserCertifications($user_id),
+        ));
+
+        $app->render('user/user-public-profile.tpl');
     }
 
     public function editTaskStreamNotification($userId)
