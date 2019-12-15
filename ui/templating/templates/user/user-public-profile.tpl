@@ -271,6 +271,9 @@
 
                         {if $private_access || $isSiteAdmin}
                         <tr>
+                            <td style="padding-bottom: 10px"/>
+                        </tr>
+                        <tr>
                             <td>
                                <table>
                                    <tr><td>Quality metric</td><td>Average score out of 5</td></tr>
