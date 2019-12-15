@@ -113,8 +113,8 @@ class UserDao extends BaseDao
     public function getUserBadges($user_id)
     {
         $ret = null;
-        $args = Lib\PDOWrapper::cleanse($user_id);
-        $result = Lib\PDOWrapper::call('getUserBadges', $args);
+        $args = LibAPI\PDOWrapper::cleanse($user_id);
+        $result = LibAPI\PDOWrapper::call('getUserBadges', $args);
         if ($result) {
             $ret = array();
             foreach ($result as $badge) {
