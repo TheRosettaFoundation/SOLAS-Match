@@ -1477,7 +1477,7 @@ error_log(print_r($result, true));
     {
         LibAPI\PDOWrapper::call('updateCertification',
             LibAPI\PDOWrapper::cleanse($id) . ',' .
-            LibAPI\PDOWrapper::cleanse($reviewed);
+            LibAPI\PDOWrapper::cleanse($reviewed));
     }
 
     public function userDownload($certification)
