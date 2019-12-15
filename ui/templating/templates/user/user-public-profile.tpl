@@ -1,6 +1,6 @@
-
 {include file='header.tpl'}
 
+{if !isset($no_header)}
 {if isset($this_user)}
     <div class="page-header">
         <h1>
@@ -54,6 +54,7 @@
             
 {else}
     <div class='page-header'><h1>{Localisation::getTranslation('common_user_profile')} <small>{Localisation::getTranslation('user_public_profile_2')}</small></h1></div>
+{/if}
 {/if}
 
 {if $private_access || $isSiteAdmin || $receive_credit}
@@ -139,6 +140,9 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td style="padding-bottom: 10px"/>
+                            </tr>
+                            <tr>
                                 <td>
                                     {foreach from=$userQualifiedPairs item=userQualifiedPair}
                                         <p>
@@ -211,6 +215,9 @@
                             <td>
                                 <img src="{$certificate}" width="50%" />
                             </td>
+                        </tr>
+                        <tr>
+                            <td style="padding-bottom: 10px"/>
                         </tr>
                         {/if}
 
