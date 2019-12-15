@@ -77,6 +77,11 @@ class UserRouteHandler
         )->via("POST")->name("user-public-profile");
 
         $app->get(
+            "/:key/shared_with_key/",
+            array($this, "profile_shared_with_key")
+        )->name('shared_with_key');
+
+        $app->get(
             "/:user_id/privateProfile/",
             array($middleware, "authUserIsLoggedInNoProfile"),
             array($this, "userPrivateProfile")
@@ -93,6 +98,18 @@ class UserRouteHandler
             array($middleware, 'authUserIsLoggedInNoProfile'),
             array($this, 'userUploads')
         )->via("POST")->name('user-uploads');
+
+        $app->get(
+            '/:id/user-download/',
+            array($middleware, 'authUserIsLoggedIn'),
+            array($this, 'userDownload')
+        )->name('user-download');
+
+        $app->get(
+            '/users_review/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'users_review')
+        )->name('users_review');
 
         $app->get(
             "/:user_id/notification/stream/",
@@ -1200,7 +1217,6 @@ EOD;
             'expertiseCount'    => count($expertise_list),
             'howheard_list'     => $howheard_list,
             'certification_list' => $certification_list,
-            'supported_ngos'    => $userDao->supported_ngos($user_id),
             'in_kind'           => $userDao->get_special_translator($user_id),
             'profile_completed' => !empty($_SESSION['profile_completed']),
             'extra_scripts' => $extra_scripts,
@@ -1298,15 +1314,17 @@ EOD;
         }
         $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
 
+        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
+        if ($user_id != $loggedInUserId && !$adminDao->isSiteAdmin($loggedInUserId)) return;
+
         $user = $userDao->getUser($user_id);
-        $isSiteAdmin = $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID());
 
         $extra_scripts = '';
 
         if ($post = $app->request()->post()) {
-            if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($_FILES['userFile']['name']) || !empty($_FILES['userFile']['error'])
+            if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['note']) || empty($_FILES['userFile']['name']) || !empty($_FILES['userFile']['error'])
                     || (($data = file_get_contents($_FILES['userFile']['tmp_name'])) === false)) {
-                $app->flashNow('error', 'Could not upload file');
+                $app->flashNow('error', 'Could not upload file, you must specify a file and a note');
             } else {
                 $userFileName = $_FILES['userFile']['name'];
                 $extensionStartIndex = strrpos($userFileName, '.');
@@ -1315,7 +1333,6 @@ EOD;
                     $extension = strtolower($extension);
                     $userFileName = substr($userFileName, 0, $extensionStartIndex + 1) . $extension;
                 }
-                if (empty($post['note'])) $post['note'] = '';
                 $userDao->saveUserFile($user_id, $cert_id, $post['note'], $userFileName, $data);
                 $extra_scripts  = '<script type="text/javascript">
 if (!window.opener.closed) {
@@ -1327,16 +1344,42 @@ window.close();
             }
         }
 
+        $certification_list = $userDao->getCertificationList($user_id);
+
         $app->view()->appendData(array(
-            'isSiteAdmin'   => $isSiteAdmin,
             'user'          => $user,
             'user_id'       => $user_id,
             'cert_id'       => $cert_id,
+            'desc'          => empty($certification_list[$cert_id]['desc']) ? '' : $certification_list[$cert_id]['desc'],
             'extra_scripts' => $extra_scripts,
             'sesskey'       => $sesskey,
         ));
 
         $app->render('user/user-uploads.tpl');
+    }
+
+    public static function userDownload($id)
+    {
+        $userDao = new DAO\UserDao();
+        $adminDao = new DAO\AdminDao();
+
+        $certification = $userDao->getUserCertificationByID($id);
+
+        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
+        if (empty($certification) || ($certification['user_id'] != $loggedInUserId && !$adminDao->isSiteAdmin($loggedInUserId))) return;
+
+        $userDao->userDownload($certification);
+    }
+
+    public function users_review()
+    {
+        $app = \Slim\Slim::getInstance();
+        $userDao = new DAO\UserDao();
+
+        $all_users = $userDao->users_review();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('user/users_review.tpl');
     }
 
     /**
@@ -1384,8 +1427,10 @@ window.close();
             $app->redirect($app->urlFor('login'));
         }
         $userPersonalInfo = null;
+        $receive_credit = 0;
         try {
             $userPersonalInfo = $userDao->getPersonalInfo($user_id);
+            if ($userPersonalInfo->getReceiveCredit()) $receive_credit = 1;
         } catch (Common\Exceptions\SolasMatchException $e) {
             // error_log("Error getting user personal info: $e");
         }
@@ -1407,6 +1452,22 @@ window.close();
                 $userDao->requestReferenceEmail($user_id);
                 $app->view()->appendData(array("requestSuccess" => true));
             }
+
+            if ($isSiteAdmin && !empty($post['admin_comment'])) {
+                if (empty($post['comment']) || (int)$post['work_again'] < 1 || (int)$post['work_again'] > 5) {
+                    $app->flashNow('error', 'You must enter a comment and a score between 1 and 5');
+                } else {
+                    $userDao->insert_admin_comment($user_id, $loggedInUserId, (int)$post['work_again'], $post['comment']);
+                }
+            }
+
+            if ($isSiteAdmin && !empty($post['mark_reviewed'])) {
+                $userDao->updateUserHowheard($user_id, 1);
+            }
+
+            if ($isSiteAdmin && !empty($post['mark_certification_reviewed'])) {
+                $userDao->updateCertification($post['certification_id'], 1);
+            }
         }
                     
         $archivedJobs = $userDao->getUserArchivedTasks($user_id, 0, 10);
@@ -1417,10 +1478,12 @@ window.close();
 
         $orgList = array();
         if ($badges) {
-            foreach ($badges as $badge) {
+            foreach ($badges as $index => $badge) {
                 if ($badge->getOwnerId() != null) {
                     $org = $orgDao->getOrganisation($badge->getOwnerId());
                     $orgList[$badge->getOwnerId()] = $org;
+                } else {
+                    unset($badges[$index]);
                 }
             }
         }
@@ -1462,9 +1525,9 @@ window.close();
             "taskTypeColours" => $taskTypeColours
         ));
 
-        $private_access = false;
+        $private_access = 0;
         if (Common\Lib\UserSession::getCurrentUserID() == $user_id) {
-            $private_access = true;
+            $private_access = 1;
 
             $notifData = $userDao->getUserTaskStreamNotification($user_id);
             $interval = null;
@@ -1495,7 +1558,6 @@ window.close();
                 "interval"       => $interval,
                 "lastSent"       => $lastSent,
                 "strict"         => $strict,
-                "private_access" => true
             ));
         }
 
@@ -1505,12 +1567,73 @@ window.close();
             $encrypted = openssl_encrypt("$user_id", 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
             $certificate = 'https://badge.translatorswb.org/index.php?volunteer_id=' . urlencode(base64_encode("$encrypted::$iv"));
         }
+
+        $euser_id = $user_id + 999999; // Ensure we don't use identical (shared profile) key as word count badge (for a bit of extra security)
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+        $encrypted = openssl_encrypt("$euser_id", 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
+        $key = urlencode(base64_encode("$encrypted::$iv"));
+
+        $howheard = $userDao->getUserHowheards($user_id);
+        if (empty($howheard)) {
+            $howheard = ['reviewed' => 1, 'howheard_key' => '']
+        } else {
+            $howheard = $howheard[0];
+        }
+
         $app->view()->appendData(array(
-            'certificate' => $certificate,
+            'certificate'            => $certificate,
+            'key'                    => $key,
+            'private_access'         => $private_access,
+            'receive_credit'         => $receive_credit,
             'is_admin_or_org_member' => $userDao->is_admin_or_org_member($user_id),
+            'howheard'               => $howheard,
+            'expertise_list'         => $userDao->getExpertiseList($user_id),
+            'capability_list'        => $userDao->getCapabilityList($user_id),
+            'supported_ngos'         => $userDao->supported_ngos($user_id),
+            'quality_score'          => $userDao->quality_score($user_id),
+            'admin_comments'         => $userDao->admin_comments($user_id),
+            'certifications'         => $userDao->getUserCertifications($user_id),
         ));
 
         $app->render("user/user-public-profile.tpl");
+    }
+
+    public static function profile_shared_with_key($key)
+    {
+        $key = base64_decode($key);
+        $iv = substr($key, -16);
+        $encrypted = substr($key, 0, -18);
+        $user_id = (int)openssl_decrypt($encrypted, 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
+        $user_id -= 999999; // Ensure we don't use identical key to word count badge
+
+        $app = \Slim\Slim::getInstance();
+        $userDao = new DAO\UserDao();
+
+        $user = $userDao->getUser($user_id);
+        $userPersonalInfo = $userDao->getPersonalInfo($user_id);
+        $userQualifiedPairs = $userDao->getUserQualifiedPairs($user_id);
+
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+        $encrypted = openssl_encrypt("$user_id", 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
+        $certificate = 'https://badge.translatorswb.org/index.php?volunteer_id=' . urlencode(base64_encode("$encrypted::$iv"));
+
+        $app->view()->appendData(array(
+            'current_page' => 'user-profile',
+            'this_user' => $user,
+            'userPersonalInfo' => $userPersonalInfo,
+            'userQualifiedPairs' => $userQualifiedPairs,
+            'certificate' => $certificate,
+            'isSiteAdmin'            => 0,
+            'private_access'         => 0,
+            'receive_credit'         => 1,
+            'expertise_list'         => $userDao->getExpertiseList($user_id),
+            'capability_list'        => $userDao->getCapabilityList($user_id),
+            'supported_ngos'         => $userDao->supported_ngos($user_id),
+            'quality_score'          => $userDao->quality_score($user_id),
+            'certifications'         => $userDao->getUserCertifications($user_id),
+        ));
+
+        $app->render('user/user-public-profile.tpl');
     }
 
     public function editTaskStreamNotification($userId)

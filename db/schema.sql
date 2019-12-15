@@ -1580,6 +1580,7 @@ CREATE TABLE IF NOT EXISTS `UserHowheards` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `UserCertifications` (
+  id                INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   user_id           INT(10) UNSIGNED NOT NULL,
   vid               INT(10) UNSIGNED NOT NULL default 0,
   reviewed          INT(10) UNSIGNED NOT NULL DEFAULT 0,
@@ -1587,9 +1588,19 @@ CREATE TABLE IF NOT EXISTS `UserCertifications` (
   filename          VARCHAR(128) COLLATE utf8_unicode_ci NOT NULL,
   mimetype          VARCHAR(128) COLLATE utf8_unicode_ci NOT NULL,
   note              TEXT         COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
   KEY `FK_UserCertifications_Users` (`user_id`),
   KEY `FK_UserCertifications_reviewed` (`reviewed`),
   CONSTRAINT `FK_UserCertifications_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `admin_comment` (
+  user_id       INT(10) UNSIGNED NOT NULL,
+  admin_id      INT(10) UNSIGNED NOT NULL,
+  work_again    INT(10) UNSIGNED NOT NULL,
+  admin_comment VARCHAR(2000) COLLATE utf8_unicode_ci NOT NULL,
+  KEY `FK_admin_comment_Users` (`user_id`),
+  CONSTRAINT `FK_admin_comment_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*---------------------------------------end of tables---------------------------------------------*/
@@ -8372,7 +8383,17 @@ BEGIN
     SELECT *
     FROM UserCertifications
     WHERE user_id=uID
-    ORDER BY vid;
+    ORDER BY note, vid;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getUserCertificationByID`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserCertificationByID`(IN primaryID INT)
+BEGIN
+    SELECT *
+    FROM UserCertifications
+    WHERE id=primaryID;
 END//
 DELIMITER ;
 
@@ -8383,6 +8404,58 @@ BEGIN
     REPLACE INTO UserCertifications
                (user_id,       vid, certification_key, filename, mimetype,  note)
         VALUES (    uID, versionID,              ckey, file,     mime,         n);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `updateCertification`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateCertification`(IN primaryID INT, IN r INT)
+BEGIN
+    UPDATE UserCertifications
+    SET reviewed=r
+    WHERE id=primaryID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `users_review`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `users_review`()
+BEGIN
+(
+    SELECT
+        0    AS cert_id,
+        ''   AS certificate,
+        u.id AS user_id,
+        CONCAT (IFNULL(i.`first-name`, ''), IFNULL(i.`last-name`, '')) AS name,
+        CONCAT (l.`en-name`, '(' , c.`en-name`, ')')                   AS native_language,
+        IFNULL(i.country, '')                                          AS country_address
+    FROM UserHowheards          hh
+    JOIN Users                   u ON hh.user_id=u.id
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    JOIN Languages               l ON u.language_id=l.id
+    JOIN Countries               c ON u.country_id=c.id
+    WHERE
+        hh.reviewed=0
+)
+UNION
+(
+    SELECT
+        uc.id   AS cert_id,
+        uc.note AS certificate,
+        u.id    AS user_id,
+        CONCAT (IFNULL(i.`first-name`, ''), IFNULL(i.`last-name`, '')) AS name,
+        CONCAT (l.`en-name`, '(' , c.`en-name`, ')')                   AS native_language,
+        IFNULL(i.country, '')                                          AS country_address
+    FROM UserCertifications     uc
+    JOIN Users                   u ON uc.user_id=u.id
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    JOIN Languages               l ON u.language_id=l.id
+    JOIN Countries               c ON u.country_id=c.id
+    WHERE
+        uc.reviewed=0 AND
+        uc.certification_key NOT IN ('TRANSLATOR', 'TWB')
+)
+ORDER BY user_id, certificate;
 END//
 DELIMITER ;
 
@@ -8401,6 +8474,51 @@ BEGIN
         tc.user_id=uID AND
         t.`task-status_id`=4
     ORDER BY o.name;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `quality_score`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `quality_score`(IN `uID` INT)
+BEGIN
+    SELECT
+        IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.corrections, 0))/SUM(consistency<10), 1), '') AS cor,
+        IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.grammar,     0))/SUM(consistency<10), 1), '') AS gram,
+        IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.spelling,    0))/SUM(consistency<10), 1), '') AS spell,
+        IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.consistency, 0))/SUM(consistency<10), 1), '') AS cons,
+        SUM(consistency<10) AS num_legacy,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.corrections,        0))/SUM(consistency>=10), 1), '') AS accuracy,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.grammar,            0))/SUM(consistency>=10), 1), '') AS fluency,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.spelling,           0))/SUM(consistency>=10), 1), '') AS terminology,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.consistency   % 10, 0))/SUM(consistency>=10), 1), '') AS style,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.consistency DIV 10, 0))/SUM(consistency>=10), 1), '') AS design,
+        SUM(consistency>=10) AS num_new,
+        COUNT(*)             AS num
+    FROM TaskReviews            tr
+    JOIN Tasks                   t  ON tr.task_id=t.id
+    JOIN TaskClaims             tc  ON tr.task_id=tc.task_id
+    WHERE
+        t.`task-status_id`=4 AND
+        tc.user_id=uID
+    GROUP BY tc.user_id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `admin_comments`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `admin_comments`(IN uID INT)
+BEGIN
+    SELECT * FROM admin_comment WHERE user_id=uID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_admin_comment`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_admin_comment`(IN uID INT, IN aID INT, IN work INT, IN comment VARCHAR(2000))
+BEGIN
+    INSERT INTO admin_comment
+               (user_id, admin_id, work_again, admin_comment)
+        VALUES (    uID,      aID,       work,       comment);
 END//
 DELIMITER ;
 

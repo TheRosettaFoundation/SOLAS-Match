@@ -249,7 +249,7 @@ If you have any questions about submitting the form, please email <a href="mailt
 
             <tr><td>
                 <hr/>
-                <label for='receiveCredit'><strong>Do you want all the above to be visible to all members of the TWB community?:</strong></label>
+                <label for='receiveCredit'><strong>Do you want all the above (including NGOs you have contributed to) to be visible to all members of the TWB community?:</strong></label>
                 <p class="desc">If at any point you wish to change this setting, you can always do that. Additionally you will be able to have a link to this information which you can share with selected people.</p>
                 <input type="checkbox" value="1" name="receiveCredit" id="receiveCredit" {if $userPersonalInfo->getReceiveCredit()}checked="checked"{/if} /> Make the above information visible to TWB community
             </td></tr>

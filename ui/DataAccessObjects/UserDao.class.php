@@ -1427,6 +1427,19 @@ error_log(print_r($result, true));
         return $result;
     }
 
+    public function getUserCertificationByID($id)
+    {
+        $result = LibAPI\PDOWrapper::call('getUserCertificationByID', LibAPI\PDOWrapper::cleanse($id));
+        return $result[0];
+    }
+
+    public function users_review()
+    {
+        $result = LibAPI\PDOWrapper::call('users_review', '');
+        if (empty($result)) $result = [];
+        return $result;
+    }
+
     public function saveUserFile($user_id, $cert_id, $note, $filename, $file)
     {
        $destination = Common\Lib\Settings::get('files.upload_path') . "certs/$user_id/$cert_id";
@@ -1458,6 +1471,28 @@ error_log(print_r($result, true));
             LibAPI\PDOWrapper::cleanseWrapStr($filename) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($mime) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($note));
+    }
+
+    public function updateCertification($id, $reviewed)
+    {
+        LibAPI\PDOWrapper::call('updateCertification',
+            LibAPI\PDOWrapper::cleanse($id) . ',' .
+            LibAPI\PDOWrapper::cleanse($reviewed);
+    }
+
+    public function userDownload($certification)
+    {
+        $app = \Slim\Slim::getInstance();
+
+        $destination = Common\Lib\Settings::get('files.upload_path') . "certs/{$certification['user_id']}/{$certification['certification_key']}/{$certification['vid']}/{$certification['filename']}";
+
+        $app->response->headers->set('Content-type', $certification['mimetype']);
+        $app->response->headers->set('Content-Disposition', "attachment; filename=\"" . trim({$certification['filename']}, '"') . "\"");
+        $app->response->headers->set('Content-length', filesize($destination));
+        $app->response->headers->set('X-Frame-Options', 'ALLOWALL');
+        $app->response->headers->set('Pragma', 'no-cache');
+        $app->response->headers->set('Cache-control', 'no-cache, must-revalidate, no-transform');
+        $app->response->headers->set('X-Sendfile', realpath($destination));
     }
 
     public function detectMimeType($file, $filename)
@@ -1608,8 +1643,10 @@ error_log(print_r($result, true));
         $certification_list['STIBC']   = ['desc' => 'Society of Translators and Interpreters of British Columbia (STIBC) - Certified Translators or Associate Members', 'state' => 0, 'reviewed' => 0];
         $certifications = $this->getUserCertifications($user_id);
         foreach ($certifications as $certification) {
-            $certification_list[$certification['certification_key']]['state'] = 1;
-            $certification_list[$certification['certification_key']]['reviewed'] = $certification['reviewed'];
+            if (!empty($certification_list[$certification['certification_key']])) {
+                $certification_list[$certification['certification_key']]['state'] = 1;
+                $certification_list[$certification['certification_key']]['reviewed'] = $certification['reviewed'];
+            }
         }
         return $certification_list;
     }
@@ -1619,5 +1656,28 @@ error_log(print_r($result, true));
         $result = LibAPI\PDOWrapper::call('supported_ngos', LibAPI\PDOWrapper::cleanse($user_id));
         if (empty($result)) $result = [];
         return $result;
+    }
+
+    public function quality_score($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('quality_score', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) return ['cor' => '', 'gram' => '', 'spell' => '', 'cons' => '', 'num_legacy' => 0, 'accuracy' => '', 'fluency' => '', 'terminology' => '', 'style' => '', 'design' => '', 'num_new' => 0, 'num' => 0];
+         return $result[0];
+    }
+
+    public function admin_comments($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('admin_comments', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) $result = [];
+        return $result;
+    }
+
+    public function insert_admin_comment($user_id, $admin_id, $work_again, $comment)
+    {
+        LibAPI\PDOWrapper::call('insert_admin_comment',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($admin_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($work_again) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($comment));
     }
 }

@@ -38,6 +38,13 @@
                                 <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('user_public_profile_edit_profile_details')}
                             </a>
                         {/if}
+                        {if $isSiteAdmin && $howheard['reviewed'] == 0}
+                            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                                <i class="icon-wrench icon-white"></i> Mark New User as Reviewed
+                                <input type="submit" name="mark_reviewed" value="Submit" />
+                                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                            </form>
+                        {/if}
                     </div>
                 </td>
             </tr>
@@ -49,11 +56,11 @@
     <div class='page-header'><h1>{Localisation::getTranslation('common_user_profile')} <small>{Localisation::getTranslation('user_public_profile_2')}</small></h1></div>
 {/if}
 
-{if $show}
+{if $private_access || $isSiteAdmin || $receive_credit}
 
 <table border="0">
     <tr valign="top">
-        <td style="{if $private_access || $isSiteAdmin} width: 48%  {else} width: 100% {/if}">
+        <td style="width: 48%">
             <div>
                 <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
                     <tbody>
@@ -164,64 +171,132 @@
                             {foreach from=$expertise_list item=expertise}
                                 {if $expertise['state']}<tr><td>{$expertise['desc']|escape:'html':'UTF-8'}</td></tr>{/if}
                             {/foreach}
+
+                            {if $private_access || $isSiteAdmin}
+                            <tr>
+                                <td>
+                                    <h3>Share this link with anyone you wish to see your profile:</h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank">{urlFor name="shared_with_key" options="key.{$key}"}</a>
+                                </td>
+                            </tr>
+                            {/if}
                     </tbody>
                 </table>
             </div>
         </td>
         
-        {if $private_access || $isSiteAdmin}
-            <td style="width: 4%"/>
-            <td style="width: 48%">            
-                <div>
-                    <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
-                        <tbody align="left" width="48%">
-                        {if $private_access || $isSiteAdmin}
-                            <tr>
-                                <td>
-                                    <img src="{$certificate}" width="50%" />
-                                </td>
-                            </tr>
+        <td style="width: 4%"/>
+        <td style="width: 48%">
+            <div>
+                <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
+                    <tbody align="left" width="48%">
+                        {if !empty($certificate)}
+                        <tr>
+                            <td>
+                                <img src="{$certificate}" width="50%" />
+                            </td>
+                        </tr>
                         {/if}
 
-                            <tr>
-                                <td>
-                                    <h3>Supported NGOs</h3>
-                                </td>
-                            </tr>
-                            {foreach from=$supported_ngos item=supported_ngo}
-                             <tr><td>{$supported_ngo['desc']|escape:'html':'UTF-8'}</td></tr>
-                            {/foreach}
-                            <tr>
-                                <td>
-                                    <ul>
-                                    <li>test list</li>
-                                    <li>test list</li>
-                                    </ul>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                <h3>Supported NGOs</h3>
+                            </td>
+                        </tr>
+                        {foreach from=$supported_ngos item=supported_ngo}
+                        <tr><td>{$supported_ngo['desc']|escape:'html':'UTF-8'}</td></tr>
+                        {/foreach}
+                        <tr>
+                            <td>
+                                <ul>
+                                <li>test list</li>
+                                <li>test list</li>
+                                </ul>
+                            </td>
+                        </tr>
 
-                            <tr>
-                                <td>
-                                    <h3>Certificates and training courses</h3>
-                                </td>
-                            </tr>
-[[
-                            {foreach from=$supported_ngos item=supported_ngo}
-                             <tr><td>{$supported_ngo['desc']|escape:'html':'UTF-8'}</td></tr>
-                            {/foreach}
-            {foreach from=$certification_list key=name item=certification}
-                <tr><td>{if $certification['state']}Already submitted{if $certification['reviewed'] == 1} and reviewed{/if}: {/if}<a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$name"}" target="_blank">{$certification['desc']}</a></td></tr>
-            {/foreach}
-]]
-                        </tbody>
-                    </table>
-                </div>
-            </td>
-        {/if}
+                        <tr>
+                            <td>
+                                <h3>Certificates and training courses</h3>
+                            </td>
+                        </tr>
+                        {foreach from=$certifications item=certification}
+                        {if $private_access || $isSiteAdmin}
+                        <tr><td>
+                            {if $isSiteAdmin && $certification['reviewed'] == 0 && $certification['certification_key'] != 'TRANSLATOR' && $certification['certification_key'] != 'TWB'}
+                            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                                <i class="icon-wrench icon-white"></i> Mark Certificate as Reviewed
+                                <input type="submit" class="btn btn-primary" name="mark_certification_reviewed" value="Submit" />
+                                <input type="hidden" name="certification_id" value="{$certification['id']}" />
+                                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                            </form>
+                           {/if}
+                            <a href="{urlFor name="user-download" options="id.{$certification['id']}"}">{$certification['note']|escape:'html':'UTF-8'}</a>
+                        </td></tr>
+                        {else}
+                        <tr><td>{$certification['note']|escape:'html':'UTF-8'}</td></tr>
+                        {/if}
+                        {/foreach}
+
+                        {if $isSiteAdmin}
+                        <tr><td><a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank">Upload a new file for this user</a></td></tr>
+                        {/if}
+
+                        {if $private_access || $isSiteAdmin}
+                        <tr>
+                            <td>
+                               <table>
+                                   <tr><td>Quality metric</td><td>Average score out of 5</td></tr>
+                                   <tr><td>Accuracy</td><td>{$quality_score['accuracy']}</td></tr>
+                                   <tr><td>Fluency</td><td>{$quality_score['fluency']}</td></tr>
+                                   <tr><td>Terminology</td><td>{$quality_score['terminology']}</td></tr>
+                                   <tr><td>Style</td><td>{$quality_score['style']}</td></tr>
+                                   <tr><td>Design</td><td>{$quality_score['design']}</td></tr>
+                               </table>
+                            </td>
+                        </tr>
+                        {/if}
+                    </tbody>
+                </table>
+            </div>
+        </td>
     </tr>
 </table>
+
+{if $isSiteAdmin}
+<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+<table border="0">
+    <tr valign="top">
+        <td><h3>Administrative Section</h3></td><td></td>
+    </tr>
+    <tr valign="top">
+        <td>Comment</td>
+        <td>Willingness to work again score (1 to 5)</td>
+    </tr>
+    <tr valign="top">
+        <td><input type='text' value="" name="comment" id="comment" /></td>
+        <td><input type='text' value="" name="work_again" id="work_again" />
+            <i class="icon-upload icon-white" style="position:relative; right:-30px; top:12px;"></i>
+            <input type="submit" class="pull-right btn btn-primary" name="admin_comment" value="Submit" />
+        </td>
+    </tr>
+{foreach $admin_comments as $admin_comment}
+    <tr valign="top">
+        <td>$admin_comment['admin_comment']</td>
+        <td>$admin_comment['work_again']</td>
+    </tr>
+{/foreach}
+</table>
+{if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+</form>
+{/if}
+
 <p style="margin-bottom:50px;"/>
-{if $this_user->getId() == UserSession::getCurrentUserID()}
+{if $private_access}
     <div class="page-header">
         <h1>
             {Localisation::getTranslation('user_public_profile_reference_email')} 
@@ -241,6 +316,7 @@
     <p style="margin-bottom:50px;"/>
 {/if}
 
+{if $private_access || $isSiteAdmin}
 {if isset($badges)}
     {if count($badges) > 0}
         <div class='page-header'>
@@ -252,7 +328,6 @@
         </div>
 
         {foreach $badges as $badge}
-            {if !is_null($badge->getOwnerId())}
                 {assign var="user_id" value=$this_user->getId()} 
                     {if $private_access}
                         <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}" class="pull-right">
@@ -270,10 +345,6 @@
                         {$org->getName()}</a> - {TemplateHelper::uiCleanseHTML($badge->getTitle())}
                 </h3>
                 <p>{TemplateHelper::uiCleanseHTML($badge->getDescription())}</p>
-            {else}
-                <h3>{Settings::get('site.name')} - {TemplateHelper::uiCleanseHTML($badge->getTitle())}</h3>
-                <p>{TemplateHelper::uiCleanseHTML($badge->getDescription())}</p>
-            {/if}
             <p style="margin-bottom:20px;"/>
         {/foreach}
         
@@ -412,8 +483,8 @@
         <p style="margin-bottom:50px;"/>
     {/if}
 {/if}
+{/if}
 
 {/if}
 
 {include file='footer.tpl'}
-
