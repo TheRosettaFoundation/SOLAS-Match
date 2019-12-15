@@ -184,12 +184,6 @@ class Users
                         '\SolasMatch\API\V0\Users::getUserOrgs'
                     );
 
-                    $app->get(
-                        '/badges(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Users::getUserbadges'
-                    );
-
                     $app->post(
                         '/badges(:format)/',
                         '\SolasMatch\API\Lib\Middleware::isloggedIn',
@@ -681,11 +675,6 @@ class Users
     public static function getUserOrgs($userId, $format = ".json")
     {
         API\Dispatcher::sendResponse(null, DAO\UserDao::findOrganisationsUserBelongsTo($userId), null, $format);
-    }
-
-    public static function getUserbadges($userId, $format = ".json")
-    {
-        API\Dispatcher::sendResponse(null, DAO\UserDao::getUserBadges($userId), null, $format);
     }
 
     public static function addUserbadges($userId, $format = ".json")

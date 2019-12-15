@@ -362,20 +362,6 @@ class UserDao
         return $ret;
     }
 
-    public static function getUserBadges($user_id)
-    {
-        $ret = null;
-        $args = Lib\PDOWrapper::cleanse($user_id);
-        $result = Lib\PDOWrapper::call("getUserBadges", $args);
-        if ($result) {
-            $ret = array();
-            foreach ($result as $badge) {
-                $ret[] = Common\Lib\ModelFactory::buildModel("Badge", $badge);
-            }
-        }
-        return $ret;
-    }
-
     public static function getUserRealName($userId)
     {
         $ret = '';
