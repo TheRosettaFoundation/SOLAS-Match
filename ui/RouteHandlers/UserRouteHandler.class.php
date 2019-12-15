@@ -630,7 +630,7 @@ class UserRouteHandler
 
                     //Set site language to user's preferred language if it is not already
                     $currentSiteLang = $langDao->getLanguageByCode(Common\Lib\UserSession::getUserLanguage());
-                    $userInfo = $userDao->getPersonalInfo($user->getId());
+                    $userInfo = $userDao->getUserPersonalInformation($user->getId());
                     $langPrefId = $userInfo->getLanguagePreference();
                     $preferredLang = $langDao->getLanguage($langPrefId);
                     if ($currentSiteLang != $preferredLang) {
@@ -702,7 +702,7 @@ class UserRouteHandler
 
                 //Set site language to user's preferred language if it is not already
                 $currentSiteLang = $langDao->getLanguageByCode(Common\Lib\UserSession::getUserLanguage());
-                $userInfo = $userDao->getPersonalInfo($user->getId());
+                $userInfo = $userDao->getUserPersonalInformation($user->getId());
                 $langPrefId = $userInfo->getLanguagePreference();
                 $preferredLang = $langDao->getLanguage($langPrefId);
                 if ($currentSiteLang != $preferredLang) {
@@ -973,7 +973,7 @@ EOD;
 
         $userPersonalInfo = null;
         try {
-            $userPersonalInfo = $userDao->getPersonalInfo($user_id);
+            $userPersonalInfo = $userDao->getUserPersonalInformation($user_id);
         } catch (Common\Exceptions\SolasMatchException $e) {
         }
 
@@ -1252,7 +1252,7 @@ EOD;
 
         $userPersonalInfo = null;
         try {
-            $userPersonalInfo = $userDao->getPersonalInfo($user_id);
+            $userPersonalInfo = $userDao->getUserPersonalInformation($user_id);
         } catch (Common\Exceptions\SolasMatchException $e) {
         }
 
@@ -1429,7 +1429,7 @@ window.close();
         $userPersonalInfo = null;
         $receive_credit = 0;
         try {
-            $userPersonalInfo = $userDao->getPersonalInfo($user_id);
+            $userPersonalInfo = $userDao->getUserPersonalInformation($user_id);
             if ($userPersonalInfo->getReceiveCredit()) $receive_credit = 1;
         } catch (Common\Exceptions\SolasMatchException $e) {
             // error_log("Error getting user personal info: $e");
@@ -1611,7 +1611,7 @@ window.close();
         $userDao = new DAO\UserDao();
 
         $user = $userDao->getUser($user_id);
-        $userPersonalInfo = $userDao->getPersonalInfo($user_id);
+        $userPersonalInfo = $userDao->getUserPersonalInformation($user_id);
         $userQualifiedPairs = $userDao->getUserQualifiedPairs($user_id);
 
         $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));

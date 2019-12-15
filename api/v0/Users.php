@@ -274,12 +274,6 @@ class Users
                         '\SolasMatch\API\V0\Users::getUserTrackedProjects'
                     );
 
-                    $app->get(
-                        '/personalInfo(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                        '\SolasMatch\API\V0\Users::getUserPersonalInfo'
-                    );
-
                     $app->post(
                         '/personalInfo(:format)/',
                         '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
@@ -926,17 +920,6 @@ class Users
     public static function getUserTrackedProjects($userId, $format = ".json")
     {
         $data = DAO\UserDao::getTrackedProjects($userId);
-        API\Dispatcher::sendResponse(null, $data, null, $format);
-    }
-
-    public static function getUserPersonalInfo($userId, $format = ".json")
-    {
-        if (!is_numeric($userId) && strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
-        $data = DAO\UserDao::getPersonalInfo(null, $userId);
         API\Dispatcher::sendResponse(null, $data, null, $format);
     }
 
