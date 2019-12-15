@@ -91,7 +91,7 @@
                                 </td>
                             </tr>
                         {/if}
-                        {if !empty($userPersonalInfo->getCity()))}
+                        {if !empty($userPersonalInfo->getCity())}
                                 <td>
                                     {TemplateHelper::uiCleanseHTML($userPersonalInfo->getCity())}
                                 </td>
