@@ -333,8 +333,7 @@
 {/if}
 
 {if $private_access || $isSiteAdmin}
-{if isset($badges)}
-    {if count($badges) > 0}
+    {if !empty($badges)}
         <div class='page-header'>
             <h1>{Localisation::getTranslation('common_badges')}<small> {Localisation::getTranslation('user_public_profile_4')}</small>
                 <a href='{urlFor name="badge-list"}' class='pull-right btn btn-primary'>
@@ -366,7 +365,6 @@
         
         <p style="margin-bottom:50px;"/>
     {/if}
-{/if}
 
 {if $private_access}
     <div class="page-header">

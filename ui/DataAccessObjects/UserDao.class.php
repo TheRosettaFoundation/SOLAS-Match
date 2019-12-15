@@ -110,11 +110,17 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function getUserBadges($userId)
+    public function getUserBadges($user_id)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/badges";
-        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\Badge"), $request);
+        $args = Lib\PDOWrapper::cleanse($user_id);
+        $result = Lib\PDOWrapper::call('getUserBadges', $args);
+        if ($result) {
+            $ret = array();
+            foreach ($result as $badge) {
+                $ret[] = Common\Lib\ModelFactory::buildModel('Badge', $badge);
+            }
+        }
         return $ret;
     }
 
