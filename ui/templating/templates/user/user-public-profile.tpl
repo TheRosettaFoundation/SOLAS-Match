@@ -127,7 +127,7 @@
                         {if $this_user->getNativeLocale() != null}
                         <tr>
                             <td>
-                                Native in {strong}{TemplateHelper::getLanguageAndCountry($this_user->getNativeLocale())}{/strong}
+                                Native in <strong>{TemplateHelper::getLanguageAndCountry($this_user->getNativeLocale())}</strong>
                             </td>
                         </tr>
                         {/if}
