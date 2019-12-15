@@ -159,18 +159,30 @@
                                     <h3>Services</h3>
                                 </td>
                             </tr>
-                            {foreach from=$capability_list item=capability}
-                                {if $capability['state']}<tr><td>{$capability['desc']|escape:'html':'UTF-8'}</td></tr>{/if}
-                            {/foreach}
+                            <tr>
+                                <td>
+                                <ul>
+                                {foreach from=$capability_list item=capability}
+                                    {if $capability['state']}<li>{$capability['desc']|escape:'html':'UTF-8'}</li>{/if}
+                                {/foreach}
+                                </ul>
+                                </td>
+                            </tr>
 
                             <tr>
                                 <td>
                                     <h3>Experienced in</h3>
                                 </td>
                             </tr>
-                            {foreach from=$expertise_list item=expertise}
-                                {if $expertise['state']}<tr><td>{$expertise['desc']|escape:'html':'UTF-8'}</td></tr>{/if}
-                            {/foreach}
+                            <tr>
+                                <td>
+                                <ul>
+                                {foreach from=$expertise_list item=expertise}
+                                    {if $expertise['state']}<li>{$expertise['desc']|escape:'html':'UTF-8'}</li>{/if}
+                                {/foreach}
+                                </ul>
+                                </td>
+                            </tr>
 
                             {if $private_access || $isSiteAdmin}
                             <tr>
@@ -207,15 +219,13 @@
                                 <h3>Supported NGOs</h3>
                             </td>
                         </tr>
-                        {foreach from=$supported_ngos item=supported_ngo}
-                        <tr><td>{$supported_ngo['org_name']|escape:'html':'UTF-8'}</td></tr>
-                        {/foreach}
                         <tr>
                             <td>
-                                <ul>
-                                <li>test list</li>
-                                <li>test list</li>
-                                </ul>
+                            <ul>
+                            {foreach from=$supported_ngos item=supported_ngo}
+                                <li>{$supported_ngo['org_name']|escape:'html':'UTF-8'}</li>
+                            {/foreach}
+                            </ul>
                             </td>
                         </tr>
 
@@ -224,9 +234,12 @@
                                 <h3>Certificates and training courses</h3>
                             </td>
                         </tr>
+                        <tr>
+                            <td>
+                            <ul>
                         {foreach from=$certifications item=certification}
+                        <li>
                         {if $private_access || $isSiteAdmin}
-                        <tr><td>
                             {if $isSiteAdmin && $certification['reviewed'] == 0 && $certification['certification_key'] != 'TRANSLATOR' && $certification['certification_key'] != 'TWB'}
                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                                 <i class="icon-wrench icon-white"></i> Mark Certificate as Reviewed
@@ -236,11 +249,14 @@
                             </form>
                            {/if}
                             <a href="{urlFor name="user-download" options="id.{$certification['id']}"}">{$certification['note']|escape:'html':'UTF-8'}</a>
-                        </td></tr>
                         {else}
-                        <tr><td>{$certification['note']|escape:'html':'UTF-8'}</td></tr>
+                        {$certification['note']|escape:'html':'UTF-8'}
                         {/if}
+                        </li>
                         {/foreach}
+                            </ul>
+                            </td>
+                        </tr>
 
                         {if $isSiteAdmin}
                         <tr><td><a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TWB"}" target="_blank">Upload a new file for this user</a></td></tr>
