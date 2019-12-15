@@ -1627,6 +1627,7 @@ window.close();
             'isSiteAdmin'            => 0,
             'private_access'         => 0,
             'receive_credit'         => 1,
+            'no_header'              => 1,
             'url_list'               => $userDao->getURLList($user_id),
             'expertise_list'         => $userDao->getExpertiseList($user_id),
             'capability_list'        => $userDao->getCapabilityList($user_id),
