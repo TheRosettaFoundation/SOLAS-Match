@@ -1240,14 +1240,6 @@ error_log(print_r($result, true));
         return $ret;
     }
     
-    public function getPersonalInfo($userId)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/personalInfo";
-        $ret = $this->client->call("\SolasMatch\Common\Protobufs\Models\UserPersonalInformation", $request);
-        return $ret;
-    }
-    
     public function getBannedComment($email)
     {
         $ret = null;
