@@ -1487,7 +1487,7 @@ error_log(print_r($result, true));
         $destination = Common\Lib\Settings::get('files.upload_path') . "certs/{$certification['user_id']}/{$certification['certification_key']}/{$certification['vid']}/{$certification['filename']}";
 
         $app->response->headers->set('Content-type', $certification['mimetype']);
-        $app->response->headers->set('Content-Disposition', "attachment; filename=\"" . trim({$certification['filename']}, '"') . "\"");
+        $app->response->headers->set('Content-Disposition', "attachment; filename=\"" . trim($certification['filename'], '"') . "\"");
         $app->response->headers->set('Content-length', filesize($destination));
         $app->response->headers->set('X-Frame-Options', 'ALLOWALL');
         $app->response->headers->set('Pragma', 'no-cache');
