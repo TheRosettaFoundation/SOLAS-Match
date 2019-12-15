@@ -1575,7 +1575,7 @@ window.close();
 
         $howheard = $userDao->getUserHowheards($user_id);
         if (empty($howheard)) {
-            $howheard = ['reviewed' => 1, 'howheard_key' => '']
+            $howheard = ['reviewed' => 1, 'howheard_key' => ''];
         } else {
             $howheard = $howheard[0];
         }
