@@ -135,12 +135,12 @@
 
                         {if !empty($userQualifiedPairs)}
                             <tr>
+                                <td style="padding-bottom: 10px"/>
+                            </tr>
+                            <tr>
                                 <td>
                                     <h3>{Localisation::getTranslation('common_secondary_languages')}</h3>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td style="padding-bottom: 10px"/>
                             </tr>
                             <tr>
                                 <td>
