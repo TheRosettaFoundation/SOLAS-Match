@@ -1130,12 +1130,17 @@ EOD;
                         }
                     }
 
+error_log('111');
                     foreach ($url_list as $name => $url) {
+error_log('222');
                         if ($post[$name] != $url['url']) $userDao->insertUserURL($user_id, $name, $post[$name]);
                     }
 
+error_log('333');
                     $userDao->updateUser($user);
+error_log('444');
                     $userDao->updatePersonalInfo($user_id, $userPersonalInfo);
+error_log('555');
 
                     if (isset($post['interval'])) {
                         if ($post['interval'] == 0 || $post['interval'] == 10) {
@@ -1177,7 +1182,7 @@ EOD;
 
                     $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user_id)));
                 } catch (\Exception $e) {
-                    $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
+                    $app->flashNow('error', 'Failed to Update');
                 }
             }
         }
@@ -1279,7 +1284,7 @@ EOD;
 
                     $app->redirect($app->urlFor('org-dashboard'));
                 } catch (\Exception $e) {
-                    $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
+                    $app->flashNow('error', 'Failed to Update');
                 }
             }
         }
