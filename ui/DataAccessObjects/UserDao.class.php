@@ -382,6 +382,7 @@ class UserDao extends BaseDao
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/badges/$badgeId";
+error_log($request);
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
         return $ret;
     }
