@@ -115,7 +115,6 @@ class BadgeDao
     */
     public static function assignBadge($userId, $badgeId)
     {
-error_log("assignBadge($userId, $badgeId)");
         $args = Lib\PDOWrapper::cleanseNull($userId).",".
             Lib\PDOWrapper::cleanseNull($badgeId);
         $validation = self::validateUserBadge($userId, $badgeId);
@@ -125,12 +124,10 @@ error_log("assignBadge($userId, $badgeId)");
             }
             $result = Lib\PDOWrapper::call("assignBadge", $args);
             if ($result) {
-error_log("result assignBadge($userId, $badgeId)");
                 return $result[0]["result"];
             }
         }
         
-error_log("fallthrough error assignBadge($userId, $badgeId)");
         return 0;
     }
     
