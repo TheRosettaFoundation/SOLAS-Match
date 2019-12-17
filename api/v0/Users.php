@@ -528,6 +528,7 @@ class Users
 
     public static function addUserbadgesByID($userId, $badgeId, $format = ".json")
     {
+error_log("addUserbadgesByID($userId, $badgeId...)");
         if (!is_numeric($badgeId) && strstr($badgeId, '.')) {
             $badgeId = explode('.', $badgeId);
             $format = '.'.$badgeId[1];
