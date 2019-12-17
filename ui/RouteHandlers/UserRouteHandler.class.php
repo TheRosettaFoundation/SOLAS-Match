@@ -1136,7 +1136,8 @@ error_log('222');
 error_log($user_id);
 error_log($name);
 error_log($post[$name]);
-                        if ($post[$name] != $url['url']) $userDao->insertUserURL($user_id, $name, $post[$name]);
+error_log($url['url']);
+                        if ($post[$name] != $url['url']) error_log($url['url']); //$userDao->insertUserURL($user_id, $name, $post[$name]);
                     }
 
 error_log('333');
