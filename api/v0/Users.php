@@ -528,13 +528,11 @@ class Users
 
     public static function addUserbadgesByID($userId, $badgeId, $format = ".json")
     {
-error_log("addUserbadgesByID($userId, $badgeId...)");
         if (!is_numeric($badgeId) && strstr($badgeId, '.')) {
             $badgeId = explode('.', $badgeId);
             $format = '.'.$badgeId[1];
             $badgeId = $badgeId[0];
         }
-error_log("addUserbadgesByID($userId, $badgeId...)");
         API\Dispatcher::sendResponse(null, DAO\BadgeDao::assignBadge($userId, $badgeId), null, $format);
     }
 
