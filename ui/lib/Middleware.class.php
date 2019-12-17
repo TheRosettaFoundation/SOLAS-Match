@@ -36,6 +36,7 @@ class Middleware
                 $app->redirect($app->urlFor('user-private-profile', array('user_id' => $_SESSION['user_id'])));
             }
         }
+else { error_log('profile_completed NOT EMPTY');}
 
         return true;
     }
