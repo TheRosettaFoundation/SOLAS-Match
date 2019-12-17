@@ -207,14 +207,14 @@ If you have any questions about submitting the form, please email <a href="mailt
             <tr><td style="font-weight: bold">Services I can provide: <span style="color: red">*</span></td></tr>
                 {assign var="i" value=0}
                 {foreach from=$capability_list key=name item=capability}
-                    <tr><td><input type="checkbox" {if $capability['state']}checked="checked"{/if} name="{$name}" id="capability{$i}" /> {$capability['desc']}</td></tr>
+                    <tr><td><input type="checkbox" {if $capability['state']}checked="checked"{/if} name="{$name}" id="capability{$i}" /> {$capability['desc']|escape:'html':'UTF-8'}</td></tr>
                     {assign var="i" value=$i+1}
                 {/foreach}
 
             <tr><td style="font-weight: bold"><br />My fields of expertise are: <span style="color: red">*</span></td></tr>
                 {assign var="i" value=0}
                 {foreach from=$expertise_list key=name item=expertise}
-                    <tr><td><input type="checkbox" {if $expertise['state']}checked="checked"{/if} name="{$name}" id="expertise{$i}" /> {$expertise['desc']}</td></tr>
+                    <tr><td><input type="checkbox" {if $expertise['state']}checked="checked"{/if} name="{$name}" id="expertise{$i}" /> {$expertise['desc']|escape:'html':'UTF-8'}</td></tr>
                     {assign var="i" value=$i+1}
                 {/foreach}
 
@@ -240,7 +240,7 @@ If you have any questions about submitting the form, please email <a href="mailt
             <tr><td style="font-weight: bold">Verifications</td></tr>
             <tr><td><p class="desc">If you hold a certification or membership from any of the organizations below, you could qualify to be a verified translator. Please select the organization and click to submit a proof of certification/membership. You will be upgraded to Verified Translator, which will give you immediate access to all projects available, for the verified combination. if you have any questions or can't upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject={rawurlencode('Translation Certification')}" target="_blank">translators@translatorswithoutborders.org</a></p></td></tr>
             {foreach from=$certification_list key=name item=certification}
-                <tr><td>{if $certification['state']}Already submitted{if $certification['reviewed'] == 1} and reviewed{/if}: {/if}<a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$name"}" target="_blank">{$certification['desc']}</a></td></tr>
+                <tr><td>{if $certification['state']}Already submitted{if $certification['reviewed'] == 1} and reviewed{/if}: {/if}<a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$name"}" target="_blank">{$certification['desc']|escape:'html':'UTF-8'}</a></td></tr>
             {/foreach}
 
             <tr><td style="font-weight: bold"><br />Other Certificates and Documentation</td></tr>
