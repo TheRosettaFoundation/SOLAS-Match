@@ -23,7 +23,7 @@
     <form method="post" action="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$cert_id"}" enctype="multipart/form-data" accept-charset="utf-8">
         <table>
             <tr><td>
-                {if $desc != ''}<label for='note'><strong>Note: <span style="color: red">*</span></strong></label>{/if}
+                <label for='note'><strong>Note: <span style="color: red">*</span></strong></label>
                 <input type='text' value="{$desc}" style="width: 80%" name="note" id="note" {if $desc != ''}readonly="readonly"{/if}/>
             </td></tr>
 
