@@ -23,8 +23,8 @@
     <form method="post" action="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$cert_id"}" enctype="multipart/form-data" accept-charset="utf-8">
         <table>
             <tr><td>
-                {if !empty($desc)}<label for='note'><strong>Note: <span style="color: red">*</span></strong></label>{/if}
-                <input type='text' value="{$desc}" style="width: 80%" name="note" id="note" {if !empty($desc)}readonly="readonly"{/if}/>
+                {if $desc != ''}<label for='note'><strong>Note: <span style="color: red">*</span></strong></label>{/if}
+                <input type='text' value="{$desc}" style="width: 80%" name="note" id="note" {if $desc != ''}readonly="readonly"{/if}/>
             </td></tr>
 
             <tr><td style="font-weight: bold">Please submit a proof of certification</td></tr> <span style="color: red">*</span></strong></label>
