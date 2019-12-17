@@ -27,9 +27,9 @@
                 <input type='text' value="{$desc}" style="width: 80%" name="note" id="note" {if $desc != ''}readonly="readonly"{/if}/>
             </td></tr>
 
-            <tr><td style="font-weight: bold">Please submit a proof of certification</td></tr> <span style="color: red">*</span></strong></label>
+            <tr><td style="font-weight: bold">Please submit a proof of certification</td></tr>
             <tr><td><p class="desc">You will be upgraded to Verified Translator, which will give you immediate access to all projects available, for the verified combination.</p></td></tr>
-            <tr><td><input type="file" name="userFile" id="userFile" /></td></tr>
+            <tr><td><input type="file" name="userFile" id="userFile" /> <span style="color: red">*</span></strong></label></td></tr>
 
             <tr><td style="padding-bottom: 20px">
                 <hr/>
