@@ -122,6 +122,9 @@
                             <td>
                                 {$bio}
                             </td>
+                            <tr>
+                                <td style="padding-bottom: 10px"/>
+                            </tr>
                         </tr>
                         {/if}
 

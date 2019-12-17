@@ -1130,20 +1130,12 @@ EOD;
                         }
                     }
 
-error_log('111');
                     foreach ($url_list as $name => $url) {
-error_log('222');
-error_log($user_id);
-error_log($name);
-error_log($post[$name]);
                         if ($post[$name] != $url['state']) $userDao->insertUserURL($user_id, $name, $post[$name]);
                     }
 
-error_log('333');
                     $userDao->updateUser($user);
-error_log('444');
                     $userDao->updatePersonalInfo($user_id, $userPersonalInfo);
-error_log('555');
 
                     if (isset($post['interval'])) {
                         if ($post['interval'] == 0 || $post['interval'] == 10) {
