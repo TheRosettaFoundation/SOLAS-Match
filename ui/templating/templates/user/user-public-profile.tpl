@@ -199,7 +199,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <a href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank">{urlFor name="shared_with_key" options="key.{$key}"}</a>
+                                    <a href="{urlFor name="shared_with_key" options="key.{$key}"}" target="_blank">{Settings::get('site.location')}{urlFor name="shared_with_key" options="key.{$key}"}</a>
                                 </td>
                             </tr>
                             {/if}
