@@ -1370,9 +1370,6 @@ error_log(print_r($result, true));
 
     public function insertUserURL($user_id, $key, $value)
     {
-error_log(LibAPI\PDOWrapper::cleanse($user_id) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($key) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($value));
         LibAPI\PDOWrapper::call('insertUserURL',
             LibAPI\PDOWrapper::cleanse($user_id) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($key) . ',' .
