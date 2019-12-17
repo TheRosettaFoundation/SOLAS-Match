@@ -533,6 +533,7 @@ class Users
             $format = '.'.$badgeId[1];
             $badgeId = $badgeId[0];
         }
+error_log("addUserbadgesByID($userId, $badgeId...)");
         API\Dispatcher::sendResponse(null, DAO\BadgeDao::assignBadge($userId, $badgeId), null, $format);
     }
 
