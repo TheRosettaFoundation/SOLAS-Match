@@ -1112,8 +1112,15 @@ EOD;
                         $i = 0;
                         $found = false;
                         while (!empty($post["language_code_source_$i"]) && !empty($post["language_code_target_$i"])) {
+error_log($post["language_code_source_$i"]);
+error_log($post["language_code_target_$i"]);
                             list($language_code_source, $country_code_source) = $projectDao->convert_selection_to_language_country($post["language_code_source_$i"]);
                             list($language_code_target, $country_code_target) = $projectDao->convert_selection_to_language_country($post["language_code_target_$i"]);
+error_log("$language_code_source, $country_code_source; $language_code_target, $country_code_target");
+error_log($userQualifiedPair['language_code_source']);
+error_log($userQualifiedPair['country_code_source']);
+error_log($userQualifiedPair['language_code_target']);
+error_log($userQualifiedPair['country_code_target']);
 
                             if (($language_code_source == $userQualifiedPair['language_code_source']) &&
                                 ($country_code_source  == $userQualifiedPair['country_code_source'])  &&
@@ -1124,6 +1131,7 @@ EOD;
                             $i++;
                         }
                         if (!$found) {
+error_log('Removing...');
                             $userDao->removeUserQualifiedPair($user_id,
                                 $userQualifiedPair['language_code_source'], $userQualifiedPair['country_code_source'],
                                 $userQualifiedPair['language_code_target'], $userQualifiedPair['country_code_target']);
