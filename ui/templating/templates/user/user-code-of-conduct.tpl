@@ -38,7 +38,7 @@
 
     <div id="placeholder_for_errors_1"></div>
 
-    <form method="post" action="{urlFor name="user-private-profile" options="user_id.$user_id"}" enctype="multipart/form-data" accept-charset="utf-8">
+    <form method="post" action="{urlFor name="user-code-of-conduct" options="user_id.$user_id"}" enctype="multipart/form-data" accept-charset="utf-8">
         <table>
             <tr><td>
                 <div id="loading_warning">
