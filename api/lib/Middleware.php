@@ -707,12 +707,11 @@ class Middleware
             $orgId = $badge->getOwnerId();
                     
             // cases where the orgId is null signify a system badge
-            // badge ids 6, 7 and 8 refer to the user controlled system badges
-            // maybe we could move them to a class as consts or a function
+            // badge ids 6, 7, 8... refer to the user controlled system badges
             if ($orgId != null && (DAO\OrganisationDao::isMember($orgId, $userId)
                     || DAO\AdminDao::isAdmin($userId, $orgId))) {
                 return true;
-            } elseif ($orgId == null && in_array($badgeId, array(6, 7, 8))) {
+            } elseif ($orgId == null && in_array($badgeId, array(6, 7, 8, 10, 11, 12, 13))) {
                 return true;
             } else {
                 Dispatcher::getDispatcher()->halt(

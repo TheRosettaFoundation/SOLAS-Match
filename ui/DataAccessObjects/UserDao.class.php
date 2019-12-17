@@ -1555,6 +1555,7 @@ error_log(print_r($result, true));
         $capability_list['badge_id_12'] = ['desc' => 'DTP',                 'state' => 0, 'id' => 12];
         $capability_list['badge_id_13'] = ['desc' => 'Voiceover',           'state' => 0, 'id' => 13];
         $capability_list['badge_id_8']  = ['desc' => 'Interpretation',      'state' => 0, 'id' =>  8];
+        // If we add >13, then the code below will need to be changed as will authenticateUserForOrgBadge() and SQL for removeUserBadge
         $badges = $this->getUserBadges($user_id);
         if (!empty($badges)) {
             foreach ($badges as $badge) {
