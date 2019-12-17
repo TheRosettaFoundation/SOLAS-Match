@@ -1156,9 +1156,11 @@ EOD;
                     }
 
                     foreach ($capability_list as $name => $capability) {
+error_log(print_r($capability, true));
                         if ($capability['state'] && empty($post[$name])) {
                             $userDao->removeUserBadge($user_id, $capability['id']);
                         } elseif (!$capability['state'] && !empty($post[$name])) {
+error_log($capability['id']);
                             $userDao->addUserBadgeById($user_id, $capability['id']);
                         }
                     }
