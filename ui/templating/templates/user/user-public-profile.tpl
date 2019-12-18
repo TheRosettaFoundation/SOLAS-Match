@@ -299,6 +299,7 @@
 </table>
 
 {if $isSiteAdmin}
+<hr/>
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
 <table border="0">
     <tr valign="top">
@@ -314,7 +315,7 @@
     </tr>
     <tr valign="top">
         <td></td>
-        <td><i class="icon-upload icon-white"></i><input type="submit" class="pull-right btn btn-primary" name="admin_comment" value="Submit" /></td>
+        <td><i class="icon-upload icon-white"></i><input type="submit" class="btn btn-primary" name="admin_comment" value="Submit" /></td>
     </tr>
 {foreach $admin_comments as $admin_comment}
     <tr valign="top">
@@ -325,6 +326,7 @@
 </table>
 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
+<hr/>
 {/if}
 
 <p style="margin-bottom:50px;"/>
@@ -488,7 +490,7 @@
                 </div>
             </div>
             <p style="margin-bottom:20px;"/>
-            <hr>
+            <hr/>
         {/foreach}
         
         <p style="margin-bottom:50px;"/>
