@@ -41,7 +41,7 @@
             </td></tr>
 
             <tr><td align="center">
-            {if $success}
+            {if $upload_pending}
                 <button type="submit" class='btn btn-primary' id="updateBtn">
                     <i class="icon-refresh icon-white"></i> Upload the Certificate
                 </button> (note the list of certificates submitted will not update until you come back to your profile)

@@ -1321,7 +1321,7 @@ EOD;
 
         $extra_scripts = '';
 
-        $success = 0;
+        $upload_pending = 1;
         if ($post = $app->request()->post()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['note']) || empty($_FILES['userFile']['name']) || !empty($_FILES['userFile']['error'])
                     || (($data = file_get_contents($_FILES['userFile']['tmp_name'])) === false)) {
@@ -1335,7 +1335,7 @@ EOD;
                     $userFileName = substr($userFileName, 0, $extensionStartIndex + 1) . $extension;
                 }
                 $userDao->saveUserFile($user_id, $cert_id, $post['note'], $userFileName, $data);
-                $success = 1;
+                $upload_pending = 0;
                 $app->flash('success', 'Certificate uploaded sucessfully, please click <a href="javascript:window.close();">Close Window</a>');
             }
         }
@@ -1347,7 +1347,7 @@ EOD;
             'user_id'       => $user_id,
             'cert_id'       => $cert_id,
             'desc'          => empty($certification_list[$cert_id]['desc']) ? '' : $certification_list[$cert_id]['desc'],
-            'success'       => $success,
+            'upload_pending'=> $upload_pending,
             'sesskey'       => $sesskey,
         ));
 
