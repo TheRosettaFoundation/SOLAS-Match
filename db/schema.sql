@@ -8426,7 +8426,7 @@ BEGIN
         0    AS cert_id,
         ''   AS certificate,
         u.id AS user_id,
-        CONCAT (IFNULL(i.`first-name`, ''), IFNULL(i.`last-name`, '')) AS name,
+        CONCAT (IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`, '')) AS name,
         CONCAT (l.`en-name`, '(' , c.`en-name`, ')')                   AS native_language,
         IFNULL(i.country, '')                                          AS country_address
     FROM UserHowheards          hh
@@ -8443,7 +8443,7 @@ UNION
         uc.id   AS cert_id,
         uc.note AS certificate,
         u.id    AS user_id,
-        CONCAT (IFNULL(i.`first-name`, ''), IFNULL(i.`last-name`, '')) AS name,
+        CONCAT (IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`, '')) AS name,
         CONCAT (l.`en-name`, '(' , c.`en-name`, ')')                   AS native_language,
         IFNULL(i.country, '')                                          AS country_address
     FROM UserCertifications     uc

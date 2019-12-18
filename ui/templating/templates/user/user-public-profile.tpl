@@ -252,13 +252,13 @@
                         {if $private_access || $isSiteAdmin}
                             {if $isSiteAdmin && $certification['reviewed'] == 0 && $certification['certification_key'] != 'TRANSLATOR' && $certification['certification_key'] != 'TWB'}
                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                                <i class="icon-wrench icon-white"></i> Mark Certificate as Reviewed
-                                <input type="submit" class="btn btn-primary" name="mark_certification_reviewed" value="Submit" />
+                                <i class="icon-wrench icon-white"></i>
+                                <input type="submit" class="btn btn-primary" name="mark_certification_reviewed" value="Mark Certificate as Reviewed" />
                                 <input type="hidden" name="certification_id" value="{$certification['id']}" />
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                <a href="{urlFor name="user-download" options="id.{$certification['id']}"}">{$certification['note']|escape:'html':'UTF-8'}</a>
                             </form>
                            {/if}
-                            <a href="{urlFor name="user-download" options="id.{$certification['id']}"}">{$certification['note']|escape:'html':'UTF-8'}</a>
                         {else}
                         {$certification['note']|escape:'html':'UTF-8'}
                         {/if}
