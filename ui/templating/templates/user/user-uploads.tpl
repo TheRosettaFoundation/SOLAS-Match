@@ -17,13 +17,13 @@
             {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
         </p>
     {/if}
-
     {if isset($flash['error'])}
         <p class="alert alert-error" style="margin-bottom: 50px">
             {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
         </p>
     {/if}
 
+    {if $upload_pending}
     <form method="post" action="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$cert_id"}" enctype="multipart/form-data" accept-charset="utf-8">
         <table>
             <tr><td>
@@ -37,24 +37,22 @@
 
             <tr><td style="padding-bottom: 20px">
                 <hr/>
-                <div id="placeholder_for_errors_2"></div>
             </td></tr>
 
             <tr><td align="center">
-            {if $upload_pending}
                 <button type="submit" class='btn btn-primary' id="updateBtn">
                     <i class="icon-refresh icon-white"></i> Upload the Certificate
                 </button> (note the list of certificates submitted will not update until you come back to your profile)
-            {else}
-                <a href="javascript:window.close();" class="btn btn-primary">
-                    <i class="icon-remove-sign icon-white"></i> Click to Close Window
-                </a>
-            {/if}
             </td></tr>
         </table>
 
         <input type="hidden" name="sesskey" value="{$sesskey}" />
     </form>
+    {else}
+        <a href="javascript:window.close();" class="btn btn-primary">
+            <i class="icon-remove-sign icon-white"></i> Click to Close Window
+        </a>
+    {/if}
 </div>
 
 {include file='footer.tpl'}
