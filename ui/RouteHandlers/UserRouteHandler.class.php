@@ -1597,7 +1597,7 @@ EOD;
 
     public static function profile_shared_with_key($key)
     {
-        $key = base64_decode($key);
+        $key = base64_decode(urldecode($key));
         $iv = substr($key, -16);
         $encrypted = substr($key, 0, -18);
         $user_id = (int)openssl_decrypt($encrypted, 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
