@@ -39,7 +39,7 @@
             <tr><td align="center">
                 <button type="submit" class='btn btn-primary' id="updateBtn">
                     <i class="icon-refresh icon-white"></i> Upload the Certificate
-                </button>
+                </button> (note the list of certificates submitted will not update until you come back to your profile)
             </td></tr>
         </table>
 

@@ -1334,13 +1334,7 @@ EOD;
                     $userFileName = substr($userFileName, 0, $extensionStartIndex + 1) . $extension;
                 }
                 $userDao->saveUserFile($user_id, $cert_id, $post['note'], $userFileName, $data);
-                $extra_scripts  = '<script type="text/javascript">
-if (!window.opener.closed) {
-window.opener.location.reload();
-window.opener.focus();
-}
-window.close();
-</script>';
+                $extra_scripts  = '<script type="text/javascript">window.close();</script>';
             }
         }
 
