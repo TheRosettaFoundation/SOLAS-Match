@@ -1586,7 +1586,7 @@ error_log(print_r($result, true));
         $expertise_list['Shelter']            = ['desc' => 'Shelter', 'state' => 0];
         $expertise_list['WASH']               = ['desc' => 'Water, Sanitation and Hygiene Promotion', 'state' => 0];
         $expertise_list['Logistics']          = ['desc' => 'Logistics', 'state' => 0];
-        $expertise_list['Equality']           = ['desc' => 'Equality & Inclusion', 'state' => 0]
+        $expertise_list['Equality']           = ['desc' => 'Equality & Inclusion', 'state' => 0];
         $expertise_list['Gender']             = ['desc' => 'Gender Equality', 'state' => 0];
         $expertise_list['Peace']              = ['desc' => 'Peace & Justice', 'state' => 0];
         $expertise_list['Environment']        = ['desc' => 'Environment & Climate Action', 'state' => 0];
