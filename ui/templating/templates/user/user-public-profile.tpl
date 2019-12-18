@@ -307,14 +307,14 @@
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
 <table border="0">
     <tr valign="top">
-        <td><h3>Administrative Section</h3></td><td></td>
+        <td<td style="width: 80%"><h3>Administrative Section</h3></td><td style="width: 20%"></td>
     </tr>
     <tr valign="top">
         <td>Comment</td>
         <td>Willingness to work again score (1 to 5)</td>
     </tr>
     <tr valign="top">
-        <td><input type='text' value="" name="comment" id="comment" style="width: 90%" /></td>
+        <td><input type='text' value="" name="comment" id="comment" style="width: 98%" /></td>
         <td><input type='text' value="" name="work_again" id="work_again" /></td>
     </tr>
     <tr valign="top">
@@ -323,8 +323,8 @@
     </tr>
 {foreach $admin_comments as $admin_comment}
     <tr valign="top">
-        <td>{$admin_comment['admin_comment']}</td>
-        <td>{$admin_comment['work_again']}</td>
+        <td><ul><li>{$admin_comment['admin_comment']|escape:'html':'UTF-8'}</li></ul></td>
+        <td><ul><li>{$admin_comment['work_again']}</li></ul></td>
     </tr>
 {/foreach}
 </table>
