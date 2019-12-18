@@ -323,8 +323,8 @@
     </tr>
 {foreach $admin_comments as $admin_comment}
     <tr valign="top">
-        <td>$admin_comment['admin_comment']</td>
-        <td>$admin_comment['work_again']</td>
+        <td>{$admin_comment['admin_comment']}</td>
+        <td>{$admin_comment['work_again']}</td>
     </tr>
 {/foreach}
 </table>
