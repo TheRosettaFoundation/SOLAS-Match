@@ -257,7 +257,7 @@ function validateForm()
     if (document.getElementById("expertise" + i).checked) checkedCount++;
   }
   if (!checkedCount) {
-    alertError = "You must indicate at least one field of expertise such as general.";
+    alertError = "You must indicate at least one field of expertise.";
     set_all_errors_for_submission();
     return false;
   }
