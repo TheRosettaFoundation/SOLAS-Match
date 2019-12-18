@@ -310,10 +310,11 @@
     </tr>
     <tr valign="top">
         <td><input type='text' value="" name="comment" id="comment" /></td>
-        <td><input type='text' value="" name="work_again" id="work_again" />
-            <i class="icon-upload icon-white" style="position:relative; right:-30px; top:12px;"></i>
-            <input type="submit" class="pull-right btn btn-primary" name="admin_comment" value="Submit" />
-        </td>
+        <td><input type='text' value="" name="work_again" id="work_again" /></td>
+    </tr>
+    <tr valign="top">
+        <td></td>
+        <td><i class="icon-upload icon-white"></i><input type="submit" class="pull-right btn btn-primary" name="admin_comment" value="Submit" /></td>
     </tr>
 {foreach $admin_comments as $admin_comment}
     <tr valign="top">
