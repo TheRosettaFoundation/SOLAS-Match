@@ -40,8 +40,8 @@
                         {/if}
                         {if $isSiteAdmin && $howheard['reviewed'] == 0}
                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                                <i class="icon-wrench icon-white"></i> Mark New User as Reviewed
-                                <input type="submit" name="mark_reviewed" value="Submit" />
+                                <i class="icon-wrench icon-white"></i>
+                                <input type="submit" name="mark_reviewed" value="Mark New User as Reviewed" />
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                             </form>
                         {/if}
