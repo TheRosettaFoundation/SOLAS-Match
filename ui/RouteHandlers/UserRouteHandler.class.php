@@ -1336,7 +1336,7 @@ EOD;
                 }
                 $userDao->saveUserFile($user_id, $cert_id, $post['note'], $userFileName, $data);
                 $upload_pending = 0;
-                $app->flash('success', 'Certificate uploaded sucessfully, please click <a href="javascript:window.close();">Close Window</a>');
+                $app->flashNow('success', 'Certificate uploaded sucessfully, please click <a href="javascript:window.close();">Close Window</a>');
             }
         }
 
