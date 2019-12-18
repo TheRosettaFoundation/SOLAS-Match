@@ -308,7 +308,7 @@
         <td>Willingness to work again score (1 to 5)</td>
     </tr>
     <tr valign="top">
-        <td><input type='text' value="" name="comment" id="comment" /></td>
+        <td><input type='text' value="" name="comment" id="comment" style="width: 90%" /></td>
         <td><input type='text' value="" name="work_again" id="work_again" /></td>
     </tr>
     <tr valign="top">
