@@ -40,7 +40,6 @@
                         {/if}
                         {if $isSiteAdmin && $howheard['reviewed'] == 0}
                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                                <i class="icon-wrench icon-white"></i>
                                 <input type="submit" class="btn btn-primary" name="mark_reviewed" value="Mark New User as Reviewed" />
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                             </form>
@@ -252,7 +251,6 @@
                         {if $private_access || $isSiteAdmin}
                             {if $isSiteAdmin && $certification['reviewed'] == 0 && $certification['certification_key'] != 'TRANSLATOR' && $certification['certification_key'] != 'TWB'}
                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                                <i class="icon-wrench icon-white"></i>
                                 <input type="submit" class="btn btn-primary" name="mark_certification_reviewed" value="Mark Reviewed" />
                                 <input type="hidden" name="certification_id" value="{$certification['id']}" />
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -315,7 +313,7 @@
     </tr>
     <tr valign="top">
         <td></td>
-        <td><i class="icon-upload icon-white"></i><input type="submit" class="btn btn-primary" name="admin_comment" value="Submit" /></td>
+        <td><input type="submit" class="btn btn-primary" name="admin_comment" value="Submit" /></td>
     </tr>
 {foreach $admin_comments as $admin_comment}
     <tr valign="top">
