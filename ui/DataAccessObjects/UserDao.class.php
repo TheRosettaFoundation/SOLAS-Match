@@ -1644,7 +1644,7 @@ error_log(print_r($result, true));
         foreach ($certifications as $certification) {
             if (!empty($certification_list[$certification['certification_key']])) {
                 $certification_list[$certification['certification_key']]['state'] = 1;
-                $certification_list[$certification['certification_key']]['reviewed'] = $certification['reviewed'];
+                if ($certification['reviewed']) $certification_list[$certification['certification_key']]['reviewed'] = 1;
             }
         }
         return $certification_list;
