@@ -1567,7 +1567,7 @@ EOD;
         $euser_id = $user_id + 999999; // Ensure we don't use identical (shared profile) key as word count badge (for a bit of extra security)
         $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
         $encrypted = openssl_encrypt("$euser_id", 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
-        $key = urlencode(base64_encode("$encrypted::$iv"));
+        $key = bin2hex("$encrypted::$iv");
 
         $howheard = $userDao->getUserHowheards($user_id);
         if (empty($howheard)) {
@@ -1597,7 +1597,7 @@ EOD;
 
     public static function profile_shared_with_key($key)
     {
-        $key = base64_decode(urldecode($key));
+        $key = hex2bin($key);
         $iv = substr($key, -16);
         $encrypted = substr($key, 0, -18);
         $user_id = (int)openssl_decrypt($encrypted, 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
