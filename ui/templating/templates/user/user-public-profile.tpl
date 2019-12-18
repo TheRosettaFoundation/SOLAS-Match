@@ -56,6 +56,12 @@
 {/if}
 {/if}
 
+{if isset($flash['error'])}
+    <p class="alert alert-error" style="margin-bottom: 50px">
+        {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
+    </p>
+{/if}
+
 {if $private_access || $isSiteAdmin || $receive_credit}
 
 <table border="0">
