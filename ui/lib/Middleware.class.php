@@ -23,9 +23,9 @@ class Middleware
         }
 
 // THIS NEEDED TEMP 24 HOURS AFTER GO LIVE ON TROMMONS BECAUSE NEEDS TO BE LOGIN CYCLE
-//$userDao = new DAO\UserDao();
-//REMOVE ABOVE BELOW TEMP
-//$userDao->setRequiredProfileCompletedinSESSION($_SESSION['user_id']);
+$userDao = new DAO\UserDao();
+$userDao->setRequiredProfileCompletedinSESSION($_SESSION['user_id']);
+//REMOVE ABOVE
         if (empty($_SESSION['profile_completed'])) {
             $userDao = new DAO\UserDao();
             if ($userDao->is_admin_or_org_member($_SESSION['user_id'])) {
