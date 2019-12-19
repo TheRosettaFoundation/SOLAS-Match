@@ -31,8 +31,14 @@
                 <input type='text' value="{$desc}" style="width: 80%" name="note" id="note" {if $desc != ''}readonly="readonly"{/if}/>
             </td></tr>
 
+            {if $desc != ''}
             <tr><td style="font-weight: bold">Please submit a proof of certification</td></tr>
             <tr><td><p class="desc">You will be upgraded to Verified Translator, which will give you immediate access to all projects available, for the verified combination.</p></td></tr>
+            {else}
+            <tr><td style="font-weight: bold">Please provide a short title for your qualification and upload the corresponding file</td></tr>
+            <tr><td><p class="desc">Project Officers will also upload here any certificates you obtain while volunteering with TWB.</p></td></tr>
+            {/if}
+
             <tr><td><input type="file" name="userFile" id="userFile" /> <span style="color: red">*</span></strong></label></td></tr>
 
             <tr><td style="padding-bottom: 20px">
