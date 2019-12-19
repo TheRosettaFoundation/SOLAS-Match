@@ -285,7 +285,7 @@
                         <tr>
                             <td>
                                <table>
-                                   <tr><td><h3>Quality metric</h3></td><td><h3>Average score out of 5</h3></td></tr>
+                                   <tr><td><h3>Average scores in reviews<br />This information is only visible to you</h3></td><td><h3>Average score out of 5</h3></td></tr>
                                    <tr><td>Accuracy</td><td>{$quality_score['accuracy']}</td></tr>
                                    <tr><td>Fluency</td><td>{$quality_score['fluency']}</td></tr>
                                    <tr><td>Terminology</td><td>{$quality_score['terminology']}</td></tr>
