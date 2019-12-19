@@ -102,7 +102,7 @@ If you have any questions about submitting the form, please email <a href="mailt
                 <select name="country" id="country" style="width: 80%">
                     <option value="{$userPersonalInfo->getCountry()|escape:'html':'UTF-8'}" selected="selected">{$userPersonalInfo->getCountry()|escape:'html':'UTF-8'}</option>
                     {foreach $countries as $country}
-                        <option value="{$country->getName()}">{$country->getName()}</option>
+                        <option value="{$country->getName()|escape:'html':'UTF-8'}">{$country->getName()|escape:'html':'UTF-8'}</option>
                     {/foreach}
                 </select>
 
