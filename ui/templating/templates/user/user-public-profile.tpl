@@ -1,6 +1,5 @@
 {include file='header.tpl'}
 
-{if !isset($no_header)}
 {if isset($this_user)}
     <div class="page-header">
         <h1>
@@ -14,7 +13,7 @@
                     {else}
                         {Localisation::getTranslation('common_user_profile')}
                     {/if}
-                    <small>{Localisation::getTranslation('user_public_profile_0')}</small>   
+                    {if !isset($no_header)}<small>{Localisation::getTranslation('user_public_profile_0')}</small>{/if}
                     
                 </td>
                 <td>                    
@@ -53,7 +52,6 @@
             
 {else}
     <div class='page-header'><h1>{Localisation::getTranslation('common_user_profile')} <small>{Localisation::getTranslation('user_public_profile_2')}</small></h1></div>
-{/if}
 {/if}
 
 {if isset($flash['error'])}
