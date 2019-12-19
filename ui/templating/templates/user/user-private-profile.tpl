@@ -99,7 +99,12 @@ If you have any questions about submitting the form, please email <a href="mailt
                 <input type='text' value="{$userPersonalInfo->getCity()|escape:'html':'UTF-8'}" style="width: 80%" name="city" id="city" />
 
                 <label for='country'><strong>{Localisation::getTranslation('common_country')}:</strong></label>
-                <input type='text' value="{$userPersonalInfo->getCountry()|escape:'html':'UTF-8'}" style="width: 80%" name="country" id="country" />
+                <select name="country" id="country" style="width: 80%">
+                    <option value="{$userPersonalInfo->getCountry()|escape:'html':'UTF-8'}" selected="selected">{$userPersonalInfo->getCountry()|escape:'html':'UTF-8'}</option>
+                    {foreach $countries as $country}
+                        <option value="{$country->getName()}">{$country->getName()}</option>
+                    {/foreach}
+                </select>
 
                 <div id="language_area">
                     <div id = "nativeLanguageDiv">
@@ -158,7 +163,7 @@ If you have any questions about submitting the form, please email <a href="mailt
                     <strong>{Localisation::getTranslation('user_task_stream_notification_edit_0')}</strong>
                 </p>
                 <p>
-                    {Localisation::getTranslation('user_task_stream_notification_edit_1')}
+                    This notification will periodically send you a list of the tasks that are most suited to your skills and areas of interest. You will be able to change the settings from your profile in the future.
                     See <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">Signing up for Kató Platform email notifications</a>.
                 </p>
                 <p>

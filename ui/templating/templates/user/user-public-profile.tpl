@@ -1,6 +1,5 @@
 {include file='header.tpl'}
 
-{if !isset($no_header)}
 {if isset($this_user)}
     <div class="page-header">
         <h1>
@@ -14,7 +13,7 @@
                     {else}
                         {Localisation::getTranslation('common_user_profile')}
                     {/if}
-                    <small>{Localisation::getTranslation('user_public_profile_0')}</small>   
+                    {if !isset($no_header)}<small>{Localisation::getTranslation('user_public_profile_0')}</small>{/if}
                     
                 </td>
                 <td>                    
@@ -53,7 +52,6 @@
             
 {else}
     <div class='page-header'><h1>{Localisation::getTranslation('common_user_profile')} <small>{Localisation::getTranslation('user_public_profile_2')}</small></h1></div>
-{/if}
 {/if}
 
 {if isset($flash['error'])}
@@ -285,7 +283,7 @@
                         <tr>
                             <td>
                                <table>
-                                   <tr><td><h3>Quality metric</h3></td><td><h3>Average score out of 5</h3></td></tr>
+                                   <tr><td><h3>Average scores in reviews<br />This information is only visible to you</h3></td><td><h3>Average score out of 5</h3></td></tr>
                                    <tr><td>Accuracy</td><td>{$quality_score['accuracy']}</td></tr>
                                    <tr><td>Fluency</td><td>{$quality_score['fluency']}</td></tr>
                                    <tr><td>Terminology</td><td>{$quality_score['terminology']}</td></tr>
