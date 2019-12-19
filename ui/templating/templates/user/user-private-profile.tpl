@@ -99,7 +99,12 @@ If you have any questions about submitting the form, please email <a href="mailt
                 <input type='text' value="{$userPersonalInfo->getCity()|escape:'html':'UTF-8'}" style="width: 80%" name="city" id="city" />
 
                 <label for='country'><strong>{Localisation::getTranslation('common_country')}:</strong></label>
-                <input type='text' value="{$userPersonalInfo->getCountry()|escape:'html':'UTF-8'}" style="width: 80%" name="country" id="country" />
+                <select name="country" id="country" style="width: 80%">
+                    <option value="{$userPersonalInfo->getCountry()|escape:'html':'UTF-8'}" selected="selected">{$userPersonalInfo->getCountry()|escape:'html':'UTF-8'}</option>
+                    {foreach $countries as $country}
+                        <option value="{$country->getName()}">{$country->getName()}</option>
+                    {/foreach}
+                </select>
 
                 <div id="language_area">
                     <div id = "nativeLanguageDiv">
