@@ -163,7 +163,7 @@ If you have any questions about submitting the form, please email <a href="mailt
                     <strong>{Localisation::getTranslation('user_task_stream_notification_edit_0')}</strong>
                 </p>
                 <p>
-                    {Localisation::getTranslation('user_task_stream_notification_edit_1')}
+                    This notification will periodically send you a list of the tasks that are most suited to your skills and areas of interest. You will be able to change the settings from your profile in the future.
                     See <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">Signing up for Kató Platform email notifications</a>.
                 </p>
                 <p>
