@@ -8435,7 +8435,7 @@ BEGIN
     JOIN Languages               l ON u.language_id=l.id
     JOIN Countries               c ON u.country_id=c.id
     WHERE
-        hh.reviewed=0
+        hh.reviewed=99
 )
 UNION
 (
