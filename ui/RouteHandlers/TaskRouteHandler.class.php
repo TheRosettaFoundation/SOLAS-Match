@@ -1201,7 +1201,7 @@ class TaskRouteHandler
                       }
 
                       if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION  && !$translated_status) $matecat_url = '';
-                      if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && !approved_status   ) $matecat_url = '';
+                      if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && !$approved_status  ) $matecat_url = '';
                   } else {
                    $recorded_status = $taskDao->getMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password);
                    if ($recorded_status === 'approved') { // We do not need to query MateCat...
