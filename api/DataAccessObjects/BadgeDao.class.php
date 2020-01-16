@@ -119,7 +119,9 @@ class BadgeDao
             Lib\PDOWrapper::cleanseNull($badgeId);
         $validation = self::validateUserBadge($userId, $badgeId);
         if (!$validation) {
-            Lib\Notify::sendUserAssignedBadgeEmail($userId, $badgeId);
+            if ($badgeId == 4 || $badgeId >= 100) { // Only send Registered or Organisation Badges (others are not really meaningfull)
+                Lib\Notify::sendUserAssignedBadgeEmail($userId, $badgeId);
+            }
             $result = Lib\PDOWrapper::call("assignBadge", $args);
             if ($result) {
                 return $result[0]["result"];

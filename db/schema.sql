@@ -699,13 +699,17 @@ CREATE TABLE IF NOT EXISTS `BannedUsers` (
 -- Dumping data for table Solas-Match-Test.Badges: ~4 rows (approximately)
 /*!40000 ALTER TABLE `Badges` DISABLE KEYS */;
 REPLACE INTO `Badges` (`id`, `owner_id`, `title`, `description`) VALUES
-	(3, NULL, 'system_badge_profile_filler_title', 'system_badge_profile_filler_desc'),
-	(4, NULL, 'system_badge_registered_title', 'system_badge_registered_desc'),
-	(5, NULL, 'system_badge_native_language_title', 'system_badge_native_language_desc'),
-        (6, NULL, 'system_badge_translator_title', 'system_badge_translator_desc'),
-        (7, NULL, 'system_badge_proofreader_title', 'system_badge_proofreader_desc'),
-        (8, NULL, 'system_badge_interpreter_title', 'system_badge_interpreter_desc'),
-        (9, NULL, 'system_badge_polyglot_title', 'system_badge_polyglot_desc');
+    ( 3, NULL, 'Profile-Filler',      'Filled in all info for user  public profile.'),
+    ( 4, NULL, 'Registered',          'Successfully set up an account'),
+    ( 5, NULL, 'Native-Language',     'Filled in your native language on your user profile successfully.'),
+    ( 6, NULL, 'Translator',          'This volunteer is available for translation tasks.'),
+    ( 7, NULL, 'Reviewer',            'This volunteer is available for revising tasks.'),
+    ( 8, NULL, 'Interpreter',         'This volunteer is available for interpreting tasks.'),
+    ( 9, NULL, 'Polyglot',            'One or more secondary languages selected on your profile.'),
+    (10, NULL, 'Subtitling',          'This volunteer is available for subtitling tasks.'),
+    (11, NULL, 'Monolingual editing', 'This volunteer is available for monolingual editing tasks.'),
+    (12, NULL, 'DTP',                 'This volunteer is available for DTP tasks.'),
+    (13, NULL, 'Voiceover',           'This volunteer is available for voiceover tasks.');
 ALTER TABLE `Badges` AUTO_INCREMENT=100;
 
 -- Dumping structure for table Solas-Match-Test.Countries
@@ -1549,6 +1553,56 @@ CREATE TABLE IF NOT EXISTS `DiscourseID` (
   CONSTRAINT FK_DiscourseID_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `UserURLs` (
+  user_id INT(10) UNSIGNED NOT NULL,
+  url_key VARCHAR(20)  COLLATE utf8_unicode_ci NOT NULL,
+  url     VARCHAR(255) COLLATE utf8_unicode_ci NOT NULL,
+  UNIQUE KEY `UserURLs` (`user_id`, `url_key`),
+  KEY `FK_UserURLs_Users` (`user_id`),
+  CONSTRAINT `FK_UserURLs_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `UserExpertises` (
+  user_id       INT(10) UNSIGNED NOT NULL,
+  expertise_key VARCHAR(20) COLLATE utf8_unicode_ci NOT NULL,
+  UNIQUE KEY `UserExpertises` (`user_id`, `expertise_key`),
+  KEY `FK_UserExpertises_Users` (`user_id`),
+  CONSTRAINT `FK_UserExpertises_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `UserHowheards` (
+  user_id      INT(10) UNSIGNED NOT NULL,
+  reviewed     INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  howheard_key VARCHAR(20) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY `FK_UserHowheards_Users` (`user_id`),
+  KEY         `FK_UserHowheards_reviewed` (`reviewed`),
+  CONSTRAINT  `FK_UserHowheards_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `UserCertifications` (
+  id                INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  user_id           INT(10) UNSIGNED NOT NULL,
+  vid               INT(10) UNSIGNED NOT NULL default 0,
+  reviewed          INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  certification_key VARCHAR(20)  COLLATE utf8_unicode_ci NOT NULL,
+  filename          VARCHAR(128) COLLATE utf8_unicode_ci NOT NULL,
+  mimetype          VARCHAR(128) COLLATE utf8_unicode_ci NOT NULL,
+  note              TEXT         COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_UserCertifications_Users` (`user_id`),
+  KEY `FK_UserCertifications_reviewed` (`reviewed`),
+  CONSTRAINT `FK_UserCertifications_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `admin_comment` (
+  user_id       INT(10) UNSIGNED NOT NULL,
+  admin_id      INT(10) UNSIGNED NOT NULL,
+  work_again    INT(10) UNSIGNED NOT NULL,
+  admin_comment VARCHAR(2000) COLLATE utf8_unicode_ci NOT NULL,
+  KEY `FK_admin_comment_Users` (`user_id`),
+  CONSTRAINT `FK_admin_comment_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -2072,6 +2126,15 @@ BEGIN
         WHERE user_id=userId;
 
         DELETE FROM UserQualifiedPairs
+        WHERE user_id=userId;
+
+        DELETE FROM UserURLs
+        WHERE user_id=userId;
+
+        DELETE FROM UserExpertises
+        WHERE user_id=userId;
+
+        DELETE FROM UserHowheards
         WHERE user_id=userId;
 
         select 1 as result;
@@ -4974,7 +5037,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `removeUserBadge`(IN `uID` INT, IN `
 BEGIN
 	set @owner = null;
 	select b.owner_id into @owner from Badges b where b.id=bID;
-        if @owner is not null  or bID in(6,7,8) then
+        if @owner is not null  or bID in(6,7,8,10,11,12,13) then
             DELETE FROM UserBadges
             WHERE user_id=uID
             AND badge_id=bID;
@@ -8177,17 +8240,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `terms_accepted`(IN userID INT)
 BEGIN
      SET @level = 0;
      SELECT accepted_level INTO @level FROM TermsAcceptedUsers WHERE user_id=userID;
-
-     if @level=0 THEN
-         IF      EXISTS (SELECT 1 FROM Admins WHERE user_id=userID) THEN
-             REPLACE INTO TermsAcceptedUsers (user_id, accepted_level) VALUES (userID, 999999);
-             SELECT 999999 INTO @level;
-         ELSEIF EXISTS (SELECT 1 FROM OrganisationMembers WHERE user_id=userID) THEN
-             REPLACE INTO TermsAcceptedUsers (user_id, accepted_level) VALUES (userID, 99999);
-             SELECT 99999 INTO @level;
-         END IF;
-     END IF;
-
      SELECT @level AS accepted_level;
 END//
 DELIMITER ;
@@ -8245,6 +8297,228 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_discourse_id`(IN projectID INT)
 BEGIN
     SELECT * FROM DiscourseID WHERE project_id=projectID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getUserURLs`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserURLs`(IN uID INT)
+BEGIN
+    SELECT * FROM UserURLs WHERE user_id=uID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insertUserURL`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertUserURL`(IN uID INT, IN ukey VARCHAR(20), IN value VARCHAR(255))
+BEGIN
+    REPLACE INTO UserURLs
+               (user_id, url_key,   url)
+        VALUES (    uID,    ukey, value);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getUserExpertises`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserExpertises`(IN uID INT)
+BEGIN
+    SELECT * FROM UserExpertises WHERE user_id=uID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `addUserExpertise`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addUserExpertise`(IN uID INT, IN ekey VARCHAR(20))
+BEGIN
+    REPLACE INTO UserExpertises
+               (user_id, expertise_key)
+        VALUES (    uID,          ekey);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `removeUserExpertise`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeUserExpertise`(IN uID INT, IN ekey VARCHAR(20))
+BEGIN
+    DELETE
+    FROM UserExpertises
+    WHERE
+        user_id=uID AND
+        expertise_key=ekey;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getUserHowheards`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserHowheards`(IN uID INT)
+BEGIN
+    SELECT * FROM UserHowheards WHERE user_id=uID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insertUserHowheard`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertUserHowheard`(IN uID INT, IN hkey VARCHAR(20))
+BEGIN
+    REPLACE INTO UserHowheards
+               (user_id, howheard_key)
+        VALUES (    uID,         hkey);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `updateUserHowheard`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateUserHowheard`(IN uID INT, IN r INT)
+BEGIN
+    UPDATE UserHowheards
+    SET reviewed=r
+    WHERE user_id=uID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getUserCertifications`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserCertifications`(IN uID INT)
+BEGIN
+    SELECT *
+    FROM UserCertifications
+    WHERE user_id=uID
+    ORDER BY note, vid;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getUserCertificationByID`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserCertificationByID`(IN primaryID INT)
+BEGIN
+    SELECT *
+    FROM UserCertifications
+    WHERE id=primaryID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insertUserCertification`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertUserCertification`(IN uID INT, IN `versionID` INT, IN ckey VARCHAR(20), IN file VARCHAR(128), IN mime VARCHAR(128), IN n TEXT)
+BEGIN
+    REPLACE INTO UserCertifications
+               (user_id,       vid, certification_key, filename, mimetype,  note)
+        VALUES (    uID, versionID,              ckey, file,     mime,         n);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `updateCertification`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateCertification`(IN primaryID INT, IN r INT)
+BEGIN
+    UPDATE UserCertifications
+    SET reviewed=r
+    WHERE id=primaryID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `users_review`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `users_review`()
+BEGIN
+(
+    SELECT
+        0    AS cert_id,
+        ''   AS certificate,
+        u.id AS user_id,
+        CONCAT (IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`, '')) AS name,
+        CONCAT (l.`en-name`, '(' , c.`en-name`, ')')                   AS native_language,
+        IFNULL(i.country, '')                                          AS country_address
+    FROM UserHowheards          hh
+    JOIN Users                   u ON hh.user_id=u.id
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    JOIN Languages               l ON u.language_id=l.id
+    JOIN Countries               c ON u.country_id=c.id
+    WHERE
+        hh.reviewed=99
+)
+UNION
+(
+    SELECT
+        uc.id   AS cert_id,
+        uc.note AS certificate,
+        u.id    AS user_id,
+        CONCAT (IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`, '')) AS name,
+        CONCAT (l.`en-name`, '(' , c.`en-name`, ')')                   AS native_language,
+        IFNULL(i.country, '')                                          AS country_address
+    FROM UserCertifications     uc
+    JOIN Users                   u ON uc.user_id=u.id
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    JOIN Languages               l ON u.language_id=l.id
+    JOIN Countries               c ON u.country_id=c.id
+    WHERE
+        uc.reviewed=0 AND
+        uc.certification_key NOT IN ('TRANSLATOR', 'TWB')
+)
+ORDER BY user_id, certificate;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `supported_ngos`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `supported_ngos`(IN uID INT)
+BEGIN
+    SELECT DISTINCT
+        o.name AS org_name,
+        o.id AS org_id
+    FROM TaskClaims   tc
+    JOIN Tasks         t ON tc.task_id=t.id
+    JOIN Projects      p ON t.project_id=p.id
+    JOIN Organisations o ON p.organisation_id=o.id
+    WHERE
+        tc.user_id=uID AND
+        t.`task-status_id`=4
+    ORDER BY o.name;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `quality_score`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `quality_score`(IN `uID` INT)
+BEGIN
+    SELECT
+        IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.corrections, 0))/SUM(consistency<10), 1), '') AS cor,
+        IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.grammar,     0))/SUM(consistency<10), 1), '') AS gram,
+        IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.spelling,    0))/SUM(consistency<10), 1), '') AS spell,
+        IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.consistency, 0))/SUM(consistency<10), 1), '') AS cons,
+        SUM(consistency<10) AS num_legacy,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.corrections,        0))/SUM(consistency>=10), 1), '') AS accuracy,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.grammar,            0))/SUM(consistency>=10), 1), '') AS fluency,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.spelling,           0))/SUM(consistency>=10), 1), '') AS terminology,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.consistency   % 10, 0))/SUM(consistency>=10), 1), '') AS style,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.consistency DIV 10, 0))/SUM(consistency>=10), 1), '') AS design,
+        SUM(consistency>=10) AS num_new,
+        COUNT(*)             AS num
+    FROM TaskReviews            tr
+    JOIN Tasks                   t  ON tr.task_id=t.id
+    JOIN TaskClaims             tc  ON tr.task_id=tc.task_id
+    WHERE
+        t.`task-status_id`=4 AND
+        tc.user_id=uID
+    GROUP BY tc.user_id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `admin_comments`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `admin_comments`(IN uID INT)
+BEGIN
+    SELECT * FROM admin_comment WHERE user_id=uID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_admin_comment`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_admin_comment`(IN uID INT, IN aID INT, IN work INT, IN comment VARCHAR(2000))
+BEGIN
+    INSERT INTO admin_comment
+               (user_id, admin_id, work_again, admin_comment)
+        VALUES (    uID,      aID,       work,       comment);
 END//
 DELIMITER ;
 

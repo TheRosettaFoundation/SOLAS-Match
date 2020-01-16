@@ -184,12 +184,6 @@ class Users
                         '\SolasMatch\API\V0\Users::getUserOrgs'
                     );
 
-                    $app->get(
-                        '/badges(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Users::getUserbadges'
-                    );
-
                     $app->post(
                         '/badges(:format)/',
                         '\SolasMatch\API\Lib\Middleware::isloggedIn',
@@ -272,12 +266,6 @@ class Users
                         '/projects(:format)/',
                         '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
                         '\SolasMatch\API\V0\Users::getUserTrackedProjects'
-                    );
-
-                    $app->get(
-                        '/personalInfo(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                        '\SolasMatch\API\V0\Users::getUserPersonalInfo'
                     );
 
                     $app->post(
@@ -689,11 +677,6 @@ class Users
         API\Dispatcher::sendResponse(null, DAO\UserDao::findOrganisationsUserBelongsTo($userId), null, $format);
     }
 
-    public static function getUserbadges($userId, $format = ".json")
-    {
-        API\Dispatcher::sendResponse(null, DAO\UserDao::getUserBadges($userId), null, $format);
-    }
-
     public static function addUserbadges($userId, $format = ".json")
     {
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
@@ -926,17 +909,6 @@ class Users
     public static function getUserTrackedProjects($userId, $format = ".json")
     {
         $data = DAO\UserDao::getTrackedProjects($userId);
-        API\Dispatcher::sendResponse(null, $data, null, $format);
-    }
-
-    public static function getUserPersonalInfo($userId, $format = ".json")
-    {
-        if (!is_numeric($userId) && strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
-        $data = DAO\UserDao::getPersonalInfo(null, $userId);
         API\Dispatcher::sendResponse(null, $data, null, $format);
     }
 

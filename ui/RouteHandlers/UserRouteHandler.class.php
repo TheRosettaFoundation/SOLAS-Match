@@ -77,10 +77,39 @@ class UserRouteHandler
         )->via("POST")->name("user-public-profile");
 
         $app->get(
+            '/:key/key/',
+            array($this, "profile_shared_with_key")
+        )->name('shared_with_key');
+
+        $app->get(
             "/:user_id/privateProfile/",
-            array($middleware, "authUserIsLoggedIn"),
+            array($middleware, "authUserIsLoggedInNoProfile"),
             array($this, "userPrivateProfile")
         )->via("POST")->name("user-private-profile");
+
+        $app->get(
+            '/:user_id/user-code-of-conduct/',
+            array($middleware, 'authUserIsLoggedInNoProfile'),
+            array($this, 'userCodeOfConduct')
+        )->via("POST")->name('user-code-of-conduct');
+
+        $app->get(
+            '/:user_id/user-uploads/:cert_id/',
+            array($middleware, 'authUserIsLoggedInNoProfile'),
+            array($this, 'userUploads')
+        )->via("POST")->name('user-uploads');
+
+        $app->get(
+            '/:id/user-download/',
+            array($middleware, 'authUserIsLoggedIn'),
+            array($this, 'userDownload')
+        )->name('user-download');
+
+        $app->get(
+            '/users_review/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'users_review')
+        )->name('users_review');
 
         $app->get(
             "/:user_id/notification/stream/",
@@ -601,13 +630,15 @@ class UserRouteHandler
 
                     //Set site language to user's preferred language if it is not already
                     $currentSiteLang = $langDao->getLanguageByCode(Common\Lib\UserSession::getUserLanguage());
-                    $userInfo = $userDao->getPersonalInfo($user->getId());
+                    $userInfo = $userDao->getUserPersonalInformation($user->getId());
                     $langPrefId = $userInfo->getLanguagePreference();
                     $preferredLang = $langDao->getLanguage($langPrefId);
                     if ($currentSiteLang != $preferredLang) {
                         Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
                     }
-                    
+
+                    $userDao->setRequiredProfileCompletedinSESSION($user->getId());
+
                     //Redirect to homepage, or the page the page user was previously on e.g. if their
                     //session timed out and they are logging in again.
                     if ($request) {
@@ -671,12 +702,14 @@ class UserRouteHandler
 
                 //Set site language to user's preferred language if it is not already
                 $currentSiteLang = $langDao->getLanguageByCode(Common\Lib\UserSession::getUserLanguage());
-                $userInfo = $userDao->getPersonalInfo($user->getId());
+                $userInfo = $userDao->getUserPersonalInformation($user->getId());
                 $langPrefId = $userInfo->getLanguagePreference();
                 $preferredLang = $langDao->getLanguage($langPrefId);
                 if ($currentSiteLang != $preferredLang) {
                     Common\Lib\UserSession::setUserLanguage($preferredLang->getCode());
                 }
+
+                $userDao->setRequiredProfileCompletedinSESSION($user->getId());
                 
                 if ($request) {
                     $app->redirect($request);
@@ -923,6 +956,7 @@ EOD;
         $adminDao = new DAO\AdminDao();
         $langDao = new DAO\LanguageDao();
         $countryDao = new DAO\CountryDao();
+        $projectDao = new DAO\projectDao();
 
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
             $_SESSION['SESSION_CSRF_KEY'] = UserRouteHandler::random_string(10);
@@ -939,13 +973,17 @@ EOD;
 
         $userPersonalInfo = null;
         try {
-            $userPersonalInfo = $userDao->getPersonalInfo($user_id);
+            $userPersonalInfo = $userDao->getUserPersonalInformation($user_id);
         } catch (Common\Exceptions\SolasMatchException $e) {
-            // error_log("Error getting user personal info: $e");
         }
 
         $languages = $langDao->getLanguages();
+        $languages_array = [];
+        foreach ($languages as $language) {
+            $languages_array[$language->getCode()] = $language->getName();
+        }
         $countries = $countryDao->getCountries();
+        $language_selection = $projectDao->generate_language_selection();
 
         $nativeLocale = $user->getNativeLocale();
         if ($nativeLocale) {
@@ -958,29 +996,15 @@ EOD;
         }
 
         $userQualifiedPairs = $userDao->getUserQualifiedPairs($user_id);
-        if (empty($userQualifiedPairs)) {
-            $userQualifiedPairs[] = array('language_code_source' => '', 'country_code_source' => '--', 'language_code_target' => '', 'country_code_target' => '--', 'qualification_level' => 1);
-        }
-        $userQualifiedPairsCount = count($userQualifiedPairs);
 
         $langPref = $langDao->getLanguage($userPersonalInfo->getLanguagePreference());
         $langPrefSelectCode = $langPref->getCode();
 
-        $badges = $userDao->getUserBadges($user_id);
-        $translator = false;
-        $proofreader = false;
-        $interpreter = false;
-        if (!empty($badges)) {
-            foreach ($badges as $badge) {
-                if ($badge->getId() == 6) {
-                    $translator = true;
-                } elseif ($badge->getId() == 7) {
-                    $proofreader = true;
-                } elseif ($badge->getId() == 8) {
-                    $interpreter = true;
-                }
-            }
-        }
+        $url_list           = $userDao->getURLList($user_id);
+        $capability_list    = $userDao->getCapabilityList($user_id);
+        $expertise_list     = $userDao->getExpertiseList($user_id);
+        $howheard_list      = $userDao->getHowheardList($user_id);
+        $certification_list = $userDao->getCertificationList($user_id);
 
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
         if (!is_null($loggedInUserId)) {
@@ -996,7 +1020,8 @@ EOD;
                 $user->setDisplayName($post['displayName']);
                 $user->setBiography($post['biography']);
 
-                if (!empty($post['nativeLanguageSelect']) && !empty($post['nativeCountrySelect'])) {
+                if (!empty($post['nativeLanguageSelect'])) {
+                    if (empty($post['nativeCountrySelect'])) $post['nativeCountrySelect'] = '--';
                     $locale = new Common\Protobufs\Models\Locale();
                     $locale->setLanguageCode($post['nativeLanguageSelect']);
                     $locale->setCountryCode($post['nativeCountrySelect']);
@@ -1021,9 +1046,9 @@ EOD;
                 $userPersonalInfo->setFirstName($post['firstName']);
                 $userPersonalInfo->setLastName($post['lastName']);
                 $userPersonalInfo->setMobileNumber($post['mobileNumber']);
-                $userPersonalInfo->setBusinessNumber($post['businessNumber']);
-                $userPersonalInfo->setJobTitle($post['jobTitle']);
-                $userPersonalInfo->setAddress($post['address']);
+                //$userPersonalInfo->setBusinessNumber($post['businessNumber']);
+                //$userPersonalInfo->setJobTitle($post['jobTitle']);
+                //$userPersonalInfo->setAddress($post['address']);
                 $userPersonalInfo->setCity($post['city']);
                 $userPersonalInfo->setCountry($post['country']);
 
@@ -1036,25 +1061,28 @@ EOD;
                 try {
                     $i = 0;
                     while (!empty($post["language_code_source_$i"]) && !empty($post["language_code_target_$i"])) {
-                        $post["language_code_source_$i"] = strtolower($post["language_code_source_$i"]); // Just in case browser is manipulated...
-                        $post["language_code_target_$i"] = strtolower($post["language_code_target_$i"]);
-                        $post["country_code_source_$i"]  = strtoupper($post["country_code_source_$i"]);
-                        $post["country_code_target_$i"]  = strtoupper($post["country_code_target_$i"]);
-                        if ($post["country_code_source_$i"] == '') $post["country_code_source_$i"] = '--'; // Any Language
-                        if ($post["country_code_target_$i"] == '') $post["country_code_target_$i"] = '--';
+                        list($language_code_source, $country_code_source) = $projectDao->convert_selection_to_language_country($post["language_code_source_$i"]);
+                        list($language_code_target, $country_code_target) = $projectDao->convert_selection_to_language_country($post["language_code_target_$i"]);
+
+                        $language_code_source = strtolower($language_code_source); // Just in case browser is manipulated...
+                        $language_code_target = strtolower($language_code_target);
+                        $country_code_source  = strtoupper($country_code_source);
+                        $country_code_target  = strtoupper($country_code_target);
+                        if ($country_code_source == '') $country_code_source = '--'; // Any Language
+                        if ($country_code_target == '') $country_code_target = '--';
 
                         $found = false;
                         foreach ($userQualifiedPairs as $userQualifiedPair) {
-                            if (($post["language_code_source_$i"] == $userQualifiedPair['language_code_source']) &&
-                                ($post["country_code_source_$i"]  == $userQualifiedPair['country_code_source'])  &&
-                                ($post["language_code_target_$i"] == $userQualifiedPair['language_code_target']) &&
-                                ($post["country_code_target_$i"]  == $userQualifiedPair['country_code_target'])) {
+                            if (($language_code_source == $userQualifiedPair['language_code_source']) &&
+                                ($country_code_source  == $userQualifiedPair['country_code_source'])  &&
+                                ($language_code_target == $userQualifiedPair['language_code_target']) &&
+                                ($country_code_target  == $userQualifiedPair['country_code_target'])) {
                                 $found = true;
 
                                 if ($isSiteAdmin && ($post["qualification_level_$i"] != $userQualifiedPair['qualification_level'])) {
                                     $userDao->updateUserQualifiedPair($user_id,
-                                        $post["language_code_source_$i"], $post["country_code_source_$i"],
-                                        $post["language_code_target_$i"], $post["country_code_target_$i"],
+                                        $language_code_source, $country_code_source,
+                                        $language_code_target, $country_code_target,
                                         $post["qualification_level_$i"]);
                                 }
                             }
@@ -1063,8 +1091,8 @@ EOD;
                             if (!$isSiteAdmin) $post["qualification_level_$i"] = 1;
 
                             $userDao->createUserQualifiedPair($user_id,
-                                $post["language_code_source_$i"], $post["country_code_source_$i"],
-                                $post["language_code_target_$i"], $post["country_code_target_$i"],
+                                $language_code_source, $country_code_source,
+                                $language_code_target, $country_code_target,
                                 $post["qualification_level_$i"]);
                         }
                         $i++;
@@ -1074,10 +1102,13 @@ EOD;
                         $i = 0;
                         $found = false;
                         while (!empty($post["language_code_source_$i"]) && !empty($post["language_code_target_$i"])) {
-                            if (($post["language_code_source_$i"] == $userQualifiedPair['language_code_source']) &&
-                                ($post["country_code_source_$i"]  == $userQualifiedPair['country_code_source'])  &&
-                                ($post["language_code_target_$i"] == $userQualifiedPair['language_code_target']) &&
-                                ($post["country_code_target_$i"]  == $userQualifiedPair['country_code_target'])) {
+                            list($language_code_source, $country_code_source) = $projectDao->convert_selection_to_language_country($post["language_code_source_$i"]);
+                            list($language_code_target, $country_code_target) = $projectDao->convert_selection_to_language_country($post["language_code_target_$i"]);
+
+                            if (($language_code_source == $userQualifiedPair['language_code_source']) &&
+                                ($country_code_source  == $userQualifiedPair['country_code_source'])  &&
+                                ($language_code_target == $userQualifiedPair['language_code_target']) &&
+                                ($country_code_target  == $userQualifiedPair['country_code_target'])) {
                                 $found = true;
                             }
                             $i++;
@@ -1087,6 +1118,10 @@ EOD;
                                 $userQualifiedPair['language_code_source'], $userQualifiedPair['country_code_source'],
                                 $userQualifiedPair['language_code_target'], $userQualifiedPair['country_code_target']);
                         }
+                    }
+
+                    foreach ($url_list as $name => $url) {
+                        if ($post[$name] != $url['state']) $userDao->insertUserURL($user_id, $name, $post[$name]);
                     }
 
                     $userDao->updateUser($user);
@@ -1110,25 +1145,29 @@ EOD;
                         }
                     }
 
-                    if ($translator && empty($post['translator'])) {
-                        $userDao->removeUserBadge($user_id, 6);
-                    } elseif (!$translator && !empty($post['translator'])) {
-                        $userDao->addUserBadgeById($user_id, 6);
+                    foreach ($capability_list as $name => $capability) {
+                        if ($capability['state'] && empty($post[$name])) {
+                            $userDao->removeUserBadge($user_id, $capability['id']);
+                        } elseif (!$capability['state'] && !empty($post[$name])) {
+                            $userDao->addUserBadgeById($user_id, $capability['id']);
+                        }
                     }
-                    if ($proofreader && empty($post['proofreader'])) {
-                        $userDao->removeUserBadge($user_id, 7);
-                    } elseif (!$proofreader && !empty($post['proofreader'])) {
-                        $userDao->addUserBadgeById($user_id, 7);
+
+                    foreach ($expertise_list as $name => $expertise) {
+                        if ($expertise['state'] && empty($post[$name])) {
+                            $userDao->removeUserExpertise($user_id, $name);
+                        } elseif (!$expertise['state'] && !empty($post[$name])) {
+                            $userDao->addUserExpertise($user_id, $name);
+                        }
                     }
-                    if ($interpreter && empty($post['interpreter'])) {
-                        $userDao->removeUserBadge($user_id, 8);
-                    } elseif (!$interpreter && !empty($post['interpreter'])) {
-                        $userDao->addUserBadgeById($user_id, 8);
-                    }
+
+                    if (!empty($post['howheard'])) $userDao->insertUserHowheard($user_id, $post['howheard']);
+
+                    $userDao->update_terms_accepted($user_id);
 
                     $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user_id)));
                 } catch (\Exception $e) {
-                    $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
+                    $app->flashNow('error', 'Failed to Update');
                 }
             }
         }
@@ -1144,7 +1183,17 @@ EOD;
         }
 
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/UserPrivateProfile1.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/UserPrivateProfile2.js\"></script>";
+
+        foreach ($userQualifiedPairs as $index => $userQualifiedPair) {
+            $userQualifiedPairs[$index]['language_code_source'] = $userQualifiedPair['language_code_source'] . '-' . $userQualifiedPair['country_code_source'];
+            $userQualifiedPairs[$index]['language_code_target'] = $userQualifiedPair['language_code_target'] . '-' . $userQualifiedPair['country_code_target'];
+            if (empty($language_selection[$userQualifiedPairs[$index]['language_code_source']])) $language_selection[$userQualifiedPairs[$index]['language_code_source']] = $languages_array[$userQualifiedPair['language_code_source']] . ($userQualifiedPair['country_code_source'] === '--' ? '' : ('-' . $userQualifiedPair['country_code_source']));
+            if (empty($language_selection[$userQualifiedPairs[$index]['language_code_target']])) $language_selection[$userQualifiedPairs[$index]['language_code_target']] = $languages_array[$userQualifiedPair['language_code_target']] . ($userQualifiedPair['country_code_target'] === '--' ? '' : ('-' . $userQualifiedPair['country_code_target']));
+        }
+        if (empty($userQualifiedPairs)) {
+            $userQualifiedPairs[] = array('language_code_source' => '', 'language_code_target' => '', 'qualification_level' => 1);
+        }
 
         $app->view()->appendData(array(
             'siteLocation'     => Common\Lib\Settings::get('site.location'),
@@ -1155,20 +1204,178 @@ EOD;
             'userPersonalInfo' => $userPersonalInfo,
             'languages' => $languages,
             'countries' => $countries,
+            'language_selection' => $language_selection,
             'nativeLanguageSelectCode' => $nativeLanguageSelectCode,
             'nativeCountrySelectCode'  => $nativeCountrySelectCode,
             'userQualifiedPairs'       => $userQualifiedPairs,
-            'userQualifiedPairsCount'  => $userQualifiedPairsCount,
+            'userQualifiedPairsCount'  => count($userQualifiedPairs),
             'langPrefSelectCode'       => $langPrefSelectCode,
-            'translator'  => $translator,
-            'proofreader' => $proofreader,
-            'interpreter' => $interpreter,
-            'in_kind'     => $userDao->get_special_translator($user_id),
+            'url_list'          => $url_list,
+            'capability_list'   => $capability_list,
+            'capabilityCount'   => count($capability_list),
+            'expertise_list'    => $expertise_list,
+            'expertiseCount'    => count($expertise_list),
+            'howheard_list'     => $howheard_list,
+            'certification_list' => $certification_list,
+            'in_kind'           => $userDao->get_special_translator($user_id),
+            'profile_completed' => !empty($_SESSION['profile_completed']),
             'extra_scripts' => $extra_scripts,
             'sesskey'       => $sesskey,
         ));
        
         $app->render('user/user-private-profile.tpl');
+    }
+
+    public static function userCodeOfConduct($user_id)
+    {
+        $app = \Slim\Slim::getInstance();
+
+        $userDao = new DAO\UserDao();
+        $adminDao = new DAO\AdminDao();
+
+        if (!$userDao->is_admin_or_org_member($user_id)) {
+            $app->redirect($app->urlFor('user-private-profile', array('user_id' => $user_id)));
+        }
+
+        if (empty($_SESSION['SESSION_CSRF_KEY'])) {
+            $_SESSION['SESSION_CSRF_KEY'] = UserRouteHandler::random_string(10);
+        }
+        $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
+
+        $user = $userDao->getUser($user_id);
+        Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER.$user_id);
+
+        if (!is_object($user)) {
+            $app->flash("error", Lib\Localisation::getTranslation('common_login_required_to_access_page'));
+            $app->redirect($app->urlFor("login"));
+        }
+
+        $userPersonalInfo = null;
+        try {
+            $userPersonalInfo = $userDao->getUserPersonalInformation($user_id);
+        } catch (Common\Exceptions\SolasMatchException $e) {
+        }
+
+        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
+        if (!is_null($loggedInUserId)) {
+            $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
+        } else {
+            $isSiteAdmin = false;
+        }
+
+        if ($post = $app->request()->post()) {
+            if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
+                $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
+            } else {
+                $user->setDisplayName($post['displayName']);
+                $userPersonalInfo->setFirstName($post['firstName']);
+                $userPersonalInfo->setLastName($post['lastName']);
+
+                try {
+                    $userDao->updateUser($user);
+                    $userDao->updatePersonalInfo($user_id, $userPersonalInfo);
+
+                    $userDao->update_terms_accepted($user_id);
+
+                    $app->redirect($app->urlFor('org-dashboard'));
+                } catch (\Exception $e) {
+                    $app->flashNow('error', 'Failed to Update');
+                }
+            }
+        }
+
+        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/user-code-of-conduct.js\"></script>";
+
+        $app->view()->appendData(array(
+            'siteLocation'      => Common\Lib\Settings::get('site.location'),
+            'siteAPI'           => Common\Lib\Settings::get('site.api'),
+            'isSiteAdmin'       => $isSiteAdmin,
+            'user'              => $user,
+            'user_id'           => $user_id,
+            'userPersonalInfo'  => $userPersonalInfo,
+            'profile_completed' => !empty($_SESSION['profile_completed']),
+            'extra_scripts'     => $extra_scripts,
+            'sesskey'           => $sesskey,
+        ));
+
+        $app->render('user/user-code-of-conduct.tpl');
+    }
+
+    public static function userUploads($user_id, $cert_id)
+    {
+        $app = \Slim\Slim::getInstance();
+
+        $userDao = new DAO\UserDao();
+        $adminDao = new DAO\AdminDao();
+
+        if (empty($_SESSION['SESSION_CSRF_KEY'])) {
+            $_SESSION['SESSION_CSRF_KEY'] = UserRouteHandler::random_string(10);
+        }
+        $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
+
+        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
+        if ($user_id != $loggedInUserId && !$adminDao->isSiteAdmin($loggedInUserId)) return;
+
+        $user = $userDao->getUser($user_id);
+
+        $extra_scripts = '';
+
+        $upload_pending = 1;
+        if ($post = $app->request()->post()) {
+            if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['note']) || empty($_FILES['userFile']['name']) || !empty($_FILES['userFile']['error'])
+                    || (($data = file_get_contents($_FILES['userFile']['tmp_name'])) === false)) {
+                $app->flashNow('error', 'Could not upload file, you must specify a file and a note');
+            } else {
+                $userFileName = $_FILES['userFile']['name'];
+                $extensionStartIndex = strrpos($userFileName, '.');
+                if ($extensionStartIndex > 0) {
+                    $extension = substr($userFileName, $extensionStartIndex + 1);
+                    $extension = strtolower($extension);
+                    $userFileName = substr($userFileName, 0, $extensionStartIndex + 1) . $extension;
+                }
+                $userDao->saveUserFile($user_id, $cert_id, $post['note'], $userFileName, $data);
+                $upload_pending = 0;
+                $app->flashNow('success', 'Certificate uploaded sucessfully, please click <a href="javascript:window.close();">Close Window</a>');
+            }
+        }
+
+        $certification_list = $userDao->getCertificationList($user_id);
+
+        $app->view()->appendData(array(
+            'user'          => $user,
+            'user_id'       => $user_id,
+            'cert_id'       => $cert_id,
+            'desc'          => empty($certification_list[$cert_id]['desc']) ? '' : $certification_list[$cert_id]['desc'],
+            'upload_pending'=> $upload_pending,
+            'sesskey'       => $sesskey,
+        ));
+
+        $app->render('user/user-uploads.tpl');
+    }
+
+    public static function userDownload($id)
+    {
+        $userDao = new DAO\UserDao();
+        $adminDao = new DAO\AdminDao();
+
+        $certification = $userDao->getUserCertificationByID($id);
+
+        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
+        if (empty($certification) || ($certification['user_id'] != $loggedInUserId && !$adminDao->isSiteAdmin($loggedInUserId))) return;
+
+        $userDao->userDownload($certification);
+    }
+
+    public function users_review()
+    {
+        $app = \Slim\Slim::getInstance();
+        $userDao = new DAO\UserDao();
+
+        $all_users = $userDao->users_review();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('user/users_review.tpl');
     }
 
     /**
@@ -1216,8 +1423,10 @@ EOD;
             $app->redirect($app->urlFor('login'));
         }
         $userPersonalInfo = null;
+        $receive_credit = 0;
         try {
-            $userPersonalInfo = $userDao->getPersonalInfo($user_id);
+            $userPersonalInfo = $userDao->getUserPersonalInformation($user_id);
+            if ($userPersonalInfo->getReceiveCredit()) $receive_credit = 1;
         } catch (Common\Exceptions\SolasMatchException $e) {
             // error_log("Error getting user personal info: $e");
         }
@@ -1239,6 +1448,22 @@ EOD;
                 $userDao->requestReferenceEmail($user_id);
                 $app->view()->appendData(array("requestSuccess" => true));
             }
+
+            if ($isSiteAdmin && !empty($post['admin_comment'])) {
+                if (empty($post['comment']) || (int)$post['work_again'] < 1 || (int)$post['work_again'] > 5) {
+                    $app->flashNow('error', 'You must enter a comment and a score between 1 and 5');
+                } else {
+                    $userDao->insert_admin_comment($user_id, $loggedInUserId, (int)$post['work_again'], $post['comment']);
+                }
+            }
+
+            if ($isSiteAdmin && !empty($post['mark_reviewed'])) {
+                $userDao->updateUserHowheard($user_id, 1);
+            }
+
+            if ($isSiteAdmin && !empty($post['mark_certification_reviewed'])) {
+                $userDao->updateCertification($post['certification_id'], 1);
+            }
         }
                     
         $archivedJobs = $userDao->getUserArchivedTasks($user_id, 0, 10);
@@ -1249,10 +1474,12 @@ EOD;
 
         $orgList = array();
         if ($badges) {
-            foreach ($badges as $badge) {
+            foreach ($badges as $index => $badge) {
                 if ($badge->getOwnerId() != null) {
                     $org = $orgDao->getOrganisation($badge->getOwnerId());
                     $orgList[$badge->getOwnerId()] = $org;
+                } else {
+                    unset($badges[$index]);
                 }
             }
         }
@@ -1277,12 +1504,6 @@ EOD;
             $langPrefName = '';
         }
 
-        if ($isSiteAdmin) {
-            $account_id = $userDao->get_neon_account($user);
-        } else {
-            $account_id = 0;
-        }
-        
         $app->view()->appendData(array(
             'sesskey' => $sesskey,
             "badges" => $badges,
@@ -1297,13 +1518,12 @@ EOD;
             "userPersonalInfo" => $userPersonalInfo,
             "langPrefName" => $langPrefName,
             "userQualifiedPairs" => $userQualifiedPairs,
-            'account_id' => $account_id,
             "taskTypeColours" => $taskTypeColours
         ));
 
-        $private_access = false;
+        $private_access = 0;
         if (Common\Lib\UserSession::getCurrentUserID() == $user_id) {
-            $private_access = true;
+            $private_access = 1;
 
             $notifData = $userDao->getUserTaskStreamNotification($user_id);
             $interval = null;
@@ -1334,7 +1554,6 @@ EOD;
                 "interval"       => $interval,
                 "lastSent"       => $lastSent,
                 "strict"         => $strict,
-                "private_access" => true
             ));
         }
 
@@ -1344,11 +1563,76 @@ EOD;
             $encrypted = openssl_encrypt("$user_id", 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
             $certificate = 'https://badge.translatorswb.org/index.php?volunteer_id=' . urlencode(base64_encode("$encrypted::$iv"));
         }
+
+        $euser_id = $user_id + 999999; // Ensure we don't use identical (shared profile) key as word count badge (for a bit of extra security)
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+        $encrypted = openssl_encrypt("$euser_id", 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
+        $key = bin2hex("$encrypted::$iv");
+
+        $howheard = $userDao->getUserHowheards($user_id);
+        if (empty($howheard)) {
+            $howheard = ['reviewed' => 1, 'howheard_key' => ''];
+        } else {
+            $howheard = $howheard[0];
+        }
+
         $app->view()->appendData(array(
-            'certificate' => $certificate,
+            'certificate'            => $certificate,
+            'key'                    => $key,
+            'private_access'         => $private_access,
+            'receive_credit'         => $receive_credit,
+            'is_admin_or_org_member' => $userDao->is_admin_or_org_member($user_id),
+            'howheard'               => $howheard,
+            'url_list'               => $userDao->getURLList($user_id),
+            'expertise_list'         => $userDao->getExpertiseList($user_id),
+            'capability_list'        => $userDao->getCapabilityList($user_id),
+            'supported_ngos'         => $userDao->supported_ngos($user_id),
+            'quality_score'          => $userDao->quality_score($user_id),
+            'admin_comments'         => $userDao->admin_comments($user_id),
+            'certifications'         => $userDao->getUserCertifications($user_id),
         ));
 
         $app->render("user/user-public-profile.tpl");
+    }
+
+    public static function profile_shared_with_key($key)
+    {
+        $key = hex2bin($key);
+        $iv = substr($key, -16);
+        $encrypted = substr($key, 0, -18);
+        $user_id = (int)openssl_decrypt($encrypted, 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
+        $user_id -= 999999; // Ensure we don't use identical key to word count badge
+
+        $app = \Slim\Slim::getInstance();
+        $userDao = new DAO\UserDao();
+
+        $user = $userDao->getUser($user_id);
+        $userPersonalInfo = $userDao->getUserPersonalInformation($user_id);
+        $userQualifiedPairs = $userDao->getUserQualifiedPairs($user_id);
+
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+        $encrypted = openssl_encrypt("$user_id", 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
+        $certificate = 'https://badge.translatorswb.org/index.php?volunteer_id=' . urlencode(base64_encode("$encrypted::$iv"));
+
+        $app->view()->appendData(array(
+            'current_page' => 'user-profile',
+            'this_user' => $user,
+            'userPersonalInfo' => $userPersonalInfo,
+            'userQualifiedPairs' => $userQualifiedPairs,
+            'certificate' => $certificate,
+            'isSiteAdmin'            => 0,
+            'private_access'         => 0,
+            'receive_credit'         => 1,
+            'no_header'              => 1,
+            'url_list'               => $userDao->getURLList($user_id),
+            'expertise_list'         => $userDao->getExpertiseList($user_id),
+            'capability_list'        => $userDao->getCapabilityList($user_id),
+            'supported_ngos'         => $userDao->supported_ngos($user_id),
+            'quality_score'          => $userDao->quality_score($user_id),
+            'certifications'         => $userDao->getUserCertifications($user_id),
+        ));
+
+        $app->render('user/user-public-profile.tpl');
     }
 
     public function editTaskStreamNotification($userId)

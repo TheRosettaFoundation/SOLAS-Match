@@ -20,8 +20,8 @@
             </h3>
             <p>{TemplateHelper::uiCleanseHTML($badgeEntry->getDescription())}</p>
         {else}
-            <h3>{sprintf(Localisation::getTranslation('badge_list_badge'), $siteName)} {TemplateHelper::uiCleanseHTML(Localisation::getTranslation($badgeEntry->getTitle()))}</h3>
-            <p>{TemplateHelper::uiCleanseHTML(Localisation::getTranslation($badgeEntry->getDescription()))}</p>
+            <h3>{sprintf(Localisation::getTranslation('badge_list_badge'), $siteName)} {TemplateHelper::uiCleanseHTML($badgeEntry->getTitle())}</h3>
+            <p>{TemplateHelper::uiCleanseHTML($badgeEntry->getDescription())}</p>
         {/if}
         <p style="margin-bottom:20px;"></p>
     {/foreach}

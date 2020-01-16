@@ -362,20 +362,6 @@ class UserDao
         return $ret;
     }
 
-    public static function getUserBadges($user_id)
-    {
-        $ret = null;
-        $args = Lib\PDOWrapper::cleanse($user_id);
-        $result = Lib\PDOWrapper::call("getUserBadges", $args);
-        if ($result) {
-            $ret = array();
-            foreach ($result as $badge) {
-                $ret[] = Common\Lib\ModelFactory::buildModel("Badge", $badge);
-            }
-        }
-        return $ret;
-    }
-
     public static function getUserRealName($userId)
     {
         $ret = '';
@@ -801,41 +787,6 @@ class UserDao
             Lib\PDOWrapper::cleanseNullOrWrapStr($userInfo->getCountry()).','.
             Lib\PDOWrapper::cleanseNull($userInfo->getReceiveCredit() ? 1 : 0);
         $result = Lib\PDOWrapper::call("userPersonalInfoInsertAndUpdate", $args);
-        if ($result) {
-            $ret = Common\Lib\ModelFactory::buildModel("UserPersonalInformation", $result[0]);
-        }
-        return $ret;
-    }
-    
-    public static function getPersonalInfo(
-        $id,
-        $userId = null,
-        $firstName = null,
-        $lastName = null,
-        $mobileNumber = null,
-        $businessNumber = null,
-        $langPref = null,
-        $jobTitle = null,
-        $address = null,
-        $city = null,
-        $country = null,
-        $receiveCredit = null
-    ) {
-        $ret = null;
-        $args = Lib\PDOWrapper::cleanseNull($id).",".
-            Lib\PDOWrapper::cleanseNull($userId).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($firstName).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($lastName).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($mobileNumber).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($businessNumber).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($langPref).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($jobTitle).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($address).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($city).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($country).','.
-            Lib\PDOWrapper::cleanseNull($receiveCredit);
-        
-        $result = Lib\PDOWrapper::call("getUserPersonalInfo", $args);
         if ($result) {
             $ret = Common\Lib\ModelFactory::buildModel("UserPersonalInformation", $result[0]);
         }
