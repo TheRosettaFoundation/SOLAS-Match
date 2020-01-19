@@ -8467,7 +8467,7 @@ BEGIN
         hh.user_id,
         IF(hh.reviewed!=0, '(Reviewed)', '')                               AS reviewed_text,
         CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`, '')) AS name,
-        u.`created-time`                                                   AS created_time,
+        SUBSTRING(u.`created-time`, 1, 10)                                 AS created_time,
         CONCAT(l.`en-name`, '(' , c.`en-name`, ')')                        AS native_language,
         IFNULL(GROUP_CONCAT(DISTINCT CONCAT(uqp.language_code_source, '-', uqp.country_code_source, '|', uqp.language_code_target, '-', uqp.country_code_target) ORDER BY CONCAT(uqp.language_code_source, '-', uqp.country_code_source, '|', uqp.language_code_target, '-', uqp.country_code_target) SEPARATOR ', '), '') AS language_pairs,
         IFNULL(u.biography, '')                                                                              AS bio,
