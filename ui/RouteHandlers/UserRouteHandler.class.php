@@ -115,7 +115,7 @@ class UserRouteHandler
             '/users_new/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'users_new')
-        )->name('users_new');
+        )->via('POST')->name('users_new');
 
         $app->get(
             "/:user_id/notification/stream/",
