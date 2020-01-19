@@ -36,7 +36,7 @@
       <td>{$user_row['language_pairs']}</td>
       <td>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['bio'])}</td>
       <td>{$user_row['certificates']}</td>
-      <td>{$user_row['email']}</td>
+      <td><a href="mailto:{$user_row['email']}?subject={rawurlencode('Kató Registration')}" target="_blank">{$user_row['email']}</a></td>
     </tr>
 
   {/foreach}
