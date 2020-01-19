@@ -30,20 +30,26 @@
 
 <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-    <th width="30%"></th>
-    <th width="30%">Name</th>
-    <th width="20%">Native Language</th>
-    <th width="20%">Country</th>
+    <th width="15%">Name</th>
+    <th width="10%">Created Time</th>
+    <th width="15%">Native Language</th>
+    <th width="15%">Language Pairs</th>
+    <th width="15%">Biography</th>
+    <th width="15%">Certificates</th>
+    <th width="15%">Email</th>
   </thead>
 
   <tbody>
   {foreach $all_users as $user_row}
 
     <tr>
-      <td>{TemplateHelper::uiCleanseHTML($user_row['certificate'])}</td>
-      <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['name'])}</a></td>
+      <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['name'])}</a>{$user_row['reviewed_text']}</td>
+      <td>{$user_row['created_time']}</td>
       <td>{$user_row['native_language']}</td>
-      <td>{$user_row['country_address']}</td>
+      <td>{$user_row['language_pairs']}</td>
+      <td>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['biography'])}</td>
+      <td>{$user_row['certificates']}</td>
+      <td>{$user_row['email']}</td>
     </tr>
 
   {/foreach}
