@@ -112,6 +112,12 @@ class UserRouteHandler
         )->name('users_review');
 
         $app->get(
+            '/users_new/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'users_new')
+        )->name('users_new');
+
+        $app->get(
             "/:user_id/notification/stream/",
             array($middleware, "authUserIsLoggedIn"),
             array($this, "editTaskStreamNotification")
@@ -1376,6 +1382,17 @@ EOD;
 
         $app->view()->appendData(array('all_users' => $all_users));
         $app->render('user/users_review.tpl');
+    }
+
+    public function users_new()
+    {
+        $app = \Slim\Slim::getInstance();
+        $userDao = new DAO\UserDao();
+
+        $all_users = $userDao->users_new();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('user/users_new.tpl');
     }
 
     /**
