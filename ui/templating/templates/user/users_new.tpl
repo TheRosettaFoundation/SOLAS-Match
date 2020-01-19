@@ -31,7 +31,7 @@
 <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
     <th width="15%">Name</th>
-    <th width="10%">Created Time</th>
+    <th width="10%">Created</th>
     <th width="15%">Native Language</th>
     <th width="15%">Language Pairs</th>
     <th width="15%">Biography</th>
