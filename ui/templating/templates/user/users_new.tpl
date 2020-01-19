@@ -47,7 +47,7 @@
       <td>{$user_row['created_time']}</td>
       <td>{$user_row['native_language']}</td>
       <td>{$user_row['language_pairs']}</td>
-      <td>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['biography'])}</td>
+      <td>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['bio'])}</td>
       <td>{$user_row['certificates']}</td>
       <td>{$user_row['email']}</td>
     </tr>
