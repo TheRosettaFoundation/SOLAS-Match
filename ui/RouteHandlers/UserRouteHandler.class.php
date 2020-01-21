@@ -1407,6 +1407,40 @@ EOD;
         $app->render('user/users_new.tpl');
     }
 
+    public function download_users_new()
+    {
+        $this->download_users_new_unreviewed(true);
+    }
+
+    public function download_users_new_unreviewed($all = false)
+    {
+        $userDao = new DAO\UserDao();
+        $all_users = $userDao->users_new();
+
+        $data = "\xEF\xBB\xBF" . '"Name","Created","Native Language","Language Pairs","Biography","Certificates","Email"' . "\n";
+
+        foreach ($all_users as $user_row) {
+          if ($all || empty($user_row['reviewed_text'])) {
+            $data .= '"' . str_replace('"', '""', $user_row['name']) . '","' .
+                $user_row['created_time'] . '","' .
+                str_replace('"', '""', $user_row['native_language']) . '","' .
+                $user_row['language_pairs'] . '","' .
+                str_replace(array('\r\n', '\n', '\r'), "\n", str_replace('"', '""', $user_row['bio'])) . '","' .
+                $user_row['certificates'] . '","' .
+                $user_row['email'] . '"' . "\n";
+          }
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="users_new.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
+    }
+
     /**
      * Generate and return a random string of the specified length.
      *
