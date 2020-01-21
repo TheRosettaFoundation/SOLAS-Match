@@ -97,6 +97,7 @@ $from_neon_to_trommons_pair = array(
 'Spanish' => array('es', 'ES'),
 'Spanish Latin America' => array('es', 'MX'),
 'Spanish Colombia' => array('es', 'CO'),
+'Spanish Puerto Rico' => array('es', 'PR'),
 'Swahili' => array('swh', 'KE'),
 'Swedish' => array('sv', 'SE'),
 'Swiss German' => array('de', 'CH'),
