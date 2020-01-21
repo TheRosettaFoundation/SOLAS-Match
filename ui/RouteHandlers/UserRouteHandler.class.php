@@ -118,6 +118,18 @@ class UserRouteHandler
         )->via('POST')->name('users_new');
 
         $app->get(
+            '/download_users_new/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_users_new')
+        )->name('download_users_new');
+
+        $app->get(
+            '/download_users_new_unreviewed/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_users_new_unreviewed')
+        )->name('download_users_new_unreviewed');
+
+        $app->get(
             "/:user_id/notification/stream/",
             array($middleware, "authUserIsLoggedIn"),
             array($this, "editTaskStreamNotification")
