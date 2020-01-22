@@ -118,6 +118,18 @@ class UserRouteHandler
         )->via('POST')->name('users_new');
 
         $app->get(
+            '/download_users_new/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_users_new')
+        )->name('download_users_new');
+
+        $app->get(
+            '/download_users_new_unreviewed/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_users_new_unreviewed')
+        )->name('download_users_new_unreviewed');
+
+        $app->get(
             "/:user_id/notification/stream/",
             array($middleware, "authUserIsLoggedIn"),
             array($this, "editTaskStreamNotification")
@@ -1389,10 +1401,59 @@ EOD;
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
 
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
         $all_users = $userDao->users_new();
 
-        $app->view()->appendData(array('all_users' => $all_users));
+        if ($app->request()->isPost()) {
+            $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post, 'users_new');
+            if (!empty($post['max_user_id'])) {
+                foreach ($all_users as $user_row) {
+                    if ($user_row['user_id'] <= $post['max_user_id']) { // Make sure a new one has not appeared
+                        if (empty($user_row['reviewed_text'])) $userDao->updateUserHowheard($user_row['user_id'], 1);
+                    }
+                }
+                $all_users = $userDao->users_new();
+            }
+        }
+
+        $app->view()->appendData(array('all_users' => $all_users, 'sesskey' => $sesskey));
         $app->render('user/users_new.tpl');
+    }
+
+    public function download_users_new()
+    {
+        $this->download_users_new_unreviewed(true);
+    }
+
+    public function download_users_new_unreviewed($all = false)
+    {
+        $userDao = new DAO\UserDao();
+        $all_users = $userDao->users_new();
+
+        $data = "\xEF\xBB\xBF" . '"Name","Created","Native Language","Language Pairs","Biography","Certificates","Email"' . "\n";
+
+        foreach ($all_users as $user_row) {
+          if ($all || empty($user_row['reviewed_text'])) {
+            $data .= '"' . str_replace('"', '""', $user_row['name']) . '","' .
+                $user_row['created_time'] . '","' .
+                str_replace('"', '""', $user_row['native_language']) . '","' .
+                $user_row['language_pairs'] . '","' .
+                str_replace(array('\r\n', '\n', '\r'), "\n", str_replace('"', '""', $user_row['bio'])) . '","' .
+                $user_row['certificates'] . '","' .
+                $user_row['email'] . '"' . "\n";
+          }
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="users_new.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
     }
 
     /**
