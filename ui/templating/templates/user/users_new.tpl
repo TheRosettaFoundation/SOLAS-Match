@@ -15,6 +15,12 @@
 
 {if isset($all_users) && count($all_users) > 0}
 
+<form method="post" action="{urlFor name="users_new"}">
+  <input type="submit" class="btn btn-primary" name="mark_reviewed" value="Mark All New Users as Reviewed" />
+  <input type="hidden" name="max_user_id" value="{$all_users[0]['user_id']}" />
+  {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+</form>
+
 <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
     <th width="15%">Name</th>

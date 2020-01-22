@@ -1401,9 +1401,24 @@ EOD;
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
 
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
         $all_users = $userDao->users_new();
 
-        $app->view()->appendData(array('all_users' => $all_users));
+        if ($app->request()->isPost()) {
+            $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post, 'users_new');
+            if (!empty($post['max_user_id'])) {
+                foreach ($all_users as $user_row) {
+                    if ($user_row['user_id'] <= $post['max_user_id']) { // Make sure a new one has not appeared
+                        if (empty($user_row['reviewed_text'])) $userDao->updateUserHowheard($user_row['user_id'], 1);
+                    }
+                }
+                $all_users = $userDao->users_new();
+            }
+        }
+
+        $app->view()->appendData(array('all_users' => $all_users, 'sesskey' => $sesskey));
         $app->render('user/users_new.tpl');
     }
 
