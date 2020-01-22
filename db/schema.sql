@@ -8480,6 +8480,7 @@ BEGIN
     JOIN Countries                 c ON u.country_id=c.id
     LEFT JOIN UserQualifiedPairs uqp ON u.id=uqp.user_id
     LEFT JOIN UserCertifications  uc ON u.id=uc.user_id
+    WHERE u.id>=37052
     GROUP BY u.id
     ORDER BY hh.reviewed, hh.user_id DESC
     LIMIT 500;
