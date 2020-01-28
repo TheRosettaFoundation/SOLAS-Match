@@ -1725,11 +1725,11 @@ class ProjectRouteHandler
         foreach($discourseapiparams as $name => $value){
             $fields .= urlencode($name).'='.urlencode($value).'&';
         }
+        $fields .= 'tags[]=' . urlencode($org_name);
         foreach($languages as $language){
             // We cannot pass the post fields as array because multiple languages mean duplicate tags[] keys
-            $fields .= 'tags[]='.urlencode($language).'&';
+            $fields .= '&tags[]=' . urlencode($language);
         }
-        $fields .= 'tags[]=' . urlencode($org_name);
 
         $re = curl_init(Common\Lib\Settings::get('discourse.url').'/posts');
         curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
