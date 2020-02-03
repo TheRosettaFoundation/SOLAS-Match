@@ -5403,15 +5403,15 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `submitTaskReview`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `submitTaskReview`(IN projectId INT, IN taskId INT, IN userId INT, IN correction INT, IN gram INT, IN spell INT, IN consis INT, IN comm VARCHAR(2048))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `submitTaskReview`(IN projectId INT, IN taskId INT, IN userId INT, IN correction INT, IN gram INT, IN spell INT, IN consis INT, IN reviseTaskId INT, IN comm VARCHAR(2048))
 BEGIN
     IF NOT EXISTS (SELECT 1 
                     FROM TaskReviews
                     WHERE task_id = taskId
                     AND user_id = userId
                     AND project_id = projectId) then
-        INSERT INTO TaskReviews (project_id, task_id, user_id, corrections, grammar, spelling, consistency, comment)
-            VALUES (projectId, taskId, userId, correction, gram, spell, consis, comm);
+        INSERT INTO TaskReviews (project_id, task_id, user_id, corrections, grammar, spelling, consistency, revise_task_id, comment)
+                         VALUES ( projectId,  taskId,  userId,  correction,    gram,    spell,      consis,   reviseTaskId,    comm);
         SELECT 1 as result;
     else
         SELECT 0 as result;
