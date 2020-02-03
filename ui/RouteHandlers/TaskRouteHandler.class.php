@@ -2549,6 +2549,8 @@ class TaskRouteHandler
                         $review->setComment($post["comment_$id"]);
                     }
 
+                    $review->setReviseTaskId($taskId);
+
                     if ($review->getProjectId() != null && $review->getUserId() != null && $error == null) {
                         $submitResult = $taskDao->submitReview($review);
                         if (!$submitResult) {
