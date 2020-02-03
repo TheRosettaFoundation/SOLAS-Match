@@ -7007,6 +7007,46 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `submitted_task_reviews`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `submitted_task_reviews`()
+BEGIN
+    SELECT
+        IFNULL(MAX(tcd.complete_date), MAX(tfv.`upload-time`)) AS completed,
+        tr.task_id,
+        tr.user_id AS reviser_id,
+        tc.user_id AS translator_id,
+        CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) AS language_pair,
+        MAX(tr.corrections)         AS accuracy,
+        MAX(tr.grammar)             AS fluency,
+        MAX(tr.spelling)            AS terminology,
+        MAX(tr.consistency)   % 10  AS style,
+        MAX(tr.consistency) DIV 10  AS design,
+        IFNULL(MAX(tr.comment), '') AS comment,
+        CONCAT(IFNULL(i .`first-name`, ''), ' ', IFNULL(i .`last-name`, ''), ' (', u .email, ')') AS translator_name,
+        CONCAT(IFNULL(i2.`first-name`, ''), ' ', IFNULL(i2.`last-name`, ''), ' (', u2.email, ')') AS reviser_name
+    FROM TaskReviews             tr
+    JOIN Tasks                    t ON tr.task_id=t.id
+    JOIN Languages               l1 ON t.`language_id-source`=l1.id
+    JOIN Languages               l2 ON t.`language_id-target`=l2.id
+    JOIN Countries               c1 ON t.`country_id-source`=c1.id
+    JOIN Countries               c2 ON t.`country_id-target`=c2.id
+    JOIN TaskClaims              tc ON tr.task_id=tc.task_id
+    JOIN Users                    u ON tc.user_id=u.id
+    JOIN UserPersonalInformation  i ON u.id=i.user_id
+    JOIN Users                   u2 ON tr.user_id=u2.id
+    JOIN UserPersonalInformation i2 ON u2.id=i2.user_id
+    LEFT JOIN TaskCompleteDates tcd ON tr.task_id=tcd.task_id
+    LEFT JOIN TaskFileVersions  tfv ON tr.task_id=tfv.task_id
+    WHERE
+        t.`task-status_id`=4 AND
+        tr.consistency>=10
+    GROUP BY tr.project_id, tr.task_id, tr.user_id
+    ORDER BY completed DESC, tr.task_id DESC, tr.user_id DESC
+    LIMIT 4000;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `active_users`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `active_users`()

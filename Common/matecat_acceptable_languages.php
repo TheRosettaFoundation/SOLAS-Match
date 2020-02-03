@@ -115,7 +115,6 @@
 'es' => 'es-ES',
 'es-MX' => 'es-MX',
 'es-CO' => 'es-CO',
-'es-PR' => 'es-PR',
 'su' => 'su-ID',
 'sw' => 'sw-KE',
 'swh' => 'sw-KE',
