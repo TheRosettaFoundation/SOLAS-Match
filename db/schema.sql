@@ -1027,6 +1027,7 @@ CREATE TABLE IF NOT EXISTS `TaskReviews` (
   `grammar` int(11) unsigned NOT NULL,
   `spelling` int(11) unsigned NOT NULL,
   `consistency` int(11) unsigned NOT NULL,
+  revise_task_id BIGINT(20) UNSIGNED DEFAULT NULL,
   `comment` VARCHAR(2048) COLLATE utf8_unicode_ci DEFAULT NULL,
   UNIQUE KEY `user_task_project` (`task_id`,`user_id`,`project_id`),
   CONSTRAINT `FK_TaskReviews_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
