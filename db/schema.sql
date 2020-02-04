@@ -7015,7 +7015,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `submitted_task_reviews`()
 BEGIN
     SELECT
         IFNULL(MAX(tcd.complete_date), MAX(tfv.`upload-time`)) AS completed,
-        tr.task_id,
+        tr.revise_task_id,
         tr.user_id AS reviser_id,
         tc.user_id AS translator_id,
         CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) AS language_pair,
@@ -7025,6 +7025,7 @@ BEGIN
         MAX(tr.consistency)   % 10  AS style,
         MAX(tr.consistency) DIV 10  AS design,
         IFNULL(MAX(tr.comment), '') AS comment,
+        tr.task_id,
         CONCAT(IFNULL(i .`first-name`, ''), ' ', IFNULL(i .`last-name`, ''), ' (', u .email, ')') AS translator_name,
         CONCAT(IFNULL(i2.`first-name`, ''), ' ', IFNULL(i2.`last-name`, ''), ' (', u2.email, ')') AS reviser_name
     FROM TaskReviews             tr
@@ -7038,13 +7039,15 @@ BEGIN
     JOIN UserPersonalInformation  i ON u.id=i.user_id
     JOIN Users                   u2 ON tr.user_id=u2.id
     JOIN UserPersonalInformation i2 ON u2.id=i2.user_id
-    LEFT JOIN TaskCompleteDates tcd ON tr.task_id=tcd.task_id
-    LEFT JOIN TaskFileVersions  tfv ON tr.task_id=tfv.task_id
+    JOIN Tasks                  rev ON tr.revise_task_id=rev.id
+    LEFT JOIN TaskCompleteDates tcd ON tr.revise_task_id=tcd.task_id
+    LEFT JOIN TaskFileVersions  tfv ON tr.revise_task_id=tfv.task_id
     WHERE
-        t.`task-status_id`=4 AND
+        tr.revise_task_id IS NOT NULL AND
+        rev.`task-status_id`=4 AND
         tr.consistency>=10
-    GROUP BY tr.project_id, tr.task_id, tr.user_id
-    ORDER BY completed DESC, tr.task_id DESC, tr.user_id DESC
+    GROUP BY tr.revise_task_id, tr.task_id, tr.user_id
+    ORDER BY completed DESC, tr.revise_task_id DESC, tr.user_id DESC
     LIMIT 4000;
 END//
 DELIMITER ;
