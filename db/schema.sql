@@ -1027,8 +1027,10 @@ CREATE TABLE IF NOT EXISTS `TaskReviews` (
   `grammar` int(11) unsigned NOT NULL,
   `spelling` int(11) unsigned NOT NULL,
   `consistency` int(11) unsigned NOT NULL,
+  revise_task_id BIGINT(20) UNSIGNED DEFAULT NULL,
   `comment` VARCHAR(2048) COLLATE utf8_unicode_ci DEFAULT NULL,
   UNIQUE KEY `user_task_project` (`task_id`,`user_id`,`project_id`),
+  KEY key_revise_task_id (revise_task_id),
   CONSTRAINT `FK_TaskReviews_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_TaskReviews_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_TaskReviews_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -1543,6 +1545,7 @@ CREATE TABLE IF NOT EXISTS `TaskCompleteDates` (
   task_id       BIGINT(20) UNSIGNED NOT NULL,
   complete_date DATETIME NOT NULL,
   PRIMARY KEY (`task_id`),
+  KEY key_complete_date (complete_date),
   CONSTRAINT `FK_TaskCompleteDates_task_id` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -4843,6 +4846,8 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `recordFileUpload`(IN `tID` INT, IN `name` TeXT, IN `content` VARCHAR(255), IN `uID` INT, IN `ver` INT)
     MODIFIES SQL DATA
 BEGIN
+    call set_task_complete_date(tID);
+
     if ver is null then
         set @maxVer =-1;
         if not exists (select 1 
@@ -5402,15 +5407,15 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `submitTaskReview`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `submitTaskReview`(IN projectId INT, IN taskId INT, IN userId INT, IN correction INT, IN gram INT, IN spell INT, IN consis INT, IN comm VARCHAR(2048))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `submitTaskReview`(IN projectId INT, IN taskId INT, IN userId INT, IN correction INT, IN gram INT, IN spell INT, IN consis INT, IN reviseTaskId INT, IN comm VARCHAR(2048))
 BEGIN
     IF NOT EXISTS (SELECT 1 
                     FROM TaskReviews
                     WHERE task_id = taskId
                     AND user_id = userId
                     AND project_id = projectId) then
-        INSERT INTO TaskReviews (project_id, task_id, user_id, corrections, grammar, spelling, consistency, comment)
-            VALUES (projectId, taskId, userId, correction, gram, spell, consis, comm);
+        INSERT INTO TaskReviews (project_id, task_id, user_id, corrections, grammar, spelling, consistency, revise_task_id, comment)
+                         VALUES ( projectId,  taskId,  userId,  correction,    gram,    spell,      consis,   reviseTaskId,    comm);
         SELECT 1 as result;
     else
         SELECT 0 as result;
@@ -7004,6 +7009,76 @@ BEGIN
     WHERE t.`task-status_id`=4
     GROUP BY u.id, l1.code, c1.code, l2.code, c2.code
     ORDER BY u.email, l1.code, c1.code, l2.code, c2.code;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `submitted_task_reviews`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `submitted_task_reviews`()
+BEGIN
+    SELECT
+        tcd.complete_date,
+        tr.revise_task_id,
+        tr.user_id AS reviser_id,
+        tc.user_id AS translator_id,
+        CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) AS language_pair,
+        tr.corrections         AS accuracy,
+        tr.grammar             AS fluency,
+        tr.spelling            AS terminology,
+        tr.consistency   % 10  AS style,
+        tr.consistency DIV 10  AS design,
+        IFNULL(tr.comment, '') AS comment,
+        tr.task_id,
+        CONCAT(IFNULL(i .`first-name`, ''), ' ', IFNULL(i .`last-name`, ''), ' (', u .email, ')') AS translator_name,
+        CONCAT(IFNULL(i2.`first-name`, ''), ' ', IFNULL(i2.`last-name`, ''), ' (', u2.email, ')') AS reviser_name
+    FROM TaskReviews             tr
+    JOIN Tasks                    t ON tr.task_id=t.id
+    JOIN Languages               l1 ON t.`language_id-source`=l1.id
+    JOIN Languages               l2 ON t.`language_id-target`=l2.id
+    JOIN Countries               c1 ON t.`country_id-source`=c1.id
+    JOIN Countries               c2 ON t.`country_id-target`=c2.id
+    JOIN TaskClaims              tc ON tr.task_id=tc.task_id
+    JOIN Users                    u ON tc.user_id=u.id
+    JOIN UserPersonalInformation  i ON u.id=i.user_id
+    JOIN Users                   u2 ON tr.user_id=u2.id
+    JOIN UserPersonalInformation i2 ON u2.id=i2.user_id
+    JOIN Tasks                  rev ON tr.revise_task_id=rev.id
+    JOIN TaskCompleteDates      tcd ON tr.revise_task_id=tcd.task_id
+    WHERE
+        tr.revise_task_id IS NOT NULL AND
+        rev.`task-status_id`=4 AND
+        tr.consistency>=10
+    ORDER BY tcd.complete_date DESC, tr.revise_task_id DESC, tr.user_id DESC
+    LIMIT 4000;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `tasks_no_reviews`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `tasks_no_reviews`()
+BEGIN
+    SELECT
+        tcd.complete_date,
+        rev.id AS revise_task_id,
+        tc.user_id AS reviser_id,
+        CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) AS language_pair,
+        CONCAT(IFNULL(i2.`first-name`, ''), ' ', IFNULL(i2.`last-name`, ''), ' (', u2.email, ')') AS reviser_name
+    FROM Tasks                  rev
+    LEFT JOIN TaskReviews        tr ON rev.id=tr.revise_task_id
+    JOIN TaskCompleteDates      tcd ON rev.id=tcd.task_id
+    JOIN Languages               l1 ON rev.`language_id-source`=l1.id
+    JOIN Languages               l2 ON rev.`language_id-target`=l2.id
+    JOIN Countries               c1 ON rev.`country_id-source`=c1.id
+    JOIN Countries               c2 ON rev.`country_id-target`=c2.id
+    JOIN TaskClaims              tc ON rev.id=tc.task_id
+    JOIN Users                   u2 ON tc.user_id=u2.id
+    JOIN UserPersonalInformation i2 ON u2.id=i2.user_id
+    WHERE
+        tr.revise_task_id IS NULL AND
+        rev.`task-status_id`=4 AND
+        rev.`task-type_id`=3
+    ORDER BY tcd.complete_date DESC, rev.id DESC
+    LIMIT 4000;
 END//
 DELIMITER ;
 

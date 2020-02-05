@@ -150,6 +150,7 @@ class TaskDao
             Lib\PDOWrapper::cleanseNull($review->getGrammar()).",".
             Lib\PDOWrapper::cleanseNull($review->getSpelling()).",".
             Lib\PDOWrapper::cleanseNull($review->getConsistency()).",".
+            Lib\PDOWrapper::cleanseNull($review->getReviseTaskId()).",".
             Lib\PDOWrapper::cleanseNullOrWrapStr($review->getComment());
         $result = Lib\PDOWrapper::call('submitTaskReview', $args);
         if ($result) {
