@@ -4846,6 +4846,8 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `recordFileUpload`(IN `tID` INT, IN `name` TeXT, IN `content` VARCHAR(255), IN `uID` INT, IN `ver` INT)
     MODIFIES SQL DATA
 BEGIN
+    call set_task_complete_date(tID);
+
     if ver is null then
         set @maxVer =-1;
         if not exists (select 1 
