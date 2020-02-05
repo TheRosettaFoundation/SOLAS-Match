@@ -7055,6 +7055,35 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `tasks_no_reviews`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `tasks_no_reviews`()
+BEGIN
+    SELECT
+        tcd.complete_date,
+        rev.id AS revise_task_id,
+        tc.user_id AS reviser_id,
+        CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) AS language_pair,
+        CONCAT(IFNULL(i2.`first-name`, ''), ' ', IFNULL(i2.`last-name`, ''), ' (', u2.email, ')') AS reviser_name
+    FROM Tasks                  rev
+    LEFT JOIN TaskReviews        tr ON rev.id=tr.revise_task_id
+    JOIN TaskCompleteDates      tcd ON rev.id=tcd.task_id
+    JOIN Languages               l1 ON rev.`language_id-source`=l1.id
+    JOIN Languages               l2 ON rev.`language_id-target`=l2.id
+    JOIN Countries               c1 ON rev.`country_id-source`=c1.id
+    JOIN Countries               c2 ON rev.`country_id-target`=c2.id
+    JOIN TaskClaims              tc ON rev.id=tc.task_id
+    JOIN Users                   u2 ON tc.user_id=u2.id
+    JOIN UserPersonalInformation i2 ON u2.id=i2.user_id
+    WHERE
+        tr.revise_task_id IS NULL AND
+        rev.`task-status_id`=4 AND
+        rev.`task-type_id`=3
+    ORDER BY tcd.complete_date DESC, rev.id DESC
+    LIMIT 4000;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `active_users`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `active_users`()
