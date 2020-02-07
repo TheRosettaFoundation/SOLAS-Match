@@ -25,6 +25,9 @@
     <p><a href="{urlFor name="user_words_by_language"}" target="_blank">List all translator's translated and revised words by language pair.</a> <a href="{urlFor name="download_user_words_by_language"}">[Download]</a></p>
     <p><a href="{urlFor name="first_completed_task"}" target="_blank">List all translator's first completed task.</a></p>
     <p><a href="{urlFor name="user_task_reviews"}" target="_blank">List average reviews for volunteers</a></p>
+    <p><a href="{urlFor name="submitted_task_reviews"}" target="_blank">List submitted reviews</a></p>
+    <p><a href="{urlFor name="tasks_no_reviews"}" target="_blank">List tasks completed without a review</a></p>
+    <p><a href="{urlFor name="project_source_file_scores"}" target="_blank">Project Source File Scores</a></p>
     <p><a href="{urlFor name="language_work_requested"}" target="_blank">List language pairs with translation work requested in those pairs.</a> <a href="{urlFor name="download_language_work_requested"}">[Download]</a></p>
     <p><a href="{urlFor name="translators_for_language_pairs"}" target="_blank">List language pairs with number of translators who have that pair.</a> <a href="{urlFor name="download_translators_for_language_pairs"}">[Download]</a></p>
     <p><a href="{urlFor name="community_stats"}">[Download community report]</a></p>
