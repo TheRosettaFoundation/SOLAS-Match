@@ -47,7 +47,6 @@
 
     <tr>
       <td>{$user_row['complete_date']}</td>
-      NEED task_title...
       <td><a href="{urlFor name="task-view" options="task_id.{$user_row['revise_task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['task_title'])}</a></td>
       <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['reviser_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['reviser_name'])}</a></td>
       <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['translator_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['translator_name'])}</a></td>

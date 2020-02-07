@@ -7029,6 +7029,7 @@ BEGIN
         tr.consistency DIV 10  AS design,
         IFNULL(tr.comment, '') AS comment,
         tr.task_id,
+        rev.title AS task_title,
         CONCAT(IFNULL(i .`first-name`, ''), ' ', IFNULL(i .`last-name`, ''), ' (', u .email, ')') AS translator_name,
         CONCAT(IFNULL(i2.`first-name`, ''), ' ', IFNULL(i2.`last-name`, ''), ' (', u2.email, ')') AS reviser_name
     FROM TaskReviews             tr
@@ -7062,6 +7063,7 @@ BEGIN
         rev.id AS revise_task_id,
         tc.user_id AS reviser_id,
         CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) AS language_pair,
+        rev.title AS task_title,
         CONCAT(IFNULL(i2.`first-name`, ''), ' ', IFNULL(i2.`last-name`, ''), ' (', u2.email, ')') AS reviser_name
     FROM Tasks                  rev
     LEFT JOIN TaskReviews        tr ON rev.id=tr.revise_task_id
