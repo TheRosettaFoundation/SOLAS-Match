@@ -7102,7 +7102,7 @@ BEGIN
             IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.grammar,     0))/SUM(consistency<10), 1), '') AS gram,
             IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.spelling,    0))/SUM(consistency<10), 1), '') AS spell,
             IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.consistency, 0))/SUM(consistency<10), 1), '') AS cons,
-            GROUP_CONCAT(tr.comment ORDER BY tr.comment SEPARATOR '<br />') AS comments
+            GROUP_CONCAT(tr.comment ORDER BY tr.comment SEPARATOR '\\r\\n') AS comments
         FROM TaskReviews  tr
         JOIN Projects      p ON tr.project_id=p.id
         JOIN Organisations o ON p.organisation_id=o.id

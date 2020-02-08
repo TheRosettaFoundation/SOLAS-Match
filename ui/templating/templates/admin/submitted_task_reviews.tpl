@@ -43,7 +43,7 @@
       <td>{$user_row['terminology']}</td>
       <td>{$user_row['style']}</td>
       <td>{$user_row['design']}</td>
-      <td>{TemplateHelper::uiCleanseHTML($user_row['comment'])}</td>
+      <td>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['comment'])}</td>
     </tr>
 
   {/foreach}
