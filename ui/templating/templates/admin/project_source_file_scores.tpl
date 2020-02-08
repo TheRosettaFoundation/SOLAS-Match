@@ -39,7 +39,7 @@
       <td>{$user_row['gram']}</td>
       <td>{$user_row['spell']}</td>
       <td>{$user_row['cons']}</td>
-      <td>{TemplateHelper::uiCleanseHTML($user_row['comments'])}</td>
+      <td>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['comments'])}</td>
     </tr>
 
   {/foreach}
