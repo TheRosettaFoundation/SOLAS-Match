@@ -7029,6 +7029,7 @@ BEGIN
         tr.consistency DIV 10  AS design,
         IFNULL(tr.comment, '') AS comment,
         tr.task_id,
+        rev.title AS task_title,
         CONCAT(IFNULL(i .`first-name`, ''), ' ', IFNULL(i .`last-name`, ''), ' (', u .email, ')') AS translator_name,
         CONCAT(IFNULL(i2.`first-name`, ''), ' ', IFNULL(i2.`last-name`, ''), ' (', u2.email, ')') AS reviser_name
     FROM TaskReviews             tr
@@ -7062,6 +7063,7 @@ BEGIN
         rev.id AS revise_task_id,
         tc.user_id AS reviser_id,
         CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) AS language_pair,
+        rev.title AS task_title,
         CONCAT(IFNULL(i2.`first-name`, ''), ' ', IFNULL(i2.`last-name`, ''), ' (', u2.email, ')') AS reviser_name
     FROM Tasks                  rev
     LEFT JOIN TaskReviews        tr ON rev.id=tr.revise_task_id
@@ -7079,6 +7081,40 @@ BEGIN
         rev.`task-type_id`=3
     ORDER BY tcd.complete_date DESC, rev.id DESC
     LIMIT 4000;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `project_source_file_scores`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `project_source_file_scores`()
+BEGIN
+    SELECT
+        scores.*,
+        IF(MIN(t.`task-status_id`=4), MAX(tcd.complete_date), '') AS completed
+    FROM
+        (SELECT
+            p.id AS project_id,
+            p.title,
+            p.organisation_id,
+            o.name,
+            p.created,
+            IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.corrections, 0))/SUM(consistency<10), 1), '') AS cor,
+            IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.grammar,     0))/SUM(consistency<10), 1), '') AS gram,
+            IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.spelling,    0))/SUM(consistency<10), 1), '') AS spell,
+            IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.consistency, 0))/SUM(consistency<10), 1), '') AS cons,
+            GROUP_CONCAT(tr.comment ORDER BY tr.comment SEPARATOR '<br />') AS comments
+        FROM TaskReviews  tr
+        JOIN Projects      p ON tr.project_id=p.id
+        JOIN Organisations o ON p.organisation_id=o.id
+        WHERE tr.task_id IS NULL
+        GROUP BY tr.project_id
+        ORDER BY tr.project_id DESC
+        LIMIT 4000
+        ) AS scores
+    JOIN      Tasks               t ON scores.project_id=t.project_id
+    LEFT JOIN TaskCompleteDates tcd ON t.id=tcd.task_id
+    GROUP BY scores.project_id
+    ORDER BY scores.project_id DESC;
 END//
 DELIMITER ;
 
