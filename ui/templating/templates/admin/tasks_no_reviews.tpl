@@ -16,10 +16,10 @@
 
 <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-    <th width="10%">Completed</th>
-    <th width="40%">Revision Task</th>
-    <th width="40%">Reviser</th>
-    <th width="10%">Language Pair</th>
+    <th width="15%">Completed</th>
+    <th width="35%">Revision Task</th>
+    <th width="35%">Reviser</th>
+    <th width="15%">Language Pair</th>
   </thead>
 
   <tbody>
