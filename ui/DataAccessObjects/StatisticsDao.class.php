@@ -423,6 +423,24 @@ class StatisticsDao extends BaseDao
         return $result;
     }
 
+    public function submitted_task_reviews()
+    {
+        $result = LibAPI\PDOWrapper::call('submitted_task_reviews', '');
+        return $result;
+    }
+
+    public function tasks_no_reviews()
+    {
+        $result = LibAPI\PDOWrapper::call('tasks_no_reviews', '');
+        return $result;
+    }
+
+    public function project_source_file_scores()
+    {
+        $result = LibAPI\PDOWrapper::call('project_source_file_scores', '');
+        return $result;
+    }
+
     public function matecat_analyse_status()
     {
         $result = LibAPI\PDOWrapper::call('matecat_analyse_status', '');
