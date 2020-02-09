@@ -74,6 +74,24 @@ class AdminRouteHandler
         )->via('POST')->name('user_task_reviews');
 
         $app->get(
+            '/submitted_task_reviews/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'submitted_task_reviews')
+        )->name('submitted_task_reviews');
+
+        $app->get(
+            '/tasks_no_reviews/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'tasks_no_reviews')
+        )->name('tasks_no_reviews');
+
+        $app->get(
+            '/project_source_file_scores/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'project_source_file_scores')
+        )->name('project_source_file_scores');
+
+        $app->get(
             '/first_completed_task/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'first_completed_task')
@@ -467,6 +485,39 @@ class AdminRouteHandler
 
         $app->view()->appendData(array('all_users' => $all_users));
         $app->render('admin/user_task_reviews.tpl');
+    }
+
+    public function submitted_task_reviews()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->submitted_task_reviews();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('admin/submitted_task_reviews.tpl');
+    }
+
+    public function tasks_no_reviews()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->tasks_no_reviews();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('admin/tasks_no_reviews.tpl');
+    }
+
+    public function project_source_file_scores()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->project_source_file_scores();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('admin/project_source_file_scores.tpl');
     }
 
     public function first_completed_task()

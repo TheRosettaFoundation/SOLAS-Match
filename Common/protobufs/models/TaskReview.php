@@ -10,6 +10,7 @@ class TaskReview
   public $grammar;
   public $spelling;
   public $consistency;
+  public $revise_task_id;
   public $comment;
 
   public function __construct() {
@@ -20,6 +21,7 @@ class TaskReview
     $this->grammar = null;
     $this->spelling = null;
     $this->consistency = null;
+    $this->revise_task_id = null;
     $this->comment = '';
   }
 
@@ -105,6 +107,18 @@ class TaskReview
 
   public function setConsistency($consistency) {
     $this->consistency = $consistency;
+  }
+
+  public function getReviseTaskId() {
+    return $this->revise_task_id;
+  }
+
+  public function hasReviseTaskId() {
+    return $this->revise_task_id != null;
+  }
+
+  public function setReviseTaskId($revise_task_id) {
+    $this->revise_task_id = $revise_task_id;
   }
 
   public function getComment() {
