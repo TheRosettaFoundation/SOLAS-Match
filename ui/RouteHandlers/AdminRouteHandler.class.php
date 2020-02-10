@@ -524,20 +524,18 @@ class AdminRouteHandler
         $data = "\xEF\xBB\xBF" . '"Completed","Revision Task","Reviser","Translator","Language Pair","Accuracy","Fluency","Terminology","Style","Design","Comment"' . "\n";
 
         foreach ($all_users as $user_row) {
-            $data .= '"' . str_replace('"', '""', $user_row['display_name']) . '","' . $user_row['email'] . '","' . str_replace('"', '""', $user_row['first_name']) . ' ' . str_replace('"', '""', $user_row['last_name']) . '","' . $user_row['language_code'] . '","' . $user_row['language_name'] . '","' . $user_row['country_code'] . '","' . $user_row['country_name'] . '","' . $user_row['native_or_secondary'] . '","' . $user_row['level'] . '"' . "\n";
-[[[
-      <td>{$user_row['complete_date']}</td>
-      <td><a href="{urlFor name="task-view" options="task_id.{$user_row['revise_task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['task_title'])}</a></td>
-      <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['reviser_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['reviser_name'])}</a></td>
-      <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['translator_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['translator_name'])}</a></td>
-      <td>{$user_row['language_pair']}</td>
-      <td>{$user_row['accuracy']}</td>
-      <td>{$user_row['fluency']}</td>
-      <td>{$user_row['terminology']}</td>
-      <td>{$user_row['style']}</td>
-      <td>{$user_row['design']}</td>
-      <td>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['comment'])}</td>
-]]]
+            $data .= '"' . $user_row['complete_date'] . '","' .
+            str_replace('"', '""', $user_row['task_title']) . '","' .
+            str_replace('"', '""', $user_row['reviser_name']) . '","' .
+            str_replace('"', '""', $user_row['translator_name']) . '","' .
+            $user_row['language_pair'] . '","' .
+            $user_row['accuracy'] . '","' .
+            $user_row['fluency'] . '","' .
+            $user_row['terminology'] . '","' .
+            $user_row['style'] . '","' .
+            $user_row['design'] . '","' .
+            str_replace('"', '""', $user_row['comment']) . '"' . "\n";
+{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['comment'])}
         }
 
         header('Content-type: text/csv');
@@ -569,13 +567,10 @@ class AdminRouteHandler
         $data = "\xEF\xBB\xBF" . '"Completed","Revision Task","Reviser","Language Pair"' . "\n";
 
         foreach ($all_users as $user_row) {
-            $data .= '"' . str_replace('"', '""', $user_row['display_name']) . '","' . $user_row['email'] . '","' . str_replace('"', '""', $user_row['first_name']) . ' ' . str_replace('"', '""', $user_row['last_name']) . '","' . $user_row['language_code'] . '","' . $user_row['language_name'] . '","' . $user_row['country_code'] . '","' . $user_row['country_name'] . '","' . $user_row['native_or_secondary'] . '","' . $user_row['level'] . '"' . "\n";
-[[[
-      <td>{$user_row['complete_date']}</td>
-      <td><a href="{urlFor name="task-view" options="task_id.{$user_row['revise_task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['task_title'])}</a></td>
-      <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['reviser_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['reviser_name'])}</a></td>
-      <td>{$user_row['language_pair']}</td>
-]]]
+            $data .= '"' . $user_row['complete_date'] . '","' .
+            str_replace('"', '""', $user_row['task_title']) . '","' .
+            str_replace('"', '""', $user_row['reviser_name']) . '","' .
+            $user_row['language_pair'] . '"' . "\n";
         }
 
         header('Content-type: text/csv');
@@ -607,18 +602,16 @@ class AdminRouteHandler
         $data = "\xEF\xBB\xBF" . '"Project","Partner","Created","Delivered","Corrections","Grammar","Spelling","Consistency","Comments"' . "\n";
 
         foreach ($all_users as $user_row) {
-            $data .= '"' . str_replace('"', '""', $user_row['display_name']) . '","' . $user_row['email'] . '","' . str_replace('"', '""', $user_row['first_name']) . ' ' . str_replace('"', '""', $user_row['last_name']) . '","' . $user_row['language_code'] . '","' . $user_row['language_name'] . '","' . $user_row['country_code'] . '","' . $user_row['country_name'] . '","' . $user_row['native_or_secondary'] . '","' . $user_row['level'] . '"' . "\n";
-[[[
-      <td><a href="{urlFor name="project-view" options="project_id.{$user_row['project_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['title'])}</a></td>
-      <td><a href="{urlFor name="org-public-profile" options="org_id.{$user_row['organisation_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['name'])}</a></td>
-      <td>{$user_row['created']}</td>
-      <td>{$user_row['completed']}</td>
-      <td>{$user_row['cor']}</td>
-      <td>{$user_row['gram']}</td>
-      <td>{$user_row['spell']}</td>
-      <td>{$user_row['cons']}</td>
+            $data .= '"' . str_replace('"', '""', $user_row['title']) . '","' .
+            str_replace('"', '""', $user_row['name']) . '","' .
+            $user_row['created'] . '","' .
+            $user_row['completed'] . '","' .
+            $user_row['cor'] . '","' .
+            $user_row['gram'] . '","' .
+            $user_row['spell'] . '","' .
+            $user_row['cons'] . '","' .
+            str_replace('"', '""', $user_row['comments']) . '"' . "\n";
       <td>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['comments'])}</td>
-]]]
         }
 
         header('Content-type: text/csv');
