@@ -535,7 +535,6 @@ class AdminRouteHandler
             $user_row['style'] . '","' .
             $user_row['design'] . '","' .
             str_replace('"', '""', $user_row['comment']) . '"' . "\n";
-{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['comment'])}
         }
 
         header('Content-type: text/csv');
@@ -611,7 +610,6 @@ class AdminRouteHandler
             $user_row['spell'] . '","' .
             $user_row['cons'] . '","' .
             str_replace('"', '""', $user_row['comments']) . '"' . "\n";
-      <td>{TemplateHelper::uiCleanseHTMLNewlineAndTabs($user_row['comments'])}</td>
         }
 
         header('Content-type: text/csv');
