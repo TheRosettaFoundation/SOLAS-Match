@@ -92,6 +92,24 @@ class AdminRouteHandler
         )->name('project_source_file_scores');
 
         $app->get(
+            '/download_submitted_task_reviews/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_submitted_task_reviews')
+        )->name('download_submitted_task_reviews');
+
+        $app->get(
+            '/download_tasks_no_reviews/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_tasks_no_reviews')
+        )->name('download_tasks_no_reviews');
+
+        $app->get(
+            '/download_project_source_file_scores/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_project_source_file_scores')
+        )->name('download_project_source_file_scores');
+
+        $app->get(
             '/first_completed_task/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'first_completed_task')
@@ -498,6 +516,27 @@ class AdminRouteHandler
         $app->render('admin/submitted_task_reviews.tpl');
     }
 
+    public function download_submitted_task_reviews()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $all_users = $statsDao->submitted_task_reviews();
+
+        $data = "\xEF\xBB\xBF" . '"Display Name","Email","Name","Code","Language","Code","Country","","Level"' . "\n";
+
+        foreach ($all_users as $user_row) {
+            $data .= '"' . str_replace('"', '""', $user_row['display_name']) . '","' . $user_row['email'] . '","' . str_replace('"', '""', $user_row['first_name']) . ' ' . str_replace('"', '""', $user_row['last_name']) . '","' . $user_row['language_code'] . '","' . $user_row['language_name'] . '","' . $user_row['country_code'] . '","' . $user_row['country_name'] . '","' . $user_row['native_or_secondary'] . '","' . $user_row['level'] . '"' . "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="submitted_task_reviews.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
+    }
+
     public function tasks_no_reviews()
     {
         $app = \Slim\Slim::getInstance();
@@ -509,6 +548,27 @@ class AdminRouteHandler
         $app->render('admin/tasks_no_reviews.tpl');
     }
 
+    public function download_tasks_no_reviews()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $all_users = $statsDao->tasks_no_reviews();
+
+        $data = "\xEF\xBB\xBF" . '"Display Name","Email","Name","Code","Language","Code","Country","","Level"' . "\n";
+
+        foreach ($all_users as $user_row) {
+            $data .= '"' . str_replace('"', '""', $user_row['display_name']) . '","' . $user_row['email'] . '","' . str_replace('"', '""', $user_row['first_name']) . ' ' . str_replace('"', '""', $user_row['last_name']) . '","' . $user_row['language_code'] . '","' . $user_row['language_name'] . '","' . $user_row['country_code'] . '","' . $user_row['country_name'] . '","' . $user_row['native_or_secondary'] . '","' . $user_row['level'] . '"' . "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="tasks_no_reviews.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
+    }
+
     public function project_source_file_scores()
     {
         $app = \Slim\Slim::getInstance();
@@ -518,6 +578,27 @@ class AdminRouteHandler
 
         $app->view()->appendData(array('all_users' => $all_users));
         $app->render('admin/project_source_file_scores.tpl');
+    }
+
+    public function download_project_source_file_scores()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $all_users = $statsDao->project_source_file_scores();
+
+        $data = "\xEF\xBB\xBF" . '"Display Name","Email","Name","Code","Language","Code","Country","","Level"' . "\n";
+
+        foreach ($all_users as $user_row) {
+            $data .= '"' . str_replace('"', '""', $user_row['display_name']) . '","' . $user_row['email'] . '","' . str_replace('"', '""', $user_row['first_name']) . ' ' . str_replace('"', '""', $user_row['last_name']) . '","' . $user_row['language_code'] . '","' . $user_row['language_name'] . '","' . $user_row['country_code'] . '","' . $user_row['country_name'] . '","' . $user_row['native_or_secondary'] . '","' . $user_row['level'] . '"' . "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="project_source_file_scores.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
     }
 
     public function first_completed_task()
