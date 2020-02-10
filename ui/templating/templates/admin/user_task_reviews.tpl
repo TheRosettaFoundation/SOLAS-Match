@@ -28,7 +28,7 @@
     <th width="6%">Corrections</th>
     <th width="6%">Grammar</th>
     <th width="6%">Spelling</th>
-    <th width="6%">consistency</th>
+    <th width="6%">Consistency</th>
     <th width="6%">Number</th>
   </thead>
 

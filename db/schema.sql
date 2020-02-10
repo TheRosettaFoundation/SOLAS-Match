@@ -7514,7 +7514,7 @@ BEGIN
     JOIN      Projects                            p ON wc.project_id=p.id
     JOIN      Tasks                               t ON wc.project_id=t.project_id
     LEFT JOIN WordCountRequestForProjectsErrors wce ON wc.project_id=wce.project_id
-    LEFT JOIN TaskFileVersions                   tv ON t.id=tv.task_id AND tv.version_id=0
+    LEFT JOIN TaskFileVersions                   tv ON t.id=tv.task_id AND tv.version_id=0 AND t.`task-type_id`=2
     LEFT JOIN Users                               u ON tv.user_id=u.id
     GROUP BY wc.project_id
     ORDER BY project_id DESC
