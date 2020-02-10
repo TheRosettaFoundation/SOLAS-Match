@@ -23,7 +23,7 @@
     <th width="5%">Corrections</th>
     <th width="5%">Grammar</th>
     <th width="5%">Spelling</th>
-    <th width="5%">consistency</th>
+    <th width="5%">Consistency</th>
     <th width="30%">Comments</th>
   </thead>
 
