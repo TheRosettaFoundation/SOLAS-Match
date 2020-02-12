@@ -336,7 +336,13 @@
 <table border="0">
 {foreach $admin_comments as $admin_comment}
     <tr valign="top">
-        <td style="width: 80%"><ul><li>{$admin_comment['admin_comment']|escape:'html':'UTF-8'}</li></ul></td>
+        <td style="width: 80%"><ul><li>{$admin_comment['admin_comment']|escape:'html':'UTF-8'}
+            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                <input type="submit" class="btn btn-danger" name="mark_comment_delete" value="Delete" />
+                <input type="hidden" name="comment_id" value="{$admin_comment['id']}" />
+                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+            </form>
+        </li></ul></td>
         <td style="width: 20%"><ul><li>{$admin_comment['work_again']}</li></ul></td>
     </tr>
 {/foreach}
