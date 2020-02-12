@@ -1680,4 +1680,9 @@ error_log(print_r($result, true));
             LibAPI\PDOWrapper::cleanse($work_again) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($comment));
     }
+
+    public function delete_admin_comment($id)
+    {
+        LibAPI\PDOWrapper::call('delete_admin_comment', LibAPI\PDOWrapper::cleanse($id));
+    }
 }
