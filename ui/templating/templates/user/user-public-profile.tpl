@@ -263,6 +263,13 @@
                            {else}
                            <a href="{urlFor name="user-download" options="id.{$certification['id']}"}">{$certification['note']|escape:'html':'UTF-8'}</a>{if $private_access && $certification['reviewed'] == 1} (reviewed){/if}
                            {/if}
+                            {if $isSiteAdmin}
+                                <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                                    <input type="submit" class="btn btn-danger" name="mark_certification_delete" value="Delete" />
+                                    <input type="hidden" name="certification_id" value="{$certification['id']}" />
+                                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                </form>
+                           {/if}
                         {else}
                         {$certification['note']|escape:'html':'UTF-8'}
                         {/if}
@@ -302,7 +309,6 @@
 
 {if $isSiteAdmin}
 <hr/>
-<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
 <table border="0">
     <tr valign="top">
         <td style="width: 80%"><h3>Administrative Section</h3></td><td style="width: 20%"></td>
@@ -311,23 +317,30 @@
         <td>Comment</td>
         <td>Willingness to work again score (1 to 5)</td>
     </tr>
+</table>
+
+<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+<table border="0">
     <tr valign="top">
-        <td><input type='text' value="" name="comment" id="comment" style="width: 98%" /></td>
-        <td><input type='text' value="" name="work_again" id="work_again" /></td>
+        <td style="width: 80%"><input type='text' value="" name="comment" id="comment" style="width: 98%" /></td>
+        <td style="width: 20%"><input type='text' value="" name="work_again" id="work_again" /></td>
     </tr>
     <tr valign="top">
         <td></td>
         <td><input type="submit" class="btn btn-primary" name="admin_comment" value="Submit" /></td>
     </tr>
-{foreach $admin_comments as $admin_comment}
-    <tr valign="top">
-        <td><ul><li>{$admin_comment['admin_comment']|escape:'html':'UTF-8'}</li></ul></td>
-        <td><ul><li>{$admin_comment['work_again']}</li></ul></td>
-    </tr>
-{/foreach}
 </table>
 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
+
+<table border="0">
+{foreach $admin_comments as $admin_comment}
+    <tr valign="top">
+        <td style="width: 80%"><ul><li>{$admin_comment['admin_comment']|escape:'html':'UTF-8'}</li></ul></td>
+        <td style="width: 20%"><ul><li>{$admin_comment['work_again']}</li></ul></td>
+    </tr>
+{/foreach}
+</table>
 <hr/>
 {/if}
 

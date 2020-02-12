@@ -1598,10 +1598,12 @@ CREATE TABLE IF NOT EXISTS `UserCertifications` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `admin_comment` (
+  id            INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   user_id       INT(10) UNSIGNED NOT NULL,
   admin_id      INT(10) UNSIGNED NOT NULL,
   work_again    INT(10) UNSIGNED NOT NULL,
   admin_comment VARCHAR(2000) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
   KEY `FK_admin_comment_Users` (`user_id`),
   CONSTRAINT `FK_admin_comment_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
