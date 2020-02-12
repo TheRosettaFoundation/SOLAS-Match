@@ -1485,6 +1485,11 @@ error_log(print_r($result, true));
             LibAPI\PDOWrapper::cleanse($reviewed));
     }
 
+    public function deleteCertification($id)
+    {
+        LibAPI\PDOWrapper::call('deleteCertification', LibAPI\PDOWrapper::cleanse($id));
+    }
+
     public function userDownload($certification)
     {
         $app = \Slim\Slim::getInstance();
@@ -1679,5 +1684,10 @@ error_log(print_r($result, true));
             LibAPI\PDOWrapper::cleanse($admin_id) . ',' .
             LibAPI\PDOWrapper::cleanse($work_again) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($comment));
+    }
+
+    public function delete_admin_comment($id)
+    {
+        LibAPI\PDOWrapper::call('delete_admin_comment', LibAPI\PDOWrapper::cleanse($id));
     }
 }

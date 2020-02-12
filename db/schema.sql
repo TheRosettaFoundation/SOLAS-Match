@@ -1598,10 +1598,12 @@ CREATE TABLE IF NOT EXISTS `UserCertifications` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `admin_comment` (
+  id            INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   user_id       INT(10) UNSIGNED NOT NULL,
   admin_id      INT(10) UNSIGNED NOT NULL,
   work_again    INT(10) UNSIGNED NOT NULL,
   admin_comment VARCHAR(2000) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
   KEY `FK_admin_comment_Users` (`user_id`),
   CONSTRAINT `FK_admin_comment_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -8528,6 +8530,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `deleteCertification`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteCertification`(IN primaryID INT)
+BEGIN
+    DELETE FROM UserCertifications WHERE id=primaryID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `users_review`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `users_review`()
@@ -8658,6 +8668,14 @@ BEGIN
     INSERT INTO admin_comment
                (user_id, admin_id, work_again, admin_comment)
         VALUES (    uID,      aID,       work,       comment);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `delete_admin_comment`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_admin_comment`(IN primaryID INT)
+BEGIN
+    DELETE FROM admin_comment WHERE id=primaryID;
 END//
 DELIMITER ;
 
