@@ -1485,6 +1485,11 @@ error_log(print_r($result, true));
             LibAPI\PDOWrapper::cleanse($reviewed));
     }
 
+    public function deleteCertification($id)
+    {
+        LibAPI\PDOWrapper::call('deleteCertification', LibAPI\PDOWrapper::cleanse($id));
+    }
+
     public function userDownload($certification)
     {
         $app = \Slim\Slim::getInstance();
