@@ -263,6 +263,13 @@
                            {else}
                            <a href="{urlFor name="user-download" options="id.{$certification['id']}"}">{$certification['note']|escape:'html':'UTF-8'}</a>{if $private_access && $certification['reviewed'] == 1} (reviewed){/if}
                            {/if}
+                            {if $isSiteAdmin}
+                                <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                                    <input type="submit" class="btn btn-danger" name="mark_certification_delete" value="Delete" />
+                                    <input type="hidden" name="certification_id" value="{$certification['id']}" />
+                                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                </form>
+                           {/if}
                         {else}
                         {$certification['note']|escape:'html':'UTF-8'}
                         {/if}
