@@ -8530,6 +8530,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `deleteCertification`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteCertification`(IN ID INT)
+BEGIN
+    DELETE FROM UserCertifications WHERE id=ID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `users_review`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `users_review`()
@@ -8660,6 +8668,14 @@ BEGIN
     INSERT INTO admin_comment
                (user_id, admin_id, work_again, admin_comment)
         VALUES (    uID,      aID,       work,       comment);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `delete_admin_comment`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_admin_comment`(IN ID INT)
+BEGIN
+    DELETE FROM admin_comment WHERE id=ID;
 END//
 DELIMITER ;
 
