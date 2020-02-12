@@ -265,7 +265,7 @@
                            {/if}
                             {if $isSiteAdmin}
                                 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                                    <input type="submit" class="btn btn-danger" name="mark_certification_delete" value="Delete" />
+                                    <input type="submit" class="btn btn-danger" name="mark_certification_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this certificate?')" />
                                     <input type="hidden" name="certification_id" value="{$certification['id']}" />
                                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                 </form>
@@ -338,7 +338,7 @@
     <tr valign="top">
         <td style="width: 80%"><ul><li>{$admin_comment['admin_comment']|escape:'html':'UTF-8'}
             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                <input type="submit" class="btn btn-danger" name="mark_comment_delete" value="Delete" />
+                <input type="submit" class="btn btn-danger" name="mark_comment_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this comment?')" />
                 <input type="hidden" name="comment_id" value="{$admin_comment['id']}" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
