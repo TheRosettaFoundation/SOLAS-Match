@@ -8532,9 +8532,9 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `deleteCertification`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteCertification`(IN ID INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteCertification`(IN primaryID INT)
 BEGIN
-    DELETE FROM UserCertifications WHERE id=ID;
+    DELETE FROM UserCertifications WHERE id=primaryID;
 END//
 DELIMITER ;
 
@@ -8673,9 +8673,9 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `delete_admin_comment`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_admin_comment`(IN ID INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_admin_comment`(IN primaryID INT)
 BEGIN
-    DELETE FROM admin_comment WHERE id=ID;
+    DELETE FROM admin_comment WHERE id=primaryID;
 END//
 DELIMITER ;
 

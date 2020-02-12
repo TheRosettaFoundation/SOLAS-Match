@@ -1536,7 +1536,6 @@ EOD;
             }
 
             if ($isSiteAdmin && !empty($post['mark_comment_delete'])) {
-error_log("post['comment_id']: {$post['comment_id']}");
                 $userDao->delete_admin_comment($post['comment_id']);
             }
 
