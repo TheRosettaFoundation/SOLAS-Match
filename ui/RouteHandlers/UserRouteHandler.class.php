@@ -1535,12 +1535,20 @@ EOD;
                 }
             }
 
+            if ($isSiteAdmin && !empty($post['mark_comment_delete'])) {
+                $userDao->delete_admin_comment($post['comment_id']);
+            }
+
             if ($isSiteAdmin && !empty($post['mark_reviewed'])) {
                 $userDao->updateUserHowheard($user_id, 1);
             }
 
             if ($isSiteAdmin && !empty($post['mark_certification_reviewed'])) {
                 $userDao->updateCertification($post['certification_id'], 1);
+            }
+
+            if ($isSiteAdmin && !empty($post['mark_certification_delete'])) {
+                $userDao->deleteCertification($post['certification_id']);
             }
         }
                     
