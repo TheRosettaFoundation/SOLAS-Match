@@ -100,4 +100,31 @@ function renderTaskDetails()
       $(this).css("visibility", "visible");
     }
   );
+
+  $(".process_completed_utc").each(function ()
+    {
+      $(this).removeClass("process_completed_utc");
+      var utcTime = $(this).text();
+      utcTime = parseInt(utcTime) * 1000;
+      var completed = new Date(utcTime);
+      var m = completed.getMonth() + 1;
+      if (m < 10) {
+        m = "0" + m;
+      }
+      var d = completed.getDate();
+      if (d < 10) {
+        d = "0" + d;
+      }
+      var h = completed.getHours();
+      if (h < 10) {
+        h = "0" + h;
+      }
+      var mi = completed.getMinutes();
+      if (mi < 10) {
+        mi = "0" + mi;
+      }
+      $(this).html("Completed <strong>%s</strong>".replace("%s", completed.getFullYear() + "-" + m + "-" + d + " " + h + ":" + mi + ":00"));
+      $(this).css("visibility", "visible");
+    }
+  );
 }

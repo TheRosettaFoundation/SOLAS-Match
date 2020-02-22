@@ -307,6 +307,7 @@ class TaskRouteHandler
         $taskTags = array();
         $created_timestamps = array();
         $deadline_timestamps = array();
+        $completed_timestamps = [];
         $projectAndOrgs = array();
         $discourse_slug = array();
         $proofreadTaskIds = array();
@@ -339,6 +340,17 @@ class TaskRouteHandler
                 $selected_hour   = (int)substr($deadline, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not what the local time zone is)
                 $selected_minute = (int)substr($deadline, 14, 2);
                 $deadline_timestamps[$taskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+
+                if ($topTask->getTaskStatus() == Common\Enums\TaskStatusEnum::COMPLETE && $completed = $taskDao->get_task_complete_date($taskId)) {
+                    $selected_year   = (int)substr($completed,  0, 4);
+                    $selected_month  = (int)substr($completed,  5, 2);
+                    $selected_day    = (int)substr($completed,  8, 2);
+                    $selected_hour   = (int)substr($completed, 11, 2); // These are UTC, they will be recalculated to local time by JavaScript (we do not know what the local time zone is)
+                    $selected_minute = (int)substr($completed, 14, 2);
+                    $completed_timestamps[$taskId] = gmmktime($selected_hour, $selected_minute, 0, $selected_month, $selected_day, $selected_year);
+                } else {
+                    $completed_timestamps[$taskId] = 0;
+                }
 
                 $projectUri = "{$siteLocation}project/{$project->getId()}/view";
                 $projectName = $project->getTitle();
@@ -388,7 +400,7 @@ class TaskRouteHandler
         }
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Home1.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Home2.js\"></script>";
 
         $app->view()->appendData(array(
             'current_page' => 'claimed-tasks',
@@ -405,6 +417,7 @@ class TaskRouteHandler
             'taskTags' => $taskTags,
             'created_timestamps' => $created_timestamps,
             'deadline_timestamps' => $deadline_timestamps,
+            'completed_timestamps' => $completed_timestamps,
             'projectAndOrgs' => $projectAndOrgs,
             'matecat_urls' => $matecat_urls,
             'allow_downloads' => $allow_downloads,
@@ -521,7 +534,7 @@ class TaskRouteHandler
         }
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Home1.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Home2.js\"></script>";
 
         $app->view()->appendData(array(
             'current_page' => 'recent-tasks',

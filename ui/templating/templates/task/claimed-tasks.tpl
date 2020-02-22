@@ -112,6 +112,9 @@
                             </p>
                             <p class="task_details"><div class="process_created_time_utc" style="visibility: hidden">{$created_timestamps[$task_id]}</div></p>
                             <p><div class="process_deadline_utc" style="visibility: hidden">{$deadline_timestamps[$task_id]}</div></p>
+                            {if !empty($completed_timestamps[$task_id])}
+                                <p><div class="process_completed_utc" style="visibility: hidden">{$completed_timestamps[$task_id]}</div></p>
+                            {/if}
                             <p id="parents_{$task_id}">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$task_id])}</p>
 
                             {if $task->getProjectId() > Settings::get("discourse.pre_discourse")}
