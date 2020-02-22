@@ -7861,6 +7861,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_task_complete_date`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_task_complete_date`(IN `tID` INT)
+BEGIN
+    SELECT * FROM TaskCompleteDates WHERE task_id=tID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `all_orgs`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `all_orgs`()

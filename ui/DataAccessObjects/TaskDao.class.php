@@ -915,6 +915,13 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
         LibAPI\PDOWrapper::call('set_task_complete_date', LibAPI\PDOWrapper::cleanse($task_id));
     }
 
+    public function get_task_complete_date($task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_task_complete_date', LibAPI\PDOWrapper::cleanse($task_id));
+        if (empty($result)) return 0;
+        return $result[0]['complete_date'];
+    }
+
     public function all_chunked_active_projects()
     {
         $result = LibAPI\PDOWrapper::call('all_chunked_active_projects', '');
