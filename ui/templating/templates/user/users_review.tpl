@@ -43,7 +43,7 @@
       <td>{TemplateHelper::uiCleanseHTML($user_row['certificate'])}</td>
       <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['name'])}</a></td>
       <td>{$user_row['native_language']}</td>
-      <td>{$user_row['country_address']}</td>
+      <td>{TemplateHelper::uiCleanseHTML($user_row['country_address'])}</td>
     </tr>
 
   {/foreach}
