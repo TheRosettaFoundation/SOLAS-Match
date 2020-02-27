@@ -405,7 +405,7 @@
         <p style="margin-bottom:50px;"/>
     {/if}
 
-{if $private_access}
+{if $private_access || $isSiteAdmin}
     <div class="page-header">
         <h1>{Localisation::getTranslation('user_public_profile_task_stream_notifications')} <small>{Localisation::getTranslation('user_public_profile_6')}</small>
             <a href="{urlFor name="stream-notification-edit" options="user_id.$user_id"}" class="pull-right btn btn-primary">

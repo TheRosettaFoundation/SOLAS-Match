@@ -1610,7 +1610,9 @@ EOD;
         $private_access = 0;
         if (Common\Lib\UserSession::getCurrentUserID() == $user_id) {
             $private_access = 1;
+        }
 
+        if ($private_access || $isSiteAdmin) {
             $notifData = $userDao->getUserTaskStreamNotification($user_id);
             $interval = null;
             $lastSent = null;
