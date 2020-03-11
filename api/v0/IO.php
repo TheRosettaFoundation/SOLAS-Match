@@ -596,6 +596,8 @@ class IO
         if (($mime == "application/octet-stream" || $mime == "application/zip" || $extension == "doc" || $extension == "xlf")
             && (array_key_exists($extension, $mimeMap))) {
             $result = $mimeMap[$extension];
+        } elseif ($mime === 'text/plain' && $extension === 'json') {
+            $result = 'application/json';
         } else {
             $result = $mime;
         }
