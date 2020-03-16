@@ -31,7 +31,7 @@ var imageError;
 
 // Target Languages
 var targetCount = 0;
-var maxTargetLanguages = 10;
+var maxTargetLanguages = 12;
 
 // Snapshot of Form Values when Submit clicked
 var title;
