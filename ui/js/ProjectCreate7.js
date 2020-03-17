@@ -328,7 +328,7 @@ function setTemplateLanguages(template_number)
   document.getElementById("sourceLanguageSelect").value = templateObj.source;
 
   for (i = 0; i < templateObj.targets.length && i < maxTargetLanguages; i++) {
-    if (i > 1) addMoreTargetLanguages();
+    if (i > 0) addMoreTargetLanguages();
     document.getElementById("target_language_" + i).value = templateObj.targets[i];
   }
 }
