@@ -275,11 +275,11 @@
         </form>
 
         <br /><hr />
-        <div>
-                <button onclick="setTemplateLanguages(1); return false;" class="btn btn-success">
-                    <i class="icon-upload icon-white"></i>
-                    Set Source and Target Languages from Template 1
-                </button>
+        <div style = "border-top: 1px solid #999996; margin-top: 20px;">
+            <button onclick="setTemplateLanguages(1); return false;" class="btn btn-success">
+                <i class="icon-upload icon-white"></i>
+                Set Source and Target Languages from Template 1
+            </button>
         </div>
 
     </div>
