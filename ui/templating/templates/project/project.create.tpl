@@ -274,8 +274,8 @@
             <input type="hidden" name="sesskey" value="{$sesskey}" />
         </form>
 
-        <br /><hr />
-        <div style = "border-top: 1px solid #999996; margin-top: 20px;">
+        <br /><br /><br />
+        <div>
             <button onclick="setTemplateLanguages(1); return false;" class="btn btn-success">
                 <i class="icon-upload icon-white"></i>
                 Set Source and Target Languages from Template 1
