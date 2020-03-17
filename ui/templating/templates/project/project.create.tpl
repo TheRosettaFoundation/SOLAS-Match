@@ -275,7 +275,7 @@
         </form>
 
         <br /><hr />
-        <div class="pull-left">
+        <div>
                 <button onclick="setTemplateLanguages(1); return false;" class="btn btn-success">
                     <i class="icon-upload icon-white"></i>
                     Set Source and Target Languages from Template 1
