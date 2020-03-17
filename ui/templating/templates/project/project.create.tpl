@@ -251,13 +251,6 @@
                    {Localisation::getTranslation('common_remove')}
                 </button>
             </div>
-        <div class="pull-left">
-                <button onclick="setTemplateLanguages(1); return false;" class="btn btn-success">
-                    <i class="icon-upload icon-white"></i>
-                    Set Source and Target Languages from Template 1
-                </button>
-        </div>
-        <br /><hr />
 
             <div id="placeholder_for_errors_2"></div>
 
@@ -280,6 +273,15 @@
             </div>
             <input type="hidden" name="sesskey" value="{$sesskey}" />
         </form>
+
+        <hr />
+        <div class="pull-left">
+                <button onclick="setTemplateLanguages(1); return false;" class="btn btn-success">
+                    <i class="icon-upload icon-white"></i>
+                    Set Source and Target Languages from Template 1
+                </button>
+        </div>
+
     </div>
     
 {include file="footer.tpl"}
