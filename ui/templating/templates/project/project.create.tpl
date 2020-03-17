@@ -274,7 +274,7 @@
             <input type="hidden" name="sesskey" value="{$sesskey}" />
         </form>
 
-        <hr />
+        <br /><hr />
         <div class="pull-left">
                 <button onclick="setTemplateLanguages(1); return false;" class="btn btn-success">
                     <i class="icon-upload icon-white"></i>
