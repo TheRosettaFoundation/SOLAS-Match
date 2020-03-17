@@ -1536,6 +1536,10 @@ error_log(print_r($result, true));
         if (($mime == "application/octet-stream" || $mime == "application/zip" || $extension == "doc" || $extension == "xlf")
             && (array_key_exists($extension, $mimeMap))) {
             $result = $mimeMap[$extension];
+        } elseif ($mime === 'text/plain' && $extension === 'json') {
+            $result = 'application/json';
+        } elseif ($mime === 'application/zip' && $extension === 'odt') {
+            $result = 'application/vnd.oasis.opendocument.text';
         } else {
             $result = $mime;
         }

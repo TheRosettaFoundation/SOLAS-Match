@@ -19,6 +19,9 @@
             {/foreach}
         </div>
 
+        <!-- Template for predefined langauges... -->
+        <div id="template1">{$template1}</div>
+
     </span>
 
     <div class="grid_8">
@@ -248,6 +251,12 @@
                    {Localisation::getTranslation('common_remove')}
                 </button>
             </div>
+        <div class="pull-left">
+                <button onclick="setTemplateLanguages(1); return false;" class="btn btn-success">
+                    <i class="icon-upload icon-white"></i>
+                    Set Source and Target Languages from Template 1
+                </button>
+        </div>
 
             <div id="placeholder_for_errors_2"></div>
 
