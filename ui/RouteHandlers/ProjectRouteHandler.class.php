@@ -1459,7 +1459,7 @@ class ProjectRouteHandler
         }
 
         $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/ProjectCreate6.js\"></script>";
+        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/ProjectCreate7.js\"></script>";
 
         $app->view()->appendData(array(
             "siteLocation"          => Common\Lib\Settings::get('site.location'),
@@ -1483,6 +1483,7 @@ class ProjectRouteHandler
             'showRestrictTask' => $taskDao->organisationHasQualifiedBadge($org_id),
             'isSiteAdmin'    => $adminDao->isSiteAdmin($user_id),
             'sesskey'        => $sesskey,
+            'template1'      => '{"source": "en-GB", "targets": ["zh-CN", "zh-TW", "th-TH", "vi-VN", "id-ID", "tl-PH", "ko-KR", "ja-JP", "ms-MY", "my-MM", "hi-IN", "bn-IN"]}',
         ));
         $app->render("project/project.create.tpl");
     }

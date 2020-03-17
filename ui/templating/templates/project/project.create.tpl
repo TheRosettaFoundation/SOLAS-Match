@@ -19,6 +19,9 @@
             {/foreach}
         </div>
 
+        <!-- Template for predefined langauges... -->
+        <div id="template1">{$template1}</div>
+
     </span>
 
     <div class="grid_8">
@@ -270,6 +273,15 @@
             </div>
             <input type="hidden" name="sesskey" value="{$sesskey}" />
         </form>
+
+    </div>
+
+    <br /><br />
+    <div>
+        <button onclick="setTemplateLanguages(1); return false;" class="btn btn-success">
+            <i class="icon-upload icon-white"></i>
+            Set Source and Target Languages from Template 1
+        </button>
     </div>
     
 {include file="footer.tpl"}
