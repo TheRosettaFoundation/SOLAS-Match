@@ -267,7 +267,7 @@ function addMoreTargetLanguages()
 
     targetCount++;
     if (targetCount == 5) {
-      window.alert(parameters.getTranslation("project_create_target_language_increase"));
+      //window.alert(parameters.getTranslation("project_create_target_language_increase"));
     }
 
     // If maximum amount of target languages has been reached, display message to notify user.
@@ -311,6 +311,25 @@ function removeTargetLanguage()
     if (addBtn.disabled == true) {
       addBtn.disabled = false;
     }
+  }
+}
+
+/**
+ * Set template languages
+ */
+function setTemplateLanguages(template_number)
+{
+  while (targetCount > 1) {
+    removeTargetLanguage();
+  }
+
+  var templateObj = JSON.parse(document.getElementById("template" + template_number).innerHTML);
+
+  document.getElementById("sourceLanguageSelect").value = templateObj.source;
+
+  for (i = 0; i < templateObj.targets.length && i < maxTargetLanguages; i++) {
+    if (i > 1) addMoreTargetLanguages();
+    document.getElementById("target_language_" + i).value = templateObj.targets[i];
   }
 }
 
