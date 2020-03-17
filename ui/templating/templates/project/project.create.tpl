@@ -257,7 +257,7 @@
                     Set Source and Target Languages from Template 1
                 </button>
         </div>
-        <hr />
+        <br /><hr />
 
             <div id="placeholder_for_errors_2"></div>
 
