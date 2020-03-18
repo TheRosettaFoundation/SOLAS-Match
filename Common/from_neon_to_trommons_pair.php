@@ -275,6 +275,11 @@ $from_neon_to_trommons_pair = array(
 'Hema' => array('nix', 'CD'),
 
 'Lao' => array('lo', 'LA'),
+
+'Oromo' => array('om', 'KE'),
+'Pokot' => array('pko', 'KE'),
+'Turkana' => array('tuv', 'KE'),
+'Samburu' => array('saq', 'KE'),
 );
 
 $language_options_changes = [

@@ -287,4 +287,9 @@
 'nnb' => 'nnb-CD',
 'shr' => 'shr-CD',
 'nix' => 'nix-CD',
+
+'om' => 'om-KE',
+'pko' => 'pko-KE',
+'tuv' => 'tuv-KE',
+'saq' => 'saq-KE',
 );
