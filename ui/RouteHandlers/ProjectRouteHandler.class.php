@@ -1727,9 +1727,11 @@ class ProjectRouteHandler
             $fields .= urlencode($name).'='.urlencode($value).'&';
         }
         $fields .= 'tags[]=' . urlencode($org_name);
+        $language_count = 0;
         foreach($languages as $language){
             // We cannot pass the post fields as array because multiple languages mean duplicate tags[] keys
             $fields .= '&tags[]=' . urlencode($language);
+            if (++$language_count == 4) break; // Limit in Discourse on number of tags?
         }
 
         $re = curl_init(Common\Lib\Settings::get('discourse.url').'/posts');
