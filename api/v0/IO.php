@@ -600,6 +600,8 @@ class IO
             $result = 'application/json';
         } elseif ($mime === 'application/zip' && $extension === 'odt') {
             $result = 'application/vnd.oasis.opendocument.text';
+        } elseif ($mime === 'text/xml' && $extension === 'xml') {
+            $result = 'application/xml';
         } else {
             $result = $mime;
         }
