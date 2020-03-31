@@ -1774,7 +1774,7 @@ class ProjectRouteHandler
         curl_setopt($re, CURLOPT_POSTFIELDS, array(
             'name' => str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getTitle()),
             'notes' => "Partner: $org_name, Target: $targetlanguages, Deadline: ".$project->getDeadline() . ' https:/'.'/'.$_SERVER['SERVER_NAME']."/project/$projectId/view",
-            'projects' => '1167152494105673'
+            'projects' => '1169104501864281'
             )
         );
 
