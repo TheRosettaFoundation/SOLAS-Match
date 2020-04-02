@@ -8687,6 +8687,36 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `covid_projects`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `covid_projects`()
+BEGIN
+    SELECT
+        p.title AS project_title,
+        o.name AS org_name,
+        MAX(u.email) AS creator_email,
+        p.`word-count` AS word_count,
+        GROUP_CONCAT(DISTINCT CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) ORDER BY CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) ASC SEPARATOR ', ') AS language_pairs,
+        COUNT(DISTINCT CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code)) AS language_pairs_number,
+        p.created,
+        p.deadline,
+        IF(MIN(t.`task-status_id`=4), MAX(tcd.complete_date), '') AS completed
+    FROM Projects               p
+    JOIN ProjectTags           pt ON p.id=pt.project_id AND pt.tag_id=4334
+    JOIN Organisations          o ON p.organisation_id=o.id
+    JOIN Tasks                  t ON p.id=t.project_id
+    LEFT JOIN TaskFileVersions tv ON t.id=tv.task_id AND tv.version_id=0 AND t.`task-type_id`=2
+    LEFT JOIN Users             u ON tv.user_id=u.id
+    JOIN Languages             l1 ON p. language_id=l1.id
+    JOIN Countries             c1 ON p. country_id =c1.id
+    JOIN Languages             l2 ON t.`language_id-target`=l2.id
+    JOIN Countries             c2 ON t.`country_id-target` =c2.id
+    LEFT JOIN TaskCompleteDates tcd ON t.id=tcd.task_id
+    GROUP BY p.id
+    ORDER BY p.created DESC;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 

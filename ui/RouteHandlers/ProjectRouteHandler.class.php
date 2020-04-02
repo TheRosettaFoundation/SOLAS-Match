@@ -1727,9 +1727,11 @@ class ProjectRouteHandler
             $fields .= urlencode($name).'='.urlencode($value).'&';
         }
         $fields .= 'tags[]=' . urlencode($org_name);
+        $language_count = 0;
         foreach($languages as $language){
             // We cannot pass the post fields as array because multiple languages mean duplicate tags[] keys
             $fields .= '&tags[]=' . urlencode($language);
+            if (++$language_count == 4) break; // Limit in Discourse on number of tags?
         }
 
         $re = curl_init(Common\Lib\Settings::get('discourse.url').'/posts');
@@ -1758,6 +1760,23 @@ class ProjectRouteHandler
             )
         );
 
+        curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($re, CURLOPT_HEADER, true);
+        curl_setopt($re, CURLOPT_HTTPHEADER, array("Authorization: Bearer " . Common\Lib\Settings::get('asana.api_key')));
+        curl_exec($re);
+        if ($error_number = curl_errno($re)) {
+          error_log("Asana API error ($error_number): " . curl_error($re));
+        }
+        curl_close($re);
+
+        // Asana 2nd Project
+        $re = curl_init('https://app.asana.com/api/1.0/tasks');
+        curl_setopt($re, CURLOPT_POSTFIELDS, array(
+            'name' => str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getTitle()),
+            'notes' => "Partner: $org_name, Target: $targetlanguages, Deadline: ".$project->getDeadline() . ' https:/'.'/'.$_SERVER['SERVER_NAME']."/project/$projectId/view",
+            'projects' => '1169104501864281'
+            )
+        );
 
         curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($re, CURLOPT_HEADER, true);
@@ -1767,7 +1786,6 @@ class ProjectRouteHandler
           error_log("Asana API error ($error_number): " . curl_error($re));
         }
         curl_close($re);
-        //End Asana
     }
 
     public function project_cron_1_minute()
