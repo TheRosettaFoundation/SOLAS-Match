@@ -446,4 +446,10 @@ class StatisticsDao extends BaseDao
         $result = LibAPI\PDOWrapper::call('matecat_analyse_status', '');
         return $result;
     }
+
+    public function covid_projects()
+    {
+        $result = LibAPI\PDOWrapper::call('covid_projects', '');
+        return $result;
+    }
 }

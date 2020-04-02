@@ -56,6 +56,12 @@ class AdminRouteHandler
         )->via('POST')->name('matecat_analyse_status');
 
         $app->get(
+            '/download_covid_projects/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_covid_projects')
+        )->via('POST')->name('download_covid_projects');
+
+        $app->get(
             '/late_matecat/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'late_matecat')
@@ -1327,6 +1333,35 @@ class AdminRouteHandler
 
         $app->view()->appendData(array('all_users' => $all_users));
         $app->render('admin/matecat_analyse_status.tpl');
+    }
+
+    public function download_covid_projects()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $all_users = $statsDao->covid_projects();
+
+        $data = "\xEF\xBB\xBF" . '"Title","Partner","Creator","Word Count","Language Pairs","Number","Created Time","Deadline","Completed Time"' . "\n";
+
+        foreach ($all_users as $user_row) {
+            $data .= '"' . str_replace('"', '""', $user_row['project_title']) . '","' .
+                str_replace('"', '""', $user_row['org_name']) . '","' .
+                $user_row['creator_email'] . '","' .
+                $user_row['word_count'] . '","' .
+                $user_row['language_pairs'] . '","' .
+                $user_row['language_pairs_number'] . '","' .
+                $user_row['created'] . '","' .
+                $user_row['deadline'] . '","' .
+                $user_row['completed'] . '"' . "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="covid_projects.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
     }
 }
 
