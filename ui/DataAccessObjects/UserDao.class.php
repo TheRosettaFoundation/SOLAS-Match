@@ -1696,4 +1696,9 @@ error_log(print_r($result, true));
     {
         LibAPI\PDOWrapper::call('delete_admin_comment', LibAPI\PDOWrapper::cleanse($id));
     }
+
+    public function record_track_code($track_code)
+    {
+        LibAPI\PDOWrapper::call('record_track_code', LibAPI\PDOWrapper::cleanseWrapStr($track_code));
+    }
 }
