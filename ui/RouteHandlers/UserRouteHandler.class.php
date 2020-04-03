@@ -373,11 +373,15 @@ class UserRouteHandler
 
     public function register($track_code = '')
     {
+error_log("register(track_code: $track_code)");
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
         $langDao = new DAO\LanguageDao();
 
-        $userDao->record_track_code($track_code);
+        if (!\SolasMatch\UI\isValidPost($app)) {
+            $userDao->record_track_code($track_code);
+            error_log("Recorded track_code: $track_code");
+        }
 
         $use_openid = Common\Lib\Settings::get("site.openid");
         $app->view()->setData("openid", $use_openid);
