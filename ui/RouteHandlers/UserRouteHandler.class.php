@@ -36,6 +36,11 @@ class UserRouteHandler
         )->via("GET", "POST")->name("register");
 
         $app->get(
+            '/register_track/:track_code/',
+            array($this, 'register')
+        )->via('GET', 'POST')->name('register_track');
+
+        $app->get(
             "/:user_id/change_email/",
             array($this, "changeEmail")
         )->via("GET", "POST")->name("change-email");
@@ -366,12 +371,14 @@ class UserRouteHandler
         $app->render("videos.tpl");
     }
 
-    public function register()
+    public function register($track_code = '')
     {
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
         $langDao = new DAO\LanguageDao();
-        
+
+        $userDao->record_track_code($track_code);
+
         $use_openid = Common\Lib\Settings::get("site.openid");
         $app->view()->setData("openid", $use_openid);
         

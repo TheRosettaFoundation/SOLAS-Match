@@ -5680,29 +5680,31 @@ DROP PROCEDURE IF EXISTS `userInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userInsertAndUpdate`(IN `email` VARCHAR(128), IN `nonce` int(11), IN `pass` char(128), IN `bio` TEXT, IN `name` VARCHAR(128), IN `lang` VARCHAR(3), IN `region` VARCHAR(3), IN `id` INT)
 BEGIN
-	if pass='' then set pass=null;end if;
-	if bio='' then set bio=null;end if;
-	if id='' then set id=null;end if;
-	if nonce='' then set nonce=null;end if;
-	if name='' then set name=null;end if;
-	if email='' then set email=null;end if;
-	if lang='' then set lang=null;end if;
+    if pass='' then set pass=null;end if;
+    if bio='' then set bio=null;end if;
+    if id='' then set id=null;end if;
+    if nonce='' then set nonce=null;end if;
+    if name='' then set name=null;end if;
+    if email='' then set email=null;end if;
+    if lang='' then set lang=null;end if;
     if region='' then set region=null;end if;
-	
+
     -- if new user
-	if id is null and not exists(select * from Users u where u.email= email) then
-	-- set insert
-    	set @countryID=null;
-	    select c.id into @countryID from Countries c where c.code=region;
-    	set @langID=null;
-    	select l.id into @langID from Languages l where l.code=lang;
-	
+    if id is null and not exists(select * from Users u where u.email= email) then
+    -- set insert
+        set @countryID=null;
+        select c.id into @countryID from Countries c where c.code=region;
+        set @langID=null;
+        select l.id into @langID from Languages l where l.code=lang;
+
+        CALL insert_tracked_registration(email);
+
         insert into Users (email, nonce, password, `created-time`, `display-name`, biography, language_id, country_id) 
             values (email, nonce, pass, NOW(), name, bio, @langID, @countryID);
         call getUser(LAST_INSERT_ID(),null,null,null,null,null,null,null,null);
-	
-    else 
-        if bio is not null 
+
+    else
+        if bio is not null
             and bio != IFNULL(
                 (SELECT u.biography 
                     FROM Users u 
@@ -5712,9 +5714,9 @@ BEGIN
             update Users u 
                 set u.biography = bio
                 WHERE u.id = id;
-		end if;
+        end if;
                 
-		if lang is not null 
+        if lang is not null
             and (select l.id 
                 from Languages l 
                 where l.code=lang
@@ -5727,7 +5729,7 @@ BEGIN
             update Users u 
                 set u.language_id = (select l.id from Languages l where l.code=lang)
                 WHERE u.id = id;
-		end if;
+        end if;
 
         if region is not null 
             and (select c.id 
@@ -5742,7 +5744,7 @@ BEGIN
             update Users u 
                 set u.country_id = (select c.id from Countries c where c.code = region)
                 WHERE u.id = id;
-		end if;
+        end if;
 
         if name is not null 
             and name NOT LIKE BINARY IFNULL(
@@ -5754,7 +5756,7 @@ BEGIN
             update Users u 
                 set u.`display-name` = name
                 WHERE u.id = id;
-		end if;
+        end if;
 
         if email is not null 
             and email != (SELECT u.email 
@@ -5764,7 +5766,7 @@ BEGIN
             update Users u 
                 set u.email = email
                 WHERE u.id = id;
-		end if;
+        end if;
 
         if nonce is not null 
             and nonce != (SELECT u.nonce 
@@ -5774,8 +5776,8 @@ BEGIN
             update Users u
                 set u.nonce = nonce
                 WHERE u.id = id;
-		end if;
-		
+        end if;
+
         if pass is not null 
             and pass != (SELECT u.password 
                 FROM Users u 
@@ -5787,7 +5789,7 @@ BEGIN
         end if;
 
        	call getUser(id,null,null,null,null,null,null,null,null);
-	end if;
+    end if;
 END//
 DELIMITER ;
 
