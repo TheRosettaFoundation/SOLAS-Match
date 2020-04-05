@@ -673,7 +673,7 @@ Bei Fragen schreiben Sie bitte an <a href="mailto:info@translatorswithoutborders
 	<string name="terms_49">Veränderungen der Nutzungsbedingungen für die Site</string>
 	<string name="terms_50">The Rosetta Foundation kann diese Nutzungsbedingungen für ihre Website jederzeit ohne Benachrichtigung ändern. Mit der Nutzung dieser Website erklären Sie sich damit einverstanden, an die aktuellen Nutzungsbedingungen dieser Website gebunden zu sein.</string>
 	<string name="terms_governing_law">Geltendes Recht</string>
-	<string name="terms_52">Jede Forderung die Website Trommons.org betreffend ist ohne Berücksichtigung der Bestimmungen bei Gesetzeskonflikten an die Gesetze des Staates Irland gebunden.</string>
+  <string name="terms_52">Jede Forderung die Website Kató betreffend ist ohne Berücksichtigung der Bestimmungen bei Gesetzeskonflikten an die Gesetze des Staates Irland gebunden.</string>
 	<string name="terms_53">Allgemeine Geschäftsbedingungen in Bezug auf die Nutzung einer Website.</string>
 	<string name="terms_privacy_policy">Datenschutzerklärung</string>
     <string name="terms_54">Der Schutz Ihrer Daten ist uns sehr wichtig. Dementsprechend haben wir dieses Regelwerk aufgestellt, damit Sie verstehen können, wie wir persönliche Daten sammeln, nutzen, kommunizieren, veröffentlichen und anwenden. Die folgenden Punkte umreißen unsere <a href="%s">Datenschutzerklärung</a>.</string>
@@ -930,7 +930,7 @@ Bei Fragen schreiben Sie bitte an <a href="mailto:info@translatorswithoutborders
   <string name="task_twitter_0_org_task_review">Wenn Du ein Twitter-Konto hast, kannst Du auf die folgende Schaltfläche klicken, um unseren Freiwilligen zu danken (Pop-ups müssen erlaubt sein):</string>
   <string name="task_twitter_1">Ich habe gerade eine gemeinnützige Übersetzungsaufgabe für @TranslatorsWB abgeschlossen #languagematters</string>
   <string name="task_twitter_2">Wir sind auf TWB, um über @TranslatorsWB Kontakt zu freiwilligen Sprachtalenten aufzunehmen #languagematters</string>
-  <string name="task_twitter_3">Übersetzer @TranslatorsWB, könnt Ihr bei unserem Projekt auf trommons.org helfen%3F #languagematters</string>
+  <string name="task_twitter_3">Übersetzer @TranslatorsWB, könnt Ihr bei unserem Projekt auf Kató helfen%3F #languagematters</string>
   <string name="task_twitter_4">Vielen Dank an alle Freiwilligen von @TranslatorsWB für Eure Hilfe bei den Übersetzungen #languagematters</string>
 	<string name="task_review_2">Bitte gib eine Bewertung zu der Datei/den Dateien ab, die Du gerade</string>
 	<string name="task_review_3">basiert auf den folgenden Kriterien:</string>

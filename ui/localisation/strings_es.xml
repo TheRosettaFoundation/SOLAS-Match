@@ -681,11 +681,11 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@transl
 	<string name="terms_49">Modificaciones de los Términos y condiciones de uso</string>
 	<string name="terms_50">The Rosetta Foundation se reserva el derecho a modificar los términos y condiciones de uso del sitio web de Trommons en cualquier momento y sin previo aviso. Al utilizar este sitio web, el usuario acepta quedar legalmente vinculado a la versión actual de los términos y condiciones de uso.</string>
 	<string name="terms_governing_law">Ley aplicable</string>
-  <string name="terms_52">Cualquier disputa o reclamación relacionada con el sitio web Trommons.org se regirá por las leyes de la República de Irlanda, independientemente de si existe algún conflicto entre las disposiciones aplicables.</string>
+  <string name="terms_52">Cualquier disputa o reclamación relacionada con el sitio web Kató se regirá por las leyes de la República de Irlanda, independientemente de si existe algún conflicto entre las disposiciones aplicables.</string>
 	<string name="terms_53">Términos y condiciones generales aplicables al uso de un sitio web</string>
 	<string name="terms_privacy_policy">Política de privacidad</string>
-    <string name="terms_54">Para Trommons.org, la privacidad de los usuarios es importante. A fin de que nuestros usuarios sepan cómo obtenemos, utilizamos, comunicamos y divulgamos su información personal, hemos redactado una política de privacidad para este sitio web. Consulta nuestra <a href="%s">Política de privacidad</a>.</string>
-  <string name="terms_56">Trommons.org se compromete a llevar a cabo sus actividades de conformidad con estos principios a fin de garantizar la protección y el mantenimiento de la confidencialidad de la información personal de los usuarios.</string>
+    <string name="terms_54">Para Kató, la privacidad de los usuarios es importante. A fin de que nuestros usuarios sepan cómo obtenemos, utilizamos, comunicamos y divulgamos su información personal, hemos redactado una política de privacidad para este sitio web. Consulta nuestra <a href="%s">Política de privacidad</a>.</string>
+  <string name="terms_56">Kató se compromete a llevar a cabo sus actividades de conformidad con estos principios a fin de garantizar la protección y el mantenimiento de la confidencialidad de la información personal de los usuarios.</string>
 
 	<string name="videos_volunteer_videos">Vídeos de voluntarios</string>
 	<string name="videos_organisation_videos">Vídeos de organizaciones</string>
@@ -942,7 +942,7 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@transl
   <string name="task_twitter_0_org_task_review">Si tienes Twitter, haz clic en este botón para decirle &quot;gracias&quot; a los voluntarios (asegúrate de habilitar las ventanas emergentes en tu navegador):</string>
   <string name="task_twitter_1">Acabo de colaborar como voluntario/a con @TranslatorsWB #languagematters</string>
   <string name="task_twitter_2">Nos hemos registrado en TWB para contactar con traductores voluntarios @TranslatorsWB #languagematters</string>
-  <string name="task_twitter_3">Voluntarios de @TranslatorsWB: ¿nos ayudáis a traducir el proyecto que hemos creado en trommons.org%3F</string>
+  <string name="task_twitter_3">Voluntarios de @TranslatorsWB: ¿nos ayudáis a traducir el proyecto que hemos creado en Kató%3F</string>
   <string name="task_twitter_4">¡Gracias a los voluntarios de @TranslatorsWB por ayudarnos a traducir nuestro texto! #languagematters</string>
   <string name="task_review_2">Por favor, puntúa el archivo o archivos que has</string>
 	<string name="task_review_3">en función de estos criterios:</string>
