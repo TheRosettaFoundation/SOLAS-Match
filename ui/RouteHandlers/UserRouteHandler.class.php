@@ -1119,6 +1119,12 @@ EOD;
                         if (!$found) {
                             if (!$isSiteAdmin) $post["qualification_level_$i"] = 1;
 
+                            if (!$isSiteAdmin && empty($userQualifiedPairs)) { // First time through here for ordinary registrant
+                                if ($userDao->get_tracked_registration_for_verified($user->getEmail())) {
+                                    $post["qualification_level_$i"] = 2; // Verified Translator
+                                }
+                            }
+
                             $userDao->createUserQualifiedPair($user_id,
                                 $language_code_source, $country_code_source,
                                 $language_code_target, $country_code_target,
@@ -1689,6 +1695,7 @@ EOD;
             'quality_score'          => $userDao->quality_score($user_id),
             'admin_comments'         => $userDao->admin_comments($user_id),
             'certifications'         => $userDao->getUserCertifications($user_id),
+            'tracked_registration'   => $userDao->get_tracked_registration($user->getEmail()),
         ));
 
         $app->render("user/user-public-profile.tpl");

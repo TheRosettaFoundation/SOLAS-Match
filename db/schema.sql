@@ -8757,6 +8757,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_tracked_registration`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_tracked_registration`(IN mail VARCHAR(128))
+BEGIN
+    SELECT referer FROM TrackedRegistrations WHERE email=mail;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 

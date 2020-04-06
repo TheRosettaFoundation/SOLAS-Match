@@ -1701,4 +1701,18 @@ error_log(print_r($result, true));
     {
         LibAPI\PDOWrapper::call('record_track_code', LibAPI\PDOWrapper::cleanseWrapStr($track_code));
     }
+
+    public function get_tracked_registration($email)
+    {
+        $result = LibAPI\PDOWrapper::call('get_tracked_registration', LibAPI\PDOWrapper::cleanseNullOrWrapStr($email));
+        if (!empty($result)) return $result[0]['referer'];
+        return '';
+    }
+
+    public function get_tracked_registration_for_verified($email)
+    {
+        $result = LibAPI\PDOWrapper::call('get_tracked_registration', LibAPI\PDOWrapper::cleanseNullOrWrapStr($email));
+        if (!empty($result) && in_array($result[0]['referer'], ['RWS Moravia'])) return true;
+        return false;
+    }
 }
