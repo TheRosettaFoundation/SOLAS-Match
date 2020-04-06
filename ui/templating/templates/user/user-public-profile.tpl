@@ -311,7 +311,7 @@
 <hr/>
 <table border="0">
     <tr valign="top">
-        <td style="width: 80%"><h3>Administrative Section</h3></td><td style="width: 20%"></td>
+        <td style="width: 80%"><h3>Administrative Section{if !empty($tracked_registration)} (Tracked Registration: {$tracked_registration}){/if}</h3></td><td style="width: 20%"></td>
     </tr>
     <tr valign="top">
         <td>Comment</td>
