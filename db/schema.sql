@@ -1608,6 +1608,19 @@ CREATE TABLE IF NOT EXISTS `admin_comment` (
   CONSTRAINT `FK_admin_comment_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `TrackCodes` (
+  id INT(10) UNSIGNED NOT NULL,
+  track_code VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT INTO TrackCodes VALUES (1, '');
+
+CREATE TABLE IF NOT EXISTS `TrackedRegistrations` (
+  email VARCHAR(128) NOT NULL,
+  referer VARCHAR(128) NOT NULL,
+  PRIMARY KEY (email)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -8716,6 +8729,39 @@ BEGIN
     LEFT JOIN TaskCompleteDates tcd ON t.id=tcd.task_id
     GROUP BY p.id
     ORDER BY p.created DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `record_track_code`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `record_track_code`(IN trackCode VARCHAR(255))
+BEGIN
+    REPLACE INTO TrackCodes (id, track_code) VALUES (1, trackCode);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_tracked_registration`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_tracked_registration`(IN mail VARCHAR(128))
+BEGIN
+    SELECT track_code INTO @track_code FROM TrackCodes WHERE id=1;
+    IF @track_code != '' THEN
+        SELECT UNHEX(@track_code) INTO @binary_track_code;
+        IF @binary_track_code IS NOT NULL THEN
+            SELECT AES_DECRYPT(@binary_track_code, 'helks5nesahel') INTO @decrypted;
+            IF @decrypted IS NOT NULL THEN
+                REPLACE INTO TrackedRegistrations VALUES (mail, @decrypted);
+            END IF;
+        END IF;
+    END IF;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_tracked_registration`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_tracked_registration`(IN mail VARCHAR(128))
+BEGIN
+    SELECT referer FROM TrackedRegistrations WHERE email=mail;
 END//
 DELIMITER ;
 
