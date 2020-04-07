@@ -30,8 +30,8 @@
 <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
     <th width="11%">Tracked</th>
-    <th width="13%">Name</th>
-    <th width="7%">Created</th>
+    <th width="12%">Name</th>
+    <th width="8%">Created</th>
     <th width="15%">Native Language</th>
     <th width="15%">Language Pairs</th>
     <th width="15%">Biography</th>
