@@ -8765,6 +8765,32 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `users_tracked`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `users_tracked`()
+BEGIN
+    SELECT
+        tr.referer,
+        u.id                                                               AS user_id,
+        CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`, '')) AS name,
+        SUBSTRING(u.`created-time`, 1, 10)                                 AS created_time,
+        CONCAT(l.`en-name`, '(' , c.`en-name`, ')')                        AS native_language,
+        IFNULL(GROUP_CONCAT(DISTINCT CONCAT(uqp.language_code_source, '-', uqp.country_code_source, '|', uqp.language_code_target, '-', uqp.country_code_target) ORDER BY CONCAT(uqp.language_code_source, '-', uqp.country_code_source, '|', uqp.language_code_target, '-', uqp.country_code_target) SEPARATOR ', '), '') AS language_pairs,
+        IFNULL(u.biography, '')                                                                              AS bio,
+        IFNULL(GROUP_CONCAT(DISTINCT uc.certification_key ORDER BY uc.certification_key SEPARATOR ', '), '') AS certificates,
+        u.email
+    FROM TrackedRegistrations     tr
+    JOIN Users                     u ON tr.email=u.email
+    JOIN UserPersonalInformation   i ON u.id=i.user_id
+    JOIN Languages                 l ON u.language_id=l.id
+    JOIN Countries                 c ON u.country_id=c.id
+    LEFT JOIN UserQualifiedPairs uqp ON u.id=uqp.user_id
+    LEFT JOIN UserCertifications  uc ON u.id=uc.user_id
+    GROUP BY u.id
+    ORDER BY u.`created-time` DESC;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
