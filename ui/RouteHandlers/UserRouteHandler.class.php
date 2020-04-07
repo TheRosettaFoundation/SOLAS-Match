@@ -123,6 +123,12 @@ class UserRouteHandler
         )->via('POST')->name('users_new');
 
         $app->get(
+            '/users_tracked/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'users_tracked')
+        )->name('users_tracked');
+
+        $app->get(
             '/download_users_new/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'download_users_new')
@@ -1471,6 +1477,15 @@ EOD;
         header('Cache-control: no-cache, must-revalidate, no-transform');
         echo $data;
         die;
+    }
+
+    public function users_tracked()
+    {
+        $app = \Slim\Slim::getInstance();
+        $userDao = new DAO\UserDao();
+        $all_users = $userDao->users_tracked();
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('user/users_tracked.tpl');
     }
 
     /**

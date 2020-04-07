@@ -8770,7 +8770,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `users_tracked`()
 BEGIN
     SELECT
-       tr.referer,
+        tr.referer,
         u.id                                                               AS user_id,
         CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`, '')) AS name,
         SUBSTRING(u.`created-time`, 1, 10)                                 AS created_time,
