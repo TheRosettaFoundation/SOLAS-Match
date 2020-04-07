@@ -44,7 +44,7 @@
 
     <tr>
       <td>{$user_row['referer']}</td>
-      <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['name'])}</a>{$user_row['reviewed_text']}</td>
+      <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['name'])}</a></td>
       <td>{$user_row['created_time']}</td>
       <td>{$user_row['native_language']}</td>
       <td>{$user_row['language_pairs']}</td>
