@@ -1616,9 +1616,9 @@ CREATE TABLE IF NOT EXISTS `TrackCodes` (
 INSERT INTO TrackCodes VALUES (1, '');
 
 CREATE TABLE IF NOT EXISTS `TrackedRegistrations` (
-  email VARCHAR(128) NOT NULL,
+  user_id INT(10) UNSIGNED NOT NULL,
   referer VARCHAR(128) NOT NULL,
-  PRIMARY KEY (email)
+  PRIMARY KEY (user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*---------------------------------------end of tables---------------------------------------------*/
