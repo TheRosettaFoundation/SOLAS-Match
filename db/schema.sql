@@ -8775,7 +8775,7 @@ BEGIN
         IFNULL(GROUP_CONCAT(DISTINCT uc.certification_key ORDER BY uc.certification_key SEPARATOR ', '), '') AS certificates,
         u.email
     FROM TrackedRegistrations     tr
-    JOIN Users                     u ON tr.email=u.email
+    JOIN Users                     u ON tr.user_id=u.id
     JOIN UserPersonalInformation   i ON u.id=i.user_id
     JOIN Languages                 l ON u.language_id=l.id
     JOIN Countries                 c ON u.country_id=c.id
