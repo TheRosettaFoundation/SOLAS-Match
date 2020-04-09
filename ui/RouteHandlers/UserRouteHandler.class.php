@@ -380,15 +380,10 @@ class UserRouteHandler
     public function register($track_code = '')
     {
         if (!empty($track_code)) $_SESSION['track_code'] = $track_code;
-error_log("register(track_code: $track_code)");
+
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
         $langDao = new DAO\LanguageDao();
-
-        if (!\SolasMatch\UI\isValidPost($app)) {
-            $userDao->record_track_code($track_code);
-            error_log("Recorded track_code: $track_code");
-        }
 
         $use_openid = Common\Lib\Settings::get("site.openid");
         $app->view()->setData("openid", $use_openid);
@@ -1053,10 +1048,6 @@ EOD;
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
                 $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
             } else {
-error_log("_SESSION['track_code']: {$_SESSION['track_code']}");
-error_log("_SESSION: " . print_r($_SESSION, true));
-//unset($_SESSION['track_code']); WHEN?
-
                 $user->setDisplayName($post['displayName']);
                 $user->setBiography($post['biography']);
 
@@ -1131,7 +1122,7 @@ error_log("_SESSION: " . print_r($_SESSION, true));
                             if (!$isSiteAdmin) $post["qualification_level_$i"] = 1;
 
                             if (!$isSiteAdmin && empty($userQualifiedPairs)) { // First time through here for ordinary registrant
-                                if ($userDao->get_tracked_registration_for_verified($user->getEmail())) {
+                                if ($userDao->get_tracked_registration_for_verified($user_id)) {
                                     $post["qualification_level_$i"] = 2; // Verified Translator
                                 }
                             }
@@ -1210,6 +1201,11 @@ error_log("_SESSION: " . print_r($_SESSION, true));
                     if (!empty($post['howheard'])) $userDao->insertUserHowheard($user_id, $post['howheard']);
 
                     $userDao->update_terms_accepted($user_id);
+
+                    if (!empty($_SESSION['track_code'])) {
+                        $userDao->insert_tracked_registration($user_id, $_SESSION['track_code']);
+                        unset($_SESSION['track_code']);
+                    }
 
                     $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user_id)));
                 } catch (\Exception $e) {
@@ -1715,7 +1711,7 @@ error_log("_SESSION: " . print_r($_SESSION, true));
             'quality_score'          => $userDao->quality_score($user_id),
             'admin_comments'         => $userDao->admin_comments($user_id),
             'certifications'         => $userDao->getUserCertifications($user_id),
-            'tracked_registration'   => $userDao->get_tracked_registration($user->getEmail()),
+            'tracked_registration'   => $userDao->get_tracked_registration($user_id),
         ));
 
         $app->render("user/user-public-profile.tpl");
