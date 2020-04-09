@@ -5710,8 +5710,6 @@ BEGIN
         set @langID=null;
         select l.id into @langID from Languages l where l.code=lang;
 
-        CALL insert_tracked_registration(email);
-
         insert into Users (email, nonce, password, `created-time`, `display-name`, biography, language_id, country_id) 
             values (email, nonce, pass, NOW(), name, bio, @langID, @countryID);
         call getUser(LAST_INSERT_ID(),null,null,null,null,null,null,null,null);
@@ -8742,16 +8740,13 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `insert_tracked_registration`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_tracked_registration`(IN mail VARCHAR(128))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_tracked_registration`(IN uID INT, IN trackCode VARCHAR(255))
 BEGIN
-    SELECT track_code INTO @track_code FROM TrackCodes WHERE id=1;
-    IF @track_code != '' THEN
-        SELECT UNHEX(@track_code) INTO @binary_track_code;
-        IF @binary_track_code IS NOT NULL THEN
-            SELECT AES_DECRYPT(@binary_track_code, 'helks5nesahel') INTO @decrypted;
-            IF @decrypted IS NOT NULL THEN
-                REPLACE INTO TrackedRegistrations VALUES (mail, @decrypted);
-            END IF;
+    SELECT UNHEX(trackCode) INTO @binary_track_code;
+    IF @binary_track_code IS NOT NULL THEN
+        SELECT AES_DECRYPT(@binary_track_code, 'helks5nesahel') INTO @decrypted;
+        IF @decrypted IS NOT NULL THEN
+            REPLACE INTO TrackedRegistrations VALUES (uID, @decrypted);
         END IF;
     END IF;
 END//
