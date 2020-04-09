@@ -8754,9 +8754,9 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_tracked_registration`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_tracked_registration`(IN mail VARCHAR(128))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_tracked_registration`(IN uID INT)
 BEGIN
-    SELECT referer FROM TrackedRegistrations WHERE email=mail;
+    SELECT referer FROM TrackedRegistrations WHERE user_id=uID;
 END//
 DELIMITER ;
 
