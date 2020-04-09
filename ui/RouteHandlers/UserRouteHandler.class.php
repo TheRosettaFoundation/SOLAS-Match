@@ -379,6 +379,7 @@ class UserRouteHandler
 
     public function register($track_code = '')
     {
+        if (!empty($track_code)) $_SESSION['track_code'] = $track_code;
 error_log("register(track_code: $track_code)");
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
@@ -1052,6 +1053,10 @@ EOD;
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
                 $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
             } else {
+error_log("_SESSION['track_code']: {$_SESSION['track_code']}");
+error_log("_SESSION: " . print_r($_SESSION, true));
+//unset($_SESSION['track_code']); WHEN?
+
                 $user->setDisplayName($post['displayName']);
                 $user->setBiography($post['biography']);
 
