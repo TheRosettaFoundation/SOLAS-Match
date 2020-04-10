@@ -981,11 +981,6 @@ EOD;
 
     public static function userPrivateProfile($user_id)
     {
-        if (!empty($_SESSION['track_code'])) {
-            $userDao->insert_tracked_registration($user_id, $_SESSION['track_code']);
-            unset($_SESSION['track_code']);
-        }
-
         $app = \Slim\Slim::getInstance();
         
         $userDao = new DAO\UserDao();
@@ -993,6 +988,11 @@ EOD;
         $langDao = new DAO\LanguageDao();
         $countryDao = new DAO\CountryDao();
         $projectDao = new DAO\projectDao();
+
+        if (!empty($_SESSION['track_code'])) {
+            $userDao->insert_tracked_registration($user_id, $_SESSION['track_code']);
+            unset($_SESSION['track_code']);
+        }
 
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
             $_SESSION['SESSION_CSRF_KEY'] = UserRouteHandler::random_string(10);
