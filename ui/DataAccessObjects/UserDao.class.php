@@ -1637,6 +1637,8 @@ error_log(print_r($result, true));
         $howheards = $this->getUserHowheards($user_id);
         if (!empty($howheards)) {
             $howheard_list[$howheards[0]['howheard_key']]['state'] = 1;
+        } elseif ($referer = $this->get_tracked_registration($user_id)) {
+            if (in_array($referer, ['RWS Moravia', 'CIOL'])) $howheard_list['Referral']['state'] = 1;
         }
         return $howheard_list;
     }
@@ -1711,6 +1713,8 @@ error_log(print_r($result, true));
 
     public function insert_tracked_registration($user_id, $track_code)
     {
+        if (in_array($track_code, ['AABBCC'])) return; // Allow old codes to be disabled
+
         LibAPI\PDOWrapper::call('insert_tracked_registration',
             LibAPI\PDOWrapper::cleanse($user_id) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($track_code));

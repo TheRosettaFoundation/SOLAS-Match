@@ -981,6 +981,11 @@ EOD;
 
     public static function userPrivateProfile($user_id)
     {
+        if (!empty($_SESSION['track_code'])) {
+            $userDao->insert_tracked_registration($user_id, $_SESSION['track_code']);
+            unset($_SESSION['track_code']);
+        }
+
         $app = \Slim\Slim::getInstance();
         
         $userDao = new DAO\UserDao();
@@ -1123,7 +1128,9 @@ EOD;
 
                             if (!$isSiteAdmin && empty($userQualifiedPairs)) { // First time through here for ordinary registrant
                                 if ($userDao->get_tracked_registration_for_verified($user_id)) {
-                                    $post["qualification_level_$i"] = 2; // Verified Translator
+                                    if (!empty($post['nativeLanguageSelect']) && ($language_code_target === $post['nativeLanguageSelect'])) { // Only make verified if target matches native language 
+                                        $post["qualification_level_$i"] = 2; // Verified Translator
+                                    }
                                 }
                             }
 
@@ -1201,11 +1208,6 @@ EOD;
                     if (!empty($post['howheard'])) $userDao->insertUserHowheard($user_id, $post['howheard']);
 
                     $userDao->update_terms_accepted($user_id);
-
-                    if (!empty($_SESSION['track_code'])) {
-                        $userDao->insert_tracked_registration($user_id, $_SESSION['track_code']);
-                        unset($_SESSION['track_code']);
-                    }
 
                     $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user_id)));
                 } catch (\Exception $e) {
