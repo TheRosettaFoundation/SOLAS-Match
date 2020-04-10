@@ -1616,9 +1616,9 @@ CREATE TABLE IF NOT EXISTS `TrackCodes` (
 INSERT INTO TrackCodes VALUES (1, '');
 
 CREATE TABLE IF NOT EXISTS `TrackedRegistrations` (
-  email VARCHAR(128) NOT NULL,
+  user_id INT(10) UNSIGNED NOT NULL,
   referer VARCHAR(128) NOT NULL,
-  PRIMARY KEY (email)
+  PRIMARY KEY (user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*---------------------------------------end of tables---------------------------------------------*/
@@ -5710,8 +5710,6 @@ BEGIN
         set @langID=null;
         select l.id into @langID from Languages l where l.code=lang;
 
-        CALL insert_tracked_registration(email);
-
         insert into Users (email, nonce, password, `created-time`, `display-name`, biography, language_id, country_id) 
             values (email, nonce, pass, NOW(), name, bio, @langID, @countryID);
         call getUser(LAST_INSERT_ID(),null,null,null,null,null,null,null,null);
@@ -8742,16 +8740,13 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `insert_tracked_registration`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_tracked_registration`(IN mail VARCHAR(128))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_tracked_registration`(IN uID INT, IN trackCode VARCHAR(255))
 BEGIN
-    SELECT track_code INTO @track_code FROM TrackCodes WHERE id=1;
-    IF @track_code != '' THEN
-        SELECT UNHEX(@track_code) INTO @binary_track_code;
-        IF @binary_track_code IS NOT NULL THEN
-            SELECT AES_DECRYPT(@binary_track_code, 'helks5nesahel') INTO @decrypted;
-            IF @decrypted IS NOT NULL THEN
-                REPLACE INTO TrackedRegistrations VALUES (mail, @decrypted);
-            END IF;
+    SELECT UNHEX(trackCode) INTO @binary_track_code;
+    IF @binary_track_code IS NOT NULL THEN
+        SELECT AES_DECRYPT(@binary_track_code, 'helks5nesahel') INTO @decrypted;
+        IF @decrypted IS NOT NULL THEN
+            REPLACE INTO TrackedRegistrations VALUES (uID, @decrypted);
         END IF;
     END IF;
 END//
@@ -8759,9 +8754,9 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_tracked_registration`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_tracked_registration`(IN mail VARCHAR(128))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_tracked_registration`(IN uID INT)
 BEGIN
-    SELECT referer FROM TrackedRegistrations WHERE email=mail;
+    SELECT referer FROM TrackedRegistrations WHERE user_id=uID;
 END//
 DELIMITER ;
 
@@ -8780,7 +8775,7 @@ BEGIN
         IFNULL(GROUP_CONCAT(DISTINCT uc.certification_key ORDER BY uc.certification_key SEPARATOR ', '), '') AS certificates,
         u.email
     FROM TrackedRegistrations     tr
-    JOIN Users                     u ON tr.email=u.email
+    JOIN Users                     u ON tr.user_id=u.id
     JOIN UserPersonalInformation   i ON u.id=i.user_id
     JOIN Languages                 l ON u.language_id=l.id
     JOIN Countries                 c ON u.country_id=c.id
