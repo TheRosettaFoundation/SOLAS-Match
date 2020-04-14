@@ -1739,6 +1739,9 @@ class ProjectRouteHandler
         curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
 
+        curl_setopt($re, CURLOPT_HEADER, true);
+        curl_setopt($re, CURLOPT_HTTPHEADER, ['Api-Key: ' . Common\Lib\Settings::get('discourse.api_key'), 'Api-Username: ' . Common\Lib\Settings::get('discourse.api_username')]);
+
         $res = curl_exec($re);
         if ($error_number = curl_errno($re)) {
           error_log("Discourse API error ($error_number): " . curl_error($re));
@@ -1747,6 +1750,8 @@ class ProjectRouteHandler
             if (!empty($response_data['topic_id'])) {
                 $topic_id = $response_data['topic_id'];
                 $projectDao->set_discourse_id($projectId, $topic_id);
+            } else {
+                error_log('Discourse API error: No topic_id returned');
             }
         }
         curl_close($re);
