@@ -1618,7 +1618,8 @@ INSERT INTO TrackCodes VALUES (1, '');
 CREATE TABLE IF NOT EXISTS `TrackedRegistrations` (
   user_id INT(10) UNSIGNED NOT NULL,
   referer VARCHAR(128) NOT NULL,
-  PRIMARY KEY (user_id)
+  PRIMARY KEY (user_id),
+  CONSTRAINT `FK_TrackedRegistrations_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*---------------------------------------end of tables---------------------------------------------*/
