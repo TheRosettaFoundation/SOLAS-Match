@@ -1736,8 +1736,6 @@ class ProjectRouteHandler
         curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
         curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
-
-        curl_setopt($re, CURLOPT_HEADER, true);
         curl_setopt($re, CURLOPT_HTTPHEADER, ['Api-Key: ' . Common\Lib\Settings::get('discourse.api_key'), 'Api-Username: ' . Common\Lib\Settings::get('discourse.api_username')]);
 
         $res = curl_exec($re);
