@@ -1028,7 +1028,7 @@ CREATE TABLE IF NOT EXISTS `TaskReviews` (
   `spelling` int(11) unsigned NOT NULL,
   `consistency` int(11) unsigned NOT NULL,
   revise_task_id BIGINT(20) UNSIGNED DEFAULT NULL,
-  `comment` VARCHAR(2048) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `comment` VARCHAR(8192) COLLATE utf8_unicode_ci DEFAULT NULL,
   UNIQUE KEY `user_task_project` (`task_id`,`user_id`,`project_id`),
   KEY key_revise_task_id (revise_task_id),
   CONSTRAINT `FK_TaskReviews_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -5423,7 +5423,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `submitTaskReview`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `submitTaskReview`(IN projectId INT, IN taskId INT, IN userId INT, IN correction INT, IN gram INT, IN spell INT, IN consis INT, IN reviseTaskId INT, IN comm VARCHAR(2048))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `submitTaskReview`(IN projectId INT, IN taskId INT, IN userId INT, IN correction INT, IN gram INT, IN spell INT, IN consis INT, IN reviseTaskId INT, IN comm VARCHAR(8192))
 BEGIN
     IF NOT EXISTS (SELECT 1 
                     FROM TaskReviews
