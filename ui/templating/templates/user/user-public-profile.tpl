@@ -87,6 +87,11 @@
                                 </td>
                             </tr>
                         {/if}
+                            <tr>
+                                <td>
+                                    Joined: {substr($this_user->getCreatedTime(), 0, 10)}
+                                </td>
+                            </tr>
                         {if isset($userPersonalInfo)}
                         {if !empty($userPersonalInfo->getMobileNumber())}
                             <tr>
