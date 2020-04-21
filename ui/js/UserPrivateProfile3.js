@@ -47,6 +47,7 @@ function documentReady()
   siteLocation = getSetting("siteLocation");
   siteAPI      = getSetting("siteAPI");
   user_id      = getSetting("user_id");
+  userQualifiedPairsLimit = getSetting("userQualifiedPairsLimit");
 
   parameters = new Parameters(loadingComplete);
 }

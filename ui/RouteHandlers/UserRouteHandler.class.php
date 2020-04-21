@@ -1252,6 +1252,7 @@ EOD;
             'nativeLanguageSelectCode' => $nativeLanguageSelectCode,
             'nativeCountrySelectCode'  => $nativeCountrySelectCode,
             'userQualifiedPairs'       => $userQualifiedPairs,
+            'userQualifiedPairsLimit'  => 120,
             'userQualifiedPairsCount'  => count($userQualifiedPairs),
             'langPrefSelectCode'       => $langPrefSelectCode,
             'url_list'          => $url_list,
