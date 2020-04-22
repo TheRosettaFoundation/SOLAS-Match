@@ -1252,7 +1252,7 @@ EOD;
             'nativeLanguageSelectCode' => $nativeLanguageSelectCode,
             'nativeCountrySelectCode'  => $nativeCountrySelectCode,
             'userQualifiedPairs'       => $userQualifiedPairs,
-            'userQualifiedPairsLimit'  => 120,
+            'userQualifiedPairsLimit'  => $isSiteAdmin ? 120 : max(6, count($userQualifiedPairs)),
             'userQualifiedPairsCount'  => count($userQualifiedPairs),
             'langPrefSelectCode'       => $langPrefSelectCode,
             'url_list'          => $url_list,
