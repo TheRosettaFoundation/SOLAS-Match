@@ -1781,7 +1781,7 @@ class ProjectRouteHandler
 
         curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($re, CURLOPT_HEADER, true);
-        curl_setopt($re, CURLOPT_HTTPHEADER, array("Authorization: Bearer " . Common\Lib\Settings::get('asana.api_key')));
+        curl_setopt($re, CURLOPT_HTTPHEADER, array("Authorization: Bearer " . Common\Lib\Settings::get('asana.api_key2')));
         curl_exec($re);
         if ($error_number = curl_errno($re)) {
           error_log("Asana API error ($error_number): " . curl_error($re));
