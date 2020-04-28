@@ -1638,7 +1638,7 @@ error_log(print_r($result, true));
         if (!empty($howheards)) {
             $howheard_list[$howheards[0]['howheard_key']]['state'] = 1;
         } elseif ($referer = $this->get_tracked_registration($user_id)) {
-            if (in_array($referer, ['RWS Moravia', 'CIOL'])) $howheard_list['Referral']['state'] = 1;
+            if (in_array($referer, ['RWS Moravia', 'CIOL', 'Riskified'])) $howheard_list['Referral']['state'] = 1;
         }
         return $howheard_list;
     }
