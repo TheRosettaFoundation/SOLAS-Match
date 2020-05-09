@@ -47,6 +47,7 @@ function documentReady()
   siteLocation = getSetting("siteLocation");
   siteAPI      = getSetting("siteAPI");
   user_id      = getSetting("user_id");
+  userQualifiedPairsLimit = getSetting("userQualifiedPairsLimit");
 
   parameters = new Parameters(loadingComplete);
 }
@@ -256,7 +257,7 @@ function validateForm()
   for (var i = 0; i < expertiseCount; i++) {
     if (document.getElementById("expertise" + i).checked) checkedCount++;
   }
-  if (!checkedCount) {
+  if (!checkedCount && !parseInt(getSetting("isSiteAdmin"))) {
     alertError = "You must indicate at least one field of expertise.";
     set_all_errors_for_submission();
     return false;

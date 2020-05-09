@@ -123,6 +123,12 @@ class UserRouteHandler
         )->via('POST')->name('users_new');
 
         $app->get(
+            '/users_tracked/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'users_tracked')
+        )->name('users_tracked');
+
+        $app->get(
             '/download_users_new/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'download_users_new')
@@ -373,15 +379,11 @@ class UserRouteHandler
 
     public function register($track_code = '')
     {
-error_log("register(track_code: $track_code)");
+        if (!empty($track_code)) $_SESSION['track_code'] = $track_code;
+
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
         $langDao = new DAO\LanguageDao();
-
-        if (!\SolasMatch\UI\isValidPost($app)) {
-            $userDao->record_track_code($track_code);
-            error_log("Recorded track_code: $track_code");
-        }
 
         $use_openid = Common\Lib\Settings::get("site.openid");
         $app->view()->setData("openid", $use_openid);
@@ -987,6 +989,11 @@ EOD;
         $countryDao = new DAO\CountryDao();
         $projectDao = new DAO\projectDao();
 
+        if (!empty($_SESSION['track_code'])) {
+            $userDao->insert_tracked_registration($user_id, $_SESSION['track_code']);
+            unset($_SESSION['track_code']);
+        }
+
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
             $_SESSION['SESSION_CSRF_KEY'] = UserRouteHandler::random_string(10);
         }
@@ -1119,6 +1126,14 @@ EOD;
                         if (!$found) {
                             if (!$isSiteAdmin) $post["qualification_level_$i"] = 1;
 
+                            if (!$isSiteAdmin && empty($userQualifiedPairs)) { // First time through here for ordinary registrant
+                                if ($userDao->get_tracked_registration_for_verified($user_id)) {
+                                    if (!empty($post['nativeLanguageSelect']) && ($language_code_target === $post['nativeLanguageSelect'])) { // Only make verified if target matches native language 
+                                        $post["qualification_level_$i"] = 2; // Verified Translator
+                                    }
+                                }
+                            }
+
                             $userDao->createUserQualifiedPair($user_id,
                                 $language_code_source, $country_code_source,
                                 $language_code_target, $country_code_target,
@@ -1212,7 +1227,7 @@ EOD;
         }
 
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/UserPrivateProfile2.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/UserPrivateProfile4.js\"></script>";
 
         foreach ($userQualifiedPairs as $index => $userQualifiedPair) {
             $userQualifiedPairs[$index]['language_code_source'] = $userQualifiedPair['language_code_source'] . '-' . $userQualifiedPair['country_code_source'];
@@ -1237,6 +1252,7 @@ EOD;
             'nativeLanguageSelectCode' => $nativeLanguageSelectCode,
             'nativeCountrySelectCode'  => $nativeCountrySelectCode,
             'userQualifiedPairs'       => $userQualifiedPairs,
+            'userQualifiedPairsLimit'  => $isSiteAdmin ? 120 : max(6, count($userQualifiedPairs)),
             'userQualifiedPairsCount'  => count($userQualifiedPairs),
             'langPrefSelectCode'       => $langPrefSelectCode,
             'url_list'          => $url_list,
@@ -1467,6 +1483,15 @@ EOD;
         die;
     }
 
+    public function users_tracked()
+    {
+        $app = \Slim\Slim::getInstance();
+        $userDao = new DAO\UserDao();
+        $all_users = $userDao->users_tracked();
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('user/users_tracked.tpl');
+    }
+
     /**
      * Generate and return a random string of the specified length.
      *
@@ -1689,6 +1714,7 @@ EOD;
             'quality_score'          => $userDao->quality_score($user_id),
             'admin_comments'         => $userDao->admin_comments($user_id),
             'certifications'         => $userDao->getUserCertifications($user_id),
+            'tracked_registration'   => $userDao->get_tracked_registration($user_id),
         ));
 
         $app->render("user/user-public-profile.tpl");

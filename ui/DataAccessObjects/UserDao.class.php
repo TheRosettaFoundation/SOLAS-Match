@@ -1445,6 +1445,13 @@ error_log(print_r($result, true));
         return $result;
     }
 
+    public function users_tracked()
+    {
+        $result = LibAPI\PDOWrapper::call('users_tracked', '');
+        if (empty($result)) $result = [];
+        return $result;
+    }
+
     public function saveUserFile($user_id, $cert_id, $note, $filename, $file)
     {
        $destination = Common\Lib\Settings::get('files.upload_path') . "certs/$user_id/$cert_id";
@@ -1630,6 +1637,8 @@ error_log(print_r($result, true));
         $howheards = $this->getUserHowheards($user_id);
         if (!empty($howheards)) {
             $howheard_list[$howheards[0]['howheard_key']]['state'] = 1;
+        } elseif ($referer = $this->get_tracked_registration($user_id)) {
+            if (in_array($referer, ['RWS Moravia', 'CIOL', 'Riskified'])) $howheard_list['Referral']['state'] = 1;
         }
         return $howheard_list;
     }
@@ -1640,6 +1649,7 @@ error_log(print_r($result, true));
         $certification_list['ATA']     = ['desc' => 'American Translators Association (ATA) - ATA Certified', 'state' => 0, 'reviewed' => 0];
         $certification_list['APTS']    = ['desc' => 'Arab Professional Translators Society (APTS) - Certified Translator, Certified Translator/Interpreter or Certified Associate', 'state' => 0, 'reviewed' => 0];
         $certification_list['ATIO']    = ['desc' => 'Association of Translators and Interpreters of Ontario (ATIO) - Certified Translators or Candidates', 'state' => 0, 'reviewed' => 0];
+        $certification_list['ATIM']    = ['desc' => 'Association of Translators, Terminologists and Interpreters of Manitoba - Certified Translators', 'state' => 0, 'reviewed' => 0];
         $certification_list['ABRATES'] = ['desc' => 'Brazilian Association of Translators and Interpreters (ABRATES) - Accredited Translators (Credenciado)', 'state' => 0, 'reviewed' => 0];
         $certification_list['CIOL']    = ['desc' => 'Chartered Institute of Linguists (CIOL) - Member, Fellow, Chartered Linguist, or DipTrans IOL Certificate holder', 'state' => 0, 'reviewed' => 0];
         $certification_list['ITIA']    = ['desc' => 'Irish Translators’ and Interpreters’ Association (ITIA) - Professional Member', 'state' => 0, 'reviewed' => 0];
@@ -1700,5 +1710,28 @@ error_log(print_r($result, true));
     public function record_track_code($track_code)
     {
         LibAPI\PDOWrapper::call('record_track_code', LibAPI\PDOWrapper::cleanseWrapStr($track_code));
+    }
+
+    public function insert_tracked_registration($user_id, $track_code)
+    {
+        if (in_array($track_code, ['AABBCC'])) return; // Allow old codes to be disabled
+
+        LibAPI\PDOWrapper::call('insert_tracked_registration',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($track_code));
+    }
+
+    public function get_tracked_registration($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_tracked_registration', LibAPI\PDOWrapper::cleanse($user_id));
+        if (!empty($result)) return $result[0]['referer'];
+        return '';
+    }
+
+    public function get_tracked_registration_for_verified($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_tracked_registration', LibAPI\PDOWrapper::cleanse($user_id));
+        if (!empty($result) && in_array($result[0]['referer'], ['RWS Moravia'])) return true;
+        return false;
     }
 }

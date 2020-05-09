@@ -1028,7 +1028,7 @@ CREATE TABLE IF NOT EXISTS `TaskReviews` (
   `spelling` int(11) unsigned NOT NULL,
   `consistency` int(11) unsigned NOT NULL,
   revise_task_id BIGINT(20) UNSIGNED DEFAULT NULL,
-  `comment` VARCHAR(2048) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `comment` VARCHAR(8192) COLLATE utf8_unicode_ci DEFAULT NULL,
   UNIQUE KEY `user_task_project` (`task_id`,`user_id`,`project_id`),
   KEY key_revise_task_id (revise_task_id),
   CONSTRAINT `FK_TaskReviews_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -1616,9 +1616,10 @@ CREATE TABLE IF NOT EXISTS `TrackCodes` (
 INSERT INTO TrackCodes VALUES (1, '');
 
 CREATE TABLE IF NOT EXISTS `TrackedRegistrations` (
-  email VARCHAR(128) NOT NULL,
+  user_id INT(10) UNSIGNED NOT NULL,
   referer VARCHAR(128) NOT NULL,
-  PRIMARY KEY (email)
+  PRIMARY KEY (user_id),
+  CONSTRAINT `FK_TrackedRegistrations_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*---------------------------------------end of tables---------------------------------------------*/
@@ -5422,7 +5423,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `submitTaskReview`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `submitTaskReview`(IN projectId INT, IN taskId INT, IN userId INT, IN correction INT, IN gram INT, IN spell INT, IN consis INT, IN reviseTaskId INT, IN comm VARCHAR(2048))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `submitTaskReview`(IN projectId INT, IN taskId INT, IN userId INT, IN correction INT, IN gram INT, IN spell INT, IN consis INT, IN reviseTaskId INT, IN comm VARCHAR(8192))
 BEGIN
     IF NOT EXISTS (SELECT 1 
                     FROM TaskReviews
@@ -5709,8 +5710,6 @@ BEGIN
         select c.id into @countryID from Countries c where c.code=region;
         set @langID=null;
         select l.id into @langID from Languages l where l.code=lang;
-
-        CALL insert_tracked_registration(email);
 
         insert into Users (email, nonce, password, `created-time`, `display-name`, biography, language_id, country_id) 
             values (email, nonce, pass, NOW(), name, bio, @langID, @countryID);
@@ -8742,18 +8741,49 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `insert_tracked_registration`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_tracked_registration`(IN mail VARCHAR(128))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_tracked_registration`(IN uID INT, IN trackCode VARCHAR(255))
 BEGIN
-    SELECT track_code INTO @track_code FROM TrackCodes WHERE id=1;
-    IF @track_code != '' THEN
-        SELECT UNHEX(@track_code) INTO @binary_track_code;
-        IF @binary_track_code IS NOT NULL THEN
-            SELECT AES_DECRYPT(@binary_track_code, 'helks5nesahel') INTO @decrypted;
-            IF @decrypted IS NOT NULL THEN
-                REPLACE INTO TrackedRegistrations VALUES (mail, @decrypted);
-            END IF;
+    SELECT UNHEX(trackCode) INTO @binary_track_code;
+    IF @binary_track_code IS NOT NULL THEN
+        SELECT AES_DECRYPT(@binary_track_code, 'helks5nesahel') INTO @decrypted;
+        IF @decrypted IS NOT NULL THEN
+            REPLACE INTO TrackedRegistrations VALUES (uID, @decrypted);
         END IF;
     END IF;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_tracked_registration`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_tracked_registration`(IN uID INT)
+BEGIN
+    SELECT referer FROM TrackedRegistrations WHERE user_id=uID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `users_tracked`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `users_tracked`()
+BEGIN
+    SELECT
+        tr.referer,
+        u.id                                                               AS user_id,
+        CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`, '')) AS name,
+        SUBSTRING(u.`created-time`, 1, 10)                                 AS created_time,
+        CONCAT(l.`en-name`, '(' , c.`en-name`, ')')                        AS native_language,
+        IFNULL(GROUP_CONCAT(DISTINCT CONCAT(uqp.language_code_source, '-', uqp.country_code_source, '|', uqp.language_code_target, '-', uqp.country_code_target) ORDER BY CONCAT(uqp.language_code_source, '-', uqp.country_code_source, '|', uqp.language_code_target, '-', uqp.country_code_target) SEPARATOR ', '), '') AS language_pairs,
+        IFNULL(u.biography, '')                                                                              AS bio,
+        IFNULL(GROUP_CONCAT(DISTINCT uc.certification_key ORDER BY uc.certification_key SEPARATOR ', '), '') AS certificates,
+        u.email
+    FROM TrackedRegistrations     tr
+    JOIN Users                     u ON tr.user_id=u.id
+    JOIN UserPersonalInformation   i ON u.id=i.user_id
+    JOIN Languages                 l ON u.language_id=l.id
+    JOIN Countries                 c ON u.country_id=c.id
+    LEFT JOIN UserQualifiedPairs uqp ON u.id=uqp.user_id
+    LEFT JOIN UserCertifications  uc ON u.id=uc.user_id
+    GROUP BY u.id
+    ORDER BY u.`created-time` DESC;
 END//
 DELIMITER ;
 

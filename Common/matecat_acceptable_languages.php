@@ -202,7 +202,7 @@
 'ppk' => 'ppk-ID',
 'rmn' => 'rmn-RO',
 'rw' => 'rw-KIN',
-'sg' => 'sg-SG',
+'sg' => 'sg-CF',
 'sm' => 'smo-WS',
 'sn' => 'sna-ZW',
 'srn' => 'srn-SRN',

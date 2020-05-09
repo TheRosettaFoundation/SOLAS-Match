@@ -142,6 +142,9 @@ class TaskDao
     */
     public static function submitReview($review)
     {
+        $comment = $review->getComment();
+        if (!empty($comment)) $comment = substr($comment, 0, 8192);
+
         $ret = null;
         $args = Lib\PDOWrapper::cleanseNull($review->getProjectId()).",".
             Lib\PDOWrapper::cleanseNull($review->getTaskId()).",".
@@ -151,7 +154,7 @@ class TaskDao
             Lib\PDOWrapper::cleanseNull($review->getSpelling()).",".
             Lib\PDOWrapper::cleanseNull($review->getConsistency()).",".
             Lib\PDOWrapper::cleanseNull($review->getReviseTaskId()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($review->getComment());
+            Lib\PDOWrapper::cleanseNullOrWrapStr($comment);
         $result = Lib\PDOWrapper::call('submitTaskReview', $args);
         if ($result) {
             $ret = $result[0]['result'];
@@ -683,6 +686,8 @@ class TaskDao
     */
     public static function unClaimTask($taskId, $userId, $userFeedback = null, $revokeByAdmin = false)
     {
+        if (!empty($userFeedback)) $userFeedback = substr($userFeedback, 0, 4096);
+
         $args = Lib\PDOWrapper::cleanse($taskId).", ".
             Lib\PDOWrapper::cleanse($userId).", ".
             Lib\PDOWrapper::cleanseNullOrWrapStr($userFeedback);
