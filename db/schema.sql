@@ -3230,7 +3230,7 @@ BEGIN
         t.project_id=projectID AND
         t.published=1 AND
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id=uID AND t.task_id=t.id) AND
-        ((uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
+        (tq.required_qualification_level=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
         (
             r.restricted_task_id IS NULL OR
             b.id IS NULL OR
@@ -3839,7 +3839,7 @@ BEGIN
         t.`task-status_id`=2 AND
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id=uID AND t.task_id=t.id) AND
         (taskType IS NULL OR t.`task-type_id`=taskType) AND
-        (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
+        (@isSiteAdmin=1 OR tq.required_qualification_level=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
         (sourceLanguage IS NULL OR t.`language_id-source`=(SELECT l.id FROM Languages l WHERE l.code=sourceLanguage)) AND
         (targetLanguage IS NULL OR t.`language_id-target`=(SELECT l.id FROM Languages l WHERE l.code=targetLanguage)) AND
         (strict=0 OR uqp.user_id IS NOT NULL) AND
@@ -3900,7 +3900,7 @@ BEGIN
         AND t.`task-status_id` = 2 
         AND not exists( SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id = uID AND t.task_id = t.id)
         AND (taskType is null or t.`task-type_id` = taskType)
-        AND (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level))
+        AND (@isSiteAdmin=1 OR tq.required_qualification_level=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level))
         AND (sourceLanguage is null or t.`language_id-source` = (SELECT l.id FROM Languages l WHERE l.code = sourceLanguage))
         AND (targetLanguage is null or t.`language_id-target` = (SELECT l.id FROM Languages l WHERE l.code = targetLanguage))
         AND (strict=0 OR uqp.user_id IS NOT NULL)
@@ -6554,6 +6554,15 @@ BEGIN
     ) THEN
         SELECT 1 AS result;
 
+    ELSEIF EXISTS (
+        SELECT 1
+        FROM RequiredTaskQualificationLevels tq
+        WHERE
+            tq.task_id=taskID AND
+            tq.required_qualification_level=1
+    ) THEN
+        SELECT 0 AS result;
+
     ELSEIF NOT EXISTS (
         SELECT t.id
         FROM Tasks t
@@ -6622,6 +6631,15 @@ BEGIN
             ub.badge_id IS NULL
     ) THEN
         SELECT 1 AS result;
+
+    ELSEIF EXISTS (
+        SELECT 1
+        FROM RequiredTaskQualificationLevels tq
+        WHERE
+            tq.task_id=taskID AND
+            tq.required_qualification_level=1
+    ) THEN
+        SELECT 0 AS result;
 
     ELSEIF EXISTS (
         SELECT 1
@@ -6710,7 +6728,7 @@ BEGIN
             t.project_id=projectID AND
             t.published=1 AND
             NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tb WHERE tb.user_id=userID AND tb.task_id=t.id) AND
-            ((uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
+            (tq.required_qualification_level=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
             (
                 r.restricted_task_id IS NULL OR
                 b.id IS NULL OR
