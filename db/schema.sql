@@ -4025,7 +4025,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `alsoViewedTasks`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `alsoViewedTasks`(IN `taskID` INT, IN `lim` INT, IN `offset` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `alsoViewedTasks`(IN `taskID` INT, IN userID INT, IN `offset` INT)
 
     READS SQL DATA
 
@@ -4079,15 +4079,19 @@ BEGIN
             t.published=1
         JOIN      Projects p ON t.project_id=p.id
         JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
+        JOIN      UserQualifiedPairs             uqp ON
+            uqp.user_id=userID AND
+            t.`language_id-source`=uqp.language_id_source AND
+            t.`language_id-target`=uqp.language_id_target
         LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
         WHERE
             r.restricted_task_id IS NULL AND
-            tq.required_qualification_level=1
+            tq.required_qualification_level<=uqp.qualification_level
         GROUP BY tv.task_id
         ORDER BY task_count DESC
         ) AS t1
     JOIN Tasks t2 ON t1.id=t2.id
-    LIMIT offset,lim
+    LIMIT offset, 3
     );
 END//
 DELIMITER ;
