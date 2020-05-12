@@ -4035,7 +4035,6 @@ BEGIN
     DECLARE current_task_langTarget INT DEFAULT 0;
     DECLARE current_task_countrySource INT DEFAULT 0;
     DECLARE current_task_countryTarget INT DEFAULT 0;
-    if lim = '' or lim is null then set lim = ~0; end if;
     if offset='' or offset is null then set offset = 0; end if;
 
   
