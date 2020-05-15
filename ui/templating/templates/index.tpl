@@ -1,4 +1,5 @@
 {include file="header.tpl" body_id="home"}
+<!-- Editor Hint: ¿áéíóú -->
 
 <span class="hidden">
     <!-- Parameters... -->
@@ -257,7 +258,7 @@
                     Take our <a href="https://community.translatorswb.org/t/introduction-to-humanitarian-translation-for-kato-translators/1714" target="_blank">online course</a>, Introduction to Humanitarian Translation
                 </li>
                 <li>
-                    <a href="https://community.translatorswb.org/t/how-to-become-a-kato-verified-translator/262" target="_blank">Become a Kat� Verified Translator</a>
+                    <a href="https://community.translatorswb.org/t/how-to-become-a-kato-verified-translator/262" target="_blank">Become a Kató Verified Translator</a>
                 </li>
                 <li>
                     <a href="https://translatorswithoutborders.org/blog/" target="_blank">Learn more</a> about the work we do
