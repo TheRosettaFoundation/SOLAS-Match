@@ -344,6 +344,10 @@ class UserRouteHandler
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Home2.js\"></script>";
 
+        $org_admin = false;
+        if (empty($topTasks) && !empty($user_id)) {
+            $org_admin = $userDao->is_admin_or_org_member($user_id);
+        }
 
         $app->view()->appendData(array(
             'siteLocation' => $siteLocation,
@@ -366,6 +370,7 @@ class UserRouteHandler
             'lastScrollPage' => $lastScrollPage,
             'extra_scripts' => $extra_scripts,
             'user_id' => $user_id,
+            'org_admin' => $org_admin,
         ));
         $app->render('index.tpl');
     }
