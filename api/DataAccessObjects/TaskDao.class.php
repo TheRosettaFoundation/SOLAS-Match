@@ -330,7 +330,6 @@ class TaskDao
         $args .= Lib\PDOWrapper::cleanseNull($limit).', ';
         $args .= Lib\PDOWrapper::cleanse($offset);
         
-error_log($args);
         $result = Lib\PDOWrapper::call("alsoViewedTasks", $args);
         if ($result) {
             $ret = array();
@@ -338,7 +337,6 @@ error_log($args);
                 $ret[] = Common\Lib\ModelFactory::buildModel("Task", $row);
             }
         }
-error_log(count($ret));
         return $ret;
     }
 
