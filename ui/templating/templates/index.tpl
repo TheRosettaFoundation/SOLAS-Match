@@ -252,7 +252,7 @@
         {else}
             <p>
                 {if !$org_admin}
-                There are currently no tasks available for your language combinations. However, some may come up soon, so don't forget to set up email alerts to be notified of new available tasks. Meanwhile, you can:
+                There are currently no tasks available for your language combinations. However, some may come up soon, so don't forget to <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">set up email alerts</a> to be notified of new available tasks. Meanwhile, you can:
                 <ol>
                 <li>
                     Take our <a href="https://community.translatorswb.org/t/introduction-to-humanitarian-translation-for-kato-translators/1714" target="_blank">online course</a>, Introduction to Humanitarian Translation
