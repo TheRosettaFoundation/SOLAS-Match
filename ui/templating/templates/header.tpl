@@ -159,13 +159,13 @@
 		    <a href = "{Settings::get('banner.link')}" target = "_blank">
 		    	<div id="banner-container-blocks">
 			    	<div id="banner-left">
-			    		<img src="{urlFor name='home'}ui/img/banner/banner-left-en.png" alt="{Settings::get('banner.info')}">
+              <img src="{urlFor name='home'}ui/img/banner/banner-left-en2.png" alt="{Settings::get('banner.info')}">
 			    	</div>
 			    	<div id="banner-mid">
-			    		<img src="{urlFor name='home'}ui/img/banner/banner-mid-en.png" alt="{Settings::get('banner.info')}">
+              <img src="{urlFor name='home'}ui/img/banner/banner-mid-en2.png" alt="{Settings::get('banner.info')}">
 			    	</div>
 			    	<div id="banner-right">
-			    		<img src="{urlFor name='home'}ui/img/banner/banner-right-en.png" alt="{Settings::get('banner.info')}">
+              <img src="{urlFor name='home'}ui/img/banner/banner-right-en2.png" alt="{Settings::get('banner.info')}">
 			    	</div>
 		    	</div>
 		    </a>

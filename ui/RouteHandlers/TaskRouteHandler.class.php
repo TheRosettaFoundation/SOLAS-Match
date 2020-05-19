@@ -956,7 +956,7 @@ class TaskRouteHandler
 
         $alsoViewedTasksCount = 0;
         
-        $alsoViewedTasks = $taskDao->getAlsoViewedTasks($taskId, 3, 0); //get first three tasks only
+        $alsoViewedTasks = $taskDao->getAlsoViewedTasks($taskId, $user_id, 0);
         if (!empty($alsoViewedTasks)) {
             $alsoViewedTasksCount = count($alsoViewedTasks);
         }

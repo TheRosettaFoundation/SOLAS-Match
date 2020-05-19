@@ -1,4 +1,5 @@
 {include file="header.tpl" body_id="home"}
+<!-- Editor Hint: ¿áéíóú -->
 
 <span class="hidden">
     <!-- Parameters... -->
@@ -25,13 +26,13 @@
 	    <a href = "{Settings::get('banner.link')}" target = "_blank">
 	    	<div id="banner-container-blocks">
 		    	<div id="banner-left">
-		    		<img src="{urlFor name='home'}ui/img/banner/banner-left-en.png" alt="{Settings::get('banner.info')}">
+            <img src="{urlFor name='home'}ui/img/banner/banner-left-en2.png" alt="{Settings::get('banner.info')}">
 		    	</div>
 		    	<div id="banner-mid">
-		    		<img src="{urlFor name='home'}ui/img/banner/banner-mid-en.png" alt="{Settings::get('banner.info')}">
+            <img src="{urlFor name='home'}ui/img/banner/banner-mid-en2.png" alt="{Settings::get('banner.info')}">
 		    	</div>
 		    	<div id="banner-right">
-		    		<img src="{urlFor name='home'}ui/img/banner/banner-right-en.png" alt="{Settings::get('banner.info')}">
+            <img src="{urlFor name='home'}ui/img/banner/banner-right-en2.png" alt="{Settings::get('banner.info')}">
 		    	</div>
 	    	</div>
 	    </a>
@@ -249,7 +250,28 @@
                 </div>
             </ul>
         {else}
-            <p>{Localisation::getTranslation('index_no_tasks_available')}</p>
+            <p>
+                {if !$org_admin}
+                There are currently no tasks available for your language combinations. However, some may come up soon, so don't forget to <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">set up email alerts</a> to be notified of new available tasks. Meanwhile, you can:
+                <ol>
+                <li>
+                    Take our <a href="https://community.translatorswb.org/t/introduction-to-humanitarian-translation-for-kato-translators/1714" target="_blank">online course</a>, Introduction to Humanitarian Translation
+                </li>
+                <li>
+                    <a href="https://community.translatorswb.org/t/how-to-become-a-kato-verified-translator/262" target="_blank">Become a Kató Verified Translator</a>
+                </li>
+                <li>
+                    <a href="https://translatorswithoutborders.org/blog/" target="_blank">Learn more</a> about the work we do
+                </li>
+                <li>
+                    <a href="https://community.translatorswb.org/t/creating-and-personalizing-your-kato-community-profile/3048" target="_blank">Register</a> and browse our forum
+                </li>
+                </ol>
+                    For any questions or comments, please email <a href="mailto:translators@translatorswithoutborders.org" target="_blank">translators@translatorswithoutborders.org</a>
+                {else}
+                    Since you are not a translator, there are no tasks here. Click on <a href="https://trommons.org/org/dashboard/">your organization's Dashboard</a>
+                {/if}
+            </p>
         {/if}
         <br />
 
