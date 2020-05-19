@@ -11,8 +11,8 @@
 </p>
 
 <a class="twitter-share-button"
-  href="https://twitter.com/intent/tweet?text={Localisation::getTranslation('task_twitter_1')}&url=https%3A%2F%2Ftrommons.org"
-  data-size="large" data-counturl="https://trommons.org">
+  href="https://twitter.com/intent/tweet?text={Localisation::getTranslation('task_twitter_1')}&url=https%3A%2F%2Fkato.translatorswb.org"
+  data-size="large" data-counturl="https://kato.translatorswb.org">
 Tweet</a>
 
 {if $action === Localisation::getTranslation('task_review_translated')}

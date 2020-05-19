@@ -483,7 +483,7 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@transl
     <string name="project_subscription_moderate">Uso moderado (hasta diez proyectos al año)</string>
     <string name="project_subscription_heavy">Uso frecuente</string>
     <string name="project_subscription_other">Otra cantidad</string>
-    <string name="project_subscription_cannot">Para otros métodos de pago, o si existe alguna razón por la que tu organización no pueda colaborar económicamente, escríbenos a <a href="mailto:info@trommons.org?subject=Subscription">info@trommons.org</a>.</string>
+    <string name="project_subscription_cannot">Para otros métodos de pago, o si existe alguna razón por la que tu organización no pueda colaborar económicamente, escríbenos a <a href="mailto:info@kato.translatorswb.org?subject=Subscription">info@kato.translatorswb.org</a>.</string>
 
     <string name="project_subscription_last_donation">Tu última aportación corresponde al periodo que comenzó el %s.</string>
     <string name="project_subscription_number_renew">Has creado un proyecto desde que se cumplió esa fecha.</string>
@@ -493,7 +493,7 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@transl
     <string name="project_subscription_numbers_upgrade">Has creado %s proyectos desde tu última aportación, por lo que has alcanzado el número de proyectos que corresponde a tu aportación.</string>
     <string name="project_subscription_remind_upgrade">Cada vez que crees un proyecto, te recordaremos que actualices tu aportación anual.</string>
 
-    <string name="user_public_profile_certificate">Si deseas recibir un certificado de tu donación por correo, escríbenos a <a href="mailto:info@trommons.org?subject=Certificate">info@trommons.org</a>. A cambio, te solicitaremos que colabores con 25 €. Destinaremos tu aportación al mantenimiento y la infraestructura del servidor, lo que nos ayudará mantener la continuidad de Trommons.</string>
+    <string name="user_public_profile_certificate">Si deseas recibir un certificado de tu donación por correo, escríbenos a <a href="mailto:info@kato.translatorswb.org?subject=Certificate">info@kato.translatorswb.org</a>. A cambio, te solicitaremos que colabores con 25 €. Destinaremos tu aportación al mantenimiento y la infraestructura del servidor, lo que nos ayudará mantener la continuidad de Trommons.</string>
 
 	<string name="project_create_source_text">Texto de origen</string>
 	<string name="project_create_1">Proporciona un título relevante para este proyecto.</string>
@@ -681,11 +681,11 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@transl
 	<string name="terms_49">Modificaciones de los Términos y condiciones de uso</string>
 	<string name="terms_50">The Rosetta Foundation se reserva el derecho a modificar los términos y condiciones de uso del sitio web de Trommons en cualquier momento y sin previo aviso. Al utilizar este sitio web, el usuario acepta quedar legalmente vinculado a la versión actual de los términos y condiciones de uso.</string>
 	<string name="terms_governing_law">Ley aplicable</string>
-  <string name="terms_52">Cualquier disputa o reclamación relacionada con el sitio web Trommons.org se regirá por las leyes de la República de Irlanda, independientemente de si existe algún conflicto entre las disposiciones aplicables.</string>
+  <string name="terms_52">Cualquier disputa o reclamación relacionada con el sitio web Kató se regirá por las leyes de la República de Irlanda, independientemente de si existe algún conflicto entre las disposiciones aplicables.</string>
 	<string name="terms_53">Términos y condiciones generales aplicables al uso de un sitio web</string>
 	<string name="terms_privacy_policy">Política de privacidad</string>
-    <string name="terms_54">Para Trommons.org, la privacidad de los usuarios es importante. A fin de que nuestros usuarios sepan cómo obtenemos, utilizamos, comunicamos y divulgamos su información personal, hemos redactado una política de privacidad para este sitio web. Consulta nuestra <a href="%s">Política de privacidad</a>.</string>
-  <string name="terms_56">Trommons.org se compromete a llevar a cabo sus actividades de conformidad con estos principios a fin de garantizar la protección y el mantenimiento de la confidencialidad de la información personal de los usuarios.</string>
+    <string name="terms_54">Para Kató, la privacidad de los usuarios es importante. A fin de que nuestros usuarios sepan cómo obtenemos, utilizamos, comunicamos y divulgamos su información personal, hemos redactado una política de privacidad para este sitio web. Consulta nuestra <a href="%s">Política de privacidad</a>.</string>
+  <string name="terms_56">Kató se compromete a llevar a cabo sus actividades de conformidad con estos principios a fin de garantizar la protección y el mantenimiento de la confidencialidad de la información personal de los usuarios.</string>
 
 	<string name="videos_volunteer_videos">Vídeos de voluntarios</string>
 	<string name="videos_organisation_videos">Vídeos de organizaciones</string>
@@ -942,7 +942,7 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@transl
   <string name="task_twitter_0_org_task_review">Si tienes Twitter, haz clic en este botón para decirle &quot;gracias&quot; a los voluntarios (asegúrate de habilitar las ventanas emergentes en tu navegador):</string>
   <string name="task_twitter_1">Acabo de colaborar como voluntario/a con @TranslatorsWB #languagematters</string>
   <string name="task_twitter_2">Nos hemos registrado en TWB para contactar con traductores voluntarios @TranslatorsWB #languagematters</string>
-  <string name="task_twitter_3">Voluntarios de @TranslatorsWB: ¿nos ayudáis a traducir el proyecto que hemos creado en trommons.org%3F</string>
+  <string name="task_twitter_3">Voluntarios de @TranslatorsWB: ¿nos ayudáis a traducir el proyecto que hemos creado en Kató%3F</string>
   <string name="task_twitter_4">¡Gracias a los voluntarios de @TranslatorsWB por ayudarnos a traducir nuestro texto! #languagematters</string>
   <string name="task_review_2">Por favor, puntúa el archivo o archivos que has</string>
 	<string name="task_review_3">en función de estos criterios:</string>
@@ -1032,7 +1032,7 @@ Si tiene alguna pregunta, no dude en contactarnos en <a href="mailto:info@transl
     <string name="register_2">No introducida ninguna contraseña. Introduce la contraseña e inténtalo de nuevo.</string>
     <string name="register_3">Ya eres un usuario verificado. Por favor, <a href="%s">introduce tu usuario y contraseña</a>.</string>
     <string name="register_4">Te hemos enviado un e-mail de verificación a la dirección de e-mail con la que te has registrado. Haz clic en el enlace que encontrarás en el e-mail para completar el registro. Una vez hayas verificado tu dirección de e-mail, inicia sesión <a href="%s">aquí</a>.</string>
-    <string name="register_no_application">Si no ha registrado su cuenta con su dirección de correo electrónico, deberá enviar el <a href="https://kato.translatorswb.org/signup.html">(haga clic aquí) Formulario de Inscripción para Traductores</a> y luego regrese a <a href="https://trommons.org/register/">https://trommons.org/register/</a> para crear una cuenta en este enlace.<br />Si ya es voluntario y no puede iniciar sesión, envíe un correo electrónico a <a href="mailto:translators@translatorswithoutborders.org">translators@translatorswithoutborders.org</a>.</string>
+    <string name="register_no_application">Si no ha registrado su cuenta con su dirección de correo electrónico, deberá enviar el <a href="https://kato.translatorswb.org/signup.html">(haga clic aquí) Formulario de Inscripción para Traductores</a> y luego regrese a <a href="https://kato.translatorswb.org/register/">https://kato.translatorswb.org/register/</a> para crear una cuenta en este enlace.<br />Si ya es voluntario y no puede iniciar sesión, envíe un correo electrónico a <a href="mailto:translators@translatorswithoutborders.org">translators@translatorswithoutborders.org</a>.</string>
     <string name="register_no_application_error">Error de conexión, por favor, vuelva a intentar más tarde.</string>
 
 	<string name="user_private_profile_private_profile">Perfil privado</string>
