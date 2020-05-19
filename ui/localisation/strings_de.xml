@@ -475,7 +475,7 @@ Bei Fragen schreiben Sie bitte an <a href="mailto:info@translatorswithoutborders
     <string name="project_subscription_moderate">Mittlere Nutzung (bis zu 10 Projekte/Jahr)</string>
     <string name="project_subscription_heavy">Häufige Nutzung</string>
     <string name="project_subscription_other">Andere Summe</string>
-    <string name="project_subscription_cannot">Bitte kontaktieren Sie uns per E-Mail unter <a href="mailto:info@trommons.org?subject=Subscription">info@trommons.org</a>, wenn Sie eine andere Zahlungsmethode nutzen möchten oder wenn Sie aus triftigen Gründen keine Spende leisten können.</string>
+    <string name="project_subscription_cannot">Bitte kontaktieren Sie uns per E-Mail unter <a href="mailto:info@kato.translatorswb.org?subject=Subscription">info@kato.translatorswb.org</a>, wenn Sie eine andere Zahlungsmethode nutzen möchten oder wenn Sie aus triftigen Gründen keine Spende leisten können.</string>
 
     <string name="project_subscription_last_donation">Zuletzt haben Sie für den Zeitraum ab dem %s gespendet.</string>
     <string name="project_subscription_number_renew">Sie haben seit dem Ablauf dieser Jahresfrist bereits ein Projekt erstellt.</string>
@@ -485,7 +485,7 @@ Bei Fragen schreiben Sie bitte an <a href="mailto:info@translatorswithoutborders
     <string name="project_subscription_numbers_upgrade">Sie haben seit Ihrer letzten Spende bereits %s Projekte erstellt. Damit ist die erwartete Projektanzahl für Ihren Spendenbeitrag erreicht.</string>
     <string name="project_subscription_remind_upgrade">Wir werden Sie weiterhin darum bitten, Ihre jährliche Spende zu erhöhen, wenn Sie neue Projekte erstellen.</string>
 
-    <string name="user_public_profile_certificate">Bitte schreiben Sie eine E-Mail an <a href="mailto:info@trommons.org?subject=Certificate">info@trommons.org</a>, wenn Sie ein unterschriebenes Zertifikat per Post erhalten möchten. Wir möchten Sie hierfür um eine Spende in Höhe von 25 € bitten. Ihr Spendenbeitrag hilft, die Zukunft der Übersetzungs-Commons zu sichern, indem er einen Teil der Kosten für die Serverinfrastruktur und Kundenbetreuung deckt.</string>
+    <string name="user_public_profile_certificate">Bitte schreiben Sie eine E-Mail an <a href="mailto:info@kato.translatorswb.org?subject=Certificate">info@kato.translatorswb.org</a>, wenn Sie ein unterschriebenes Zertifikat per Post erhalten möchten. Wir möchten Sie hierfür um eine Spende in Höhe von 25 € bitten. Ihr Spendenbeitrag hilft, die Zukunft der Übersetzungs-Commons zu sichern, indem er einen Teil der Kosten für die Serverinfrastruktur und Kundenbetreuung deckt.</string>
 
 	<string name="project_create_source_text">Ausgangstext</string>
 	<string name="project_create_1">Gib einen aussagekräftigen Titel für das Projekt an.</string>
@@ -673,7 +673,7 @@ Bei Fragen schreiben Sie bitte an <a href="mailto:info@translatorswithoutborders
 	<string name="terms_49">Veränderungen der Nutzungsbedingungen für die Site</string>
 	<string name="terms_50">The Rosetta Foundation kann diese Nutzungsbedingungen für ihre Website jederzeit ohne Benachrichtigung ändern. Mit der Nutzung dieser Website erklären Sie sich damit einverstanden, an die aktuellen Nutzungsbedingungen dieser Website gebunden zu sein.</string>
 	<string name="terms_governing_law">Geltendes Recht</string>
-	<string name="terms_52">Jede Forderung die Website Trommons.org betreffend ist ohne Berücksichtigung der Bestimmungen bei Gesetzeskonflikten an die Gesetze des Staates Irland gebunden.</string>
+  <string name="terms_52">Jede Forderung die Website Kató betreffend ist ohne Berücksichtigung der Bestimmungen bei Gesetzeskonflikten an die Gesetze des Staates Irland gebunden.</string>
 	<string name="terms_53">Allgemeine Geschäftsbedingungen in Bezug auf die Nutzung einer Website.</string>
 	<string name="terms_privacy_policy">Datenschutzerklärung</string>
     <string name="terms_54">Der Schutz Ihrer Daten ist uns sehr wichtig. Dementsprechend haben wir dieses Regelwerk aufgestellt, damit Sie verstehen können, wie wir persönliche Daten sammeln, nutzen, kommunizieren, veröffentlichen und anwenden. Die folgenden Punkte umreißen unsere <a href="%s">Datenschutzerklärung</a>.</string>
@@ -930,7 +930,7 @@ Bei Fragen schreiben Sie bitte an <a href="mailto:info@translatorswithoutborders
   <string name="task_twitter_0_org_task_review">Wenn Du ein Twitter-Konto hast, kannst Du auf die folgende Schaltfläche klicken, um unseren Freiwilligen zu danken (Pop-ups müssen erlaubt sein):</string>
   <string name="task_twitter_1">Ich habe gerade eine gemeinnützige Übersetzungsaufgabe für @TranslatorsWB abgeschlossen #languagematters</string>
   <string name="task_twitter_2">Wir sind auf TWB, um über @TranslatorsWB Kontakt zu freiwilligen Sprachtalenten aufzunehmen #languagematters</string>
-  <string name="task_twitter_3">Übersetzer @TranslatorsWB, könnt Ihr bei unserem Projekt auf trommons.org helfen%3F #languagematters</string>
+  <string name="task_twitter_3">Übersetzer @TranslatorsWB, könnt Ihr bei unserem Projekt auf Kató helfen%3F #languagematters</string>
   <string name="task_twitter_4">Vielen Dank an alle Freiwilligen von @TranslatorsWB für Eure Hilfe bei den Übersetzungen #languagematters</string>
 	<string name="task_review_2">Bitte gib eine Bewertung zu der Datei/den Dateien ab, die Du gerade</string>
 	<string name="task_review_3">basiert auf den folgenden Kriterien:</string>
@@ -1020,7 +1020,7 @@ Bei Fragen schreiben Sie bitte an <a href="mailto:info@translatorswithoutborders
     <string name="register_2">Du hast kein Passwort eingegeben. Bitte versuche es noch einmal.</string>
     <string name="register_3">Du bist bereits ein verifizierter Benutzer. Bitte <a href="%s">melde dich an</a>.</string>
     <string name="register_4">Eine Verifikations-E-Mail wurde an die E-Mail-Adresse gesendet, mit der Du Dich registriert hast. Bitte folge dem Link in dieser E-Mail, um die Registrierung abzuschließen. Sobald Du Deine E-Mail-Adresse verifiziert hast, kannst Du Dich <a href="%s">hier</a> anmelden.</string>
-    <string name="register_no_application">Du hast kein Benutzerkonto mit der eingegebenen Email-Adresse und musst zuerst das <a href="https://kato.translatorswb.org/signup.html">Übersetzerregistrierformular (hier klicken)</a> ausfüllen, um später unter <a href="https://trommons.org/register/">https://trommons.org/register/</a> ein Benutzerkonto erstellen zu können.<br />Wenn du bereits als Freiwilliger für TWB gearbeitet und jetzt Probleme beim Anmelden hast, bitte <a href="mailto:translators@translatorswithoutborders.org">translators@translatorswithoutborders.org</a> kontaktieren.</string>
+    <string name="register_no_application">Du hast kein Benutzerkonto mit der eingegebenen Email-Adresse und musst zuerst das <a href="https://kato.translatorswb.org/signup.html">Übersetzerregistrierformular (hier klicken)</a> ausfüllen, um später unter <a href="https://kato.translatorswb.org/register/">https://kato.translatorswb.org/register/</a> ein Benutzerkonto erstellen zu können.<br />Wenn du bereits als Freiwilliger für TWB gearbeitet und jetzt Probleme beim Anmelden hast, bitte <a href="mailto:translators@translatorswithoutborders.org">translators@translatorswithoutborders.org</a> kontaktieren.</string>
     <string name="register_no_application_error">Verbindung fehlgeschlagen, bitte später erneut versuchen.</string>
 
 	<string name="user_private_profile_private_profile">Privates Profil</string>
