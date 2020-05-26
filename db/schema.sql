@@ -2156,6 +2156,12 @@ BEGIN
         DELETE FROM UserHowheards
         WHERE user_id=userId;
 
+        DELETE FROM UserTaskStreamNotifications
+        WHERE user_id=userId;
+
+        DELETE FROM Admins
+        WHERE user_id=userId;
+
         select 1 as result;
     else
         select 0 as result;
