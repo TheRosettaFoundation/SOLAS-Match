@@ -6751,11 +6751,16 @@ BEGIN
         i.city,
         i.country,
         i.`first-name` AS first_name,
-        i.`last-name` AS last_name
+        i.`last-name` AS last_name,
+        MAX(IF(tau.user_id IS NOT NULL, 'Yes', '')) AS terms,
+        MAX(IF( ad.user_id IS NOT NULL, 'Yes', '')) AS admin
     FROM Users u
     LEFT JOIN UserPersonalInformation i ON u.id=i.user_id
     LEFT JOIN Countries c ON u.country_id=c.id
     LEFT JOIN Languages l ON u.language_id=l.id
+    LEFT JOIN TermsAcceptedUsers tau ON u.id=tau.user_id
+    LEFT JOIN Admins              ad ON u.id=ad.user_id
+    GROUP BY u.id
     ORDER BY u.id DESC;
 END//
 DELIMITER ;
