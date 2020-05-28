@@ -824,7 +824,7 @@ class AdminRouteHandler
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->getUsers();
 
-        $data = "\xEF\xBB\xBF" . '"ID","Name","Email","Biography","Language","City","Country","Created"' . "\n";
+        $data = "\xEF\xBB\xBF" . '"ID","Name","Email","Biography","Language","City","Country","Created","Code of Conduct","Admin"' . "\n";
 
         foreach ($all_users as $user_row) {
             $data .= '"' . $user_row['id'] . '","' .
@@ -834,7 +834,9 @@ class AdminRouteHandler
                 $user_row['native_language'] . ' ' . $user_row['native_country'] . '","' .
                 str_replace('"', '""', $user_row['city']) . '","' .
                 str_replace('"', '""', $user_row['country']) . '","' .
-                $user_row['created_time'] . '"' . "\n";
+                $user_row['created_time'] . '","' .
+                $user_row['terms'] . '","' .
+                $user_row['admin'] . '"' . "\n";
         }
 
         header('Content-type: text/csv');
