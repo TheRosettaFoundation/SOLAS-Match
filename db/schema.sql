@@ -6650,6 +6650,16 @@ BEGIN
     ) THEN
         SELECT 0 AS result;
 
+    ELSEIF EXISTS (
+        SELECT 1
+        FROM MatecatLanguagePairs lp
+        JOIN TaskChunks           tc ON lp.matecat_id_job=tc.matecat_id_job
+        JOIN TaskClaims          tcl ON tcl.user_id=userID AND tc.task_id=tcl.task_id
+        WHERE
+            lp.task_id=taskID
+    ) THEN
+        SELECT 0 AS result;
+
     ELSEIF NOT EXISTS (
         SELECT t.id
         FROM Tasks t
