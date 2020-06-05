@@ -311,6 +311,7 @@ class TaskRouteHandler
         $projectAndOrgs = array();
         $discourse_slug = array();
         $proofreadTaskIds = array();
+        $parentTaskIds = [];
         $matecat_urls = array();
         $allow_downloads = array();
         $show_mark_chunk_complete = array();
@@ -392,6 +393,16 @@ class TaskRouteHandler
                         $proofreadTaskIds[$taskId] = null;
                     }
                 }
+
+                $parentTaskIds[$taskId] = null;
+                if (!$allow_downloads[$taskId]) { // Chunked
+                    if ($parent_translation_id = $taskDao->get_parent_transation_task($topTask)) {
+                        $parent_translation_task = $taskDao->getTask($parent_translation_id);
+                        if ($parent_translation_task->getTaskStatus() == Common\Enums\TaskStatusEnum::COMPLETE) {
+                            $parentTaskIds[$taskId] = $parent_translation_id;
+                        }
+                    }
+                }
             }
         }
 
@@ -424,6 +435,7 @@ class TaskRouteHandler
             'show_mark_chunk_complete' => $show_mark_chunk_complete,
             'discourse_slug' => $discourse_slug,
             'proofreadTaskIds' => $proofreadTaskIds,
+            'parentTaskIds'    => $parentTaskIds,
             'currentScrollPage' => $currentScrollPage,
             'itemsPerScrollPage' => $itemsPerScrollPage,
             'lastScrollPage' => $lastScrollPage,
