@@ -23,10 +23,12 @@ If you are having problems registering please contact <a href="mailto:translator
     <form method="post" action="{urlFor name="register"}" class="well" accept-charset="utf-8">
             <label for="email"><strong>{Localisation::getTranslation('common_email')}</strong></label>
             <input type="text" name="email" id="email" placeholder="{Localisation::getTranslation('register_your_email')}"/>
+            <label for="email2"><strong>Re-enter E-mail</strong></label>
+            <input type="text" id="email2" placeholder="Confirm your email"/>
             <label for="password"><strong>{Localisation::getTranslation('common_password')}</strong></label>
             <input type="password" name="password" id="password" placeholder="{Localisation::getTranslation('register_your_password')}"/>
             <p>
-                <button type="submit" class="btn btn-success" name="submit">
+                <button type="submit" onclick="return compareEmails();" class="btn btn-success" name="submit">
                     <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_register')}
                 </button>
             </p>
