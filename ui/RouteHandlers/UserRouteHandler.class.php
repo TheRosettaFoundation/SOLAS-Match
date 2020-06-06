@@ -412,7 +412,7 @@ class UserRouteHandler
         }
         
         if ($appendExtraScripts) {
-            $extra_scripts .= '<script type="text/javascript">function compareEmails() {if (document.getElementById("email") != document.getElementById("email2")) {window.alert("Entered emails must be identical." + document.getElementById("email") + "..." + document.getElementById("email2")); return false;} return true;}</script>';
+            $extra_scripts .= '<script type="text/javascript">function compareEmails() {if (document.getElementById("email").value != document.getElementById("email2").value) {window.alert("Entered emails must be identical." + document.getElementById("email").value + "..." + document.getElementById("email2").value); return false;} return true;}</script>';
             $app->view()->appendData(array("extra_scripts" => $extra_scripts));
         }
         
