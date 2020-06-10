@@ -292,4 +292,7 @@
 'pko' => 'pko-KE',
 'tuv' => 'tuv-KE',
 'saq' => 'saq-KE',
+
+'lol' => 'lol-CD',
+'ngc' => 'ngc-CD',
 );
