@@ -1534,6 +1534,12 @@ EOD;
             $isSiteAdmin = 0;
             $app->view()->setData('isSiteAdmin', 0);
         }
+
+        $private_access = 0;
+        if (Common\Lib\UserSession::getCurrentUserID() == $user_id) {
+            $private_access = 1;
+        }
+
         $user = null;
         try {
             Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER.$user_id);
@@ -1648,11 +1654,6 @@ EOD;
             "userQualifiedPairs" => $userQualifiedPairs,
             "taskTypeColours" => $taskTypeColours
         ));
-
-        $private_access = 0;
-        if (Common\Lib\UserSession::getCurrentUserID() == $user_id) {
-            $private_access = 1;
-        }
 
         if ($private_access || $isSiteAdmin) {
             $notifData = $userDao->getUserTaskStreamNotification($user_id);
