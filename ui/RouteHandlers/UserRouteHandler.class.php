@@ -1598,6 +1598,133 @@ EOD;
             if ($isSiteAdmin && !empty($post['mark_certification_delete'])) {
                 $userDao->deleteCertification($post['certification_id']);
             }
+
+            if (($private_access || $isSiteAdmin) && !empty($post['source_language_code']) && !empty($post['target_language_code'])) {
+                $source_language_code = $post['source_language_code'];
+                $target_language_code = $post['target_language_code'];
+
+                $user_id_owner = 17709; // support@therosettafoundation.org
+
+                $app = \Slim\Slim::getInstance();
+                $projectDao = new DAO\ProjectDao();
+                $taskDao = new DAO\TaskDao();
+
+                $project = new Common\Protobufs\Models\Project();
+                $project->setTitle('Testing Center ' . UserRouteHandler::random_string(4));
+                $project->setOrganisationId(643); // TWB Community&Recruitment
+                $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
+                $project->setDeadline(gmdate('Y-m-d H:i:s', strtotime('10 days')));
+                $project->setDescription('');
+                $project->setImpact('');
+                $project->setReference('');
+                $project->setWordCount(1);
+
+                $sourceLocale = new Common\Protobufs\Models\Locale();
+                $sourceLocale->setLanguageCode($source_language_code);
+                $sourceLocale->setCountryCode('--');
+                $project->setSourceLocale($sourceLocale);
+
+                $source_language = $source_language_code . '---';
+                $target_languages = $target_language_code . '---';
+
+                $project = $projectDao->createProject($project);
+                if (empty($project)) {
+                    error_log("testingProject($user_id...) Failed");
+                    return;
+                }
+                $project_id = $project->getId();
+
+                $projects_to_copy = [9999, 9998, 9997, 9996];
+                $n = count($projects_to_copy);
+                $testing_center_projects = $projectDao->get_testing_center_projects($user_id);
+
+                $test_number = mt_rand(0, $n - 1); // Pick a random $projects_to_copy test file
+                $i = $n;
+                while ($i--) {
+                    if (empty($testing_center_projects[$projects_to_copy[$test_number]])) break; // Found test file not already used
+                    $test_number = ($test_number + 1) % $n;
+                }
+                if ($i == 0) return;
+
+                $project_to_copy_id = $projects_to_copy[$test_number];
+
+                $result = Lib\PDOWrapper::call('getProjectFile', "$project_to_copy_id, null, null, null, null");
+                $filename = $result[0]['filename'];
+                $args = Lib\PDOWrapper::cleanseNull($project_id) . ',' .
+                    Lib\PDOWrapper::cleanseNull($user_id_owner) . ',' .
+                    Lib\PDOWrapper::cleanseNullOrWrapStr($filename) . ',' .
+                    Lib\PDOWrapper::cleanseNullOrWrapStr($filename) . ',' .
+                    Lib\PDOWrapper::cleanseNullOrWrapStr($result[0]['mime']);
+                $result = Lib\PDOWrapper::call('addProjectFile', $args);
+
+                $destination = Common\Lib\Settings::get("files.upload_path") . "proj-$project_id/";
+                mkdir($destination, 0755);
+                file_put_contents($destination . $filename, "files/proj-$project_to_copy_id/$filename"); // Point to existing project file
+
+                $createdTasks = [];
+                $post = ['publish' => 1, 'testing_center' => 1];
+
+                $project_route_handler = new ProjectRouteHandler();
+                $translation_task_id = $project_route_handler->addProjectTask(
+                    $project,
+                    $target_language_code,
+                    '--',
+                    Common\Enums\TaskTypeEnum::TRANSLATION,
+                    0,
+                    $createdTasks,
+                    $user_id_owner,
+                    $projectDao,
+                    $taskDao,
+                    $app,
+                    $post);
+                $proofreading_task_id = $project_route_handler->addProjectTask(
+                    $project,
+                    $target_language_code,
+                    '--',
+                    Common\Enums\TaskTypeEnum::PROOFREADING,
+                    $translation_task_id,
+                    $createdTasks,
+                    $user_id_owner,
+                    $projectDao,
+                    $taskDao,
+                    $app,
+                    $post);
+
+                $projectDao->calculateProjectDeadlines($project_id);
+
+                $taskDao->insertWordCountRequestForProjects($project_id, $source_language, $target_languages, 0);
+
+                $source_language = $project_route_handler->valid_language_for_matecat($source_language);
+                $target_language = $project_route_handler->valid_language_for_matecat($target_language_code . '---');
+                $taskDao->insertMatecatLanguagePairs($translation_task_id,  $project_id, Common\Enums\TaskTypeEnum::TRANSLATION,  "$source_language|$target_language");
+                $taskDao->insertMatecatLanguagePairs($proofreading_task_id, $project_id, Common\Enums\TaskTypeEnum::PROOFREADING, "$source_language|$target_language");
+
+                $mt_engine        = '0';
+                $pretranslate_100 = '0';
+                $lexiqa           = '0';
+                $private_tm_key   = 'new';
+                $taskDao->set_project_tm_key($project_id, $mt_engine, $pretranslate_100, $lexiqa, $private_tm_key);
+
+                $projectDao->insert_testing_center_project($user_id, $project_id, $translation_task_id, $proofreading_task_id, $project_to_copy_id, $source_language_code, $target_language_code);
+
+                // Asana 4th Project
+                $re = curl_init('https://app.asana.com/api/1.0/tasks');
+                curl_setopt($re, CURLOPT_POSTFIELDS, array(
+                    'name' => $user->getEmail(),
+                    'notes' => ' https://' . $_SERVER['SERVER_NAME'] . "/$user_id/profile , Target: $targetlanguages, Deadline: " . $project->getDeadline() . ' https://' . $_SERVER['SERVER_NAME'] . "/project/$project_id/view",
+                    'projects' => '1127940658676844'
+                    )
+                );
+
+                curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
+                curl_setopt($re, CURLOPT_HEADER, true);
+                curl_setopt($re, CURLOPT_HTTPHEADER, array("Authorization: Bearer " . Common\Lib\Settings::get('asana.api_key4')));
+                curl_exec($re);
+                if ($error_number = curl_errno($re)) {
+                  error_log("Asana 4 API error ($error_number): " . curl_error($re));
+                }
+                curl_close($re);
+            }
         }
                     
         $archivedJobs = $userDao->getUserArchivedTasks($user_id, 0, 10);
