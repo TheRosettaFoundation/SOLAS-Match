@@ -413,4 +413,29 @@ $replace = array(
         $trommons_country_code  = substr($language_code, strpos($language_code, '-') + 1);
         return [$trommons_language_code, $trommons_country_code];
     }
+
+    public function insert_testing_center_project($user_id, $project_id, $translation_task_id, $proofreading_task_id, $project_to_copy_id, $source_language_code, $target_language_code)
+    {
+        LibAPI\PDOWrapper::call('insert_testing_center_project',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($translation_task_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($proofreading_task_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($project_to_copy_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($source_language_code) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($target_language_code)
+        );
+    }
+
+    public function get_testing_center_projects($user_id)
+    {
+        $results = LibAPI\PDOWrapper::call('get_testing_center_projects', LibAPI\PDOWrapper::cleanse($user_id));
+        $testing_center_projects = [];
+        if (!empty($results) {
+            foreach ($results as $result) {
+                $testing_center_projects[$result['project_to_copy_id']] = $result;
+            }
+        }
+        return $testing_center_projects;
+    }
 }
