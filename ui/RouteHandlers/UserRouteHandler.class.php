@@ -1601,10 +1601,10 @@ EOD;
                 $userDao->deleteCertification($post['certification_id']);
             }
 
-            if (($private_access || $isSiteAdmin) && !empty($post['source_language_code']) && !empty($post['target_language_code'])) {
+            if (($private_access || $isSiteAdmin) && !empty($post['language_code_source']) && !empty($post['language_code_target'])) {
                 // Testing Center Project for this User
-                $source_language_code = $post['source_language_code'];
-                $target_language_code = $post['target_language_code'];
+                $language_code_source = $post['language_code_source'];
+                $language_code_target = $post['language_code_target'];
 
                 $user_id_owner = 17709; // support@therosettafoundation.org
 
@@ -1619,12 +1619,12 @@ EOD;
                 $project->setWordCount(1);
 
                 $sourceLocale = new Common\Protobufs\Models\Locale();
-                $sourceLocale->setLanguageCode($source_language_code);
+                $sourceLocale->setLanguageCode($language_code_source);
                 $sourceLocale->setCountryCode('--');
                 $project->setSourceLocale($sourceLocale);
 
-                $source_language = $source_language_code . '---';
-                $target_languages = $target_language_code . '---';
+                $source_language = $language_code_source . '---';
+                $target_languages = $language_code_target . '---';
 
                 $project = $projectDao->createProject($project);
                 if (empty($project)) {
@@ -1668,7 +1668,7 @@ EOD;
                         $project_route_handler = new ProjectRouteHandler();
                         $translation_task_id = $project_route_handler->addProjectTask(
                             $project,
-                            $target_language_code,
+                            $language_code_target,
                             '--',
                             Common\Enums\TaskTypeEnum::TRANSLATION,
                             0,
@@ -1680,7 +1680,7 @@ EOD;
                             $post);
                         $proofreading_task_id = $project_route_handler->addProjectTask(
                             $project,
-                            $target_language_code,
+                            $language_code_target,
                             '--',
                             Common\Enums\TaskTypeEnum::PROOFREADING,
                             $translation_task_id,
@@ -1696,7 +1696,7 @@ EOD;
                         $taskDao->insertWordCountRequestForProjects($project_id, $source_language, $target_languages, 0);
 
                         $source_language = $project_route_handler->valid_language_for_matecat($source_language);
-                        $target_language = $project_route_handler->valid_language_for_matecat($target_language_code . '---');
+                        $target_language = $project_route_handler->valid_language_for_matecat($language_code_target . '---');
                         $taskDao->insertMatecatLanguagePairs($translation_task_id,  $project_id, Common\Enums\TaskTypeEnum::TRANSLATION,  "$source_language|$target_language");
                         $taskDao->insertMatecatLanguagePairs($proofreading_task_id, $project_id, Common\Enums\TaskTypeEnum::PROOFREADING, "$source_language|$target_language");
 
@@ -1706,7 +1706,7 @@ EOD;
                         $private_tm_key   = 'new';
                         $taskDao->set_project_tm_key($project_id, $mt_engine, $pretranslate_100, $lexiqa, $private_tm_key);
 
-                        $projectDao->insert_testing_center_project($user_id, $project_id, $translation_task_id, $proofreading_task_id, $project_to_copy_id, $source_language_code, $target_language_code);
+                        $projectDao->insert_testing_center_project($user_id, $project_id, $translation_task_id, $proofreading_task_id, $project_to_copy_id, $language_code_source, $language_code_target);
 
                         // Asana 4th Project
                         $re = curl_init('https://app.asana.com/api/1.0/tasks');

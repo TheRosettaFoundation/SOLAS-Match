@@ -165,6 +165,14 @@
                                             {if $userQualifiedPair['qualification_level'] == 2}({Localisation::getTranslation('user_qualification_level_2')}){/if}
                                             {if $userQualifiedPair['qualification_level'] == 3}({Localisation::getTranslation('user_qualification_level_3')}){/if}
                                             </strong>
+                                            {if $userQualifiedPair['qualification_level'] == 1 && $userQualifiedPair['language_code_source'] == 'en' && in_array($userQualifiedPair['language_code_target'], ['ar', 'fr', 'es']) && ($private_access || $isSiteAdmin)}
+                                            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                                                <input type="hidden" name="language_code_source" value="{$userQualifiedPair['language_code_source']}" />
+                                                <input type="hidden" name="language_code_target" value="{$userQualifiedPair['language_code_target']}" />
+                                                <input type="submit" class="btn btn-primary" name="submit" value="Request Test" />
+                                                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                                            </form>
+                                            {/if}
                                         </p>
                                     {/foreach}
                                 </td>
