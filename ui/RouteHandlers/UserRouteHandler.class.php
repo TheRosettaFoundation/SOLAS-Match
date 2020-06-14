@@ -1523,6 +1523,8 @@ EOD;
         $orgDao = new DAO\OrganisationDao();
         $adminDao = new DAO\AdminDao();
         $langDao = new DAO\LanguageDao();
+        $projectDao = new DAO\ProjectDao();
+        $taskDao = new DAO\TaskDao();
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
@@ -1605,10 +1607,6 @@ EOD;
                 $target_language_code = $post['target_language_code'];
 
                 $user_id_owner = 17709; // support@therosettafoundation.org
-
-                $app = \Slim\Slim::getInstance();
-                $projectDao = new DAO\ProjectDao();
-                $taskDao = new DAO\TaskDao();
 
                 $project = new Common\Protobufs\Models\Project();
                 $project->setTitle('Testing Center ' . UserRouteHandler::random_string(4));
