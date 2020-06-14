@@ -1635,7 +1635,7 @@ EOD;
                 } else {
                     $project_id = $project->getId();
 
-                    $projects_to_copy = [9148, 9149, 9151, 9152];
+                    $projects_to_copy = [9149, 9151, 9152, 9153];
                     $n = count($projects_to_copy);
                     $testing_center_projects = $projectDao->get_testing_center_projects($user_id);
 
