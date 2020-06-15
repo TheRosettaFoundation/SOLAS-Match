@@ -1559,7 +1559,8 @@ EOD;
             // error_log("Error getting user personal info: $e");
         }
 
-        $testing_center_projects = $projectDao->get_testing_center_projects($user_id);
+        $testing_center_projects_by_code = [];
+        $testing_center_projects = $projectDao->get_testing_center_projects($user_id, $testing_center_projects_by_code);
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
@@ -1855,7 +1856,7 @@ EOD;
             'admin_comments'         => $userDao->admin_comments($user_id),
             'certifications'         => $userDao->getUserCertifications($user_id),
             'tracked_registration'   => $userDao->get_tracked_registration($user_id),
-            'testing_center_projects' => $testing_center_projects,
+            'testing_center_projects_by_code' => $testing_center_projects_by_code,
         ));
 
         $app->render("user/user-public-profile.tpl");

@@ -427,13 +427,14 @@ $replace = array(
         );
     }
 
-    public function get_testing_center_projects($user_id)
+    public function get_testing_center_projects($user_id, &$testing_center_projects_by_code)
     {
         $results = LibAPI\PDOWrapper::call('get_testing_center_projects', LibAPI\PDOWrapper::cleanse($user_id));
         $testing_center_projects = [];
         if (!empty($results) {
             foreach ($results as $result) {
                 $testing_center_projects[$result['project_to_copy_id']] = $result;
+                $testing_center_projects_by_code[$result['language_code_source'] . $result['language_code_target']] = $result;
             }
         }
         return $testing_center_projects;
