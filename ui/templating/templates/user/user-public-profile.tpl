@@ -170,9 +170,20 @@
                                                 <input type="hidden" name="language_code_source" value="{$userQualifiedPair['language_code_source']}" />
                                                 <input type="hidden" name="language_code_target" value="{$userQualifiedPair['language_code_target']}" />
                                                 {if empty($testing_center_projects_by_code[$userQualifiedPair['language_code_source'] . $userQualifiedPair['language_code_target']])}
-                                                    <input type="submit" class="btn btn-primary" name="submit" value="Get Verified" />
+                                                    <input type="submit" class="btn btn-primary" name="submit" value="Get Verified" onclick=
+"return confirm('
+If you press OK, a task will be created for you to perform a translation test and this will be graded by a senior translator, and if your score is 3.5 or above,
+you will get verified. If you don’t want to do that, please press Cancel.
+See https://community.translatorswb.org/t/how-to-solve-your-login-issues/4385
+10 days??
+')"
+                                                    />
                                                 {else}
-                                                    <input type="submit" class="btn btn-primary" name="submit" value="Get Verified" />
+                                                    <input type="submit" class="btn btn-primary" name="submit" value="Get Verified" onclick=
+"alert('
+You have already requested a translation test. If you want another one, please email translators@translatorswithoutborders.org
+');
+                                                    return false;" />
                                                 {/if}
                                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                             </form>
