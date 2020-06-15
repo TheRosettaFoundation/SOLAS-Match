@@ -1708,6 +1708,8 @@ EOD;
 
                         $projectDao->insert_testing_center_project($user_id, $project_id, $translation_task_id, $proofreading_task_id, $project_to_copy_id, $language_code_source, $language_code_target);
 
+                        $userDao->claimTask($user_id, $translation_task_id);
+
                         // Asana 4th Project
                         $re = curl_init('https://app.asana.com/api/1.0/tasks');
                         curl_setopt($re, CURLOPT_POSTFIELDS, array(
