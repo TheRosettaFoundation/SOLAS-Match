@@ -1558,6 +1558,9 @@ EOD;
         } catch (Common\Exceptions\SolasMatchException $e) {
             // error_log("Error getting user personal info: $e");
         }
+
+        $testing_center_projects = $projectDao->get_testing_center_projects($user_id);
+
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
             Common\Lib\UserSession::checkCSRFKey($post, 'userPublicProfile');
@@ -1606,7 +1609,7 @@ EOD;
                 $language_code_source = $post['language_code_source'];
                 $language_code_target = $post['language_code_target'];
 
-                $user_id_owner = 17709; // support@therosettafoundation.org
+                $user_id_owner = 62927; // translators@translatorswithoutborders.org
 
                 $project = new Common\Protobufs\Models\Project();
                 $project->setTitle('Testing Center ' . UserRouteHandler::random_string(4));
@@ -1635,8 +1638,6 @@ EOD;
 
                     $projects_to_copy = [9149, 9151, 9152, 9153];
                     $n = count($projects_to_copy);
-                    $testing_center_projects = $projectDao->get_testing_center_projects($user_id);
-
                     $test_number = mt_rand(0, $n - 1); // Pick a random $projects_to_copy test file
                     $i = $n;
                     while ($i--) {
@@ -1854,6 +1855,7 @@ EOD;
             'admin_comments'         => $userDao->admin_comments($user_id),
             'certifications'         => $userDao->getUserCertifications($user_id),
             'tracked_registration'   => $userDao->get_tracked_registration($user_id),
+            'testing_center_projects' => $testing_center_projects,
         ));
 
         $app->render("user/user-public-profile.tpl");

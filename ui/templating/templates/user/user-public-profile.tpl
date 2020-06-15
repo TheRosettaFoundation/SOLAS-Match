@@ -169,7 +169,7 @@
                                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                                                 <input type="hidden" name="language_code_source" value="{$userQualifiedPair['language_code_source']}" />
                                                 <input type="hidden" name="language_code_target" value="{$userQualifiedPair['language_code_target']}" />
-                                                <input type="submit" class="btn btn-primary" name="submit" value="Request Test" />
+                                                <input type="submit" class="btn btn-primary" name="submit" value="Get Verified" />
                                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                             </form>
                                             {/if}
