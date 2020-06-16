@@ -5,7 +5,7 @@ $(document).ready(documentReady);
 function documentReady()
 {
   $(".add_click_handler").each.click(function(e) {
-      $("#dialog").dialog(
+      $("#dialog_for_verification").dialog(
 		{
           resizable: false,
           height:    "auto",
