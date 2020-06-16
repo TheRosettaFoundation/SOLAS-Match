@@ -1756,6 +1756,7 @@ EOD;
             
         $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
+        $extra_scripts .= file_get_contents(__DIR__."/../js/profile.js");
         
         $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
         $taskTypeColours = array();

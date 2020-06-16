@@ -170,7 +170,7 @@
                                                 <input type="hidden" name="language_code_source" value="{$userQualifiedPair['language_code_source']}" />
                                                 <input type="hidden" name="language_code_target" value="{$userQualifiedPair['language_code_target']}" />
                                                 {if empty($testing_center_projects_by_code[$userQualifiedPair['language_code_source'] . $userQualifiedPair['language_code_target']])}
-                                                    <input type="submit" class="btn btn-primary" name="submit" value="Get Verified" onclick=
+                                                    <input type="submit" class="add_click_handler btn btn-primary" name="submit" value="Get Verified" onclick=
 "return confirm(
 'If you press OK, a task will be created for you to perform a translation test and this will be graded by a senior translator, and if your score is 3.5 or above,' +
 'you will get verified. If you don’t want to do that, please press Cancel.' +
