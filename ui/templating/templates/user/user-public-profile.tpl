@@ -64,14 +64,12 @@
 
 <span class="hidden">
 <div id="dialog_for_verification" title="Perform a translation test?">
-<p>
-If you press OK, a task will be created for you to perform a translation test and this will be graded by a senior translator, and if your score is 3.5 or above,
-you will get verified. If you don’t want to do that, please press Cancel.
-</p>
-<p>
-See https://community.translatorswb.org/t/how-to-solve-your-login-issues/4385
-<br />10 days??
-</p></div>
+<p>Becoming verified will give you access to more tasks in your language pair. For more information please visit <a href="https://community.translatorswb.org/t/how-to-become-a-kato-verified-translator/262">this page</a>.</p>
+<p>By clicking “OK” below, a test will be created for you, and you will receive an email with instructions on how to complete the test.</p>
+<p>One of our Senior Translators will review the test, and if you receive 3.5 or more stars we will verify you.</p>
+<p>Please note, tests can take 3-4 weeks to be reviewed. When we have the results, we will contact you by email.</p>
+<p>If you do not want to take the test, please click “Cancel”.</p>
+</div>
 </span>
 
 
@@ -185,9 +183,8 @@ See https://community.translatorswb.org/t/how-to-solve-your-login-issues/4385
                                                 {if empty($testing_center_projects_by_code[$userQualifiedPair['language_code_source'] . $userQualifiedPair['language_code_target']])}
                                                     <input type="submit" class="add_click_handler btn btn-primary" name="submit" value="Get Verified" />
                                                 {else}
-                                                    <input type="submit" class="btn btn-primary" name="submit" value="Get Verified" onclick=
-"alert(
-'You have already requested to take a test in order to become a Kató Verified Translator. If you would like to take a second test, please contact translators@translatorswithoutborders.org.');
+                                                    <input type="submit" class="btn btn-primary" name="submit" value="Get Verified" onclick="
+alert('You have already requested to take a test in order to become a Kató Verified Translator. If you would like to take a second test, please contact translators@translatorswithoutborders.org.');
                                                     return false;" />
                                                 {/if}
                                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
