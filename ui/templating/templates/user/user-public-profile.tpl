@@ -187,7 +187,7 @@ See https://community.translatorswb.org/t/how-to-solve-your-login-issues/4385
                                                 {else}
                                                     <input type="submit" class="btn btn-primary" name="submit" value="Get Verified" onclick=
 "alert(
-'You have already requested a translation test. If you want another one, please email translators@translatorswithoutborders.org');
+'You have already requested to take a test in order to become a Kató Verified Translator. If you would like to take a second test, please contact translators@translatorswithoutborders.org.');
                                                     return false;" />
                                                 {/if}
                                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
