@@ -431,7 +431,7 @@ $replace = array(
     {
         $results = LibAPI\PDOWrapper::call('get_testing_center_projects', LibAPI\PDOWrapper::cleanse($user_id));
         $testing_center_projects = [];
-        if (!empty($results) {
+        if (!empty($results)) {
             foreach ($results as $result) {
                 $testing_center_projects[$result['project_to_copy_id']] = $result;
                 $testing_center_projects_by_code[$result['language_code_source'] . $result['language_code_target']] = $result;
