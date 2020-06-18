@@ -1606,14 +1606,14 @@ EOD;
             }
 
             if (($private_access || $isSiteAdmin) && !empty($post['language_code_source']) && !empty($post['language_code_target'])) {
-                // Testing Center Project for this User
+                // Verification System Project for this User
                 $language_code_source = $post['language_code_source'];
                 $language_code_target = $post['language_code_target'];
 
                 $user_id_owner = 62927; // translators@translatorswithoutborders.org
 
                 $project = new Common\Protobufs\Models\Project();
-                $project->setTitle('Testing Center ' . UserRouteHandler::random_string(4));
+                $project->setTitle('Test' . UserRouteHandler::random_string(4));
                 $project->setOrganisationId(643); // TWB Community&Recruitment
                 $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
                 $project->setDeadline(gmdate('Y-m-d H:i:s', strtotime('10 days')));
