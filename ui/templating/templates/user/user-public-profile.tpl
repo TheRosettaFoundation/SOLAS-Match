@@ -188,7 +188,6 @@
 alert('You have already requested to take a test in order to become a Kató Verified Translator. If you would like to take a second test, please contact translators@translatorswithoutborders.org.');
                                                     return false;" />
                                                 {/if}
-{$pair}
                                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                             </form>
                                             {/if}
