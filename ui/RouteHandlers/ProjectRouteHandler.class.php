@@ -1488,7 +1488,7 @@ class ProjectRouteHandler
         $app->render("project/project.create.tpl");
     }
 
-    private function addProjectTask(
+    public function addProjectTask(
         $project,
         $target_language,
         $target_country,
