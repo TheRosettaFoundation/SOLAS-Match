@@ -6921,6 +6921,24 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `insert_testing_center_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_testing_center_project`(IN uID INT, IN pID INT, IN tID BIGINT, IN ptID BIGINT, IN pIDtoCopy INT, IN sourceCode VARCHAR(3), IN targetCode VARCHAR(3))
+BEGIN
+    INSERT INTO TestingCenterProjects
+               (user_id,  project_id,  translation_task_id,  proofreading_task_id,  project_to_copy_id,  language_code_source,  language_code_target)
+        VALUES (    uID,         pID,                  tID,                  ptID,           pIDtoCopy,            sourceCode,            targetCode);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_testing_center_projects`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_testing_center_projects`(IN uID INT)
+BEGIN
+    SELECT * FROM TestingCenterProjects WHERE user_id=uID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `complete_matecat`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `complete_matecat`()
