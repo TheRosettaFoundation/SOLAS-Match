@@ -434,7 +434,7 @@ $replace = array(
         if (!empty($results)) {
             foreach ($results as $result) {
                 $testing_center_projects[$result['project_to_copy_id']] = $result;
-                $testing_center_projects_by_code[$result['language_code_source'] . $result['language_code_target']] = $result;
+                $testing_center_projects_by_code[$result['language_code_source'] . '-' . $result['language_code_target']] = $result;
             }
         }
         return $testing_center_projects;
