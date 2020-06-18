@@ -6872,80 +6872,52 @@ BEGIN
         t.id    AS task_id,
         p.id    AS project_id,
         p.title AS project_title,
-        IF(t.`task-type_id`=2, 'Translation', 'Revising') AS task_type,
+        IF(t.`task-type_id`=2, 'Translation', 'Revising')               AS task_type,
         CASE
             WHEN t.`task-status_id`=1 THEN 'Waiting'
             WHEN t.`task-status_id`=2 THEN 'Pending'
             WHEN t.`task-status_id`=3 THEN 'In Progress'
             WHEN t.`task-status_id`=4 THEN 'Complete'
-        END                                               AS task_status,
-        IFNULL(u.email, '')          AS user_email,
-        IFNULL(u.`display-name`, '') AS display_name,
-        IFNULL(u.id, '')             AS user_id,
-        IFNULL(tr.corrections,        '') AS accuracy,
-        IFNULL(tr.grammar,            '') AS fluency,
-        IFNULL(tr.spelling,           '') AS terminology,
-        IFNULL(tr.consistency   % 10, '') AS style,
-        IFNULL(tr.consistency DIV 10, '') AS design,
-        IFNULL(tr.comment,            '') AS comment
-    FROM      Projects        p
-    JOIN      PrivateTMKeys tmk ON p.id=tmk.project_id AND tmk.private_tm_key='new'
-    JOIN      Tasks           t ON p.id=t.project_id
-    LEFT JOIN TaskClaims     tc ON t.id=tc.task_id
-    LEFT JOIN Users           u ON tc.user_id=u.id
-    LEFT JOIN TaskReviews    tr ON t.id=tr.task_id
-    ORDER BY t.id DESC;
-END//
-DELIMITER ;
-
-DROP PROCEDURE IF EXISTS `late_matecat`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `late_matecat`()
-BEGIN
-    SELECT
-        u.id AS user_id,
-        u.`display-name` AS display_name,
-        u.email,
-        IFNULL(i.`first-name`, '') AS first_name,
-        IFNULL(i.`last-name`, '') AS last_name,
-        t.title AS task_title,
-        t.id AS task_id,
-        t.`word-count` AS word_count,
-        t.`created-time` AS created_time,
+        END                                                             AS task_status,
+        t.`created-time`                                                AS created,
         t.deadline,
-        IF(NOW()>t.deadline, 1, 0) AS red,
-        t.`task-type_id` AS task_type,
+        CONCAT(tcp.language_code_source, '|', tcp.language_code_target) AS language_pair,
+        IFNULL(u.email, '')                                             AS user_email,
+        IFNULL(u.`display-name`, '')                                    AS display_name,
+        IFNULL(u.id, '')                                                AS user_id,
         CASE
-            WHEN t.`task-type_id`=1 THEN 'Segmentation'
-            WHEN t.`task-type_id`=2 THEN 'Translation'
-            WHEN t.`task-type_id`=3 THEN 'Revising'
-            WHEN t.`task-type_id`=4 THEN 'Desegmentation'
-        END
-        AS task_type_text,
-        IFNULL(tc.`claimed-time`, '') AS claimed_time,
-        IFNULL(lp.matecat_langpair,        '') AS matecat_langpair_or_blank,
-        IFNULL(lp.matecat_id_job,           0) AS matecat_id_job_or_zero,
-        IFNULL(lp.matecat_id_job_password, '') AS matecat_id_job_password_or_blank,
-        IFNULL(lp.matecat_id_file,          0) AS matecat_id_file_or_zero,
-        CONCAT(l.code, '|', l2.code)           AS language_pair,
-        o.id AS org_id,
-        o.name AS org_name,
-        p.title AS project_title,
-        p.id AS project_id
-    FROM Projects    p
-    JOIN Organisations o ON p.organisation_id=o.id
-    JOIN Tasks       t ON p.id=t.project_id
-    JOIN Languages   l ON t.`language_id-source`=l.id
-    JOIN Languages  l2 ON t.`language_id-target`=l2.id
-    LEFT JOIN TaskClaims              tc ON t.id=tc.task_id
-    LEFT JOIN Users                    u ON tc.user_id=u.id
-    LEFT JOIN UserPersonalInformation  i ON u.id=i.user_id
-    LEFT JOIN MatecatLanguagePairs    lp ON t.id=lp.task_id
+            WHEN uqp.qualification_level=1 THEN ''
+            WHEN uqp.qualification_level=2 THEN 'Verified'
+            WHEN uqp.qualification_level=3 THEN 'Senior'
+        END                                                             AS level,
+        IFNULL(tr.corrections,        '')                               AS accuracy,
+        IFNULL(tr.grammar,            '')                               AS fluency,
+        IFNULL(tr.spelling,           '')                               AS terminology,
+        IFNULL(tr.consistency   % 10, '')                               AS style,
+        IFNULL(tr.consistency DIV 10, '')                               AS design,
+        IFNULL(tr.comment,            '')                               AS comment,
+        tcp.proofreading_task_id,
+        CASE
+            WHEN prooft.`task-status_id`=1 THEN 'Waiting'
+            WHEN prooft.`task-status_id`=2 THEN 'Pending'
+            WHEN prooft.`task-status_id`=3 THEN 'In Progress'
+            WHEN prooft.`task-status_id`=4 THEN 'Complete'
+        END                                                             AS proofreading_task_status,
+        IFNULL(proofu.email, '')                                        AS proofreading_email
+    FROM      Projects                p
+    JOIN      PrivateTMKeys         tmk ON p.id=tmk.project_id AND tmk.private_tm_key='new'
+    JOIN      Tasks                   t ON p.id=t.project_id
+    LEFT JOIN TaskClaims             tc ON t.id=tc.task_id
+    LEFT JOIN Users                   u ON tc.user_id=u.id
+    LEFT JOIN TaskReviews            tr ON t.id=tr.task_id
+    LEFT JOIN TestingCenterProjects tcp ON p.id=tcp.project_id
+    LEFT JOIN Tasks              prooft ON tcp.proofreading_task_id=prooft.id
+    LEFT JOIN TaskClaims        prooftc ON tcp.proofreading_task_id=prooftc.task_id
+    LEFT JOIN Users              proofu ON prooftc.user_id=proofu.id
+    LEFT JOIN UserQualifiedPairs    uqp ON tc.user_id=uqp.user_id AND tcp.language_code_source=uqp.language_code_source AND tcp.language_code_target=uqp.language_code_target
     WHERE
-        (t.`task-status_id`=3 OR t.`task-status_id`=2) AND
-        (t.`created-time` > NOW() - INTERVAL 3 MONTH) AND
-        NOW() > t.deadline - INTERVAL 1 week
-    ORDER BY o.name, t.title, lp.matecat_langpair, CONCAT(l.code, '|', l2.code), t.`task-type_id`;
+        t.`task-type_id`=2
+    ORDER BY t.id DESC;
 END//
 DELIMITER ;
 
