@@ -176,6 +176,8 @@
                                             {if $userQualifiedPair['qualification_level'] == 2}({Localisation::getTranslation('user_qualification_level_2')}){/if}
                                             {if $userQualifiedPair['qualification_level'] == 3}({Localisation::getTranslation('user_qualification_level_3')}){/if}
                                             </strong>
+                                            {if $userQualifiedPair['qualification_level'] == 1 && $userQualifiedPair['language_code_source'] == 'en' && in_array($userQualifiedPair['language_code_target'], ['ar', 'fr', 'es']) && ($private_access || $isSiteAdmin)}
+                                            {/if}
                                         </p>
                                     {/foreach}
                                 </td>
