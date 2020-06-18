@@ -181,13 +181,6 @@
                                                 <input type="hidden" name="language_code_source" value="{$userQualifiedPair['language_code_source']}" />
                                                 <input type="hidden" name="language_code_target" value="{$userQualifiedPair['language_code_target']}" />
                                                 {assign var="pair" value=$userQualifiedPair['language_code_source'].$userQualifiedPair['language_code_target']}
-                                                {if empty($testing_center_projects_by_code[$pair])}
-                                                    <input type="submit" class="add_click_handler btn btn-primary" name="submit" value="Get Verified" />
-                                                {else}
-                                                    <input type="submit" class="btn btn-primary" name="submit" value="Get Verified" onclick="
-alert('You have already requested to take a test in order to become a Kató Verified Translator. If you would like to take a second test, please contact translators@translatorswithoutborders.org.');
-                                                    return false;" />
-                                                {/if}
                                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                             </form>
                                             {/if}
