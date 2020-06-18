@@ -180,7 +180,7 @@
                                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                                                 <input type="hidden" name="language_code_source" value="{$userQualifiedPair['language_code_source']}" />
                                                 <input type="hidden" name="language_code_target" value="{$userQualifiedPair['language_code_target']}" />
-                                                {if empty($testing_center_projects_by_code[$userQualifiedPair['language_code_source']])}
+                                                {if empty($testing_center_projects_by_code['{$userQualifiedPair['language_code_source']}{$userQualifiedPair['language_code_target']}'])}
                                                 {/if}
                                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                                             </form>
