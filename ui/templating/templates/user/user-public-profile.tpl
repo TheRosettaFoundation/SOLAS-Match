@@ -177,6 +177,8 @@
                                             {if $userQualifiedPair['qualification_level'] == 3}({Localisation::getTranslation('user_qualification_level_3')}){/if}
                                             </strong>
                                             {if $userQualifiedPair['qualification_level'] == 1 && $userQualifiedPair['language_code_source'] == 'en' && in_array($userQualifiedPair['language_code_target'], ['ar', 'fr', 'es']) && ($private_access || $isSiteAdmin)}
+                                            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                                            </form>
                                             {/if}
                                         </p>
                                     {/foreach}
