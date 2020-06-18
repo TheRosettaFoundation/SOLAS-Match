@@ -62,10 +62,6 @@
 
 {if $private_access || $isSiteAdmin || $receive_credit}
 
-<span class="hidden">
-</span>
-
-
 <table border="0">
     <tr valign="top">
         <td style="width: 48%">
@@ -169,20 +165,6 @@
                                             {if $userQualifiedPair['qualification_level'] == 2}({Localisation::getTranslation('user_qualification_level_2')}){/if}
                                             {if $userQualifiedPair['qualification_level'] == 3}({Localisation::getTranslation('user_qualification_level_3')}){/if}
                                             </strong>
-                                            {if $userQualifiedPair['qualification_level'] == 1 && $userQualifiedPair['language_code_source'] == 'en' && in_array($userQualifiedPair['language_code_target'], ['ar', 'fr', 'es']) && ($private_access || $isSiteAdmin)}
-                                            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                                                <input type="hidden" name="language_code_source" value="{$userQualifiedPair['language_code_source']}" />
-                                                <input type="hidden" name="language_code_target" value="{$userQualifiedPair['language_code_target']}" />
-                                                {if empty($testing_center_projects_by_code[$userQualifiedPair['language_code_source'].$userQualifiedPair['language_code_target']])}
-                                                    <input type="submit" class="add_click_handler btn btn-primary" name="submit" value="Get Verified" />
-                                                {else}
-                                                    <input type="submit" class="btn btn-primary" name="submit" value="Get Verified" onclick="
-alert('You have already requested to take a test in order to become a Kató Verified Translator. If you would like to take a second test, please contact translators@translatorswithoutborders.org.');
-                                                    return false;" />
-                                                {/if}
-                                                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
-                                            </form>
-                                            {/if}
                                         </p>
                                     {/foreach}
                                 </td>
