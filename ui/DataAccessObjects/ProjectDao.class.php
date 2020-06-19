@@ -80,6 +80,62 @@ class ProjectDao extends BaseDao
         return $ret;
     }
 
+                    $project = $projectDao->createProject($project);
+==============================
+    public static function save($project)
+    {
+        $tagList = $project->getTag(); //Get the project's tags.
+        $sourceLocale = $project->getSourceLocale();
+        $args = Lib\PDOWrapper::cleanseNullOrWrapStr($project->getId()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($project->getTitle()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($project->getDescription()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($project->getImpact()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($project->getDeadline()).",".
+            Lib\PDOWrapper::cleanseNull($project->getOrganisationId()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($project->getReference()).",".
+            Lib\PDOWrapper::cleanseNull($project->getWordCount()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($project->getCreatedTime()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode()).",".
+            Lib\PDOWrapper::cleanseNull($project->getImageUploaded()).",".
+            Lib\PDOWrapper::cleanseNull($project->getImageApproved());
+
+        $result = Lib\PDOWrapper::call("projectInsertAndUpdate", $args);
+        if ($result) {
+            $project = Common\Lib\ModelFactory::buildModel("Project", $result[0]);
+        }
+
+        TagsDao::updateTags($project->getId(), $tagList);
+        $project->clearTag();
+
+        $projectTags = self::getTags($project->getId());
+        if ($projectTags) {
+            foreach ($projectTags as $tag) {
+                $project->appendTag($tag);
+            }
+        }
+
+        return $project;
+    }
+
+        if (!is_null($project) && $project->getId() > 0) {
+            // Auto track the project for admins
+            $adminIdsString = trim(Common\Lib\Settings::get('site.autofollow_admin_ids'));
+            if ($adminIdsString) {
+                $result = array_map('intval', explode(',', $adminIdsString));
+            }
+            $admins = self::getAutoFollowAdminIds();
+            self::addTrackProjectForUsers($admins, $project->getId());
+        foreach($userIds as $userId) {
+            try {
+                DAO\UserDao::trackProject($projectId, $userId);
+                error_log(sprintf('User %s tracks project %s', $userId, $projectId));
+            } catch (Exception $e) {
+                error_log('Error auto-tracking project ' . $projectId);
+            }
+        }
+==============================
+
     public function deleteProject($projectId)
     {
         $ret = null;
@@ -429,6 +485,96 @@ $replace = array(
         mkdir($destination, 0755);
         file_put_contents($destination . $filename, "files/proj-$project_to_copy_id/$filename"); // Point to existing project file
     }
+
+===================================
+    public function addProjectTask(
+        $project,
+        $target_language,
+        $target_country,
+        $taskType,
+        $preReqTaskId,
+        &$createdTasks,
+        $user_id,
+        $projectDao,
+        $taskDao,
+        $app,
+        $post)
+    {
+        $taskPreReqs = array();
+        $task = new Common\Protobufs\Models\Task();
+        try {
+            $projectTasks = $projectDao->getProjectTasks($project->getId());
+        } catch (\Exception $e) {
+            return 0;
+        }
+
+        $task->setProjectId($project->getId());
+
+        $task->setTitle($project->getTitle());
+
+        $projectSourceLocale = $project->getSourceLocale();
+        $taskSourceLocale = new Common\Protobufs\Models\Locale();
+        $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
+        $taskSourceLocale->setCountryCode($projectSourceLocale->getCountryCode());
+        $task->setSourceLocale($taskSourceLocale);
+        $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+
+        $taskTargetLocale = new Common\Protobufs\Models\Locale();
+        $taskTargetLocale->setLanguageCode($target_language);
+        $taskTargetLocale->setCountryCode($target_country);
+        $task->setTargetLocale($taskTargetLocale);
+
+        $task->setTaskType($taskType);
+        $task->setWordCount($project->getWordCount());
+        $task->setDeadline($project->getDeadline());
+
+        if (!empty($post['publish'])) {
+            $task->setPublished(1);
+        } else {
+            $task->setPublished(0);
+        }
+
+        if (!empty($post['testing_center']) && $taskType == Common\Enums\TaskTypeEnum::TRANSLATION) {
+            $task->setPublished(0);
+        }
+
+        try {
+            error_log("addProjectTask");
+            $newTask = $taskDao->createTask($task);
+            $newTaskId = $newTask->getId();
+
+            if (!empty($post['testing_center']) && $taskType == Common\Enums\TaskTypeEnum::PROOFREADING) {
+                $taskDao->updateRequiredTaskQualificationLevel($newTaskId, 3); // Reviser Needs to be Senior
+            }
+
+            $createdTasks[] = $newTaskId;
+
+            $upload_error = $taskDao->saveTaskFileFromProject(
+                $newTaskId,
+                $user_id,
+                $projectDao->getProjectFile($project->getId())
+            );
+
+            if ($newTaskId && $preReqTaskId) {
+                $taskDao->addTaskPreReq($newTaskId, $preReqTaskId);
+            }
+
+            if (!empty($post['trackProject'])) {
+                $userDao = new DAO\UserDao();
+                $userDao->trackTask($user_id, $newTaskId);
+            }
+
+            if (!empty($post['restrictTask']) && $newTask->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
+                $taskDao->setRestrictedTask($newTaskId);
+            }
+        } catch (\Exception $e) {
+            return 0;
+        }
+
+        error_log("Added Task: $newTaskId");
+        return $newTaskId;
+    }
+===================================
 
     public function insert_testing_center_project($user_id, $project_id, $translation_task_id, $proofreading_task_id, $project_to_copy_id, $language_code_source, $language_code_target)
     {
