@@ -414,6 +414,22 @@ $replace = array(
         return [$trommons_language_code, $trommons_country_code];
     }
 
+    public function copy_project_file($project_to_copy_id, $project_id, $user_id_owner)
+    {
+        $result = LibAPI\PDOWrapper::call('getProjectFile', "$project_to_copy_id, null, null, null, null");
+        $filename = $result[0]['filename'];
+        $args = LibAPI\PDOWrapper::cleanseNull($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($user_id_owner) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($filename) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($filename) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($result[0]['mime']);
+        LibAPI\PDOWrapper::call('addProjectFile', $args);
+
+        $destination = Common\Lib\Settings::get("files.upload_path") . "proj-$project_id/";
+        mkdir($destination, 0755);
+        file_put_contents($destination . $filename, "files/proj-$project_to_copy_id/$filename"); // Point to existing project file
+    }
+
     public function insert_testing_center_project($user_id, $project_id, $translation_task_id, $proofreading_task_id, $project_to_copy_id, $language_code_source, $language_code_target)
     {
         LibAPI\PDOWrapper::call('insert_testing_center_project',

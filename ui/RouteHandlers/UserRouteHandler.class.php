@@ -1617,8 +1617,8 @@ EOD;
                 $project->setOrganisationId(643); // TWB Community&Recruitment
                 $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
                 $project->setDeadline(gmdate('Y-m-d H:i:s', strtotime('10 days')));
-                $project->setDescription('');
-                $project->setImpact('');
+                $project->setDescription(' ');
+                $project->setImpact(' ');
                 $project->setReference('');
                 $project->setWordCount(1);
 
@@ -1630,7 +1630,11 @@ EOD;
                 $source_language = $language_code_source . '---';
                 $target_languages = $language_code_target . '---';
 
-                $project = $projectDao->createProject($project);
+                try {
+                    $project = $projectDao->createProject($project);
+                } catch (\Exception $e) {
+                    $project = null;
+                }
                 if (empty($project)) {
                     $app->flashNow('error', "Unable to create test project for $user_id");
                     error_log("Unable to create test project for $user_id");
@@ -1651,18 +1655,7 @@ EOD;
                     } else {
                         $project_to_copy_id = $projects_to_copy[$test_number];
 
-                        $result = Lib\PDOWrapper::call('getProjectFile', "$project_to_copy_id, null, null, null, null");
-                        $filename = $result[0]['filename'];
-                        $args = Lib\PDOWrapper::cleanseNull($project_id) . ',' .
-                            Lib\PDOWrapper::cleanseNull($user_id_owner) . ',' .
-                            Lib\PDOWrapper::cleanseNullOrWrapStr($filename) . ',' .
-                            Lib\PDOWrapper::cleanseNullOrWrapStr($filename) . ',' .
-                            Lib\PDOWrapper::cleanseNullOrWrapStr($result[0]['mime']);
-                        $result = Lib\PDOWrapper::call('addProjectFile', $args);
-
-                        $destination = Common\Lib\Settings::get("files.upload_path") . "proj-$project_id/";
-                        mkdir($destination, 0755);
-                        file_put_contents($destination . $filename, "files/proj-$project_to_copy_id/$filename"); // Point to existing project file
+                        $projectDao->copy_project_file($project_to_copy_id, $project_id, $user_id_owner);
 
                         $createdTasks = [];
                         $post = ['publish' => 1, 'testing_center' => 1];
