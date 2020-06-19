@@ -80,61 +80,28 @@ class ProjectDao extends BaseDao
         return $ret;
     }
 
-                    $project = $projectDao->createProject($project);
-==============================
-    public static function save($project)
+    public function createProjectDirectly($project)
     {
-        $tagList = $project->getTag(); //Get the project's tags.
         $sourceLocale = $project->getSourceLocale();
-        $args = Lib\PDOWrapper::cleanseNullOrWrapStr($project->getId()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($project->getTitle()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($project->getDescription()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($project->getImpact()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($project->getDeadline()).",".
-            Lib\PDOWrapper::cleanseNull($project->getOrganisationId()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($project->getReference()).",".
-            Lib\PDOWrapper::cleanseNull($project->getWordCount()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($project->getCreatedTime()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode()).",".
-            Lib\PDOWrapper::cleanseNull($project->getImageUploaded()).",".
-            Lib\PDOWrapper::cleanseNull($project->getImageApproved());
-
-        $result = Lib\PDOWrapper::call("projectInsertAndUpdate", $args);
+        $args = LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getId()). ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getTitle()). ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getDescription()). ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getImpact()). ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getDeadline()). ',' .
+            LibAPI\PDOWrapper::cleanseNull($project->getOrganisationId()). ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getReference()). ',' .
+            LibAPI\PDOWrapper::cleanseNull($project->getWordCount()). ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getCreatedTime()). ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode()). ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode()). ',' .
+            LibAPI\PDOWrapper::cleanseNull($project->getImageUploaded()). ',' .
+            LibAPI\PDOWrapper::cleanseNull($project->getImageApproved());
+        $result = LibAPI\PDOWrapper::call('projectInsertAndUpdate', $args);
         if ($result) {
-            $project = Common\Lib\ModelFactory::buildModel("Project", $result[0]);
+            $project = Common\Lib\ModelFactory::buildModel('Project', $result[0]);
         }
-
-        TagsDao::updateTags($project->getId(), $tagList);
-        $project->clearTag();
-
-        $projectTags = self::getTags($project->getId());
-        if ($projectTags) {
-            foreach ($projectTags as $tag) {
-                $project->appendTag($tag);
-            }
-        }
-
         return $project;
     }
-
-        if (!is_null($project) && $project->getId() > 0) {
-            // Auto track the project for admins
-            $adminIdsString = trim(Common\Lib\Settings::get('site.autofollow_admin_ids'));
-            if ($adminIdsString) {
-                $result = array_map('intval', explode(',', $adminIdsString));
-            }
-            $admins = self::getAutoFollowAdminIds();
-            self::addTrackProjectForUsers($admins, $project->getId());
-        foreach($userIds as $userId) {
-            try {
-                DAO\UserDao::trackProject($projectId, $userId);
-                error_log(sprintf('User %s tracks project %s', $userId, $projectId));
-            } catch (Exception $e) {
-                error_log('Error auto-tracking project ' . $projectId);
-            }
-        }
-==============================
 
     public function deleteProject($projectId)
     {

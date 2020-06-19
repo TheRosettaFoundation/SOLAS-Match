@@ -1630,11 +1630,7 @@ EOD;
                 $source_language = $language_code_source . '---';
                 $target_languages = $language_code_target . '---';
 
-                try {
-                    $project = $projectDao->createProject($project);
-                } catch (\Exception $e) {
-                    $project = null;
-                }
+                $project = $projectDao->createProjectDirectly($project);
                 if (empty($project)) {
                     $app->flashNow('error', "Unable to create test project for $user_id");
                     error_log("Unable to create test project for $user_id");
