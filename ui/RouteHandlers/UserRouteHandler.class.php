@@ -1653,34 +1653,26 @@ EOD;
 
                         $projectDao->copy_project_file($project_to_copy_id, $project_id, $user_id_owner);
 
-                        $createdTasks = [];
-                        $post = ['publish' => 1, 'testing_center' => 1];
-
-                        $project_route_handler = new ProjectRouteHandler();
                         $translation_task_id = $project_route_handler->addProjectTask(
                             $project,
                             $language_code_target,
                             '--',
                             Common\Enums\TaskTypeEnum::TRANSLATION,
                             0,
-                            $createdTasks,
                             $user_id_owner,
                             $projectDao,
                             $taskDao,
-                            $app,
-                            $post);
+);
                         $proofreading_task_id = $project_route_handler->addProjectTask(
                             $project,
                             $language_code_target,
                             '--',
                             Common\Enums\TaskTypeEnum::PROOFREADING,
                             $translation_task_id,
-                            $createdTasks,
                             $user_id_owner,
                             $projectDao,
                             $taskDao,
-                            $app,
-                            $post);
+);
 
                         $projectDao->calculateProjectDeadlines($project_id);
 

@@ -460,25 +460,14 @@ $replace = array(
         $target_country,
         $taskType,
         $preReqTaskId,
-        &$createdTasks,
         $user_id,
         $projectDao,
         $taskDao,
-        $app,
-        $post)
+)
     {
-        $taskPreReqs = array();
         $task = new Common\Protobufs\Models\Task();
-        try {
-            $projectTasks = $projectDao->getProjectTasks($project->getId());
-        } catch (\Exception $e) {
-            return 0;
-        }
-
         $task->setProjectId($project->getId());
-
         $task->setTitle($project->getTitle());
-
         $projectSourceLocale = $project->getSourceLocale();
         $taskSourceLocale = new Common\Protobufs\Models\Locale();
         $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
@@ -495,26 +484,16 @@ $replace = array(
         $task->setWordCount($project->getWordCount());
         $task->setDeadline($project->getDeadline());
 
-        if (!empty($post['publish'])) {
-            $task->setPublished(1);
-        } else {
-            $task->setPublished(0);
-        }
-
-        if (!empty($post['testing_center']) && $taskType == Common\Enums\TaskTypeEnum::TRANSLATION) {
-            $task->setPublished(0);
-        }
+        if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION) $task->setPublished(0);
+        else                                                     $task->setPublished(1);
 
         try {
-            error_log("addProjectTask");
             $newTask = $taskDao->createTask($task);
             $newTaskId = $newTask->getId();
 
-            if (!empty($post['testing_center']) && $taskType == Common\Enums\TaskTypeEnum::PROOFREADING) {
+            if ($taskType == Common\Enums\TaskTypeEnum::PROOFREADING) {
                 $taskDao->updateRequiredTaskQualificationLevel($newTaskId, 3); // Reviser Needs to be Senior
             }
-
-            $createdTasks[] = $newTaskId;
 
             $upload_error = $taskDao->saveTaskFileFromProject(
                 $newTaskId,
@@ -530,15 +509,9 @@ $replace = array(
                 $userDao = new DAO\UserDao();
                 $userDao->trackTask($user_id, $newTaskId);
             }
-
-            if (!empty($post['restrictTask']) && $newTask->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
-                $taskDao->setRestrictedTask($newTaskId);
-            }
         } catch (\Exception $e) {
             return 0;
         }
-
-        error_log("Added Task: $newTaskId");
         return $newTaskId;
     }
 ===================================
