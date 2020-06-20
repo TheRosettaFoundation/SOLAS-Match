@@ -1660,7 +1660,6 @@ EOD;
                             Common\Enums\TaskTypeEnum::TRANSLATION,
                             0,
                             $user_id_owner,
-                            $projectDao,
                             $taskDao,
 );
                         $proofreading_task_id = $project_route_handler->addProjectTask(
@@ -1670,7 +1669,6 @@ EOD;
                             Common\Enums\TaskTypeEnum::PROOFREADING,
                             $translation_task_id,
                             $user_id_owner,
-                            $projectDao,
                             $taskDao,
 );
 

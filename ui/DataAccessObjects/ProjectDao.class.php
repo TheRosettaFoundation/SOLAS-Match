@@ -461,44 +461,38 @@ $replace = array(
         $taskType,
         $preReqTaskId,
         $user_id,
-        $projectDao,
         $taskDao,
 )
     {
-        $task = new Common\Protobufs\Models\Task();
-        $task->setProjectId($project->getId());
-        $task->setTitle($project->getTitle());
-        $projectSourceLocale = $project->getSourceLocale();
-        $taskSourceLocale = new Common\Protobufs\Models\Locale();
-        $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
-        $taskSourceLocale->setCountryCode($projectSourceLocale->getCountryCode());
-        $task->setSourceLocale($taskSourceLocale);
-        $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+        if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION) $published = 0;
+        else                                                     $published = 1;
 
-        $taskTargetLocale = new Common\Protobufs\Models\Locale();
-        $taskTargetLocale->setLanguageCode($target_language);
-        $taskTargetLocale->setCountryCode($target_country);
-        $task->setTargetLocale($taskTargetLocale);
-
-        $task->setTaskType($taskType);
-        $task->setWordCount($project->getWordCount());
-        $task->setDeadline($project->getDeadline());
-
-        if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION) $task->setPublished(0);
-        else                                                     $task->setPublished(1);
-
-        try {
-            $newTask = $taskDao->createTask($task);
-            $newTaskId = $newTask->getId();
+        $args = 'null ,' .
+            Lib\PDOWrapper::cleanseNull($project->getId()) . ',' .
+            Lib\PDOWrapper::cleanseNullOrWrapStr($project->getTitle()) . ',' .
+            Lib\PDOWrapper::cleanseNull($project->getWordCount()) . ',' .
+            Lib\PDOWrapper::cleanseNullOrWrapStr($project->getSourceLocale()->getLanguageCode()) . ',' .
+            Lib\PDOWrapper::cleanseNullOrWrapStr($target_language) . ',' .
+            Lib\PDOWrapper::cleanseNullOrWrapStr('') . ',' .
+            Lib\PDOWrapper::cleanseNullOrWrapStr($project->getSourceLocale()->getCountryCode()) . ',' .
+            Lib\PDOWrapper::cleanseNullOrWrapStr($target_country) . ',' .
+            Lib\PDOWrapper::cleanseNullOrWrapStr($project->getDeadline()) . ',' .
+            Lib\PDOWrapper::cleanseNull($taskType) . ',' .
+            Lib\PDOWrapper::cleanseNull(Common\Enums\TaskStatusEnum::PENDING_CLAIM) . ',' .
+            Lib\PDOWrapper::cleanseNull($published);
+        $result = LibAPI\PDOWrapper::call('taskInsertAndUpdate', $args);
+        $newTaskId = $result[0]['id'];
 
             if ($taskType == Common\Enums\TaskTypeEnum::PROOFREADING) {
                 $taskDao->updateRequiredTaskQualificationLevel($newTaskId, 3); // Reviser Needs to be Senior
+            } else {
+                $taskDao->updateRequiredTaskQualificationLevel($newTaskId, 1);
             }
 
             $upload_error = $taskDao->saveTaskFileFromProject(
                 $newTaskId,
                 $user_id,
-                $projectDao->getProjectFile($project->getId())
+                THIS???$projectDao->getProjectFile($project->getId())
             );
 
             if ($newTaskId && $preReqTaskId) {
