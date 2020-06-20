@@ -1651,31 +1651,36 @@ EOD;
                     } else {
                         $project_to_copy_id = $projects_to_copy[$test_number];
 
-                        $projectDao->copy_project_file($project_to_copy_id, $project_id, $user_id_owner);
+                        list($filename, $mime) = $projectDao->copy_project_file($project_to_copy_id, $project_id, $user_id_owner);
 
-                        $translation_task_id = $project_route_handler->addProjectTask(
+                        $translation_task_id = $projectDao->addProjectTask(
+                            $project_to_copy_id,
+                            $filename,
+                            $mime,
                             $project,
                             $language_code_target,
                             '--',
                             Common\Enums\TaskTypeEnum::TRANSLATION,
                             0,
                             $user_id_owner,
-                            $taskDao,
-);
-                        $proofreading_task_id = $project_route_handler->addProjectTask(
+                            $taskDao);
+                        $proofreading_task_id = $projectDao->addProjectTask(
+                            $project_to_copy_id,
+                            $filename,
+                            $mime,
                             $project,
                             $language_code_target,
                             '--',
                             Common\Enums\TaskTypeEnum::PROOFREADING,
                             $translation_task_id,
                             $user_id_owner,
-                            $taskDao,
-);
+                            $taskDao);
 
                         $projectDao->calculateProjectDeadlines($project_id);
 
                         $taskDao->insertWordCountRequestForProjects($project_id, $source_language, $target_languages, 0);
 
+                        $project_route_handler = new ProjectRouteHandler();
                         $source_language = $project_route_handler->valid_language_for_matecat($source_language);
                         $target_language = $project_route_handler->valid_language_for_matecat($language_code_target . '---');
                         $taskDao->insertMatecatLanguagePairs($translation_task_id,  $project_id, Common\Enums\TaskTypeEnum::TRANSLATION,  "$source_language|$target_language");
