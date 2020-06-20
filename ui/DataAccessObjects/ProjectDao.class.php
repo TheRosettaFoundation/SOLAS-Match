@@ -456,57 +456,64 @@ $replace = array(
 ===================================
     public function addProjectTask(
         $project,
+$project_to_copy_id,
         $target_language,
         $target_country,
         $taskType,
         $preReqTaskId,
-        $user_id,
+        $user_id_owner,
         $taskDao,
+NEED ...
+$filename
+$mime
 )
     {
         if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION) $published = 0;
         else                                                     $published = 1;
 
         $args = 'null ,' .
-            Lib\PDOWrapper::cleanseNull($project->getId()) . ',' .
-            Lib\PDOWrapper::cleanseNullOrWrapStr($project->getTitle()) . ',' .
-            Lib\PDOWrapper::cleanseNull($project->getWordCount()) . ',' .
-            Lib\PDOWrapper::cleanseNullOrWrapStr($project->getSourceLocale()->getLanguageCode()) . ',' .
-            Lib\PDOWrapper::cleanseNullOrWrapStr($target_language) . ',' .
-            Lib\PDOWrapper::cleanseNullOrWrapStr('') . ',' .
-            Lib\PDOWrapper::cleanseNullOrWrapStr($project->getSourceLocale()->getCountryCode()) . ',' .
-            Lib\PDOWrapper::cleanseNullOrWrapStr($target_country) . ',' .
-            Lib\PDOWrapper::cleanseNullOrWrapStr($project->getDeadline()) . ',' .
-            Lib\PDOWrapper::cleanseNull($taskType) . ',' .
-            Lib\PDOWrapper::cleanseNull(Common\Enums\TaskStatusEnum::PENDING_CLAIM) . ',' .
-            Lib\PDOWrapper::cleanseNull($published);
+            LibAPI\PDOWrapper::cleanseNull($project->getId()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getTitle()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($project->getWordCount()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getSourceLocale()->getLanguageCode()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($target_language) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr('') . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getSourceLocale()->getCountryCode()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($target_country) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getDeadline()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($taskType) . ',' .
+            LibAPI\PDOWrapper::cleanseNull(Common\Enums\TaskStatusEnum::PENDING_CLAIM) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($published);
         $result = LibAPI\PDOWrapper::call('taskInsertAndUpdate', $args);
-        $newTaskId = $result[0]['id'];
+        $task_id = $result[0]['id'];
 
-            if ($taskType == Common\Enums\TaskTypeEnum::PROOFREADING) {
-                $taskDao->updateRequiredTaskQualificationLevel($newTaskId, 3); // Reviser Needs to be Senior
-            } else {
-                $taskDao->updateRequiredTaskQualificationLevel($newTaskId, 1);
-            }
-
-            $upload_error = $taskDao->saveTaskFileFromProject(
-                $newTaskId,
-                $user_id,
-                THIS???$projectDao->getProjectFile($project->getId())
-            );
-
-            if ($newTaskId && $preReqTaskId) {
-                $taskDao->addTaskPreReq($newTaskId, $preReqTaskId);
-            }
-
-            if (!empty($post['trackProject'])) {
-                $userDao = new DAO\UserDao();
-                $userDao->trackTask($user_id, $newTaskId);
-            }
-        } catch (\Exception $e) {
-            return 0;
+        if ($taskType == Common\Enums\TaskTypeEnum::PROOFREADING) {
+            $taskDao->updateRequiredTaskQualificationLevel($task_id, 3); // Reviser Needs to be Senior
+        } else {
+            $taskDao->updateRequiredTaskQualificationLevel($task_id, 1);
         }
-        return $newTaskId;
+
+        $args = LibAPI\PDOWrapper::cleanseNull($task_id).", ".
+            LibAPI\PDOWrapper::cleanseWrapStr($filename).", ".
+            LibAPI\PDOWrapper::cleanseWrapStr($mime).", ".
+            LibAPI\PDOWrapper::cleanseNull($user_id_owner).', '.
+            'NULL';
+        LibAPI\PDOWrapper::call('recordFileUpload', $args);
+
+$project_id = $project->getId();
+        $uploadFolder = Common\Lib\Settings::get("files.upload_path")."proj-$project_id/task-$task_id/v-0";
+        mkdir($uploadFolder, 0755, true);
+        $destinationPath = $uploadFolder."/$filename";
+
+        file_put_contents($destinationPath, "files/proj-$project_to_copy_id/$filename"); // Point to existing project file
+
+            if ($task_id && $preReqTaskId) {
+        $args = LibAPI\PDOWrapper::cleanseNull($task_id).",".
+            LibAPI\PDOWrapper::cleanseNull($preReqTaskId);
+        $result = LibAPI\PDOWrapper::call('addTaskPreReq', $args);
+            }
+
+        return $task_id;
     }
 ===================================
 
