@@ -97,6 +97,7 @@ class ProjectDao extends BaseDao
             LibAPI\PDOWrapper::cleanseNull($project->getImageUploaded()). ',' .
             LibAPI\PDOWrapper::cleanseNull($project->getImageApproved());
         $result = LibAPI\PDOWrapper::call('projectInsertAndUpdate', $args);
+        $project = null;
         if ($result) {
             $project = Common\Lib\ModelFactory::buildModel('Project', $result[0]);
         }
@@ -485,34 +486,34 @@ $replace = array(
             LibAPI\PDOWrapper::cleanseNull(Common\Enums\TaskStatusEnum::PENDING_CLAIM) . ',' .
             LibAPI\PDOWrapper::cleanseNull($published);
         $result = LibAPI\PDOWrapper::call('taskInsertAndUpdate', $args);
-        $task_id = $result[0]['id'];
+        if (!empty($result)( {
+            $task_id = $result[0]['id'];
 
-        if ($task_type == Common\Enums\TaskTypeEnum::PROOFREADING) {
-            $taskDao->updateRequiredTaskQualificationLevel($task_id, 3); // Reviser Needs to be Senior
-        } else {
-            $taskDao->updateRequiredTaskQualificationLevel($task_id, 1);
-        }
+            if ($task_type == Common\Enums\TaskTypeEnum::PROOFREADING) {
+                $taskDao->updateRequiredTaskQualificationLevel($task_id, 3); // Reviser Needs to be Senior
+            } else {
+                $taskDao->updateRequiredTaskQualificationLevel($task_id, 1);
+            }
 
-        $args = LibAPI\PDOWrapper::cleanseNull($task_id) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($filename) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($mime) . ',' .
-            LibAPI\PDOWrapper::cleanseNull($user_id_owner) . ',' .
-            'NULL';
-        LibAPI\PDOWrapper::call('recordFileUpload', $args);
-
-        $project_id = $project->getId();
-        $uploadFolder = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0";
-        mkdir($uploadFolder, 0755, true);
-
-        file_put_contents($uploadFolder . "/$filename", "files/proj-$project_to_copy_id/$filename"); // Point to existing project file
-
-        if ($task_id && $task_id_prereq) {
             $args = LibAPI\PDOWrapper::cleanseNull($task_id) . ',' .
-                LibAPI\PDOWrapper::cleanseNull($task_id_prereq);
-            $result = LibAPI\PDOWrapper::call('addTaskPreReq', $args);
-        }
+                LibAPI\PDOWrapper::cleanseWrapStr($filename) . ',' .
+                LibAPI\PDOWrapper::cleanseWrapStr($mime) . ',' .
+                LibAPI\PDOWrapper::cleanseNull($user_id_owner) . ',' .
+                'NULL';
+            LibAPI\PDOWrapper::call('recordFileUpload', $args);
 
-        return $task_id;
+            $project_id = $project->getId();
+            $uploadFolder = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0";
+            mkdir($uploadFolder, 0755, true);
+
+            file_put_contents($uploadFolder . "/$filename", "files/proj-$project_to_copy_id/$filename"); // Point to existing project file
+
+            if ($task_id_prereq) LibAPI\PDOWrapper::call('addTaskPreReq', LibAPI\PDOWrapper::cleanseNull($task_id) . ',' . LibAPI\PDOWrapper::cleanseNull($task_id_prereq));
+
+            return $task_id;
+        } else {
+            return 0;
+        }
     }
 
     public function insert_testing_center_project($user_id, $project_id, $translation_task_id, $proofreading_task_id, $project_to_copy_id, $language_code_source, $language_code_target)
