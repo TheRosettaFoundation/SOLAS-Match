@@ -486,7 +486,7 @@ $replace = array(
             LibAPI\PDOWrapper::cleanseNull(Common\Enums\TaskStatusEnum::PENDING_CLAIM) . ',' .
             LibAPI\PDOWrapper::cleanseNull($published);
         $result = LibAPI\PDOWrapper::call('taskInsertAndUpdate', $args);
-        if (!empty($result)( {
+        if (!empty($result)) {
             $task_id = $result[0]['id'];
 
             if ($task_type == Common\Enums\TaskTypeEnum::PROOFREADING) {
