@@ -97,6 +97,7 @@ class ProjectDao extends BaseDao
             LibAPI\PDOWrapper::cleanseNull($project->getImageUploaded()). ',' .
             LibAPI\PDOWrapper::cleanseNull($project->getImageApproved());
         $result = LibAPI\PDOWrapper::call('projectInsertAndUpdate', $args);
+ error_log($args);
         $project = null;
         if ($result) {
             $project = Common\Lib\ModelFactory::buildModel('Project', $result[0]);
