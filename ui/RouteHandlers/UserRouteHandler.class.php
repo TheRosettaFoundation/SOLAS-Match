@@ -1702,10 +1702,11 @@ $project->setOrganisationId(380);//DEV SERVER
                         $re = curl_init('https://app.asana.com/api/1.0/tasks');
                         curl_setopt($re, CURLOPT_POSTFIELDS, array(
                             'name' => $user->getEmail(),
-                            'notes' => ' https://' . $_SERVER['SERVER_NAME'] . "/$user_id/profile , Target: $targetlanguages, Deadline: " . $project->getDeadline() . ' https://' . $_SERVER['SERVER_NAME'] . "/project/$project_id/view",
+                            'notes' => ' https://' . $_SERVER['SERVER_NAME'] . "/$user_id/profile , Target: $language_code_target, Deadline: " . $project->getDeadline() . ' https://' . $_SERVER['SERVER_NAME'] . "/project/$project_id/view",
                             'projects' => '1127940658676844'
                             )
                         );
+error_log(' https://' . $_SERVER['SERVER_NAME'] . "/$user_id/profile , Target: $language_code_target, Deadline: " . $project->getDeadline() . ' https://' . $_SERVER['SERVER_NAME'] . "/project/$project_id/view");
 
                         curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
                         curl_setopt($re, CURLOPT_HEADER, true);
