@@ -1619,8 +1619,8 @@ $user_id_owner = 25016;//DEV SERVER
 $project->setOrganisationId(380);//DEV SERVER
                 $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
                 $project->setDeadline(gmdate('Y-m-d H:i:s', strtotime('10 days')));
-                $project->setDescription(' ');
-                $project->setImpact(' ');
+                $project->setDescription('-');
+                $project->setImpact('-');
                 $project->setReference('');
                 $project->setWordCount(1);
 
