@@ -1618,7 +1618,7 @@ $user_id_owner = 25016;//DEV SERVER
                 $project->setOrganisationId(643); // TWB Community&Recruitment
 $project->setOrganisationId(380);//DEV SERVER
                 $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
-                $project->setDeadline(gmdate('Y-m-d H:i:s', strtotime('10 days')));
+                $project->setDeadline(gmdate('Y-m-d H:i:s', strtotime('14 days'))); // 10 days + 4 added by C++ to translation deadline
                 $project->setDescription('-');
                 $project->setImpact('-');
                 $project->setReference('');
