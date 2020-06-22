@@ -1607,8 +1607,17 @@ EOD;
 
             if (($private_access || $isSiteAdmin) && !empty($post['language_code_source']) && !empty($post['language_code_target'])) {
                 // Verification System Project for this User
+                $project_route_handler = new ProjectRouteHandler();
+
                 $language_code_source = $post['language_code_source'];
+                $language_code_source = strtolower($language_code_source); // Just in case browser is manipulated
+                $source_language_country = $project_route_handler->valid_language_for_matecat($language_code_source . '---');
+                $country_code_source = substr($source_language_country, strpos($source_language_country, '-') + 1);
+
                 $language_code_target = $post['language_code_target'];
+                $language_code_target = strtolower($language_code_target);
+                $target_language_country = $project_route_handler->valid_language_for_matecat($language_code_target . '---');
+                $country_code_target = substr($target_language_country, strpos($target_language_country, '-') + 1);
 
                 $user_id_owner = 62927; // translators@translatorswithoutborders.org
 $user_id_owner = 25016;//DEV SERVER
@@ -1626,11 +1635,8 @@ $project->setOrganisationId(380);//DEV SERVER
 
                 $sourceLocale = new Common\Protobufs\Models\Locale();
                 $sourceLocale->setLanguageCode($language_code_source);
-                $sourceLocale->setCountryCode('--');
+                $sourceLocale->setCountryCode($country_code_source);
                 $project->setSourceLocale($sourceLocale);
-
-                $source_language = $language_code_source . '---';
-                $target_languages = $language_code_target . '---';
 
                 $project = $projectDao->createProjectDirectly($project);
                 if (empty($project)) {
@@ -1661,7 +1667,7 @@ $project->setOrganisationId(380);//DEV SERVER
                             $mime,
                             $project,
                             $language_code_target,
-                            '--',
+                            $country_code_target,
                             Common\Enums\TaskTypeEnum::TRANSLATION,
                             0,
                             $user_id_owner,
@@ -1672,7 +1678,7 @@ $project->setOrganisationId(380);//DEV SERVER
                             $mime,
                             $project,
                             $language_code_target,
-                            '--',
+                            $country_code_target,
                             Common\Enums\TaskTypeEnum::PROOFREADING,
                             $translation_task_id,
                             $user_id_owner,
@@ -1680,13 +1686,9 @@ $project->setOrganisationId(380);//DEV SERVER
 
                         $projectDao->calculateProjectDeadlines($project_id);
 
-                        $taskDao->insertWordCountRequestForProjects($project_id, $source_language, $target_languages, 0);
-
-                        $project_route_handler = new ProjectRouteHandler();
-                        $source_language = $project_route_handler->valid_language_for_matecat($source_language);
-                        $target_language = $project_route_handler->valid_language_for_matecat($language_code_target . '---');
-                        $taskDao->insertMatecatLanguagePairs($translation_task_id,  $project_id, Common\Enums\TaskTypeEnum::TRANSLATION,  "$source_language|$target_language");
-                        $taskDao->insertMatecatLanguagePairs($proofreading_task_id, $project_id, Common\Enums\TaskTypeEnum::PROOFREADING, "$source_language|$target_language");
+                        $taskDao->insertWordCountRequestForProjects($project_id, $source_language_country, $target_language_country, 0);
+                        $taskDao->insertMatecatLanguagePairs($translation_task_id,  $project_id, Common\Enums\TaskTypeEnum::TRANSLATION,  "$source_language_country|$target_language_country");
+                        $taskDao->insertMatecatLanguagePairs($proofreading_task_id, $project_id, Common\Enums\TaskTypeEnum::PROOFREADING, "$source_language_country|$target_language_country");
 
                         $mt_engine        = '0';
                         $pretranslate_100 = '0';

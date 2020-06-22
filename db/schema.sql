@@ -1622,6 +1622,18 @@ CREATE TABLE IF NOT EXISTS `TrackedRegistrations` (
   CONSTRAINT `FK_TrackedRegistrations_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `TestingCenterProjects` (
+  user_id                 INT(10) UNSIGNED NOT NULL,
+  project_id              INT(10) UNSIGNED NOT NULL,
+  translation_task_id  BIGINT(20) UNSIGNED NOT NULL,
+  proofreading_task_id BIGINT(20) UNSIGNED NOT NULL,
+  project_to_copy_id      INT(10) UNSIGNED NOT NULL,
+  language_code_source VARCHAR(3)          NOT NULL,
+  language_code_target VARCHAR(3)          NOT NULL,
+  KEY FK_TestingCenterProjects_Users (user_id),
+  CONSTRAINT FK_TestingCenterProjects_Users FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
