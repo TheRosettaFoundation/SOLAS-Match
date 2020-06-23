@@ -1707,12 +1707,12 @@ $project->setOrganisationId(380);//DEV SERVER
                                 'projects' => '1127940658676844'
                                 )
                             );
-error_log(' https://' . $_SERVER['SERVER_NAME'] . "/$user_id/profile , Target: $language_code_target, Deadline: " . $project->getDeadline() . ' https://' . $_SERVER['SERVER_NAME'] . "/project/$project_id/view");
 
                             curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
                             curl_setopt($re, CURLOPT_HEADER, true);
                             curl_setopt($re, CURLOPT_HTTPHEADER, array("Authorization: Bearer " . Common\Lib\Settings::get('asana.api_key4')));
-                            $response = curl_exec($re);
+                            curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
+                            curl_exec($re);
                             if ($error_number = curl_errno($re)) {
                               error_log("Asana 4 API error ($error_number): " . curl_error($re));
                             }
