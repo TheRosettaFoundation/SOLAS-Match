@@ -178,8 +178,8 @@
                                             </strong>
                                             {if $userQualifiedPair['qualification_level'] == 1 && $userQualifiedPair['language_code_source'] == 'en' && in_array($userQualifiedPair['language_code_target'], ['ar', 'fr', 'es']) && ($private_access || $isSiteAdmin)}
                                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                                                <input type="hidden" name="language_code_source" value="{$userQualifiedPair['language_code_source']}" />
-                                                <input type="hidden" name="language_code_target" value="{$userQualifiedPair['language_code_target']}" />
+                                                <input type="hidden" name="source_language_country" value="{$userQualifiedPair['language_code_source']}-{$userQualifiedPair['country_code_source']}" />
+                                                <input type="hidden" name="target_language_country" value="{$userQualifiedPair['language_code_target']}-{$userQualifiedPair['country_code_target']}" />
                                                 {assign var="pair" value="`$userQualifiedPair['language_code_source']`-`$userQualifiedPair['language_code_target']`"}
                                                 {if empty($testing_center_projects_by_code[$pair]) || $isSiteAdmin}
                                                     <input type="submit" class="add_click_handler btn btn-primary" name="submit" value="Get Verified" />

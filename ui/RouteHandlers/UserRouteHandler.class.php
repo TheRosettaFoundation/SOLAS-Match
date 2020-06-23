@@ -1605,119 +1605,119 @@ EOD;
                 $userDao->deleteCertification($post['certification_id']);
             }
 
-            if (($private_access || $isSiteAdmin) && !empty($post['language_code_source']) && !empty($post['language_code_target'])) {
+            if (($private_access || $isSiteAdmin) && !empty($post['source_language_country']) && !empty($post['target_language_country'])) {
                 // Verification System Project for this User
                 $project_route_handler = new ProjectRouteHandler();
 
-                $language_code_source = $post['language_code_source'];
-                $language_code_source = strtolower($language_code_source); // Just in case browser is manipulated
-                $source_language_country = $project_route_handler->valid_language_for_matecat($language_code_source . '---');
-                $country_code_source = substr($source_language_country, strpos($source_language_country, '-') + 1);
+                $source_language_country = $project_route_handler->valid_language_for_matecat($post['source_language_country']);
+                $language_code_source = substr($source_language_country, strpos(0, $source_language_country, '-'));
+                $country_code_source  = substr($source_language_country, strpos($source_language_country, '-') + 1);
 
-                $language_code_target = $post['language_code_target'];
-                $language_code_target = strtolower($language_code_target);
-                $target_language_country = $project_route_handler->valid_language_for_matecat($language_code_target . '---');
-                $country_code_target = substr($target_language_country, strpos($target_language_country, '-') + 1);
+                $target_language_country = $project_route_handler->valid_language_for_matecat($post['target_language_country']);
+                $language_code_target = substr($target_language_country, strpos(0, $target_language_country, '-'));
+                $country_code_target  = substr($target_language_country, strpos($target_language_country, '-') + 1);
 
-                $user_id_owner = 62927; // translators@translatorswithoutborders.org
+                if (!empty($source_language_country) && !empty($target_language_country)) { // Protect against browser manipulation
+                    $user_id_owner = 62927; // translators@translatorswithoutborders.org
 $user_id_owner = 25016;//DEV SERVER
 
-                $project = new Common\Protobufs\Models\Project();
-                $project->setTitle('Test' . UserRouteHandler::random_string(4));
-                $project->setOrganisationId(643); // TWB Community&Recruitment
+                    $project = new Common\Protobufs\Models\Project();
+                    $project->setTitle('Test' . UserRouteHandler::random_string(4));
+                    $project->setOrganisationId(643); // TWB Community&Recruitment
 $project->setOrganisationId(380);//DEV SERVER
-                $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
-                $project->setDeadline(gmdate('Y-m-d H:i:s', strtotime('14 days'))); // 10 days + 4 added by C++ to translation deadline
-                $project->setDescription('-');
-                $project->setImpact('-');
-                $project->setReference('');
-                $project->setWordCount(1);
+                    $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
+                    $project->setDeadline(gmdate('Y-m-d H:i:s', strtotime('14 days'))); // 10 days + 4 added by C++ to translation deadline
+                    $project->setDescription('-');
+                    $project->setImpact('-');
+                    $project->setReference('');
+                    $project->setWordCount(1);
 
-                $sourceLocale = new Common\Protobufs\Models\Locale();
-                $sourceLocale->setLanguageCode($language_code_source);
-                $sourceLocale->setCountryCode($country_code_source);
-                $project->setSourceLocale($sourceLocale);
+                    $sourceLocale = new Common\Protobufs\Models\Locale();
+                    $sourceLocale->setLanguageCode($language_code_source);
+                    $sourceLocale->setCountryCode($country_code_source);
+                    $project->setSourceLocale($sourceLocale);
 
-                $project = $projectDao->createProjectDirectly($project);
-                if (empty($project)) {
-                    $app->flashNow('error', "Unable to create test project for $user_id");
-                    error_log("Unable to create test project for $user_id");
-                } else {
-                    $project_id = $project->getId();
-
-                    $projects_to_copy = [9149, 9151, 9152, 9153];
-                    $n = count($projects_to_copy);
-                    $test_number = mt_rand(0, $n - 1); // Pick a random $projects_to_copy test file
-                    $i = $n;
-                    while ($i--) {
-                        if (empty($testing_center_projects[$projects_to_copy[$test_number]])) break; // Found test file not already used
-                        $test_number = ($test_number + 1) % $n;
-                    }
-                    if ($i == 0) {
-                        $app->flashNow('error', "Unable to create test project for $user_id, no projects");
-                        error_log("Unable to create test project for $user_id, no projects");
+                    $project = $projectDao->createProjectDirectly($project);
+                    if (empty($project)) {
+                        $app->flashNow('error', "Unable to create test project for $user_id");
+                        error_log("Unable to create test project for $user_id");
                     } else {
-                        $project_to_copy_id = $projects_to_copy[$test_number];
+                        $project_id = $project->getId();
 
-                        list($filename, $mime) = $projectDao->copy_project_file($project_to_copy_id, $project_id, $user_id_owner);
+                        $projects_to_copy = [9149, 9151, 9152, 9153];
+                        $n = count($projects_to_copy);
+                        $test_number = mt_rand(0, $n - 1); // Pick a random $projects_to_copy test file
+                        $i = $n;
+                        while ($i--) {
+                            if (empty($testing_center_projects[$projects_to_copy[$test_number]])) break; // Found test file not already used
+                            $test_number = ($test_number + 1) % $n;
+                        }
+                        if ($i == 0) {
+                            $app->flashNow('error', "Unable to create test project for $user_id, no projects");
+                            error_log("Unable to create test project for $user_id, no projects");
+                        } else {
+                            $project_to_copy_id = $projects_to_copy[$test_number];
 
-                        $translation_task_id = $projectDao->addProjectTask(
-                            $project_to_copy_id,
-                            $filename,
-                            $mime,
-                            $project,
-                            $language_code_target,
-                            $country_code_target,
-                            Common\Enums\TaskTypeEnum::TRANSLATION,
-                            0,
-                            $user_id_owner,
-                            $taskDao);
-                        $proofreading_task_id = $projectDao->addProjectTask(
-                            $project_to_copy_id,
-                            $filename,
-                            $mime,
-                            $project,
-                            $language_code_target,
-                            $country_code_target,
-                            Common\Enums\TaskTypeEnum::PROOFREADING,
-                            $translation_task_id,
-                            $user_id_owner,
-                            $taskDao);
+                            list($filename, $mime) = $projectDao->copy_project_file($project_to_copy_id, $project_id, $user_id_owner);
 
-                        $projectDao->calculateProjectDeadlines($project_id);
+                            $translation_task_id = $projectDao->addProjectTask(
+                                $project_to_copy_id,
+                                $filename,
+                                $mime,
+                                $project,
+                                $language_code_target,
+                                $country_code_target,
+                                Common\Enums\TaskTypeEnum::TRANSLATION,
+                                0,
+                                $user_id_owner,
+                                $taskDao);
+                            $proofreading_task_id = $projectDao->addProjectTask(
+                                $project_to_copy_id,
+                                $filename,
+                                $mime,
+                                $project,
+                                $language_code_target,
+                                $country_code_target,
+                                Common\Enums\TaskTypeEnum::PROOFREADING,
+                                $translation_task_id,
+                                $user_id_owner,
+                                $taskDao);
 
-                        $taskDao->insertWordCountRequestForProjects($project_id, $source_language_country, $target_language_country, 0);
-                        $taskDao->insertMatecatLanguagePairs($translation_task_id,  $project_id, Common\Enums\TaskTypeEnum::TRANSLATION,  "$source_language_country|$target_language_country");
-                        $taskDao->insertMatecatLanguagePairs($proofreading_task_id, $project_id, Common\Enums\TaskTypeEnum::PROOFREADING, "$source_language_country|$target_language_country");
+                            $projectDao->calculateProjectDeadlines($project_id);
 
-                        $mt_engine        = '0';
-                        $pretranslate_100 = '0';
-                        $lexiqa           = '0';
-                        $private_tm_key   = 'new';
-                        $taskDao->set_project_tm_key($project_id, $mt_engine, $pretranslate_100, $lexiqa, $private_tm_key);
+                            $taskDao->insertWordCountRequestForProjects($project_id, $source_language_country, $target_language_country, 0);
+                            $taskDao->insertMatecatLanguagePairs($translation_task_id,  $project_id, Common\Enums\TaskTypeEnum::TRANSLATION,  "$source_language_country|$target_language_country");
+                            $taskDao->insertMatecatLanguagePairs($proofreading_task_id, $project_id, Common\Enums\TaskTypeEnum::PROOFREADING, "$source_language_country|$target_language_country");
 
-                        $projectDao->insert_testing_center_project($user_id, $project_id, $translation_task_id, $proofreading_task_id, $project_to_copy_id, $language_code_source, $language_code_target);
+                            $mt_engine        = '0';
+                            $pretranslate_100 = '0';
+                            $lexiqa           = '0';
+                            $private_tm_key   = 'new';
+                            $taskDao->set_project_tm_key($project_id, $mt_engine, $pretranslate_100, $lexiqa, $private_tm_key);
 
-                        $userDao->claimTask($user_id, $translation_task_id);
+                            $projectDao->insert_testing_center_project($user_id, $project_id, $translation_task_id, $proofreading_task_id, $project_to_copy_id, $language_code_source, $language_code_target);
 
-                        // Asana 4th Project
-                        $re = curl_init('https://app.asana.com/api/1.0/tasks');
-                        curl_setopt($re, CURLOPT_POSTFIELDS, array(
-                            'name' => $user->getEmail(),
-                            'notes' => ' https://' . $_SERVER['SERVER_NAME'] . "/$user_id/profile , Target: $language_code_target, Deadline: " . $project->getDeadline() . ' https://' . $_SERVER['SERVER_NAME'] . "/project/$project_id/view",
-                            'projects' => '1127940658676844'
-                            )
-                        );
+                            $userDao->claimTask($user_id, $translation_task_id);
+
+                            // Asana 4th Project
+                            $re = curl_init('https://app.asana.com/api/1.0/tasks');
+                            curl_setopt($re, CURLOPT_POSTFIELDS, array(
+                                'name' => $user->getEmail(),
+                                'notes' => ' https://' . $_SERVER['SERVER_NAME'] . "/$user_id/profile , Target: $language_code_target, Deadline: " . $project->getDeadline() . ' https://' . $_SERVER['SERVER_NAME'] . "/project/$project_id/view",
+                                'projects' => '1127940658676844'
+                                )
+                            );
 error_log(' https://' . $_SERVER['SERVER_NAME'] . "/$user_id/profile , Target: $language_code_target, Deadline: " . $project->getDeadline() . ' https://' . $_SERVER['SERVER_NAME'] . "/project/$project_id/view");
 
-                        curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
-                        curl_setopt($re, CURLOPT_HEADER, true);
-                        curl_setopt($re, CURLOPT_HTTPHEADER, array("Authorization: Bearer " . Common\Lib\Settings::get('asana.api_key4')));
-                        $response = curl_exec($re);
-                        if ($error_number = curl_errno($re)) {
-                          error_log("Asana 4 API error ($error_number): " . curl_error($re));
+                            curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
+                            curl_setopt($re, CURLOPT_HEADER, true);
+                            curl_setopt($re, CURLOPT_HTTPHEADER, array("Authorization: Bearer " . Common\Lib\Settings::get('asana.api_key4')));
+                            $response = curl_exec($re);
+                            if ($error_number = curl_errno($re)) {
+                              error_log("Asana 4 API error ($error_number): " . curl_error($re));
+                            }
+                            curl_close($re);
                         }
-                        curl_close($re);
                     }
                 }
             }
