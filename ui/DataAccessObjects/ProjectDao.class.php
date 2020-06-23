@@ -469,8 +469,13 @@ $replace = array(
         $user_id_owner,
         $taskDao)
     {
-        if ($task_type == Common\Enums\TaskTypeEnum::TRANSLATION) $published = 0;
-        else                                                      $published = 1;
+        if ($task_type == Common\Enums\TaskTypeEnum::TRANSLATION) {
+            $published = 0;
+            $deadline = gmdate('Y-m-d H:i:s', strtotime('10 days'));
+        } else {
+            $published = 1;
+            $deadline = gmdate('Y-m-d H:i:s', strtotime('13 days'));
+        }
 
         $args = 'null ,' .
             LibAPI\PDOWrapper::cleanseNull($project->getId()) . ',' .
@@ -481,7 +486,7 @@ $replace = array(
             LibAPI\PDOWrapper::cleanseNullOrWrapStr('') . ',' .
             LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getSourceLocale()->getCountryCode()) . ',' .
             LibAPI\PDOWrapper::cleanseNullOrWrapStr($country_code_target) . ',' .
-            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getDeadline()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($deadline) . ',' .
             LibAPI\PDOWrapper::cleanseNull($task_type) . ',' .
             LibAPI\PDOWrapper::cleanseNull(Common\Enums\TaskStatusEnum::PENDING_CLAIM) . ',' .
             LibAPI\PDOWrapper::cleanseNull($published);
