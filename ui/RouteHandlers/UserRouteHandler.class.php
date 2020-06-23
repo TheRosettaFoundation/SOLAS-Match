@@ -1713,7 +1713,7 @@ error_log(' https://' . $_SERVER['SERVER_NAME'] . "/$user_id/profile , Target: $
                         curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
                         curl_setopt($re, CURLOPT_HEADER, true);
                         curl_setopt($re, CURLOPT_HTTPHEADER, array("Authorization: Bearer " . Common\Lib\Settings::get('asana.api_key4')));
-                        curl_exec($re);
+                        $response = curl_exec($re);
                         if ($error_number = curl_errno($re)) {
                           error_log("Asana 4 API error ($error_number): " . curl_error($re));
                         }
