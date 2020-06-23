@@ -33,5 +33,6 @@ function documentReady()
           return false;
       }
     }
+  );
 }
 </script>
