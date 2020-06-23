@@ -1610,11 +1610,11 @@ EOD;
                 $project_route_handler = new ProjectRouteHandler();
 
                 $source_language_country = $project_route_handler->valid_language_for_matecat($post['source_language_country']);
-                $language_code_source = substr($source_language_country, strpos(0, $source_language_country, '-'));
+                $language_code_source = substr($source_language_country, 0, strpos($source_language_country, '-'));
                 $country_code_source  = substr($source_language_country, strpos($source_language_country, '-') + 1);
 
                 $target_language_country = $project_route_handler->valid_language_for_matecat($post['target_language_country']);
-                $language_code_target = substr($target_language_country, strpos(0, $target_language_country, '-'));
+                $language_code_target = substr($target_language_country, 0, strpos($target_language_country, '-'));
                 $country_code_target  = substr($target_language_country, strpos($target_language_country, '-') + 1);
 
                 if (!empty($source_language_country) && !empty($target_language_country)) { // Protect against browser manipulation
