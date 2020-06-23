@@ -226,7 +226,7 @@ Tweet</a>
                     {/if}
                     </td>                
                 </tr>
-                {if $project_id > Settings::get("discourse.pre_discourse")}
+                {if $project_id > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $project->getTitle())}
                 <tr>
                     <td colspan="3" style="padding-bottom: 40px"></td>
                 </tr>
