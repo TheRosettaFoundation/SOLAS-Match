@@ -1721,6 +1721,10 @@ $project->setOrganisationId(380);//DEV SERVER
                               error_log("Asana 4 API error ($error_number): " . curl_error($re));
                             }
                             curl_close($re);
+
+                            $app->flashNow('success', 'Here is your Verification task which you must translate with Kató TM: <a href="' .
+                            $app->urlFor('task-view', ['task_id' => $translation_task_id]) .
+                            '">' . $app->urlFor('task-view', ['task_id' => $translation_task_id]) . '</a>. You will receive an email with instructions.');
                         }
                     }
                 }
