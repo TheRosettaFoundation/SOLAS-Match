@@ -1651,7 +1651,7 @@ $project->setOrganisationId(380);//DEV SERVER
 error_log(print_r($testing_center_projects, true));
                         while ($i--) {
 error_log("top loop i: $i");
-error_log("projects_to_copy[$test_number]: " . $projects_to_copy[$test_number]]);
+error_log("projects_to_copy[$test_number]: " . $projects_to_copy[$test_number]);
                             if (empty($testing_center_projects[$projects_to_copy[$test_number]])) break; // Found test file not already used
                             $test_number = ($test_number + 1) % $n;
 error_log("bottom loop test_number: $test_number");
