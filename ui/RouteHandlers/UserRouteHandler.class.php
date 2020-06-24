@@ -1657,7 +1657,7 @@ error_log("projects_to_copy[$test_number]: " . $projects_to_copy[$test_number]);
 error_log("bottom loop test_number: $test_number");
                         }
 error_log("AFTER LOOP i: $i");
-                        if ($i == 0) {
+                        if ($i < 0) {
                             $app->flashNow('error', "Unable to create test project for $user_id, no projects");
                             error_log("Unable to create test project for $user_id, no projects");
                         } else {
