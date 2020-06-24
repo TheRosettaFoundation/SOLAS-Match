@@ -1722,9 +1722,8 @@ $project->setOrganisationId(380);//DEV SERVER
                             }
                             curl_close($re);
 
-                            $app->flashNow('success', 'Here is your Verification task which you must translate with Kató TM: <a href="' .
-                            $app->urlFor('task-view', ['task_id' => $translation_task_id]) .
-                            '">https://kato.translatorswb.org' . $app->urlFor('task-view', ['task_id' => $translation_task_id]) . '</a>. You will receive an email with instructions.');
+                            $app->flashNow('success', '<a href="' . $app->urlFor('task-view', ['task_id' => $translation_task_id]) .
+                            '">This is your Verification task</a>, which you <strong>must</strong> translate using Kató TM. Please, check your email inbox for instructions');
                         }
                     }
                 }
