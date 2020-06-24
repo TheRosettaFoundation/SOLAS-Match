@@ -11,6 +11,9 @@ alert("1 onclick " + $(this).name);
         {
 alert("onclick " + $(this).getAttribute("name"));
 document.getElementById('buttonLED'+id).setAttribute('onclick','writeLED(1,1)')
+var but.setAttribute('onclick', 'my_function( " '+my_string+' " )');
+editButton.setAttribute('onclick', "editSection('id');")
+EG onclick="return confirm('Are you sure you want to permanently delete this certificate?')"
 
           $("#dialog_for_verification").dialog(
             {
