@@ -1621,47 +1621,46 @@ EOD;
                     $user_id_owner = 62927; // translators@translatorswithoutborders.org
 $user_id_owner = 25016;//DEV SERVER
 
-                    $project = new Common\Protobufs\Models\Project();
-                    $project->setTitle('Test' . UserRouteHandler::random_string(4));
-                    $project->setOrganisationId(643); // TWB Community&Recruitment
-$project->setOrganisationId(380);//DEV SERVER
-                    $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
-                    $project->setDeadline(gmdate('Y-m-d H:i:s', strtotime('18 days'))); // 10 days for Translation + 7 for Revision added + 1 to get to Project Deadline
-                    $project->setDescription('-');
-                    $project->setImpact('-');
-                    $project->setReference('');
-                    $project->setWordCount(1);
-
-                    $sourceLocale = new Common\Protobufs\Models\Locale();
-                    $sourceLocale->setLanguageCode($language_code_source);
-                    $sourceLocale->setCountryCode($country_code_source);
-                    $project->setSourceLocale($sourceLocale);
-
-                    $project = $projectDao->createProjectDirectly($project);
-                    if (empty($project)) {
-                        $app->flashNow('error', "Unable to create test project for $user_id");
-                        error_log("Unable to create test project for $user_id");
-                    } else {
-                        $project_id = $project->getId();
-
-                        $projects_to_copy = [9149, 9151, 9152, 9153];
-                        $n = count($projects_to_copy);
-                        $test_number = mt_rand(0, $n - 1); // Pick a random $projects_to_copy test file
-                        $i = $n;
-error_log(print_r($testing_center_projects, true));
-                        while ($i--) {
+                    $projects_to_copy = [9149, 9151, 9152, 9153];
+                    $n = count($projects_to_copy);
+                    $test_number = mt_rand(0, $n - 1); // Pick a random $projects_to_copy test file
+                    $i = $n;
+                    while ($i--) {
 error_log("top loop i: $i");
 error_log("projects_to_copy[$test_number]: " . $projects_to_copy[$test_number]);
-                            if (empty($testing_center_projects[$projects_to_copy[$test_number]])) break; // Found test file not already used
-                            $test_number = ($test_number + 1) % $n;
+                        if (empty($testing_center_projects[$projects_to_copy[$test_number]])) break; // Found test file not already used
+                        $test_number = ($test_number + 1) % $n;
 error_log("bottom loop test_number: $test_number");
-                        }
+                    }
 error_log("AFTER LOOP i: $i");
-                        if ($i < 0) {
-                            $app->flashNow('error', "Unable to create test project for $user_id, no projects");
-                            error_log("Unable to create test project for $user_id, no projects");
+                    if ($i < 0) {
+                        $app->flashNow('error', "Unable to create test project for $user_id, no projects");
+                        error_log("Unable to create test project for $user_id, no projects");
+                    } else {
+                        $project_to_copy_id = $projects_to_copy[$test_number];
+
+                        $project = new Common\Protobufs\Models\Project();
+                        $project->setTitle('Test' . UserRouteHandler::random_string(4));
+                        $project->setOrganisationId(643); // TWB Community&Recruitment
+$project->setOrganisationId(380);//DEV SERVER
+                        $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
+                        $project->setDeadline(gmdate('Y-m-d H:i:s', strtotime('25 days'))); // 10 days for Translation + 14 for Revision added + 1 to get to Project Deadline
+                        $project->setDescription('-');
+                        $project->setImpact('-');
+                        $project->setReference('');
+                        $project->setWordCount(1);
+
+                        $sourceLocale = new Common\Protobufs\Models\Locale();
+                        $sourceLocale->setLanguageCode($language_code_source);
+                        $sourceLocale->setCountryCode($country_code_source);
+                        $project->setSourceLocale($sourceLocale);
+
+                        $project = $projectDao->createProjectDirectly($project);
+                        if (empty($project)) {
+                            $app->flashNow('error', "Unable to create test project for $user_id");
+                            error_log("Unable to create test project for $user_id");
                         } else {
-                            $project_to_copy_id = $projects_to_copy[$test_number];
+                            $project_id = $project->getId();
 
                             list($filename, $mime) = $projectDao->copy_project_file($project_to_copy_id, $project_id, $user_id_owner);
 
