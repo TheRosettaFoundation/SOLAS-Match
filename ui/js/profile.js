@@ -6,8 +6,10 @@ function documentReady()
 {
   $(".add_click_handler").each(function ()
     {
+alert("we got here before adding onclick");
       $(this).onclick = function(e)
         {
+alert("onclick " + $(this).name);
           $("#dialog_for_verification").dialog(
             {
               resizable: false,
@@ -18,16 +20,17 @@ function documentReady()
 
                 "OK": function()
                 {
-                  e.target.parentNode.submit();
+//                  e.target.parentNode.submit();
                 },
 
                 "Cancel": function()
                 {
-                  $(this).dialog("close");
+//                  $(this).dialog("close");
                 }
               }
             }
           );
+alert("AFTER DIALOG");
 
           e.preventDefault();
           return false;

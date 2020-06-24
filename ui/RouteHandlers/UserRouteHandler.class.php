@@ -1626,13 +1626,9 @@ $user_id_owner = 25016;//DEV SERVER
                     $test_number = mt_rand(0, $n - 1); // Pick a random $projects_to_copy test file
                     $i = $n;
                     while ($i--) {
-error_log("top loop i: $i");
-error_log("projects_to_copy[$test_number]: " . $projects_to_copy[$test_number]);
                         if (empty($testing_center_projects[$projects_to_copy[$test_number]])) break; // Found test file not already used
                         $test_number = ($test_number + 1) % $n;
-error_log("bottom loop test_number: $test_number");
                     }
-error_log("AFTER LOOP i: $i");
                     if ($i < 0) {
                         $app->flashNow('error', "Unable to create test project for $user_id, no projects");
                         error_log("Unable to create test project for $user_id, no projects");
