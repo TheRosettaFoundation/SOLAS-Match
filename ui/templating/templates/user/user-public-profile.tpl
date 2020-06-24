@@ -59,6 +59,12 @@
         {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
     </p>
 {/if}
+{if isset($flash['success'])}
+    <p class="alert alert-success" style="margin-bottom: 50px">
+        {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
+    </p>
+{/if}
+
 
 {if $private_access || $isSiteAdmin || $receive_credit}
 
