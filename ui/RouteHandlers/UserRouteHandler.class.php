@@ -1626,7 +1626,7 @@ $user_id_owner = 25016;//DEV SERVER
                     $project->setOrganisationId(643); // TWB Community&Recruitment
 $project->setOrganisationId(380);//DEV SERVER
                     $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
-                    $project->setDeadline(gmdate('Y-m-d H:i:s', strtotime('14 days'))); // 10 days for translation + 4 added to get to Project Deadline
+                    $project->setDeadline(gmdate('Y-m-d H:i:s', strtotime('18 days'))); // 10 days for Translation + 7 for Revision added + 1 to get to Project Deadline
                     $project->setDescription('-');
                     $project->setImpact('-');
                     $project->setReference('');
@@ -1648,10 +1648,15 @@ $project->setOrganisationId(380);//DEV SERVER
                         $n = count($projects_to_copy);
                         $test_number = mt_rand(0, $n - 1); // Pick a random $projects_to_copy test file
                         $i = $n;
+error_log(print_r($testing_center_projects, true));
                         while ($i--) {
+error_log("top loop i: $i");
+error_log("projects_to_copy[$test_number]: " . $projects_to_copy[$test_number]]);
                             if (empty($testing_center_projects[$projects_to_copy[$test_number]])) break; // Found test file not already used
                             $test_number = ($test_number + 1) % $n;
+error_log("bottom loop test_number: $test_number");
                         }
+error_log("AFTER LOOP i: $i");
                         if ($i == 0) {
                             $app->flashNow('error', "Unable to create test project for $user_id, no projects");
                             error_log("Unable to create test project for $user_id, no projects");

@@ -474,7 +474,7 @@ $replace = array(
             $deadline = gmdate('Y-m-d H:i:s', strtotime('10 days'));
         } else {
             $published = 1;
-            $deadline = gmdate('Y-m-d H:i:s', strtotime('13 days'));
+            $deadline = gmdate('Y-m-d H:i:s', strtotime('17 days'));
         }
 
         $args = 'null ,' .
