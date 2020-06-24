@@ -6,11 +6,12 @@ function documentReady()
 {
   $(".add_click_handler").each(function ()
     {
-alert("we got here before adding onclick");
 alert("1 onclick " + $(this).name);
       $(this).onclick = function(e)
         {
-alert("onclick " + $(this).name);
+alert("onclick " + $(this).getAttribute("name"));
+document.getElementById('buttonLED'+id).setAttribute('onclick','writeLED(1,1)')
+
           $("#dialog_for_verification").dialog(
             {
               resizable: false,
