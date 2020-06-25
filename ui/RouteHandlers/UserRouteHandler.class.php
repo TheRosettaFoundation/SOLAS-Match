@@ -1719,7 +1719,7 @@ $project->setOrganisationId(380);//DEV SERVER
                             curl_close($re);
 
                             $app->flashNow('success', '<a href="' . $app->urlFor('task-view', ['task_id' => $translation_task_id]) .
-                            '">This is your Verification task</a>, which you <strong>must</strong> translate using Kató TM. Please, check your email inbox for instructions');
+                            '">This is your Verification task</a>, which you <strong>must</strong> translate using Kató TM. You will need to refresh that page after a few minutes in order to see the Kató TM translation link. Please, check your email inbox for instructions');
                         }
                     }
                 }
