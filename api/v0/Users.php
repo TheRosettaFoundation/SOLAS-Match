@@ -491,6 +491,12 @@ class Users
                 '/users(:format)/',
                 '\SolasMatch\API\V0\Users::getUsers'
             );
+
+            // From cron
+            $app->get(
+                '/dequeue_claim_task/',
+                '\SolasMatch\API\V0\Users::dequeue_claim_task'
+            );
         });
     }
 
@@ -715,6 +721,39 @@ class Users
             $taskId = $taskId[0];
         }
         API\Dispatcher::sendResponse(null, DAO\TaskDao::claimTask($taskId, $userId), null, $format);
+        Lib\Notify::notifyUserClaimedTask($userId, $taskId);
+        Lib\Notify::notifyOrgClaimedTask($userId, $taskId);
+    }
+
+    public static function dequeue_claim_task()
+    {
+
+
+all reverse of...
+SQL for queue_claim_task
+
+project still there or alive... word count req???
+            $matecat_tasks = $this->getMatecatLanguagePairs($task->getId());
+            if (empty($matecat_tasks)) {
+                $matecat_tasks = $this->getTaskChunk($task->getId());
+                if (!empty($matecat_tasks)) {
+                    $matecat_tasks[0]['matecat_id_job_password'] = $matecat_tasks[0]['matecat_id_chunk_password'];
+                    $job_first_segment                           = $matecat_tasks[0]['job_first_segment'];
+                }
+            }
+            if (!empty($matecat_tasks)) {
+                $matecat_langpair = $matecat_tasks[0]['matecat_langpair'];
+                $matecat_id_job = $matecat_tasks[0]['matecat_id_job'];
+                $matecat_id_job_password = $matecat_tasks[0]['matecat_id_job_password'];
+                if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
+
+
+
+
+
+
+
+        DAO\TaskDao::claimTask($taskId, $userId);
         Lib\Notify::notifyUserClaimedTask($userId, $taskId);
         Lib\Notify::notifyOrgClaimedTask($userId, $taskId);
     }
