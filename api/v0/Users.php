@@ -733,6 +733,16 @@ all reverse of...
 SQL for queue_claim_task
 
 project still there or alive... word count req???
+[[
+DROP PROCEDURE IF EXISTS `getWordCountRequestForProject`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getWordCountRequestForProject`(IN `projectID` INT)
+BEGIN
+    SELECT * FROM WordCountRequestForProjects WHERE project_id=projectID;
+END//
+DELIMITER ;
+]]
+
             $matecat_tasks = $this->getMatecatLanguagePairs($task->getId());
             if (empty($matecat_tasks)) {
                 $matecat_tasks = $this->getTaskChunk($task->getId());
