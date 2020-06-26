@@ -727,11 +727,18 @@ class Users
 
     public static function dequeue_claim_task()
     {
-
-
-all reverse of...
-SQL for queue_claim_task
-
+        $queue_claim_tasks = DAO\TaskDao::get_queue_claim_tasks();
+maake sure empty is array
+        foreach ($queue_claim_tasks as $queue_claim_task) {
+            $task_id = $queue_claim_task['task_id'];
+            $user_id = $queue_claim_task['user_id'];
+            $matecat_tasks = DAO\TaskDao::getMatecatLanguagePairs($queue_claim_task['task_id']);
+            if (!empty($matecat_tasks[0]['matecat_id_job']) && !empty($matecat_tasks[0]['matecat_id_job_password'])) {
+                DAO\TaskDao::dequeue_claim_task($task_id);
+                DAO\TaskDao::claimTask($task_id, $user_id);
+                Lib\Notify::notifyUserClaimedTask($user_id, $task_id);
+                Lib\Notify::notifyOrgClaimedTask($user_id, $task_id);
+            } else {
 project still there or alive... word count req???
 [[
 DROP PROCEDURE IF EXISTS `getWordCountRequestForProject`;
@@ -742,6 +749,15 @@ BEGIN
 END//
 DELIMITER ;
 ]]
+if 3?? dequeue
+
+
+}
+
+
+all reverse of...
+SQL for queue_claim_task
+
 
             $matecat_tasks = $this->getMatecatLanguagePairs($task->getId());
             if (empty($matecat_tasks)) {
@@ -757,15 +773,6 @@ DELIMITER ;
                 $matecat_id_job_password = $matecat_tasks[0]['matecat_id_job_password'];
                 if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
 
-
-
-
-
-
-
-        DAO\TaskDao::claimTask($taskId, $userId);
-        Lib\Notify::notifyUserClaimedTask($userId, $taskId);
-        Lib\Notify::notifyOrgClaimedTask($userId, $taskId);
     }
 
     public static function getUserTopTasks($userId, $format = ".json")
