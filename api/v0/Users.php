@@ -728,51 +728,22 @@ class Users
     public static function dequeue_claim_task()
     {
         $queue_claim_tasks = DAO\TaskDao::get_queue_claim_tasks();
-maake sure empty is array
         foreach ($queue_claim_tasks as $queue_claim_task) {
             $task_id = $queue_claim_task['task_id'];
             $user_id = $queue_claim_task['user_id'];
             $matecat_tasks = DAO\TaskDao::getMatecatLanguagePairs($queue_claim_task['task_id']);
-            if (!empty($matecat_tasks[0]['matecat_id_job']) && !empty($matecat_tasks[0]['matecat_id_job_password'])) {
+            if (!empty($matecat_tasks) && !empty($matecat_tasks[0]['matecat_id_job'])) { // Analysis complete
                 DAO\TaskDao::dequeue_claim_task($task_id);
                 DAO\TaskDao::claimTask($task_id, $user_id);
                 Lib\Notify::notifyUserClaimedTask($user_id, $task_id);
                 Lib\Notify::notifyOrgClaimedTask($user_id, $task_id);
             } else {
-project still there or alive... word count req???
-[[
-DROP PROCEDURE IF EXISTS `getWordCountRequestForProject`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getWordCountRequestForProject`(IN `projectID` INT)
-BEGIN
-    SELECT * FROM WordCountRequestForProjects WHERE project_id=projectID;
-END//
-DELIMITER ;
-]]
-if 3?? dequeue
-
-
-}
-
-
-all reverse of...
-SQL for queue_claim_task
-
-
-            $matecat_tasks = $this->getMatecatLanguagePairs($task->getId());
-            if (empty($matecat_tasks)) {
-                $matecat_tasks = $this->getTaskChunk($task->getId());
-                if (!empty($matecat_tasks)) {
-                    $matecat_tasks[0]['matecat_id_job_password'] = $matecat_tasks[0]['matecat_id_chunk_password'];
-                    $job_first_segment                           = $matecat_tasks[0]['job_first_segment'];
+                $request_for_project = DAO\TaskDao::getWordCountRequestForProject($matecat_tasks[0]['project_id']);
+                if (empty($request_for_project) || $request_for_project['state'] == 3) { // If Project deleted or Analysis has failed
+                    DAO\TaskDao::dequeue_claim_task($task_id);
                 }
             }
-            if (!empty($matecat_tasks)) {
-                $matecat_langpair = $matecat_tasks[0]['matecat_langpair'];
-                $matecat_id_job = $matecat_tasks[0]['matecat_id_job'];
-                $matecat_id_job_password = $matecat_tasks[0]['matecat_id_job_password'];
-                if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
-
+        }
     }
 
     public static function getUserTopTasks($userId, $format = ".json")
