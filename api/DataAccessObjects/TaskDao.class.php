@@ -1099,4 +1099,35 @@ class TaskDao
         }
         return $task;    
     }
+
+    public static function get_queue_claim_tasks()
+    {
+        $result = Lib\PDOWrapper::call('get_queue_claim_tasks', '');
+        if (!empty($result)) {
+            return $result;
+        } else {
+            return [];
+        }
+    }
+
+    public static function dequeue_claim_task($task_id)
+    {
+        Lib\PDOWrapper::call('dequeue_claim_task', Lib\PDOWrapper::cleanse($task_id));
+    }
+
+    public static function getMatecatLanguagePairs($task_id)
+    {
+        $result = Lib\PDOWrapper::call('getMatecatLanguagePairs', Lib\PDOWrapper::cleanse($task_id));
+        return $result;
+    }
+
+    public static function getWordCountRequestForProject($project_id)
+    {
+        $result = Lib\PDOWrapper::call('getWordCountRequestForProject', Lib\PDOWrapper::cleanse($project_id));
+        if ($result) {
+            return $result[0];
+        } else {
+            return false;
+        }
+    }
 }
