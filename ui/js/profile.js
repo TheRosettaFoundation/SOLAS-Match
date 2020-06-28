@@ -13,6 +13,7 @@ function documentReady()
                 width:     400,
                 modal:     true,
                 buttons: {
+                  "class": "btn btn-primary",
 
                   "OK": function()
                   {
