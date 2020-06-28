@@ -4,7 +4,7 @@ function documentReady()
 {
   $(".add_click_handler").each(function ()
     {
-alert("before adding click handler for: " + $(this).getAttribute("name"));
+//alert("before adding click handler for: " + $(this).getAttribute("name"));
       $(this).click(function(e)
           {
 alert("Handler for .click() called");
