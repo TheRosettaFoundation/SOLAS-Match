@@ -1,45 +1,45 @@
 <script type="text/javascript">
 
-$(document).ready(documentReady);
-
 function documentReady()
 {
   $(".add_click_handler").each(function ()
     {
-alert("onclick " + $(this).getAttribute("name"));
-      $(this).onclick = function(e)
-        {
-document.getElementById('buttonLED'+id).setAttribute('onclick','writeLED(1,1)')
-var but.setAttribute('onclick', 'my_function( " '+my_string+' " )');
-editButton.setAttribute('onclick', "editSection('id');")
-EG onclick="return confirm('Are you sure you want to permanently delete this certificate?')"
+alert("before adding click handler for: " + $(this).getAttribute("name"));
+      $(this).click(function(e)
+          {
+alert("Handler for .click() called");
+            $("#dialog_for_verification").dialog(
+              {
+                resizable: false,
+                height:    "auto",
+                width:     400,
+                modal:     true,
+                buttons: {
 
-          $("#dialog_for_verification").dialog(
-            {
-              resizable: false,
-              height:    "auto",
-              width:     400,
-              modal:     true,
-              buttons: {
+                  "OK": function()
+                  {
+alert("before trying submit of parent, action: " +   e.target.parentNode.action);
+//                    e.target.parentNode.submit();
+                  },
 
-                "OK": function()
-                {
-//                  e.target.parentNode.submit();
-                },
+                  "Cancel": function()
+                  {
+alert("before trying close dialog");
 
-                "Cancel": function()
-                {
-//                  $(this).dialog("close");
+                    $(this).dialog("close");
+                  }
                 }
               }
-            }
-          );
-alert("AFTER DIALOG");
+            );
+alert("after dialog added");
 
-          e.preventDefault();
-          return false;
-      }
+            e.preventDefault();
+            return false;
+        }
+      );
     }
   );
 }
+
+$(document).ready(documentReady);
 </script>
