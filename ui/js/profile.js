@@ -16,8 +16,8 @@ function documentReady()
 
                   "OK": function()
                   {
-                    alert("action: " + e.target.parentNode.action);
-                    //e.target.parentNode.submit();
+                    //alert("action: " + e.target.parentNode.action);
+                    e.target.parentNode.submit();
                   },
 
                   "Cancel": function()
