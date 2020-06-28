@@ -742,7 +742,7 @@ error_log("dequeue_claim_task() task_id: $task_id Removing");
                 Lib\Notify::notifyOrgClaimedTask($user_id, $task_id);
             } else {
                 $request_for_project = DAO\TaskDao::getWordCountRequestForProject($matecat_tasks[0]['project_id']);
-                if ($request_for_project || $request_for_project['state'] == 3) { // If Project deleted or Analysis has failed
+                if (!$request_for_project || $request_for_project['state'] == 3) { // If Project deleted or Analysis has failed
 error_log("dequeue_claim_task() task_id: $task_id Removing BECAUSE FAILED");
                     DAO\TaskDao::dequeue_claim_task($task_id);
                 }
