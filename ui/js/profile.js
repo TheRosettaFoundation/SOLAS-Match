@@ -18,6 +18,7 @@ function documentReady()
                   {
                     //alert("action: " + e.target.parentNode.action);
                     e.target.parentNode.submit();
+                    $(this).dialog("close");
                   },
 
                   "Cancel": function()
