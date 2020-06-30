@@ -1617,7 +1617,11 @@ EOD;
                 $language_code_target = substr($target_language_country, 0, strpos($target_language_country, '-'));
                 $country_code_target  = substr($target_language_country, strpos($target_language_country, '-') + 1);
 
-                if (!empty($source_language_country) && !empty($target_language_country)) { // Protect against browser manipulation
+error_log("Admin should be allowed duplicate: $language_code_source-$language_code_target");
+if (empty($testing_center_projects_by_code["$language_code_source-$language_code_target"])) error_log("Test does NOT already exist"); else error_log("Test already exists");
+                if (!empty($source_language_country) && !empty($target_language_country) &&
+                    (empty($testing_center_projects_by_code["$language_code_source-$language_code_target"]) || $isSiteAdmin)) { // Protect against browser manipulation or duplicate
+error_log("AFTER IF, Admin should be allowed duplicate: $language_code_source-$language_code_target");
                     $user_id_owner = 62927; // translators@translatorswithoutborders.org
 $user_id_owner = 25016;//DEV SERVER
 
