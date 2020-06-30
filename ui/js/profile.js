@@ -17,12 +17,14 @@ function documentReady()
                   "OK": function()
                   {
                     //alert("action: " + e.target.parentNode.action);
+                    e.target.disabled = true;
                     e.target.parentNode.submit();
                     $(this).dialog("close");
                   },
 
                   "Cancel": function()
                   {
+e.target.disabled = true;
                     $(this).dialog("close");
                   }
                 }
