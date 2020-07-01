@@ -24,7 +24,6 @@ function documentReady()
 
                   "Cancel": function()
                   {
-e.target.disabled = true;
                     $(this).dialog("close");
                   }
                 }
