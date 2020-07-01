@@ -186,7 +186,7 @@
                                                 <input type="hidden" name="source_language_country" value="{$userQualifiedPair['language_code_source']}-{$userQualifiedPair['country_code_source']}" />
                                                 <input type="hidden" name="target_language_country" value="{$userQualifiedPair['language_code_target']}-{$userQualifiedPair['country_code_target']}" />
                                                 {assign var="pair" value="`$userQualifiedPair['language_code_source']`-`$userQualifiedPair['language_code_target']`"}
-                                                {if empty($testing_center_projects_by_code[$pair]) || $isSiteAdmin}
+                                                {if true  || empty($testing_center_projects_by_code[$pair]) || $isSiteAdmin}
                                                     <input type="submit" class="add_click_handler btn btn-primary" name="btnSubmit" value="Get Verified" />
                                                 {else}
                                                     <input type="submit" class="btn btn-primary" name="btnSubmit" value="Get Verified" onclick="
