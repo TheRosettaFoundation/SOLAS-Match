@@ -59,6 +59,12 @@
         {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
     </p>
 {/if}
+{if isset($flash['success'])}
+    <p class="alert alert-success" style="margin-bottom: 50px">
+        {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}
+    </p>
+{/if}
+
 
 {if $private_access || $isSiteAdmin || $receive_credit}
 
@@ -66,8 +72,7 @@
 <div id="dialog_for_verification" title="Perform a translation test?">
 <p>Becoming verified will give you access to more tasks in your language pair. For more information please visit <a href="https://community.translatorswb.org/t/how-to-become-a-kato-verified-translator/262">this page</a>.</p>
 <p>By clicking “OK” below, a test will be created for you, and you will receive an email with instructions on how to complete the test.</p>
-<p>One of our Senior Translators will review the test, and if you receive 3.5 or more stars we will verify you.</p>
-<p>Please note, tests can take 3-4 weeks to be reviewed. When we have the results, we will contact you by email.</p>
+<p>When you have completed the test, one of our Senior Translators will review it. When we have the results we will contact you by email. Please note, this can take 3-4 weeks.</p>
 <p>If you do not want to take the test, please click “Cancel”.</p>
 </div>
 </span>
@@ -178,13 +183,14 @@
                                             </strong>
                                             {if $userQualifiedPair['qualification_level'] == 1 && $userQualifiedPair['language_code_source'] == 'en' && in_array($userQualifiedPair['language_code_target'], ['ar', 'fr', 'es']) && ($private_access || $isSiteAdmin)}
                                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
-                                                <input type="hidden" name="language_code_source" value="{$userQualifiedPair['language_code_source']}" />
-                                                <input type="hidden" name="language_code_target" value="{$userQualifiedPair['language_code_target']}" />
-                                                {if empty($testing_center_projects_by_code[$userQualifiedPair['language_code_source'] . $userQualifiedPair['language_code_target']])}
-                                                    <input type="submit" class="add_click_handler btn btn-primary" name="submit" value="Get Verified" />
+                                                <input type="hidden" name="source_language_country" value="{$userQualifiedPair['language_code_source']}-{$userQualifiedPair['country_code_source']}" />
+                                                <input type="hidden" name="target_language_country" value="{$userQualifiedPair['language_code_target']}-{$userQualifiedPair['country_code_target']}" />
+                                                {assign var="pair" value="`$userQualifiedPair['language_code_source']`-`$userQualifiedPair['language_code_target']`"}
+                                                {if empty($testing_center_projects_by_code[$pair]) || $isSiteAdmin}
+                                                    <input type="submit" class="add_click_handler btn btn-primary" name="btnSubmit" value="Get Verified" />
                                                 {else}
-                                                    <input type="submit" class="btn btn-primary" name="submit" value="Get Verified" onclick="
-alert('You have already requested to take a test in order to become a Kató Verified Translator. If you would like to take a second test, please contact translators@translatorswithoutborders.org.');
+                                                    <input type="submit" class="btn btn-primary" name="btnSubmit" value="Get Verified" onclick="
+alert('You have already requested to take a test in order to become a Kató Verified Translator. If you would like to take a second test, please contact translators@translatorswithoutborders.org');
                                                     return false;" />
                                                 {/if}
                                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}

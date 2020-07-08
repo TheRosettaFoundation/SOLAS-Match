@@ -982,6 +982,15 @@ CREATE TABLE IF NOT EXISTS `TaskClaims` (
   CONSTRAINT `FK_task_claim_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `queue_claim_tasks` (
+  task_id BIGINT(20) UNSIGNED NOT NULL,
+  user_id INT(10)    UNSIGNED NOT NULL,
+  UNIQUE KEY FK_queue_claim_tasks_task_id (task_id),
+  CONSTRAINT FK_queue_claim_tasks_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_queue_claim_tasks_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
 -- Data exporting was unselected.
 
 -- Dumping structure for table SolasMatch.TaskFileVersions
@@ -1622,6 +1631,18 @@ CREATE TABLE IF NOT EXISTS `TrackedRegistrations` (
   CONSTRAINT `FK_TrackedRegistrations_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `TestingCenterProjects` (
+  user_id                 INT(10) UNSIGNED NOT NULL,
+  project_id              INT(10) UNSIGNED NOT NULL,
+  translation_task_id  BIGINT(20) UNSIGNED NOT NULL,
+  proofreading_task_id BIGINT(20) UNSIGNED NOT NULL,
+  project_to_copy_id      INT(10) UNSIGNED NOT NULL,
+  language_code_source VARCHAR(3)          NOT NULL,
+  language_code_target VARCHAR(3)          NOT NULL,
+  KEY FK_TestingCenterProjects_Users (user_id),
+  CONSTRAINT FK_TestingCenterProjects_Users FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -2001,6 +2022,31 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `queue_claim_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `queue_claim_task`(IN uID INT, IN tID BIGINT)
+BEGIN
+    INSERT INTO queue_claim_tasks
+               (user_id, task_id)
+        VALUES (    uID,     tID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_queue_claim_tasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_queue_claim_tasks`()
+BEGIN
+    SELECT * FROM queue_claim_tasks;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `dequeue_claim_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `dequeue_claim_task`(IN tID BIGINT)
+BEGIN
+    DELETE FROM queue_claim_tasks WHERE task_id=tID;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.deleteBadge
 DROP PROCEDURE IF EXISTS `deleteBadge`;

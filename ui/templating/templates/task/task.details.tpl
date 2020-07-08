@@ -121,7 +121,7 @@
             </tr>
             <tr>
                 <td>
-                    <strong>{Localisation::getTranslation('common_discuss_on_community')}:</strong><hr/>
+                    {if !preg_match('/^Test.{4}$/', $task->getTitle())}<strong>{Localisation::getTranslation('common_discuss_on_community')}:</strong><hr/>{/if}
                 </td>
                 <td></td>
                 <td>
@@ -130,7 +130,7 @@
             </tr>
             <tr valign="top">
                 <td>
-                    <a href="https://community.translatorswb.org/t/{$discourse_slug}" target="_blank">https://community.translatorswb.org/t/{$discourse_slug}</a>
+                    {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" target="_blank">https://community.translatorswb.org/t/{$discourse_slug}</a>{/if}
                 </td>
                 <td></td>
                 <td>

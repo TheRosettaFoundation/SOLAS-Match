@@ -491,6 +491,12 @@ class Users
                 '/users(:format)/',
                 '\SolasMatch\API\V0\Users::getUsers'
             );
+
+            // From cron
+            $app->get(
+                '/dequeue_claim_task/',
+                '\SolasMatch\API\V0\Users::dequeue_claim_task'
+            );
         });
     }
 
@@ -717,6 +723,28 @@ class Users
         API\Dispatcher::sendResponse(null, DAO\TaskDao::claimTask($taskId, $userId), null, $format);
         Lib\Notify::notifyUserClaimedTask($userId, $taskId);
         Lib\Notify::notifyOrgClaimedTask($userId, $taskId);
+    }
+
+    public static function dequeue_claim_task()
+    {
+        $queue_claim_tasks = DAO\TaskDao::get_queue_claim_tasks();
+        foreach ($queue_claim_tasks as $queue_claim_task) {
+            $task_id = $queue_claim_task['task_id'];
+            $user_id = $queue_claim_task['user_id'];
+            $matecat_tasks = DAO\TaskDao::getMatecatLanguagePairs($queue_claim_task['task_id']);
+            if (!empty($matecat_tasks) && !empty($matecat_tasks[0]['matecat_id_job'])) { // Analysis complete
+                error_log("dequeue_claim_task() task_id: $task_id Removing");
+                DAO\TaskDao::dequeue_claim_task($task_id);
+                DAO\TaskDao::claimTask($task_id, $user_id);
+                Lib\Notify::notifyUserClaimedTask($user_id, $task_id);
+                Lib\Notify::notifyOrgClaimedTask($user_id, $task_id);
+            } else {
+                $request_for_project = DAO\TaskDao::getWordCountRequestForProject($matecat_tasks[0]['project_id']);
+                if (!$request_for_project || $request_for_project['state'] == 3) { // If Project deleted or Analysis has failed
+                    DAO\TaskDao::dequeue_claim_task($task_id);
+                }
+            }
+        }
     }
 
     public static function getUserTopTasks($userId, $format = ".json")
