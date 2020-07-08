@@ -15,17 +15,21 @@
 
 <table style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-    <th width="12%">Task Title</th>
-    <th width="8%">Type</th>
-    <th width="8%">Status</th>
-    <th width="11%">Claimant Email</th>
-    <th width="10%">Display Name</th>
-    <th width="7%">Accuracy</th>
+    <th width="6%">Task</th>
+    <th width="6%">Pair</th>
+    <th width="6%">Created</th>
+    <th width="6%">Deadline</th>
+    <th width="6%">Translator</th>
+    <th width="6%">Level</th>
+    <th width="6%">Status</th>
+    <th width="6%">Reviewer</th>
+    <th width="6%">Revision Status</th>
+    <th width="6%">Accuracy</th>
     <th width="6%">Fluency</th>
     <th width="6%">Terminology</th>
     <th width="6%">Style</th>
     <th width="6%">Design</th>
-    <th width="20%">Feedback</th>
+    <th width="16%">Feedback</th>
   </thead>
 
   <tbody>
@@ -33,16 +37,20 @@
 
     <tr>
       <td><a href="{urlFor name="task-view" options="task_id.{$user_row['task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['task_title'])}</a></td>
-      <td>{$user_row['task_type']}</td>
-      <td>{$user_row['task_status']}</td>
-      <td>{$user_row['user_email']}</td>
-      <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['display_name'])}</a></td>
-      <td>{$user_row['accuracy']}</td>
-      <td>{$user_row['fluency']}</td>
-      <td>{$user_row['terminology']}</td>
-      <td>{$user_row['style']}</td>
-      <td>{$user_row['design']}</td>
-      <td>{TemplateHelper::uiCleanseHTML($user_row['comment'])}</td>
+      <td>{$user_row['language_pair']}</td>
+      <td>{$user_row['created']}</td>
+      <td>{$user_row['deadline']}</td>
+      <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['user_id']}"}" target="_blank">{$user_row['user_email']}</a></td>
+      <td>{$user_row['level']}</td>
+      <td><a href="{urlFor name="task-view" options="task_id.{$user_row['task_id']}"}" target="_blank">{$user_row['task_status']}</a></td>
+      <td><a href="{urlFor name="user-public-profile" options="user_id.{$user_row['proofreading_task_id']}"}" target="_blank">{$user_row['proofreading_email']}</a></td>
+      <td><a href="{urlFor name="task-view" options="task_id.{$user_row['proofreading_task_id']}"}" target="_blank">{$user_row['proofreading_task_status']}</a></td>
+      <td><a href="{urlFor name="user-task-reviews" options="task_id.{$user_row['task_id']}"}" target="_blank">{$user_row['accuracy']}</a></td>
+      <td><a href="{urlFor name="user-task-reviews" options="task_id.{$user_row['task_id']}"}" target="_blank">{$user_row['fluency']}</a></td>
+      <td><a href="{urlFor name="user-task-reviews" options="task_id.{$user_row['task_id']}"}" target="_blank">{$user_row['terminology']}</a></td>
+      <td><a href="{urlFor name="user-task-reviews" options="task_id.{$user_row['task_id']}"}" target="_blank">{$user_row['style']}</a></td>
+      <td><a href="{urlFor name="user-task-reviews" options="task_id.{$user_row['task_id']}"}" target="_blank">{$user_row['design']}</a></td>
+      <td><a href="{urlFor name="user-task-reviews" options="task_id.{$user_row['task_id']}"}" target="_blank">{TemplateHelper::uiCleanseHTML($user_row['comment'])}</a></td>
     </tr>
 
   {/foreach}

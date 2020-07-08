@@ -982,6 +982,15 @@ CREATE TABLE IF NOT EXISTS `TaskClaims` (
   CONSTRAINT `FK_task_claim_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `queue_claim_tasks` (
+  task_id BIGINT(20) UNSIGNED NOT NULL,
+  user_id INT(10)    UNSIGNED NOT NULL,
+  UNIQUE KEY FK_queue_claim_tasks_task_id (task_id),
+  CONSTRAINT FK_queue_claim_tasks_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_queue_claim_tasks_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
 -- Data exporting was unselected.
 
 -- Dumping structure for table SolasMatch.TaskFileVersions
@@ -1622,6 +1631,18 @@ CREATE TABLE IF NOT EXISTS `TrackedRegistrations` (
   CONSTRAINT `FK_TrackedRegistrations_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `TestingCenterProjects` (
+  user_id                 INT(10) UNSIGNED NOT NULL,
+  project_id              INT(10) UNSIGNED NOT NULL,
+  translation_task_id  BIGINT(20) UNSIGNED NOT NULL,
+  proofreading_task_id BIGINT(20) UNSIGNED NOT NULL,
+  project_to_copy_id      INT(10) UNSIGNED NOT NULL,
+  language_code_source VARCHAR(3)          NOT NULL,
+  language_code_target VARCHAR(3)          NOT NULL,
+  KEY FK_TestingCenterProjects_Users (user_id),
+  CONSTRAINT FK_TestingCenterProjects_Users FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -2001,6 +2022,31 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `queue_claim_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `queue_claim_task`(IN uID INT, IN tID BIGINT)
+BEGIN
+    INSERT INTO queue_claim_tasks
+               (user_id, task_id)
+        VALUES (    uID,     tID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_queue_claim_tasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_queue_claim_tasks`()
+BEGIN
+    SELECT * FROM queue_claim_tasks;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `dequeue_claim_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `dequeue_claim_task`(IN tID BIGINT)
+BEGIN
+    DELETE FROM queue_claim_tasks WHERE task_id=tID;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.deleteBadge
 DROP PROCEDURE IF EXISTS `deleteBadge`;
@@ -6872,29 +6918,70 @@ BEGIN
         t.id    AS task_id,
         p.id    AS project_id,
         p.title AS project_title,
-        IF(t.`task-type_id`=2, 'Translation', 'Revising') AS task_type,
+        IF(t.`task-type_id`=2, 'Translation', 'Revising')               AS task_type,
         CASE
             WHEN t.`task-status_id`=1 THEN 'Waiting'
             WHEN t.`task-status_id`=2 THEN 'Pending'
             WHEN t.`task-status_id`=3 THEN 'In Progress'
             WHEN t.`task-status_id`=4 THEN 'Complete'
-        END                                               AS task_status,
-        IFNULL(u.email, '')          AS user_email,
-        IFNULL(u.`display-name`, '') AS display_name,
-        IFNULL(u.id, '')             AS user_id,
-        IFNULL(tr.corrections,        '') AS accuracy,
-        IFNULL(tr.grammar,            '') AS fluency,
-        IFNULL(tr.spelling,           '') AS terminology,
-        IFNULL(tr.consistency   % 10, '') AS style,
-        IFNULL(tr.consistency DIV 10, '') AS design,
-        IFNULL(tr.comment,            '') AS comment
-    FROM      Projects        p
-    JOIN      PrivateTMKeys tmk ON p.id=tmk.project_id AND tmk.private_tm_key='new'
-    JOIN      Tasks           t ON p.id=t.project_id
-    LEFT JOIN TaskClaims     tc ON t.id=tc.task_id
-    LEFT JOIN Users           u ON tc.user_id=u.id
-    LEFT JOIN TaskReviews    tr ON t.id=tr.task_id
+        END                                                             AS task_status,
+        t.`created-time`                                                AS created,
+        t.deadline,
+        CONCAT(tcp.language_code_source, '|', tcp.language_code_target) AS language_pair,
+        IFNULL(u.email, '')                                             AS user_email,
+        IFNULL(u.`display-name`, '')                                    AS display_name,
+        IFNULL(u.id, '')                                                AS user_id,
+        CASE
+            WHEN uqp.qualification_level=1 THEN ''
+            WHEN uqp.qualification_level=2 THEN 'Verified'
+            WHEN uqp.qualification_level=3 THEN 'Senior'
+        END                                                             AS level,
+        IFNULL(tr.corrections,        '')                               AS accuracy,
+        IFNULL(tr.grammar,            '')                               AS fluency,
+        IFNULL(tr.spelling,           '')                               AS terminology,
+        IFNULL(tr.consistency   % 10, '')                               AS style,
+        IFNULL(tr.consistency DIV 10, '')                               AS design,
+        IFNULL(tr.comment,            '')                               AS comment,
+        tcp.proofreading_task_id,
+        CASE
+            WHEN prooft.`task-status_id`=1 THEN 'Waiting'
+            WHEN prooft.`task-status_id`=2 THEN 'Pending'
+            WHEN prooft.`task-status_id`=3 THEN 'In Progress'
+            WHEN prooft.`task-status_id`=4 THEN 'Complete'
+        END                                                             AS proofreading_task_status,
+        IFNULL(proofu.email, '')                                        AS proofreading_email
+    FROM      Projects                p
+    JOIN      PrivateTMKeys         tmk ON p.id=tmk.project_id AND tmk.private_tm_key='new'
+    JOIN      Tasks                   t ON p.id=t.project_id
+    LEFT JOIN TaskClaims             tc ON t.id=tc.task_id
+    LEFT JOIN Users                   u ON tc.user_id=u.id
+    LEFT JOIN TaskReviews            tr ON t.id=tr.task_id
+    LEFT JOIN TestingCenterProjects tcp ON p.id=tcp.project_id
+    LEFT JOIN Tasks              prooft ON tcp.proofreading_task_id=prooft.id
+    LEFT JOIN TaskClaims        prooftc ON tcp.proofreading_task_id=prooftc.task_id
+    LEFT JOIN Users              proofu ON prooftc.user_id=proofu.id
+    LEFT JOIN UserQualifiedPairs    uqp ON tc.user_id=uqp.user_id AND tcp.language_code_source=uqp.language_code_source AND tcp.language_code_target=uqp.language_code_target
+    WHERE
+        t.`task-type_id`=2
     ORDER BY t.id DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_testing_center_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_testing_center_project`(IN uID INT, IN pID INT, IN tID BIGINT, IN ptID BIGINT, IN pIDtoCopy INT, IN sourceCode VARCHAR(3), IN targetCode VARCHAR(3))
+BEGIN
+    INSERT INTO TestingCenterProjects
+               (user_id,  project_id,  translation_task_id,  proofreading_task_id,  project_to_copy_id,  language_code_source,  language_code_target)
+        VALUES (    uID,         pID,                  tID,                  ptID,           pIDtoCopy,            sourceCode,            targetCode);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_testing_center_projects`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_testing_center_projects`(IN uID INT)
+BEGIN
+    SELECT * FROM TestingCenterProjects WHERE user_id=uID;
 END//
 DELIMITER ;
 

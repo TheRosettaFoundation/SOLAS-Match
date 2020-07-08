@@ -457,6 +457,11 @@ class UserDao extends BaseDao
         return $ret;
     }
 
+    public function queue_claim_task($user_id, $task_id)
+    {
+        LibAPI\PDOWrapper::call('queue_claim_task', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
+    }
+
     public function unclaimTask($userId, $taskId, $feedback)
     {
         $ret = null;

@@ -139,7 +139,7 @@ If you have any questions about submitting the form, please email <a href="mailt
                     </div>
                 </div>
 
-                <label for='conduct'><strong>Please read the <a href="http://translatorswithoutborders.org/wp-content/uploads/2018/05/Code-of-Conduct-for-Translators-May-2018.pdf" target="_blank">TWB Code of Conduct for Translators</a>: <span style="color: red">*</span></strong></label>
+                <label for='conduct'><strong>Please read the <a href="https://www.translatorswithoutborders.org/volunteer/volunteer-translators/translators-code-of-conduct/" target="_blank">TWB Code of Conduct for Translators</a>: <span style="color: red">*</span></strong></label>
                 <input type="checkbox" value="1" name="conduct" id="conduct" {if $profile_completed}checked="checked"{/if} /> I agree to abide by the TWB Code of Conduct for translators.<br /><br />
 
                 <label for='biography'><strong>About Me:</strong></label>

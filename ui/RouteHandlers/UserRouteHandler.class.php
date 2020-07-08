@@ -1523,6 +1523,8 @@ EOD;
         $orgDao = new DAO\OrganisationDao();
         $adminDao = new DAO\AdminDao();
         $langDao = new DAO\LanguageDao();
+        $projectDao = new DAO\ProjectDao();
+        $taskDao = new DAO\TaskDao();
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
@@ -1534,6 +1536,12 @@ EOD;
             $isSiteAdmin = 0;
             $app->view()->setData('isSiteAdmin', 0);
         }
+
+        $private_access = 0;
+        if (Common\Lib\UserSession::getCurrentUserID() == $user_id) {
+            $private_access = 1;
+        }
+
         $user = null;
         try {
             Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER.$user_id);
@@ -1550,6 +1558,10 @@ EOD;
         } catch (Common\Exceptions\SolasMatchException $e) {
             // error_log("Error getting user personal info: $e");
         }
+
+        $testing_center_projects_by_code = [];
+        $testing_center_projects = $projectDao->get_testing_center_projects($user_id, $testing_center_projects_by_code);
+
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
             Common\Lib\UserSession::checkCSRFKey($post, 'userPublicProfile');
@@ -1592,6 +1604,125 @@ EOD;
             if ($isSiteAdmin && !empty($post['mark_certification_delete'])) {
                 $userDao->deleteCertification($post['certification_id']);
             }
+
+            if (($private_access || $isSiteAdmin) && !empty($post['source_language_country']) && !empty($post['target_language_country'])) {
+                // Verification System Project for this User
+                $project_route_handler = new ProjectRouteHandler();
+
+                $source_language_country = $project_route_handler->valid_language_for_matecat($post['source_language_country']);
+                $language_code_source = substr($source_language_country, 0, strpos($source_language_country, '-'));
+                $country_code_source  = substr($source_language_country, strpos($source_language_country, '-') + 1);
+
+                $target_language_country = $project_route_handler->valid_language_for_matecat($post['target_language_country']);
+                $language_code_target = substr($target_language_country, 0, strpos($target_language_country, '-'));
+                $country_code_target  = substr($target_language_country, strpos($target_language_country, '-') + 1);
+
+                if (!empty($source_language_country) && !empty($target_language_country) &&
+                    (empty($testing_center_projects_by_code["$language_code_source-$language_code_target"]) || $isSiteAdmin)) { // Protect against browser manipulation or duplicate
+                    $user_id_owner = 62927; // translators@translatorswithoutborders.org
+
+                    $projects_to_copy = [16987, 16982];
+                    $n = count($projects_to_copy);
+                    $test_number = mt_rand(0, $n - 1); // Pick a random $projects_to_copy test file
+                    $i = $n;
+                    while ($i--) {
+                        if (empty($testing_center_projects[$projects_to_copy[$test_number]])) break; // Found test file not already used
+                        $test_number = ($test_number + 1) % $n;
+                    }
+                    if ($i < 0) {
+                        $app->flashNow('error', "Unable to create test project for $user_id, no projects");
+                        error_log("Unable to create test project for $user_id, no projects");
+                    } else {
+                        $project_to_copy_id = $projects_to_copy[$test_number];
+
+                        $project = new Common\Protobufs\Models\Project();
+                        $project->setTitle('Test' . UserRouteHandler::random_string(4));
+                        $project->setOrganisationId(643); // TWB Community&Recruitment
+                        $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
+                        $project->setDeadline(gmdate('Y-m-d H:i:s', strtotime('25 days'))); // 10 days for Translation + 14 for Revision added + 1 to get to Project Deadline
+                        $project->setDescription('-');
+                        $project->setImpact('-');
+                        $project->setReference('');
+                        $project->setWordCount(1);
+
+                        $sourceLocale = new Common\Protobufs\Models\Locale();
+                        $sourceLocale->setLanguageCode($language_code_source);
+                        $sourceLocale->setCountryCode($country_code_source);
+                        $project->setSourceLocale($sourceLocale);
+
+                        $project = $projectDao->createProjectDirectly($project);
+                        if (empty($project)) {
+                            $app->flashNow('error', "Unable to create test project for $user_id");
+                            error_log("Unable to create test project for $user_id");
+                        } else {
+                            $project_id = $project->getId();
+
+                            list($filename, $mime) = $projectDao->copy_project_file($project_to_copy_id, $project_id, $user_id_owner);
+
+                            $translation_task_id = $projectDao->addProjectTask(
+                                $project_to_copy_id,
+                                $filename,
+                                $mime,
+                                $project,
+                                $language_code_target,
+                                $country_code_target,
+                                Common\Enums\TaskTypeEnum::TRANSLATION,
+                                0,
+                                $user_id_owner,
+                                $taskDao);
+                            $proofreading_task_id = $projectDao->addProjectTask(
+                                $project_to_copy_id,
+                                $filename,
+                                $mime,
+                                $project,
+                                $language_code_target,
+                                $country_code_target,
+                                Common\Enums\TaskTypeEnum::PROOFREADING,
+                                $translation_task_id,
+                                $user_id_owner,
+                                $taskDao);
+
+                            $projectDao->calculateProjectDeadlines($project_id);
+
+                            $taskDao->insertWordCountRequestForProjects($project_id, $source_language_country, $target_language_country, 0);
+                            $taskDao->insertMatecatLanguagePairs($translation_task_id,  $project_id, Common\Enums\TaskTypeEnum::TRANSLATION,  "$source_language_country|$target_language_country");
+                            $taskDao->insertMatecatLanguagePairs($proofreading_task_id, $project_id, Common\Enums\TaskTypeEnum::PROOFREADING, "$source_language_country|$target_language_country");
+
+                            $mt_engine        = '0';
+                            $pretranslate_100 = '0';
+                            $lexiqa           = '0';
+                            $private_tm_key   = 'new';
+                            $taskDao->set_project_tm_key($project_id, $mt_engine, $pretranslate_100, $lexiqa, $private_tm_key);
+
+                            $projectDao->insert_testing_center_project($user_id, $project_id, $translation_task_id, $proofreading_task_id, $project_to_copy_id, $language_code_source, $language_code_target);
+
+                            $userDao->queue_claim_task($user_id, $translation_task_id);
+
+                            // Asana 4th Project
+                            $re = curl_init('https://app.asana.com/api/1.0/tasks');
+                            curl_setopt($re, CURLOPT_POSTFIELDS, array(
+                                'name' => $user->getEmail(),
+                                'notes' => ' https://' . $_SERVER['SERVER_NAME'] . "/$user_id/profile , Target: $language_code_target, Deadline: " . gmdate('Y-m-d H:i:s', strtotime('10 days')) . ' https://' . $_SERVER['SERVER_NAME'] . "/project/$project_id/view",
+                                'projects' => '1127940658676844'
+                                )
+                            );
+
+                            curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
+                            curl_setopt($re, CURLOPT_HEADER, true);
+                            curl_setopt($re, CURLOPT_HTTPHEADER, array("Authorization: Bearer " . Common\Lib\Settings::get('asana.api_key4')));
+                            curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
+                            curl_exec($re);
+                            if ($error_number = curl_errno($re)) {
+                              error_log("Asana 4 API error ($error_number): " . curl_error($re));
+                            }
+                            curl_close($re);
+
+                            $app->flashNow('success', '<a href="' . $app->urlFor('task-view', ['task_id' => $translation_task_id]) .
+                            '">This is your Translation Test</a>, which you <strong>must</strong> translate using Kató TM. You will find the <strong>Translate using Kató TM</strong> button under the Translation Test task in your <strong>Claimed Tasks</strong> section, which you can find in the upper menu. You will need to refresh that page after a few minutes in order to see the task and button. Please check your email inbox in a few minutes for instructions on completing the test');
+                        }
+                    }
+                }
+            }
         }
                     
         $archivedJobs = $userDao->getUserArchivedTasks($user_id, 0, 10);
@@ -1616,6 +1747,7 @@ EOD;
             
         $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
+        $extra_scripts .= file_get_contents(__DIR__."/../js/profile.js");
         
         $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
         $taskTypeColours = array();
@@ -1648,11 +1780,6 @@ EOD;
             "userQualifiedPairs" => $userQualifiedPairs,
             "taskTypeColours" => $taskTypeColours
         ));
-
-        $private_access = 0;
-        if (Common\Lib\UserSession::getCurrentUserID() == $user_id) {
-            $private_access = 1;
-        }
 
         if ($private_access || $isSiteAdmin) {
             $notifData = $userDao->getUserTaskStreamNotification($user_id);
@@ -1721,6 +1848,7 @@ EOD;
             'admin_comments'         => $userDao->admin_comments($user_id),
             'certifications'         => $userDao->getUserCertifications($user_id),
             'tracked_registration'   => $userDao->get_tracked_registration($user_id),
+            'testing_center_projects_by_code' => $testing_center_projects_by_code,
         ));
 
         $app->render("user/user-public-profile.tpl");
