@@ -1715,10 +1715,16 @@ class ProjectRouteHandler
             $languages[$i++] = $language->getName();
         }
 
+        $creator = $taskDao->get_creator($projectId);
+        $pm = $creator['email'];
+error_log("pm: $pm");
+        if (strpos($pm, '@translatorswithoutborders.org') === false) $pm = 'projects@translatorswithoutborders.org';
+error_log("pm: $pm");
+
         $discourseapiparams = array(
             'category' => '7',
             'title' => str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getTitle()),
-            'raw' => "Partner: $org_name. URL: /"."/".$_SERVER['SERVER_NAME']."/project/$projectId/view ".str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getDescription()),
+            'raw' => "Partner: $org_name. Project Manager: $pm URL: /"."/".$_SERVER['SERVER_NAME']."/project/$projectId/view ".str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getDescription()),
         );
         $fields = '';
         foreach($discourseapiparams as $name => $value){
