@@ -593,6 +593,12 @@ class ProjectRouteHandler
 
         $preventImageCacheToken = time(); //see http://stackoverflow.com/questions/126772/how-to-force-a-web-browser-not-to-cache-images
 
+        $creator = $taskDao->get_creator($project_id);
+        $pm = $creator['email'];
+error_log("pm: $pm");
+        if (strpos($pm, '@translatorswithoutborders.org') === false) $pm = 'projects@translatorswithoutborders.org';
+error_log("pm: $pm");
+
         $app->view()->appendData(array(
                 'sesskey'       => $sesskey,
                 "isOrgMember"   => $isOrgMember,
@@ -602,6 +608,7 @@ class ProjectRouteHandler
                 "imgCacheToken" => $preventImageCacheToken,
                 'discourse_slug' => $projectDao->discourse_parameterize($project),
                 'matecat_analyze_url' => $taskDao->get_matecat_analyze_url($project_id),
+                'pm' => $pm,
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation
         ));
                 //'allow_downloads'     => $allow_downloads,
