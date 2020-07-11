@@ -154,7 +154,9 @@
                         </tr>
                         {/if}
 
+                        {assign var="native_language_code" value=""}
                         {if $this_user->getNativeLocale() != null}
+                        {assign var="native_language_code" value=$this_user->getNativeLocale()->getLanguageCode()}
                         <tr>
                             <td>
                                 Native in <strong>{TemplateHelper::getLanguageAndCountry($this_user->getNativeLocale())}</strong>
@@ -181,7 +183,7 @@
                                             {if $userQualifiedPair['qualification_level'] == 2}({Localisation::getTranslation('user_qualification_level_2')}){/if}
                                             {if $userQualifiedPair['qualification_level'] == 3}({Localisation::getTranslation('user_qualification_level_3')}){/if}
                                             </strong>
-                                            {if $userQualifiedPair['qualification_level'] == 1 && $userQualifiedPair['language_code_source'] == 'en' && in_array($userQualifiedPair['language_code_target'], ['ar', 'fr', 'es']) && ($private_access || $isSiteAdmin)}
+                                            {if $userQualifiedPair['qualification_level'] == 1 && $userQualifiedPair['language_code_source'] == 'en' && in_array($native_language_code, ['ar', 'fr', 'es']) && in_array($userQualifiedPair['language_code_target'], ['ar', 'fr', 'es']) && ($private_access || $isSiteAdmin)}
                                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                                                 <input type="hidden" name="source_language_country" value="{$userQualifiedPair['language_code_source']}-{$userQualifiedPair['country_code_source']}" />
                                                 <input type="hidden" name="target_language_country" value="{$userQualifiedPair['language_code_target']}-{$userQualifiedPair['country_code_target']}" />
