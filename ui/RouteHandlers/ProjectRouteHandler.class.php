@@ -1723,9 +1723,7 @@ class ProjectRouteHandler
 
         $creator = $taskDao->get_creator($projectId);
         $pm = $creator['email'];
-error_log("pm: $pm");
         if (strpos($pm, '@translatorswithoutborders.org') === false) $pm = 'projects@translatorswithoutborders.org';
-error_log("pm: $pm");
 
         $discourseapiparams = array(
             'category' => '7',
@@ -1745,6 +1743,7 @@ error_log("pm: $pm");
         }
 
         $re = curl_init(Common\Lib\Settings::get('discourse.url').'/posts');
+error_log(print_r($fields, true));
         curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
         curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
@@ -1760,6 +1759,7 @@ error_log("pm: $pm");
                 $projectDao->set_discourse_id($projectId, $topic_id);
             } else {
                 error_log('Discourse API error: No topic_id returned');
+error_log(print_r($response_data, true));
             }
         }
         curl_close($re);
