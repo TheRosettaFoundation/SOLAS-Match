@@ -101,7 +101,7 @@ Tweet</a>
                     <div id="put_updated_wordcount_here">{if $project->getWordCount() != '' && $project->getWordCount() > 1}{$project->getWordCount()}{else}-{/if}</div>
                 </td>
                 <td>
-                    <div class="convert_utc_to_local" style="visibility: hidden">{$project->getCreatedTime()}</div>
+                    <div class="convert_utc_to_local" style="visibility: hidden">{$project->getCreatedTime()}</div><br />{$pm}
                 </td>  
                 <td>
                     <div class="convert_utc_to_local" style="visibility: hidden">{$project->getDeadline()}</div>
