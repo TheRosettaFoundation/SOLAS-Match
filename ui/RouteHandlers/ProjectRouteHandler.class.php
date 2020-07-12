@@ -595,9 +595,7 @@ class ProjectRouteHandler
 
         $creator = $taskDao->get_creator($project_id);
         $pm = $creator['email'];
-error_log("pm: $pm");
         if (strpos($pm, '@translatorswithoutborders.org') === false) $pm = 'projects@translatorswithoutborders.org';
-error_log("pm: $pm");
 
         $app->view()->appendData(array(
                 'sesskey'       => $sesskey,
@@ -1706,6 +1704,7 @@ error_log("pm: $pm");
     {
         $app = \Slim\Slim::getInstance();
         $projectDao = new DAO\ProjectDao();
+        $taskDao = new DAO\TaskDao();
         $project = $projectDao->getProject($projectId);
         $org_id = $project->getOrganisationId();
         $orgDao = new DAO\OrganisationDao();
