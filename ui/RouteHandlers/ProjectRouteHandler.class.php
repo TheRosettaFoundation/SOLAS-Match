@@ -1743,7 +1743,6 @@ class ProjectRouteHandler
         }
 
         $re = curl_init(Common\Lib\Settings::get('discourse.url').'/posts');
-error_log(print_r($fields, true));
         curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
         curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
@@ -1759,7 +1758,6 @@ error_log(print_r($fields, true));
                 $projectDao->set_discourse_id($projectId, $topic_id);
             } else {
                 error_log('Discourse API error: No topic_id returned');
-error_log(print_r($response_data, true));
             }
         }
         curl_close($re);
