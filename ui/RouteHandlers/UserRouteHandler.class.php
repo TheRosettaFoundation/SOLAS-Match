@@ -1702,9 +1702,7 @@ EOD;
                             $server_name = $_SERVER['SERVER_NAME'];
                             $re = curl_init('https://app.asana.com/api/1.0/tasks');
                             curl_setopt($re, CURLOPT_POSTFIELDS, array(
-$language_code_source|$language_code_target
-$project->getTitle()  {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getTitle())}
-                                'name' => "$language_code_source|$language_code_target, " . $user->getEmail(),
+                                'name' => "$language_code_source|$language_code_target, " . $project->getTitle() . ', ' . $user->getEmail(),
                                 'notes' => " https://$server_name/$user_id/profile , Target: $language_code_target, Deadline: " . gmdate('Y-m-d H:i:s', strtotime('10 days')) . " https://$server_name/project/$project_id/view https://$server_name/task/$translation_task_id/view",
                                 'projects' => '1127940658676844'
                                 )
@@ -1719,6 +1717,11 @@ $project->getTitle()  {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->get
                               error_log("Asana 4 API error ($error_number): " . curl_error($re));
                             }
                             curl_close($re);
+error_log(print_r(array(
+                                'name' => "$language_code_source|$language_code_target, " . $project->getTitle() . ', ' . $user->getEmail(),
+                                'notes' => " https://$server_name/$user_id/profile , Target: $language_code_target, Deadline: " . gmdate('Y-m-d H:i:s', strtotime('10 days')) . " https://$server_name/project/$project_id/view https://$server_name/task/$translation_task_id/view",
+                                'projects' => '1127940658676844'
+                                ), true));
 
                             $app->flashNow('success', '<a href="' . $app->urlFor('task-view', ['task_id' => $translation_task_id]) .
                             '">This is your Translation Test</a>, which you <strong>must</strong> translate using Kató TM. You will find the <strong>Translate using Kató TM</strong> button under the Translation Test task in your <strong>Claimed Tasks</strong> section, which you can find in the upper menu. You will need to refresh that page after a few minutes in order to see the task and button. Please check your email inbox in a few minutes for instructions on completing the test');
