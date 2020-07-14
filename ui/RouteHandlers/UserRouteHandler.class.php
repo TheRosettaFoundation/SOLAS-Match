@@ -1699,10 +1699,11 @@ EOD;
                             $userDao->queue_claim_task($user_id, $translation_task_id);
 
                             // Asana 4th Project
+                            $server_name = $_SERVER['SERVER_NAME'];
                             $re = curl_init('https://app.asana.com/api/1.0/tasks');
                             curl_setopt($re, CURLOPT_POSTFIELDS, array(
-                                'name' => $user->getEmail(),
-                                'notes' => ' https://' . $_SERVER['SERVER_NAME'] . "/$user_id/profile , Target: $language_code_target, Deadline: " . gmdate('Y-m-d H:i:s', strtotime('10 days')) . ' https://' . $_SERVER['SERVER_NAME'] . "/project/$project_id/view",
+                                'name' => "$language_code_source|$language_code_target, " . $project->getTitle() . ', ' . $user->getEmail(),
+                                'notes' => " https://$server_name/$user_id/profile , Target: $language_code_target, Deadline: " . gmdate('Y-m-d H:i:s', strtotime('10 days')) . " https://$server_name/project/$project_id/view https://$server_name/task/$translation_task_id/view",
                                 'projects' => '1127940658676844'
                                 )
                             );

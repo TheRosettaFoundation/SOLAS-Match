@@ -1643,7 +1643,7 @@ error_log(print_r($result, true));
         if (!empty($howheards)) {
             $howheard_list[$howheards[0]['howheard_key']]['state'] = 1;
         } elseif ($referer = $this->get_tracked_registration($user_id)) {
-            if (in_array($referer, ['RWS Moravia', 'CIOL', 'Riskified', 'Welocalize', 'Lionbridge'])) $howheard_list['Referral']['state'] = 1;
+            if (in_array($referer, ['RWS Moravia', 'CIOL', 'Riskified', 'Welocalize', 'Lionbridge', 'Apala', 'Ei Ei', 'Muhannad', 'Paul', 'Rodrigue', 'Diane', 'Simon M.', 'Mahmud', 'Kamal', 'Fatima', 'Halima', 'Ibrahim', 'Abdulwahab', 'Alhaji', 'Ali Abdulrahman', 'Amajam', 'Buba Gameche', 'Jacob', 'Jagila', 'Mustapha', 'Valerie', 'Ivana', 'Renwar', 'Marwan', 'Simon W.', 'Hussain', 'Thalia', 'Claudia', 'Carolina', 'Ravija', 'Facebook', 'Twitter', 'Instagram', 'Linkedin'])) $howheard_list['Referral']['state'] = 1;
         }
         return $howheard_list;
     }
