@@ -1701,7 +1701,10 @@ EOD;
                             // Asana 4th Project
                             $re = curl_init('https://app.asana.com/api/1.0/tasks');
                             curl_setopt($re, CURLOPT_POSTFIELDS, array(
+$language_code_source|$language_code_target
+$project->getTitle()  {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getTitle())}
                                 'name' => $user->getEmail(),
+at end https://kato.translatorswb.org/task/{$user_row['task_id']}/view
                                 'notes' => ' https://' . $_SERVER['SERVER_NAME'] . "/$user_id/profile , Target: $language_code_target, Deadline: " . gmdate('Y-m-d H:i:s', strtotime('10 days')) . ' https://' . $_SERVER['SERVER_NAME'] . "/project/$project_id/view",
                                 'projects' => '1127940658676844'
                                 )
