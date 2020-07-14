@@ -1620,8 +1620,10 @@ EOD;
                 if (!empty($source_language_country) && !empty($target_language_country) &&
                     (empty($testing_center_projects_by_code["$language_code_source-$language_code_target"]) || $isSiteAdmin)) { // Protect against browser manipulation or duplicate
                     $user_id_owner = 62927; // translators@translatorswithoutborders.org
+$user_id_owner = 25016;//DEV SERVERDEL
 
                     $projects_to_copy = [16987, 16982];
+$projects_to_copy = [9149, 9151, 9152, 9153];//DEV SERVERDEL
                     $n = count($projects_to_copy);
                     $test_number = mt_rand(0, $n - 1); // Pick a random $projects_to_copy test file
                     $i = $n;
@@ -1638,6 +1640,7 @@ EOD;
                         $project = new Common\Protobufs\Models\Project();
                         $project->setTitle('Test' . UserRouteHandler::random_string(4));
                         $project->setOrganisationId(643); // TWB Community&Recruitment
+$project->setOrganisationId(380);//DEV SERVERDEL
                         $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
                         $project->setDeadline(gmdate('Y-m-d H:i:s', strtotime('25 days'))); // 10 days for Translation + 14 for Revision added + 1 to get to Project Deadline
                         $project->setDescription('-');
