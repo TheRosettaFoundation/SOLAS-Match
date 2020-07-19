@@ -129,6 +129,12 @@ class UserRouteHandler
         )->name('users_tracked');
 
         $app->get(
+            '/download_users_tracked/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_users_tracked')
+        )->name('download_users_tracked');
+
+        $app->get(
             '/download_users_new/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'download_users_new')
@@ -1496,6 +1502,34 @@ EOD;
         $all_users = $userDao->users_tracked();
         $app->view()->appendData(array('all_users' => $all_users));
         $app->render('user/users_tracked.tpl');
+    }
+
+    public function download_users_tracked()
+    {
+        $userDao = new DAO\UserDao();
+        $all_users = $userDao->users_tracked();
+
+        $data = "\xEF\xBB\xBF" . '"Tracked","Name","Created","Native Language","Language Pairs","Biography","Certificates","Email"' . "\n";
+
+        foreach ($all_users as $user_row) {
+            $data .= '"' . str_replace('"', '""', $user_row['referer']) . '","' .
+                str_replace('"', '""', $user_row['name']) . '","' .
+                $user_row['created_time'] . '","' .
+                str_replace('"', '""', $user_row['native_language']) . '","' .
+                $user_row['language_pairs'] . '","' .
+                str_replace(array('\r\n', '\n', '\r'), "\n", str_replace('"', '""', $user_row['bio'])) . '","' .
+                $user_row['certificates'] . '","' .
+                $user_row['email'] . '"' . "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="users_tracked.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
     }
 
     /**
