@@ -226,6 +226,7 @@ $from_neon_to_trommons_pair = array(
 'Arabic Sudan' => array('apd', 'SD'),
 'Bura-Pabir' => array('bwr', 'NG'),
 'Cibak' => array('ckl', 'NG'),
+'Kibaku' => array('ckl', 'NG'),
 'Lamang' => array('hia', 'NG'),
 'Levantine Arabic' => array('apc', 'SY'),
 'Central Makhuwa' => array('vmw', 'MZ'),
