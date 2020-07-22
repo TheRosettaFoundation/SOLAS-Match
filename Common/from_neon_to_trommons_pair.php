@@ -283,6 +283,8 @@ $from_neon_to_trommons_pair = array(
 
 'Mongo' => array('lol', 'CD'),
 'Ngombe' => array('ngc', 'CD'),
+
+'Nuer' => array('nus', 'SS'),
 );
 
 $language_options_changes = [
