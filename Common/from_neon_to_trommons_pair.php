@@ -128,6 +128,8 @@ $from_neon_to_trommons_pair = array(
 'Mizo' => array('lus', 'IN'),
 'Chadian Arabic' => array('shu', 'TD'),
 'Chadian Arabic Latin' => array('shu', 'NG'),
+'Shuwa Arabic' => array('shu', 'TD'),
+'Shuwa Arabic Latin' => array('shu', 'NG'),
 'Kamba' => array('kam', 'KE'),
 'Margi' => array('mrt', 'NG'),
 'Borana' => array('gax', 'KE'),
@@ -226,6 +228,7 @@ $from_neon_to_trommons_pair = array(
 'Arabic Sudan' => array('apd', 'SD'),
 'Bura-Pabir' => array('bwr', 'NG'),
 'Cibak' => array('ckl', 'NG'),
+'Kibaku' => array('ckl', 'NG'),
 'Lamang' => array('hia', 'NG'),
 'Levantine Arabic' => array('apc', 'SY'),
 'Central Makhuwa' => array('vmw', 'MZ'),
@@ -276,13 +279,15 @@ $from_neon_to_trommons_pair = array(
 
 'Lao' => array('lo', 'LA'),
 
-'Oromo' => array('om', 'KE'),
+'Oromo' => array('om', 'ET'),
 'Pokot' => array('pko', 'KE'),
 'Turkana' => array('tuv', 'KE'),
 'Samburu' => array('saq', 'KE'),
 
 'Mongo' => array('lol', 'CD'),
 'Ngombe' => array('ngc', 'CD'),
+
+'Nuer' => array('nus', 'SS'),
 );
 
 $language_options_changes = [
@@ -299,6 +304,7 @@ $language_options_changes = [
   'sr-ME#' => 'Montenegrin',
   'no-NO#' => 'Norwegian',
   'xen---' => 'Plain English',
+  'ln---#' => 'Lingala Makanja',
 ];
 
 $from_neon_to_trommons_pair_options_remove = [

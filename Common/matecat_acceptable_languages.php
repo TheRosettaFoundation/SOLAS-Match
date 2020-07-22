@@ -295,4 +295,6 @@
 
 'lol' => 'lol-CD',
 'ngc' => 'ngc-CD',
+
+'nus' => 'nus-SS',
 );
