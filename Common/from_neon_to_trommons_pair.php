@@ -276,7 +276,7 @@ $from_neon_to_trommons_pair = array(
 
 'Lao' => array('lo', 'LA'),
 
-'Oromo' => array('om', 'KE'),
+'Oromo' => array('om', 'ET'),
 'Pokot' => array('pko', 'KE'),
 'Turkana' => array('tuv', 'KE'),
 'Samburu' => array('saq', 'KE'),
