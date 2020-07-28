@@ -15,12 +15,12 @@ DROP VIEW IF EXISTS `ArchivedProjects`;
 -- Creating temporary table to overcome VIEW dependency errors
 CREATE TABLE `ArchivedProjects` (
 	`id` INT(10) UNSIGNED NOT NULL,
-	`title` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
-	`description` VARCHAR(4096) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`impact` VARCHAR(4096) NOT NULL COLLATE 'utf8_unicode_ci',
+	`title` VARCHAR(128) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+	`description` VARCHAR(4096) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`impact` VARCHAR(4096) NOT NULL COLLATE 'utf8mb4_unicode_ci',
 	`deadline` DATETIME NOT NULL,
 	`organisationId` INT(10) UNSIGNED NOT NULL,
-	`reference` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`reference` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
 	`wordCount` INT(10) NOT NULL,
 	`created` DATETIME NOT NULL,
 	`languageId` INT(10) UNSIGNED NOT NULL,
@@ -36,8 +36,8 @@ DROP VIEW IF EXISTS `ArchivedTasks`;
 CREATE TABLE `ArchivedTasks` (
 	`id` BIGINT(20) UNSIGNED NOT NULL,
 	`project_id` INT(20) UNSIGNED NOT NULL,
-	`title` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
-	`comment` VARCHAR(4096) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`title` VARCHAR(128) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+	`comment` VARCHAR(4096) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
 	`deadline` DATETIME NOT NULL,
 	`word-count` INT(11) NOT NULL,
 	`created-time` DATETIME NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE `ArchivedTasks` (
 	`country_id-target` INT(11) UNSIGNED NOT NULL,
 	`taskType_id` INT(11) UNSIGNED NOT NULL,
 	`taskStatus_id` INT(11) UNSIGNED NOT NULL,
-	`published` VARCHAR(50) NOT NULL COLLATE 'utf8_unicode_ci',
+	`published` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_unicode_ci',
 	`volenteerID` INT(10) UNSIGNED NULL DEFAULT NULL,
 	`archiverId` INT(10) UNSIGNED NOT NULL,
 	`archiveDate` DATETIME NOT NULL
@@ -60,8 +60,8 @@ DROP VIEW IF EXISTS `Badges`;
 CREATE TABLE `Badges` (
 	`id` INT(11) NOT NULL DEFAULT '0',
 	`owner_id` INT(11) UNSIGNED NULL DEFAULT NULL,
-	`title` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
-	`description` MEDIUMTEXT NOT NULL COLLATE 'utf8_unicode_ci'
+	`title` VARCHAR(128) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+	`description` MEDIUMTEXT NOT NULL COLLATE 'utf8mb4_unicode_ci'
 ) ENGINE=MyISAM;
 
 
@@ -70,8 +70,8 @@ DROP VIEW IF EXISTS `Countries`;
 -- Creating temporary table to overcome VIEW dependency errors
 CREATE TABLE `Countries` (
 	`id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-	`code` VARCHAR(2) NOT NULL COMMENT '"IE", for example' COLLATE 'utf8_unicode_ci',
-	`name` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci'
+	`code` VARCHAR(2) NOT NULL COMMENT '"IE", for example' COLLATE 'utf8mb4_unicode_ci',
+	`name` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci'
 ) ENGINE=MyISAM;
 
 
@@ -102,8 +102,8 @@ DROP VIEW IF EXISTS `Languages`;
 -- Creating temporary table to overcome VIEW dependency errors
 CREATE TABLE `Languages` (
 	`id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-	`code` VARCHAR(3) NOT NULL COMMENT '"en", for example' COLLATE 'utf8_unicode_ci',
-	`name` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci'
+	`code` VARCHAR(3) NOT NULL COMMENT '"en", for example' COLLATE 'utf8mb4_unicode_ci',
+	`name` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci'
 ) ENGINE=MyISAM;
 
 
@@ -112,19 +112,19 @@ DROP VIEW IF EXISTS `NGOContacts`;
 -- Creating temporary table to overcome VIEW dependency errors
 CREATE TABLE `NGOContacts` (
 	`userId` INT(10) UNSIGNED NULL DEFAULT NULL,
-	`firstName` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`lastName` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`mobileNumber` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`businessNumber` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`jobTitle` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`address` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`city` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`country` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`firstName` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`lastName` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`mobileNumber` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`businessNumber` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`jobTitle` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`address` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`city` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`country` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
 	`NGOId` INT(10) UNSIGNED NOT NULL,
 	`id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-	`displayName` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`email` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
-	`biography` TEXT NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`displayName` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`email` VARCHAR(128) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+	`biography` TEXT NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
 	`languageID` INT(10) UNSIGNED NULL DEFAULT NULL,
 	`countryID` INT(10) UNSIGNED NULL DEFAULT NULL,
 	`createdtime` DATETIME NOT NULL
@@ -136,14 +136,14 @@ DROP VIEW IF EXISTS `NGOs`;
 -- Creating temporary table to overcome VIEW dependency errors
 CREATE TABLE `NGOs` (
 	`id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-	`name` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
-	`biography` VARCHAR(4096) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`homePage` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`email` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`address` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`city` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`country` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`regionalFocus` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci'
+	`name` VARCHAR(128) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+	`biography` VARCHAR(4096) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`homePage` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`email` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`address` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`city` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`country` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`regionalFocus` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci'
 ) ENGINE=MyISAM;
 
 
@@ -152,12 +152,12 @@ DROP VIEW IF EXISTS `Projects`;
 -- Creating temporary table to overcome VIEW dependency errors
 CREATE TABLE `Projects` (
 	`id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-	`title` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
-	`description` VARCHAR(4096) NOT NULL COLLATE 'utf8_unicode_ci',
-	`impact` VARCHAR(4096) NOT NULL COLLATE 'utf8_unicode_ci',
+	`title` VARCHAR(128) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+	`description` VARCHAR(4096) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+	`impact` VARCHAR(4096) NOT NULL COLLATE 'utf8mb4_unicode_ci',
 	`deadline` DATETIME NOT NULL,
 	`organisationId` INT(10) UNSIGNED NOT NULL,
-	`reference` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`reference` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
 	`wordCount` INT(10) UNSIGNED NOT NULL,
 	`created` DATETIME NOT NULL,
 	`languageId` INT(10) UNSIGNED NOT NULL,
@@ -180,7 +180,7 @@ CREATE TABLE `SecondaryLanguages` (
 DROP VIEW IF EXISTS `Stats`;
 -- Creating temporary table to overcome VIEW dependency errors
 CREATE TABLE `Stats` (
-	`name` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
+	`name` VARCHAR(128) NOT NULL COLLATE 'utf8mb4_unicode_ci',
 	`value` DOUBLE NOT NULL
 ) ENGINE=MyISAM;
 
@@ -196,7 +196,7 @@ CREATE TABLE `TaskReviews` (
 	`grammar` INT(11) UNSIGNED NOT NULL,
 	`spelling` INT(11) UNSIGNED NOT NULL,
 	`consistency` INT(11) UNSIGNED NOT NULL,
-	`comment` VARCHAR(2048) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci'
+	`comment` VARCHAR(2048) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci'
 ) ENGINE=MyISAM;
 
 
@@ -206,7 +206,7 @@ DROP VIEW IF EXISTS `Tasks`;
 CREATE TABLE `Tasks` (
 	`id` BIGINT(20) UNSIGNED NOT NULL DEFAULT '0',
 	`projectId` INT(20) UNSIGNED NOT NULL,
-	`title` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
+	`title` VARCHAR(128) NOT NULL COLLATE 'utf8mb4_unicode_ci',
 	`wordCount` INT(11) NULL DEFAULT NULL,
 	`sourceLanguageId` INT(11) UNSIGNED NOT NULL,
 	`targetLanguageId` INT(11) UNSIGNED NOT NULL,
@@ -214,12 +214,12 @@ CREATE TABLE `Tasks` (
 	`targetCountryId` INT(11) UNSIGNED NOT NULL,
 	`createdTime` DATETIME NOT NULL,
 	`deadline` DATETIME NOT NULL,
-	`comment` VARCHAR(4096) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`comment` VARCHAR(4096) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
 	`taskTypeId` INT(11) UNSIGNED NOT NULL,
 	`taskStatusId` INT(11) UNSIGNED NOT NULL,
-	`published` VARCHAR(50) NOT NULL COLLATE 'utf8_unicode_ci',
-	`filename` TEXT NOT NULL COLLATE 'utf8_unicode_ci',
-	`contentType` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`published` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+	`filename` TEXT NOT NULL COLLATE 'utf8mb4_unicode_ci',
+	`contentType` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
 	`creatorId` INT(11) UNSIGNED NOT NULL COMMENT 'Null while we don\'t have logging in',
 	`volenteerId` INT(11) UNSIGNED NULL DEFAULT NULL
 ) ENGINE=MyISAM;
@@ -230,8 +230,8 @@ DROP VIEW IF EXISTS `UnVerifiedUsers`;
 -- Creating temporary table to overcome VIEW dependency errors
 CREATE TABLE `UnVerifiedUsers` (
 	`id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-	`displayName` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`email` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
+	`displayName` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`email` VARCHAR(128) NOT NULL COLLATE 'utf8mb4_unicode_ci',
 	`createdTime` DATETIME NOT NULL
 ) ENGINE=MyISAM;
 
@@ -241,18 +241,18 @@ DROP VIEW IF EXISTS `UserBadges`;
 -- Creating temporary table to overcome VIEW dependency errors
 CREATE TABLE `UserBadges` (
 	`id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-	`displayName` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`email` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
-	`biography` TEXT NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`displayName` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`email` VARCHAR(128) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+	`biography` TEXT NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
 	`languageId` INT(10) UNSIGNED NULL DEFAULT NULL,
 	`countryId` INT(10) UNSIGNED NULL DEFAULT NULL,
-	`city` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`country` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`city` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`country` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
 	`createdTime` DATETIME NOT NULL,
 	`badgeId` INT(11) NOT NULL DEFAULT '0',
 	`badgeCreator` INT(11) UNSIGNED NULL DEFAULT NULL,
-	`title` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
-	`description` MEDIUMTEXT NOT NULL COLLATE 'utf8_unicode_ci'
+	`title` VARCHAR(128) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+	`description` MEDIUMTEXT NOT NULL COLLATE 'utf8mb4_unicode_ci'
 ) ENGINE=MyISAM;
 
 
@@ -260,12 +260,12 @@ CREATE TABLE `UserBadges` (
 DROP VIEW IF EXISTS `UserLanguages`;
 -- Creating temporary table to overcome VIEW dependency errors
 CREATE TABLE `UserLanguages` (
-	`displayName` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`email` VARCHAR(128) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-	`Language_code` VARCHAR(3) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-	`Language_name` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`Country_code` VARCHAR(2) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-	`Country_name` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci'
+	`displayName` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`email` VARCHAR(128) NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+	`Language_code` VARCHAR(3) NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+	`Language_name` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`Country_code` VARCHAR(2) NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+	`Country_name` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci'
 ) ENGINE=MyISAM;
 
 
@@ -274,13 +274,13 @@ DROP VIEW IF EXISTS `Users`;
 -- Creating temporary table to overcome VIEW dependency errors
 CREATE TABLE `Users` (
 	`id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-	`displayName` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`email` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
-	`biography` TEXT NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`displayName` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`email` VARCHAR(128) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+	`biography` TEXT NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
 	`languageId` INT(10) UNSIGNED NULL DEFAULT NULL,
 	`countryId` INT(10) UNSIGNED NULL DEFAULT NULL,
-	`city` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`country` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`city` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`country` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
 	`createdTime` DATETIME NOT NULL
 ) ENGINE=MyISAM;
 

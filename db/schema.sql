@@ -501,18 +501,18 @@ CREATE TABLE IF NOT EXISTS `Admins` (
 	INDEX `FK_Admins_Organisations` (`organisation_id`),
 	CONSTRAINT `FK_Admins_Organisations` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT `FK_Admins_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 
 -- Dumping structure for table debug-test.ArchivedProjects
 CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
   `id` int(10) unsigned NOT NULL,
-  `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `description` varchar(4096) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `impact` varchar(4096) COLLATE utf8_unicode_ci NOT NULL,
+  `title` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(4096) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `impact` varchar(4096) COLLATE utf8mb4_unicode_ci NOT NULL,
   `deadline` datetime NOT NULL,
   `organisation_id` int(10) unsigned NOT NULL,
-  `reference` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `reference` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `word-count` int(10) NOT NULL,
   `created` datetime NOT NULL,
   `language_id` int(10) unsigned NOT NULL,
@@ -527,7 +527,7 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
   CONSTRAINT `FK_archivedproject_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ArchivedProjects_Languages` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ArchivedProjects_Countries` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 DROP PROCEDURE IF EXISTS alterTable;
  DELIMITER //
@@ -569,26 +569,26 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjectsMetadata` (
   `archivedProject_id` int(10) unsigned NOT NULL,
   `user_id-archived` int(10) unsigned NOT NULL,
   `user_id-projectCreator` int(10) unsigned NOT NULL,
-  `filename` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `file-token` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `mime-type` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `filename` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `file-token` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mime-type` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   `archived-date` datetime NOT NULL,
-  `tags` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `tags` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   UNIQUE KEY `archivedProject_id` (`archivedProject_id`),
   KEY `FK_ArchivedProjectsMetadata_Users` (`user_id-archived`),
   KEY `FK_ArchivedProjectsMetadata_Users_2` (`user_id-projectCreator`),
   CONSTRAINT `FK_ArchivedProjectsMetadata_ArchivedProjects` FOREIGN KEY (`archivedProject_id`) REFERENCES `ArchivedProjects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ArchivedProjectsMetadata_Users` FOREIGN KEY (`user_id-archived`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ArchivedProjectsMetadata_Users_2` FOREIGN KEY (`user_id-projectCreator`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 
 -- Dumping structure for table debug-test.ArchivedTasks
 CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
   `id` bigint(20) unsigned NOT NULL,
   `project_id` int(10) unsigned NOT NULL,
-  `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `comment` varchar(4096) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `title` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `comment` varchar(4096) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `deadline` datetime NOT NULL,
   `word-count` int(11) NOT NULL,
   `created-time` datetime NOT NULL,
@@ -612,19 +612,19 @@ CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
   CONSTRAINT `FK_ArchivedTasks_Languages_2` FOREIGN KEY (`language_id-target`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ArchivedTasks_TaskStatus` FOREIGN KEY (`taskStatus_id`) REFERENCES `TaskStatus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ArchivedTasks_TaskTypes` FOREIGN KEY (`taskType_id`) REFERENCES `TaskTypes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 
 -- Dumping structure for table debug-test.ArchivedTasksMetadata
 CREATE TABLE IF NOT EXISTS `ArchivedTasksMetadata` (
   `archivedTask_id` bigint(20) unsigned NOT NULL,
   `version` int(10) unsigned DEFAULT NULL,
-  `filename` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `content-type` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `filename` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `content-type` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `upload-time` datetime DEFAULT NULL,
   `user_id-claimed` int(10) unsigned DEFAULT NULL,
   `user_id-archived` int(10) unsigned NOT NULL,
-  `prerequisites` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `prerequisites` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `user_id-taskCreator` int(10) unsigned DEFAULT NULL,
   `archived-date` datetime NOT NULL,
   UNIQUE KEY `archivedTask_id` (`archivedTask_id`),
@@ -635,19 +635,19 @@ CREATE TABLE IF NOT EXISTS `ArchivedTasksMetadata` (
   CONSTRAINT `FK_ArchivedTasksMetadata_Users` FOREIGN KEY (`user_id-claimed`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ArchivedTasksMetadata_Users_2` FOREIGN KEY (`user_id-archived`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ArchivedTasksMetadata_Users_3` FOREIGN KEY (`user_id-taskCreator`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 
 -- Dumping structure for table Solas-Match-Test.Badges
 CREATE TABLE IF NOT EXISTS `Badges` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `owner_id` int(11) unsigned DEFAULT NULL,
-  `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `description` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+  `title` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `badge` (`owner_id`,`title`),
   CONSTRAINT `FK_badges_organisation` FOREIGN KEY (`owner_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 
 -- Dumping structure for table debug-test3.BannedOrganisations
@@ -655,7 +655,7 @@ CREATE TABLE IF NOT EXISTS `BannedOrganisations` (
   `org_id` int(10) unsigned NOT NULL,
   `user_id-admin` int(10) unsigned NOT NULL,
   `bannedtype_id` int(10) unsigned NOT NULL,
-  `comment` varchar(4096) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `comment` varchar(4096) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `banned-date` datetime NOT NULL,
   UNIQUE KEY `org_id` (`org_id`),
   KEY `FK_BannedOrganisations_Users` (`user_id-admin`),
@@ -663,16 +663,16 @@ CREATE TABLE IF NOT EXISTS `BannedOrganisations` (
   CONSTRAINT `FK_BannedOrganisations_BannedTypes` FOREIGN KEY (`bannedtype_id`) REFERENCES `BannedTypes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_BannedOrganisations_Organisations` FOREIGN KEY (`org_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_BannedOrganisations_Users` FOREIGN KEY (`user_id-admin`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 
 -- Dumping structure for table debug-test3.BannedTypes
 CREATE TABLE IF NOT EXISTS `BannedTypes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `type` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `type` (`type`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 REPLACE INTO `BannedTypes` (`id`, `type`) VALUES
 	(1, 'Day'),
@@ -686,7 +686,7 @@ CREATE TABLE IF NOT EXISTS `BannedUsers` (
   `user_id` int(10) unsigned NOT NULL,
   `user_id-admin` int(10) unsigned NOT NULL,
   `bannedtype_id` int(10) unsigned NOT NULL,
-  `comment` varchar(4096) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `comment` varchar(4096) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `banned-date` datetime NOT NULL,
   UNIQUE KEY `user_id` (`user_id`),
   KEY `FK_BannedUsers_Users_2` (`user_id-admin`),
@@ -694,7 +694,7 @@ CREATE TABLE IF NOT EXISTS `BannedUsers` (
   CONSTRAINT `FK_BannedUsers_BannedTypes` FOREIGN KEY (`bannedtype_id`) REFERENCES `BannedTypes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_BannedUsers_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_BannedUsers_Users_2` FOREIGN KEY (`user_id-admin`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table Solas-Match-Test.Badges: ~4 rows (approximately)
 /*!40000 ALTER TABLE `Badges` DISABLE KEYS */;
@@ -715,22 +715,22 @@ ALTER TABLE `Badges` AUTO_INCREMENT=100;
 -- Dumping structure for table Solas-Match-Test.Countries
 CREATE TABLE IF NOT EXISTS `Countries` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(2) COLLATE utf8_unicode_ci NOT NULL COMMENT '"IE", for example',
-  `en-name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `code` varchar(2) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '"IE", for example',
+  `en-name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
 -- Dumping structure for table Solas-Match-Test.Languages
 CREATE TABLE IF NOT EXISTS `Languages` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(3) COLLATE utf8_unicode_ci NOT NULL COMMENT '"en", for example',
-  `en-name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `code` varchar(3) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '"en", for example',
+  `en-name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -738,10 +738,10 @@ CREATE TABLE IF NOT EXISTS `Languages` (
 -- Dumping structure for table Solas-Match-Test.NotificationIntervals
 CREATE TABLE IF NOT EXISTS `NotificationIntervals` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 REPLACE INTO `NotificationIntervals` (`id`, `name`) VALUES
 	(1, "Daily"),
@@ -757,56 +757,56 @@ CREATE TABLE IF NOT EXISTS `OrganisationMembers` (
   KEY `FK_organisation_member_organisation` (`organisation_id`),
   CONSTRAINT `FK_organisation_member_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_organisation_member_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
 -- Dumping structure for table Solas-Match-Test.Organisations
 CREATE TABLE IF NOT EXISTS `Organisations` (
 	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-	`name` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
-	`biography` VARCHAR(4096) NULL COLLATE 'utf8_unicode_ci',
-	`home-page` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`name` VARCHAR(128) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+	`biography` VARCHAR(4096) NULL COLLATE 'utf8mb4_unicode_ci',
+	`home-page` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
 	`e-mail` VARCHAR(128) NULL,
-	`address` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`city` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`country` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`regional-focus` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`address` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`city` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`country` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`regional-focus` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
 	PRIMARY KEY (`id`),
 	UNIQUE INDEX `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
 
 CREATE TABLE IF NOT EXISTS `OrganisationExtendedProfiles` (
   `id` INT(10) UNSIGNED NOT NULL,
-  `facebook`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `linkedin`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `primaryContactName`  VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `primaryContactTitle` VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `primaryContactEmail` VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `primaryContactPhone` VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `otherContacts`       VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `structure`           VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `affiliations`        VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `urlVideo1`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `urlVideo2`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `urlVideo3`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `subjectMatters`      VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `activitys`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `employees`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `fundings`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `finds`               VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `translations`        VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `requests`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `contents`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `pages`               VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `sources`             VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `targets`             VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `oftens`              VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `facebook`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `linkedin`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `primaryContactName`  VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `primaryContactTitle` VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `primaryContactEmail` VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `primaryContactPhone` VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `otherContacts`       VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `structure`           VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `affiliations`        VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `urlVideo1`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `urlVideo2`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `urlVideo3`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `subjectMatters`      VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `activitys`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `employees`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `fundings`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `finds`               VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `translations`        VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `requests`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `contents`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `pages`               VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `sources`             VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `targets`             VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `oftens`              VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 
 -- Dumping structure for table Solas-Match-Test.OrgRequests
@@ -820,7 +820,7 @@ CREATE TABLE IF NOT EXISTS `OrgRequests` (
   KEY `FK_org_request_queue_organisation` (`org_id`),
   CONSTRAINT `FK_org_request_queue_organisation1` FOREIGN KEY (`org_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_org_request_queue_user2` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -832,19 +832,19 @@ CREATE TABLE IF NOT EXISTS `OrgTranslatorBlacklist` (
   KEY `FK_OrgTranslatorBlacklist_Users` (`user_id`),
   CONSTRAINT `FK_OrgTranslatorBlacklist_Organisations` FOREIGN KEY (`org_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_OrgTranslatorBlacklist_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
 
 -- Dumping structure for table Solas-Match-Test.PasswordResetRequests
 CREATE TABLE IF NOT EXISTS `PasswordResetRequests` (
-  `uid` char(40) COLLATE utf8_unicode_ci NOT NULL,
+  `uid` char(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
   `request-time` datetime DEFAULT NULL,
   UNIQUE KEY `user_id` (`user_id`),
   CONSTRAINT `FK_password_reset_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -853,14 +853,14 @@ CREATE TABLE IF NOT EXISTS `PasswordResetRequests` (
 CREATE TABLE IF NOT EXISTS `ProjectFiles` (
   `project_id` int(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
-  `filename` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `file-token` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `mime-type` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `filename` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `file-token` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mime-type` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   UNIQUE KEY `project_id` (`project_id`),
   KEY `FK_ProjectFiles_Users` (`user_id`),
   CONSTRAINT `FK_ProjectFiles_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ProjectFiles_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -868,12 +868,12 @@ CREATE TABLE IF NOT EXISTS `ProjectFiles` (
 -- Dumping structure for table Solas-Match-Test.Projects
 CREATE TABLE IF NOT EXISTS `Projects` (
 	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-	`title` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
-	`description` VARCHAR(4096) NOT NULL COLLATE 'utf8_unicode_ci',
-	`impact` VARCHAR(4096) NOT NULL COLLATE 'utf8_unicode_ci',
+	`title` VARCHAR(128) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+	`description` VARCHAR(4096) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+	`impact` VARCHAR(4096) NOT NULL COLLATE 'utf8mb4_unicode_ci',
 	`deadline` DATETIME NOT NULL,
 	`organisation_id` INT(10) UNSIGNED NOT NULL,
-	`reference` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`reference` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
 	`word-count` INT(10) UNSIGNED NOT NULL,
 	`created` DATETIME NOT NULL,
 	`language_id` INT(10) UNSIGNED NOT NULL,
@@ -888,7 +888,7 @@ CREATE TABLE IF NOT EXISTS `Projects` (
 	CONSTRAINT `FK_Projects_Countries` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT `FK_Projects_Languages` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT `FK_project_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 DROP PROCEDURE IF EXISTS alterTable;
  DELIMITER //
@@ -934,36 +934,36 @@ CREATE TABLE IF NOT EXISTS `ProjectTags` (
   KEY `FK_ProjectTags_Tags` (`tag_id`),
   CONSTRAINT `FK_ProjectTags_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ProjectTags_Tags` FOREIGN KEY (`tag_id`) REFERENCES `Tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
 -- Dumping structure for table SolasMatch.RegisteredUsers
 CREATE TABLE IF NOT EXISTS `RegisteredUsers` (
   `user_id` int(10) unsigned NOT NULL,
-  `unique_id` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `unique_id` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   UNIQUE KEY `user_id` (`user_id`),
   CONSTRAINT `FK_RegisteredUsers_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
 
 -- Dumping structure for table Solas-Match-Test.Statistics
 CREATE TABLE IF NOT EXISTS `Statistics` (
-  `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   `value` double NOT NULL,
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 
 -- Dumping structure for table Solas-Match-Test.Tags
 CREATE TABLE IF NOT EXISTS `Tags` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `label` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `label` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `label` (`label`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -980,7 +980,7 @@ CREATE TABLE IF NOT EXISTS `TaskClaims` (
   KEY `FK_task_claim_user` (`user_id`),
   CONSTRAINT `FK_task_claim_task` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_task_claim_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `queue_claim_tasks` (
   task_id BIGINT(20) UNSIGNED NOT NULL,
@@ -988,7 +988,7 @@ CREATE TABLE IF NOT EXISTS `queue_claim_tasks` (
   UNIQUE KEY FK_queue_claim_tasks_task_id (task_id),
   CONSTRAINT FK_queue_claim_tasks_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT FK_queue_claim_tasks_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 
 -- Data exporting was unselected.
@@ -999,8 +999,8 @@ CREATE TABLE IF NOT EXISTS `TaskFileVersions` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `task_id` bigint(20) unsigned NOT NULL,
   `version_id` int(11) NOT NULL COMMENT 'Gets incremented within the code',
-  `filename` text COLLATE utf8_unicode_ci NOT NULL,
-  `content-type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `filename` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content-type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `user_id` int(10) unsigned NOT NULL COMMENT 'Null while we don''t have logging in',
   `upload-time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -1008,7 +1008,7 @@ CREATE TABLE IF NOT EXISTS `TaskFileVersions` (
   KEY `FK_task_file_version_user` (`user_id`),
   CONSTRAINT `FK_TaskFileVersions_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_TaskFileVersions_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -1022,7 +1022,7 @@ CREATE TABLE IF NOT EXISTS `TaskPrerequisites` (
   KEY `FK_TaskPrerequisites_Tasks_2` (`task_id-prerequisite`),
   CONSTRAINT `FK_TaskPrerequisites_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_TaskPrerequisites_Tasks_2` FOREIGN KEY (`task_id-prerequisite`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -1037,13 +1037,13 @@ CREATE TABLE IF NOT EXISTS `TaskReviews` (
   `spelling` int(11) unsigned NOT NULL,
   `consistency` int(11) unsigned NOT NULL,
   revise_task_id BIGINT(20) UNSIGNED DEFAULT NULL,
-  `comment` VARCHAR(8192) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `comment` VARCHAR(8192) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   UNIQUE KEY `user_task_project` (`task_id`,`user_id`,`project_id`),
   KEY key_revise_task_id (revise_task_id),
   CONSTRAINT `FK_TaskReviews_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_TaskReviews_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_TaskReviews_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -1051,7 +1051,7 @@ CREATE TABLE IF NOT EXISTS `TaskReviews` (
 CREATE TABLE IF NOT EXISTS `Tasks` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `project_id` int(10) unsigned NOT NULL,
-  `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `title` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   `word-count` int(11) DEFAULT NULL,
   `language_id-source` int(10) unsigned NOT NULL,
   `language_id-target` int(10) unsigned NOT NULL,
@@ -1059,7 +1059,7 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
   `country_id-target` int(10) unsigned NOT NULL,
   `created-time` datetime NOT NULL,
   `deadline` datetime NOT NULL,
-  `comment` varchar(4096) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `comment` varchar(4096) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `task-type_id` int(11) unsigned NOT NULL,
   `task-status_id` int(11) unsigned NOT NULL,
   `published` BIT(1) DEFAULT 0 NOT NULL,
@@ -1079,7 +1079,7 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
   CONSTRAINT `FK_Tasks_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_Tasks_TaskStatus` FOREIGN KEY (`task-status_id`) REFERENCES `TaskStatus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_Tasks_TaskTypes` FOREIGN KEY (`task-type_id`) REFERENCES `TaskTypes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -1089,16 +1089,16 @@ CREATE TABLE IF NOT EXISTS `TaskNotificationSent` (
   `notification` INT(10) UNSIGNED NOT NULL,
   PRIMARY KEY (`task_id`),
   CONSTRAINT `FK_TaskNotificationSent_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 
 -- Dumping structure for table Solas-Match-Test.TaskStatus
 CREATE TABLE IF NOT EXISTS `TaskStatus` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 REPLACE INTO `TaskStatus` (`id`, `name`) VALUES
 	(1, "Waiting PreReqs"),
@@ -1116,7 +1116,7 @@ CREATE TABLE IF NOT EXISTS `TaskTranslatorBlacklist` (
   KEY `FK_TaskTranslatorBlacklist_Users` (`user_id`),
   CONSTRAINT `FK_TaskTranslatorBlacklist_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_TaskTranslatorBlacklist_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -1124,10 +1124,10 @@ CREATE TABLE IF NOT EXISTS `TaskTranslatorBlacklist` (
 -- Dumping structure for table Solas-Match-Test.TaskTypes
 CREATE TABLE IF NOT EXISTS `TaskTypes` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 REPLACE INTO `TaskTypes` (`id`, `name`) VALUES
 	(1, "Segmentation"),
@@ -1147,7 +1147,7 @@ CREATE TABLE IF NOT EXISTS `TaskUnclaims` (
   UNIQUE KEY `Tasks` (`task_id`, `user_id`, `unclaimed-time`),
   KEY `FK_task_unclaim_user` (`user_id`),
   CONSTRAINT `FK_task_unclaim_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping structure for table Solas-Match-Test.UserBadges
 CREATE TABLE IF NOT EXISTS `UserBadges` (
@@ -1158,7 +1158,7 @@ CREATE TABLE IF NOT EXISTS `UserBadges` (
   KEY `FK_user_badges_badges` (`badge_id`),
   CONSTRAINT `FK_user_badges_badges` FOREIGN KEY (`badge_id`) REFERENCES `Badges` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_user_badges_users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -1166,12 +1166,12 @@ CREATE TABLE IF NOT EXISTS `UserBadges` (
 -- Dumping structure for table debug-test3.UserLogins
 CREATE TABLE IF NOT EXISTS `UserLogins` (
   `user_id` int(10) unsigned DEFAULT NULL,
-  `email` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `success` char(1) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `success` char(1) COLLATE utf8mb4_unicode_ci NOT NULL,
   `login-time` datetime NOT NULL,
   KEY `FK_UserLogins_Users` (`user_id`),
   CONSTRAINT `FK_UserLogins_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
  
 
 -- Dumping structure for table Solas-Match-Test.UserNotifications
@@ -1185,27 +1185,27 @@ CREATE TABLE IF NOT EXISTS `UserNotifications` (
   KEY `FK_user_notifications_task` (`task_id`),
   CONSTRAINT `FK_user_notifications_task1` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_user_notifications_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping structure for table big-merge.UserPersonalInformation
 CREATE TABLE IF NOT EXISTS `UserPersonalInformation` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
-  `first-name` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `last-name` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `mobile-number` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `business-number` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `first-name` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `last-name` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `mobile-number` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `business-number` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `language-preference` INT(10) UNSIGNED DEFAULT NULL,
-  `job-title` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `address` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `city` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `country` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `job-title` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `city` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `country` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `receive_credit` BIT(1) DEFAULT 0 NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`user_id`),
   CONSTRAINT `FK_UserPersonalInformation_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_UserPersonalInformation_Languages` FOREIGN KEY (`language-preference`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
@@ -1245,10 +1245,10 @@ DROP PROCEDURE alterTable;
 -- Dumping structure for table Solas-Match-Test.Users
 CREATE TABLE IF NOT EXISTS `Users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `display-name` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `email` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `password` char(128) COLLATE utf8_unicode_ci NOT NULL,
-  `biography` text COLLATE utf8_unicode_ci,
+  `display-name` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` char(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `biography` text COLLATE utf8mb4_unicode_ci,
   `language_id` int(10) unsigned DEFAULT NULL,
   `country_id` int(10) unsigned DEFAULT NULL,
   `nonce` int(11) unsigned NOT NULL,
@@ -1260,7 +1260,7 @@ CREATE TABLE IF NOT EXISTS `Users` (
   KEY `FK_user_country` (`country_id`),
   CONSTRAINT `FK_user_country` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_user_language` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -1275,7 +1275,7 @@ CREATE TABLE IF NOT EXISTS `UserSecondaryLanguages` (
 	CONSTRAINT `FK_UserSecondaryLanguages_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT `FK_UserSecondaryLanguages_Languages` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT `FK_UserSecondaryLanguages_Countries` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 
 -- Dumping structure for table Solas-Match-Test.UserTags
@@ -1288,7 +1288,7 @@ CREATE TABLE IF NOT EXISTS `UserTags` (
   KEY `FK_user_tag_user1` (`tag_id`),
   CONSTRAINT `FK_user_tag_tag1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_user_tag_user1` FOREIGN KEY (`tag_id`) REFERENCES `Tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -1303,7 +1303,7 @@ CREATE TABLE IF NOT EXISTS `UserTaskScores` (
   KEY `FK_user_task_score_task1` (`task_id`),
   CONSTRAINT `FK_user_task_score_task1` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_user_task_score_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -1311,7 +1311,7 @@ CREATE TABLE IF NOT EXISTS `UserTaskScoresUpdatedTime` (
   `id` int(10) unsigned NOT NULL,
   `unix_epoch` BIGINT(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping structure for table Solas-Match-Test.UserTaskStreamNotifications
 CREATE TABLE IF NOT EXISTS `UserTaskStreamNotifications` (
@@ -1323,14 +1323,14 @@ CREATE TABLE IF NOT EXISTS `UserTaskStreamNotifications` (
   UNIQUE KEY `user_id` (`user_id`),
   CONSTRAINT `FK_user_task_stream_notification_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_user_task_stream_notification_interval1` FOREIGN KEY (`interval`) REFERENCES `NotificationIntervals` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `SpecialTranslators` (
     user_id INT (10) UNSIGNED NOT NULL,
     type    INT (10) UNSIGNED DEFAULT 0,
     PRIMARY KEY FK_special_user_id (user_id),
     CONSTRAINT FK_special_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -1343,7 +1343,7 @@ CREATE TABLE IF NOT EXISTS `UserTrackedProjects` (
 	INDEX `FK_UserTrackedProjects_Projects` (`Project_id`),
 	CONSTRAINT `FK_UserTrackedProjects_Projects` FOREIGN KEY (`Project_id`) REFERENCES `Projects` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT `FK_UserTrackedProjects_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 -- Data exporting was unselected.
 
 
@@ -1355,7 +1355,7 @@ CREATE TABLE IF NOT EXISTS `UserTrackedTasks` (
 	INDEX `FK_UserTrackedTasks_Tasks` (`task_id`),
 	CONSTRAINT `FK_UserTrackedTasks_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT `FK_UserTrackedTasks_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping structure for table Solas-Match-UserTrackedOrganisations
 CREATE TABLE IF NOT EXISTS `UserTrackedOrganisations` (
@@ -1366,7 +1366,7 @@ CREATE TABLE IF NOT EXISTS `UserTrackedOrganisations` (
     INDEX `FK_UserTrackedOrganisations_Organisations` (`organisation_id`),
     CONSTRAINT `FK_UserTrackedOrganisations_Organisations` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT `FK_UserTrackedOrganisations_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Structure of table TaskViews
 CREATE TABLE IF NOT EXISTS `TaskViews` (
@@ -1379,7 +1379,7 @@ CREATE TABLE IF NOT EXISTS `TaskViews` (
   UNIQUE KEY `TaskViewTimeStamps` (`task_id`, `user_id`, `viewed-time`),
   KEY `FK_task_viewed_user` (`user_id`),
   CONSTRAINT `FK_task_viewed_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -1388,9 +1388,9 @@ CREATE TABLE IF NOT EXISTS Subscriptions (
   level INT(10) UNSIGNED NOT NULL,
   spare INT(10) UNSIGNED DEFAULT 0 NOT NULL,
   start_date DATETIME NOT NULL,
-  comment VARCHAR(255) COLLATE utf8_unicode_ci DEFAULT '',
+  comment VARCHAR(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
   PRIMARY KEY (organisation_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS SubscriptionsRecorded (
   time_stamp DATETIME NOT NULL,
@@ -1398,15 +1398,15 @@ CREATE TABLE IF NOT EXISTS SubscriptionsRecorded (
   level INT(10) UNSIGNED NOT NULL,
   spare INT(10) UNSIGNED DEFAULT 0 NOT NULL,
   start_date DATETIME NOT NULL,
-  comment VARCHAR(255) COLLATE utf8_unicode_ci DEFAULT '',
+  comment VARCHAR(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
   KEY (organisation_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `RestrictedTasks` (
   `restricted_task_id` BIGINT(20) UNSIGNED NOT NULL,
   UNIQUE KEY `FK_restricted_task_id` (`restricted_task_id`),
   CONSTRAINT `FK_restricted_task_id` FOREIGN KEY (`restricted_task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `WordCountRequestForProjects` (
     project_id INT(10) UNSIGNED NOT NULL,
@@ -1420,7 +1420,7 @@ CREATE TABLE IF NOT EXISTS `WordCountRequestForProjects` (
     KEY state (state),
     KEY FK_WordCountRequestForProjects_project_id (project_id),
     CONSTRAINT FK_WordCountRequestForProjects_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `WordCountRequestForProjectsErrors` (
     project_id INT(10) UNSIGNED NOT NULL,
@@ -1428,7 +1428,7 @@ CREATE TABLE IF NOT EXISTS `WordCountRequestForProjectsErrors` (
     message VARCHAR(255) NOT NULL,
     KEY FK_WordCountRequestForProjectsErrors_project_id (project_id),
     CONSTRAINT FK_WordCountRequestForProjectsErrors_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `MatecatLanguagePairs` (
     task_id BIGINT(20) UNSIGNED NOT NULL,
@@ -1442,7 +1442,7 @@ CREATE TABLE IF NOT EXISTS `MatecatLanguagePairs` (
     CONSTRAINT FK_matecat_language_pair_task_id FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     KEY FK_matecat_language_pair_project_id (project_id),
     CONSTRAINT FK_matecat_language_pair_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `TaskChunks` (
     task_id BIGINT(20) UNSIGNED NOT NULL,
@@ -1458,7 +1458,7 @@ CREATE TABLE IF NOT EXISTS `TaskChunks` (
     KEY FK_task_chunks_matecat_id_job (matecat_id_job),
     KEY FK_task_chunks_project_id (project_id),
     CONSTRAINT FK_task_chunks_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `UserQualifiedPairs` (
   user_id              INT(10) UNSIGNED NOT NULL,
@@ -1478,21 +1478,21 @@ CREATE TABLE IF NOT EXISTS `UserQualifiedPairs` (
   CONSTRAINT `FK_UserQualifiedPairs_country_id_source`  FOREIGN KEY (`country_id_source`)  REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT `FK_UserQualifiedPairs_language_id_target` FOREIGN KEY (`language_id_target`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT `FK_UserQualifiedPairs_country_id_target`  FOREIGN KEY (`country_id_target`)  REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `RequiredOrgQualificationLevels` (
   org_id                       INT(10) UNSIGNED NOT NULL,
   required_qualification_level INT(10) UNSIGNED NOT NULL,
   PRIMARY KEY (org_id),
   CONSTRAINT `FK_RequiredOrgQualificationLevels_org_id` FOREIGN KEY (`org_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `RequiredTaskQualificationLevels` (
   task_id                      BIGINT(20) UNSIGNED NOT NULL,
   required_qualification_level INT(10)    UNSIGNED NOT NULL,
   PRIMARY KEY (task_id),
   CONSTRAINT `FK_RequiredTaskQualificationLevels_task_id` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `OrgIDMatchingNeon` (
   org_id_neon  INT(10) UNSIGNED NOT NULL,
@@ -1501,12 +1501,12 @@ CREATE TABLE IF NOT EXISTS `OrgIDMatchingNeon` (
   PRIMARY KEY (org_id_neon),
   KEY FK_OrgIDMatchingNeon_Organisations (org_id),
   CONSTRAINT FK_OrgIDMatchingNeon_Organisations FOREIGN KEY (org_id) REFERENCES Organisations (id) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `TaskTranslatedInMatecat` (
   `task_id` BIGINT(20) UNSIGNED NOT NULL,
   PRIMARY KEY (`task_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `TaskInviteSentToUsers` (
     task_id BIGINT(20) UNSIGNED NOT NULL,
@@ -1516,14 +1516,14 @@ CREATE TABLE IF NOT EXISTS `TaskInviteSentToUsers` (
     CONSTRAINT FK_invite_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE,
     KEY FK_invite_user_id (user_id),
     CONSTRAINT FK_invite_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `TermsAcceptedUsers` (
     user_id        INT (10) UNSIGNED NOT NULL,
     accepted_level INT (10) UNSIGNED NOT NULL,
     UNIQUE KEY FK_terms_user_id (user_id),
     CONSTRAINT FK_terms_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `PrivateTMKeys` (
     project_id INT(10) UNSIGNED NOT NULL,
@@ -1533,7 +1533,7 @@ CREATE TABLE IF NOT EXISTS `PrivateTMKeys` (
     private_tm_key     VARCHAR(255) NOT NULL,
     KEY FK_PrivateTMKeys_project_id (project_id),
     CONSTRAINT FK_PrivateTMKeys_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `UserNeonAccount` (
   user_id    INT(10) UNSIGNED NOT NULL,
@@ -1541,14 +1541,14 @@ CREATE TABLE IF NOT EXISTS `UserNeonAccount` (
   PRIMARY KEY FK_UserNeonAccount_user_id (user_id),
   KEY         account_id                 (account_id),
   CONSTRAINT FK_UserNeonAccount_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `MatecatRecordedJobStatus` (
     matecat_id_job          INT(10) UNSIGNED NOT NULL,
     matecat_id_job_password VARCHAR(50) NOT NULL,
     job_status              VARCHAR(20) NOT NULL,
     UNIQUE KEY job_job_password (matecat_id_job, matecat_id_job_password)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `TaskCompleteDates` (
   task_id       BIGINT(20) UNSIGNED NOT NULL,
@@ -1556,72 +1556,72 @@ CREATE TABLE IF NOT EXISTS `TaskCompleteDates` (
   PRIMARY KEY (`task_id`),
   KEY key_complete_date (complete_date),
   CONSTRAINT `FK_TaskCompleteDates_task_id` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `DiscourseID` (
   project_id INT(10) UNSIGNED NOT NULL,
   topic_id   INT(10) UNSIGNED NOT NULL,
   PRIMARY KEY (project_id),
   CONSTRAINT FK_DiscourseID_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `UserURLs` (
   user_id INT(10) UNSIGNED NOT NULL,
-  url_key VARCHAR(20)  COLLATE utf8_unicode_ci NOT NULL,
-  url     VARCHAR(255) COLLATE utf8_unicode_ci NOT NULL,
+  url_key VARCHAR(20)  COLLATE utf8mb4_unicode_ci NOT NULL,
+  url     VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   UNIQUE KEY `UserURLs` (`user_id`, `url_key`),
   KEY `FK_UserURLs_Users` (`user_id`),
   CONSTRAINT `FK_UserURLs_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `UserExpertises` (
   user_id       INT(10) UNSIGNED NOT NULL,
-  expertise_key VARCHAR(20) COLLATE utf8_unicode_ci NOT NULL,
+  expertise_key VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   UNIQUE KEY `UserExpertises` (`user_id`, `expertise_key`),
   KEY `FK_UserExpertises_Users` (`user_id`),
   CONSTRAINT `FK_UserExpertises_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `UserHowheards` (
   user_id      INT(10) UNSIGNED NOT NULL,
   reviewed     INT(10) UNSIGNED NOT NULL DEFAULT 0,
-  howheard_key VARCHAR(20) COLLATE utf8_unicode_ci NOT NULL,
+  howheard_key VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY `FK_UserHowheards_Users` (`user_id`),
   KEY         `FK_UserHowheards_reviewed` (`reviewed`),
   CONSTRAINT  `FK_UserHowheards_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `UserCertifications` (
   id                INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   user_id           INT(10) UNSIGNED NOT NULL,
   vid               INT(10) UNSIGNED NOT NULL default 0,
   reviewed          INT(10) UNSIGNED NOT NULL DEFAULT 0,
-  certification_key VARCHAR(20)  COLLATE utf8_unicode_ci NOT NULL,
-  filename          VARCHAR(128) COLLATE utf8_unicode_ci NOT NULL,
-  mimetype          VARCHAR(128) COLLATE utf8_unicode_ci NOT NULL,
-  note              TEXT         COLLATE utf8_unicode_ci NOT NULL,
+  certification_key VARCHAR(20)  COLLATE utf8mb4_unicode_ci NOT NULL,
+  filename          VARCHAR(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  mimetype          VARCHAR(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  note              TEXT         COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_UserCertifications_Users` (`user_id`),
   KEY `FK_UserCertifications_reviewed` (`reviewed`),
   CONSTRAINT `FK_UserCertifications_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `admin_comment` (
   id            INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   user_id       INT(10) UNSIGNED NOT NULL,
   admin_id      INT(10) UNSIGNED NOT NULL,
   work_again    INT(10) UNSIGNED NOT NULL,
-  admin_comment VARCHAR(2000) COLLATE utf8_unicode_ci NOT NULL,
+  admin_comment VARCHAR(2000) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_admin_comment_Users` (`user_id`),
   CONSTRAINT `FK_admin_comment_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `TrackCodes` (
   id INT(10) UNSIGNED NOT NULL,
   track_code VARCHAR(255) NOT NULL,
   PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 INSERT INTO TrackCodes VALUES (1, '');
 
 CREATE TABLE IF NOT EXISTS `TrackedRegistrations` (
@@ -1629,7 +1629,7 @@ CREATE TABLE IF NOT EXISTS `TrackedRegistrations` (
   referer VARCHAR(128) NOT NULL,
   PRIMARY KEY (user_id),
   CONSTRAINT `FK_TrackedRegistrations_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `TestingCenterProjects` (
   user_id                 INT(10) UNSIGNED NOT NULL,
@@ -1641,7 +1641,7 @@ CREATE TABLE IF NOT EXISTS `TestingCenterProjects` (
   language_code_target VARCHAR(3)          NOT NULL,
   KEY FK_TestingCenterProjects_Users (user_id),
   CONSTRAINT FK_TestingCenterProjects_Users FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
 
 /*---------------------------------------end of tables---------------------------------------------*/
 
