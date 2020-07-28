@@ -73,7 +73,7 @@ class UnitTestHelper
             $dsn,
             Common\Lib\Settings::get('unit_test.username'),
             Common\Lib\Settings::get('unit_test.password'),
-            array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
+            array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4")
         );
         //Make PDO throw exceptions if they arise
         $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);

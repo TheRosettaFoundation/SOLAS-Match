@@ -7,7 +7,7 @@
 -- --------------------------------------------------------ul
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 SET FOREIGN_KEY_CHECKS=0;
 
 /*--------------------START OF ALTER TABLES TO NORMALISE DATA LENGTHS/TYPES -----------------------*/
@@ -8927,7 +8927,7 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 /*!40014 SET FOREIGN_KEY_CHECKS=0 */;
 
 -- Dumping structure for trigger debug-test.deleteArchiveTaskOnArchiveProjectDeletion
