@@ -61,6 +61,7 @@ $from_neon_to_trommons_pair = array(
 'Kyrgyz' => array('ky', 'KG'),
 'Latvian' => array('lv', 'LV'),
 'Lingala' => array('ln', '--'),
+'Lingala Makanja' => array('ln', 'CE'),
 'Lithuanian' => array('lt', 'LT'),
 'Macedonian' => array('mk', 'MK'),
 'Malagasy' => array('mg', 'MG'),
@@ -304,7 +305,6 @@ $language_options_changes = [
   'sr-ME#' => 'Montenegrin',
   'no-NO#' => 'Norwegian',
   'xen---' => 'Plain English',
-  'ln---#' => 'Lingala Makanja',
 ];
 
 $from_neon_to_trommons_pair_options_remove = [
