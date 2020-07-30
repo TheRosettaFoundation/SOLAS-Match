@@ -92,17 +92,17 @@ class PDOWrapper
         
         if ($this->use_permanent_connection) {
             $conn = new \PDO(
-                "mysql:host=$server;dbname=$dbName;port=$server_port",
+                "mysql:host=$server;dbname=$dbName;port=$server_port;charset=utf8mb4",
                 $username,
                 $password,
-                array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4", \PDO::ATTR_PERSISTENT => true)
+                array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci", \PDO::ATTR_PERSISTENT => true)
             );
         } else {
              $conn = new \PDO(
-                 "mysql:host=$server;dbname=$dbName;port=$server_port",
+                 "mysql:host=$server;dbname=$dbName;port=$server_port;charset=utf8mb4",
                  $username,
                  $password,
-                 array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4")
+                 array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci")
              );
         }
         
