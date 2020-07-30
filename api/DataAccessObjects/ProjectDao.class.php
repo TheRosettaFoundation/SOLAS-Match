@@ -50,7 +50,7 @@ class ProjectDao
             Lib\PDOWrapper::cleanseNull($project->getImageUploaded()).",".
             Lib\PDOWrapper::cleanseNull($project->getImageApproved());
 
-error_log("callprojectInsertAndUpdate($args);");
+error_log("call projectInsertAndUpdate($args);");
         $result = Lib\PDOWrapper::call("projectInsertAndUpdate", $args);
         if ($result) {
 error_log("...Success");
