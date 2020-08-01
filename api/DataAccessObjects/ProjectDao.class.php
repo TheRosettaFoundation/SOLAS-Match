@@ -50,13 +50,10 @@ class ProjectDao
             Lib\PDOWrapper::cleanseNull($project->getImageUploaded()).",".
             Lib\PDOWrapper::cleanseNull($project->getImageApproved());
 
-error_log("call projectInsertAndUpdate($args);");
         $result = Lib\PDOWrapper::call("projectInsertAndUpdate", $args);
         if ($result) {
-error_log("...Success");
             $project = Common\Lib\ModelFactory::buildModel("Project", $result[0]);
         }
-if (!$result) error_log("...Fail");
 
         TagsDao::updateTags($project->getId(), $tagList);
         $project->clearTag();
