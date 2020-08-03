@@ -73,7 +73,7 @@ class UnitTestHelper
             $dsn,
             Common\Lib\Settings::get('unit_test.username'),
             Common\Lib\Settings::get('unit_test.password'),
-            array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
+            array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4")
         );
         //Make PDO throw exceptions if they arise
         $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
@@ -88,7 +88,7 @@ class UnitTestHelper
             $result = $conn->exec(
                 "CREATE DATABASE `".
                 Common\Lib\Settings::get('unit_test.database').
-                "` /*!40100 CHARACTER SET utf8 COLLATE 'utf8_unicode_ci' */"
+                "` /*!40100 CHARACTER SET utf8mb4 COLLATE 'utf8mb4_unicode_ci' */"
             );
             $result = $conn->exec("use `".Common\Lib\Settings::get('unit_test.database')."`");
            
