@@ -283,6 +283,11 @@ class IO
             error_log("Before uploadOutputFile($taskId..., $userId, $filename)");
         self::uploadOutputFile($task, $convert, $data, $userId, $filename);
             error_log("After uploadOutputFile($taskId..., $userId, $filename)");
+$task = DAO\TaskDao::getTask($taskId + 1);
+if (!empty($task) && $task->getTaskType() == 3) {
+    $ts = $task->getTaskStatus();
+    error_log("After uploadOutputFile($taskId + 1 getTaskStatus(): $ts");
+}
         } catch (Common\Exceptions\SolasMatchException $e) {
             error_log("Catch uploadOutputFile($taskId..., $userId, $filename)");
             API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());

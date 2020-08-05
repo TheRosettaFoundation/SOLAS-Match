@@ -390,6 +390,7 @@ class TaskDao
         $args = Lib\PDOWrapper::cleanseNull($taskId).",".
             Lib\PDOWrapper::cleanseNull($preReqId);
         $result = Lib\PDOWrapper::call("addTaskPreReq", $args);
+error_log("addTaskPreReq($taskId, $preReqId)");
         return $result[0]["result"];
     }
 
