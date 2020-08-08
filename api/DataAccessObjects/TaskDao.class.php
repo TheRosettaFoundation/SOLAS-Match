@@ -224,6 +224,7 @@ class TaskDao
             Lib\PDOWrapper::cleanseNull($task->getTaskStatus()).",".
             Lib\PDOWrapper::cleanse($task->getPublished());
         $result = Lib\PDOWrapper::call("taskInsertAndUpdate", $args);
+error_log("call taskInsertAndUpdate($args)");
         if ($result) {
             $task = Common\Lib\ModelFactory::buildModel('Task', $result);
         } else {
@@ -978,6 +979,7 @@ error_log("removeTaskPreReq($taskId, $preReqId)");
             Lib\PDOWrapper::cleanseNull($userId).', '.
             Lib\PDOWrapper::cleanseNull($version);
         $result = Lib\PDOWrapper::call("recordFileUpload", $args);
+error_log("call recordFileUpload($args)");
         if ($result) {
             return $result[0]['version'];
         } else {
