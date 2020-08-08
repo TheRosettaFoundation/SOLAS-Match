@@ -407,6 +407,7 @@ error_log("addTaskPreReq($taskId, $preReqId)");
         $args = Lib\PDOWrapper::cleanseNull($taskId).",".
             Lib\PDOWrapper::cleanseNull($preReqId);
         $result = Lib\PDOWrapper::call("removeTaskPreReq", $args);
+error_log("removeTaskPreReq($taskId, $preReqId)");
         return $result[0]["result"];
     }
 
