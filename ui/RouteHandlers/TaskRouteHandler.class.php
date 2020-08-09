@@ -1649,6 +1649,7 @@ class TaskRouteHandler
                         foreach ($preReqTasks as $preReqTask) {
                             if (!in_array($preReqTask->getId(), $selectedList)) {
                                 $taskDao->removeTaskPreReq($task->getId(), $preReqTask->getId());
+                                $task = $taskDao->getTask($task->getId()); // Trigger will probably have changed status
                             }
                         }
                     }
@@ -1656,6 +1657,7 @@ class TaskRouteHandler
                     foreach ($selectedList as $taskId) {
                         if (is_numeric($taskId)) {
                             $taskDao->addTaskPreReq($task->getId(), $taskId);
+                            $task = $taskDao->getTask($task->getId()); // Trigger will probably have changed status
                         }
                     }
 
