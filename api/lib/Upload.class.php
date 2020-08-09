@@ -131,6 +131,7 @@ class Upload
             );
         }
 
+$task = DAO\TaskDao::getTask($id);
 $ts = $task->getTaskStatus();
 error_log("removeTaskPreReq($id, $preReqId), $id ->getTaskStatus(): $ts");
 
