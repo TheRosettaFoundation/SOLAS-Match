@@ -227,8 +227,15 @@ If you have any questions about submitting the form, please email <a href="mailt
             <tr><td>
                 <hr/>
                 <label for='twbprivacy'><strong>Please read the <a href="https://translatorswithoutborders.org/privacy-policy/" target="_blank">TWB Privacy Policy</a>: <span style="color: red">*</span></strong></label>
-                <p class="desc">TWB is committed to protecting personal data and will use the information you provide to send you updates, information and news from Translators without Borders, including our newsletter, volunteer and job opportunities, and crisis alerts. If at any point you wish to unsubscribe from TWB communications, you can always do that.</p>
-                <input type="checkbox" value="1" name="twbprivacy" id="twbprivacy" {if $profile_completed}checked="checked"{/if} /> I agree to communications from Translators without Borders by email
+                <input type="checkbox" value="1" name="twbprivacy" id="twbprivacy" {if $profile_completed}checked="checked"{/if} /> I have read and agree to the Translators without Borders Privacy Policy.
+                <hr/>
+            </td></tr>
+
+            <tr><td>
+                <hr/>
+                <label for='communications_consent'><strong>Communications Consent:</strong></label>
+                <p class="desc">We’d like to keep in touch with you about the lives we can change thanks to your support.</p>
+                <input type="checkbox" value="1" name="communications_consent" id="communications_consent" {if $communications_consent}checked="checked"{/if} /> Subscribe to the TWB email newsletter. <i>You can unsubscribe at any time.</i>
                 <hr/>
             </td></tr>
 
