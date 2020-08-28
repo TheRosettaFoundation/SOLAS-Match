@@ -1219,6 +1219,9 @@ EOD;
 
                     if (!empty($post['howheard'])) $userDao->insertUserHowheard($user_id, $post['howheard']);
 
+                    if (!empty($post['communications_consent'])) $userDao->insert_communications_consent($user_id, 1);
+                    else                                         $userDao->insert_communications_consent($user_id, 0);
+
                     $userDao->update_terms_accepted($user_id);
 
                     $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user_id)));
@@ -1276,6 +1279,7 @@ EOD;
             'certification_list' => $certification_list,
             'in_kind'           => $userDao->get_special_translator($user_id),
             'profile_completed' => !empty($_SESSION['profile_completed']),
+            'communications_consent' => $userDao->get_communications_consent($user_id),
             'extra_scripts' => $extra_scripts,
             'sesskey'       => $sesskey,
         ));

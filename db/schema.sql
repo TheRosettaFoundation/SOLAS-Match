@@ -8611,6 +8611,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_communications_consent`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_communications_consent`(IN uID INT)
+BEGIN
+    SELECT * FROM communications_consents WHERE user_id=uID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `updateUserHowheard`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `updateUserHowheard`(IN uID INT, IN r INT)
