@@ -232,7 +232,6 @@ If you have any questions about submitting the form, please email <a href="mailt
             </td></tr>
 
             <tr><td>
-                <hr/>
                 <label for='communications_consent'><strong>Communications Consent:</strong></label>
                 <p class="desc">We’d like to keep in touch with you about the lives we can change thanks to your support.</p>
                 <input type="checkbox" value="1" name="communications_consent" id="communications_consent" {if $communications_consent}checked="checked"{/if} /> Subscribe to the TWB email newsletter. <i>You can unsubscribe at any time.</i>
