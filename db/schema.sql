@@ -1591,6 +1591,13 @@ CREATE TABLE IF NOT EXISTS `UserHowheards` (
   CONSTRAINT  `FK_UserHowheards_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `communications_consents` (
+  user_id      INT(10) UNSIGNED NOT NULL,
+  accepted     INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY `FK_communications_consents_Users` (`user_id`),
+  CONSTRAINT  `FK_communications_consents_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS `UserCertifications` (
   id                INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   user_id           INT(10) UNSIGNED NOT NULL,
@@ -8591,6 +8598,24 @@ BEGIN
     REPLACE INTO UserHowheards
                (user_id, howheard_key)
         VALUES (    uID,         hkey);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_communications_consent`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_communications_consent`(IN uID INT, IN acc INT)
+BEGIN
+    REPLACE INTO communications_consents
+               (user_id, accepted)
+        VALUES (    uID,      acc);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_communications_consent`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_communications_consent`(IN uID INT)
+BEGIN
+    SELECT * FROM communications_consents WHERE user_id=uID;
 END//
 DELIMITER ;
 

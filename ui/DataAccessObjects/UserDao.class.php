@@ -1423,6 +1423,20 @@ error_log(print_r($result, true));
             LibAPI\PDOWrapper::cleanse($reviewed));
     }
 
+    public function insert_communications_consent($user_id, $accepted)
+    {
+        LibAPI\PDOWrapper::call('insert_communications_consent',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($accepted));
+    }
+
+    public function get_communications_consent($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_communications_consent', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) return 0;
+        return $result[0]['accepted'];
+    }
+
     public function getUserCertifications($user_id)
     {
         $result = LibAPI\PDOWrapper::call('getUserCertifications', LibAPI\PDOWrapper::cleanse($user_id));

@@ -269,7 +269,7 @@
                 </ol>
                     For any questions or comments, please email <a href="mailto:translators@translatorswithoutborders.org" target="_blank">translators@translatorswithoutborders.org</a>
                 {else}
-                    Since you are not a translator, there are no tasks here. Click on <a href="https://trommons.org/org/dashboard/">your organization's Dashboard</a>
+                    Since you are not a translator, there are no tasks here. Click on <a href="https://kato.translatorswb.org/org/dashboard/">your organization's Dashboard</a>
                 {/if}
             </p>
         {/if}
