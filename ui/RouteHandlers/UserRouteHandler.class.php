@@ -1336,6 +1336,9 @@ EOD;
                     $userDao->updateUser($user);
                     $userDao->updatePersonalInfo($user_id, $userPersonalInfo);
 
+                    if (!empty($post['communications_consent'])) $userDao->insert_communications_consent($user_id, 1);
+                    else                                         $userDao->insert_communications_consent($user_id, 0);
+
                     $userDao->update_terms_accepted($user_id);
 
                     $app->redirect($app->urlFor('org-dashboard'));
@@ -1356,6 +1359,7 @@ EOD;
             'user_id'           => $user_id,
             'userPersonalInfo'  => $userPersonalInfo,
             'profile_completed' => !empty($_SESSION['profile_completed']),
+            'communications_consent' => $userDao->get_communications_consent($user_id),
             'extra_scripts'     => $extra_scripts,
             'sesskey'           => $sesskey,
         ));
