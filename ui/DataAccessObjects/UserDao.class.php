@@ -1657,7 +1657,7 @@ error_log(print_r($result, true));
         if (!empty($howheards)) {
             $howheard_list[$howheards[0]['howheard_key']]['state'] = 1;
         } elseif ($referer = $this->get_tracked_registration($user_id)) {
-            if (in_array($referer, ['RWS Moravia', 'CIOL', 'Riskified', 'Welocalize', 'Lionbridge', 'Apala', 'Ei Ei', 'Muhannad', 'Paul', 'Rodrigue', 'Diane', 'Simon M.', 'Mahmud', 'Kamal', 'Fatima', 'Halima', 'Ibrahim', 'Abdulwahab', 'Alhaji', 'Ali Abdulrahman', 'Amajam', 'Buba Gameche', 'Jacob', 'Jagila', 'Mustapha', 'Valerie', 'Ivana', 'Renwar', 'Marwan', 'Simon W.', 'Hussain', 'Thalia', 'Claudia', 'Carolina', 'Ravija', 'Facebook', 'Twitter', 'Instagram', 'Linkedin', 'Parenting for Lifelong Health', 'PLH SMEs', 'Cardinals'])) $howheard_list['Referral']['state'] = 1;
+            if (in_array($referer, ['RWS Moravia', 'CIOL', 'Riskified', 'Welocalize', 'Lionbridge', 'Apala', 'Ei Ei', 'Muhannad', 'Paul', 'Rodrigue', 'Diane', 'Simon M.', 'Mahmud', 'Kamal', 'Fatima', 'Halima', 'Ibrahim', 'Abdulwahab', 'Alhaji', 'Ali Abdulrahman', 'Amajam', 'Buba Gameche', 'Jacob', 'Jagila', 'Mustapha', 'Valerie', 'Ivana', 'Renwar', 'Marwan', 'Simon W.', 'Hussain', 'Thalia', 'Claudia', 'Carolina', 'Ravija', 'Facebook', 'Twitter', 'Instagram', 'Linkedin', 'Parenting for Lifelong Health', 'PLH SMEs', 'Cardinals', 'SDL'])) $howheard_list['Referral']['state'] = 1;
         }
         return $howheard_list;
     }
@@ -1750,7 +1750,7 @@ error_log(print_r($result, true));
     public function get_tracked_registration_for_verified($user_id)
     {
         $result = LibAPI\PDOWrapper::call('get_tracked_registration', LibAPI\PDOWrapper::cleanse($user_id));
-        if (!empty($result) && in_array($result[0]['referer'], ['RWS Moravia', 'Welocalize', 'Lionbridge'])) return true;
+        if (!empty($result) && in_array($result[0]['referer'], ['RWS Moravia', 'Welocalize', 'Lionbridge', 'SDL'])) return true;
         return false;
     }
 }
