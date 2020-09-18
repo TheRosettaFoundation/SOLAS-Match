@@ -1252,8 +1252,8 @@ class ProjectRouteHandler
                                             $mt_engine        = empty($post['mt_engine'])        ? '0' : '1';
                                             $pretranslate_100 = empty($post['pretranslate_100']) ? '0' : '1';
                                             $lexiqa           = '1';
-                                            $private_tm_key   = empty($post['private_tm_key'])   ? '58f97b6f65fb5c8c8522,d5320e2850c37cc31551' : '58f97b6f65fb5c8c8522,d5320e2850c37cc31551,' . $post['private_tm_key'];
-                                            $private_tm_key   = str_replace(' ', '', $private_tm_key);
+                                            if (!empty($post['private_tm_key'])) $post['private_tm_key'] = str_replace(' ', '', $post['private_tm_key']);
+                                            $private_tm_key = empty($post['private_tm_key']) ? '58f97b6f65fb5c8c8522,d5320e2850c37cc31551' : $post['private_tm_key'] . ',58f97b6f65fb5c8c8522,d5320e2850c37cc31551';
 
                                             if (!empty($post['testing_center'])) {
                                                 $mt_engine        = '0';
