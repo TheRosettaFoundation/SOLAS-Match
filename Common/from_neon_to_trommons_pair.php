@@ -289,6 +289,10 @@ $from_neon_to_trommons_pair = array(
 'Ngombe' => array('ngc', 'CD'),
 
 'Nuer' => array('nus', 'SS'),
+
+'Navajo' => array('nv', 'US'),
+'Krio' => array('kri', 'SL'),
+'Tshiluba' => array('lua', 'CD'),
 );
 
 $language_options_changes = [

@@ -297,4 +297,8 @@
 'ngc' => 'ngc-CD',
 
 'nus' => 'nus-SS',
+
+'nv' => 'nv-US',
+'kri' => 'kri-SL',
+'lua' => 'lua-CD',
 );
