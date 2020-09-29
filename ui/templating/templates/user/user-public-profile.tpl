@@ -185,12 +185,12 @@
                                             {if $userQualifiedPair['qualification_level'] == 3}({Localisation::getTranslation('user_qualification_level_3')}){/if}
                                             </strong>
 
-                                            {if $userQualifiedPair['qualification_level'] >  1 && $userQualifiedPair['language_code_source'] == 'en' && in_array($native_language_code, ['ar', 'fr', 'es']) && $native_language_code === $userQualifiedPair['language_code_target']}
+                                            {if $userQualifiedPair['qualification_level'] >  1 && in_array($userQualifiedPair['language_code_source'] . '-' . $userQualifiedPair['language_code_target'], ['en-ar', 'en-fr', 'en-es', 'fr-en', 'es-en', 'en-pt', 'en-it']) && $native_language_code === $userQualifiedPair['language_code_target']}
                                                 {* Already verified for en to Native, don't display another button for a different country code *}
                                                 {assign var="count_buttons" value=$count_buttons+1}
                                             {/if}
 
-                                            {if $userQualifiedPair['qualification_level'] == 1 && $userQualifiedPair['language_code_source'] == 'en' && in_array($native_language_code, ['ar', 'fr', 'es']) && $native_language_code === $userQualifiedPair['language_code_target'] && ($private_access || $isSiteAdmin) && $count_buttons == 0}
+                                            {if $userQualifiedPair['qualification_level'] == 1 && in_array($userQualifiedPair['language_code_source'] . '-' . $userQualifiedPair['language_code_target'], ['en-ar', 'en-fr', 'en-es', 'fr-en', 'es-en', 'en-pt', 'en-it']) && $native_language_code === $userQualifiedPair['language_code_target'] && ($private_access || $isSiteAdmin) && $count_buttons == 0}
                                                 {assign var="count_buttons" value=$count_buttons+1}
                                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                                                 <input type="hidden" name="source_language_country" value="{$userQualifiedPair['language_code_source']}-{$userQualifiedPair['country_code_source']}" />
