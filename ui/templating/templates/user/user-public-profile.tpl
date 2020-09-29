@@ -191,6 +191,7 @@
                                                 {assign var="count_buttons" value=$count_buttons+1}
                                             {/if}
 
+XX{$pair}XX{$userQualifiedPair['language_code_source']}-{$userQualifiedPair['language_code_target']}XX
                                             {if $userQualifiedPair['qualification_level'] == 1 && in_array($pair, ['en-ar', 'en-fr', 'en-es', 'fr-en', 'es-en', 'en-pt', 'en-it']) && $native_language_code === $userQualifiedPair['language_code_target'] && ($private_access || $isSiteAdmin) && $count_buttons == 0}
                                                 {assign var="count_buttons" value=$count_buttons+1}
                                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
