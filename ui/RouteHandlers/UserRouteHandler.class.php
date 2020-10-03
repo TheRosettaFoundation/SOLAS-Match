@@ -1662,6 +1662,7 @@ EOD;
                 if (!empty($source_language_country) && !empty($target_language_country) &&
                     (empty($testing_center_projects_by_code["$language_code_source-$language_code_target"]) || $isSiteAdmin)) { // Protect against browser manipulation or duplicate
                     $user_id_owner = 62927; // translators@translatorswithoutborders.org
+$user_id_owner = 3297; // translators@translatorswithoutborders.org
 
                     $projects_to_copy = [16987, 16982];
 if ($language_code_source === 'fr') $projects_to_copy = [9115, 9115];
