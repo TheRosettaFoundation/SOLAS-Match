@@ -96,6 +96,7 @@ class ProjectDao extends BaseDao
             LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode()). ',' .
             LibAPI\PDOWrapper::cleanseNull($project->getImageUploaded()). ',' .
             LibAPI\PDOWrapper::cleanseNull($project->getImageApproved());
+error_log($args);
         $result = LibAPI\PDOWrapper::call('projectInsertAndUpdate', $args);
         $project = null;
         if ($result) {

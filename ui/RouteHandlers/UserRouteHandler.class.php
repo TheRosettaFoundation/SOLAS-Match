@@ -1670,8 +1670,6 @@ if ($language_code_source === 'es') $projects_to_copy = [16987, 16982];
                     $test_number = mt_rand(0, $n - 1); // Pick a random $projects_to_copy test file
                     $i = $n;
                     while ($i--) {
-error_log("i: $i, test_number: $test_number, projects_to_copy[test_number]: {$projects_to_copy[$test_number]}");
-error_log(print_r($testing_center_projects, true));
                         if (empty($testing_center_projects[$projects_to_copy[$test_number]])) break; // Found test file not already used
                         $test_number = ($test_number + 1) % $n;
                     }
