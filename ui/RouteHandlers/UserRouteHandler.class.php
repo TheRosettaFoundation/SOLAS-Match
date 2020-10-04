@@ -1664,6 +1664,8 @@ EOD;
                     $user_id_owner = 62927; // translators@translatorswithoutborders.org
 
                     $projects_to_copy = [16987, 16982];
+                    if ($language_code_source === 'fr') $projects_to_copy = [19408, 19409];
+                    if ($language_code_source === 'es') $projects_to_copy = [19410, 19411];
                     $n = count($projects_to_copy);
                     $test_number = mt_rand(0, $n - 1); // Pick a random $projects_to_copy test file
                     $i = $n;
