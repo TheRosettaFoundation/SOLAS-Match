@@ -185,7 +185,6 @@
                                         {if $userQualifiedPair['qualification_level'] > 1}
                                             {$button_count.$pair=1}
                                         {/if}
-XXX{$pair}={$button_count.$pair}XXX<br />
                                     {/foreach}
 
                                     {foreach from=$userQualifiedPairs item=userQualifiedPair}
