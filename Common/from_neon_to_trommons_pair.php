@@ -293,6 +293,15 @@ $from_neon_to_trommons_pair = array(
 'Navajo' => array('nv', 'US'),
 'Krio' => array('kri', 'SL'),
 'Tshiluba' => array('lua', 'CD'),
+
+'Tausug' => array('tsg', 'PH'),
+'Maranao' => array('mrw', 'PH'),
+'Maguindanao' => array('mdh', 'PH'),
+'Chavacano' => array('cbk', 'PH'),
+'Waray' => array('war', 'PH'),
+'Bikol' => array('bik', 'PH'),
+'Kapampangan' => array('pam', 'PH'),
+'Pangasinan' => array('pag', 'PH'),
 );
 
 $language_options_changes = [

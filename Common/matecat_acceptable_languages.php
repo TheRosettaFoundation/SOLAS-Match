@@ -301,4 +301,13 @@
 'nv' => 'nv-US',
 'kri' => 'kri-SL',
 'lua' => 'lua-CD',
+
+'tsg' => 'tsg-PH',
+'mrw' => 'mrw-PH',
+'mdh' => 'mdh-PH',
+'cbk' => 'cbk-PH',
+'war' => 'war-PH',
+'bik' => 'bik-PH',
+'pam' => 'pam-PH',
+'pag' => 'pag-PH',
 );
