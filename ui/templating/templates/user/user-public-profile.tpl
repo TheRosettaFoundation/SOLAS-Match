@@ -178,7 +178,6 @@
                                     {foreach from=$userQualifiedPairs item=userQualifiedPair}
                                         {assign var="pair" value="`$userQualifiedPair['language_code_source']`-`$userQualifiedPair['language_code_target']`"}
                                         {$button_count.$pair=0}
-XXX{$pair}={$button_count.$pair}XXX<br />
                                     {/foreach}
 
                                     {foreach from=$userQualifiedPairs item=userQualifiedPair}
@@ -199,9 +198,10 @@ XXX{$pair}={$button_count.$pair}XXX<br />
                                             </strong>
 
                                             {assign var="pair" value="`$userQualifiedPair['language_code_source']`-`$userQualifiedPair['language_code_target']`"}
+BEFORE TEST XXX{$pair}={$button_count.$pair}XXX<br />
                                             {if $userQualifiedPair['qualification_level'] == 1 && in_array($pair, ['en-ar', 'en-fr', 'en-es', 'fr-en', 'es-en', 'en-pt', 'en-it']) && $native_language_code === $userQualifiedPair['language_code_target'] && ($private_access || $isSiteAdmin) && $button_count.$pair == 0}
                                                 {$button_count.$pair=1}
-XXX{$pair}={$button_count.$pair}XXX<br />
+IN IF SET 1 XXX{$pair}={$button_count.$pair}XXX<br />
                                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                                                 <input type="hidden" name="source_language_country" value="{$userQualifiedPair['language_code_source']}-{$userQualifiedPair['country_code_source']}" />
                                                 <input type="hidden" name="target_language_country" value="{$userQualifiedPair['language_code_target']}-{$userQualifiedPair['country_code_target']}" />
