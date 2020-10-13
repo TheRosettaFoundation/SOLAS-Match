@@ -568,14 +568,14 @@ class AdminRouteHandler
 
         foreach ($all_users as $user_row) {
             $data .= '"' . $user_row['email'] . '","' .
-            $data .= '"' . $user_row['native_language_name'] . '","' .
-            $data .= '"' . $user_row['words_translated'] . '","' .
-            $data .= '"' . $user_row['words_revised'] . '","' .
-            $data .= '"' . $user_row['language_pair'] . '","' .
-            $data .= '"' . $user_row['average_reviews'] . '","' .
-            $data .= '"' . $user_row['number_reviews'] . '","' .
-            $data .= '"' . $user_row['level'] . '","' .
-            $data .= '"' . $user_row['last_task'] . '"' . "\n";
+            $data .= $user_row['native_language_name'] . '","' .
+            $data .= $user_row['words_translated'] . '","' .
+            $data .= $user_row['words_revised'] . '","' .
+            $data .= $user_row['language_pair'] . '","' .
+            $data .= $user_row['average_reviews'] . '","' .
+            $data .= $user_row['number_reviews'] . '","' .
+            $data .= $user_row['level'] . '","' .
+            $data .= $user_row['last_task'] . '"' . "\n";
 break;
         }
 
