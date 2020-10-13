@@ -80,6 +80,12 @@ class AdminRouteHandler
         )->via('POST')->name('user_task_reviews');
 
         $app->get(
+            '/peer_to_peer_vetting/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'peer_to_peer_vetting')
+        )->name('peer_to_peer_vetting');
+
+        $app->get(
             '/submitted_task_reviews/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'submitted_task_reviews')
@@ -545,6 +551,37 @@ class AdminRouteHandler
 
         header('Content-type: text/csv');
         header('Content-Disposition: attachment; filename="submitted_task_reviews.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
+    }
+
+    public function peer_to_peer_vetting()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $all_users = $statsDao->peer_to_peer_vetting();
+
+        $data = "\xEF\xBB\xBF" . '"Completed","Revision Task","Reviser","Translator","Language Pair","Accuracy","Fluency","Terminology","Style","Design","Comment"' . "\n";
+
+        foreach ($all_users as $user_row) {
+            $data .= '"' . $user_row['complete_date'] . '","' .
+            str_replace('"', '""', $user_row['task_title']) . '","' .
+            str_replace('"', '""', $user_row['reviser_name']) . '","' .
+            str_replace('"', '""', $user_row['translator_name']) . '","' .
+            $user_row['language_pair'] . '","' .
+            $user_row['accuracy'] . '","' .
+            $user_row['fluency'] . '","' .
+            $user_row['terminology'] . '","' .
+            $user_row['style'] . '","' .
+            $user_row['design'] . '","' .
+            str_replace('"', '""', $user_row['comment']) . '"' . "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="peer_to_peer_vetting.csv"');
         header('Content-length: ' . strlen($data));
         header('X-Frame-Options: ALLOWALL');
         header('Pragma: no-cache');
