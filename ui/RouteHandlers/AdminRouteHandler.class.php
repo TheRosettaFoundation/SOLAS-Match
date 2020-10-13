@@ -566,21 +566,16 @@ class AdminRouteHandler
 
         $data = "\xEF\xBB\xBF" . '"Email","Native","Words Translated","Words Revised","Language Pair","Average Reviews","Number","Level","Last Task"' . "\n";
 
-error_log($data);
         foreach ($all_users as $user_row) {
-error_log(print_r($user_row, true));
             $data .= '"' . $user_row['email'] . '","' .
-error_log($data);
-            $data .= $user_row['native_language_name'] . '","' .
-            $data .= $user_row['words_translated'] . '","' .
-            $data .= $user_row['words_revised'] . '","' .
-            $data .= $user_row['language_pair'] . '","' .
-            $data .= $user_row['average_reviews'] . '","' .
-            $data .= $user_row['number_reviews'] . '","' .
-            $data .= $user_row['level'] . '","' .
-            $data .= $user_row['last_task'] . '"' . "\n";
-error_log($data);
-break;
+            $user_row['native_language_name'] . '","' .
+            $user_row['words_translated'] . '","' .
+            $user_row['words_revised'] . '","' .
+            $user_row['language_pair'] . '","' .
+            $user_row['average_reviews'] . '","' .
+            $user_row['number_reviews'] . '","' .
+            $user_row['level'] . '","' .
+            $user_row['last_task'] . '"' . "\n";
         }
 
         header('Content-type: text/csv');
