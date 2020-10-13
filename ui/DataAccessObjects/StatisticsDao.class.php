@@ -423,6 +423,12 @@ class StatisticsDao extends BaseDao
         return $result;
     }
 
+    public function peer_to_peer_vetting()
+    {
+        $result = LibAPI\PDOWrapper::call('peer_to_peer_vetting', '');
+        return $result;
+    }
+
     public function submitted_task_reviews()
     {
         $result = LibAPI\PDOWrapper::call('submitted_task_reviews', '');
