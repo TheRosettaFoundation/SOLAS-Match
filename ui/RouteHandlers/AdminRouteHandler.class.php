@@ -576,6 +576,7 @@ class AdminRouteHandler
             $data .= '"' . $user_row['number_reviews'] . '","' .
             $data .= '"' . $user_row['level'] . '","' .
             $data .= '"' . $user_row['last_task'] . '"' . "\n";
+break;
         }
 
         header('Content-type: text/csv');
