@@ -565,8 +565,10 @@ class AdminRouteHandler
         $all_users = $statsDao->peer_to_peer_vetting();
 
         $data = "\xEF\xBB\xBF" . '"Email","Native","Words Translated","Words Revised","Language Pair","Average Reviews","Number","Level","Last Task"' . "\n";
+
 error_log($data);
         foreach ($all_users as $user_row) {
+error_log(print_r($user_row, true));
             $data .= '"' . $user_row['email'] . '","' .
 error_log($data);
             $data .= $user_row['native_language_name'] . '","' .
