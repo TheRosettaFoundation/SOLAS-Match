@@ -564,20 +564,18 @@ class AdminRouteHandler
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->peer_to_peer_vetting();
 
-        $data = "\xEF\xBB\xBF" . '"Completed","Revision Task","Reviser","Translator","Language Pair","Accuracy","Fluency","Terminology","Style","Design","Comment"' . "\n";
+        $data = "\xEF\xBB\xBF" . '"Email","Native","Words Translated","Words Revised","Language Pair","Average Reviews","Number","Level","Last Task"' . "\n";
 
         foreach ($all_users as $user_row) {
-            $data .= '"' . $user_row['complete_date'] . '","' .
-            str_replace('"', '""', $user_row['task_title']) . '","' .
-            str_replace('"', '""', $user_row['reviser_name']) . '","' .
-            str_replace('"', '""', $user_row['translator_name']) . '","' .
-            $user_row['language_pair'] . '","' .
-            $user_row['accuracy'] . '","' .
-            $user_row['fluency'] . '","' .
-            $user_row['terminology'] . '","' .
-            $user_row['style'] . '","' .
-            $user_row['design'] . '","' .
-            str_replace('"', '""', $user_row['comment']) . '"' . "\n";
+            $data .= '"' . $user_row['email'] . '","' .
+            $data .= '"' . $user_row['native_language_name'] . '","' .
+            $data .= '"' . $user_row['words_translated'] . '","' .
+            $data .= '"' . $user_row['words_revised'] . '","' .
+            $data .= '"' . $user_row['language_pair'] . '","' .
+            $data .= '"' . $user_row['average_reviews'] . '","' .
+            $data .= '"' . $user_row['number_reviews'] . '","' .
+            $data .= '"' . $user_row['level'] . '","' .
+            $data .= '"' . $user_row['last_task'] . '"' . "\n";
         }
 
         header('Content-type: text/csv');
