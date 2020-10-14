@@ -8911,28 +8911,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `peer_to_peer_vetting`()
 BEGIN
     SELECT
         u.id AS user_id,
-        u.`display-name`                                             AS display_name,
+        u.`display-name`                                                     AS display_name,
         u.email,
-        native.code                                                  AS native_language_code,
-        native.`en-name`                                             AS native_language_name,
-        SUM(IF(t.`task-type_id`=2, t.`word-count`, 0))               AS words_translated,
-        SUM(IF(t.`task-type_id`=3, t.`word-count`, 0))               AS words_revised,
-        CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code)    AS language_pair,
-        FORMAT(
-            SUM(IF(tr.task_id IS NOT NULL AND tr.consistency>=10, (tr.corrections + tr.grammar + tr.spelling + tr.consistency % 10 + tr.consistency DIV 10)/5., 0.))
-                /
-            IF(SUM(IF(tr.task_id IS NOT NULL AND tr.consistency>=10, 1., 0.))!=0., SUM(IF(tr.task_id IS NOT NULL AND tr.consistency>=10, 1., 0.)), 1.),
-            1
-        )                                                            AS average_reviews,
-        SUM(IF(tr.task_id IS NOT NULL AND tr.consistency>=10, 1, 0)) AS number_reviews,
-        IF(MAX(uqp.qualification_level) IS NULL, '',
-            CASE
-                WHEN MAX(uqp.qualification_level)=1 THEN 'Translator'
-                WHEN MAX(uqp.qualification_level)=2 THEN 'Verified Translator'
-                WHEN MAX(uqp.qualification_level)=3 THEN 'Senior Translator'
-            END
-         )                                                           AS level,
-         MAX(tc.`claimed-time`)                                      AS last_task
+        native.code                                                          AS native_language_code,
+        native.`en-name`                                                     AS native_language_name,
+        SUM(IF(t.`task-type_id`=2, t.`word-count`, 0))                       AS words_translated,
+        SUM(IF(t.`task-type_id`=3, t.`word-count`, 0))                       AS words_revised,
+        CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code)            AS language_pair,
+        CONCAT(u.id, '-', l1.code, '-', c1.code, '|', l2.code, '-', c2.code) AS user_language_pair,
+        CONCAT(u.id, '-', l1.code, '|', l2.code)                             AS user_language_pair_reduced,
+        MAX(tc.`claimed-time`)                                               AS last_task
     FROM Tasks                     t
     JOIN TaskClaims               tc ON t.id=tc.task_id
     JOIN Users                     u ON tc.user_id=u.id
@@ -8942,13 +8930,56 @@ BEGIN
     JOIN Countries                c1 ON t.`country_id-source`=c1.id
     JOIN Countries                c2 ON t.`country_id-target`=c2.id
     LEFT JOIN TaskReviews         tr ON t.id=tr.task_id
-    LEFT JOIN UserQualifiedPairs uqp ON u.id=uqp.user_id AND
-                                        t.`language_id-source`=uqp.language_id_source AND
-                                        t.`language_id-target`=uqp.language_id_target
     WHERE
         t.`task-status_id`=4
     GROUP BY tc.user_id, t.`language_id-source`, t.`country_id-source`, t.`language_id-target`, t.`country_id-target`
     ORDER BY l1.code, c1.code, l2.code, c2.code, u.email;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `peer_to_peer_vetting_qualification_level`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `peer_to_peer_vetting_qualification_level`()
+BEGIN
+    SELECT
+        uqp.user_id,
+        uqp.language_code_source,
+        uqp.language_code_target,
+        CONCAT(uqp.user_id, '-', uqp.language_code_source, '|', uqp.language_code_target) AS user_language_pair_reduced,
+        CASE
+            WHEN MAX(uqp.qualification_level)=1 THEN 'Translator'
+            WHEN MAX(uqp.qualification_level)=2 THEN 'Verified Translator'
+            WHEN MAX(uqp.qualification_level)=3 THEN 'Senior Translator'
+        END                                                                               AS level
+    FROM UserQualifiedPairs uqp
+    GROUP BY uqp.user_id, uqp.language_code_source, uqp.language_code_target;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `peer_to_peer_vetting_reviews`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `peer_to_peer_vetting_reviews`()
+BEGIN
+    SELECT
+        tc.user_id,
+        CONCAT(tc.user_id, '-', l1.code, '-', c1.code, '|', l2.code, '-', c2.code) AS user_language_pair,
+        FORMAT(
+            SUM(IF(tr.task_id IS NOT NULL AND tr.consistency>=10, (tr.corrections + tr.grammar + tr.spelling + tr.consistency % 10 + tr.consistency DIV 10)/5., 0.))
+                /
+            IF(SUM(IF(tr.task_id IS NOT NULL AND tr.consistency>=10, 1., 0.))!=0., SUM(IF(tr.task_id IS NOT NULL AND tr.consistency>=10, 1., 0.)), 1.),
+            1
+        )                                                                         AS average_reviews,
+        SUM(IF(tr.task_id IS NOT NULL AND tr.consistency>=10, 1, 0))              AS number_reviews
+    FROM Tasks        t
+    JOIN TaskReviews tr ON t.id=tr.task_id
+    JOIN Languages   l1 ON t.`language_id-source`=l1.id
+    JOIN Languages   l2 ON t.`language_id-target`=l2.id
+    JOIN Countries   c1 ON t.`country_id-source`=c1.id
+    JOIN Countries   c2 ON t.`country_id-target`=c2.id
+    JOIN TaskClaims  tc ON t.id=tc.task_id
+    WHERE
+        t.`task-status_id`=4
+    GROUP BY tc.user_id, t.`language_id-source`, t.`country_id-source`, t.`language_id-target`, t.`country_id-target`;
 END//
 DELIMITER ;
 
