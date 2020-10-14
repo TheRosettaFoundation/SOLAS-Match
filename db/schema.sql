@@ -8964,12 +8964,12 @@ BEGIN
         tc.user_id,
         CONCAT(tc.user_id, '-', l1.code, '-', c1.code, '|', l2.code, '-', c2.code) AS user_language_pair,
         FORMAT(
-            SUM(IF(tr.task_id IS NOT NULL AND tr.consistency>=10, (tr.corrections + tr.grammar + tr.spelling + tr.consistency % 10 + tr.consistency DIV 10)/5., 0.))
+            SUM((tr.corrections + tr.grammar + tr.spelling + tr.consistency % 10 + tr.consistency DIV 10)/5.)
                 /
-            IF(SUM(IF(tr.task_id IS NOT NULL AND tr.consistency>=10, 1., 0.))!=0., SUM(IF(tr.task_id IS NOT NULL AND tr.consistency>=10, 1., 0.)), 1.),
+            SUM(1.),
             1
         )                                                                         AS average_reviews,
-        SUM(IF(tr.task_id IS NOT NULL AND tr.consistency>=10, 1, 0))              AS number_reviews
+        SUM(1)                                                                    AS number_reviews
     FROM Tasks        t
     JOIN TaskReviews tr ON t.id=tr.task_id
     JOIN Languages   l1 ON t.`language_id-source`=l1.id
@@ -8978,6 +8978,8 @@ BEGIN
     JOIN Countries   c2 ON t.`country_id-target`=c2.id
     JOIN TaskClaims  tc ON t.id=tc.task_id
     WHERE
+        tr.task_id IS NOT NULL AND
+        tr.consistency>=10 AND
         t.`task-status_id`=4
     GROUP BY tc.user_id, t.`language_id-source`, t.`country_id-source`, t.`language_id-target`, t.`country_id-target`;
 END//
