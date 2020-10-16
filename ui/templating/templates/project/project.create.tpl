@@ -186,8 +186,10 @@
                 <div class="projFormInput">
                     <div style="margin-bottom:25px;">
                         <h2>{Localisation::getTranslation('restrict_tasks')}:</h2>
+                        <p class="desc">If checked, translation tasks will only be shown to qualified volunteers.</p>
+                        <input type="checkbox" name="restrictTaskTranslate" id="restrictTaskTranslate" value="1" checked />
                         <p class="desc">{Localisation::getTranslation('restrict_tasks_long')}</p>
-                        <input type="checkbox" name="restrictTask" id="restrictTask" value="1" checked />
+                        <input type="checkbox" name="restrictTaskRevise" id="restrictTaskRevise" value="1" checked />
                     </div>
                 </div>
                 {/if}
