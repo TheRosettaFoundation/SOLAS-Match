@@ -8911,16 +8911,17 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `peer_to_peer_vetting`()
 BEGIN
     SELECT
         u.id AS user_id,
-        u.`display-name`                                                     AS display_name,
+        u.`display-name`                                                        AS display_name,
         u.email,
-        native.code                                                          AS native_language_code,
-        native.`en-name`                                                     AS native_language_name,
-        SUM(IF(t.`task-type_id`=2, t.`word-count`, 0))                       AS words_translated,
-        SUM(IF(t.`task-type_id`=3, t.`word-count`, 0))                       AS words_revised,
-        CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code)            AS language_pair,
-        CONCAT(u.id, '-', l1.code, '-', c1.code, '|', l2.code, '-', c2.code) AS user_language_pair,
-        CONCAT(u.id, '-', l1.code, '|', l2.code)                             AS user_language_pair_reduced,
-        MAX(tc.`claimed-time`)                                               AS last_task
+        native.code                                                             AS native_language_code,
+        native.`en-name`                                                        AS native_language_name,
+        SUM(IF(t.`task-type_id`=2, t.`word-count`, 0))                          AS words_translated,
+        SUM(IF(t.`task-type_id`=3, t.`word-count`, 0))                          AS words_revised,
+        CONCAT(l1.code, '|', l2.code)                                           AS language_pair,
+        CONCAT(u.id, '-', l1.code, '|', l2.code)                                AS user_language_pair,
+        CONCAT(u.id, '-', l1.code, '|', l2.code)                                AS user_language_pair_reduced,
+        GROUP_CONCAT(CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code)) AS language_pair_list,
+        MAX(tc.`claimed-time`)                                                  AS last_task
     FROM Tasks                     t
     JOIN TaskClaims               tc ON t.id=tc.task_id
     JOIN Users                     u ON tc.user_id=u.id
@@ -8932,8 +8933,8 @@ BEGIN
     LEFT JOIN TaskReviews         tr ON t.id=tr.task_id
     WHERE
         t.`task-status_id`=4
-    GROUP BY tc.user_id, t.`language_id-source`, t.`country_id-source`, t.`language_id-target`, t.`country_id-target`
-    ORDER BY l1.code, c1.code, l2.code, c2.code, u.email;
+    GROUP BY tc.user_id, t.`language_id-source`, t.`language_id-target`
+    ORDER BY l1.code, l2.code, u.email;
 END//
 DELIMITER ;
 
@@ -8962,26 +8963,24 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `peer_to_peer_vetting_reviews`()
 BEGIN
     SELECT
         tc.user_id,
-        CONCAT(tc.user_id, '-', l1.code, '-', c1.code, '|', l2.code, '-', c2.code) AS user_language_pair,
+        CONCAT(tc.user_id, '-', l1.code, '|', l2.code) AS user_language_pair,
         FORMAT(
             SUM((tr.corrections + tr.grammar + tr.spelling + tr.consistency % 10 + tr.consistency DIV 10)/5.)
                 /
             SUM(1.),
             1
-        )                                                                         AS average_reviews,
-        SUM(1)                                                                    AS number_reviews
+        )                                              AS average_reviews,
+        SUM(1)                                         AS number_reviews
     FROM Tasks        t
     JOIN TaskReviews tr ON t.id=tr.task_id
     JOIN Languages   l1 ON t.`language_id-source`=l1.id
     JOIN Languages   l2 ON t.`language_id-target`=l2.id
-    JOIN Countries   c1 ON t.`country_id-source`=c1.id
-    JOIN Countries   c2 ON t.`country_id-target`=c2.id
     JOIN TaskClaims  tc ON t.id=tc.task_id
     WHERE
         tr.task_id IS NOT NULL AND
         tr.consistency>=10 AND
         t.`task-status_id`=4
-    GROUP BY tc.user_id, t.`language_id-source`, t.`country_id-source`, t.`language_id-target`, t.`country_id-target`;
+    GROUP BY tc.user_id, t.`language_id-source`, t.`language_id-target`;
 END//
 DELIMITER ;
 
