@@ -8920,7 +8920,7 @@ BEGIN
         CONCAT(l1.code, '|', l2.code)                                           AS language_pair,
         CONCAT(u.id, '-', l1.code, '|', l2.code)                                AS user_language_pair,
         CONCAT(u.id, '-', l1.code, '|', l2.code)                                AS user_language_pair_reduced,
-        GROUP_CONCAT(CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code)) AS language_pair_list,
+        GROUP_CONCAT(DISTINCT CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) ORDER BY CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) SEPARATOR ', ') AS language_pair_list,
         MAX(tc.`claimed-time`)                                                  AS last_task
     FROM Tasks                     t
     JOIN TaskClaims               tc ON t.id=tc.task_id
