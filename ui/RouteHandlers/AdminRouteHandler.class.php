@@ -564,7 +564,7 @@ class AdminRouteHandler
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->peer_to_peer_vetting();
 
-        $data = "\xEF\xBB\xBF" . '"Email","Native","Words Translated","Words Revised","Language Pair","Average Reviews","Number","Level","Last Task"' . "\n";
+        $data = "\xEF\xBB\xBF" . '"Email","Native","Words Translated","Words Revised","Language Pair","Language Pairs","Average Reviews","Number","Level","Last Task"' . "\n";
 
         foreach ($all_users as $user_row) {
             $data .= '"' . $user_row['email'] . '","' .
@@ -572,6 +572,7 @@ class AdminRouteHandler
             $user_row['words_translated'] . '","' .
             $user_row['words_revised'] . '","' .
             $user_row['language_pair'] . '","' .
+            $user_row['language_pair_list'] . '","' .
             $user_row['average_reviews'] . '","' .
             $user_row['number_reviews'] . '","' .
             $user_row['level'] . '","' .
