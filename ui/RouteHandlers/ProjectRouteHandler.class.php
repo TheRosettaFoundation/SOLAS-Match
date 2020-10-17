@@ -1575,7 +1575,10 @@ class ProjectRouteHandler
                 $userDao->trackTask($user_id, $newTaskId);
             }
 
-            if (!empty($post['restrictTask']) && $newTask->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
+            if (!empty($post['restrict_translate_tasks']) && $newTask->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) {
+                $taskDao->setRestrictedTask($newTaskId);
+            }
+            if (!empty($post['restrict_revise_tasks'])    && $newTask->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
                 $taskDao->setRestrictedTask($newTaskId);
             }
         } catch (\Exception $e) {
