@@ -643,7 +643,11 @@ class ProjectRouteHandler
 
         $taskDao->updateRequiredTaskQualificationLevel($task_id, $taskDao->getRequiredTaskQualificationLevel($parent_task->getId()));
 
-        if ($newTask->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $taskDao->getRestrictedTask($parent_task->getId())) {
+        $project_restrictions = $taskDao->get_project_restrictions($project_id);
+        if ($project_restrictions &&
+                ($newTask->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION  && $project_restrictions['restrict_translate_tasks'])
+                    ||
+                ($newTask->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $project_restrictions['restrict_revise_tasks'])) {
             $taskDao->setRestrictedTask($task_id);
         }
 

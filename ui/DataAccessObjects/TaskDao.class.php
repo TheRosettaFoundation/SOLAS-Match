@@ -472,10 +472,10 @@ class TaskDao extends BaseDao
     public function get_project_restrictions($project_id)
     {
         $result = LibAPI\PDOWrapper::call('get_project_restrictions', LibAPI\PDOWrapper::cleanse($project_id));
-        if (!empty($result)) {
-            return $result[0]['result'];
+        if ($result) {
+            return $result[0];
         }
-        return [;
+        return false;
     }
 
     public function insertWordCountRequestForProjects($project_id, $source_language, $target_languages, $user_word_count)
