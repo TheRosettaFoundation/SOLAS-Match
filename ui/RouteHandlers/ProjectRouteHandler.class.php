@@ -1271,6 +1271,10 @@ class ProjectRouteHandler
                                             }
                                         }
 
+                                        $restrict_translate_tasks = !empty($post['restrict_translate_tasks']);
+                                        $restrict_revise_tasks    = !empty($post['restrict_revise_tasks']);
+                                        if ($restrict_translate_tasks || $restrict_revise_tasks) $taskDao->insert_project_restrictions($project->getId(), $restrict_translate_tasks, $restrict_revise_tasks);
+
                                         // Create a topic in the Community forum (Discourse) and a project in Asana
                                         error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");
                                         try {
