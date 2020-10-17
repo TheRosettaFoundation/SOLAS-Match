@@ -1228,7 +1228,7 @@ class ProjectRouteHandler
                                             $targetCount++;
                                         }
                                         // $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, $post['wordCountInput']);
-                                        $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, 0);
+//DEL                                        $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, 0);
 
                                         $source_language = $this->valid_language_for_matecat($source_language);
                                         if (!empty($source_language) && !empty($matecat_translation_task_ids)) {
@@ -1278,7 +1278,7 @@ class ProjectRouteHandler
                                         // Create a topic in the Community forum (Discourse) and a project in Asana
                                         error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");
                                         try {
-                                           $this->create_discourse_topic($project->getId(), $target_languages);
+//DEL                                           $this->create_discourse_topic($project->getId(), $target_languages);
                                         } catch (\Exception $e) {
                                             error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
                                         }
