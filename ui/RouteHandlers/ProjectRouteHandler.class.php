@@ -669,17 +669,19 @@ error_log("Restrict task_id: $task_id, Type: " . $newTask->getTaskType());
         $projectDao = new DAO\ProjectDao();
         $taskDao    = new DAO\TaskDao();
 //DEL[[...
+$pttask = $taskDao->getTask(30632);
+$prtask = $taskDao->getTask(30633);
                                                         $task_id = $this->addChunkTask(
                                                             $taskDao,
                                                             $project_id,
-                                                            30632,
+                                                            $pttask,
                                                             Common\Enums\TaskTypeEnum::TRANSLATION,
                                                             0,
                                                             1);
                                                         $task_id = $this->addChunkTask(
                                                             $taskDao,
                                                             $project_id,
-                                                            30633,
+                                                            $prtask,
                                                             Common\Enums\TaskTypeEnum::PROOFREADING,
                                                             0,
                                                             1);
