@@ -1650,6 +1650,14 @@ CREATE TABLE IF NOT EXISTS `TestingCenterProjects` (
   CONSTRAINT FK_TestingCenterProjects_Users FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `ProjectRestrictions` (
+  project_id               INT(10) UNSIGNED NOT NULL,
+  restrict_translate_tasks INT(10) UNSIGNED NOT NULL,
+  restrict_revise_tasks    INT(10) UNSIGNED NOT NULL,
+  UNIQUE KEY `project_id` (`project_id`),
+  CONSTRAINT `FK_ProjectRestrictions_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -8920,7 +8928,7 @@ BEGIN
         CONCAT(l1.code, '|', l2.code)                                           AS language_pair,
         CONCAT(u.id, '-', l1.code, '|', l2.code)                                AS user_language_pair,
         CONCAT(u.id, '-', l1.code, '|', l2.code)                                AS user_language_pair_reduced,
-        GROUP_CONCAT(CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code)) AS language_pair_list,
+        GROUP_CONCAT(DISTINCT CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) ORDER BY CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) SEPARATOR ', ') AS language_pair_list,
         MAX(tc.`claimed-time`)                                                  AS last_task
     FROM Tasks                     t
     JOIN TaskClaims               tc ON t.id=tc.task_id
@@ -8981,6 +8989,24 @@ BEGIN
         tr.consistency>=10 AND
         t.`task-status_id`=4
     GROUP BY tc.user_id, t.`language_id-source`, t.`language_id-target`;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_project_restrictions`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_project_restrictions`(IN projectID INT, IN translate INT, IN revise INT)
+BEGIN
+    INSERT INTO ProjectRestrictions (project_id, restrict_translate_tasks, restrict_revise_tasks) VALUES (projectID, translate, revise);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_project_restrictions`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_project_restrictions`(IN projectID INT)
+BEGIN
+    SELECT *
+    FROM ProjectRestrictions
+    WHERE project_id=projectID;
 END//
 DELIMITER ;
 

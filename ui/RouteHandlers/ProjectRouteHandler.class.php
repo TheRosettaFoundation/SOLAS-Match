@@ -643,7 +643,11 @@ class ProjectRouteHandler
 
         $taskDao->updateRequiredTaskQualificationLevel($task_id, $taskDao->getRequiredTaskQualificationLevel($parent_task->getId()));
 
-        if ($newTask->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $taskDao->getRestrictedTask($parent_task->getId())) {
+        $project_restrictions = $taskDao->get_project_restrictions($project_id);
+        if ($project_restrictions && (
+                ($newTask->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION  && $project_restrictions['restrict_translate_tasks'])
+                    ||
+                ($newTask->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $project_restrictions['restrict_revise_tasks']))) {
             $taskDao->setRestrictedTask($task_id);
         }
 
@@ -1267,6 +1271,10 @@ class ProjectRouteHandler
                                             }
                                         }
 
+                                        $restrict_translate_tasks = !empty($post['restrict_translate_tasks']);
+                                        $restrict_revise_tasks    = !empty($post['restrict_revise_tasks']);
+                                        if ($restrict_translate_tasks || $restrict_revise_tasks) $taskDao->insert_project_restrictions($project->getId(), $restrict_translate_tasks, $restrict_revise_tasks);
+
                                         // Create a topic in the Community forum (Discourse) and a project in Asana
                                         error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");
                                         try {
@@ -1571,7 +1579,10 @@ class ProjectRouteHandler
                 $userDao->trackTask($user_id, $newTaskId);
             }
 
-            if (!empty($post['restrictTask']) && $newTask->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
+            if (!empty($post['restrict_translate_tasks']) && $newTask->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) {
+                $taskDao->setRestrictedTask($newTaskId);
+            }
+            if (!empty($post['restrict_revise_tasks'])    && $newTask->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
                 $taskDao->setRestrictedTask($newTaskId);
             }
         } catch (\Exception $e) {
