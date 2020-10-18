@@ -294,6 +294,23 @@ class ProjectRouteHandler
             }
 
             if (!empty($post['copyChunks'])) {
+//DEL[[...
+                                                        $task_id = $this->addChunkTask(
+                                                            $taskDao,
+                                                            $project_id,
+                                                            30632,
+                                                            Common\Enums\TaskTypeEnum::TRANSLATION,
+                                                            0,
+                                                            1);
+                                                        $task_id = $this->addChunkTask(
+                                                            $taskDao,
+                                                            $project_id,
+                                                            30633,
+                                                            Common\Enums\TaskTypeEnum::PROOFREADING,
+                                                            0,
+                                                            1);
+
+//DEL...]]
                 $matecat_language_pairs = $taskDao->getMatecatLanguagePairsForProject($project_id);
                 $matecat_language_pairs_populated = false;
                 if (!empty($matecat_language_pairs)) {
@@ -644,11 +661,15 @@ class ProjectRouteHandler
         $taskDao->updateRequiredTaskQualificationLevel($task_id, $taskDao->getRequiredTaskQualificationLevel($parent_task->getId()));
 
         $project_restrictions = $taskDao->get_project_restrictions($project_id);
-        if ($project_restrictions &&
+        if ($project_restrictions && (
                 ($newTask->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION  && $project_restrictions['restrict_translate_tasks'])
                     ||
-                ($newTask->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $project_restrictions['restrict_revise_tasks'])) {
+                ($newTask->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $project_restrictions['restrict_revise_tasks']))) {
             $taskDao->setRestrictedTask($task_id);
+//DEL BELOW...
+error_log(print_r($project_restrictions, true));
+error_log("Restrict task_id: $task_id, Type: " . $newTask->getTaskType());
+
         }
 
         // Trigger afterTaskCreate should update UserTrackedTasks based on UserTrackedProjects
