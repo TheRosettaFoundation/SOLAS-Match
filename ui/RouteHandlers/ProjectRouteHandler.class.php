@@ -649,10 +649,6 @@ class ProjectRouteHandler
                     ||
                 ($newTask->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $project_restrictions['restrict_revise_tasks']))) {
             $taskDao->setRestrictedTask($task_id);
-//DEL BELOW...
-error_log(print_r($project_restrictions, true));
-error_log("Restrict task_id: $task_id, Type: " . $newTask->getTaskType());
-
         }
 
         // Trigger afterTaskCreate should update UserTrackedTasks based on UserTrackedProjects
@@ -668,25 +664,6 @@ error_log("Restrict task_id: $task_id, Type: " . $newTask->getTaskType());
 
         $projectDao = new DAO\ProjectDao();
         $taskDao    = new DAO\TaskDao();
-//DEL[[...
-$pttask = $taskDao->getTask(30634);
-$prtask = $taskDao->getTask(30635);
-                                                        $task_id = $this->addChunkTask(
-                                                            $taskDao,
-                                                            $project_id,
-                                                            $pttask,
-                                                            Common\Enums\TaskTypeEnum::TRANSLATION,
-                                                            0,
-                                                            1);
-                                                        $task_id = $this->addChunkTask(
-                                                            $taskDao,
-                                                            $project_id,
-                                                            $prtask,
-                                                            Common\Enums\TaskTypeEnum::PROOFREADING,
-                                                            0,
-                                                            1);
-
-//DEL...]]
 
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
             $_SESSION['SESSION_CSRF_KEY'] = $this->random_string(10);
@@ -1251,7 +1228,7 @@ $prtask = $taskDao->getTask(30635);
                                             $targetCount++;
                                         }
                                         // $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, $post['wordCountInput']);
-//DEL                                        $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, 0);
+                                        $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, 0);
 
                                         $source_language = $this->valid_language_for_matecat($source_language);
                                         if (!empty($source_language) && !empty($matecat_translation_task_ids)) {
@@ -1301,7 +1278,7 @@ $prtask = $taskDao->getTask(30635);
                                         // Create a topic in the Community forum (Discourse) and a project in Asana
                                         error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");
                                         try {
-//DEL                                           $this->create_discourse_topic($project->getId(), $target_languages);
+                                           $this->create_discourse_topic($project->getId(), $target_languages);
                                         } catch (\Exception $e) {
                                             error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
                                         }
