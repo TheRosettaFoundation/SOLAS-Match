@@ -100,14 +100,18 @@ class ProjectRouteHandler
                 $sourceLocale = new Common\Protobufs\Models\Locale();
                 $project = new Common\Protobufs\Models\Project();
 
-                $project->setTitle($post['project_title']);
-                $project->setDescription($post['project_description']);
-                $project->setDeadline($post['project_deadline']);
-                $project->setImpact($post['project_impact']);
-                $project->setReference($post['project_reference']);
+//Have to allow duplicate titles within an organisation
+//Will title always be set?
+//Will they be nulls or what? in general
+                $project->setTitle($hook['name']);
+
+                $project->setDescription($hook['project_description']);
+                $project->setDeadline($hook['project_deadline']);
+                $project->setImpact($hook['project_impact']);
+                $project->setReference($hook['project_reference']);
                 $project->setWordCount(1); // Code in taskInsertAndUpdate() does not support 0, so use 1 as placeholder
 
-                list($trommons_source_language_code, $trommons_source_country_code) = $projectDao->convert_selection_to_language_country($post['sourceLanguageSelect']);
+                list($trommons_source_language_code, $trommons_source_country_code) = $projectDao->convert_selection_to_language_country($hook['sourceLanguageSelect']);
                 $sourceLocale->setCountryCode($trommons_source_country_code);
                 $sourceLocale->setLanguageCode($trommons_source_language_code);
                 $project->setSourceLocale($sourceLocale);
@@ -119,7 +123,7 @@ class ProjectRouteHandler
 
                 try {
                     $project = $projectDao->createProject($project);
-                    error_log('Created Project: ' . $post['project_title']);
+                    error_log('Created Project: ' . $hook['project_title']);
                 } catch (\Exception $e) {
                     $project = null;
                 }
