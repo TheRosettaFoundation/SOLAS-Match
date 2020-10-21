@@ -97,6 +97,36 @@ class ProjectRouteHandler
 
     private function create_project($hook)
     {
+                $sourceLocale = new Common\Protobufs\Models\Locale();
+                $project = new Common\Protobufs\Models\Project();
+
+                $project->setTitle($post['project_title']);
+                $project->setDescription($post['project_description']);
+                $project->setDeadline($post['project_deadline']);
+                $project->setImpact($post['project_impact']);
+                $project->setReference($post['project_reference']);
+                $project->setWordCount(1); // Code in taskInsertAndUpdate() does not support 0, so use 1 as placeholder
+
+                list($trommons_source_language_code, $trommons_source_country_code) = $projectDao->convert_selection_to_language_country($post['sourceLanguageSelect']);
+                $sourceLocale->setCountryCode($trommons_source_country_code);
+                $sourceLocale->setLanguageCode($trommons_source_language_code);
+                $project->setSourceLocale($sourceLocale);
+
+                $project->setOrganisationId($org_id);
+                $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
+
+                $project->clearTag();
+
+                try {
+                    $project = $projectDao->createProject($project);
+                    error_log('Created Project: ' . $post['project_title']);
+                } catch (\Exception $e) {
+                    $project = null;
+                }
+                if (empty($project) || $project->getId() <= 0) {
+                    $app->flashNow('error', Lib\Localisation::getTranslation('project_create_title_conflict'));
+                } else {
+
 
     }
 
