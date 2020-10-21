@@ -97,19 +97,19 @@ class ProjectRouteHandler
 
     private function create_project($hook)
     {
+        $hook = $hook['project'];
                 $sourceLocale = new Common\Protobufs\Models\Locale();
                 $project = new Common\Protobufs\Models\Project();
 
 //Have to allow duplicate titles within an organisation
-//Will title always be set?
-//Will they be nulls or what? in general
-                $project->setTitle($hook['name']);
-
-                $project->setDescription($hook['project_description']);
-                $project->setDeadline($hook['project_deadline']);
-                $project->setImpact($hook['project_impact']);
-                $project->setReference($hook['project_reference']);
-                $project->setWordCount(1); // Code in taskInsertAndUpdate() does not support 0, so use 1 as placeholder
+//Test Kató€"'&%XX
+        $project->setTitle($hook['name']);
+        if (!empty($hook['project_description'])) $project->setDescription($hook['project_description']);
+        if (!empty($hook['dateDue'])) $project->setDeadline(substr(string $hook['dateDue'], 0, 10) . ' ' . substr(string $hook['dateDue'], 11, 6));
+else
+//Other fields such as impact/reference
+//Wordcount??...
+        $project->setWordCount(1); // Code in taskInsertAndUpdate() does not support 0, so use 1 as placeholder
 
                 list($trommons_source_language_code, $trommons_source_country_code) = $projectDao->convert_selection_to_language_country($hook['sourceLanguageSelect']);
                 $sourceLocale->setCountryCode($trommons_source_country_code);
