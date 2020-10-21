@@ -71,6 +71,33 @@ class ProjectRouteHandler
             '/project/:project_id/getwordcount/',
             array($this, 'project_get_wordcount')
         )->name('project_get_wordcount');
+
+        $app->get(
+            '/memsource_hook/',
+            array($this, 'memsourceHook')
+        )->via("POST")->name('memsource_hook');
+    }
+
+    public function memsourceHook()
+    {
+//Only allow from memsource domain or check code
+
+        $app = \Slim\Slim::getInstance();
+        $body = $app->request()->getBody();
+        error_log(print_r(json_decode($body, true), true));
+        $hook = json_decode($body, true);
+
+        switch ($hook['event']) {
+            case 'PROJECT_CREATED':
+                create_project($hook);
+                break;
+        }
+        die;
+    }
+
+    private function create_project($hook)
+    {
+
     }
 
     public function test($projectId)
