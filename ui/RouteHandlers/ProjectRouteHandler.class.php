@@ -105,6 +105,8 @@ class ProjectRouteHandler
 //Test Kató€"'&%XX
         $project->setTitle($hook['name']);
         if (!empty($hook['project_description'])) $project->setDescription($hook['project_description']);
+        else                                      $project->setDescription('-');
+        $project->setImpact('-');
         if (!empty($hook['dateDue'])) $project->setDeadline(substr(string $hook['dateDue'], 0, 10) . ' ' . substr(string $hook['dateDue'], 11, 6));
         else                          $project->setDeadline(gmdate('Y-m-d H:i:s', strtotime('25 days')));
 //Other fields such as impact/reference
@@ -118,29 +120,16 @@ class ProjectRouteHandler
 
 //REQUIRED How match
                 $project->setOrganisationId($org_id);
-        if (!empty($hook['dateCreated'])) $project->setDeadline(substr(string $hook['dateCreated'], 0, 10) . ' ' . substr(string $hook['dateCreated'], 11, 6));
+        if (!empty($hook['dateCreated'])) $project->setCreatedTime(substr(string $hook['dateCreated'], 0, 10) . ' ' . substr(string $hook['dateCreated'], 11, 6));
         else                              $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
         //IS THERE ANY MATCHING TAGS? $project->clearTag();
 
         try {
             $project = $projectDao->createProject($project);
 [[
-    if deadlineTime="" then set deadlineTime=null; end if;
-    if orgId="" then set orgId=null; end if;
-    if wordCount="" then set wordCount=null; end if;
-    if createdTime="" then set createdTime=null; end if;
-    if sourceCountryCode="" then set sourceCountryCode=null; end if;
-    if sourceLanguageCode="" then set sourceLanguageCode=null; end if;
-    if titleText="" then set titleText=null; end if;
-    if descr="" then set descr=null; end if;
-    if impactText="" then set impactText=null; end if;
     if ref="" then set ref=null; end if;
     if imageUploaded="" OR imageUploaded= NULL then set imageUploaded=0; end if;
     if imageApproved="" OR imageApproved= NULL then set imageApproved=0; end if;
-
-
-        if deadlineTime is null or deadlineTime = '0000-00-00 00:00:00' 
-        then set deadlineTime = DATE_ADD(now(),INTERVAL 14 DAY); end if;
 ]]
             error_log('Created Project: ' . $hook['project_title']);
         } catch (\Exception $e) {
