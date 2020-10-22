@@ -177,6 +177,28 @@ class ProjectRouteHandler
 // Needed later? $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, 0);
 // Needed later? $taskDao->insertMatecatLanguagePairs($matecat_translation_task_id, $project->getId(), Common\Enums\TaskTypeEnum::TRANSLATION, "$source_language|$target_language");
 
+//Discuss...
+//            [accessSettings] => Array
+//            [analyseSettings] => Array
+//            [businessUnit] => 
+//            [client] => Array
+//            [costCenter] => 
+//            [createdBy] => Array
+//            [domain] => 
+//            [financialSettings] => Array
+//            [id] => 20434630
+//            [internalId] => 48
+//            [isPublishedOnJobBoard] => 
+//            [owner] => Array
+//            [progress] => Array
+//            [purchaseOrder] => 
+//            [qualityAssuranceSettings] => Array
+//            [references] => Array
+//            [shared] => 
+//            [status] => NEW
+//            [subDomain] => 
+//            [uid] => 0jnLCiBsa0LZW4cufoTWY3
+//            [workflowSteps] => Array
     }
 
     public function test($projectId)
