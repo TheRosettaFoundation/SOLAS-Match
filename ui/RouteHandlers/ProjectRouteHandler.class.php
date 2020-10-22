@@ -126,23 +126,15 @@ class ProjectRouteHandler
 
         try {
             $project = $projectDao->createProject($project);
-[[
-    if ref="" then set ref=null; end if;
-    if imageUploaded="" OR imageUploaded= NULL then set imageUploaded=0; end if;
-    if imageApproved="" OR imageApproved= NULL then set imageApproved=0; end if;
-]]
             error_log('Created Project: ' . $hook['project_title']);
         } catch (\Exception $e) {
-            error_log('Failed to create Project: ' . $hook['project_title']);
+            error_log('Failed to create Project (exception): ' . $hook['project_title']);
             die;
         }
         if (empty($project) || $project->getId() <= 0) {
-            $app->flashNow('error', Lib\Localisation::getTranslation('project_create_title_conflict'));
-        } else {
-
-
-
-
+            error_log('Failed to create Project: ' . $hook['project_title']);
+            die;
+        }
 
 
             [targetLangs] => Array
