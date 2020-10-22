@@ -126,6 +126,7 @@ class ProjectRouteHandler
 
         try {
             $project = $projectDao->createProject($project);
+            //?? $project = $projectDao->createProjectDirectly($project);
             error_log('Created Project: ' . $hook['project_title']);
         } catch (\Exception $e) {
             error_log('Failed to create Project (exception): ' . $hook['project_title']);
@@ -136,13 +137,45 @@ class ProjectRouteHandler
             die;
         }
 
+// No (issues?) $projectDao->saveProjectFile($project, $user_id, $projectFileName, $data);
+//??                                         error_log('projectCreate calculateProjectDeadlines: ' . $project->getId());
+//                                        $projectDao->calculateProjectDeadlines($project->getId());
 
-            [targetLangs] => Array
-                (
-                    [0] => es
-                    [1] => fr
-                )
+//check/discuss...
+//            $task->setPublished(1);
+//            if ($newTaskId && $preReqTaskId) {
+//                $taskDao->addTaskPreReq($newTaskId, $preReqTaskId);
+//            }
+//            if (!empty($post['trackProject'])) {
+//                $userDao = new DAO\UserDao();
+//                $userDao->trackTask($user_id, $newTaskId);
+//            }
+//            if (!empty($post['restrict_translate_tasks']) && $newTask->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) {
+//                $taskDao->setRestrictedTask($newTaskId);
+//            }
+//            if (!empty($post['restrict_revise_tasks'])    && $newTask->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
+//                $taskDao->setRestrictedTask($newTaskId);
+//            }
 
+//DISCUSS...
+//                                        $restrict_translate_tasks = !empty($post['restrict_translate_tasks']);
+//                                        $restrict_revise_tasks    = !empty($post['restrict_revise_tasks']);
+//                                        if ($restrict_translate_tasks || $restrict_revise_tasks) $taskDao->insert_project_restrictions($project->getId(), $restrict_translate_tasks, $restrict_revise_tasks);
+//
+//                                        // Create a topic in the Community forum (Discourse) and a project in Asana
+//                                        error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");
+//                                        try {
+//                                           $this->create_discourse_topic($project->getId(), $target_languages);
+//                                        } catch (\Exception $e) {
+//                                            error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
+//                                        }
+//            [targetLangs] => Array
+//                (
+//                    [0] => es
+//                    [1] => fr
+//                )
+// Needed later? $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, 0);
+// Needed later? $taskDao->insertMatecatLanguagePairs($matecat_translation_task_id, $project->getId(), Common\Enums\TaskTypeEnum::TRANSLATION, "$source_language|$target_language");
 
     }
 
