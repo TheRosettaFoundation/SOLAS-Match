@@ -178,6 +178,7 @@ class ProjectRouteHandler
 // Needed later? $taskDao->insertMatecatLanguagePairs($matecat_translation_task_id, $project->getId(), Common\Enums\TaskTypeEnum::TRANSLATION, "$source_language|$target_language");
 
 //Discuss...
+//https://cloud.memsource.com/web/project2/show/0jnLCiBsa0LZW4cufoTWY3
 //            [accessSettings] => Array
 //            [analyseSettings] => Array
 //            [businessUnit] => 
@@ -186,7 +187,7 @@ class ProjectRouteHandler
 //            [createdBy] => Array
 //            [domain] => 
 //            [financialSettings] => Array
-//            [id] => 20434630
+//            [id] => 20434630 NEED TO MATCH IN TASK
 //            [internalId] => 48
 //            [isPublishedOnJobBoard] => 
 //            [owner] => Array
