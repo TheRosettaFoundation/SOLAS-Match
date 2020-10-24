@@ -113,7 +113,7 @@ class Tasks
                 /* Routes starting /v0/tasks */
                 $app->put(
                     '/archiveTask/:taskId/user/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
+                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
                     '\SolasMatch\API\V0\Tasks::archiveTask'
                 );
                 

@@ -2,6 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" >
     <head>
         <meta charset="utf-8" content="application/xhtml+xml" />
+
+        <meta name="google-signin-client_id" content="{Settings::get('googlePlus.client_id')}" />
 <!--        <meta name="google-translate-customization" content="d0b5975e5905d60f-4e4c167261d2937a-g4574d0ff41a34d5b-10" />-->
 
         <!-- css -->
@@ -44,8 +46,14 @@
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-1.9.0.js"></script>
         <script type="text/javascript" src="{urlFor name="home"}ui/js/lib/jquery-ui.js"></script>
 
-        <!-- google analytics -->
-        <script type="text/javascript" src="{urlFor name="home"}ui/js/tracking.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-149484461-6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'UA-149484461-6');
+</script>
 
         <!-- extra Scripts -->
         {if isset($extra_scripts)}
@@ -93,6 +101,11 @@
 	                                <a href="{Settings::get('site.forum_link')}" target="_blank">{Localisation::getTranslation('common_forum')}</a>
 	                            </li>
                             {/if}
+                        {if isset($site_admin)}
+                            <li>
+                                <a href="https://analytics.translatorswb.org">Kató Analytics</a>
+                            </li>
+                        {/if}
                     </ul>
                     <ul class="nav pull-right" style="max-height: 38px">
                         {if isset($userNotifications)}   
@@ -146,13 +159,13 @@
 		    <a href = "{Settings::get('banner.link')}" target = "_blank">
 		    	<div id="banner-container-blocks">
 			    	<div id="banner-left">
-			    		<img src="{urlFor name='home'}ui/img/banner/banner-left-en.png" alt="{Settings::get('banner.info')}">
+              <img src="{urlFor name='home'}ui/img/banner/banner-left-en2.png" alt="{Settings::get('banner.info')}">
 			    	</div>
 			    	<div id="banner-mid">
-			    		<img src="{urlFor name='home'}ui/img/banner/banner-mid-en.png" alt="{Settings::get('banner.info')}">
+              <img src="{urlFor name='home'}ui/img/banner/banner-mid-en2.png" alt="{Settings::get('banner.info')}">
 			    	</div>
 			    	<div id="banner-right">
-			    		<img src="{urlFor name='home'}ui/img/banner/banner-right-en.png" alt="{Settings::get('banner.info')}">
+              <img src="{urlFor name='home'}ui/img/banner/banner-right-en2.png" alt="{Settings::get('banner.info')}">
 			    	</div>
 		    	</div>
 		    </a>

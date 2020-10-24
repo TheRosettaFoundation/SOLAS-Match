@@ -1,4 +1,5 @@
 {include file='header.tpl'}
+<!-- Editor Hint: ¿áéíóú -->
 
 <span class="hidden">
     <!-- Parameters... -->
@@ -40,10 +41,10 @@
                 <div class="filter-title">{Localisation::getTranslation('common_task_type')}</div>
                 <select name="taskTypes" id="taskTypes">
                     <option value="0" {if ($selectedTaskType === 0)}selected="selected"{/if}>{Localisation::getTranslation('index_any_task_type')}</option>
-                    <option value="1" {if ($selectedTaskType === 1)}selected="selected"{/if}>{Localisation::getTranslation('common_segmentation')}</option>
+                    <!-- <option value="1" {if ($selectedTaskType === 1)}selected="selected"{/if}>{Localisation::getTranslation('common_segmentation')}</option> -->
                     <option value="2" {if ($selectedTaskType === 2)}selected="selected"{/if}>{Localisation::getTranslation('common_translation')}</option>
                     <option value="3" {if ($selectedTaskType === 3)}selected="selected"{/if}>{Localisation::getTranslation('common_proofreading')}</option>
-                    <option value="4" {if ($selectedTaskType === 4)}selected="selected"{/if}>{Localisation::getTranslation('common_desegmentation')}</option>
+                    <!-- <option value="4" {if ($selectedTaskType === 4)}selected="selected"{/if}>{Localisation::getTranslation('common_desegmentation')}</option> -->
                 </select>
             </div>
             <div class="filter-block">
@@ -98,7 +99,7 @@
                                 {Localisation::getTranslation('common_status')}: <strong>{$taskStatusTexts[$status_id]}</strong>
                             </p>
                             <p>
-                                {if count($taskTags[$task_id]) gt 0}
+                                {if !empty($taskTags) && !empty($taskTags[$task_id]) && count($taskTags[$task_id]) gt 0}
                                     {foreach $taskTags[$task_id] as $tag}
                                         <a href="{$siteLocation}tag/{$tag->getId()}" class="label"><span class="label">{trim(trim(TemplateHelper::uiCleanseHTML($tag->getLabel())),",")}</span></a>
                                     {/foreach}
@@ -111,10 +112,13 @@
                             </p>
                             <p class="task_details"><div class="process_created_time_utc" style="visibility: hidden">{$created_timestamps[$task_id]}</div></p>
                             <p><div class="process_deadline_utc" style="visibility: hidden">{$deadline_timestamps[$task_id]}</div></p>
+                            {if !empty($completed_timestamps[$task_id])}
+                                <p><div class="process_completed_utc" style="visibility: hidden">{$completed_timestamps[$task_id]}</div></p>
+                            {/if}
                             <p id="parents_{$task_id}">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$task_id])}</p>
 
-                            {if $task->getProjectId() > Settings::get("discourse.pre_discourse")}
-                            <p>{Localisation::getTranslation('common_forum')}: <a href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">https://community.translatorswb.org/t/{$discourse_slug[$task_id]}</a></p>
+                            {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
+                            <p>{Localisation::getTranslation('common_discuss_on_community')}: <a href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">https://community.translatorswb.org/t/{$discourse_slug[$task_id]}</a></p>
                             {/if}
 
                             <p>
@@ -130,9 +134,17 @@
                                             </a>
                                         {/if}
                                     {/if}
+                                    {if $allow_downloads[$task_id]}
                                     <a href="{$siteLocation}task/{$task_id}/simple-upload" class="btn btn-small btn-success">
                                         {Localisation::getTranslation('claimed_tasks_submit_completed_task')}
                                     </a>
+                                    {else}
+                                    {if $show_mark_chunk_complete[$task_id]}
+                                    <a href="{$siteLocation}task/{$task_id}/chunk-complete" class="btn btn-small btn-success">
+                                        Mark Chunk Complete
+                                    </a>
+                                    {/if}
+                                    {/if}
                                 {/if}
                                 {if $status_id == 3 && $type_id == 1}
                                     <a href="{$siteLocation}task/{$task_id}/segmentation" class="btn btn-small btn-primary">
@@ -154,10 +166,22 @@
                                 {/if}
                                 {if $type_id == 2}
                                     {if $proofreadTaskIds[$task_id]}
+                                        {if $allow_downloads[$task_id]}
                                         <a href="{$siteLocation}task/{$proofreadTaskIds[$task_id]}/download-task-latest-file/" class="btn btn-small btn-info">
                                             {Localisation::getTranslation('claimed_tasks_download_proofread_task')}
                                         </a>
+                                        {/if}
                                     {/if}
+                                {/if}
+                                {if $parentTaskIds[$task_id]}
+                                    <a href="{$siteLocation}task/{$parentTaskIds[$task_id]}/download-task-latest-file/" class="btn btn-small btn-info">
+                                        Download Complete Revised Version
+                                    </a>
+                                {/if}
+                                {if ($status_id == 3 || $status_id == 4) && ($type_id == 3 || $type_id == 2)}
+                                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdIEBza8C3RRsP0k75ISPm_urEHa0Fx_A3BGjkYNj8iwl4_mQ/viewform?{if isset($thisUser)}emailAddress={urlencode($thisUser->getEmail())}&{/if}entry.2005620554={$siteLocation}task/{$task_id}/view" class="btn btn-small btn-primary" target="_blank">
+                                        Kató Pre-Delivery Checklist
+                                    </a>
                                 {/if}
                             </p>
                             <br/>

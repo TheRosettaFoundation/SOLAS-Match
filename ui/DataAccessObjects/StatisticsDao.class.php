@@ -67,13 +67,20 @@ class StatisticsDao extends BaseDao
             if (!empty($stats['TRANSLATED_PERC_FORMATTED'])) $result[$index]['TRANSLATED_PERC_FORMATTED'] = $stats['TRANSLATED_PERC_FORMATTED'] . '%';
             if (!empty($stats['APPROVED_PERC_FORMATTED']))   $result[$index]['APPROVED_PERC_FORMATTED']   = $stats['APPROVED_PERC_FORMATTED'] . '%';
             if (!empty($stats['matecat_url']))               $result[$index]['matecat_url']               = $stats['matecat_url'];
+            if (!empty($stats['matecat_langpair_or_blank'])) $result[$index]['matecat_langpair_or_blank'] = $stats['matecat_langpair_or_blank'];
         }
         return $result;
     }
 
-    public function complete_matecat()
+    public function testing_center()
     {
-        $result = LibAPI\PDOWrapper::call('complete_matecat', '');
+        $result = LibAPI\PDOWrapper::call('testing_center', '');
+        return $result;
+    }
+
+    public function late_matecat()
+    {
+        $result = LibAPI\PDOWrapper::call('late_matecat', '');
 
         foreach ($result as $index => $user_row) {
            $stats = $this->get_matecat_task_stats($user_row['task_id'], $user_row['task_type'], $user_row['project_id'], $user_row['matecat_langpair_or_blank'], $user_row['matecat_id_job_or_zero'], $user_row['matecat_id_job_password_or_blank']);
@@ -87,21 +94,83 @@ class StatisticsDao extends BaseDao
             if (!empty($stats['TRANSLATED_PERC_FORMATTED'])) $result[$index]['TRANSLATED_PERC_FORMATTED'] = $stats['TRANSLATED_PERC_FORMATTED'] . '%';
             if (!empty($stats['APPROVED_PERC_FORMATTED']))   $result[$index]['APPROVED_PERC_FORMATTED']   = $stats['APPROVED_PERC_FORMATTED'] . '%';
             if (!empty($stats['matecat_url']))               $result[$index]['matecat_url']               = $stats['matecat_url'];
+            if (!empty($stats['matecat_langpair_or_blank'])) $result[$index]['matecat_langpair_or_blank'] = $stats['matecat_langpair_or_blank'];
+        }
+        return $result;
+    }
+
+    public function complete_matecat()
+    {
+        $result = LibAPI\PDOWrapper::call('complete_matecat', '');
+
+        foreach ($result as $index => $user_row) {
+           //$stats = $this->get_matecat_task_stats($user_row['task_id'], $user_row['task_type'], $user_row['project_id'], $user_row['matecat_langpair_or_blank'], $user_row['matecat_id_job_or_zero'], $user_row['matecat_id_job_password_or_blank']);
+           // Above takes too long...
+           $stats = $this->get_matecat_task_urls($user_row['task_id'], $user_row['task_type'], $user_row['project_id'], $user_row['matecat_langpair_or_blank'], $user_row['matecat_id_job_or_zero'], $user_row['matecat_id_job_password_or_blank']);
+
+           $result[$index]['DOWNLOAD_STATUS'] = '';
+           $result[$index]['TRANSLATED_PERC_FORMATTED'] = '';
+           $result[$index]['APPROVED_PERC_FORMATTED'] = '';
+           $result[$index]['matecat_url'] = '';
+
+            if (!empty($stats['DOWNLOAD_STATUS']))           $result[$index]['DOWNLOAD_STATUS']           = $stats['DOWNLOAD_STATUS'];
+            if (!empty($stats['TRANSLATED_PERC_FORMATTED'])) $result[$index]['TRANSLATED_PERC_FORMATTED'] = $stats['TRANSLATED_PERC_FORMATTED'] . '%';
+            if (!empty($stats['APPROVED_PERC_FORMATTED']))   $result[$index]['APPROVED_PERC_FORMATTED']   = $stats['APPROVED_PERC_FORMATTED'] . '%';
+            if (!empty($stats['matecat_url']))               $result[$index]['matecat_url']               = $stats['matecat_url'];
+            if (!empty($stats['matecat_langpair_or_blank'])) $result[$index]['matecat_langpair_or_blank'] = $stats['matecat_langpair_or_blank'];
         }
         return $result;
     }
 
     public function get_matecat_task_stats($task_id, $task_type, $project_id, $matecat_langpair, $matecat_id_job, $matecat_id_job_password)
     {
+        $matecat_api = Common\Lib\Settings::get('matecat.url');
+        $taskDao = new TaskDao();
         $stats = array();
+        $we_are_a_subchunk = false;
         if ($task_type == Common\Enums\TaskTypeEnum::TRANSLATION || $task_type == Common\Enums\TaskTypeEnum::PROOFREADING) {
+            $job_first_segment = '';
             $translate = 'translate';
             if ($task_type == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
 
-            if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
+            if (empty($matecat_id_job)) {
+                // Might be a chunk...
+                $matecat_tasks = $taskDao->getTaskChunk($task_id);
+                if (!empty($matecat_tasks)) {
+                    $we_are_a_subchunk = true;
+                    $matecat_langpair        = $matecat_tasks[0]['matecat_langpair'];
+                    $matecat_id_job          = $matecat_tasks[0]['matecat_id_job'];
+                    $matecat_id_job_password = $matecat_tasks[0]['matecat_id_chunk_password'];
+                    $job_first_segment       = $matecat_tasks[0]['job_first_segment'];
+                }
+            }
 
+            if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
+                  if (!$we_are_a_subchunk && $taskDao->getTaskSubChunks($matecat_id_job)) {
+                      // This has been chunked, so need to accumulate status of all chunks
+                      $chunks = $taskDao->getStatusOfSubChunks($project_id, $matecat_langpair, $matecat_id_job, $matecat_id_job_password);
+                      $translated_status = true;
+                      $approved_status   = true;
+                      foreach ($chunks as $index => $chunk) {
+                          if ($chunk['DOWNLOAD_STATUS'] === 'draft') $translated_status = false;
+                          if ($chunk['DOWNLOAD_STATUS'] === 'draft' || $chunk['DOWNLOAD_STATUS'] === 'translated') $approved_status = false;
+                      }
+                      if     ($approved_status)   $stats['DOWNLOAD_STATUS'] = 'approved (Split Job)';
+                      elseif ($translated_status) $stats['DOWNLOAD_STATUS'] = 'translated (Split Job)';
+                      else                        $stats['DOWNLOAD_STATUS'] = 'draft (Split Job)';
+                  } else {
+                $recorded_status = $taskDao->getMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password);
+                if ($recorded_status === 'approved') { // We do not need to query MateCat...
+                    $stats = array();
+                    $stats['DOWNLOAD_STATUS']           = 'approved';
+                    $stats['TRANSLATED_PERC_FORMATTED'] = '100';
+                    $stats['APPROVED_PERC_FORMATTED']   = '100';
+                    $stats['matecat_url'] = "{$matecat_api}$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password$job_first_segment";
+                    $stats['matecat_langpair_or_blank'] = $matecat_langpair;
+                    return $stats;
+                }
                 // https://www.matecat.com/api/docs#!/Project/get_v1_jobs_id_job_password_stats
-                $re = curl_init("https://kato.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
+                $re = curl_init("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats");
 
                 curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
                 curl_setopt($re, CURLOPT_COOKIESESSION, true);
@@ -130,13 +199,53 @@ class StatisticsDao extends BaseDao
 
                     if (!empty($response_data['stats'])) {
                         $stats = $response_data['stats'];
-                        $stats['matecat_url'] = "https://kato.translatorswb.org/$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password";
+                        $stats['matecat_url'] = "{$matecat_api}$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password$job_first_segment";
+                        $stats['matecat_langpair_or_blank'] = $matecat_langpair;
+                        if ($stats['DOWNLOAD_STATUS'] === 'draft') {
+                            $stats['DOWNLOAD_STATUS'] = $recorded_status; // getMatecatRecordedJobStatus() MIGHT have a "better" status
+                        }
                     } else {
-                        error_log("https://kato.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats get_matecat_task_stats($task_id...) stats empty!");
+                        error_log("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats get_matecat_task_stats($task_id...) stats empty!");
                     }
                 } else {
-                    error_log("https://kato.translatorswb.org/api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats get_matecat_task_stats($task_id...) responseCode: $responseCode");
+                    error_log("{$matecat_api}api/v1/jobs/$matecat_id_job/$matecat_id_job_password/stats get_matecat_task_stats($task_id...) responseCode: $responseCode");
                 }
+                  }
+            }
+        }
+        return $stats;
+    }
+
+    public function get_matecat_task_urls($task_id, $task_type, $project_id, $matecat_langpair, $matecat_id_job, $matecat_id_job_password)
+    {
+        $matecat_api = Common\Lib\Settings::get('matecat.url');
+        $taskDao = new TaskDao();
+        $stats = array();
+        $we_are_a_subchunk = false;
+        if ($task_type == Common\Enums\TaskTypeEnum::TRANSLATION || $task_type == Common\Enums\TaskTypeEnum::PROOFREADING) {
+            $job_first_segment = '';
+            $translate = 'translate';
+            if ($task_type == Common\Enums\TaskTypeEnum::PROOFREADING) $translate = 'revise';
+
+            if (empty($matecat_id_job)) {
+                // Might be a chunk...
+                $matecat_tasks = $taskDao->getTaskChunk($task_id);
+                if (!empty($matecat_tasks)) {
+                    $we_are_a_subchunk = true;
+                    $matecat_langpair        = $matecat_tasks[0]['matecat_langpair'];
+                    $matecat_id_job          = $matecat_tasks[0]['matecat_id_job'];
+                    $matecat_id_job_password = $matecat_tasks[0]['matecat_id_chunk_password'];
+                    $job_first_segment       = $matecat_tasks[0]['job_first_segment'];
+                }
+            }
+
+            if (!empty($matecat_langpair) && !empty($matecat_id_job) && !empty($matecat_id_job_password)) {
+                  if (!$we_are_a_subchunk && $taskDao->getTaskSubChunks($matecat_id_job)) {
+                      $stats['parent_of_chunked'] = 1;
+                  } else {
+                $stats['matecat_url'] = "{$matecat_api}$translate/proj-" . $project_id . '/' . str_replace('|', '-', $matecat_langpair) . "/$matecat_id_job-$matecat_id_job_password$job_first_segment";
+                $stats['matecat_langpair_or_blank'] = $matecat_langpair;
+                  }
             }
         }
         return $stats;
@@ -151,6 +260,22 @@ class StatisticsDao extends BaseDao
     public function unclaimed_tasks()
     {
         $result = LibAPI\PDOWrapper::call('unclaimed_tasks', '');
+
+        foreach ($result as $index => $user_row) {
+            $stats = $this->get_matecat_task_urls($user_row['task_id'], $user_row['task_type'], $user_row['project_id'], $user_row['matecat_langpair_or_blank'], $user_row['matecat_id_job_or_zero'], $user_row['matecat_id_job_password_or_blank']);
+
+            $result[$index]['matecat_url'] = '';
+            if (!empty($stats['matecat_url']))               $result[$index]['matecat_url']               = $stats['matecat_url'];
+            if (!empty($stats['matecat_langpair_or_blank'])) $result[$index]['matecat_langpair_or_blank'] = $stats['matecat_langpair_or_blank'];
+            if (!empty($stats['parent_of_chunked'])) $result[$index]['status'] .= ' (Split Job)';
+        }
+
+        return $result;
+    }
+
+    public function search_users_by_language_pair($source, $target)
+    {
+        $result = LibAPI\PDOWrapper::call('search_users_by_language_pair', LibAPI\PDOWrapper::cleanseNullOrWrapStr($source) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($target));
         return $result;
     }
 
@@ -163,6 +288,12 @@ class StatisticsDao extends BaseDao
     public function user_task_languages($code)
     {
         $result = LibAPI\PDOWrapper::call('user_task_languages', LibAPI\PDOWrapper::cleanseNullOrWrapStr($code));
+        return $result;
+    }
+
+    public function user_words_by_language()
+    {
+        $result = LibAPI\PDOWrapper::call('user_words_by_language', '');
         return $result;
     }
 
@@ -208,6 +339,12 @@ class StatisticsDao extends BaseDao
         return $result;
     }
 
+    public function org_stats_words_req()
+    {
+        $result = LibAPI\PDOWrapper::call('org_stats_words_req', '');
+        return $result;
+    }
+
     public function org_stats_languages()
     {
         $result = LibAPI\PDOWrapper::call('org_stats_languages', '');
@@ -244,6 +381,24 @@ class StatisticsDao extends BaseDao
         return $result;
     }
 
+    public function users_who_logged_in()
+    {
+        $result = LibAPI\PDOWrapper::call('users_who_logged_in', '');
+        return $result;
+    }
+
+    public function language_work_requested()
+    {
+        $result = LibAPI\PDOWrapper::call('language_work_requested', '');
+        return $result;
+    }
+
+    public function translators_for_language_pairs()
+    {
+        $result = LibAPI\PDOWrapper::call('translators_for_language_pairs', '');
+        return $result;
+    }
+
     public function search_user($name)
     {
         $result = LibAPI\PDOWrapper::call('search_user', LibAPI\PDOWrapper::cleanseNullOrWrapStr($name));
@@ -259,6 +414,79 @@ class StatisticsDao extends BaseDao
     public function search_project($name)
     {
         $result = LibAPI\PDOWrapper::call('search_project', LibAPI\PDOWrapper::cleanseNullOrWrapStr($name));
+        return $result;
+    }
+
+    public function user_task_reviews()
+    {
+        $result = LibAPI\PDOWrapper::call('user_task_reviews', '');
+        return $result;
+    }
+
+    public function peer_to_peer_vetting()
+    {
+        $levels_by_user_language_pair_reduced = [];
+        $result = LibAPI\PDOWrapper::call('peer_to_peer_vetting_qualification_level', '');
+        foreach ($result as $row) {
+            $levels_by_user_language_pair_reduced[$row['user_language_pair_reduced']] = $row;
+        }
+
+        $average_reviews_by_user_language_pair = [];
+        $result = LibAPI\PDOWrapper::call('peer_to_peer_vetting_reviews', '');
+        foreach ($result as $row) {
+            $average_reviews_by_user_language_pair[$row['user_language_pair']] = $row;
+        }
+
+        $result = LibAPI\PDOWrapper::call('peer_to_peer_vetting', '');
+        foreach ($result as $index => $row) {
+            if (!empty($levels_by_user_language_pair_reduced[$row['user_language_pair_reduced']])) {
+                $result[$index]['level'] = $levels_by_user_language_pair_reduced[$row['user_language_pair_reduced']]['level'];
+            } else {
+                $result[$index]['level'] = '';
+            }
+
+            if (!empty($average_reviews_by_user_language_pair[$row['user_language_pair']])) {
+                $result[$index]['average_reviews'] = $average_reviews_by_user_language_pair[$row['user_language_pair']]['average_reviews'];
+            } else {
+                $result[$index]['average_reviews'] = '';
+            }
+
+            if (!empty($average_reviews_by_user_language_pair[$row['user_language_pair']])) {
+                $result[$index]['number_reviews'] = $average_reviews_by_user_language_pair[$row['user_language_pair']]['number_reviews'];
+            } else {
+                $result[$index]['number_reviews'] = 0;
+            }
+        }
+        return $result;
+    }
+
+    public function submitted_task_reviews()
+    {
+        $result = LibAPI\PDOWrapper::call('submitted_task_reviews', '');
+        return $result;
+    }
+
+    public function tasks_no_reviews()
+    {
+        $result = LibAPI\PDOWrapper::call('tasks_no_reviews', '');
+        return $result;
+    }
+
+    public function project_source_file_scores()
+    {
+        $result = LibAPI\PDOWrapper::call('project_source_file_scores', '');
+        return $result;
+    }
+
+    public function matecat_analyse_status()
+    {
+        $result = LibAPI\PDOWrapper::call('matecat_analyse_status', '');
+        return $result;
+    }
+
+    public function covid_projects()
+    {
+        $result = LibAPI\PDOWrapper::call('covid_projects', '');
         return $result;
     }
 }

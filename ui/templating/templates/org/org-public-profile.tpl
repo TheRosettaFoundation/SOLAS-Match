@@ -34,6 +34,11 @@
                                 <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('org_public_profile_edit_organisation_details')}
                             </a>
                             {/if}
+                            {if $isSiteAdmin}
+                            <a class="btn btn-success" href="{urlFor name="project-create" options="org_id.$org_id"}">
+                                <i class="icon-upload icon-white"></i> {Localisation::getTranslation('common_create_project')}
+                            </a>
+                            {/if}
                             {if false}
                             <a href="{urlFor name="org-request-membership" options="org_id.$org_id"}" class='btn btn-primary'>
                                 <i class="icon-ok-circle icon-white"></i> {Localisation::getTranslation('org_public_profile_request_membership')}
@@ -58,6 +63,11 @@
                             <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('org_public_profile_edit_organisation_details')}
                         </a>
                     {/if}
+                            {if $isMember && $isSiteAdmin}
+                            <a class="btn btn-success" href="{urlFor name="project-create" options="org_id.$org_id"}">
+                                <i class="icon-upload icon-white"></i> {Localisation::getTranslation('common_create_project')}
+                            </a>
+                            {/if}
                 </div>
             {/if}
         </h1>
@@ -628,7 +638,7 @@
 {/if}
       
 
-{if $isMember || $adminAccess}               
+{if false && ($isMember || $adminAccess)}
      <p style="margin-bottom: 40px" />         
      <h1 class="page-header">
          {Localisation::getTranslation('org_public_profile_membership_requests')}
@@ -695,6 +705,10 @@
     <h1 class="page-header">
         {Localisation::getTranslation('org_public_profile_organisation_members')}
         <small>{Localisation::getTranslation('org_public_profile_member_list')}</small>
+
+        <a href="{urlFor name="org-request-queue" options="org_id.$org_id"}" class='pull-right btn btn-success'>
+            <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_add_user')}
+        </a>
     </h1>
     {if isset($orgMembers) && count($orgMembers) > 0}
         <form method="post" action="{urlFor name="org-public-profile" options="org_id.$org_id"}">

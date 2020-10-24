@@ -28,6 +28,12 @@ class OrgRouteHandler
         )->via("POST")->name("org-dashboard");
 
         $app->get(
+            '/org/:org_id/org_dashboard/',
+            array($middleware, "authUserIsLoggedIn"),
+            array($this, 'org_orgDashboard')
+        )->name('org-projects');
+
+        $app->get(
             "/org/:org_id/request/",
             array($middleware, "authUserIsLoggedIn"),
             array($this, "orgRequestMembership")
@@ -405,7 +411,6 @@ class OrgRouteHandler
         
         $current_user = $userDao->getUser($current_user_id);
         $my_organisations = $userDao->getUserOrgs($current_user_id);
-        $org_projects = array();
         
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
@@ -455,8 +460,7 @@ class OrgRouteHandler
             $orgs = array();
             $templateData = array();
             foreach ($my_organisations as $org) {
-                $my_org_projects = $orgDao->getOrgProjects($org->getId());
-                $org_projects[$org->getId()] = $my_org_projects;
+                $my_org_projects = $projectDao->getOrgProjects($org->getId(), 3);
                 $orgs[$org->getId()] = $org;
 
                 $taskData = array();
@@ -502,6 +506,74 @@ class OrgRouteHandler
             "current_page"  => "org-dashboard"
         ));
         $app->render("org/org.dashboard.tpl");
+    }
+
+    public function org_orgDashboard($org_id)
+    {
+        $app = \Slim\Slim::getInstance();
+        $current_user_id = Common\Lib\UserSession::getCurrentUserID();
+        $userDao = new DAO\UserDao();
+        $projectDao = new DAO\ProjectDao();
+        $adminDao = new DAO\AdminDao();
+        $isSiteAdmin = $adminDao->isSiteAdmin($current_user_id);
+
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
+        $current_user = $userDao->getUser($current_user_id);
+        $my_organisations = $userDao->getUserOrgs($current_user_id);
+
+        if ($my_organisations) {
+            foreach ($my_organisations as $index => $org) {
+                if ($org->getId() != $org_id) {
+                    unset($my_organisations[$index]);
+                }
+            }
+
+            $orgs = array();
+            $templateData = array();
+            foreach ($my_organisations as $org) {
+                $my_org_projects = $projectDao->getOrgProjects($org->getId(), 500); // About 50 years
+                $orgs[$org->getId()] = $org;
+
+                $taskData = array();
+                if ($my_org_projects) {
+                    foreach ($my_org_projects as $project) {
+                        $temp = array();
+                        $temp['project'] = $project;
+                        $taskData[]=$temp;
+                    }
+                } else {
+                    $taskData = null;
+                }
+                $templateData[$org->getId()] = $taskData;
+            }
+
+            $adminForOrg = array();
+            foreach ($orgs as $orgAdminTest) {
+                $adminForOrg[$orgAdminTest->getId()] = false;
+                if ($isSiteAdmin || $adminDao->isOrgAdmin($orgAdminTest->getId(), $current_user_id)) {
+                    $adminForOrg[$orgAdminTest->getId()] = true;
+                }
+            }
+
+            $app->view()->appendData(array(
+                'orgs'         => $orgs,
+                'adminForOrg'  => $adminForOrg,
+                'templateData' => $templateData
+            ));
+        }
+
+        $extra_scripts = file_get_contents(__DIR__ . '/../js/TaskView.js');
+        $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
+
+        $app->view()->appendData(array(
+            'sesskey'         => $sesskey,
+            'isSiteAdmin'     => $isSiteAdmin,
+            'extra_scripts'   => $extra_scripts,
+            'beyond_3_months' => 1,
+            'current_page'    => 'org-dashboard'
+        ));
+        $app->render('org/org.dashboard.tpl');
     }
 
     public function orgRequestMembership($org_id)
@@ -595,7 +667,7 @@ class OrgRouteHandler
         }
         $requests = $orgDao->getMembershipRequests($org_id);
         $user_list = array();
-        if (count($requests) > 0) {
+        if (!empty($requests) && count($requests) > 0) {
             foreach ($requests as $memRequest) {
                 $user_list[] =  $userDao->getUser($memRequest->getId());
             }
@@ -1818,7 +1890,7 @@ class OrgRouteHandler
         }
         $isMember = false;
         $orgMemberList = $orgDao->getOrgMembers($org_id);
-        if (count($orgMemberList) > 0) {
+        if (!empty($orgMemberList) && count($orgMemberList) > 0) {
             foreach ($orgMemberList as $member) {
                 if ($currentUser->getId() ==  $member->getId()) {
                     $isMember = true;
@@ -1839,7 +1911,7 @@ class OrgRouteHandler
 
         if ($isMember || $adminAccess) {
             $requests = $orgDao->getMembershipRequests($org_id);
-            if (count($requests) > 0) {
+            if (!empty($requests) && count($requests) > 0) {
                 foreach ($requests as $memRequest) {
                     $user = $userDao->getUser($memRequest->getUserId());
                     $user_list[] = $user;
@@ -2020,7 +2092,7 @@ class OrgRouteHandler
             
             if (isset($post['search_name']) && $post['search_name'] != '') {
                 $foundOrgs = $orgDao->searchForOrgByName(urlencode($post['search_name']));
-                if (count($foundOrgs) < 1) {
+                if (empty($foundOrgs)) {
                     $app->flashNow("error", Lib\Localisation::getTranslation('org_search_34'));
                 }
                 $app->view()->appendData(array('searchedText' => $post['search_name']));
@@ -2072,6 +2144,7 @@ class OrgRouteHandler
                 'claimant'          => $claimant,
                 'userName'          => $userName,
                 'claimantProfile'   => $claimantProfile,
+                'allow_download'    => $taskDao->get_allow_download($task),
                 "orgId"             => $orgId
         );
 
@@ -2129,7 +2202,7 @@ class OrgRouteHandler
                 }
                 if (isset($post["consistency_$id"]) && ctype_digit($post["consistency_$id"])) {
                     $value = intval($post["consistency_$id"]);
-                    if ($value > 0 && $value <= 5) {
+                    if ($value > 0 && $value <= 55) {
                         $review->setConsistency($value);
                     } else {
                         $error = Lib\Localisation::getTranslation('org_task_review_38');
@@ -2209,6 +2282,23 @@ class OrgRouteHandler
         $preReqTasks = array();
         $preReqs = $taskDao->getTaskPreReqs($taskId);
         $reviews = array();
+
+        if (empty($preReqs) && $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && !empty($matecat_tasks = $taskDao->getTaskChunk($taskId))) {
+            // We are a chunk, so need to manually find the matching translation task
+            $matecat_id_job          = $matecat_tasks[0]['matecat_id_job'];
+            $matecat_id_job_password = $matecat_tasks[0]['matecat_id_chunk_password'];
+            $matching_tasks = $taskDao->getMatchingTask($matecat_id_job, $matecat_id_job_password, Common\Enums\TaskTypeEnum::TRANSLATION);
+            if (!empty($matching_tasks)) {
+                $dummyTask = new Common\Protobufs\Models\Task();
+                $dummyTask->setId($matching_tasks[0]['id']);
+                $dummyTask->setProjectId($matching_tasks[0]['projectId']);
+                $dummyTask->setTitle($matching_tasks[0]['title']);
+                $preReqs = array();
+                $preReqs[] = $dummyTask;
+                error_log('preReqs for chunked PROOFREADING Task... ' . print_r($preReqs, true));
+            }
+        }
+
         if (!is_null($preReqs) && count($preReqs) > 0) {
             foreach ($preReqs as $preReq) {
                 $taskReviews = $taskDao->getTaskReviews($preReq->getId());

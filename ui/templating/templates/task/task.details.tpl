@@ -1,3 +1,4 @@
+<!-- Editor Hint: ¿áéíóú -->
 <table class="table table-striped">
     <thead>
         <th style="text-align: left"><strong>{Localisation::getTranslation('common_project')}</strong></th>
@@ -120,15 +121,40 @@
             </tr>
             <tr>
                 <td>
-                    <strong>{Localisation::getTranslation('common_forum')}:</strong><hr/>
+                    {if !preg_match('/^Test.{4}$/', $task->getTitle())}<strong>{Localisation::getTranslation('common_discuss_on_community')}:</strong><hr/>{/if}
+                </td>
+                <td></td>
+                <td>
+                    {if isset($isSiteAdmin) && isset($matecat_url) && $isSiteAdmin && $matecat_url != ''}<strong>Kató TM URL for Task:</strong><hr/>{/if}
+                </td>
+            </tr>
+            <tr valign="top">
+                <td>
+                    {if !preg_match('/^Test.{4}$/', $task->getTitle())}<a href="https://community.translatorswb.org/t/{$discourse_slug}" target="_blank">https://community.translatorswb.org/t/{$discourse_slug}</a>{/if}
+                </td>
+                <td></td>
+                <td>
+                    {if isset($isSiteAdmin) && isset($matecat_url) && $isSiteAdmin && $matecat_url != ''}<a href="{$matecat_url}" target="_blank">{$matecat_url}</a>{/if}
+                </td>
+            </tr>
+            {/if}
+            {if !empty($required_qualification_for_details)}
+            <tr>
+                <td colspan="3" style="padding-bottom: 40px"/>
+            </tr>
+            <tr>
+                <td>
+                    <strong>{Localisation::getTranslation('required_qualification_level')}:</strong><hr/>
                 </td>
                 <td></td>
                 <td></td>
             </tr>
             <tr valign="top">
-                <td>
-                    <a href="https://community.translatorswb.org/t/{$discourse_slug}" target="_blank">https://community.translatorswb.org/t/{$discourse_slug}</a>
-                </td>
+                <td><i>
+                    {if $required_qualification_for_details == 1}{Localisation::getTranslation('user_qualification_level_1')}{/if}
+                    {if $required_qualification_for_details == 2}{Localisation::getTranslation('user_qualification_level_2')}{/if}
+                    {if $required_qualification_for_details == 3}{Localisation::getTranslation('user_qualification_level_3')}{/if}
+                </i></td>
                 <td></td>
                 <td></td>
             </tr>

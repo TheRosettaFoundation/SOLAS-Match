@@ -57,32 +57,37 @@ class IO
                 $app->group('/upload', function () use ($app) {
                     $app->put(
                         '/project/:projectId/file/:filename/:userId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+                        '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgProject',
                         '\SolasMatch\API\V0\IO::saveProjectFile'
                     );
 
                     $app->put(
                         '/project/:projectId/image/:filename/:userId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+                        '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgProject',
                         '\SolasMatch\API\V0\IO::saveProjectImageFile'
                     );
 
                     $app->put(
                         '/task/:taskId/:userId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+                        '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgTask',
                         '\SolasMatch\API\V0\IO::saveTaskFile'
                     );
 
                     $app->put(
                         '/taskfromproject/:taskId/:userId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+                        '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgTask',
                         '\SolasMatch\API\V0\IO::saveTaskFileFromProject'
                     );
 
                     $app->put(
                         '/taskOutput/:taskId/:userId(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isLoggedIn',
+                        '\SolasMatch\API\Lib\Middleware::authUserForClaimedTask',
                         '\SolasMatch\API\V0\IO::saveOutputFile'
+                    );
+
+                    $app->put(
+                        '/sendTaskUploadNotifications/:taskId/:type/',
+                        '\SolasMatch\API\V0\IO::sendTaskUploadNotifications'
                     );
                 });
             });
@@ -134,7 +139,7 @@ class IO
 
         $project = DAO\ProjectDao::getProject($projectId);
         $imageFileList = glob(Common\Lib\Settings::get("files.upload_path")."proj-$projectId/image/image.*");
-        if (count($imageFileList) > 0) {
+        if (!empty($imageFileList) && count($imageFileList) > 0) {
             $currentImageFile = $imageFileList[0];
             $currentFileName = pathinfo($currentImageFile, PATHINFO_FILENAME);
             $currentfileExt = pathinfo($currentImageFile, PATHINFO_EXTENSION);
@@ -274,11 +279,26 @@ class IO
         $filename = $projectFile->getFilename();
         $convert = API\Dispatcher::clenseArgs('convertFromXliff', Common\Enums\HttpMethodEnum::GET, false);
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        try {
+            error_log("Before uploadOutputFile($taskId..., $userId, $filename)");
         self::uploadOutputFile($task, $convert, $data, $userId, $filename);
+            error_log("After uploadOutputFile($taskId..., $userId, $filename)");
+$task = DAO\TaskDao::getTask($taskId + 1);
+if (!empty($task) && $task->getTaskType() == 3) {
+    $ts = $task->getTaskStatus();
+    error_log("After uploadOutputFile($taskId + 1 getTaskStatus(): $ts");
+}
+        } catch (Common\Exceptions\SolasMatchException $e) {
+            error_log("Catch uploadOutputFile($taskId..., $userId, $filename)");
+            API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
+            return;
+        }
+        API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::CREATED);
     }
 
     public static function saveProjectFile($projectId, $filename, $userId, $format = ".json")
     {
+        error_log("saveProjectFile($projectId, $filename, $userId...)");
         if (!is_numeric($userId) && strstr($userId, '.')) {
             $userId = explode('.', $userId);
             $format = '.'.$userId[1];
@@ -287,8 +307,10 @@ class IO
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         try {
             $token = self::saveProjectFileToFs($projectId, $data, urldecode($filename), $userId);
+            error_log('CREATED');
             API\Dispatcher::sendResponse(null, $token, Common\Enums\HttpStatusEnum::CREATED, $format);
         } catch (Exception $e) {
+            error_log('Exception: ' . $e->getMessage());
             API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
         }
     }
@@ -391,13 +413,19 @@ class IO
         if (!file_exists($destination)) {
             mkdir($destination, 0755);
         }
+        error_log("destination: $destination");
+
         $mime = self::detectMimeType($file, $filename);
+        error_log("detectMimeType: $mime");
+
         $apiHelper = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
         $canonicalMime = $apiHelper->getCanonicalMime($filename);
+        error_log("getCanonicalMime: $canonicalMime");
 
         if (!is_null($canonicalMime) && $mime != $canonicalMime) {
             $message = "The content type ($mime) of the file you are trying to upload does not";
             $message .= " match the content type ($canonicalMime) expected from its extension.";
+            error_log($message);
             throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::BAD_REQUEST);
         }
             $token = DAO\ProjectDao::recordProjectFileInfo($projectId, $filename, $userId, $mime);
@@ -410,10 +438,12 @@ class IO
             }
             if ($physical_pointer === false) {
                 $message = "Failed to write file data ($projectId).";
+                error_log($message);
                 throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::INTERNAL_SERVER_ERROR);
             }
         } catch (\Exception $e) {
             $message = "You cannot upload a project file for project ($projectId), as one already exists.";
+            error_log($message);
             throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::CONFLICT);
         }
 
@@ -448,12 +478,12 @@ class IO
 
         $project = DAO\ProjectDao::getProject($projectId);
         $project->setImageUploaded(1);
-        $project->setImageApproved(0);
+        $project->setImageApproved(1); // Automatically approve (was 0)
         $project = DAO\ProjectDao::save($project);
 
         try {
              $imageFileList = glob(Common\Lib\Settings::get("files.upload_path")."proj-$projectId/image/image.*");
-                if (count($imageFileList)>0)
+                if (!empty($imageFileList) && count($imageFileList)>0)
                 {
                     $currentImageFile = $imageFileList[0];
                     $currentfileName = pathinfo($currentImageFile, PATHINFO_FILENAME);
@@ -464,7 +494,7 @@ class IO
                 }
             $ext = pathinfo($filename, PATHINFO_EXTENSION);
             file_put_contents($destination."/image.$ext", $file);
-            Lib\Notify::sendProjectImageUploaded($projectId);
+            //Lib\Notify::sendProjectImageUploaded($projectId); // No notification
         } catch (\Exception $e) {
             $message = "You cannot upload an image file for project ($projectId), as one already exists.";
             throw new Common\Exceptions\SolasMatchException($message, Common\Enums\HttpStatusEnum::CONFLICT);
@@ -484,7 +514,9 @@ class IO
         }
 
         if ($taskFileMime != $projectFileMime) {
-            API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::BAD_REQUEST);
+            //API\Dispatcher::sendResponse(null, null, Common\Enums\HttpStatusEnum::BAD_REQUEST);
+            //throw new Common\Exceptions\SolasMatchException("Mime type does not match.", Common\Enums\HttpStatusEnum::BAD_REQUEST);
+            // Previous code "API\" allowed the flow to proceed even though it gave an error, but there may be mismatches so we need to proceed uninterrupted 20180919
         }
 
         if (is_null($version)) {
@@ -520,12 +552,31 @@ class IO
         return $ret;
     }
 
+    public static function sendTaskUploadNotifications($taskId, $type, $format = ".json")
+    {
+        if (!is_numeric($type) && strstr($type, '.')) {
+            $type = explode('.', $type);
+            $format = '.'.$type[1];
+            $type = $type[0];
+        }
+
+        try {
+            Lib\Notify::sendTaskUploadNotifications($taskId, $type);
+            error_log("sendTaskUploadNotifications($taskId, $type)");
+        } catch (Common\Exceptions\SolasMatchException $e) {
+            API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
+            return;
+        }
+        API\Dispatcher::sendResponse(null, null, null, $format);
+    }
+
     private static function detectMimeType($file, $filename)
     {
         $result = null;
 
         $mimeMap = array(
                 "xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                ,"xlsm" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                 ,"xltx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.template"
                 ,"potx" => "application/vnd.openxmlformats-officedocument.presentationml.template"
                 ,"ppsx" => "application/vnd.openxmlformats-officedocument.presentationml.slideshow"
@@ -550,6 +601,12 @@ class IO
         if (($mime == "application/octet-stream" || $mime == "application/zip" || $extension == "doc" || $extension == "xlf")
             && (array_key_exists($extension, $mimeMap))) {
             $result = $mimeMap[$extension];
+        } elseif ($mime === 'text/plain' && $extension === 'json') {
+            $result = 'application/json';
+        } elseif ($mime === 'application/zip' && $extension === 'odt') {
+            $result = 'application/vnd.oasis.opendocument.text';
+        } elseif ($mime === 'text/xml' && $extension === 'xml') {
+            $result = 'application/xml';
         } else {
             $result = $mime;
         }

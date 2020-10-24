@@ -48,7 +48,7 @@ class GraphViewer
             
             $foundLanguages = array();
             $taskDao = new DAO\TaskDao();
-            while (count($currentLayer) > 0) {
+            while (!empty($currentLayer) && count($currentLayer) > 0) {
                 foreach ($currentLayer as $taskId) {
                     $task = $taskDao->getTask($taskId);
                     $taskTargetLocale = $task->getTargetLocale();
@@ -200,7 +200,7 @@ class GraphViewer
         $maxVNodeCount = 0;
         $verticalNodeCount = 0;
         $horizontalNodeCount = 0;
-        while (count($currentLayer) > 0) {
+        while (!empty($currentLayer) && count($currentLayer) > 0) {
             foreach ($currentLayer as $nodeId) {
                 $task = $this->taskDao->getTask($nodeId);
                 $index = $this->graphBuilder->find($nodeId, $this->model);

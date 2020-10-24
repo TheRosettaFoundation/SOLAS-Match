@@ -2,6 +2,7 @@
     <!-- Smarty Template Strings -->
     <string name="common_faq">Domande frequenti</string>
     <string name="common_forum">Kató Community</string>
+    <string name="common_discuss_on_community">Parlane alla Kató Community</string>
 	<string name="common_banned_by">Escluso da</string>
 	<string name="common_ban_duration">Durata esclusione</string>
 	<string name="common_ban_reason">Ragione esclusione</string>
@@ -84,7 +85,8 @@
   <string name="common_maximum_file_total_size_vs_limit_is">Il file che hai selezionato è di %1$sMB, ma il limite è di %2$sMB.</string>
 	<string name="common_assign">Assegna</string>
 	<string name="common_it_is_time_to_decide">È il momento di decidere</string>
-	<string name="common_no_just_bring_me_back_to_the_task_page">No, portami di nuovo alla pagina delle attività.</string>
+	<string name="common_no_just_bring_me_back_to_the_task_page">Portami di nuovo alla pagina delle attività.</string>
+    <string name="common_no_just_bring_me_back_to_claimed_tasks">Just bring me back to my Claimed Tasks page.</string>
 	<string name="common_review_this_checklist_for_your_downloaded_file">Controlla che i file che hai scaricato rispettino i seguenti punti.</string>
 	<string name="common_after_downloading">Dopo il download</string>
 	<string name="common_this_is_what_you_need_to_do_as_soon_as_possible">Questo è quello che devi fare (il prima possibile)</string>
@@ -124,9 +126,9 @@
     <string name="common_secondary_languages">Combinazioni linguistiche</string>
     <string name="i_can_translate_from">Traduco da</string>
     <string name="qualification_level_for_above">Livello di competenza per combinazione linguistica dichiarata sopra</string>
-    <string name="user_qualification_level_1">Volunteer</string>
-    <string name="user_qualification_level_2">Verified</string>
-    <string name="user_qualification_level_3">Senior</string>
+    <string name="user_qualification_level_1">Kató Translator</string>
+    <string name="user_qualification_level_2">Kató Verified Translator</string>
+    <string name="user_qualification_level_3">Kató Senior Translator</string>
     <string name="required_qualification_level">Livello di competenza richiesto ai traduttori</string>
     <string name="set_default_required_qualification_level">Stabilire livello di competenza per volontari che lavorano per questa organizzazione (può essere modificato in base al compito).</string>
     <string name="update_required_qualification_level">Aggiornare il livello di competenza richiesto</string>
@@ -136,7 +138,7 @@
 	<string name="common_business_number">Numero di telefono di lavoro</string>
 	<string name="common_job_title">Professione</string>
 	<string name="common_badges">Riconoscimenti</string>
-	<string name="common_strict">Parziale</string>
+  <string name="common_strict">Solo le combinazioni linguistiche selezionate</string>
 	<string name="common_the_last_email_was_sent_on">L'ultima email è stata inviata il %s.</string>
     <string name="common_no_emails_have_been_sent_yet">Nessuna email è stata ancora inviata.</string>
 	<string name="common_you_are_not_currently_receiving_task_stream_notification_emails">Al momento non stai ricevendo le notifiche sulle attività disponibili.</string>
@@ -284,12 +286,12 @@
     <string name="create_org_invalid_name">Il nome dell'organizzazione non può contenere caratteri invalidi.</string>
     <string name="create_org_created">L'organizzazione <strong>%s</strong> è stata creata.</string>
 
-    <string name="thank_registering_organisation">Vi ringraziamo per il vostro interesse nel registrare la vostra organizzazione su Trommons</string>
+    <string name="thank_registering_organisation">Vi ringraziamo per il vostro interesse nel registrare la vostra organizzazione su Kató Platform</string>
     <string name="registrations_twb">La registrazione delle no-profit è attualmente gestita da Translators without Borders (TWB).<br />
 <br />
 Cliccare su <a href="https://translatorswithoutborders.org/non-profit-application/">questo link per visitare la pagina di Translators without Borders</a>.<br />
 <br />
-Per qualsiasi domanda si prega di contattare <a href="mailto:info@therosettafoundation.org">info@therosettafoundation.org</a><br /></string>
+Per qualsiasi domanda si prega di contattare <a href="mailto:info@translatorswithoutborders.org">info@translatorswithoutborders.org</a><br /></string>
 
 	<string name="org_private_profile_alter_profile_here">Modifica qui il profilo della tua organizzazione.</string>
 	<string name="org_private_profile_public_profile">Profilo pubblico</string>
@@ -302,8 +304,8 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@therosettafoun
     <string name="org_private_profile_delete_success">L'organizzazione %s è stata eliminata con successo</string>        
     <string name="org_private_profile_delete_fail">Impossibile eliminare l'organizzazione. Si prega di riprovare più tardi.</string> 
 
-    <string name="org_private_profile_organisation_visible_by_all">Visibile a tutti gli utenti registrati su Trommons</string>
-    <string name="org_private_profile_organisation_visible_by_members">Visibile solo ai membri delle organizzazioni e agli amministratori di Trommons</string>
+    <string name="org_private_profile_organisation_visible_by_all">Visibile a tutti gli utenti registrati su Kató Platform</string>
+    <string name="org_private_profile_organisation_visible_by_members">Visibile solo ai membri delle organizzazioni e agli amministratori di Kató Platform</string>
     <string name="org_private_profile_organisation_overview">Panoramica sull'organizzazione, includendo valori, missione<br />e comunità a cui si rivolge l'organizzazione</string>
     <string name="org_private_profile_organisation_activity">Settore d'azione</string>
     <string name="org_private_profile_organisation_multiple">Tenere premuto Ctrl (Windows)/Command (Mac) per selezionare opzioni multiple</string>
@@ -477,7 +479,7 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@therosettafoun
     <string name="project_subscription_moderate">Utilizzo moderato (fino a 10 progetti per anno)</string>
     <string name="project_subscription_heavy">Utilizzo frequente</string>
     <string name="project_subscription_other">Altri importi</string>
-    <string name="project_subscription_cannot">Per altre modalità di pagamento o per spiegare il motivo per cui non potete effettuare una donazione, vi preghiamo di scrivere a <a href="mailto:info@trommons.org?subject=Subscription">info@trommons.org</a>.</string>
+    <string name="project_subscription_cannot">Per altre modalità di pagamento o per spiegare il motivo per cui non potete effettuare una donazione, vi preghiamo di scrivere a <a href="mailto:info@kato.translatorswb.org?subject=Subscription">info@kato.translatorswb.org</a>.</string>
 
     <string name="project_subscription_last_donation">Ultima donazione valida per il periodo dal %s.</string>
     <string name="project_subscription_number_renew">Avete già creato un progetto dalla scadenza della donazione annuale.</string>
@@ -487,7 +489,7 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@therosettafoun
     <string name="project_subscription_numbers_upgrade">Avete superato il limite di progetti previsto per la vostra donazione (%s progetti creati dalla vostra ultima donazione).</string>
     <string name="project_subscription_remind_upgrade">Vi ricorderemo di rinnovare la vostra donazione annuale quando creerete un nuovo progetto.</string>
 
-    <string name="user_public_profile_certificate">Per ricevere un certificato ufficiale via posta, vi preghiamo di scrivere a <a href="mailto:info@trommons.org?subject=Certificate">info@trommons.org</a>. Vi verrà richiesta una donazione pari a €25 per il servizio. Tale donazione ci permetterà di assicurare a Translation Commons un futuro, garantendo la copertura dei costi delle infrastrutture del server e supporto.</string>
+    <string name="user_public_profile_certificate">Per ricevere un certificato ufficiale via posta, vi preghiamo di scrivere a <a href="mailto:info@kato.translatorswb.org?subject=Certificate">info@kato.translatorswb.org</a>. Vi verrà richiesta una donazione pari a €25 per il servizio. Tale donazione ci permetterà di assicurare a Translation Commons un futuro, garantendo la copertura dei costi delle infrastrutture del server e supporto.</string>
 
 	<string name="project_create_source_text">Testo di partenza</string>
 	<string name="project_create_1">Dai un titolo rappresentativo al progetto.</string>
@@ -675,7 +677,7 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@therosettafoun
 	<string name="terms_49">Modifiche ai Termini di Utilizzo del sito</string>
 	<string name="terms_50">The Rosetta Foundation può apportare modifiche ai termini di utilizzo del presente sito internet in qualsiasi momento e senza preavviso. Utilizzando questo sito, si accetta implicitamente la versione corrente dei Termini e Condizioni di utilizzo.</string>
 	<string name="terms_governing_law">Legge applicabile</string>
-	<string name="terms_52">Qualsiasi richiesta riguardo al sito internet Trommons.org è disciplinata dalla legislazione vigente dello Stato dell'Irlanda, senza ricorso alle sue norme sul conflitto di leggi.</string>
+  <string name="terms_52">Qualsiasi richiesta riguardo al sito internet Kató è disciplinata dalla legislazione vigente dello Stato dell'Irlanda, senza ricorso alle sue norme sul conflitto di leggi.</string>
 	<string name="terms_53">Condizioni generali di utilizzo di un sito internet.</string>
 	<string name="terms_privacy_policy">Informativa sulla Privacy</string>
     <string name="terms_54">La tua privacy è molto importante per noi. Per questo, abbiamo redatto la presente informativa che ti spiega in che modo raccogliamo, utilizziamo, comunichiamo e condividiamo i dati personali. Il presente documento delinea la nostra <a href="%s">Informativa sulla Privacy</a>.</string>
@@ -826,6 +828,9 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@therosettafoun
 	<string name="task_claim_translation_4">Quando avrai finito di fare la traduzione, dovrai caricare il file tradotto sul server.</string>
 	<string name="task_claim_translation_5">Si, mi impegno a tradurre questo documento</string>
 
+    <string name="task_claim_view_on_kato">View Task on Kató TM</string>
+    <string name="task_claim_warning_kato">If you select "<strong>%s</strong>" or "<strong>%s</strong>", please only start editing after you click "<strong>%s</strong>".</string>
+
 	<string name="task_claimed_desegmentation_desegmentation_task_claimed">Attività di desegmentazione assegnata</string>
 	<string name="task_claimed_desegmentation_0">Unisci i file in un unico documento!</string>
     <string name="task_claimed_desegmentation_1">Hai preso in carico l'attività di desegmentazione <strong>%s</strong></string>
@@ -839,7 +844,7 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@therosettafoun
 	<string name="task_claimed_proofreading_please_proofread_it">Procedi alla revisione di questo documento!</string>
     <string name="task_claimed_proofreading_0">Hai preso in carico l'attività di revisione <strong>%s</strong></string>
 	<string name="task_claimed_proofreading_1">Apri il file che hai salvato sul tuo computer.</string>
-    <string name="task_claimed_proofreading_proofread_the_file_in">Rivedi il file in <strong>%s</strong> per essere sicuro che non ci siano errori di ortografia o grammatica.</string>
+    <string name="task_claimed_proofreading_proofread_the_file_in">Controllare la traduzione <strong>%s</strong> per assicurarsi che soddisfi gli standard qualitativi.</string>
 	<string name="task_claimed_proofreading_upload_the_proofread_file">Carica il file di cui hai fatto la revisione nella pagina dell'attività.</string>
 	<string name="task_claimed_proofreading_4">Quando avrai finito di fare la revisione del documento scaricato:</string>
     <string name="task_claimed_proofreading_upload_proofread_task">Invia il file revisionato</string>
@@ -858,20 +863,22 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@therosettafoun
 	<string name="task_claimed_translation_0">Hai preso in carico l'attività di traduzione</string>
 	<string name="task_claimed_translation_we_need_your_translation">Abbiamo bisogno della tua traduzione.</string>
 	<string name="task_claimed_translation_translate_the_file_to">Traduci il documento in %s utilizzando il tuo software di traduzione preferito.</string>
+    <string name="task_claimed_translation_translate_the_file_to_plain">Traduci il documento in %s.</string>
 	<string name="task_claimed_translation_4">Quando avrai finito di tradurre il documento scaricato:</string>
     <string name="task_claimed_translation_5">Carica il file tradotto sulla pagina dell'attività.</string>
     <string name="task_claimed_translation_upload_translated_task">Invia il file tradotto</string>
 
     <string name="task_claimed_alternative_option">Opzione alternativa:</string>
     <string name="task_claimed_translate_using_kato">Tradurre usando Kató TM</string>
+    <string name="task_claimed_click">Fai click</string>
     <string name="task_claimed_proofread_using_kato">Procedi alla revisione di questo documento usando Kató TM</string>
-    <string name="task_claimed_please_read_kato">Kató TM è una piattaforma di traduzione di Translators without Borders (TWB). Leggi <a href="https://kato.translatorswb.org/public/doc/translators.html" target="_blank">queste linee guida</a> prima di iniziare a usare Kató TM.</string>
-    <string name="task_simple_upload_copy_from_kato">Copia la tua traduzione da Kató TM a Kató Trommons</string>
+    <string name="task_claimed_please_read_kato">Kató TM è una piattaforma di traduzione di Translators without Borders (TWB). Leggi <a href="https://community.translatorswb.org/t/useful-posts-index/2883" target="_blank">queste linee guida</a> prima di iniziare a usare Kató TM.</string>
+    <string name="task_simple_upload_copy_from_kato">Copia la tua traduzione da Kató TM a Kató</string>
     <string name="task_simple_upload_view_on_kato">Clicca <a href="%s" target="_blank">qui</a> per <strong>vedere la tua traduzione su Kató TM</strong>.</string>
-    <string name="task_simple_upload_download_from_kato">Clicca <a href="%s">qui</a> per <strong>scaricare la tua traduzione da Kató TM e caricarla manualmente su Kató Trommons</strong>.</string>
-    <string name="task_simple_upload_copy_from_kato_proofread">Copia la versione già corretta da Kató TM a Kató Trommons</string>
+    <string name="task_simple_upload_download_from_kato">Clicca <a href="%s">qui</a> per <strong>scaricare la tua traduzione da Kató TM e caricarla manualmente su Kató</strong>.</string>
+    <string name="task_simple_upload_copy_from_kato_proofread">Copia la versione già corretta da Kató TM a Kató</string>
     <string name="task_simple_upload_view_on_kato_proofread">Clicca <a href="%s" target="_blank">qui</a> per<strong> vedere la versione corretta su Kató TM</strong>.</string>
-    <string name="task_simple_upload_download_from_kato_proofread">Clicca <a href="%s">qui</a> per <strong> scaricare la versione corretta da Kató TM e caricarla manualmente su Kató Trommons</strong>.</string>
+    <string name="task_simple_upload_download_from_kato_proofread">Clicca <a href="%s">qui</a> per <strong> scaricare la versione corretta da Kató TM e caricarla manualmente su Kató</strong>.</string>
 
     <string name="task_create_for_project">Per il progetto <strong>%s</strong>.</string>
 	<string name="task_create_0">Dai un titolo rappresentativo all'attività.</string>
@@ -926,12 +933,12 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@therosettafoun
 	<string name="task_review_provide_a_rating">Fornisci una valutazione</string>
 	<string name="task_review_0">Come valuteresti questa attività?</string>
   <string name="task_twitter_0">Se sei su Twitter, clicca qui per far sapere al mondo del tuo contributo (assicurati di accettare i pop-up):</string>
-  <string name="task_twitter_0_org_dashboard">Se sei su Twitter, clicca qui per far sapere a tutti di Trommons (assicurati di accettare i pop-up):</string>
+  <string name="task_twitter_0_org_dashboard">Se sei su Twitter, clicca qui per far sapere a tutti di TWB Kató (assicurati di accettare i pop-up):</string>
   <string name="task_twitter_0_project_view">Se sei su Twitter, clicca qui per far sapere a tutti del tuo progetto (assicurati di accettare i pop-up):</string>
   <string name="task_twitter_0_org_task_review">Se sei su Twitter, clicca qui per ringraziare i nostri volontari (assicurati di accettare i pop-up):</string>
   <string name="task_twitter_1">Ho appena offerto il mio aiuto come volontario per @TranslatorsWB #languagematters</string>
-  <string name="task_twitter_2">Ci siamo iscritti a Trommons per connettere attraverso la lingua i volontari di @TranslatorsWB #languagematters</string>
-  <string name="task_twitter_3">Traduttori di @TranslatorsWB potete aiutarci con il progetto su trommons.org%3F #languagematters</string>
+  <string name="task_twitter_2">Ci siamo iscritti a TWB per connettere attraverso la lingua i volontari di @TranslatorsWB #languagematters</string>
+  <string name="task_twitter_3">Traduttori di @TranslatorsWB potete aiutarci con il progetto su Kató%3F #languagematters</string>
   <string name="task_twitter_4">Un grazie ai volontari di @TranslatorsWB per aver reso possibile le traduzioni #languagematters</string>
 	<string name="task_review_1">Grazie mille per il tuo contributo a questo progetto.</string>
 	<string name="task_review_2">Fornisci una valutazione per il/i documento/i</string>
@@ -1015,14 +1022,14 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@therosettafoun
     <string name="password_reset_4">Le password inserite non combaciano. Si prega di riprovare.</string>
     <string name="password_reset_5">Per favore, controlla la password inserita e prova di nuovo.</string>
 
-    <string name="register_register_on">Sarà possible creare un accunt su Trommons dopo aver compilato il <a href="https://translatorswithoutborders.org/volunteer/translators/">Modulo di iscrizione di TWB per traduttori</a><br />o dopo essersi presentato a TWB come il contatto di un’organizzazione associata.<br />Se già hai completato questo passo, registrati qui con l’indirizzo email fornito a TWB e una password a tua scelta.<br />O, se preferisci, puoi creare il tuo account su Trommons usando uno dei provider indicati sotto,<br />se l’indirizzo email usato con quel provider è lo stesso.<br />Se se già un volontario e non riesci a effettuare il login, manda una email a <a href="mailto:translators@translatorswithoutborders.org">translators@translatorswithoutborders.org</a>.</string>
+    <string name="register_register_on">Sarà possible creare un accunt su Kató Platform dopo aver compilato il <a href="https://kato.translatorswb.org/signup.html">Modulo di iscrizione di TWB per traduttori</a><br />o dopo essersi presentato a TWB come il contatto di un’organizzazione associata.<br />Se già hai completato questo passo, registrati qui con l’indirizzo email fornito a TWB e una password a tua scelta.<br />O, se preferisci, puoi creare il tuo account su Kató Platform usando uno dei provider indicati sotto,<br />se l’indirizzo email usato con quel provider è lo stesso.<br />Se se già un volontario e non riesci a effettuare il login, manda una email a <a href="mailto:translators@translatorswithoutborders.org">translators@translatorswithoutborders.org</a>.</string>
 	<string name="register_your_email">La tua email</string>
 	<string name="register_your_password">La tua password</string>
     <string name="register_1">L'indirizzo email inserito non è valido. Si prega di riprovare.</string>
     <string name="register_2">Non hai inserito una password. Si prega di riprovare.</string>
     <string name="register_3">Sei un utente già verificato. Effettuare il <a href="%s">Login</a>.</string>
     <string name="register_4">Un'email di verifica è stata inviata all'indirizzo email con il quale è stata fatta la registrazione. Segui il link presente nell'email per completare la registrazione. Una volta verificato l'indirizzo email puoi effettuare il Login <a href="%s">qui</a>.</string>
-    <string name="register_no_application">Se non hai un account con l’email indicata, invia il <a href="https://translatorswithoutborders.org/volunteer/translators/">(clicca qui) Modulo di Iscrizione per traduttori</a> e dopo registrati su <a href="https://trommons.org/register/">https://trommons.org/register/</a> per creare un account qui.<br />Se se già un volontario e non riesci a effettuare il login, manda una email a <a href="mailto:translators@translatorswithoutborders.org">translators@translatorswithoutborders.org</a>.</string>
+    <string name="register_no_application">Se non hai un account con l’email indicata, invia il <a href="https://kato.translatorswb.org/signup.html">(clicca qui) Modulo di Iscrizione per traduttori</a> e dopo registrati su <a href="https://kato.translatorswb.org/register/">https://kato.translatorswb.org/register/</a> per creare un account qui.<br />Se se già un volontario e non riesci a effettuare il login, manda una email a <a href="mailto:translators@translatorswithoutborders.org">translators@translatorswithoutborders.org</a>.</string>
     <string name="register_no_application_error">Errore di connessione, per favore prova più tardi.</string>
 
 	<string name="user_private_profile_private_profile">Profilo privato</string>
@@ -1068,7 +1075,7 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@therosettafoun
 	<string name="user_public_profile_list_all_archived_tasks">Lista di tutte le attività archiviate</string>
     <string name="user_public_profile_reference_email">Email per le referenze</string>
     <string name="user_public_profile_request_reference">Richiedi referenze</string>
-    <string name="user_public_profile_15">Per richiedere un'email di referenze che riassuma il tuo lavoro su Trommons, fai click sul pulsante sulla destra.</string>
+    <string name="user_public_profile_15">Per richiedere un'email di referenze che riassuma il tuo lavoro su TWB Kató, fai click sul pulsante sulla destra.</string>
     <string name="user_public_profile_16">Richiedi un'email con il resoconto del tuo lavoro.</string>
     <string name="user_public_profile_reference_request_success">La tua richiesta è stata inviata, riceverai un'email a breve.</string>
     <string name="user_public_profile_17">Sottoscrizione alle notifiche sulle attività disponibili aggiornata con successo.</string>    
@@ -1092,7 +1099,7 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@therosettafoun
 	<string name="user_task_stream_notification_edit_2">Se selezioni la modalità di notifiche &quot;parziale&quot;, riceverai solo le notifiche per le attività che includono le lingue da te prescelte (la lingua selezionata come tua lingua madre e le lingue secondarie). </string>
     <string name="user_task_stream_notification_edit_5">Che tipo di notifiche vuoi ricevere?</string>
     <string name="user_task_stream_notification_edit_6">Con che frequenza vuoi ricevere questo tipo di notifiche?</string>
-	<string name="user_task_stream_notification_edit_all">Tutte</string>
+  <string name="user_task_stream_notification_edit_all">Attività</string>
 	<string name="user_task_stream_notification_edit_never">Mai</string>
 	<string name="user_task_stream_notification_edit_daily">Quotidianamente</string>
 	<string name="user_task_stream_notification_edit_weekly">Settimanalmente</string>
@@ -1116,7 +1123,7 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@therosettafoun
 	<string name="header_notifications">Notifiche:</string>
 	<string name="header_log_out">Logout</string>
 
-    <string name="index_translation_commons">Kató Trommons</string>
+    <string name="index_translation_commons">TWB Kató</string>
     <string name="index_0">Consentire la comunicazione tra comunità</string>
     <string name="index_translation_tasks">Attività di traduzione</string>
     <string name="index_1">Scegli un'attività, traducila, manda la tua traduzione</string>
@@ -1146,7 +1153,7 @@ Per qualsiasi domanda si prega di contattare <a href="mailto:info@therosettafoun
 	<string name="statistics_tasks_archived">Attività archiviate:</string>
     
 	<string name="slim_error_Oops_there_has">C'è un disguido! C'è un problema tecnico.</string>
-	<string name="slim_error_1">Puoi segnalare questo problema mandandoci un'email a <a>info@trommons.org</a></string>
+  <string name="slim_error_1">Puoi segnalare questo problema mandandoci un'email a <a>translators@translatorswithoutborders.org</a></string>
 	<string name="slim_error_2">con i dettagli dell'errore riscontrato, e i dati tecnici presenti qui sotto.</string>
 	<string name="slim_error_3">Vai</string>
 	<string name="slim_error_4">Indietro.</string>

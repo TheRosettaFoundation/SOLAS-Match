@@ -142,6 +142,9 @@ class TaskDao
     */
     public static function submitReview($review)
     {
+        $comment = $review->getComment();
+        if (!empty($comment)) $comment = substr($comment, 0, 8192);
+
         $ret = null;
         $args = Lib\PDOWrapper::cleanseNull($review->getProjectId()).",".
             Lib\PDOWrapper::cleanseNull($review->getTaskId()).",".
@@ -150,7 +153,8 @@ class TaskDao
             Lib\PDOWrapper::cleanseNull($review->getGrammar()).",".
             Lib\PDOWrapper::cleanseNull($review->getSpelling()).",".
             Lib\PDOWrapper::cleanseNull($review->getConsistency()).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($review->getComment());
+            Lib\PDOWrapper::cleanseNull($review->getReviseTaskId()).",".
+            Lib\PDOWrapper::cleanseNullOrWrapStr($comment);
         $result = Lib\PDOWrapper::call('submitTaskReview', $args);
         if ($result) {
             $ret = $result[0]['result'];
@@ -220,6 +224,7 @@ class TaskDao
             Lib\PDOWrapper::cleanseNull($task->getTaskStatus()).",".
             Lib\PDOWrapper::cleanse($task->getPublished());
         $result = Lib\PDOWrapper::call("taskInsertAndUpdate", $args);
+error_log("call taskInsertAndUpdate($args)");
         if ($result) {
             $task = Common\Lib\ModelFactory::buildModel('Task', $result);
         } else {
@@ -386,6 +391,7 @@ class TaskDao
         $args = Lib\PDOWrapper::cleanseNull($taskId).",".
             Lib\PDOWrapper::cleanseNull($preReqId);
         $result = Lib\PDOWrapper::call("addTaskPreReq", $args);
+error_log("addTaskPreReq($taskId, $preReqId)");
         return $result[0]["result"];
     }
 
@@ -402,6 +408,7 @@ class TaskDao
         $args = Lib\PDOWrapper::cleanseNull($taskId).",".
             Lib\PDOWrapper::cleanseNull($preReqId);
         $result = Lib\PDOWrapper::call("removeTaskPreReq", $args);
+error_log("removeTaskPreReq($taskId, $preReqId)");
         return $result[0]["result"];
     }
 
@@ -602,15 +609,15 @@ class TaskDao
         $ret = true;
         $task = self::getTasks($node->getTaskId());
         $dependantNodes = $node->getNext();
-        if (count($dependantNodes) > 0) {
+        if (!empty($dependantNodes) && count($dependantNodes) > 0) {
             $builder = new Lib\APIWorkflowBuilder();
             foreach ($dependantNodes as $dependantId) {
                 $dTask = self::getTasks($dependantId);
                 $index = $builder->find($dependantId, $graph);
                 $dependant = $graph->getAllNodes($index);
                 $preReqs = $dependant->getPrevious();
-                if ((count($preReqs) == 2 && $dTask->getTaskType() == Common\Enums\TaskTypeEnum::DESEGMENTATION) ||
-                        count($preReqs) == 1) {
+                if (!empty($preReqs) && ((count($preReqs) == 2 && $dTask->getTaskType() == Common\Enums\TaskTypeEnum::DESEGMENTATION) ||
+                        count($preReqs) == 1)) {
                     $ret = $ret && (self::archiveTaskNode($dependant, $graph, $userId));
                 }
             }
@@ -682,6 +689,8 @@ class TaskDao
     */
     public static function unClaimTask($taskId, $userId, $userFeedback = null, $revokeByAdmin = false)
     {
+        if (!empty($userFeedback)) $userFeedback = substr($userFeedback, 0, 4096);
+
         $args = Lib\PDOWrapper::cleanse($taskId).", ".
             Lib\PDOWrapper::cleanse($userId).", ".
             Lib\PDOWrapper::cleanseNullOrWrapStr($userFeedback);
@@ -970,6 +979,7 @@ class TaskDao
             Lib\PDOWrapper::cleanseNull($userId).', '.
             Lib\PDOWrapper::cleanseNull($version);
         $result = Lib\PDOWrapper::call("recordFileUpload", $args);
+error_log("call recordFileUpload($args)");
         if ($result) {
             return $result[0]['version'];
         } else {
@@ -1092,5 +1102,36 @@ class TaskDao
             }
         }
         return $task;    
+    }
+
+    public static function get_queue_claim_tasks()
+    {
+        $result = Lib\PDOWrapper::call('get_queue_claim_tasks', '');
+        if (!empty($result)) {
+            return $result;
+        } else {
+            return [];
+        }
+    }
+
+    public static function dequeue_claim_task($task_id)
+    {
+        Lib\PDOWrapper::call('dequeue_claim_task', Lib\PDOWrapper::cleanse($task_id));
+    }
+
+    public static function getMatecatLanguagePairs($task_id)
+    {
+        $result = Lib\PDOWrapper::call('getMatecatLanguagePairs', Lib\PDOWrapper::cleanse($task_id));
+        return $result;
+    }
+
+    public static function getWordCountRequestForProject($project_id)
+    {
+        $result = Lib\PDOWrapper::call('getWordCountRequestForProject', Lib\PDOWrapper::cleanse($project_id));
+        if ($result) {
+            return $result[0];
+        } else {
+            return false;
+        }
     }
 }

@@ -10,7 +10,7 @@ header("Content-Type:application/xhtml+xml;charset=UTF-8");
 
 require_once __DIR__."/ui/vendor/autoload.php";
 
-\DrSlump\Protobuf::autoload();
+//\DrSlump\Protobuf::autoload();
 
 require_once 'Common/lib/Settings.class.php';
 require_once 'Common/lib/ModelFactory.class.php';
@@ -41,7 +41,6 @@ require_once 'Common/protobufs/models/MembershipRequest.php';
 require_once 'Common/protobufs/models/UserTaskStreamNotification.php';
 require_once 'Common/protobufs/models/TaskReview.php';
 
-require_once 'Common/protobufs/emails/EmailMessage.php';
 require_once 'Common/protobufs/emails/UserFeedback.php';
 require_once 'Common/protobufs/emails/OrgFeedback.php';
 
@@ -83,8 +82,8 @@ $app->configureMode('production', function () use ($app) {
         'cookies.lifetime' => Common\Lib\Settings::get('site.cookie_timeout'),
         'cookies.encrypt' => true,
         'cookies.secret_key' => Common\Lib\Settings::get('session.site_key'),
-        'cookies.cipher' => MCRYPT_RIJNDAEL_256,
-        'cookies.cipher_mode' => MCRYPT_MODE_CBC
+        'cookies.cipher' => '',
+        'cookies.cipher_mode' => ''
     ));
 });
 
@@ -95,8 +94,8 @@ $app->configureMode('development', function () use ($app) {
         'cookies.lifetime' => Common\Lib\Settings::get('site.cookie_timeout'),
         'cookies.encrypt' => true,
         'cookies.secret_key' => Common\Lib\Settings::get('session.site_key'),
-        'cookies.cipher' => MCRYPT_RIJNDAEL_256,
-        'cookies.cipher_mode' => MCRYPT_MODE_CBC
+        'cookies.cipher' => '',
+        'cookies.cipher_mode' => ''
     ));
 });
 
@@ -109,8 +108,8 @@ $app->add(new \Slim\Middleware\SessionCookie(array(
     'name' => 'slim_session',
     'encrypt' => true,
     'secret' => Common\Lib\Settings::get('session.site_key'),
-    'cipher' => MCRYPT_RIJNDAEL_256,
-    'cipher_mode' => MCRYPT_MODE_CBC
+    'cipher' => '',
+    'cipher_mode' => ''
 )));
 
 // Register static classes so they can be used in smarty templates

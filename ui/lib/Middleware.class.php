@@ -22,6 +22,33 @@ class Middleware
             $app->redirect($app->urlFor('login'));
         }
 
+        if (empty($_SESSION['profile_completed'])) {
+            $userDao = new DAO\UserDao();
+            if ($userDao->is_admin_or_org_member($_SESSION['user_id'])) {
+                $app->flash('error', 'You must accept the Code of Conduct before continuing');
+                $app->redirect($app->urlFor('user-code-of-conduct', array('user_id' => $_SESSION['user_id'])));
+            } else {
+                $app->flash('error', 'You must fill in your profile including Code of Conduct before continuing');
+                $app->redirect($app->urlFor('user-private-profile', array('user_id' => $_SESSION['user_id'])));
+            }
+        }
+
+        return true;
+    }
+
+    public function authUserIsLoggedInNoProfile()
+    {
+        $app = \Slim\Slim::getInstance();
+
+        $this->isUserBanned();
+        if (!Common\Lib\UserSession::getCurrentUserID()) {
+            Common\Lib\UserSession::setReferer(
+                $app->request()->getUrl().$app->request()->getScriptName().$app->request()->getPathInfo()
+            );
+            $app->flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
+            $app->redirect($app->urlFor('login'));
+        }
+
         return true;
     }
     
@@ -50,6 +77,8 @@ class Middleware
 
         $app = \Slim\Slim::getInstance();
         $app->flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
+
+        Common\Lib\UserSession::setReferer($app->request()->getUrl() . $app->request()->getScriptName() . $app->request()->getPathInfo());
         $app->redirect($app->urlFor('login'));
     }
 
@@ -72,6 +101,7 @@ class Middleware
         }
         if ($claimant) {
             if ($user_id != $claimant->getId()) {
+//error_log("Already claimed... task_id: $task_id, user_id: $user_id, claimant: " . $claimant->getId());
                 $app->flash('error', Localisation::getTranslation('common_error_already_claimed'));
                 $app->redirect($app->urlFor('home'));
             }

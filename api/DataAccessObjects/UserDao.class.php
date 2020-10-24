@@ -142,6 +142,7 @@ class UserDao
         
         if (!is_object($user)) {
             self::logLoginAttempt(null, $email, 0);
+            error_log("is_object $email, $clear_password");
             throw new Common\Exceptions\SolasMatchException(
                 "Unable to find user",
                 Common\Enums\HttpStatusEnum::NOT_FOUND
@@ -150,6 +151,7 @@ class UserDao
                 
         if (!self::isUserVerified($user->getId())) {
             self::logLoginAttempt($user->getId(), $email, 0);
+            error_log("isUserVerified $email, $clear_password");
             throw new Common\Exceptions\SolasMatchException(
                 "Account is unverified",
                 Common\Enums\HttpStatusEnum::UNAUTHORIZED
@@ -158,6 +160,7 @@ class UserDao
 
         if (AdminDao::isUserBanned($user->getId())) {
             self::logLoginAttempt($user->getId(), $email, 0);
+            error_log("isUserBanned $email, $clear_password");
             throw new Common\Exceptions\SolasMatchException(
                 'user is banned',
                 Common\Enums\HttpStatusEnum::FORBIDDEN
@@ -166,6 +169,7 @@ class UserDao
 
         if (!self::clearPasswordMatchesUsersPassword($user, $clear_password)) {
             self::logLoginAttempt($user->getId(), $email, 0);
+            error_log("clearPasswordMatchesUsersPassword $email, $clear_password");
             throw new Common\Exceptions\SolasMatchException(
                 'Unable to find user',
                 Common\Enums\HttpStatusEnum::NOT_FOUND
@@ -216,6 +220,9 @@ class UserDao
         $args = Lib\PDOWrapper::cleanseNull($userId);
         $response = Lib\PDOWrapper::call('finishRegistration', $args);
         BadgeDao::assignBadge($userId, Common\Enums\BadgeTypes::REGISTERED);
+        if (!self::is_admin_or_org_member($userId)) {
+        Lib\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', Lib\PDOWrapper::cleanse($userId) . ',2,1');
+        }
         return $response[0]['result'];
     }
 
@@ -225,8 +232,17 @@ class UserDao
         $response = Lib\PDOWrapper::call('finishRegistrationManually', $args);
         if ($response[0]['result']) {
             BadgeDao::assignBadge($response[0]['result'], Common\Enums\BadgeTypes::REGISTERED);
+            if (!self::is_admin_or_org_member($response[0]['result'])) {
+            Lib\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', Lib\PDOWrapper::cleanse($response[0]['result']) . ',2,1');
+            }
         }
         return $response[0]['result'];
+    }
+
+    public static function is_admin_or_org_member($userId)
+    {
+        $result = Lib\PDOWrapper::call('is_admin_or_org_member', Lib\PDOWrapper::cleanse($userId));
+        return $result[0]['result'];
     }
 
     public static function getRegisteredUser($uuid)
@@ -341,20 +357,6 @@ class UserDao
             $ret = array();
             foreach ($result as $row) {
                 $ret[] = Common\Lib\ModelFactory::buildModel("Organisation", $row);
-            }
-        }
-        return $ret;
-    }
-
-    public static function getUserBadges($user_id)
-    {
-        $ret = null;
-        $args = Lib\PDOWrapper::cleanse($user_id);
-        $result = Lib\PDOWrapper::call("getUserBadges", $args);
-        if ($result) {
-            $ret = array();
-            foreach ($result as $badge) {
-                $ret[] = Common\Lib\ModelFactory::buildModel("Badge", $badge);
             }
         }
         return $ret;
@@ -791,41 +793,6 @@ class UserDao
         return $ret;
     }
     
-    public static function getPersonalInfo(
-        $id,
-        $userId = null,
-        $firstName = null,
-        $lastName = null,
-        $mobileNumber = null,
-        $businessNumber = null,
-        $langPref = null,
-        $jobTitle = null,
-        $address = null,
-        $city = null,
-        $country = null,
-        $receiveCredit = null
-    ) {
-        $ret = null;
-        $args = Lib\PDOWrapper::cleanseNull($id).",".
-            Lib\PDOWrapper::cleanseNull($userId).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($firstName).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($lastName).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($mobileNumber).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($businessNumber).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($langPref).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($jobTitle).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($address).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($city).",".
-            Lib\PDOWrapper::cleanseNullOrWrapStr($country).','.
-            Lib\PDOWrapper::cleanseNull($receiveCredit);
-        
-        $result = Lib\PDOWrapper::call("getUserPersonalInfo", $args);
-        if ($result) {
-            $ret = Common\Lib\ModelFactory::buildModel("UserPersonalInformation", $result[0]);
-        }
-        return $ret;
-    }
-    
     public static function createSecondaryLanguage($userId, $locale)
     {
         $ret = null;
@@ -836,8 +803,21 @@ class UserDao
         if ($result) {
             $ret = Common\Lib\ModelFactory::buildModel("Locale", $result[0]);
         }
-        if (count(self::getSecondaryLanguages($userId)) > 1) {
+        if (count(self::getSecondaryLanguagesArray($userId)) > 1) {
             BadgeDao::assignBadge($userId, Common\Enums\BadgeTypes::POLYGLOT);
+        }
+        return $ret;
+    }
+
+    public static function getSecondaryLanguagesArray($userId = null)
+    {
+        $ret = array();
+        $args = Lib\PDOWrapper::cleanseNull($userId);
+        $result = Lib\PDOWrapper::call("getUserSecondaryLanguages", $args);
+        if ($result) {
+            foreach ($result as $locale) {
+                $ret[] = Common\Lib\ModelFactory::buildModel("Locale", $locale);
+            }
         }
         return $ret;
     }

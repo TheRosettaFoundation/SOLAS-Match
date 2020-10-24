@@ -5,7 +5,7 @@
     <h1>{TemplateHelper::uiCleanseHTML($task->getTitle())} <small>{Localisation::getTranslation('org_task_review_review_this_completed_task')}</small></h1>
 </div>
 
-<h2 class="page-header">{Localisation::getTranslation('org_task_review_review_this_file')} <small>{Localisation::getTranslation('org_task_review_1')}</small></h2>
+<h2 class="page-header">{if $task->getTaskType() == TaskTypeEnum::TRANSLATION}Review this translation task{else}Review this revising task{/if} <small>{Localisation::getTranslation('org_task_review_1')}</small></h2>
 {include file="handle-flash-messages.tpl"}
 
 <p>
@@ -14,13 +14,14 @@
 
 <p>
 {Localisation::getTranslation('task_twitter_0_org_task_review')} <a class="twitter-share-button"
-  href="https://twitter.com/intent/tweet?text={Localisation::getTranslation('task_twitter_4')}&url=https%3A%2F%2Ftrommons.org"
-  data-size="large" data-counturl="https://trommons.org">
+  href="https://twitter.com/intent/tweet?text={Localisation::getTranslation('task_twitter_4')}&url=https%3A%2F%2Fkato.translatorswb.org"
+  data-size="large" data-counturl="https://kato.translatorswb.org">
 Tweet</a>
 </p>
 
 {if isset($formAction)}
-    <form class="well" method="post" action="{$formAction}"  onsubmit="createHiddenFields()" id="TaskReviewForm" accept-charset="utf-8">
+    <form class="well" method="post" action="{$formAction}"  onsubmit="return areRatingsSetThenCreateHiddenFields()" id="TaskReviewForm" accept-charset="utf-8">
+        <div id="placeholder_for_errors_1"></div>
 {else}
     <div class="well">
 {/if}
@@ -29,13 +30,14 @@ Tweet</a>
 {include file="task/task.review-form.tpl"}
 
  {if isset($formAction)}
+        <div id="placeholder_for_errors_2"></div>
       
         {if !isset($review)}
             <button class="btn btn-primary" type="submit" name="submitReview">
                 <i class="icon-upload icon-white"></i> {Localisation::getTranslation('task_review_form_submit_review')}
             </button>
         {/if}
-        <button class="btn btn-inverse" type="submit" name="skip">
+        <button class="btn btn-inverse" type="submit" name="skip" onclick="noteSkipClicked();">
             <i class="icon-circle-arrow-right icon-white"></i> {Localisation::getTranslation('task_review_form_skip')}
         </button>
     {/if}

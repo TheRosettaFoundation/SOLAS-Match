@@ -14,17 +14,14 @@
         <!-- Templates... -->
         <div id="template_language_options">
             <option value="0"></option>
-            {foreach $languages as $language}
-                <option value="{$language->getCode()}" >{$language->getName()}</option>
+            {foreach from=$languages key=codes item=language}
+                <option value="{$codes}" >{$language}</option>
             {/foreach}
         </div>
 
-        <div id="template_country_options">
-            <option value="0"></option>
-            {foreach $countries as $country}
-                <option value="{$country->getCode()}">{$country->getName()}</option>
-            {/foreach}
-        </div>
+        <!-- Template for predefined langauges... -->
+        <div id="template1">{$template1}</div>
+        <div id="template2">{$template2}</div>
 
     </span>
 
@@ -147,6 +144,29 @@
                         <input type="text" name="tagList" id="tagList" style="width: 400px" />
                     </div>
                 </div>
+                {if $isSiteAdmin}
+                <div class="projFormInput">
+                    <div style="margin-bottom:25px;">
+                        <h2>Additional Private TM Keys</h2>
+                        <p class="desc">
+                            Zero or more additional TM keys, comma separated.
+                        </p>
+                        <input type="text" name="private_tm_key" id="private_tm_key" style="width: 400px" />
+                    </div>
+                </div>
+                <div class="projFormInput">
+                    <div style="margin-bottom:25px;">
+                        <h2>Use MT Engine:</h2>
+                        <input type="checkbox" name="mt_engine" id="mt_engine" value="1" checked />
+                    </div>
+                </div>
+                <div class="projFormInput">
+                    <div style="margin-bottom:25px;">
+                        <h2>Pre-Translate 100%:</h2>
+                        <input type="checkbox" name="pretranslate_100" id="pretranslate_100" value="1" checked />
+                    </div>
+                </div>
+                {/if}
                 <div class="projFormInput">
                     <div style="margin-bottom:25px;">
                         <h2>{Localisation::getTranslation('project_create_publish_tasks')}:</h2>
@@ -167,8 +187,19 @@
                 <div class="projFormInput">
                     <div style="margin-bottom:25px;">
                         <h2>{Localisation::getTranslation('restrict_tasks')}:</h2>
+                        <p class="desc">If checked, translation tasks will only be shown to qualified volunteers.</p>
+                        <input type="checkbox" name="restrict_translate_tasks" id="restrict_translate_tasks" value="1" checked />
                         <p class="desc">{Localisation::getTranslation('restrict_tasks_long')}</p>
-                        <input type="checkbox" name="restrictTask" id="restrictTask" value="1" checked />
+                        <input type="checkbox" name="restrict_revise_tasks" id="restrict_revise_tasks" value="1" checked />
+                    </div>
+                </div>
+                {/if}
+                {if $isSiteAdmin}
+                <div class="projFormInput">
+                    <div style="margin-bottom:25px;">
+                        <h2>Verification System Project:</h2>
+                        <p class="desc">If checked, this will become a Verification System Project (No TM, MT, lexiQA) revised by Senior Translators.</p>
+                        <input type="checkbox" name="testing_center" id="testing_center" value="1" />
                     </div>
                 </div>
                 {/if}
@@ -183,28 +214,24 @@
                     <h2>{Localisation::getTranslation('common_source_language')}: <span style="color: red">*</span></h2>
                     <select name="sourceLanguageSelect" id="sourceLanguageSelect" style="width: 400px">
                         <option value="0"></option>
-                        {foreach $languages as $language}
-                            <option value="{$language->getCode()}" >{$language->getName()}</option>
-                        {/foreach}
-                    </select>
-                    <select name="sourceCountrySelect" id="sourceCountrySelect" style="width: 400px">
-                        <option value="0"></option>
-                        {foreach $countries as $country}
-                            <option value="{$country->getCode()}">{$country->getName()}</option>
+                        {foreach from=$languages key=codes item=language}
+                            <option value="{$codes}" >{$language}</option>
                         {/foreach}
                     </select>
                 </div>
-                <h2>{Localisation::getTranslation('project_create_target_languages')}: <span style="color: red">*</span></h2>
                 <br />
+                <h2>{Localisation::getTranslation('project_create_target_languages')}: <span style="color: red">*</span></h2>
             </div>
             <div id="projFormBottomBlockRight">
                 <h2>{Localisation::getTranslation('common_task_type')}: <span style="color: red">*</span></h2>
                 <p class="desc" style ="margin-bottom:63px">{Localisation::getTranslation('project_create_9')}</p>
                 <div> <!-- <table border="0" width="100%"> -->
                     <div>
+                        <!--
                         <div class="proj-task-type-text pull-left" title="{Localisation::getTranslation('project_create_10')}">
                             <strong>{Localisation::getTranslation('common_segmentation')}</strong>
                         </div>
+                        -->
                         <div class="proj-task-type-text pull-left" title="{Localisation::getTranslation('common_create_a_translation_task_for_volunteer_translators_to_pick_up')}">
                             <strong>{Localisation::getTranslation('common_translation')}</strong>
                         </div>
@@ -249,6 +276,22 @@
             </div>
             <input type="hidden" name="sesskey" value="{$sesskey}" />
         </form>
+
     </div>
-    
+
+    <br /><br />
+    <div>
+        <button onclick="setTemplateLanguages(1); return false;" class="btn btn-success">
+            <i class="icon-upload icon-white"></i>
+            Set Source and Target Languages from Template 1
+        </button>
+    </div>
+    <br />
+    <div>
+        <button onclick="setTemplateLanguages(2); return false;" class="btn btn-success">
+            <i class="icon-upload icon-white"></i>
+            Set Source and Target Languages from Template 2
+        </button>
+    </div>
+
 {include file="footer.tpl"}

@@ -12,17 +12,51 @@
 <div class="well">
     <p><a href="{urlFor name="active_now"}" target="_blank">List all tasks currently in progress showing information about the volunteer working on them.</a></p>
     <p><a href="{urlFor name="active_now_matecat"}" target="_blank">List all tasks currently in progress showing their MateCat Status.</a></p>
+    <p><a href="{urlFor name="late_matecat"}" target="_blank">List all tasks within one week of being overdue showing their MateCat Status.</a></p>
     <p><a href="{urlFor name="complete_matecat"}" target="_blank">List all complete tasks showing their MateCat Status.</a></p>
     <p><a href="{urlFor name="unclaimed_tasks"}" target="_blank">List all tasks still unclaimed and the email address of their creators.</a></p>
+    <p><a href="{urlFor name="testing_center"}" target="_blank">List all verification system tasks.</a></p>
     <p><a href="{urlFor name="active_users"}" target="_blank">List all volunteers who have ever claimed a task (and which task is still on the system and not archived), the corresponding task and the task creator's email address.</a> <a href="{urlFor name="download_active_users"}">[Download]</a></p>
     <p><a href="{urlFor name="active_users_unique"}" target="_blank">List all volunteers who have ever claimed a task (and which task is still on the system and not archived) showing their email address and Display Name.</a></p>
     <p><a href="{urlFor name="all_users"}" target="_blank">List all users currently registered on Trommons showing information about them.</a> <a href="{urlFor name="download_all_users"}">[Download]</a></p>
     <p><a href="{urlFor name="all_users_plain"}" target="_blank">(Same as above but plain layout.)</a></p>
     <p><a href="{urlFor name="user_languages" options="code.full"}" target="_blank">List all languages indicated on user's profiles showing information about the user (if you replace the "full" in the URL with a language code like "es", you will just get that language).</a> <a href="{urlFor name="download_user_languages"}">[Download]</a></p>
     <p><a href="{urlFor name="user_task_languages" options="code.full"}" target="_blank">List users who worked on tasks for a language (if you replace the "full" in the URL with a language code like "es", you will just get that language).</a> <a href="{urlFor name="download_user_task_languages"}">[Download]</a></p>
+    <p><a href="{urlFor name="user_words_by_language"}" target="_blank">List all translator's translated and revised words by language pair.</a> <a href="{urlFor name="download_user_words_by_language"}">[Download]</a></p>
+    <p><a href="{urlFor name="first_completed_task"}" target="_blank">List all translator's first completed task.</a></p>
+    <p><a href="{urlFor name="user_task_reviews"}" target="_blank">List average reviews for volunteers</a></p>
+    <p><a href="{urlFor name="peer_to_peer_vetting"}">[Download peer to peer vetting report]</a></p>
+    <p><a href="{urlFor name="submitted_task_reviews"}" target="_blank">List submitted reviews</a> <a href="{urlFor name="download_submitted_task_reviews"}">[Download]</a></p>
+    <p><a href="{urlFor name="tasks_no_reviews"}" target="_blank">List tasks completed without a review</a> <a href="{urlFor name="download_tasks_no_reviews"}">[Download]</a></p>
+    <p><a href="{urlFor name="project_source_file_scores"}" target="_blank">Project Source File Scores</a> <a href="{urlFor name="download_project_source_file_scores"}">[Download]</a></p>
+    <p><a href="{urlFor name="language_work_requested"}" target="_blank">List language pairs with translation work requested in those pairs.</a> <a href="{urlFor name="download_language_work_requested"}">[Download]</a></p>
+    <p><a href="{urlFor name="translators_for_language_pairs"}" target="_blank">List language pairs with number of translators who have that pair.</a> <a href="{urlFor name="download_translators_for_language_pairs"}">[Download]</a></p>
     <p><a href="{urlFor name="community_stats"}">[Download community report]</a></p>
     <p><a href="{urlFor name="org_stats"}">[Download NGO report]</a></p>
     <p><a href="{urlFor name="community_dashboard"}">[Download community dashboard report]</a></p>
+    <p><a href="{urlFor name="matecat_analyse_status"}">List projects with MateCat analyse status</a></p>
+    <p><a href="{urlFor name="users_review"}">List user certificates to be reviewed</a></p>
+    <p><a href="{urlFor name="users_new"}">List new users</a> <a href="{urlFor name="download_users_new"}">[Download]</a> <a href="{urlFor name="download_users_new_unreviewed"}">[Download Unreviewed]</a></p>
+    <p><a href="{urlFor name="users_tracked"}">List tracked Registrations</a> <a href="{urlFor name="download_users_tracked"}">[Download]</a></p>
+    <p><a href="{urlFor name="download_covid_projects"}">[Download covid projects]</a></p>
+    <hr />
+
+    <form method="post" enctype="multipart/form-data" action="{urlFor name="search_users_by_language_pair"}" accept-charset="utf-8" target="_blank">
+        <table style="width: 40%">
+            <tr>
+                <td>
+                    <input type="text" name="search_users_language_pair" placeholder="Language pair e.g. en-fr" style="width: 95%"/>
+                </td>
+                <td valign="top">
+                    <button class="btn btn-success" type="submit" name="search_users_by_language_pair_submit" value="1">
+                        <i class="icon-search icon-white"></i>
+                        List all volunteers with given language pair
+                    </button>
+                </td>
+            </tr>
+        </table>
+        {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+    </form>
     <hr />
 
     <form method="post" enctype="multipart/form-data" action="{urlFor name="site-admin-dashboard"}" accept-charset="utf-8">

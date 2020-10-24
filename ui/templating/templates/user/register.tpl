@@ -1,7 +1,9 @@
 {include file="header.tpl"}
 
 <div class="page-header">
-    <h3>{Localisation::getTranslation('register_register_on')}</h3>
+    <h3>Create your Kató Platform account by registering here with your email address and chosen password.<br />
+Or alternatively, create your account using one of the third-party account providers below (the email from that account will be used).<br />
+If you are having problems registering please contact <a href="mailto:translators@translatorswithoutborders.org?subject={rawurlencode('Registration')}">translators@translatorswithoutborders.org</a>.</h3>
 </div>
 
 {include file="handle-flash-messages.tpl"}
@@ -21,10 +23,12 @@
     <form method="post" action="{urlFor name="register"}" class="well" accept-charset="utf-8">
             <label for="email"><strong>{Localisation::getTranslation('common_email')}</strong></label>
             <input type="text" name="email" id="email" placeholder="{Localisation::getTranslation('register_your_email')}"/>
+            <label for="email2"><strong>Re-enter E-mail</strong></label>
+            <input type="text" id="email2" placeholder="Confirm your email"/>
             <label for="password"><strong>{Localisation::getTranslation('common_password')}</strong></label>
             <input type="password" name="password" id="password" placeholder="{Localisation::getTranslation('register_your_password')}"/>
             <p>
-                <button type="submit" class="btn btn-success" name="submit">
+                <button type="submit" onclick="return compareEmails();" class="btn btn-success" name="submit">
                     <i class="icon-star icon-white"></i> {Localisation::getTranslation('common_register')}
                 </button>
             </p>
@@ -39,10 +43,8 @@
             <h3>{Localisation::getTranslation('register_signin_or_create_new_account')}</h3>
             <div id="openid_choice">
                  {if isset($gplus) && ($gplus === 'y')}
-                    <div id="gSignInWrapper">
-                        <div id="customGplusBtn" class="customGPlusSignIn">
-                           <span id="customGplusBtnIcon"></span>
-                           <span id="customGplusBtnText">Google</span>
+                    <div id="gSignInWrapper" style="margin-bottom: 10px;">
+                        <div id="g-signin2" class="g-signin2">
                         </div>
                     </div>
                 {/if}

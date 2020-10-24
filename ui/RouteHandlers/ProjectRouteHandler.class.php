@@ -9,6 +9,7 @@ use \SolasMatch\Common as Common;
 require_once __DIR__."/../../Common/Enums/TaskTypeEnum.class.php";
 require_once __DIR__."/../../Common/Enums/TaskStatusEnum.class.php";
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
+require_once __DIR__.'/../../Common/matecat_acceptable_languages.php';
 
 class ProjectRouteHandler
 {
@@ -115,6 +116,7 @@ class ProjectRouteHandler
 
     public function projectView($project_id)
     {
+        $matecat_api = Common\Lib\Settings::get('matecat.url');
         $app = \Slim\Slim::getInstance();
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $adminDao = new DAO\AdminDao();
@@ -126,6 +128,16 @@ class ProjectRouteHandler
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $project = $projectDao->getProject($project_id);
+        if (empty($project)) {
+            $app->flash('error', 'That project does not exist!');
+            $app->redirect($app->urlFor('home'));
+        }
+
+        if ($taskDao->isUserRestrictedFromProject($project_id, $user_id)) {
+            $app->flash('error', 'You cannot access this project!');
+            $app->redirect($app->urlFor('home'));
+        }
+
         $app->view()->setData("project", $project);
 
         if ($app->request()->isPost()) {
@@ -280,6 +292,223 @@ class ProjectRouteHandler
                     }
                 }
             }
+
+            if (!empty($post['copyChunks'])) {
+                $matecat_language_pairs = $taskDao->getMatecatLanguagePairsForProject($project_id);
+                $matecat_language_pairs_populated = false;
+                if (!empty($matecat_language_pairs)) {
+                    $matecat_language_pairs_populated = true;
+                    foreach ($matecat_language_pairs as $matecat_language_pair) {
+                        if (empty($matecat_language_pair['matecat_id_job'])) $matecat_language_pairs_populated = false;
+                    }
+                }
+                if ($matecat_language_pairs_populated) {
+                    $project_chunks = $taskDao->getTaskChunks($project_id);
+                    if (empty($project_chunks)) $project_chunks = array();
+
+                    $task_chunks = array();
+                    foreach ($project_chunks as $task_chunk) {
+                        $task_chunks[$task_chunk['matecat_id_job']][$task_chunk['chunk_number']][$task_chunk['type_id']] = $task_chunk;
+                    }
+
+                    $parent_task_by_matecat_id_job_and_type = array();
+                    $job_was_chunked = array();
+                    foreach ($matecat_language_pairs as $matecat_language_pair) {
+                        $parent_task_by_matecat_id_job_and_type[$matecat_language_pair['matecat_id_job']][$matecat_language_pair['type_id']] = $matecat_language_pair['task_id'];
+
+                        $job_was_chunked[$matecat_language_pair['matecat_id_job']] = true;
+                    }
+
+                    foreach ($matecat_language_pairs as $matecat_language_pair) {
+                        if (empty($task_chunks[$matecat_language_pair['matecat_id_job']])) {
+                            $job_was_chunked[$matecat_language_pair['matecat_id_job']] = false;
+
+                            $task_chunks[$matecat_language_pair['matecat_id_job']][0][Common\Enums\TaskTypeEnum::TRANSLATION ] = array(
+                                'task_id' => 0,
+                                'project_id' => $project_id,
+                                'type_id' => Common\Enums\TaskTypeEnum::TRANSLATION,
+                                'matecat_langpair' => $matecat_language_pair['matecat_langpair'],
+                                'matecat_id_job' => $matecat_language_pair['matecat_id_job'],
+                                'chunk_number' => 0,
+                                'matecat_id_chunk_password' => $matecat_language_pair['matecat_id_job_password'],
+                                'job_first_segment' => '',
+                            );
+                            $task_chunks[$matecat_language_pair['matecat_id_job']][0][Common\Enums\TaskTypeEnum::PROOFREADING] = array(
+                                'task_id' => 0,
+                                'project_id' => $project_id,
+                                'type_id' => Common\Enums\TaskTypeEnum::PROOFREADING,
+                                'matecat_langpair' => $matecat_language_pair['matecat_langpair'],
+                                'matecat_id_job' => $matecat_language_pair['matecat_id_job'],
+                                'chunk_number' => 0,
+                                'matecat_id_chunk_password' => $matecat_language_pair['matecat_id_job_password'],
+                                'job_first_segment' => '',
+                            );
+                        }
+                    }
+
+                    $request_for_project = $taskDao->getWordCountRequestForProject($project_id);
+                    if ($request_for_project && !empty($request_for_project['matecat_id_project']) && !empty($request_for_project['matecat_id_project_pass'])) {
+                        $re = curl_init("{$matecat_api}api/v2/projects/{$request_for_project['matecat_id_project']}/{$request_for_project['matecat_id_project_pass']}/urls");
+
+                        curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
+                        curl_setopt($re, CURLOPT_COOKIESESSION, true);
+                        curl_setopt($re, CURLOPT_FOLLOWLOCATION, true);
+                        curl_setopt($re, CURLOPT_AUTOREFERER, true);
+
+                        $httpHeaders = array(
+                            'Expect:'
+                        );
+                        curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
+
+                        curl_setopt($re, CURLOPT_HEADER, true);
+                        curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
+                        curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
+                        curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
+                        $res = curl_exec($re);
+
+                        $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
+                        $header = substr($res, 0, $header_size);
+                        $res = substr($res, $header_size);
+                        $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
+
+                        curl_close($re);
+
+                        if ($responseCode == 200) {
+                            $response_data = json_decode($res, true);
+                            if (!empty($response_data['urls']['jobs'])) {
+                                $chunks = $taskDao->getStatusOfSubChunks($project_id); // It is possible that this should have been used instead of /urls above, but would involve recode/retest
+                                $segment_by_job_and_password = [];
+                                foreach ($chunks as $chunk) {
+                                    $segment_by_job_and_password[$chunk['matecat_id_job'] . '|' . $chunk['matecat_id_chunk_password']] = $chunk['job_first_segment'];
+                                }
+
+                                $jobs = $response_data['urls']['jobs'];
+                                foreach ($jobs as $job) {
+                                    if (!empty($job['chunks']) && !empty($job['id'])) {
+                                        $matecat_id_job = $job['id'];
+
+                                        $chunks = $job['chunks'];
+                                        $number_of_chunks = count($chunks);
+
+                                        foreach ($chunks as $chunk_number => $chunk) {
+                                            if (empty($chunks[$chunk_number]['password']) && !empty($chunks[$chunk_number]['translate_url'])) {
+                                                // 20191102 MateCat 2.9.2e no longer has "password" key here, need to extract it from "translate_url"
+                                                $chunks[$chunk_number]['password'] = substr($chunks[$chunk_number]['translate_url'], strrpos($chunks[$chunk_number]['translate_url'], '-') + 1);
+                                            }
+                                        }
+
+                                        $was_chunked = !empty($job_was_chunked[$matecat_id_job]);
+                                        $chunked_now = $number_of_chunks > 1;
+                                        if     (!$was_chunked && !$chunked_now) $matched = true;
+                                        elseif (!$was_chunked &&  $chunked_now) $matched = false;
+                                        elseif ( $was_chunked && !$chunked_now) $matched = false;
+                                        else { //$was_chunked &&  $chunked_now
+                                            $matched = true;
+                                            foreach ($chunks as $chunk_number => $chunk) {
+                                                if (empty($task_chunks[$matecat_id_job][$chunk_number][Common\Enums\TaskTypeEnum::TRANSLATION]['matecat_id_chunk_password']) ||
+                                                    $task_chunks[$matecat_id_job][$chunk_number][Common\Enums\TaskTypeEnum::TRANSLATION]['matecat_id_chunk_password'] != $chunk['password']) {
+
+                                                    $matched = false;
+                                                }
+                                            }
+                                        }
+
+                                        if (!$matched) {
+                                            $parent_task_id_translation  = 0;
+                                            $parent_task_id_proofreading = 0;
+                                            if (!empty($parent_task_by_matecat_id_job_and_type[$matecat_id_job][Common\Enums\TaskTypeEnum::TRANSLATION])) {
+                                                $parent_task_id_translation  = $parent_task_by_matecat_id_job_and_type[$matecat_id_job][Common\Enums\TaskTypeEnum::TRANSLATION];
+                                            }
+                                            if (!empty($parent_task_by_matecat_id_job_and_type[$matecat_id_job][Common\Enums\TaskTypeEnum::PROOFREADING])) {
+                                                $parent_task_id_proofreading = $parent_task_by_matecat_id_job_and_type[$matecat_id_job][Common\Enums\TaskTypeEnum::PROOFREADING];
+                                            }
+                                            if (!empty($parent_task_id_translation ) || !empty($parent_task_id_proofreading)) {
+                                                if (empty($parent_task_id_translation )) $parent_task_id_translation  = $parent_task_id_proofreading;
+                                                if (empty($parent_task_id_proofreading)) $parent_task_id_proofreading = $parent_task_id_translation;
+
+                                                $parent_translation_task  = $taskDao->getTask($parent_task_id_translation);
+                                                $parent_proofreading_task = $taskDao->getTask($parent_task_id_proofreading);
+
+                                                if ($parent_task_id_translation === $parent_task_id_proofreading) {
+                                                    // Need to calculate Translation Deadline, 3 days earlier if it will fit
+                                                    $deadline = strtotime($parent_proofreading_task->getDeadline());
+                                                    $deadline_less_3_days = $deadline - 3*24*60*60;
+                                                    if ($deadline_less_3_days < time())    $deadline_less_3_days = time() + 2*24*60*60;
+                                                    if ($deadline_less_3_days > $deadline) $deadline_less_3_days = $deadline;
+                                                    error_log("Parent task_id: $parent_task_id_translation, deadline will be inherited: " . date("Y-m-d H:i:s", $deadline_less_3_days));
+                                                    $parent_translation_task->setDeadline(date("Y-m-d H:i:s", $deadline_less_3_days));
+                                                }
+
+                                                if ($was_chunked) {
+                                                    foreach ($task_chunks[$matecat_id_job] as $chunk_item) {
+                                                        $taskDao->deleteTask($chunk_item[Common\Enums\TaskTypeEnum::TRANSLATION ]['task_id']);
+                                                        $taskDao->deleteTask($chunk_item[Common\Enums\TaskTypeEnum::PROOFREADING]['task_id']);
+                                                    }
+                                                    // $taskDao->removeTaskChunks($matecat_id_job); WILL BE DONE BY DELETE CASCADE
+                                                }
+
+                                                if ($chunked_now) {
+                                                    foreach ($chunks as $chunk_number => $chunk) {
+                                                        $job_first_segment = '';
+                                                        if (!empty($segment_by_job_and_password[$matecat_id_job . '|' . $chunk['password']])) $job_first_segment = $segment_by_job_and_password[$matecat_id_job . '|' . $chunk['password']];
+
+                                                        // Ideally Tasks should be created after the TaskChunks as there could, in theory, be an immediate attempt to claim the task linked to the chunk
+                                                        // However we are not doing that here
+                                                        $task_id = $this->addChunkTask(
+                                                            $taskDao,
+                                                            $project_id,
+                                                            $parent_translation_task,
+                                                            Common\Enums\TaskTypeEnum::TRANSLATION,
+                                                            $chunk_number,
+                                                            $number_of_chunks);
+                                                        $taskDao->insertTaskChunks(
+                                                            $task_id,
+                                                            $project_id,
+                                                            Common\Enums\TaskTypeEnum::TRANSLATION,
+                                                            $task_chunks[$matecat_id_job][0][Common\Enums\TaskTypeEnum::TRANSLATION ]['matecat_langpair'],
+                                                            $matecat_id_job,
+                                                            $chunk_number,
+                                                            $chunk['password'],
+                                                            $job_first_segment);
+                                                        $task_id = $this->addChunkTask(
+                                                            $taskDao,
+                                                            $project_id,
+                                                            $parent_proofreading_task,
+                                                            Common\Enums\TaskTypeEnum::PROOFREADING,
+                                                            $chunk_number,
+                                                            $number_of_chunks);
+                                                        $taskDao->insertTaskChunks(
+                                                            $task_id,
+                                                            $project_id,
+                                                            Common\Enums\TaskTypeEnum::PROOFREADING,
+                                                            $task_chunks[$matecat_id_job][0][Common\Enums\TaskTypeEnum::PROOFREADING]['matecat_langpair'],
+                                                            $matecat_id_job,
+                                                            $chunk_number,
+                                                            $chunk['password'],
+                                                            $job_first_segment);
+                                                    }
+                                                }
+                                            } else {
+                                                $app->flashNow('error', "Could not find parent translation or revising task for chunks (Job id: $matecat_id_job)");
+                                            }
+                                        }
+                                    } else {
+                                        $app->flashNow('error', 'No chunks or id found for job');
+                                    }
+                                }
+                            } else {
+                                $app->flashNow('error', 'No jobs found');
+                            }
+                        } else {
+                            $app->flashNow('error', "Could not get data from Kató TM, Response Code: $responseCode");
+                        }
+                    } else {
+                        $app->flashNow('error', 'Could not get matecat_id_project (WordCountRequestForProjects)');
+                    }
+                } else {
+                    $app->flashNow('error', 'No MateCat project (MatecatLanguagePairs) found for this project in Kató Platform');
+                }
+            }
         }
 
         $org = $orgDao->getOrganisation($project->getOrganisationId());
@@ -290,6 +519,13 @@ class ProjectRouteHandler
         $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
         $isAdmin = $adminDao->isOrgAdmin($project->getOrganisationId(), $user_id) || $isSiteAdmin;
 
+        $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
+        $taskTypeColours = array();
+        for ($i=1; $i <= $numTaskTypes; $i++) {
+            $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
+        }
+
+        //$allow_downloads = array();
         if ($isOrgMember || $isAdmin) {
             $userSubscribedToProject = $userDao->isSubscribedToProject($user_id, $project_id);
             $taskMetaData = array();
@@ -310,6 +546,7 @@ class ProjectRouteHandler
                         $metaData['tracking'] = false;
                     }
                     $taskMetaData[$task_id] = $metaData;
+                    //$allow_downloads[$task_id] = $taskDao->get_allow_download($task);
                 }
             }
 
@@ -325,25 +562,23 @@ class ProjectRouteHandler
             // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
             $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
 
-            $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
-            $taskTypeColours = array();
-
-            for ($i=1; $i <= $numTaskTypes; $i++) {
-                $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
-            }
-
             $app->view()->appendData(array(
                     "org" => $org,
                     "graph" => $graphView,
                     "extra_scripts" => $extra_scripts,
                     "projectTasks" => $project_tasks,
                     "taskMetaData" => $taskMetaData,
-                    "taskTypeColours" => $taskTypeColours,
                     "userSubscribedToProject" => $userSubscribedToProject,
                     "project_tags" => $project_tags,
                     "taskLanguageMap" => $taskLanguageMap
             ));
         } else {
+            $project_tasks = $taskDao->getVolunteerProjectTasks($project_id, $user_id);
+            $volunteerTaskLanguageMap = array();
+            foreach ($project_tasks as $task) {
+                $volunteerTaskLanguageMap[$task['target_language_code'] . ',' . $task['target_country_code']][] = $task;
+            }
+
             $extra_scripts = file_get_contents(__DIR__."/../js/TaskView1.js");
             // Load Twitter JS asynch, see https://dev.twitter.com/web/javascript/loading
             $extra_scripts .= '<script>window.twttr = (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {}; if (d.getElementById(id)) return t; js = d.createElement(s); js.id = id; js.src = "https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); t._e = []; t.ready = function(f) { t._e.push(f); }; return t; }(document, "script", "twitter-wjs"));</script>';
@@ -351,30 +586,84 @@ class ProjectRouteHandler
             $app->view()->appendData(array(
                 "extra_scripts" => $extra_scripts,
                 "org" => $org,
+                'volunteerTaskLanguageMap' => $volunteerTaskLanguageMap,
                 "project_tags" => $project_tags
             ));
         }
 
         $preventImageCacheToken = time(); //see http://stackoverflow.com/questions/126772/how-to-force-a-web-browser-not-to-cache-images
 
+        $creator = $taskDao->get_creator($project_id);
+        $pm = $creator['email'];
+        if (strpos($pm, '@translatorswithoutborders.org') === false) $pm = 'projects@translatorswithoutborders.org';
+
         $app->view()->appendData(array(
                 'sesskey'       => $sesskey,
                 "isOrgMember"   => $isOrgMember,
                 "isAdmin"       => $isAdmin,
                 "isSiteAdmin"   => $isSiteAdmin,
+                'taskTypeColours' => $taskTypeColours,
                 "imgCacheToken" => $preventImageCacheToken,
-                'discourse_slug' => $projectDao->discourse_parameterize($project->getTitle()),
+                'discourse_slug' => $projectDao->discourse_parameterize($project),
+                'matecat_analyze_url' => $taskDao->get_matecat_analyze_url($project_id),
+                'pm' => $pm,
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation
         ));
+                //'allow_downloads'     => $allow_downloads,
         $app->render("project/project.view.tpl");
+    }
+
+    private function addChunkTask(
+        $taskDao,
+        $project_id,
+        $parent_task,
+        $type_id,
+        $chunk_number,
+        $number_of_chunks)
+    {
+        $task = new Common\Protobufs\Models\Task();
+        $task->setProjectId($project_id);
+        $task->setTitle("Chunk $chunk_number of " . $parent_task->getTitle());
+        $task->setTaskType($type_id);
+        $task->setSourceLocale($parent_task->getSourceLocale());
+        $task->setTargetLocale($parent_task->getTargetLocale());
+        $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+
+        $word_count = $parent_task->getWordCount() / $number_of_chunks;
+        if ($word_count < 1) $word_count = 1;
+        $task->setWordCount($word_count);
+
+        $task->setDeadline($parent_task->getDeadline());
+        //$task->setPublished($parent_task->getPublished());
+        $task->setPublished(true);
+
+        $newTask = $taskDao->createTask($task);
+        $task_id = $newTask->getId();
+        error_log("addChunkTask $chunk_number: $task_id, deadline: " . $task->getDeadline());
+
+        $taskDao->updateRequiredTaskQualificationLevel($task_id, $taskDao->getRequiredTaskQualificationLevel($parent_task->getId()));
+
+        $project_restrictions = $taskDao->get_project_restrictions($project_id);
+        if ($project_restrictions && (
+                ($newTask->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION  && $project_restrictions['restrict_translate_tasks'])
+                    ||
+                ($newTask->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $project_restrictions['restrict_revise_tasks']))) {
+            $taskDao->setRestrictedTask($task_id);
+        }
+
+        // Trigger afterTaskCreate should update UserTrackedTasks based on UserTrackedProjects
+
+        return $task_id;
     }
 
     public function projectAlter($project_id)
     {
+        $matecat_api = Common\Lib\Settings::get('matecat.url');
         $app = \Slim\Slim::getInstance();
         $user_id = Common\Lib\UserSession::getCurrentUserID();
 
         $projectDao = new DAO\ProjectDao();
+        $taskDao    = new DAO\TaskDao();
 
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
             $_SESSION['SESSION_CSRF_KEY'] = $this->random_string(10);
@@ -386,7 +675,7 @@ class ProjectRouteHandler
         if ($post = $app->request()->post()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
                     || empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact'])
-                    || empty($post['sourceCountrySelect']) || empty($post['sourceLanguageSelect']) || empty($post['project_deadline'])
+                    || empty($post['project_deadline'])
                     || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $post['project_deadline'])) {
                 // Note the deadline date validation above is only partial (these checks have been done more rigorously on client size, if that is to be trusted)
                 $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_to_create_project'), htmlspecialchars($post['project_title'], ENT_COMPAT, 'UTF-8')));
@@ -400,10 +689,6 @@ class ProjectRouteHandler
                 $project->setReference($post['project_reference']);
                 // Done by DAOupdateProjectWordCount(), which only saves it conditionally...
                 // $project->setWordCount($post['wordCountInput']);
-
-                $sourceLocale->setCountryCode($post['sourceCountrySelect']);
-                $sourceLocale->setLanguageCode($post['sourceLanguageSelect']);
-                $project->setSourceLocale($sourceLocale);
 
                 $project->clearTag();
                 if (!empty($post['tagList'])) {
@@ -511,6 +796,20 @@ class ProjectRouteHandler
                             } else {
                                 // Continue here whether there is, or is not, an image file uploaded as long as there was not an explicit failure
 
+                                if (!empty($post['analyse_url'])) {
+                                    $request_for_project = $taskDao->getWordCountRequestForProject($project_id);
+                                    if ($request_for_project && empty($request_for_project['matecat_id_project']) && empty($request_for_project['matecat_id_project_pass']) && $request_for_project['state'] == 3) {
+                                        $found = preg_match('|^http[s]?' . substr($matecat_api, strpos($matecat_api, ':')) . 'analyze/proj-([0-9]+)/([0-9]+)-([0-9a-z]+)$|', $post['analyse_url'], $matches);
+                                        if ($found && $matches[1] == $project_id) {
+                                            $matecat_id_project = $matches[2];
+                                            $matecat_id_project_pass = $matches[3];
+                                            $taskDao->updateWordCountRequestForProjects($project_id, $matecat_id_project, $matecat_id_project_pass, 0, 1);
+                                            $app->flash('success', 'Matecat Project ID/Password updated!');
+                                        } else {
+                                            $app->flash('error', 'URL did not match project and expected pattern!');
+                                        }
+                                    }
+                                }
                                 try {
                                      $app->redirect($app->urlFor('project-view', array('project_id' => $project->getId())));
                                 } catch (\Exception $e) { // redirect throws \Slim\Exception\Stop
@@ -587,8 +886,14 @@ class ProjectRouteHandler
         $userIsAdmin = $adminDao->isSiteAdmin($user_id);
         // For some reason the existing Dart code excludes this case...
         //$userIsAdmin = $adminDao->isOrgAdmin($project->getOrganisationId(), $user_id) || $userIsAdmin;
+        $enter_analyse_url = 0;
         if ($userIsAdmin) {
             $userIsAdmin = 1; // Just to be sure what will appear in the template and then the JavaScript
+
+            $request_for_project = $taskDao->getWordCountRequestForProject($project_id);
+            if ($request_for_project && empty($request_for_project['matecat_id_project']) && empty($request_for_project['matecat_id_project_pass']) && $request_for_project['state'] == 3) {
+                $enter_analyse_url = 1;
+            }
         } else {
             $userIsAdmin = 0;
         }
@@ -623,6 +928,7 @@ class ProjectRouteHandler
             'sourceLanguageSelectCode' => $sourceLanguageSelectCode,
             'sourceCountrySelectCode'  => $sourceCountrySelectCode,
             'userIsAdmin'    => $userIsAdmin,
+            'enter_analyse_url' => $enter_analyse_url,
             'sesskey'        => $sesskey,
         ));
 
@@ -634,6 +940,7 @@ class ProjectRouteHandler
         $app = \Slim\Slim::getInstance();
         $user_id = Common\Lib\UserSession::getCurrentUserID();
 
+        $adminDao = new DAO\AdminDao();
         $projectDao = new DAO\ProjectDao();
         $orgDao = new DAO\OrganisationDao();
         $subscriptionDao = new DAO\SubscriptionDao();
@@ -647,10 +954,9 @@ class ProjectRouteHandler
         if ($post = $app->request()->post()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
                     || empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact'])
-                    || empty($post['sourceCountrySelect']) || empty($post['sourceLanguageSelect']) || empty($post['project_deadline'])
+                    || empty($post['sourceLanguageSelect']) || empty($post['project_deadline'])
                     || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $post['project_deadline'])
                     ) {
-                    // || empty($post['wordCountInput']) || !ctype_digit($post['wordCountInput'])
                 // Note the deadline date validation above is only partial (these checks have been done more rigorously on client size, if that is to be trusted)
                 $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_to_create_project'), htmlspecialchars($post['project_title'], ENT_COMPAT, 'UTF-8')));
             } else {
@@ -662,11 +968,11 @@ class ProjectRouteHandler
                 $project->setDeadline($post['project_deadline']);
                 $project->setImpact($post['project_impact']);
                 $project->setReference($post['project_reference']);
-                // $project->setWordCount($post['wordCountInput']);
                 $project->setWordCount(1); // Code in taskInsertAndUpdate() does not support 0, so use 1 as placeholder
 
-                $sourceLocale->setCountryCode($post['sourceCountrySelect']);
-                $sourceLocale->setLanguageCode($post['sourceLanguageSelect']);
+                list($trommons_source_language_code, $trommons_source_country_code) = $projectDao->convert_selection_to_language_country($post['sourceLanguageSelect']);
+                $sourceLocale->setCountryCode($trommons_source_country_code);
+                $sourceLocale->setLanguageCode($trommons_source_language_code);
                 $project->setSourceLocale($sourceLocale);
 
                 $project->setOrganisationId($org_id);
@@ -820,34 +1126,13 @@ class ProjectRouteHandler
                                 $matecat_proofreading_task_ids        = array();
                                 $matecat_proofreading_target_languages= array();
                                 $matecat_proofreading_target_countrys = array();
-                                while (!empty($post["target_language_$targetCount"]) && !empty($post["target_country_$targetCount"])) {
-
-                                    if (!empty($post["segmentation_$targetCount"])) {
-                                        // Create segmentation task
-                                        $id = $this->addProjectTask(
-                                            $project,
-                                            $post["target_language_$targetCount"],
-                                            $post["target_country_$targetCount"],
-                                            Common\Enums\TaskTypeEnum::SEGMENTATION,
-                                            0,
-                                            $createdTasks,
-                                            $user_id,
-                                            $projectDao,
-                                            $taskDao,
-                                            $app,
-                                            $post);
-                                        if (!$id) {
-                                            $creatingTasksSuccess = false;
-                                            break;
-                                        }
-
-                                    } else {
-                                        // Not a segmentation task, so translation and/or proofreading will be created.
+                                while (!empty($post["target_language_$targetCount"])) {
+                                    list($trommons_language_code, $trommons_country_code) = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
                                         if (!empty($post["translation_$targetCount"])) {
                                             $translation_Task_Id = $this->addProjectTask(
                                                 $project,
-                                                $post["target_language_$targetCount"],
-                                                $post["target_country_$targetCount"],
+                                                $trommons_language_code,
+                                                $trommons_country_code,
                                                 Common\Enums\TaskTypeEnum::TRANSLATION,
                                                 0,
                                                 $createdTasks,
@@ -861,14 +1146,14 @@ class ProjectRouteHandler
                                                 break;
                                             }
                                             $matecat_translation_task_ids[]         = $translation_Task_Id;
-                                            $matecat_translation_target_languages[] = $post["target_language_$targetCount"];
-                                            $matecat_translation_target_countrys[]  = $post["target_country_$targetCount"];
+                                            $matecat_translation_target_languages[] = $trommons_language_code;
+                                            $matecat_translation_target_countrys[]  = $trommons_country_code;
 
                                             if (!empty($post["proofreading_$targetCount"])) {
                                                 $id = $this->addProjectTask(
                                                     $project,
-                                                    $post["target_language_$targetCount"],
-                                                    $post["target_country_$targetCount"],
+                                                    $trommons_language_code,
+                                                    $trommons_country_code,
                                                     Common\Enums\TaskTypeEnum::PROOFREADING,
                                                     $translation_Task_Id,
                                                     $createdTasks,
@@ -882,15 +1167,15 @@ class ProjectRouteHandler
                                                     break;
                                                 }
                                                 $matecat_proofreading_task_ids[]         = $id;
-                                                $matecat_proofreading_target_languages[] = $post["target_language_$targetCount"];
-                                                $matecat_proofreading_target_countrys[]  = $post["target_country_$targetCount"];
+                                                $matecat_proofreading_target_languages[] = $trommons_language_code;
+                                                $matecat_proofreading_target_countrys[]  = $trommons_country_code;
                                             }
                                         } elseif (empty($post["translation_$targetCount"]) && !empty($post["proofreading_$targetCount"])) {
                                             // Only a proofreading task to be created
                                             $id = $this->addProjectTask(
                                                 $project,
-                                                $post["target_language_$targetCount"],
-                                                $post["target_country_$targetCount"],
+                                                $trommons_language_code,
+                                                $trommons_country_code,
                                                 Common\Enums\TaskTypeEnum::PROOFREADING,
                                                 0,
                                                 $createdTasks,
@@ -904,10 +1189,9 @@ class ProjectRouteHandler
                                                 break;
                                             }
                                             $matecat_proofreading_task_ids[]         = $id;
-                                            $matecat_proofreading_target_languages[] = $post["target_language_$targetCount"];
-                                            $matecat_proofreading_target_countrys[]  = $post["target_country_$targetCount"];
+                                            $matecat_proofreading_target_languages[] = $trommons_language_code;
+                                            $matecat_proofreading_target_countrys[]  = $trommons_country_code;
                                         }
-                                    }
                                     $targetCount++;
                                 }
 
@@ -930,15 +1214,17 @@ class ProjectRouteHandler
                                         error_log('projectCreate calculateProjectDeadlines: ' . $project->getId());
                                         $projectDao->calculateProjectDeadlines($project->getId());
 
-                                        $source_language = $post['sourceLanguageSelect'] . '-' . $post['sourceCountrySelect'];
+                                        $source_language = $trommons_source_language_code . '-' . $trommons_source_country_code;
                                         $target_languages = '';
                                         $targetCount = 0;
-                                        if (!empty($post["target_language_$targetCount"]) && !empty($post["target_country_$targetCount"])) {
-                                            $target_languages = $post["target_language_$targetCount"] . '-' . $post["target_country_$targetCount"];
+                                        if (!empty($post["target_language_$targetCount"])) {
+                                            list($trommons_language_code, $trommons_country_code) = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
+                                            $target_languages = $trommons_language_code . '-' . $trommons_country_code;
                                         }
                                         $targetCount++;
-                                        while (!empty($post["target_language_$targetCount"]) && !empty($post["target_country_$targetCount"])) {
-                                            $target_languages .= ',' . $post["target_language_$targetCount"] . '-' . $post["target_country_$targetCount"];
+                                        while (!empty($post["target_language_$targetCount"])) {
+                                            list($trommons_language_code, $trommons_country_code) = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
+                                            $target_languages .= ',' . $trommons_language_code . '-' . $trommons_country_code;
                                             $targetCount++;
                                         }
                                         // $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, $post['wordCountInput']);
@@ -966,9 +1252,36 @@ class ProjectRouteHandler
                                             }
                                         }
 
-                                       // Create a topic in the Community forum (Discourse) and a project in Asana
-                                       $this->create_discourse_topic($project->getId(), $target_languages);
+                                        if ($adminDao->isSiteAdmin($user_id)) {
+                                            $mt_engine        = empty($post['mt_engine'])        ? '0' : '1';
+                                            $pretranslate_100 = empty($post['pretranslate_100']) ? '0' : '1';
+                                            $lexiqa           = '1';
+                                            if (!empty($post['private_tm_key'])) $post['private_tm_key'] = str_replace(' ', '', $post['private_tm_key']);
+                                            $private_tm_key = empty($post['private_tm_key']) ? '58f97b6f65fb5c8c8522,d5320e2850c37cc31551' : $post['private_tm_key'] . ',58f97b6f65fb5c8c8522,d5320e2850c37cc31551';
 
+                                            if (!empty($post['testing_center'])) {
+                                                $mt_engine        = '0';
+                                                $pretranslate_100 = '0';
+                                                $lexiqa           = '0';
+                                                $private_tm_key   = 'new';
+                                            }
+
+                                            if (!empty($post['testing_center']) || !empty($post['private_tm_key']) || empty($post['mt_engine']) || empty($post['pretranslate_100'])) {
+                                                $taskDao->set_project_tm_key($project->getId(), $mt_engine, $pretranslate_100, $lexiqa, $private_tm_key);
+                                            }
+                                        }
+
+                                        $restrict_translate_tasks = !empty($post['restrict_translate_tasks']);
+                                        $restrict_revise_tasks    = !empty($post['restrict_revise_tasks']);
+                                        if ($restrict_translate_tasks || $restrict_revise_tasks) $taskDao->insert_project_restrictions($project->getId(), $restrict_translate_tasks, $restrict_revise_tasks);
+
+                                        // Create a topic in the Community forum (Discourse) and a project in Asana
+                                        error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");
+                                        try {
+                                           $this->create_discourse_topic($project->getId(), $target_languages);
+                                        } catch (\Exception $e) {
+                                            error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
+                                        }
                                         try {
                                             $app->redirect($app->urlFor('project-view', array('project_id' => $project->getId())));
                                         } catch (\Exception $e) { // redirect throws \Slim\Exception\Stop
@@ -976,6 +1289,7 @@ class ProjectRouteHandler
                                     } catch (\Exception $e) {
                                         $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('project_create_failed_upload_file'), Lib\Localisation::getTranslation('common_project'), htmlspecialchars($_FILES['projectFile']['name'], ENT_COMPAT, 'UTF-8')));
                                         try {
+                                            error_log('projectCreate deleteProject(' . $project->getId() . ")");
                                             $projectDao->deleteProject($project->getId());
                                         } catch (\Exception $e) {
                                         }
@@ -1005,6 +1319,7 @@ class ProjectRouteHandler
 
         $subscription_text = null;
         $paypal_email = Common\Lib\Settings::get('banner.paypal_email');
+        $paypal_email = null;
         if (!empty($paypal_email)) {
             $text_start = '<p style="font-size: 14px">' . Lib\Localisation::getTranslation('project_subscription') . '<br />';
 
@@ -1141,13 +1456,6 @@ class ProjectRouteHandler
             }
         }
 
-        // $languages = Lib\TemplateHelper::getLanguageList(); // (code) is added to name because of settings
-        // $countries = Lib\TemplateHelper::getCountryList();
-        $langDao = new DAO\LanguageDao();
-        $languages = $langDao->getLanguages();
-        $countryDao = new DAO\CountryDao();
-        $countries = $countryDao->getCountries();
-
         $year_list = array();
         $yeari = (int)date('Y');
         for ($i = 0; $i < 10; $i++) {
@@ -1165,7 +1473,7 @@ class ProjectRouteHandler
         }
 
         $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/ProjectCreate2.js\"></script>";
+        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/ProjectCreate7.js\"></script>";
 
         $app->view()->appendData(array(
             "siteLocation"          => Common\Lib\Settings::get('site.location'),
@@ -1185,10 +1493,12 @@ class ProjectRouteHandler
             'selected_hour'  => 0,
             'minute_list'    => $minute_list,
             'selected_minute'=> 0,
-            'languages'      => $languages,
-            'countries'      => $countries,
+            'languages'      => $projectDao->generate_language_selection(),
             'showRestrictTask' => $taskDao->organisationHasQualifiedBadge($org_id),
+            'isSiteAdmin'    => $adminDao->isSiteAdmin($user_id),
             'sesskey'        => $sesskey,
+            'template1'      => '{"source": "en-GB", "targets": ["zh-CN", "zh-TW", "th-TH", "vi-VN", "id-ID", "tl-PH", "ko-KR", "ja-JP", "ms-MY", "my-MM", "hi-IN", "bn-IN"]}',
+            'template2'      => '{"source": "en-GB", "targets": ["ar-SA", "hi-IN", "swh-KE", "fr-FR", "es-MX", "pt-BR"]}',
         ));
         $app->render("project/project.create.tpl");
     }
@@ -1240,10 +1550,19 @@ class ProjectRouteHandler
             $task->setPublished(0);
         }
 
+        if (!empty($post['testing_center']) && $taskType == Common\Enums\TaskTypeEnum::TRANSLATION) {
+            $task->setPublished(0);
+        }
+
         try {
             error_log("addProjectTask");
             $newTask = $taskDao->createTask($task);
             $newTaskId = $newTask->getId();
+
+            if (!empty($post['testing_center']) && $taskType == Common\Enums\TaskTypeEnum::PROOFREADING) {
+                $taskDao->updateRequiredTaskQualificationLevel($newTaskId, 3); // Reviser Needs to be Senior
+            }
+
             $createdTasks[] = $newTaskId;
 
             $upload_error = $taskDao->saveTaskFileFromProject(
@@ -1261,7 +1580,10 @@ class ProjectRouteHandler
                 $userDao->trackTask($user_id, $newTaskId);
             }
 
-            if (!empty($post['restrictTask'])) {
+            if (!empty($post['restrict_translate_tasks']) && $newTask->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) {
+                $taskDao->setRestrictedTask($newTaskId);
+            }
+            if (!empty($post['restrict_revise_tasks'])    && $newTask->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
                 $taskDao->setRestrictedTask($newTaskId);
             }
         } catch (\Exception $e) {
@@ -1335,13 +1657,21 @@ class ProjectRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $projectDao = new DAO\ProjectDao();
+        $taskDao = new DAO\TaskDao();
+
+        if ($taskDao->isUserRestrictedFromProject($projectId, Common\Lib\UserSession::getCurrentUserID())) {
+            $app->flash('error', 'You cannot access this project!');
+            $app->redirect($app->urlFor('home'));
+        }
 
         try {
             $headArr = $projectDao->downloadProjectFile($projectId);
             //Convert header data to array and set headers appropriately
-            $headArr = json_decode($headArr);
-            foreach ($headArr as $key => $val) {
-                $app->response->headers->set($key, $val);
+            if (!empty($headArr)) {
+                $headArr = unserialize($headArr);
+                foreach ($headArr as $key => $val) {
+                    $app->response->headers->set($key, $val);
+                }
             }
         } catch (Common\Exceptions\SolasMatchException $e) {
             $app->flash(
@@ -1364,9 +1694,11 @@ class ProjectRouteHandler
         try {
             $headArr = $projectDao->downloadProjectImageFile($projectId);
             //Convert header data to array and set headers appropriately
-            $headArr = json_decode($headArr);
-            foreach ($headArr as $key => $val) {
-                $app->response->headers->set($key, $val);
+            if (!empty($headArr)) {
+                $headArr = unserialize($headArr);
+                foreach ($headArr as $key => $val) {
+                    $app->response->headers->set($key, $val);
+                }
             }
         } catch (Common\Exceptions\SolasMatchException $e) {
             $app->flash(
@@ -1385,6 +1717,7 @@ class ProjectRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $projectDao = new DAO\ProjectDao();
+        $taskDao = new DAO\TaskDao();
         $project = $projectDao->getProject($projectId);
         $org_id = $project->getOrganisationId();
         $orgDao = new DAO\OrganisationDao();
@@ -1401,42 +1734,55 @@ class ProjectRouteHandler
             $languages[$i++] = $language->getName();
         }
 
+        $creator = $taskDao->get_creator($projectId);
+        $pm = $creator['email'];
+        if (strpos($pm, '@translatorswithoutborders.org') === false) $pm = 'projects@translatorswithoutborders.org';
+
         $discourseapiparams = array(
-            'api_key'      => Common\Lib\Settings::get('discourse.api_key'),
-            'api_username' => Common\Lib\Settings::get('discourse.api_username'),
             'category' => '7',
             'title' => str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getTitle()),
-            'raw' => "Partner: $org_name. URL: /"."/".$_SERVER['SERVER_NAME']."/project/$projectId/view ".str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getDescription()),
+            'raw' => "Partner: $org_name. Project Manager: $pm URL: /"."/".$_SERVER['SERVER_NAME']."/project/$projectId/view ".str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getDescription()),
         );
         $fields = '';
         foreach($discourseapiparams as $name => $value){
             $fields .= urlencode($name).'='.urlencode($value).'&';
         }
+        $fields .= 'tags[]=' . urlencode($org_name);
+        $language_count = 0;
         foreach($languages as $language){
             // We cannot pass the post fields as array because multiple languages mean duplicate tags[] keys
-            $fields .= 'tags[]='.urlencode($language).'&';
+            $fields .= '&tags[]=' . urlencode($language);
+            if (++$language_count == 4) break; // Limit in Discourse on number of tags?
         }
-        $fields .= 'tags[]=' . urlencode($org_name);
 
         $re = curl_init(Common\Lib\Settings::get('discourse.url').'/posts');
         curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
         curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($re, CURLOPT_HTTPHEADER, ['Api-Key: ' . Common\Lib\Settings::get('discourse.api_key'), 'Api-Username: ' . Common\Lib\Settings::get('discourse.api_username')]);
 
-        curl_exec($re);
+        $res = curl_exec($re);
         if ($error_number = curl_errno($re)) {
           error_log("Discourse API error ($error_number): " . curl_error($re));
+        } else {
+            $response_data = json_decode($res, true);
+            if (!empty($response_data['topic_id'])) {
+                $topic_id = $response_data['topic_id'];
+                $projectDao->set_discourse_id($projectId, $topic_id);
+            } else {
+                error_log('Discourse API error: No topic_id returned');
+            }
         }
         curl_close($re);
 
         //Asana
         $re = curl_init('https://app.asana.com/api/1.0/tasks');
         curl_setopt($re, CURLOPT_POSTFIELDS, array(
-            'name' => $project->getTitle(),
+            'name' => str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getTitle()),
             'notes' => "Partner: $org_name, Target: $targetlanguages, Deadline: ".$project->getDeadline() . ' https:/'.'/'.$_SERVER['SERVER_NAME']."/project/$projectId/view",
             'projects' => Common\Lib\Settings::get('asana.project')
             )
         );
-
 
         curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($re, CURLOPT_HEADER, true);
@@ -1446,11 +1792,48 @@ class ProjectRouteHandler
           error_log("Asana API error ($error_number): " . curl_error($re));
         }
         curl_close($re);
-        //End Asana
+
+        // Asana 2nd Project
+        $re = curl_init('https://app.asana.com/api/1.0/tasks');
+        curl_setopt($re, CURLOPT_POSTFIELDS, array(
+            'name' => str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getTitle()),
+            'notes' => "Partner: $org_name, Target: $targetlanguages, Deadline: ".$project->getDeadline() . ' https:/'.'/'.$_SERVER['SERVER_NAME']."/project/$projectId/view",
+            'projects' => '1169104501864281'
+            )
+        );
+
+        curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($re, CURLOPT_HEADER, true);
+        curl_setopt($re, CURLOPT_HTTPHEADER, array("Authorization: Bearer " . Common\Lib\Settings::get('asana.api_key2')));
+        curl_exec($re);
+        if ($error_number = curl_errno($re)) {
+          error_log("Asana 2 API error ($error_number): " . curl_error($re));
+        }
+        curl_close($re);
+
+        // Asana 3rd Project
+        $re = curl_init('https://app.asana.com/api/1.0/tasks');
+        curl_setopt($re, CURLOPT_POSTFIELDS, array(
+            'name' => str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getTitle()),
+            'notes' => "Partner: $org_name, Target: $targetlanguages, Deadline: ".$project->getDeadline() . ' https:/'.'/'.$_SERVER['SERVER_NAME']."/project/$projectId/view",
+            'projects' => '1174689961513340'
+            )
+        );
+
+        curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($re, CURLOPT_HEADER, true);
+        curl_setopt($re, CURLOPT_HTTPHEADER, array("Authorization: Bearer " . Common\Lib\Settings::get('asana.api_key3')));
+        curl_exec($re);
+        if ($error_number = curl_errno($re)) {
+          error_log("Asana 3 API error ($error_number): " . curl_error($re));
+        }
+        curl_close($re);
     }
 
     public function project_cron_1_minute()
     {
+      $matecat_api = Common\Lib\Settings::get('matecat.url');
+
       $fp_for_lock = fopen(__DIR__ . '/project_cron_1_minute_lock.txt', 'r');
       if (flock($fp_for_lock, LOCK_EX | LOCK_NB)) { // Acquire an exclusive lock, if possible, if not we will wait for next time
 
@@ -1466,7 +1849,7 @@ class ProjectRouteHandler
 
                 // https://www.matecat.com/api/docs#!/Project/get_status (i.e. Word Count)
                 // $re = curl_init("https://www.matecat.com/api/status?id_project=$matecat_id_project&project_pass=$matecat_id_project_pass");
-                $re = curl_init("https://kato.translatorswb.org/api/status?id_project=$matecat_id_project&project_pass=$matecat_id_project_pass");
+                $re = curl_init("{$matecat_api}api/status?id_project=$matecat_id_project&project_pass=$matecat_id_project_pass");
 
                 // http://php.net/manual/en/function.curl-setopt.php
                 curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'GET');
@@ -1507,7 +1890,7 @@ class ProjectRouteHandler
                                 $word_count = $response_data['data']['summary']['TOTAL_RAW_WC'];
 
                                 if (!empty($response_data['jobs']['langpairs'])) {
-                                    $langpairs = count($response_data['jobs']['langpairs']);
+                                    $langpairs = count(array_unique($response_data['jobs']['langpairs']));
 
                                     foreach ($response_data['jobs']['langpairs'] as $job_password => $langpair) {
                                         $matecat_id_job          = substr($job_password, 0, strpos($job_password, '-'));
@@ -1516,7 +1899,7 @@ class ProjectRouteHandler
                                         if (!empty($response_data['data']['jobs'][$matecat_id_job]['chunks'][$matecat_id_job_password])) {
                                             foreach ($response_data['data']['jobs'][$matecat_id_job]['chunks'][$matecat_id_job_password] as $i => $filename_array) {
                                                 $matecat_id_file = $i;
-                                                break; // Should only be one
+                                                break; // Should only be one... actually now not used and could be more than one for ZIP file
                                             }
                                         } else {
                                             error_log("project_cron /status ($project_id) ['data']['jobs'][$matecat_id_job]['chunks'][$matecat_id_job_password] empty!");
@@ -1556,6 +1939,11 @@ class ProjectRouteHandler
                         }
                     } else {
                         error_log("project_cron /status ($project_id) status NOT DONE: " . $response_data['status']);
+                        if ($response_data['status'] === 'NO_SEGMENTS_FOUND') {
+                            // Change status to Complete (3), Give up!
+                            $taskDao->updateWordCountRequestForProjects($project_id, $matecat_id_project, $matecat_id_project_pass, 0, 3);
+                            $taskDao->insertWordCountRequestForProjectsErrors($project_id, $response_data['status'], empty($response_data['message']) ? '' : $response_data['message']);
+                        }
                     }
                 } else {
                     error_log("project_cron /status ($project_id) responseCode: $responseCode");
@@ -1587,13 +1975,15 @@ class ProjectRouteHandler
                     continue;
                 }
 
+                $creator = $taskDao->get_creator($project_id);
+
                 $source_language = $project['source_language'];
                 $source_language = $this->valid_language_for_matecat($source_language);
                 if (empty($source_language)) $source_language = 'en-US';
 
                 // https://www.matecat.com/api/docs#!/Project/post_new
-                // $re = curl_init('https://www.matecat.com/api/new');
-                $re = curl_init('https://kato.translatorswb.org/api/new');
+                // $re = curl_init('https://www.matecat.com/api/new'); ... api/v1/new 20191029
+                $re = curl_init("{$matecat_api}api/v1/new");
 
                 // http://php.net/manual/en/function.curl-setopt.php
                 curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
@@ -1630,17 +2020,36 @@ class ProjectRouteHandler
                     }
                 }
 
+                $private_tm_key = $taskDao->get_project_tm_key($project_id);
+                if (empty($private_tm_key)) {
+                    $mt_engine        = '1';
+                    $pretranslate_100 = '1';
+                    $lexiqa           = '1';
+                    $private_tm_key   = '58f97b6f65fb5c8c8522,d5320e2850c37cc31551';
+                } else {
+                    $mt_engine        = $private_tm_key[0]['mt_engine'];
+                    $pretranslate_100 = $private_tm_key[0]['pretranslate_100'];
+                    $lexiqa           = $private_tm_key[0]['lexiqa'];
+                    $private_tm_key   = $private_tm_key[0]['private_tm_key'];
+                }
                 $fields = array(
                   'file'         => $cfile,
                   'project_name' => "proj-$project_id",
                   'source_lang'  => $source_language,
                   'target_lang'  => $filtered_target_languages,
                   'tms_engine'   => '1',
-                  'mt_engine'    => '1',
-                  'private_tm_key' => '81c6737631bb9c48dab5',
+                  'mt_engine'        => $mt_engine,
+                  'private_tm_key'   => $private_tm_key,
+                  'pretranslate_100' => $pretranslate_100,
+                  'lexiqa'           => $lexiqa,
                   'subject'      => 'general',
-                  'owner_email'  => 'info@trommons.org'
+                  'owner_email'  => $creator['email']
                 );
+                if ($private_tm_key === 'new') { // Testing Center Project
+                    $fields['tms_engine']         = '0';
+                    $fields['get_public_matches'] = '0';
+                }
+                error_log("project_cron /new ($project_id) fields: " . print_r($fields, true));
                 curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
 
                 curl_setopt($re, CURLOPT_HEADER, true);
@@ -1669,11 +2078,13 @@ class ProjectRouteHandler
                         error_log("project_cron /new ($project_id) status message: " . $response_data['message']);
                         // Change status to Complete (3), if there was an error!
                         $taskDao->updateWordCountRequestForProjects($project_id, 0, 0, 0, 3);
+                        $taskDao->insertWordCountRequestForProjectsErrors($project_id, $response_data['status'], $response_data['message']);
                     }
                     elseif (empty($response_data['id_project']) || empty($response_data['project_pass'])) {
                         error_log("project_cron /new ($project_id) id_project or project_pass empty!");
                         // Change status to Complete (3), if there was an error!
                         $taskDao->updateWordCountRequestForProjects($project_id, 0, 0, 0, 3);
+                        $taskDao->insertWordCountRequestForProjectsErrors($project_id, $response_data['status'], 'id_project or project_pass empty');
                     } else {
                         $matecat_id_project      = $response_data['id_project'];
                         $matecat_id_project_pass = $response_data['project_pass'];
@@ -1688,6 +2099,36 @@ class ProjectRouteHandler
             }
         }
 
+        // See if any chunks have been finalised in MateCat, if so mark any corresponding IN_PROGRESS (active) task(s) as complete
+        // $active_tasks_for_chunks = $taskDao->all_chunked_active_projects();
+        $active_tasks_for_chunks = array(); // It is now desired to have tranlators manually mark as COMPLETE
+        if (!empty($active_tasks_for_chunks)) {
+            $projects = array();
+            foreach ($active_tasks_for_chunks as $active_task) {
+                $projects[$active_task['project_id']] = $active_task['project_id'];
+            }
+
+          if (count($projects) > 10) $projects = array_rand($projects, 10); // Pick random Projects, we don't want to do too many at once.
+          foreach ($projects as $project_id) {
+            $chunks = $taskDao->getStatusOfSubChunks($project_id);
+
+            foreach ($active_tasks_for_chunks as $active_task) {
+                foreach ($chunks as $chunk) {
+                    if ($active_task['matecat_id_job'] == $chunk['matecat_id_job'] && $active_task['matecat_id_chunk_password'] == $chunk['matecat_id_chunk_password']) {
+                        if (($active_task['type_id'] == Common\Enums\TaskTypeEnum::TRANSLATION  && ($chunk['DOWNLOAD_STATUS'] === 'translated' || $chunk['DOWNLOAD_STATUS'] === 'approved')) ||
+                            ($active_task['type_id'] == Common\Enums\TaskTypeEnum::PROOFREADING &&                                                $chunk['DOWNLOAD_STATUS'] === 'approved')) {
+
+                            error_log('Setting Task COMPLETE for: ' . $active_task['task_id']);
+                            $taskDao->setTaskStatus($active_task['task_id'], Common\Enums\TaskStatusEnum::COMPLETE);
+                            $taskDao->sendTaskUploadNotifications($active_task['task_id'], 1);
+                            // LibAPI\Notify::sendTaskUploadNotifications($active_task['task_id'], 1);
+                        }
+                    }
+                }
+            }
+          }
+        }
+
         flock($fp_for_lock, LOCK_UN); // Release the lock
       }
       fclose($fp_for_lock);
@@ -1697,149 +2138,17 @@ class ProjectRouteHandler
         //    'body' => 'Dummy',
         //));
         //$app->render('nothing.tpl');
+      die;
     }
 
     public function valid_language_for_matecat($language_code)
     {
-        $matecat_acceptable_languages = array(
-'af' => 'af-ZA',
-'sq' => 'sq-AL',
-'am' => 'am-AM',
-'ar' => 'ar-SA',
-'an' => 'an-ES',
-'hy' => 'hy-AM',
-'ast' => 'ast-ES',
-'az' => 'az-AZ',
-'ba' => 'ba-RU',
-'eu' => 'eu-ES',
-'bn' => 'bn-IN',
-'be' => 'be-BY',
-'fr-BE' => 'fr-BE',
-'bs' => 'bs-BA',
-'br' => 'br-FR',
-'bg' => 'bg-BG',
-'my' => 'my-MM',
-'ca' => 'ca-ES',
-'cav' => 'cav-ES',
-'cb' => 'cb-PH',
-'zh' => 'zh-CN',
-'zh-TW' => 'zh-TW',
-'hr' => 'hr-HR',
-'cs' => 'cs-CZ',
-'da' => 'da-DK',
-'nl' => 'nl-NL',
-'en-GB' => 'en-GB',
-'en' => 'en-US',
-'eo' => 'eo-XN',
-'et' => 'et-EE',
-'fo' => 'fo-FO',
-'ff' => 'ff-FUL',
-'fi' => 'fi-FI',
-'nl-BE' => 'nl-BE',
-'fr' => 'fr-FR',
-'fr-CA' => 'fr-CA',
-'gl' => 'gl-ES',
-'ka' => 'ka-GE',
-'de' => 'de-DE',
-'el' => 'el-GR',
-'gu' => 'gu-IN',
-'ht' => 'ht-HT',
-'ha' => 'ha-HAU',
-'US' => 'US-HI',
-'haw' => 'US-HI',
-'he' => 'he-IL',
-'mrj' => 'mrj-RU',
-'hi' => 'hi-IN',
-'hu' => 'hu-HU',
-'is' => 'is-IS',
-'id' => 'id-ID',
-'ga' => 'ga-IE',
-'it' => 'it-IT',
-'ja' => 'ja-JP',
-'jv' => 'jv-ID',
-'kn' => 'kn-IN',
-'kr' => 'kr-KAU',
-'kk' => 'kk-KZ',
-'km' => 'km-KH',
-'ko' => 'ko-KR',
-'ku' => 'ku-KMR',
-'ku-CKB' => 'ku-CKB',
-'ky' => 'ky-KG',
-'lo' => 'lo-LA',
-'la' => 'la-XN',
-'lv' => 'lv-LV',
-'ln' => 'ln-LIN',
-'lt' => 'lt-LT',
-'lb' => 'lb-LU',
-'mk' => 'mk-MK',
-'mg' => 'mg-MLG',
-'ms' => 'ms-MY',
-'ml' => 'ml-IN',
-'mt' => 'mt-MT',
-'mhr' => 'mhr-RU',
-'mi' => 'mi-NZ',
-'mr' => 'mr-IN',
-'mn' => 'mn-MN',
-'sr-ME' => 'sr-ME',
-'nr' => 'nr-ZA',
-'ne' => 'ne-NP',
-'nb' => 'nb-NO',
-'nn' => 'nn-NO',
-'ny' => 'ny-NYA',
-'oc' => 'oc-FR',
-'oc-ES' => 'oc-ES',
-'or' => 'or-IN',
-'pa' => 'pa-IN',
-'pap' => 'pap-CW',
-'ps' => 'ps-PK',
-'fa-PRS' => 'fa-PRS',
-'fa' => 'fa-IR',
-'pl' => 'pl-PL',
-'pt-PT' => 'pt-PT',
-'pt' => 'pt-BR',
-'qu' => 'qu-XN',
-'rhg' => 'rhg-MM',
-'rhl' => 'rhl-MM',
-'ro' => 'ro-RO',
-'ru' => 'ru-RU',
-'gd' => 'gd-GB',
-'sr-Latn-RS' => 'sr-Latn-RS',
-'sr' => 'sr-Cyrl-RS',
-'nso' => 'nso-ZA',
-'tn' => 'tn-ZA',
-'si' => 'si-LK',
-'sk' => 'sk-SK',
-'sl' => 'sl-SI',
-'so' => 'so-SO',
-'es-ES' => 'es-ES',
-'es' => 'es-MX',
-'es-CO' => 'es-CO',
-'su' => 'su-ID',
-'sw' => 'sw-SZ',
-'sv' => 'sv-SE',
-'de-CH' => 'de-CH',
-'tl' => 'tl-PH',
-'tg' => 'tg-TJ',
-'ta' => 'ta-IN',
-'te' => 'te-IN',
-'tt' => 'tt-RU',
-'th' => 'th-TH',
-'ti' => 'ti-TIR',
-'ts' => 'ts-ZA',
-'tr' => 'tr-TR',
-'tk' => 'tk-TM',
-'udm' => 'udm-RU',
-'uk' => 'uk-UA',
-'ur' => 'ur-PK',
-'uz' => 'uz-UZ',
-'vi' => 'vi-VN',
-'cy' => 'cy-GB',
-'xh' => 'xh-ZA',
-'yi' => 'yi-YD',
-'yo' => 'yo-NG',
-'zu' => 'zu-ZA',
-);
+        global $matecat_acceptable_languages;
         if (in_array($language_code, $matecat_acceptable_languages)) return $language_code;
+        // Special case...
+        if ($language_code === 'tn-BW') return 'tsn-BW';
+        if ($language_code === 'ca---') return 'cav-ES';
+
         if (!empty($matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))])) return $matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))];
         return '';
     }
@@ -1849,9 +2158,11 @@ class ProjectRouteHandler
         $projectDao = new DAO\ProjectDao();
         $project = $projectDao->getProject($project_id);
 
+        if (!empty($project)) {
         $this->project_cron_1_minute(); // Trigger update
 
         $word_count = $project->getWordCount();
+        }
         if (empty($word_count) || $word_count == 1) $word_count = '-';
 
         \Slim\Slim::getInstance()->response()->body($word_count);

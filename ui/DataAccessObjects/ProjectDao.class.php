@@ -2,10 +2,14 @@
 
 namespace SolasMatch\UI\DAO;
 
+use \SolasMatch\API\Lib as LibAPI;
 use \SolasMatch\Common as Common;
 
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/BaseDao.php";
+require_once __DIR__.'/../../api/lib/PDOWrapper.class.php';
+require_once __DIR__ . '/../../Common/from_neon_to_trommons_pair.php';
+
 
 class ProjectDao extends BaseDao
 {
@@ -74,6 +78,30 @@ class ProjectDao extends BaseDao
             $project
         );
         return $ret;
+    }
+
+    public function createProjectDirectly($project)
+    {
+        $sourceLocale = $project->getSourceLocale();
+        $args = LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getId()). ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getTitle()). ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getDescription()). ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getImpact()). ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getDeadline()). ',' .
+            LibAPI\PDOWrapper::cleanseNull($project->getOrganisationId()). ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getReference()). ',' .
+            LibAPI\PDOWrapper::cleanseNull($project->getWordCount()). ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getCreatedTime()). ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode()). ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode()). ',' .
+            LibAPI\PDOWrapper::cleanseNull($project->getImageUploaded()). ',' .
+            LibAPI\PDOWrapper::cleanseNull($project->getImageApproved());
+        $result = LibAPI\PDOWrapper::call('projectInsertAndUpdate', $args);
+        $project = null;
+        if ($result) {
+            $project = Common\Lib\ModelFactory::buildModel('Project', $result[0]);
+        }
+        return $project;
     }
 
     public function deleteProject($projectId)
@@ -230,8 +258,10 @@ class ProjectDao extends BaseDao
         }
     }
 
-    public function discourse_parameterize($a)
+    public function discourse_parameterize($project)
     {
+        $a = $project->getTitle();
+
         mb_internal_encoding('UTF-8');
         mb_regex_encoding('UTF-8');
 
@@ -349,6 +379,171 @@ $replace = array(
 
         $a = trim($a, '-');
         $a = preg_replace('/-+/', '-', $a);
-        return strtolower($a);
+        $a = strtolower($a);
+
+        $topic_id = $this->get_discourse_id($project->getId());
+        if (!empty($topic_id)) $a .= "/$topic_id";
+
+        return $a;
+    }
+
+    public function set_discourse_id($project_id, $topic_id)
+    {
+        LibAPI\PDOWrapper::call('set_discourse_id', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($topic_id));
+    }
+
+    public function get_discourse_id($project_id)
+    {
+        $topic_id = 0;
+        $result = LibAPI\PDOWrapper::call('get_discourse_id', LibAPI\PDOWrapper::cleanse($project_id));
+        if (!empty($result)) {
+            $topic_id = $result[0]['topic_id'];
+        }
+        return $topic_id;
+    }
+
+    public function getOrgProjects($org_id, $months)
+    {
+        $result = LibAPI\PDOWrapper::call('getOrgProjects', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($months));
+        return $result;
+    }
+
+    public function generate_language_selection()
+    {
+        global $from_neon_to_trommons_pair, $from_neon_to_trommons_pair_options_remove, $language_options_changes;
+        unset($from_neon_to_trommons_pair["Norwegian Bokm\xE5l"]); // Remove as it is just here to support bad Neon hook
+
+        foreach ($from_neon_to_trommons_pair_options_remove as $remove) {
+            unset($from_neon_to_trommons_pair[$remove]);
+        }
+
+        $language_options = [];
+        foreach ($from_neon_to_trommons_pair as $language => $trommons_pair) {
+            $language_options[$trommons_pair[0] . '-' . $trommons_pair[1]] = $language;
+        }
+
+        foreach ($language_options_changes as $key => $language) {
+            $language_options[$key] = $language;
+        }
+
+        asort($language_options);
+        return $language_options;
+    }
+
+    public function convert_selection_to_language_country($selection)
+    {
+        $language_code = str_replace('#', '', $selection); // Alternative language name uses # in code
+        $trommons_language_code = substr($language_code, 0, strpos($language_code, '-'));
+        $trommons_country_code  = substr($language_code, strpos($language_code, '-') + 1);
+        return [$trommons_language_code, $trommons_country_code];
+    }
+
+    public function copy_project_file($project_to_copy_id, $project_id, $user_id_owner)
+    {
+        $result = LibAPI\PDOWrapper::call('getProjectFile', "$project_to_copy_id, null, null, null, null");
+        $filename = $result[0]['filename'];
+        $mime     = $result[0]['mime'];
+        $args = LibAPI\PDOWrapper::cleanseNull($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($user_id_owner) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($filename) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($filename) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($mime);
+        LibAPI\PDOWrapper::call('addProjectFile', $args);
+
+        $destination = Common\Lib\Settings::get("files.upload_path") . "proj-$project_id/";
+        mkdir($destination, 0755);
+        file_put_contents($destination . $filename, "files/proj-$project_to_copy_id/$filename"); // Point to existing project file
+
+        return [$filename, $mime];
+    }
+
+    public function addProjectTask(
+        $project_to_copy_id,
+        $filename,
+        $mime,
+        $project,
+        $language_code_target,
+        $country_code_target,
+        $task_type,
+        $task_id_prereq,
+        $user_id_owner,
+        $taskDao)
+    {
+        if ($task_type == Common\Enums\TaskTypeEnum::TRANSLATION) {
+            $published = 0;
+            $deadline = gmdate('Y-m-d H:i:s', strtotime('10 days'));
+        } else {
+            $published = 1;
+            $deadline = gmdate('Y-m-d H:i:s', strtotime('24 days'));
+        }
+
+        $args = 'null ,' .
+            LibAPI\PDOWrapper::cleanseNull($project->getId()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getTitle()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($project->getWordCount()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getSourceLocale()->getLanguageCode()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($language_code_target) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr('') . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getSourceLocale()->getCountryCode()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($country_code_target) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($deadline) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($task_type) . ',' .
+            LibAPI\PDOWrapper::cleanseNull(Common\Enums\TaskStatusEnum::PENDING_CLAIM) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($published);
+        $result = LibAPI\PDOWrapper::call('taskInsertAndUpdate', $args);
+        if (!empty($result)) {
+            $task_id = $result[0]['id'];
+
+            if ($task_type == Common\Enums\TaskTypeEnum::PROOFREADING) {
+                $taskDao->updateRequiredTaskQualificationLevel($task_id, 3); // Reviser Needs to be Senior
+            } else {
+                $taskDao->updateRequiredTaskQualificationLevel($task_id, 1);
+            }
+
+            $args = LibAPI\PDOWrapper::cleanseNull($task_id) . ',' .
+                LibAPI\PDOWrapper::cleanseWrapStr($filename) . ',' .
+                LibAPI\PDOWrapper::cleanseWrapStr($mime) . ',' .
+                LibAPI\PDOWrapper::cleanseNull($user_id_owner) . ',' .
+                'NULL';
+            LibAPI\PDOWrapper::call('recordFileUpload', $args);
+
+            $project_id = $project->getId();
+            $uploadFolder = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0";
+            mkdir($uploadFolder, 0755, true);
+
+            file_put_contents($uploadFolder . "/$filename", "files/proj-$project_to_copy_id/$filename"); // Point to existing project file
+
+            if ($task_id_prereq) LibAPI\PDOWrapper::call('addTaskPreReq', LibAPI\PDOWrapper::cleanseNull($task_id) . ',' . LibAPI\PDOWrapper::cleanseNull($task_id_prereq));
+
+            return $task_id;
+        } else {
+            return 0;
+        }
+    }
+
+    public function insert_testing_center_project($user_id, $project_id, $translation_task_id, $proofreading_task_id, $project_to_copy_id, $language_code_source, $language_code_target)
+    {
+        LibAPI\PDOWrapper::call('insert_testing_center_project',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($translation_task_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($proofreading_task_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($project_to_copy_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($language_code_source) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($language_code_target)
+        );
+    }
+
+    public function get_testing_center_projects($user_id, &$testing_center_projects_by_code)
+    {
+        $results = LibAPI\PDOWrapper::call('get_testing_center_projects', LibAPI\PDOWrapper::cleanse($user_id));
+        $testing_center_projects = [];
+        if (!empty($results)) {
+            foreach ($results as $result) {
+                $testing_center_projects[$result['project_to_copy_id']] = $result;
+                $testing_center_projects_by_code[$result['language_code_source'] . '-' . $result['language_code_target']] = $result;
+            }
+        }
+        return $testing_center_projects;
     }
 }

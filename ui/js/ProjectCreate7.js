@@ -31,7 +31,7 @@ var imageError;
 
 // Target Languages
 var targetCount = 0;
-var maxTargetLanguages = 10;
+var maxTargetLanguages = 12;
 
 // Snapshot of Form Values when Submit clicked
 var title;
@@ -206,12 +206,6 @@ function addMoreTargetLanguages()
     targetLanguageSelect.id   = "target_language_" + targetCount;
     targetLanguageSelect.innerHTML = document.getElementById("template_language_options").innerHTML;
 
-    var targetCountrySelect = document.createElement("select");
-    targetCountrySelect.style.width = "400px";
-    targetCountrySelect.name = "target_country_" + targetCount;
-    targetCountrySelect.id   = "target_country_" + targetCount;
-    targetCountrySelect.innerHTML = document.getElementById("template_country_options").innerHTML;
-
     var taskTypesRow = document.createElement("div"); // Sub-div for task type checkboxes, holds individual divs for each checkox
     taskTypesRow.id = "task-type-checkboxes";
     taskTypesRow.className = "pull-left width-50";
@@ -251,7 +245,6 @@ function addMoreTargetLanguages()
 
     // Put the Select Elements into their div
     targetLanguageCell.appendChild(targetLanguageSelect);
-    targetLanguageCell.appendChild(targetCountrySelect);
 
     // Put the Select Elements' div into the main div
     targetLanguageRow.appendChild(targetLanguageCell);
@@ -262,7 +255,7 @@ function addMoreTargetLanguages()
     proofreadingRequiredDiv.appendChild(proofreadingCheckbox);
 
     // Put each checkbox div into the div that is to contain them all
-    taskTypesRow.appendChild(segmentationRequiredDiv);
+    // taskTypesRow.appendChild(segmentationRequiredDiv);
     taskTypesRow.appendChild(translationRequiredDiv);
     taskTypesRow.appendChild(proofreadingRequiredDiv);
 
@@ -274,7 +267,7 @@ function addMoreTargetLanguages()
 
     targetCount++;
     if (targetCount == 5) {
-      window.alert(parameters.getTranslation("project_create_target_language_increase"));
+      //window.alert(parameters.getTranslation("project_create_target_language_increase"));
     }
 
     // If maximum amount of target languages has been reached, display message to notify user.
@@ -318,6 +311,25 @@ function removeTargetLanguage()
     if (addBtn.disabled == true) {
       addBtn.disabled = false;
     }
+  }
+}
+
+/**
+ * Set template languages
+ */
+function setTemplateLanguages(template_number)
+{
+  while (targetCount > 1) {
+    removeTargetLanguage();
+  }
+
+  var templateObj = JSON.parse(document.getElementById("template" + template_number).innerHTML);
+
+  document.getElementById("sourceLanguageSelect").value = templateObj.source;
+
+  for (i = 0; i < templateObj.targets.length && i < maxTargetLanguages; i++) {
+    if (i > 0) addMoreTargetLanguages();
+    document.getElementById("target_language_" + i).value = templateObj.targets[i];
   }
 }
 
@@ -373,8 +385,6 @@ function validateForm()
   var sourceLocale = new Object();
   sourceLocale.languageName = $("#sourceLanguageSelect option:selected").text();
   sourceLocale.languageCode = document.getElementById("sourceLanguageSelect").value;
-  sourceLocale.countryName  = $("#sourceCountrySelect option:selected").text();
-  sourceLocale.countryCode  = document.getElementById("sourceCountrySelect").value;
   project.sourceLocale = sourceLocale;
 
   project.tag = [];
@@ -457,7 +467,7 @@ function validateLocalValues()
     if (project.wordCount > 5000) {
       var i = 0;
       var segmentationMissing = false;
-      while (i < targetCount && !segmentationMissing) {
+      while (false && i < targetCount && !segmentationMissing) {
         var segmentationCheckbox = document.getElementById("segmentation_" + i);
         if (!segmentationCheckbox.checked) {
           segmentationMissing = true;
@@ -523,8 +533,14 @@ function validateLocalValues()
     success = false;
   }
 
-  if (project.sourceLocale.languageCode == 0) project_create_set_source_language = parameters.getTranslation("project_create_set_source_language");
-  if (project.sourceLocale.countryCode  == 0) project_create_set_source_country = parameters.getTranslation("project_create_set_source_country");
+  if (project.sourceLocale.languageCode == 0) {
+    project_create_set_source_language = parameters.getTranslation("project_create_set_source_language");
+    success = false;
+  }
+  if (project.sourceLocale.countryCode  == 0) {
+    project_create_set_source_country  = parameters.getTranslation("project_create_set_source_country");
+    success = false;
+  }
 
   var encounteredLocales = [];
   segmentationRequired   = [];
@@ -535,7 +551,8 @@ function validateLocalValues()
   targetCountryCode      = [];
   targetCountryCountry   = [];
   for (var i = 0; i < targetCount; i++) {
-    segmentationRequired[i] = document.getElementById("segmentation_" + i).checked;
+    // segmentationRequired[i] = document.getElementById("segmentation_" + i).checked;
+    segmentationRequired[i] = false;
     translationRequired [i] = document.getElementById("translation_" + i).checked;
     proofreadingRequired[i] = document.getElementById("proofreading_" + i).checked;
 
@@ -547,14 +564,14 @@ function validateLocalValues()
 
     targetLanguageCode    [i] = document.getElementById("target_language_" + i).value;
     targetLanguageLanguage[i] = $("#target_language_" + i + " option:selected").text();
-    targetCountryCode     [i] = document.getElementById("target_country_" + i).value;
-    targetCountryCountry  [i] = $("#target_country_" + i + " option:selected").text();
 
-    if (targetLanguageCode[i] == 0) project_create_set_target_language = parameters.getTranslation("project_create_set_target_language");
-    if (targetCountryCode [i] == 0) project_create_set_target_country  = parameters.getTranslation("project_create_set_target_country");
+    if (targetLanguageCode[i] == 0) {
+      project_create_set_target_language = parameters.getTranslation("project_create_set_target_language");
+      success = false;
+    }
 
     // If a duplicate locale is encountered, display error message
-    var encounteredLocale = targetLanguageCode[i] + "_" + targetCountryCode[i];
+    var encounteredLocale = targetLanguageCode[i].replace("#", "");
     if ($.inArray(encounteredLocale, encounteredLocales) >= 0) {
       duplicateLocale = parameters.getTranslation("project_create_28");
       success = false;

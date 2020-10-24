@@ -44,10 +44,88 @@ class AdminRouteHandler
         )->via('POST')->name('active_now_matecat');
 
         $app->get(
+            '/testing_center/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'testing_center')
+        )->via('POST')->name('testing_center');
+
+        $app->get(
+            '/matecat_analyse_status/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'matecat_analyse_status')
+        )->via('POST')->name('matecat_analyse_status');
+
+        $app->get(
+            '/download_covid_projects/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_covid_projects')
+        )->via('POST')->name('download_covid_projects');
+
+        $app->get(
+            '/late_matecat/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'late_matecat')
+        )->via('POST')->name('late_matecat');
+
+        $app->get(
             '/complete_matecat/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'complete_matecat')
         )->via('POST')->name('complete_matecat');
+
+        $app->get(
+            '/user_task_reviews/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'user_task_reviews')
+        )->via('POST')->name('user_task_reviews');
+
+        $app->get(
+            '/peer_to_peer_vetting/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'peer_to_peer_vetting')
+        )->name('peer_to_peer_vetting');
+
+        $app->get(
+            '/submitted_task_reviews/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'submitted_task_reviews')
+        )->name('submitted_task_reviews');
+
+        $app->get(
+            '/tasks_no_reviews/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'tasks_no_reviews')
+        )->name('tasks_no_reviews');
+
+        $app->get(
+            '/project_source_file_scores/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'project_source_file_scores')
+        )->name('project_source_file_scores');
+
+        $app->get(
+            '/download_submitted_task_reviews/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_submitted_task_reviews')
+        )->name('download_submitted_task_reviews');
+
+        $app->get(
+            '/download_tasks_no_reviews/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_tasks_no_reviews')
+        )->name('download_tasks_no_reviews');
+
+        $app->get(
+            '/download_project_source_file_scores/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_project_source_file_scores')
+        )->name('download_project_source_file_scores');
+
+        $app->get(
+            '/first_completed_task/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'first_completed_task')
+        )->via('POST')->name('first_completed_task');
 
         $app->get(
             '/active_users/',
@@ -68,6 +146,12 @@ class AdminRouteHandler
         )->via('POST')->name('unclaimed_tasks');
 
         $app->get(
+            '/search_users_by_language_pair/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'search_users_by_language_pair')
+        )->via('POST')->name('search_users_by_language_pair');
+
+        $app->get(
             '/user_languages/:code',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'user_languages')
@@ -84,6 +168,18 @@ class AdminRouteHandler
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'user_task_languages')
         )->via('POST')->name('user_task_languages');
+
+        $app->get(
+            '/user_words_by_language/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'user_words_by_language')
+        )->via('POST')->name('user_words_by_language');
+
+        $app->get(
+            '/download_user_words_by_language/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_user_words_by_language')
+        )->name('download_user_words_by_language');
 
         $app->get(
             '/download_user_task_languages/',
@@ -120,6 +216,30 @@ class AdminRouteHandler
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'community_dashboard')
         )->name('community_dashboard');
+
+        $app->get(
+            '/language_work_requested/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'language_work_requested')
+        )->name('language_work_requested');
+
+        $app->get(
+            '/download_language_work_requested/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_language_work_requested')
+        )->name('download_language_work_requested');
+
+        $app->get(
+            '/translators_for_language_pairs/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'translators_for_language_pairs')
+        )->name('translators_for_language_pairs');
+
+        $app->get(
+            '/download_translators_for_language_pairs/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_translators_for_language_pairs')
+        )->name('download_translators_for_language_pairs');
     }
     
     public function adminDashboard()
@@ -353,6 +473,28 @@ class AdminRouteHandler
         $app->render('admin/active_now_matecat.tpl');
     }
 
+    public function testing_center()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->testing_center();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('admin/testing_center.tpl');
+    }
+
+    public function late_matecat()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->late_matecat();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('admin/late_matecat.tpl');
+    }
+
     public function complete_matecat()
     {
         $app = \Slim\Slim::getInstance();
@@ -361,7 +503,192 @@ class AdminRouteHandler
         $all_users = $statsDao->complete_matecat();
 
         $app->view()->appendData(array('all_users' => $all_users));
-        $app->render('admin/active_now_matecat.tpl');
+        $app->render('admin/complete_matecat.tpl');
+    }
+
+    public function user_task_reviews()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->user_task_reviews();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('admin/user_task_reviews.tpl');
+    }
+
+    public function submitted_task_reviews()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->submitted_task_reviews();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('admin/submitted_task_reviews.tpl');
+    }
+
+    public function download_submitted_task_reviews()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $all_users = $statsDao->submitted_task_reviews();
+
+        $data = "\xEF\xBB\xBF" . '"Completed","Revision Task","Reviser","Translator","Language Pair","Accuracy","Fluency","Terminology","Style","Design","Comment"' . "\n";
+
+        foreach ($all_users as $user_row) {
+            $data .= '"' . $user_row['complete_date'] . '","' .
+            str_replace('"', '""', $user_row['task_title']) . '","' .
+            str_replace('"', '""', $user_row['reviser_name']) . '","' .
+            str_replace('"', '""', $user_row['translator_name']) . '","' .
+            $user_row['language_pair'] . '","' .
+            $user_row['accuracy'] . '","' .
+            $user_row['fluency'] . '","' .
+            $user_row['terminology'] . '","' .
+            $user_row['style'] . '","' .
+            $user_row['design'] . '","' .
+            str_replace('"', '""', $user_row['comment']) . '"' . "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="submitted_task_reviews.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
+    }
+
+    public function peer_to_peer_vetting()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $all_users = $statsDao->peer_to_peer_vetting();
+
+        $data = "\xEF\xBB\xBF" . '"Email","Native","Words Translated","Words Revised","Language Pair","Language Pairs","Average Reviews","Number","Level","Last Task"' . "\n";
+
+        foreach ($all_users as $user_row) {
+            $data .= '"' . $user_row['email'] . '","' .
+            $user_row['native_language_name'] . '","' .
+            $user_row['words_translated'] . '","' .
+            $user_row['words_revised'] . '","' .
+            $user_row['language_pair'] . '","' .
+            $user_row['language_pair_list'] . '","' .
+            $user_row['average_reviews'] . '","' .
+            $user_row['number_reviews'] . '","' .
+            $user_row['level'] . '","' .
+            $user_row['last_task'] . '"' . "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="peer_to_peer_vetting.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
+    }
+
+    public function tasks_no_reviews()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->tasks_no_reviews();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('admin/tasks_no_reviews.tpl');
+    }
+
+    public function download_tasks_no_reviews()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $all_users = $statsDao->tasks_no_reviews();
+
+        $data = "\xEF\xBB\xBF" . '"Completed","Revision Task","Reviser","Language Pair"' . "\n";
+
+        foreach ($all_users as $user_row) {
+            $data .= '"' . $user_row['complete_date'] . '","' .
+            str_replace('"', '""', $user_row['task_title']) . '","' .
+            str_replace('"', '""', $user_row['reviser_name']) . '","' .
+            $user_row['language_pair'] . '"' . "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="tasks_no_reviews.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
+    }
+
+    public function project_source_file_scores()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->project_source_file_scores();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('admin/project_source_file_scores.tpl');
+    }
+
+    public function download_project_source_file_scores()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $all_users = $statsDao->project_source_file_scores();
+
+        $data = "\xEF\xBB\xBF" . '"Project","Partner","Created","Delivered","Corrections","Grammar","Spelling","Consistency","Comments"' . "\n";
+
+        foreach ($all_users as $user_row) {
+            $data .= '"' . str_replace('"', '""', $user_row['title']) . '","' .
+            str_replace('"', '""', $user_row['name']) . '","' .
+            $user_row['created'] . '","' .
+            $user_row['completed'] . '","' .
+            $user_row['cor'] . '","' .
+            $user_row['gram'] . '","' .
+            $user_row['spell'] . '","' .
+            $user_row['cons'] . '","' .
+            str_replace('"', '""', $user_row['comments']) . '"' . "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="project_source_file_scores.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
+    }
+
+    public function first_completed_task()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->complete_matecat();
+
+        $earliest = array();
+        foreach ($all_users as $user) {
+            if (empty($earliest[$user['user_id']])) {
+                $earliest[$user['user_id']] = $user['claimed_time'];
+            } else {
+                if ($earliest[$user['user_id']] > $user['claimed_time']) $earliest[$user['user_id']] = $user['claimed_time'];
+            }
+        }
+        foreach ($all_users as $key => $user) {
+            if (!in_array($user['claimed_time'], $earliest)) {
+                unset($all_users[$key]);
+            } else {
+                $all_users[$key]['first_name'] = $user['claimed_time'] . ' ' . $user['first_name'];
+            }
+        }
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('admin/first_completed_task.tpl');
     }
 
     public function active_users()
@@ -401,6 +728,26 @@ class AdminRouteHandler
         $app->render('admin/unclaimed_tasks.tpl');
     }
 
+    public function search_users_by_language_pair()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
+        if (!empty($_POST['search_users_language_pair'])) {
+            Common\Lib\UserSession::checkCSRFKey($_POST, 'search_users_by_language_pair');
+
+            $source_target = explode('-', $_POST['search_users_language_pair']);
+            if (!empty($source_target) && count($source_target) == 2) {
+                $all_users = $statsDao->search_users_by_language_pair($source_target[0], $source_target[1]);
+                $app->view()->appendData(array('all_users' => $all_users));
+            }
+        }
+
+        $app->render('admin/search_users_by_language_pair.tpl');
+    }
+
     public function user_languages($code)
     {
         $app = \Slim\Slim::getInstance();
@@ -418,10 +765,10 @@ class AdminRouteHandler
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->user_languages(null);
 
-        $data = "\xEF\xBB\xBF" . '"Display Name","Email","Name","Code","Language","Code","Country",""' . "\n";
+        $data = "\xEF\xBB\xBF" . '"Display Name","Email","Name","Code","Language","Code","Country","","Level"' . "\n";
 
         foreach ($all_users as $user_row) {
-            $data .= '"' . str_replace('"', '""', $user_row['display_name']) . '","' . $user_row['email'] . '","' . str_replace('"', '""', $user_row['first_name']) . ' ' . str_replace('"', '""', $user_row['last_name']) . '","' . $user_row['language_code'] . '","' . $user_row['language_name'] . '","' . $user_row['country_code'] . '","' . $user_row['country_name'] . '","' . $user_row['native_or_secondary'] . '"' . "\n";
+            $data .= '"' . str_replace('"', '""', $user_row['display_name']) . '","' . $user_row['email'] . '","' . str_replace('"', '""', $user_row['first_name']) . ' ' . str_replace('"', '""', $user_row['last_name']) . '","' . $user_row['language_code'] . '","' . $user_row['language_name'] . '","' . $user_row['country_code'] . '","' . $user_row['country_name'] . '","' . $user_row['native_or_secondary'] . '","' . $user_row['level'] . '"' . "\n";
         }
 
         header('Content-type: text/csv');
@@ -444,6 +791,38 @@ class AdminRouteHandler
 
         $app->view()->appendData(array('all_users' => $all_users));
         $app->render('admin/user_task_languages.tpl');
+    }
+
+    public function user_words_by_language()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->user_words_by_language();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('admin/user_words_by_language.tpl');
+    }
+
+    public function download_user_words_by_language()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $all_users = $statsDao->user_words_by_language();
+
+        $data = "\xEF\xBB\xBF" . '"Display Name","Email","Name","Pair","Qualification Level","Words Translated","Words Revised"' . "\n";
+
+        foreach ($all_users as $user_row) {
+            $data .= '"' . str_replace('"', '""', $user_row['display_name']) . '","' . $user_row['email'] . '","' . str_replace('"', '""', $user_row['first_name']) . ' ' . str_replace('"', '""', $user_row['last_name']) . '","' . $user_row['language_pair'] . '","' . $user_row['level'] . '","' . $user_row['words_translated'] . '","' . $user_row['words_proofread'] . '"' . "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="user_words_by_language.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
     }
 
     public function download_user_task_languages()
@@ -481,7 +860,7 @@ class AdminRouteHandler
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->getUsers();
 
-        $data = "\xEF\xBB\xBF" . '"ID","Name","Email","Biography","Language","City","Country","Created"' . "\n";
+        $data = "\xEF\xBB\xBF" . '"ID","Name","Email","Biography","Language","City","Country","Created","Code of Conduct","Admin"' . "\n";
 
         foreach ($all_users as $user_row) {
             $data .= '"' . $user_row['id'] . '","' .
@@ -491,7 +870,9 @@ class AdminRouteHandler
                 $user_row['native_language'] . ' ' . $user_row['native_country'] . '","' .
                 str_replace('"', '""', $user_row['city']) . '","' .
                 str_replace('"', '""', $user_row['country']) . '","' .
-                $user_row['created_time'] . '"' . "\n";
+                $user_row['created_time'] . '","' .
+                $user_row['terms'] . '","' .
+                $user_row['admin'] . '"' . "\n";
         }
 
         header('Content-type: text/csv');
@@ -586,6 +967,7 @@ class AdminRouteHandler
         $all_org_admins      = $statsDao->all_org_admins();
         $all_org_members     = $statsDao->all_org_members();
         $org_stats_words     = $statsDao->org_stats_words();
+        $org_stats_words_req = $statsDao->org_stats_words_req();
         $org_stats_languages = $statsDao->org_stats_languages();
 
         $all_orgs = array();
@@ -595,6 +977,8 @@ class AdminRouteHandler
             $all_orgs[$org_row['id']]['members'] = array();
             $all_orgs[$org_row['id']]['words_translated'] = array();
             $all_orgs[$org_row['id']]['words_proofread']  = array();
+            $all_orgs[$org_row['id']]['words_translated_req'] = array();
+            $all_orgs[$org_row['id']]['words_proofread_req']  = array();
             $all_orgs[$org_row['id']]['language_pairs']   = array();
         }
         unset($all_orgs0);
@@ -624,6 +1008,16 @@ class AdminRouteHandler
         }
         unset($org_stats_words);
 
+        foreach ($org_stats_words_req as $words_row) {
+            if (!empty($all_orgs[$words_row['organisation_id']])) {
+                $year_list[$words_row['year']] = $words_row['year'];
+
+                $all_orgs[$words_row['organisation_id']]['words_translated_req'][$words_row['year']] = $words_row['words_translated_req'];
+                $all_orgs[$words_row['organisation_id']]['words_proofread_req'] [$words_row['year']] = $words_row['words_proofread_req'];
+            }
+        }
+        unset($org_stats_words_req);
+
         foreach ($org_stats_languages as $words_row) {
             if (!empty($all_orgs[$words_row['organisation_id']])) {
                 $year_list[$words_row['year']] = $words_row['year'];
@@ -637,7 +1031,7 @@ class AdminRouteHandler
 
         rsort($year_list);
         foreach ($year_list as $year) {
-            $data .= ',"' . $year . ' Words Translated","Words Proofread","Language Pairs"';
+            $data .= ',"' . $year . ' Words Translated","Words Revised","Requested Words Translated","Requested Words Revised","Language Pairs"';
         }
         $data .= "\n";
 
@@ -650,6 +1044,8 @@ class AdminRouteHandler
             foreach ($year_list as $year) {
                 $data .= ',"' . (empty($org_row['words_translated'][$year]) ? '' : $org_row['words_translated'][$year]) . '"';
                 $data .= ',"' . (empty($org_row['words_proofread'] [$year]) ? '' : $org_row['words_proofread'][$year]) . '"';
+                $data .= ',"' . (empty($org_row['words_translated_req'][$year]) ? '' : $org_row['words_translated_req'][$year]) . '"';
+                $data .= ',"' . (empty($org_row['words_proofread_req'] [$year]) ? '' : $org_row['words_proofread_req'][$year]) . '"';
                 $data .= ',"' . (empty($org_row['language_pairs']  [$year]) ? '' : implode(', ', $org_row['language_pairs'][$year])) . '"';
             }
             $data .= "\n";
@@ -673,6 +1069,7 @@ class AdminRouteHandler
         $new_tasks                  = $statsDao->new_tasks();
         $average_time_to_assign     = $statsDao->average_time_to_assign();
         $average_time_to_turnaround = $statsDao->average_time_to_turnaround();
+        $users_who_logged_in        = $statsDao->users_who_logged_in();
 
         $all_months = array();
         foreach ($new_tasks as $new_tasks_month) { // new_tasks sorted newest first (like most of these)
@@ -685,6 +1082,8 @@ class AdminRouteHandler
                     'new_tasks' => $new_tasks_month['new_tasks'],
                     'average_time_to_assign' => 0,
                     'average_time_to_turnaround' => 0,
+                    'all_logins' => 0,
+                    'distinct_logins' => 0,
                     );
             }
         }
@@ -692,7 +1091,8 @@ class AdminRouteHandler
         $total = 0;
         $previous = 0;
         foreach ($users_signed_up as $users_signed_up_month) { // users_signed_up is sorted oldest first!
-            $total+= $users_signed_up_month['users_signed_up'];
+            if (empty($users_signed_up_month['users_signed_up'])) $users_signed_up_month['users_signed_up'] = 0;
+            $total += $users_signed_up_month['users_signed_up'];
 
             if (!empty($all_months[$users_signed_up_month['month']])) { // Don't add partial data
                 $all_months[$users_signed_up_month['month']]['users_signed_up'] = $users_signed_up_month['users_signed_up'];
@@ -726,7 +1126,14 @@ class AdminRouteHandler
             }
         }
 
-        $data = "\xEF\xBB\xBF" . '"trommons.org Community"';
+        foreach ($users_who_logged_in as $users_who_logged_in_month) {
+            if (!empty($all_months[$users_who_logged_in_month['month']])) {
+                $all_months[$users_who_logged_in_month['month']]['all_logins'] = $users_who_logged_in_month['all_logins'];
+                $all_months[$users_who_logged_in_month['month']]['distinct_logins'] = $users_who_logged_in_month['distinct_logins'];
+            }
+        }
+
+        $data = "\xEF\xBB\xBF" . '"Kató Platform Community"';
         foreach ($all_months as $month => $month_data) {
             $data .= ',"' . $month . '"';
         }
@@ -741,6 +1148,18 @@ class AdminRouteHandler
         $data .= '"Active Translators"';
         foreach ($all_months as $month_data) {
             $data .= ',"' . $month_data['users_active'] . '"';
+        }
+        $data .= "\n";
+
+        $data .= '"All Logins"';
+        foreach ($all_months as $month_data) {
+            $data .= ',"' . $month_data['all_logins'] . '"';
+        }
+        $data .= "\n";
+
+        $data .= '"Distinct Logins"';
+        foreach ($all_months as $month_data) {
+            $data .= ',"' . $month_data['distinct_logins'] . '"';
         }
         $data .= "\n";
 
@@ -776,6 +1195,205 @@ class AdminRouteHandler
 
         header('Content-type: text/csv');
         header('Content-Disposition: attachment; filename="community_dashboard.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
+    }
+
+    public function language_work_requested()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+        $language_work_requested = $statsDao->language_work_requested();
+
+        $years = array();
+        $words = array();
+        foreach ($language_work_requested as $row) {
+            $years[$row['created']] = $row['created'];
+            $words[$row['language_pair']] = 0;
+        }
+        arsort($years);
+        $current_year = reset($years);
+
+        $template = array();
+        foreach ($years as $year) {
+            $template[$year] = array('words' => 0, 'tasks' => 0);
+        }
+
+        foreach ($language_work_requested as $row) {
+            if ($row['created'] == $current_year) $words[$row['language_pair']] = $row['words'];
+        }
+
+        arsort($words);
+
+        foreach ($words as $language_pair => $data) {
+            $words[$language_pair] = $template;
+        }
+
+        foreach ($language_work_requested as $row) {
+            $words[$row['language_pair']][$row['created']]['words'] = $row['words'];
+            $words[$row['language_pair']][$row['created']]['tasks'] = $row['tasks'];
+        }
+
+        $app->view()->appendData(array('words' => $words, 'years' => $years));
+        $app->render('admin/language_work_requested.tpl');
+
+    }
+
+    public function download_language_work_requested()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $language_work_requested = $statsDao->language_work_requested();
+
+        $years = array();
+        $words = array();
+        foreach ($language_work_requested as $row) {
+            $years[$row['created']] = $row['created'];
+            $words[$row['language_pair']] = 0;
+        }
+        arsort($years);
+        $current_year = reset($years);
+
+        $template = array();
+        foreach ($years as $year) {
+            $template[$year] = array('words' => 0, 'tasks' => 0);
+        }
+
+        foreach ($language_work_requested as $row) {
+            if ($row['created'] == $current_year) $words[$row['language_pair']] = $row['words'];
+        }
+
+        arsort($words);
+
+        foreach ($words as $language_pair => $data) {
+            $words[$language_pair] = $template;
+        }
+
+        foreach ($language_work_requested as $row) {
+            $words[$row['language_pair']][$row['created']]['words'] = $row['words'];
+            $words[$row['language_pair']][$row['created']]['tasks'] = $row['tasks'];
+        }
+
+        $data = "\xEF\xBB\xBF" . '"Language Pair"';
+
+        foreach ($years as $year) {
+            $data .= ',"' . $year . ' Tasks","Words"';
+        }
+        $data .= "\n";
+
+        foreach ($words as $key => $row) {
+            $data .= '"' . $key . '"';
+            foreach ($years as $year) {
+                $data .= ',"' . (empty($row[$year]['tasks']) ? '' : $row[$year]['tasks']) . '"';
+                $data .= ',"' . (empty($row[$year]['words']) ? '' : $row[$year]['words']) . '"';
+            }
+            $data .= "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="language_work_requested.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
+    }
+
+    public function translators_for_language_pairs()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+        $translators_for_language_pairs = $statsDao->translators_for_language_pairs();
+
+        $totals = array();
+        $breakdown = array();
+        foreach ($translators_for_language_pairs as $row) {
+            if (empty($totals[$row['pair']])) {
+                $totals[$row['pair']] = $row['number'];
+                $breakdown[$row['pair']] = $row['level'] . '(' . $row['number'] . ')';
+            } else {
+                $totals[$row['pair']] += $row['number'];
+                $breakdown[$row['pair']] .= ', ' . $row['level'] . '(' . $row['number'] . ')';
+            }
+        }
+
+        $app->view()->appendData(array('totals' => $totals, 'breakdown' => $breakdown));
+        $app->render('admin/translators_for_language_pairs.tpl');
+    }
+
+    public function download_translators_for_language_pairs()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $translators_for_language_pairs = $statsDao->translators_for_language_pairs();
+
+        $totals = array();
+        $breakdown = array();
+        foreach ($translators_for_language_pairs as $row) {
+            if (empty($totals[$row['pair']])) {
+                $totals[$row['pair']] = $row['number'];
+                $breakdown[$row['pair']] = $row['level'] . '(' . $row['number'] . ')';
+            } else {
+                $totals[$row['pair']] += $row['number'];
+                $breakdown[$row['pair']] .= ', ' . $row['level'] . '(' . $row['number'] . ')';
+            }
+        }
+
+        $data = "\xEF\xBB\xBF" . '"Language Pair","Number of Translators","Breakdown"';
+        $data .= "\n";
+
+        foreach ($totals as $pair => $total) {
+            $data .= '"' . $pair . '"';
+            $data .= ',"' . $total . '"';
+            $data .= ',"' . $breakdown[$pair] . '"';
+            $data .= "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="translators_for_language_pairs.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
+    }
+
+    public function matecat_analyse_status()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->matecat_analyse_status();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('admin/matecat_analyse_status.tpl');
+    }
+
+    public function download_covid_projects()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $all_users = $statsDao->covid_projects();
+
+        $data = "\xEF\xBB\xBF" . '"Title","Partner","Creator","Word Count","Language Pairs","Number","Created Time","Deadline","Completed Time"' . "\n";
+
+        foreach ($all_users as $user_row) {
+            $data .= '"' . str_replace('"', '""', $user_row['project_title']) . '","' .
+                str_replace('"', '""', $user_row['org_name']) . '","' .
+                $user_row['creator_email'] . '","' .
+                $user_row['word_count'] . '","' .
+                $user_row['language_pairs'] . '","' .
+                $user_row['language_pairs_number'] . '","' .
+                $user_row['created'] . '","' .
+                $user_row['deadline'] . '","' .
+                $user_row['completed'] . '"' . "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="covid_projects.csv"');
         header('Content-length: ' . strlen($data));
         header('X-Frame-Options: ALLOWALL');
         header('Pragma: no-cache');

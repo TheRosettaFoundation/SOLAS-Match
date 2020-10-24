@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 
     <h1 class="page-header" style="height: auto">
-        <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block; word-break:break-all;">
+        <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
             {if $task->getTitle() != ''}
                 {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
             {else}
@@ -135,23 +135,54 @@
 		
 		    {include file="task/task.details.tpl"} 
 		
+        {if $isSiteAdmin}
+            <div class="well">
+        {/if}
 		    {if $isSiteAdmin and !isset($registered)}
-		        <div class="well">
 		            <form id="assignTaskToUserForm" method="post" action="{urlFor name="task" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
-		                {Localisation::getTranslation('task_view_assign_label')}
-		                <input type="text" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}">
+                    {Localisation::getTranslation('task_view_assign_label')}<br />
+                    <input type="text" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
+                    {if !empty($list_qualified_translators)}
+                        <select name="assignUserSelect" id="assignUserSelect" style="width: 500px;">
+                            <option value="">...</option>
+                            {foreach $list_qualified_translators as $list_qualified_translator}
+                                <option value="{$list_qualified_translator['user_id']}">{TemplateHelper::uiCleanseHTML($list_qualified_translator['name'])}</option>
+                            {/foreach}
+                        </select><br />
+                    {/if}
 		                <a class="btn btn-primary" onclick="$('#assignTaskToUserForm').submit();">
 		                <i class="icon-user icon-white"></i>&nbsp;{Localisation::getTranslation('task_view_assign_button')}
 		                </a>
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 		            </form> 
-		        </div>
 		    {/if}
-		
+        {if $isSiteAdmin}
+                {if $task->getTaskStatus() != TaskStatusEnum::COMPLETE && $task->getTaskStatus() != TaskStatusEnum::IN_PROGRESS}
+                <a href="{urlFor name="task-search_translators" options="task_id.$task_id"}" class="btn btn-primary">
+                    <i class="icon-user icon-white"></i>&nbsp;Search for Translators
+                </a>
+                {/if}
+                {if $display_treat_as_translated}
+                    {if $recorded_status == 'draft' || ($recorded_status == 'translated' && $type_id == TaskTypeEnum::PROOFREADING)}
+                        <form method="post" action="{urlFor name="task-view" options="task_id.$task_id"}">
+                            <input type="hidden" name="treat_as_translated" value="treat_as_translated" />
+                            <a href="#" onclick="this.parentNode.submit()" class="btn btn-small">
+                                <i class="icon-check icon-black"></i> Treat as if fully {if $type_id == TaskTypeEnum::TRANSLATION}translated{else}approved{/if} in Kató TM
+                            </a>
+                            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                        </form>
+                    {else}
+                        Note: This task is being treated as if fully {$recorded_status} in Kató TM.
+                    {/if}
+                {/if}
+            </div>
+        {/if}
+
 		    <p style="margin-bottom: 40px"/>        
+        {if !empty($file_preview_path)}
 		    <table width="100%">
 		        <thead>
-                <th>{Localisation::getTranslation('task_view_source_document_preview')} - {TemplateHelper::uiCleanseHTML($filename)}<hr/></th>
+                <th>{Localisation::getTranslation('task_view_source_document_preview')} {$chunked_message} - {TemplateHelper::uiCleanseHTML($filename)}<hr/></th>
 		        </thead>
 		        <tbody>
 		            <tr>
@@ -159,7 +190,7 @@
 		            </tr>
 		        </tbody>
 		    </table>
-		    
+        {/if}
 	{if ($alsoViewedTasksCount>0)}		    
 			</div>
 	    </div>

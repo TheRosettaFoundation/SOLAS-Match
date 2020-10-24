@@ -1,4 +1,5 @@
 {include file="header.tpl" body_id="home"}
+<!-- Editor Hint: ¿áéíóú -->
 
 <span class="hidden">
     <!-- Parameters... -->
@@ -16,6 +17,7 @@
             <a class="btn btn-primary btn-large" href="{urlFor name="login"}">
                 <i class="icon-share icon-white"></i> {Localisation::getTranslation('common_log_in')}
             </a>
+            <a href="https://community.translatorswb.org/t/how-to-solve-your-login-issues/4385">Click here if you are having problems logging in</a>
         </p>
     </div>
 
@@ -24,13 +26,13 @@
 	    <a href = "{Settings::get('banner.link')}" target = "_blank">
 	    	<div id="banner-container-blocks">
 		    	<div id="banner-left">
-		    		<img src="{urlFor name='home'}ui/img/banner/banner-left-en.png" alt="{Settings::get('banner.info')}">
+            <img src="{urlFor name='home'}ui/img/banner/banner-left-en2.png" alt="{Settings::get('banner.info')}">
 		    	</div>
 		    	<div id="banner-mid">
-		    		<img src="{urlFor name='home'}ui/img/banner/banner-mid-en.png" alt="{Settings::get('banner.info')}">
+            <img src="{urlFor name='home'}ui/img/banner/banner-mid-en2.png" alt="{Settings::get('banner.info')}">
 		    	</div>
 		    	<div id="banner-right">
-		    		<img src="{urlFor name='home'}ui/img/banner/banner-right-en.png" alt="{Settings::get('banner.info')}">
+            <img src="{urlFor name='home'}ui/img/banner/banner-right-en2.png" alt="{Settings::get('banner.info')}">
 		    	</div>
 	    	</div>
 	    </a>
@@ -128,10 +130,10 @@
 	                            <td>
 	                                <select name="taskTypes" id="taskTypes">
 	                                    <option value="0" {if ($selectedTaskType === 0)}selected="selected"{/if}>{Localisation::getTranslation('index_any_task_type')}</option>
-	                                    <option value="1" {if ($selectedTaskType === 1)}selected="selected"{/if}>{Localisation::getTranslation('common_segmentation')}</option>
+                                      <!-- <option value="1" {if ($selectedTaskType === 1)}selected="selected"{/if}>{Localisation::getTranslation('common_segmentation')}</option> -->
 	                                    <option value="2" {if ($selectedTaskType === 2)}selected="selected"{/if}>{Localisation::getTranslation('common_translation')}</option>
 	                                    <option value="3" {if ($selectedTaskType === 3)}selected="selected"{/if}>{Localisation::getTranslation('common_proofreading')}</option>
-	                                    <option value="4" {if ($selectedTaskType === 4)}selected="selected"{/if}>{Localisation::getTranslation('common_desegmentation')}</option>
+                                      <!-- <option value="4" {if ($selectedTaskType === 4)}selected="selected"{/if}>{Localisation::getTranslation('common_desegmentation')}</option> -->
 	                                 </select>
 	                            </td>
 	                            <td>
@@ -189,7 +191,7 @@
                                 {Localisation::getTranslation('common_to')}: <strong>{TemplateHelper::getLanguageAndCountryNoCodes($task->getTargetLocale())}</strong>
                             </p>
                             <p>
-                                {if count($taskTags[$task_id]) gt 0}
+                                {if !empty($taskTags[$task_id]) && count($taskTags[$task_id]) gt 0}
                                     {foreach $taskTags[$task_id] as $tag}
                                         <a href="{$siteLocation}tag/{$tag->getId()}" class="label"><span class="label">{trim(trim(TemplateHelper::uiCleanseHTML($tag->getLabel())),",")}</span></a>
                                     {/foreach}
@@ -204,8 +206,8 @@
                             <!-- <p class="task_details"><div class="process_created_time_utc" style="visibility: hidden">{$created_timestamps[$task_id]}</div></p> -->
                             <p><div class="process_deadline_utc" style="visibility: hidden">{$deadline_timestamps[$task_id]}</div></p>
                             <p id="parents_{$task_id}">{TemplateHelper::uiCleanseNewlineAndTabs($projectAndOrgs[$task_id])}</p>
-                            {if $task->getProjectId() > Settings::get("discourse.pre_discourse")}
-                            <p><a class="btn btn-primary" href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">{Localisation::getTranslation('common_forum')}</a></p>
+                            {if $task->getProjectId() > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $task_title)}
+                            <p><a class="btn btn-primary" href="https://community.translatorswb.org/t/{$discourse_slug[$task_id]}" target="_blank">{Localisation::getTranslation('common_discuss_on_community')}</a></p>
                             {/if}
                             <br />
                         </div>
@@ -248,7 +250,28 @@
                 </div>
             </ul>
         {else}
-            <p>{Localisation::getTranslation('index_no_tasks_available')}</p>
+            <p>
+                {if !$org_admin}
+                There are currently no tasks available for your language combinations. However, some may come up soon, so don't forget to <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">set up email alerts</a> to be notified of new available tasks. Meanwhile, you can:
+                <ol>
+                <li>
+                    Take our <a href="https://community.translatorswb.org/t/introduction-to-humanitarian-translation-for-kato-translators/1714" target="_blank">online course</a>, Introduction to Humanitarian Translation
+                </li>
+                <li>
+                    <a href="https://community.translatorswb.org/t/how-to-become-a-kato-verified-translator/262" target="_blank">Become a Kató Verified Translator</a>
+                </li>
+                <li>
+                    <a href="https://translatorswithoutborders.org/blog/" target="_blank">Learn more</a> about the work we do
+                </li>
+                <li>
+                    <a href="https://community.translatorswb.org/t/creating-and-personalizing-your-kato-community-profile/3048" target="_blank">Register</a> and browse our forum
+                </li>
+                </ol>
+                    For any questions or comments, please email <a href="mailto:translators@translatorswithoutborders.org" target="_blank">translators@translatorswithoutborders.org</a>
+                {else}
+                    Since you are not a translator, there are no tasks here. Click on <a href="https://kato.translatorswb.org/org/dashboard/">your organization's Dashboard</a>
+                {/if}
+            </p>
         {/if}
         <br />
 

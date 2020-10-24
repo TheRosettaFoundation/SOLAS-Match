@@ -7,6 +7,7 @@ use \SolasMatch\API\DAO as DAO;
 use \SolasMatch\API\Lib as Lib;
 use \SolasMatch\API as API;
 use SolasMatch\API\DAO\AdminDao;
+use \SolasMatch\Common\Exceptions as Exceptions;
 
 require_once __DIR__.'/../../Common/protobufs/models/OAuthResponse.php';
 require_once __DIR__."/../../Common/protobufs/models/PasswordResetRequest.php";
@@ -183,12 +184,6 @@ class Users
                         '\SolasMatch\API\V0\Users::getUserOrgs'
                     );
 
-                    $app->get(
-                        '/badges(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                        '\SolasMatch\API\V0\Users::getUserbadges'
-                    );
-
                     $app->post(
                         '/badges(:format)/',
                         '\SolasMatch\API\Lib\Middleware::isloggedIn',
@@ -271,12 +266,6 @@ class Users
                         '/projects(:format)/',
                         '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
                         '\SolasMatch\API\V0\Users::getUserTrackedProjects'
-                    );
-
-                    $app->get(
-                        '/personalInfo(:format)/',
-                        '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
-                        '\SolasMatch\API\V0\Users::getUserPersonalInfo'
                     );
 
                     $app->post(
@@ -404,6 +393,7 @@ class Users
 
                 $app->put(
                     '/assignBadge/:email/:badgeId/',
+                    '\SolasMatch\API\Lib\Middleware::authenticateUserForOrgBadge',
                     '\SolasMatch\API\V0\Users::assignBadge'
                 );
 
@@ -472,14 +462,16 @@ class Users
 
                 $app->post(
                     '/changeEmail(:format)/',
+                    '\SolasMatch\API\Lib\Middleware::authenticateSiteAdmin',
                     '\SolasMatch\API\V0\Users::changeEmail'
                 );
 
-                $app->get(
-                    '/:userId/',
-                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
-                    '\SolasMatch\API\V0\Users::getUser'
-                );
+                // Security (work done directly in ui/DataAccessObjects/UserDao.class.php: getUser($userId) )
+                //$app->get(
+                //    '/:userId/',
+                //    '\SolasMatch\API\Lib\Middleware::isloggedIn',
+                //    '\SolasMatch\API\V0\Users::getUser'
+                //);
 
                 $app->put(
                     '/:userId/',
@@ -498,6 +490,12 @@ class Users
             $app->get(
                 '/users(:format)/',
                 '\SolasMatch\API\V0\Users::getUsers'
+            );
+
+            // From cron
+            $app->get(
+                '/dequeue_claim_task/',
+                '\SolasMatch\API\V0\Users::dequeue_claim_task'
             );
         });
     }
@@ -685,11 +683,6 @@ class Users
         API\Dispatcher::sendResponse(null, DAO\UserDao::findOrganisationsUserBelongsTo($userId), null, $format);
     }
 
-    public static function getUserbadges($userId, $format = ".json")
-    {
-        API\Dispatcher::sendResponse(null, DAO\UserDao::getUserBadges($userId), null, $format);
-    }
-
     public static function addUserbadges($userId, $format = ".json")
     {
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
@@ -730,6 +723,28 @@ class Users
         API\Dispatcher::sendResponse(null, DAO\TaskDao::claimTask($taskId, $userId), null, $format);
         Lib\Notify::notifyUserClaimedTask($userId, $taskId);
         Lib\Notify::notifyOrgClaimedTask($userId, $taskId);
+    }
+
+    public static function dequeue_claim_task()
+    {
+        $queue_claim_tasks = DAO\TaskDao::get_queue_claim_tasks();
+        foreach ($queue_claim_tasks as $queue_claim_task) {
+            $task_id = $queue_claim_task['task_id'];
+            $user_id = $queue_claim_task['user_id'];
+            $matecat_tasks = DAO\TaskDao::getMatecatLanguagePairs($queue_claim_task['task_id']);
+            if (!empty($matecat_tasks) && !empty($matecat_tasks[0]['matecat_id_job'])) { // Analysis complete
+                error_log("dequeue_claim_task() task_id: $task_id Removing");
+                DAO\TaskDao::dequeue_claim_task($task_id);
+                DAO\TaskDao::claimTask($task_id, $user_id);
+                Lib\Notify::notifyUserClaimedTask($user_id, $task_id);
+                Lib\Notify::notifyOrgClaimedTask($user_id, $task_id);
+            } else {
+                $request_for_project = DAO\TaskDao::getWordCountRequestForProject($matecat_tasks[0]['project_id']);
+                if (!$request_for_project || $request_for_project['state'] == 3) { // If Project deleted or Analysis has failed
+                    DAO\TaskDao::dequeue_claim_task($task_id);
+                }
+            }
+        }
     }
 
     public static function getUserTopTasks($userId, $format = ".json")
@@ -925,17 +940,6 @@ class Users
         API\Dispatcher::sendResponse(null, $data, null, $format);
     }
 
-    public static function getUserPersonalInfo($userId, $format = ".json")
-    {
-        if (!is_numeric($userId) && strstr($userId, '.')) {
-            $userId = explode('.', $userId);
-            $format = '.'.$userId[1];
-            $userId = $userId[0];
-        }
-        $data = DAO\UserDao::getPersonalInfo(null, $userId);
-        API\Dispatcher::sendResponse(null, $data, null, $format);
-    }
-
     public static function createUserPersonalInfo($userId, $format = ".json")
     {
         if (!is_numeric($userId) && strstr($userId, '.')) {
@@ -1104,6 +1108,7 @@ class Users
             $authCode = $authCodeGrant->newAuthoriseRequest('user', $user->getId(), $params);
         } catch (\Exception $e) {
             DAO\UserDao::logLoginAttempt($user->getId(), $email, 0);
+            error_log("Exception $email");
             if (!isset($params['redirect_uri'])) {
                 API\Dispatcher::getDispatcher()->redirect(
                     API\Dispatcher::getDispatcher()->request()->getReferrer().
@@ -1189,60 +1194,29 @@ class Users
             $data = API\Dispatcher::getDispatcher()->request()->getBody();
             $parsed_data = array();
             parse_str($data, $parsed_data);
-            $access_token = $parsed_data['token'];
-            
-            //validate token
-            $client = new Common\Lib\APIHelper("");
+            $id_token = $parsed_data['token'];
+
             $request =  Common\Lib\Settings::get('googlePlus.token_validation_endpoint');
-            $args = null;
-            if ($access_token) {
-                $args = array("access_token" =>  $access_token );
-            } 
-            
+            $client = new Common\Lib\APIHelper('');
             $ret = $client->externalCall(
                 null,
                 $request,
                 Common\Enums\HttpMethodEnum::GET,
                 null,
-                $args
+                array('id_token' => $id_token)
             );
-
             $response = json_decode($ret);
-            $email = "";
-            if(isset($response->audience))
-            {
-                $client_id = Common\Lib\Settings::get('googlePlus.client_id'); 
-                if ($client_id != $response->audience)
-                {
-                    throw new \Exception("Received token is not intended for this application.");
-                } else {
-                    if (isset($response->email))
-                    {
-                        $email = $response->email;
-                    } else {
-                        //see https://developers.google.com/accounts/docs/OAuth2UserAgent#callinganapi
-                        $request = Common\Lib\Settings::get('googlePlus.userinfo_endpoint');
-                        $ret = $client->externalCall(
-                            null,
-                            $request,
-                            Common\Enums\HttpMethodEnum::GET,
-                            null,
-                            null,
-                            null,
-                            $access_token
-                        );
-                        $userInfo = json_decode($ret);
-                        $email = $userInfo->email;
-                    }
-                }
-            }
-    
-            if (empty($email)) {
-                throw new \Exception("Unable to obtain user's email address from Google.");
-            } else {
-                 API\Dispatcher::sendResponse(null, $email, null, $format, null);    
-            }
+            // error_log("oauth2/v3/tokeninfo response: " . print_r($response, true));
 
+            $client_id = Common\Lib\Settings::get('googlePlus.client_id');
+            if ($client_id != $response->aud) {
+                throw new \Exception("Received token is not intended for this application.");
+            }
+            if (empty($response->email)) {
+                throw new \Exception("Unable to obtain user's email address from Google.");
+           }
+
+            API\Dispatcher::sendResponse(null, $response->email, null, $format, null);
         } catch (\Exception $e) {
             API\Dispatcher::sendResponse(null, $e->getMessage(), Common\Enums\HttpStatusEnum::BAD_REQUEST, $format);
         }
@@ -1269,6 +1243,7 @@ class Users
 
             API\Dispatcher::sendResponse(null, $user, null, $format, $oAuthToken);
         } catch (\Exception $e) {
+            error_log("Exception getAccessToken");
             API\Dispatcher::sendResponse(null, $e->getMessage(), Common\Enums\HttpStatusEnum::BAD_REQUEST, $format);
         }
     }
@@ -1392,128 +1367,7 @@ class Users
 
     public static function update_user_with_neon_data($newUser, $userInfo)
     {
-$from_neon_to_trommons_pair = array(
-'Afrikaans' => array('af', 'ZA'),
-'Albanian' => array('sq', 'AL'),
-'Amharic' => array('am', 'AM'),
-'Arabic' => array('ar', 'SA'),
-'Aragonese' => array('an', 'ES'),
-'Armenian' => array('hy', 'AM'),
-'Asturian' => array('ast', 'ES'),
-'Azerbaijani' => array('az', 'AZ'),
-'Basque' => array('eu', 'ES'),
-'Bengali' => array('bn', 'IN'),
-'Belarus' => array('be', 'BY'),
-'Belgian French' => array('fr', 'BE'),
-'Bosnian' => array('bs', 'BA'),
-'Breton' => array('br', 'FR'),
-'Bulgarian' => array('bg', 'BG'),
-'Burmese' => array('my', 'MM'),
-'Catalan' => array('ca', 'ES'),
-'Catalan Valencian' => array('ca', '--'),
-'Cebuano' => array('cb', 'PH'),
-'Chinese Simplified' => array('zh', 'CN'),
-'Chinese Traditional' => array('zh', 'TW'),
-'Croatian' => array('hr', 'HR'),
-'Czech' => array('cs', 'CZ'),
-'Danish' => array('da', 'DK'),
-'Dutch' => array('nl', 'NL'),
-'English' => array('en', 'GB'),
-'English US' => array('en', 'US'),
-'Esperanto' => array('eo', '--'),
-'Estonian' => array('et', 'EE'),
-'Faroese' => array('fo', 'FO'),
-'Fula' => array('ff', '--'),
-'Finnish' => array('fi', 'FI'),
-'Flemish' => array('nl', 'BE'),
-'French' => array('fr', 'FR'),
-'French Canada' => array('fr', 'CA'),
-'Galician' => array('gl', 'ES'),
-'Georgian' => array('ka', 'GE'),
-'German' => array('de', 'DE'),
-'Greek' => array('el', 'GR'),
-'Gujarati' => array('gu', 'IN'),
-'Haitian Creole French' => array('ht', 'HT'),
-'Hausa' => array('ha', '--'),
-'Hawaiian' => array('haw', 'US'),
-'Hebrew' => array('he', 'IL'),
-'Hindi' => array('hi', 'IN'),
-'Hungarian' => array('hu', 'HU'),
-'Icelandic' => array('is', 'IS'),
-'Indonesian' => array('id', 'ID'),
-'Irish Gaelic' => array('ga', 'IE'),
-'Italian' => array('it', 'IT'),
-'Japanese' => array('ja', 'JP'),
-'Kanuri' => array('kr', '--'),
-'Kazakh' => array('kk', 'KZ'),
-'Khmer' => array('km', 'KH'),
-'Korean' => array('ko', 'KR'),
-'Kurdish Kurmanji' => array('ku', '--'),
-'Kurdish Sorani' => array('ku', '--'),
-'Kyrgyz' => array('ky', 'KG'),
-'Latvian' => array('lv', 'LV'),
-'Lingala' => array('ln', '--'),
-'Lithuanian' => array('lt', 'LT'),
-'Macedonian' => array('mk', 'MK'),
-'Malagasy' => array('mg', 'MG'),
-'Malay' => array('ms', 'MY'),
-'Malayalam' => array('ml', 'IN'),
-'Maltese' => array('mt', 'MT'),
-'Maori' => array('mi', 'NZ'),
-'Mongolian' => array('mn', 'MN'),
-'Montenegrin' => array('sr', 'ME'),
-'Ndebele' => array('nr', 'ZA'),
-'Nepali' => array('ne', 'NP'),
-'Norwegian Bokmål' => array('no', 'NO'),
-'Norwegian Nynorsk' => array('nn', 'NO'),
-'Nyanja' => array('ny', '--'),
-'Occitan' => array('oc', 'FR'),
-'Occitan Aran' => array('oc', 'ES'),
-'Oriya' => array('or', 'IN'),
-'Panjabi' => array('pa', 'IN'),
-'Pashto' => array('ps', 'PK'),
-'Dari' => array('prs', '--'),
-'Persian' => array('fa', 'IR'),
-'Polish' => array('pl', 'PL'),
-'Portuguese' => array('pt', 'PT'),
-'Portuguese Brazil' => array('pt', 'BR'),
-'Quechua' => array('qu', '--'),
-'Rohingya' => array('rhg', 'MM'),
-'Rohingyalish' => array('rhl', 'MM'),
-'Romanian' => array('ro', 'RO'),
-'Russian' => array('ru', 'RU'),
-'Serbian Latin' => array('sr', '--'),
-'Serbian Cyrillic' => array('sr', 'RS'),
-'Sesotho' => array('nso', 'ZA'),
-'Setswana (South Africa)' => array('tn', 'ZA'),
-'Slovak' => array('sk', 'SK'),
-'Slovenian' => array('sl', 'SI'),
-'Somali' => array('so', 'SO'),
-'Spanish' => array('es', 'ES'),
-'Spanish Latin America' => array('es', 'MX'),
-'Spanish Colombia' => array('es', 'CO'),
-'Swahili' => array('sw', 'SZ'),
-'Swedish' => array('sv', 'SE'),
-'Swiss German' => array('de', 'CH'),
-'Tagalog' => array('tl', 'PH'),
-'Tamil' => array('ta', 'IN'),
-'Telugu' => array('te', 'IN'),
-'Tatar' => array('tt', 'RU'),
-'Thai' => array('th', 'TH'),
-'Tigrinya' => array('ti', '--'),
-'Tsonga' => array('ts', 'ZA'),
-'Turkish' => array('tr', 'TR'),
-'Turkmen' => array('tk', 'TM'),
-'Ukrainian' => array('uk', 'UA'),
-'Urdu' => array('ur', 'PK'),
-'Uzbek' => array('uz', 'UZ'),
-'Vietnamese' => array('vi', 'VN'),
-'Welsh' => array('cy', 'GB'),
-'Xhosa' => array('xh', 'ZA'),
-'Yoruba' => array('yo', 'NG'),
-'Zulu' => array('zu', 'ZA'),
-);
-
+        global $from_neon_to_trommons_pair;
 $NEON_NATIVELANGFIELD = 64;
 $NEON_SOURCE1FIELD    = 167;
 $NEON_TARGET1FIELD    = 168;
@@ -1561,9 +1415,11 @@ $NEON_LEVELFIELD      = 173;
             if (empty($result) || empty($result['searchResults'])) {
                 error_log("update_user_with_neon_data($email), no results from NeonCRM");
             } else {
-                $r = current($result['searchResults']);
+                foreach ($result['searchResults'] as $r) {
+                    $first_name = (empty($r['First Name'])) ? '' : $r['First Name'];
+                    if (!empty($first_name)) break; // If we find a First Name, then we have found the good account and we should use this one "$r" (normally there will only be one account)
+                }
 
-                $first_name = (empty($r['First Name'])) ? '' : $r['First Name'];
                 $last_name  = (empty($r['Last Name']))  ? '' : $r['Last Name'];
                 if (!empty($first_name)) $userInfo->setFirstName($first_name);
                 if (!empty($last_name))  $userInfo->setLastName($last_name);
@@ -1576,7 +1432,8 @@ $NEON_LEVELFIELD      = 173;
                 if (!empty($from_neon_to_trommons_pair[$nativelang])) {
                     $locale = new Common\Protobufs\Models\Locale();
                     $locale->setLanguageCode($from_neon_to_trommons_pair[$nativelang][0]);
-                    $locale->setCountryCode($from_neon_to_trommons_pair[$nativelang][1]);
+                    //$locale->setCountryCode($from_neon_to_trommons_pair[$nativelang][1]); Meeting 20180110...
+                    $locale->setCountryCode('--');
                     $newUser->setNativeLocale($locale);
                 }
 
@@ -1600,16 +1457,16 @@ $NEON_LEVELFIELD      = 173;
                 }
 
                 $user_id = $newUser->getId();
-                if (!empty($from_neon_to_trommons_pair[$sourcelang1]) && !empty($from_neon_to_trommons_pair[$targetlang1])) {
+                if (!empty($from_neon_to_trommons_pair[$sourcelang1]) && !empty($from_neon_to_trommons_pair[$targetlang1]) && ($sourcelang1 != $targetlang1)) {
                     DAO\UserDao::createUserQualifiedPair($user_id, $from_neon_to_trommons_pair[$sourcelang1][0], $from_neon_to_trommons_pair[$sourcelang1][1], $from_neon_to_trommons_pair[$targetlang1][0], $from_neon_to_trommons_pair[$targetlang1][1], $quality_level);
                 }
-                if (!empty($from_neon_to_trommons_pair[$sourcelang1]) && !empty($from_neon_to_trommons_pair[$targetlang2])) {
+                if (!empty($from_neon_to_trommons_pair[$sourcelang1]) && !empty($from_neon_to_trommons_pair[$targetlang2]) && ($sourcelang1 != $targetlang2)) {
                     DAO\UserDao::createUserQualifiedPair($user_id, $from_neon_to_trommons_pair[$sourcelang1][0], $from_neon_to_trommons_pair[$sourcelang1][1], $from_neon_to_trommons_pair[$targetlang2][0], $from_neon_to_trommons_pair[$targetlang2][1], $quality_level);
                 }
-                if (!empty($from_neon_to_trommons_pair[$sourcelang2]) && !empty($from_neon_to_trommons_pair[$targetlang1])) {
+                if (!empty($from_neon_to_trommons_pair[$sourcelang2]) && !empty($from_neon_to_trommons_pair[$targetlang1]) && ($sourcelang2 != $targetlang1)) {
                     DAO\UserDao::createUserQualifiedPair($user_id, $from_neon_to_trommons_pair[$sourcelang2][0], $from_neon_to_trommons_pair[$sourcelang2][1], $from_neon_to_trommons_pair[$targetlang1][0], $from_neon_to_trommons_pair[$targetlang1][1], $quality_level);
                 }
-                if (!empty($from_neon_to_trommons_pair[$sourcelang2]) && !empty($from_neon_to_trommons_pair[$targetlang2])) {
+                if (!empty($from_neon_to_trommons_pair[$sourcelang2]) && !empty($from_neon_to_trommons_pair[$targetlang2]) && ($sourcelang2 != $targetlang2)) {
                     DAO\UserDao::createUserQualifiedPair($user_id, $from_neon_to_trommons_pair[$sourcelang2][0], $from_neon_to_trommons_pair[$sourcelang2][1], $from_neon_to_trommons_pair[$targetlang2][0], $from_neon_to_trommons_pair[$targetlang2][1], $quality_level);
                 }
 

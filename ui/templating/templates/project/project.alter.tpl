@@ -23,7 +23,12 @@
                 <small>{Localisation::getTranslation('project_alter_alter_project_details_here')}</small>
             </span>
             <div class="pull-right">
-                <a href="{urlFor name="project-view" options="project_id.$project_id"}" class="pull-right btn btn-primary">
+                {if $userIsAdmin}
+                <a href="{urlFor name="archive-project" options="project_id.$project_id|sesskey.{$sesskey}"}" class="btn btn-danger" onclick="return confirm('{Localisation::getTranslation('org_dashboard_1')}')">
+                    <i class="icon-fire icon-white"></i> {Localisation::getTranslation('org_dashboard_archive_project')}
+                </a>
+                {/if}
+                <a href="{urlFor name="project-view" options="project_id.$project_id"}" class="btn btn-primary">
                     <i class="icon-list icon-white"></i> {Localisation::getTranslation('project_alter_view_project_details')}
                 </a>
             </div>
@@ -63,6 +68,11 @@
                         <i class="icon-refresh icon-white"></i>{Localisation::getTranslation('common_submit')} {Localisation::getTranslation('common_word_count')}
                     </button>
                     {/if}
+                    {if $enter_analyse_url}
+                    <br /><br />
+                    <label for="analyse_url" style="font-size: large"><strong>Enter Analysis URL</strong></label>
+                    <input type="text" style="width: 400px;  margin-bottom: 20px" name="analyse_url" id="analyse_url" />
+                    {/if}
                 </td>
                 <td>
                     <label for="tagList" style="font-size: large"><strong>{Localisation::getTranslation('common_tags')}</strong></label>
@@ -95,21 +105,6 @@
                                 {html_options options=$minute_list selected=$selected_minute}
                             </select>
                         </div>
-                    </div>
-                    <p style="margin-bottom:20px;"/>
-
-                    <div id="sourceLanguageDiv">
-                    <h2>{Localisation::getTranslation('common_source_language')}: <span style="color: red">*</span></h2>
-                    <select name="sourceLanguageSelect" id="sourceLanguageSelect" style="width: 400px">
-                        {foreach $languages as $language}
-                            <option value="{$language->getCode()}" {if $language->getCode() == $sourceLanguageSelectCode}selected="selected"{/if}>{$language->getName()}</option>
-                        {/foreach}
-                    </select>
-                    <select name="sourceCountrySelect" id="sourceCountrySelect" style="width: 400px">
-                        {foreach $countries as $country}
-                            <option value="{$country->getCode()}" {if $country->getCode() == $sourceCountrySelectCode}selected="selected"{/if}>{$country->getName()}</option>
-                        {/foreach}
-                    </select>
                     </div>
                     <p style="margin-bottom:20px;"/>
 

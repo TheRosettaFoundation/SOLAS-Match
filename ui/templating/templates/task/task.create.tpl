@@ -88,10 +88,8 @@
                             <h2>{Localisation::getTranslation('common_task_type')} <span style="color: red">*</span></h2>
                             <p class="desc">{Localisation::getTranslation('task_create_2')}</p>
                             <select name="taskType" style="width: 400px">
-                                {assign var="taskTypeCount" value=count($taskTypes)}
-                                {for $id=1 to $taskTypeCount}
-                                    <option value="{$id}">{$taskTypes[$id]}</option>
-                                {/for}
+                                <option value="2">{$taskTypes[2]}</option>
+                                <option value="3">{$taskTypes[3]}</option>
                             </select>
                             <p style="margin-bottom:40px;"/>
                             <p>

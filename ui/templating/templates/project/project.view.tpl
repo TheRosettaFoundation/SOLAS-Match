@@ -1,13 +1,23 @@
 {include file="header.tpl"}
+<!-- Editor Hint: ¿áéíóú -->
 
     <h1 class="page-header">
-        <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block; word-break:break-all;">
+        <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($project->getTitle())}
             <small>{Localisation::getTranslation('project_view_overview_of_project_details')}</small>
         </span>
         {assign var="project_id" value=$project->getId()}
-		<div class="pull-right">
-            <form method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+        <div class="pull-right">
+            <form id="copyChunksProjectForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
+                {if $isSiteAdmin && !empty($matecat_analyze_url)}
+                    <input type="hidden" name="copyChunks" value="1" />
+                    <a class="btn btn-success" onclick="$('#copyChunksProjectForm').submit();" >
+                        <i class="icon-upload icon-white"></i> Update Chunks
+                    </a>
+                    <a href="{$matecat_analyze_url}" class="btn btn-primary" target="_blank">
+                        <i class="icon-th-list icon-white"></i> Kató TM analysis
+                    </a>
+                {/if}
                 {if (!$isOrgMember)}
                     {if false}
                         {if ($userSubscribedToOrganisation)}
@@ -24,13 +34,13 @@
                     {/if}
                 {/if}
                 {if ($isOrgMember || $isAdmin)}
-                    <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='pull-right btn btn-primary fixMargin'>
+                    <a href="{urlFor name="project-alter" options="project_id.$project_id"}" class='btn btn-primary fixMargin'>
                         <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('common_edit_project')}
                     </a> 
                 {/if}
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
-		</div>
+        </div>
     </h1>
 
 {if isset($flash['success'])}
@@ -47,12 +57,12 @@
 
 <p>
 {Localisation::getTranslation('task_twitter_0_project_view')} <a class="twitter-share-button"
-  href="https://twitter.com/intent/tweet?text={Localisation::getTranslation('task_twitter_3')}&url=https%3A%2F%2Ftrommons.org"
-  data-size="large" data-counturl="https://trommons.org">
+  href="https://twitter.com/intent/tweet?text={Localisation::getTranslation('task_twitter_3')}&url=https%3A%2F%2Fkato.translatorswb.org"
+  data-size="large" data-counturl="https://kato.translatorswb.org">
 Tweet</a>
 </p>
 
-    <table class="table table-striped" style="overflow-wrap: break-word; word-break:break-all; table-layout: fixed;">
+    <table class="table table-striped" style="overflow-wrap: break-word; table-layout: fixed;">
         <thead>            
             <th style="text-align: left;"><strong>{Localisation::getTranslation('common_organisation')}</strong></th>
             <th>{Localisation::getTranslation('common_source_language')}</th>
@@ -66,8 +76,8 @@ Tweet</a>
 
         </thead>
         <tbody>
-            <tr style="overflow-wrap: break-word; word-break:break-all;">
-                <td style="text-align: left; overflow-wrap: break-word; word-break:break-all;">
+            <tr style="overflow-wrap: break-word;">
+                <td style="text-align: left; overflow-wrap: break-word;">
                     {if isset($org)}
                         {assign var="org_id" value=$org->getId()}
                         <a href="{urlFor name="org-public-profile" options="org_id.$org_id"}">{$org->getName()|escape:'html':'UTF-8'}</a>
@@ -91,7 +101,7 @@ Tweet</a>
                     <div id="put_updated_wordcount_here">{if $project->getWordCount() != '' && $project->getWordCount() > 1}{$project->getWordCount()}{else}-{/if}</div>
                 </td>
                 <td>
-                    <div class="convert_utc_to_local" style="visibility: hidden">{$project->getCreatedTime()}</div>
+                    <div class="convert_utc_to_local" style="visibility: hidden">{$project->getCreatedTime()}</div><br />{$pm}
                 </td>  
                 <td>
                     <div class="convert_utc_to_local" style="visibility: hidden">{$project->getDeadline()}</div>
@@ -126,7 +136,7 @@ Tweet</a>
     </table>            
             
     <div class="well">
-        <table border="0" width="100%" style="overflow-wrap: break-word; word-break:break-all; table-layout: fixed;">
+        <table border="0" width="100%" style="overflow-wrap: break-word; table-layout: fixed;">
             <thead>
             <th align="left" width="48%">{Localisation::getTranslation('common_description')}<hr/></th>
             <th></th>
@@ -216,13 +226,13 @@ Tweet</a>
                     {/if}
                     </td>                
                 </tr>
-                {if $project_id > Settings::get("discourse.pre_discourse")}
+                {if $project_id > Settings::get("discourse.pre_discourse") && !preg_match('/^Test.{4}$/', $project->getTitle())}
                 <tr>
                     <td colspan="3" style="padding-bottom: 40px"></td>
                 </tr>
                 <tr valign="top">
                     <td colspan="3">
-                        <strong>{Localisation::getTranslation('common_forum')}</strong><hr/>
+                        <strong>{Localisation::getTranslation('common_discuss_on_community')}</strong><hr/>
                     </td>
                 </tr>
                 <tr>
@@ -267,13 +277,13 @@ Tweet</a>
             {if isset($projectTasks) && count($projectTasks) > 0}
                 {foreach from=$taskLanguageMap key=languageCountry item=tasks}           
 
-                    <div style="display: inline-block; overflow-wrap: break-word; word-break:break-all; 
+                    <div style="display: inline-block; overflow-wrap: break-word;
                                     font-weight: bold; font-size: large; max-width: 70%">
                         {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
                     </div>                
                     <hr />  
  
-                    <table class="table table-striped" style="overflow-wrap: break-word; word-break:break-all; margin-bottom: 60px">
+                    <table class="table table-striped" style="overflow-wrap: break-word; margin-bottom: 60px">
                         <thead>
                             <tr>
                                 <th>{Localisation::getTranslation('common_title')}</th>
@@ -290,7 +300,7 @@ Tweet</a>
 
                             {foreach from=$tasks item=task}
                                 {assign var="task_id" value=$task->getId()}
-                                <tr style="overflow-wrap: break-word; word-break:break-all;">
+                                <tr style="overflow-wrap: break-word;">
                                     <td width="24%">
                                         <a href="{urlFor name="task-view" options="task_id.$task_id"}">
                                             {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
@@ -431,6 +441,86 @@ Tweet</a>
         {Localisation::getTranslation('project_view_6')}
     </p>
     {/if}
+{/if}
+
+{if !empty($volunteerTaskLanguageMap)}
+    <hr />
+    <h1 class="page-header" style="margin-bottom: 60px">
+        {Localisation::getTranslation('project_view_tasks')}
+        <small>{Localisation::getTranslation('project_view_0')}</small>
+    </h1>
+                {foreach from=$volunteerTaskLanguageMap key=languageCountry item=tasks}
+
+                    <div style="display: inline-block; overflow-wrap: break-word;
+                                    font-weight: bold; font-size: large; max-width: 70%">
+                        {TemplateHelper::getLanguageAndCountryFromCode($languageCountry)}
+                    </div>
+                    <hr />
+
+                    <table class="table table-striped" style="overflow-wrap: break-word; margin-bottom: 60px">
+                        <thead>
+                            <tr>
+                                <th>{Localisation::getTranslation('common_title')}</th>
+                                <th>{Localisation::getTranslation('common_status')}</th>
+                                <th>{Localisation::getTranslation('common_type')}</th>
+                                <th>{Localisation::getTranslation('common_task_deadline')}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            {foreach from=$tasks item=task}
+                                {assign var="task_id" value=$task['task_id']}
+                                <tr style="overflow-wrap: break-word;">
+                                    <td width="24%">
+                                        <a href="{urlFor name="task-view" options="task_id.$task_id"}">
+                                            {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task['title'])}
+                                        </a>
+                                        <br/>
+                                    </td>
+                                    <td>
+                                        {assign var="status_id" value=$task['status_id']}
+                                        {if $status_id == TaskStatusEnum::WAITING_FOR_PREREQUISITES}
+                                            {Localisation::getTranslation('common_waiting')}
+                                        {elseif $status_id == TaskStatusEnum::PENDING_CLAIM}
+                                            {Localisation::getTranslation('common_unclaimed')}
+                                        {elseif $status_id == TaskStatusEnum::IN_PROGRESS}
+                                            {Localisation::getTranslation('common_in_progress')}
+                                        {elseif $status_id == TaskStatusEnum::COMPLETE}
+                                            {Localisation::getTranslation('common_complete')}
+                                        {/if}
+                                    </td>
+                                    <td>
+                                        <strong>
+                                            <small>
+                                                {assign var="type_id" value=$task['type_id']}
+                                                {if $type_id == TaskTypeEnum::SEGMENTATION}
+                                                    <span style="color: {$taskTypeColours[TaskTypeEnum::SEGMENTATION]}">
+                                                        {Localisation::getTranslation('common_segmentation')}
+                                                    </span>
+                                                {elseif $type_id == TaskTypeEnum::TRANSLATION}
+                                                    <span style="color: {$taskTypeColours[TaskTypeEnum::TRANSLATION]}">
+                                                        {Localisation::getTranslation('common_translation')}
+                                                    </span>
+                                                {elseif $type_id == TaskTypeEnum::PROOFREADING}
+                                                    <span style="color: {$taskTypeColours[TaskTypeEnum::PROOFREADING]}">
+                                                        {Localisation::getTranslation('common_proofreading')}
+                                                    </span>
+                                                {elseif $type_id == TaskTypeEnum::DESEGMENTATION}
+                                                    <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">
+                                                        {Localisation::getTranslation('common_desegmentation')}
+                                                    </span>
+                                                {/if}
+                                            </small>
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        <div class="convert_utc_to_local" style="visibility: hidden">{$task['deadline']}</div>
+                                    </td>
+                                </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
+                {/foreach}
 {/if}
 
 {include file="footer.tpl"}

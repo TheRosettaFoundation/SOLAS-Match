@@ -1,7 +1,8 @@
 <resources>
-    <!-- Smarty Template Strings -->
+    <!-- ¿áéíóú Smarty Template Strings -->
     <string name="common_faq">FAQ</string>
     <string name="common_forum">Kató Community</string>
+    <string name="common_discuss_on_community">Discuss this task on Kató Community</string>
 	<string name="common_banned_by">Banned By</string>
 	<string name="common_ban_duration">Ban Duration</string>
 	<string name="common_ban_reason">Ban Reason</string>
@@ -51,7 +52,7 @@
 	<string name="common_target_language">Target Language</string>
 	<string name="common_segmentation">Segmentation</string>
 	<string name="common_translation">Translation</string>
-	<string name="common_proofreading">Proofreading</string>
+	<string name="common_proofreading">Revising</string>
 	<string name="common_desegmentation">Desegmentation</string>
 	<string name="common_cancel">Cancel</string>
 	<string name="common_create_project">Create Project</string>
@@ -70,21 +71,22 @@
    	<string name="common_project">Project</string>
 	<string name="common_segmentation_task">Segmentation Task</string>
 	<string name="common_translation_task">Translation Task</string>
-	<string name="common_proofreading_task">Proofreading Task</string>
+	<string name="common_proofreading_task">Revising Task</string>
 	<string name="common_desegmentation_task">Desegmentation Task</string>
 	<string name="common_please_fill_in_all_required_fields">Please fill in all required fields</string>
     <string name="common_please_correct_errors">Please correct the following errors</string>
 	<string name="common_provide_feedback">Provide Feedback</string>
 	<string name="common_here">here</string>
 	<string name="common_create_a_translation_task_for_volunteer_translators_to_pick_up">Create a translation task for volunteer translators to pick up.</string>
-	<string name="common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer">Create a proofreading task for evaluating the translation provided by a volunteer.</string>
+	<string name="common_create_a_proofreading_task_for_evaluating_the_translation_provided_by_a_volunteer">Create a revising task for evaluating the translation provided by a volunteer.</string>
 	<string name="common_thanks_for_providing_your_translation_for_this_task">Thanks for providing your translation for this task.</string>
 	<string name="common_maximum_file_size_is">Maximum file size is <strong>%sMB</strong></string>
   <string name="common_maximum_file_total_size_is">The maximum total MB that can be uploaded for all files is <strong>%sMB</strong></string>
   <string name="common_maximum_file_total_size_vs_limit_is">You have selected to upload %1$sMB, but the limit is %2$sMB.</string>
 	<string name="common_assign">Assign</string>
 	<string name="common_it_is_time_to_decide">It is time to decide</string>
-	<string name="common_no_just_bring_me_back_to_the_task_page">No, just bring me back to the task page.</string>
+	<string name="common_no_just_bring_me_back_to_the_task_page">Just bring me back to the task page.</string>
+    <string name="common_no_just_bring_me_back_to_claimed_tasks">Just bring me back to my Claimed Tasks page.</string>
 	<string name="common_review_this_checklist_for_your_downloaded_file">Review this checklist for your downloaded file.</string>
 	<string name="common_after_downloading">After downloading</string>
 	<string name="common_this_is_what_you_need_to_do_as_soon_as_possible">This is what you need to do (as soon as possible)</string>
@@ -124,9 +126,9 @@
 	<string name="common_secondary_languages">Language Pair(s)</string>
     <string name="i_can_translate_from">I Can Translate From</string>
     <string name="qualification_level_for_above">Qualification Level for Above</string>
-    <string name="user_qualification_level_1">Volunteer</string>
-    <string name="user_qualification_level_2">Verified</string>
-    <string name="user_qualification_level_3">Senior</string>
+    <string name="user_qualification_level_1">Kató Translator</string>
+    <string name="user_qualification_level_2">Kató Verified Translator</string>
+    <string name="user_qualification_level_3">Kató Senior Translator</string>
     <string name="required_qualification_level">Required Qualification Level For Translators</string>
     <string name="set_default_required_qualification_level">Set default qualification level for volunteers working on tasks for this organisation (can be overridden on a per task basis).</string>
     <string name="update_required_qualification_level">Update Required Qualification Level</string>
@@ -135,11 +137,11 @@
 	<string name="common_mobile_number">Mobile Number</string>
 	<string name="common_business_number">Business Number</string>
 	<string name="common_job_title">Job Title</string>
-	<string name="common_badges">Badges</string>
-	<string name="common_strict">Strict</string>
-	<string name="common_the_last_email_was_sent_on">The last email was sent on %s.</string>
-   	<string name="common_no_emails_have_been_sent_yet">No e-mails have been sent yet.</string>
-	<string name="common_you_are_not_currently_receiving_task_stream_notification_emails">You are not currently receiving task stream notification emails.</string>
+  <string name="common_badges">Achievements</string>
+  <string name="common_strict">Selected language pairs only</string>
+    <string name="common_the_last_email_was_sent_on">The last search for these tasks was made on %s. See <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">Signing up for Kató Platform email notifications</a>.</string>
+    <string name="common_no_emails_have_been_sent_yet">No notification e-mails have been sent yet. See <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">Signing up for Kató Platform email notifications</a>.</string>
+    <string name="common_you_are_not_currently_receiving_task_stream_notification_emails">You are not currently receiving task stream notification emails. See <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">Signing up for Kató Platform email notifications</a>.</string>
 	<string name="common_submit">Submit</string>
 	<string name="common_log_in">Log In</string>
     <string name="log_in_with_proz">Login with TWB Workspace</string>
@@ -175,7 +177,7 @@
 	<string name="common_error">Error</string>
     <string name="common_login_required_to_access_page">Login required to access page.</string>
     <string name="common_this_user_account_has_been_banned">This user account has been banned. The administrator has given the following comment: %s</string>
-    <string name="common_assign_badge">Assign Badge</string>        
+    <string name="common_assign_badge">Assign Achievement</string>
     <string name="common_successfully_added_member">Successfully added %s as a member of %s.</string>
     <string name="common_invalid_userid">Invalid User ID: %s</string>
     <string name="common_invalid_characters">Invalid characters are: '/', '\', ';', '#','~', '|', '&lt;', '&gt;', " and '@'</string>
@@ -189,7 +191,7 @@
     <string name="common_error_not_exist">You do not have sufficient privileges to access this page or the page does not exist.</string>
     <string name="common_error_already_claimed">This task has been claimed by another user.</string>
     <string name="common_error_cannot_claim_desegmentation">You cannot claim the desegmentation task <a href="%s">%s</a>, because you have worked on one of its prerequisite tasks.</string>
-    <string name="common_error_cannot_reclaim">You cannot reclaim the task <a href="%s">%s</a>, because you have previously unclaimed it.</string>
+    <string name="common_error_cannot_reclaim">You cannot claim the task <a href="%s">%s</a>, because you have previously claimed the matching translation or revision task.</string>
     <string name="common_error_cannot_reclaim_admin_revoked">You cannot reclaim the task <a href="%s">%s</a>, because an administrator has previously revoked it from you.</string>      
     <string name="common_error_unknown_task_type">Unknown task type.</string>
     <string name="common_error_language_code_expected">A valid language code was expected.</string>
@@ -278,21 +280,21 @@
     <string name="site_admin_dashboard_revoke_task_error_no_claim">The user you specified has not claimed the task you specified.</string>
     <string name="site_admin_dashboard_revoke_task_error_invalid">Invalid user email or task id provided.</string>
 
-	<string name="badge_list_badge_list">Badge List</string>
-	<string name="badge_list_all_available_badges_of">All available badges of %s.</string>
-	<string name="badge_list_badge">%s Badge:</string>
+  <string name="badge_list_badge_list">Achievement List</string>
+  <string name="badge_list_all_available_badges_of">All available achievements of %s.</string>
+  <string name="badge_list_badge">%s Achievement:</string>
 
 	<string name="create_org_create_an_organisation">Create an Organisation</string>
 	<string name="create_org_create_your_own_organisation">Create your own organisation.</string>
     <string name="create_org_invalid_name">Organisation names cannot contain invalid characters.</string>
     <string name="create_org_created">The organisation <strong>%s</strong> has been created.</string>
 
-    <string name="thank_registering_organisation">Thank you for your interest in registering as an organisation on Trommons</string>
+    <string name="thank_registering_organisation">Thank you for your interest in registering as an organisation on Kató Platform</string>
     <string name="registrations_twb">Registrations for non-profits are currently managed by Translators without Borders (TWB).<br />
 <br />
 Please click on <a href="https://translatorswithoutborders.org/non-profit-application/">this link to go to the Translators without Borders website</a>.<br />
 <br />
-Should you have any questions please contact <a href="mailto:info@therosettafoundation.org">info@therosettafoundation.org</a><br /></string>
+Should you have any questions please contact <a href="mailto:info@translatorswithoutborders.org">info@translatorswithoutborders.org</a><br /></string>
 
 	<string name="org_private_profile_alter_profile_here">Alter your organisation's profile here.</string>
 	<string name="org_private_profile_public_profile">Public Profile</string>
@@ -305,8 +307,8 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="org_private_profile_delete_success">Successfully deleted the organisation %s</string>        
     <string name="org_private_profile_delete_fail">Unable to delete organisation. Please try again later.</string> 
 
-    <string name="org_private_profile_organisation_visible_by_all">Visible to all Registered Users of Trommons</string>
-    <string name="org_private_profile_organisation_visible_by_members">Visible to Organisation Members and Trommons Administrators only</string>
+    <string name="org_private_profile_organisation_visible_by_all">Visible to all Registered Users of Kató Platform</string>
+    <string name="org_private_profile_organisation_visible_by_members">Visible to Organisation Members and Kató Platform Administrators only</string>
     <string name="org_private_profile_organisation_overview">Overview of Organisation including Vision, Mission<br />and Target Beneficiary Communities</string>
     <string name="org_private_profile_organisation_activity">Area of Activity</string>
     <string name="org_private_profile_organisation_multiple">Hold down Ctrl (Windows)/Command (Mac) to select multiple options</string>
@@ -352,12 +354,12 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="org_public_profile_no_email_listed">No e-mail listed.</string>
 	<string name="org_public_profile_no_biography_listed">No biography listed.</string>
 	<string name="org_public_profile_no_regional_focus_listed">No regional focus listed.</string>
-	<string name="org_public_profile_badge_overview">Overview of badges created by this organisation.</string>
-	<string name="org_public_profile_create_badge">Create Badge</string>
-	<string name="org_public_profile_edit_badge">Edit Badge</string>
-	<string name="org_public_profile_delete_badge">Delete Badge</string>
-	<string name="org_public_profile_confirm_delete_badge">Are you sure you want to delete this badge?</string>
-	<string name="org_public_profile_no_badges_associated">There are no badges associated with this organisation.</string>
+  <string name="org_public_profile_badge_overview">Overview of achievements created by this organisation.</string>
+  <string name="org_public_profile_create_badge">Create Achievement</string>
+  <string name="org_public_profile_edit_badge">Edit Achievement</string>
+  <string name="org_public_profile_delete_badge">Delete Achievement</string>
+  <string name="org_public_profile_confirm_delete_badge">Are you sure you want to delete this achievement?</string>
+  <string name="org_public_profile_no_badges_associated">There are no achievements associated with this organisation.</string>
 	<string name="org_public_profile_membership_requests">Membership Requests</string>
 	<string name="org_public_profile_membership_request_overview">Overview of users who have requested membership.</string>
 	<string name="org_public_profile_accept">Accept</string>
@@ -395,11 +397,11 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="org_search_search_results">Search Results: Found %s result(s)!</string>
     <string name="org_search_34">No organisations found.</string>
 
-	<string name="org_create_badge_create_organisation_badge">Create Organisation Badge</string>
-	<string name="org_create_badge_badge_title">Badge Title</string>
-	<string name="org_create_badge_0">Create a badge for your organisation.</string>
-	<string name="org_create_badge_create_badge">Create Badge</string>
-    <string name="org_create_badge_33">Successfully created new Organisation Badge.</string>  
+  <string name="org_create_badge_create_organisation_badge">Create Organisation Achievement</string>
+  <string name="org_create_badge_badge_title">Achievement Title</string>
+  <string name="org_create_badge_0">Create an achievement for your organisation.</string>
+  <string name="org_create_badge_create_badge">Create Achievement</string>
+    <string name="org_create_badge_33">Successfully created new Organisation Achievement.</string>
 
 	<string name="org_dashboard_organisation_dashboard">Organisation Dashboard</string>
 	<string name="org_dashboard_0">Overview of projects created by your organisations.</string>
@@ -414,22 +416,22 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="org_dashboard_9">You have successfully archived the project <strong>%s</strong>.</string>
     <string name="org_dashboard_10">There was an error archiving the project <strong>%s</strong>.</string>
 
-	<string name="org_edit_badge_edit_organisation_badge_details">Edit organisation badge details.</string>
-	<string name="org_edit_badge_badge_title">Badge Title</string>
-	<string name="org_edit_badge_0">Enter updated badge name here.</string>
-	<string name="org_edit_badge_1">Enter updated badge description here.</string>
-	<string name="org_edit_badge_update_badge">Update Badge</string>
+  <string name="org_edit_badge_edit_organisation_badge_details">Edit organisation achievement details.</string>
+  <string name="org_edit_badge_badge_title">Achievement Title</string>
+  <string name="org_edit_badge_0">Enter updated achievement name here.</string>
+  <string name="org_edit_badge_1">Enter updated achievement description here.</string>
+  <string name="org_edit_badge_update_badge">Update Achievement</string>
                
-    <string name="org_manage_badge_manage_badge">Manage Badge '%s'</string>
-	<string name="org_manage_badge_0">Assign/Remove a badge to/from a user.</string>
-	<string name="org_manage_badge_3">Enter a user's e-mail address to assign the badge to them.</string>
-	<string name="org_manage_badge_users_with_this_badge">Users with this badge.</string>
-	<string name="org_manage_badge_4">A list of users who were assigned this badge by an organisation member.</string>
-	<string name="org_manage_badge_remove_badge">Remove Badge</string>
-	<string name="org_manage_badge_5">No users have been assigned this badge yet.</string>
-    <string name="org_manage_badge_29">Successfully assigned badge %s to user %s.</string>
-    <string name="org_manage_badge_30">The user %s already has that badge or the user does not exist.</string>        
-    <string name="org_manage_badge_32">Successfully removed badge from user %s.</string>
+    <string name="org_manage_badge_manage_badge">Manage Achievement '%s'</string>
+  <string name="org_manage_badge_0">Assign/Remove an achievement to/from a user.</string>
+  <string name="org_manage_badge_3">Enter a user's e-mail address to assign the achievement to them.</string>
+  <string name="org_manage_badge_users_with_this_badge">Users with this achievement.</string>
+  <string name="org_manage_badge_4">A list of users who were assigned this achievement by an organisation member.</string>
+  <string name="org_manage_badge_remove_badge">Remove Achievement</string>
+  <string name="org_manage_badge_5">No users have been assigned this achievement yet.</string>
+    <string name="org_manage_badge_29">Successfully assigned achievement %s to user %s.</string>
+    <string name="org_manage_badge_30">The user %s already has that achievement or the user does not exist.</string>
+    <string name="org_manage_badge_32">Successfully removed achievement from user %s.</string>
 
 	<string name="org_request_queue_0">Add a user to your organisation.</string>
 	<string name="org_request_queue_2">Enter the user's e-mail address to add them as a member of this organisation.</string>   
@@ -480,7 +482,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="project_subscription_moderate">Moderate use (up to 10 Projects/Year)</string>
     <string name="project_subscription_heavy">Heavy use</string>
     <string name="project_subscription_other">Other amount</string>
-    <string name="project_subscription_cannot">For other payment methods, or if you have a good reason why you cannot make a donation, please email us at <a href="mailto:info@trommons.org?subject=Subscription">info@trommons.org</a>.</string>
+    <string name="project_subscription_cannot">For other payment methods, or if you have a good reason why you cannot make a donation, please email us at <a href="mailto:info@kato.translatorswb.org?subject=Subscription">info@kato.translatorswb.org</a>.</string>
 
     <string name="project_subscription_last_donation">Your last donation was for the period starting %s.</string>
     <string name="project_subscription_number_renew">You have already created one project since the anniversary of that date.</string>
@@ -490,7 +492,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="project_subscription_numbers_upgrade">You have already created %s projects since your last donation, which reaches the expected amount based on your donation.</string>
     <string name="project_subscription_remind_upgrade">We will continue to remind you to upgrade your annual donation each time you create a project.</string>
 
-    <string name="user_public_profile_certificate">If you wish to receive a signed certificate by post, please email <a href="mailto:info@trommons.org?subject=Certificate">info@trommons.org</a>. We kindly ask for a donation of €25 in return. This donation will help ensure the future of the Translation Commons by contributing towards the costs of server infrastructure and support.</string>
+    <string name="user_public_profile_certificate">If you wish to receive a signed certificate by post, please email <a href="mailto:info@kato.translatorswb.org?subject=Certificate">info@kato.translatorswb.org</a>. We kindly ask for a donation of €25 in return. This donation will help ensure the future of the Translation Commons by contributing towards the costs of server infrastructure and support.</string>
 
 	<string name="project_create_source_text">Source Text</string>
 	<string name="project_create_1">Provide a meaningful title for the project.</string>
@@ -514,7 +516,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="project_create_add_more_target_languages">Add More Target Languages</string>
     <string name="project_create_13"><strong>Failed to create segmentation task:</strong></string>
     <string name="project_create_14">Failed to create translation task</string>
-    <string name="project_create_15">Failed to create proofreading task</string>
+    <string name="project_create_15">Failed to create revising task</string>
     <string name="project_create_16">No project file uploaded.</string>
     <string name="project_create_17">The project file you uploaded is empty.</string>
     <string name="project_create_failed_to_create_project"><strong>Failed to create project</strong>: %s</string>
@@ -550,7 +552,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="project_create_failed_upload_file"><strong>Failed to upload %s file:</strong> %s</string>
     <string name="project_create_failed_upload_image"><strong>Failed to upload project image file:</strong> %s</string>
     <string name="project_create_failed_track_task"><strong>Failed to track %s task:</strong> %s</string>
-    <string name="project_create_failed_add_prereq"><strong>Failed to add prerequisite to proofreading task:</strong> %s</string>
+    <string name="project_create_failed_add_prereq"><strong>Failed to add prerequisite to revising task:</strong> %s</string>
     <string name="project_create_please_upload_valid_image_file">If you are uploading a project image, please upload a valid image file. %s files are not images.</string>
     <string name="project_create_image_file_empty">The image file you uploaded is empty.</string>
     <string name="project_create_upload_project_image">Optionally, you can upload an image to be associated with your project.</string>
@@ -678,7 +680,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="terms_49">Site Terms of Use Modifications</string>
 	<string name="terms_50">The Rosetta Foundataion may revise these terms of use for its web site at any time without notice. By using this web site you are agreeing to be bound by the then current version of these Terms and Conditions of Use.</string>
 	<string name="terms_governing_law">Governing Law</string>
-	<string name="terms_52">Any claim relating to the Trommons.org web site shall be governed by the laws of the State of Ireland without regard to its conflict of law provisions.</string>
+  <string name="terms_52">Any claim relating to the Kató web site shall be governed by the laws of the State of Ireland without regard to its conflict of law provisions.</string>
 	<string name="terms_53">General Terms and Conditions applicable to Use of a Web Site.</string>
 	<string name="terms_privacy_policy">Privacy Policy</string>
     <string name="terms_54">Your privacy is very important to us. Accordingly, we have developed this Policy in order for you to understand how we collect, use, communicate and disclose and make use of personal information. The following outlines our <a href="%s">Privacy Policy</a>.</string>
@@ -738,7 +740,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="claimed_tasks_submit_completed_task">Submit Completed Task</string>
 	<string name="claimed_tasks_no_active_tasks_available">No Active Tasks available!</string>
     <string name="claimed_tasks_no_tasks_matching_filters">You do not have any claimed tasks which match the filter options you selected.</string>
-    <string name="claimed_tasks_download_proofread_task">Download Proofread Version</string>
+    <string name="claimed_tasks_download_proofread_task">Download Revised Version</string>
 
 	<string name="task_desegmentation_desegmentation_task_details">Desegmentation task details.</string>
 	<string name="task_desegmentation_download">Download</string>
@@ -761,14 +763,14 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="task_segmentation_15">You have not selected a <strong>Segmented File</strong> to upload.</string>
     <string name="task_segmentation_16">Each <strong>Segmented File</strong> that you upload must have a <strong>unique file name.</strong></string>
     <string name="task_segmentation_17">You have selected <strong>one or more</strong> files with the exact same <strong>file content</strong>.</string>
-    <string name="task_segmentation_18">At least one task type such as <strong>Translation</strong> and/or <strong>Proofreading</strong> must be set.</string>
+    <string name="task_segmentation_18">At least one task type such as <strong>Translation</strong> and/or <strong>Revising</strong> must be set.</string>
     <string name="task_segmentation_7">This task has already been segmented, you cannot resegment this task.</string>
 
 	<string name="task_simple_upload_finished_processing">Finished processing?</string>
 	<string name="task_simple_upload_provide_feedback">Provide Feedback</string>
 	<string name="task_simple_upload_upload_error">Upload error</string>
 	<string name="task_simple_upload_0">Upload your translated version of %s</string>
-    <string name="task_simple_upload_0_proofreading">Upload your proofread version of %s</string>
+    <string name="task_simple_upload_0_proofreading">Upload your revised version of %s</string>
 	<string name="task_simple_upload_upload">Upload</string>
 	<string name="task_simple_upload_1">%s will be able to use it for their benefit.</string>
 	<string name="task_simple_upload_2">Uploading a new version of the file will overwrite the old one.</string>
@@ -806,12 +808,12 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="task_claim_desegmentation_8">The files you need to merge can be downloaded after claiming.</string>
 	<string name="task_claim_desegmentation_9">Yes, I promise I will merge these files</string>
 
-	<string name="task_claim_proofreading_0">Do you want to proofread this file?</string>
-	<string name="task_claim_proofreading_1">Will you be able to proofread this file?</string>
-	<string name="task_claim_proofreading_2">Will you have enough time to proofread this file? Check how long the file is.</string>
-    <string name="task_claim_proofreading_3">Do you think you are capable of proofreading a file in <strong>%s?</strong></string>
-	<string name="task_claim_proofreading_4">When you are finished proofreading the file, you will need to upload it again.</string>
-	<string name="task_claim_proofreading_5">Yes, I promise I will proofread this file</string>
+	<string name="task_claim_proofreading_0">Do you want to revise this file?</string>
+	<string name="task_claim_proofreading_1">Will you be able to revise this file?</string>
+	<string name="task_claim_proofreading_2">Will you have enough time to revise this file? Check how long the file is.</string>
+    <string name="task_claim_proofreading_3">Do you think you are capable of revising a file in <strong>%s?</strong></string>
+	<string name="task_claim_proofreading_4">When you are finished revising the file, you will need to upload it again.</string>
+	<string name="task_claim_proofreading_5">Yes, I promise I will revise this file</string>
     <string name="task_claim_proofreading_6">If you would like to view the <strong>original file</strong> in its source language you can download it <a href="%s">here</a></string>
 
 	<string name="task_claim_segmentation_0">Do you want to segment this file?</string>
@@ -828,6 +830,9 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="task_claim_translation_4">When you are finished translating the file, you will need to upload it again.</string>
 	<string name="task_claim_translation_5">Yes, I promise I will translate this file</string>
 
+    <string name="task_claim_view_on_kato">View Task on Kató TM</string>
+    <string name="task_claim_warning_kato">If you select "<strong>%s</strong>" or "<strong>%s</strong>", please only start editing after you click "<strong>%s</strong>".</string>
+
 	<string name="task_claimed_desegmentation_desegmentation_task_claimed">Desegmentation task claimed</string>
 	<string name="task_claimed_desegmentation_0">Please merge the relevent files!</string>
     <string name="task_claimed_desegmentation_1">You have claimed the desegmentation task <strong>%s</strong></string>
@@ -837,14 +842,14 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="task_claimed_desegmentation_merge_files">Merge Files</string>
 	<string name="task_claimed_desegmentation_5">Go back to Home page</string>
 
-	<string name="task_claimed_proofreading_proofreading_task_claimed">Proofreading task claimed</string>
-	<string name="task_claimed_proofreading_please_proofread_it">Please proofread it!</string>
-    <string name="task_claimed_proofreading_0">You have claimed the proofreading task <strong>%s</strong>.</string>
+	<string name="task_claimed_proofreading_proofreading_task_claimed">Revising task claimed</string>
+	<string name="task_claimed_proofreading_please_proofread_it">Please revise it!</string>
+    <string name="task_claimed_proofreading_0">You have claimed the revising task <strong>%s</strong>.</string>
 	<string name="task_claimed_proofreading_1">Open the file that you have already saved to your computer.</string>
-    <string name="task_claimed_proofreading_proofread_the_file_in">Proofread the file in <strong>%s</strong> to ensure spelling and grammatical correctness.</string>
-	<string name="task_claimed_proofreading_upload_the_proofread_file">Upload the proofread file to the task upload page.</string>
-	<string name="task_claimed_proofreading_4">When you have finished proofreading the file you downloaded:</string>
-    <string name="task_claimed_proofreading_upload_proofread_task">Submit Proofread Task</string>
+    <string name="task_claimed_proofreading_proofread_the_file_in">Revise the <strong>%s</strong> translation to ensure that it meets <a href="https://community.translatorswb.org/t/what-is-translation-quality-for-translators-without-borders/10295" target="_blank">quality standards</a>:</string>
+	<string name="task_claimed_proofreading_upload_the_proofread_file">Upload the revised file to the task upload page.</string>
+	<string name="task_claimed_proofreading_4">When you have finished revising the file you downloaded:</string>
+    <string name="task_claimed_proofreading_upload_proofread_task">Submit Revised Task</string>
 
 	<string name="task_claimed_segmentation_segmentation_task_claimed">Segmentation task claimed</string>
 	<string name="task_claimed_segmentation_please_segment_it">Please segment it!</string>
@@ -860,20 +865,22 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="task_claimed_translation_0">You have claimed the translation task</string>
 	<string name="task_claimed_translation_we_need_your_translation">We need your translation.</string>
 	<string name="task_claimed_translation_translate_the_file_to">Translate the file to %s using your favourite translation software.</string>
+  <string name="task_claimed_translation_translate_the_file_to_plain">Translate the file to %s:</string>
 	<string name="task_claimed_translation_4">When you have finished translating the file you downloaded:</string>
     <string name="task_claimed_translation_5">Upload your finished translated file to the task page.</string>
     <string name="task_claimed_translation_upload_translated_task">Submit Translated Task</string>
 
     <string name="task_claimed_alternative_option">Alternative option:</string>
     <string name="task_claimed_translate_using_kato">Translate using Kató TM</string>
-    <string name="task_claimed_proofread_using_kato">Proofread using Kató TM</string>
-    <string name="task_claimed_please_read_kato">Kató TM is a Translators without Borders (TWB) translation platform. Please read <a href="https://kato.translatorswb.org/public/doc/translators.html" target="_blank">these guidelines</a> before using Kató TM.</string>
-    <string name="task_simple_upload_copy_from_kato">Copy your translation from Kató TM to Kató Trommons</string>
+    <string name="task_claimed_click">Click</string>
+    <string name="task_claimed_proofread_using_kato">Revise using Kató TM</string>
+    <string name="task_claimed_please_read_kato">Kató TM is a Translators without Borders (TWB) translation platform. Please read <a href="https://community.translatorswb.org/t/useful-posts-index/2883" target="_blank">these guidelines</a> before using Kató TM.</string>
+    <string name="task_simple_upload_copy_from_kato">Copy your translation from Kató TM to Kató</string>
     <string name="task_simple_upload_view_on_kato">Click <a href="%s" target="_blank">here</a> to <strong>view your translation on Kató TM</strong>.</string>
-    <string name="task_simple_upload_download_from_kato">Click <a href="%s">here</a> to <strong>download your translation from Kató TM and upload it to Kató Trommons manually</strong>.</string>
-    <string name="task_simple_upload_copy_from_kato_proofread">Copy your proofread version from Kató TM to Kató Trommons</string>
-    <string name="task_simple_upload_view_on_kato_proofread">Click <a href="%s" target="_blank">here</a> to <strong>view your proofread version on Kató TM</strong>.</string>
-    <string name="task_simple_upload_download_from_kato_proofread">Click <a href="%s">here</a> to <strong>download your proofread version from Kató TM and upload it to Kató Trommons manually</strong>.</string>
+    <string name="task_simple_upload_download_from_kato">Click <a href="%s">here</a> to <strong>download your translation from Kató TM and upload it to Kató manually</strong>.</string>
+    <string name="task_simple_upload_copy_from_kato_proofread">Copy your revised version from Kató TM to Kató</string>
+    <string name="task_simple_upload_view_on_kato_proofread">Click <a href="%s" target="_blank">here</a> to <strong>view your revised version on Kató TM</strong>.</string>
+    <string name="task_simple_upload_download_from_kato_proofread">Click <a href="%s">here</a> to <strong>download your revised version from Kató TM and upload it to Kató manually</strong>.</string>
 
     <string name="task_create_for_project">For Project <strong>%s</strong>.</string>
 	<string name="task_create_0">Provide a meaningful title for the task.</string>
@@ -910,7 +917,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="task_review_form_rating">Star rating of 1-5, where 1 = "Many Errors" and 5 = "Few Errors"</string>
     <string name="task_review_segmented">segmented</string>
     <string name="task_review_translated">translated</string>
-    <string name="task_review_proofread">proofread</string>
+    <string name="task_review_proofread">revised</string>
     <string name="task_review_merged">merged</string>
 	<string name="task_review_form_corrections">Corrections</string>
 	<string name="task_review_form_2">Were there many mistakes in the file?</string>
@@ -929,12 +936,12 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="task_review_0">How would you rate this task?</string>
 	<string name="task_review_1">Thank you for contributing to this project.</string>
   <string name="task_twitter_0">If you are on Twitter, click the following button to tell the world about your contribution (make sure to allow pop-ups):</string>
-  <string name="task_twitter_0_org_dashboard">If you are on Twitter, click the following button to tell the world about Trommons (make sure to allow pop-ups):</string>
+  <string name="task_twitter_0_org_dashboard">If you are on Twitter, click the following button to tell the world about TWB Kató (make sure to allow pop-ups):</string>
   <string name="task_twitter_0_project_view">If you are on Twitter, click the following button to tell the world about your project (make sure to allow pop-ups):</string>
   <string name="task_twitter_0_org_task_review">If you are on Twitter, click the following button to thank our volunteers (make sure to allow pop-ups):</string>
   <string name="task_twitter_1">I’ve just completed a task as a volunteer with @TranslatorsWB #languagematters</string>
-  <string name="task_twitter_2">We’ve joined Trommons to connect with language volunteers @TranslatorsWB #languagematters</string>
-  <string name="task_twitter_3">Translators @TranslatorsWB can you help with our project on trommons.org%3F #languagematters</string>
+  <string name="task_twitter_2">We’ve joined TWB to connect with language volunteers @TranslatorsWB #languagematters</string>
+  <string name="task_twitter_3">Translators @TranslatorsWB can you help with our project on Kató%3F #languagematters</string>
   <string name="task_twitter_4">Thanks to volunteers @TranslatorsWB for helping with translations #languagematters</string>
 	<string name="task_review_2">Please provide a rating for the file(s) you just</string>
 	<string name="task_review_3">based on the following criteria:</string>
@@ -970,7 +977,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="task_view_11">Unable to register for notifications for this task.</string>
     <string name="task_view_12">You are no longer tracking this task and will receive no further emails.</string>
     <string name="task_view_13">Unable to unregister for this notification.</string>
-    <string name="task_view_0">Note: This task has already been claimed by another user.</string>
+    <string name="task_view_0">Note: This task has been claimed.</string>
     <string name="task_view_1"><b>Success:</b> The task is now published and will appear on users' task streams.</string>
     <string name="task_view_2"><b>Success:</b> The task is no longer published and will not appear on users' task streams.</string>
     <string name="task_view_3"><b>Error:</b> Failed to publish the task, please try again later.</string>
@@ -1003,7 +1010,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="login_reset_password">Reset Password</string>
 	<string name="login_0">Find out <a href='%s'>more about OpenID</a> and <a href='%s'>how to get an OpenID enabled account</a>.</string>
 	<string name="login_signin">Sign-In</string>
-    <string name="login_1"><p>Unable to log in. Please check your email and password. <a href="%s">Try logging in again</a> or <a href="%s">register</a> for an account.</p><p><strong>%s</strong></p></string>
+    <string name="login_1"><p>Unable to log in. Please check your email and password (<strong>or if you registered your account using Google or other provider, click on the appropriate button below</strong>). <a href="%s">Try logging in again</a> or <a href="%s">register</a> for an account.</p><p><strong>%s</strong></p></string>
     <string name="login_2">Oops! It looks like you have cancelled the authentication. Please reselect your account provider below.</string>
 
 	<string name="password_reset_password_reset">Password Reset</string>
@@ -1017,14 +1024,14 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="password_reset_4">The passwords entered do not match. Please try again.</string>
     <string name="password_reset_5">Please check the password provided and try again.</string>
 
-    <string name="register_register_on">You can only create your Trommons account after filling in the <a href="https://translatorswithoutborders.org/volunteer/translators/">TWB Translators Application Form</a><br />or after being announced to TWB as the contact for a partner organisation.<br />If you have already completed that step, register here with the email address that was provided to TWB and choose a password.<br />Or alternatively, create your Trommons account using one of the third-party account providers below,<br />if your email address with that provider is the same.<br />If you are already a volunteer and are having problems logging in please contact <a href="mailto:translators@translatorswithoutborders.org">translators@translatorswithoutborders.org</a>.</string>
+    <string name="register_register_on">You can only create your Kató Platform account after filling in the <a href="https://kato.translatorswb.org/signup.html">TWB Translators Application Form</a><br />or after being announced to TWB as the contact for a partner organisation.<br />If you have already completed that step, register here with the email address that was provided to TWB and choose a password.<br />Or alternatively, create your Kató Platform account using one of the third-party account providers below,<br />if your email address with that provider is the same.<br />If you are already a volunteer and are having problems logging in please contact <a href="mailto:translators@translatorswithoutborders.org">translators@translatorswithoutborders.org</a>.</string>
 	<string name="register_your_email">Your email</string>
 	<string name="register_your_password">Your password</string>
     <string name="register_1">The email address you entered was not valid. Please try again.</string>
     <string name="register_2">You did not enter a password. Please try again.</string>
     <string name="register_3">You are already a verified user. Please <a href="%s">log in</a>.</string>
     <string name="register_4">A verification email has been sent to the email address you registered with. Please follow the link in that email to finish registration. Once you have verified your email address you can log in <a href="%s">here</a>.</string>
-    <string name="register_no_application">You do not have an account with the specified email, you need to submit the <a href="https://translatorswithoutborders.org/volunteer/translators/">Translators Application Form (click here)</a> and afterwards come back to <a href="https://trommons.org/register/">https://trommons.org/register/</a> to create an account here.<br />If you are already a volunteer and are having problems logging in please contact <a href="mailto:translators@translatorswithoutborders.org">translators@translatorswithoutborders.org</a>.</string>
+    <string name="register_no_application">You do not have an account with the specified email, you need to submit the <a href="https://kato.translatorswb.org/signup.html">Translators Application Form (click here)</a> and afterwards come back to <a href="https://kato.translatorswb.org/register/">https://kato.translatorswb.org/register/</a> to create an account here.<br />If you are already a volunteer and are having problems logging in please contact <a href="mailto:translators@translatorswithoutborders.org">translators@translatorswithoutborders.org</a>.</string>
     <string name="register_no_application_error">Failed to connect, please try again later.</string>
 
 	<string name="user_private_profile_private_profile">Private Profile</string>
@@ -1036,7 +1043,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
     <string name="user_private_profile_add_secondary_language">Add Another Language Pair</string>
 	<string name="user_private_profile_task_type_preferences">Task Type Preferences:</string>
 	<string name="user_private_profile_translating">Translating</string>
-	<string name="user_private_profile_proofreading">Proofreading</string>
+	<string name="user_private_profile_proofreading">Revising</string>
 	<string name="user_private_profile_interpreting">Interpreting</string>
 	<string name="user_private_profile_update_profile_details">Update Profile Details</string>
 	<string name="user_private_profile_6">Are you sure you want permanently delete your account?</string>
@@ -1052,10 +1059,10 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="user_public_profile_edit_profile_details">Edit Profile Details</string>
 	<string name="user_public_profile_2">Overview of your account details.</string>
 	<string name="user_public_profile_3">Please select a native language by editing your profile.</string>
-	<string name="user_public_profile_4">A list of badges you have earned.</string>
-	<string name="user_public_profile_list_all_badges">List All Badges</string>
-	<string name="user_public_profile_remove_badge">Remove Badge</string>
-	<string name="user_public_profile_5">Are you sure you want to remove this badge?</string>
+  <string name="user_public_profile_4">A list of achievements you have earned.</string>
+  <string name="user_public_profile_list_all_badges">List All Achievements</string>
+  <string name="user_public_profile_remove_badge">Remove Achievement</string>
+  <string name="user_public_profile_5">Are you sure you want to remove this achievement?</string>
 	<string name="user_public_profile_task_stream_notifications">Task Stream Notifications</string>
   <string name="user_public_profile_6">How often do you receive task stream e-mail updates?</string>
 	<string name="user_public_profile_edit_notifications">Edit Notifications</string>
@@ -1070,7 +1077,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="user_public_profile_list_all_archived_tasks">List All Archived Tasks</string>
     <string name="user_public_profile_reference_email">Reference Email</string>
     <string name="user_public_profile_request_reference">Request Reference</string>
-    <string name="user_public_profile_15">To request a reference e-mail summarising your completed work on Trommons, click the button on the right.</string>
+    <string name="user_public_profile_15">To request a reference e-mail summarising your completed work on TWB Kató, click the button on the right.</string>
     <string name="user_public_profile_16">Request an email outlining your work.</string>
     <string name="user_public_profile_reference_request_success">Your request was sent successfully, you will receive the email shortly.</string>
     <string name="user_public_profile_17">Successfully updated user task stream notification subscription.</string>
@@ -1094,7 +1101,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="user_task_stream_notification_edit_2">If you select strict notifications then you will only receive notifications for tasks that match a language you have expressed an interest in (i.e. by setting it as your native language or as a secondary language).</string>
     <string name="user_task_stream_notification_edit_5">What type of notifications would you like to receive?</string>
     <string name="user_task_stream_notification_edit_6">How often do you want to receive these types of notifications?</string>
-	<string name="user_task_stream_notification_edit_all">All</string>
+  <string name="user_task_stream_notification_edit_all">All tasks</string>
 	<string name="user_task_stream_notification_edit_never">Never</string>
 	<string name="user_task_stream_notification_edit_daily">Daily</string>
 	<string name="user_task_stream_notification_edit_weekly">Weekly</string>
@@ -1105,7 +1112,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="footer_privacy_policy">Privacy Policy</string>
 	<string name="footer_community_forum">Community Forum</string>
     <string name="footer_feedback">Your <a href="%s">feedback</a> is appreciated.</string>
-    <string name="footer_powered_by">Powered by <a href="%s">%s</a></string>
+    <string name="footer_powered_by">Kató Platform is powered by <a href="%s">%s</a></string>
     <string name="footer_maintained_by">Maintained by <a href="%s">%s</a></string>
     <string name="footer_contact_us">Contact Us</string>
 
@@ -1118,7 +1125,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="header_notifications">Notifications:</string>
 	<string name="header_log_out">Log out</string>
 
-    <string name="index_translation_commons">Kató Trommons</string>
+    <string name="index_translation_commons">TWB Kató</string>
     <string name="index_0">Empowering conversation in communities</string>
     <string name="index_translation_tasks">Translation tasks</string>
     <string name="index_1">Claim a task, translate it, upload it</string>
@@ -1148,7 +1155,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="statistics_tasks_archived">Tasks Archived:</string>
 		
 	<string name="slim_error_Oops_there_has">Oops! there has been a technical problem.</string>
-	<string name="slim_error_1">You can report this problem by E-Mailing us at <a>info@trommons.org</a></string>
+  <string name="slim_error_1">You can report this problem by E-Mailing us at <a>translators@translatorswithoutborders.org</a></string>
 	<string name="slim_error_2">with details of how you encountered the error, along with the technical details listed below.</string>
 	<string name="slim_error_3">Go </string>
 	<string name="slim_error_4">Back.</string>
@@ -1165,8 +1172,8 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name ="system_badge_native_language_desc">Filled in your native language on your user profile successfully.</string>
 	<string name ="system_badge_translator_title">Translator</string>
 	<string name ="system_badge_translator_desc">This volunteer is available for translation tasks.</string>
-	<string name ="system_badge_proofreader_title">Proofreader</string>
-	<string name ="system_badge_proofreader_desc">This volunteer is available for proofreading tasks.</string>
+	<string name ="system_badge_proofreader_title">Reviewer</string>
+	<string name ="system_badge_proofreader_desc">This volunteer is available for revising tasks.</string>
 	<string name ="system_badge_interpreter_title">Interpreter</string>
 	<string name ="system_badge_interpreter_desc">This volunteer is available for interpreting tasks.</string>
 	<string name ="system_badge_polyglot_title">Polyglot</string>
@@ -1178,7 +1185,7 @@ Should you have any questions please contact <a href="mailto:info@therosettafoun
 	<string name="common_task_stream">Task Stream</string>	
 
 <string name="restrict_tasks">Restrict Tasks</string>
-<string name="restrict_tasks_long">If checked, tasks will only be shown to qualified volunteers.</string>
+<string name="restrict_tasks_long">If checked, revising tasks will only be shown to qualified volunteers.</string>
 <string name="restrict_task">Restrict Task</string>
 <string name="restrict_task_long">If checked, task will only be shown to qualified volunteers.</string>
 </resources>

@@ -10,9 +10,8 @@ require_once __DIR__."/MessagingClient.class.php";
 require_once __DIR__."/../../Common/lib/Settings.class.php";
 require_once __DIR__."/../vendor/autoload.php";
 
-\DrSlump\Protobuf::autoload();
+//\DrSlump\Protobuf::autoload();
 
-require_once __DIR__."/../../Common/protobufs/emails/EmailMessage.php";
 require_once __DIR__."/../../Common/protobufs/emails/UserTaskClaim.php";
 require_once __DIR__."/../../Common/protobufs/emails/PasswordResetEmail.php";
 require_once __DIR__."/../../Common/protobufs/emails/OrgMembershipAccepted.php";
@@ -184,7 +183,7 @@ class Notify
     public static function notifyOrgClaimedTask($userId, $taskId)
     {
         $subscribed_users = DAO\TaskDao::getSubscribedUsers($taskId);
-        if (count($subscribed_users) > 0) {
+        if (!empty($subscribed_users) && count($subscribed_users) > 0) {
             $messagingClient = new Lib\MessagingClient();
             if ($messagingClient->init()) {
                 $message_type = new Common\Protobufs\Emails\TaskClaimed();
@@ -221,7 +220,7 @@ class Notify
 
     public static function sendTaskArchivedNotifications($taskId, $subscribedUsers)
     {
-        if (count($subscribedUsers) > 0) {
+        if (!empty($subscribedUsers) && count($subscribedUsers) > 0) {
             $messagingClient = new Lib\MessagingClient();
             if ($messagingClient->init()) {
                 $message_type = new Common\Protobufs\Emails\TaskArchived();
@@ -290,7 +289,7 @@ class Notify
         $project = DAO\ProjectDao::getProject($projectId);
         $orgAdmins = DAO\AdminDao::getAdmins(null, $project->getOrganisationId());
 
-        if (count($orgAdmins) > 0) {
+        if (!empty($orgAdmins) && count($orgAdmins) > 0) {
             $messagingClient = new Lib\MessagingClient();
             if ($messagingClient->init()) {
                 $message_type = new Common\Protobufs\Emails\ProjectImageApprovedEmail();
@@ -313,7 +312,7 @@ class Notify
         $project = DAO\ProjectDao::getProject($projectId);
         $orgAdmins = DAO\AdminDao::getAdmins(null, $project->getOrganisationId());
 
-        if (count($orgAdmins) > 0) {
+        if (!empty($orgAdmins) && count($orgAdmins) > 0) {
             $messagingClient = new Lib\MessagingClient();
             if ($messagingClient->init()) {
                 $message_type = new Common\Protobufs\Emails\ProjectImageDisapprovedEmail();

@@ -12,6 +12,7 @@ require_once __DIR__."/../../Common/protobufs/models/OAuthResponse.php";
 require_once __DIR__."/BaseDao.php";
 require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 require_once '/repo/neon-php/neon.php';
+require_once __DIR__ . '/../../Common/from_neon_to_trommons_pair.php';
 
 
 class UserDao extends BaseDao
@@ -37,10 +38,18 @@ class UserDao extends BaseDao
             Common\Lib\CacheHelper::GET_USER.$userId,
             Common\Enums\TimeToLiveEnum::MINUTE,
             function ($args) {
-                $request = "{$args[2]}v0/users/$args[1]";
-                return $args[0]->call("\SolasMatch\Common\Protobufs\Models\User", $request);
+                $user = null;
+                $result = LibAPI\PDOWrapper::call('getUser', LibAPI\PDOWrapper::cleanseNull($args[0]) . ',null,null,null,null,null,null,null,null');
+                if (!empty($result)) {
+                    $user = Common\Lib\ModelFactory::buildModel('User', $result[0]);
+                    if (!is_null($user)) {
+                        $user->setPassword('');
+                        $user->setNonce('');
+                    }
+                }
+                return $user;
             },
-            array($this->client, $userId, $this->siteApi)
+            array($userId)
         );
         return $ret;
     }
@@ -101,11 +110,17 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function getUserBadges($userId)
+    public function getUserBadges($user_id)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/badges";
-        $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\Badge"), $request);
+        $args = LibAPI\PDOWrapper::cleanse($user_id);
+        $result = LibAPI\PDOWrapper::call('getUserBadges', $args);
+        if ($result) {
+            $ret = array();
+            foreach ($result as $badge) {
+                $ret[] = Common\Lib\ModelFactory::buildModel('Badge', $badge);
+            }
+        }
         return $ret;
     }
 
@@ -387,6 +402,21 @@ class UserDao extends BaseDao
         return $ret;
     }
 
+    public function set_special_translator($user_id, $type)
+    {
+        LibAPI\PDOWrapper::call('set_special_translator', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($type));
+    }
+
+    public function get_special_translator($user_id)
+    {
+        $type = 0;
+        $result = LibAPI\PDOWrapper::call('get_special_translator', LibAPI\PDOWrapper::cleanse($user_id));
+        if (!empty($result)) {
+            $type = $result[0]['type'];
+        }
+        return $type;
+    }
+
     public function requestTaskStreamNotification($notifData)
     {
         $ret = null;
@@ -408,7 +438,28 @@ class UserDao extends BaseDao
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tasks/$taskId";
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
+
+        $taskDao = new TaskDao();
+        $matecat_tasks = $taskDao->getTaskChunk($taskId);
+        if (!empty($matecat_tasks)) {
+            // We are a chunk
+            $matecat_id_job          = $matecat_tasks[0]['matecat_id_job'];
+            $matecat_id_job_password = $matecat_tasks[0]['matecat_id_chunk_password'];
+            $type_id                 = $matecat_tasks[0]['type_id'];
+            $matching_type_id = Common\Enums\TaskTypeEnum::PROOFREADING;
+            if ($type_id == Common\Enums\TaskTypeEnum::PROOFREADING) $matching_type_id = Common\Enums\TaskTypeEnum::TRANSLATION;
+            $matching_tasks = $taskDao->getMatchingTask($matecat_id_job, $matecat_id_job_password, $matching_type_id);
+            if (!empty($matching_tasks)) {
+                $taskDao->addUserToTaskBlacklist($userId, $matching_tasks[0]['id']);
+            }
+        }
+
         return $ret;
+    }
+
+    public function queue_claim_task($user_id, $task_id)
+    {
+        LibAPI\PDOWrapper::call('queue_claim_task', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
     }
 
     public function unclaimTask($userId, $taskId, $feedback)
@@ -505,6 +556,8 @@ class UserDao extends BaseDao
     
     public function login($email, $password)
     {
+        $this->verify_email_allowed_register($email);
+
         $ret = null;
         $login = new Common\Protobufs\Models\Login();
         $login->setEmail($email);
@@ -671,9 +724,17 @@ class UserDao extends BaseDao
 
     public function verify_email_allowed_register($email)
     {
+        return; // No longer check with Neon
+
         $app = \Slim\Slim::getInstance();
         error_log("verify_email_allowed_register($email)");
-        if ($this->verifyUserByEmail($email)) return;
+
+        $user = $this->verifyUserByEmail($email);
+        $terms_accepted = false;
+        if ($user) {
+            $terms_accepted = $this->terms_accepted($user->getId());
+        }
+        if ($user && $terms_accepted) return; // User has previously accepted terms and conditions
 
         $neon = new \Neon();
 
@@ -690,7 +751,8 @@ class UserDao extends BaseDao
 
         $search = array(
             'method' => 'account/listAccounts',
-            'columns' => array('standardFields' => array('Email 1'))
+            'columns' => array('standardFields' => array('Email 1'),
+                               'customFields'   => array(209))
         );
         $search['criteria'] = array(array('Email', 'EQUAL', $email));
 
@@ -698,10 +760,93 @@ class UserDao extends BaseDao
 
         $neon->go(array('method' => 'common/logout'));
 
-        if (!empty($result) && !empty($result['searchResults'])) return;
+        if (!empty($result) && !empty($result['searchResults'])) {
+            $terms_accepted = false;
+            foreach ($result['searchResults'] as $r) {
+                if (!empty($r['Do you agree to abide by the Code of Conduct?']) && ($r['Do you agree to abide by the Code of Conduct?'] === 'Yes')) {
+                    $terms_accepted = true;
+                }
+            }
 
+            if ($terms_accepted) {
+                if ($user) $this->update_terms_accepted($user->getId());
+                error_log("verify_email_allowed_register($email) Accepted T&Cs in Neon");
+                return; // User is known in Neon and has accepted terms and conditions
+            } else {
+                // User is known in Neon, but has not accepted terms and conditions
+                error_log("verify_email_allowed_register($email) Ask to accept T&Cs");
+                $app->redirect('https://kato.translatorswb.org/accept-code-of-conduct.html?email=' . urlencode($email));
+            }
+        }
+
+        if ($user) {
+            // They are a legacy Trommons user with no Neon account
+            error_log("verify_email_allowed_register($email) Legacy Trommons user needs to fill in Neon application form (with explanation)");
+            $app->redirect('https://kato.translatorswb.org/rosetta-info-update.html?email=' . urlencode($email));
+        }
+
+        // User is not known in Neon, they will be asked to fill in the Neon application form
         error_log("verify_email_allowed_register($email) Not allowed!");
         $app->redirect($app->urlFor('no_application'));
+    }
+
+    public function set_neon_account($user_id, $account_id)
+    {
+        LibAPI\PDOWrapper::call('set_neon_account', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($account_id));
+    }
+
+    public function get_neon_account($user)
+    {
+        if (strpos($user->getEmail(), '@aaa.bbb')) return 0; // Deleted User
+
+        $account_id = 0;
+        $result = LibAPI\PDOWrapper::call('get_neon_account', LibAPI\PDOWrapper::cleanse($user->getId()));
+        if (!empty($result)) {
+            $account_id = $result[0]['account_id'];
+        }
+
+        if ($account_id === 0) {
+            $neon = new \Neon();
+
+            $credentials = array(
+                'orgId'  => Common\Lib\Settings::get('neon.org_id'),
+                'apiKey' => Common\Lib\Settings::get('neon.api_key')
+            );
+
+            $loginResult = $neon->login($credentials);
+            if (isset($loginResult['operationResult']) && $loginResult['operationResult'] === 'SUCCESS') {
+                $search = array(
+                    'method' => 'account/listAccounts',
+                    'columns' => array(
+                        'standardFields' => array(
+                            'Email 1',
+                            'First Name',
+                            'Account ID'),
+                    )
+                );
+
+                $search['criteria'] = array(array('Email', 'EQUAL', $user->getEmail()));
+
+                $result = $neon->search($search);
+
+                $neon->go(array('method' => 'common/logout'));
+
+                if (!empty($result) && !empty($result['searchResults'])) {
+                    foreach ($result['searchResults'] as $r) {
+                        if (!empty($r['First Name'])) break; // If we find a First Name, then we have found the good account and we should use this one "$r" (normally there will only be one account)
+                    }
+
+                    if (!empty($r['Account ID'])) {
+                        $account_id = $r['Account ID'];
+                        $this->set_neon_account($user->getId(), $account_id);
+                    }
+                }
+            } else {
+                error_log("get_neon_account(), there was a problem connecting to NeonCRM");
+            }
+        }
+
+        return $account_id;
     }
 
     public function verifyUserByEmail($email)
@@ -712,6 +857,29 @@ class UserDao extends BaseDao
             $user = Common\Lib\ModelFactory::buildModel('User', $result[0]);
         }
         return $user;
+    }
+
+    public function terms_accepted($user_id)
+    {
+        $terms_accepted = false;
+        $result = LibAPI\PDOWrapper::call('terms_accepted', LibAPI\PDOWrapper::cleanse($user_id));
+        if (!empty($result)) {
+            $terms_accepted = $result[0]['accepted_level'] >= 1;
+        }
+        return $terms_accepted;
+    }
+
+    public function setRequiredProfileCompletedinSESSION($user_id)
+    {
+        if ($this->terms_accepted($user_id)) {
+            $_SESSION['profile_completed'] = 1;
+        }
+    }
+
+    public function update_terms_accepted($user_id)
+    {
+        $_SESSION['profile_completed'] = 1;
+        LibAPI\PDOWrapper::call('update_terms_accepted', LibAPI\PDOWrapper::cleanse($user_id) . ',1');
     }
 
     public function saveUser($user)
@@ -765,136 +933,13 @@ class UserDao extends BaseDao
 
     public function process_neonwebhook()
     {
+        global $from_neon_to_trommons_pair;
 $NEON_NATIVELANGFIELD = 64;
 $NEON_SOURCE1FIELD    = 167;
 $NEON_TARGET1FIELD    = 168;
 $NEON_SOURCE2FIELD    = 169;
 $NEON_TARGET2FIELD    = 170;
 $NEON_LEVELFIELD      = 173;
-
-$from_neon_to_trommons_pair = array(
-'Afrikaans' => array('af', 'ZA'),
-'Albanian' => array('sq', 'AL'),
-'Amharic' => array('am', 'AM'),
-'Arabic' => array('ar', 'SA'),
-'Aragonese' => array('an', 'ES'),
-'Armenian' => array('hy', 'AM'),
-'Asturian' => array('ast', 'ES'),
-'Azerbaijani' => array('az', 'AZ'),
-'Basque' => array('eu', 'ES'),
-'Bengali' => array('bn', 'IN'),
-'Belarus' => array('be', 'BY'),
-'Belgian French' => array('fr', 'BE'),
-'Bosnian' => array('bs', 'BA'),
-'Breton' => array('br', 'FR'),
-'Bulgarian' => array('bg', 'BG'),
-'Burmese' => array('my', 'MM'),
-'Catalan' => array('ca', 'ES'),
-'Catalan Valencian' => array('ca', '--'),
-'Cebuano' => array('cb', 'PH'),
-'Chinese Simplified' => array('zh', 'CN'),
-'Chinese Traditional' => array('zh', 'TW'),
-'Croatian' => array('hr', 'HR'),
-'Czech' => array('cs', 'CZ'),
-'Danish' => array('da', 'DK'),
-'Dutch' => array('nl', 'NL'),
-'English' => array('en', 'GB'),
-'English US' => array('en', 'US'),
-'Esperanto' => array('eo', '--'),
-'Estonian' => array('et', 'EE'),
-'Faroese' => array('fo', 'FO'),
-'Fula' => array('ff', '--'),
-'Finnish' => array('fi', 'FI'),
-'Flemish' => array('nl', 'BE'),
-'French' => array('fr', 'FR'),
-'French Canada' => array('fr', 'CA'),
-'Galician' => array('gl', 'ES'),
-'Georgian' => array('ka', 'GE'),
-'German' => array('de', 'DE'),
-'Greek' => array('el', 'GR'),
-'Gujarati' => array('gu', 'IN'),
-'Haitian Creole French' => array('ht', 'HT'),
-'Hausa' => array('ha', '--'),
-'Hawaiian' => array('haw', 'US'),
-'Hebrew' => array('he', 'IL'),
-'Hindi' => array('hi', 'IN'),
-'Hungarian' => array('hu', 'HU'),
-'Icelandic' => array('is', 'IS'),
-'Indonesian' => array('id', 'ID'),
-'Irish Gaelic' => array('ga', 'IE'),
-'Italian' => array('it', 'IT'),
-'Japanese' => array('ja', 'JP'),
-'Kanuri' => array('kr', '--'),
-'Kazakh' => array('kk', 'KZ'),
-'Khmer' => array('km', 'KH'),
-'Korean' => array('ko', 'KR'),
-'Kurdish Kurmanji' => array('ku', '--'),
-'Kurdish Sorani' => array('ku', '--'),
-'Kyrgyz' => array('ky', 'KG'),
-'Latvian' => array('lv', 'LV'),
-'Lingala' => array('ln', '--'),
-'Lithuanian' => array('lt', 'LT'),
-'Macedonian' => array('mk', 'MK'),
-'Malagasy' => array('mg', 'MG'),
-'Malay' => array('ms', 'MY'),
-'Malayalam' => array('ml', 'IN'),
-'Maltese' => array('mt', 'MT'),
-'Maori' => array('mi', 'NZ'),
-'Mongolian' => array('mn', 'MN'),
-'Montenegrin' => array('sr', 'ME'),
-'Ndebele' => array('nr', 'ZA'),
-'Nepali' => array('ne', 'NP'),
-'Norwegian Bokmål' => array('no', 'NO'),
-"Norwegian Bokm\xE5l" => array('no', 'NO'),
-'Norwegian Nynorsk' => array('nn', 'NO'),
-'Nyanja' => array('ny', '--'),
-'Occitan' => array('oc', 'FR'),
-'Occitan Aran' => array('oc', 'ES'),
-'Oriya' => array('or', 'IN'),
-'Panjabi' => array('pa', 'IN'),
-'Pashto' => array('ps', 'PK'),
-'Dari' => array('prs', '--'),
-'Persian' => array('fa', 'IR'),
-'Polish' => array('pl', 'PL'),
-'Portuguese' => array('pt', 'PT'),
-'Portuguese Brazil' => array('pt', 'BR'),
-'Quechua' => array('qu', '--'),
-'Rohingya' => array('rhg', 'MM'),
-'Rohingyalish' => array('rhl', 'MM'),
-'Romanian' => array('ro', 'RO'),
-'Russian' => array('ru', 'RU'),
-'Serbian Latin' => array('sr', '--'),
-'Serbian Cyrillic' => array('sr', 'RS'),
-'Sesotho' => array('nso', 'ZA'),
-'Setswana (South Africa)' => array('tn', 'ZA'),
-'Slovak' => array('sk', 'SK'),
-'Slovenian' => array('sl', 'SI'),
-'Somali' => array('so', 'SO'),
-'Spanish' => array('es', 'ES'),
-'Spanish Latin America' => array('es', 'MX'),
-'Spanish Colombia' => array('es', 'CO'),
-'Swahili' => array('sw', 'SZ'),
-'Swedish' => array('sv', 'SE'),
-'Swiss German' => array('de', 'CH'),
-'Tagalog' => array('tl', 'PH'),
-'Tamil' => array('ta', 'IN'),
-'Telugu' => array('te', 'IN'),
-'Tatar' => array('tt', 'RU'),
-'Thai' => array('th', 'TH'),
-'Tigrinya' => array('ti', '--'),
-'Tsonga' => array('ts', 'ZA'),
-'Turkish' => array('tr', 'TR'),
-'Turkmen' => array('tk', 'TM'),
-'Ukrainian' => array('uk', 'UA'),
-'Urdu' => array('ur', 'PK'),
-'Uzbek' => array('uz', 'UZ'),
-'Vietnamese' => array('vi', 'VN'),
-'Welsh' => array('cy', 'GB'),
-'Xhosa' => array('xh', 'ZA'),
-'Yoruba' => array('yo', 'NG'),
-'Zulu' => array('zu', 'ZA'),
-);
-
         $account_id   = '';
         $email        = '';
         $user_id      = '';
@@ -909,10 +954,10 @@ $from_neon_to_trommons_pair = array(
         $org_id_neon  = '';
         $org_name     = '';
         $quality_level= 1;
-
+error_log('function process_neonwebhook()');
         if (!empty($_POST['payload'])) {
             $result = json_decode($_POST['payload'], true);
-
+error_log(print_r($result, true));
             if (!empty($result['eventTrigger']) && $result['eventTrigger'] == 'editAccount') {
 
                 if (!empty($result['data'])) {
@@ -975,16 +1020,16 @@ $from_neon_to_trommons_pair = array(
                         if (!empty($email) && $user = $this->verifyUserByEmail($email)) {
                             $user_id = $user->getId();
 
-                            if (!empty($from_neon_to_trommons_pair[$sourcelang1]) && !empty($from_neon_to_trommons_pair[$targetlang1])) {
+                            if (!empty($from_neon_to_trommons_pair[$sourcelang1]) && !empty($from_neon_to_trommons_pair[$targetlang1]) && ($sourcelang1 != $targetlang1)) {
                                 $this->createUserQualifiedPair($user_id, $from_neon_to_trommons_pair[$sourcelang1][0], $from_neon_to_trommons_pair[$sourcelang1][1], $from_neon_to_trommons_pair[$targetlang1][0], $from_neon_to_trommons_pair[$targetlang1][1], $quality_level);
                             }
-                            if (!empty($from_neon_to_trommons_pair[$sourcelang1]) && !empty($from_neon_to_trommons_pair[$targetlang2])) {
+                            if (!empty($from_neon_to_trommons_pair[$sourcelang1]) && !empty($from_neon_to_trommons_pair[$targetlang2]) && ($sourcelang1 != $targetlang2)) {
                                 $this->createUserQualifiedPair($user_id, $from_neon_to_trommons_pair[$sourcelang1][0], $from_neon_to_trommons_pair[$sourcelang1][1], $from_neon_to_trommons_pair[$targetlang2][0], $from_neon_to_trommons_pair[$targetlang2][1], $quality_level);
                             }
-                            if (!empty($from_neon_to_trommons_pair[$sourcelang2]) && !empty($from_neon_to_trommons_pair[$targetlang1])) {
+                            if (!empty($from_neon_to_trommons_pair[$sourcelang2]) && !empty($from_neon_to_trommons_pair[$targetlang1]) && ($sourcelang2 != $targetlang1)) {
                                 $this->createUserQualifiedPair($user_id, $from_neon_to_trommons_pair[$sourcelang2][0], $from_neon_to_trommons_pair[$sourcelang2][1], $from_neon_to_trommons_pair[$targetlang1][0], $from_neon_to_trommons_pair[$targetlang1][1], $quality_level);
                             }
-                            if (!empty($from_neon_to_trommons_pair[$sourcelang2]) && !empty($from_neon_to_trommons_pair[$targetlang2])) {
+                            if (!empty($from_neon_to_trommons_pair[$sourcelang2]) && !empty($from_neon_to_trommons_pair[$targetlang2]) && ($sourcelang2 != $targetlang2)) {
                                 $this->createUserQualifiedPair($user_id, $from_neon_to_trommons_pair[$sourcelang2][0], $from_neon_to_trommons_pair[$sourcelang2][1], $from_neon_to_trommons_pair[$targetlang2][0], $from_neon_to_trommons_pair[$targetlang2][1], $quality_level);
                             }
                         } else {
@@ -1047,9 +1092,15 @@ $from_neon_to_trommons_pair = array(
                     if (!empty($display_name)) $user->setDisplayName($display_name);
 
                     if (!empty($from_neon_to_trommons_pair[$nativelang])) {
+                        $new_country_code = '--'; // Meeting 20180110...
+                        $original_locale = $user->getNativeLocale();
+                        if ($original_locale && $original_locale->getCountryCode()) {
+                            $new_country_code = $original_locale->getCountryCode();
+                        }
                         $locale = new Common\Protobufs\Models\Locale();
                         $locale->setLanguageCode($from_neon_to_trommons_pair[$nativelang][0]);
-                        $locale->setCountryCode($from_neon_to_trommons_pair[$nativelang][1]);
+                        //$locale->setCountryCode($from_neon_to_trommons_pair[$nativelang][1]); Meeting 20180110...
+                        $locale->setCountryCode($new_country_code);
                         $user->setNativeLocale($locale);
                     }
 
@@ -1109,6 +1160,12 @@ $from_neon_to_trommons_pair = array(
         $args = LibAPI\PDOWrapper::cleanseNull($user_id) . ',' . LibAPI\PDOWrapper::cleanseNull($org_id);
         LibAPI\PDOWrapper::call('acceptMemRequest', $args);
         LibAPI\PDOWrapper::call('addAdmin', $args);
+    }
+
+    public function is_admin_or_org_member($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('is_admin_or_org_member', LibAPI\PDOWrapper::cleanse($user_id));
+        return $result[0]['result'];
     }
 
     public function getOrgIDUsingName($org_name)
@@ -1191,14 +1248,6 @@ $from_neon_to_trommons_pair = array(
             Common\Enums\HttpMethodEnum::PUT,
             $personalInfo
         );
-        return $ret;
-    }
-    
-    public function getPersonalInfo($userId)
-    {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/personalInfo";
-        $ret = $this->client->call("\SolasMatch\Common\Protobufs\Models\UserPersonalInformation", $request);
         return $ret;
     }
     
@@ -1315,5 +1364,393 @@ $from_neon_to_trommons_pair = array(
         $request = "{$this->siteApi}v0/users/subscribedToOrganisation/$userId/$organisationId";
         $ret = $this->client->call(null, $request);
         return $ret;
+    }
+
+    public function getUserURLs($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getUserURLs', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) $result = [];
+        return $result;
+    }
+
+    public function insertUserURL($user_id, $key, $value)
+    {
+        LibAPI\PDOWrapper::call('insertUserURL',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($key) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($value));
+    }
+
+    public function getUserExpertises($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getUserExpertises', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) $result = [];
+        return $result;
+    }
+
+    public function addUserExpertise($user_id, $key)
+    {
+        LibAPI\PDOWrapper::call('addUserExpertise',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($key));
+    }
+
+    public function removeUserExpertise($user_id, $key)
+    {
+        LibAPI\PDOWrapper::call('removeUserExpertise',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($key));
+    }
+
+    public function getUserHowheards($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getUserHowheards', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) $result = [];
+        return $result;
+    }
+
+    public function insertUserHowheard($user_id, $key)
+    {
+        LibAPI\PDOWrapper::call('insertUserHowheard',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($key));
+    }
+
+    public function updateUserHowheard($user_id, $reviewed)
+    {
+        LibAPI\PDOWrapper::call('updateUserHowheard',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($reviewed));
+    }
+
+    public function insert_communications_consent($user_id, $accepted)
+    {
+        LibAPI\PDOWrapper::call('insert_communications_consent',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($accepted));
+    }
+
+    public function get_communications_consent($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_communications_consent', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) return 0;
+        return $result[0]['accepted'];
+    }
+
+    public function getUserCertifications($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getUserCertifications', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) $result = [];
+        return $result;
+    }
+
+    public function getUserCertificationByID($id)
+    {
+        $result = LibAPI\PDOWrapper::call('getUserCertificationByID', LibAPI\PDOWrapper::cleanse($id));
+        return $result[0];
+    }
+
+    public function users_review()
+    {
+        $result = LibAPI\PDOWrapper::call('users_review', '');
+        if (empty($result)) $result = [];
+        return $result;
+    }
+
+    public function users_new()
+    {
+        $result = LibAPI\PDOWrapper::call('users_new', '');
+        if (empty($result)) $result = [];
+        return $result;
+    }
+
+    public function users_tracked()
+    {
+        $result = LibAPI\PDOWrapper::call('users_tracked', '');
+        if (empty($result)) $result = [];
+        return $result;
+    }
+
+    public function saveUserFile($user_id, $cert_id, $note, $filename, $file)
+    {
+       $destination = Common\Lib\Settings::get('files.upload_path') . "certs/$user_id/$cert_id";
+       if (!file_exists($destination)) mkdir($destination, 0755, true);
+
+        $vid = 0;
+        while (true) { // Find next free vid
+            $destination = Common\Lib\Settings::get('files.upload_path') . "certs/$user_id/$cert_id/$vid";
+            if (!file_exists($destination)) break;
+            $vid++;
+        }
+
+        $mime = $this->detectMimeType($file, $filename);
+        $canonicalMime = $this->client->getCanonicalMime($filename);
+        error_log("saveUserFile($user_id, $cert_id, $note, $filename, ...)");
+
+        if (!is_null($canonicalMime) && $mime != $canonicalMime) {
+            error_log("content type ($mime) of file does not match ($canonicalMime) expected from extension");
+            return;
+        }
+
+        mkdir($destination, 0755);
+        file_put_contents("$destination/$filename", $file);
+
+        LibAPI\PDOWrapper::call('insertUserCertification',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($vid) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($cert_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($filename) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($mime) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($note));
+    }
+
+    public function updateCertification($id, $reviewed)
+    {
+        LibAPI\PDOWrapper::call('updateCertification',
+            LibAPI\PDOWrapper::cleanse($id) . ',' .
+            LibAPI\PDOWrapper::cleanse($reviewed));
+    }
+
+    public function deleteCertification($id)
+    {
+        LibAPI\PDOWrapper::call('deleteCertification', LibAPI\PDOWrapper::cleanse($id));
+    }
+
+    public function userDownload($certification)
+    {
+        $app = \Slim\Slim::getInstance();
+
+        $destination = Common\Lib\Settings::get('files.upload_path') . "certs/{$certification['user_id']}/{$certification['certification_key']}/{$certification['vid']}/{$certification['filename']}";
+
+        $app->response->headers->set('Content-type', $certification['mimetype']);
+        $app->response->headers->set('Content-Disposition', "attachment; filename=\"" . trim($certification['filename'], '"') . "\"");
+        $app->response->headers->set('Content-length', filesize($destination));
+        $app->response->headers->set('X-Frame-Options', 'ALLOWALL');
+        $app->response->headers->set('Pragma', 'no-cache');
+        $app->response->headers->set('Cache-control', 'no-cache, must-revalidate, no-transform');
+        $app->response->headers->set('X-Sendfile', realpath($destination));
+    }
+
+    public function detectMimeType($file, $filename)
+    {
+        $result = null;
+
+        $mimeMap = array(
+                "xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                ,"xlsm" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                ,"xltx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.template"
+                ,"potx" => "application/vnd.openxmlformats-officedocument.presentationml.template"
+                ,"ppsx" => "application/vnd.openxmlformats-officedocument.presentationml.slideshow"
+                ,"pptx" => "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                ,"sldx" => "application/vnd.openxmlformats-officedocument.presentationml.slide"
+                ,"docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                ,"dotx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.template"
+                ,"xlam" => "application/vnd.ms-excel.addin.macroEnabled.12"
+                ,"xlsb" => "application/vnd.ms-excel.sheet.binary.macroEnabled.12"
+                ,"xlf"  => "application/xliff+xml"
+                ,"doc"  => "application/msword"
+                ,"ppt"  => "application/vnd.ms-powerpoint"
+                ,"xls"  => "application/vnd.ms-excel"
+        );
+
+        $finfo = new \finfo(FILEINFO_MIME_TYPE);
+        $mime = $finfo->buffer($file);
+
+        $extension = explode(".", $filename);
+        $extension = $extension[count($extension)-1];
+
+        if (($mime == "application/octet-stream" || $mime == "application/zip" || $extension == "doc" || $extension == "xlf")
+            && (array_key_exists($extension, $mimeMap))) {
+            $result = $mimeMap[$extension];
+        } elseif ($mime === 'text/plain' && $extension === 'json') {
+            $result = 'application/json';
+        } elseif ($mime === 'application/zip' && $extension === 'odt') {
+            $result = 'application/vnd.oasis.opendocument.text';
+        } elseif ($mime === 'text/xml' && $extension === 'xml') {
+            $result = 'application/xml';
+        } else {
+            $result = $mime;
+        }
+
+        return $result;
+    }
+
+    public function getURLList($user_id)
+    {
+        $url_list = [];
+        $url_list['proz']   = ['desc' => 'Your ProZ.com URL (if you have one)', 'state' => ''];
+        $url_list['linked'] = ['desc' => 'Your LinkedIn URL (if you have one)', 'state' => ''];
+        $url_list['other']  = ['desc' => 'Other URL', 'state' => ''];
+        $urls = $this->getUserURLs($user_id);
+        foreach ($urls as $url) {
+            $url_list[$url['url_key']]['state'] = $url['url'];
+        }
+        return $url_list;
+    }
+
+    public function getCapabilityList($user_id)
+    {
+        $capability_list = [];
+        $capability_list['badge_id_6']  = ['desc' => 'Translation',         'state' => 0, 'id' =>  6];
+        $capability_list['badge_id_7']  = ['desc' => 'Revision',            'state' => 0, 'id' =>  7];
+        $capability_list['badge_id_10'] = ['desc' => 'Subtitling',          'state' => 0, 'id' => 10];
+        $capability_list['badge_id_11'] = ['desc' => 'Monolingual editing', 'state' => 0, 'id' => 11];
+        $capability_list['badge_id_12'] = ['desc' => 'DTP',                 'state' => 0, 'id' => 12];
+        $capability_list['badge_id_13'] = ['desc' => 'Voiceover',           'state' => 0, 'id' => 13];
+        $capability_list['badge_id_8']  = ['desc' => 'Interpretation',      'state' => 0, 'id' =>  8];
+        // If we add >13, then the code below will need to be changed as will authenticateUserForOrgBadge() and SQL for removeUserBadge
+        $badges = $this->getUserBadges($user_id);
+        if (!empty($badges)) {
+            foreach ($badges as $badge) {
+                if ($badge->getId() >= 6 && $badge->getId() != 9 && $badge->getId() <= 13) {
+                    $capability_list['badge_id_' . $badge->getId()]['state'] = 1;
+                }
+            }
+        }
+        return $capability_list;
+    }
+
+    public function getExpertiseList($user_id)
+    {
+        $expertise_list = [];
+        $expertise_list['Accounting']         = ['desc' => 'Accounting & Finance', 'state' => 0];
+        $expertise_list['Legal']              = ['desc' => 'Legal Documents / Contracts / Law', 'state' => 0];
+        $expertise_list['Technical']          = ['desc' => 'Technical / Engineering', 'state' => 0];
+        $expertise_list['IT']                 = ['desc' => 'Information Technology (IT)', 'state' => 0];
+        $expertise_list['Literary']           = ['desc' => 'Literary', 'state' => 0];
+        $expertise_list['Medical']            = ['desc' => 'Medical / Pharmaceutical', 'state' => 0];
+        $expertise_list['Science']            = ['desc' => 'Science / Scientific', 'state' => 0];
+        $expertise_list['Health']             = ['desc' => 'Health', 'state' => 0];
+        $expertise_list['Nutrition']          = ['desc' => 'Food Security & Nutrition', 'state' => 0];
+        $expertise_list['Telecommunications'] = ['desc' => 'Telecommunications', 'state' => 0];
+        $expertise_list['Education']          = ['desc' => 'Education', 'state' => 0];
+        $expertise_list['Protection']         = ['desc' => 'Protection & Early Recovery', 'state' => 0];
+        $expertise_list['Migration']          = ['desc' => 'Migration & Displacement', 'state' => 0];
+        $expertise_list['CCCM']               = ['desc' => 'Camp Coordination & Camp Management', 'state' => 0];
+        $expertise_list['Shelter']            = ['desc' => 'Shelter', 'state' => 0];
+        $expertise_list['WASH']               = ['desc' => 'Water, Sanitation and Hygiene Promotion', 'state' => 0];
+        $expertise_list['Logistics']          = ['desc' => 'Logistics', 'state' => 0];
+        $expertise_list['Equality']           = ['desc' => 'Equality & Inclusion', 'state' => 0];
+        $expertise_list['Gender']             = ['desc' => 'Gender Equality', 'state' => 0];
+        $expertise_list['Peace']              = ['desc' => 'Peace & Justice', 'state' => 0];
+        $expertise_list['Environment']        = ['desc' => 'Environment & Climate Action', 'state' => 0];
+        $expertises = $this->getUserExpertises($user_id);
+        foreach ($expertises as $expertise) {
+            $expertise_list[$expertise['expertise_key']]['state'] = 1;
+        }
+        return $expertise_list;
+    }
+
+    public function getHowheardList($user_id)
+    {
+        $howheard_list = [];
+        $howheard_list['Twitter']    = ['desc' => 'Twitter', 'state' => 0];
+        $howheard_list['Facebook']   = ['desc' => 'Facebook', 'state' => 0];
+        $howheard_list['LinkedIn']   = ['desc' => 'LinkedIn', 'state' => 0];
+        $howheard_list['Event']      = ['desc' => 'Event/Conference', 'state' => 0];
+        $howheard_list['Referral']   = ['desc' => 'Word of mouth/Referral', 'state' => 0];
+        $howheard_list['Newsletter'] = ['desc' => 'TWB Newsletter', 'state' => 0];
+        $howheard_list['Internet']   = ['desc' => 'Internet search', 'state' => 0];
+        $howheard_list['staff']      = ['desc' => 'Contacted by TWB staff', 'state' => 0];
+        $howheard_list['Other']      = ['desc' => 'Other', 'state' => 0];
+        $howheards = $this->getUserHowheards($user_id);
+        if (!empty($howheards)) {
+            $howheard_list[$howheards[0]['howheard_key']]['state'] = 1;
+        } elseif ($referer = $this->get_tracked_registration($user_id)) {
+            if (in_array($referer, ['RWS Moravia', 'CIOL', 'Riskified', 'Welocalize', 'Lionbridge', 'Apala', 'Ei Ei', 'Muhannad', 'Paul', 'Rodrigue', 'Diane', 'Simon M.', 'Mahmud', 'Kamal', 'Fatima', 'Halima', 'Ibrahim', 'Abdulwahab', 'Alhaji', 'Ali Abdulrahman', 'Amajam', 'Buba Gameche', 'Jacob', 'Jagila', 'Mustapha', 'Valerie', 'Ivana', 'Renwar', 'Marwan', 'Simon W.', 'Hussain', 'Thalia', 'Claudia', 'Carolina', 'Ravija', 'Facebook', 'Twitter', 'Instagram', 'Linkedin', 'Parenting for Lifelong Health', 'PLH SMEs', 'Cardinals', 'SDL', 'Dace', 'Miami'])) $howheard_list['Referral']['state'] = 1;
+        }
+        return $howheard_list;
+    }
+
+    public function getCertificationList($user_id)
+    {
+        $certification_list = [];
+        $certification_list['ATA']     = ['desc' => 'American Translators Association (ATA) - ATA Certified', 'state' => 0, 'reviewed' => 0];
+        $certification_list['APTS']    = ['desc' => 'Arab Professional Translators Society (APTS) - Certified Translator, Certified Translator/Interpreter or Certified Associate', 'state' => 0, 'reviewed' => 0];
+        $certification_list['ATIO']    = ['desc' => 'Association of Translators and Interpreters of Ontario (ATIO) - Certified Translators or Candidates', 'state' => 0, 'reviewed' => 0];
+        $certification_list['ATIM']    = ['desc' => 'Association of Translators, Terminologists and Interpreters of Manitoba - Certified Translators', 'state' => 0, 'reviewed' => 0];
+        $certification_list['ABRATES'] = ['desc' => 'Brazilian Association of Translators and Interpreters (ABRATES) - Accredited Translators (Credenciado)', 'state' => 0, 'reviewed' => 0];
+        $certification_list['CIOL']    = ['desc' => 'Chartered Institute of Linguists (CIOL) - Member, Fellow, Chartered Linguist, or DipTrans IOL Certificate holder', 'state' => 0, 'reviewed' => 0];
+        $certification_list['ITIA']    = ['desc' => 'Irish Translators’ and Interpreters’ Association (ITIA) - Professional Member', 'state' => 0, 'reviewed' => 0];
+        $certification_list['ITI']     = ['desc' => 'Institute of Translation and Interpreting (ITI) - ITI Assessed', 'state' => 0, 'reviewed' => 0];
+        $certification_list['NAATI']   = ['desc' => 'National Accreditation Authority for Translators and Interpreters (NAATI) - Certified Translator or Advanced Certified Translator', 'state' => 0, 'reviewed' => 0];
+        $certification_list['NZSTI']   = ['desc' => 'New Zealand Society of Translators and Interpreters (NZSTI) - Full Members', 'state' => 0, 'reviewed' => 0];
+        $certification_list['ProZ']    = ['desc' => 'ProZ Certified PRO members', 'state' => 0, 'reviewed' => 0];
+        $certification_list['Austria'] = ['desc' => 'UNIVERSITAS Austria Interpreters’ and Translators’ Association - Certified Members', 'state' => 0, 'reviewed' => 0];
+        $certification_list['ETLA']    = ['desc' => 'Egyptian Translators and Linguists Association (ETLA) - Members', 'state' => 0, 'reviewed' => 0];
+        $certification_list['SATI']    = ['desc' => 'South African Translators’ Institute (SATI) - Accredited Translators or Sworn Translators', 'state' => 0, 'reviewed' => 0];
+        $certification_list['CATTI']   = ['desc' => 'China Accreditation Test for Translators and Interpreters (CATTI) - Senior Translators or Level 1 Translators', 'state' => 0, 'reviewed' => 0];
+        $certification_list['STIBC']   = ['desc' => 'Society of Translators and Interpreters of British Columbia (STIBC) - Certified Translators or Associate Members', 'state' => 0, 'reviewed' => 0];
+        $certifications = $this->getUserCertifications($user_id);
+        foreach ($certifications as $certification) {
+            if (!empty($certification_list[$certification['certification_key']])) {
+                $certification_list[$certification['certification_key']]['state'] = 1;
+                if ($certification['reviewed']) $certification_list[$certification['certification_key']]['reviewed'] = 1;
+            }
+        }
+        return $certification_list;
+    }
+
+    public function supported_ngos($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('supported_ngos', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) $result = [];
+        return $result;
+    }
+
+    public function quality_score($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('quality_score', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) return ['cor' => '', 'gram' => '', 'spell' => '', 'cons' => '', 'num_legacy' => 0, 'accuracy' => '', 'fluency' => '', 'terminology' => '', 'style' => '', 'design' => '', 'num_new' => 0, 'num' => 0];
+         return $result[0];
+    }
+
+    public function admin_comments($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('admin_comments', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) $result = [];
+        return $result;
+    }
+
+    public function insert_admin_comment($user_id, $admin_id, $work_again, $comment)
+    {
+        LibAPI\PDOWrapper::call('insert_admin_comment',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($admin_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($work_again) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($comment));
+    }
+
+    public function delete_admin_comment($id)
+    {
+        LibAPI\PDOWrapper::call('delete_admin_comment', LibAPI\PDOWrapper::cleanse($id));
+    }
+
+    public function record_track_code($track_code)
+    {
+        LibAPI\PDOWrapper::call('record_track_code', LibAPI\PDOWrapper::cleanseWrapStr($track_code));
+    }
+
+    public function insert_tracked_registration($user_id, $track_code)
+    {
+        if (in_array($track_code, ['AABBCC'])) return; // Allow old codes to be disabled
+
+        LibAPI\PDOWrapper::call('insert_tracked_registration',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($track_code));
+    }
+
+    public function get_tracked_registration($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_tracked_registration', LibAPI\PDOWrapper::cleanse($user_id));
+        if (!empty($result)) return $result[0]['referer'];
+        return '';
+    }
+
+    public function get_tracked_registration_for_verified($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_tracked_registration', LibAPI\PDOWrapper::cleanse($user_id));
+        if (!empty($result) && in_array($result[0]['referer'], ['RWS Moravia', 'Welocalize', 'Lionbridge', 'SDL'])) return true;
+        return false;
     }
 }

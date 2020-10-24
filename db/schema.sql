@@ -7,7 +7,7 @@
 -- --------------------------------------------------------ul
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 SET FOREIGN_KEY_CHECKS=0;
 
 /*--------------------START OF ALTER TABLES TO NORMALISE DATA LENGTHS/TYPES -----------------------*/
@@ -501,18 +501,18 @@ CREATE TABLE IF NOT EXISTS `Admins` (
 	INDEX `FK_Admins_Organisations` (`organisation_id`),
 	CONSTRAINT `FK_Admins_Organisations` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT `FK_Admins_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 -- Dumping structure for table debug-test.ArchivedProjects
 CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
   `id` int(10) unsigned NOT NULL,
-  `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `description` varchar(4096) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `impact` varchar(4096) COLLATE utf8_unicode_ci NOT NULL,
+  `title` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(4096) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `impact` varchar(4096) COLLATE utf8mb4_unicode_ci NOT NULL,
   `deadline` datetime NOT NULL,
   `organisation_id` int(10) unsigned NOT NULL,
-  `reference` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `reference` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `word-count` int(10) NOT NULL,
   `created` datetime NOT NULL,
   `language_id` int(10) unsigned NOT NULL,
@@ -527,7 +527,7 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
   CONSTRAINT `FK_archivedproject_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ArchivedProjects_Languages` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ArchivedProjects_Countries` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP PROCEDURE IF EXISTS alterTable;
  DELIMITER //
@@ -569,26 +569,26 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjectsMetadata` (
   `archivedProject_id` int(10) unsigned NOT NULL,
   `user_id-archived` int(10) unsigned NOT NULL,
   `user_id-projectCreator` int(10) unsigned NOT NULL,
-  `filename` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `file-token` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `mime-type` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `filename` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `file-token` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mime-type` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   `archived-date` datetime NOT NULL,
-  `tags` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `tags` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   UNIQUE KEY `archivedProject_id` (`archivedProject_id`),
   KEY `FK_ArchivedProjectsMetadata_Users` (`user_id-archived`),
   KEY `FK_ArchivedProjectsMetadata_Users_2` (`user_id-projectCreator`),
   CONSTRAINT `FK_ArchivedProjectsMetadata_ArchivedProjects` FOREIGN KEY (`archivedProject_id`) REFERENCES `ArchivedProjects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ArchivedProjectsMetadata_Users` FOREIGN KEY (`user_id-archived`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ArchivedProjectsMetadata_Users_2` FOREIGN KEY (`user_id-projectCreator`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 -- Dumping structure for table debug-test.ArchivedTasks
 CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
   `id` bigint(20) unsigned NOT NULL,
   `project_id` int(10) unsigned NOT NULL,
-  `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `comment` varchar(4096) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `title` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `comment` varchar(4096) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `deadline` datetime NOT NULL,
   `word-count` int(11) NOT NULL,
   `created-time` datetime NOT NULL,
@@ -612,20 +612,20 @@ CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
   CONSTRAINT `FK_ArchivedTasks_Languages_2` FOREIGN KEY (`language_id-target`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ArchivedTasks_TaskStatus` FOREIGN KEY (`taskStatus_id`) REFERENCES `TaskStatus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ArchivedTasks_TaskTypes` FOREIGN KEY (`taskType_id`) REFERENCES `TaskTypes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 -- Dumping structure for table debug-test.ArchivedTasksMetadata
 CREATE TABLE IF NOT EXISTS `ArchivedTasksMetadata` (
   `archivedTask_id` bigint(20) unsigned NOT NULL,
-  `version` int(10) unsigned NOT NULL,
-  `filename` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `content-type` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `upload-time` datetime NOT NULL,
+  `version` int(10) unsigned DEFAULT NULL,
+  `filename` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `content-type` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `upload-time` datetime DEFAULT NULL,
   `user_id-claimed` int(10) unsigned DEFAULT NULL,
   `user_id-archived` int(10) unsigned NOT NULL,
-  `prerequisites` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `user_id-taskCreator` int(10) unsigned NOT NULL,
+  `prerequisites` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_id-taskCreator` int(10) unsigned DEFAULT NULL,
   `archived-date` datetime NOT NULL,
   UNIQUE KEY `archivedTask_id` (`archivedTask_id`),
   KEY `FK_ArchivedTasksMetadata_Users` (`user_id-claimed`),
@@ -635,19 +635,19 @@ CREATE TABLE IF NOT EXISTS `ArchivedTasksMetadata` (
   CONSTRAINT `FK_ArchivedTasksMetadata_Users` FOREIGN KEY (`user_id-claimed`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ArchivedTasksMetadata_Users_2` FOREIGN KEY (`user_id-archived`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ArchivedTasksMetadata_Users_3` FOREIGN KEY (`user_id-taskCreator`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 -- Dumping structure for table Solas-Match-Test.Badges
 CREATE TABLE IF NOT EXISTS `Badges` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `owner_id` int(11) unsigned DEFAULT NULL,
-  `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `description` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+  `title` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `badge` (`owner_id`,`title`),
   CONSTRAINT `FK_badges_organisation` FOREIGN KEY (`owner_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 -- Dumping structure for table debug-test3.BannedOrganisations
@@ -655,7 +655,7 @@ CREATE TABLE IF NOT EXISTS `BannedOrganisations` (
   `org_id` int(10) unsigned NOT NULL,
   `user_id-admin` int(10) unsigned NOT NULL,
   `bannedtype_id` int(10) unsigned NOT NULL,
-  `comment` varchar(4096) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `comment` varchar(4096) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `banned-date` datetime NOT NULL,
   UNIQUE KEY `org_id` (`org_id`),
   KEY `FK_BannedOrganisations_Users` (`user_id-admin`),
@@ -663,16 +663,16 @@ CREATE TABLE IF NOT EXISTS `BannedOrganisations` (
   CONSTRAINT `FK_BannedOrganisations_BannedTypes` FOREIGN KEY (`bannedtype_id`) REFERENCES `BannedTypes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_BannedOrganisations_Organisations` FOREIGN KEY (`org_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_BannedOrganisations_Users` FOREIGN KEY (`user_id-admin`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 -- Dumping structure for table debug-test3.BannedTypes
 CREATE TABLE IF NOT EXISTS `BannedTypes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `type` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `type` (`type`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 REPLACE INTO `BannedTypes` (`id`, `type`) VALUES
 	(1, 'Day'),
@@ -686,7 +686,7 @@ CREATE TABLE IF NOT EXISTS `BannedUsers` (
   `user_id` int(10) unsigned NOT NULL,
   `user_id-admin` int(10) unsigned NOT NULL,
   `bannedtype_id` int(10) unsigned NOT NULL,
-  `comment` varchar(4096) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `comment` varchar(4096) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `banned-date` datetime NOT NULL,
   UNIQUE KEY `user_id` (`user_id`),
   KEY `FK_BannedUsers_Users_2` (`user_id-admin`),
@@ -694,39 +694,43 @@ CREATE TABLE IF NOT EXISTS `BannedUsers` (
   CONSTRAINT `FK_BannedUsers_BannedTypes` FOREIGN KEY (`bannedtype_id`) REFERENCES `BannedTypes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_BannedUsers_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_BannedUsers_Users_2` FOREIGN KEY (`user_id-admin`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table Solas-Match-Test.Badges: ~4 rows (approximately)
 /*!40000 ALTER TABLE `Badges` DISABLE KEYS */;
 REPLACE INTO `Badges` (`id`, `owner_id`, `title`, `description`) VALUES
-	(3, NULL, 'system_badge_profile_filler_title', 'system_badge_profile_filler_desc'),
-	(4, NULL, 'system_badge_registered_title', 'system_badge_registered_desc'),
-	(5, NULL, 'system_badge_native_language_title', 'system_badge_native_language_desc'),
-        (6, NULL, 'system_badge_translator_title', 'system_badge_translator_desc'),
-        (7, NULL, 'system_badge_proofreader_title', 'system_badge_proofreader_desc'),
-        (8, NULL, 'system_badge_interpreter_title', 'system_badge_interpreter_desc'),
-        (9, NULL, 'system_badge_polyglot_title', 'system_badge_polyglot_desc');
+    ( 3, NULL, 'Profile-Filler',      'Filled in all info for user  public profile.'),
+    ( 4, NULL, 'Registered',          'Successfully set up an account'),
+    ( 5, NULL, 'Native-Language',     'Filled in your native language on your user profile successfully.'),
+    ( 6, NULL, 'Translator',          'This volunteer is available for translation tasks.'),
+    ( 7, NULL, 'Reviewer',            'This volunteer is available for revising tasks.'),
+    ( 8, NULL, 'Interpreter',         'This volunteer is available for interpreting tasks.'),
+    ( 9, NULL, 'Polyglot',            'One or more secondary languages selected on your profile.'),
+    (10, NULL, 'Subtitling',          'This volunteer is available for subtitling tasks.'),
+    (11, NULL, 'Monolingual editing', 'This volunteer is available for monolingual editing tasks.'),
+    (12, NULL, 'DTP',                 'This volunteer is available for DTP tasks.'),
+    (13, NULL, 'Voiceover',           'This volunteer is available for voiceover tasks.');
 ALTER TABLE `Badges` AUTO_INCREMENT=100;
 
 -- Dumping structure for table Solas-Match-Test.Countries
 CREATE TABLE IF NOT EXISTS `Countries` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(2) COLLATE utf8_unicode_ci NOT NULL COMMENT '"IE", for example',
-  `en-name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `code` varchar(2) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '"IE", for example',
+  `en-name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
 -- Dumping structure for table Solas-Match-Test.Languages
 CREATE TABLE IF NOT EXISTS `Languages` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(3) COLLATE utf8_unicode_ci NOT NULL COMMENT '"en", for example',
-  `en-name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `code` varchar(3) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '"en", for example',
+  `en-name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -734,10 +738,10 @@ CREATE TABLE IF NOT EXISTS `Languages` (
 -- Dumping structure for table Solas-Match-Test.NotificationIntervals
 CREATE TABLE IF NOT EXISTS `NotificationIntervals` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 REPLACE INTO `NotificationIntervals` (`id`, `name`) VALUES
 	(1, "Daily"),
@@ -753,56 +757,56 @@ CREATE TABLE IF NOT EXISTS `OrganisationMembers` (
   KEY `FK_organisation_member_organisation` (`organisation_id`),
   CONSTRAINT `FK_organisation_member_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_organisation_member_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
 -- Dumping structure for table Solas-Match-Test.Organisations
 CREATE TABLE IF NOT EXISTS `Organisations` (
 	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-	`name` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
-	`biography` VARCHAR(4096) NULL COLLATE 'utf8_unicode_ci',
-	`home-page` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`name` VARCHAR(128) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+	`biography` VARCHAR(4096) NULL COLLATE 'utf8mb4_unicode_ci',
+	`home-page` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
 	`e-mail` VARCHAR(128) NULL,
-	`address` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`city` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`country` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
-	`regional-focus` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`address` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`city` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`country` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`regional-focus` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
 	PRIMARY KEY (`id`),
 	UNIQUE INDEX `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
 
 CREATE TABLE IF NOT EXISTS `OrganisationExtendedProfiles` (
   `id` INT(10) UNSIGNED NOT NULL,
-  `facebook`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `linkedin`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `primaryContactName`  VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `primaryContactTitle` VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `primaryContactEmail` VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `primaryContactPhone` VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `otherContacts`       VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `structure`           VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `affiliations`        VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `urlVideo1`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `urlVideo2`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `urlVideo3`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `subjectMatters`      VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `activitys`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `employees`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `fundings`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `finds`               VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `translations`        VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `requests`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `contents`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `pages`               VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `sources`             VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `targets`             VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
-  `oftens`              VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
+  `facebook`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `linkedin`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `primaryContactName`  VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `primaryContactTitle` VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `primaryContactEmail` VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `primaryContactPhone` VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `otherContacts`       VARCHAR(1000) NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `structure`           VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `affiliations`        VARCHAR(4096) NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `urlVideo1`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `urlVideo2`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `urlVideo3`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `subjectMatters`      VARCHAR(1000) NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `activitys`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `employees`           VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `fundings`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `finds`               VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `translations`        VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `requests`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `contents`            VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `pages`               VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `sources`             VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `targets`             VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
+  `oftens`              VARCHAR(255)  NOT NULL DEFAULT '' COLLATE 'utf8mb4_unicode_ci',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 -- Dumping structure for table Solas-Match-Test.OrgRequests
@@ -816,7 +820,7 @@ CREATE TABLE IF NOT EXISTS `OrgRequests` (
   KEY `FK_org_request_queue_organisation` (`org_id`),
   CONSTRAINT `FK_org_request_queue_organisation1` FOREIGN KEY (`org_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_org_request_queue_user2` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -828,19 +832,19 @@ CREATE TABLE IF NOT EXISTS `OrgTranslatorBlacklist` (
   KEY `FK_OrgTranslatorBlacklist_Users` (`user_id`),
   CONSTRAINT `FK_OrgTranslatorBlacklist_Organisations` FOREIGN KEY (`org_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_OrgTranslatorBlacklist_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
 
 -- Dumping structure for table Solas-Match-Test.PasswordResetRequests
 CREATE TABLE IF NOT EXISTS `PasswordResetRequests` (
-  `uid` char(40) COLLATE utf8_unicode_ci NOT NULL,
+  `uid` char(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
   `request-time` datetime DEFAULT NULL,
   UNIQUE KEY `user_id` (`user_id`),
   CONSTRAINT `FK_password_reset_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -849,14 +853,14 @@ CREATE TABLE IF NOT EXISTS `PasswordResetRequests` (
 CREATE TABLE IF NOT EXISTS `ProjectFiles` (
   `project_id` int(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
-  `filename` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `file-token` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `mime-type` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `filename` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `file-token` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mime-type` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   UNIQUE KEY `project_id` (`project_id`),
   KEY `FK_ProjectFiles_Users` (`user_id`),
   CONSTRAINT `FK_ProjectFiles_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ProjectFiles_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -864,12 +868,12 @@ CREATE TABLE IF NOT EXISTS `ProjectFiles` (
 -- Dumping structure for table Solas-Match-Test.Projects
 CREATE TABLE IF NOT EXISTS `Projects` (
 	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-	`title` VARCHAR(128) NOT NULL COLLATE 'utf8_unicode_ci',
-	`description` VARCHAR(4096) NOT NULL COLLATE 'utf8_unicode_ci',
-	`impact` VARCHAR(4096) NOT NULL COLLATE 'utf8_unicode_ci',
+	`title` VARCHAR(128) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+	`description` VARCHAR(4096) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+	`impact` VARCHAR(4096) NOT NULL COLLATE 'utf8mb4_unicode_ci',
 	`deadline` DATETIME NOT NULL,
 	`organisation_id` INT(10) UNSIGNED NOT NULL,
-	`reference` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
+	`reference` VARCHAR(128) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
 	`word-count` INT(10) UNSIGNED NOT NULL,
 	`created` DATETIME NOT NULL,
 	`language_id` INT(10) UNSIGNED NOT NULL,
@@ -884,7 +888,7 @@ CREATE TABLE IF NOT EXISTS `Projects` (
 	CONSTRAINT `FK_Projects_Countries` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT `FK_Projects_Languages` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT `FK_project_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP PROCEDURE IF EXISTS alterTable;
  DELIMITER //
@@ -930,36 +934,36 @@ CREATE TABLE IF NOT EXISTS `ProjectTags` (
   KEY `FK_ProjectTags_Tags` (`tag_id`),
   CONSTRAINT `FK_ProjectTags_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_ProjectTags_Tags` FOREIGN KEY (`tag_id`) REFERENCES `Tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
 -- Dumping structure for table SolasMatch.RegisteredUsers
 CREATE TABLE IF NOT EXISTS `RegisteredUsers` (
   `user_id` int(10) unsigned NOT NULL,
-  `unique_id` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `unique_id` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   UNIQUE KEY `user_id` (`user_id`),
   CONSTRAINT `FK_RegisteredUsers_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
 
 -- Dumping structure for table Solas-Match-Test.Statistics
 CREATE TABLE IF NOT EXISTS `Statistics` (
-  `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   `value` double NOT NULL,
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 -- Dumping structure for table Solas-Match-Test.Tags
 CREATE TABLE IF NOT EXISTS `Tags` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `label` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `label` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `label` (`label`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -976,7 +980,16 @@ CREATE TABLE IF NOT EXISTS `TaskClaims` (
   KEY `FK_task_claim_user` (`user_id`),
   CONSTRAINT `FK_task_claim_task` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_task_claim_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `queue_claim_tasks` (
+  task_id BIGINT(20) UNSIGNED NOT NULL,
+  user_id INT(10)    UNSIGNED NOT NULL,
+  UNIQUE KEY FK_queue_claim_tasks_task_id (task_id),
+  CONSTRAINT FK_queue_claim_tasks_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FK_queue_claim_tasks_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 -- Data exporting was unselected.
 
@@ -986,8 +999,8 @@ CREATE TABLE IF NOT EXISTS `TaskFileVersions` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `task_id` bigint(20) unsigned NOT NULL,
   `version_id` int(11) NOT NULL COMMENT 'Gets incremented within the code',
-  `filename` text COLLATE utf8_unicode_ci NOT NULL,
-  `content-type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `filename` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content-type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `user_id` int(10) unsigned NOT NULL COMMENT 'Null while we don''t have logging in',
   `upload-time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -995,7 +1008,7 @@ CREATE TABLE IF NOT EXISTS `TaskFileVersions` (
   KEY `FK_task_file_version_user` (`user_id`),
   CONSTRAINT `FK_TaskFileVersions_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_TaskFileVersions_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -1009,7 +1022,7 @@ CREATE TABLE IF NOT EXISTS `TaskPrerequisites` (
   KEY `FK_TaskPrerequisites_Tasks_2` (`task_id-prerequisite`),
   CONSTRAINT `FK_TaskPrerequisites_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_TaskPrerequisites_Tasks_2` FOREIGN KEY (`task_id-prerequisite`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -1023,12 +1036,14 @@ CREATE TABLE IF NOT EXISTS `TaskReviews` (
   `grammar` int(11) unsigned NOT NULL,
   `spelling` int(11) unsigned NOT NULL,
   `consistency` int(11) unsigned NOT NULL,
-  `comment` VARCHAR(2048) COLLATE utf8_unicode_ci DEFAULT NULL,
+  revise_task_id BIGINT(20) UNSIGNED DEFAULT NULL,
+  `comment` VARCHAR(8192) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   UNIQUE KEY `user_task_project` (`task_id`,`user_id`,`project_id`),
+  KEY key_revise_task_id (revise_task_id),
   CONSTRAINT `FK_TaskReviews_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_TaskReviews_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_TaskReviews_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -1036,7 +1051,7 @@ CREATE TABLE IF NOT EXISTS `TaskReviews` (
 CREATE TABLE IF NOT EXISTS `Tasks` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `project_id` int(10) unsigned NOT NULL,
-  `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `title` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   `word-count` int(11) DEFAULT NULL,
   `language_id-source` int(10) unsigned NOT NULL,
   `language_id-target` int(10) unsigned NOT NULL,
@@ -1044,7 +1059,7 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
   `country_id-target` int(10) unsigned NOT NULL,
   `created-time` datetime NOT NULL,
   `deadline` datetime NOT NULL,
-  `comment` varchar(4096) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `comment` varchar(4096) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `task-type_id` int(11) unsigned NOT NULL,
   `task-status_id` int(11) unsigned NOT NULL,
   `published` BIT(1) DEFAULT 0 NOT NULL,
@@ -1064,7 +1079,7 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
   CONSTRAINT `FK_Tasks_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_Tasks_TaskStatus` FOREIGN KEY (`task-status_id`) REFERENCES `TaskStatus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_Tasks_TaskTypes` FOREIGN KEY (`task-type_id`) REFERENCES `TaskTypes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -1074,16 +1089,16 @@ CREATE TABLE IF NOT EXISTS `TaskNotificationSent` (
   `notification` INT(10) UNSIGNED NOT NULL,
   PRIMARY KEY (`task_id`),
   CONSTRAINT `FK_TaskNotificationSent_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 -- Dumping structure for table Solas-Match-Test.TaskStatus
 CREATE TABLE IF NOT EXISTS `TaskStatus` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 REPLACE INTO `TaskStatus` (`id`, `name`) VALUES
 	(1, "Waiting PreReqs"),
@@ -1101,7 +1116,7 @@ CREATE TABLE IF NOT EXISTS `TaskTranslatorBlacklist` (
   KEY `FK_TaskTranslatorBlacklist_Users` (`user_id`),
   CONSTRAINT `FK_TaskTranslatorBlacklist_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_TaskTranslatorBlacklist_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -1109,10 +1124,10 @@ CREATE TABLE IF NOT EXISTS `TaskTranslatorBlacklist` (
 -- Dumping structure for table Solas-Match-Test.TaskTypes
 CREATE TABLE IF NOT EXISTS `TaskTypes` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 REPLACE INTO `TaskTypes` (`id`, `name`) VALUES
 	(1, "Segmentation"),
@@ -1132,7 +1147,7 @@ CREATE TABLE IF NOT EXISTS `TaskUnclaims` (
   UNIQUE KEY `Tasks` (`task_id`, `user_id`, `unclaimed-time`),
   KEY `FK_task_unclaim_user` (`user_id`),
   CONSTRAINT `FK_task_unclaim_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping structure for table Solas-Match-Test.UserBadges
 CREATE TABLE IF NOT EXISTS `UserBadges` (
@@ -1143,7 +1158,7 @@ CREATE TABLE IF NOT EXISTS `UserBadges` (
   KEY `FK_user_badges_badges` (`badge_id`),
   CONSTRAINT `FK_user_badges_badges` FOREIGN KEY (`badge_id`) REFERENCES `Badges` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_user_badges_users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -1151,12 +1166,12 @@ CREATE TABLE IF NOT EXISTS `UserBadges` (
 -- Dumping structure for table debug-test3.UserLogins
 CREATE TABLE IF NOT EXISTS `UserLogins` (
   `user_id` int(10) unsigned DEFAULT NULL,
-  `email` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `success` char(1) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `success` char(1) COLLATE utf8mb4_unicode_ci NOT NULL,
   `login-time` datetime NOT NULL,
   KEY `FK_UserLogins_Users` (`user_id`),
   CONSTRAINT `FK_UserLogins_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
  
 
 -- Dumping structure for table Solas-Match-Test.UserNotifications
@@ -1170,27 +1185,27 @@ CREATE TABLE IF NOT EXISTS `UserNotifications` (
   KEY `FK_user_notifications_task` (`task_id`),
   CONSTRAINT `FK_user_notifications_task1` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_user_notifications_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping structure for table big-merge.UserPersonalInformation
 CREATE TABLE IF NOT EXISTS `UserPersonalInformation` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
-  `first-name` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `last-name` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `mobile-number` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `business-number` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `first-name` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `last-name` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `mobile-number` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `business-number` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `language-preference` INT(10) UNSIGNED DEFAULT NULL,
-  `job-title` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `address` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `city` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `country` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `job-title` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `city` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `country` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `receive_credit` BIT(1) DEFAULT 0 NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`user_id`),
   CONSTRAINT `FK_UserPersonalInformation_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_UserPersonalInformation_Languages` FOREIGN KEY (`language-preference`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP PROCEDURE IF EXISTS alterTable;
 DELIMITER //
@@ -1230,10 +1245,10 @@ DROP PROCEDURE alterTable;
 -- Dumping structure for table Solas-Match-Test.Users
 CREATE TABLE IF NOT EXISTS `Users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `display-name` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `email` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `password` char(128) COLLATE utf8_unicode_ci NOT NULL,
-  `biography` text COLLATE utf8_unicode_ci,
+  `display-name` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` char(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `biography` text COLLATE utf8mb4_unicode_ci,
   `language_id` int(10) unsigned DEFAULT NULL,
   `country_id` int(10) unsigned DEFAULT NULL,
   `nonce` int(11) unsigned NOT NULL,
@@ -1245,7 +1260,7 @@ CREATE TABLE IF NOT EXISTS `Users` (
   KEY `FK_user_country` (`country_id`),
   CONSTRAINT `FK_user_country` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_user_language` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -1260,7 +1275,7 @@ CREATE TABLE IF NOT EXISTS `UserSecondaryLanguages` (
 	CONSTRAINT `FK_UserSecondaryLanguages_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT `FK_UserSecondaryLanguages_Languages` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT `FK_UserSecondaryLanguages_Countries` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 -- Dumping structure for table Solas-Match-Test.UserTags
@@ -1273,7 +1288,7 @@ CREATE TABLE IF NOT EXISTS `UserTags` (
   KEY `FK_user_tag_user1` (`tag_id`),
   CONSTRAINT `FK_user_tag_tag1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_user_tag_user1` FOREIGN KEY (`tag_id`) REFERENCES `Tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -1288,7 +1303,7 @@ CREATE TABLE IF NOT EXISTS `UserTaskScores` (
   KEY `FK_user_task_score_task1` (`task_id`),
   CONSTRAINT `FK_user_task_score_task1` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_user_task_score_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -1296,7 +1311,7 @@ CREATE TABLE IF NOT EXISTS `UserTaskScoresUpdatedTime` (
   `id` int(10) unsigned NOT NULL,
   `unix_epoch` BIGINT(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping structure for table Solas-Match-Test.UserTaskStreamNotifications
 CREATE TABLE IF NOT EXISTS `UserTaskStreamNotifications` (
@@ -1308,7 +1323,14 @@ CREATE TABLE IF NOT EXISTS `UserTaskStreamNotifications` (
   UNIQUE KEY `user_id` (`user_id`),
   CONSTRAINT `FK_user_task_stream_notification_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_user_task_stream_notification_interval1` FOREIGN KEY (`interval`) REFERENCES `NotificationIntervals` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `SpecialTranslators` (
+    user_id INT (10) UNSIGNED NOT NULL,
+    type    INT (10) UNSIGNED DEFAULT 0,
+    PRIMARY KEY FK_special_user_id (user_id),
+    CONSTRAINT FK_special_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -1321,7 +1343,7 @@ CREATE TABLE IF NOT EXISTS `UserTrackedProjects` (
 	INDEX `FK_UserTrackedProjects_Projects` (`Project_id`),
 	CONSTRAINT `FK_UserTrackedProjects_Projects` FOREIGN KEY (`Project_id`) REFERENCES `Projects` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT `FK_UserTrackedProjects_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 -- Data exporting was unselected.
 
 
@@ -1333,7 +1355,7 @@ CREATE TABLE IF NOT EXISTS `UserTrackedTasks` (
 	INDEX `FK_UserTrackedTasks_Tasks` (`task_id`),
 	CONSTRAINT `FK_UserTrackedTasks_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT `FK_UserTrackedTasks_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping structure for table Solas-Match-UserTrackedOrganisations
 CREATE TABLE IF NOT EXISTS `UserTrackedOrganisations` (
@@ -1344,7 +1366,7 @@ CREATE TABLE IF NOT EXISTS `UserTrackedOrganisations` (
     INDEX `FK_UserTrackedOrganisations_Organisations` (`organisation_id`),
     CONSTRAINT `FK_UserTrackedOrganisations_Organisations` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT `FK_UserTrackedOrganisations_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Structure of table TaskViews
 CREATE TABLE IF NOT EXISTS `TaskViews` (
@@ -1357,7 +1379,7 @@ CREATE TABLE IF NOT EXISTS `TaskViews` (
   UNIQUE KEY `TaskViewTimeStamps` (`task_id`, `user_id`, `viewed-time`),
   KEY `FK_task_viewed_user` (`user_id`),
   CONSTRAINT `FK_task_viewed_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -1366,9 +1388,9 @@ CREATE TABLE IF NOT EXISTS Subscriptions (
   level INT(10) UNSIGNED NOT NULL,
   spare INT(10) UNSIGNED DEFAULT 0 NOT NULL,
   start_date DATETIME NOT NULL,
-  comment VARCHAR(255) COLLATE utf8_unicode_ci DEFAULT '',
+  comment VARCHAR(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
   PRIMARY KEY (organisation_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS SubscriptionsRecorded (
   time_stamp DATETIME NOT NULL,
@@ -1376,15 +1398,15 @@ CREATE TABLE IF NOT EXISTS SubscriptionsRecorded (
   level INT(10) UNSIGNED NOT NULL,
   spare INT(10) UNSIGNED DEFAULT 0 NOT NULL,
   start_date DATETIME NOT NULL,
-  comment VARCHAR(255) COLLATE utf8_unicode_ci DEFAULT '',
+  comment VARCHAR(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
   KEY (organisation_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `RestrictedTasks` (
   `restricted_task_id` BIGINT(20) UNSIGNED NOT NULL,
   UNIQUE KEY `FK_restricted_task_id` (`restricted_task_id`),
   CONSTRAINT `FK_restricted_task_id` FOREIGN KEY (`restricted_task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `WordCountRequestForProjects` (
     project_id INT(10) UNSIGNED NOT NULL,
@@ -1398,7 +1420,15 @@ CREATE TABLE IF NOT EXISTS `WordCountRequestForProjects` (
     KEY state (state),
     KEY FK_WordCountRequestForProjects_project_id (project_id),
     CONSTRAINT FK_WordCountRequestForProjects_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `WordCountRequestForProjectsErrors` (
+    project_id INT(10) UNSIGNED NOT NULL,
+    status  VARCHAR(30)  NOT NULL,
+    message VARCHAR(255) NOT NULL,
+    KEY FK_WordCountRequestForProjectsErrors_project_id (project_id),
+    CONSTRAINT FK_WordCountRequestForProjectsErrors_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `MatecatLanguagePairs` (
     task_id BIGINT(20) UNSIGNED NOT NULL,
@@ -1412,7 +1442,23 @@ CREATE TABLE IF NOT EXISTS `MatecatLanguagePairs` (
     CONSTRAINT FK_matecat_language_pair_task_id FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     KEY FK_matecat_language_pair_project_id (project_id),
     CONSTRAINT FK_matecat_language_pair_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `TaskChunks` (
+    task_id BIGINT(20) UNSIGNED NOT NULL,
+    project_id INT(10) UNSIGNED NOT NULL,
+    type_id    INT(10) UNSIGNED NOT NULL,
+    matecat_langpair   VARCHAR(50) NOT NULL,
+    matecat_id_job INT(10) UNSIGNED NOT NULL,
+    chunk_number   INT(10) UNSIGNED NOT NULL,
+    matecat_id_chunk_password VARCHAR(50) NOT NULL,
+    job_first_segment         VARCHAR(50) NOT NULL DEFAULT '',
+    UNIQUE KEY FK_task_chunks_task_id (task_id),
+    CONSTRAINT FK_task_chunks_task_id FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    KEY FK_task_chunks_matecat_id_job (matecat_id_job),
+    KEY FK_task_chunks_project_id (project_id),
+    CONSTRAINT FK_task_chunks_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `UserQualifiedPairs` (
   user_id              INT(10) UNSIGNED NOT NULL,
@@ -1432,21 +1478,21 @@ CREATE TABLE IF NOT EXISTS `UserQualifiedPairs` (
   CONSTRAINT `FK_UserQualifiedPairs_country_id_source`  FOREIGN KEY (`country_id_source`)  REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT `FK_UserQualifiedPairs_language_id_target` FOREIGN KEY (`language_id_target`) REFERENCES `Languages` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT `FK_UserQualifiedPairs_country_id_target`  FOREIGN KEY (`country_id_target`)  REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `RequiredOrgQualificationLevels` (
   org_id                       INT(10) UNSIGNED NOT NULL,
   required_qualification_level INT(10) UNSIGNED NOT NULL,
   PRIMARY KEY (org_id),
   CONSTRAINT `FK_RequiredOrgQualificationLevels_org_id` FOREIGN KEY (`org_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `RequiredTaskQualificationLevels` (
   task_id                      BIGINT(20) UNSIGNED NOT NULL,
   required_qualification_level INT(10)    UNSIGNED NOT NULL,
   PRIMARY KEY (task_id),
   CONSTRAINT `FK_RequiredTaskQualificationLevels_task_id` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `OrgIDMatchingNeon` (
   org_id_neon  INT(10) UNSIGNED NOT NULL,
@@ -1455,7 +1501,162 @@ CREATE TABLE IF NOT EXISTS `OrgIDMatchingNeon` (
   PRIMARY KEY (org_id_neon),
   KEY FK_OrgIDMatchingNeon_Organisations (org_id),
   CONSTRAINT FK_OrgIDMatchingNeon_Organisations FOREIGN KEY (org_id) REFERENCES Organisations (id) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `TaskTranslatedInMatecat` (
+  `task_id` BIGINT(20) UNSIGNED NOT NULL,
+  PRIMARY KEY (`task_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `TaskInviteSentToUsers` (
+    task_id BIGINT(20) UNSIGNED NOT NULL,
+    user_id INT   (10) UNSIGNED NOT NULL,
+    date_sent_invite datetime NOT NULL,
+    KEY FK_invite_task_id (task_id),
+    CONSTRAINT FK_invite_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    KEY FK_invite_user_id (user_id),
+    CONSTRAINT FK_invite_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `TermsAcceptedUsers` (
+    user_id        INT (10) UNSIGNED NOT NULL,
+    accepted_level INT (10) UNSIGNED NOT NULL,
+    UNIQUE KEY FK_terms_user_id (user_id),
+    CONSTRAINT FK_terms_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `PrivateTMKeys` (
+    project_id INT(10) UNSIGNED NOT NULL,
+    mt_engine INT(10)  UNSIGNED NOT NULL,
+    pretranslate_100   INT(10) UNSIGNED NOT NULL,
+    lexiqa INT(10)     UNSIGNED NOT NULL,
+    private_tm_key     VARCHAR(255) NOT NULL,
+    KEY FK_PrivateTMKeys_project_id (project_id),
+    CONSTRAINT FK_PrivateTMKeys_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `UserNeonAccount` (
+  user_id    INT(10) UNSIGNED NOT NULL,
+  account_id INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY FK_UserNeonAccount_user_id (user_id),
+  KEY         account_id                 (account_id),
+  CONSTRAINT FK_UserNeonAccount_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `MatecatRecordedJobStatus` (
+    matecat_id_job          INT(10) UNSIGNED NOT NULL,
+    matecat_id_job_password VARCHAR(50) NOT NULL,
+    job_status              VARCHAR(20) NOT NULL,
+    UNIQUE KEY job_job_password (matecat_id_job, matecat_id_job_password)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `TaskCompleteDates` (
+  task_id       BIGINT(20) UNSIGNED NOT NULL,
+  complete_date DATETIME NOT NULL,
+  PRIMARY KEY (`task_id`),
+  KEY key_complete_date (complete_date),
+  CONSTRAINT `FK_TaskCompleteDates_task_id` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `DiscourseID` (
+  project_id INT(10) UNSIGNED NOT NULL,
+  topic_id   INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (project_id),
+  CONSTRAINT FK_DiscourseID_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `UserURLs` (
+  user_id INT(10) UNSIGNED NOT NULL,
+  url_key VARCHAR(20)  COLLATE utf8mb4_unicode_ci NOT NULL,
+  url     VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  UNIQUE KEY `UserURLs` (`user_id`, `url_key`),
+  KEY `FK_UserURLs_Users` (`user_id`),
+  CONSTRAINT `FK_UserURLs_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `UserExpertises` (
+  user_id       INT(10) UNSIGNED NOT NULL,
+  expertise_key VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  UNIQUE KEY `UserExpertises` (`user_id`, `expertise_key`),
+  KEY `FK_UserExpertises_Users` (`user_id`),
+  CONSTRAINT `FK_UserExpertises_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `UserHowheards` (
+  user_id      INT(10) UNSIGNED NOT NULL,
+  reviewed     INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  howheard_key VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY `FK_UserHowheards_Users` (`user_id`),
+  KEY         `FK_UserHowheards_reviewed` (`reviewed`),
+  CONSTRAINT  `FK_UserHowheards_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `communications_consents` (
+  user_id      INT(10) UNSIGNED NOT NULL,
+  accepted     INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY `FK_communications_consents_Users` (`user_id`),
+  CONSTRAINT  `FK_communications_consents_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `UserCertifications` (
+  id                INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  user_id           INT(10) UNSIGNED NOT NULL,
+  vid               INT(10) UNSIGNED NOT NULL default 0,
+  reviewed          INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  certification_key VARCHAR(20)  COLLATE utf8mb4_unicode_ci NOT NULL,
+  filename          VARCHAR(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  mimetype          VARCHAR(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  note              TEXT         COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_UserCertifications_Users` (`user_id`),
+  KEY `FK_UserCertifications_reviewed` (`reviewed`),
+  CONSTRAINT `FK_UserCertifications_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `admin_comment` (
+  id            INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  user_id       INT(10) UNSIGNED NOT NULL,
+  admin_id      INT(10) UNSIGNED NOT NULL,
+  work_again    INT(10) UNSIGNED NOT NULL,
+  admin_comment VARCHAR(2000) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_admin_comment_Users` (`user_id`),
+  CONSTRAINT `FK_admin_comment_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `TrackCodes` (
+  id INT(10) UNSIGNED NOT NULL,
+  track_code VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+INSERT INTO TrackCodes VALUES (1, '');
+
+CREATE TABLE IF NOT EXISTS `TrackedRegistrations` (
+  user_id INT(10) UNSIGNED NOT NULL,
+  referer VARCHAR(128) NOT NULL,
+  PRIMARY KEY (user_id),
+  CONSTRAINT `FK_TrackedRegistrations_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `TestingCenterProjects` (
+  user_id                 INT(10) UNSIGNED NOT NULL,
+  project_id              INT(10) UNSIGNED NOT NULL,
+  translation_task_id  BIGINT(20) UNSIGNED NOT NULL,
+  proofreading_task_id BIGINT(20) UNSIGNED NOT NULL,
+  project_to_copy_id      INT(10) UNSIGNED NOT NULL,
+  language_code_source VARCHAR(3)          NOT NULL,
+  language_code_target VARCHAR(3)          NOT NULL,
+  KEY FK_TestingCenterProjects_Users (user_id),
+  CONSTRAINT FK_TestingCenterProjects_Users FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `ProjectRestrictions` (
+  project_id               INT(10) UNSIGNED NOT NULL,
+  restrict_translate_tasks INT(10) UNSIGNED NOT NULL,
+  restrict_revise_tasks    INT(10) UNSIGNED NOT NULL,
+  UNIQUE KEY `project_id` (`project_id`),
+  CONSTRAINT `FK_ProjectRestrictions_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*---------------------------------------end of tables---------------------------------------------*/
 
@@ -1539,6 +1740,18 @@ BEGIN
 	else
 		select 0 as result;
 	end if;
+END//
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `get_creator`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_creator`(IN `projectID` INT)
+BEGIN
+    SELECT u.*
+    FROM ProjectFiles p
+    JOIN Users        u ON p.user_id=u.id
+    WHERE p.project_id=projectID;
 END//
 DELIMITER ;
 
@@ -1824,6 +2037,31 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `queue_claim_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `queue_claim_task`(IN uID INT, IN tID BIGINT)
+BEGIN
+    INSERT INTO queue_claim_tasks
+               (user_id, task_id)
+        VALUES (    uID,     tID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_queue_claim_tasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_queue_claim_tasks`()
+BEGIN
+    SELECT * FROM queue_claim_tasks;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `dequeue_claim_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `dequeue_claim_task`(IN tID BIGINT)
+BEGIN
+    DELETE FROM queue_claim_tasks WHERE task_id=tID;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.deleteBadge
 DROP PROCEDURE IF EXISTS `deleteBadge`;
@@ -1934,13 +2172,57 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure debug-test3.deleteUser
 DROP PROCEDURE IF EXISTS `deleteUser`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteUser`(IN `userId` INT)
 BEGIN
     if EXISTS (select 1 from Users where Users.id = userId) then
-	    delete from Users where Users.id = userId;
+
+        UPDATE UserPersonalInformation SET
+           `first-name`='',
+           `last-name`='',
+           `mobile-number`='',
+           `business-number`='',
+           `language-preference`=1786,
+           `job-title`='',
+           `address`='',
+           `city`='',
+           `country`='',
+           `receive_credit`=0
+        WHERE user_id=userId;
+
+        UPDATE Users SET
+           `display-name`='',
+           `email`=CONCAT(FLOOR(RAND() * 1000000000000), '@aaa.bbb'),
+           `password`='',
+           `biography`='',
+           `language_id`=1786,
+           `country_id`=1,
+           `nonce`=0,
+           `created-time`='2000-01-01 01:01:01'
+        WHERE id=userId;
+
+        DELETE FROM UserLogins
+        WHERE user_id=userId;
+
+        DELETE FROM UserQualifiedPairs
+        WHERE user_id=userId;
+
+        DELETE FROM UserURLs
+        WHERE user_id=userId;
+
+        DELETE FROM UserExpertises
+        WHERE user_id=userId;
+
+        DELETE FROM UserHowheards
+        WHERE user_id=userId;
+
+        DELETE FROM UserTaskStreamNotifications
+        WHERE user_id=userId;
+
+        DELETE FROM Admins
+        WHERE user_id=userId;
+
         select 1 as result;
     else
         select 0 as result;
@@ -2048,7 +2330,8 @@ BEGIN
         FROM Languages
         WHERE id IN (SELECT `language_id-source`
                         FROM Tasks
-                        WHERE published = 1 AND `task-status_id` = 2);
+                        WHERE published = 1 AND `task-status_id` = 2)
+    ORDER BY `en-name`;
 END//
 DELIMITER ;
 
@@ -2063,7 +2346,8 @@ BEGIN
         FROM Languages
         WHERE id IN (SELECT `language_id-target`
                         FROM Tasks
-                        WHERE published = 1 AND `task-status_id` = 2);
+                        WHERE published = 1 AND `task-status_id` = 2)
+    ORDER BY `en-name`;
 END//
 DELIMITER ;
 
@@ -2086,6 +2370,21 @@ BEGIN
         FROM Users u JOIN Admins a ON a.user_id = u.id 
         
         WHERE (a.organisation_id is null or a.organisation_id = orgId);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getAdminsForOrg`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAdminsForOrg`(IN `orgId` INT)
+BEGIN
+    SELECT u.id, u.`display-name` as display_name, u.email, u.password, u.biography,
+        (SELECT `en-name` FROM Languages l WHERE l.id = u.`language_id`) AS `languageName`,
+        (SELECT code FROM Languages l WHERE l.id = u.`language_id`) AS `languageCode`,
+        (SELECT `en-name` FROM Countries c WHERE c.id = u.`country_id`) AS `countryName`,
+        (SELECT code FROM Countries c WHERE c.id = u.`country_id`) AS `countryCode`,
+        u.nonce, u.`created-time` as created_time
+    FROM Users u JOIN Admins a ON a.user_id=u.id
+    WHERE a.organisation_id=orgId;
 END//
 DELIMITER ;
 
@@ -2532,14 +2831,24 @@ DROP PROCEDURE IF EXISTS `getOrgMembers`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgMembers`(IN `orgId` INT)
 BEGIN
-    select u.id,`display-name` as display_name,email,password,biography,
+    SELECT id, `display-name` AS display_name, email, password, biography,
             (select `en-name` from Languages where id =u.`language_id`) as `languageName`, 
             (select code from Languages where id =u.`language_id`) as `languageCode`, 
             (select `en-name` from Countries where id =u.`country_id`) as `countryName`, 
             (select code from Countries where id =u.`country_id`) as `countryCode`, 
             nonce,`created-time` as created_time
-    	FROM OrganisationMembers om JOIN Users u ON om.user_id = u.id
-	    WHERE organisation_id=orgId;
+    FROM OrganisationMembers om JOIN Users u ON om.user_id=u.id
+    WHERE organisation_id=orgId
+    UNION
+    SELECT id, `display-name` AS display_name, email, password, biography,
+            (select `en-name` from Languages where id =u.`language_id`) as `languageName`,
+            (select code from Languages where id =u.`language_id`) as `languageCode`,
+            (select `en-name` from Countries where id =u.`country_id`) as `countryName`,
+            (select code from Countries where id =u.`country_id`) as `countryCode`,
+            nonce,`created-time` as created_time
+    FROM Admins om JOIN Users u ON om.user_id=u.id
+    WHERE organisation_id=orgId
+    ORDER BY 2;
 END//
 DELIMITER ;
 
@@ -2693,6 +3002,30 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getOrgProjects`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgProjects`(IN `orgId` INT, IN `months` INT)
+BEGIN
+    SELECT
+        id,
+        title,
+        description,
+        impact,
+        deadline,
+        organisation_id AS organisationId,
+        reference,
+        `word-count` AS wordCount,
+        created AS createdTime,
+        (SELECT SUM(tsk.`task-status_id`)/(COUNT(tsk.`task-status_id`)*4) FROM Tasks tsk WHERE tsk.project_id=p.id) AS status,
+        image_uploaded AS imageUploaded,
+        image_approved AS imageApproved
+    FROM Projects p
+    WHERE
+        p.organisation_id=orgId AND
+        p.deadline > DATE_SUB(NOW(), INTERVAL months MONTH)
+    ORDER BY p.created DESC;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.getProjectByTag
 DROP PROCEDURE IF EXISTS `getProjectByTag`;
@@ -2937,6 +3270,43 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getVolunteerProjectTasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getVolunteerProjectTasks`(IN `projectID` INT, IN `uID` INT)
+BEGIN
+    SELECT
+        t.id AS task_id,
+        t.title,
+        (SELECT code      FROM Languages l WHERE l.id=t.`language_id-target`) AS target_language_code,
+        (SELECT code      FROM Countries c WHERE c.id=t.`country_id-target` ) AS target_country_code,
+        (SELECT `en-name` FROM Languages l WHERE l.id=t.`language_id-target`) AS target_language_name,
+        (SELECT `en-name` FROM Countries c WHERE c.id=t.`country_id-target` ) AS target_country_name,
+        t.`task-type_id`   AS type_id,
+        t.`task-status_id` AS status_id,
+        t.deadline
+    FROM      Tasks                            t
+    JOIN      Projects                         p ON t.project_id=p.id
+    JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
+    LEFT JOIN Badges                           b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+    LEFT JOIN RestrictedTasks                  r ON t.id=r.restricted_task_id
+    LEFT JOIN UserQualifiedPairs             uqp ON
+        uqp.user_id=uID AND
+        t.`language_id-source`=uqp.language_id_source AND
+        t.`language_id-target`=uqp.language_id_target
+    WHERE
+        t.project_id=projectID AND
+        t.published=1 AND
+        NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id=uID AND t.task_id=t.id) AND
+        ((uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
+        (
+            r.restricted_task_id IS NULL OR
+            b.id IS NULL OR
+            b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
+        )
+    GROUP BY t.id
+    ORDER BY target_language_name, target_country_name, t.id;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure debug-test3.getTaskClaimedTime
 DROP PROCEDURE IF EXISTS `getTaskClaimedTime`;
@@ -3459,6 +3829,21 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `set_special_translator`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_special_translator`(IN userID INT, IN typeID INT)
+BEGIN
+    REPLACE INTO SpecialTranslators (user_id, type) VALUES (userID, typeID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_special_translator`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_special_translator`(IN `userID` INT)
+BEGIN
+    SELECT * FROM SpecialTranslators WHERE user_id=userID;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.getUserTaskScore
 DROP PROCEDURE IF EXISTS `getUserTaskScore`;
@@ -3486,6 +3871,11 @@ BEGIN
     IF taskType=''       THEN SET taskType       = NULL; END IF;
     IF sourceLanguage='' THEN SET sourceLanguage = NULL; END IF;
     IF targetLanguage='' THEN SET targetLanguage = NULL; END IF;
+
+    SET @isSiteAdmin = 0;
+    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id IS NULL) THEN
+        SET @isSiteAdmin = 1;
+    END IF;
 
     SELECT
         t.id, t.project_id as projectId, t.title, t.`word-count` AS wordCount,
@@ -3516,11 +3906,12 @@ BEGIN
         t.`task-status_id`=2 AND
         NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id=uID AND t.task_id=t.id) AND
         (taskType IS NULL OR t.`task-type_id`=taskType) AND
-        (tq.required_qualification_level=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
+        (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
         (sourceLanguage IS NULL OR t.`language_id-source`=(SELECT l.id FROM Languages l WHERE l.code=sourceLanguage)) AND
         (targetLanguage IS NULL OR t.`language_id-target`=(SELECT l.id FROM Languages l WHERE l.code=targetLanguage)) AND
         (strict=0 OR uqp.user_id IS NOT NULL) AND
         (
+            @isSiteAdmin=1 OR
             r.restricted_task_id IS NULL OR
             b.id IS NULL OR
             b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
@@ -3536,7 +3927,8 @@ BEGIN
         IF(SUM(IFNULL(uqp.country_id_target, 0)=t.`country_id-target`), 50, 0) +
         IF(SUM(IFNULL(uqp.country_id_source, 0)=t.`country_id-source`), 50, 0) +
         (SELECT 250.*(1.0-POWER(0.75, COUNT(*)))/(1.0-0.75) FROM ProjectTags pt WHERE pt.project_id=t.project_id AND pt.tag_id IN (SELECT ut.tag_id FROM UserTags ut WHERE user_id=uID)) +
-        LEAST(DATEDIFF(CURDATE(), t.`created-time`), 700)
+        LEAST(DATEDIFF(CURDATE(), t.`created-time`), 700) +
+        IF(DATEDIFF(CURDATE(), t.deadline) > 91, -5000, 0)
         DESC
     LIMIT offset, lim;
 END//
@@ -3554,6 +3946,11 @@ BEGIN
     if sourceLanguage = '' then set sourceLanguage = null; end if;
     if targetLanguage = '' then set targetLanguage = null; end if;
 
+    SET @isSiteAdmin = 0;
+    IF EXISTS (SELECT 1 FROM Admins WHERE user_id=uID AND organisation_id IS NULL) THEN
+        SET @isSiteAdmin = 1;
+    END IF;
+
     SELECT COUNT(*) AS result FROM (
         SELECT t.id
         FROM Tasks t
@@ -3570,12 +3967,13 @@ BEGIN
         AND t.`task-status_id` = 2 
         AND not exists( SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id = uID AND t.task_id = t.id)
         AND (taskType is null or t.`task-type_id` = taskType)
-        AND (tq.required_qualification_level=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level))
+        AND (@isSiteAdmin=1 OR (uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level))
         AND (sourceLanguage is null or t.`language_id-source` = (SELECT l.id FROM Languages l WHERE l.code = sourceLanguage))
         AND (targetLanguage is null or t.`language_id-target` = (SELECT l.id FROM Languages l WHERE l.code = targetLanguage))
         AND (strict=0 OR uqp.user_id IS NOT NULL)
         AND
         (
+            @isSiteAdmin=1 OR
             r.restricted_task_id IS NULL OR
             b.id IS NULL OR
             b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
@@ -3694,7 +4092,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `alsoViewedTasks`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `alsoViewedTasks`(IN `taskID` INT, IN `lim` INT, IN `offset` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `alsoViewedTasks`(IN `taskID` INT, IN userID INT, IN `offset` INT)
 
     READS SQL DATA
 
@@ -3704,7 +4102,6 @@ BEGIN
     DECLARE current_task_langTarget INT DEFAULT 0;
     DECLARE current_task_countrySource INT DEFAULT 0;
     DECLARE current_task_countryTarget INT DEFAULT 0;
-    if lim = '' or lim is null then set lim = ~0; end if;
     if offset='' or offset is null then set offset = 0; end if;
 
   
@@ -3748,15 +4145,19 @@ BEGIN
             t.published=1
         JOIN      Projects p ON t.project_id=p.id
         JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
+        JOIN      UserQualifiedPairs             uqp ON
+            uqp.user_id=userID AND
+            t.`language_id-source`=uqp.language_id_source AND
+            t.`language_id-target`=uqp.language_id_target
         LEFT JOIN RestrictedTasks r ON t.id=r.restricted_task_id
         WHERE
             r.restricted_task_id IS NULL AND
-            tq.required_qualification_level=1
+            tq.required_qualification_level<=uqp.qualification_level
         GROUP BY tv.task_id
         ORDER BY task_count DESC
         ) AS t1
     JOIN Tasks t2 ON t1.id=t2.id
-    LIMIT offset,lim
+    LIMIT offset, 3
     );
 END//
 DELIMITER ;
@@ -3843,6 +4244,21 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `is_admin_or_org_member`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `is_admin_or_org_member`(IN `uID` INT)
+BEGIN
+    SELECT EXISTS (
+        SELECT user_id
+        FROM Admins
+        WHERE user_id=uID
+        UNION
+        SELECT user_id
+        FROM OrganisationMembers
+        WHERE user_id=uID
+    ) AS result;
+END//
+DELIMITER ;
 
 -- Dumping structure for function Solas-Match-Dev.isNullOrEqual
 DROP FUNCTION IF EXISTS `isNullOrEqual`;
@@ -4078,7 +4494,7 @@ DELIMITER ;
 -- Dumping structure for procedure Solas-Match-Test.oauthGetClient
 DROP PROCEDURE IF EXISTS `oauthGetClient`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthGetClient`(IN `clientId` CHAR(40), IN `clientSecret` CHAR(40), IN `redirectUri` VARCHAR(255))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthGetClient`(IN `clientId` CHAR(40), IN `clientSecret` CHAR(42), IN `redirectUri` VARCHAR(255))
     READS SQL DATA
 BEGIN
     IF clientSecret = '' then
@@ -4093,7 +4509,7 @@ BEGIN
         JOIN `oauth_client_endpoints`
         ON `oauth_clients`.id = `oauth_client_endpoints`.client_id
         WHERE `oauth_clients`.id = clientId
-        AND (clientSecret IS NULL OR `oauth_clients`.secret = clientSecret)
+        AND (clientSecret IS NULL OR `oauth_clients`.secret = SUBSTRING(clientSecret, 1, 40))
         AND (redirectUri IS NULL OR `oauth_client_endpoints`.redirect_uri = redirectUri);
 END//
 DELIMITER ;
@@ -4516,6 +4932,8 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `recordFileUpload`(IN `tID` INT, IN `name` TeXT, IN `content` VARCHAR(255), IN `uID` INT, IN `ver` INT)
     MODIFIES SQL DATA
 BEGIN
+    call set_task_complete_date(tID);
+
     if ver is null then
         set @maxVer =-1;
         if not exists (select 1 
@@ -4710,7 +5128,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `removeUserBadge`(IN `uID` INT, IN `
 BEGIN
 	set @owner = null;
 	select b.owner_id into @owner from Badges b where b.id=bID;
-        if @owner is not null  or bID in(6,7,8) then
+        if @owner is not null  or bID in(6,7,8,10,11,12,13) then
             DELETE FROM UserBadges
             WHERE user_id=uID
             AND badge_id=bID;
@@ -5075,15 +5493,15 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `submitTaskReview`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `submitTaskReview`(IN projectId INT, IN taskId INT, IN userId INT, IN correction INT, IN gram INT, IN spell INT, IN consis INT, IN comm VARCHAR(2048))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `submitTaskReview`(IN projectId INT, IN taskId INT, IN userId INT, IN correction INT, IN gram INT, IN spell INT, IN consis INT, IN reviseTaskId INT, IN comm VARCHAR(8192))
 BEGIN
     IF NOT EXISTS (SELECT 1 
                     FROM TaskReviews
                     WHERE task_id = taskId
                     AND user_id = userId
                     AND project_id = projectId) then
-        INSERT INTO TaskReviews (project_id, task_id, user_id, corrections, grammar, spelling, consistency, comment)
-            VALUES (projectId, taskId, userId, correction, gram, spell, consis, comm);
+        INSERT INTO TaskReviews (project_id, task_id, user_id, corrections, grammar, spelling, consistency, revise_task_id, comment)
+                         VALUES ( projectId,  taskId,  userId,  correction,    gram,    spell,      consis,   reviseTaskId,    comm);
         SELECT 1 as result;
     else
         SELECT 0 as result;
@@ -5280,6 +5698,49 @@ BEGIN
       INSERT INTO TaskUnclaims (id, task_id, user_id, `unclaim-comment`, `unclaimed-time`) VALUES (NULL, tID, uID, userFeedback, NOW());
       update Tasks set `task-status_id`=2 where id = tID;
       COMMIT;
+
+    SELECT
+        t.project_id,
+        t.`language_id-source`,
+        t.`language_id-target`,
+        t.`country_id-source`,
+        t.`country_id-target`,
+        IF(t.`task-type_id`=2, 3, 2),
+        tc.chunk_number
+    INTO
+        @projectid,
+        @language_source,
+        @language_target,
+        @country_source,
+        @country_target,
+        @bl_type_to_delete,
+        @chunknumber
+    FROM      Tasks       t
+    LEFT JOIN TaskChunks tc ON task_id=t.id
+    WHERE
+    t.id=tID AND
+    t.`task-type_id` IN (2, 3);
+
+    SELECT
+        MAX(t.id) INTO @bl_id_to_delete
+    FROM      Tasks       t
+    LEFT JOIN TaskChunks tc ON task_id=t.id
+    WHERE
+        t.project_id          =@projectid AND
+        t.`language_id-source`=@language_source AND
+        t.`language_id-target`=@language_target AND
+        t.`country_id-source` =@country_source AND
+        t.`country_id-target` =@country_target AND
+        t.`task-type_id`      =@bl_type_to_delete AND
+        (tc.chunk_number      =@chunknumber OR tc.chunk_number IS NULL);
+
+    IF @bl_id_to_delete IS NOT NULL THEN
+        DELETE FROM TaskTranslatorBlacklist
+        WHERE
+            user_id=uID AND
+            task_id=@bl_id_to_delete;
+    END IF;
+
 		select 1 as result;
 	else
 		select 0 as result;
@@ -5303,29 +5764,29 @@ DROP PROCEDURE IF EXISTS `userInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userInsertAndUpdate`(IN `email` VARCHAR(128), IN `nonce` int(11), IN `pass` char(128), IN `bio` TEXT, IN `name` VARCHAR(128), IN `lang` VARCHAR(3), IN `region` VARCHAR(3), IN `id` INT)
 BEGIN
-	if pass='' then set pass=null;end if;
-	if bio='' then set bio=null;end if;
-	if id='' then set id=null;end if;
-	if nonce='' then set nonce=null;end if;
-	if name='' then set name=null;end if;
-	if email='' then set email=null;end if;
-	if lang='' then set lang=null;end if;
+    if pass='' then set pass=null;end if;
+    if bio='' then set bio=null;end if;
+    if id='' then set id=null;end if;
+    if nonce='' then set nonce=null;end if;
+    if name='' then set name=null;end if;
+    if email='' then set email=null;end if;
+    if lang='' then set lang=null;end if;
     if region='' then set region=null;end if;
-	
+
     -- if new user
-	if id is null and not exists(select * from Users u where u.email= email) then
-	-- set insert
-    	set @countryID=null;
-	    select c.id into @countryID from Countries c where c.code=region;
-    	set @langID=null;
-    	select l.id into @langID from Languages l where l.code=lang;
-	
+    if id is null and not exists(select * from Users u where u.email= email) then
+    -- set insert
+        set @countryID=null;
+        select c.id into @countryID from Countries c where c.code=region;
+        set @langID=null;
+        select l.id into @langID from Languages l where l.code=lang;
+
         insert into Users (email, nonce, password, `created-time`, `display-name`, biography, language_id, country_id) 
             values (email, nonce, pass, NOW(), name, bio, @langID, @countryID);
         call getUser(LAST_INSERT_ID(),null,null,null,null,null,null,null,null);
-	
-    else 
-        if bio is not null 
+
+    else
+        if bio is not null
             and bio != IFNULL(
                 (SELECT u.biography 
                     FROM Users u 
@@ -5335,9 +5796,9 @@ BEGIN
             update Users u 
                 set u.biography = bio
                 WHERE u.id = id;
-		end if;
+        end if;
                 
-		if lang is not null 
+        if lang is not null
             and (select l.id 
                 from Languages l 
                 where l.code=lang
@@ -5350,7 +5811,7 @@ BEGIN
             update Users u 
                 set u.language_id = (select l.id from Languages l where l.code=lang)
                 WHERE u.id = id;
-		end if;
+        end if;
 
         if region is not null 
             and (select c.id 
@@ -5365,7 +5826,7 @@ BEGIN
             update Users u 
                 set u.country_id = (select c.id from Countries c where c.code = region)
                 WHERE u.id = id;
-		end if;
+        end if;
 
         if name is not null 
             and name NOT LIKE BINARY IFNULL(
@@ -5377,7 +5838,7 @@ BEGIN
             update Users u 
                 set u.`display-name` = name
                 WHERE u.id = id;
-		end if;
+        end if;
 
         if email is not null 
             and email != (SELECT u.email 
@@ -5387,7 +5848,7 @@ BEGIN
             update Users u 
                 set u.email = email
                 WHERE u.id = id;
-		end if;
+        end if;
 
         if nonce is not null 
             and nonce != (SELECT u.nonce 
@@ -5397,8 +5858,8 @@ BEGIN
             update Users u
                 set u.nonce = nonce
                 WHERE u.id = id;
-		end if;
-		
+        end if;
+
         if pass is not null 
             and pass != (SELECT u.password 
                 FROM Users u 
@@ -5410,7 +5871,7 @@ BEGIN
         end if;
 
        	call getUser(id,null,null,null,null,null,null,null,null);
-	end if;
+    end if;
 END//
 DELIMITER ;
 
@@ -6140,6 +6601,86 @@ BEGIN
         SELECT 0 AS result;
 
     ELSEIF EXISTS (
+        SELECT 1
+        FROM Tasks                t
+        JOIN Projects             p ON t.project_id=p.id
+        JOIN Admins              oa ON p.organisation_id=oa.organisation_id
+        WHERE
+            t.id=taskID AND
+            oa.user_id=userID
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF EXISTS (
+        SELECT t.id
+        FROM Tasks            t
+        JOIN RestrictedTasks  r ON t.id=r.restricted_task_id
+        JOIN Projects         p ON t.project_id=p.id
+        JOIN Badges           b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+        LEFT JOIN UserBadges ub ON b.id=ub.badge_id AND ub.user_id=userID
+        WHERE
+            t.id=taskID AND
+            ub.badge_id IS NULL
+    ) THEN
+        SELECT 1 AS result;
+
+    ELSEIF NOT EXISTS (
+        SELECT t.id
+        FROM Tasks t
+        JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
+        JOIN UserQualifiedPairs uqp ON
+            uqp.user_id=userID AND
+            t.`language_id-source`=uqp.language_id_source AND
+            t.`language_id-target`=uqp.language_id_target
+        WHERE
+            t.id=taskID AND
+            tq.required_qualification_level<=uqp.qualification_level
+    ) THEN
+        SELECT 1 AS result;
+
+    ELSE
+    SELECT 0 AS result;
+
+    END IF;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `isUserRestrictedFromTaskButAllowTranslatorToDownload`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserRestrictedFromTaskButAllowTranslatorToDownload`(IN `taskID` INT, IN `userID` INT)
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM Admins
+        WHERE
+            user_id=userID AND
+            organisation_id IS NULL
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF EXISTS (
+        SELECT 1
+        FROM Tasks                t
+        JOIN Projects             p ON t.project_id=p.id
+        JOIN OrganisationMembers om ON p.organisation_id=om.organisation_id
+        WHERE
+            t.id=taskID AND
+            om.user_id=userID
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF EXISTS (
+        SELECT 1
+        FROM Tasks                t
+        JOIN Projects             p ON t.project_id=p.id
+        JOIN Admins              oa ON p.organisation_id=oa.organisation_id
+        WHERE
+            t.id=taskID AND
+            oa.user_id=userID
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF EXISTS (
         SELECT t.id
         FROM Tasks            t
         JOIN RestrictedTasks  r ON t.id=r.restricted_task_id
@@ -6154,10 +6695,29 @@ BEGIN
 
     ELSEIF EXISTS (
         SELECT 1
-        FROM RequiredTaskQualificationLevels tq
+        FROM Tasks  t
+        JOIN Tasks t2 ON t.project_id=t2.project_id AND
+                         t.`language_id-source`=t2.`language_id-source` AND
+                         t.`language_id-target`=t2.`language_id-target` AND
+                         t.`country_id-source` =t2.`country_id-source`  AND
+                         t.`country_id-target` =t2.`country_id-target`  AND
+                         t2.`task-type_id`=2
+        JOIN      TaskClaims tcl ON tcl.user_id=userID AND t2.id=tcl.task_id
+        LEFT JOIN TaskChunks  tc ON t.id=tc.task_id
         WHERE
-            tq.task_id=taskID AND
-            tq.required_qualification_level=1
+            t.id=taskID AND
+            t.`task-type_id`=3 AND
+            tc.task_id IS NULL
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF EXISTS (
+        SELECT 1
+        FROM MatecatLanguagePairs lp
+        JOIN TaskChunks           tc ON lp.matecat_id_job=tc.matecat_id_job
+        JOIN TaskClaims          tcl ON tcl.user_id=userID AND tc.task_id=tcl.task_id
+        WHERE
+            lp.task_id=taskID
     ) THEN
         SELECT 0 AS result;
 
@@ -6182,6 +6742,71 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `isUserRestrictedFromProject`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserRestrictedFromProject`(IN `projectID` INT, IN `userID` INT)
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM Admins
+        WHERE
+            user_id=userID AND
+            organisation_id IS NULL
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF EXISTS (
+        SELECT 1
+        FROM Projects             p
+        JOIN OrganisationMembers om ON p.organisation_id=om.organisation_id
+        WHERE
+            p.id=projectID AND
+            om.user_id=userID
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF EXISTS (
+        SELECT 1
+        FROM Projects             p
+        JOIN Admins              oa ON p.organisation_id=oa.organisation_id
+        WHERE
+            p.id=projectID AND
+            oa.user_id=userID
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSEIF EXISTS (
+        SELECT t.id
+        FROM      Tasks                            t
+        JOIN      Projects                         p ON t.project_id=p.id
+        JOIN      RequiredTaskQualificationLevels tq ON t.id=tq.task_id
+        LEFT JOIN Badges                           b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+        LEFT JOIN RestrictedTasks                  r ON t.id=r.restricted_task_id
+        LEFT JOIN UserQualifiedPairs             uqp ON
+            uqp.user_id=userID AND
+            t.`language_id-source`=uqp.language_id_source AND
+            t.`language_id-target`=uqp.language_id_target
+        WHERE
+            t.project_id=projectID AND
+            t.published=1 AND
+            NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tb WHERE tb.user_id=userID AND tb.task_id=t.id) AND
+            ((uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
+            (
+                r.restricted_task_id IS NULL OR
+                b.id IS NULL OR
+                b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=userID)
+            )
+        GROUP BY t.id
+    ) THEN
+        SELECT 0 AS result;
+
+    ELSE
+        SELECT 1 AS result;
+
+    END IF;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `getUsers`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUsers`()
@@ -6197,12 +6822,38 @@ BEGIN
         i.city,
         i.country,
         i.`first-name` AS first_name,
-        i.`last-name` AS last_name
+        i.`last-name` AS last_name,
+        MAX(IF(tau.user_id IS NOT NULL, 'Yes', '')) AS terms,
+        MAX(IF( ad.user_id IS NOT NULL, 'Yes', '')) AS admin
     FROM Users u
     LEFT JOIN UserPersonalInformation i ON u.id=i.user_id
     LEFT JOIN Countries c ON u.country_id=c.id
     LEFT JOIN Languages l ON u.language_id=l.id
+    LEFT JOIN TermsAcceptedUsers tau ON u.id=tau.user_id
+    LEFT JOIN Admins              ad ON u.id=ad.user_id
+    GROUP BY u.id
     ORDER BY u.id DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `list_qualified_translators`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_qualified_translators`(IN `taskID` INT)
+BEGIN
+        SELECT DISTINCT
+            uqp.user_id,
+            CONCAT(u.email, ' (', IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`, ''), ')') as name
+        FROM Tasks t
+        JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
+        JOIN UserQualifiedPairs uqp ON
+            t.`language_id-source`=uqp.language_id_source AND
+            t.`language_id-target`=uqp.language_id_target AND
+            tq.required_qualification_level<=uqp.qualification_level
+        JOIN Users u ON uqp.user_id=u.id
+        LEFT JOIN UserPersonalInformation i ON u.id=i.user_id
+        WHERE
+            t.id=taskID
+        ORDER BY u.email;
 END//
 DELIMITER ;
 
@@ -6254,16 +6905,149 @@ BEGIN
         IFNULL(lp.matecat_id_job,           0) AS matecat_id_job_or_zero,
         IFNULL(lp.matecat_id_job_password, '') AS matecat_id_job_password_or_blank,
         IFNULL(lp.matecat_id_file,          0) AS matecat_id_file_or_zero,
+        CONCAT(l.code, '|', l2.code) AS language_pair,
+        o.id AS org_id,
+        o.name AS org_name,
         p.title AS project_title,
         p.id AS project_id
     FROM Projects    p
+    JOIN Organisations o ON p.organisation_id=o.id
     JOIN Tasks       t ON p.id=t.project_id
     JOIN TaskClaims tc ON t.id=tc.task_id
     JOIN Users       u ON tc.user_id=u.id
     JOIN UserPersonalInformation    i ON u.id=i.user_id
+    JOIN Languages   l ON t.`language_id-source`=l.id
+    JOIN Languages  l2 ON t.`language_id-target`=l2.id
     LEFT JOIN MatecatLanguagePairs lp ON t.id=lp.task_id
     WHERE t.`task-status_id`=3
-    ORDER BY t.title, lp.matecat_langpair, t.`task-type_id`;
+    ORDER BY o.name, t.title, lp.matecat_langpair, t.`task-type_id`;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `testing_center`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `testing_center`()
+BEGIN
+    SELECT
+        t.title AS task_title,
+        t.id    AS task_id,
+        p.id    AS project_id,
+        p.title AS project_title,
+        IF(t.`task-type_id`=2, 'Translation', 'Revising')               AS task_type,
+        CASE
+            WHEN t.`task-status_id`=1 THEN 'Waiting'
+            WHEN t.`task-status_id`=2 THEN 'Pending'
+            WHEN t.`task-status_id`=3 THEN 'In Progress'
+            WHEN t.`task-status_id`=4 THEN 'Complete'
+        END                                                             AS task_status,
+        t.`created-time`                                                AS created,
+        t.deadline,
+        CONCAT(tcp.language_code_source, '|', tcp.language_code_target) AS language_pair,
+        IFNULL(u.email, '')                                             AS user_email,
+        IFNULL(u.`display-name`, '')                                    AS display_name,
+        IFNULL(u.id, '')                                                AS user_id,
+        CASE
+            WHEN uqp.qualification_level=1 THEN ''
+            WHEN uqp.qualification_level=2 THEN 'Verified'
+            WHEN uqp.qualification_level=3 THEN 'Senior'
+        END                                                             AS level,
+        IFNULL(tr.corrections,        '')                               AS accuracy,
+        IFNULL(tr.grammar,            '')                               AS fluency,
+        IFNULL(tr.spelling,           '')                               AS terminology,
+        IFNULL(tr.consistency   % 10, '')                               AS style,
+        IFNULL(tr.consistency DIV 10, '')                               AS design,
+        IFNULL(tr.comment,            '')                               AS comment,
+        tcp.proofreading_task_id,
+        CASE
+            WHEN prooft.`task-status_id`=1 THEN 'Waiting'
+            WHEN prooft.`task-status_id`=2 THEN 'Pending'
+            WHEN prooft.`task-status_id`=3 THEN 'In Progress'
+            WHEN prooft.`task-status_id`=4 THEN 'Complete'
+        END                                                             AS proofreading_task_status,
+        IFNULL(proofu.email, '')                                        AS proofreading_email
+    FROM      Projects                p
+    JOIN      PrivateTMKeys         tmk ON p.id=tmk.project_id AND tmk.private_tm_key='new'
+    JOIN      Tasks                   t ON p.id=t.project_id
+    LEFT JOIN TaskClaims             tc ON t.id=tc.task_id
+    LEFT JOIN Users                   u ON tc.user_id=u.id
+    LEFT JOIN TaskReviews            tr ON t.id=tr.task_id
+    LEFT JOIN TestingCenterProjects tcp ON p.id=tcp.project_id
+    LEFT JOIN Tasks              prooft ON tcp.proofreading_task_id=prooft.id
+    LEFT JOIN TaskClaims        prooftc ON tcp.proofreading_task_id=prooftc.task_id
+    LEFT JOIN Users              proofu ON prooftc.user_id=proofu.id
+    LEFT JOIN UserQualifiedPairs    uqp ON tc.user_id=uqp.user_id AND tcp.language_code_source=uqp.language_code_source AND tcp.language_code_target=uqp.language_code_target
+    WHERE
+        t.`task-type_id`=2
+    ORDER BY t.id DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_testing_center_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_testing_center_project`(IN uID INT, IN pID INT, IN tID BIGINT, IN ptID BIGINT, IN pIDtoCopy INT, IN sourceCode VARCHAR(3), IN targetCode VARCHAR(3))
+BEGIN
+    INSERT INTO TestingCenterProjects
+               (user_id,  project_id,  translation_task_id,  proofreading_task_id,  project_to_copy_id,  language_code_source,  language_code_target)
+        VALUES (    uID,         pID,                  tID,                  ptID,           pIDtoCopy,            sourceCode,            targetCode);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_testing_center_projects`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_testing_center_projects`(IN uID INT)
+BEGIN
+    SELECT * FROM TestingCenterProjects WHERE user_id=uID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `late_matecat`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `late_matecat`()
+BEGIN
+    SELECT
+        u.id AS user_id,
+        u.`display-name` AS display_name,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`, '') AS last_name,
+        t.title AS task_title,
+        t.id AS task_id,
+        t.`word-count` AS word_count,
+        t.`created-time` AS created_time,
+        t.deadline,
+        IF(NOW()>t.deadline, 1, 0) AS red,
+        t.`task-type_id` AS task_type,
+        CASE
+            WHEN t.`task-type_id`=1 THEN 'Segmentation'
+            WHEN t.`task-type_id`=2 THEN 'Translation'
+            WHEN t.`task-type_id`=3 THEN 'Revising'
+            WHEN t.`task-type_id`=4 THEN 'Desegmentation'
+        END
+        AS task_type_text,
+        IFNULL(tc.`claimed-time`, '') AS claimed_time,
+        IFNULL(lp.matecat_langpair,        '') AS matecat_langpair_or_blank,
+        IFNULL(lp.matecat_id_job,           0) AS matecat_id_job_or_zero,
+        IFNULL(lp.matecat_id_job_password, '') AS matecat_id_job_password_or_blank,
+        IFNULL(lp.matecat_id_file,          0) AS matecat_id_file_or_zero,
+        CONCAT(l.code, '|', l2.code)           AS language_pair,
+        o.id AS org_id,
+        o.name AS org_name,
+        p.title AS project_title,
+        p.id AS project_id
+    FROM Projects    p
+    JOIN Organisations o ON p.organisation_id=o.id
+    JOIN Tasks       t ON p.id=t.project_id
+    JOIN Languages   l ON t.`language_id-source`=l.id
+    JOIN Languages  l2 ON t.`language_id-target`=l2.id
+    LEFT JOIN TaskClaims              tc ON t.id=tc.task_id
+    LEFT JOIN Users                    u ON tc.user_id=u.id
+    LEFT JOIN UserPersonalInformation  i ON u.id=i.user_id
+    LEFT JOIN MatecatLanguagePairs    lp ON t.id=lp.task_id
+    WHERE
+        (t.`task-status_id`=3 OR t.`task-status_id`=2) AND
+        (t.`created-time` > NOW() - INTERVAL 3 MONTH) AND
+        NOW() > t.deadline - INTERVAL 1 week
+    ORDER BY o.name, t.title, lp.matecat_langpair, CONCAT(l.code, '|', l2.code), t.`task-type_id`;
 END//
 DELIMITER ;
 
@@ -6290,20 +7074,171 @@ BEGIN
             WHEN t.`task-type_id`=4 THEN 'Desegmentation'
         END
         AS task_type_text,
+        tc.`claimed-time` AS claimed_time,
         IFNULL(lp.matecat_langpair,        '') AS matecat_langpair_or_blank,
         IFNULL(lp.matecat_id_job,           0) AS matecat_id_job_or_zero,
         IFNULL(lp.matecat_id_job_password, '') AS matecat_id_job_password_or_blank,
         IFNULL(lp.matecat_id_file,          0) AS matecat_id_file_or_zero,
+        CONCAT(l.code, '|', l2.code) AS language_pair,
+        o.id AS org_id,
+        o.name AS org_name,
         p.title AS project_title,
         p.id AS project_id
     FROM Projects    p
+    JOIN Organisations o ON p.organisation_id=o.id
     JOIN Tasks       t ON p.id=t.project_id
     JOIN TaskClaims tc ON t.id=tc.task_id
     JOIN Users       u ON tc.user_id=u.id
     JOIN UserPersonalInformation    i ON u.id=i.user_id
+    JOIN Languages   l ON t.`language_id-source`=l.id
+    JOIN Languages  l2 ON t.`language_id-target`=l2.id
     LEFT JOIN MatecatLanguagePairs lp ON t.id=lp.task_id
     WHERE t.`task-status_id`=4
-    ORDER BY t.title, lp.matecat_langpair, t.`task-type_id`;
+    ORDER BY o.name, t.title, lp.matecat_langpair, t.`task-type_id`;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `user_task_reviews`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `user_task_reviews`()
+BEGIN
+    SELECT
+        u.id AS user_id,
+        u.`display-name` AS display_name,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`, '') AS last_name,
+        CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) AS language_pair,
+        IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.corrections, 0))/SUM(consistency<10), 1), '') AS cor,
+        IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.grammar,     0))/SUM(consistency<10), 1), '') AS gram,
+        IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.spelling,    0))/SUM(consistency<10), 1), '') AS spell,
+        IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.consistency, 0))/SUM(consistency<10), 1), '') AS cons,
+        SUM(consistency<10) AS num_legacy,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.corrections,        0))/SUM(consistency>=10), 1), '') AS accuracy,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.grammar,            0))/SUM(consistency>=10), 1), '') AS fluency,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.spelling,           0))/SUM(consistency>=10), 1), '') AS terminology,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.consistency   % 10, 0))/SUM(consistency>=10), 1), '') AS style,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.consistency DIV 10, 0))/SUM(consistency>=10), 1), '') AS design,
+        SUM(consistency>=10) AS num_new,
+        COUNT(*)             AS num
+    FROM TaskReviews            tr
+    JOIN Tasks                   t  ON tr.task_id=t.id
+    JOIN Languages              l1 ON t.`language_id-source`=l1.id
+    JOIN Languages              l2 ON t.`language_id-target`=l2.id
+    JOIN Countries              c1 ON t.`country_id-source`=c1.id
+    JOIN Countries              c2 ON t.`country_id-target`=c2.id
+    JOIN TaskClaims             tc  ON tr.task_id=tc.task_id
+    JOIN Users                   u  ON tc.user_id=u.id
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    WHERE t.`task-status_id`=4
+    GROUP BY u.id, l1.code, c1.code, l2.code, c2.code
+    ORDER BY u.email, l1.code, c1.code, l2.code, c2.code;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `submitted_task_reviews`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `submitted_task_reviews`()
+BEGIN
+    SELECT
+        tcd.complete_date,
+        tr.revise_task_id,
+        tr.user_id AS reviser_id,
+        tc.user_id AS translator_id,
+        CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) AS language_pair,
+        tr.corrections         AS accuracy,
+        tr.grammar             AS fluency,
+        tr.spelling            AS terminology,
+        tr.consistency   % 10  AS style,
+        tr.consistency DIV 10  AS design,
+        IFNULL(tr.comment, '') AS comment,
+        tr.task_id,
+        rev.title AS task_title,
+        CONCAT(IFNULL(i .`first-name`, ''), ' ', IFNULL(i .`last-name`, ''), ' (', u .email, ')') AS translator_name,
+        CONCAT(IFNULL(i2.`first-name`, ''), ' ', IFNULL(i2.`last-name`, ''), ' (', u2.email, ')') AS reviser_name
+    FROM TaskReviews             tr
+    JOIN Tasks                    t ON tr.task_id=t.id
+    JOIN Languages               l1 ON t.`language_id-source`=l1.id
+    JOIN Languages               l2 ON t.`language_id-target`=l2.id
+    JOIN Countries               c1 ON t.`country_id-source`=c1.id
+    JOIN Countries               c2 ON t.`country_id-target`=c2.id
+    JOIN TaskClaims              tc ON tr.task_id=tc.task_id
+    JOIN Users                    u ON tc.user_id=u.id
+    JOIN UserPersonalInformation  i ON u.id=i.user_id
+    JOIN Users                   u2 ON tr.user_id=u2.id
+    JOIN UserPersonalInformation i2 ON u2.id=i2.user_id
+    JOIN Tasks                  rev ON tr.revise_task_id=rev.id
+    JOIN TaskCompleteDates      tcd ON tr.revise_task_id=tcd.task_id
+    WHERE
+        tr.revise_task_id IS NOT NULL AND
+        rev.`task-status_id`=4 AND
+        tr.consistency>=10
+    ORDER BY tcd.complete_date DESC, tr.revise_task_id DESC, tr.user_id DESC
+    LIMIT 4000;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `tasks_no_reviews`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `tasks_no_reviews`()
+BEGIN
+    SELECT
+        tcd.complete_date,
+        rev.id AS revise_task_id,
+        tc.user_id AS reviser_id,
+        CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) AS language_pair,
+        rev.title AS task_title,
+        CONCAT(IFNULL(i2.`first-name`, ''), ' ', IFNULL(i2.`last-name`, ''), ' (', u2.email, ')') AS reviser_name
+    FROM Tasks                  rev
+    LEFT JOIN TaskReviews        tr ON rev.id=tr.revise_task_id
+    JOIN TaskCompleteDates      tcd ON rev.id=tcd.task_id
+    JOIN Languages               l1 ON rev.`language_id-source`=l1.id
+    JOIN Languages               l2 ON rev.`language_id-target`=l2.id
+    JOIN Countries               c1 ON rev.`country_id-source`=c1.id
+    JOIN Countries               c2 ON rev.`country_id-target`=c2.id
+    JOIN TaskClaims              tc ON rev.id=tc.task_id
+    JOIN Users                   u2 ON tc.user_id=u2.id
+    JOIN UserPersonalInformation i2 ON u2.id=i2.user_id
+    WHERE
+        tr.revise_task_id IS NULL AND
+        rev.`task-status_id`=4 AND
+        rev.`task-type_id`=3
+    ORDER BY tcd.complete_date DESC, rev.id DESC
+    LIMIT 4000;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `project_source_file_scores`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `project_source_file_scores`()
+BEGIN
+    SELECT
+        scores.*,
+        IF(MIN(t.`task-status_id`=4), MAX(tcd.complete_date), '') AS completed
+    FROM
+        (SELECT
+            p.id AS project_id,
+            p.title,
+            p.organisation_id,
+            o.name,
+            p.created,
+            IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.corrections, 0))/SUM(consistency<10), 1), '') AS cor,
+            IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.grammar,     0))/SUM(consistency<10), 1), '') AS gram,
+            IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.spelling,    0))/SUM(consistency<10), 1), '') AS spell,
+            IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.consistency, 0))/SUM(consistency<10), 1), '') AS cons,
+            GROUP_CONCAT(tr.comment ORDER BY tr.comment SEPARATOR '\\r\\n') AS comments
+        FROM TaskReviews  tr
+        JOIN Projects      p ON tr.project_id=p.id
+        JOIN Organisations o ON p.organisation_id=o.id
+        WHERE tr.task_id IS NULL
+        GROUP BY tr.project_id
+        ORDER BY tr.project_id DESC
+        LIMIT 4000
+        ) AS scores
+    JOIN      Tasks               t ON scores.project_id=t.project_id
+    LEFT JOIN TaskCompleteDates tcd ON t.id=tcd.task_id
+    GROUP BY scores.project_id
+    ORDER BY scores.project_id DESC;
 END//
 DELIMITER ;
 
@@ -6318,16 +7253,16 @@ BEGIN
         t.id AS task_id,
         t.title AS task_title,
         t.`created-time` AS created_time,
-        tv.user_id AS creator_id,
-        u2.email AS creator_email,
+        IFNULL(tv.user_id, '') AS creator_id,
+        IFNULL(u2.email, '') AS creator_email,
         p.id AS project_id,
         p.title AS project_title
     FROM Projects          p
     JOIN Tasks             t ON p.id=t.project_id
-    JOIN TaskFileVersions tv ON t.id=tv.task_id AND tv.version_id=0
     JOIN TaskClaims       tc ON t.id=tc.task_id
     JOIN Users             u ON tc.user_id=u.id
-    JOIN Users            u2 ON tv.user_id=u2.id
+    LEFT JOIN TaskFileVersions tv ON t.id=tv.task_id AND tv.version_id=0
+    LEFT JOIN Users            u2 ON tv.user_id=u2.id
     ORDER BY t.id;
 END//
 DELIMITER ;
@@ -6339,18 +7274,45 @@ BEGIN
     SELECT
         t.id AS task_id,
         t.title AS task_title,
+        t.`word-count` AS word_count,
         t.`created-time` AS created_time,
-        tv.user_id AS creator_id,
+        t.deadline,
+        t.`task-type_id` AS task_type,
+        CASE
+            WHEN t.`task-type_id`=1 THEN 'Segmentation'
+            WHEN t.`task-type_id`=2 THEN 'Translation'
+            WHEN t.`task-type_id`=3 THEN 'Proofreading'
+            WHEN t.`task-type_id`=4 THEN 'Desegmentation'
+        END
+        AS task_type_text,
+        CASE
+            WHEN tq.required_qualification_level=1 THEN ''
+            WHEN tq.required_qualification_level=2 THEN 'Verified'
+            WHEN tq.required_qualification_level=3 THEN 'Senior'
+        END AS level,
+        IFNULL(tv.user_id, '') AS creator_id,
         u2.email AS creator_email,
+        IFNULL(lp.matecat_langpair,        '') AS matecat_langpair_or_blank,
+        IFNULL(lp.matecat_id_job,           0) AS matecat_id_job_or_zero,
+        IFNULL(lp.matecat_id_job_password, '') AS matecat_id_job_password_or_blank,
+        IFNULL(lp.matecat_id_file,          0) AS matecat_id_file_or_zero,
+        CONCAT(l.code, '|', l2.code) AS language_pair,
+        o.id AS org_id,
+        o.name AS org_name,
         p.id AS project_id,
         p.title AS project_title,
         IF(t.`task-status_id`=1, 'Waiting for Prerequisites', 'Pending Claim') AS status
     FROM Projects          p
+    JOIN Organisations     o ON p.organisation_id=o.id
     JOIN Tasks             t ON p.id=t.project_id
-    JOIN TaskFileVersions tv ON t.id=tv.task_id AND tv.version_id=0
-    JOIN Users            u2 ON tv.user_id=u2.id
+    JOIN Languages   l ON t.`language_id-source`=l.id
+    JOIN Languages  l2 ON t.`language_id-target`=l2.id
+    JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
+    LEFT JOIN MatecatLanguagePairs lp ON t.id=lp.task_id
+    LEFT JOIN TaskFileVersions tv ON t.id=tv.task_id AND tv.version_id=0
+    LEFT JOIN Users            u2 ON tv.user_id=u2.id
     WHERE t.`task-status_id`<3
-    ORDER BY t.id;
+    ORDER BY o.name, t.title, lp.matecat_langpair, t.`task-type_id`;
 END//
 DELIMITER ;
 
@@ -6369,7 +7331,8 @@ BEGIN
         l.`en-name` AS language_name,
         c.code AS country_code,
         c.`en-name` AS country_name,
-        'Native' AS native_or_secondary
+        'Native' AS native_or_secondary,
+        '' AS level
     FROM Users     u
     JOIN UserPersonalInformation i ON u.id=i.user_id
     JOIN Languages l ON u.language_id=l.id
@@ -6388,7 +7351,12 @@ UNION
         l.`en-name` AS language_name,
         c.code AS country_code,
         c.`en-name` AS country_name,
-        'Source' AS native_or_secondary
+        'Source' AS native_or_secondary,
+        CASE
+            WHEN uqp.qualification_level=1 THEN 'Translator'
+            WHEN uqp.qualification_level=2 THEN 'Verified Translator'
+            WHEN uqp.qualification_level=3 THEN 'Senior Translator'
+        END AS level
     FROM Users                   u
     JOIN UserPersonalInformation i ON u.id=i.user_id
     JOIN UserQualifiedPairs    uqp ON u.id=uqp.user_id
@@ -6408,7 +7376,12 @@ UNION
         l.`en-name` AS language_name,
         c.code AS country_code,
         c.`en-name` AS country_name,
-        'Target' AS native_or_secondary
+        'Target' AS native_or_secondary,
+        CASE
+            WHEN uqp.qualification_level=1 THEN 'Translator'
+            WHEN uqp.qualification_level=2 THEN 'Verified Translator'
+            WHEN uqp.qualification_level=3 THEN 'Senior Translator'
+        END AS level
     FROM Users                   u
     JOIN UserPersonalInformation i ON u.id=i.user_id
     JOIN UserQualifiedPairs    uqp ON u.id=uqp.user_id
@@ -6417,6 +7390,44 @@ UNION
     WHERE languageCode IS NULL OR l.code=languageCode
 )
 ORDER BY language_name, country_name, display_name;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `search_users_by_language_pair`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `search_users_by_language_pair`(IN `languageCodeSource` VARCHAR(3), IN `languageCodeTarget` VARCHAR(3))
+BEGIN
+    SELECT
+        u.id AS user_id,
+        u.`display-name` AS display_name,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`, '') AS last_name,
+        l1.`en-name` AS language_name_source,
+        c1.`en-name` AS country_name_source,
+        l2.`en-name` AS language_name_target,
+        c2.`en-name` AS country_name_target,
+        uqp.qualification_level,
+        CASE
+            WHEN uqp.qualification_level=1 THEN 'Translator'
+            WHEN uqp.qualification_level=2 THEN 'Verified Translator'
+            WHEN uqp.qualification_level=3 THEN 'Senior Translator'
+        END AS level,
+        IFNULL(ln.`en-name`, '') AS language_name_native,
+        IFNULL(cn.`en-name`, '') AS country_name_native
+    FROM Users                   u
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    JOIN UserQualifiedPairs    uqp ON u.id=uqp.user_id
+    JOIN Languages              l1 ON uqp.language_id_source=l1.id
+    JOIN Countries              c1 ON uqp.country_id_source=c1.id
+    JOIN Languages              l2 ON uqp.language_id_target=l2.id
+    JOIN Countries              c2 ON uqp.country_id_target=c2.id
+    LEFT JOIN Languages         ln ON u.language_id=ln.id
+    LEFT JOIN Countries         cn ON u.country_id=cn.id
+    WHERE
+        l1.code=languageCodeSource AND
+        l2.code=languageCodeTarget
+    ORDER BY u.email;
 END//
 DELIMITER ;
 
@@ -6515,6 +7526,79 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `user_words_by_language`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `user_words_by_language`()
+BEGIN
+    SELECT
+        u.id AS user_id,
+        u.`display-name` AS display_name,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`,  '') AS last_name,
+        MAX(CASE
+            WHEN uqp.qualification_level=1 THEN ''
+            WHEN uqp.qualification_level=2 THEN 'Verified'
+            WHEN uqp.qualification_level=3 THEN 'Senior'
+        END) AS level,
+        SUM(IF(t.`task-type_id`=2 AND t.`task-status_id`=4, t.`word-count`, 0)) AS words_translated,
+        SUM(IF(t.`task-type_id`=3 AND t.`task-status_id`=4, t.`word-count`, 0)) AS words_proofread,
+        CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) AS language_pair
+    FROM Tasks       t
+    JOIN TaskClaims tc ON t.id=tc.task_id
+    JOIN Users       u ON tc.user_id=u.id
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    JOIN UserQualifiedPairs    uqp ON u.id=uqp.user_id
+    JOIN Languages  l1 ON t.`language_id-source`=l1.id
+    JOIN Languages  l2 ON t.`language_id-target`=l2.id
+    JOIN Countries  c1 ON t.`country_id-source` =c1.id
+    JOIN Countries  c2 ON t.`country_id-target` =c2.id
+    WHERE
+        t.`task-status_id`=4 AND
+       (t.`task-type_id`=2 OR
+        t.`task-type_id`=3)
+    GROUP BY u.id, l1.code, c1.code, l2.code, c2.code
+    ORDER BY u.email, l1.code, c1.code, l2.code, c2.code;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `language_work_requested`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `language_work_requested`()
+BEGIN
+    SELECT
+        COUNT(*) AS tasks,
+        SUM(`word-count`) AS words,
+        YEAR(t.`created-time`) AS created,
+        CONCAT(l.code, '-', l2.code) AS language_pair
+    FROM Tasks t
+    JOIN Languages l ON t.`language_id-source`=l.id
+    JOIN Languages l2 ON t.`language_id-target`=l2.id
+    WHERE
+        t.`task-type_id`=2
+    GROUP BY CONCAT(l.code, '-', l2.code), YEAR(t.`created-time`)
+    ORDER BY CONCAT(l.code, '-', l2.code), YEAR(t.`created-time`) DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `translators_for_language_pairs`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `translators_for_language_pairs`()
+BEGIN
+    SELECT
+        CONCAT(language_code_source, '-', language_code_target) AS pair,
+        CASE
+            WHEN qualification_level=1 THEN 'Translator'
+            WHEN qualification_level=2 THEN 'Verified Translator'
+            WHEN qualification_level=3 THEN 'Senior Translator'
+        END AS level,
+        COUNT(*) AS number
+    FROM UserQualifiedPairs
+    GROUP BY language_code_source, language_code_target, qualification_level
+    ORDER BY language_code_source, language_code_target, qualification_level;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `insertWordCountRequestForProjects`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insertWordCountRequestForProjects`(IN `pID` INT, IN sourceLanguage VARCHAR(10), IN targetLanguages VARCHAR(100), IN `userWordCount` INT)
@@ -6522,6 +7606,43 @@ BEGIN
     INSERT INTO WordCountRequestForProjects
                (project_id, matecat_id_project, matecat_id_project_pass, source_language, target_languages, user_word_count, matecat_word_count, state)
         VALUES (pID,                         0,                      '',  sourceLanguage,  targetLanguages,   userWordCount,                  0,     0);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insertWordCountRequestForProjectsErrors`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertWordCountRequestForProjectsErrors`(IN `pID` INT, IN statusIN VARCHAR(30), IN messageIN VARCHAR(255))
+BEGIN
+    INSERT INTO WordCountRequestForProjectsErrors
+               (project_id, status,    message)
+        VALUES (pID,        statusIN,  messageIN);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `matecat_analyse_status`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `matecat_analyse_status`()
+BEGIN
+    SELECT
+        wc.project_id,
+        MIN(wc.matecat_id_project)      AS matecat_id_project,
+        MIN(wc.matecat_id_project_pass) AS matecat_id_project_pass,
+        MIN(wc.matecat_word_count)      AS matecat_word_count,
+        MIN(wc.state)                   AS state,
+        MIN(p.title)                    AS title,
+        IFNULL(MIN(tv.user_id), '')     AS creator_id,
+        IFNULL(MIN(u.email), '')        AS creator_email,
+        IFNULL(MIN(wce.status),  '')    AS status,
+        IFNULL(MIN(wce.message), '')    AS message
+    FROM      WordCountRequestForProjects        wc
+    JOIN      Projects                            p ON wc.project_id=p.id
+    JOIN      Tasks                               t ON wc.project_id=t.project_id
+    LEFT JOIN WordCountRequestForProjectsErrors wce ON wc.project_id=wce.project_id
+    LEFT JOIN TaskFileVersions                   tv ON t.id=tv.task_id AND tv.version_id=0 AND t.`task-type_id`=2
+    LEFT JOIN Users                               u ON tv.user_id=u.id
+    GROUP BY wc.project_id
+    ORDER BY project_id DESC
+    LIMIT 250;
 END//
 DELIMITER ;
 
@@ -6538,6 +7659,14 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getWordCountRequestForProjects`(IN `getState` INT)
 BEGIN
     SELECT * FROM WordCountRequestForProjects WHERE state=getState;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getWordCountRequestForProject`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getWordCountRequestForProject`(IN `projectID` INT)
+BEGIN
+    SELECT * FROM WordCountRequestForProjects WHERE project_id=projectID;
 END//
 DELIMITER ;
 
@@ -6640,6 +7769,228 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getMatecatLanguagePairsForProject`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getMatecatLanguagePairsForProject`(IN `pID` INT)
+BEGIN
+    SELECT * FROM MatecatLanguagePairs WHERE project_id=pID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insertTaskChunks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertTaskChunks`(IN `tID` BIGINT, IN `pID` INT, IN `typeID` INT, IN matecatLangpair VARCHAR(50), IN matecatIdJob INT, IN chunkNumber INT, IN chunkPassword VARCHAR(50), IN firstSegment VARCHAR(50))
+BEGIN
+    INSERT INTO TaskChunks
+               (task_id, project_id, type_id, matecat_langpair, matecat_id_job, chunk_number, matecat_id_chunk_password, job_first_segment)
+        VALUES (    tID,        pID,  typeID,  matecatLangpair,   matecatIdJob,  chunkNumber,             chunkPassword,      firstSegment);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getTaskChunks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskChunks`(IN `pID` INT)
+BEGIN
+    SELECT * FROM TaskChunks WHERE project_id=pID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getTaskChunk`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskChunk`(IN `tID` INT)
+BEGIN
+    SELECT * FROM TaskChunks WHERE task_id=tID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getTaskSubChunks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskSubChunks`(IN `jID` INT)
+BEGIN
+    SELECT * FROM TaskChunks WHERE matecat_id_job=jID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `is_chunk_or_parent_of_chunk`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `is_chunk_or_parent_of_chunk`(IN `pID` INT, IN `tID` INT)
+BEGIN
+    SELECT
+        lp.task_id,
+        tc.task_id AS tc_task_id,
+        lp.matecat_id_job
+    FROM MatecatLanguagePairs lp
+    JOIN TaskChunks tc ON lp.matecat_id_job=tc.matecat_id_job
+    WHERE
+        lp.project_id=pID AND
+        (
+            lp.task_id=tID OR
+            tc.task_id=tID
+        );
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `is_parent_of_chunk`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `is_parent_of_chunk`(IN `pID` INT, IN `tID` INT)
+BEGIN
+    SELECT
+        lp.task_id,
+        tc.task_id AS tc_task_id,
+        lp.matecat_id_job
+    FROM MatecatLanguagePairs lp
+    JOIN TaskChunks tc ON lp.matecat_id_job=tc.matecat_id_job
+    WHERE
+        lp.project_id=pID AND
+        lp.task_id=tID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `all_chunked_active_projects`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `all_chunked_active_projects`()
+BEGIN
+    SELECT
+        tc.project_id,
+        tc.task_id,
+        tc.matecat_id_job,
+        tc.type_id,
+        tc.matecat_id_chunk_password,
+        t.`created-time` AS created,
+        t.deadline
+    FROM TaskChunks tc
+    JOIN Tasks       t ON tc.task_id=t.id
+    WHERE
+        t.`task-status_id`=3;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getMatchingTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getMatchingTask`(IN id_job INT, IN id_chunk_password VARCHAR(50), IN matching_type_id INT)
+BEGIN
+    SELECT
+        t.id,
+        t.project_id AS projectId,
+        t.title,
+        `word-count` AS wordCount,
+        (SELECT `en-name` FROM Languages l where l.id = t.`language_id-source`) AS `sourceLanguageName`,
+        (SELECT  code     FROM Languages l where l.id = t.`language_id-source`) AS `sourceLanguageCode`,
+        (SELECT `en-name` FROM Languages l where l.id = t.`language_id-target`) AS `targetLanguageName`,
+        (SELECT  code     FROM Languages l where l.id = t.`language_id-target`) AS `targetLanguageCode`,
+        (SELECT `en-name` FROM Countries c where c.id = t.`country_id-source` ) AS `sourceCountryName`,
+        (SELECT  code     FROM Countries c where c.id = t.`country_id-source` ) AS `sourceCountryCode`,
+        (SELECT `en-name` FROM Countries c where c.id = t.`country_id-target` ) AS `targetCountryName`,
+        (SELECT  code     FROM Countries c where c.id = t.`country_id-target` ) AS `targetCountryCode`,
+        t.`comment`,
+        t.`task-type_id`   AS taskType,
+        t.`task-status_id` AS taskStatus,
+        t.published,
+        t.deadline,
+        t.`created-time`   AS createdTime
+    FROM Tasks       t
+    JOIN TaskChunks tc ON t.id=tc.task_id
+    WHERE
+        tc.matecat_id_job=id_job AND
+        tc.matecat_id_chunk_password=id_chunk_password AND
+        tc.type_id=matching_type_id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getParentTask`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getParentTask`(IN project INT, IN id_job INT, IN matching_type_id INT)
+BEGIN
+    SELECT
+        t.id,
+        t.project_id AS projectId,
+        t.title, `word-count` AS wordCount,
+        (SELECT `en-name` FROM Languages l where l.id = t.`language_id-source`) AS `sourceLanguageName`,
+        (SELECT  code     FROM Languages l where l.id = t.`language_id-source`) AS `sourceLanguageCode`,
+        (SELECT `en-name` FROM Languages l where l.id = t.`language_id-target`) AS `targetLanguageName`,
+        (SELECT  code     FROM Languages l where l.id = t.`language_id-target`) AS `targetLanguageCode`,
+        (SELECT `en-name` FROM Countries c where c.id = t.`country_id-source` ) AS `sourceCountryName`,
+        (SELECT  code     FROM Countries c where c.id = t.`country_id-source` ) AS `sourceCountryCode`,
+        (SELECT `en-name` FROM Countries c where c.id = t.`country_id-target` ) AS `targetCountryName`,
+        (SELECT  code     FROM Countries c where c.id = t.`country_id-target` ) AS `targetCountryCode`,
+        t.`comment`,
+        t.`task-type_id`   AS taskType,
+        t.`task-status_id` AS taskStatus,
+        t.published,
+        t.deadline,
+        t.`created-time`   AS createdTime
+    FROM Tasks                 t
+    JOIN MatecatLanguagePairs lp ON t.id=lp.task_id
+    WHERE
+        lp.project_id=project AND
+        lp.matecat_id_job=id_job AND
+        lp.type_id=matching_type_id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_parent_transation_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_parent_transation_task`(IN tID INT)
+BEGIN
+    SELECT
+        lp.task_id
+    FROM TaskChunks tc
+    JOIN MatecatLanguagePairs lp ON tc.project_id=lp.project_id
+    WHERE
+        tc.task_id=tID AND
+        tc.matecat_id_job=lp.matecat_id_job AND
+        lp.type_id=2;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getOtherPendingChunks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOtherPendingChunks`(IN `tID` BIGINT, IN `typeID` INT, IN `matecatIdJob` INT)
+BEGIN
+    SELECT tc.task_id
+    FROM TaskChunks tc
+    JOIN Tasks t ON tc.task_id=t.id
+    WHERE
+        tc.matecat_id_job=matecatIdJob AND
+        tc.type_id=typeID AND
+        t.`task-status_id`=2 AND
+        tc.task_id!=tID
+    ORDER BY chunk_number ASC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insertMatecatRecordedJobStatus`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertMatecatRecordedJobStatus`(IN jobID INT, IN jobPassword VARCHAR(50), IN jobStatus VARCHAR(20))
+BEGIN
+    REPLACE INTO MatecatRecordedJobStatus (matecat_id_job, matecat_id_job_password, job_status) VALUES (jobID, jobPassword, jobStatus);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getMatecatRecordedJobStatus`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getMatecatRecordedJobStatus`(IN jobID INT, IN jobPassword VARCHAR(50))
+BEGIN
+    SELECT job_status FROM MatecatRecordedJobStatus WHERE matecat_id_job=jobID AND matecat_id_job_password=jobPassword;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_task_complete_date`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_task_complete_date`(IN `tID` INT)
+BEGIN
+    REPLACE INTO TaskCompleteDates (task_id, complete_date) VALUES (tID, now());
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_task_complete_date`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_task_complete_date`(IN `tID` INT)
+BEGIN
+    SELECT * FROM TaskCompleteDates WHERE task_id=tID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `all_orgs`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `all_orgs`()
@@ -6685,10 +8036,31 @@ BEGIN
     FROM Projects p
     JOIN Tasks t ON p.id=t.project_id
     JOIN TaskClaims tc ON t.id=tc.task_id
+    LEFT JOIN TaskChunks c ON t.id=c.task_id
     WHERE
         (t.`task-type_id`=2 OR t.`task-type_id`=3) AND
-        t.`task-status_id`=4
+        t.`task-status_id`=4 AND
+        c.task_id IS NULL
     GROUP BY p.organisation_id, YEAR(tc.`claimed-time`);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `org_stats_words_req`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `org_stats_words_req`()
+BEGIN
+    SELECT
+        p.organisation_id,
+        YEAR(t.`created-time`) AS year,
+        SUM(IF(`task-type_id`=2, t.`word-count`, 0)) AS words_translated_req,
+        SUM(IF(`task-type_id`=3, t.`word-count`, 0)) AS words_proofread_req
+    FROM Projects p
+    JOIN Tasks t ON p.id=t.project_id
+    LEFT JOIN TaskChunks c ON t.id=c.task_id
+    WHERE
+        (t.`task-type_id`=2 OR t.`task-type_id`=3) AND
+        c.task_id IS NULL
+    GROUP BY p.organisation_id, YEAR(t.`created-time`);
 END//
 DELIMITER ;
 
@@ -6770,10 +8142,33 @@ ORDER BY YEAR(tfv.`upload-time`) DESC, MONTH(tfv.`upload-time`) DESC;
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `users_who_logged_in`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `users_who_logged_in`()
+BEGIN
+SELECT COUNT(u.user_id) AS all_logins, COUNT(DISTINCT u.user_id) AS distinct_logins, CONCAT(SUBSTRING(MONTHNAME(u.`login-time`),1, 3), '-', SUBSTRING(YEAR(u.`login-time`), 3)) AS month
+FROM UserLogins u
+WHERE u.success=1
+GROUP BY YEAR(u.`login-time`), MONTH(u.`login-time`)
+ORDER BY YEAR(u.`login-time`) ASC, MONTH(u.`login-time`) ASC;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `createUserQualifiedPair`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `createUserQualifiedPair`(IN userID INT, IN languageCodeSource VARCHAR(3), IN countryCodeSource VARCHAR(2), IN languageCodeTarget VARCHAR(3), IN countryCodeTarget VARCHAR(2), IN qualificationLevel INT)
 BEGIN
+  if NOT EXISTS (
+    SELECT 1
+    FROM UserQualifiedPairs
+    WHERE
+        user_id=userID AND
+        language_code_source=languageCodeSource AND
+        country_code_source=countryCodeSource AND
+        language_code_target=languageCodeTarget AND
+        country_code_target=countryCodeTarget
+  )
+  THEN
     INSERT INTO UserQualifiedPairs (
         user_id,
         language_id_source,
@@ -6797,6 +8192,15 @@ BEGIN
         countryCodeTarget,
         qualificationLevel
     );
+  ELSE
+    UPDATE UserQualifiedPairs SET qualification_level=qualificationLevel
+    WHERE
+        user_id=userID AND
+        language_code_source=languageCodeSource AND
+        country_code_source=countryCodeSource AND
+        language_code_target=languageCodeTarget AND
+        country_code_target=countryCodeTarget;
+  END IF;
 END//
 DELIMITER ;
 
@@ -6918,6 +8322,694 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `record_task_translated_in_matecat`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `record_task_translated_in_matecat`(IN `taskId` INT)
+BEGIN
+    REPLACE INTO TaskTranslatedInMatecat (task_id) VALUES (taskId);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `is_task_translated_in_matecat`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `is_task_translated_in_matecat`(IN `taskId` INT)
+BEGIN
+    SELECT * FROM TaskTranslatedInMatecat WHERE task_id=taskId;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_task_invite_sent_to_users`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_task_invite_sent_to_users`(IN `valueList` TEXT)
+BEGIN
+    SET @query = CONCAT(
+        'INSERT INTO TaskInviteSentToUsers
+        (task_id, user_id, date_sent_invite)
+        VALUES',
+        valueList);
+    PREPARE statement from @query;
+    execute statement;
+    DEALLOCATE PREPARE statement;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `list_task_invites_sent`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_task_invites_sent`(IN `taskID` INT)
+BEGIN
+    SELECT
+        ti.user_id,
+        MAX(ti.date_sent_invite) AS date_sent_invite,
+        IFNULL(MAX(tv.`viewed-time`),  '') AS date_viewed_task,
+        IFNULL(MAX(tc.`claimed-time`), '') AS date_claimed_task,
+        u.`display-name` AS display_name,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`, '') AS last_name
+    FROM TaskInviteSentToUsers       ti
+    JOIN Users                        u ON ti.user_id=u.id
+    LEFT JOIN UserPersonalInformation i ON ti.user_id=i.user_id
+    LEFT JOIN TaskClaims             tc ON ti.user_id=tc.user_id AND ti.task_id=tc.task_id
+    LEFT JOIN TaskViews              tv ON ti.user_id=tv.user_id AND tv.task_id=taskID
+    WHERE
+        ti.task_id=taskID
+    GROUP BY ti.user_id
+    ORDER BY MAX(ti.date_sent_invite) ASC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `list_task_invites_not_sent`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_task_invites_not_sent`(IN `taskID` INT)
+BEGIN
+    SELECT
+        u.id AS user_id,
+        u.`display-name` AS display_name,
+        u.email,
+        IFNULL(i.`first-name`, '') AS first_name,
+        IFNULL(i.`last-name`, '') AS last_name,
+        CASE
+            WHEN MAX(uqp.qualification_level=1) THEN 'Translator'
+            WHEN MAX(uqp.qualification_level=2) THEN 'Verified Translator'
+            WHEN MAX(uqp.qualification_level=3) THEN 'Senior Translator'
+        END AS level,
+        IFNULL(ln.`en-name`, '') AS language_name_native,
+        IFNULL(cn.`en-name`, '') AS country_name_native
+    FROM Tasks                            t
+    JOIN Projects                         p ON t.project_id=p.id
+    JOIN RequiredTaskQualificationLevels tq ON t.id=tq.task_id
+    JOIN UserQualifiedPairs             uqp ON
+        t.`language_id-source`=uqp.language_id_source AND
+        t.`language_id-target`=uqp.language_id_target AND
+        tq.required_qualification_level<=uqp.qualification_level
+    JOIN Users                            u ON uqp.user_id=u.id
+    LEFT JOIN Languages                  ln ON u.language_id=ln.id
+    LEFT JOIN Countries                  cn ON u.country_id=cn.id
+    LEFT JOIN UserPersonalInformation     i ON u.id=i.user_id
+    LEFT JOIN TaskInviteSentToUsers     tis ON u.id=tis.user_id AND tis.task_id=taskID
+    LEFT JOIN SpecialTranslators     st ON u.id=st.user_id
+    LEFT JOIN Admins                      a ON uqp.user_id=a.user_id
+    LEFT JOIN OrganisationMembers         o ON uqp.user_id=o.user_id
+    LEFT JOIN Badges                      b ON p.organisation_id=b.owner_id AND b.title='Qualified'
+    LEFT JOIN RestrictedTasks             r ON t.id=r.restricted_task_id
+    WHERE
+        t.id=taskID AND
+        tis.user_id IS NULL AND
+        (st.user_id IS NULL OR st.type=0) AND
+        a.user_id IS NULL AND
+        o.user_id IS NULL AND
+        NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist tbl WHERE tbl.user_id=uqp.user_id AND tbl.task_id=t.id) AND
+        (
+            r.restricted_task_id IS NULL OR
+            b.id IS NULL OR
+            b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uqp.user_id)
+        )
+    GROUP BY uqp.user_id
+    ORDER BY uqp.user_id DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `list_task_invites_not_sent_words`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_task_invites_not_sent_words`(IN `taskID` INT)
+BEGIN
+    SELECT
+        tc.user_id,
+        SUM(IF((t.`task-type_id`=2 OR t.`task-type_id`=3) AND t.`task-status_id`=4,                                                             t.`word-count`, 0)) AS words_delivered,
+        SUM(IF((t.`task-type_id`=2 OR t.`task-type_id`=3) AND t.`task-status_id`=4 AND (tc.`claimed-time` > DATE_SUB(NOW(), INTERVAL 3 MONTH)), t.`word-count`, 0)) AS words_delivered_last_3_months
+    FROM Tasks       t
+    JOIN TaskClaims tc ON t.id=tc.task_id
+    WHERE
+        tc.user_id IN (
+            SELECT 
+                uqp1.user_id
+            FROM Tasks t1
+            JOIN UserQualifiedPairs uqp1 ON
+                t1.`language_id-source`=uqp1.language_id_source AND
+                t1.`language_id-target`=uqp1.language_id_target
+            WHERE
+                t1.id=taskID)
+    GROUP BY tc.user_id
+    ORDER BY words_delivered DESC, tc.user_id DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `list_task_invites_not_sent_tags`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_task_invites_not_sent_tags`(IN `taskID` INT)
+BEGIN
+    SELECT
+        ut.user_id,
+        GROUP_CONCAT(t.label ORDER BY t.label ASC SEPARATOR ', ') AS user_liked_tags
+    FROM UserTags ut
+    JOIN Tags      t ON ut.tag_id=t.id 
+    WHERE
+        ut.user_id IN (
+            SELECT 
+                uqp1.user_id
+            FROM Tasks t1
+            JOIN UserQualifiedPairs uqp1 ON
+                t1.`language_id-source`=uqp1.language_id_source AND
+                t1.`language_id-target`=uqp1.language_id_target
+            WHERE
+                t1.id=taskID)
+    GROUP BY ut.user_id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `terms_accepted`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `terms_accepted`(IN userID INT)
+BEGIN
+     SET @level = 0;
+     SELECT accepted_level INTO @level FROM TermsAcceptedUsers WHERE user_id=userID;
+     SELECT @level AS accepted_level;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_terms_accepted`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_terms_accepted`(IN userID INT, IN acceptedLevel INT)
+BEGIN
+    REPLACE INTO TermsAcceptedUsers (user_id, accepted_level) VALUES (userID, acceptedLevel);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_project_tm_key`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_project_tm_key`(IN `projectID` INT, IN `mtEngine` INT, IN `preTranslate` INT, IN `lexi_QA` INT, IN `privateTMKey` VARCHAR(255))
+BEGIN
+    INSERT INTO PrivateTMKeys (project_id, mt_engine, pretranslate_100, lexiqa, private_tm_key) VALUES (projectID, mtEngine, preTranslate, lexi_QA, privateTMKey);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_project_tm_key`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_project_tm_key`(IN `projectID` INT)
+BEGIN
+    SELECT * FROM PrivateTMKeys WHERE project_id=projectID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_neon_account`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_neon_account`(IN userID INT)
+BEGIN
+     SELECT * FROM UserNeonAccount WHERE user_id=userID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_neon_account`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_neon_account`(IN userID INT, IN accountID INT)
+BEGIN
+    REPLACE INTO UserNeonAccount (user_id, account_id) VALUES (userID, accountID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_discourse_id`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_discourse_id`(IN projectID INT, IN topicID INT)
+BEGIN
+    INSERT INTO DiscourseID (project_id, topic_id) VALUES (projectID, topicID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_discourse_id`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_discourse_id`(IN projectID INT)
+BEGIN
+    SELECT * FROM DiscourseID WHERE project_id=projectID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getUserURLs`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserURLs`(IN uID INT)
+BEGIN
+    SELECT * FROM UserURLs WHERE user_id=uID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insertUserURL`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertUserURL`(IN uID INT, IN ukey VARCHAR(20), IN value VARCHAR(255))
+BEGIN
+    REPLACE INTO UserURLs
+               (user_id, url_key,   url)
+        VALUES (    uID,    ukey, value);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getUserExpertises`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserExpertises`(IN uID INT)
+BEGIN
+    SELECT * FROM UserExpertises WHERE user_id=uID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `addUserExpertise`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addUserExpertise`(IN uID INT, IN ekey VARCHAR(20))
+BEGIN
+    REPLACE INTO UserExpertises
+               (user_id, expertise_key)
+        VALUES (    uID,          ekey);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `removeUserExpertise`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeUserExpertise`(IN uID INT, IN ekey VARCHAR(20))
+BEGIN
+    DELETE
+    FROM UserExpertises
+    WHERE
+        user_id=uID AND
+        expertise_key=ekey;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getUserHowheards`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserHowheards`(IN uID INT)
+BEGIN
+    SELECT * FROM UserHowheards WHERE user_id=uID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insertUserHowheard`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertUserHowheard`(IN uID INT, IN hkey VARCHAR(20))
+BEGIN
+    REPLACE INTO UserHowheards
+               (user_id, howheard_key)
+        VALUES (    uID,         hkey);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_communications_consent`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_communications_consent`(IN uID INT, IN acc INT)
+BEGIN
+    REPLACE INTO communications_consents
+               (user_id, accepted)
+        VALUES (    uID,      acc);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_communications_consent`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_communications_consent`(IN uID INT)
+BEGIN
+    SELECT * FROM communications_consents WHERE user_id=uID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `updateUserHowheard`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateUserHowheard`(IN uID INT, IN r INT)
+BEGIN
+    UPDATE UserHowheards
+    SET reviewed=r
+    WHERE user_id=uID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getUserCertifications`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserCertifications`(IN uID INT)
+BEGIN
+    SELECT *
+    FROM UserCertifications
+    WHERE user_id=uID
+    ORDER BY note, vid;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getUserCertificationByID`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserCertificationByID`(IN primaryID INT)
+BEGIN
+    SELECT *
+    FROM UserCertifications
+    WHERE id=primaryID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insertUserCertification`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertUserCertification`(IN uID INT, IN `versionID` INT, IN ckey VARCHAR(20), IN file VARCHAR(128), IN mime VARCHAR(128), IN n TEXT)
+BEGIN
+    REPLACE INTO UserCertifications
+               (user_id,       vid, certification_key, filename, mimetype,  note)
+        VALUES (    uID, versionID,              ckey, file,     mime,         n);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `updateCertification`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateCertification`(IN primaryID INT, IN r INT)
+BEGIN
+    UPDATE UserCertifications
+    SET reviewed=r
+    WHERE id=primaryID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `deleteCertification`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteCertification`(IN primaryID INT)
+BEGIN
+    DELETE FROM UserCertifications WHERE id=primaryID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `users_review`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `users_review`()
+BEGIN
+(
+    SELECT
+        0    AS cert_id,
+        ''   AS certificate,
+        u.id AS user_id,
+        CONCAT (IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`, '')) AS name,
+        CONCAT (l.`en-name`, '(' , c.`en-name`, ')')                   AS native_language,
+        IFNULL(i.country, '')                                          AS country_address
+    FROM UserHowheards          hh
+    JOIN Users                   u ON hh.user_id=u.id
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    JOIN Languages               l ON u.language_id=l.id
+    JOIN Countries               c ON u.country_id=c.id
+    WHERE
+        hh.reviewed=99
+)
+UNION
+(
+    SELECT
+        uc.id   AS cert_id,
+        uc.note AS certificate,
+        u.id    AS user_id,
+        CONCAT (IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`, '')) AS name,
+        CONCAT (l.`en-name`, '(' , c.`en-name`, ')')                   AS native_language,
+        IFNULL(i.country, '')                                          AS country_address
+    FROM UserCertifications     uc
+    JOIN Users                   u ON uc.user_id=u.id
+    JOIN UserPersonalInformation i ON u.id=i.user_id
+    JOIN Languages               l ON u.language_id=l.id
+    JOIN Countries               c ON u.country_id=c.id
+    WHERE
+        uc.reviewed=0 AND
+        uc.certification_key NOT IN ('TRANSLATOR', 'TWB')
+)
+ORDER BY user_id, certificate;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `users_new`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `users_new`()
+BEGIN
+    SELECT
+        hh.user_id,
+        IF(hh.reviewed!=0, '(Reviewed)', '')                               AS reviewed_text,
+        CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`, '')) AS name,
+        SUBSTRING(u.`created-time`, 1, 10)                                 AS created_time,
+        CONCAT(l.`en-name`, '(' , c.`en-name`, ')')                        AS native_language,
+        IFNULL(GROUP_CONCAT(DISTINCT CONCAT(uqp.language_code_source, '-', uqp.country_code_source, '|', uqp.language_code_target, '-', uqp.country_code_target) ORDER BY CONCAT(uqp.language_code_source, '-', uqp.country_code_source, '|', uqp.language_code_target, '-', uqp.country_code_target) SEPARATOR ', '), '') AS language_pairs,
+        IFNULL(u.biography, '')                                                                              AS bio,
+        IFNULL(GROUP_CONCAT(DISTINCT uc.certification_key ORDER BY uc.certification_key SEPARATOR ', '), '') AS certificates,
+        u.email
+    FROM UserHowheards            hh
+    JOIN Users                     u ON hh.user_id=u.id
+    JOIN UserPersonalInformation   i ON u.id=i.user_id
+    JOIN Languages                 l ON u.language_id=l.id
+    JOIN Countries                 c ON u.country_id=c.id
+    LEFT JOIN UserQualifiedPairs uqp ON u.id=uqp.user_id
+    LEFT JOIN UserCertifications  uc ON u.id=uc.user_id
+    WHERE u.id>=37052
+    GROUP BY u.id
+    ORDER BY hh.reviewed, hh.user_id DESC
+    LIMIT 500;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `supported_ngos`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `supported_ngos`(IN uID INT)
+BEGIN
+    SELECT DISTINCT
+        o.name AS org_name,
+        o.id AS org_id
+    FROM TaskClaims   tc
+    JOIN Tasks         t ON tc.task_id=t.id
+    JOIN Projects      p ON t.project_id=p.id
+    JOIN Organisations o ON p.organisation_id=o.id
+    WHERE
+        tc.user_id=uID AND
+        t.`task-status_id`=4
+    ORDER BY o.name;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `quality_score`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `quality_score`(IN `uID` INT)
+BEGIN
+    SELECT
+        IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.corrections, 0))/SUM(consistency<10), 1), '') AS cor,
+        IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.grammar,     0))/SUM(consistency<10), 1), '') AS gram,
+        IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.spelling,    0))/SUM(consistency<10), 1), '') AS spell,
+        IF(SUM(consistency<10), FORMAT(SUM(IF(consistency<10, tr.consistency, 0))/SUM(consistency<10), 1), '') AS cons,
+        SUM(consistency<10) AS num_legacy,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.corrections,        0))/SUM(consistency>=10), 1), '') AS accuracy,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.grammar,            0))/SUM(consistency>=10), 1), '') AS fluency,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.spelling,           0))/SUM(consistency>=10), 1), '') AS terminology,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.consistency   % 10, 0))/SUM(consistency>=10), 1), '') AS style,
+        IF(SUM(consistency>=10), FORMAT(SUM(IF(consistency>=10, tr.consistency DIV 10, 0))/SUM(consistency>=10), 1), '') AS design,
+        SUM(consistency>=10) AS num_new,
+        COUNT(*)             AS num
+    FROM TaskReviews            tr
+    JOIN Tasks                   t  ON tr.task_id=t.id
+    JOIN TaskClaims             tc  ON tr.task_id=tc.task_id
+    WHERE
+        t.`task-status_id`=4 AND
+        tc.user_id=uID
+    GROUP BY tc.user_id;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `admin_comments`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `admin_comments`(IN uID INT)
+BEGIN
+    SELECT * FROM admin_comment WHERE user_id=uID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_admin_comment`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_admin_comment`(IN uID INT, IN aID INT, IN work INT, IN comment VARCHAR(2000))
+BEGIN
+    INSERT INTO admin_comment
+               (user_id, admin_id, work_again, admin_comment)
+        VALUES (    uID,      aID,       work,       comment);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `delete_admin_comment`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_admin_comment`(IN primaryID INT)
+BEGIN
+    DELETE FROM admin_comment WHERE id=primaryID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `covid_projects`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `covid_projects`()
+BEGIN
+    SELECT
+        p.title AS project_title,
+        o.name AS org_name,
+        MAX(u.email) AS creator_email,
+        p.`word-count` AS word_count,
+        GROUP_CONCAT(DISTINCT CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) ORDER BY CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) ASC SEPARATOR ', ') AS language_pairs,
+        COUNT(DISTINCT CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code)) AS language_pairs_number,
+        p.created,
+        p.deadline,
+        IF(MIN(t.`task-status_id`=4), MAX(tcd.complete_date), '') AS completed
+    FROM Projects               p
+    JOIN ProjectTags           pt ON p.id=pt.project_id AND pt.tag_id=4334
+    JOIN Organisations          o ON p.organisation_id=o.id
+    JOIN Tasks                  t ON p.id=t.project_id
+    LEFT JOIN TaskFileVersions tv ON t.id=tv.task_id AND tv.version_id=0 AND t.`task-type_id`=2
+    LEFT JOIN Users             u ON tv.user_id=u.id
+    JOIN Languages             l1 ON p. language_id=l1.id
+    JOIN Countries             c1 ON p. country_id =c1.id
+    JOIN Languages             l2 ON t.`language_id-target`=l2.id
+    JOIN Countries             c2 ON t.`country_id-target` =c2.id
+    LEFT JOIN TaskCompleteDates tcd ON t.id=tcd.task_id
+    GROUP BY p.id
+    ORDER BY p.created DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `record_track_code`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `record_track_code`(IN trackCode VARCHAR(255))
+BEGIN
+    REPLACE INTO TrackCodes (id, track_code) VALUES (1, trackCode);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_tracked_registration`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_tracked_registration`(IN uID INT, IN trackCode VARCHAR(255))
+BEGIN
+    SELECT UNHEX(trackCode) INTO @binary_track_code;
+    IF @binary_track_code IS NOT NULL THEN
+        SELECT AES_DECRYPT(@binary_track_code, 'helks5nesahel') INTO @decrypted;
+        IF @decrypted IS NOT NULL THEN
+            REPLACE INTO TrackedRegistrations VALUES (uID, @decrypted);
+        END IF;
+    END IF;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_tracked_registration`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_tracked_registration`(IN uID INT)
+BEGIN
+    SELECT referer FROM TrackedRegistrations WHERE user_id=uID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `users_tracked`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `users_tracked`()
+BEGIN
+    SELECT
+        tr.referer,
+        u.id                                                               AS user_id,
+        CONCAT(IFNULL(i.`first-name`, ''), ' ', IFNULL(i.`last-name`, '')) AS name,
+        SUBSTRING(u.`created-time`, 1, 10)                                 AS created_time,
+        CONCAT(l.`en-name`, '(' , c.`en-name`, ')')                        AS native_language,
+        IFNULL(GROUP_CONCAT(DISTINCT CONCAT(uqp.language_code_source, '-', uqp.country_code_source, '|', uqp.language_code_target, '-', uqp.country_code_target) ORDER BY CONCAT(uqp.language_code_source, '-', uqp.country_code_source, '|', uqp.language_code_target, '-', uqp.country_code_target) SEPARATOR ', '), '') AS language_pairs,
+        IFNULL(u.biography, '')                                                                              AS bio,
+        IFNULL(GROUP_CONCAT(DISTINCT uc.certification_key ORDER BY uc.certification_key SEPARATOR ', '), '') AS certificates,
+        u.email
+    FROM TrackedRegistrations     tr
+    JOIN Users                     u ON tr.user_id=u.id
+    JOIN UserPersonalInformation   i ON u.id=i.user_id
+    JOIN Languages                 l ON u.language_id=l.id
+    JOIN Countries                 c ON u.country_id=c.id
+    LEFT JOIN UserQualifiedPairs uqp ON u.id=uqp.user_id
+    LEFT JOIN UserCertifications  uc ON u.id=uc.user_id
+    GROUP BY u.id
+    ORDER BY u.`created-time` DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `peer_to_peer_vetting`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `peer_to_peer_vetting`()
+BEGIN
+    SELECT
+        u.id AS user_id,
+        u.`display-name`                                                        AS display_name,
+        u.email,
+        native.code                                                             AS native_language_code,
+        native.`en-name`                                                        AS native_language_name,
+        SUM(IF(t.`task-type_id`=2, t.`word-count`, 0))                          AS words_translated,
+        SUM(IF(t.`task-type_id`=3, t.`word-count`, 0))                          AS words_revised,
+        CONCAT(l1.code, '|', l2.code)                                           AS language_pair,
+        CONCAT(u.id, '-', l1.code, '|', l2.code)                                AS user_language_pair,
+        CONCAT(u.id, '-', l1.code, '|', l2.code)                                AS user_language_pair_reduced,
+        GROUP_CONCAT(DISTINCT CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) ORDER BY CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) SEPARATOR ', ') AS language_pair_list,
+        MAX(tc.`claimed-time`)                                                  AS last_task
+    FROM Tasks                     t
+    JOIN TaskClaims               tc ON t.id=tc.task_id
+    JOIN Users                     u ON tc.user_id=u.id
+    JOIN Languages            native ON u.language_id=native.id
+    JOIN Languages                l1 ON t.`language_id-source`=l1.id
+    JOIN Languages                l2 ON t.`language_id-target`=l2.id
+    JOIN Countries                c1 ON t.`country_id-source`=c1.id
+    JOIN Countries                c2 ON t.`country_id-target`=c2.id
+    LEFT JOIN TaskReviews         tr ON t.id=tr.task_id
+    WHERE
+        t.`task-status_id`=4
+    GROUP BY tc.user_id, t.`language_id-source`, t.`language_id-target`
+    ORDER BY l1.code, l2.code, u.email;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `peer_to_peer_vetting_qualification_level`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `peer_to_peer_vetting_qualification_level`()
+BEGIN
+    SELECT
+        uqp.user_id,
+        uqp.language_code_source,
+        uqp.language_code_target,
+        CONCAT(uqp.user_id, '-', uqp.language_code_source, '|', uqp.language_code_target) AS user_language_pair_reduced,
+        CASE
+            WHEN MAX(uqp.qualification_level)=1 THEN 'Translator'
+            WHEN MAX(uqp.qualification_level)=2 THEN 'Verified Translator'
+            WHEN MAX(uqp.qualification_level)=3 THEN 'Senior Translator'
+        END                                                                               AS level
+    FROM UserQualifiedPairs uqp
+    GROUP BY uqp.user_id, uqp.language_code_source, uqp.language_code_target;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `peer_to_peer_vetting_reviews`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `peer_to_peer_vetting_reviews`()
+BEGIN
+    SELECT
+        tc.user_id,
+        CONCAT(tc.user_id, '-', l1.code, '|', l2.code) AS user_language_pair,
+        FORMAT(
+            SUM((tr.corrections + tr.grammar + tr.spelling + tr.consistency % 10 + tr.consistency DIV 10)/5.)
+                /
+            SUM(1.),
+            1
+        )                                              AS average_reviews,
+        SUM(1)                                         AS number_reviews
+    FROM Tasks        t
+    JOIN TaskReviews tr ON t.id=tr.task_id
+    JOIN Languages   l1 ON t.`language_id-source`=l1.id
+    JOIN Languages   l2 ON t.`language_id-target`=l2.id
+    JOIN TaskClaims  tc ON t.id=tc.task_id
+    WHERE
+        tr.task_id IS NOT NULL AND
+        tr.consistency>=10 AND
+        t.`task-status_id`=4
+    GROUP BY tc.user_id, t.`language_id-source`, t.`language_id-target`;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_project_restrictions`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_project_restrictions`(IN projectID INT, IN translate INT, IN revise INT)
+BEGIN
+    INSERT INTO ProjectRestrictions (project_id, restrict_translate_tasks, restrict_revise_tasks) VALUES (projectID, translate, revise);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_project_restrictions`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_project_restrictions`(IN projectID INT)
+BEGIN
+    SELECT *
+    FROM ProjectRestrictions
+    WHERE project_id=projectID;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
@@ -6965,7 +9057,7 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 /*!40014 SET FOREIGN_KEY_CHECKS=0 */;
 
 -- Dumping structure for trigger debug-test.deleteArchiveTaskOnArchiveProjectDeletion

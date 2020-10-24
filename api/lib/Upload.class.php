@@ -130,6 +130,16 @@ class Upload
                 $projectFile
             );
         }
+
+$task = DAO\TaskDao::getTask($id);
+$ts = $task->getTaskStatus();
+error_log("removeTaskPreReq($id, $preReqId), $id ->getTaskStatus(): $ts");
+
+$task = DAO\TaskDao::getTask($preReqId);
+if (!empty($task)) {
+    $ts = $task->getTaskStatus();
+    error_log("removeTaskPreReq($id, $preReqId), $preReqId ->getTaskStatus(): $ts");
+}
         return $ret;
     }
     
