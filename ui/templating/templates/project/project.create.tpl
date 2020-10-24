@@ -21,6 +21,7 @@
 
         <!-- Template for predefined langauges... -->
         <div id="template1">{$template1}</div>
+        <div id="template2">{$template2}</div>
 
     </span>
 
@@ -285,5 +286,12 @@
             Set Source and Target Languages from Template 1
         </button>
     </div>
-    
+    <br />
+    <div>
+        <button onclick="setTemplateLanguages(2); return false;" class="btn btn-success">
+            <i class="icon-upload icon-white"></i>
+            Set Source and Target Languages from Template 2
+        </button>
+    </div>
+
 {include file="footer.tpl"}
