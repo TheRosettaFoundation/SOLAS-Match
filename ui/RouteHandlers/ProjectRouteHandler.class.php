@@ -118,11 +118,10 @@ class ProjectRouteHandler
         $sourceLocale->setLanguageCode($trommons_source_language_code);
         $project->setSourceLocale($sourceLocale);
 
-//REQUIRED How match
+//REQUIRED How match PREMAP
                 $project->setOrganisationId($org_id);
         if (!empty($hook['dateCreated'])) $project->setCreatedTime(substr(string $hook['dateCreated'], 0, 10) . ' ' . substr(string $hook['dateCreated'], 11, 6));
         else                              $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
-        //IS THERE ANY MATCHING TAGS? $project->clearTag();
 
         try {
             $project = $projectDao->createProject($project);
@@ -143,13 +142,17 @@ class ProjectRouteHandler
 
 //check/discuss...
 //            $task->setPublished(1);
+Levels inherited from organisation
+claim but not work...
 //            if ($newTaskId && $preReqTaskId) {
 //                $taskDao->addTaskPreReq($newTaskId, $preReqTaskId);
 //            }
+owner must track
 //            if (!empty($post['trackProject'])) {
 //                $userDao = new DAO\UserDao();
 //                $userDao->trackTask($user_id, $newTaskId);
 //            }
+not now...
 //            if (!empty($post['restrict_translate_tasks']) && $newTask->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) {
 //                $taskDao->setRestrictedTask($newTaskId);
 //            }
@@ -163,6 +166,7 @@ class ProjectRouteHandler
 //                                        if ($restrict_translate_tasks || $restrict_revise_tasks) $taskDao->insert_project_restrictions($project->getId(), $restrict_translate_tasks, $restrict_revise_tasks);
 //
 //                                        // Create a topic in the Community forum (Discourse) and a project in Asana
+YEs
 //                                        error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");
 //                                        try {
 //                                           $this->create_discourse_topic($project->getId(), $target_languages);
@@ -179,23 +183,23 @@ class ProjectRouteHandler
 
 //Discuss...
 //https://cloud.memsource.com/web/project2/show/0jnLCiBsa0LZW4cufoTWY3
-//            [accessSettings] => Array
-//            [analyseSettings] => Array
-//            [businessUnit] => 
+ignore//            [accessSettings] => Array
+ignore//            [analyseSettings] => Array
+ignore//            [businessUnit] => 
 //            [client] => Array
-//            [costCenter] => 
+ignore//            [costCenter] => 
 //            [createdBy] => Array
-//            [domain] => 
-//            [financialSettings] => Array
+Maybe//            [domain] => 
+NO//            [financialSettings] => Array
 //            [id] => 20434630 NEED TO MATCH IN TASK
 //            [internalId] => 48
-//            [isPublishedOnJobBoard] => 
+No//            [isPublishedOnJobBoard] => 
 //            [owner] => Array
 //            [progress] => Array
 //            [purchaseOrder] => 
-//            [qualityAssuranceSettings] => Array
+NO//            [qualityAssuranceSettings] => Array
 //            [references] => Array
-//            [shared] => 
+No//            [shared] => 
 //            [status] => NEW
 //            [subDomain] => 
 //            [uid] => 0jnLCiBsa0LZW4cufoTWY3
