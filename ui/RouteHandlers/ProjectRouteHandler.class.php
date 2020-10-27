@@ -100,17 +100,13 @@ class ProjectRouteHandler
         $hook = $hook['project'];
         $project = new Common\Protobufs\Models\Project();
 
-//continuous job and other hooks, reassign??
-//Have to allow duplicate titles within an organisation
-//Test Kató€"'&%XX
         $project->setTitle($hook['name']);
         if (!empty($hook['project_description'])) $project->setDescription($hook['project_description']);
         else                                      $project->setDescription('-');
         $project->setImpact('-');
         if (!empty($hook['dateDue'])) $project->setDeadline(substr(string $hook['dateDue'], 0, 10) . ' ' . substr(string $hook['dateDue'], 11, 6));
         else                          $project->setDeadline(gmdate('Y-m-d H:i:s', strtotime('25 days')));
-//Other fields such as impact/reference
-        $project->setWordCount(1); //?? Code in taskInsertAndUpdate() does not support 0, so use 1 as placeholder
+        $project->setWordCount(1);
         //Need new mapping model...
         list($trommons_source_language_code, $trommons_source_country_code) = $projectDao->convert_selection_to_language_country($hook['sourceLang']);
         $sourceLocale = new Common\Protobufs\Models\Locale();
