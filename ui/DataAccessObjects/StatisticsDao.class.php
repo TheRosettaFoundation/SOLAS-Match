@@ -423,6 +423,43 @@ class StatisticsDao extends BaseDao
         return $result;
     }
 
+    public function peer_to_peer_vetting()
+    {
+        $levels_by_user_language_pair_reduced = [];
+        $result = LibAPI\PDOWrapper::call('peer_to_peer_vetting_qualification_level', '');
+        foreach ($result as $row) {
+            $levels_by_user_language_pair_reduced[$row['user_language_pair_reduced']] = $row;
+        }
+
+        $average_reviews_by_user_language_pair = [];
+        $result = LibAPI\PDOWrapper::call('peer_to_peer_vetting_reviews', '');
+        foreach ($result as $row) {
+            $average_reviews_by_user_language_pair[$row['user_language_pair']] = $row;
+        }
+
+        $result = LibAPI\PDOWrapper::call('peer_to_peer_vetting', '');
+        foreach ($result as $index => $row) {
+            if (!empty($levels_by_user_language_pair_reduced[$row['user_language_pair_reduced']])) {
+                $result[$index]['level'] = $levels_by_user_language_pair_reduced[$row['user_language_pair_reduced']]['level'];
+            } else {
+                $result[$index]['level'] = '';
+            }
+
+            if (!empty($average_reviews_by_user_language_pair[$row['user_language_pair']])) {
+                $result[$index]['average_reviews'] = $average_reviews_by_user_language_pair[$row['user_language_pair']]['average_reviews'];
+            } else {
+                $result[$index]['average_reviews'] = '';
+            }
+
+            if (!empty($average_reviews_by_user_language_pair[$row['user_language_pair']])) {
+                $result[$index]['number_reviews'] = $average_reviews_by_user_language_pair[$row['user_language_pair']]['number_reviews'];
+            } else {
+                $result[$index]['number_reviews'] = 0;
+            }
+        }
+        return $result;
+    }
+
     public function submitted_task_reviews()
     {
         $result = LibAPI\PDOWrapper::call('submitted_task_reviews', '');

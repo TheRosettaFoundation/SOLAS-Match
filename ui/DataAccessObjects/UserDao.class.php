@@ -1423,6 +1423,20 @@ error_log(print_r($result, true));
             LibAPI\PDOWrapper::cleanse($reviewed));
     }
 
+    public function insert_communications_consent($user_id, $accepted)
+    {
+        LibAPI\PDOWrapper::call('insert_communications_consent',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($accepted));
+    }
+
+    public function get_communications_consent($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_communications_consent', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) return 0;
+        return $result[0]['accepted'];
+    }
+
     public function getUserCertifications($user_id)
     {
         $result = LibAPI\PDOWrapper::call('getUserCertifications', LibAPI\PDOWrapper::cleanse($user_id));
@@ -1643,7 +1657,7 @@ error_log(print_r($result, true));
         if (!empty($howheards)) {
             $howheard_list[$howheards[0]['howheard_key']]['state'] = 1;
         } elseif ($referer = $this->get_tracked_registration($user_id)) {
-            if (in_array($referer, ['RWS Moravia', 'CIOL', 'Riskified', 'Welocalize', 'Lionbridge', 'Apala', 'Ei Ei', 'Muhannad', 'Paul', 'Rodrigue', 'Diane', 'Simon M.', 'Mahmud', 'Kamal', 'Fatima', 'Halima', 'Ibrahim', 'Abdulwahab', 'Alhaji', 'Ali Abdulrahman', 'Amajam', 'Buba Gameche', 'Jacob', 'Jagila', 'Mustapha', 'Valerie', 'Ivana', 'Renwar', 'Marwan', 'Simon W.', 'Hussain', 'Thalia', 'Claudia', 'Carolina', 'Ravija', 'Facebook', 'Twitter', 'Instagram', 'Linkedin', 'Parenting for Lifelong Health', 'PLH SMEs'])) $howheard_list['Referral']['state'] = 1;
+            if (in_array($referer, ['RWS Moravia', 'CIOL', 'Riskified', 'Welocalize', 'Lionbridge', 'Apala', 'Ei Ei', 'Muhannad', 'Paul', 'Rodrigue', 'Diane', 'Simon M.', 'Mahmud', 'Kamal', 'Fatima', 'Halima', 'Ibrahim', 'Abdulwahab', 'Alhaji', 'Ali Abdulrahman', 'Amajam', 'Buba Gameche', 'Jacob', 'Jagila', 'Mustapha', 'Valerie', 'Ivana', 'Renwar', 'Marwan', 'Simon W.', 'Hussain', 'Thalia', 'Claudia', 'Carolina', 'Ravija', 'Facebook', 'Twitter', 'Instagram', 'Linkedin', 'Parenting for Lifelong Health', 'PLH SMEs', 'Cardinals', 'SDL', 'Dace', 'Miami'])) $howheard_list['Referral']['state'] = 1;
         }
         return $howheard_list;
     }
@@ -1736,7 +1750,7 @@ error_log(print_r($result, true));
     public function get_tracked_registration_for_verified($user_id)
     {
         $result = LibAPI\PDOWrapper::call('get_tracked_registration', LibAPI\PDOWrapper::cleanse($user_id));
-        if (!empty($result) && in_array($result[0]['referer'], ['RWS Moravia', 'Welocalize', 'Lionbridge'])) return true;
+        if (!empty($result) && in_array($result[0]['referer'], ['RWS Moravia', 'Welocalize', 'Lionbridge', 'SDL'])) return true;
         return false;
     }
 }

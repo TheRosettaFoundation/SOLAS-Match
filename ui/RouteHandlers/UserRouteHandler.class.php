@@ -1219,6 +1219,9 @@ EOD;
 
                     if (!empty($post['howheard'])) $userDao->insertUserHowheard($user_id, $post['howheard']);
 
+                    if (!empty($post['communications_consent'])) $userDao->insert_communications_consent($user_id, 1);
+                    else                                         $userDao->insert_communications_consent($user_id, 0);
+
                     $userDao->update_terms_accepted($user_id);
 
                     $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user_id)));
@@ -1276,6 +1279,7 @@ EOD;
             'certification_list' => $certification_list,
             'in_kind'           => $userDao->get_special_translator($user_id),
             'profile_completed' => !empty($_SESSION['profile_completed']),
+            'communications_consent' => $userDao->get_communications_consent($user_id),
             'extra_scripts' => $extra_scripts,
             'sesskey'       => $sesskey,
         ));
@@ -1332,6 +1336,9 @@ EOD;
                     $userDao->updateUser($user);
                     $userDao->updatePersonalInfo($user_id, $userPersonalInfo);
 
+                    if (!empty($post['communications_consent'])) $userDao->insert_communications_consent($user_id, 1);
+                    else                                         $userDao->insert_communications_consent($user_id, 0);
+
                     $userDao->update_terms_accepted($user_id);
 
                     $app->redirect($app->urlFor('org-dashboard'));
@@ -1352,6 +1359,7 @@ EOD;
             'user_id'           => $user_id,
             'userPersonalInfo'  => $userPersonalInfo,
             'profile_completed' => !empty($_SESSION['profile_completed']),
+            'communications_consent' => $userDao->get_communications_consent($user_id),
             'extra_scripts'     => $extra_scripts,
             'sesskey'           => $sesskey,
         ));
@@ -1656,6 +1664,8 @@ EOD;
                     $user_id_owner = 62927; // translators@translatorswithoutborders.org
 
                     $projects_to_copy = [16987, 16982];
+                    if ($language_code_source === 'fr') $projects_to_copy = [19408, 19409];
+                    if ($language_code_source === 'es') $projects_to_copy = [19410, 19411];
                     $n = count($projects_to_copy);
                     $test_number = mt_rand(0, $n - 1); // Pick a random $projects_to_copy test file
                     $i = $n;

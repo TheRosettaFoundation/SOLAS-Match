@@ -25,6 +25,7 @@
     <p><a href="{urlFor name="user_words_by_language"}" target="_blank">List all translator's translated and revised words by language pair.</a> <a href="{urlFor name="download_user_words_by_language"}">[Download]</a></p>
     <p><a href="{urlFor name="first_completed_task"}" target="_blank">List all translator's first completed task.</a></p>
     <p><a href="{urlFor name="user_task_reviews"}" target="_blank">List average reviews for volunteers</a></p>
+    <p><a href="{urlFor name="peer_to_peer_vetting"}">[Download peer to peer vetting report]</a></p>
     <p><a href="{urlFor name="submitted_task_reviews"}" target="_blank">List submitted reviews</a> <a href="{urlFor name="download_submitted_task_reviews"}">[Download]</a></p>
     <p><a href="{urlFor name="tasks_no_reviews"}" target="_blank">List tasks completed without a review</a> <a href="{urlFor name="download_tasks_no_reviews"}">[Download]</a></p>
     <p><a href="{urlFor name="project_source_file_scores"}" target="_blank">Project Source File Scores</a> <a href="{urlFor name="download_project_source_file_scores"}">[Download]</a></p>

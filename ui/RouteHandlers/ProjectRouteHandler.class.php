@@ -643,7 +643,11 @@ class ProjectRouteHandler
 
         $taskDao->updateRequiredTaskQualificationLevel($task_id, $taskDao->getRequiredTaskQualificationLevel($parent_task->getId()));
 
-        if ($newTask->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $taskDao->getRestrictedTask($parent_task->getId())) {
+        $project_restrictions = $taskDao->get_project_restrictions($project_id);
+        if ($project_restrictions && (
+                ($newTask->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION  && $project_restrictions['restrict_translate_tasks'])
+                    ||
+                ($newTask->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $project_restrictions['restrict_revise_tasks']))) {
             $taskDao->setRestrictedTask($task_id);
         }
 
@@ -1252,7 +1256,8 @@ class ProjectRouteHandler
                                             $mt_engine        = empty($post['mt_engine'])        ? '0' : '1';
                                             $pretranslate_100 = empty($post['pretranslate_100']) ? '0' : '1';
                                             $lexiqa           = '1';
-                                            $private_tm_key   = empty($post['private_tm_key'])   ? '58f97b6f65fb5c8c8522,d5320e2850c37cc31551' : '58f97b6f65fb5c8c8522,d5320e2850c37cc31551,' . $post['private_tm_key'];
+                                            if (!empty($post['private_tm_key'])) $post['private_tm_key'] = str_replace(' ', '', $post['private_tm_key']);
+                                            $private_tm_key = empty($post['private_tm_key']) ? '58f97b6f65fb5c8c8522' : $post['private_tm_key'] . ',58f97b6f65fb5c8c8522';
 
                                             if (!empty($post['testing_center'])) {
                                                 $mt_engine        = '0';
@@ -1265,6 +1270,10 @@ class ProjectRouteHandler
                                                 $taskDao->set_project_tm_key($project->getId(), $mt_engine, $pretranslate_100, $lexiqa, $private_tm_key);
                                             }
                                         }
+
+                                        $restrict_translate_tasks = !empty($post['restrict_translate_tasks']);
+                                        $restrict_revise_tasks    = !empty($post['restrict_revise_tasks']);
+                                        if ($restrict_translate_tasks || $restrict_revise_tasks) $taskDao->insert_project_restrictions($project->getId(), $restrict_translate_tasks, $restrict_revise_tasks);
 
                                         // Create a topic in the Community forum (Discourse) and a project in Asana
                                         error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");
@@ -1489,6 +1498,7 @@ class ProjectRouteHandler
             'isSiteAdmin'    => $adminDao->isSiteAdmin($user_id),
             'sesskey'        => $sesskey,
             'template1'      => '{"source": "en-GB", "targets": ["zh-CN", "zh-TW", "th-TH", "vi-VN", "id-ID", "tl-PH", "ko-KR", "ja-JP", "ms-MY", "my-MM", "hi-IN", "bn-IN"]}',
+            'template2'      => '{"source": "en-GB", "targets": ["ar-SA", "hi-IN", "swh-KE", "fr-FR", "es-MX", "pt-BR"]}',
         ));
         $app->render("project/project.create.tpl");
     }
@@ -1570,7 +1580,10 @@ class ProjectRouteHandler
                 $userDao->trackTask($user_id, $newTaskId);
             }
 
-            if (!empty($post['restrictTask']) && $newTask->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
+            if (!empty($post['restrict_translate_tasks']) && $newTask->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) {
+                $taskDao->setRestrictedTask($newTaskId);
+            }
+            if (!empty($post['restrict_revise_tasks'])    && $newTask->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
                 $taskDao->setRestrictedTask($newTaskId);
             }
         } catch (\Exception $e) {
@@ -2012,7 +2025,7 @@ class ProjectRouteHandler
                     $mt_engine        = '1';
                     $pretranslate_100 = '1';
                     $lexiqa           = '1';
-                    $private_tm_key   = '58f97b6f65fb5c8c8522,d5320e2850c37cc31551';
+                    $private_tm_key   = '58f97b6f65fb5c8c8522';
                 } else {
                     $mt_engine        = $private_tm_key[0]['mt_engine'];
                     $pretranslate_100 = $private_tm_key[0]['pretranslate_100'];

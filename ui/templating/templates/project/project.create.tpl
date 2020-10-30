@@ -21,6 +21,7 @@
 
         <!-- Template for predefined langauges... -->
         <div id="template1">{$template1}</div>
+        <div id="template2">{$template2}</div>
 
     </span>
 
@@ -186,8 +187,10 @@
                 <div class="projFormInput">
                     <div style="margin-bottom:25px;">
                         <h2>{Localisation::getTranslation('restrict_tasks')}:</h2>
+                        <p class="desc">If checked, translation tasks will only be shown to qualified volunteers.</p>
+                        <input type="checkbox" name="restrict_translate_tasks" id="restrict_translate_tasks" value="1" checked />
                         <p class="desc">{Localisation::getTranslation('restrict_tasks_long')}</p>
-                        <input type="checkbox" name="restrictTask" id="restrictTask" value="1" checked />
+                        <input type="checkbox" name="restrict_revise_tasks" id="restrict_revise_tasks" value="1" checked />
                     </div>
                 </div>
                 {/if}
@@ -283,5 +286,12 @@
             Set Source and Target Languages from Template 1
         </button>
     </div>
-    
+    <br />
+    <div>
+        <button onclick="setTemplateLanguages(2); return false;" class="btn btn-success">
+            <i class="icon-upload icon-white"></i>
+            Set Source and Target Languages from Template 2
+        </button>
+    </div>
+
 {include file="footer.tpl"}

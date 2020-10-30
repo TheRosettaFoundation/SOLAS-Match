@@ -80,6 +80,12 @@ class AdminRouteHandler
         )->via('POST')->name('user_task_reviews');
 
         $app->get(
+            '/peer_to_peer_vetting/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'peer_to_peer_vetting')
+        )->name('peer_to_peer_vetting');
+
+        $app->get(
             '/submitted_task_reviews/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'submitted_task_reviews')
@@ -545,6 +551,36 @@ class AdminRouteHandler
 
         header('Content-type: text/csv');
         header('Content-Disposition: attachment; filename="submitted_task_reviews.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
+    }
+
+    public function peer_to_peer_vetting()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $all_users = $statsDao->peer_to_peer_vetting();
+
+        $data = "\xEF\xBB\xBF" . '"Email","Native","Words Translated","Words Revised","Language Pair","Language Pairs","Average Reviews","Number","Level","Last Task"' . "\n";
+
+        foreach ($all_users as $user_row) {
+            $data .= '"' . $user_row['email'] . '","' .
+            $user_row['native_language_name'] . '","' .
+            $user_row['words_translated'] . '","' .
+            $user_row['words_revised'] . '","' .
+            $user_row['language_pair'] . '","' .
+            $user_row['language_pair_list'] . '","' .
+            $user_row['average_reviews'] . '","' .
+            $user_row['number_reviews'] . '","' .
+            $user_row['level'] . '","' .
+            $user_row['last_task'] . '"' . "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="peer_to_peer_vetting.csv"');
         header('Content-length: ' . strlen($data));
         header('X-Frame-Options: ALLOWALL');
         header('Pragma: no-cache');

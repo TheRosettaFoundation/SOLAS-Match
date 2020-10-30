@@ -1591,6 +1591,13 @@ CREATE TABLE IF NOT EXISTS `UserHowheards` (
   CONSTRAINT  `FK_UserHowheards_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `communications_consents` (
+  user_id      INT(10) UNSIGNED NOT NULL,
+  accepted     INT(10) UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY `FK_communications_consents_Users` (`user_id`),
+  CONSTRAINT  `FK_communications_consents_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS `UserCertifications` (
   id                INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   user_id           INT(10) UNSIGNED NOT NULL,
@@ -1641,6 +1648,14 @@ CREATE TABLE IF NOT EXISTS `TestingCenterProjects` (
   language_code_target VARCHAR(3)          NOT NULL,
   KEY FK_TestingCenterProjects_Users (user_id),
   CONSTRAINT FK_TestingCenterProjects_Users FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `ProjectRestrictions` (
+  project_id               INT(10) UNSIGNED NOT NULL,
+  restrict_translate_tasks INT(10) UNSIGNED NOT NULL,
+  restrict_revise_tasks    INT(10) UNSIGNED NOT NULL,
+  UNIQUE KEY `project_id` (`project_id`),
+  CONSTRAINT `FK_ProjectRestrictions_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*---------------------------------------end of tables---------------------------------------------*/
@@ -8594,6 +8609,24 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `insert_communications_consent`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_communications_consent`(IN uID INT, IN acc INT)
+BEGIN
+    REPLACE INTO communications_consents
+               (user_id, accepted)
+        VALUES (    uID,      acc);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_communications_consent`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_communications_consent`(IN uID INT)
+BEGIN
+    SELECT * FROM communications_consents WHERE user_id=uID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `updateUserHowheard`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `updateUserHowheard`(IN uID INT, IN r INT)
@@ -8877,6 +8910,103 @@ BEGIN
     LEFT JOIN UserCertifications  uc ON u.id=uc.user_id
     GROUP BY u.id
     ORDER BY u.`created-time` DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `peer_to_peer_vetting`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `peer_to_peer_vetting`()
+BEGIN
+    SELECT
+        u.id AS user_id,
+        u.`display-name`                                                        AS display_name,
+        u.email,
+        native.code                                                             AS native_language_code,
+        native.`en-name`                                                        AS native_language_name,
+        SUM(IF(t.`task-type_id`=2, t.`word-count`, 0))                          AS words_translated,
+        SUM(IF(t.`task-type_id`=3, t.`word-count`, 0))                          AS words_revised,
+        CONCAT(l1.code, '|', l2.code)                                           AS language_pair,
+        CONCAT(u.id, '-', l1.code, '|', l2.code)                                AS user_language_pair,
+        CONCAT(u.id, '-', l1.code, '|', l2.code)                                AS user_language_pair_reduced,
+        GROUP_CONCAT(DISTINCT CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) ORDER BY CONCAT(l1.code, '-', c1.code, '|', l2.code, '-', c2.code) SEPARATOR ', ') AS language_pair_list,
+        MAX(tc.`claimed-time`)                                                  AS last_task
+    FROM Tasks                     t
+    JOIN TaskClaims               tc ON t.id=tc.task_id
+    JOIN Users                     u ON tc.user_id=u.id
+    JOIN Languages            native ON u.language_id=native.id
+    JOIN Languages                l1 ON t.`language_id-source`=l1.id
+    JOIN Languages                l2 ON t.`language_id-target`=l2.id
+    JOIN Countries                c1 ON t.`country_id-source`=c1.id
+    JOIN Countries                c2 ON t.`country_id-target`=c2.id
+    LEFT JOIN TaskReviews         tr ON t.id=tr.task_id
+    WHERE
+        t.`task-status_id`=4
+    GROUP BY tc.user_id, t.`language_id-source`, t.`language_id-target`
+    ORDER BY l1.code, l2.code, u.email;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `peer_to_peer_vetting_qualification_level`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `peer_to_peer_vetting_qualification_level`()
+BEGIN
+    SELECT
+        uqp.user_id,
+        uqp.language_code_source,
+        uqp.language_code_target,
+        CONCAT(uqp.user_id, '-', uqp.language_code_source, '|', uqp.language_code_target) AS user_language_pair_reduced,
+        CASE
+            WHEN MAX(uqp.qualification_level)=1 THEN 'Translator'
+            WHEN MAX(uqp.qualification_level)=2 THEN 'Verified Translator'
+            WHEN MAX(uqp.qualification_level)=3 THEN 'Senior Translator'
+        END                                                                               AS level
+    FROM UserQualifiedPairs uqp
+    GROUP BY uqp.user_id, uqp.language_code_source, uqp.language_code_target;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `peer_to_peer_vetting_reviews`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `peer_to_peer_vetting_reviews`()
+BEGIN
+    SELECT
+        tc.user_id,
+        CONCAT(tc.user_id, '-', l1.code, '|', l2.code) AS user_language_pair,
+        FORMAT(
+            SUM((tr.corrections + tr.grammar + tr.spelling + tr.consistency % 10 + tr.consistency DIV 10)/5.)
+                /
+            SUM(1.),
+            1
+        )                                              AS average_reviews,
+        SUM(1)                                         AS number_reviews
+    FROM Tasks        t
+    JOIN TaskReviews tr ON t.id=tr.task_id
+    JOIN Languages   l1 ON t.`language_id-source`=l1.id
+    JOIN Languages   l2 ON t.`language_id-target`=l2.id
+    JOIN TaskClaims  tc ON t.id=tc.task_id
+    WHERE
+        tr.task_id IS NOT NULL AND
+        tr.consistency>=10 AND
+        t.`task-status_id`=4
+    GROUP BY tc.user_id, t.`language_id-source`, t.`language_id-target`;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_project_restrictions`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_project_restrictions`(IN projectID INT, IN translate INT, IN revise INT)
+BEGIN
+    INSERT INTO ProjectRestrictions (project_id, restrict_translate_tasks, restrict_revise_tasks) VALUES (projectID, translate, revise);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_project_restrictions`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_project_restrictions`(IN projectID INT)
+BEGIN
+    SELECT *
+    FROM ProjectRestrictions
+    WHERE project_id=projectID;
 END//
 DELIMITER ;
 
