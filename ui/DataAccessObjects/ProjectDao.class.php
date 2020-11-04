@@ -438,11 +438,62 @@ $replace = array(
         return [$trommons_language_code, $trommons_country_code];
     }
 
-    public function convert_memsource_to_language_country($selection)
+    public function convert_memsource_to_language_country($memsource)
     {
+$memsource_change_language_to_kp = [
+'as' => 'asm',
+'ilt' => 'ilo',
+'kz' => 'ky',
+'rn' => 'run',
+'tir' => 'ti',
+];
 
-        $trommons_language_code = substr($language_code, 0, strpos($language_code, '-'));
-        $trommons_country_code  = substr($language_code, strpos($language_code, '-') + 1);
+$memsource_change_country_to_kp = [
+'001' => '--',
+'mod' => '--',
+'latn' => '900',
+'latn_az' => '900',
+'latn_bg' => '900',
+'latn_ba' => '900',
+'latn_gr' => '900',
+'latn_ir' => '900',
+'latn_am' => '900',
+'latn_in' => '900',
+'latn_ru' => '900',
+'latn_me' => '900',
+'latn_rs' => '900',
+'latn_ua' => '900',
+'latn_uz' => '900',
+
+'cyrl_rs' => 'rs',
+'cyrl_me' => 'me',
+
+'cyrl' => '901',
+'cyrl_az' => '901',
+'cyrl_ba' => '901',
+'cyrl_tj' => '901',
+'cyrl_uz' => '901',
+
+'arab' => 'pk', // Because sd_arab is the only active 'arab'
+
+'hans' => 'cn',
+'hans_cn' => 'cn',
+'hant' => 'tw',
+'hant_tw' => 'tw',
+];
+        $trommons_language_code = $memsource[0];
+        $trommons_country_code  = '';
+        $pos = strpos($memsource[0], '_');
+        if ($pos != false) {
+            $trommons_language_code = substr($memsource[0], 0, $pos);
+            $trommons_country_code  = substr($memsource[0], $pos + 1);
+            if (!empty($memsource_change_country_to_kp[$trommons_country_code])) $trommons_country_code = $memsource_change_country_to_kp[$trommons_country_code];
+            $trommons_country_code = strtoupper($trommons_country_code);
+        } else {
+            $trommons_country_code = '--';
+        }
+        if (!empty($memsource_change_language_to_kp[$trommons_language_code])) $trommons_language_code = $memsource_change_language_to_kp[$language_code];
+
         return [$trommons_language_code, $trommons_country_code];
     }
 
