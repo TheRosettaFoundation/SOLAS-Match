@@ -438,6 +438,14 @@ $replace = array(
         return [$trommons_language_code, $trommons_country_code];
     }
 
+    public function convert_memsource_to_language_country($selection)
+    {
+
+        $trommons_language_code = substr($language_code, 0, strpos($language_code, '-'));
+        $trommons_country_code  = substr($language_code, strpos($language_code, '-') + 1);
+        return [$trommons_language_code, $trommons_country_code];
+    }
+
     public function copy_project_file($project_to_copy_id, $project_id, $user_id_owner)
     {
         $result = LibAPI\PDOWrapper::call('getProjectFile', "$project_to_copy_id, null, null, null, null");

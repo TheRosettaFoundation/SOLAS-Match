@@ -80,8 +80,6 @@ class ProjectRouteHandler
 
     public function memsourceHook()
     {
-//Only allow from memsource domain or check code
-
         $app = \Slim\Slim::getInstance();
         $body = $app->request()->getBody();
         error_log(print_r(json_decode($body, true), true));
@@ -107,8 +105,7 @@ class ProjectRouteHandler
         if (!empty($hook['dateDue'])) $project->setDeadline(substr(string $hook['dateDue'], 0, 10) . ' ' . substr(string $hook['dateDue'], 11, 6));
         else                          $project->setDeadline(gmdate('Y-m-d H:i:s', strtotime('25 days')));
         $project->setWordCount(1);
-        //Need new mapping model...
-        list($trommons_source_language_code, $trommons_source_country_code) = $projectDao->convert_selection_to_language_country($hook['sourceLang']);
+        list($trommons_source_language_code, $trommons_source_country_code) = $projectDao->convert_memsource_to_language_country($hook['sourceLang']);
         $sourceLocale = new Common\Protobufs\Models\Locale();
         $sourceLocale->setCountryCode($trommons_source_country_code);
         $sourceLocale->setLanguageCode($trommons_source_language_code);
