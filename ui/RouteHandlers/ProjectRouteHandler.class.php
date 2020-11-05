@@ -128,14 +128,14 @@ class ProjectRouteHandler
         try {
             $project = $projectDao->createProject($project);
             //?? $project = $projectDao->createProjectDirectly($project);
-            error_log('Created Project: ' . $hook['project_title']);
+            error_log("Created Project: $hook['name']");
         } catch (\Exception $e) {
-            error_log('Failed to create Project (exception): ' . $hook['project_title']);
-            die;
+            error_log("Failed to create Project (exception): $hook['name']");
+            return;
         }
         if (empty($project) || $project->getId() <= 0) {
-            error_log('Failed to create Project: ' . $hook['project_title']);
-            die;
+            error_log("Failed to create Project: $hook['name']");
+            return;
         }
 
 // No (issues?) $projectDao->saveProjectFile($project, $user_id, $projectFileName, $data);
