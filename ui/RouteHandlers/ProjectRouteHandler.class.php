@@ -132,44 +132,21 @@ class ProjectRouteHandler
             return;
         }
 
-//check/discuss...
-//            $task->setPublished(1);
-Levels inherited from organisation
-claim but not work...
-//            if ($newTaskId && $preReqTaskId) {
-//                $taskDao->addTaskPreReq($newTaskId, $preReqTaskId);
-//            }
-owner must track
-//            if (!empty($post['trackProject'])) {
-//                $userDao = new DAO\UserDao();
-//                $userDao->trackTask($user_id, $newTaskId);
-//            }
-not now...
-//            if (!empty($post['restrict_translate_tasks']) && $newTask->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION) {
-//                $taskDao->setRestrictedTask($newTaskId);
-//            }
-//            if (!empty($post['restrict_revise_tasks'])    && $newTask->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
-//                $taskDao->setRestrictedTask($newTaskId);
-//            }
+        $task->setPublished(1);
 
-//DISCUSS...
-//                                        $restrict_translate_tasks = !empty($post['restrict_translate_tasks']);
-//                                        $restrict_revise_tasks    = !empty($post['restrict_revise_tasks']);
-//                                        if ($restrict_translate_tasks || $restrict_revise_tasks) $taskDao->insert_project_restrictions($project->getId(), $restrict_translate_tasks, $restrict_revise_tasks);
-//
-//                                        // Create a topic in the Community forum (Discourse) and a project in Asana
-YEs
-//                                        error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");
-//                                        try {
-//                                           $this->create_discourse_topic($project->getId(), $target_languages);
-//                                        } catch (\Exception $e) {
-//                                            error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
-//                                        }
+        // Create a topic in the Community forum (Discourse) and a project in Asana
 //            [targetLangs] => Array
 //                (
 //                    [0] => es
 //                    [1] => fr
 //                )
+        error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");
+        try {
+            $this->create_discourse_topic($project->getId(), $target_languages);
+        } catch (\Exception $e) {
+            error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
+        }
+
 // Needed later? $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, 0);
 // Needed later? $taskDao->insertMatecatLanguagePairs($matecat_translation_task_id, $project->getId(), Common\Enums\TaskTypeEnum::TRANSLATION, "$source_language|$target_language");
 
