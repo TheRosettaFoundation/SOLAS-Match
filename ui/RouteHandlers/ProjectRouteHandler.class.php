@@ -135,11 +135,8 @@ class ProjectRouteHandler
         $task->setPublished(1);
 
         // Create a topic in the Community forum (Discourse) and a project in Asana
-//            [targetLangs] => Array
-//                (
-//                    [0] => es
-//                    [1] => fr
-//                )
+        $target_languages = '';
+        if (!empty($hook['targetLangs'])) $target_languages = implode(',', $hook['targetLangs']);
         error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");
         try {
             $this->create_discourse_topic($project->getId(), $target_languages);
@@ -147,6 +144,7 @@ class ProjectRouteHandler
             error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
         }
 
+Insert id,uid??
 // Needed later? $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, 0);
 // Needed later? $taskDao->insertMatecatLanguagePairs($matecat_translation_task_id, $project->getId(), Common\Enums\TaskTypeEnum::TRANSLATION, "$source_language|$target_language");
 
