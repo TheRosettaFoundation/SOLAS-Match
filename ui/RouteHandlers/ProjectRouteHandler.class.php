@@ -125,15 +125,9 @@ class ProjectRouteHandler
         if (!empty($hook['dateCreated'])) $project->setCreatedTime(substr(string $hook['dateCreated'], 0, 10) . ' ' . substr(string $hook['dateCreated'], 11, 6));
         else                              $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
 
-        try {
-            $project = $projectDao->createProject($project);
-            //?? $project = $projectDao->createProjectDirectly($project);
-            error_log("Created Project: $hook['name']");
-        } catch (\Exception $e) {
-            error_log("Failed to create Project (exception): $hook['name']");
-            return;
-        }
-        if (empty($project) || $project->getId() <= 0) {
+        $project = $projectDao->createProjectDirectly($project);
+        error_log("Created Project: $hook['name']");
+        if (empty($project)) {
             error_log("Failed to create Project: $hook['name']");
             return;
         }
