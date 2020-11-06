@@ -132,10 +132,6 @@ class ProjectRouteHandler
             return;
         }
 
-// No (issues?) $projectDao->saveProjectFile($project, $user_id, $projectFileName, $data);
-//??                                         error_log('projectCreate calculateProjectDeadlines: ' . $project->getId());
-//                                        $projectDao->calculateProjectDeadlines($project->getId());
-
 //check/discuss...
 //            $task->setPublished(1);
 Levels inherited from organisation
