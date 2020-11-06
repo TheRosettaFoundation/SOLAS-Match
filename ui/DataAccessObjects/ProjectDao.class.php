@@ -481,12 +481,12 @@ $memsource_change_country_to_kp = [
 'hant' => 'tw',
 'hant_tw' => 'tw',
 ];
-        $trommons_language_code = $memsource[0];
+        $trommons_language_code = $memsource;
         $trommons_country_code  = '';
-        $pos = strpos($memsource[0], '_');
+        $pos = strpos($memsource, '_');
         if ($pos != false) {
-            $trommons_language_code = substr($memsource[0], 0, $pos);
-            $trommons_country_code  = substr($memsource[0], $pos + 1);
+            $trommons_language_code = substr($memsource, 0, $pos);
+            $trommons_country_code  = substr($memsource, $pos + 1);
             if (!empty($memsource_change_country_to_kp[$trommons_country_code])) $trommons_country_code = $memsource_change_country_to_kp[$trommons_country_code];
             $trommons_country_code = strtoupper($trommons_country_code);
         } else {
