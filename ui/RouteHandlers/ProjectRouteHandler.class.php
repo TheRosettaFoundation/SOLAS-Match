@@ -132,7 +132,9 @@ class ProjectRouteHandler
             return;
         }
 
-        $task->setPublished(1);
+Insert id,uid??
+//            [uid] => 0jnLCiBsa0LZW4cufoTWY3
+//            [id] => 20434630 NEED TO MATCH IN TASK
 
         // Create a topic in the Community forum (Discourse) and a project in Asana
         $target_languages = '';
@@ -144,32 +146,10 @@ class ProjectRouteHandler
             error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
         }
 
-Insert id,uid??
-// Needed later? $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, 0);
-// Needed later? $taskDao->insertMatecatLanguagePairs($matecat_translation_task_id, $project->getId(), Common\Enums\TaskTypeEnum::TRANSLATION, "$source_language|$target_language");
-
-//Discuss...
-//https://cloud.memsource.com/web/project2/show/0jnLCiBsa0LZW4cufoTWY3
-ignore//            [accessSettings] => Array
-ignore//            [analyseSettings] => Array
-ignore//            [businessUnit] => 
-//            [client] => Array
-ignore//            [costCenter] => 
 //            [createdBy] => Array
-Maybe//            [domain] => 
-NO//            [financialSettings] => Array
-//            [id] => 20434630 NEED TO MATCH IN TASK
-//            [internalId] => 48
-No//            [isPublishedOnJobBoard] => 
 //            [owner] => Array
 //            [progress] => Array
-//            [purchaseOrder] => 
-NO//            [qualityAssuranceSettings] => Array
-//            [references] => Array
-No//            [shared] => 
 //            [status] => NEW
-//            [subDomain] => 
-//            [uid] => 0jnLCiBsa0LZW4cufoTWY3
 //            [workflowSteps] => Array
     }
 
