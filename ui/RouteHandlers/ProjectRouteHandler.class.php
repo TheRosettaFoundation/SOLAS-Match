@@ -111,7 +111,7 @@ class ProjectRouteHandler
         $sourceLocale->setLanguageCode($trommons_source_language_code);
         $project->setSourceLocale($sourceLocale);
 
-        if (empty($hook['client']) || empty($hook['client']['id'])) {
+        if (empty(empty($hook['client']['id'])) {
             error_log("No client id in new project: $hook['name']");
             return;
         }
@@ -132,39 +132,10 @@ class ProjectRouteHandler
             return;
         }
 
-        $projectDao->set_memsource_project($project->getId(), $hook['id'], $hook['uid']);
 
-        // Create a topic in the Community forum (Discourse) and a project in Asana
-        $target_languages = '';
-        if (!empty($hook['targetLangs'])) $target_languages = implode(',', $hook['targetLangs']);
-        error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");
-        try {
-            $this->create_discourse_topic($project->getId(), $target_languages);
-        } catch (\Exception $e) {
-            error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
-        }
 
-            [createdBy] => Array
-                (
-                    [email] => manuel@translatorswithoutborders.org
-                    [firstName] => Manuel
-                    [id] => 489042
-                    [lastName] => Locria
-                    [role] => ADMIN
-                    [uid] => kJ3qUeQPwP9F9F4xPPwaU2
-                    [userName] => manuellocria
-                )
 
-            [owner] => Array
-                (
-                    [email] => manuel@translatorswithoutborders.org
-                    [firstName] => Manuel
-                    [id] => 489042
-                    [lastName] => Locria
-                    [role] => ADMIN
-                    [uid] => kJ3qUeQPwP9F9F4xPPwaU2
-                    [userName] => manuellocria
-                )
+
 
             [workflowSteps] => Array
                 (
@@ -198,6 +169,17 @@ class ProjectRouteHandler
 
 
 
+        $projectDao->set_memsource_project($project->getId(), $hook['id'], $hook['uid'], empty($hook['createdBy']['id']) ? 0 : $hook['createdBy']['id'], empty($hook['owner']['id']) ? 0 : $hook['owner']['id']);
+
+        // Create a topic in the Community forum (Discourse) and a project in Asana
+        $target_languages = '';
+        if (!empty($hook['targetLangs'])) $target_languages = implode(',', $hook['targetLangs']);
+        error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");
+        try {
+            $this->create_discourse_topic($project->getId(), $target_languages);
+        } catch (\Exception $e) {
+            error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
+        }
     }
 
     public function test($projectId)
