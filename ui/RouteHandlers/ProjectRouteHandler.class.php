@@ -132,51 +132,20 @@ class ProjectRouteHandler
             return;
         }
 
-
-check logic loop??
-$workflowLevel_1 = '';
-if (!empty($hook['workflowSteps'][0]['workflowLevel']) && $hook['workflowSteps'][0]['workflowLevel'] == 1) $workflowLevel_1 = $hook['workflowSteps'][0]['name'];
-if (!empty($hook['workflowSteps'][0]['workflowLevel']) && $hook['workflowSteps'][0]['workflowLevel'] == 2) $workflowLevel_2 = $hook['workflowSteps'][0]['name'];
-
-$workflowLevel_2 = '';
-
-            [workflowSteps] => Array
-                (
-                    [0] => Array
-                        (
-                            [abbreviation] => T
-                            [id] => 9950683
-                            [name] => Translation
-                            [workflowLevel] => 1
-                            [workflowStep] => Array
-                                (
-                                    [id] => 377328
-                                )
-                        )
-                    [1] => Array
-                        (
-                            [abbreviation] => R
-                            [id] => 9950684
-                            [name] => Revision
-                            [workflowLevel] => 2
-                            [workflowStep] => Array
-                                (
-                                    [id] => 377329
-                                )
-                        )
-                )
-
-
+        $workflowLevels = ['', '']; // Will contain 'Translation' or 'Revision' for workflowLevel 1 and 2
+        if (!empty($hook['workflowSteps'])) {
+            foreach ($hook['workflowSteps'] as $step) {
+                foreach ($workflowLevels as $i => $w) {
+                    if ($step['workflowLevel'] == $i + 1) $workflowLevels[$i] = $step['name'];
+                }
+            }
+        }
 
         $projectDao->set_memsource_project($project->getId(), $hook['id'], $hook['uid'],
             empty($hook['createdBy']['id']) ? 0 : $hook['createdBy']['id'],
-            empty($hook['owner']['id']) ? 0 : $hook['owner']['id']
-
-
-            empty($hook['owner']['id']) ? 0 : $hook['owner']['id']
-            empty($hook['owner']['id']) ? 0 : $hook['owner']['id']
-            
-            );
+            empty($hook['owner']['id']) ? 0 : $hook['owner']['id'],
+            $workflowLevels[0],
+            $workflowLevels[1]);
 
         // Create a topic in the Community forum (Discourse) and a project in Asana
         $target_languages = '';
