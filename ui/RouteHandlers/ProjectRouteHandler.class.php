@@ -132,9 +132,7 @@ class ProjectRouteHandler
             return;
         }
 
-Insert id,uid??
-//            [uid] => 0jnLCiBsa0LZW4cufoTWY3
-//            [id] => 20434630 NEED TO MATCH IN TASK
+        $projectDao->set_memsource_project($project->getId(), $hook['id'], $hook['uid']);
 
         // Create a topic in the Community forum (Discourse) and a project in Asana
         $target_languages = '';
@@ -149,7 +147,6 @@ Insert id,uid??
 //            [createdBy] => Array
 //            [owner] => Array
 //            [progress] => Array
-//            [status] => NEW
 //            [workflowSteps] => Array
     }
 
