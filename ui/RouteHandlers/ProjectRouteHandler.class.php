@@ -133,9 +133,12 @@ class ProjectRouteHandler
         }
 
 
+check logic loop??
+$workflowLevel_1 = '';
+if (!empty($hook['workflowSteps'][0]['workflowLevel']) && $hook['workflowSteps'][0]['workflowLevel'] == 1) $workflowLevel_1 = $hook['workflowSteps'][0]['name'];
+if (!empty($hook['workflowSteps'][0]['workflowLevel']) && $hook['workflowSteps'][0]['workflowLevel'] == 2) $workflowLevel_2 = $hook['workflowSteps'][0]['name'];
 
-
-
+$workflowLevel_2 = '';
 
             [workflowSteps] => Array
                 (
@@ -149,9 +152,7 @@ class ProjectRouteHandler
                                 (
                                     [id] => 377328
                                 )
-
                         )
-
                     [1] => Array
                         (
                             [abbreviation] => R
@@ -162,14 +163,20 @@ class ProjectRouteHandler
                                 (
                                     [id] => 377329
                                 )
-
                         )
-
                 )
 
 
 
-        $projectDao->set_memsource_project($project->getId(), $hook['id'], $hook['uid'], empty($hook['createdBy']['id']) ? 0 : $hook['createdBy']['id'], empty($hook['owner']['id']) ? 0 : $hook['owner']['id']);
+        $projectDao->set_memsource_project($project->getId(), $hook['id'], $hook['uid'],
+            empty($hook['createdBy']['id']) ? 0 : $hook['createdBy']['id'],
+            empty($hook['owner']['id']) ? 0 : $hook['owner']['id']
+
+
+            empty($hook['owner']['id']) ? 0 : $hook['owner']['id']
+            empty($hook['owner']['id']) ? 0 : $hook['owner']['id']
+            
+            );
 
         // Create a topic in the Community forum (Discourse) and a project in Asana
         $target_languages = '';
