@@ -144,10 +144,60 @@ class ProjectRouteHandler
             error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
         }
 
-//            [createdBy] => Array
-//            [owner] => Array
-//            [progress] => Array
-//            [workflowSteps] => Array
+            [createdBy] => Array
+                (
+                    [email] => manuel@translatorswithoutborders.org
+                    [firstName] => Manuel
+                    [id] => 489042
+                    [lastName] => Locria
+                    [role] => ADMIN
+                    [uid] => kJ3qUeQPwP9F9F4xPPwaU2
+                    [userName] => manuellocria
+                )
+
+            [owner] => Array
+                (
+                    [email] => manuel@translatorswithoutborders.org
+                    [firstName] => Manuel
+                    [id] => 489042
+                    [lastName] => Locria
+                    [role] => ADMIN
+                    [uid] => kJ3qUeQPwP9F9F4xPPwaU2
+                    [userName] => manuellocria
+                )
+
+            [workflowSteps] => Array
+                (
+                    [0] => Array
+                        (
+                            [abbreviation] => T
+                            [id] => 9950683
+                            [name] => Translation
+                            [workflowLevel] => 1
+                            [workflowStep] => Array
+                                (
+                                    [id] => 377328
+                                )
+
+                        )
+
+                    [1] => Array
+                        (
+                            [abbreviation] => R
+                            [id] => 9950684
+                            [name] => Revision
+                            [workflowLevel] => 2
+                            [workflowStep] => Array
+                                (
+                                    [id] => 377329
+                                )
+
+                        )
+
+                )
+
+
+
     }
 
     public function test($projectId)
