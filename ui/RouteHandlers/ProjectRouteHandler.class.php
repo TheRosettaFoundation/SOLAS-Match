@@ -132,7 +132,7 @@ class ProjectRouteHandler
             return;
         }
 
-        $workflowLevels = ['', '']; // Will contain 'Translation' or 'Revision' for workflowLevel 1 and 2
+        $workflowLevels = ['', '', '']; // Will contain 'Translation' or 'Revision' for workflowLevel 1 possibly up to 3
         if (!empty($hook['workflowSteps'])) {
             foreach ($hook['workflowSteps'] as $step) {
                 foreach ($workflowLevels as $i => $w) {
@@ -144,8 +144,7 @@ class ProjectRouteHandler
         $projectDao->set_memsource_project($project->getId(), $hook['id'], $hook['uid'],
             empty($hook['createdBy']['id']) ? 0 : $hook['createdBy']['id'],
             empty($hook['owner']['id']) ? 0 : $hook['owner']['id'],
-            $workflowLevels[0],
-            $workflowLevels[1]);
+            $workflowLevels);
 
         // Create a topic in the Community forum (Discourse) and a project in Asana
         $target_languages = '';
