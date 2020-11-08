@@ -87,7 +87,10 @@ class ProjectRouteHandler
 
         switch ($hook['event']) {
             case 'PROJECT_CREATED':
-                create_project($hook);
+                $this->create_project($hook);
+                break;
+            case 'JOB_CREATED':
+                $this->create_task($hook);
                 break;
         }
         die;
@@ -111,7 +114,7 @@ class ProjectRouteHandler
         $sourceLocale->setLanguageCode($trommons_source_language_code);
         $project->setSourceLocale($sourceLocale);
 
-        if (empty(empty($hook['client']['id'])) {
+        if (empty($hook['client']['id'])) {
             error_log("No client id in new project: $hook['name']");
             return;
         }
