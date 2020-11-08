@@ -100,6 +100,7 @@ class ProjectRouteHandler
     {
         $hook = $hook['project'];
         $project = new Common\Protobufs\Models\Project();
+        $projectDao = new DAO\ProjectDao();
 
         $project->setTitle($hook['name']);
         if (!empty($hook['project_description'])) $project->setDescription($hook['project_description']);
