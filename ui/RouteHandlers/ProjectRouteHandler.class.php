@@ -161,6 +161,90 @@ class ProjectRouteHandler
         }
     }
 
+    private function create_task($hook)
+    {
+        $hook = $hook['jobParts'];
+        $projectDao = new DAO\ProjectDao();
+        $taskDao    = new DAO\TaskDao();
+        foreach ($hook as $part) {
+            $task = new Common\Protobufs\Models\Task();
+
+            if (empty($part['fileName'])) {
+                error_log("No fileName in new jobPart $part['id']");
+                continue;
+            }
+            if (empty($part['project']['id'])) {
+                error_log("No project id in new jobPart $part['id'] for: $part['fileName']");
+                continue;
+            }
+            $memsource_project = $projectDao->get_memsource_project_by_memsource_id($part['project']['id']);
+            if (empty($memsource_project)) {
+                error_log("Can't find memsource_project for $part['project']['id'] in new jobPart $part['id'] for: $part['fileName']");
+                continue;
+            }
+            $task->setProjectId($memsource_project['project_id']);
+            $task->setTitle($part['fileName']);
+
+            $project = $projectDao->getProject($memsource_project['project_id']);
+            $projectSourceLocale = $project->getSourceLocale();
+            $taskSourceLocale = new Common\Protobufs\Models\Locale();
+            $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
+            $taskSourceLocale->setCountryCode($projectSourceLocale->getCountryCode());
+            $task->setSourceLocale($taskSourceLocale);
+            $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+
+            $taskTargetLocale = new Common\Protobufs\Models\Locale();
+            list($target_language, $target_country) = $projectDao->convert_memsource_to_language_country($part['targetLang']);
+            $taskTargetLocale->setLanguageCode($target_language);
+            $taskTargetLocale->setCountryCode($target_country);
+            $task->setTargetLocale($taskTargetLocale);
+
+            if (empty($part['workflowLevel']) || $part['workflowLevel'] > 3) {
+                error_log("Can't find workflowLevel in new jobPart $part['id'] for: $part['fileName']");
+                continue;
+            }
+            $taskType = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3']][$part['workflowLevel'] - 1]
+            if     ($taskType == 'Translation') $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
+            elseif ($taskType == 'Revision')    $taskType = Common\Enums\TaskTypeEnum::PROOFREADING;
+            else {
+                error_log("Can't find expected taskType in new jobPart $part['id'] for: $part['fileName']");
+                continue;
+            }
+            $task->setTaskType($taskType);
+
+            if (!empty($part['wordsCount'])) {
+                $task->setWordCount($part['wordsCount']);
+                $project->setWordCount($part['wordsCount']);
+            } else {
+                $task->setWordCount(1);
+            }
+
+            if (!empty($part['dateDue'])) $task->setDeadline(substr(string $part['dateDue'], 0, 10) . ' ' . substr(string $part['dateDue'], 11, 6));
+            else                          $task->setDeadline($project->getDeadline());
+
+            $task->setPublished(1);
+
+            try {
+                error_log("addProjectTask");
+                $newTask = $taskDao->createTask($task);
+                $newTaskId = $newTask->getId();
+                error_log("Added Task: $newTaskId for new jobPart $part['id'] for: $part['fileName']");
+            } catch (\Exception $e) {
+                error_log("Failed to create Task for new jobPart $part['id'] for: $part['fileName']");
+                continue;
+            }
+
+            $projectDao->set_memsource_task($newTask->getId(), $part['id'], $part['uid'], $part['task'], // note 'task' is for Language pair (independent of workflow step)
+                empty($hook['$part['workflowLevel']) ? 0 : $hook['$part['workflowLevel'],
+                empty($hook['$part['beginIndex'])    ? 0 : $hook['$part['beginIndex'], // Begin Segment number
+                empty($hook['$part['endIndex'])      ? 0 : $hook['$part['endIndex']);
+            try {
+                $projectDao->updateProject($project);
+            } catch (\Exception $e) {
+            }
+        }
+    }
+
     public function test($projectId)
     {
         $app = \Slim\Slim::getInstance();
