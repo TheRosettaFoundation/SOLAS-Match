@@ -267,6 +267,7 @@
                     <a href="https://community.translatorswb.org/t/creating-and-personalizing-your-kato-community-profile/3048" target="_blank">Register</a> and browse our forum
                 </li>
                 </ol>
+                    <p>New to TWB? Have a look at our <a href="https://community.translatorswb.org/t/welcome-pack-for-kato-translators/3138" target="_blank">Translator's Toolkit</a> to find out how to get started with us.</p>
                     For any questions or comments, please email <a href="mailto:translators@translatorswithoutborders.org" target="_blank">translators@translatorswithoutborders.org</a>
                 {else}
                     Since you are not a translator, there are no tasks here. Click on <a href="https://kato.translatorswb.org/org/dashboard/">your organization's Dashboard</a>
