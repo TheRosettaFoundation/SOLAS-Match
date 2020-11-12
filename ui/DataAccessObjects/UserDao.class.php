@@ -13,6 +13,7 @@ require_once __DIR__."/BaseDao.php";
 require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
 require_once '/repo/neon-php/neon.php';
 require_once __DIR__ . '/../../Common/from_neon_to_trommons_pair.php';
+require_once __DIR__."/../../Common/Enums/MemsourceRoleEnum.class.php";
 
 
 class UserDao extends BaseDao
@@ -21,6 +22,10 @@ class UserDao extends BaseDao
     {
         $this->client = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
         $this->siteApi = Common\Lib\Settings::get("site.api");
+        $this->memsourceAuthUrlApi = Common\Lib\Settings::get("memsource.api_auth_url");
+        $this->memsourceApiV1 = Common\Lib\Settings::get("memsource.api_url_v1");
+        $this->memsourceApiV2 = Common\Lib\Settings::get("memsource.api_url_v2");
+        $this->memsourceApiToken = Common\Lib\Settings::get("memsource.memsource_api_token");
     }
     
     public function getUserDart($userId)
@@ -438,6 +443,60 @@ class UserDao extends BaseDao
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tasks/$taskId";
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
+
+        if (!empty($ret)) {
+
+            //call get_memsource_user(user_id)...
+            $user_exist = get_memsource_user($userId);
+
+            //if !exists create user on memsource
+            if(!$user_exist){
+
+                $url = $this->memsourceApiV2 .'/users';
+
+                // Create a new cURL resource
+                $ch = curl_init($url);
+
+                // Setup request to send json via POST
+
+                $user_personal_info = getUserPersonalInformation($userId);
+                $user_info = getUser($userId);
+
+                //Required Fields
+                $data = array(
+                    'email' => $user_info['email'],
+                    'firstName' => $user_personal_info['first-name'],
+                    'lastName' => $user_personal_info['last-name'],
+                    'role'=> Common\Enums\MemsourceRoleEnum::LINGUIST,
+                    'timezone'=>'Europe/London', //To change and match user profile from KP
+                    'userName'=>$user_personal_info['first-name'].'.'.$user_personal_info['last-name']
+                );
+
+                $payload = json_encode($data);
+
+                // Attach encoded JSON string to the POST fields
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+
+
+                $authorization = "Authorization: Bearer ".$this->memsourceApiToken;
+
+                // Set the content type to application/json
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+
+                $result_exec = curl_exec($ch);
+
+                $result = json_decode($result, true);
+
+                // Close cURL resource
+                curl_close($ch);
+
+
+
+            }
+            
+            //Assign task to Memsource user on Memsource
+
+        }
 
         $taskDao = new TaskDao();
         $matecat_tasks = $taskDao->getTaskChunk($taskId);
@@ -1753,4 +1812,29 @@ error_log(print_r($result, true));
         if (!empty($result) && in_array($result[0]['referer'], ['RWS Moravia', 'Welocalize', 'Lionbridge', 'SDL'])) return true;
         return false;
     }
+
+    /*
+    Memsource - user Token
+    */
+
+
+
+ 
+
+
+
+    public function get_memsource_user($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_memsource_user', LibAPI\PDOWrapper::cleanse($user_id));
+
+        if (empty($result)) return 0;
+
+        return $result[0]['memsource_user_id'];
+    }
+
+    public function set_memsource_user($user_id, $memsource_user_id)
+    {
+        LibAPI\PDOWrapper::call('set_memsource_user', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($memsource_user_id));
+    }
+
 }
