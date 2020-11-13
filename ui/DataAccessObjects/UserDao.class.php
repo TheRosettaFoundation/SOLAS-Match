@@ -445,53 +445,33 @@ class UserDao extends BaseDao
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
 
         if (!empty($ret)) {
-
-            //call get_memsource_user(user_id)...
             $user_exist = get_memsource_user($userId);
-
-            //if !exists create user on memsource
-            if(!$user_exist){
-
-                $url = $this->memsourceApiV2 .'/users';
-
-                // Create a new cURL resource
+            if (!$user_exist) {
+                $url = $this->memsourceApiV2 . '/users';
                 $ch = curl_init($url);
-
-                // Setup request to send json via POST
-
-                $user_personal_info = getUserPersonalInformation($userId);
-                $user_info = getUser($userId);
-
-                //Required Fields
+                $user_personal_info = $this->getUserPersonalInformation($userId);
+                $user_info = $this->getUser($userId);
                 $data = array(
                     'email' => $user_info['email'],
-                    'firstName' => $user_personal_info['first-name'],
-                    'lastName' => $user_personal_info['last-name'],
-                    'role'=> Common\Enums\MemsourceRoleEnum::LINGUIST,
-                    'timezone'=>'Europe/London', //To change and match user profile from KP
-                    'userName'=>$user_personal_info['first-name'].'.'.$user_personal_info['last-name']
+                    'password' => '',
+                    'firstName' => $user_personal_info['firstName'],
+                    'lastName' => $user_personal_info['lastName'],
+                    'role' => Common\Enums\MemsourceRoleEnum::LINGUIST,
+                    'timezone' => 'Europe/London',
+                    'userName' => $user_info['display_name']
                 );
-
                 $payload = json_encode($data);
-
-                // Attach encoded JSON string to the POST fields
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-
-
-                $authorization = "Authorization: Bearer ".$this->memsourceApiToken;
-
-                // Set the content type to application/json
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
-
+                $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
                 $result_exec = curl_exec($ch);
-
-                $result = json_decode($result, true);
-
-                // Close cURL resource
+                $result = json_decode($result_exec, true);
                 curl_close($ch);
-
-
-
+                if (!empty($result['id'])) {
+                    $this->set_memsource_user($userId, $result['id']);
+                } else {
+                    error_log("No memsource user created for $userId");
+                } 
             }
             
             //Assign task to Memsource user on Memsource
