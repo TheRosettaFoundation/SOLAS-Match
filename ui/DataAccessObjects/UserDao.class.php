@@ -441,36 +441,40 @@ class UserDao extends BaseDao
     public function claimTask($userId, $taskId)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/tasks/$taskId";
-        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
+        //$request = "{$this->siteApi}v0/users/$userId/tasks/$taskId";
+        //$ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
+        $ret = 1; //Test
 
         if (!empty($ret)) {
-            $user_exist = get_memsource_user($userId);
+            $user_exist = $this->get_memsource_user($userId);
             if (!$user_exist) {
-                $url = $this->memsourceApiV2 . '/users';
+                $url = $this->memsourceApiV2 . 'users';
                 $ch = curl_init($url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 $user_personal_info = $this->getUserPersonalInformation($userId);
                 $user_info = $this->getUser($userId);
                 $data = array(
-                    'email' => $user_info['email'],
-                    'password' => '',
-                    'firstName' => $user_personal_info['firstName'],
-                    'lastName' => $user_personal_info['lastName'],
+                    'email' => $user_info->email,
+                    'password' => 'sdfoi4345rere!',
+                    'firstName' => $user_personal_info->firstName,
+                    'lastName' => $user_personal_info->lastName,
                     'role' => Common\Enums\MemsourceRoleEnum::LINGUIST,
                     'timezone' => 'Europe/London',
-                    'userName' => $user_info['display_name']
+                    'userName' => $user_info->display_name
                 );
                 $payload = json_encode($data);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
                 $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));                
                 $result_exec = curl_exec($ch);
-                $result = json_decode($result_exec, true);
+                $result = json_decode($result_exec, true);                
                 curl_close($ch);
                 if (!empty($result['id'])) {
-                    $this->set_memsource_user($userId, $result['id']);
+                    $this->set_memsource_user($userId, $result['id']);            
                 } else {
                     error_log("No memsource user created for $userId");
+                   // error_log("Memsouce return $result");
+                   error_log(print_r($result, true));
                 } 
             }
             
@@ -480,6 +484,7 @@ class UserDao extends BaseDao
 
         $taskDao = new TaskDao();
         $matecat_tasks = $taskDao->getTaskChunk($taskId);
+        $matching_tasks = 0 ; //Test
         if (!empty($matecat_tasks)) {
             // We are a chunk
             $matecat_id_job          = $matecat_tasks[0]['matecat_id_job'];
