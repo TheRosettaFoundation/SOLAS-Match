@@ -139,6 +139,10 @@ class ProjectRouteHandler
             return;
         }
 
+        $project_id = $project->getId();
+        $destination = Common\Lib\Settings::get("files.upload_path") . "proj-$project_id/";
+        mkdir($destination, 0755);
+
         $workflowLevels = ['', '', '']; // Will contain 'Translation' or 'Revision' for workflowLevel 1 possibly up to 3
         if (!empty($hook['workflowSteps'])) {
             foreach ($hook['workflowSteps'] as $step) {
@@ -148,7 +152,7 @@ class ProjectRouteHandler
             }
         }
 
-        $projectDao->set_memsource_project($project->getId(), $hook['id'], $hook['uid'],
+        $projectDao->set_memsource_project($project_id, $hook['id'], $hook['uid'],
             empty($hook['createdBy']['id']) ? 0 : $hook['createdBy']['id'],
             empty($hook['owner']['id']) ? 0 : $hook['owner']['id'],
             $workflowLevels);
@@ -156,9 +160,9 @@ class ProjectRouteHandler
         // Create a topic in the Community forum (Discourse) and a project in Asana
         $target_languages = '';
         if (!empty($hook['targetLangs'])) $target_languages = implode(',', $hook['targetLangs']);
-        error_log('projectCreate create_discourse_topic(' . $project->getId() . ", $target_languages)");
+        error_log("projectCreate create_discourse_topic($project_id, $target_languages)");
         try {
-            $this->create_discourse_topic($project->getId(), $target_languages);
+            $this->create_discourse_topic($project_id, $target_languages);
         } catch (\Exception $e) {
             error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
         }
@@ -245,6 +249,13 @@ class ProjectRouteHandler
                 $projectDao->updateProject($project);
             } catch (\Exception $e) {
             }
+
+
+project above create
+INSERT
+0 length
+$part['fileName']
+
         }
     }
 
