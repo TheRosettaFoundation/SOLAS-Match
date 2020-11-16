@@ -234,14 +234,14 @@ class ProjectRouteHandler
             try {
                 error_log("addProjectTask");
                 $newTask = $taskDao->createTask($task);
-                $newTaskId = $newTask->getId();
-                error_log("Added Task: $newTaskId for new jobPart $part['id'] for: $part['fileName']");
+                $task_id = $newTask->getId();
+                error_log("Added Task: $task_id for new jobPart $part['id'] for: $part['fileName']");
             } catch (\Exception $e) {
                 error_log("Failed to create Task for new jobPart $part['id'] for: $part['fileName']");
                 continue;
             }
 
-            $projectDao->set_memsource_task($newTask->getId(), $part['id'], $part['uid'], $part['task'], // note 'task' is for Language pair (independent of workflow step)
+            $projectDao->set_memsource_task($task_id, $part['id'], $part['uid'], $part['task'], // note 'task' is for Language pair (independent of workflow step)
                 empty($hook['$part['workflowLevel']) ? 0 : $hook['$part['workflowLevel'],
                 empty($hook['$part['beginIndex'])    ? 0 : $hook['$part['beginIndex'], // Begin Segment number
                 empty($hook['$part['endIndex'])      ? 0 : $hook['$part['endIndex']);
@@ -250,12 +250,17 @@ class ProjectRouteHandler
             } catch (\Exception $e) {
             }
 
+            $project_id = $project->getId();
+            $uploadFolder = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0";
+            mkdir($uploadFolder, 0755, true);
+            $filesFolder = Common\Lib\Settings::get('files.upload_path') . "files/proj-$project_id/task-$task_id/v-0";
+            mkdir($filesFolder, 0755, true);
 
-project above create
-INSERT
-0 length
-$part['fileName']
+            $filename = $part['fileName'];
+            file_put_contents("$filesFolder/$filename", ''); // Placeholder
+            file_put_contents("$uploadFolder/$filename", "files/proj-$project_id/task-$task_id/v-0/$filename"); // Point to it
 
+            $projectDao->queue_copy_task_original_file($project_id, $task_id, $memsource_project_uid, $memsource_task_uid); // cron will copy file from memsource
         }
     }
 
