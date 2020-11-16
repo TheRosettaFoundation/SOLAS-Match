@@ -260,7 +260,7 @@ class ProjectRouteHandler
             file_put_contents("$filesFolder/$filename", ''); // Placeholder
             file_put_contents("$uploadFolder/$filename", "files/proj-$project_id/task-$task_id/v-0/$filename"); // Point to it
 
-            $projectDao->queue_copy_task_original_file($project_id, $task_id, $memsource_project_uid, $memsource_task_uid); // cron will copy file from memsource
+            $projectDao->queue_copy_task_original_file($project_id, $task_id, $memsource_task_uid, $filename); // cron will copy file from memsource
         }
     }
 
