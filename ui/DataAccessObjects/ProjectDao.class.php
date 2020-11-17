@@ -629,4 +629,27 @@ $memsource_change_country_to_kp = [
         file_put_contents($filesFolderFull . "/$filename", $file); // Save the file in files folder
         file_put_contents("$uploadFolder/$filename", "$filesFolder/$filename"); // Point to files folder
     }
+
+    public function set_memsource_client($org_id, $memsource_client_id, $memsource_client_uid)
+    {
+        LibAPI\PDOWrapper::call('set_memsource_client', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($memsource_client_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($memsource_client_uid));
+    }
+
+    public function get_memsource_client($org_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_memsource_client', LibAPI\PDOWrapper::cleanse($org_id));
+
+        if (empty($result)) return 0;
+
+        return $result[0];
+    }
+
+    public function get_memsource_client_by_memsource_id($memsource_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_memsource_client_by_memsource_id', LibAPI\PDOWrapper::cleanse($memsource_id));
+
+        if (empty($result)) return 0;
+
+        return $result[0];
+    }
 }

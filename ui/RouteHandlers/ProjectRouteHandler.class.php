@@ -127,12 +127,12 @@ class ProjectRouteHandler
             error_log("No client id in new project: $hook['name']");
             return;
         }
-        $memsource_client = $projectDao->get_memsource_client($hook['client']['id']);
+        $memsource_client = $projectDao->get_memsource_client_by_memsource_id($hook['client']['id']);
         if (empty($memsource_client)) {
             error_log("No MemsourceOrganisations record for new project: $hook['name'], client id: $hook['client']['id']");
             return;
         }
-        $project->setOrganisationId($memsource_client['organisation_id']);
+        $project->setOrganisationId($memsource_client['org_id']);
 
         if (!empty($hook['dateCreated'])) $project->setCreatedTime(substr(string $hook['dateCreated'], 0, 10) . ' ' . substr(string $hook['dateCreated'], 11, 6));
         else                              $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
