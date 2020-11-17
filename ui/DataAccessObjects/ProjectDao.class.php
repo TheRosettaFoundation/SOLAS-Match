@@ -605,4 +605,28 @@ $memsource_change_country_to_kp = [
         }
         return $testing_center_projects;
     }
+
+    public function save_task_file($user_id, $project_id, $task_id, $filename, $file)
+    {
+        $userDao = new UserDao();
+        $mime = $userDao->detectMimeType($file, $filename);
+
+        $args = LibAPI\PDOWrapper::cleanseNull($task_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($filename) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($mime) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($user_id) . ',' .
+            'NULL';
+        $result = LibAPI\PDOWrapper::call('recordFileUpload', $args);
+        $version = $result[0]['version'];
+
+        $uploadFolder = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-$version";
+        if (!is_dir($uploadFolder)) mkdir($uploadFolder, 0755, true);
+
+        $filesFolder = "files/proj-$project_id/task-$task_id/v-$version";
+        $filesFolderFull = Common\Lib\Settings::get('files.upload_path') . $filesFolder;
+        if (!is_dir($filesFolderFull)) mkdir($filesFolderFull, 0755, true);
+
+        file_put_contents($filesFolderFull . "/$filename", $file); // Save the file in files folder
+        file_put_contents("$uploadFolder/$filename", "$filesFolder/$filename"); // Point to files folder
+    }
 }
