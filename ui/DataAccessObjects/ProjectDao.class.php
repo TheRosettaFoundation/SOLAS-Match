@@ -652,4 +652,35 @@ $memsource_change_country_to_kp = [
 
         return $result[0];
     }
+
+    public function set_memsource_project($project_id, $memsource_project_id, $memsource_project_uid, $created_by_id, $owner_id, $workflowLevels)
+    {
+        LibAPI\PDOWrapper::call('set_memsource_project',
+            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($memsource_project_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($memsource_project_uid) . ',' .
+            LibAPI\PDOWrapper::cleanse($created_by_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($owner_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[0]) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[1]) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[2]));
+    }
+
+    public function get_memsource_project($project_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_memsource_project', LibAPI\PDOWrapper::cleanse($project_id));
+
+        if (empty($result)) return 0;
+
+        return $result[0];
+    }
+
+    public function get_memsource_project_by_memsource_id($memsource_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_memsource_project_by_memsource_id', LibAPI\PDOWrapper::cleanse($memsource_id));
+
+        if (empty($result)) return 0;
+
+        return $result[0];
+    }
 }
