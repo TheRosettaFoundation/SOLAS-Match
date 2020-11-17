@@ -2362,7 +2362,6 @@ class ProjectRouteHandler
     public function task_cron_1_minute()
     {
         $projectDao = new DAO\ProjectDao();
-        $userDao    = new DAO\UserDao();
 
         $fp_for_lock = fopen(__DIR__ . '/task_cron_1_minute_lock.txt', 'r');
         if (flock($fp_for_lock, LOCK_EX | LOCK_NB)) { // Acquire an exclusive lock, if possible, if not we will wait for next time
@@ -2379,7 +2378,7 @@ class ProjectRouteHandler
                 $memsource_project = $projectDao->get_memsource_project($project_id);
                 $memsource_project_uid = $memsource_project['memsource_project_uid'];
                 $created_by_id         = $memsource_project['created_by_id'];
-                $user_id = $userDao->get_user_id_from_memsource_user($created_by_id);
+                $user_id = $projectDao->get_user_id_from_memsource_user($created_by_id);
 
                 $re = curl_init("{$matecat_api}api/v1/new");
 

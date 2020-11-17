@@ -732,4 +732,13 @@ $memsource_change_country_to_kp = [
     {
         Lib\PDOWrapper::call('dequeue_copy_task_original_file', Lib\PDOWrapper::cleanse($task_id));
     }
+
+    public function get_user_id_from_memsource_user($memsource_user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_user_id_from_memsource_user', LibAPI\PDOWrapper::cleanse($memsource_user_id));
+
+        if (empty($result)) return 0;
+
+        return $result[0]['user_id'];
+    }
 }
