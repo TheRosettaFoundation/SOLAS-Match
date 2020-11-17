@@ -68,6 +68,11 @@ class ProjectRouteHandler
         )->name('project_cron_1_minute');
 
         $app->get(
+            '/task_cron_1_minute/',
+            array($this, 'task_cron_1_minute')
+        )->name('task_cron_1_minute');
+
+        $app->get(
             '/project/:project_id/getwordcount/',
             array($this, 'project_get_wordcount')
         )->name('project_get_wordcount');
