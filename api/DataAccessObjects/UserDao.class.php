@@ -142,7 +142,6 @@ class UserDao
         
         if (!is_object($user)) {
             self::logLoginAttempt(null, $email, 0);
-            error_log("is_object $email, $clear_password");
             throw new Common\Exceptions\SolasMatchException(
                 "Unable to find user",
                 Common\Enums\HttpStatusEnum::NOT_FOUND
@@ -151,7 +150,6 @@ class UserDao
                 
         if (!self::isUserVerified($user->getId())) {
             self::logLoginAttempt($user->getId(), $email, 0);
-            error_log("isUserVerified $email, $clear_password");
             throw new Common\Exceptions\SolasMatchException(
                 "Account is unverified",
                 Common\Enums\HttpStatusEnum::UNAUTHORIZED
@@ -160,7 +158,6 @@ class UserDao
 
         if (AdminDao::isUserBanned($user->getId())) {
             self::logLoginAttempt($user->getId(), $email, 0);
-            error_log("isUserBanned $email, $clear_password");
             throw new Common\Exceptions\SolasMatchException(
                 'user is banned',
                 Common\Enums\HttpStatusEnum::FORBIDDEN
@@ -169,7 +166,6 @@ class UserDao
 
         if (!self::clearPasswordMatchesUsersPassword($user, $clear_password)) {
             self::logLoginAttempt($user->getId(), $email, 0);
-            error_log("clearPasswordMatchesUsersPassword $email, $clear_password");
             throw new Common\Exceptions\SolasMatchException(
                 'Unable to find user',
                 Common\Enums\HttpStatusEnum::NOT_FOUND

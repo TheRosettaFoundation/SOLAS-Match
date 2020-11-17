@@ -1470,7 +1470,7 @@ class ProjectRouteHandler
                                             $pretranslate_100 = empty($post['pretranslate_100']) ? '0' : '1';
                                             $lexiqa           = '1';
                                             if (!empty($post['private_tm_key'])) $post['private_tm_key'] = str_replace(' ', '', $post['private_tm_key']);
-                                            $private_tm_key = empty($post['private_tm_key']) ? '58f97b6f65fb5c8c8522,d5320e2850c37cc31551' : $post['private_tm_key'] . ',58f97b6f65fb5c8c8522,d5320e2850c37cc31551';
+                                            $private_tm_key = empty($post['private_tm_key']) ? '58f97b6f65fb5c8c8522' : $post['private_tm_key'] . ',58f97b6f65fb5c8c8522';
 
                                             if (!empty($post['testing_center'])) {
                                                 $mt_engine        = '0';
@@ -1711,6 +1711,7 @@ class ProjectRouteHandler
             'isSiteAdmin'    => $adminDao->isSiteAdmin($user_id),
             'sesskey'        => $sesskey,
             'template1'      => '{"source": "en-GB", "targets": ["zh-CN", "zh-TW", "th-TH", "vi-VN", "id-ID", "tl-PH", "ko-KR", "ja-JP", "ms-MY", "my-MM", "hi-IN", "bn-IN"]}',
+            'template2'      => '{"source": "en-GB", "targets": ["ar-SA", "hi-IN", "swh-KE", "fr-FR", "es-MX", "pt-BR"]}',
         ));
         $app->render("project/project.create.tpl");
     }
@@ -2237,7 +2238,7 @@ class ProjectRouteHandler
                     $mt_engine        = '1';
                     $pretranslate_100 = '1';
                     $lexiqa           = '1';
-                    $private_tm_key   = '58f97b6f65fb5c8c8522,d5320e2850c37cc31551';
+                    $private_tm_key   = '58f97b6f65fb5c8c8522';
                 } else {
                     $mt_engine        = $private_tm_key[0]['mt_engine'];
                     $pretranslate_100 = $private_tm_key[0]['pretranslate_100'];
