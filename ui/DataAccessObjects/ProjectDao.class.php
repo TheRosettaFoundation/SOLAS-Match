@@ -713,4 +713,23 @@ $memsource_change_country_to_kp = [
 
         return $result[0];
     }
+
+    public function queue_copy_task_original_file($project_id, $task_id, $memsource_task_uid, $filename)
+    {
+        LibAPI\PDOWrapper::call('queue_copy_task_original_file',
+            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($task_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($memsource_task_uid) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($filename));
+    }
+
+    public function get_queue_copy_task_original_files()
+    {
+        return LibAPI\PDOWrapper::call('get_queue_copy_task_original_files', '');
+    }
+
+    public static function dequeue_copy_task_original_file($task_id)
+    {
+        Lib\PDOWrapper::call('dequeue_copy_task_original_file', Lib\PDOWrapper::cleanse($task_id));
+    }
 }
