@@ -9063,6 +9063,129 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `set_memsource_user`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_user`(IN userID INT, IN memsourceID INT)
+BEGIN
+    INSERT INTO MemsourceUsers (user_id, memsource_user_id) VALUES (userID, memsourceID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_memsource_user`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_user`(IN userID INT)
+BEGIN
+    SELECT * FROM MemsourceUsers WHERE user_id=userID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_user_id_from_memsource_user`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_id_from_memsource_user`(IN memsourceID INT)
+BEGIN
+    SELECT * FROM MemsourceUsers WHERE memsource_user_id=memsourceID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_memsource_client`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_client`(IN orgID INT, IN memsourceID INT, IN memsourceUID VARCHAR(30))
+BEGIN
+    INSERT INTO MemsourceClients (org_id, memsource_client_id, memsource_client_uid) VALUES (userID, memsourceID, memsourceUID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_memsource_client`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_client`(IN orgID INT)
+BEGIN
+    SELECT * FROM MemsourceClients WHERE org_id=orgID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_memsource_client_by_memsource_id`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_client_by_memsource_id`(IN memsourceID INT)
+BEGIN
+    SELECT * FROM MemsourceClients WHERE memsource_client_id=memsourceID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_memsource_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_project`(IN projectID INT, IN memsourceID INT, IN memsourceUID VARCHAR(30), IN createdID INT, IN ownerID INT, IN workflow1 VARCHAR(20), IN workflow2 VARCHAR(20), IN workflow3 VARCHAR(20))
+BEGIN
+    INSERT INTO MemsourceProjects (project_id, memsource_project_id, memsource_project_uid, created_by_id, owner_id, workflow_level_1, workflow_level_2, workflow_level_3)
+    VALUES                        ( projectID,          memsourceID,          memsourceUID,     createdID,  ownerID,        workflow1,        workflow2,        workflow3);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_memsource_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_project`(IN projectID INT)
+BEGIN
+    SELECT * FROM MemsourceProjects WHERE project_id=projectID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_memsource_project_by_memsource_id`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_project_by_memsource_id`(IN memsourceID INT)
+BEGIN
+    SELECT * FROM MemsourceProjects WHERE memsource_project_id=memsourceID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_memsource_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_task`(IN taskID INT, IN memsourceID INT, IN memsourceUID VARCHAR(30), IN t VARCHAR(30), IN level INT, IN begin INT, IN end INT)
+BEGIN
+    INSERT INTO MemsourceTasks (task_id, memsource_task_id, memsource_task_uid, task, workflowLevel,beginIndex, endIndex)
+    VALUES                     ( taskID,       memsourceID,       memsourceUID,    t,         level,     begin,      end);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_memsource_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_task`(IN taskID INT)
+BEGIN
+    SELECT * FROM MemsourceTasks WHERE task_id=taskID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_memsource_task_by_memsource_id`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_task_by_memsource_id`(IN memsourceID INT)
+BEGIN
+    SELECT * FROM MemsourceTasks WHERE memsource_task_id=memsourceID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `queue_copy_task_original_file`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `queue_copy_task_original_file`(IN projectID INT, IN taskID INT, IN memsourceUID VARCHAR(30), IN name VARCHAR(255))
+BEGIN
+    INSERT INTO queue_copy_task_original_files (project_id, task_id, memsource_task_uid, filename)
+    VALUES                                     ( projectID,  taskID,       memsourceUID,     name);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_queue_copy_task_original_files`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_queue_copy_task_original_files`()
+BEGIN
+    SELECT * FROM queue_copy_task_original_files;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `dequeue_copy_task_original_file`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `dequeue_copy_task_original_file`(IN taskID BIGINT)
+BEGIN
+    DELETE FROM queue_copy_task_original_files WHERE task_id=taskID;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
