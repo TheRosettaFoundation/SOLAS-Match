@@ -247,9 +247,9 @@ class ProjectRouteHandler
             }
 
             $projectDao->set_memsource_task($task_id, $part['id'], $part['uid'], $part['task'], // note 'task' is for Language pair (independent of workflow step)
-                empty($hook['$part['workflowLevel']) ? 0 : $hook['$part['workflowLevel'],
-                empty($hook['$part['beginIndex'])    ? 0 : $hook['$part['beginIndex'], // Begin Segment number
-                empty($hook['$part['endIndex'])      ? 0 : $hook['$part['endIndex']);
+                empty($part['workflowLevel']) ? 0 : $part['workflowLevel'],
+                empty($part['beginIndex'])    ? 0 : $part['beginIndex'], // Begin Segment number
+                empty($part['endIndex'])      ? 0 : $part['endIndex']);
             try {
                 $projectDao->updateProject($project);
             } catch (\Exception $e) {
