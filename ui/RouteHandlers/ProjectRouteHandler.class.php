@@ -124,12 +124,12 @@ class ProjectRouteHandler
         $project->setSourceLocale($sourceLocale);
 
         if (empty($hook['client']['id'])) {
-            error_log("No client id in new project: $hook['name']");
+            error_log("No client id in new project: {$hook['name']}");
             return;
         }
         $memsource_client = $projectDao->get_memsource_client_by_memsource_id($hook['client']['id']);
         if (empty($memsource_client)) {
-            error_log("No MemsourceOrganisations record for new project: $hook['name'], client id: $hook['client']['id']");
+            error_log("No MemsourceOrganisations record for new project: {$hook['name']}, client id: {$hook['client']['id']}");
             return;
         }
         $project->setOrganisationId($memsource_client['org_id']);
@@ -138,9 +138,9 @@ class ProjectRouteHandler
         else                              $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
 
         $project = $projectDao->createProjectDirectly($project);
-        error_log("Created Project: $hook['name']");
+        error_log("Created Project: {$hook['name']}");
         if (empty($project)) {
-            error_log("Failed to create Project: $hook['name']");
+            error_log("Failed to create Project: {$hook['name']}");
             return;
         }
 
@@ -182,16 +182,16 @@ class ProjectRouteHandler
             $task = new Common\Protobufs\Models\Task();
 
             if (empty($part['fileName'])) {
-                error_log("No fileName in new jobPart $part['id']");
+                error_log("No fileName in new jobPart {$part['id']}");
                 continue;
             }
             if (empty($part['project']['id'])) {
-                error_log("No project id in new jobPart $part['id'] for: $part['fileName']");
+                error_log("No project id in new jobPart {$part['id']} for: {$part['fileName']}");
                 continue;
             }
             $memsource_project = $projectDao->get_memsource_project_by_memsource_id($part['project']['id']);
             if (empty($memsource_project)) {
-                error_log("Can't find memsource_project for $part['project']['id'] in new jobPart $part['id'] for: $part['fileName']");
+                error_log("Can't find memsource_project for {$part['project']['id']} in new jobPart {$part['id']} for: {$part['fileName']}");
                 continue;
             }
             $task->setProjectId($memsource_project['project_id']);
@@ -212,14 +212,14 @@ class ProjectRouteHandler
             $task->setTargetLocale($taskTargetLocale);
 
             if (empty($part['workflowLevel']) || $part['workflowLevel'] > 3) {
-                error_log("Can't find workflowLevel in new jobPart $part['id'] for: $part['fileName']");
+                error_log("Can't find workflowLevel in new jobPart {$part['id']} for: {$part['fileName']}");
                 continue;
             }
             $taskType = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3']][$part['workflowLevel'] - 1]
             if     ($taskType == 'Translation') $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
             elseif ($taskType == 'Revision')    $taskType = Common\Enums\TaskTypeEnum::PROOFREADING;
             else {
-                error_log("Can't find expected taskType in new jobPart $part['id'] for: $part['fileName']");
+                error_log("Can't find expected taskType in new jobPart {$part['id']} for: {$part['fileName']}");
                 continue;
             }
             $task->setTaskType($taskType);
@@ -240,9 +240,9 @@ class ProjectRouteHandler
                 error_log("addProjectTask");
                 $newTask = $taskDao->createTask($task);
                 $task_id = $newTask->getId();
-                error_log("Added Task: $task_id for new jobPart $part['id'] for: $part['fileName']");
+                error_log("Added Task: $task_id for new jobPart {$part['id']} for: {$part['fileName']}");
             } catch (\Exception $e) {
-                error_log("Failed to create Task for new jobPart $part['id'] for: $part['fileName']");
+                error_log("Failed to create Task for new jobPart {$part['id']} for: {$part['fileName']}");
                 continue;
             }
 
@@ -278,7 +278,7 @@ class ProjectRouteHandler
             if ($part['status'] == 'COMPLETED_BY_LINGUIST') {
                 $memsource_task = $projectDao->get_memsource_task_by_memsource_id($part['id']);
                 if (empty($memsource_task)) {
-                    error_log("Can't find memsource_task for $part['id'] in COMPLETED_BY_LINGUIST jobPart");
+                    error_log("Can't find memsource_task for {$part['id']} in COMPLETED_BY_LINGUIST jobPart");
                     continue;
                 }
 
@@ -286,7 +286,7 @@ class ProjectRouteHandler
                 $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::COMPLETE);
                 $taskDao->sendTaskUploadNotifications($task_id, 1);
                 $taskDao->set_task_complete_date($task_id);
-                error_log("COMPLETED_BY_LINGUIST task_id: $task_id, memsource: $part['id']");
+                error_log("COMPLETED_BY_LINGUIST task_id: $task_id, memsource: {$part['id']}");
             }
         }
     }
