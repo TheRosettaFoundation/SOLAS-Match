@@ -9186,6 +9186,16 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_first_project_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_first_project_task`(IN projectID INT)
+BEGIN
+    SELECT MIN(id) AS min_id
+    FROM  Tasks
+    WHERE project_id=projectID;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
