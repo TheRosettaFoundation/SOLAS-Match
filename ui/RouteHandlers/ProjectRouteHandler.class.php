@@ -114,7 +114,7 @@ class ProjectRouteHandler
         if (!empty($hook['project_description'])) $project->setDescription($hook['project_description']);
         else                                      $project->setDescription('-');
         $project->setImpact('-');
-        if (!empty($hook['dateDue'])) $project->setDeadline(substr(string $hook['dateDue'], 0, 10) . ' ' . substr(string $hook['dateDue'], 11, 6));
+        if (!empty($hook['dateDue'])) $project->setDeadline(substr($hook['dateDue'], 0, 10) . ' ' . substr($hook['dateDue'], 11, 6));
         else                          $project->setDeadline(gmdate('Y-m-d H:i:s', strtotime('25 days')));
         $project->setWordCount(1);
         list($trommons_source_language_code, $trommons_source_country_code) = $projectDao->convert_memsource_to_language_country($hook['sourceLang']);
@@ -134,7 +134,7 @@ class ProjectRouteHandler
         }
         $project->setOrganisationId($memsource_client['org_id']);
 
-        if (!empty($hook['dateCreated'])) $project->setCreatedTime(substr(string $hook['dateCreated'], 0, 10) . ' ' . substr(string $hook['dateCreated'], 11, 6));
+        if (!empty($hook['dateCreated'])) $project->setCreatedTime(substr($hook['dateCreated'], 0, 10) . ' ' . substr($hook['dateCreated'], 11, 6));
         else                              $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
 
         $project = $projectDao->createProjectDirectly($project);
@@ -231,7 +231,7 @@ class ProjectRouteHandler
                 $task->setWordCount(1);
             }
 
-            if (!empty($part['dateDue'])) $task->setDeadline(substr(string $part['dateDue'], 0, 10) . ' ' . substr(string $part['dateDue'], 11, 6));
+            if (!empty($part['dateDue'])) $task->setDeadline(substr($part['dateDue'], 0, 10) . ' ' . substr($part['dateDue'], 11, 6));
             else                          $task->setDeadline($project->getDeadline());
 
             $task->setPublished(1);
