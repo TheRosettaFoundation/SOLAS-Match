@@ -622,6 +622,16 @@ $memsource_change_country_to_kp = [
         $uploadFolder = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-$version";
         if (!is_dir($uploadFolder)) mkdir($uploadFolder, 0755, true);
 
+        $min_id = get_first_project_task($project_id);
+        if ($min_id) {
+            $previous_path = "files/proj-$project_id/task-$min_id/v-0/$filename";
+            $previous_file = file_get_contents(Common\Lib\Settings::get('files.upload_path') . $previous_path);
+            if ($previous_file && $previous_file === $file) {                 // If a previously stored file is identical
+                file_put_contents("$uploadFolder/$filename", $previous_path); // Point to files folder for previous file
+                return;
+            }
+        }
+
         $filesFolder = "files/proj-$project_id/task-$task_id/v-$version";
         $filesFolderFull = Common\Lib\Settings::get('files.upload_path') . $filesFolder;
         if (!is_dir($filesFolderFull)) mkdir($filesFolderFull, 0755, true);
@@ -740,5 +750,13 @@ $memsource_change_country_to_kp = [
         if (empty($result)) return 0;
 
         return $result[0]['user_id'];
+    }
+
+    public function get_first_project_task($project_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_first_project_task', LibAPI\PDOWrapper::cleanse($project_id));
+        if (empty($result[0]['min_id'])) return 0;
+
+        return $result[0]['min_id'];
     }
 }
