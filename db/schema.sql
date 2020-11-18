@@ -1658,6 +1658,59 @@ CREATE TABLE IF NOT EXISTS `ProjectRestrictions` (
   CONSTRAINT `FK_ProjectRestrictions_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `MemsourceUsers` (
+  user_id           INT(10) UNSIGNED NOT NULL,
+  memsource_user_id INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY FK_MemsourceUsers_user_id (user_id),
+  UNIQUE  KEY memsource_user_id         (memsource_user_id),
+  CONSTRAINT FK_MemsourceUsers_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `MemsourceClients` (
+  org_id               INT(10) UNSIGNED NOT NULL,
+  memsource_client_id  INT(10) UNSIGNED NOT NULL,
+  memsource_client_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY FK_MemsourceClients_org_id (org_id),
+  UNIQUE  KEY memsource_client_id        (memsource_client_id),
+  CONSTRAINT FK_MemsourceClients_org_id FOREIGN KEY (org_id) REFERENCES Organisations (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `MemsourceProjects` (
+  project_id            INT(10) UNSIGNED NOT NULL,
+  memsource_project_id  INT(10) UNSIGNED NOT NULL,
+  memsource_project_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  created_by_id INT(10) UNSIGNED NOT NULL,
+  owner_id INT(10)      UNSIGNED NOT NULL,
+  workflow_level_1      VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  workflow_level_2      VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  workflow_level_3      VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY FK_MemsourceProjects_project_id (project_id),
+  UNIQUE  KEY memsource_project_id            (memsource_project_id),
+  CONSTRAINT FK_MemsourceProjects_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `MemsourceTasks` (
+  task_id            INT(10) UNSIGNED NOT NULL,
+  memsource_task_id  INT(10) UNSIGNED NOT NULL,
+  memsource_task_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  task               VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  workflowLevel      INT(10) UNSIGNED NOT NULL,
+  beginIndex         INT(10) UNSIGNED NOT NULL,
+  endIndex           INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY FK_MemsourceTasks_task_id (task_id),
+  UNIQUE  KEY memsource_task_id         (memsource_task_id),
+  CONSTRAINT FK_MemsourceTasks_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `queue_copy_task_original_files` (
+  project_id         INT(10) UNSIGNED NOT NULL,
+  task_id            BIGINT(20) UNSIGNED NOT NULL,
+  memsource_task_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  filename           VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  UNIQUE KEY FK_queue_copy_task_original_files_task_id (task_id),
+  CONSTRAINT FK_queue_copy_task_original_files_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
