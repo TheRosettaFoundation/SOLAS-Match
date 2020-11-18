@@ -215,7 +215,7 @@ class ProjectRouteHandler
                 error_log("Can't find workflowLevel in new jobPart {$part['id']} for: {$part['fileName']}");
                 continue;
             }
-            $taskType = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3']][$part['workflowLevel'] - 1]
+            $taskType = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3']][$part['workflowLevel'] - 1];
             if     ($taskType == 'Translation') $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
             elseif ($taskType == 'Revision')    $taskType = Common\Enums\TaskTypeEnum::PROOFREADING;
             else {
