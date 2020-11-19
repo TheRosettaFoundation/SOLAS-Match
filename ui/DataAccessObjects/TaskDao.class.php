@@ -718,8 +718,10 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
         return $matecat_url;
     }
 
-    public function get_matecat_url_regardless($task)
+    public function get_matecat_url_regardless($task, $memsource_task)
     {
+        if ($memsource_task) return "https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
+
         $matecat_url = '';
         if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
             $job_first_segment = '';
