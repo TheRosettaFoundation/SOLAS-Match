@@ -134,6 +134,7 @@ $hook['client']['id'] = 0;
 //(**)            return;
 $memsource_client['org_id'] = 456;
         }
+error_log('ghere0');
         $project->setOrganisationId($memsource_client['org_id']);
 
 error_log('ghere1');
