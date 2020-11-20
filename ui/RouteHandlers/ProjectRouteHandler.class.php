@@ -241,6 +241,7 @@ error_log(print_r($project, true));
 
             try {
                 error_log("addProjectTask");
+error_log(print_r($task, true));
                 $newTask = $taskDao->createTask($task);
                 $task_id = $newTask->getId();
                 error_log("Added Task: $task_id for new jobPart {$part['id']} for: {$part['fileName']}");
