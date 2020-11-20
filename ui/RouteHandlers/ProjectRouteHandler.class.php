@@ -136,6 +136,8 @@ $memsource_client['org_id'] = 456;
         }
         $project->setOrganisationId($memsource_client['org_id']);
 
+error_log('ghere1');
+error_log('ghere2' . $hook['dateCreated']);
         if (!empty($hook['dateCreated'])) $project->setCreatedTime(substr($hook['dateCreated'], 0, 10) . ' ' . substr($hook['dateCreated'], 11, 6));
         else                              $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
 error_log(print_r($project, true));
