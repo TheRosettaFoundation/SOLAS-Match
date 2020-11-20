@@ -132,7 +132,7 @@ $hook['client']['id'] = 0;
         if (empty($memsource_client)) {
             error_log("No MemsourceOrganisations record for new project: {$hook['name']}, client id: {$hook['client']['id']}");
 //(**)            return;
-$memsource_client['org_id'] = 456;
+$memsource_client = ['org_id' => 456];
         }
 error_log('ghere0');
         $project->setOrganisationId($memsource_client['org_id']);
