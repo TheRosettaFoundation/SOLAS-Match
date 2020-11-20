@@ -1828,6 +1828,24 @@ class ProjectRouteHandler
           error_log("Asana 3 API error ($error_number): " . curl_error($re));
         }
         curl_close($re);
+
+        // Asana 5th Project
+        $re = curl_init('https://app.asana.com/api/1.0/tasks');
+        curl_setopt($re, CURLOPT_POSTFIELDS, array(
+            'name' => str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getTitle()),
+            'notes' => "Partner: $org_name, Target: $targetlanguages, Deadline: ".$project->getDeadline() . ' https:/'.'/'.$_SERVER['SERVER_NAME']."/project/$projectId/view",
+            'projects' => '1186619555316417'
+            )
+        );
+
+        curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($re, CURLOPT_HEADER, true);
+        curl_setopt($re, CURLOPT_HTTPHEADER, array("Authorization: Bearer " . Common\Lib\Settings::get('asana.api_key5')));
+        curl_exec($re);
+        if ($error_number = curl_errno($re)) {
+          error_log("Asana 5 API error ($error_number): " . curl_error($re));
+        }
+        curl_close($re);
     }
 
     public function project_cron_1_minute()
