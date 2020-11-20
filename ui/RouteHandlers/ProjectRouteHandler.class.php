@@ -138,6 +138,7 @@ $memsource_client['org_id'] = 456;
 
         if (!empty($hook['dateCreated'])) $project->setCreatedTime(substr($hook['dateCreated'], 0, 10) . ' ' . substr($hook['dateCreated'], 11, 6));
         else                              $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
+error_log(print_r($project, true));
 
         $project = $projectDao->createProjectDirectly($project);
         error_log("Created Project: {$hook['name']}");
