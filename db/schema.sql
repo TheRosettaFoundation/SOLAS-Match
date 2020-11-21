@@ -9063,7 +9063,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `set_memsource_user`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_user`(IN userID INT, IN memsourceID INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_user`(IN userID INT, IN memsourceID BIGINT)
 BEGIN
     INSERT INTO MemsourceUsers (user_id, memsource_user_id) VALUES (userID, memsourceID);
 END//
