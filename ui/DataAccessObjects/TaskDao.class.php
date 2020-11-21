@@ -167,11 +167,8 @@ class TaskDao extends BaseDao
             Common\Enums\HttpMethodEnum::POST,
             $task
         );
-error_log("After API Call");
         if (!empty($response)) {
-error_log("!empty()");
             if (get_class($response) === 'SolasMatch\Common\Protobufs\Models\Task') {
-error_log("Task");
                 $this->inheritRequiredTaskQualificationLevel($response->getId());
 
                 error_log("TaskDAO::createTask id: " . $response->getId());
@@ -187,6 +184,29 @@ error_log("Task");
             error_log("TaskDAO::createTask Failed");
         }
         return $response;
+    }
+
+    public function createTaskDirectly($task)
+    {
+        $sourceLocale = $task->getSourceLocale();
+        $targetLocale = $task->getTargetLocale();
+        $args = 'null,' .
+            LibAPI\PDOWrapper::cleanseNull($task->getProjectId()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($task->getTitle()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($task->getWordCount()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLocale->getLanguageCode()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($task->getComment()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLocale->getCountryCode()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($task->getDeadline()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($task->getTaskType()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($task->getTaskStatus()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($task->getPublished());
+        $result = LibAPI\PDOWrapper::call('taskInsertAndUpdate', $args);
+        $task_id = $result[0]['id'];
+        $this->inheritRequiredTaskQualificationLevel($task_id);
+        return $task_id;
     }
 
     public function updateTask($task)

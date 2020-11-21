@@ -239,17 +239,9 @@ error_log(print_r($project, true));
 
             $task->setPublished(1);
 
-            try {
-                error_log("addProjectTask");
 error_log(print_r($task, true));
-                $newTask = $taskDao->createTask($task);
-                $task_id = $newTask->getId();
-                error_log("Added Task: $task_id for new jobPart {$part['id']} for: {$part['fileName']}");
-            } catch (\Exception $e) {
-error_log("Exception: " . $e->getMessage());
-                error_log("Failed to create Task for new jobPart {$part['id']} for: {$part['fileName']}");
-                continue;
-            }
+            $task_id = $taskDao->createTaskDirectly($task);
+            error_log("Added Task: $task_id for new jobPart {$part['id']} for: {$part['fileName']}");
 
             $projectDao->set_memsource_task($task_id, $part['id'], $part['uid'], $part['task'], // note 'task' is for Language pair (independent of workflow step)
                 empty($part['workflowLevel']) ? 0 : $part['workflowLevel'],
