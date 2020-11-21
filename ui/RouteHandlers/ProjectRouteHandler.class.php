@@ -246,6 +246,7 @@ error_log(print_r($task, true));
                 $task_id = $newTask->getId();
                 error_log("Added Task: $task_id for new jobPart {$part['id']} for: {$part['fileName']}");
             } catch (\Exception $e) {
+error_log("Exception: " . $e->getMessage());
                 error_log("Failed to create Task for new jobPart {$part['id']} for: {$part['fileName']}");
                 continue;
             }
