@@ -125,6 +125,25 @@ class ProjectDao extends BaseDao
         return $ret;
     }
 
+    public function updateProjectDirectly($project)
+    {
+        $sourceLocale = $project->getSourceLocale();
+        $args = LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getId()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getTitle()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getDescription()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getImpact()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getDeadline()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($project->getOrganisationId()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getReference()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($project->getWordCount()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getCreatedTime()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($project->getImageUploaded()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($project->getImageApproved());
+        LibAPI\PDOWrapper::call('projectInsertAndUpdate', $args);
+    }
+
     public function saveProjectFile($project, $userId, $filename, $fileData)
     {
         $filename = urlencode($filename);

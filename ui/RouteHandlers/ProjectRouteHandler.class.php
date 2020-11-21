@@ -247,10 +247,8 @@ error_log(print_r($task, true));
                 empty($part['workflowLevel']) ? 0 : $part['workflowLevel'],
                 empty($part['beginIndex'])    ? 0 : $part['beginIndex'], // Begin Segment number
                 empty($part['endIndex'])      ? 0 : $part['endIndex']);
-            try {
-                $projectDao->updateProject($project);
-            } catch (\Exception $e) {
-            }
+
+            $projectDao->updateProjectDirectly($project);
 
             $project_id = $project->getId();
             $uploadFolder = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0";
