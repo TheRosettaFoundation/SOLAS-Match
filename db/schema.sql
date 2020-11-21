@@ -9136,7 +9136,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `set_memsource_task`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_task`(IN taskID INT, IN memsourceID INT, IN memsourceUID VARCHAR(30), IN t VARCHAR(30), IN level INT, IN begin INT, IN end INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_task`(IN taskID BIGINT, IN memsourceID BIGINT, IN memsourceUID VARCHAR(30), IN t VARCHAR(30), IN level INT, IN begin INT, IN end INT)
 BEGIN
     INSERT INTO MemsourceTasks (task_id, memsource_task_id, memsource_task_uid, task, workflowLevel,beginIndex, endIndex)
     VALUES                     ( taskID,       memsourceID,       memsourceUID,    t,         level,     begin,      end);
@@ -9145,7 +9145,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_memsource_task`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_task`(IN taskID INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_task`(IN taskID BIGINT)
 BEGIN
     SELECT * FROM MemsourceTasks WHERE task_id=taskID;
 END//
@@ -9153,7 +9153,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_memsource_task_by_memsource_id`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_task_by_memsource_id`(IN memsourceID INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_task_by_memsource_id`(IN memsourceID BIGINT)
 BEGIN
     SELECT * FROM MemsourceTasks WHERE memsource_task_id=memsourceID;
 END//
