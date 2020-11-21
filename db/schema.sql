@@ -1658,7 +1658,7 @@ CREATE TABLE IF NOT EXISTS `ProjectRestrictions` (
 
 CREATE TABLE IF NOT EXISTS `MemsourceUsers` (
   user_id           INT(10) UNSIGNED NOT NULL,
-  memsource_user_id INT(10) UNSIGNED NOT NULL,
+  memsource_user_id BIGINT(20) UNSIGNED NOT NULL,
   PRIMARY KEY FK_MemsourceUsers_user_id (user_id),
   UNIQUE  KEY memsource_user_id         (memsource_user_id),
   CONSTRAINT FK_MemsourceUsers_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -1666,7 +1666,7 @@ CREATE TABLE IF NOT EXISTS `MemsourceUsers` (
 
 CREATE TABLE IF NOT EXISTS `MemsourceClients` (
   org_id               INT(10) UNSIGNED NOT NULL,
-  memsource_client_id  INT(10) UNSIGNED NOT NULL,
+  memsource_client_id  BIGINT(20) UNSIGNED NOT NULL,
   memsource_client_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY FK_MemsourceClients_org_id (org_id),
   UNIQUE  KEY memsource_client_id        (memsource_client_id),
@@ -1675,10 +1675,10 @@ CREATE TABLE IF NOT EXISTS `MemsourceClients` (
 
 CREATE TABLE IF NOT EXISTS `MemsourceProjects` (
   project_id            INT(10) UNSIGNED NOT NULL,
-  memsource_project_id  INT(10) UNSIGNED NOT NULL,
+  memsource_project_id  BIGINT(20) UNSIGNED NOT NULL,
   memsource_project_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  created_by_id INT(10) UNSIGNED NOT NULL,
-  owner_id INT(10)      UNSIGNED NOT NULL,
+  created_by_id         BIGINT(20) UNSIGNED NOT NULL,
+  owner_id              BIGINT(20) UNSIGNED NOT NULL,
   workflow_level_1      VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   workflow_level_2      VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   workflow_level_3      VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1688,8 +1688,8 @@ CREATE TABLE IF NOT EXISTS `MemsourceProjects` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `MemsourceTasks` (
-  task_id            INT(10) UNSIGNED NOT NULL,
-  memsource_task_id  INT(10) UNSIGNED NOT NULL,
+  task_id            BIGINT(20) UNSIGNED NOT NULL,
+  memsource_task_id  BIGINT(20) UNSIGNED NOT NULL,
   memsource_task_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   task               VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   workflowLevel      INT(10) UNSIGNED NOT NULL,
