@@ -388,10 +388,14 @@ class Tasks
 
     public static function createTask($format = ".json")
     {
+error_log("API createTask");
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper($format);
+error_log("API createTask1");
         $data = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Models\Task");
+error_log("API createTask2");
         API\Dispatcher::sendResponse(null, DAO\TaskDao::save($data), null, $format);
+error_log("API createTask3");
     }
 }
 Tasks::init();
