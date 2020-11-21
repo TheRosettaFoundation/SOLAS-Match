@@ -9079,7 +9079,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_user_id_from_memsource_user`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_id_from_memsource_user`(IN memsourceID INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_id_from_memsource_user`(IN memsourceID BIGINT)
 BEGIN
     SELECT * FROM MemsourceUsers WHERE memsource_user_id=memsourceID;
 END//
