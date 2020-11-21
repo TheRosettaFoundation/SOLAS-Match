@@ -9111,7 +9111,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `set_memsource_project`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_project`(IN projectID INT, IN memsourceID INT, IN memsourceUID VARCHAR(30), IN createdID INT, IN ownerID INT, IN workflow1 VARCHAR(20), IN workflow2 VARCHAR(20), IN workflow3 VARCHAR(20))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_project`(IN projectID INT, IN memsourceID BIGINT, IN memsourceUID VARCHAR(30), IN createdID BIGINT, IN ownerID BIGINT, IN workflow1 VARCHAR(20), IN workflow2 VARCHAR(20), IN workflow3 VARCHAR(20))
 BEGIN
     INSERT INTO MemsourceProjects (project_id, memsource_project_id, memsource_project_uid, created_by_id, owner_id, workflow_level_1, workflow_level_2, workflow_level_3)
     VALUES                        ( projectID,          memsourceID,          memsourceUID,     createdID,  ownerID,        workflow1,        workflow2,        workflow3);
@@ -9128,7 +9128,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_memsource_project_by_memsource_id`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_project_by_memsource_id`(IN memsourceID INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_project_by_memsource_id`(IN memsourceID BIGINT)
 BEGIN
     SELECT * FROM MemsourceProjects WHERE memsource_project_id=memsourceID;
 END//
