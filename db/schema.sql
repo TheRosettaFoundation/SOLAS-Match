@@ -9087,7 +9087,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `set_memsource_client`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_client`(IN orgID INT, IN memsourceID INT, IN memsourceUID VARCHAR(30))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_client`(IN orgID INT, IN memsourceID BIGINT, IN memsourceUID VARCHAR(30))
 BEGIN
     INSERT INTO MemsourceClients (org_id, memsource_client_id, memsource_client_uid) VALUES (userID, memsourceID, memsourceUID);
 END//
@@ -9103,7 +9103,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_memsource_client_by_memsource_id`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_client_by_memsource_id`(IN memsourceID INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_client_by_memsource_id`(IN memsourceID BIGINT)
 BEGIN
     SELECT * FROM MemsourceClients WHERE memsource_client_id=memsourceID;
 END//
