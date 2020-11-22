@@ -274,12 +274,10 @@ error_log('HERE6');
 
 error_log($project_id);
 error_log($task_id);
-error_log($memsource_task_uid);
+error_log($part['uid']);
 error_log($filename);
 error_log('HERE7');
-/*
-            $projectDao->queue_copy_task_original_file($project_id, $task_id, $memsource_task_uid, $filename); // cron will copy file from memsource
-*/
+            $projectDao->queue_copy_task_original_file($project_id, $task_id, $part['uid'], $filename); // cron will copy file from memsource
 error_log('HERE8');
         }
     }

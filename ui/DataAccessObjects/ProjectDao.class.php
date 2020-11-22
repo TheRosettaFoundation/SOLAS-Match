@@ -746,7 +746,6 @@ $memsource_change_country_to_kp = [
     public function queue_copy_task_original_file($project_id, $task_id, $memsource_task_uid, $filename)
     {
 error_log('here q');
-/*
 error_log(LibAPI\PDOWrapper::cleanse($project_id) . ',' .
             LibAPI\PDOWrapper::cleanse($task_id) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($memsource_task_uid) . ',' .
@@ -756,7 +755,6 @@ error_log(LibAPI\PDOWrapper::cleanse($project_id) . ',' .
             LibAPI\PDOWrapper::cleanse($task_id) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($memsource_task_uid) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($filename));
-*/
 error_log('here q END');
     }
 
