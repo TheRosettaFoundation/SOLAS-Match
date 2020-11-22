@@ -272,8 +272,14 @@ error_log('HERE6');
             file_put_contents("$filesFolder/$filename", ''); // Placeholder
             file_put_contents("$uploadFolder/$filename", "files/proj-$project_id/task-$task_id/v-0/$filename"); // Point to it
 
+error_log($project_id);
+error_log($task_id);
+error_log($memsource_task_uid);
+error_log($filename);
 error_log('HERE7');
+/*
             $projectDao->queue_copy_task_original_file($project_id, $task_id, $memsource_task_uid, $filename); // cron will copy file from memsource
+*/
 error_log('HERE8');
         }
     }
