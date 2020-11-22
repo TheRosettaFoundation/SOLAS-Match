@@ -182,8 +182,7 @@ error_log(print_r($project, true));
         $projectDao = new DAO\ProjectDao();
         $taskDao    = new DAO\TaskDao();
         foreach ($hook as $part) {
-error_log('part...');
-error_log(print_r($part, true));
+error_log('part...' . print_r($part, true));
             $task = new Common\Protobufs\Models\Task();
 
             if (empty($part['fileName'])) {
@@ -220,13 +219,7 @@ error_log(print_r($part, true));
                 error_log("Can't find workflowLevel in new jobPart {$part['id']} for: {$part['fileName']}");
                 continue;
             }
-error_log(print_r([$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3']] , true));
-error_log($part['workflowLevel']);
-error_log('HERE1');
-error_log("part['workflowLevel']: {$part['workflowLevel']}");
-error_log('HERE2');
             $taskType = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3']][$part['workflowLevel'] - 1];
-error_log('HERE3');
 error_log("taskType: $taskType");
             if     ($taskType == 'Translation') $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
             elseif ($taskType == 'Revision')    $taskType = Common\Enums\TaskTypeEnum::PROOFREADING;
@@ -257,9 +250,7 @@ error_log(print_r($task, true));
                 empty($part['beginIndex'])    ? 0 : $part['beginIndex'], // Begin Segment number
                 empty($part['endIndex'])      ? 0 : $part['endIndex']);
 
-error_log('HERE4');
             $projectDao->updateProjectDirectly($project);
-error_log('HERE5');
 
             $project_id = $project->getId();
             $uploadFolder = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0";
@@ -267,18 +258,11 @@ error_log('HERE5');
             $filesFolder = Common\Lib\Settings::get('files.upload_path') . "files/proj-$project_id/task-$task_id/v-0";
             mkdir($filesFolder, 0755, true);
 
-error_log('HERE6');
             $filename = $part['fileName'];
             file_put_contents("$filesFolder/$filename", ''); // Placeholder
             file_put_contents("$uploadFolder/$filename", "files/proj-$project_id/task-$task_id/v-0/$filename"); // Point to it
 
-error_log($project_id);
-error_log($task_id);
-error_log($part['uid']);
-error_log($filename);
-error_log('HERE7');
             $projectDao->queue_copy_task_original_file($project_id, $task_id, $part['uid'], $filename); // cron will copy file from memsource
-error_log('HERE8');
         }
     }
 
