@@ -745,11 +745,17 @@ $memsource_change_country_to_kp = [
 
     public function queue_copy_task_original_file($project_id, $task_id, $memsource_task_uid, $filename)
     {
+error_log('here q');
+error_log(LibAPI\PDOWrapper::cleanse($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($task_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($memsource_task_uid) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($filename));
         LibAPI\PDOWrapper::call('queue_copy_task_original_file',
             LibAPI\PDOWrapper::cleanse($project_id) . ',' .
             LibAPI\PDOWrapper::cleanse($task_id) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($memsource_task_uid) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($filename));
+error_log('here q END');
     }
 
     public function get_queue_copy_task_original_files()
@@ -759,7 +765,7 @@ $memsource_change_country_to_kp = [
 
     public static function dequeue_copy_task_original_file($task_id)
     {
-        Lib\PDOWrapper::call('dequeue_copy_task_original_file', Lib\PDOWrapper::cleanse($task_id));
+        LibAPI\PDOWrapper::call('dequeue_copy_task_original_file', LibAPI\PDOWrapper::cleanse($task_id));
     }
 
     public function get_user_id_from_memsource_user($memsource_user_id)
