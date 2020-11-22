@@ -219,8 +219,12 @@ error_log(print_r($project, true));
                 continue;
             }
 error_log(print_r([$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3']] , true));
-error_log("part['workflowLevel'] - 1: " . $part['workflowLevel'] - 1 . "({$part['workflowLevel']})");
+error_log($part['workflowLevel']);
+error_log('HERE1');
+error_log("part['workflowLevel']: {$part['workflowLevel']}");
+error_log('HERE2');
             $taskType = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3']][$part['workflowLevel'] - 1];
+error_log('HERE3');
 error_log("taskType: $taskType");
             if     ($taskType == 'Translation') $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
             elseif ($taskType == 'Revision')    $taskType = Common\Enums\TaskTypeEnum::PROOFREADING;
