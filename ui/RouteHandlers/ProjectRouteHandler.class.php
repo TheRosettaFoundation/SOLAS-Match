@@ -257,7 +257,9 @@ error_log(print_r($task, true));
                 empty($part['beginIndex'])    ? 0 : $part['beginIndex'], // Begin Segment number
                 empty($part['endIndex'])      ? 0 : $part['endIndex']);
 
+error_log('HERE4');
             $projectDao->updateProjectDirectly($project);
+error_log('HERE5');
 
             $project_id = $project->getId();
             $uploadFolder = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0";
@@ -265,11 +267,14 @@ error_log(print_r($task, true));
             $filesFolder = Common\Lib\Settings::get('files.upload_path') . "files/proj-$project_id/task-$task_id/v-0";
             mkdir($filesFolder, 0755, true);
 
+error_log('HERE6');
             $filename = $part['fileName'];
             file_put_contents("$filesFolder/$filename", ''); // Placeholder
             file_put_contents("$uploadFolder/$filename", "files/proj-$project_id/task-$task_id/v-0/$filename"); // Point to it
 
+error_log('HERE7');
             $projectDao->queue_copy_task_original_file($project_id, $task_id, $memsource_task_uid, $filename); // cron will copy file from memsource
+error_log('HERE8');
         }
     }
 
