@@ -182,6 +182,8 @@ error_log(print_r($project, true));
         $projectDao = new DAO\ProjectDao();
         $taskDao    = new DAO\TaskDao();
         foreach ($hook as $part) {
+error_log('part...');
+error_log(print_r($part, true));
             $task = new Common\Protobufs\Models\Task();
 
             if (empty($part['fileName'])) {
