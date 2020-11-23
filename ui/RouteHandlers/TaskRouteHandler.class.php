@@ -1781,8 +1781,8 @@ class TaskRouteHandler
         $user = $userDao->getUser($user_id);
 
         $memsource_task = $projectDao->get_memsource_task($task_id);
-        if ($memsource_task) $matecat_id_job = 0;
-        else list ($matecat_id_job, $matecat_id_job_password, $recorded_status) = $taskDao->get_matecat_job_id_recorded_status($task);
+        if ($memsource_task) list ($matecat_id_job, $matecat_id_job_password, $recorded_status) = [0, '', ''];
+        else                 list ($matecat_id_job, $matecat_id_job_password, $recorded_status) = $taskDao->get_matecat_job_id_recorded_status($task);
 
         $trackTaskView = $taskDao->recordTaskView($task_id,$user_id);
 

@@ -138,7 +138,6 @@ $memsource_client = ['org_id' => 456];
 
         if (!empty($hook['dateCreated'])) $project->setCreatedTime(substr($hook['dateCreated'], 0, 10) . ' ' . substr($hook['dateCreated'], 11, 8));
         else                              $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
-error_log(print_r($project, true));
 
         $project = $projectDao->createProjectDirectly($project);
         error_log("Created Project: {$hook['name']}");
@@ -182,7 +181,6 @@ error_log(print_r($project, true));
         $projectDao = new DAO\ProjectDao();
         $taskDao    = new DAO\TaskDao();
         foreach ($hook as $part) {
-error_log('part...' . print_r($part, true));
             $task = new Common\Protobufs\Models\Task();
 
             if (empty($part['fileName'])) {
@@ -220,7 +218,6 @@ error_log('part...' . print_r($part, true));
                 continue;
             }
             $taskType = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3']][$part['workflowLevel'] - 1];
-error_log("taskType: $taskType");
             if     ($taskType == 'Translation') $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
             elseif ($taskType == 'Revision')    $taskType = Common\Enums\TaskTypeEnum::PROOFREADING;
             else {
@@ -241,7 +238,6 @@ error_log("taskType: $taskType");
 
             $task->setPublished(1);
 
-error_log(print_r($task, true));
             $task_id = $taskDao->createTaskDirectly($task);
             error_log("Added Task: $task_id for new jobPart {$part['id']} for: {$part['fileName']}");
 
