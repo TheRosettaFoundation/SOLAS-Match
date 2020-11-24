@@ -101,6 +101,9 @@ class ProjectRouteHandler
             case 'JOB_STATUS_CHANGED':
                 $this->update_task_status($hook);
                 break;
+            case 'JOB_ASSIGNED':
+                $this->job_assigned($hook);
+                break;
         }
         die;
     }
@@ -283,6 +286,34 @@ $memsource_client = ['org_id' => 456];
                 $taskDao->sendTaskUploadNotifications($task_id, 1);
                 $taskDao->set_task_complete_date($task_id);
                 error_log("COMPLETED_BY_LINGUIST task_id: $task_id, memsource: {$part['id']}");
+            }
+        }
+    }
+
+    private function job_assigned($hook)
+    {
+        $hook = $hook['jobParts'];
+        $projectDao = new DAO\ProjectDao();
+        $taskDao    = new DAO\TaskDao();
+        foreach ($hook as $part) {
+            if (!empty($part['assignedTo'][0]['linguist']['id'])) {
+                $memsource_task = $projectDao->get_memsource_task_by_memsource_id($part['id']);
+                if (empty($memsource_task)) {
+                    error_log("Can't find memsource_task for {$part['id']} in event JOB_ASSIGNED jobPart");
+                    continue;
+                }
+                $task_id = $memsource_task['task_id'];
+
+                $user_id = $projectDao->get_user_id_from_memsource_user($part['assignedTo'][0]['linguist']['id']);
+                if (!$user_id) {
+                    error_log("Can't find user_id for {$part['assignedTo'][0]['linguist']['id']} in event JOB_ASSIGNED jobPart");
+                    continue;
+                }
+
+                if (!$taskDao->taskIsClaimed($task_id)) {
+                    $taskDao->claimTask($task_id, $user_id);
+                    error_log("JOB_ASSIGNED in memsource task_id: $task_id, user_id: $user_id, memsource job: {$part['id']}, user: {$part['assignedTo'][0]['linguist']['id']}");
+                }
             }
         }
     }
