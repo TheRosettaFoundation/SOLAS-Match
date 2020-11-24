@@ -977,6 +977,20 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
             LibAPI\PDOWrapper::cleanse($status));
     }
 
+    public function taskIsClaimed($task_id)
+    {
+        $args = LibAPI\PDOWrapper::cleanse($task_id);
+        $result = LibAPI\PDOWrapper::call('taskIsClaimed', $args);
+        return $result[0]['result'];
+    }
+
+    public function claimTask($task_id, $user_id)
+    {
+        $args = LibAPI\PDOWrapper::cleanse($task_id) . "," . LibAPI\PDOWrapper::cleanse($user_id);
+        $result = LibAPI\PDOWrapper::call('claimTask', $args);
+        return $result[0]['result'];
+    }
+
     public function record_task_if_translated_in_matecat($task)
     {
         if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {

@@ -277,6 +277,7 @@ $memsource_client = ['org_id' => 456];
                 }
 
                 $task_id = $memsource_task['task_id'];
+                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 62927); // translators@translatorswithoutborders.org
                 $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::COMPLETE);
                 $taskDao->sendTaskUploadNotifications($task_id, 1);
                 $taskDao->set_task_complete_date($task_id);
