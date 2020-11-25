@@ -2424,6 +2424,8 @@ $memsource_client = ['org_id' => 456];
                 $memsource_project_uid = $memsource_project['memsource_project_uid'];
                 $created_by_id         = $memsource_project['created_by_id'];
                 $user_id = $projectDao->get_user_id_from_memsource_user($created_by_id);
+//(**)                if (!$user_id) $user_id = 62927; // translators@translatorswithoutborders.org
+                if (!$user_id) $user_id = 3297;
 
                 $memsourceApiV1 = Common\Lib\Settings::get("memsource.api_url_v1");                    
                 $memsourceApiToken = Common\Lib\Settings::get("memsource.memsource_api_token");
