@@ -441,9 +441,8 @@ class UserDao extends BaseDao
     public function claimTask($userId, $taskId)
     {
         $ret = null;
-        //$request = "{$this->siteApi}v0/users/$userId/tasks/$taskId";
-        //$ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
-        $ret = 1; //Test
+        $request = "{$this->siteApi}v0/users/$userId/tasks/$taskId";
+        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
 
         if (!empty($ret)) {
             $user_exist = $this->get_memsource_user($userId);
@@ -479,12 +478,10 @@ class UserDao extends BaseDao
             }
             
             //Assign task to Memsource user on Memsource
-
         }
 
         $taskDao = new TaskDao();
         $matecat_tasks = $taskDao->getTaskChunk($taskId);
-        $matching_tasks = 0 ; //Test
         if (!empty($matecat_tasks)) {
             // We are a chunk
             $matecat_id_job          = $matecat_tasks[0]['matecat_id_job'];
@@ -1798,16 +1795,6 @@ error_log(print_r($result, true));
         return false;
     }
 
-    /*
-    Memsource - user Token
-    */
-
-
-
- 
-
-
-
     public function get_memsource_user($user_id)
     {
         $result = LibAPI\PDOWrapper::call('get_memsource_user', LibAPI\PDOWrapper::cleanse($user_id));
@@ -1821,5 +1808,4 @@ error_log(print_r($result, true));
     {
         LibAPI\PDOWrapper::call('set_memsource_user', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($memsource_user_id));
     }
-
 }

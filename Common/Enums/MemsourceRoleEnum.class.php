@@ -9,6 +9,4 @@ class MemsourceRoleEnum
     const LINGUIST        = 'LINGUIST';
     const GUEST           = 'GUEST';
     const SUBMITTER       = 'SUBMITTER';
-
-    
 }
