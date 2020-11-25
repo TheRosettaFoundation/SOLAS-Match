@@ -2415,58 +2415,47 @@ $memsource_client = ['org_id' => 456];
             foreach ($queue_copy_task_original_files as $queue_copy_task_original_file) {
                 if (++$count > 1) break; // Limit number done at one time, just in case
 
-                $project_id         = $queue_copy_task_original_files['project_id'];
-                $task_id            = $queue_copy_task_original_files['task_id'];
-                $memsource_task_uid = $queue_copy_task_original_files['memsource_task_uid'];
-                $filename           = $queue_copy_task_original_files['filename'];
+                $project_id         = $queue_copy_task_original_file['project_id'];
+                $task_id            = $queue_copy_task_original_file['task_id'];
+                $memsource_task_uid = $queue_copy_task_original_file['memsource_task_uid'];
+                $filename           = $queue_copy_task_original_file['filename'];
 
                 $memsource_project = $projectDao->get_memsource_project($project_id);
                 $memsource_project_uid = $memsource_project['memsource_project_uid'];
                 $created_by_id         = $memsource_project['created_by_id'];
                 $user_id = $projectDao->get_user_id_from_memsource_user($created_by_id);
 
-                $re = curl_init("{$matecat_api}api/v1/new");
+                $memsourceApiV1 = Common\Lib\Settings::get("memsource.api_url_v1");                    
+                $memsourceApiToken = Common\Lib\Settings::get("memsource.memsource_api_token");
+                $url = "{$memsourceApiV1}projects/$memsource_project_uid/jobs/$memsource_task_uid/original";
 
-                curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
-                curl_setopt($re, CURLOPT_COOKIESESSION, true);
-                curl_setopt($re, CURLOPT_FOLLOWLOCATION, true);
-                curl_setopt($re, CURLOPT_AUTOREFERER, true);
-
-                $httpHeaders = [
-                    'Expect:'
-                ];
+                $re = curl_init($url);
+                $httpHeaders = ["Authorization: Bearer $memsourceApiToken"];
                 curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
-
-                curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
-
-                curl_setopt($re, CURLOPT_HEADER, true);
-                curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
-                curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
                 curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($re, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
 
                 $res = curl_exec($re);
                 if ($error_number = curl_errno($re)) {
-                    error_log("task_cron /new ($task_id) Curl error ($error_number): " . curl_error($re)); // $responseCode will be 0, so error will be caught below
+                    error_log("task_cron ($task_id) Curl error ($error_number): " . curl_error($re)); 
                 }
 
-                $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
-                $header = substr($res, 0, $header_size);
-                $res = substr($res, $header_size);
                 $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
 
                 curl_close($re);
 
                 if ($responseCode == 200) {
-                    $response_data = json_decode($res, true);
+                    //$response_data = json_decode($res, true);
 
-                    $projectDao->save_task_file($user_id, $project_id, $task_id, $filename, $file);
+                    $projectDao->save_task_file($user_id, $project_id, $task_id, $filename, $res);
 
                     error_log("dequeue_copy_task_original_file() task_id: $task_id Removing");
                     $projectDao->dequeue_copy_task_original_file($task_id);
                 } else {
-                    // If this was a comms error, we will retry
-                    error_log("task_cron /new ($task_id) responseCode: $responseCode");
+                    if (in_array($responseCode,[400,401,403,404,405,410,415,501])) {
+                        $projectDao->dequeue_copy_task_original_file($task_id);
+                    }
+                    error_log("task_cron ERROR ($task_id) responseCode: $responseCode");
                 }
             }
 

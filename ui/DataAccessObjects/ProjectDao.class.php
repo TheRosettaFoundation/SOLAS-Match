@@ -641,7 +641,7 @@ $memsource_change_country_to_kp = [
         $uploadFolder = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-$version";
         if (!is_dir($uploadFolder)) mkdir($uploadFolder, 0755, true);
 
-        $min_id = get_first_project_task($project_id);
+        $min_id = $this->get_first_project_task($project_id);
         if ($min_id) {
             $previous_path = "files/proj-$project_id/task-$min_id/v-0/$filename";
             $previous_file = file_get_contents(Common\Lib\Settings::get('files.upload_path') . $previous_path);
