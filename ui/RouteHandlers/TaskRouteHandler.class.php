@@ -827,6 +827,8 @@ class TaskRouteHandler
         $taskClaimed = $taskDao->isTaskClaimed($taskId);
         $trackTaskView = $taskDao->recordTaskView($taskId,$user_id);
 
+        $memsource_task = $projectDao->get_memsource_task($taskId);
+
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
             Common\Lib\UserSession::checkCSRFKey($post, 'task');
@@ -866,6 +868,9 @@ class TaskRouteHandler
         }
         if ($taskClaimed) {
             $app->flashKeep();
+
+           if ($memsource_task) $app->redirect($app->urlFor('task-view', array('task_id' => $taskId)));
+
             switch ($task->getTaskType()) {
                 case Common\Enums\TaskTypeEnum::DESEGMENTATION:
                     // $app->redirect($app->urlFor("task-desegmentation", array("task_id" => $taskId)));
@@ -1029,14 +1034,13 @@ class TaskRouteHandler
             'taskTypeTexts' => $taskTypeTexts,
             'projectAndOrgs' => $projectAndOrgs,
             'discourse_slug' => $projectDao->discourse_parameterize($project),
-            'matecat_url' => $taskDao->get_matecat_url_regardless($task),
+            'matecat_url' => $taskDao->get_matecat_url_regardless($task, $memsource_task),
             'list_qualified_translators' => $list_qualified_translators,
             'display_treat_as_translated' => 0,
             'taskStatusTexts' => $taskStatusTexts
         ));
 
         $app->render("task/task.view.tpl");
-
         }
     }
 
@@ -1776,7 +1780,9 @@ class TaskRouteHandler
         $project = $projectDao->getProject($task->getProjectId());
         $user = $userDao->getUser($user_id);
 
-        list ($matecat_id_job, $matecat_id_job_password, $recorded_status) = $taskDao->get_matecat_job_id_recorded_status($task);
+        $memsource_task = $projectDao->get_memsource_task($task_id);
+        if ($memsource_task) list ($matecat_id_job, $matecat_id_job_password, $recorded_status) = [0, '', ''];
+        else                 list ($matecat_id_job, $matecat_id_job_password, $recorded_status) = $taskDao->get_matecat_job_id_recorded_status($task);
 
         $trackTaskView = $taskDao->recordTaskView($task_id,$user_id);
 
@@ -1927,7 +1933,7 @@ class TaskRouteHandler
                 "isSiteAdmin" => $isSiteAdmin,
                 'alsoViewedTasksCount' => $alsoViewedTasksCount,
                 'discourse_slug' => $projectDao->discourse_parameterize($project),
-                'matecat_url' => $taskDao->get_matecat_url_regardless($task),
+                'matecat_url' => $taskDao->get_matecat_url_regardless($task, $memsource_task),
                 'recorded_status' => $recorded_status,
                 'display_treat_as_translated' => !empty($matecat_id_job) && empty($taskDao->is_parent_of_chunk($task->getProjectId(), $task_id)),
                 "userSubscribedToOrganisation" => $userSubscribedToOrganisation
@@ -1945,6 +1951,8 @@ class TaskRouteHandler
         $project    = $projectDao->getProject($task->getProjectId());
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
+
+        $memsource_task = $projectDao->get_memsource_task($task_id);
 
         $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
         $taskTypeColours = array();
@@ -2026,7 +2034,7 @@ class TaskRouteHandler
             'isSiteAdmin'     => 1,
             'isMember'        => 1,
             'discourse_slug'  => $projectDao->discourse_parameterize($project),
-            'matecat_url'     => $taskDao->get_matecat_url_regardless($task),
+            'matecat_url'     => $taskDao->get_matecat_url_regardless($task, $memsource_task),
             'required_qualification_for_details' => $taskDao->getRequiredTaskQualificationLevel($task_id),
             'sent_users'      => $taskDao->list_task_invites_sent($task_id),
             'all_users'       => $all_users,

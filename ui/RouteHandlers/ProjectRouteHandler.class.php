@@ -68,9 +68,254 @@ class ProjectRouteHandler
         )->name('project_cron_1_minute');
 
         $app->get(
+            '/task_cron_1_minute/',
+            array($this, 'task_cron_1_minute')
+        )->name('task_cron_1_minute');
+
+        $app->get(
             '/project/:project_id/getwordcount/',
             array($this, 'project_get_wordcount')
         )->name('project_get_wordcount');
+
+        $app->get(
+            '/memsource_hook/',
+            array($this, 'memsourceHook')
+        )->via("POST")->name('memsource_hook');
+    }
+
+    public function memsourceHook()
+    {
+        $app = \Slim\Slim::getInstance();
+        if ($app->request->headers->get('X-Memsource-Token') !== Common\Lib\Settings::get('memsource.X-Memsource-Token')) error_log('X-Memsource-Token does not match!');
+        $body = $app->request()->getBody();
+        error_log(print_r(json_decode($body, true), true));
+        $hook = json_decode($body, true);
+
+        switch ($hook['event']) {
+            case 'PROJECT_CREATED':
+                $this->create_project($hook);
+                break;
+            case 'JOB_CREATED':
+                $this->create_task($hook);
+                break;
+            case 'JOB_STATUS_CHANGED':
+                $this->update_task_status($hook);
+                break;
+            case 'JOB_ASSIGNED':
+                $this->job_assigned($hook);
+                break;
+        }
+        die;
+    }
+
+    private function create_project($hook)
+    {
+        $hook = $hook['project'];
+        $project = new Common\Protobufs\Models\Project();
+        $projectDao = new DAO\ProjectDao();
+
+        $project->setTitle($hook['name']);
+        if (!empty($hook['project_description'])) $project->setDescription($hook['project_description']);
+        else                                      $project->setDescription('-');
+        $project->setImpact('-');
+        if (!empty($hook['dateDue'])) $project->setDeadline(substr($hook['dateDue'], 0, 10) . ' ' . substr($hook['dateDue'], 11, 8));
+        else                          $project->setDeadline(gmdate('Y-m-d H:i:s', strtotime('25 days')));
+        $project->setWordCount(1);
+        list($trommons_source_language_code, $trommons_source_country_code) = $projectDao->convert_memsource_to_language_country($hook['sourceLang']);
+        $sourceLocale = new Common\Protobufs\Models\Locale();
+        $sourceLocale->setCountryCode($trommons_source_country_code);
+        $sourceLocale->setLanguageCode($trommons_source_language_code);
+        $project->setSourceLocale($sourceLocale);
+
+        if (empty($hook['client']['id'])) {
+            error_log("No client id in new project: {$hook['name']}");
+//(**)            return;
+$hook['client']['id'] = 0;
+        }
+        $memsource_client = $projectDao->get_memsource_client_by_memsource_id($hook['client']['id']);
+        if (empty($memsource_client)) {
+            error_log("No MemsourceOrganisations record for new project: {$hook['name']}, client id: {$hook['client']['id']}");
+//(**)            return;
+$memsource_client = ['org_id' => 456];
+        }
+        $project->setOrganisationId($memsource_client['org_id']);
+
+        if (!empty($hook['dateCreated'])) $project->setCreatedTime(substr($hook['dateCreated'], 0, 10) . ' ' . substr($hook['dateCreated'], 11, 8));
+        else                              $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
+
+        $project = $projectDao->createProjectDirectly($project);
+        error_log("Created Project: {$hook['name']}");
+        if (empty($project)) {
+            error_log("Failed to create Project: {$hook['name']}");
+            return;
+        }
+
+        $project_id = $project->getId();
+        $destination = Common\Lib\Settings::get("files.upload_path") . "proj-$project_id/";
+        mkdir($destination, 0755);
+
+        $workflowLevels = ['', '', '']; // Will contain 'Translation' or 'Revision' for workflowLevel 1 possibly up to 3
+        if (!empty($hook['workflowSteps'])) {
+            foreach ($hook['workflowSteps'] as $step) {
+                foreach ($workflowLevels as $i => $w) {
+                    if ($step['workflowLevel'] == $i + 1) $workflowLevels[$i] = $step['name'];
+                }
+            }
+        }
+
+        $projectDao->set_memsource_project($project_id, $hook['id'], $hook['uid'],
+            empty($hook['createdBy']['id']) ? 0 : $hook['createdBy']['id'],
+            empty($hook['owner']['id']) ? 0 : $hook['owner']['id'],
+            $workflowLevels);
+
+        // Create a topic in the Community forum (Discourse) and a project in Asana
+        $target_languages = '';
+        if (!empty($hook['targetLangs'])) $target_languages = implode(',', $hook['targetLangs']);
+        error_log("projectCreate create_discourse_topic($project_id, $target_languages)");
+        try {
+            $this->create_discourse_topic($project_id, $target_languages);
+        } catch (\Exception $e) {
+            error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
+        }
+    }
+
+    private function create_task($hook)
+    {
+        $hook = $hook['jobParts'];
+        $projectDao = new DAO\ProjectDao();
+        $taskDao    = new DAO\TaskDao();
+        foreach ($hook as $part) {
+            $task = new Common\Protobufs\Models\Task();
+
+            if (empty($part['fileName'])) {
+                error_log("No fileName in new jobPart {$part['id']}");
+                continue;
+            }
+            if (empty($part['project']['id'])) {
+                error_log("No project id in new jobPart {$part['id']} for: {$part['fileName']}");
+                continue;
+            }
+            $memsource_project = $projectDao->get_memsource_project_by_memsource_id($part['project']['id']);
+            if (empty($memsource_project)) {
+                error_log("Can't find memsource_project for {$part['project']['id']} in new jobPart {$part['id']} for: {$part['fileName']}");
+                continue;
+            }
+            $task->setProjectId($memsource_project['project_id']);
+            $task->setTitle($part['fileName']);
+
+            $project = $projectDao->getProject($memsource_project['project_id']);
+            $projectSourceLocale = $project->getSourceLocale();
+            $taskSourceLocale = new Common\Protobufs\Models\Locale();
+            $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
+            $taskSourceLocale->setCountryCode($projectSourceLocale->getCountryCode());
+            $task->setSourceLocale($taskSourceLocale);
+            $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+
+            $taskTargetLocale = new Common\Protobufs\Models\Locale();
+            list($target_language, $target_country) = $projectDao->convert_memsource_to_language_country($part['targetLang']);
+            $taskTargetLocale->setLanguageCode($target_language);
+            $taskTargetLocale->setCountryCode($target_country);
+            $task->setTargetLocale($taskTargetLocale);
+
+            if (empty($part['workflowLevel']) || $part['workflowLevel'] > 3) {
+                error_log("Can't find workflowLevel in new jobPart {$part['id']} for: {$part['fileName']}");
+                continue;
+            }
+            $taskType = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3']][$part['workflowLevel'] - 1];
+            if     ($taskType == 'Translation') $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
+            elseif ($taskType == 'Revision')    $taskType = Common\Enums\TaskTypeEnum::PROOFREADING;
+            else {
+                error_log("Can't find expected taskType in new jobPart {$part['id']} for: {$part['fileName']}");
+                continue;
+            }
+            $task->setTaskType($taskType);
+
+            if (!empty($part['wordsCount'])) {
+                $task->setWordCount($part['wordsCount']);
+                $project->setWordCount($part['wordsCount']);
+            } else {
+                $task->setWordCount(1);
+            }
+
+            if (!empty($part['dateDue'])) $task->setDeadline(substr($part['dateDue'], 0, 10) . ' ' . substr($part['dateDue'], 11, 8));
+            else                          $task->setDeadline($project->getDeadline());
+
+            $task->setPublished(1);
+
+            $task_id = $taskDao->createTaskDirectly($task);
+            error_log("Added Task: $task_id for new jobPart {$part['id']} for: {$part['fileName']}");
+
+            $projectDao->set_memsource_task($task_id, $part['id'], $part['uid'], $part['task'], // note 'task' is for Language pair (independent of workflow step)
+                empty($part['workflowLevel']) ? 0 : $part['workflowLevel'],
+                empty($part['beginIndex'])    ? 0 : $part['beginIndex'], // Begin Segment number
+                empty($part['endIndex'])      ? 0 : $part['endIndex']);
+
+            $projectDao->updateProjectDirectly($project);
+
+            $project_id = $project->getId();
+            $uploadFolder = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0";
+            mkdir($uploadFolder, 0755, true);
+            $filesFolder = Common\Lib\Settings::get('files.upload_path') . "files/proj-$project_id/task-$task_id/v-0";
+            mkdir($filesFolder, 0755, true);
+
+            $filename = $part['fileName'];
+            file_put_contents("$filesFolder/$filename", ''); // Placeholder
+            file_put_contents("$uploadFolder/$filename", "files/proj-$project_id/task-$task_id/v-0/$filename"); // Point to it
+
+            $projectDao->queue_copy_task_original_file($project_id, $task_id, $part['uid'], $filename); // cron will copy file from memsource
+        }
+    }
+
+    private function update_task_status($hook)
+    {
+        $hook = $hook['jobParts'];
+        $projectDao = new DAO\ProjectDao();
+        $taskDao    = new DAO\TaskDao();
+        foreach ($hook as $part) {
+            if ($part['status'] == 'COMPLETED_BY_LINGUIST') {
+                $memsource_task = $projectDao->get_memsource_task_by_memsource_id($part['id']);
+                if (empty($memsource_task)) {
+                    error_log("Can't find memsource_task for {$part['id']} in COMPLETED_BY_LINGUIST jobPart");
+                    continue;
+                }
+
+                $task_id = $memsource_task['task_id'];
+//(**)                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 62927); // translators@translatorswithoutborders.org
+                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 3297);
+                $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::COMPLETE);
+                $taskDao->sendTaskUploadNotifications($task_id, 1);
+                $taskDao->set_task_complete_date($task_id);
+                error_log("COMPLETED_BY_LINGUIST task_id: $task_id, memsource: {$part['id']}");
+            }
+        }
+    }
+
+    private function job_assigned($hook)
+    {
+        $hook = $hook['jobParts'];
+        $projectDao = new DAO\ProjectDao();
+        $taskDao    = new DAO\TaskDao();
+        foreach ($hook as $part) {
+            if (!empty($part['assignedTo'][0]['linguist']['id'])) {
+                $memsource_task = $projectDao->get_memsource_task_by_memsource_id($part['id']);
+                if (empty($memsource_task)) {
+                    error_log("Can't find memsource_task for {$part['id']} in event JOB_ASSIGNED jobPart");
+                    continue;
+                }
+                $task_id = $memsource_task['task_id'];
+
+                $user_id = $projectDao->get_user_id_from_memsource_user($part['assignedTo'][0]['linguist']['id']);
+                if (!$user_id) {
+                    error_log("Can't find user_id for {$part['assignedTo'][0]['linguist']['id']} in event JOB_ASSIGNED jobPart");
+                    continue;
+                }
+
+                if (!$taskDao->taskIsClaimed($task_id)) {
+                    $taskDao->claimTask($task_id, $user_id);
+                    error_log("JOB_ASSIGNED in memsource task_id: $task_id, user_id: $user_id, memsource job: {$part['id']}, user: {$part['assignedTo'][0]['linguist']['id']}");
+                }
+            }
+        }
     }
 
     public function test($projectId)
@@ -1828,6 +2073,24 @@ class ProjectRouteHandler
           error_log("Asana 3 API error ($error_number): " . curl_error($re));
         }
         curl_close($re);
+
+        // Asana 5th Project
+        $re = curl_init('https://app.asana.com/api/1.0/tasks');
+        curl_setopt($re, CURLOPT_POSTFIELDS, array(
+            'name' => str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getTitle()),
+            'notes' => "Partner: $org_name, Target: $targetlanguages, Deadline: ".$project->getDeadline() . ' https:/'.'/'.$_SERVER['SERVER_NAME']."/project/$projectId/view",
+            'projects' => '1186619555316417'
+            )
+        );
+
+        curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($re, CURLOPT_HEADER, true);
+        curl_setopt($re, CURLOPT_HTTPHEADER, array("Authorization: Bearer " . Common\Lib\Settings::get('asana.api_key5')));
+        curl_exec($re);
+        if ($error_number = curl_errno($re)) {
+          error_log("Asana 5 API error ($error_number): " . curl_error($re));
+        }
+        curl_close($re);
     }
 
     public function project_cron_1_minute()
@@ -2139,6 +2402,79 @@ class ProjectRouteHandler
         //));
         //$app->render('nothing.tpl');
       die;
+    }
+
+    public function task_cron_1_minute()
+    {
+        $projectDao = new DAO\ProjectDao();
+
+        $fp_for_lock = fopen(__DIR__ . '/task_cron_1_minute_lock.txt', 'r');
+        if (flock($fp_for_lock, LOCK_EX | LOCK_NB)) { // Acquire an exclusive lock, if possible, if not we will wait for next time
+            $queue_copy_task_original_files = $projectDao->get_queue_copy_task_original_files();
+            $count = 0;
+            foreach ($queue_copy_task_original_files as $queue_copy_task_original_file) {
+                if (++$count > 1) break; // Limit number done at one time, just in case
+
+                $project_id         = $queue_copy_task_original_files['project_id'];
+                $task_id            = $queue_copy_task_original_files['task_id'];
+                $memsource_task_uid = $queue_copy_task_original_files['memsource_task_uid'];
+                $filename           = $queue_copy_task_original_files['filename'];
+
+                $memsource_project = $projectDao->get_memsource_project($project_id);
+                $memsource_project_uid = $memsource_project['memsource_project_uid'];
+                $created_by_id         = $memsource_project['created_by_id'];
+                $user_id = $projectDao->get_user_id_from_memsource_user($created_by_id);
+
+                $re = curl_init("{$matecat_api}api/v1/new");
+
+                curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
+                curl_setopt($re, CURLOPT_COOKIESESSION, true);
+                curl_setopt($re, CURLOPT_FOLLOWLOCATION, true);
+                curl_setopt($re, CURLOPT_AUTOREFERER, true);
+
+                $httpHeaders = [
+                    'Expect:'
+                ];
+                curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
+
+                curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
+
+                curl_setopt($re, CURLOPT_HEADER, true);
+                curl_setopt($re, CURLOPT_SSL_VERIFYHOST, false);
+                curl_setopt($re, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($re, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
+
+                $res = curl_exec($re);
+                if ($error_number = curl_errno($re)) {
+                    error_log("task_cron /new ($task_id) Curl error ($error_number): " . curl_error($re)); // $responseCode will be 0, so error will be caught below
+                }
+
+                $header_size = curl_getinfo($re, CURLINFO_HEADER_SIZE);
+                $header = substr($res, 0, $header_size);
+                $res = substr($res, $header_size);
+                $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
+
+                curl_close($re);
+
+                if ($responseCode == 200) {
+                    $response_data = json_decode($res, true);
+
+                    $projectDao->save_task_file($user_id, $project_id, $task_id, $filename, $file);
+
+                    error_log("dequeue_copy_task_original_file() task_id: $task_id Removing");
+                    $projectDao->dequeue_copy_task_original_file($task_id);
+                } else {
+                    // If this was a comms error, we will retry
+                    error_log("task_cron /new ($task_id) responseCode: $responseCode");
+                }
+            }
+
+            flock($fp_for_lock, LOCK_UN); // Release the lock
+        }
+        fclose($fp_for_lock);
+
+        die;
     }
 
     public function valid_language_for_matecat($language_code)

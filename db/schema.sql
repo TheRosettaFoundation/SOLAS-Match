@@ -881,7 +881,6 @@ CREATE TABLE IF NOT EXISTS `Projects` (
     `image_uploaded` BIT(1) DEFAULT 0 NOT NULL,
     `image_approved` BIT(1) DEFAULT 0 NOT NULL,
 	PRIMARY KEY (`id`),
-	UNIQUE INDEX `organisation_id` (`organisation_id`, `title`, `language_id`, `country_id`),
     KEY `key_organisation_id` (`organisation_id`),
 	INDEX `FK_Projects_Languages` (`language_id`),
 	INDEX `FK_Projects_Countries` (`country_id`),
@@ -1064,7 +1063,6 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
   `task-status_id` int(11) unsigned NOT NULL,
   `published` BIT(1) DEFAULT 0 NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `title` (`title`,`project_id`,`language_id-source`,`language_id-target`,`country_id-source`,`country_id-target`,`task-type_id`),
   KEY `FK_Tasks_Languages` (`language_id-source`),
   KEY `FK_Tasks_Languages_2` (`language_id-target`),
   KEY `FK_Tasks_Countries` (`country_id-source`),
@@ -1656,6 +1654,59 @@ CREATE TABLE IF NOT EXISTS `ProjectRestrictions` (
   restrict_revise_tasks    INT(10) UNSIGNED NOT NULL,
   UNIQUE KEY `project_id` (`project_id`),
   CONSTRAINT `FK_ProjectRestrictions_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `MemsourceUsers` (
+  user_id           INT(10) UNSIGNED NOT NULL,
+  memsource_user_id BIGINT(20) UNSIGNED NOT NULL,
+  PRIMARY KEY FK_MemsourceUsers_user_id (user_id),
+  UNIQUE  KEY memsource_user_id         (memsource_user_id),
+  CONSTRAINT FK_MemsourceUsers_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `MemsourceClients` (
+  org_id               INT(10) UNSIGNED NOT NULL,
+  memsource_client_id  BIGINT(20) UNSIGNED NOT NULL,
+  memsource_client_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY FK_MemsourceClients_org_id (org_id),
+  UNIQUE  KEY memsource_client_id        (memsource_client_id),
+  CONSTRAINT FK_MemsourceClients_org_id FOREIGN KEY (org_id) REFERENCES Organisations (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `MemsourceProjects` (
+  project_id            INT(10) UNSIGNED NOT NULL,
+  memsource_project_id  BIGINT(20) UNSIGNED NOT NULL,
+  memsource_project_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  created_by_id         BIGINT(20) UNSIGNED NOT NULL,
+  owner_id              BIGINT(20) UNSIGNED NOT NULL,
+  workflow_level_1      VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  workflow_level_2      VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  workflow_level_3      VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY FK_MemsourceProjects_project_id (project_id),
+  UNIQUE  KEY memsource_project_id            (memsource_project_id),
+  CONSTRAINT FK_MemsourceProjects_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `MemsourceTasks` (
+  task_id            BIGINT(20) UNSIGNED NOT NULL,
+  memsource_task_id  BIGINT(20) UNSIGNED NOT NULL,
+  memsource_task_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  task               VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  workflowLevel      INT(10) UNSIGNED NOT NULL,
+  beginIndex         INT(10) UNSIGNED NOT NULL,
+  endIndex           INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY FK_MemsourceTasks_task_id (task_id),
+  UNIQUE  KEY memsource_task_id         (memsource_task_id),
+  CONSTRAINT FK_MemsourceTasks_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `queue_copy_task_original_files` (
+  project_id         INT(10) UNSIGNED NOT NULL,
+  task_id            BIGINT(20) UNSIGNED NOT NULL,
+  memsource_task_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  filename           VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  UNIQUE KEY FK_queue_copy_task_original_files_task_id (task_id),
+  CONSTRAINT FK_queue_copy_task_original_files_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*---------------------------------------end of tables---------------------------------------------*/
@@ -9006,6 +9057,139 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `get_project_restrictions`(IN projec
 BEGIN
     SELECT *
     FROM ProjectRestrictions
+    WHERE project_id=projectID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_memsource_user`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_user`(IN userID INT, IN memsourceID BIGINT)
+BEGIN
+    INSERT INTO MemsourceUsers (user_id, memsource_user_id) VALUES (userID, memsourceID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_memsource_user`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_user`(IN userID INT)
+BEGIN
+    SELECT * FROM MemsourceUsers WHERE user_id=userID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_user_id_from_memsource_user`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user_id_from_memsource_user`(IN memsourceID BIGINT)
+BEGIN
+    SELECT * FROM MemsourceUsers WHERE memsource_user_id=memsourceID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_memsource_client`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_client`(IN orgID INT, IN memsourceID BIGINT, IN memsourceUID VARCHAR(30))
+BEGIN
+    INSERT INTO MemsourceClients (org_id, memsource_client_id, memsource_client_uid) VALUES (userID, memsourceID, memsourceUID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_memsource_client`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_client`(IN orgID INT)
+BEGIN
+    SELECT * FROM MemsourceClients WHERE org_id=orgID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_memsource_client_by_memsource_id`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_client_by_memsource_id`(IN memsourceID BIGINT)
+BEGIN
+    SELECT * FROM MemsourceClients WHERE memsource_client_id=memsourceID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_memsource_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_project`(IN projectID INT, IN memsourceID BIGINT, IN memsourceUID VARCHAR(30), IN createdID BIGINT, IN ownerID BIGINT, IN workflow1 VARCHAR(20), IN workflow2 VARCHAR(20), IN workflow3 VARCHAR(20))
+BEGIN
+    INSERT INTO MemsourceProjects (project_id, memsource_project_id, memsource_project_uid, created_by_id, owner_id, workflow_level_1, workflow_level_2, workflow_level_3)
+    VALUES                        ( projectID,          memsourceID,          memsourceUID,     createdID,  ownerID,        workflow1,        workflow2,        workflow3);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_memsource_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_project`(IN projectID INT)
+BEGIN
+    SELECT * FROM MemsourceProjects WHERE project_id=projectID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_memsource_project_by_memsource_id`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_project_by_memsource_id`(IN memsourceID BIGINT)
+BEGIN
+    SELECT * FROM MemsourceProjects WHERE memsource_project_id=memsourceID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_memsource_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_task`(IN taskID BIGINT, IN memsourceID BIGINT, IN memsourceUID VARCHAR(30), IN t VARCHAR(30), IN level INT, IN begin INT, IN end INT)
+BEGIN
+    INSERT INTO MemsourceTasks (task_id, memsource_task_id, memsource_task_uid, task, workflowLevel,beginIndex, endIndex)
+    VALUES                     ( taskID,       memsourceID,       memsourceUID,    t,         level,     begin,      end);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_memsource_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_task`(IN taskID BIGINT)
+BEGIN
+    SELECT * FROM MemsourceTasks WHERE task_id=taskID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_memsource_task_by_memsource_id`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_task_by_memsource_id`(IN memsourceID BIGINT)
+BEGIN
+    SELECT * FROM MemsourceTasks WHERE memsource_task_id=memsourceID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `queue_copy_task_original_file`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `queue_copy_task_original_file`(IN projectID INT, IN taskID INT, IN memsourceUID VARCHAR(30), IN name VARCHAR(255))
+BEGIN
+    INSERT INTO queue_copy_task_original_files (project_id, task_id, memsource_task_uid, filename)
+    VALUES                                     ( projectID,  taskID,       memsourceUID,     name);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_queue_copy_task_original_files`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_queue_copy_task_original_files`()
+BEGIN
+    SELECT * FROM queue_copy_task_original_files;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `dequeue_copy_task_original_file`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `dequeue_copy_task_original_file`(IN taskID BIGINT)
+BEGIN
+    DELETE FROM queue_copy_task_original_files WHERE task_id=taskID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_first_project_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_first_project_task`(IN projectID INT)
+BEGIN
+    SELECT MIN(id) AS min_id
+    FROM  Tasks
     WHERE project_id=projectID;
 END//
 DELIMITER ;

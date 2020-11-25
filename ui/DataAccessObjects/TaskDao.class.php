@@ -186,6 +186,29 @@ class TaskDao extends BaseDao
         return $response;
     }
 
+    public function createTaskDirectly($task)
+    {
+        $sourceLocale = $task->getSourceLocale();
+        $targetLocale = $task->getTargetLocale();
+        $args = 'null,' .
+            LibAPI\PDOWrapper::cleanseNull($task->getProjectId()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($task->getTitle()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($task->getWordCount()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLocale->getLanguageCode()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($task->getComment()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($targetLocale->getCountryCode()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($task->getDeadline()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($task->getTaskType()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($task->getTaskStatus()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($task->getPublished());
+        $result = LibAPI\PDOWrapper::call('taskInsertAndUpdate', $args);
+        $task_id = $result[0]['id'];
+        $this->inheritRequiredTaskQualificationLevel($task_id);
+        return $task_id;
+    }
+
     public function updateTask($task)
     {
         $u = Common\Lib\UserSession::getCurrentUserID();
@@ -718,8 +741,10 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
         return $matecat_url;
     }
 
-    public function get_matecat_url_regardless($task)
+    public function get_matecat_url_regardless($task, $memsource_task)
     {
+        if ($memsource_task) return "https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
+
         $matecat_url = '';
         if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
             $job_first_segment = '';
@@ -950,6 +975,20 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
         LibAPI\PDOWrapper::call('setTaskStatus',
             LibAPI\PDOWrapper::cleanse($task_id) . ',' .
             LibAPI\PDOWrapper::cleanse($status));
+    }
+
+    public function taskIsClaimed($task_id)
+    {
+        $args = LibAPI\PDOWrapper::cleanse($task_id);
+        $result = LibAPI\PDOWrapper::call('taskIsClaimed', $args);
+        return $result[0]['result'];
+    }
+
+    public function claimTask($task_id, $user_id)
+    {
+        $args = LibAPI\PDOWrapper::cleanse($task_id) . "," . LibAPI\PDOWrapper::cleanse($user_id);
+        $result = LibAPI\PDOWrapper::call('claimTask', $args);
+        return $result[0]['result'];
     }
 
     public function record_task_if_translated_in_matecat($task)

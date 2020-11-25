@@ -8,6 +8,8 @@ vendor
 /ui/templating/cache/
 /Common/includes/conf.ini
 Common/includes/conf.ini
+/Common/conf/conf.ini
+Common/conf/conf.ini
 backup/
 ui/dart/deploy/web/conf/conf.json
 .directory
