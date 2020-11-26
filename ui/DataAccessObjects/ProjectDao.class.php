@@ -635,17 +635,23 @@ $memsource_change_country_to_kp = [
             LibAPI\PDOWrapper::cleanseWrapStr($mime) . ',' .
             LibAPI\PDOWrapper::cleanseNull($user_id) . ',' .
             'NULL';
+error_log($args);//(**)
         $result = LibAPI\PDOWrapper::call('recordFileUpload', $args);
+//(**)select * from TaskFileVersions;
         $version = $result[0]['version'];
 
         $uploadFolder = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-$version";
+error_log($uploadFolder);//(**)
+
         if (!is_dir($uploadFolder)) mkdir($uploadFolder, 0755, true);
 
         $min_id = $this->get_first_project_task($project_id);
         if ($min_id) {
             $previous_path = "files/proj-$project_id/task-$min_id/v-0/$filename";
+error_log($previous_path);//(**)
             $previous_file = file_get_contents(Common\Lib\Settings::get('files.upload_path') . $previous_path);
             if ($previous_file && $previous_file === $file) {                 // If a previously stored file is identical
+error_log("POINT TO PREVIOUS FILE $uploadFolder/$filename");//(**)
                 file_put_contents("$uploadFolder/$filename", $previous_path); // Point to files folder for previous file
                 return;
             }
@@ -653,9 +659,12 @@ $memsource_change_country_to_kp = [
 
         $filesFolder = "files/proj-$project_id/task-$task_id/v-$version";
         $filesFolderFull = Common\Lib\Settings::get('files.upload_path') . $filesFolder;
+error_log($filesFolderFull);//(**)
         if (!is_dir($filesFolderFull)) mkdir($filesFolderFull, 0755, true);
 
+error_log($filesFolderFull . "/$filename");//(**)
         file_put_contents($filesFolderFull . "/$filename", $file); // Save the file in files folder
+error_log("POINT TO FILES FOLDER $uploadFolder/$filename, $filesFolder/$filename");//(**)
         file_put_contents("$uploadFolder/$filename", "$filesFolder/$filename"); // Point to files folder
     }
 
