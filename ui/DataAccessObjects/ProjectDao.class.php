@@ -635,7 +635,7 @@ $memsource_change_country_to_kp = [
             LibAPI\PDOWrapper::cleanseWrapStr($mime) . ',' .
             LibAPI\PDOWrapper::cleanseNull($user_id) . ',' .
             'NULL';
-error_log($args);//(**)
+error_log("=======================$args==============");//(**)
         $result = LibAPI\PDOWrapper::call('recordFileUpload', $args);
 //(**)select * from TaskFileVersions;
         $version = $result[0]['version'];
@@ -650,6 +650,8 @@ error_log($uploadFolder);//(**)
             $previous_path = "files/proj-$project_id/task-$min_id/v-0/$filename";
 error_log($previous_path);//(**)
             $previous_file = file_get_contents(Common\Lib\Settings::get('files.upload_path') . $previous_path);
+error_log("strlen(previous_file): " . strlen($previous_file));//(**)
+error_log("strlen(new file): " . strlen($file));//(**)
             if ($previous_file && $previous_file === $file) {                 // If a previously stored file is identical
 error_log("POINT TO PREVIOUS FILE $uploadFolder/$filename");//(**)
                 file_put_contents("$uploadFolder/$filename", $previous_path); // Point to files folder for previous file
