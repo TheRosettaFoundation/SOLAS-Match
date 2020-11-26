@@ -650,8 +650,8 @@ error_log($uploadFolder);//(**)
             $previous_path = "files/proj-$project_id/task-$min_id/v-0/$filename";
 error_log($previous_path);//(**)
             $previous_file = '';
-                if (file_exists(Common\Lib\Settings::get('files.upload_path') . $previous_path)) {
-                    $previous_file = file_get_contents(Common\Lib\Settings::get('files.upload_path') . $previous_path);
+            if (file_exists(Common\Lib\Settings::get('files.upload_path') . $previous_path)) {
+                $previous_file = file_get_contents(Common\Lib\Settings::get('files.upload_path') . $previous_path);
             }
 error_log("strlen(previous_file): " . strlen($previous_file));//(**)
 error_log("strlen(new file): " . strlen($file));//(**)
