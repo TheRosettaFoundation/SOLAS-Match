@@ -438,13 +438,13 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function claimTask($userId, $taskId)
+    public function claimTask($userId, $taskId, $memsource_task)
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tasks/$taskId";
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
 
-        if (!empty($ret)) {
+        if ($memsource_task && !empty($ret)) {
             $user_exist = $this->get_memsource_user($userId);
             if (!$user_exist) {
                 $url = $this->memsourceApiV2 . 'users';
