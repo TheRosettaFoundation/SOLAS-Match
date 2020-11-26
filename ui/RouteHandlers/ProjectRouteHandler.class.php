@@ -225,7 +225,7 @@ $memsource_client = ['org_id' => 456];
             if     ($taskType == 'Translation') $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
             elseif ($taskType == 'Revision')    $taskType = Common\Enums\TaskTypeEnum::PROOFREADING;
             else {
-                error_log("Can't find expected taskType in new jobPart {$part['id']} for: {$part['fileName']}");
+                error_log("Can't find expected taskType ($taskType) in new jobPart {$part['id']} for: {$part['fileName']}");
                 continue;
             }
             $task->setTaskType($taskType);
@@ -2447,10 +2447,11 @@ $memsource_client = ['org_id' => 456];
                 curl_close($re);
 
                 if ($responseCode == 200) {
-                    //$response_data = json_decode($res, true);
-
-                    $projectDao->save_task_file($user_id, $project_id, $task_id, $filename, $res);
-
+                    if (strlen($res) <= 100000000) {
+                        $projectDao->save_task_file($user_id, $project_id, $task_id, $filename, $res);
+                    } else {
+                        error_log('File too big: ' . strlen($res));
+                    }
                     error_log("dequeue_copy_task_original_file() task_id: $task_id Removing");
                     $projectDao->dequeue_copy_task_original_file($task_id);
                 } else {
