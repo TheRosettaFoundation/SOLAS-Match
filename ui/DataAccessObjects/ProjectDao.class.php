@@ -781,4 +781,14 @@ $memsource_change_country_to_kp = [
 
         return $result[0]['min_id'];
     }
+
+    public function update_project_due_date($project_id, $deadline)
+    {
+        LibAPI\PDOWrapper::call('update_project_due_date', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($deadline));
+    }
+
+    public function update_task_due_date($task_id, $deadline)
+    {
+        LibAPI\PDOWrapper::call('update_task_due_date', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($deadline));
+    }
 }

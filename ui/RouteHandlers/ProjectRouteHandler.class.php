@@ -95,6 +95,9 @@ class ProjectRouteHandler
             case 'PROJECT_CREATED':
                 $this->create_project($hook);
                 break;
+            case 'PROJECT_DUE_DATE_CHANGED':
+                $this->update_project_due_date($hook);
+                break;
             case 'JOB_CREATED':
                 $this->create_task($hook);
                 break;
@@ -103,6 +106,9 @@ class ProjectRouteHandler
                 break;
             case 'JOB_ASSIGNED':
                 $this->job_assigned($hook);
+                break;
+            case 'JOB_DUE_DATE_CHANGED':
+                $this->update_task_due_date($hook);
                 break;
         }
         die;
@@ -177,6 +183,19 @@ $memsource_client = ['org_id' => 456];
         } catch (\Exception $e) {
             error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
         }
+    }
+
+    private function update_project_due_date($hook)
+    {
+        $hook = $hook['project'];
+        $projectDao = new DAO\ProjectDao();
+
+        $memsource_project = $projectDao->get_memsource_project_by_memsource_id($hook['id']);
+        if (empty($memsource_project)) {
+            error_log("Can't find memsource_project for {$hook['id']} in event PROJECT_DUE_DATE_CHANGED");
+            return;
+        }
+        if (!empty($hook['dateDue'])) $projectDao->update_project_due_date($memsource_project['project_id'], substr($hook['dateDue'], 0, 10) . ' ' . substr($hook['dateDue'], 11, 8));
     }
 
     private function create_task($hook)
@@ -345,6 +364,20 @@ $memsource_client = ['org_id' => 456];
                     error_log("JOB_ASSIGNED in memsource task_id: $task_id, user_id: $user_id, memsource job: {$part['id']}, user: {$part['assignedTo'][0]['linguist']['id']}");
                 }
             }
+        }
+    }
+
+    private function update_task_due_date($hook)
+    {
+        $hook = $hook['jobParts'];
+        $projectDao = new DAO\ProjectDao();
+        foreach ($hook as $part) {
+            $memsource_task = $projectDao->get_memsource_task_by_memsource_id($part['id']);
+            if (empty($memsource_task)) {
+                error_log("Can't find memsource_task for {$part['id']} in event JOB_DUE_DATE_CHANGED");
+                continue;
+            }
+            if (!empty($part['dateDue'])) $projectDao->update_task_due_date($memsource_task['task_id'], substr($part['dateDue'], 0, 10) . ' ' . substr($part['dateDue'], 11, 8));
         }
     }
 
