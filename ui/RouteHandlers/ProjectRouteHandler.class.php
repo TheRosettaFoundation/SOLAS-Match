@@ -274,18 +274,18 @@ $memsource_client = ['org_id' => 456];
         foreach ($hook as $part) {
             if ($part['status'] == 'ASSIGNED') {
                 if (!empty($part['assignedTo'][0]['linguist']['id']) && count($part['assignedTo']) == 1) {
-                   $memsource_task = $projectDao->get_memsource_task_by_memsource_id($part['id']);
-                   if (empty($memsource_task)) {
-                       error_log("Can't find memsource_task for {$part['id']} in event JOB_STATUS_CHANGED jobPart, status ASSIGNED");
-                       continue;
-                   }
-                   $task_id = $memsource_task['task_id'];
+                    $memsource_task = $projectDao->get_memsource_task_by_memsource_id($part['id']);
+                    if (empty($memsource_task)) {
+                        error_log("Can't find memsource_task for {$part['id']} in event JOB_STATUS_CHANGED jobPart, status ASSIGNED");
+                        continue;
+                    }
+                    $task_id = $memsource_task['task_id'];
 
-                   $user_id = $projectDao->get_user_id_from_memsource_user($part['assignedTo'][0]['linguist']['id']);
-                   if (!$user_id) {
-                       error_log("Can't find user_id for {$part['assignedTo'][0]['linguist']['id']} in event JOB_STATUS_CHANGED jobPart, status ASSIGNED");
-                       continue;
-                   }
+                    $user_id = $projectDao->get_user_id_from_memsource_user($part['assignedTo'][0]['linguist']['id']);
+                    if (!$user_id) {
+                        error_log("Can't find user_id for {$part['assignedTo'][0]['linguist']['id']} in event JOB_STATUS_CHANGED jobPart, status ASSIGNED");
+                        continue;
+                    }
 
                     if (!$taskDao->taskIsClaimed($task_id)) {
                         $taskDao->claimTask($task_id, $user_id);
@@ -307,6 +307,27 @@ $memsource_client = ['org_id' => 456];
                 $taskDao->sendTaskUploadNotifications($task_id, 1);
                 $taskDao->set_task_complete_date($task_id);
                 error_log("COMPLETED_BY_LINGUIST task_id: $task_id, memsource: {$part['id']}");
+            }
+            if ($part['status'] == 'DECLINED_BY_LINGUIST') {
+                if (!empty($part['assignedTo'][0]['linguist']['id']) && count($part['assignedTo']) == 1) {
+                    $memsource_task = $projectDao->get_memsource_task_by_memsource_id($part['id']);
+                    if (empty($memsource_task)) {
+                        error_log("Can't find memsource_task for {$part['id']} in event JOB_STATUS_CHANGED jobPart, status DECLINED_BY_LINGUIST");
+                        continue;
+                    }
+                    $task_id = $memsource_task['task_id'];
+
+                    $user_id = $projectDao->get_user_id_from_memsource_user($part['assignedTo'][0]['linguist']['id']);
+                    if (!$user_id) {
+                        error_log("Can't find user_id for {$part['assignedTo'][0]['linguist']['id']} in event JOB_STATUS_CHANGED jobPart, status DECLINED_BY_LINGUIST");
+                        continue;
+                    }
+
+                    if ($taskDao->taskIsClaimed($task_id)) {
+                        $taskDao->unclaimTask($task_id, $user_id);
+                        error_log("JOB_STATUS_CHANGED DECLINED_BY_LINGUIST in memsource task_id: $task_id, user_id: $user_id, memsource job: {$part['id']}, user: {$part['assignedTo'][0]['linguist']['id']}");
+                    }
+                }
             }
         }
     }
