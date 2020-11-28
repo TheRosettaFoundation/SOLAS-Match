@@ -1700,6 +1700,16 @@ CREATE TABLE IF NOT EXISTS `MemsourceTasks` (
   CONSTRAINT FK_MemsourceTasks_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `memsource_statuses` (
+  task_id            BIGINT(20) UNSIGNED NOT NULL,
+  memsource_task_id  BIGINT(20) UNSIGNED NOT NULL,
+  status             VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  status_time        DATETIME NOT NULL,
+  KEY FK_memsource_statuses_task_id        (task_id),
+  KEY memsource_statuses_memsource_task_id (memsource_task_id),
+  CONSTRAINT FK_memsource_statuses_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS `queue_copy_task_original_files` (
   project_id         INT(10) UNSIGNED NOT NULL,
   task_id            BIGINT(20) UNSIGNED NOT NULL,
@@ -9156,6 +9166,15 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_task_by_memsource_id`(IN memsourceID BIGINT)
 BEGIN
     SELECT * FROM MemsourceTasks WHERE memsource_task_id=memsourceID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_memsource_status`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_status`(IN taskID BIGINT, IN memsourceID BIGINT, IN statusID VARCHAR(30))
+BEGIN
+    INSERT INTO memsource_statuses (task_id, memsource_task_id, status, status_time)
+    VALUES                         ( taskID,       memsourceID,       statusID,    NOW());
 END//
 DELIMITER ;
 

@@ -998,6 +998,12 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
         return $result[0]['result'];
     }
 
+    public function set_memsource_status($task_id, $memsource_task_id, $status)
+    {
+        $args = LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($memsource_task_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($status);
+        LibAPI\PDOWrapper::call('set_memsource_status', $args);
+    }
+
     public function record_task_if_translated_in_matecat($task)
     {
         if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
