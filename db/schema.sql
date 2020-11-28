@@ -9213,6 +9213,22 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `update_project_due_date`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_due_date`(IN projectID INT, IN deadlineTime DATETIME)
+BEGIN
+    UPDATE Projects SET deadline=deadlineTime WHERE id=projectID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `update_task_due_date`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_task_due_date`(IN taskID BIGINT, IN deadlineTime DATETIME)
+BEGIN
+    UPDATE Tasks SET deadline=deadlineTime WHERE id=taskID;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
