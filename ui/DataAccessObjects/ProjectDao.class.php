@@ -787,6 +787,11 @@ $memsource_change_country_to_kp = [
         LibAPI\PDOWrapper::call('update_project_due_date', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($deadline));
     }
 
+    public function update_project_organisation($project_id, $org_id)
+    {
+        LibAPI\PDOWrapper::call('update_project_organisation', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($org_id));
+    }
+
     public function update_task_due_date($task_id, $deadline)
     {
         LibAPI\PDOWrapper::call('update_task_due_date', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($deadline));

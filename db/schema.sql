@@ -9221,6 +9221,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `update_project_organisation`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_organisation`(IN projectID INT, IN orgID INT)
+BEGIN
+    UPDATE Projects SET organisation_id=orgID WHERE id=projectID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `update_task_due_date`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_task_due_date`(IN taskID BIGINT, IN deadlineTime DATETIME)
