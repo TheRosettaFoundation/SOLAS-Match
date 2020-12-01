@@ -50,6 +50,12 @@ class AdminRouteHandler
         )->via('POST')->name('testing_center');
 
         $app->get(
+            '/download_testing_center/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_testing_center')
+        )->via('POST')->name('download_testing_center');
+
+        $app->get(
             '/matecat_analyse_status/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'matecat_analyse_status')
@@ -482,6 +488,42 @@ class AdminRouteHandler
 
         $app->view()->appendData(array('all_users' => $all_users));
         $app->render('admin/testing_center.tpl');
+    }
+
+    public function download_testing_center()
+    {
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->testing_center();
+
+        $data = "\xEF\xBB\xBF" . '"Task","Pair","Created","Deadline","Translator","Level","Status","Reviewer","Revision Status","Accuracy","Fluency","Terminology","Style","Design","Feedback"' . "\n";
+
+        foreach ($all_users as $user_row) {
+            $data .= '"' . str_replace('"', '""', $user_row['task_title']) . '","' .
+            $user_row['language_pair'] . '","' .
+            $user_row['created'] . '","' .
+            $user_row['deadline'] . '","' .
+            $user_row['user_email'] . '","' .
+            $user_row['level'] . '","' .
+            $user_row['task_status'] . '","' .
+            $user_row['proofreading_email'] . '","' .
+            $user_row['proofreading_task_status'] . '","' .
+            $user_row['accuracy'] . '","' .
+            $user_row['fluency'] . '","' .
+            $user_row['terminology'] . '","' .
+            $user_row['style'] . '","' .
+            $user_row['design'] . '","' .
+            str_replace('"', '""', $user_row['comment']) . '"' . "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="testing_center.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
     }
 
     public function late_matecat()
