@@ -9099,7 +9099,7 @@ DROP PROCEDURE IF EXISTS `set_memsource_client`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_client`(IN orgID INT, IN memsourceID BIGINT, IN memsourceUID VARCHAR(30))
 BEGIN
-    INSERT INTO MemsourceClients (org_id, memsource_client_id, memsource_client_uid) VALUES (userID, memsourceID, memsourceUID);
+    INSERT INTO MemsourceClients (org_id, memsource_client_id, memsource_client_uid) VALUES (orgID, memsourceID, memsourceUID);
 END//
 DELIMITER ;
 
