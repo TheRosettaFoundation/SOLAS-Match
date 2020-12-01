@@ -98,6 +98,9 @@ class ProjectRouteHandler
             case 'PROJECT_DUE_DATE_CHANGED':
                 $this->update_project_due_date($hook);
                 break;
+            case 'PROJECT_METADATA_UPDATED':
+                $this->update_project_client($hook);
+                break;
             case 'JOB_CREATED':
                 $this->create_task($hook);
                 break;
@@ -196,6 +199,26 @@ $memsource_client = ['org_id' => 456];
             return;
         }
         if (!empty($hook['dateDue'])) $projectDao->update_project_due_date($memsource_project['project_id'], substr($hook['dateDue'], 0, 10) . ' ' . substr($hook['dateDue'], 11, 8));
+    }
+
+    private function update_project_client($hook)
+    {
+        $hook = $hook['project'];
+        $projectDao = new DAO\ProjectDao();
+
+        $memsource_project = $projectDao->get_memsource_project_by_memsource_id($hook['id']);
+        if (empty($memsource_project)) {
+            error_log("Can't find memsource_project for {$hook['id']} in event PROJECT_METADATA_UPDATED");
+            return;
+        }
+        if (empty($hook['client']['id'])) return;
+
+        $memsource_client = $projectDao->get_memsource_client_by_memsource_id($hook['client']['id']);
+        if (empty($memsource_client)) {
+            error_log("No MemsourceOrganisations record for project: {$hook['name']}, client id: {$hook['client']['id']} in event PROJECT_METADATA_UPDATED");
+            return;
+        }
+        $projectDao->update_project_organisation($memsource_project['project_id'], $memsource_client['org_id']);
     }
 
     private function create_task($hook)
