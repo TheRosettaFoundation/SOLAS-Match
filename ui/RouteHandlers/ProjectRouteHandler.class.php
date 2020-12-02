@@ -286,7 +286,7 @@ $memsource_client = ['org_id' => 456];
             $task->setPublished(1);
 
             $task_id = $taskDao->createTaskDirectly($task);
-            if (!task_id) {
+            if (!$task_id) {
                 error_log("Failed to add task for new jobPart {$part['id']} for: {$part['fileName']}");
                 continue;
             }
