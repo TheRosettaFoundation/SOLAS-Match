@@ -512,7 +512,7 @@ $memsource_change_country_to_kp = [
         } else {
             $trommons_country_code = '--';
         }
-        if (!empty($memsource_change_language_to_kp[$trommons_language_code])) $trommons_language_code = $memsource_change_language_to_kp[$language_code];
+        if (!empty($memsource_change_language_to_kp[$trommons_language_code])) $trommons_language_code = $memsource_change_language_to_kp[$trommons_language_code];
 
         return [$trommons_language_code, $trommons_country_code];
     }
