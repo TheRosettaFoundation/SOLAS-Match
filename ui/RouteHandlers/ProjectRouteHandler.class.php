@@ -224,11 +224,9 @@ $memsource_client = ['org_id' => 456];
     private function create_task($hook)
     {
         $hook = $hook['jobParts'];
-error_log('Parts');//(**)
         $projectDao = new DAO\ProjectDao();
         $taskDao    = new DAO\TaskDao();
         foreach ($hook as $part) {
-error_log('Part 1...');//(**)
             $task = new Common\Protobufs\Models\Task();
 
             if (empty($part['fileName'])) {
@@ -239,7 +237,6 @@ error_log('Part 1...');//(**)
                 error_log("No project id in new jobPart {$part['id']} for: {$part['fileName']}");
                 continue;
             }
-error_log('before project');//(**)
             $memsource_project = $projectDao->get_memsource_project_by_memsource_id($part['project']['id']);
             if (empty($memsource_project)) {
                 error_log("Can't find memsource_project for {$part['project']['id']} in new jobPart {$part['id']} for: {$part['fileName']}");
@@ -248,19 +245,16 @@ error_log('before project');//(**)
             $task->setProjectId($memsource_project['project_id']);
             $task->setTitle($part['fileName']);
 
-error_log('before getproject');//(**)
             $project = $projectDao->getProject($memsource_project['project_id']);
             $projectSourceLocale = $project->getSourceLocale();
             $taskSourceLocale = new Common\Protobufs\Models\Locale();
             $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
             $taskSourceLocale->setCountryCode($projectSourceLocale->getCountryCode());
             $task->setSourceLocale($taskSourceLocale);
-error_log('after setlocale');//(**)
             $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
 
             $taskTargetLocale = new Common\Protobufs\Models\Locale();
             list($target_language, $target_country) = $projectDao->convert_memsource_to_language_country($part['targetLang']);
-error_log('after convert');//(**)
             $taskTargetLocale->setLanguageCode($target_language);
             $taskTargetLocale->setCountryCode($target_country);
             $task->setTargetLocale($taskTargetLocale);
@@ -278,7 +272,6 @@ error_log('after convert');//(**)
                 }
             }
             $task->setTaskType($taskType);
-error_log('after workflow');//(**)
 
             if (!empty($part['wordsCount'])) {
                 $task->setWordCount($part['wordsCount']);
