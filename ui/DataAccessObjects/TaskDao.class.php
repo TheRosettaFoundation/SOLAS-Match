@@ -188,7 +188,6 @@ class TaskDao extends BaseDao
 
     public function createTaskDirectly($task)
     {
-error_log('TASK: ' . print_r($task, true));//(**)
         $sourceLocale = $task->getSourceLocale();
         $targetLocale = $task->getTargetLocale();
         $args = 'null,' .
@@ -204,7 +203,6 @@ error_log('TASK: ' . print_r($task, true));//(**)
             LibAPI\PDOWrapper::cleanseNull($task->getTaskType()) . ',' .
             LibAPI\PDOWrapper::cleanseNull($task->getTaskStatus()) . ',' .
             LibAPI\PDOWrapper::cleanseNull($task->getPublished());
-error_log($args);//(**)
         $result = LibAPI\PDOWrapper::call('taskInsertAndUpdate', $args);
         if (empty($result[0]['id'])) return 0;
         $task_id = $result[0]['id'];
