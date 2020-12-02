@@ -286,6 +286,10 @@ $memsource_client = ['org_id' => 456];
             $task->setPublished(1);
 
             $task_id = $taskDao->createTaskDirectly($task);
+            if (!task_id) {
+                error_log("Failed to add task for new jobPart {$part['id']} for: {$part['fileName']}");
+                continue;
+            }
             error_log("Added Task: $task_id for new jobPart {$part['id']} for: {$part['fileName']}");
 
             $projectDao->set_memsource_task($task_id, $part['id'], $part['uid'], $part['task'], // note 'task' is for Language pair (independent of workflow step)
