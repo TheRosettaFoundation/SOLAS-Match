@@ -365,8 +365,9 @@ class TaskRouteHandler
                     htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
                 );
 
-                $matecat_urls[$taskId] = $taskDao->get_matecat_url($topTask);
-                $allow_downloads[$taskId] = $taskDao->get_allow_download($topTask);
+                $memsource_task = $projectDao->get_memsource_task($taskId);
+                $matecat_urls[$taskId] = $taskDao->get_matecat_url($topTask, $memsource_task);
+                $allow_downloads[$taskId] = $taskDao->get_allow_download($topTask, $memsource_task);
                 $show_mark_chunk_complete[$taskId] = 0;
                 if (!$allow_downloads[$taskId] && $matecat_urls[$taskId]) { // it's a chunk && a bit of optimisation
                     $matecat_tasks = $taskDao->getTaskChunk($taskId);

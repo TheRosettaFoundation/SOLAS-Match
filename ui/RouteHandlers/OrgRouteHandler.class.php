@@ -2127,6 +2127,7 @@ class OrgRouteHandler
         $app = \Slim\Slim::getInstance();
         $taskDao = new DAO\TaskDao();
         $userDao = new DAO\UserDao();
+        $projectDao = new DAO\ProjectDao();
         $userName = '';
         $claimant = $taskDao->getUserClaimedTask($taskId);
         $claimantProfile = "";
@@ -2144,7 +2145,7 @@ class OrgRouteHandler
                 'claimant'          => $claimant,
                 'userName'          => $userName,
                 'claimantProfile'   => $claimantProfile,
-                'allow_download'    => $taskDao->get_allow_download($task),
+                'allow_download'    => $taskDao->get_allow_download($task, $projectDao->get_memsource_task($taskId)),
                 "orgId"             => $orgId
         );
 

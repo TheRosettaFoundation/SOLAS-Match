@@ -704,8 +704,10 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
         return $result;
     }
 
-    public function get_matecat_url($task)
+    public function get_matecat_url($task, $memsource_task)
     {
+        if ($memsource_task) return "https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
+
         $matecat_url = '';
         if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
             $job_first_segment = '';
@@ -1026,8 +1028,10 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
         }
     }
 
-    public function get_allow_download($task)
+    public function get_allow_download($task, $memsource_task)
     {
+        if ($memsource_task) return 0;
+
         $allow = 1;
         $matecat_tasks = $this->getTaskChunk($task->getId());
         if (!empty($matecat_tasks)) {
