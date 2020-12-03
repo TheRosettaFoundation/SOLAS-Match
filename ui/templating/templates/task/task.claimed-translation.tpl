@@ -33,9 +33,11 @@
     <section>
         <h3>When you have finished translating:</h3>
         <p>
+            {if empty($memsource_task)}
             <a href="{urlFor name="task" options="task_id.$task_id"}" class="btn btn-primary">
                 <i class="icon-share-alt icon-white"></i> {Localisation::getTranslation('task_claimed_translation_upload_translated_task')}
             </a>
+            {/if}
             {if isset($user)}
             <a href="{urlFor name="claimed-tasks" options="user_id.{$user->getId()}"}" class="btn">
             {else}
@@ -56,6 +58,14 @@
         <small>
             ({Localisation::getTranslation('common_cant_find_the_file_on_your_desktop')}
             {sprintf(Localisation::getTranslation('common_download_the_file'), {urlFor name="download-task" options="task_id.$task_id"})})
+        </small>
+    </p>
+    {/if}
+    {if !empty($memsource_task)}
+    <p>
+        <small>
+            ({Localisation::getTranslation('common_cant_find_the_file_on_your_desktop')}
+            {sprintf('Download the <a href="%s">original file</a> in its source language and save it to your desktop.', {urlFor name="download-task" options="task_id.$task_id"})})
         </small>
     </p>
     {/if}

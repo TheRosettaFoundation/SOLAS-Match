@@ -771,13 +771,17 @@ class TaskRouteHandler
         $app = \Slim\Slim::getInstance();
         $taskDao = new DAO\TaskDao();
         $adminDao = new DAO\AdminDao();
+        $projectDao = new DAO\ProjectDao();
 
         $task = $taskDao->getTask($task_id);
         $app->view()->setData("task", $task);
 
+        $memsource_task = $projectDao->get_memsource_task($task_id);
+
         $app->view()->appendData(array(
-            'matecat_url' => $taskDao->get_matecat_url($task),
-            'allow_download' => $taskDao->get_allow_download($task),
+            'matecat_url' => $taskDao->get_matecat_url($task, $memsource_task),
+            'allow_download' => $taskDao->get_allow_download($task, $memsource_task),
+            'memsource_task' => $memsource_task,
             'isSiteAdmin'    => $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID()),
         ));
 
