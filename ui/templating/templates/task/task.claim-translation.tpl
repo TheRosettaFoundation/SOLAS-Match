@@ -30,6 +30,10 @@
             <a href="{urlFor name="download-task" options="task_id.$task_id"}" class=" btn btn-primary">
                 <i class="icon-download icon-white"></i> {Localisation::getTranslation('common_download_file')}</a>
             {/if}
+            {if !empty($memsource_task)}
+            <a href="{urlFor name="download-task" options="task_id.$task_id"}" class=" btn btn-primary">
+                <i class="icon-download icon-white"></i> Download Original File in its source language</a>
+            {/if}
             <h3>{Localisation::getTranslation('common_it_is_time_to_decide')}</h3>
             <p>
                 <button type="submit" class="btn btn-primary">
