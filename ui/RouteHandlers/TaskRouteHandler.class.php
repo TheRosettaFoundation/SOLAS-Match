@@ -887,7 +887,7 @@ class TaskRouteHandler
                     break;
                 case Common\Enums\TaskTypeEnum::TRANSLATION:
                 case Common\Enums\TaskTypeEnum::PROOFREADING:
-                  if ($taskDao->get_allow_download($task)) {
+                  if ($taskDao->get_allow_download($task, $memsource_task)) {
                     $app->redirect($app->urlFor("task-simple-upload", array("task_id" => $taskId)));
                   } else {
                     $app->redirect($app->urlFor('task-chunk-complete', array('task_id' => $taskId)));
