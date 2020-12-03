@@ -1074,7 +1074,8 @@ class TaskRouteHandler
         $task = $taskDao->getTask($taskId);
         $project = $projectDao->getProject($task->getProjectId());
 
-        if (!$taskDao->get_allow_download($task)) {
+        $memsource_task = $projectDao->get_memsource_task($taskId); // $memsource_task should never be set, protect against this
+        if ($memsource_task || !$taskDao->get_allow_download($task, $memsource_task)) {
             $app->redirect($app->urlFor("task-view", array("task_id" => $taskId)));
         }
 
