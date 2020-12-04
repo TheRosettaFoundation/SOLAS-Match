@@ -2100,6 +2100,8 @@ class TaskRouteHandler
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
+        if ($projectDao->get_memsource_project($project_id)) $app->redirect($app->urlFor('project-view', ['project_id' => $project_id]));
+
         $titleError = null;
         $wordCountError = null;
         $deadlineError = null;
