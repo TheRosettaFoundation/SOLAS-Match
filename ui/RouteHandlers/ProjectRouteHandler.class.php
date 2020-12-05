@@ -474,6 +474,8 @@ $memsource_client = ['org_id' => 456];
             $app->redirect($app->urlFor('home'));
         }
 
+        $memsource_project = $projectDao->get_memsource_project($project_id);
+
         $app->view()->setData("project", $project);
 
         if ($app->request()->isPost()) {
@@ -941,6 +943,7 @@ $memsource_client = ['org_id' => 456];
                 'taskTypeColours' => $taskTypeColours,
                 "imgCacheToken" => $preventImageCacheToken,
                 'discourse_slug' => $projectDao->discourse_parameterize($project),
+                'memsource_project'   => $memsource_project,
                 'matecat_analyze_url' => $taskDao->get_matecat_analyze_url($project_id),
                 'pm' => $pm,
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation
