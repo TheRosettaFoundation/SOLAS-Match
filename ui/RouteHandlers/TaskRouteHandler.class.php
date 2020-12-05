@@ -1517,14 +1517,20 @@ class TaskRouteHandler
 
         $task = $taskDao->getTask($task_id);
 
+        $memsource_task = $projectDao->get_memsource_task($task_id);
+
         $preReqTasks = $taskDao->getTaskPreReqs($task_id);
         if (!$preReqTasks) {
             $preReqTasks = array();
         }
 
         $project = $projectDao->getProject($task->getProjectId());
-        $projectTasks = $projectDao->getProjectTasks($task->getProjectId());
+
+        $projectTasks = [];
+        if (!$memsource_task) $projectTasks = $projectDao->getProjectTasks($task->getProjectId());
         $allow_downloads = array();
+        $tasksEnabled = [];
+        $thisTaskPreReqIds = 0;
         foreach ($projectTasks as $projectTask) {
             $allow_downloads[$projectTask->getId()] = $taskDao->get_allow_download($projectTask);
 
@@ -1589,7 +1595,7 @@ class TaskRouteHandler
                     $targetLocale->setCountryCode($post['targetCountry']);
                 }
 
-                $task->setTargetLocale($targetLocale);
+                if (!$memsource_task) $task->setTargetLocale($targetLocale);
             }
 
             if ($site_admin || $task->getTaskStatus() < Common\Enums\TaskStatusEnum::IN_PROGRESS) {
@@ -1615,6 +1621,7 @@ class TaskRouteHandler
                 $task->setComment($post['impact']);
             }
 
+          if (!$memsource_task) {
             if ($word_count_err == "" && $deadlineError == "") {
                 $selectedPreReqs = array();
                 if (isset($post['totalTaskPreReqs']) && $post['totalTaskPreReqs'] > 0) {
@@ -1690,8 +1697,17 @@ class TaskRouteHandler
                     $taskPreReqIds[$task->getId()] = $oldPreReqs;
                 }
             }
+          } else {
+                $taskDao->updateTask($task);
+
+                if ($adminAccess && ($task->getTaskStatus() <= Common\Enums\TaskStatusEnum::PENDING_CLAIM) && !empty($post['required_qualification_level'])) {
+                    $taskDao->updateRequiredTaskQualificationLevel($task_id, $post['required_qualification_level']);
+                }
+                $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
+          }
         }
 
+        if (!$memsource_task) {
         $graphBuilder = new Lib\UIWorkflowBuilder();
         //Maybe replace with an API call
         $graph = $graphBuilder->parseAndBuild($taskPreReqIds);
@@ -1720,6 +1736,7 @@ class TaskRouteHandler
                 $previousRow = array();
             }
         }
+        }
 
         $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
         $taskTypeColours = array();
@@ -1728,8 +1745,13 @@ class TaskRouteHandler
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
 
+        if (!$memsource_task) {
         $languages = Lib\TemplateHelper::getLanguageList();
         $countries = Lib\TemplateHelper::getCountryList();
+        } else {
+            $languages = [];
+            $countries = [];
+        }
 
         $publishStatus="";
         if ($task->getPublished())
