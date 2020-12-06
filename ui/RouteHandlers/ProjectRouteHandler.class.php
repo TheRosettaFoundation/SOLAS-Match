@@ -944,7 +944,7 @@ $memsource_client = ['org_id' => 456];
                 "imgCacheToken" => $preventImageCacheToken,
                 'discourse_slug' => $projectDao->discourse_parameterize($project),
                 'memsource_project'   => $memsource_project,
-                'matecat_analyze_url' => $taskDao->get_matecat_analyze_url($project_id),
+                'matecat_analyze_url' => $taskDao->get_matecat_analyze_url($project_id, $memsource_project),
                 'pm' => $pm,
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation
         ));
