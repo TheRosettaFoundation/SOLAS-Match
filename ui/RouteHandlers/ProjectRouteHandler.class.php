@@ -1011,6 +1011,8 @@ $memsource_client = ['org_id' => 456];
 
         $project = $projectDao->getProject($project_id);
 
+        $memsource_project = $projectDao->get_memsource_project($project_id);
+
         if ($post = $app->request()->post()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
                     || empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact'])
@@ -1268,6 +1270,7 @@ $memsource_client = ['org_id' => 456];
             'sourceCountrySelectCode'  => $sourceCountrySelectCode,
             'userIsAdmin'    => $userIsAdmin,
             'enter_analyse_url' => $enter_analyse_url,
+            'memsource_project' => $memsource_project,
             'sesskey'        => $sesskey,
         ));
 
