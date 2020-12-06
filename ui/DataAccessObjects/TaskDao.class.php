@@ -654,7 +654,15 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
         LibAPI\PDOWrapper::call('updateWordCountForProject', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($matecat_word_count));
     }
 
-    public function get_creator($project_id) {
+    public function get_creator($project_id, $memsource_project = 0) {
+        if ($memsource_project) {
+            $user_id = $projectDao->get_user_id_from_memsource_user($memsource_project['created_by_id']);
+//(**)            if (!$user_id) $user_id = 62927; // translators@translatorswithoutborders.org
+            if (!$user_id) $user_id = 3297;
+//(**)getuser equiv
+            return ['email' => 999];
+        }
+
         $result = LibAPI\PDOWrapper::call('get_creator', LibAPI\PDOWrapper::cleanse($project_id));
         return $result[0];
     }

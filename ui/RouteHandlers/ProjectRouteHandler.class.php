@@ -182,7 +182,7 @@ $memsource_client = ['org_id' => 456];
         if (!empty($hook['targetLangs'])) $target_languages = implode(',', $hook['targetLangs']);
         error_log("projectCreate create_discourse_topic($project_id, $target_languages)");
         try {
-            $this->create_discourse_topic($project_id, $target_languages);
+            $this->create_discourse_topic($project_id, $target_languages, ['created_by_id' => empty($hook['createdBy']['id']) ? 0 : $hook['createdBy']['id']]);
         } catch (\Exception $e) {
             error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
         }
@@ -931,7 +931,7 @@ $memsource_client = ['org_id' => 456];
 
         $preventImageCacheToken = time(); //see http://stackoverflow.com/questions/126772/how-to-force-a-web-browser-not-to-cache-images
 
-        $creator = $taskDao->get_creator($project_id);
+        $creator = $taskDao->get_creator($project_id, $memsource_project);
         $pm = $creator['email'];
         if (strpos($pm, '@translatorswithoutborders.org') === false) $pm = 'projects@translatorswithoutborders.org';
 
@@ -2055,7 +2055,7 @@ $memsource_client = ['org_id' => 456];
         }
     }
 
-    public function create_discourse_topic($projectId, $targetlanguages)
+    public function create_discourse_topic($projectId, $targetlanguages, $memsource_project = 0)
     {
         $app = \Slim\Slim::getInstance();
         $projectDao = new DAO\ProjectDao();
@@ -2076,7 +2076,7 @@ $memsource_client = ['org_id' => 456];
             $languages[$i++] = $language->getName();
         }
 
-        $creator = $taskDao->get_creator($projectId);
+        $creator = $taskDao->get_creator($projectId, $memsource_project);
         $pm = $creator['email'];
         if (strpos($pm, '@translatorswithoutborders.org') === false) $pm = 'projects@translatorswithoutborders.org';
 
