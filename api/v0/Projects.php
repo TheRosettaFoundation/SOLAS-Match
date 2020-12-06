@@ -289,7 +289,8 @@ class Projects
         $client = new Common\Lib\APIHelper($format);
         $data = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Models\Project');
         API\Dispatcher::sendResponse(null, DAO\ProjectDao::save($data), null, $format);
-        DAO\ProjectDao::calculateProjectDeadlines($data->getId());
+
+        if (!DAO\ProjectDao::get_memsource_project($data->getId())) DAO\ProjectDao::calculateProjectDeadlines($data->getId());
     }
 
     public static function deleteProject($projectId, $format = ".json")

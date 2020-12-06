@@ -68,6 +68,15 @@ class ProjectDao
         return $project;
     }
 
+    public static function get_memsource_project($project_id)
+    {
+        $result = Lib\PDOWrapper::call('get_memsource_project', Lib\PDOWrapper::cleanse($project_id));
+
+        if (empty($result)) return 0;
+
+        return $result[0];
+    }
+
     //! Used to automatically calculate the Deadlines for Project Tasks
     /*!
       When this function is called it generates a CalculateProjectDeadlineRequest object and pushes it to RabbitMQ.
