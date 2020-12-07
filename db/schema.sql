@@ -9237,6 +9237,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_user`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_user`(IN uID INT)
+BEGIN
+    SELECT * FROM Users WHERE id=uID;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 

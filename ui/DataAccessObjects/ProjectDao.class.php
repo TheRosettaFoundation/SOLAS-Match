@@ -797,4 +797,13 @@ $memsource_change_country_to_kp = [
     {
         LibAPI\PDOWrapper::call('update_task_due_date', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($deadline));
     }
+
+    public function get_user($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_user', LibAPI\PDOWrapper::cleanse($user_id));
+
+        if (empty($result)) return [];
+
+        return $result[0];
+    }
 }
