@@ -438,7 +438,7 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function claimTask($userId, $taskId, $memsource_task)
+    public function claimTask($userId, $taskId, $memsource_task, $project_id)
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tasks/$taskId";
