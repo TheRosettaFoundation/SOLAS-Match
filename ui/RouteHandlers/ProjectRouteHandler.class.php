@@ -179,7 +179,13 @@ $memsource_client = ['org_id' => 456];
 
         // Create a topic in the Community forum (Discourse) and a project in Asana
         $target_languages = '';
-        if (!empty($hook['targetLangs'])) $target_languages = implode(',', $hook['targetLangs']);
+        if (!empty($hook['targetLangs'])) {
+            foreach ($hook['targetLangs'] as $index => $value) {
+                list($trommons_source_language_code, $trommons_source_country_code) = $projectDao->convert_memsource_to_language_country($value);
+                $hook['targetLangs'][$index] = "{$trommons_source_language_code}-{$trommons_source_country_code}";
+            }
+            $target_languages = implode(',', $hook['targetLangs']);
+        }
         error_log("projectCreate create_discourse_topic($project_id, $target_languages)");
         try {
             $this->create_discourse_topic($project_id, $target_languages, ['created_by_id' => empty($hook['createdBy']['id']) ? 0 : $hook['createdBy']['id']]);
@@ -2071,9 +2077,11 @@ $memsource_client = ['org_id' => 456];
         $i = 0;
         $languages = array();
         foreach($langcodearray as $langcode){
+          if (!empty($langcode)) {
             $langcode = substr($langcode,0,strpos($langcode."-","-"));
             $language = $langDao->getLanguageByCode($langcode);
             $languages[$i++] = $language->getName();
+          }
         }
 
         $creator = $taskDao->get_creator($projectId, $memsource_project);
@@ -2096,6 +2104,7 @@ $memsource_client = ['org_id' => 456];
             $fields .= '&tags[]=' . urlencode($language);
             if (++$language_count == 4) break; // Limit in Discourse on number of tags?
         }
+error_log("fields: $fields , targetlanguages: $targetlanguages");//(**)
 
         $re = curl_init(Common\Lib\Settings::get('discourse.url').'/posts');
         curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
