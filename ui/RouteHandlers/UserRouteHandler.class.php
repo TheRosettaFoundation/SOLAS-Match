@@ -1254,6 +1254,9 @@ EOD;
             $userQualifiedPairs[] = array('language_code_source' => '', 'language_code_target' => '', 'qualification_level' => 1);
         }
 
+        unset(countries['90']);
+        unset(countries['91']);
+        unset(countries['49']);
         $app->view()->appendData(array(
             'siteLocation'     => Common\Lib\Settings::get('site.location'),
             'siteAPI'          => Common\Lib\Settings::get('site.api'),
