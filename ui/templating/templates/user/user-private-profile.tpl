@@ -103,7 +103,9 @@ If you have any questions about submitting the form, please email <a href="mailt
                 <select name="country" id="country" style="width: 80%">
                     <option value="{$userPersonalInfo->getCountry()|escape:'html':'UTF-8'}" selected="selected">{$userPersonalInfo->getCountry()|escape:'html':'UTF-8'}</option>
                     {foreach $countries as $country}
+                        {if $country->getCode() != '90' && $country->getCode() != '91' && $country->getCode() != '49'}
                         <option value="{$country->getName()|escape:'html':'UTF-8'}">{$country->getName()|escape:'html':'UTF-8'}</option>
+                        {/if}
                     {/foreach}
                 </select>
 
@@ -120,7 +122,9 @@ If you have any questions about submitting the form, please email <a href="mailt
                         <select name="nativeCountrySelect" id="nativeCountrySelect" style="width: 41%">
                             <option value=""></option>
                             {foreach $countries as $country}
+                                {if $country->getCode() != '90' && $country->getCode() != '91' && $country->getCode() != '49'}
                                 <option value="{$country->getCode()}" {if $country->getCode() == $nativeCountrySelectCode}selected="selected"{/if}>{$country->getName()}</option>
+                                {/if}
                             {/foreach}
                         </select>
                     </div>
