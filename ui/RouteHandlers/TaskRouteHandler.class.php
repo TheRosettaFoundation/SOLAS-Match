@@ -1532,7 +1532,7 @@ class TaskRouteHandler
         $tasksEnabled = [];
         $thisTaskPreReqIds = 0;
         foreach ($projectTasks as $projectTask) {
-            $allow_downloads[$projectTask->getId()] = $taskDao->get_allow_download($projectTask);
+            $allow_downloads[$projectTask->getId()] = $taskDao->get_allow_download($projectTask, $memsource_task);
 
             if ($projectTask->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS ||
                         $projectTask->getTaskStatus() == Common\Enums\TaskStatusEnum::COMPLETE) {

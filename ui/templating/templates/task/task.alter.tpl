@@ -72,7 +72,7 @@
                         <input type="checkbox" name="restrictTask" value="1" {$restrictTaskStatus} />
                     </div>
                     {/if}
-                    {if !empty($languages))}
+                    {if !empty($languages)}
                     <p>
                         <label for="target" style="font-size: large"><strong>{Localisation::getTranslation('common_target_language')}</strong></label>
                         <select name="target" id="target" {if $task_status_id > TaskStatusEnum::PENDING_CLAIM}disabled{/if} style="width: 400px">
@@ -126,7 +126,7 @@
                 </td>
             </tr>
             {/if}
-            {if !empty($projectTasks))}
+            {if !empty($projectTasks)}
             <tr>
                 <td colspan="2">
                     <h2>{Localisation::getTranslation('common_task_prerequisites')}</h2>
