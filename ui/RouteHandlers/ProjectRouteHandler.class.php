@@ -2561,7 +2561,7 @@ error_log("fields: $fields , targetlanguages: $targetlanguages");//(**)
                     error_log("dequeue_copy_task_original_file() task_id: $task_id Removing");
                     $projectDao->dequeue_copy_task_original_file($task_id);
                 } else {
-                    if (in_array($responseCode,[400,401,403,404,405,410,415,501])) {
+                    if (in_array($responseCode,[400,401,403,404,405,410,415,501,202])) {
                         $projectDao->dequeue_copy_task_original_file($task_id);
                     }
                     error_log("task_cron ERROR ($task_id) responseCode: $responseCode");
