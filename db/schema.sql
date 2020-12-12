@@ -1695,6 +1695,7 @@ CREATE TABLE IF NOT EXISTS `MemsourceTasks` (
   workflowLevel      INT(10) UNSIGNED NOT NULL,
   beginIndex         INT(10) UNSIGNED NOT NULL,
   endIndex           INT(10) UNSIGNED NOT NULL,
+  prerequisite       BIGINT(20) UNSIGNED NOT NULL,
   PRIMARY KEY FK_MemsourceTasks_task_id (task_id),
   UNIQUE  KEY memsource_task_id         (memsource_task_id),
   CONSTRAINT FK_MemsourceTasks_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -9146,10 +9147,10 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `set_memsource_task`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_task`(IN taskID BIGINT, IN memsourceID BIGINT, IN memsourceUID VARCHAR(30), IN t VARCHAR(30), IN level INT, IN begin INT, IN end INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_task`(IN taskID BIGINT, IN memsourceID BIGINT, IN memsourceUID VARCHAR(30), IN t VARCHAR(30), IN level INT, IN begin INT, IN end INT, IN prereq BIGINT)
 BEGIN
-    INSERT INTO MemsourceTasks (task_id, memsource_task_id, memsource_task_uid, task, workflowLevel,beginIndex, endIndex)
-    VALUES                     ( taskID,       memsourceID,       memsourceUID,    t,         level,     begin,      end);
+    INSERT INTO MemsourceTasks (task_id, memsource_task_id, memsource_task_uid, task, workflowLevel,beginIndex, endIndex, prerequisite)
+    VALUES                     ( taskID,       memsourceID,       memsourceUID,    t,         level,     begin,      end,       prereq);
 END//
 DELIMITER ;
 
@@ -9166,6 +9167,26 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_task_by_memsource_id`(IN memsourceID BIGINT)
 BEGIN
     SELECT * FROM MemsourceTasks WHERE memsource_task_id=memsourceID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_memsource_tasks_for_project_language_type`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_tasks_for_project_language_type`(IN projectID INT, IN taskUID VARCHAR(30), IN typeID INT)
+BEGIN
+    SELECT
+        mt.*,
+        t.`language_id-source`,
+        t.`language_id-target`,
+        t.`country_id-source`,
+        t.`country_id-target`,
+        t.`task-status_id`
+    FROM Tasks           t
+    JOIN MemsourceTasks mt ON t.id=mt.task_id
+    WHERE
+        t.project_id=projectID AND
+        mt.task=taskUID AND
+        t.`task-type_id`=typeID;
 END//
 DELIMITER ;
 

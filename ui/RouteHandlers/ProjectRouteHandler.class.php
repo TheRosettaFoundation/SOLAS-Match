@@ -301,7 +301,8 @@ $memsource_client = ['org_id' => 456];
             $projectDao->set_memsource_task($task_id, $part['id'], $part['uid'], $part['task'], // note 'task' is for Language pair (independent of workflow step)
                 empty($part['workflowLevel']) ? 0 : $part['workflowLevel'],
                 empty($part['beginIndex'])    ? 0 : $part['beginIndex'], // Begin Segment number
-                empty($part['endIndex'])      ? 0 : $part['endIndex']);
+                empty($part['endIndex'])      ? 0 : $part['endIndex'],
+                0);
 
             $projectDao->updateProjectDirectly($project);
 
