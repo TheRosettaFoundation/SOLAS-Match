@@ -291,6 +291,15 @@ $memsource_client = ['org_id' => 456];
 
             $task->setPublished(1);
 
+            $prerequisite = 0;
+            if (!empty($part['task']) && $taskType == Common\Enums\TaskTypeEnum::PROOFREADING) {
+                $prerequisite_task = $projectDao->get_memsource_tasks_for_project_language_type($memsource_project['project_id'], $part['task'], Common\Enums\TaskTypeEnum::TRANSLATION);
+                if ($prerequisite_task) {
+                    $prerequisite = $prerequisite_task['task_id'];
+                    $task->setTaskStatus(Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
+                }
+            }
+
             $task_id = $taskDao->createTaskDirectly($task);
             if (!$task_id) {
                 error_log("Failed to add task for new jobPart {$part['id']} for: {$part['fileName']}");
@@ -302,7 +311,7 @@ $memsource_client = ['org_id' => 456];
                 empty($part['workflowLevel']) ? 0 : $part['workflowLevel'],
                 empty($part['beginIndex'])    ? 0 : $part['beginIndex'], // Begin Segment number
                 empty($part['endIndex'])      ? 0 : $part['endIndex'],
-                0);
+                $prerequisite);
 
             $projectDao->updateProjectDirectly($project);
 
