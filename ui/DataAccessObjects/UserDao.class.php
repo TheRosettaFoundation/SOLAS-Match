@@ -1268,6 +1268,7 @@ error_log(print_r($result, true));
             LibAPI\PDOWrapper::cleanseWrapStr($language_code_target) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($country_code_target) . ',' .
             LibAPI\PDOWrapper::cleanse($qualification_level));
+            error_log("createUserQualifiedPair($user_id, $language_code_source, $country_code_source, $language_code_target, $country_code_target, $qualification_level)");
     }
 
     public function updateUserQualifiedPair($user_id, $language_code_source, $country_code_source, $language_code_target, $country_code_target, $qualification_level)
@@ -1279,6 +1280,7 @@ error_log(print_r($result, true));
             LibAPI\PDOWrapper::cleanseWrapStr($language_code_target) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($country_code_target) . ',' .
             LibAPI\PDOWrapper::cleanse($qualification_level));
+            error_log("updateUserQualifiedPair($user_id, $language_code_source, $country_code_source, $language_code_target, $country_code_target, $qualification_level)");
     }
 
     public function getUserQualifiedPairs($user_id)
@@ -1296,6 +1298,7 @@ error_log(print_r($result, true));
             LibAPI\PDOWrapper::cleanseWrapStr($country_code_source) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($language_code_target) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($country_code_target));
+            error_log("removeUserQualifiedPair($user_id, $language_code_source, $country_code_source, $language_code_target, $country_code_target)");
     }
 
     public function updateRequiredOrgQualificationLevel($org_id, $required_qualification_level)
