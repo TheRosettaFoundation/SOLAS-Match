@@ -250,7 +250,7 @@ class TaskRouteHandler
         if ($loggedInUserId != $user_id) {
             $adminDao = new DAO\AdminDao();
             if (!$adminDao->isSiteAdmin($loggedInUserId)) {
-                $app->flash('error', "You are not authorized to view this page");
+                $app->flash('error', 'You are not authorized to view this page');
                 $app->redirect($app->urlFor('home'));
             }
         }
