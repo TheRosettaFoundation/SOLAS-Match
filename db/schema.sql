@@ -1692,6 +1692,7 @@ CREATE TABLE IF NOT EXISTS `MemsourceTasks` (
   memsource_task_id  BIGINT(20) UNSIGNED NOT NULL,
   memsource_task_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   task               VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  internalId         VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL
   workflowLevel      INT(10) UNSIGNED NOT NULL,
   beginIndex         INT(10) UNSIGNED NOT NULL,
   endIndex           INT(10) UNSIGNED NOT NULL,
@@ -9147,10 +9148,10 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `set_memsource_task`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_task`(IN taskID BIGINT, IN memsourceID BIGINT, IN memsourceUID VARCHAR(30), IN t VARCHAR(30), IN level INT, IN begin INT, IN end INT, IN prereq BIGINT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_task`(IN taskID BIGINT, IN memsourceID BIGINT, IN memsourceUID VARCHAR(30), IN t VARCHAR(30), IN intID VARCHAR(30), IN level INT, IN begin INT, IN end INT, IN prereq BIGINT)
 BEGIN
-    INSERT INTO MemsourceTasks (task_id, memsource_task_id, memsource_task_uid, task, workflowLevel,beginIndex, endIndex, prerequisite)
-    VALUES                     ( taskID,       memsourceID,       memsourceUID,    t,         level,     begin,      end,       prereq);
+    INSERT INTO MemsourceTasks (task_id, memsource_task_id, memsource_task_uid, task, internalId, workflowLevel,beginIndex, endIndex, prerequisite)
+    VALUES                     ( taskID,       memsourceID,       memsourceUID,    t,      intID,         level,     begin,      end,       prereq);
 END//
 DELIMITER ;
 

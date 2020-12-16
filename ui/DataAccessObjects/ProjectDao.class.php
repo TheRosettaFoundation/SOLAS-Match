@@ -717,13 +717,14 @@ $memsource_change_country_to_kp = [
         return $result[0];
     }
 
-    public function set_memsource_task($task_id, $memsource_task_id, $memsource_task_uid, $task, $workflowLevel, $beginIndex, $endIndex, $prerequisite)
+    public function set_memsource_task($task_id, $memsource_task_id, $memsource_task_uid, $task, $internalId, $workflowLevel, $beginIndex, $endIndex, $prerequisite)
     {
         LibAPI\PDOWrapper::call('set_memsource_task',
             LibAPI\PDOWrapper::cleanse($task_id) . ',' .
             LibAPI\PDOWrapper::cleanse($memsource_task_id) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($memsource_task_uid) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($task) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($internalId) . ',' .
             LibAPI\PDOWrapper::cleanse($workflowLevel) . ',' .
             LibAPI\PDOWrapper::cleanse($beginIndex) . ',' .
             LibAPI\PDOWrapper::cleanse($endIndex) . ',' .
