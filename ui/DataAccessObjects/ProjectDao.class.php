@@ -816,4 +816,12 @@ $memsource_change_country_to_kp = [
     {
         return LibAPI\PDOWrapper::call('get_user', LibAPI\PDOWrapper::cleanse($user_id));
     }
+
+    public function getUserClaimedTask($task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getUserClaimedTask', LibAPI\PDOWrapper::cleanse($task_id));
+        if (empty($result)) return 0;
+
+        return $result[0]['id'];
+    }
 }

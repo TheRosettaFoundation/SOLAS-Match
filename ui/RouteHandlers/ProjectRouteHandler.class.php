@@ -365,6 +365,24 @@ $memsource_client = ['org_id' => 456];
                 $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::COMPLETE);
                 $taskDao->sendTaskUploadNotifications($task_id, 1);
                 $taskDao->set_task_complete_date($task_id);
+
+                if (strpos($memsource_task['internalId'], '.') === false) { // Not split
+                    if (empty($part['project']['id'])) {
+                        error_log("No project id in {$part['id']} in event JOB_STATUS_CHANGED, jobPart status: COMPLETED_BY_LINGUIST");
+                        continue;
+                    }
+                    $memsource_project = $projectDao->get_memsource_project_by_memsource_id($part['project']['id']);
+                    if (empty($memsource_project)) {
+                        error_log("Can't find memsource_project for {$part['project']['id']} in {$part['id']} in event JOB_STATUS_CHANGED, jobPart status: COMPLETED_BY_LINGUIST");
+                        continue;
+                    }
+                    $dependent_task = $projectDao->get_memsource_tasks_for_project_language_type($memsource_project['project_id'], $memsource_task['task'], Common\Enums\TaskTypeEnum::PROOFREADING);
+                    if ($dependent_task && $dependent_task['prerequisite'] == $task_id) {
+                        $taskDao->setTaskStatus($dependent_task['task_id'], Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+                        $user_id = $projectDao->getUserClaimedTask($task_id);
+                        if ($user_id) $taskDao->addUserToTaskBlacklist($user_id, $dependent_task['task_id']);
+                    }
+                }
                 error_log("COMPLETED_BY_LINGUIST task_id: $task_id, memsource: {$part['id']}");
             }
             if ($part['status'] == 'DECLINED_BY_LINGUIST') {
