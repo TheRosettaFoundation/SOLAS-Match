@@ -344,6 +344,7 @@ class OrgRouteHandler
             if (is_null($errorOccured)) {
                 $user_id = Common\Lib\UserSession::getCurrentUserID();
                 $orgDao = new DAO\OrganisationDao();
+                $projectDao = new DAO\ProjectDao();
 
                 try {
                     error_log("Calling createOrg(, $user_id)");
@@ -352,12 +353,34 @@ class OrgRouteHandler
                         $org2->setId($new_org->getId());
                         $orgDao->updateOrgExtendedProfile($org2);
                         $org_name = $org->getName();
+                        $org_biography = $org->getBiography();
                         error_log("Called createOrg() for: $org_name");
                         $app->flash(
-                            "success",
+                            'success',
                             sprintf(Lib\Localisation::getTranslation('create_org_created'), $org_name)
                         );
-                        $app->redirect($app->urlFor("org-dashboard"));
+
+                        // Create Client on Memsource
+                        $memsourceApiV1 = Common\Lib\Settings::get('memsource.api_url_v1');
+                        $memsourceApiToken = Common\Lib\Settings::get('memsource.memsource_api_token');
+                        $url = $memsourceApiV1 . 'clients';
+                        $ch = curl_init($url);
+                        $data = array(
+                            'name' => $org_name,
+                            'note' => $org_biography,
+                            'displayNoteInProject' => true
+                        );
+                        $payload = json_encode($data);
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+                        $authorization = 'Authorization: Bearer ' . $memsourceApiToken;
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                        $result = curl_exec($ch);
+                        curl_close($ch);
+                        $res = json_decode($result, true);
+                        $projectDao->set_memsource_client($new_org->getId(), $res['id'], $res['uid']);
+
+                        $app->redirect($app->urlFor('org-dashboard'));
                     }
                 } catch (Common\Exceptions\SolasMatchException $ex) {
                     $org_name = $org->getName();
