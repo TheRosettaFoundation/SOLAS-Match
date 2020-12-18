@@ -1309,6 +1309,7 @@ error_log(print_r($result, true));
             LibAPI\PDOWrapper::cleanseWrapStr($language_code_target) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($country_code_target) . ',' .
             LibAPI\PDOWrapper::cleanse($qualification_level));
+            error_log("createUserQualifiedPair($user_id, $language_code_source, $country_code_source, $language_code_target, $country_code_target, $qualification_level)");
     }
 
     public function updateUserQualifiedPair($user_id, $language_code_source, $country_code_source, $language_code_target, $country_code_target, $qualification_level)
@@ -1320,6 +1321,7 @@ error_log(print_r($result, true));
             LibAPI\PDOWrapper::cleanseWrapStr($language_code_target) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($country_code_target) . ',' .
             LibAPI\PDOWrapper::cleanse($qualification_level));
+            error_log("updateUserQualifiedPair($user_id, $language_code_source, $country_code_source, $language_code_target, $country_code_target, $qualification_level)");
     }
 
     public function getUserQualifiedPairs($user_id)
@@ -1337,6 +1339,7 @@ error_log(print_r($result, true));
             LibAPI\PDOWrapper::cleanseWrapStr($country_code_source) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($language_code_target) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($country_code_target));
+            error_log("removeUserQualifiedPair($user_id, $language_code_source, $country_code_source, $language_code_target, $country_code_target)");
     }
 
     public function updateRequiredOrgQualificationLevel($org_id, $required_qualification_level)
@@ -1698,7 +1701,7 @@ error_log(print_r($result, true));
         if (!empty($howheards)) {
             $howheard_list[$howheards[0]['howheard_key']]['state'] = 1;
         } elseif ($referer = $this->get_tracked_registration($user_id)) {
-            if (in_array($referer, ['RWS Moravia', 'CIOL', 'Riskified', 'Welocalize', 'Lionbridge', 'Apala', 'Ei Ei', 'Muhannad', 'Paul', 'Rodrigue', 'Diane', 'Simon M.', 'Mahmud', 'Kamal', 'Fatima', 'Halima', 'Ibrahim', 'Abdulwahab', 'Alhaji', 'Ali Abdulrahman', 'Amajam', 'Buba Gameche', 'Jacob', 'Jagila', 'Mustapha', 'Valerie', 'Ivana', 'Renwar', 'Marwan', 'Simon W.', 'Hussain', 'Thalia', 'Claudia', 'Carolina', 'Ravija', 'Facebook', 'Twitter', 'Instagram', 'Linkedin', 'Parenting for Lifelong Health', 'PLH SMEs', 'Cardinals', 'SDL', 'Dace', 'Miami'])) $howheard_list['Referral']['state'] = 1;
+            if (in_array($referer, ['RWS Moravia', 'CIOL', 'Riskified', 'Welocalize', 'Lionbridge', 'Apala', 'Ei Ei', 'Muhannad', 'Paul', 'Rodrigue', 'Diane', 'Simon M.', 'Mahmud', 'Kamal', 'Fatima', 'Halima', 'Ibrahim', 'Abdulwahab', 'Alhaji', 'Ali Abdulrahman', 'Amajam', 'Buba Gameche', 'Jacob', 'Jagila', 'Mustapha', 'Valerie', 'Ivana', 'Renwar', 'Marwan', 'Simon W.', 'Hussain', 'Thalia', 'Claudia', 'Carolina', 'Ravija', 'Facebook', 'Twitter', 'Instagram', 'Linkedin', 'Parenting for Lifelong Health', 'PLH SMEs', 'Cardinals', 'SDL', 'Dace', 'Miami', 'Tigrinya', 'Dinka', 'Amharic', 'Pashto'])) $howheard_list['Referral']['state'] = 1;
         }
         return $howheard_list;
     }
