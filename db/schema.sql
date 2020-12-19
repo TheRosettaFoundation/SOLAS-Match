@@ -1698,7 +1698,7 @@ CREATE TABLE IF NOT EXISTS `MemsourceTasks` (
   endIndex           INT(10) UNSIGNED NOT NULL,
   prerequisite       BIGINT(20) UNSIGNED NOT NULL,
   PRIMARY KEY FK_MemsourceTasks_task_id (task_id),
-  UNIQUE  KEY memsource_task_id         (memsource_task_id),
+  UNIQUE  KEY memsource_task_uid        (memsource_task_uid),
   CONSTRAINT FK_MemsourceTasks_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
