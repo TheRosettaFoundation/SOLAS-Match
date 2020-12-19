@@ -1012,9 +1012,9 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
         return $result[0]['result'];
     }
 
-    public function set_memsource_status($task_id, $memsource_task_id, $status)
+    public function set_memsource_status($task_id, $memsource_task_uid, $status)
     {
-        $args = LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($memsource_task_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($status);
+        $args = LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($memsource_task_uid) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($status);
         LibAPI\PDOWrapper::call('set_memsource_status', $args);
     }
 
