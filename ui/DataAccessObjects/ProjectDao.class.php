@@ -749,6 +749,15 @@ $memsource_change_country_to_kp = [
         return $result[0];
     }
 
+    public function get_memsource_task_by_memsource_uid($memsource_uid)
+    {
+        $result = LibAPI\PDOWrapper::call('get_memsource_task_by_memsource_uid', LibAPI\PDOWrapper::cleanseWrapStr($memsource_uid));
+
+        if (empty($result)) return 0;
+
+        return $result[0];
+    }
+
     public function get_memsource_tasks_for_project_language_type($project_id, $task, $type_id)
     {
         $result = LibAPI\PDOWrapper::call('get_memsource_tasks_for_project_language_type',
