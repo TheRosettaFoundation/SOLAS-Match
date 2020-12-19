@@ -465,13 +465,11 @@ class UserDao extends BaseDao
                     'timezone' => $timezone,
                     'userName' => $user_info->display_name
                 );
-                error_log(print_r($data, true));//(**)
                 $payload = json_encode($data);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
                 $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
                 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));                
                 $result_exec = curl_exec($ch);
-                error_log("result_exec: $result_exec");//(**)
                 $result = json_decode($result_exec, true);                
                 curl_close($ch);
                 if (!empty($result['id'])) {
@@ -500,14 +498,12 @@ class UserDao extends BaseDao
                         )
                     )
                 );
-                error_log(print_r($data, true));//(**)
                 $payload = json_encode($data);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
                 $result = curl_exec($ch);
-                error_log(print_r(json_decode($result, true)));//(**)
                 curl_close($ch);
 
                 $url_notify = "https://cloud.memsource.com/web/api2/v1/projects/$projectUid/jobs/notifyAssigned";
@@ -526,7 +522,6 @@ class UserDao extends BaseDao
                 curl_setopt($ch_notify, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
                 curl_setopt($ch_notify, CURLOPT_RETURNTRANSFER, true);
                 $result = curl_exec($ch_notify);
-                error_log(print_r(json_decode($result, true)));//(**)
                 curl_close($ch_notify);
 
                 $url = 'https://cloud.memsource.com/web/api2/v1/projects/' . $projectUid . '/jobs/' . $taskUid;
@@ -546,7 +541,6 @@ class UserDao extends BaseDao
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
                 $result = curl_exec($ch);
-                error_log(print_r(json_decode($result, true)));//(**)
                 curl_close($ch);
             }
         }
