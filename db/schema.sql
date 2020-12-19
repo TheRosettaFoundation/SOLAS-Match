@@ -9171,6 +9171,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_memsource_task_by_memsource_uid`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_task_by_memsource_uid`(IN memsourceUID VARCHAR(30))
+BEGIN
+    SELECT * FROM MemsourceTasks WHERE memsource_task_uid=memsourceUID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `get_memsource_tasks_for_project_language_type`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_tasks_for_project_language_type`(IN projectID INT, IN taskUID VARCHAR(30), IN typeID INT)
