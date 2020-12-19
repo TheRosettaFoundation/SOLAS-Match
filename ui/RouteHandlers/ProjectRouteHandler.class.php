@@ -307,7 +307,7 @@ $memsource_client = ['org_id' => 456];//(**) TWB
             }
             error_log("Added Task: $task_id for new jobPart {$part['uid']} for: {$part['fileName']}");
 
-            $projectDao->set_memsource_task($task_id, $part['id'], $part['uid'], $part['task'], // note 'task' is for Language pair (independent of workflow step)
+            $projectDao->set_memsource_task($task_id, !empty($part['id']) ? $part['id'] : 0, $part['uid'], $part['task'], // note 'task' is for Language pair (independent of workflow step)
                 empty($part['internalId'])    ? 0 : $part['internalId'],
                 empty($part['workflowLevel']) ? 0 : $part['workflowLevel'],
                 empty($part['beginIndex'])    ? 0 : $part['beginIndex'], // Begin Segment number
