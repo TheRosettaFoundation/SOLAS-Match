@@ -533,6 +533,12 @@ class UserDao extends BaseDao
                 $ch = curl_init($url);
                 $data = array(
                     'status' => 'ACCEPTED',
+                    'providers' => array(
+                        array(
+                            'type' => 'USER',
+                            'id' => $memsource_user_id
+                        )
+                    )
                 );
                 $payload = json_encode($data);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
