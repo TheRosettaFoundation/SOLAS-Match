@@ -9201,10 +9201,10 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `set_memsource_status`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_status`(IN taskID BIGINT, IN memsourceID BIGINT, IN statusID VARCHAR(30))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_status`(IN taskID BIGINT, IN memsourceID BIGINT, IN memsourceUID VARCHAR(30), IN statusID VARCHAR(30))
 BEGIN
-    INSERT INTO memsource_statuses (task_id, memsource_task_id, status, status_time)
-    VALUES                         ( taskID,       memsourceID,       statusID,    NOW());
+    INSERT INTO memsource_statuses (task_id, memsource_task_id, memsource_task_uid,   status, status_time)
+    VALUES                         ( taskID,       memsourceID,       memsourceUID, statusID,       NOW());
 END//
 DELIMITER ;
 
