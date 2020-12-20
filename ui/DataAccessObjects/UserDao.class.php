@@ -1876,4 +1876,14 @@ error_log(print_r($result, true));
     {
         LibAPI\PDOWrapper::call('set_memsource_user', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($memsource_user_id));
     }
+
+    public function memsource_list_jobs($memsource_project_uid)
+    {
+        return [];
+    }
+
+    public function memsource_get_job($memsource_project_uid, $memsource_task_uid)
+    {
+        return 0;
+    }
 }
