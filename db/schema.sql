@@ -1684,6 +1684,7 @@ CREATE TABLE IF NOT EXISTS `MemsourceProjects` (
   workflow_level_3      VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY FK_MemsourceProjects_project_id (project_id),
   UNIQUE  KEY memsource_project_id            (memsource_project_id),
+  UNIQUE  KEY memsource_project_uid           (memsource_project_uid),
   CONSTRAINT FK_MemsourceProjects_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -9143,6 +9144,14 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_project_by_memsource_id`(IN memsourceID BIGINT)
 BEGIN
     SELECT * FROM MemsourceProjects WHERE memsource_project_id=memsourceID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_memsource_project_by_memsource_uid`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_project_by_memsource_uid`(IN memsourceUID VARCHAR(30))
+BEGIN
+    SELECT * FROM MemsourceProjects WHERE memsource_project_uid=memsourceUID;
 END//
 DELIMITER ;
 
