@@ -10,12 +10,10 @@
         <div class="pull-right">
             <form id="copyChunksProjectForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                 {if $isSiteAdmin && !empty($matecat_analyze_url)}
-                    {if empty($memsource_project)}
                     <input type="hidden" name="copyChunks" value="1" />
                     <a class="btn btn-success" onclick="$('#copyChunksProjectForm').submit();" >
                         <i class="icon-upload icon-white"></i> Update Chunks
                     </a>
-                   {/if}
                     <a href="{$matecat_analyze_url}" class="btn btn-primary" target="_blank">
                         <i class="icon-th-list icon-white"></i> Kató TM analysis
                     </a>
