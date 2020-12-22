@@ -86,7 +86,10 @@ class ProjectRouteHandler
     public function memsourceHook()
     {
         $app = \Slim\Slim::getInstance();
-        if ($app->request->headers->get('X-Memsource-Token') !== Common\Lib\Settings::get('memsource.X-Memsource-Token')) error_log('X-Memsource-Token does not match!');
+        if ($app->request->headers->get('X-Memsource-Token') !== Common\Lib\Settings::get('memsource.X-Memsource-Token')) {
+            error_log('X-Memsource-Token does not match!');
+            die;
+        }
         $body = $app->request()->getBody();
         error_log(print_r(json_decode($body, true), true));
         $hook = json_decode($body, true);
