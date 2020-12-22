@@ -9284,6 +9284,26 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_tasks_for_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_tasks_for_project`(IN projectID INT)
+BEGIN
+    SELECT t.*, mt.*
+    FROM Tasks           t
+    JOIN MemsourceTasks mt ON t.id=mt.task_id
+    WHERE
+        t.project_id=projectID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `delete_task_directly`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_task_directly`(IN taskID BIGINT)
+BEGIN
+    DELETE FROM Tasks WHERE id=taskID;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
