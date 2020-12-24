@@ -842,4 +842,151 @@ $memsource_change_country_to_kp = [
 
         return $result[0]['id'];
     }
+
+    public function sync_split_jobs($memsource_project)
+    {
+        $userDao = new UserDao();
+        $taskDao = new TaskDao();
+        $project_route_handler = new ProjectRouteHandler();
+        $project_id            = $memsource_project['project_id']
+        $memsource_project_uid = $memsource_project['memsource_project_uid']
+
+        $jobs = $userDao->memsource_list_jobs($memsource_project_uid);
+        $top_level = [];
+        foreach ($jobs as $uid => $job) {
+            $memsource_task = $this->get_memsource_task_by_memsource_uid($uid)
+            if (empty($memsource_task) {
+                $full_job = $userDao->memsource_get_job($memsource_project_uid, $uid);
+                if ($full_job && strpos($full_job['innerId'], '.')) { // Make sure, as safety check, not top level
+                    if ($this->create_task($memsource_project, $full_job)) {
+                        $top_level[] = $this->get_top_level($full_job['innerId']);
+                        error_log("Created task for job $uid {$full_job['innerId']} in project $project_id");
+                    }
+                } else error_log("Could not find job $uid in project $project_id (or is top level)");
+            }
+        }
+
+        $project_tasks = $this->get_tasks_for_project($project_id);
+        foreach ($project_tasks as $uid => $project_task) {
+            if (in_array($this->get_top_level($project_task['internalId']), $top_level) { // This is extra projection against wrongly deleting tasks
+                if (empty($jobs[$uid])) {
+                    $this->delete_task_directly($project_task['id']);
+                    error_log("Deleted task {$project_task['id']} for job $uid {$project_task['internalId']} in project $project_id");
+                } elseif (($prerequisite = $project_task['prerequisite']) && $project_task['task-status_id'] == Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES) {
+                    $prerequisite_uid = 0;
+                    foreach ($project_tasks as $u => $pt) {
+                        if ($pt['id'] == $prerequisite) $prerequisite_uid = $u;
+                    }
+                    if (empty($jobs[$prerequisite_uid])) { // Has been (or will be) deleted
+                        $taskDao->setTaskStatus($project_task['id'], Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+                    }
+                }
+            }
+        }
+    }
+
+    private function create_task($memsource_project, $job)
+    {
+        $taskDao = new TaskDao();
+        $task = new Common\Protobufs\Models\Task();
+
+        if (empty($job['filename'])) {
+            error_log("No filename in new jobPart {$job['uid']}");
+            return 0;
+        }
+        $task->setProjectId($memsource_project['project_id']);
+        $task->setTitle($job['filename']);
+
+        $project = $this->getProject($memsource_project['project_id']);
+        $projectSourceLocale = $project->getSourceLocale();
+        $taskSourceLocale = new Common\Protobufs\Models\Locale();
+        $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
+        $taskSourceLocale->setCountryCode($projectSourceLocale->getCountryCode());
+        $task->setSourceLocale($taskSourceLocale);
+        $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+
+        $taskTargetLocale = new Common\Protobufs\Models\Locale();
+        list($target_language, $target_country) = $this->convert_memsource_to_language_country($job['targetLang']);
+        $taskTargetLocale->setLanguageCode($target_language);
+        $taskTargetLocale->setCountryCode($target_country);
+        $task->setTargetLocale($taskTargetLocale);
+
+        if (empty($job['workflowLevel']) || $job['workflowLevel'] > 3) {
+            error_log("Can't find workflowLevel in new job {$job['uid']} for: {$job['filename']}, assuming Translation");
+            $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
+        } else {
+            $taskType = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3']][$job['workflowLevel'] - 1];
+            if     ($taskType == 'Translation' || $taskType == '') $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
+            elseif ($taskType == 'Revision')                       $taskType = Common\Enums\TaskTypeEnum::PROOFREADING;
+            else {
+                error_log("Can't find expected taskType ($taskType) in new job {$job['uid']} for: {$job['filename']}");
+                return 0;
+            }
+        }
+        $task->setTaskType($taskType);
+
+        if (!empty($job['wordsCount'])) {
+            $task->setWordCount($job['wordsCount']);
+            $project->setWordCount($job['wordsCount']);
+        } else {
+            $task->setWordCount(1);
+        }
+
+        if (!empty($job['dateDue'])) $task->setDeadline(substr($job['dateDue'], 0, 10) . ' ' . substr($job['dateDue'], 11, 8));
+        else                         $task->setDeadline($project->getDeadline());
+
+        $task->setPublished(1);
+
+        $task_id = $taskDao->createTaskDirectly($task);
+        if (!$task_id) {
+            error_log("Failed to add task for new job {$job['uid']} for: {$job['filename']}");
+            return 0;
+        }
+        error_log("Added Task: $task_id for new job {$job['uid']} for: {$job['filename']}");
+
+        $this->set_memsource_task($task_id, 0, $job['uid'], '',
+            empty($job['innerId'])       ? 0 : $job['innerId'],
+            empty($job['workflowLevel']) ? 0 : $job['workflowLevel'],
+            empty($job['beginIndex'])    ? 0 : $job['beginIndex'],
+            empty($job['endIndex'])      ? 0 : $job['endIndex'],
+            0);
+
+        $this->updateProjectDirectly($project);
+
+        $project_id = $project->getId();
+        $uploadFolder = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0";
+        mkdir($uploadFolder, 0755, true);
+        $filesFolder = Common\Lib\Settings::get('files.upload_path') . "files/proj-$project_id/task-$task_id/v-0";
+        mkdir($filesFolder, 0755, true);
+
+        $filename = $job['filename'];
+        file_put_contents("$filesFolder/$filename", ''); // Placeholder
+        file_put_contents("$uploadFolder/$filename", "files/proj-$project_id/task-$task_id/v-0/$filename"); // Point to it
+
+        $this->queue_copy_task_original_file($project_id, $task_id, $job['uid'], $filename); // cron will copy file from memsource
+        return 1;
+    }
+
+    public function get_top_level($id)
+    {
+        $pos = strpos($id, '.');
+        if ($pos === false) return $id;
+        return substr($id, 0, $pos);
+    }
+
+    public function get_tasks_for_project($project_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_tasks_for_project', LibAPI\PDOWrapper::cleanse($project_id));
+        if (empty($result)) return [];
+        $tasks = [];
+        foreach ($result as $row) {
+            $tasks[$row['memsource_task_uid']] = $row;
+        }
+        return $tasks;
+    }
+
+    public function delete_task_directly($task_id)
+    {
+        LibAPI\PDOWrapper::call('delete_task_directly', LibAPI\PDOWrapper::cleanse($task_id));
+    }
 }
