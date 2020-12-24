@@ -848,8 +848,8 @@ $memsource_change_country_to_kp = [
         $userDao = new UserDao();
         $taskDao = new TaskDao();
         $project_route_handler = new ProjectRouteHandler();
-        $project_id            = $memsource_project['project_id']
-        $memsource_project_uid = $memsource_project['memsource_project_uid']
+        $project_id            = $memsource_project['project_id'];
+        $memsource_project_uid = $memsource_project['memsource_project_uid'];
 
         $jobs = $userDao->memsource_list_jobs($memsource_project_uid);
         $top_level = [];
