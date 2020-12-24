@@ -868,7 +868,7 @@ $memsource_change_country_to_kp = [
 
         $project_tasks = $this->get_tasks_for_project($project_id);
         foreach ($project_tasks as $uid => $project_task) {
-            if (in_array($this->get_top_level($project_task['internalId']), $top_level) { // This is extra projection against wrongly deleting tasks
+            if (in_array($this->get_top_level($project_task['internalId']), $top_level)) { // This is extra projection against wrongly deleting tasks
                 if (empty($jobs[$uid])) {
                     $this->delete_task_directly($project_task['id']);
                     error_log("Deleted task {$project_task['id']} for job $uid {$project_task['internalId']} in project $project_id");
