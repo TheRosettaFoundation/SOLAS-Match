@@ -542,6 +542,24 @@ class UserDao extends BaseDao
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
                 $result = curl_exec($ch);
                 curl_close($ch);
+
+                // If this is split, add corresponding task(s) to deny list for translator
+                $projectDao = new ProjectDao();
+                $taskDao = new TaskDao();
+                $top_level = $projectDao->get_top_level($memsource_task['internalId']);
+                $project_tasks = $projectDao->get_tasks_for_project($project_id);
+                foreach ($project_tasks as $project_task) {
+                    if ($top_level == $projectDao->get_top_level($project_task['internalId'])) {
+                        if (strpos($memsource_task['internalId'], '.') || strpos($project_task['internalId'], '.')) { // Make sure is split
+                            if ($memsource_task['workflowLevel'] != $project_task['workflowLevel']) { // Not same workflowLevel
+                                if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
+                                    error_log("Adding $userId to Deny List for {$project_task['id']} {$project_task['internalId']}");
+                                    $taskDao->addUserToTaskBlacklist($userId, $project_task['id']);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
