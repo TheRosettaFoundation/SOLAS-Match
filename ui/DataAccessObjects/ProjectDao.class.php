@@ -855,7 +855,7 @@ $memsource_change_country_to_kp = [
         $top_level = [];
         foreach ($jobs as $uid => $job) {
             $memsource_task = $this->get_memsource_task_by_memsource_uid($uid);
-            if (empty($memsource_task) {
+            if (empty($memsource_task)) {
                 $full_job = $userDao->memsource_get_job($memsource_project_uid, $uid);
                 if ($full_job && strpos($full_job['innerId'], '.')) { // Make sure, as safety check, not top level
                     if ($this->create_task($memsource_project, $full_job)) {
