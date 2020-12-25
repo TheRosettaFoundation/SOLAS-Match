@@ -1897,11 +1897,63 @@ error_log(print_r($result, true));
 
     public function memsource_list_jobs($memsource_project_uid)
     {
-        return [];
+        $url = $this->memsourceApiV1."projects/$memsource_project_uid/workflowSteps";
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+        $result = curl_exec($ch);
+        $workflowlevels = count(json_decode($result, true)['projectWorkflowSteps']);
+        curl_close($ch);
+        $jobs = array();
+        
+        //Check workflowlevels
+        if ($workflowlevels > 0) {
+
+            for ($i = 1; $i <= $workflowlevels; $i++) {
+                $workflowstep = 0;
+                $workflowstep = $i + $workflowstep;
+                $workflow_param =   $workflowstep;
+
+                for ($p = 0; $p < 2; $p++) {
+
+                    $url = $this->memsourceApiV2."projects/$memsource_project_uid/jobs?pageNumber=$p&workflowLevel=$workflow_param";
+                    $ch = curl_init($url);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+                    $result = curl_exec($ch);
+                    array_push($jobs, json_decode($result, true));
+                    curl_close($ch);
+                }
+             }
+        } else {
+                for ($p = 0; $p < 2; $p++) {
+
+                    $url = $this->memsourceApiV2."projects/$memsource_project_uid/jobs?pageNumber=$p";
+                    $ch = curl_init($url);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+                    $result = curl_exec($ch);
+                    array_push($jobs, json_decode($result, true));
+                    curl_close($ch);
+                }
+            }
+
+            return $jobs;
     }
 
     public function memsource_get_job($memsource_project_uid, $memsource_task_uid)
     {
-        return 0;
+        $url = $this->memsourceApiV1."projects/$memsource_project_uid/jobs/$memsource_task_uid";
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+        $result = curl_exec($ch);
+        $job = json_decode($result, true);
+        curl_close($ch);
+        
+        return $job;
+    
     }
 }
