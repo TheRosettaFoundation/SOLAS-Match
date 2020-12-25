@@ -1922,7 +1922,7 @@ error_log(print_r($result, true));
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
                     $result = curl_exec($ch);
-                    array_push($jobs, json_decode($result, true));
+                    array_push($jobs, json_decode($result, true)['content']);
                     curl_close($ch);
                 }
              }
@@ -1934,12 +1934,21 @@ error_log(print_r($result, true));
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
                     $result = curl_exec($ch);
-                    array_push($jobs, json_decode($result, true));
+                    array_push($jobs, json_decode($result, true)['content']);
                     curl_close($ch);
                 }
             }
 
-            return $jobs;
+            $jobs_arr = array();
+            foreach ($jobs as $key => $value) {
+
+                foreach ($value as $k => $v) {
+                    array_push($jobs_arr, $v);
+                }
+            }
+
+            return $jobs_arr;
+
     }
 
     public function memsource_get_job($memsource_project_uid, $memsource_task_uid)
@@ -1952,7 +1961,7 @@ error_log(print_r($result, true));
         $result = curl_exec($ch);
         $job = json_decode($result, true);
         curl_close($ch);
-        
+
         return $job;
     
     }
