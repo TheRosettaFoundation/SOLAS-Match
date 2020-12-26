@@ -1905,7 +1905,7 @@ error_log(print_r($result, true));
         $result = curl_exec($ch);
         $result = json_decode($result, true);
         curl_close($ch);
-        if (!isset($result['projectWorkflowSteps']) return [];
+        if (!isset($result['projectWorkflowSteps'])) return [];
         $workflowlevels = count($result['projectWorkflowSteps']);
 
         $jobs = [];
