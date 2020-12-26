@@ -4,6 +4,7 @@ namespace SolasMatch\UI\DAO;
 
 use \SolasMatch\API\Lib as LibAPI;
 use \SolasMatch\Common as Common;
+use \SolasMatch\UI\RouteHandlers as Route;
 
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/BaseDao.php";
@@ -847,7 +848,7 @@ $memsource_change_country_to_kp = [
     {
         $userDao = new UserDao();
         $taskDao = new TaskDao();
-        $project_route_handler = new ProjectRouteHandler();
+        $project_route_handler = new Route\ProjectRouteHandler();
         $project_id            = $memsource_project['project_id'];
         $memsource_project_uid = $memsource_project['memsource_project_uid'];
 
