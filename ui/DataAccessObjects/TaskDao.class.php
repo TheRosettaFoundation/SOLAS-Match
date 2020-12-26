@@ -1008,7 +1008,7 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
     public function unClaimTask($task_id, $user_id, $userFeedback = null)
     {
         $args = LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($userFeedback) . ',0';
-        $result = LibAPI\PDOWrapper::call('unClaimTask', $args);
+        $result = LibAPI\PDOWrapper::call('unClaimTaskMemsource', $args);
         return $result[0]['result'];
     }
 

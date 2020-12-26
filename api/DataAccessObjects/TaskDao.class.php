@@ -701,10 +701,110 @@ error_log("removeTaskPreReq($taskId, $preReqId)");
         }
 
         error_log("call unClaimTask($args)");
-        $ret = Lib\PDOWrapper::call("unClaimTask", $args);
+
+        $memsource_task = self::get_memsource_task($taskId);
+        if ($memsource_task) {
+            $ret = Lib\PDOWrapper::call('unClaimTaskMemsource', $args);
+
+            $task = self::getTask($taskId);
+            $project_tasks = self::get_tasks_for_project($task->getProjectId());
+
+            $top_level = self::get_top_level($memsource_task['internalId']);
+            // Remove any Deny List for this $userId for this top level 'internalId' for other 'workflowLevel' (split or not)
+            foreach ($project_tasks as $dependent_task) {
+                if ($top_level == self::get_top_level($dependent_task['internalId'])) {
+                    if ($memsource_task['workflowLevel'] != $dependent_task['workflowLevel']) {
+                        error_log("Removing $userId from Deny List for {$dependent_task['id']} {$dependent_task['internalId']}");
+                        self::removeUserFromTaskBlacklist($userId, $dependent_task['id']);
+                    }
+                }
+            }
+
+            // Reapply Deny List for this $userId claimed tasks for this top level 'internalId' for other 'workflowLevel' (only if split)
+            foreach ($project_tasks as $claimed_task) { // Potential tasks that might have been claimed by $userId
+                if ($top_level == self::get_top_level($claimed_task['internalId'])) {
+                    if ($claimed_task['workflowLevel'] == $memsource_task['workflowLevel']) { // Only add back Deny if claimed 'workflowLevel' is same as unclaimed task
+                        if (self::hasUserClaimedTask($userId, $claimed_task['id'])) {
+                            foreach ($project_tasks as $dependent_task) {
+                                if ($top_level == self::get_top_level($dependent_task['internalId'])) {
+                                    if (strpos($claimed_task['internalId'], '.') || strpos($dependent_task['internalId'], '.')) { // Make sure is split
+                                        if ($claimed_task['workflowLevel'] != $dependent_task['workflowLevel']) { // Not same workflowLevel
+                                            if (($claimed_task['beginIndex'] <= $dependent_task['endIndex']) && ($dependent_task['beginIndex'] <= $claimed_task['endIndex'])) { // Overlap
+                                                error_log("Reapplying $userId to Deny List for {$dependent_task['id']} {$dependent_task['internalId']}");
+                                                self::addUserToTaskBlacklist($userId, $dependent_task['id']);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            $memsource_project = self::get_memsource_project($task->getProjectId());
+            $url = 'https://cloud.memsource.com/web/api2/v1/projects/' . $memsource_project['memsource_project_uid'] . '/jobs/' . $memsource_task['memsource_task_uid'];
+            $ch = curl_init($url);
+            $data = ['status' => 'DECLINED'];
+            $payload = json_encode($data);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+            $result = curl_exec($ch);
+            curl_close($ch);
+        } else {
+            $ret = Lib\PDOWrapper::call('unClaimTask', $args);
+        }
         $result = $ret[0]['result'];
         error_log("result: $result");
         return $ret[0]['result'];
+    }
+
+    public static function get_memsource_task($task_id)
+    {
+        $result = Lib\PDOWrapper::call('get_memsource_task', Lib\PDOWrapper::cleanse($task_id));
+
+        if (empty($result)) return 0;
+
+        return $result[0];
+    }
+
+    public static function get_tasks_for_project($project_id)
+    {
+        $result = Lib\PDOWrapper::call('get_tasks_for_project', Lib\PDOWrapper::cleanse($project_id));
+        if (empty($result)) return [];
+        $tasks = [];
+        foreach ($result as $row) {
+            $tasks[$row['memsource_task_uid']] = $row;
+        }
+        return $tasks;
+    }
+
+    public static function get_top_level($id)
+    {
+        $pos = strpos($id, '.');
+        if ($pos === false) return $id;
+        return substr($id, 0, $pos);
+    }
+
+    public static function removeUserFromTaskBlacklist($user_id, $task_id)
+    {
+        Lib\PDOWrapper::call('removeUserFromTaskBlacklist', Lib\PDOWrapper::cleanse($user_id) . ',' . Lib\PDOWrapper::cleanse($task_id));
+    }
+
+    public static function addUserToTaskBlacklist($user_id, $task_id)
+    {
+        Lib\PDOWrapper::call('addUserToTaskBlacklist', Lib\PDOWrapper::cleanse($user_id) . ',' . Lib\PDOWrapper::cleanse($task_id));
+    }
+
+    public static function get_memsource_project($project_id)
+    {
+        $result = Lib\PDOWrapper::call('get_memsource_project', Lib\PDOWrapper::cleanse($project_id));
+
+        if (empty($result)) return 0;
+
+        return $result[0];
     }
 
     //! Determine if a User has claimed a Task

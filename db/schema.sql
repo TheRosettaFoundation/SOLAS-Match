@@ -1869,6 +1869,13 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `removeUserFromTaskBlacklist`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `removeUserFromTaskBlacklist`(IN userId INT, IN taskId BIGINT)
+BEGIN
+    DELETE FROM TaskTranslatorBlacklist WHERE user_id=userId AND task_id=taskId;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure debug-test.archiveProject
 DROP PROCEDURE IF EXISTS `archiveProject`;
@@ -5812,6 +5819,22 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `unClaimTaskMemsource`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `unClaimTaskMemsource`(IN tID BIGINT, IN uID INT, IN userFeedback VARCHAR(4096), IN unclaimByAdmin BIT(1))
+BEGIN
+  IF EXISTS (SELECT 1 FROM TaskClaims tc WHERE tc.task_id=tID AND tc.user_id=uID) THEN
+    START TRANSACTION;
+      DELETE FROM TaskClaims WHERE task_id=tID AND user_id=uID;
+      INSERT INTO TaskUnclaims (id, task_id, user_id, `unclaim-comment`, `unclaimed-time`) VALUES (NULL, tID, uID, userFeedback, NOW());
+      UPDATE Tasks SET `task-status_id`=2 where id = tID;
+    COMMIT;
+    SELECT 1 as result;
+  ELSE
+    SELECT 0 as result;
+  END IF;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.userHasBadge
 DROP PROCEDURE IF EXISTS `userHasBadge`;
