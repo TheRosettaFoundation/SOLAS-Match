@@ -1947,6 +1947,7 @@ error_log(print_r($result, true));
                     if (!empty($result['totalPages'])) $totalPages = $result['totalPages'];
                 }
         }
+print_r($jobs);die;//(**)test
         return $jobs;
     }
 
