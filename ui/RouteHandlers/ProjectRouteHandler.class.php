@@ -669,7 +669,7 @@ $memsource_client = ['org_id' => 456];//(**) TWB
                 }
             }
 
-            if (!empty($post['copyChunks'])) {
+            if (!empty($post['copyChunks']) && empty($memsource_project)) {
                 $matecat_language_pairs = $taskDao->getMatecatLanguagePairsForProject($project_id);
                 $matecat_language_pairs_populated = false;
                 if (!empty($matecat_language_pairs)) {
@@ -884,6 +884,9 @@ $memsource_client = ['org_id' => 456];//(**) TWB
                 } else {
                     $app->flashNow('error', 'No MateCat project (MatecatLanguagePairs) found for this project in Kató Platform');
                 }
+            }
+            if (!empty($post['copyChunks']) && !empty($memsource_project)) {
+                $projectDao->sync_split_jobs($memsource_project);
             }
         }
 
