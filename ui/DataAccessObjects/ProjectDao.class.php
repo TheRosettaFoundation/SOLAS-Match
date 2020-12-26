@@ -928,7 +928,6 @@ $memsource_change_country_to_kp = [
 
         if (!empty($job['wordsCount'])) {
             $task->setWordCount($job['wordsCount']);
-            $project->setWordCount($job['wordsCount']);
         } else {
             $task->setWordCount(1);
         }
@@ -951,8 +950,6 @@ $memsource_change_country_to_kp = [
             empty($job['beginIndex'])    ? 0 : $job['beginIndex'],
             empty($job['endIndex'])      ? 0 : $job['endIndex'],
             0);
-
-        $this->updateProjectDirectly($project);
 
         $project_id = $project->getId();
         $uploadFolder = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0";
