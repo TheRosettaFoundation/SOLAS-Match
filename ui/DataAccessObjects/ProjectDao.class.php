@@ -896,7 +896,7 @@ $memsource_change_country_to_kp = [
             return 0;
         }
         $task->setProjectId($memsource_project['project_id']);
-        $task->setTitle($job['filename']);
+        $task->setTitle("{$full['innerId']} {$job['filename']}");
 
         $project = $this->getProject($memsource_project['project_id']);
         $projectSourceLocale = $project->getSourceLocale();
