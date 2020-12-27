@@ -127,8 +127,8 @@ class ProjectRouteHandler
         $projectDao = new DAO\ProjectDao();
 
         $project->setTitle($hook['name']);
-        if (!empty($hook['project_description'])) $project->setDescription($hook['project_description']);
-        else                                      $project->setDescription('-');
+        if (!empty($hook['note'])) $project->setDescription($hook['note']);
+        else                       $project->setDescription('-');
         $project->setImpact('-');
         if (!empty($hook['dateDue'])) $project->setDeadline(substr($hook['dateDue'], 0, 10) . ' ' . substr($hook['dateDue'], 11, 8));
         else                          $project->setDeadline(gmdate('Y-m-d H:i:s', strtotime('25 days')));
@@ -2139,7 +2139,7 @@ $memsource_client = ['org_id' => 456];//(**) TWB
             $fields .= '&tags[]=' . urlencode($language);
             if (++$language_count == 4) break; // Limit in Discourse on number of tags?
         }
-error_log("fields: $fields , targetlanguages: $targetlanguages");//(**)
+error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
 
         $re = curl_init(Common\Lib\Settings::get('discourse.url').'/posts');
         curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
