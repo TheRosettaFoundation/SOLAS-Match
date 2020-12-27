@@ -1930,7 +1930,7 @@ error_log(print_r($result, true));
                 }
              }
         } else {
-                for ($p = 0; $p < 2; $p++) {
+                for ($p = 0; $p < $totalPages; $p++) {
                     $url = $this->memsourceApiV2 . "projects/$memsource_project_uid/jobs?pageNumber=$p";
                     $ch = curl_init($url);
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
