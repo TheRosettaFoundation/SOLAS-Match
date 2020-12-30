@@ -578,7 +578,35 @@ class TaskRouteHandler
         $task = $taskDao->getTask($task_id);
         $latest_version = $taskDao->getTaskVersion($task_id);
         try {
-            $this->downloadTaskVersion($task_id, $latest_version);
+            $projectDao = new DAO\ProjectDao();
+            $memsource_task = $projectDao->get_memsource_task($task_id);
+            if ($memsource_task) {
+                $user_id = Common\Lib\UserSession::getCurrentUserID();
+                if (is_null($user_id) || $taskDao->isUserRestrictedFromTaskButAllowTranslatorToDownload($task_id, $user_id)) {
+                    $app->flash('error', 'You are not authorized to view this page');
+                    $app->redirect($app->urlFor('home'));
+                }
+                $memsource_project = $projectDao->get_memsource_project($project_id);
+                $userDao = new DAO\UserDao();
+                $file = $userDao->memsource_get_target_file($memsource_project['memsource_project_uid'], $memsource_task['memsource_task_uid']);
+                if (empty($file)) {
+                    $app->flash('error', 'Could not retrieve file');
+                    $app->redirect($app->urlFor('home'));
+                }
+                $task_file_info = $taskDao->getTaskInfo($task_id, 0);
+                $filename = $task_file_info->getFilename();
+                $mime = $userDao->detectMimeType($file, $filename);
+                header("Content-type: $mime");
+                header('Content-Disposition: attachment; filename="' . $filename . '"');
+                header('Content-length: ' . strlen($file));
+                header('X-Frame-Options: ALLOWALL');
+                header('Pragma: no-cache');
+                header('Cache-control: no-cache, must-revalidate, no-transform');
+                echo $file;
+                die;
+            } else {
+                $this->downloadTaskVersion($task_id, $latest_version);
+            }
         } catch (Common\Exceptions\SolasMatchException $e) {
             $app->flash(
                 "error",
