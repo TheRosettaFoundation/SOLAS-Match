@@ -1964,4 +1964,22 @@ error_log(print_r($result, true));
         if (empty($job['innerId'])) return 0;
         return $job;
     }
+
+    public function memsource_get_target_file($memsource_project_uid, $memsource_task_uid)
+    {
+        $url = "{$this->memsourceApiV1}projects/$memsource_project_uid/jobs/$memsource_task_uid/targetFile";
+        $re = curl_init($url);
+        $httpHeaders = ["Authorization: Bearer $this->memsourceApiToken"];
+        curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
+        curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
+        $res = curl_exec($re);
+        if ($error_number = curl_errno($re)) error_log("memsource_get_target_file($memsource_project_uid, $memsource_task_uid) Curl error ($error_number): " . curl_error($re));
+        $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
+        curl_close($re);
+        if ($responseCode != 200 || strlen($res) > 100000000) {
+            error_log("ERROR memsource_get_target_file($memsource_project_uid, $memsource_task_uid) responseCode: $responseCode");
+            return 0;
+        }
+        return $res;
+    }
 }
