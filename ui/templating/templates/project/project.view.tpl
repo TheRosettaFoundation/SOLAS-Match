@@ -257,7 +257,19 @@ Tweet</a>
         <a class="pull-right btn btn-success" href="{urlFor name="task-create" options="project_id.$project_id"}">
             <i class="icon-upload icon-white"></i> {Localisation::getTranslation('common_create_task')}
         </a> 
-        {/if}
+       
+        {else if !empty($memsource_project)}
+        <div class="pull-right">
+          <a class=" btn btn-small btn-inverse" href="{urlFor name="task-create" options="project_id.$project_id"}">
+            <i class="icon-remove-circle icon-white"></i> Unpublish all Translation Tasks</a>
+        
+         <a class="btn btn-small btn-inverse" href="{urlFor name="task-create" options="project_id.$project_id"}">
+            <i class="icon-remove-circle icon-white"></i> Unpublish all Revision Tasks
+        </a>
+           
+        </div>
+         {/if}
+         
     </h1> 
             
     {if isset($flash['taskSuccess'])}

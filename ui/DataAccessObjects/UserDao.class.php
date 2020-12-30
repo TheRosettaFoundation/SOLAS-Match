@@ -1965,4 +1965,43 @@ error_log(print_r($result, true));
         return $job;
     
     }
+
+    public function memsource_get_target_file($memsource_project_uid, $memsource_task_uid)
+    {                 
+        $url = "{$this->memsourceApiV1}projects/$memsource_project_uid/jobs/$memsource_task_uid/targetFile";
+        $re = curl_init($url);
+        $httpHeaders = ["Authorization: Bearer $this->memsourceApiToken"];
+        curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
+        curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($re, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
+
+        $res = curl_exec($re);
+        if ($error_number = curl_errno($re)) 
+        {
+            error_log("task_cron ($task_id) Curl error ($error_number): " . curl_error($re)); 
+        }
+
+        $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
+
+        curl_close($re);
+
+        if ($responseCode == 200) {
+            if (strlen($res) <= 100000000) {
+                 //Download file - $res
+                return $res;
+    
+              
+            } else {
+                error_log('File too big: ' . strlen($res));
+            }
+            
+        } else {
+            if (in_array($responseCode,[400,401,403,404,405,410,415,501,202])) {
+                error_log('Error: '.$responseCode);
+            }
+            error_log("ERROR ($memsource_task_uid) responseCode: $responseCode");
+        }
+
+
+    }
 }
