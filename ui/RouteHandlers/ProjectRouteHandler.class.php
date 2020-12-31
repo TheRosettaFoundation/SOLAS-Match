@@ -2157,6 +2157,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 $projectDao->set_discourse_id($projectId, $topic_id);
             } else {
                 error_log('Discourse API error: No topic_id returned');
+                error_log($res);
             }
         }
         curl_close($re);
