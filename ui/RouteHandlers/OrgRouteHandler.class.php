@@ -2163,12 +2163,14 @@ class OrgRouteHandler
         }
 
         $task = $taskDao->getTask($taskId);
+        $memsource_task = $projectDao->get_memsource_task($taskId);
         $viewData = array(
                 "task"              => $task,
                 'claimant'          => $claimant,
                 'userName'          => $userName,
                 'claimantProfile'   => $claimantProfile,
-                'allow_download'    => $taskDao->get_allow_download($task, $projectDao->get_memsource_task($taskId)),
+                'allow_download'    => $taskDao->get_allow_download($task, $memsource_task),
+                'memsource_task'    => $memsource_task,
                 "orgId"             => $orgId
         );
 
