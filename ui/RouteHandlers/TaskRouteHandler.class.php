@@ -586,7 +586,7 @@ class TaskRouteHandler
                     $app->flash('error', 'You are not authorized to view this page');
                     $app->redirect($app->urlFor('home'));
                 }
-                $memsource_project = $projectDao->get_memsource_project($project_id);
+                $memsource_project = $projectDao->get_memsource_project($task->getProjectId());
                 $userDao = new DAO\UserDao();
                 $file = $userDao->memsource_get_target_file($memsource_project['memsource_project_uid'], $memsource_task['memsource_task_uid']);
                 if (empty($file)) {
