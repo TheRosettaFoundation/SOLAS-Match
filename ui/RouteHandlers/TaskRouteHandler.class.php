@@ -2555,10 +2555,10 @@ class TaskRouteHandler
                 error_log('preReqTasks for chunked PROOFREADING Task... ' . print_r($preReqTasks, true));
             }
         }
+        $projectDao = new ProjectDao();
         if (empty($preReqTasks) && $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $memsource_task = $projectDao->get_memsource_task($taskId)) {
             $preReqTasks = [];
             $dummyTask = new Common\Protobufs\Models\Task();
-            $projectDao = new ProjectDao();
             $top_level = $projectDao->get_top_level($memsource_task['internalId']);
             $project_tasks = $projectDao->get_tasks_for_project($task->getProjectId());
             foreach ($project_tasks as $project_task) {

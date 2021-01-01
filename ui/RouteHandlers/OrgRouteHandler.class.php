@@ -2324,10 +2324,10 @@ class OrgRouteHandler
                 error_log('preReqs for chunked PROOFREADING Task... ' . print_r($preReqs, true));
             }
         }
+        $projectDao = new ProjectDao();
         if (empty($preReqs) && $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $memsource_task = $projectDao->get_memsource_task($taskId)) {
             $preReqs = [];
             $dummyTask = new Common\Protobufs\Models\Task();
-            $projectDao = new ProjectDao();
             $top_level = $projectDao->get_top_level($memsource_task['internalId']);
             $project_tasks = $projectDao->get_tasks_for_project($task->getProjectId());
             foreach ($project_tasks as $project_task) {
