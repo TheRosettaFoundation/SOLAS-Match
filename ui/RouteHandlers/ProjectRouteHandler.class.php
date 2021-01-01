@@ -2047,8 +2047,28 @@ $memsource_client = ['org_id' => 456];//(**) TWB
             $app->redirect($app->urlFor('home'));
         }
 
+        $project_tasks = $projectDao->get_tasks_for_project($projectId); // Is a memsource project if any memsource jobs
         try {
+            if ($project_tasks) {
+                $task_id = 0;
+                $unitary = 1;
+                foreach ($project_tasks as $project_task) {
+                    $title = $project_task['title'];
+                    if (strpos($project_task['internalId'], '.')) $title = substr($project_task['title'], strlen($project_task['internalId']) + 1);
+                    if (!$task_id) { // First time through
+                        $task_id = $project_task['id'];
+                        $title_0 = $title;
+                    }
+                    if ($title_0 !== $title) $unitary = 0; // Not a unitary project with a single source file (1 => probably it is)
+                }
+                if (!$unitary) {
+                    $app->flash('error', 'We could not find a matching file.');
+                    $app->redirect($app->urlFor('home'));
+                }
+                $headArr = $taskDao->downloadTaskVersion($task_id, 0, 0); // Download an original Task file as "Project" file
+            } else {
             $headArr = $projectDao->downloadProjectFile($projectId);
+            }
             //Convert header data to array and set headers appropriately
             if (!empty($headArr)) {
                 $headArr = unserialize($headArr);
