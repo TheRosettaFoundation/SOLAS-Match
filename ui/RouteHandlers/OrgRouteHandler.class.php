@@ -2324,7 +2324,7 @@ class OrgRouteHandler
                 error_log('preReqs for chunked PROOFREADING Task... ' . print_r($preReqs, true));
             }
         }
-        $projectDao = new ProjectDao();
+        $projectDao = new DAO\ProjectDao();
         if (empty($preReqs) && $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $memsource_task = $projectDao->get_memsource_task($taskId)) {
             $preReqs = [];
             $dummyTask = new Common\Protobufs\Models\Task();
