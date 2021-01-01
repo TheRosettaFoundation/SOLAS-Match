@@ -2555,6 +2555,26 @@ class TaskRouteHandler
                 error_log('preReqTasks for chunked PROOFREADING Task... ' . print_r($preReqTasks, true));
             }
         }
+        if (empty($preReqTasks) && $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $memsource_task = $projectDao->get_memsource_task($taskId)) {
+            $preReqTasks = [];
+            $dummyTask = new Common\Protobufs\Models\Task();
+            $projectDao = new ProjectDao();
+            $top_level = $projectDao->get_top_level($memsource_task['internalId']);
+            $project_tasks = $projectDao->get_tasks_for_project($task->getProjectId());
+            foreach ($project_tasks as $project_task) {
+                if ($top_level == $projectDao->get_top_level($project_task['internalId'])) {
+                    if ($memsource_task['workflowLevel'] > $project_task['workflowLevel']) { // Dependent on
+                        if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
+                            $dummyTask->setId($project_task['id']);
+                            $dummyTask->setProjectId($task->getProjectId());
+                            $dummyTask->setTitle($project_task['title']);
+                            $preReqTasks[] = $dummyTask;
+                            error_log('preReqTasks for memsource PROOFREADING Task... ' . print_r($preReqTasks, true));
+                        }
+                    }
+                }
+            }
+        }
         if ($preReqTasks == null || count($preReqTasks) == 0) {
             $projectDao = new \SolasMatch\UI\DAO\ProjectDao();
             $project = $projectDao->getProject($task->getProjectId());
