@@ -312,6 +312,7 @@ class TaskRouteHandler
         $discourse_slug = array();
         $proofreadTaskIds = array();
         $parentTaskIds = [];
+        $show_memsource_revision = [];
         $matecat_urls = array();
         $allow_downloads = array();
         $show_mark_chunk_complete = array();
@@ -382,6 +383,27 @@ class TaskRouteHandler
 
                 $discourse_slug[$taskId] = $projectDao->discourse_parameterize($project);
 
+                $show_memsource_revision[$taskId] = null;
+                if ($memsource_task) {
+                    $project_tasks = $projectDao->get_tasks_for_project($topTask->getProjectId());
+                    foreach ($project_tasks as $project_task) {
+                        if ($taskId == $project_task['id']) $top_level = $projectDao->get_top_level($project_task['internalId']);
+                    }
+                    $revision_task = 0;
+                    $revision_complete = 1;
+                    foreach ($project_tasks as $project_task) {
+                        if ($top_level == $projectDao->get_top_level($project_task['internalId'])) {
+                            if ($project_task['task-type_id'] == Common\Enums\TaskTypeEnum::PROOFREADING) { // Revision
+                                if (!$revision_task) $revision_task = $project_task['id'];
+                                if ($project_task['task-status_id'] != Common\Enums\TaskStatusEnum::COMPLETE) $revision_complete = 0;
+                            }
+                        }
+                    }
+error_log("taskId: $taskId, revision_task: $revision_task, revision_complete: $revision_complete, top_level: $top_level");//(**)Test
+                    if ($revision_task && $revision_complete) $show_memsource_revision[$taskId] = $revision_task;
+                    $proofreadTaskIds[$taskId] = null;
+                    $parentTaskIds[$taskId] = null;
+                } else {
                 if ($topTask->getTaskType() == 2) { // If current task is a translation task
                     try {
                         $proofreadTask = $taskDao->getProofreadTask($taskId);
@@ -403,6 +425,7 @@ class TaskRouteHandler
                             $parentTaskIds[$taskId] = $parent_translation_id;
                         }
                     }
+                }
                 }
             }
         }
@@ -437,6 +460,7 @@ class TaskRouteHandler
             'discourse_slug' => $discourse_slug,
             'proofreadTaskIds' => $proofreadTaskIds,
             'parentTaskIds'    => $parentTaskIds,
+            'show_memsource_revision' => $show_memsource_revision,
             'currentScrollPage' => $currentScrollPage,
             'itemsPerScrollPage' => $itemsPerScrollPage,
             'lastScrollPage' => $lastScrollPage,
