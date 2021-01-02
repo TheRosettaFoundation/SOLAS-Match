@@ -399,7 +399,6 @@ class TaskRouteHandler
                             }
                         }
                     }
-error_log("taskId: $taskId, revision_task: $revision_task, revision_complete: $revision_complete, top_level: $top_level");//(**)Test
                     if ($revision_task && $revision_complete) $show_memsource_revision[$taskId] = $revision_task;
                     $proofreadTaskIds[$taskId] = null;
                     $parentTaskIds[$taskId] = null;
