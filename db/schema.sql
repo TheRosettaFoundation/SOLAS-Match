@@ -1881,68 +1881,69 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS `archiveProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `archiveProject`(IN `projectId` INT, IN `user_id` INT)
-    MODIFIES SQL DATA
 BEGIN
-	Declare taskId int;
-	DECLARE done INT DEFAULT FALSE;
-	DECLARE cur1 CURSOR FOR SELECT t.id FROM Tasks t WHERE t.project_id=projectId;
-	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-	
-		 
-	if not exists(select 1 from ArchivedProjects where id = projectId) then		
+  Declare taskId int;
+  DECLARE done INT DEFAULT FALSE;
+  DECLARE cur1 CURSOR FOR SELECT t.id FROM Tasks t WHERE t.project_id=projectId;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+  if not exists(select 1 from ArchivedProjects where id = projectId) then
+    set @`userIdProjectCreator` = null;
+    set @`filename` = null;
+    set @`fileToken` = null;
+    set @`mimeType` = null;
+    set @`projectTags` = null;
 
-		set @`userIdProjectCreator` = null;
-		set @`filename` = null;
-		set @`fileToken` = null;
-		set @`mimeType` = null;
-		set @`projectTags` = null;
-		
-		SELECT pf.user_id INTO @`userIdProjectCreator` FROM ProjectFiles pf WHERE pf.project_id=projectId;
-		SELECT pf.filename INTO @`filename` FROM ProjectFiles pf WHERE pf.project_id=projectId;
-		SELECT pf.`file-token` INTO @`fileToken` FROM ProjectFiles pf WHERE pf.project_id=projectId;
-		SELECT pf.`mime-type` INTO @`mimeType` FROM ProjectFiles pf WHERE pf.project_id=projectId;
-		SELECT GROUP_CONCAT(t.label) INTO @`projectTags` FROM Tags t JOIN ProjectTags pt ON t.id = pt.tag_id WHERE pt.project_id=projectId;
-			
-		START TRANSACTION;
-		INSERT INTO `ArchivedProjects` (id, title, description, impact, deadline, organisation_id, reference, `word-count`, created,language_id, country_id, image_uploaded, image_approved)
-		SELECT *
-		FROM Projects p
-		WHERE p.id=projectId;
-		
-		INSERT INTO `ArchivedProjectsMetadata` (`archivedProject_id`,`user_id-archived`,`user_id-projectCreator`,`filename`,`file-token`,`mime-type`,`archived-date`,`tags`)
-		VALUES (projectId,user_id,@`userIdProjectCreator`,@`filename`,@`fileToken`,@`mimeType`,NOW(),@`projectTags`);
-		
-		OPEN cur1;
-		
-		read_loop: LOOP
-			FETCH cur1 INTO taskId;
-			IF done THEN
-			 	LEAVE read_loop;
-			END IF;
-         call archiveTask(taskId, user_id);
-		END LOOP;
-		CLOSE cur1;
-			  
-		
-		OPEN cur1;
-		
-		read_loop: LOOP
-			FETCH cur1 INTO taskId;
-			IF done THEN
-			 	LEAVE read_loop;
-			END IF;
-         call deleteTask(taskId);
-		END LOOP;
-		CLOSE cur1;	
-		
-		DELETE FROM Projects WHERE id=projectId;
-		
-		COMMIT;
-	    SELECT 1 AS result;
-   ELSE
-      SELECT 0 AS result;
-   END IF;	
-	  
+    IF EXISTS(SELECT 1 FROM ProjectFiles WHERE project_id=projectId) THEN
+      SELECT pf.user_id INTO @`userIdProjectCreator` FROM ProjectFiles pf WHERE pf.project_id=projectId;
+      SELECT pf.filename INTO @`filename` FROM ProjectFiles pf WHERE pf.project_id=projectId;
+      SELECT pf.`file-token` INTO @`fileToken` FROM ProjectFiles pf WHERE pf.project_id=projectId;
+      SELECT pf.`mime-type` INTO @`mimeType` FROM ProjectFiles pf WHERE pf.project_id=projectId;
+    ELSE
+      set @`userIdProjectCreator` = 3297;
+      set @`filename` = 'none';
+      set @`fileToken` = 'none';
+      set @`mimeType` = 'none';
+    END IF;
+    SELECT GROUP_CONCAT(t.label) INTO @`projectTags` FROM Tags t JOIN ProjectTags pt ON t.id = pt.tag_id WHERE pt.project_id=projectId;
+
+    START TRANSACTION;
+    INSERT INTO `ArchivedProjects` (id, title, description, impact, deadline, organisation_id, reference, `word-count`, created,language_id, country_id, image_uploaded, image_approved)
+    SELECT *
+    FROM Projects p
+    WHERE p.id=projectId;
+
+    INSERT INTO `ArchivedProjectsMetadata` (`archivedProject_id`,`user_id-archived`,`user_id-projectCreator`,`filename`,`file-token`,`mime-type`,`archived-date`,`tags`)
+    VALUES (projectId,user_id,@`userIdProjectCreator`,@`filename`,@`fileToken`,@`mimeType`,NOW(),@`projectTags`);
+
+    OPEN cur1;
+
+    read_loop: LOOP
+      FETCH cur1 INTO taskId;
+      IF done THEN
+        LEAVE read_loop;
+      END IF;
+        call archiveTask(taskId, user_id);
+    END LOOP;
+    CLOSE cur1;
+
+    OPEN cur1;
+
+    read_loop: LOOP
+      FETCH cur1 INTO taskId;
+      IF done THEN
+        LEAVE read_loop;
+      END IF;
+        call deleteTask(taskId);
+    END LOOP;
+    CLOSE cur1;
+
+    DELETE FROM Projects WHERE id=projectId;
+
+    COMMIT;
+    SELECT 1 AS result;
+  ELSE
+    SELECT 0 AS result;
+  END IF;
 END//
 DELIMITER ;
 
