@@ -631,6 +631,11 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
         LibAPI\PDOWrapper::call('addUserToTaskBlacklist', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
     }
 
+    public static function removeUserFromTaskBlacklist($user_id, $task_id)
+    {
+        LibAPI\PDOWrapper::call('removeUserFromTaskBlacklist', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
+    }
+
     public function insertTaskChunks($task_id, $project_id, $type_id, $matecat_langpair, $matecat_id_job, $chunk_number, $chunk_password, $job_first_segment)
     {
         LibAPI\PDOWrapper::call('insertTaskChunks',
