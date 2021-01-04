@@ -8051,7 +8051,7 @@ DROP PROCEDURE IF EXISTS `getOtherPendingMemsourceJobs`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOtherPendingMemsourceJobs`(IN tID BIGINT, IN typeID INT, IN pID INT, IN iID VARCHAR(30))
 BEGIN
-    SELECT t.id
+    SELECT mt.task_id
     FROM Tasks           t
     JOIN MemsourceTasks mt ON t.id=mt.task_id
     WHERE
