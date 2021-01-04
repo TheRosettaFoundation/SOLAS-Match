@@ -594,6 +594,18 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
 
     public function getOtherPendingChunks($task_id)
     {
+      $projectDao = new ProjectDao();
+      $memsource_task = $projectDao->get_memsource_task($task_id);
+      if ($memsource_task) {
+          if (!strpos($memsource_task['internalId'], '.')) return []; // Not split
+          $taskDao = new TaskDao();
+          $task = $taskDao->getTask($task_id);
+          $result = LibAPI\PDOWrapper::call('getOtherPendingMemsourceJobs',
+             LibAPI\PDOWrapper::cleanse($task_id) . ',' .
+             LibAPI\PDOWrapper::cleanse($type_id) . ',' .
+             LibAPI\PDOWrapper::cleanse($task->getProjectId()) . ',' .
+             LibAPI\PDOWrapper::cleanseWrapStr($memsource_task['internalId']));
+      } else {
         $matecat_tasks = $this->getTaskChunk($task_id);
         if (empty($matecat_tasks)) return array();
 
@@ -604,6 +616,7 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
             LibAPI\PDOWrapper::cleanse($task_id) . ',' .
             LibAPI\PDOWrapper::cleanse($type_id) . ',' .
             LibAPI\PDOWrapper::cleanse($matecat_id_job));
+      }
         if (empty($result)) return array();
 
         $other_task_ids = array();
