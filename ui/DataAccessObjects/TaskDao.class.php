@@ -602,7 +602,7 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
           $task = $taskDao->getTask($task_id);
           $result = LibAPI\PDOWrapper::call('getOtherPendingMemsourceJobs',
              LibAPI\PDOWrapper::cleanse($task_id) . ',' .
-             LibAPI\PDOWrapper::cleanse($type_id) . ',' .
+             LibAPI\PDOWrapper::cleanse($task->getTaskType()) . ',' .
              LibAPI\PDOWrapper::cleanse($task->getProjectId()) . ',' .
              LibAPI\PDOWrapper::cleanseWrapStr($memsource_task['internalId']));
       } else {
