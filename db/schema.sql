@@ -8047,6 +8047,23 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getOtherPendingMemsourceJobs`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getOtherPendingMemsourceJobs`(IN tID BIGINT, IN typeID INT, IN pID INT, IN iID VARCHAR(30))
+BEGIN
+    SELECT t.id
+    FROM Tasks           t
+    JOIN MemsourceTasks mt ON t.id=mt.task_id
+    WHERE
+        t.project_id=pID AND
+        t.`task-status_id`=2 AND
+        t.`task-type_id`=typeID AND
+        SUBSTRING_INDEX(mt.internalId, ".", 1)=SUBSTRING_INDEX(iID, ".", 1) AND
+        mt.task_id!=tID
+    ORDER BY mt.internalId ASC;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `insertMatecatRecordedJobStatus`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insertMatecatRecordedJobStatus`(IN jobID INT, IN jobPassword VARCHAR(50), IN jobStatus VARCHAR(20))
