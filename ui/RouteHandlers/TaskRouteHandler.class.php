@@ -998,7 +998,7 @@ class TaskRouteHandler
                     $app->flashNow('error', 'User does not exist.');
                 } else {
                     $taskDao->removeUserFromTaskBlacklist($remove_deny_user->getId(), $taskId);
-                    $app->flashNow('success', 'Success');
+                    $app->flashNow('success', 'Removed (assuming was actually in deny list)');
                 }
             }
 
