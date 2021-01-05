@@ -989,7 +989,18 @@ class TaskRouteHandler
                     }
                 }
                 $post['userIdOrEmail']="";
-        }
+            }
+            if ($isSiteAdmin && !empty($post['userIdOrEmailDenyList'])) {
+                $userIdOrEmail = trim($post['userIdOrEmailDenyList']);
+                if (ctype_digit($userIdOrEmail)) $remove_deny_user = $userDao->getUser($userIdOrEmail);
+                else                             $remove_deny_user = $userDao->getUserByEmail($userIdOrEmail);
+                if (empty($remove_deny_user)) {
+                    $app->flashNow('error', 'User does not exist.');
+                } else {
+                    $taskDao->removeUserFromTaskBlacklist($remove_deny_user->getId(), $taskId);
+                    $app->flashNow('success', 'Success');
+                }
+            }
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $project = $projectDao->getProject($task->getProjectId());
