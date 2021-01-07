@@ -1901,12 +1901,6 @@ $memsource_client = ['org_id' => 456];//(**) TWB
     {
         $taskPreReqs = array();
         $task = new Common\Protobufs\Models\Task();
-        try {
-            $projectTasks = $projectDao->getProjectTasks($project->getId());
-        } catch (\Exception $e) {
-            return 0;
-        }
-
         $task->setProjectId($project->getId());
 
         $task->setTitle($project->getTitle());
