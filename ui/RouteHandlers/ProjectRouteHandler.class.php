@@ -1951,6 +1951,32 @@ $memsource_client = ['org_id' => 456];//(**) TWB
             if ($newTaskId && $preReqTaskId) {
                 $taskDao->addTaskPreReq($newTaskId, $preReqTaskId);
             }
+[[(**) 
+            $prerequisite = 0;
+            if (!empty($part['task']) && $taskType == Common\Enums\TaskTypeEnum::PROOFREADING) {
+                $prerequisite_task = $projectDao->get_memsource_tasks_for_project_language_type($memsource_project['project_id'], $part['task'], Common\Enums\TaskTypeEnum::TRANSLATION);
+                if ($prerequisite_task) {
+                    $prerequisite = $prerequisite_task['task_id'];
+                    $task->setTaskStatus(Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
+                }
+            }
+[[[WHERE?...(**)
+[[[
+            $memsource_project = $projectDao->get_memsource_project_by_memsource_id($part['project']['id']);
+            if (empty($memsource_project)) {
+                error_log("Can't find memsource_project for {$part['project']['id']} in new jobPart {$part['uid']} for: {$part['fileName']}");
+                continue;
+            }
+
+            $projectDao->set_memsource_task($task_id, !empty($part['id']) ? $part['id'] : 0, $part['uid'], $part['task'], // note 'task' is for Language pair (independent of workflow step)
+                empty($part['internalId'])    ? 0 : $part['internalId'],
+                empty($part['workflowLevel']) ? 0 : $part['workflowLevel'],
+                empty($part['beginIndex'])    ? 0 : $part['beginIndex'], // Begin Segment number
+                empty($part['endIndex'])      ? 0 : $part['endIndex'],
+                $prerequisite);
+]]]
+]]]
+]](**)
 
             if (!empty($post['trackProject'])) {
                 $userDao = new DAO\UserDao();
