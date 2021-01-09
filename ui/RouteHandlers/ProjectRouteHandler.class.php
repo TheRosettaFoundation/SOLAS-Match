@@ -1919,23 +1919,21 @@ $memsource_client = ['org_id' => 456];//(**) TWB
 
         $task->setTaskType($taskType);
         $task->setWordCount($project->getWordCount());
-        $task->setDeadline($project->getDeadline());
-[[(**)
-                                                    $deadline = strtotime($project->getDeadline());
-                                                    $deadline_less_7_days = $deadline - 7*24*60*60; // 7-4 days Translation
-                                                    $deadline_less_4_days = $deadline - 4*24*60*60; // 4-1 days Revising
-                                                    $deadline_less_1_days = $deadline - 1*24*60*60; // 1 day for pm
-                                                    $now = time();
-                                                    if ($deadline_less_7_days < $now) { // We are squashed for time
-                                                        $total = $deadline - $now;
-                                                        if ($total < 0) $total = 0;
-                                                        $deadline_less_4_days = $deadline - $total*4/7;
-                                                        $deadline_less_1_days = $deadline - $total*1/7;
-                                                    }
-One...
-gmdate('Y-m-d H:i:s', $deadline_less_4_days)
-gmdate('Y-m-d H:i:s', $deadline_less_1_days)
-]]
+        if ($memsource_project) {
+            $deadline = strtotime($project->getDeadline());
+            $deadline_less_7_days = $deadline - 7*24*60*60; // 7-4 days Translation
+            $deadline_less_4_days = $deadline - 4*24*60*60; // 4-1 days Revising
+            $deadline_less_1_days = $deadline - 1*24*60*60; // 1 day for pm
+            $now = time();
+            if ($deadline_less_7_days < $now) { // We are squashed for time
+                $total = $deadline - $now;
+                if ($total < 0) $total = 0;
+                $deadline_less_4_days = $deadline - $total*4/7;
+                $deadline_less_1_days = $deadline - $total*1/7;
+            }
+            if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION) $task->setDeadline(gmdate('Y-m-d H:i:s', $deadline_less_4_days));
+            else                                                     $task->setDeadline(gmdate('Y-m-d H:i:s', $deadline_less_1_days));
+        } else                                                       $task->setDeadline($project->getDeadline());
 
         if (!empty($post['publish'])) {
             $task->setPublished(1);
@@ -1967,7 +1965,7 @@ gmdate('Y-m-d H:i:s', $deadline_less_1_days)
             if ($newTaskId && $preReqTaskId) {
                 $taskDao->addTaskPreReq($newTaskId, $preReqTaskId);
             }
-[[(**) 
+[[(**) pass $memsource_project
             $prerequisite = 0;
             if (!empty($part['task']) && $taskType == Common\Enums\TaskTypeEnum::PROOFREADING) {
                 $prerequisite_task = $projectDao->get_memsource_tasks_for_project_language_type($memsource_project['project_id'], $part['task'], Common\Enums\TaskTypeEnum::TRANSLATION);
