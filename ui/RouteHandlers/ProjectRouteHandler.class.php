@@ -1987,8 +1987,9 @@ $memsource_client = ['org_id' => 456];//(**) TWB
                     $type_text = 'Revision';
                     $default_workflow = 2;
                 }
-                $workflow = [$memsource_project['workflow_level_1'] => 1, $memsource_project['workflow_level_2'] => 2, $memsource_project['workflow_level_3'] => 3][$type_text];
-                if (empty($workflow)) $workflow = $default_workflow;
+                $levels = [$memsource_project['workflow_level_1'] => 1, $memsource_project['workflow_level_2'] => 2, $memsource_project['workflow_level_3'] => 3];
+                if (!empty($levels[$type_text])) $workflow = $levels[$type_text];
+                else                             $workflow = $default_workflow;
 
                 if (empty($memsource_project['jobs']["$memsource_target-$workflow"])) return 0;
                 $job = $memsource_project['jobs']["$memsource_target-$workflow"];
