@@ -1328,6 +1328,7 @@ $memsource_client = ['org_id' => 456];//(**) TWB
         $orgDao = new DAO\OrganisationDao();
         $subscriptionDao = new DAO\SubscriptionDao();
         $taskDao = new DAO\TaskDao();
+        $userDao = new DAO\UserDao();
 
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
             $_SESSION['SESSION_CSRF_KEY'] = $this->random_string(10);
@@ -1404,6 +1405,9 @@ $memsource_client = ['org_id' => 456];//(**) TWB
                             $projectDao->saveProjectFile($project, $user_id, $projectFileName, $data);
                             error_log("Project File Saved($user_id): " . $post['project_title']);
                             $success = true;
+//(**)If this org is a memsoure one... else ... after success $memsource_project = 0
+                            $memsource_project = $userDao->create_memsource_project($project, $data);//(**)Ian
+                            if (!$memsource_project) $success = false;
                         } catch (\Exception $e) {
                             error_log("Project File Save Error($user_id): " . $post['project_title']);
                             $success = false;
@@ -1514,6 +1518,7 @@ $memsource_client = ['org_id' => 456];//(**) TWB
                                         if (!empty($post["translation_$targetCount"])) {
                                             $translation_Task_Id = $this->addProjectTask(
                                                 $project,
+                                                $memsource_project,
                                                 $trommons_language_code,
                                                 $trommons_country_code,
                                                 Common\Enums\TaskTypeEnum::TRANSLATION,
@@ -1522,6 +1527,7 @@ $memsource_client = ['org_id' => 456];//(**) TWB
                                                 $user_id,
                                                 $projectDao,
                                                 $taskDao,
+                                                $userDao,
                                                 $app,
                                                 $post);
                                             if (!$translation_Task_Id) {
@@ -1535,6 +1541,7 @@ $memsource_client = ['org_id' => 456];//(**) TWB
                                             if (!empty($post["proofreading_$targetCount"])) {
                                                 $id = $this->addProjectTask(
                                                     $project,
+                                                    $memsource_project,
                                                     $trommons_language_code,
                                                     $trommons_country_code,
                                                     Common\Enums\TaskTypeEnum::PROOFREADING,
@@ -1543,6 +1550,7 @@ $memsource_client = ['org_id' => 456];//(**) TWB
                                                     $user_id,
                                                     $projectDao,
                                                     $taskDao,
+                                                    $userDao,
                                                     $app,
                                                     $post);
                                                 if (!$id) {
@@ -1557,6 +1565,7 @@ $memsource_client = ['org_id' => 456];//(**) TWB
                                             // Only a proofreading task to be created
                                             $id = $this->addProjectTask(
                                                 $project,
+                                                $memsource_project,
                                                 $trommons_language_code,
                                                 $trommons_country_code,
                                                 Common\Enums\TaskTypeEnum::PROOFREADING,
@@ -1565,6 +1574,7 @@ $memsource_client = ['org_id' => 456];//(**) TWB
                                                 $user_id,
                                                 $projectDao,
                                                 $taskDao,
+                                                $userDao,
                                                 $app,
                                                 $post);
                                             if (!$id) {
@@ -1888,6 +1898,7 @@ $memsource_client = ['org_id' => 456];//(**) TWB
 
     private function addProjectTask(
         $project,
+        $memsource_project,
         $target_language,
         $target_country,
         $taskType,
@@ -1896,6 +1907,7 @@ $memsource_client = ['org_id' => 456];//(**) TWB
         $user_id,
         $projectDao,
         $taskDao,
+        $userDao,
         $app,
         $post)
     {
@@ -1983,7 +1995,6 @@ $memsource_client = ['org_id' => 456];//(**) TWB
             }
 
             if (!empty($post['trackProject'])) {
-                $userDao = new DAO\UserDao();
                 $userDao->trackTask($user_id, $newTaskId);
             }
 
