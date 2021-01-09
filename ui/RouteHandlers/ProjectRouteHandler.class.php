@@ -1406,7 +1406,7 @@ $memsource_client = ['org_id' => 456];//(**) TWB
                             error_log("Project File Saved($user_id): " . $post['project_title']);
                             $success = true;
 //(**)If this org is a memsoure one... else ... after success $memsource_project = 0
-                            $memsource_project = $userDao->create_memsource_project($project, $data);//(**)Ian
+                            $memsource_project = $userDao->create_memsource_project($post, $project, $data);//(**)Ian
                             if (!$memsource_project) $success = false;
                         } catch (\Exception $e) {
                             error_log("Project File Save Error($user_id): " . $post['project_title']);
