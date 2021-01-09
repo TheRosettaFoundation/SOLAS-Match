@@ -1978,16 +1978,27 @@ $memsource_client = ['org_id' => 456];//(**) TWB
                 if ($preReqTaskId) {
                     $task->setTaskStatus(Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
                 }
+                $memsource_target = $this->valid_language_for_matecat("$target_language-$target_country");
 
-[[[WHERE?...(**)
-            $projectDao->set_memsource_task($task_id, !empty($part['id']) ? $part['id'] : 0, $part['uid'], $part['task'], // note 'task' is for Language pair (independent of workflow step)
-                empty($part['internalId'])    ? 0 : $part['internalId'],
-                empty($part['workflowLevel']) ? 0 : $part['workflowLevel'],
-                empty($part['beginIndex'])    ? 0 : $part['beginIndex'], // Begin Segment number
-                empty($part['endIndex'])      ? 0 : $part['endIndex'],
-                $preReqTaskId);
-]]]
-(**)
+                if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION) {
+                    $type_text = 'Translation';
+                    $default_workflow = 1;
+                } else {
+                    $type_text = 'Revision';
+                    $default_workflow = 2;
+                }
+                $workflow = [$memsource_project['workflow_level_1'] => 1, $memsource_project['workflow_level_2'] => 2, $memsource_project['workflow_level_3'] => 3][$type_text];
+                if (empty($workflow)) $workflow = $default_workflow;
+
+                if (empty($memsource_project['jobs']["$memsource_target-$workflow"])) return 0;
+                $job = $memsource_project['jobs']["$memsource_target-$workflow"];
+                //(**) verify below also error checking needed?
+                $projectDao->set_memsource_task($newTaskId, !empty($job['id']) ? $job['id'] : 0, $job['uid'], $job['task'],
+                    empty($job['internalId'])    ? 0 : $job['internalId'],
+                    empty($job['workflowLevel']) ? 0 : $job['workflowLevel'],
+                    empty($job['beginIndex'])    ? 0 : $job['beginIndex'], // Begin Segment number
+                    empty($job['endIndex'])      ? 0 : $job['endIndex'],
+                    $preReqTaskId);
             } else {
                 if ($newTaskId && $preReqTaskId) {
                     $taskDao->addTaskPreReq($newTaskId, $preReqTaskId);
