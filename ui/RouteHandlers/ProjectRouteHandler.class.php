@@ -1607,8 +1607,8 @@ $memsource_client = ['org_id' => 456];//(**) TWB
                                       if (!$memsource_project) {
                                         error_log('projectCreate calculateProjectDeadlines: ' . $project->getId());
                                         $projectDao->calculateProjectDeadlines($project->getId());
-                                      }
                                         $source_language = $trommons_source_language_code . '-' . $trommons_source_country_code;
+                                      }
                                         $target_languages = '';
                                         $targetCount = 0;
                                         if (!empty($post["target_language_$targetCount"])) {
