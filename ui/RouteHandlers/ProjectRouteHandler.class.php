@@ -1604,9 +1604,10 @@ $memsource_client = ['org_id' => 456];//(**) TWB
                                     }
                                 } else {
                                     try {
+                                      if (!$memsource_project) {
                                         error_log('projectCreate calculateProjectDeadlines: ' . $project->getId());
                                         $projectDao->calculateProjectDeadlines($project->getId());
-
+                                      }
                                         $source_language = $trommons_source_language_code . '-' . $trommons_source_country_code;
                                         $target_languages = '';
                                         $targetCount = 0;
@@ -1620,6 +1621,8 @@ $memsource_client = ['org_id' => 456];//(**) TWB
                                             $target_languages .= ',' . $trommons_language_code . '-' . $trommons_country_code;
                                             $targetCount++;
                                         }
+
+                                      if (!$memsource_project) {
                                         // $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, $post['wordCountInput']);
                                         $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, 0);
 
@@ -1663,6 +1666,7 @@ $memsource_client = ['org_id' => 456];//(**) TWB
                                                 $taskDao->set_project_tm_key($project->getId(), $mt_engine, $pretranslate_100, $lexiqa, $private_tm_key);
                                             }
                                         }
+                                      }
 
                                         $restrict_translate_tasks = !empty($post['restrict_translate_tasks']);
                                         $restrict_revise_tasks    = !empty($post['restrict_revise_tasks']);
