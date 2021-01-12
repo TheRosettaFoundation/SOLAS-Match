@@ -525,6 +525,105 @@ $memsource_change_country_to_kp = [
         return [$trommons_language_code, $trommons_country_code];
     }
 
+
+
+
+    public function convert_language_country_to_memsource($kp_language, $kp_country)
+    {
+OLD(**)
+        global $matecat_acceptable_languages;
+        if (in_array($language_code, $matecat_acceptable_languages)) return $language_code;
+        // Special case...
+        if ($language_code === 'tn-BW') return 'tsn-BW';
+        if ($language_code === 'ca---') return 'cav-ES';
+
+        if (!empty($matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))])) return $matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))];
+        return '';
+
+from test...(**)
+    {
+$kp_change_language_to_memsource = [
+'asm' => 'as',
+'run' => 'rn',
+'swh' => 'sw',
+];
+$memsource_change_country_to_kp = [
+'49' => '419',
+'90' => 'latn',
+];
+
+'arab' => 'pk', // Because sd_arab is the only active 'arab'
+MAKE sd_pk into sd_arab(**)
+
+        $trommons_language_code = $memsource;
+        $trommons_country_code  = '';
+        $pos = strpos($memsource, '_');
+        if ($pos != false) {
+            $trommons_language_code = substr($memsource, 0, $pos);
+            $trommons_country_code  = substr($memsource, $pos + 1);
+            if (!empty($memsource_change_country_to_kp[$trommons_country_code])) $trommons_country_code = $memsource_change_country_to_kp[$trommons_country_code];
+            $trommons_country_code = strtoupper($trommons_country_code);
+        } else {
+            $trommons_country_code = '--';
+        }
+        if (!empty($memsource_change_language_to_kp[$trommons_language_code])) $trommons_language_code = $memsource_change_language_to_kp[$trommons_language_code];
+
+        return [$trommons_language_code, $trommons_country_code];
+    }
+
+(**)STUFF FROM "a"/memsource_missing.php
+$memsource = [
+'as','es_001','fr_001','hbs','ilt','kz','nb_no','nl_001','poh','rn','rn_bi','RU_ee','sb','tir_et','ug_arab','ypk','ar_mod','az_cyrl','az_cyrl_az','az_latn','az_latn_az','bg_latn_bg','bs_cyrl','bs_cyrl_ba','bs_latn','bs_latn_ba','el_latn_gr','en_001','es_419','fa_latn_ir','hy_latn_am','iu_cans','iu_cans_ca','kk_latn','ku_arab','ku_arab_iq','no_no_ny','or_latn_in','pa_arab_pk','ru_latn_ru','sd_arab','sdh_arab','sr_cs','sr_cyrl','sr_cyrl_ba','sr_cyrl_me','sr_cyrl_rs','sr_latn','sr_latn_ba','sr_latn_me','sr_latn_rs','ta_latn_in','te_latn_in','tg_cyrl','tg_cyrl_tj','th_th_th','uk_latn_ua','uz_cyrl_uz','uz_latn_uz','zh_hans','zh_hans_cn','zh_hant','zh_hant_tw','aa','ab','ach','af','af_na','af_za','ak','am','am_et','ar','ar_ae','ar_bh','ar_dz','ar_eg','ar_il','ar_iq','ar_jo','ar_kw','ar_lb','ar_ly','ar_ma','ar_om','ar_qa','ar_sa','ar_sd','ar_sy','ar_tn','ar_ye','arc','av','ay','az','azb','azb_ir','ba','bal','be','be_by','bg','bg_bg','bh','bi','bin','bin_ng','bm','bn','bn_bd','bn_in','bo','br','bs','bs_ba','bua','byn','byn_er','ca','ca_es','ce','ce_ru','ceb','chk','chr','cja','cja_kh','cjk','cjk_ao','ckb','cld','cnh','co','co_fr','Code','cs','cs_cz','cv','cy','cy_gb','da','da_dk','de','de_at','de_be','de_ch','de_de','de_li','de_lu','dv','dv_MV','dyu','dyu_ci','dz','ee','el','el_cy','el_gr','en','en_au','en_bz','en_ca','en_gb','en_hk','en_id','en_ie','en_in','en_jm','en_ke','en_lb','en_mt','en_my','en_ng','en_nz','en_ph','en_sa','en_sg','en_tt','en_us','en_za','en_zw','eo','es','es_ar','es_bo','es_cl','es_co','es_cr','es_do','es_ec','es_es','es_gt','es_hn','es_mx','es_ni','es_pa','es_pe','es_pr','es_py','es_sv','es_us','es_uy','es_ve','et','et_ee','eu','ewo','ewo_cm','fa','fa_af','fa_ir','fat','ff','fi','fi_fi','fil','fil_ph','fit','fj','fo','fo_fo','fr','fr_be','fr_ca','fr_cd','fr_ch','fr_cm','fr_dz','fr_fr','fr_lu','fr_ma','fr_mc','fy','ga','ga_ie','gd','gd_gb','gl','gl_es','gn','gu','gu_in','guz','guz_ke','ha','hak','he','he_il','hi','hi_in','hil','hlt','hmn','hr','hr_hr','ht','hu','hu_hu','hy','hy_am','id','id_id','ig','ig_ng','ii','ike','ikt','ilo','ilo_ph','is','is_is','iso','it','it_ch','it_it','iu','iu_ca','ium','ja','ja_jp','jv','ka','ka_ge','kac','kac_mm','kam','kam_ke','kar','kea','kea_cv','kg','kg_ao','khq','khq_ml','ki','kk','kk_kz','kl','kl_gl','kln','kln_ke','km','kmb','kmb_ao','kmr','kmr_sy','kmr_tr','kn','kn_in','ko','ko_kr','kok','kpe','kr','kri','krl','ks','ku','kun','kv','ky_kg','la','lb','lb_lu','lg','lg_ug','li','ln','ln_ao','ln_cd','ln_cf','ln_cg','lo','lt','lt_lt','lu','luo','luo_ke','lv','lv_lv','mam','man','mg','mg_mg','mh','mi','mi_nz','mk','mk_mk','ml','ml_in','mn','mn_mn','mnk','mr','mr_in','ms','ms_bn','ms_my','mt','mt_mt','mxt','my','my_mm','nd','nd_zw','ne','ne_np','new','nl','nl_be','nl_nl','nn_no','no','no_no','nr','nso','nus','nv','ny','oc','om','om_et','om_ke','or','or_in','os','pa','pa_in','pa_pk','pap','pau','pcb','pis','pl','pl_pl','prs','prs_af','ps','ps_af','pt','pt_ao','pt_br','pt_pt','qu','quc','rm','rm_ch','ro','ro_md','ro_ro','rom','ru','ru_il','ru_lv','ru_md','ru_ru','ru_ua','rw','sa','sc','sc_it','sd','sdh','se','se_fi','se_no','se_se','shn','shn_mm','si','si_lk','sk','sk_sk','sl','sl_si','sm','sma','sma_no','sma_se','smj','smj_no','smj_se','smn','smn_fi','sms','sms_fi','sn','snk','so','so_dj','so_et','so_ke','so_so','sq','sq_al','sr','sr_ba','sr_me','sr_rs','ss','st','su','sv','sv_fi','sv_se','sw','sw_ke','sw_tz','sw_ug','syr','syr_sy','szl','szl_pl','ta','ta_in','ta_lk','ta_my','ta_sg','taq','taq_ml','te','te_in','tet','tg','th','th_th','ti','ti_er','ti_et','tig','tig_er','tk','tl','tlh','tn','to','tpi','tr','tr_tr','ts','tsg','tsg_ph','tt','tw','tzm','ug','ug_cn','uk','uk_ua','umb','umb_ao','ur','ur_pk','uz','ve','vi','vi_vn','wa','wes','wes_cm','wes_ng','wo','wo_sn','xh','yi','ymm','yo','za','zh','zh_cn','zh_hk','zh_mo','zh_my','zh_sg','zh_tw','zom','zu','zu_za','zza'
+];
+
+        unset($from_neon_to_trommons_pair["Norwegian Bokm\xE5l"]); // Remove as it is just here to support bad Neon hook
+
+        foreach ($from_neon_to_trommons_pair_options_remove as $remove) {
+            unset($from_neon_to_trommons_pair[$remove]);
+        }
+
+        $language_options = [];
+        foreach ($from_neon_to_trommons_pair as $language => $trommons_pair) {
+            $language_options[$trommons_pair[0] . '_' . $trommons_pair[1]] = $language;
+        }
+
+        foreach ($language_options_changes as $key => $language) {
+            $language_options[$key] = $language;
+        }
+
+            $remove_memsource = ['xen_--', 'aig_AG', 'bba_BJ', 'bah_BS', 'bjs_BB', 'ban_ID', 'bho_IN', 'gax_KE', 'vmw_MZ', 'chw_MZ', 'zdj_KM', 'pov_GW', 'dag_GH', 'grt_IN', 'gil_FJ', 'gcl_GD', 'gyn_GY', 'haw_US', 'nix_CD', 'ijc_NG', 'jam_JM', 'kab_DZ', 'kha_IN', 'kye_GH', 'led_CD', 'luy_KE', 'cma_KE', 'mgh_MZ', 'xsq_MZ', 'kde_MZ', 'mni_IN', 'men_SL', 'mer_KE', 'lus_IN', 'mfe_MU', 'wmw_MZ', 'ndc_MZ', 'ory_IN', 'pko_KE', 'acf_LC', 'saq_KE', 'srr_SN', 'crs_SC', 'srn_SR', 'tmh_DZ', 'twx_MZ', 'tsc_MZ', 'tuv_KE', 'svc_VC', 'vic_US'];
+            foreach ($remove_memsource as $remove) { // carefull underscore above different
+                unset($language_options[$remove]);
+            }
+
+        asort($language_options);
+
+      echo "\n";
+foreach ($language_options as $key => $language) {
+  $key = strtolower($key);
+  $key = str_replace('___', '', $key);
+  if (!in_array($key, $memsource)) {
+    if (strpos($key, '_')) {
+      $key0 = substr($key, 0, strpos($key, '_'));
+      if (!in_array($key0, $memsource)) {
+        echo "\nKey missing: $key => $language;";
+      }
+    }
+  }
+}
+      echo "\n\n";
+
+
+
+    }
+
+
+
+
+
+
+
+
     public function copy_project_file($project_to_copy_id, $project_id, $user_id_owner)
     {
         $result = LibAPI\PDOWrapper::call('getProjectFile', "$project_to_copy_id, null, null, null, null");
