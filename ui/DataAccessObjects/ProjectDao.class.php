@@ -428,7 +428,7 @@ $replace = array(
         return $result;
     }
 
-    public function generate_language_selection()
+    public function generate_language_selection($create_memsource = false)
     {
         global $from_neon_to_trommons_pair, $from_neon_to_trommons_pair_options_remove, $language_options_changes;
         unset($from_neon_to_trommons_pair["Norwegian Bokm\xE5l"]); // Remove as it is just here to support bad Neon hook
@@ -444,6 +444,13 @@ $replace = array(
 
         foreach ($language_options_changes as $key => $language) {
             $language_options[$key] = $language;
+        }
+
+        if ($create_memsource) {
+            $remove_memsource = ['xen---', 'aig-AG', 'bba-BJ', 'bah-BS', 'bjs-BB', 'ban-ID', 'bho-IN', 'gax-KE', 'vmw-MZ', 'chw-MZ', 'zdj-KM', 'pov-GW', 'dag-GH', 'grt-IN', 'gil-FJ', 'gcl-GD', 'gyn-GY', 'haw-US', 'nix-CD', 'ijc-NG', 'jam-JM', 'kab-DZ', 'kha-IN', 'kye-GH', 'led-CD', 'luy-KE', 'cma-KE', 'mgh-MZ', 'xsq-MZ', 'kde-MZ', 'mni-IN', 'men-SL', 'mer-KE', 'lus-IN', 'mfe-MU', 'wmw-MZ', 'ndc-MZ', 'ory-IN', 'pko-KE', 'acf-LC', 'saq-KE', 'srr-SN', 'crs-SC', 'srn-SR', 'tmh-DZ', 'twx-MZ', 'tsc-MZ', 'tuv-KE', 'svc-VC', 'vic-US'];
+            foreach ($remove_memsource as $remove) {
+                unset($language_options[$remove]);
+            }
         }
 
         asort($language_options);
