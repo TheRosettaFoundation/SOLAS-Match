@@ -1847,6 +1847,7 @@ $memsource_client = ['org_id' => 456];//(**) TWB
                     $task->setTaskStatus(Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
                 }
                 $memsource_target = $projectDao->convert_language_country_to_memsource($target_language, $target_country);
+                if (!$memsource_target) return 0;
 
                 if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION) {
                     $type_text = 'Translation';
