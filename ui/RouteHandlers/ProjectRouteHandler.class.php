@@ -1335,6 +1335,8 @@ $memsource_client = ['org_id' => 456];//(**) TWB
         }
         $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
 
+        $create_memsource = true;//(**)If this org is a memsource one
+
         if ($post = $app->request()->post()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
                     || empty($post['project_title']) || empty($post['project_description']) || empty($post['project_impact'])
@@ -1405,9 +1407,10 @@ $memsource_client = ['org_id' => 456];//(**) TWB
                             $projectDao->saveProjectFile($project, $user_id, $projectFileName, $data);
                             error_log("Project File Saved($user_id): " . $post['project_title']);
                             $success = true;
-//(**)If this org is a memsource one... else ... after success $memsource_project = 0
-                            $memsource_project = $userDao->create_memsource_project($post, $project, $data);//(**)Ian
-                            if (!$memsource_project) $success = false;
+                            if ($create_memsource) {
+                                $memsource_project = $userDao->create_memsource_project($post, $project, $data);//(**)Ian
+                                if (!$memsource_project) $success = false;
+                            } else $memsource_project = 0;
                         } catch (\Exception $e) {
                             error_log("Project File Save Error($user_id): " . $post['project_title']);
                             $success = false;
@@ -1751,7 +1754,7 @@ $memsource_client = ['org_id' => 456];//(**) TWB
             'selected_hour'  => 0,
             'minute_list'    => $minute_list,
             'selected_minute'=> 0,
-            'languages'      => $projectDao->generate_language_selection(),
+            'languages'      => $projectDao->generate_language_selection($create_memsource),
             'showRestrictTask' => $taskDao->organisationHasQualifiedBadge($org_id),
             'isSiteAdmin'    => $adminDao->isSiteAdmin($user_id),
             'sesskey'        => $sesskey,
