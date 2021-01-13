@@ -144,7 +144,7 @@
                         <input type="text" name="tagList" id="tagList" style="width: 400px" />
                     </div>
                 </div>
-                {if $isSiteAdmin}
+                {if $isSiteAdmin && !$create_memsource}
                 <div class="projFormInput">
                     <div style="margin-bottom:25px;">
                         <h2>Additional Private TM Keys</h2>
@@ -194,7 +194,7 @@
                     </div>
                 </div>
                 {/if}
-                {if $isSiteAdmin}
+                {if $isSiteAdmin && !$create_memsource}
                 <div class="projFormInput">
                     <div style="margin-bottom:25px;">
                         <h2>Verification System Project:</h2>
