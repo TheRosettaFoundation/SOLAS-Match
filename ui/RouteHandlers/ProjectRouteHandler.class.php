@@ -1520,7 +1520,7 @@ $memsource_client = ['org_id' => 456];//(**) TWB
                                 $matecat_proofreading_target_countrys = array();
                                 while (!empty($post["target_language_$targetCount"])) {
                                     list($trommons_language_code, $trommons_country_code) = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
-                                        if (!empty($post["translation_$targetCount"])) {
+                                        if ($create_memsource || !empty($post["translation_$targetCount"])) {
                                             $translation_Task_Id = $this->addProjectTask(
                                                 $project,
                                                 $memsource_project,
@@ -1543,7 +1543,7 @@ $memsource_client = ['org_id' => 456];//(**) TWB
                                             $matecat_translation_target_languages[] = $trommons_language_code;
                                             $matecat_translation_target_countrys[]  = $trommons_country_code;
 
-                                            if (!empty($post["proofreading_$targetCount"])) {
+                                            if ($create_memsource || !empty($post["proofreading_$targetCount"])) {
                                                 $id = $this->addProjectTask(
                                                     $project,
                                                     $memsource_project,
@@ -1566,7 +1566,7 @@ $memsource_client = ['org_id' => 456];//(**) TWB
                                                 $matecat_proofreading_target_languages[] = $trommons_language_code;
                                                 $matecat_proofreading_target_countrys[]  = $trommons_country_code;
                                             }
-                                        } elseif (empty($post["translation_$targetCount"]) && !empty($post["proofreading_$targetCount"])) {
+                                        } elseif (!$create_memsource && empty($post["translation_$targetCount"]) && !empty($post["proofreading_$targetCount"])) {
                                             // Only a proofreading task to be created
                                             $id = $this->addProjectTask(
                                                 $project,
