@@ -125,6 +125,8 @@ class ProjectRouteHandler
         $hook = $hook['project'];
         $project = new Common\Protobufs\Models\Project();
         $projectDao = new DAO\ProjectDao();
+if ($projectDao->get_memsource_project_by_memsource_id($hook['id'])) error_log("memsource Project exists {$hook['id']} {$hook['uid']}"); //(**) test code
+        if ($projectDao->get_memsource_project_by_memsource_id($hook['id'])) return; // Likely self service project
 
         $project->setTitle($hook['name']);
         if (!empty($hook['note'])) $project->setDescription($hook['note']);
