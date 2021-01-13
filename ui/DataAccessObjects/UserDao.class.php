@@ -1982,4 +1982,78 @@ error_log(print_r($result, true));
         }
         return $res;
     }
+
+    public function create_memsource_project($post, $project, $file)
+    {
+        $projectDao = new ProjectDao();
+
+        [$kp_language, $kp_country] = $projectDao->convert_selection_to_language_country($post['sourceLanguageSelect']);
+        $sourceLang = $projectDao->convert_language_country_to_memsource($kp_language, $kp_country);
+        if (!$sourceLang) return 0;
+
+        $targetCount = 0;
+        $langs = [];
+        while (!empty($post["target_language_$targetCount"])) {
+            [$kp_language, $kp_country] = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
+            $lang = $projectDao->convert_language_country_to_memsource($kp_language, $kp_country);
+            if (!$lang) return 0;
+            $langs[] = $lang;
+        }
+        if (empty($langs)) return 0;
+
+        $url = 'https://cloud.memsource.com/web/api2/v1/projects';
+        $ch = curl_init($url);
+        $data = [
+            'name' => $post['project_title'],
+(**)??            'note' => $post['project_description'],
+            'sourceLang' => $sourceLang,
+            'targetLangs' => $langs,
+        ];
+        $payload = json_encode($data);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+        $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        $result = json_decode($result, true);
+error_log(print_r($result, true));//(**)
+        curl_close($ch);
+
+//Create Job(**)
+
+(**)...
+        $projectDao->set_memsource_project($project->getId(), $hook['id'], $hook['uid'],
+            empty($hook['createdBy']['id']) ? 0 : $hook['createdBy']['id'],
+            empty($hook['owner']['id']) ? 0 : $hook['owner']['id'],
+            $workflowLevels);
+
+        $jobs_indexed = [];
+        foreach ($jobs as $job) {
+            (**)$jobs_indexed["{$job['??memsource_target']}-{$job['??workflowLevel']}"] = $job;
+        }
+
+        memsource_project['jobs'] = $jobs_indexed;
+
+  project_id            INT(10) UNSIGNED NOT NULL,
+  memsource_project_id  BIGINT(20) UNSIGNED NOT NULL,
+  memsource_project_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  created_by_id         BIGINT(20) UNSIGNED NOT NULL,
+  owner_id              BIGINT(20) UNSIGNED NOT NULL,
+  workflow_level_1      VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  workflow_level_2      VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  workflow_level_3      VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+AND
+(**)POST... https://cloud.memsource.com/web/api2/v1/projects/{projectUid}/jobs
+for jobs Do we get back list of...
+  task_id            BIGINT(20) UNSIGNED NOT NULL,
+  memsource_task_id  BIGINT(20) UNSIGNED NOT NULL,
+  memsource_task_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  task               VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  internalId         VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL
+  workflowLevel      INT(10) UNSIGNED NOT NULL,
+  beginIndex         INT(10) UNSIGNED NOT NULL,
+  endIndex           INT(10) UNSIGNED NOT NULL,
+  prerequisite       BIGINT(20) UNSIGNED NOT NULL,
+(**)return 0 if fail
+    }
 }
