@@ -1337,7 +1337,7 @@ $memsource_client = ['org_id' => 456];//(**) TWB
         }
         $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
 
-        $create_memsource = true;//(**)If this org is a memsource one
+        $create_memsource = 1;//(**)If this org is a memsource one
 
         if ($post = $app->request()->post()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
@@ -1756,6 +1756,7 @@ $memsource_client = ['org_id' => 456];//(**) TWB
             'selected_hour'  => 0,
             'minute_list'    => $minute_list,
             'selected_minute'=> 0,
+            'create_memsource'=> $create_memsource,
             'languages'      => $projectDao->generate_language_selection($create_memsource),
             'showRestrictTask' => $taskDao->organisationHasQualifiedBadge($org_id),
             'isSiteAdmin'    => $adminDao->isSiteAdmin($user_id),
