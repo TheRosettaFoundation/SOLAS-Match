@@ -2022,17 +2022,24 @@ error_log(print_r($result, true));
         $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
-        $result = json_decode($result, true);
-error_log(print_r($result, true));//(**)
+        $project_result = curl_exec($ch);
+        $project_result = json_decode($project_result, true);
+error_log(print_r($project_result, true));//(**)
         curl_close($ch);
 
 //Create Job(**)
 
-(**)...
-        $projectDao->set_memsource_project($project->getId(), $hook['id'], $hook['uid'],
-            empty($hook['createdBy']['id']) ? 0 : $hook['createdBy']['id'],
-            empty($hook['owner']['id']) ? 0 : $hook['owner']['id'],
+        $workflowLevels = ['', '', '']; // Will contain 'Translation' or 'Revision' for workflowLevel 1 possibly up to 3
+        if (!empty($project_result['workflowSteps'])) {
+            foreach ($project_result['workflowSteps'] as $step) {
+                foreach ($workflowLevels as $i => $w) {
+                    if ($step['workflowLevel'] == $i + 1) $workflowLevels[$i] = $step['name'];
+                }
+            }
+        }
+        $projectDao->set_memsource_project($project->getId(), $project_result['id'], $project_result['uid'],
+            empty($project_result['createdBy']['id']) ? 0 : $project_result['createdBy']['id'],
+            empty($project_result['owner']['id']) ? 0 : $project_result['owner']['id'],
             $workflowLevels);
 
         $jobs_indexed = [];
@@ -2042,15 +2049,6 @@ error_log(print_r($result, true));//(**)
 
         memsource_project['jobs'] = $jobs_indexed;
 
-  project_id            INT(10) UNSIGNED NOT NULL,
-  memsource_project_id  BIGINT(20) UNSIGNED NOT NULL,
-  memsource_project_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  created_by_id         BIGINT(20) UNSIGNED NOT NULL,
-  owner_id              BIGINT(20) UNSIGNED NOT NULL,
-  workflow_level_1      VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  workflow_level_2      VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  workflow_level_3      VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-AND
 (**)POST... https://cloud.memsource.com/web/api2/v1/projects/{projectUid}/jobs
 for jobs Do we get back list of...
   task_id            BIGINT(20) UNSIGNED NOT NULL,
