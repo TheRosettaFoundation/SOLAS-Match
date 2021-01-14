@@ -2003,6 +2003,7 @@ error_log(print_r($result, true));
 
         $url = 'https://cloud.memsource.com/web/api2/v1/projects';
         $ch = curl_init($url);
+        $deadline = $project->getDeadline();
         $data = [
             'name' => $post['project_title'],
             'note' => $post['project_description'],
@@ -2013,7 +2014,7 @@ error_log(print_r($result, true));
                 ['id' => 'cFUVHSAAmsVrftA3GC0Ak6'],
                 ['id' => '1Y5F5rJDuvNTnyQBkCUhw0']
             ],
-            'dateDue' => "2021-02-08T11:00:00Z",
+            'dateDue' => substr($deadline, 0, 10) . 'T' . substr($deadline, 11, 8) . 'Z',
         ];
         $payload = json_encode($data);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
