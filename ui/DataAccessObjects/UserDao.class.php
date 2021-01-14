@@ -2005,9 +2005,15 @@ error_log(print_r($result, true));
         $ch = curl_init($url);
         $data = [
             'name' => $post['project_title'],
-(**)??            'note' => $post['project_description'],
+            'note' => $post['project_description'],
             'sourceLang' => $sourceLang,
             'targetLangs' => $langs,
+            'client' => ['id' => "sr0B0RNDKME6VAWBHWbEnd"],
+            'workflowSteps' => [
+                ['id' => 'cFUVHSAAmsVrftA3GC0Ak6'],
+                ['id' => '1Y5F5rJDuvNTnyQBkCUhw0']
+            ],
+            'dateDue' => "2021-02-08T11:00:00Z",
         ];
         $payload = json_encode($data);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
