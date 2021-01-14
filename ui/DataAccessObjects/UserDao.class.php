@@ -2009,13 +2009,14 @@ error_log(print_r($result, true));
             'note' => $post['project_description'],
             'sourceLang' => $sourceLang,
             'targetLangs' => $langs,
-            'client' => ['id' => "sr0B0RNDKME6VAWBHWbEnd"],
             'workflowSteps' => [
                 ['id' => 'cFUVHSAAmsVrftA3GC0Ak6'],
                 ['id' => '1Y5F5rJDuvNTnyQBkCUhw0']
             ],
             'dateDue' => substr($deadline, 0, 10) . 'T' . substr($deadline, 11, 8) . 'Z',
         ];
+        if ($client = $projectDao->get_memsource_client($project->getOrganisationId())) $data['client'] = ['id' => $client];
+
         $payload = json_encode($data);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
         $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
