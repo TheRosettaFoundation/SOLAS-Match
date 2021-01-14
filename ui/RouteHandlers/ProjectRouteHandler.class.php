@@ -2066,9 +2066,10 @@ error_log(print_r($job, true))//(**)
         $pm = $creator['email'];
         if (strpos($pm, '@translatorswithoutborders.org') === false) $pm = 'projects@translatorswithoutborders.org';
 
+        $title = str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getTitle() . " $projectId"); // Discourse does not like duplicates
         $discourseapiparams = array(
             'category' => '7',
-            'title' => str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getTitle()),
+            'title' => $title,
             'raw' => "Partner: $org_name. Project Manager: $pm URL: /"."/".$_SERVER['SERVER_NAME']."/project/$projectId/view ".str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getDescription()),
         );
         $fields = '';
@@ -2108,7 +2109,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
         //Asana
         $re = curl_init('https://app.asana.com/api/1.0/tasks');
         curl_setopt($re, CURLOPT_POSTFIELDS, array(
-            'name' => str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getTitle()),
+            'name' => $title,
             'notes' => "Partner: $org_name, Target: $targetlanguages, Deadline: ".$project->getDeadline() . ' https:/'.'/'.$_SERVER['SERVER_NAME']."/project/$projectId/view",
             'projects' => Common\Lib\Settings::get('asana.project')
             )
@@ -2126,7 +2127,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
         // Asana 2nd Project
         $re = curl_init('https://app.asana.com/api/1.0/tasks');
         curl_setopt($re, CURLOPT_POSTFIELDS, array(
-            'name' => str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getTitle()),
+            'name' => $title,
             'notes' => "Partner: $org_name, Target: $targetlanguages, Deadline: ".$project->getDeadline() . ' https:/'.'/'.$_SERVER['SERVER_NAME']."/project/$projectId/view",
             'projects' => '1169104501864281'
             )
@@ -2144,7 +2145,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
         // Asana 3rd Project
         $re = curl_init('https://app.asana.com/api/1.0/tasks');
         curl_setopt($re, CURLOPT_POSTFIELDS, array(
-            'name' => str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getTitle()),
+            'name' => $title,
             'notes' => "Partner: $org_name, Target: $targetlanguages, Deadline: ".$project->getDeadline() . ' https:/'.'/'.$_SERVER['SERVER_NAME']."/project/$projectId/view",
             'projects' => '1174689961513340'
             )
@@ -2162,7 +2163,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
         // Asana 5th Project
         $re = curl_init('https://app.asana.com/api/1.0/tasks');
         curl_setopt($re, CURLOPT_POSTFIELDS, array(
-            'name' => str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getTitle()),
+            'name' => $title,
             'notes' => "Partner: $org_name, Target: $targetlanguages, Deadline: ".$project->getDeadline() . ' https:/'.'/'.$_SERVER['SERVER_NAME']."/project/$projectId/view",
             'projects' => '1186619555316417'
             )
