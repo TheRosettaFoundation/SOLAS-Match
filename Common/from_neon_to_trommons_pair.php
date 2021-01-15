@@ -341,7 +341,6 @@ $from_neon_to_trommons_pair_options_remove = [
   'Inuktitut Greenlandic',
   'Italian Swiss',
   'Manx Gaelic',
-  'Marshallese',
   'Mijikenda',
   'Niuean',
   'Occitan',
