@@ -143,14 +143,12 @@ if ($projectDao->get_memsource_project_by_memsource_id($hook['id'])) error_log("
 
         if (empty($hook['client']['id'])) {
             error_log("No client id in new project: {$hook['name']}");
-//(**)            return;
-$hook['client']['id'] = 0;
+            $hook['client']['id'] = 0;
         }
         $memsource_client = $projectDao->get_memsource_client_by_memsource_id($hook['client']['id']);
         if (empty($memsource_client)) {
             error_log("No MemsourceOrganisations record for new project: {$hook['name']}, client id: {$hook['client']['id']}");
-//(**)            return;
-$memsource_client = ['org_id' => 456];//(**) TWB
+            $memsource_client = ['org_id' => 456]; // TWB
         }
         $project->setOrganisationId($memsource_client['org_id']);
 
