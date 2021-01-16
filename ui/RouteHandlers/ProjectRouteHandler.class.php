@@ -1408,7 +1408,7 @@ if ($projectDao->get_memsource_project_by_memsource_id($hook['id'])) error_log("
                             error_log("Project File Saved($user_id): " . $post['project_title']);
                             $success = true;
                             if ($create_memsource) {
-                                $memsource_project = $userDao->create_memsource_project($post, $project, $data);
+                                $memsource_project = $userDao->create_memsource_project($post, $project, $projectFileName, $data);
                                 if (!$memsource_project) $success = false;
                             } else $memsource_project = 0;
                         } catch (\Exception $e) {
