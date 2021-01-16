@@ -1998,6 +1998,7 @@ error_log(print_r($result, true));
             $lang = $projectDao->convert_language_country_to_memsource($kp_language, $kp_country);
             if (!$lang) return 0;
             $langs[] = $lang;
+            $targetCount++;
         }
         if (empty($langs)) return 0;
 
