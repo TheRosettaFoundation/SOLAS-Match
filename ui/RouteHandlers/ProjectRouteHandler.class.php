@@ -1875,7 +1875,7 @@ if ($projectDao->get_memsource_project_by_memsource_id($hook['id'])) error_log("
 if (!empty($levels[$type_text])) error_log("levels[$type_text]: {$levels[$type_text]}");//(**)test code
 
 error_log("$memsource_target-$workflow");//(**)
-error_log(print_r($memsource_project['jobs'], true))//(**)
+error_log(print_r($memsource_project['jobs'], true));//(**)
                 if (empty($memsource_project['jobs']["$memsource_target-$workflow"])) return 0;
                 $job = $memsource_project['jobs']["$memsource_target-$workflow"];
 error_log(print_r($job, true))//(**)
