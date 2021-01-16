@@ -255,6 +255,50 @@ if ($projectDao->get_memsource_project_by_memsource_id($hook['id'])) error_log("
             $task->setTitle($part['fileName']);
 
             $project = $projectDao->getProject($memsource_project['project_id']);
+
+            if ($projectDao->get_memsource_task_by_memsource_uid($part['uid'])) error_log("memsource Task exists {$part['uid']}"); //(**) test code
+            if ($projectDao->get_memsource_task_by_memsource_uid($part['uid'])) { // Likely self service project
+                if (!empty($part['wordsCount'])) {
+BUT DO DIRECTLY!!                $task->setWordCount($part['wordsCount']);
+                    $project->setWordCount($part['wordsCount']);
+                    $projectDao->updateProjectDirectly($project);
+                }
+
+[[[previous...
+                // Missing items should be updated by memsource hook...
+                $projectDao->set_memsource_task($newTaskId, 0, $job['uid'], '',
+                    0,
+                    empty($job['workflowLevel']) ? 0 : $job['workflowLevel'],
+                    0,
+                    0,
+                    $preReqTaskId);
+]]]
+                $projectDao->update_memsource_task(
+WILL NEED TO UPDATE...
+'id'  memsource_task_id  BIGINT(20) UNSIGNED NOT NULL, (maybe not critical)
+'internalId'  internalId         VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL
+'task'  task               VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+'beginIndex'  beginIndex         INT(10) UNSIGNED NOT NULL,
+'endIndex'  endIndex           INT(10) UNSIGNED NOT NULL,
+                $projectDao->set_memsource_task($task_id, !empty($part['id']) ? $part['id'] : 0, $part['uid'], $part['task'], // note 'task' is for Language pair (independent of workflow step)
+                    empty($part['internalId'])    ? 0 : $part['internalId'],
+                    empty($part['workflowLevel']) ? 0 : $part['workflowLevel'],
+                    empty($part['beginIndex'])    ? 0 : $part['beginIndex'], // Begin Segment number
+                    empty($part['endIndex'])      ? 0 : $part['endIndex'],
+                    $prerequisite);
+ALSO ADD DAO
+EDIT...
+DROP PROCEDURE IF EXISTS `update_memsource_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_memsource_task`(IN taskID BIGINT, IN memsourceID BIGINT, IN memsourceUID VARCHAR(30), IN t VARCHAR(30), IN intID VARCHAR(30), IN level INT, IN begin INT, IN end INT, IN prereq BIGINT)
+BEGIN
+    INSERT INTO MemsourceTasks (task_id, memsource_task_id, memsource_task_uid, task, internalId, workflowLevel,beginIndex, endIndex, prerequisite)
+    VALUES                     ( taskID,       memsourceID,       memsourceUID,    t,      intID,         level,     begin,      end,       prereq);
+END//
+DELIMITER ;
+                continue;
+            }
+
             $projectSourceLocale = $project->getSourceLocale();
             $taskSourceLocale = new Common\Protobufs\Models\Locale();
             $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
@@ -1867,12 +1911,12 @@ error_log(print_r($memsource_project['jobs'], true))//(**)
                 if (empty($memsource_project['jobs']["$memsource_target-$workflow"])) return 0;
                 $job = $memsource_project['jobs']["$memsource_target-$workflow"];
 error_log(print_r($job, true))//(**)
-                //(**) verify below also error checking needed?
-                $projectDao->set_memsource_task($newTaskId, !empty($job['id']) ? $job['id'] : 0, $job['uid'], $job['task'],
-                    empty($job['internalId'])    ? 0 : $job['internalId'],
+                // Missing items should be updated by memsource hook...
+                $projectDao->set_memsource_task($newTaskId, 0, $job['uid'], '',
+                    0,
                     empty($job['workflowLevel']) ? 0 : $job['workflowLevel'],
-                    empty($job['beginIndex'])    ? 0 : $job['beginIndex'], // Begin Segment number
-                    empty($job['endIndex'])      ? 0 : $job['endIndex'],
+                    0,
+                    0,
                     $preReqTaskId);
             } else {
                 if ($newTaskId && $preReqTaskId) {
