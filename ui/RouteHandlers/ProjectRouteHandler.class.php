@@ -1878,7 +1878,7 @@ error_log("$memsource_target-$workflow");//(**)
 error_log(print_r($memsource_project['jobs'], true));//(**)
                 if (empty($memsource_project['jobs']["$memsource_target-$workflow"])) return 0;
                 $job = $memsource_project['jobs']["$memsource_target-$workflow"];
-error_log(print_r($job, true))//(**)
+error_log(print_r($job, true));//(**)
                 // Missing items should be updated by memsource hook...
                 $projectDao->set_memsource_task($newTaskId, 0, $job['uid'], '',
                     0,
