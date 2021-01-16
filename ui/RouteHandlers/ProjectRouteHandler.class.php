@@ -258,11 +258,7 @@ if ($projectDao->get_memsource_project_by_memsource_id($hook['id'])) error_log("
 
             if ($projectDao->get_memsource_task_by_memsource_uid($part['uid'])) error_log("memsource Task exists {$part['uid']}"); //(**) test code
             if ($projectDao->get_memsource_task_by_memsource_uid($part['uid'])) { // Likely self service project
-                if (!empty($part['wordsCount'])) {
-BUT DO DIRECTLY!!                $task->setWordCount($part['wordsCount']);
-                    $project->setWordCount($part['wordsCount']);
-                    $projectDao->updateProjectDirectly($project);
-                }
+                if (!empty($part['wordsCount'])) $taskDao->updateWordCountForProject($memsource_project['project_id'], $part['wordsCount']);
 
 [[[previous...
                 // Missing items should be updated by memsource hook...
