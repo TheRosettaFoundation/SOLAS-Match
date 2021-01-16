@@ -9205,6 +9205,21 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `update_memsource_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_memsource_task`(IN taskID BIGINT, IN memsourceID BIGINT, IN t VARCHAR(30), IN intID VARCHAR(30), IN begin INT, IN end INT)
+BEGIN
+    UPDATE MemsourceTasks
+    SET
+        memsource_task_id=memsourceID,
+        task=t,
+        internalId=intID,
+        beginIndex=begin,
+        endIndex=end
+WHERE task_id=taskID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `get_memsource_task`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_task`(IN taskID BIGINT)
