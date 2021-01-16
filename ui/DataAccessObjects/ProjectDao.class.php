@@ -282,7 +282,7 @@ class ProjectDao extends BaseDao
     {
         $a = $project->getTitle();
         $project_id = $project->getId();
-        if ($project_id > 9277) $title .= " $project_id"; //(**)[KP ID] Backwards compatible
+        if ($project_id > 9277) $a .= " $project_id"; //(**)[KP ID] Backwards compatible
 
         mb_internal_encoding('UTF-8');
         mb_regex_encoding('UTF-8');
