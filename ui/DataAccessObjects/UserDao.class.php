@@ -2077,7 +2077,6 @@ error_log(print_r($result, true));//(**)
             $jobs_indexed["{$job['targetLang']}-{$job['workflowLevel']}"] = $job;
         }
         $memsource_project['jobs'] = $jobs_indexed;
-error_log("Before return");//(**)
         return $memsource_project;
     }
 }
