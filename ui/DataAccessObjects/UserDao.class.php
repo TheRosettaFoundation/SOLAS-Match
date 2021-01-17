@@ -2058,7 +2058,6 @@ error_log(print_r($result, true));//(**)
             return 0;
         }
 
-error_log("Before Workflow");//(**)
         $workflowLevels = ['', '', '']; // Will contain 'Translation' or 'Revision' for workflowLevel 1 possibly up to 3
         if (!empty($project_result['workflowSteps'])) {
             foreach ($project_result['workflowSteps'] as $step) {
@@ -2067,16 +2066,14 @@ error_log("Before Workflow");//(**)
                 }
             }
         }
-error_log("Before set_memsource_project");//(**)
         $projectDao->set_memsource_project($project->getId(), $project_result['id'], $project_result['uid'],
             empty($project_result['createdBy']['id']) ? 0 : $project_result['createdBy']['id'],
             empty($project_result['owner']['id']) ? 0 : $project_result['owner']['id'],
             $workflowLevels);
         $memsource_project = $projectDao->get_memsource_project($project->getId());
 
-error_log("Before jobs_indexed");//(**)
         $jobs_indexed = [];
-        foreach ($jobs as $job) {
+        foreach ($result['jobs'] as $job) {
             $jobs_indexed["{$job['targetLang']}-{$job['workflowLevel']}"] = $job;
         }
         $memsource_project['jobs'] = $jobs_indexed;
