@@ -125,7 +125,6 @@ class ProjectRouteHandler
         $hook = $hook['project'];
         $project = new Common\Protobufs\Models\Project();
         $projectDao = new DAO\ProjectDao();
-if ($projectDao->get_memsource_project_by_memsource_id($hook['id'])) error_log("memsource Project exists {$hook['id']} {$hook['uid']}"); //(**) test code
         if ($projectDao->get_memsource_project_by_memsource_id($hook['id'])) return; // Likely self service project
 
         $project->setTitle($hook['name']);
@@ -256,7 +255,6 @@ if ($projectDao->get_memsource_project_by_memsource_id($hook['id'])) error_log("
 
             $project = $projectDao->getProject($memsource_project['project_id']);
 
-            if ($projectDao->get_memsource_task_by_memsource_uid($part['uid'])) error_log("memsource Task exists {$part['uid']}"); //(**) test code
             if ($memsource_task = $projectDao->get_memsource_task_by_memsource_uid($part['uid'])) { // Likely self service project
                 if (!empty($part['wordsCount'])) $taskDao->updateWordCountForProject($memsource_project['project_id'], $part['wordsCount']);
 
@@ -1839,6 +1837,11 @@ if ($projectDao->get_memsource_project_by_memsource_id($hook['id'])) error_log("
         }
 
         try {
+            if ($memsource_project) {
+                if ($preReqTaskId) {
+                    $task->setTaskStatus(Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
+                }
+            }
             error_log("addProjectTask");
             $newTask = $taskDao->createTask($task);
             $newTaskId = $newTask->getId();
@@ -1856,9 +1859,6 @@ if ($projectDao->get_memsource_project_by_memsource_id($hook['id'])) error_log("
             );
 
             if ($memsource_project) {
-                if ($preReqTaskId) {
-                    $task->setTaskStatus(Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
-                }
                 $memsource_target = $projectDao->convert_language_country_to_memsource($target_language, $target_country);
                 if (!$memsource_target) return 0;
 
@@ -1872,13 +1872,9 @@ if ($projectDao->get_memsource_project_by_memsource_id($hook['id'])) error_log("
                 $levels = [$memsource_project['workflow_level_1'] => 1, $memsource_project['workflow_level_2'] => 2, $memsource_project['workflow_level_3'] => 3];
                 if (!empty($levels[$type_text])) $workflow = $levels[$type_text];
                 else                             $workflow = $default_workflow;
-if (!empty($levels[$type_text])) error_log("levels[$type_text]: {$levels[$type_text]}");//(**)test code
 
-error_log("$memsource_target-$workflow");//(**)
-error_log(print_r($memsource_project['jobs'], true));//(**)
                 if (empty($memsource_project['jobs']["$memsource_target-$workflow"])) return 0;
                 $job = $memsource_project['jobs']["$memsource_target-$workflow"];
-error_log(print_r($job, true));//(**)
                 // Missing items should be updated by memsource hook...
                 $projectDao->set_memsource_task($newTaskId, 0, $job['uid'], '',
                     0,
