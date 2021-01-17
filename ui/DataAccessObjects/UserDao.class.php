@@ -2018,10 +2018,10 @@ error_log(print_r($result, true));
             'dateDue' => substr($deadline, 0, 10) . 'T' . substr($deadline, 11, 8) . 'Z',
         ];
         if ($client = $projectDao->get_memsource_client($project->getOrganisationId())) $data['client'] = ['id' => $client['memsource_client_uid']];
-//(**)try memsource_client_id
+//(**)try memsource_client_id NO DONT... DELETE THERE TWO LINES
 //(**)Ian worked "client" => array("id" => "sr0B0RNDKME6VAWBHWbEnd"),
 
-//(**)??        $payload = json_encode($data, JSON_UNESCAPED_UNICODE);
+//(**)DEL        $payload = json_encode($data, JSON_UNESCAPED_UNICODE);
         $payload = json_encode($data);
 error_log("Project payload: $payload");//(**)
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
