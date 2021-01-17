@@ -2018,10 +2018,7 @@ error_log(print_r($result, true));
             'dateDue' => substr($deadline, 0, 10) . 'T' . substr($deadline, 11, 8) . 'Z',
         ];
         if ($client = $projectDao->get_memsource_client($project->getOrganisationId())) $data['client'] = ['id' => $client['memsource_client_uid']];
-//(**)try memsource_client_id NO DONT... DELETE THERE TWO LINES
-//(**)Ian worked "client" => array("id" => "sr0B0RNDKME6VAWBHWbEnd"),
 
-//(**)DEL        $payload = json_encode($data, JSON_UNESCAPED_UNICODE);
         $payload = json_encode($data);
 error_log("Project payload: $payload");//(**)
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
@@ -2039,7 +2036,6 @@ error_log(print_r($project_result, true));//(**)
 
         // Create Job
         $url = "https://cloud.memsource.com/web/api2/v1/projects/{$project_result['uid']}/jobs";
-error_log($url);//(**)
         $ch = curl_init($url);
         $metadata = json_encode(['targetLangs' => $langs]);
         $headers = [
@@ -2049,7 +2045,6 @@ error_log($url);//(**)
             'Content-type: application/octet-stream',
             'Content-Length: ' . strlen($file),
         ];
-error_log("\n\n$metadata\n\n");//(**)
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($ch, CURLOPT_POSTFIELDS, $file);
@@ -2063,6 +2058,7 @@ error_log(print_r($result, true));//(**)
             return 0;
         }
 
+error_log("Before Workflow");//(**)
         $workflowLevels = ['', '', '']; // Will contain 'Translation' or 'Revision' for workflowLevel 1 possibly up to 3
         if (!empty($project_result['workflowSteps'])) {
             foreach ($project_result['workflowSteps'] as $step) {
@@ -2071,17 +2067,20 @@ error_log(print_r($result, true));//(**)
                 }
             }
         }
+error_log("Before set_memsource_project");//(**)
         $projectDao->set_memsource_project($project->getId(), $project_result['id'], $project_result['uid'],
             empty($project_result['createdBy']['id']) ? 0 : $project_result['createdBy']['id'],
             empty($project_result['owner']['id']) ? 0 : $project_result['owner']['id'],
             $workflowLevels);
         $memsource_project = $projectDao->get_memsource_project($project->getId());
 
+error_log("Before jobs_indexed");//(**)
         $jobs_indexed = [];
         foreach ($jobs as $job) {
             $jobs_indexed["{$job['targetLang']}-{$job['workflowLevel']}"] = $job;
         }
         $memsource_project['jobs'] = $jobs_indexed;
+error_log("Before return");//(**)
         return $memsource_project;
     }
 }

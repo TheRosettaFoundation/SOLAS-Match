@@ -1424,7 +1424,7 @@ if ($projectDao->get_memsource_project_by_memsource_id($hook['id'])) error_log("
                                 if (!$memsource_project) $success = false;
                             } else $memsource_project = 0;
                         } catch (\Exception $e) {
-                            error_log("Project File Save Error($user_id): " . $post['project_title']);
+                            error_log("Project File Save Error($user_id): " . $post['project_title'] . ' ' . $e->getMessage());
                             $success = false;
                         }
                         if (!$success) {
