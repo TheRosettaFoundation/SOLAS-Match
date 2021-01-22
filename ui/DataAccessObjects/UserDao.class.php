@@ -506,6 +506,7 @@ class UserDao extends BaseDao
                 $result = curl_exec($ch);
                 curl_close($ch);
 
+/*
                 $url_notify = "https://cloud.memsource.com/web/api2/v1/projects/$projectUid/jobs/notifyAssigned";
                 $ch_notify = curl_init($url_notify);
                 $data = array(
@@ -514,7 +515,7 @@ class UserDao extends BaseDao
                             'uid' => $taskUid
                         )
                     ),
-                    'emailTemplate' => array('id' => '2213161'),//(**)
+                    'emailTemplate' => array('id' => '2213161'),
                 );
                 $payload = json_encode($data);
                 curl_setopt($ch_notify, CURLOPT_POSTFIELDS, $payload);
@@ -542,6 +543,7 @@ class UserDao extends BaseDao
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
                 $result = curl_exec($ch);
                 curl_close($ch);
+*/
 
                 // If this is split, add corresponding task(s) to deny list for translator
                 $projectDao = new ProjectDao();
