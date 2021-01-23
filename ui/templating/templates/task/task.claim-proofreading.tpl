@@ -6,6 +6,12 @@
         </div>
     </section>
 
+    {if isset($flash['error'])}
+        <p class="alert alert-error">
+            <strong>{Localisation::getTranslation('common_warning')}:</strong> {TemplateHelper::uiCleanseHTMLKeepMarkup($flash['error'])}
+        </p>
+    {/if}
+
     <section>
         <h2>{Localisation::getTranslation('task_claim_proofreading_0')}</h2>
         <p style="margin-bottom:20px;"></p>
