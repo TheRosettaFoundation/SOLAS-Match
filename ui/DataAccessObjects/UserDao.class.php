@@ -504,7 +504,17 @@ class UserDao extends BaseDao
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
                 $result = curl_exec($ch);
+                if ($error_number = curl_errno($ch)) {
+                    error_log("Failed: claimTask($userId, $taskId...) $url Curl error ($error_number): " . curl_error($ch));
+                } elseif (($responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE)) > 204) {
+                    $error_number = -1;
+                    error_log("Failed: claimTask($userId, $taskId...) $url responseCode: $responseCode");
+                }
                 curl_close($ch);
+                if ($error_number) {
+                    $this->unclaimTask($userId, $taskId, null);
+                    return 0;
+                }
 
 /*
                 $url_notify = "https://cloud.memsource.com/web/api2/v1/projects/$projectUid/jobs/notifyAssigned";

@@ -251,7 +251,7 @@ class ProjectRouteHandler
                 continue;
             }
             $task->setProjectId($memsource_project['project_id']);
-            $task->setTitle($part['fileName']);
+            $task->setTitle((empty($part['internalId']) ? '' : $part['internalId'] . ' ') . $part['fileName']);
 
             $project = $projectDao->getProject($memsource_project['project_id']);
 

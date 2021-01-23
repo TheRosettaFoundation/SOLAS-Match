@@ -777,11 +777,13 @@ class TaskRouteHandler
             $user_id = Common\Lib\UserSession::getCurrentUserID();
 
             $taskDao->record_task_if_translated_in_matecat($task);
-            $userDao->claimTask($user_id, $taskId, $memsource_task, $task->getProjectId());
-
+            $success = $userDao->claimTask($user_id, $taskId, $memsource_task, $task->getProjectId());
+            if ($success) {
             $app->redirect($app->urlFor("task-claimed", array(
                 "task_id" => $taskId
             )));
+            }
+            $app->flashNow('error', 'The task could not be assigned, likely not found on memsource.');
         }
 
         $convert = $app->request()->get("convertToXliff");
@@ -982,10 +984,12 @@ class TaskRouteHandler
                         $app->flashNow("error", sprintf(Lib\Localisation::getTranslation('task_view_assign_task_banned_error'), $userDisplayName));
                     } else {
                         $taskDao->record_task_if_translated_in_matecat($task);
-                        $userDao->claimTask($assgneeId, $taskId, $memsource_task, $task->getProjectId());
-
+                        $success = $userDao->claimTask($assgneeId, $taskId, $memsource_task, $task->getProjectId());
+                        if ($success) {
                         $app->flash("success", sprintf(Lib\Localisation::getTranslation('task_view_assign_task_success'), $userDisplayName));
                         $app->redirect($app->urlFor("project-view", array("project_id" => $task->getProjectId())));
+                        }
+                        $app->flashNow('error', 'The task could not be assigned, likely not found on memsource.');
                     }
                 }
                 $post['userIdOrEmail']="";
