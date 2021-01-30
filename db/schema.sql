@@ -8238,12 +8238,14 @@ DROP PROCEDURE IF EXISTS `average_time_to_turnaround`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `average_time_to_turnaround`()
 BEGIN
-SELECT ROUND(AVG(UNIX_TIMESTAMP(tfv.`upload-time`) - UNIX_TIMESTAMP(t.`created-time`))/(60.*60.)) AS average_time_to_turnaround, CONCAT(SUBSTRING(MONTHNAME(tfv.`upload-time`),1, 3), '-', SUBSTRING(YEAR(tfv.`upload-time`), 3)) AS month
-FROM Tasks t
-JOIN TaskFileVersions tfv ON t.id=tfv.task_id AND tfv.version_id>0 AND tfv.version_id=(SELECT MAX(tfv0.version_id) FROM TaskFileVersions tfv0 WHERE tfv.task_id=tfv0.id)
+SELECT
+    ROUND(AVG(UNIX_TIMESTAMP(tcd.complete_date) - UNIX_TIMESTAMP(t.`created-time`))/(60.*60.)) AS average_time_to_turnaround,
+    MAX(CONCAT(SUBSTRING(MONTHNAME(tcd.complete_date), 1, 3), '-', SUBSTRING(YEAR(tcd.complete_date), 3))) AS month
+FROM Tasks               t
+JOIN TaskCompleteDates tcd ON t.id=tcd.task_id
 WHERE t.`task-status_id`=4
-GROUP BY YEAR(tfv.`upload-time`), MONTH(tfv.`upload-time`)
-ORDER BY YEAR(tfv.`upload-time`) DESC, MONTH(tfv.`upload-time`) DESC;
+GROUP BY YEAR(tcd.complete_date), MONTH(tcd.complete_date)
+ORDER BY YEAR(tcd.complete_date) DESC, MONTH(tcd.complete_date) DESC;
 END//
 DELIMITER ;
 
