@@ -9385,6 +9385,23 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `record_referer`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `record_referer`(IN ref VARCHAR(30))
+BEGIN
+    REPLACE INTO Referers (referer) VALUES (ref);
+    SELECT CONCAT('https://kato.translatorswb.org/register_track/', HEX(AES_ENCRYPT(ref, 'helks5nesahel')), '/') AS url;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_referers`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_referers`()
+BEGIN
+    SELECT * FROM Referers;
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
