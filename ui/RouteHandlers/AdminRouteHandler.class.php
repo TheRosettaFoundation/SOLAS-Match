@@ -62,6 +62,12 @@ class AdminRouteHandler
         )->via('POST')->name('matecat_analyse_status');
 
         $app->get(
+            '/list_memsource_projects/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'list_memsource_projects')
+        )->name('list_memsource_projects');
+
+        $app->get(
             '/download_covid_projects/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'download_covid_projects')
@@ -1413,6 +1419,17 @@ class AdminRouteHandler
 
         $app->view()->appendData(array('all_users' => $all_users));
         $app->render('admin/matecat_analyse_status.tpl');
+    }
+
+    public function list_memsource_projects()
+    {
+        $app = \Slim\Slim::getInstance();
+        $statsDao = new DAO\StatisticsDao();
+
+        $all_users = $statsDao->list_memsource_projects();
+
+        $app->view()->appendData(array('all_users' => $all_users));
+        $app->render('admin/list_memsource_projects.tpl');
     }
 
     public function download_covid_projects()

@@ -7734,6 +7734,24 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `list_memsource_projects`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_memsource_projects`()
+BEGIN
+    SELECT
+        mp.*,
+        p.*,
+        mu.user_id AS creator_id,
+        u.email    AS creator_email
+    FROM      MemsourceProjects mp
+    JOIN      Projects           p ON mp.project_id=p.id
+    LEFT JOIN MemsourceUsers    mu ON mp.created_by_id=memsource_user_id
+    LEFT JOIN Users              u ON mu.user_id=u.id
+    ORDER BY mp.project_id DESC
+    LIMIT 250;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `updateWordCountRequestForProjects`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `updateWordCountRequestForProjects`(IN `pID` INT, IN `matecatID` INT, IN `matecatPW` VARCHAR(50), IN `matecatWordCount` INT, IN `setState` INT)

@@ -484,6 +484,12 @@ class StatisticsDao extends BaseDao
         return $result;
     }
 
+    public function list_memsource_projects()
+    {
+        $result = LibAPI\PDOWrapper::call('list_memsource_projects', '');
+        return $result;
+    }
+
     public function covid_projects()
     {
         $result = LibAPI\PDOWrapper::call('covid_projects', '');
