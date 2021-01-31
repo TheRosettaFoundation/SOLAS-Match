@@ -1722,6 +1722,11 @@ CREATE TABLE IF NOT EXISTS `queue_copy_task_original_files` (
   CONSTRAINT FK_queue_copy_task_original_files_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `Referers` (
+  referer VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (referer)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
