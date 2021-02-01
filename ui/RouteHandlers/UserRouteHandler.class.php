@@ -129,6 +129,12 @@ class UserRouteHandler
         )->name('users_tracked');
 
         $app->get(
+            '/add_tracking_code/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'add_tracking_code')
+        )->via('POST')->name('add_tracking_code');
+
+        $app->get(
             '/download_users_tracked/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'download_users_tracked')
@@ -1510,6 +1516,29 @@ EOD;
         $all_users = $userDao->users_tracked();
         $app->view()->appendData(array('all_users' => $all_users));
         $app->render('user/users_tracked.tpl');
+    }
+
+    public function add_tracking_code()
+    {
+        $app = \Slim\Slim::getInstance();
+        $userDao = new DAO\UserDao();
+
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+
+        if ($app->request()->isPost()) {
+            $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post, 'add_tracking_code');
+
+            if (!empty($post['tracking_code'])) {
+                $url = $userDao->record_referer($post['tracking_code']);
+                $app->flash('success', "Added Tracking Code (if not already present), URL: $url");
+            }
+        }
+        $app->view()->appendData(array(
+            'sesskey'  => $sesskey,
+            'referers' => $userDao->get_referers(),
+        ));
+        $app->render('user/add_tracking_code.tpl');
     }
 
     public function download_users_tracked()
