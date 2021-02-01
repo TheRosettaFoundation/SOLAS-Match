@@ -19,7 +19,7 @@
 
 <form method="post" action="{urlFor name="add_tracking_code"}">
     <p>
-        <input type='text' value="" name="tracking_code" id="tracking_code"/>
+        New Code (keep short!): <input type='text' value="" name="tracking_code" id="tracking_code"/>
     </p>
     <button type="submit" value="Submit" class="btn btn-success">
         <i class="icon-upload icon-white"></i> {Localisation::getTranslation('common_submit')}
