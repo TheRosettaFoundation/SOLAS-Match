@@ -1531,7 +1531,7 @@ EOD;
 
             if (!empty($post['tracking_code'])) {
                 $url = $userDao->record_referer($post['tracking_code']);
-                $app->flash('success', "Added Tracking Code (if not already present), URL: $url");
+                $app->flashNow('success', "Added Tracking Code (if not already present), URL: $url");
             }
         }
         $app->view()->appendData(array(
