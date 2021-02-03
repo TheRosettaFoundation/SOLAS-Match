@@ -17,15 +17,12 @@ class UserDao
     {
         if (is_null($token)) {
             try {
-if (!empty($_SERVER['HTTP_AUTHORIZATION'])) error_log("_SERVER['HTTP_AUTHORIZATION']: {$_SERVER['HTTP_AUTHORIZATION']}");//(**)
-else error_log("_SERVER['HTTP_AUTHORIZATION']: empty()");//(**)
                 $resource = new \League\OAuth2\Server\Resource(new \League\OAuth2\Server\Storage\PDO\Session());
                 // Test for token existance and validity
                 $resource->isValid(true);
                 $parts = explode(" ", $_SERVER['HTTP_AUTHORIZATION']);
                 $token = $parts[1];
             } catch (\League\OAuth2\Server\Exception\InvalidAccessTokenException $e) {
-error_log('The access token is missing or invalid...');//(**)
                 //The access token is missing or invalid...
                 return null;
             }
