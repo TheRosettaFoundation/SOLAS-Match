@@ -898,6 +898,18 @@ class ProjectRouteHandler
             if (!empty($post['copyChunks']) && !empty($memsource_project)) {
                 $projectDao->sync_split_jobs($memsource_project);
             }
+            if (!empty($post['unpublish_all_translated']) || !empty($post['unpublish_all_revisions'])) {
+                $project_tasks = $projectDao->getProjectTasks($project_id);
+                if (!empty($project_tasks)) {
+                    foreach ($project_tasks as $project_task) {
+                        if ((!empty($post['unpublish_all_translated']) && ($project_task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION)) ||
+                            (!empty($post['unpublish_all_revisions'])  && ($project_task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING))) {
+                                $project_task->setPublished(false);
+                                $taskDao->updateTask($project_task);
+                        }
+                    }
+                }
+            }
         }
 
         $org = $orgDao->getOrganisation($project->getOrganisationId());
