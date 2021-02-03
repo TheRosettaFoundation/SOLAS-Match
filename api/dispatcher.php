@@ -70,9 +70,12 @@ class Dispatcher
     public static function init()
     {
         $path = self::getDispatcher()->request()->getResourceUri();
+error_log("path: $path");//(**)
         $path = explode("/", $path);
         $path = $path[1];
         $providerNames = self::readProviders("$path/");
+error_log("path: $path");//(**)
+error_log(print_r($providerNames, true));//(**)
         self::autoRequire($providerNames, "$path/");
         self::initUnitTests();
         self::initOAuth();
