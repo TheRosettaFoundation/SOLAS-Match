@@ -905,7 +905,7 @@ class UserRouteHandler
 
                         $userDao->requestAuthCode($response_data->email);
                         // This does not return,
-                        // it redirects to API /v0/useremail/$email/auth/code
+                        // it redirects to API /v0/users/$email/auth/code
                         // which starts "normal" Trommons authorization process
                         // (and may register a user if the email is new),
                         // which then redirects to /login URL with a different Trommons 'code',

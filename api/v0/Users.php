@@ -27,23 +27,6 @@ class Users
         $app = \Slim\Slim::getInstance();
 
         $app->group('/v0', function () use ($app) {
-            $app->group('/useremail', function () use ($app) {
-                /* Routes starting /v0/useremail */
-                $app->get(
-                    '/:email/auth/code(:format)/',
-                    '\SolasMatch\API\V0\Users::getAuthCode'
-                );
-            });
-
-            $app->group('/userfinish', function () use ($app) {
-                $app->group('/:uuid', function () use ($app) {
-                    $app->post(
-                        '/manuallyFinishRegistration(:format)/',
-                        '\SolasMatch\API\V0\Users::finishRegistrationManually'
-                    );
-                });
-            });
-
             $app->group('/users', function () use ($app) {
                 $app->group('/:userId', function () use ($app) {
                     $app->group('/trackedTasks', function () use ($app) {
@@ -328,6 +311,11 @@ class Users
                         '/finishRegistration(:format)/',
                         '\SolasMatch\API\V0\Users::finishRegistration'
                     );
+
+                    $app->post(
+                        '/manuallyFinishRegistration(:format)/',
+                        '\SolasMatch\API\V0\Users::finishRegistrationManually'
+                    );
                 });
 
                 $app->group('/email/:email', function () use ($app) {
@@ -372,6 +360,11 @@ class Users
                     '/leaveOrg/:userId/:orgId/',
                     '\SolasMatch\API\Lib\Middleware::authUserOrAdminForOrg',
                     '\SolasMatch\API\V0\Users::userLeaveOrg'
+                );
+
+                $app->get(
+                    '/:email/auth/code(:format)/',
+                    '\SolasMatch\API\V0\Users::getAuthCode'
                 );
 
                 $app->get(

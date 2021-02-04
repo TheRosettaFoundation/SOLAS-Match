@@ -764,7 +764,7 @@ class UserDao extends BaseDao
         }
         $redirectUri .= $_SERVER['SERVER_NAME'].$app->urlFor('login');
 
-        $request = "{$this->siteApi}v0/useremail/$email/auth/code/?".
+        $request = "{$this->siteApi}v0/users/$email/auth/code/?".
             'client_id='.Common\Lib\Settings::get('oauth.client_id').'&'.
             "redirect_uri=$redirectUri&".
             'response_type=code';
@@ -1333,7 +1333,7 @@ error_log(print_r($result, true));
 
     public function finishRegistrationManually($email)
     {
-        $request = "{$this->siteApi}v0/userfinish/$email/manuallyFinishRegistration";
+        $request = "{$this->siteApi}v0/users/$email/manuallyFinishRegistration";
         $resp = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
         return $resp;
     }
