@@ -70,6 +70,7 @@ class Dispatcher
     public static function init()
     {
         $path = self::getDispatcher()->request()->getResourceUri();
+error_log("path: $path");//(**)
         $path = explode("/", $path);
         $path = $path[1];
         $providerNames = self::readProviders("$path/");

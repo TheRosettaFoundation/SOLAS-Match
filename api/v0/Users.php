@@ -414,7 +414,7 @@ class Users
                 );
 
                 $app->get(
-                    '/getByEmail/:email/email/',
+                    '/getByEmail/:email/email(:format)/',
                     '\SolasMatch\API\Lib\Middleware::registerValidation',
                     '\SolasMatch\API\V0\Users::getUserByEmail'
                 );
