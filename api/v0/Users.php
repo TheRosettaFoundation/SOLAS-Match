@@ -414,7 +414,7 @@ class Users
                 );
 
                 $app->get(
-                    '/getByEmail/:email/',
+                    '/getByEmail/:email/email/',
                     '\SolasMatch\API\Lib\Middleware::registerValidation',
                     '\SolasMatch\API\V0\Users::getUserByEmail'
                 );
@@ -1250,6 +1250,7 @@ class Users
 
     public static function getUserByEmail($email, $format = ".json")
     {
+error_log("getUserByEmail($email");//(**)
         if (!is_numeric($email) && strstr($email, '.')) {
             $temp = array();
             $temp = explode('.', $email);
@@ -1264,7 +1265,9 @@ class Users
                 }
             }
         }
+error_log("getUserByEmail($email");//(**)
         $data = DAO\UserDao::getUser(null, $email);
+error_log(print_r($data, true));//(**)
         API\Dispatcher::sendResponse(null, $data, null, $format);
     }
 

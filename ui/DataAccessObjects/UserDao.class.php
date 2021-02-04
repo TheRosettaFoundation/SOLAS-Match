@@ -63,7 +63,7 @@ class UserDao extends BaseDao
     public function getUserByEmail($email, $headerHash = null)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/users/getByEmail/$email";
+        $request = "{$this->siteApi}v0/users/getByEmail/$email/email";
         $ret = $this->client->call(
             "\SolasMatch\Common\Protobufs\Models\User",
             $request,
