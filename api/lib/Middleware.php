@@ -29,10 +29,8 @@ class Middleware
       
     public static function registerValidation (\Slim\Route $route)
     {
-error_log("registerValidation");//(**)
         $params = $route->getParams();
         if (isset($params['email']) && isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'])) {
-error_log("CUSTOM email: {$params['email']}");//(**)
             $headerHash = $_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'];
             $email = $params['email'];
             if (!is_numeric($email) && strstr($email, '.')) {
@@ -55,7 +53,6 @@ error_log("CUSTOM email: {$params['email']}");//(**)
                 );
             }
         } else {
-error_log("NOT CUSTOM");//(**)
             self::isloggedIn($route);
             //self::authUserOwnsResource($route);
         }

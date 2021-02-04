@@ -1250,7 +1250,6 @@ class Users
 
     public static function getUserByEmail($email, $format = ".json")
     {
-error_log("getUserByEmail($email");//(**)
         if (!is_numeric($email) && strstr($email, '.')) {
             $temp = array();
             $temp = explode('.', $email);
@@ -1265,9 +1264,7 @@ error_log("getUserByEmail($email");//(**)
                 }
             }
         }
-error_log("getUserByEmail($email");//(**)
         $data = DAO\UserDao::getUser(null, $email);
-error_log(print_r($data, true));//(**)
         API\Dispatcher::sendResponse(null, $data, null, $format);
     }
 
