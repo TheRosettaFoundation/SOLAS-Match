@@ -629,6 +629,151 @@ class OrgRouteHandler
         $app = \Slim\Slim::getInstance();
         $orgDao = new DAO\OrganisationDao();
         $userDao = new DAO\UserDao();
+//(**)DELETE!!!...
+        $projectDao = new DAO\ProjectDao();
+$orgs_to_create = [
+678,
+498,
+697,
+482,
+524,
+495,
+513,
+527,
+537,
+722,
+707,
+671,
+523,
+457,
+689,
+677,
+674,
+682,
+748,
+514,
+683,
+566,
+554,
+726,
+ 15,
+591,
+453,
+692,
+515,
+335,
+616,
+623,
+461,
+531,
+735,
+717,
+637,
+534,
+746,
+628,
+483,
+711,
+455,
+672,
+481,
+577,
+615,
+718,
+607,
+680,
+747,
+743,
+586,
+525,
+706,
+675,
+ 29,
+741,
+530,
+575,
+560,
+757,
+740,
+501,
+496,
+744,
+704,
+509,
+497,
+719,
+541,
+654,
+670,
+629,
+557,
+716,
+714,
+552,
+687,
+727,
+665,
+467,
+732,
+660,
+548,
+503,
+500,
+456,
+643,
+659,
+666,
+729,
+619,
+538,
+630,
+545,
+608,
+532,
+632,
+469,
+742,
+715,
+667,
+474,
+579,
+695,
+759,
+544,
+598,
+691,
+];
+$orgs_to_create = [
+456,
+457,
+];
+
+foreach ($orgs_to_create as $org_id) {
+    $org = $orgDao->getOrganisation($org_id);
+echo "Doing $org_id<br />";
+                        // Create Client on Memsource
+                        $memsourceApiV1 = Common\Lib\Settings::get('memsource.api_url_v1');
+                        $memsourceApiToken = Common\Lib\Settings::get('memsource.memsource_api_token');
+                        $url = $memsourceApiV1 . 'clients';
+                        $ch = curl_init($url);
+                        $data = array(
+                            'name' => $org->getName(),
+                            'note' => $org->getBiography(),
+                            'displayNoteInProject' => true
+                        );
+                        $payload = json_encode($data);
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+                        $authorization = 'Authorization: Bearer ' . $memsourceApiToken;
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                        $result = curl_exec($ch);
+                        curl_close($ch);
+                        $res = json_decode($result, true);
+                        $projectDao->set_memsource_client($org_id, $res['id'], $res['uid']);
+}
+echo '<h1>Done</h1>';
+die;
+//(**)
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
