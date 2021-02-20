@@ -645,7 +645,7 @@ $orgs_to_create = [
 707,
 671,
 523,
-457,
+//457,(**) already done
 689,
 677,
 674,
@@ -719,7 +719,7 @@ $orgs_to_create = [
 548,
 503,
 500,
-456,
+//456,(**) already done
 643,
 659,
 666,
@@ -743,9 +743,8 @@ $orgs_to_create = [
 598,
 691,
 ];
+//(**)DISABLED...
 $orgs_to_create = [
-456,
-457,
 ];
 
 foreach ($orgs_to_create as $org_id) {
