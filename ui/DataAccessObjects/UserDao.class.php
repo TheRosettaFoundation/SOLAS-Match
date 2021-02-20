@@ -2019,8 +2019,8 @@ error_log(print_r($result, true));
         $ch = curl_init($url);
         $deadline = $project->getDeadline();
         $data = [
-            'name' => str_replace(array('\r\n', '\n', '\r'), '<br />', $post['project_title']),
-            'note' => str_replace(array('\r\n', '\n', '\r'), '<br />', $post['project_description']),
+            'name' => $post['project_title'],
+            'note' => $post['project_description'],
             'sourceLang' => $sourceLang,
             'targetLangs' => $langs,
             'workflowSteps' => [
