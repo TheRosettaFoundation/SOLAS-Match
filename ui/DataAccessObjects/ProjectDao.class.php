@@ -1000,6 +1000,15 @@ $memsource_change_country_to_kp = [
             0);
 
         $project_id = $project->getId();
+
+        $project_restrictions = $taskDao->get_project_restrictions($project_id);
+        if ($project_restrictions && (
+                ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION  && $project_restrictions['restrict_translate_tasks'])
+                    ||
+                ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $project_restrictions['restrict_revise_tasks']))) {
+            $taskDao->setRestrictedTask($task_id);
+        }
+
         $uploadFolder = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0";
         mkdir($uploadFolder, 0755, true);
         $filesFolder = Common\Lib\Settings::get('files.upload_path') . "files/proj-$project_id/task-$task_id/v-0";

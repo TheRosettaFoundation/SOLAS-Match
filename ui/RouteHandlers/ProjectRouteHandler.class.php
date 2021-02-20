@@ -179,6 +179,9 @@ class ProjectRouteHandler
             empty($hook['owner']['id']) ? 0 : $hook['owner']['id'],
             $workflowLevels);
 
+         $taskDao = new DAO\TaskDao();
+         if ($taskDao->organisationHasQualifiedBadge($memsource_client['org_id'])) $taskDao->insert_project_restrictions($project_id, true, true);
+
         // Create a topic in the Community forum (Discourse) and a project in Asana
         $target_languages = '';
         if (!empty($hook['targetLangs'])) {
@@ -330,6 +333,15 @@ class ProjectRouteHandler
             $projectDao->updateProjectDirectly($project);
 
             $project_id = $project->getId();
+
+            $project_restrictions = $taskDao->get_project_restrictions($project_id);
+            if ($project_restrictions && (
+                    ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION  && $project_restrictions['restrict_translate_tasks'])
+                        ||
+                    ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $project_restrictions['restrict_revise_tasks']))) {
+                $taskDao->setRestrictedTask($task_id);
+            }
+
             $uploadFolder = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0";
             mkdir($uploadFolder, 0755, true);
             $filesFolder = Common\Lib\Settings::get('files.upload_path') . "files/proj-$project_id/task-$task_id/v-0";
