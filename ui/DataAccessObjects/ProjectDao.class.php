@@ -1040,6 +1040,29 @@ $memsource_change_country_to_kp = [
         return $tasks;
     }
 
+    public function are_translations_not_all_complete($task, $memsource_task)
+    {
+
+        $translations_not_all_complete = 0;
+        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $memsource_task) {
+            $top_level = $this->get_top_level($memsource_task['internalId']);
+            $project_tasks = $this->get_tasks_for_project($task->getProjectId());
+            foreach ($project_tasks as $project_task) {
+                if ($top_level == $this->get_top_level($project_task['internalId'])) {
+                    if ($memsource_task['workflowLevel'] > $project_task['workflowLevel']) { // Dependent on
+                        if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
+                            if ($project_task['task-status_id'] != Common\Enums\TaskStatusEnum::COMPLETE) {
+                                $translations_not_all_complete = 1;
+                                error_log("translations_not_all_complete: {$project_task['id']} {$project_task['internalId']}");//(**)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $translations_not_all_complete;
+    }
+
     public function delete_task_directly($task_id)
     {
         LibAPI\PDOWrapper::call('delete_task_directly', LibAPI\PDOWrapper::cleanse($task_id));

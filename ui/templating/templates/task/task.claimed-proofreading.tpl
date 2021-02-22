@@ -11,6 +11,16 @@
 
     <section>
         <h1>{Localisation::getTranslation('common_what_happens_now')}</h1>
+        {if $translations_not_all_complete)
+        <p>{Localisation::getTranslation('common_this_is_what_you_need_to_do_as_soon_as_possible')} TEST: translations_not_all_complete</p>
+        <ol>
+            <li>{Localisation::getTranslation('task_claimed_please_read_kato')}</li>
+            <li>Also please note that you must wait for translation to be complete (100% translated) before starting revising.</li>
+            <li>{sprintf(Localisation::getTranslation('task_claimed_proofreading_proofread_the_file_in'), {TemplateHelper::getLanguage($task->getTargetLocale())})}<br />
+                <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
+                <i class="icon-th-list icon-white"></i> {Localisation::getTranslation('task_claimed_proofread_using_kato')}</a></li>
+        </ol>
+       {else}
         <p>{Localisation::getTranslation('common_this_is_what_you_need_to_do_as_soon_as_possible')}</p>
         <ol>
                 {if $matecat_url != ''}
@@ -25,6 +35,7 @@
                 <li>{Localisation::getTranslation('task_claimed_proofreading_upload_the_proofread_file')}</li>
                 {/if}
         </ol>
+        {/if}
         {if isset($user)}
             <p>{sprintf(Localisation::getTranslation('common_we_have_also_emailed_you_these_instructions_to'), {$user->getEmail()})}</p>
         {/if}

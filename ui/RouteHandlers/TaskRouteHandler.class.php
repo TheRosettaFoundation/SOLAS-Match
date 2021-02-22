@@ -367,7 +367,8 @@ class TaskRouteHandler
                 );
 
                 $memsource_task = $projectDao->get_memsource_task($taskId);
-                $matecat_urls[$taskId] = $taskDao->get_matecat_url($topTask, $memsource_task);
+                if ($projectDao->are_translations_not_all_complete($topTask, $memsource_task)) $matecat_urls[$taskId] = '';
+                else                                                                           $matecat_urls[$taskId] = $taskDao->get_matecat_url($topTask, $memsource_task);
                 $allow_downloads[$taskId] = $taskDao->get_allow_download($topTask, $memsource_task);
                 $show_mark_chunk_complete[$taskId] = 0;
                 if (!$allow_downloads[$taskId] && $matecat_urls[$taskId]) { // it's a chunk && a bit of optimisation
@@ -835,6 +836,7 @@ class TaskRouteHandler
             'matecat_url' => $taskDao->get_matecat_url($task, $memsource_task),
             'allow_download' => $taskDao->get_allow_download($task, $memsource_task),
             'memsource_task' => $memsource_task,
+            'translations_not_all_complete' => $projectDao->are_translations_not_all_complete($task, $memsource_task),
             'isSiteAdmin'    => $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID()),
         ));
 
