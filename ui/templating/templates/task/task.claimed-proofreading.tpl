@@ -25,7 +25,9 @@
         <ol>
                 {if $matecat_url != ''}
                 <li>{Localisation::getTranslation('task_claimed_please_read_kato')}</li>
+                {if empty($memsource_task)}
                 <li>Also please note that you must wait for translation to be complete (100% translated) before starting revising.</li>
+                {/if}
                 <li>{sprintf(Localisation::getTranslation('task_claimed_proofreading_proofread_the_file_in'), {TemplateHelper::getLanguage($task->getTargetLocale())})}<br />
                     <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
                     <i class="icon-th-list icon-white"></i> {Localisation::getTranslation('task_claimed_proofread_using_kato')}</a></li>
