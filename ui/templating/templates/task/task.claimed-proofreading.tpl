@@ -12,13 +12,12 @@
     <section>
         <h1>{Localisation::getTranslation('common_what_happens_now')}</h1>
         {if $translations_not_all_complete}
-        <p>{Localisation::getTranslation('common_this_is_what_you_need_to_do_as_soon_as_possible')} TEST: translations_not_all_complete</p>
+        <p>This is what you need to do</p>
         <ol>
             <li>{Localisation::getTranslation('task_claimed_please_read_kato')}</li>
-            <li>Also please note that you must wait for translation to be complete (100% translated) before starting revising.</li>
-            <li>{sprintf(Localisation::getTranslation('task_claimed_proofreading_proofread_the_file_in'), {TemplateHelper::getLanguage($task->getTargetLocale())})}<br />
-                <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
-                <i class="icon-th-list icon-white"></i> {Localisation::getTranslation('task_claimed_proofread_using_kato')}</a></li>
+            <li>You will be notified by email when the translations that this task depends on are complete.</li>
+            <li>The email will contain a link to memsource to do the revision. This will also be in your Claimed Tasks page.</li>
+            <li>Then you can start revising.</li>
         </ol>
        {else}
         <p>{Localisation::getTranslation('common_this_is_what_you_need_to_do_as_soon_as_possible')}</p>
