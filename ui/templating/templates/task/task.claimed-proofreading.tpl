@@ -11,7 +11,7 @@
 
     <section>
         <h1>{Localisation::getTranslation('common_what_happens_now')}</h1>
-        {if $translations_not_all_complete)
+        {if $translations_not_all_complete)}
         <p>{Localisation::getTranslation('common_this_is_what_you_need_to_do_as_soon_as_possible')} TEST: translations_not_all_complete</p>
         <ol>
             <li>{Localisation::getTranslation('task_claimed_please_read_kato')}</li>
