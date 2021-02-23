@@ -1053,7 +1053,7 @@ $memsource_change_country_to_kp = [
                         if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
                             if ($project_task['task-status_id'] != Common\Enums\TaskStatusEnum::COMPLETE) {
                                 $translations_not_all_complete = 1;
-                                error_log("translations_not_all_complete: {$project_task['id']} {$project_task['internalId']}");//(**)
+                                error_log("translations_not_all_complete {$memsource_task['id']}: {$project_task['id']} {$project_task['internalId']}");//(**)
                             }
                         }
                     }
