@@ -16,7 +16,7 @@
         <ol>
             <li>{Localisation::getTranslation('task_claimed_please_read_kato')}</li>
             <li>You will be notified by email when the translations that this task depends on are complete.</li>
-            <li>The email will contain a link to memsource to do the revision. This will also be in your Claimed Tasks page.</li>
+            <li>The email will contain a link to Memsource to do the revision. This will also be in your Claimed Tasks page.</li>
             <li>Then you can start revising.</li>
         </ol>
        {else}
