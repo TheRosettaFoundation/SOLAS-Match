@@ -15,7 +15,7 @@
                         <i class="icon-upload icon-white"></i> Update Chunks
                     </a>
                     <a href="{$matecat_analyze_url}" class="btn btn-primary" target="_blank">
-                        <i class="icon-th-list icon-white"></i> Kató TM analysis
+                        <i class="icon-th-list icon-white"></i> {if !empty($memsource_project)}Memsource Project{else}Kató TM analysis{/if}
                     </a>
                 {/if}
                 {if (!$isOrgMember)}
