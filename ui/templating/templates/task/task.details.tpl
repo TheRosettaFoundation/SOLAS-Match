@@ -125,7 +125,7 @@
                 </td>
                 <td></td>
                 <td>
-                    {if isset($isSiteAdmin) && isset($matecat_url) && $isSiteAdmin && $matecat_url != ''}<strong>Kató TM URL for Task:</strong><hr/>{/if}
+                    {if isset($isSiteAdmin) && isset($matecat_url) && $isSiteAdmin && $matecat_url != ''}<strong>{if !empty($memsource_task)}Memsource{else}Kató TM{/if} URL for Task:</strong><hr/>{/if}
                 </td>
             </tr>
             <tr valign="top">
