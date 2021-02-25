@@ -316,6 +316,7 @@ class TaskRouteHandler
         $matecat_urls = array();
         $allow_downloads = array();
         $show_mark_chunk_complete = array();
+        $memsource_tasks = [];
 
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
         if ($currentScrollPage <= $lastScrollPage) {
@@ -367,6 +368,7 @@ class TaskRouteHandler
                 );
 
                 $memsource_task = $projectDao->get_memsource_task($taskId);
+                $memsource_tasks[$taskId] = $memsource_task;
                 if ($projectDao->are_translations_not_all_complete($topTask, $memsource_task)) $matecat_urls[$taskId] = '';
                 else                                                                           $matecat_urls[$taskId] = $taskDao->get_matecat_url($topTask, $memsource_task);
                 $allow_downloads[$taskId] = $taskDao->get_allow_download($topTask, $memsource_task);
@@ -461,6 +463,7 @@ class TaskRouteHandler
             'proofreadTaskIds' => $proofreadTaskIds,
             'parentTaskIds'    => $parentTaskIds,
             'show_memsource_revision' => $show_memsource_revision,
+            'memsource_tasks' => $memsource_tasks,
             'currentScrollPage' => $currentScrollPage,
             'itemsPerScrollPage' => $itemsPerScrollPage,
             'lastScrollPage' => $lastScrollPage,
