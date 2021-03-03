@@ -678,7 +678,7 @@ $orgs_to_create = [
 672,
 481,
 577,
-615,
+//615,(**) already done
 718,
 607,
 680,
@@ -715,7 +715,7 @@ $orgs_to_create = [
 665,
 467,
 732,
-//660,(**) already done
+//660,(**) should not be done (IRC Global)
 548,
 503,
 500,
