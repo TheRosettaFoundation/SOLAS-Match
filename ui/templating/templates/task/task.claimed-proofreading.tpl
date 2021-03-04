@@ -12,18 +12,18 @@
     <section>
         <h1>{Localisation::getTranslation('common_what_happens_now')}</h1>
         {if $translations_not_all_complete}
-        <p>This is what you need to do</p>
+        <p>This is what you need to do:</p>
         <ol>
-            <li>{Localisation::getTranslation('task_claimed_please_read_kato')}</li>
+            <li>Please take a look at our <a href="https://community.translatorswb.org/t/the-kato-translators-toolkit/3138" target="_blank">Translator’s Toolkit</a> before working on this task.</li>
             <li>You will be notified by email when the translations that this task depends on are complete.</li>
-            <li>The email will contain a link to Memsource to do the revision. This will also be in your Claimed Tasks page.</li>
-            <li>Then you can start revising.</li>
+            <li>The email will contain a link to Memsource, our translation tool, where you can revise the task. You can also find the link in your Claimed Tasks page.</li>
+            <li>Click on the link to start revising.</li>
         </ol>
        {else}
-        <p>{Localisation::getTranslation('common_this_is_what_you_need_to_do_as_soon_as_possible')}</p>
+        <p>{Localisation::getTranslation('common_this_is_what_you_need_to_do_as_soon_as_possible')}:</p>
         <ol>
                 {if $matecat_url != ''}
-                <li>{if !empty($memsource_task)}{Localisation::getTranslation('task_claimed_please_read_kato')}{else}{Localisation::getTranslation('task_claimed_please_read_kato')}{/if}</li>
+                <li>{if !empty($memsource_task)}Please take a look at our <a href="https://community.translatorswb.org/t/the-kato-translators-toolkit/3138" target="_blank">Translator’s Toolkit</a> before working on this task.{else}{Localisation::getTranslation('task_claimed_please_read_kato')}{/if}</li>
                 {if empty($memsource_task)}
                 <li>Also please note that you must wait for translation to be complete (100% translated) before starting revising.</li>
                 {/if}
