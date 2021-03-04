@@ -17,7 +17,6 @@ require_once __DIR__."/../DataAccessObjects/UserDao.class.php";
 require_once __DIR__."/../DataAccessObjects/TaskDao.class.php";
 require_once __DIR__."/../lib/Notify.class.php";
 require_once __DIR__."/../lib/Middleware.php";
-require_once '/repo/neon-php/neon.php';
 
 
 class Users
@@ -1095,7 +1094,6 @@ class Users
             $userInfo->setUserId($newUser->getId());
             $userInfo->setLanguagePreference($english->getId());
             $personal_info = DAO\UserDao::savePersonalInfo($userInfo);
-            self::update_user_with_neon_data($newUser, $personal_info);
         }
         $params = array();
         try {
@@ -1360,150 +1358,8 @@ class Users
         $userInfo->setUserId($newUser->getId());
         $userInfo->setLanguagePreference($english->getId());
         $personal_info = DAO\UserDao::savePersonalInfo($userInfo);
-        self::update_user_with_neon_data($newUser, $personal_info);
         
         API\Dispatcher::sendResponse(null, $registered, null, $format);
-    }
-
-    public static function update_user_with_neon_data($newUser, $userInfo)
-    {
-        global $from_neon_to_trommons_pair;
-$NEON_NATIVELANGFIELD = 64;
-$NEON_SOURCE1FIELD    = 167;
-$NEON_TARGET1FIELD    = 168;
-$NEON_SOURCE2FIELD    = 169;
-$NEON_TARGET2FIELD    = 170;
-$NEON_LEVELFIELD      = 173;
-
-        $email = $newUser->getEmail();
-        error_log("update_user_with_neon_data($email)");
-
-        $neon = new \Neon();
-
-        $credentials = array(
-            'orgId'  => Common\Lib\Settings::get('neon.org_id'),
-            'apiKey' => Common\Lib\Settings::get('neon.api_key')
-        );
-
-        $loginResult = $neon->login($credentials);
-        if (isset($loginResult['operationResult']) && $loginResult['operationResult'] === 'SUCCESS') {
-            $search = array(
-                'method' => 'account/listAccounts',
-                'columns' => array(
-                'standardFields' => array(
-                    'Email 1',
-                    'First Name',
-                    'Last Name',
-                    'Preferred Name',
-                    'Company Name',
-                    'Company ID'),
-                'customFields' => array(
-                    $NEON_NATIVELANGFIELD,
-                    $NEON_SOURCE1FIELD,
-                    $NEON_TARGET1FIELD,
-                    $NEON_SOURCE2FIELD,
-                    $NEON_TARGET2FIELD,
-                    $NEON_LEVELFIELD),
-                )
-            );
-            $search['criteria'] = array(array('Email', 'EQUAL', $email));
-
-            $result = $neon->search($search);
-
-            $neon->go(array('method' => 'common/logout'));
-
-            if (empty($result) || empty($result['searchResults'])) {
-                error_log("update_user_with_neon_data($email), no results from NeonCRM");
-            } else {
-                foreach ($result['searchResults'] as $r) {
-                    $first_name = (empty($r['First Name'])) ? '' : $r['First Name'];
-                    if (!empty($first_name)) break; // If we find a First Name, then we have found the good account and we should use this one "$r" (normally there will only be one account)
-                }
-
-                $last_name  = (empty($r['Last Name']))  ? '' : $r['Last Name'];
-                if (!empty($first_name)) $userInfo->setFirstName($first_name);
-                if (!empty($last_name))  $userInfo->setLastName($last_name);
-                DAO\UserDao::savePersonalInfo($userInfo);
-
-                $display_name = (empty($r['Preferred Name'])) ? '' : $r['Preferred Name'];
-                if (!empty($display_name)) $newUser->setDisplayName($display_name);
-
-                $nativelang = (empty($r['Native language'])) ? '' : $r['Native language'];
-                if (!empty($from_neon_to_trommons_pair[$nativelang])) {
-                    $locale = new Common\Protobufs\Models\Locale();
-                    $locale->setLanguageCode($from_neon_to_trommons_pair[$nativelang][0]);
-                    //$locale->setCountryCode($from_neon_to_trommons_pair[$nativelang][1]); Meeting 20180110...
-                    $locale->setCountryCode('--');
-                    $newUser->setNativeLocale($locale);
-                }
-
-                DAO\UserDao::save($newUser);
-
-                $org_name    = (empty($r['Company Name'])) ? '' : $r['Company Name'];
-                $org_id_neon = (empty($r['Company ID']))   ? '' : $r['Company ID'];
-
-                error_log("first_name: $first_name, last_name: $last_name, display_name: $display_name, nativelang: $nativelang, org_name: $org_name, org_id_neon: $org_id_neon");
-
-                $sourcelang1  = (empty($r['Primary Source Language']))   ? '' : $r['Primary Source Language'];
-                $targetlang1  = (empty($r['Primary Target Language']))   ? '' : $r['Primary Target Language'];
-                $sourcelang2  = (empty($r['Secondary Source Language'])) ? '' : $r['Secondary Source Language'];
-                $targetlang2  = (empty($r['Secondary Target Language'])) ? '' : $r['Secondary Target Language'];
-
-                $neon_quality_levels = array('unverified' => 1, 'verified' => 2, 'senior' => 3);
-                if (empty($r['Level']) || empty($neon_quality_levels[$r['Level']])) {
-                    $quality_level = 1;
-                } else {
-                    $quality_level = $neon_quality_levels[$r['Level']];
-                }
-
-                $user_id = $newUser->getId();
-                if (!empty($from_neon_to_trommons_pair[$sourcelang1]) && !empty($from_neon_to_trommons_pair[$targetlang1]) && ($sourcelang1 != $targetlang1)) {
-                    DAO\UserDao::createUserQualifiedPair($user_id, $from_neon_to_trommons_pair[$sourcelang1][0], $from_neon_to_trommons_pair[$sourcelang1][1], $from_neon_to_trommons_pair[$targetlang1][0], $from_neon_to_trommons_pair[$targetlang1][1], $quality_level);
-                }
-                if (!empty($from_neon_to_trommons_pair[$sourcelang1]) && !empty($from_neon_to_trommons_pair[$targetlang2]) && ($sourcelang1 != $targetlang2)) {
-                    DAO\UserDao::createUserQualifiedPair($user_id, $from_neon_to_trommons_pair[$sourcelang1][0], $from_neon_to_trommons_pair[$sourcelang1][1], $from_neon_to_trommons_pair[$targetlang2][0], $from_neon_to_trommons_pair[$targetlang2][1], $quality_level);
-                }
-                if (!empty($from_neon_to_trommons_pair[$sourcelang2]) && !empty($from_neon_to_trommons_pair[$targetlang1]) && ($sourcelang2 != $targetlang1)) {
-                    DAO\UserDao::createUserQualifiedPair($user_id, $from_neon_to_trommons_pair[$sourcelang2][0], $from_neon_to_trommons_pair[$sourcelang2][1], $from_neon_to_trommons_pair[$targetlang1][0], $from_neon_to_trommons_pair[$targetlang1][1], $quality_level);
-                }
-                if (!empty($from_neon_to_trommons_pair[$sourcelang2]) && !empty($from_neon_to_trommons_pair[$targetlang2]) && ($sourcelang2 != $targetlang2)) {
-                    DAO\UserDao::createUserQualifiedPair($user_id, $from_neon_to_trommons_pair[$sourcelang2][0], $from_neon_to_trommons_pair[$sourcelang2][1], $from_neon_to_trommons_pair[$targetlang2][0], $from_neon_to_trommons_pair[$targetlang2][1], $quality_level);
-                }
-
-                $org_name = trim(str_replace(array('"', '<', '>'), '', $org_name)); // Only Trommons value with limitations (not filtered on output)
-
-                if (!empty($org_id_neon) && $org_id_neon != 3783) { // Translators without Borders (TWb)
-
-                    if ($org_id_matching_neon = DAO\UserDao::getOrgIDMatchingNeon($org_id_neon)) {
-                        DAO\AdminDao::addOrgAdmin($user_id, $org_id_matching_neon);
-                        error_log("update_user_with_neon_data($email), addOrgAdmin($user_id, $org_id_matching_neon)");
-
-                    } elseif ($org = DAO\OrganisationDao::getOrg(null, $org_name)) { // unlikely?
-                        DAO\UserDao::insertOrgIDMatchingNeon($org->getId(), $org_id_neon);
-
-                        DAO\AdminDao::addOrgAdmin($user_id, $org->getId());
-                        error_log("update_user_with_neon_data($email), addOrgAdmin($user_id, " . $org->getId() . "), $org_name existing");
-
-                    } elseif (!empty($org_name)) {
-                        $org = new Common\Protobufs\Models\Organisation();
-                        $org->setName($org_name);
-                        $org->setEmail($email);
-
-                        $org = DAO\OrganisationDao::insertAndUpdate($org);
-                        error_log("update_user_with_neon_data($email), created Org: $org_name");
-                        if (!empty($org) && $org->getId() > 0) {
-                            DAO\UserDao::insertOrgIDMatchingNeon($org->getId(), $org_id_neon);
-
-                            DAO\AdminDao::addOrgAdmin($user_id, $org->getId());
-                            error_log("update_user_with_neon_data($email), addOrgAdmin($user_id, " . $org->getId() . ')');
-                            Lib\Notify::sendOrgCreatedNotifications($org->getId());
-                        }
-                    }
-                }
-            }
-        } else {
-            error_log("update_user_with_neon_data($email), could not connect to NeonCRM");
-        }
     }
 
     public static function changeEmail($format = ".json")
