@@ -175,7 +175,6 @@ $from_neon_to_trommons_pair = array(
 'Niuean' => array('niu', 'NU'),
 'Norwegian' => array('no', 'NO'),
 'Norwegian Bokmål' => array('no', 'NO'),
-"Norwegian Bokm\xE5l" => array('no', 'NO'),
 'Norwegian Nynorsk' => array('nn', 'NO'),
 'Odia' => array('ory', 'IN'),
 'Palauan' => array('pau', 'PW'),
