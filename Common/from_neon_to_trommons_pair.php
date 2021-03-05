@@ -215,4 +215,5 @@ $language_options_changes = [
   'run-BI#' => 'Kirundi',
   'sr-ME#' => 'Montenegrin',
   'no-NO#' => 'Norwegian',
+  'ckl-NG#' => 'Kibaku',
 ];
