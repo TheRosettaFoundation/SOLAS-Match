@@ -2591,7 +2591,6 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
         if (in_array($language_code, $matecat_acceptable_languages)) return $language_code;
         // Special case...
         if ($language_code === 'tn-BW') return 'tsn-BW';
-        if ($language_code === 'ca---') return 'cav-ES';
         if ($language_code === 'es-49') return 'es-MX';
         if ($language_code === 'sr-90') return 'sr-ME';
         if ($language_code === 'shu-90') return 'shu-NG';

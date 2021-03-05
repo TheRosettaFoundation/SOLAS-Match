@@ -482,6 +482,7 @@ $memsource_change_country_to_kp = [
 'latn_rs' => '90',
 'latn_ua' => '90',
 'latn_uz' => '90',
+'latn_ng' => '90',
 
 'cyrl_rs' => 'rs',
 'cyrl_me' => 'me',
@@ -535,6 +536,7 @@ $memsource_change_country_to_kp = [
         else                     $memsource_pair = $kp_language;
 
         if ($memsource_pair === 'sd_pk') $memsource_pair = 'sd_arab';
+        if ($memsource_pair === 'shu_latn') $memsource_pair = 'shu_latn_ng';
 
         if (in_array($memsource_pair, $memsource_valid)) return $memsource_pair;
         if (in_array($kp_language,    $memsource_valid)) return $kp_language;

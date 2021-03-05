@@ -17,7 +17,7 @@ $from_neon_to_trommons_pair = array(
 'Bosnian (Latin)' => array('bs', '90'),
 'Bulgarian' => array('bg', 'BG'),
 'Burmese' => array('my', 'MM'),
-'Catalan' => array('ca', 'ES'),
+'Catalan' => array('ca', '--'),
 'Cebuano' => array('ceb', 'PH'),
 'Chinese Simplified' => array('zh', 'CN'),
 'Chinese Traditional' => array('zh', 'TW'),
@@ -118,8 +118,6 @@ $from_neon_to_trommons_pair = array(
 'Konkani' => array('kok', 'IN'),
 'Chadian Arabic' => array('shu', 'TD'),
 'Chadian Arabic Latin' => array('shu', '90'),
-'Shuwa Arabic' => array('shu', 'TD'),
-'Shuwa Arabic Latin' => array('shu', '90'),
 'Kamba' => array('kam', 'KE'),
 'Margi' => array('mrt', 'NG'),
 'Kalenjin' => array('kln', 'KE'),
@@ -210,7 +208,6 @@ $from_neon_to_trommons_pair = array(
 );
 
 $language_options_changes = [
-  //'shu-TD#' => 'Arabic Chad',
   'apc-SY#' => 'Arabic North Levantine',
   'de-CH#' => 'German Swiss',
   'bin-NG#' => 'Bini',
