@@ -8,6 +8,7 @@ $from_neon_to_trommons_pair = array(
 'Armenian' => array('hy', 'AM'),
 'Azerbaijani Cyrillic' => array('az', '91'),
 'Azerbaijani Latin' => array('az', '90'),
+'Aymara' => array('ay', '--'),
 'Basque' => array('eu', 'ES'),
 'Bengali' => array('bn', 'IN'),
 'Belarus' => array('be', 'BY'),
