@@ -146,7 +146,7 @@ $from_neon_to_trommons_pair = array(
 'Sango' => array('sg', 'CF'),
 'Samoan' => array('sm', 'WS'),
 'Shona' => array('sn', 'ZW'),
-'Sotho Southern' => array('st', 'ZA'),
+'Sotho Southern' => array('st', 'LS'),
 'Tswana' => array('tn', 'BW'),
 'Wolof' => array('wo', 'SN'),
 'Chittagonian' => array('ctg', 'BD'),
@@ -213,6 +213,5 @@ $language_options_changes = [
   'bin-NG#' => 'Bini',
   'run-BI' => 'Rundi',
   'run-BI#' => 'Kirundi',
-  'sr-ME#' => 'Montenegrin',
   'ckl-NG#' => 'Kibaku',
 ];
