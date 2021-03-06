@@ -543,6 +543,7 @@ $memsource_change_country_to_kp = [
 
         if ($memsource_pair === 'sd_pk') $memsource_pair = 'sd_arab';
         if ($memsource_pair === 'shu_latn') $memsource_pair = 'shu_latn_ng';
+        if ($memsource_pair === 'uz_cyrl') $memsource_pair = 'uz_cyrl_uz';
 
         if (in_array($memsource_pair, $memsource_valid)) return $memsource_pair;
         if (in_array($kp_language,    $memsource_valid)) return $kp_language;
