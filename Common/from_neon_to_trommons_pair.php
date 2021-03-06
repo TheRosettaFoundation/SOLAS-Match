@@ -94,7 +94,6 @@ $from_neon_to_trommons_pair = array(
 'Spanish Colombia' => array('es', 'CO'),
 'Swahili' => array('swh', 'KE'),
 'Swedish' => array('sv', 'SE'),
-'Swiss German' => array('de', 'CH'),
 'Tagalog' => array('tl', 'PH'),
 'Tamil' => array('ta', 'IN'),
 'Telugu' => array('te', 'IN'),
@@ -209,7 +208,6 @@ $from_neon_to_trommons_pair = array(
 
 $language_options_changes = [
   'apc-SY#' => 'Arabic North Levantine',
-  'de-CH#' => 'German Swiss',
   'bin-NG#' => 'Bini',
   'run-BI' => 'Rundi',
   'run-BI#' => 'Kirundi',
