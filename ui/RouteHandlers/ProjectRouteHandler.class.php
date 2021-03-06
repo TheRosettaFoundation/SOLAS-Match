@@ -2595,6 +2595,9 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
         if ($language_code === 'sr-90') return 'sr-ME';
         if ($language_code === 'shu-90') return 'shu-NG';
         if ($language_code === 'rhg-90') return 'rhl-MM';
+        if ($language_code === 'sr-90') return 'sr-Latn-RS';
+        if ($language_code === 'sr-91') return 'sr-Cyrl-RS';
+        if ($language_code === 'sr-92') return 'sr-ME';
 
         if (!empty($matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))])) return $matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))];
         return '';
