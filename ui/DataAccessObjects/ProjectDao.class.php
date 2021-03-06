@@ -464,6 +464,7 @@ $memsource_change_language_to_kp = [
 'rn' => 'run',
 'tir' => 'ti',
 'mfi' => 'mf0',
+'nb' => 'no',
 ];
 
 $memsource_change_country_to_kp = [
@@ -525,6 +526,7 @@ $memsource_change_country_to_kp = [
             'run' => 'rn',
             'swh' => 'sw',
             'mf0' => 'mfi',
+            'no' => 'nb',
         ];
         if (!empty($kp_change_language_to_memsource[$kp_language])) $kp_language = $kp_change_language_to_memsource[$kp_language];
         $kp_change_country_to_memsource = [
