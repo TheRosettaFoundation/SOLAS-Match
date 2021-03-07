@@ -549,6 +549,8 @@ $memsource_change_country_to_kp = [
         if ($memsource_pair === 'shu_latn') $memsource_pair = 'shu_latn_ng';
         if ($memsource_pair === 'uz_cyrl') $memsource_pair = 'uz_cyrl_uz';
         if ($memsource_pair === 'tg_cyrl') $memsource_pair = 'tg_cyrl_tj';
+        if ($memsource_pair === 'sr_latn') $memsource_pair = 'sr_latn_rs';
+        if ($memsource_pair === 'sr_cyrl') $memsource_pair = 'sr_cyrl_rs';
 
         if (in_array($memsource_pair, $memsource_valid)) return $memsource_pair;
         if (in_array($kp_language,    $memsource_valid)) return $kp_language;
