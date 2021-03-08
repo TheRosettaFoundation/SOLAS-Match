@@ -497,10 +497,20 @@ $memsource_change_country_to_kp = [
 
 'arab' => 'pk', // Because sd_arab is the only active 'arab'
 
-'hans' => 'cn',
-'hans_cn' => 'cn',
-'hant' => 'tw',
-'hant_tw' => 'tw',
+'cn' => '92',
+'hans' => '92',
+'hans_cn' => '92',
+'tw' => '93',
+'hant' => '93',
+'hant_tw' => '93',
+[[
+<option value="sr_cyrl_me"  title='Serbian (Cyrillic, Montenegro)'>Serbian (Cyrillic, Montenegro)</option>
+<option value="sr_cyrl_rs"  title='Serbian (Cyrillic, Serbia)'>Serbian (Cyrillic, Serbia)</option>
+<option value="sr_latn_me"  title='Serbian (Latin, Montenegro)'>Serbian (Latin, Montenegro)</option>
+<option value="sr_latn_rs"  title='Serbian (Latin, Serbia)'>Serbian (Latin, Serbia)</option>
+'Montenegrin (Latin)' => array('cnr', '90'),
+'Montenegrin (Cyrilic)' => array('cnr', '91'),
+]]
 ];
         $trommons_language_code = $memsource;
         $trommons_country_code  = '';
@@ -535,8 +545,8 @@ $memsource_change_country_to_kp = [
             '49' => '419',  // Latin America
             '90' => 'latn', // Latin Script
             '91' => 'cyrl', // Cyrillic Script
-            '92' => 'latn_me', // Latin Script Montenegro
-            '93' => 'cyrl_me', // Cyrillic Script Montenegro
+            '92' => 'cn',   // Simplified Script
+            '93' => 'tw',   // Traditional Script
         ];
         if (!empty($kp_change_country_to_memsource[$kp_country])) $kp_country = $kp_change_country_to_memsource[$kp_country];
 
@@ -551,6 +561,8 @@ $memsource_change_country_to_kp = [
         if ($memsource_pair === 'tg_cyrl') $memsource_pair = 'tg_cyrl_tj';
         if ($memsource_pair === 'sr_latn') $memsource_pair = 'sr_latn_rs';
         if ($memsource_pair === 'sr_cyrl') $memsource_pair = 'sr_cyrl_rs';
+        if ($memsource_pair === 'cnr_latn') $memsource_pair = 'sr_latn_me';
+        if ($memsource_pair === 'cnr_cyrl') $memsource_pair = 'sr_cyrl_me';
 
         if (in_array($memsource_pair, $memsource_valid)) return $memsource_pair;
         if (in_array($kp_language,    $memsource_valid)) return $kp_language;
