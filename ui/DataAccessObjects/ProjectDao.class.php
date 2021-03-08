@@ -480,15 +480,12 @@ $memsource_change_country_to_kp = [
 'latn_am' => '90',
 'latn_in' => '90',
 'latn_ru' => '90',
-'latn_me' => '90',
 'latn_rs' => '90',
 'latn_ua' => '90',
 'latn_uz' => '90',
 'latn_ng' => '90',
 
 'cyrl_rs' => '91',
-'cyrl_me' => '91',
-
 'cyrl' => '91',
 'cyrl_az' => '91',
 'cyrl_ba' => '91',
@@ -503,14 +500,6 @@ $memsource_change_country_to_kp = [
 'tw' => '93',
 'hant' => '93',
 'hant_tw' => '93',
-[[
-<option value="sr_cyrl_me"  title='Serbian (Cyrillic, Montenegro)'>Serbian (Cyrillic, Montenegro)</option>
-<option value="sr_cyrl_rs"  title='Serbian (Cyrillic, Serbia)'>Serbian (Cyrillic, Serbia)</option>
-<option value="sr_latn_me"  title='Serbian (Latin, Montenegro)'>Serbian (Latin, Montenegro)</option>
-<option value="sr_latn_rs"  title='Serbian (Latin, Serbia)'>Serbian (Latin, Serbia)</option>
-'Montenegrin (Latin)' => array('cnr', '90'),
-'Montenegrin (Cyrilic)' => array('cnr', '91'),
-]]
 ];
         $trommons_language_code = $memsource;
         $trommons_country_code  = '';
@@ -526,6 +515,8 @@ $memsource_change_country_to_kp = [
         if (!empty($memsource_change_language_to_kp[$trommons_language_code])) $trommons_language_code = $memsource_change_language_to_kp[$trommons_language_code];
 
         if ($trommons_language_code === 'sw' && $trommons_country_code === 'CD') $trommons_language_code = 'swc';
+        if ($trommons_country_code === 'latn_me') { $trommons_language_code = 'cnr'; $trommons_country_code = '90';}
+        if ($trommons_country_code === 'cyrl_me') { $trommons_language_code = 'cnr'; $trommons_country_code = '91';}
 
         return [$trommons_language_code, $trommons_country_code];
     }
