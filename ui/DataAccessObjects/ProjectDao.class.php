@@ -465,7 +465,6 @@ $memsource_change_language_to_kp = [
 'tir' => 'ti',
 'mfi' => 'mf0',
 'nb' => 'no',
-'sw' => 'swh',
 ];
 
 $memsource_change_country_to_kp = [
@@ -516,7 +515,7 @@ $memsource_change_country_to_kp = [
         }
         if (!empty($memsource_change_language_to_kp[$trommons_language_code])) $trommons_language_code = $memsource_change_language_to_kp[$trommons_language_code];
 
-        if ($trommons_language_code === 'swh' && $trommons_country_code === 'CD') $trommons_language_code = 'swc';
+        if ($trommons_language_code === 'sw' && $trommons_country_code === 'CD') $trommons_language_code = 'swc';
 
         return [$trommons_language_code, $trommons_country_code];
     }
@@ -528,7 +527,6 @@ $memsource_change_country_to_kp = [
             'asm' => 'as',
             'run' => 'rn',
             'swc' => 'sw',
-            'swh' => 'sw',
             'mf0' => 'mfi',
             'no' => 'nb',
         ];
