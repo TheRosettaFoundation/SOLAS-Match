@@ -515,8 +515,8 @@ $memsource_change_country_to_kp = [
         if (!empty($memsource_change_language_to_kp[$trommons_language_code])) $trommons_language_code = $memsource_change_language_to_kp[$trommons_language_code];
 
         if ($trommons_language_code === 'sw' && $trommons_country_code === 'CD') $trommons_language_code = 'swc';
-        if ($trommons_country_code === 'latn_me') { $trommons_language_code = 'cnr'; $trommons_country_code = '90';}
-        if ($trommons_country_code === 'cyrl_me') { $trommons_language_code = 'cnr'; $trommons_country_code = '91';}
+        if ($trommons_country_code === 'LATN_ME') { $trommons_language_code = 'cnr'; $trommons_country_code = '90';}
+        if ($trommons_country_code === 'CYRL_ME') { $trommons_language_code = 'cnr'; $trommons_country_code = '91';}
 
         return [$trommons_language_code, $trommons_country_code];
     }
