@@ -137,7 +137,6 @@ $from_neon_to_trommons_pair = array(
 'Dhivehi' => array('dv', 'MV'),
 'Filipino' => array('fil', 'PH'),
 'Kabuverdianu' => array('kea', 'CV'),
-'Marshallese' => array('mh', 'MH'),
 'Norwegian Bokmål' => array('no', '--'),
 'Norwegian Nynorsk' => array('nn', '--'),
 'Palauan' => array('pau', 'PW'),
