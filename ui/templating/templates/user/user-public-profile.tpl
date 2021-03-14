@@ -189,7 +189,7 @@
 
                                     {foreach from=$userQualifiedPairs item=userQualifiedPair}
                                         <p>
-                                            {$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']} &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; {$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}&nbsp;&nbsp;&nbsp;&nbsp;
+                                            {if $userQualifiedPair['country_source'] == 'ANY'}{$userQualifiedPair['language_source']}{else}{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']}{/if} &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; {if $userQualifiedPair['country_target'] == 'ANY'}{$userQualifiedPair['language_target']}{else}{$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}{/if}&nbsp;&nbsp;&nbsp;&nbsp;
                                             <strong>
                                             {if $userQualifiedPair['qualification_level'] == 1}({Localisation::getTranslation('user_qualification_level_1')}){/if}
                                             {if $userQualifiedPair['qualification_level'] == 2}({Localisation::getTranslation('user_qualification_level_2')}){/if}
