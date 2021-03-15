@@ -103,6 +103,7 @@ $from_neon_to_trommons_pair = array(
 'Telugu' => array('te', '--'),
 'Tatar' => array('tt', 'RU'),
 'Thai' => array('th', 'TH'),
+'Tigre' => array('tig', '--'),
 'Tigrinya' => array('ti', '--'),
 'Tsonga' => array('ts', 'ZA'),
 'Turkish' => array('tr', '--'),
