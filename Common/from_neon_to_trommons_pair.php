@@ -126,6 +126,7 @@ $from_neon_to_trommons_pair = array(
 'Kamba' => array('kam', 'KE'),
 'Marghi Central' => array('mrt', 'NG'),
 'Kalenjin' => array('kln', 'KE'),
+'Luba-Katanga' => array('lu', '--'),
 'Luo' => array('luo', 'KE'),
 'Kikuyu' => array('ki', 'KE'),
 'Kisii' => array('guz', 'KE'),
