@@ -1,5 +1,7 @@
 <?php
         $matecat_acceptable_languages = array(
+'tig' => 'tig-ER',
+'lu' => 'lub-CD',
 'af' => 'af-ZA',
 'sq' => 'sq-AL',
 'am' => 'am-ET',

@@ -1,6 +1,8 @@
 <?php
 
 $from_neon_to_trommons_pair = array(
+'Tigre' => array('tig', '--'), //(**)DELETE DUP in  memsource
+'Luba-Katanga' => array('lu', '--'), //(**)DELETE DUP in  memsource
 'Afrikaans' => array('af', 'ZA'),
 'Albanian' => array('sq', '--'),
 'Amharic' => array('am', 'ET'),
