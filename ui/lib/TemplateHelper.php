@@ -117,7 +117,7 @@ class TemplateHelper
         } elseif ($use_language_codes == 'n') {
             return "$languageName - $countryName";
         } elseif ($use_language_codes == 'h') {
-            if ($countryName === 'ALL') return "$languageName ($languageCode)";
+            if ($countryName === 'ANY') return "$languageName ($languageCode)";
             return "$languageName - $countryName ($languageCode-$countryCode)";
         }
     }
@@ -135,7 +135,7 @@ class TemplateHelper
         } elseif ($use_language_codes == 'n') {
             return "$languageName - $countryName";
         } elseif ($use_language_codes == 'h') {
-            if ($countryName === 'ALL') return "$languageName ($languageCode)";
+            if ($countryName === 'ANY') return "$languageName ($languageCode)";
             return "$languageName - $countryName ($languageCode-$countryCode)";
         }
     }
@@ -153,7 +153,7 @@ class TemplateHelper
         } elseif ($use_language_codes == 'n') {
             return "$languageName - $countryName";
         } elseif ($use_language_codes == 'h') {
-            if ($countryName === 'ALL') return "$languageName ($languageCode)";
+            if ($countryName === 'ANY') return "$languageName ($languageCode)";
             return "$languageName - $countryName ($languageCode-$countryCode)";
         }
     }
@@ -203,7 +203,7 @@ class TemplateHelper
         } elseif ($use_language_codes == 'n') {
             return "$languageName - $countryName";
         } elseif ($use_language_codes == 'h') {
-            if ($countryName === 'ALL') return "$languageName ($languageCode)";
+            if ($countryName === 'ANY') return "$languageName ($languageCode)";
             return "$languageName - $countryName ($languageCode - $countryCode)";
         }
         return "$languageName - $countryName";
@@ -213,7 +213,7 @@ class TemplateHelper
     {
         $languageName = $locale->getLanguageName();
         $countryName = $locale->getCountryName();
-        if ($countryName === 'ALL') return $languageName;
+        if ($countryName === 'ANY') return $languageName;
         return "$languageName - $countryName";
     }
 
@@ -231,7 +231,7 @@ class TemplateHelper
         } elseif ($use_language_codes == 'n') {
             return "$languageName - $countryName";
         } elseif ($use_language_codes == 'h') {
-            if ($countryName === 'ALL') return "$languageName ($languageCode)";
+            if ($countryName === 'ANY') return "$languageName ($languageCode)";
             return "$languageName - $countryName ($languageCode - $countryCode)";
         }
         return "$language - $countryName";
