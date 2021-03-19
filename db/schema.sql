@@ -3373,7 +3373,6 @@ BEGIN
     WHERE
         t.project_id=projectID AND
         t.published=1 AND
-        NOT EXISTS (SELECT 1 FROM TaskTranslatorBlacklist t WHERE t.user_id=uID AND t.task_id=t.id) AND
         ((uqp.user_id IS NOT NULL AND tq.required_qualification_level<=uqp.qualification_level)) AND
         (
             r.restricted_task_id IS NULL OR
