@@ -660,6 +660,7 @@ class UserRouteHandler
                     $app->flashNow('error', $error);
                 }
                 if (!is_null($user)) {
+                    error_log("Password, Login: {$post['email']}");
                     Common\Lib\UserSession::setSession($user->getId());
                     $request = Common\Lib\UserSession::getReferer();
                     Common\Lib\UserSession::clearReferer();
@@ -732,6 +733,7 @@ class UserRouteHandler
                     $app->flash('error', $error);
                     $app->redirect($app->urlFor('login'));
                 }
+                error_log('OAuth, Login: ' . $user->getEmail());
                 Common\Lib\UserSession::setSession($user->getId());
                 $request = Common\Lib\UserSession::getReferer();
                 Common\Lib\UserSession::clearReferer();
@@ -896,8 +898,7 @@ class UserRouteHandler
                     $response_data = json_decode($curl_response);
 
                     if (!empty($response_data->email)) {
-                        error_log("Got email from ProZ SSO: {$response_data->email}");
-
+                        error_log("ProZ SSO, Login: {$response_data->email}");
                         $userDao->requestAuthCode($response_data->email);
                         // This does not return,
                         // it redirects to API /v0/users/$email/auth/code
@@ -985,6 +986,7 @@ EOD;
         } else {
             $retvals = $openid->getAttributes();
             if ($openid->validate()) {
+                error_log("OpenID, Login: {$retvals['contact/email']}");
                 // Request Auth code and redirect
                 $userDao = new DAO\UserDao();
                 $userDao->requestAuthCode($retvals['contact/email']);
