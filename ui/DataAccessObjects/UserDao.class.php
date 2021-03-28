@@ -640,6 +640,7 @@ class UserDao extends BaseDao
             Common\Enums\HttpMethodEnum::POST,
             $postArg
         );
+        error_log("loginWithGooglePlus, Login: $email");
         self::requestAuthCode($email);
     }
 
