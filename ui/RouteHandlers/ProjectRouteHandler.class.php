@@ -144,6 +144,10 @@ class ProjectRouteHandler
             error_log("No client id in new project: {$hook['name']}");
             $hook['client']['id'] = 0;
         }
+        if ($hook['client']['id'] == 305070) {
+            error_log('Testing Client (No KP link)');
+            return;
+        }
         $memsource_client = $projectDao->get_memsource_client_by_memsource_id($hook['client']['id']);
         if (empty($memsource_client)) {
             error_log("No MemsourceOrganisations record for new project: {$hook['name']}, client id: {$hook['client']['id']}");
