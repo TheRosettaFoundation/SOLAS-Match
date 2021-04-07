@@ -125,11 +125,11 @@
                                {if $status_id == 3 && ($type_id == 3 || $type_id == 2)}
                                     {if $matecat_urls[$task_id] != ''}
                                         {if $type_id == 2}
-                                            <a href="{$matecat_urls[$task_id]}" class="btn btn-small btn-success">
+                                            <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
                                                 {if $memsource_tasks[$task_id]}Translate using Memsource{else}{Localisation::getTranslation('task_claimed_translate_using_kato')}{/if}
                                             </a>
                                         {else}
-                                            <a href="{$matecat_urls[$task_id]}" class="btn btn-small btn-success">
+                                            <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
                                                 {if $memsource_tasks[$task_id]}Revise using Memsource{else}{Localisation::getTranslation('task_claimed_proofread_using_kato')}{/if}
                                             </a>
                                         {/if}
