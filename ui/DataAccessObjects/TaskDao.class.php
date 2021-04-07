@@ -735,7 +735,8 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
 
     public function get_matecat_url($task, $memsource_task)
     {
-        if ($memsource_task) return "https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
+        if ($memsource_task) return "https://dev.translatorswb.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://cloud.memsource.com/web/saml2Login/metadata/127330&RelayState=https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
+        //(**)if ($memsource_task) return "https://kato.translatorswb.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://cloud.memsource.com/web/saml2Login/metadata/127330&RelayState=https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
 
         $matecat_url = '';
         if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
