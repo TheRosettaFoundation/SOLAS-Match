@@ -1920,6 +1920,7 @@ EOD;
             'certifications'         => $userDao->getUserCertifications($user_id),
             'tracked_registration'   => $userDao->get_tracked_registration($user_id),
             'testing_center_projects_by_code' => $testing_center_projects_by_code,
+            'show_create_memsource_user'      => 1,
         ));
 
         $app->render("user/user-public-profile.tpl");
