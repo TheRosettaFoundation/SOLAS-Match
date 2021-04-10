@@ -1728,24 +1728,24 @@ error_log(print_r($project_result, true));//(**)
         $url = "https://cloud.memsource.com/web/api2/v1/projects/{$project_result['uid']}/preTranslateSettings";
         $ch = curl_init($url);
         $data = [
-            'translationMemory': true,
-            'translationMemoryThreshold': 70,
-            'autoPropagateRepetitions': true,
-            'machineTranslation': false,
-            'nonTranslatables': true,
-            'repetitionsAsConfirmed': true,
-            'matches100AsTranslated': false,
-            'matches101AsTranslate': true,
-            'nonTranslatablesAsTranslated': false,
-            'preTranslateOnJobCreation': true,
-            'setJobStatusCompleted': false,
-            'setJobStatusCompletedWhenConfirmed': false,
-            'setProjectStatusCompleted': false,
-            'lockNonTranslatables': false,
-            'lock100': false,
-            'lock101': false,
-            'nonTranslatablesInEditors': true,
-            'overwrite': false
+            'translationMemory' => true,
+            'translationMemoryThreshold' => 70,
+            'autoPropagateRepetitions' => true,
+            'machineTranslation' => false,
+            'nonTranslatables' => true,
+            'repetitionsAsConfirmed' => true,
+            'matches100AsTranslated' => false,
+            'matches101AsTranslate' => true,
+            'nonTranslatablesAsTranslated' => false,
+            'preTranslateOnJobCreation' => true,
+            'setJobStatusCompleted' => false,
+            'setJobStatusCompletedWhenConfirmed' => false,
+            'setProjectStatusCompleted' => false,
+            'lockNonTranslatables' => false,
+            'lock100' => false,
+            'lock101' => false,
+            'nonTranslatablesInEditors' => true,
+            'overwrite' => false
         ];
         $payload = json_encode($data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
