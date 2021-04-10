@@ -1665,6 +1665,12 @@ EOD;
                 $userDao->updateUserHowheard($user_id, 1);
             }
 
+            $show_create_memsource_user = $isSiteAdmin && !$userDao->get_memsource_user($user_id) && $adminDao->isSiteAdmin($user_id);
+            if ($show_create_memsource_user && !empty($post['mark_create_memsource_user'])) {
+                if ($memsource_user_id = $userDao->create_memsource_user($user_id)) $app->flashNow('success', "Memsource user $memsource_user_id created");
+                $show_create_memsource_user = 0;
+            }
+
             if ($isSiteAdmin && !empty($post['mark_certification_reviewed'])) {
                 $userDao->updateCertification($post['certification_id'], 1);
             }
