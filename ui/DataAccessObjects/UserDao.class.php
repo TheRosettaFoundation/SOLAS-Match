@@ -591,6 +591,42 @@ class UserDao extends BaseDao
         return $ret;
     }
 
+    public function create_memsource_user($user_id)
+    {
+        $ch = curl_init($this->memsourceApiV2 . 'users');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $user_personal_info = $this->getUserPersonalInformation($user_id);
+        $user_info = $this->getUser($user_id);
+        $user_country = $this->getUserPersonalInformation($user_id)->country;
+        $timezones = Common\Lib\MemsourceTimezone::timezones();
+        $timezone = !empty($timezones[$user_country]) ? $timezones[$user_country] : 'Europe/Rome';
+        $data = array(
+            'email' => $user_info->email,
+            'password' => uniqid(),
+            'firstName' => $user_personal_info->firstName,
+            'lastName' => $user_personal_info->lastName,
+            'role' => Common\Enums\MemsourceRoleEnum::PROJECT_MANAGER,
+            'timezone' => $timezone,
+            'userName' => $user_info->display_name
+        );
+        $payload = json_encode($data);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+        $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
+        $result_exec = curl_exec($ch);
+        $result = json_decode($result_exec, true);
+        curl_close($ch);
+        if (!empty($result['id'])) {
+            $memsource_user_id = $result['id'];
+            $this->set_memsource_user($user_id, $memsource_user_id);
+            error_log("PROJECT_MANAGER memsource user $memsource_user_id created for $user_id");
+            return $memsource_user_id;
+        } else {
+            error_log("No PROJECT_MANAGER memsource user created for $user_id");
+            return 0;
+        }
+    }
+
     public function queue_claim_task($user_id, $task_id)
     {
         LibAPI\PDOWrapper::call('queue_claim_task', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($task_id));
