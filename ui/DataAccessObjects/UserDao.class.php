@@ -1688,6 +1688,39 @@ error_log(print_r($project_result, true));//(**)
             return 0;
         }
 
+        // Pre-Translate Settings
+        $url = "https://cloud.memsource.com/web/api2/v1/projects/{$project_result['uid']}/preTranslateSettings";
+        $ch = curl_init($url);
+        $data = [
+            'translationMemory': true,
+            'translationMemoryThreshold': 70,
+            'autoPropagateRepetitions': true,
+            'machineTranslation': false,
+            'nonTranslatables': true,
+            'repetitionsAsConfirmed': true,
+            'matches100AsTranslated': false,
+            'matches101AsTranslate': true,
+            'nonTranslatablesAsTranslated': false,
+            'preTranslateOnJobCreation': true,
+            'setJobStatusCompleted': false,
+            'setJobStatusCompletedWhenConfirmed': false,
+            'setProjectStatusCompleted': false,
+            'lockNonTranslatables': false,
+            'lock100': false,
+            'lock101': false,
+            'nonTranslatablesInEditors': true,
+            'overwrite': false
+        ];
+        $payload = json_encode($data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+        $result = curl_exec($ch);
+        $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        if ($responseCode > 204) error_log("$url responseCode: $responseCode");
+        curl_close($ch);
+
         // Create Job
         $url = "https://cloud.memsource.com/web/api2/v1/projects/{$project_result['uid']}/jobs";
         $ch = curl_init($url);
