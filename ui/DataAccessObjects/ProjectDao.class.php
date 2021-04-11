@@ -554,6 +554,7 @@ $memsource_change_country_to_kp = [
         if ($memsource_pair === 'sr_cyrl') $memsource_pair = 'sr_cyrl_rs';
         if ($memsource_pair === 'cnr_latn') $memsource_pair = 'sr_latn_me';
         if ($memsource_pair === 'cnr_cyrl') $memsource_pair = 'sr_cyrl_me';
+        if ($memsource_pair === 'mfi_cm') $memsource_pair = 'mfi_ng';//(**)
 
         if (in_array($memsource_pair, $memsource_valid)) return $memsource_pair;
         if (in_array($kp_language,    $memsource_valid)) return $kp_language;
