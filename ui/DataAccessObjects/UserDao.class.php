@@ -1729,7 +1729,7 @@ error_log(print_r($project_result, true));//(**)
         $ch = curl_init($url);
         $data = [
             'translationMemory' => true,
-            'translationMemoryThreshold' => 70,
+            'translationMemoryThreshold' => .7,
             'autoPropagateRepetitions' => true,
             'machineTranslation' => false,
             'nonTranslatables' => true,
