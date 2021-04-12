@@ -712,7 +712,7 @@ $orgs_to_create = [
 552,
 687,
 727,
-665,
+//665,(**) already done
 467,
 732,
 //660,(**) should not be done (IRC Global)
