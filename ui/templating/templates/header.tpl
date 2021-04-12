@@ -106,6 +106,9 @@
                                 <a href="https://analytics.translatorswb.org">Kató Analytics</a>
                             </li>
                         {/if}
+                            <li>
+                                <a href="https://form.asana.com?k=dlsF11XkOwpfFllbq325dg&d=170818793545926" target="_blank">Give Feedback</a>
+                            </li>
                     </ul>
                     <ul class="nav pull-right" style="max-height: 38px">
                         {if isset($userNotifications)}   
