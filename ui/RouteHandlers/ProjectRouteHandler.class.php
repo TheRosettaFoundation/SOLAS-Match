@@ -388,8 +388,8 @@ class ProjectRouteHandler
                 }
             }
             if ($part['status'] == 'COMPLETED_BY_LINGUIST') {
-//(**)                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 62927); // translators@translatorswithoutborders.org
-                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 3297);
+                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 62927); // translators@translatorswithoutborders.org
+//(**)dev server                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 3297);
 
                 $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::COMPLETE);
                 $taskDao->sendTaskUploadNotifications($task_id, 1);
@@ -1373,7 +1373,7 @@ class ProjectRouteHandler
         }
         $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
 
-        $create_memsource = 1;//(**)If this org is a memsource one
+        $create_memsource = 0;//(**)If this org is a memsource one
 
         if ($post = $app->request()->post()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
@@ -2544,8 +2544,8 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 $memsource_project_uid = $memsource_project['memsource_project_uid'];
                 $created_by_id         = $memsource_project['created_by_id'];
                 $user_id = $projectDao->get_user_id_from_memsource_user($created_by_id);
-//(**)                if (!$user_id) $user_id = 62927; // translators@translatorswithoutborders.org
-                if (!$user_id) $user_id = 3297;
+                if (!$user_id) $user_id = 62927; // translators@translatorswithoutborders.org
+//(**)dev server                if (!$user_id) $user_id = 3297;
 
                 $memsourceApiV1 = Common\Lib\Settings::get("memsource.api_url_v1");                    
                 $memsourceApiToken = Common\Lib\Settings::get("memsource.memsource_api_token");

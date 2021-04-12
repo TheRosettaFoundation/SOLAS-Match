@@ -676,8 +676,8 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
         if ($memsource_project) {
             $projectDao = new ProjectDao();
             $user_id = $projectDao->get_user_id_from_memsource_user($memsource_project['created_by_id']);
-//(**)            if (!$user_id) $user_id = 62927; // translators@translatorswithoutborders.org
-            if (!$user_id) $user_id = 3297;
+            if (!$user_id) $user_id = 62927; // translators@translatorswithoutborders.org
+//(**)dev server            if (!$user_id) $user_id = 3297;
             $result = $projectDao->get_user($user_id);
             return $result[0];
         }
@@ -735,8 +735,8 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
 
     public function get_matecat_url($task, $memsource_task)
     {
-        if ($memsource_task) return "https://dev.translatorswb.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://cloud.memsource.com/web/saml2Login/metadata/127330&RelayState=https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
-        //(**)if ($memsource_task) return "https://kato.translatorswb.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://cloud.memsource.com/web/saml2Login/metadata/127330&RelayState=https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
+//dev server(**)        if ($memsource_task) return "https://dev.translatorswb.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://cloud.memsource.com/web/saml2Login/metadata/127330&RelayState=https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
+        if ($memsource_task) return "https://kato.translatorswb.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://cloud.memsource.com/web/saml2Login/metadata/127330&RelayState=https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
 
         $matecat_url = '';
         if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
