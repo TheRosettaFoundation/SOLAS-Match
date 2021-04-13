@@ -67,9 +67,11 @@
                 <div class="container">
                     <a href="{urlFor name='home'}" class="pull-left"><img height="40px" src="{urlFor name='home'}ui/img/logo_katotrommons.png"></a>
                     <ul class="nav">
+                        {if !isset($site_admin)}
                         <li {if isset($current_page) && $current_page == 'home'}class="active"{/if} >
                             <a href="{urlFor name="home"}">{Localisation::getTranslation('header_home')}</a>
                         </li> 
+                        {/if}
                         {if isset($user_is_organisation_member)||isset($site_admin)}
                              <li {if isset($current_page) && $current_page == 'org-dashboard'}class="active"{/if} >
                                  <a href="{urlFor name="org-dashboard"}">{Localisation::getTranslation('header_dashboard')}</a>
