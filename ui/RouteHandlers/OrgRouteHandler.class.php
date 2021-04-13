@@ -632,21 +632,7 @@ class OrgRouteHandler
 //(**)DELETE!!!...
         $projectDao = new DAO\ProjectDao();
 $orgs_to_create = [
-678,
-498,
-697,
-482,
-524,
-495,
-513,
-527,
-537,
-722,
-707,
-671,
-523,
-//457,(**) already done
-689,
+//DOAGAIN(**)689,
 677,
 674,
 682,
