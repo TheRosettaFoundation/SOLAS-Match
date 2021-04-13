@@ -776,8 +776,8 @@ $orgs_to_create = [
 781,
 ];
 //(**)DISABLED...
-$orgs_to_create = [
-];
+//$orgs_to_create = [
+//];
 
 foreach ($orgs_to_create as $org_id) {
     $org = $orgDao->getOrganisation($org_id);
