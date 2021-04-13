@@ -11,6 +11,8 @@ require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/../../Common/protobufs/models/OAuthResponse.php";
 require_once __DIR__."/BaseDao.php";
 require_once __DIR__."/../../api/lib/PDOWrapper.class.php";
+require_once __DIR__."/../../Common/Enums/MemsourceRoleEnum.class.php";
+require_once __DIR__."/../../Common/lib/MemsourceTimezone.class.php";
 
 
 class UserDao extends BaseDao
@@ -19,6 +21,10 @@ class UserDao extends BaseDao
     {
         $this->client = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
         $this->siteApi = Common\Lib\Settings::get("site.api");
+        $this->memsourceAuthUrlApi = Common\Lib\Settings::get("memsource.api_auth_url");
+        $this->memsourceApiV1 = Common\Lib\Settings::get("memsource.api_url_v1");
+        $this->memsourceApiV2 = Common\Lib\Settings::get("memsource.api_url_v2");
+        $this->memsourceApiToken = Common\Lib\Settings::get("memsource.memsource_api_token");
     }
     
     public function getUserDart($userId)
@@ -55,7 +61,7 @@ class UserDao extends BaseDao
     public function getUserByEmail($email, $headerHash = null)
     {
         $ret = null;
-        $request = "{$this->siteApi}v0/users/getByEmail/$email";
+        $request = "{$this->siteApi}v0/users/getByEmail/$email/email";
         $ret = $this->client->call(
             "\SolasMatch\Common\Protobufs\Models\User",
             $request,
@@ -431,11 +437,141 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function claimTask($userId, $taskId)
+    public function claimTask($userId, $taskId, $memsource_task, $project_id)
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tasks/$taskId";
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
+
+        if ($memsource_task && !empty($ret)) {
+            $memsource_user_id = $this->get_memsource_user($userId);
+            if (!$memsource_user_id) {
+                $url = $this->memsourceApiV2 . 'users';
+                $ch = curl_init($url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $user_personal_info = $this->getUserPersonalInformation($userId);
+                $user_info = $this->getUser($userId);
+                $user_country = $this->getUserPersonalInformation($userId)->country;
+                $timezones = Common\Lib\MemsourceTimezone::timezones();
+                $timezone = !empty($timezones[$user_country]) ? $timezones[$user_country] : 'Europe/Rome';
+                $data = array(
+                    'email' => $user_info->email,
+                    'password' => uniqid(),
+                    'firstName' => $user_personal_info->firstName,
+                    'lastName' => $user_personal_info->lastName,
+                    'role' => Common\Enums\MemsourceRoleEnum::LINGUIST,
+                    'timezone' => $timezone,
+                    'userName' => $user_info->display_name
+                );
+                $payload = json_encode($data);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+                $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));                
+                $result_exec = curl_exec($ch);
+                $result = json_decode($result_exec, true);                
+                curl_close($ch);
+                if (!empty($result['id'])) {
+                    $memsource_user_id = $result['id'];
+                    $this->set_memsource_user($userId, $memsource_user_id);
+                } else {
+                    error_log("No memsource user created for $userId");
+                    $memsource_user_id = 0;
+                }
+            }
+            if ($memsource_user_id) {
+                $projectDao = new ProjectDao();
+                $memsource_project = $projectDao->get_memsource_project($project_id);
+                $projectUid = $memsource_project['memsource_project_uid'];
+                $taskUid = $memsource_task['memsource_task_uid'];
+                $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
+
+                $url = $this->memsourceApiV1.'projects/' . $projectUid . '/jobs/' . $taskUid;
+                $ch = curl_init($url);
+                $data = array(
+                    'status' => 'ACCEPTED',
+                    'providers' => array(
+                        array(
+                            'type' => 'USER',
+                            'id' => $memsource_user_id
+                        )
+                    )
+                );
+                $payload = json_encode($data);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+                $result = curl_exec($ch);
+                if ($error_number = curl_errno($ch)) {
+                    error_log("Failed: claimTask($userId, $taskId...) $url Curl error ($error_number): " . curl_error($ch));
+                } elseif (($responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE)) > 204) {
+                    $error_number = -1;
+                    error_log("Failed: claimTask($userId, $taskId...) $url responseCode: $responseCode");
+                }
+                curl_close($ch);
+                if ($error_number) {
+                    $this->unclaimTask($userId, $taskId, null);
+                    return 0;
+                }
+
+/*
+                $url_notify = "https://cloud.memsource.com/web/api2/v1/projects/$projectUid/jobs/notifyAssigned";
+                $ch_notify = curl_init($url_notify);
+                $data = array(
+                    'jobs' => array(
+                        array(
+                            'uid' => $taskUid
+                        )
+                    ),
+                    'emailTemplate' => array('id' => '2213161'),
+                );
+                $payload = json_encode($data);
+                curl_setopt($ch_notify, CURLOPT_POSTFIELDS, $payload);
+                curl_setopt($ch_notify, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch_notify, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+                curl_setopt($ch_notify, CURLOPT_RETURNTRANSFER, true);
+                $result = curl_exec($ch_notify);
+                curl_close($ch_notify);
+
+                $url = 'https://cloud.memsource.com/web/api2/v1/projects/' . $projectUid . '/jobs/' . $taskUid;
+                $ch = curl_init($url);
+                $data = array(
+                    'status' => 'ACCEPTED',
+                    'providers' => array(
+                        array(
+                            'type' => 'USER',
+                            'id' => $memsource_user_id
+                        )
+                    )
+                );
+                $payload = json_encode($data);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+                $result = curl_exec($ch);
+                curl_close($ch);
+*/
+
+                // If this is split, add corresponding task(s) to deny list for translator
+                $projectDao = new ProjectDao();
+                $taskDao = new TaskDao();
+                $top_level = $projectDao->get_top_level($memsource_task['internalId']);
+                $project_tasks = $projectDao->get_tasks_for_project($project_id);
+                foreach ($project_tasks as $project_task) {
+                    if ($top_level == $projectDao->get_top_level($project_task['internalId'])) {
+                        if (strpos($memsource_task['internalId'], '.') || strpos($project_task['internalId'], '.')) { // Make sure is split
+                            if ($memsource_task['workflowLevel'] != $project_task['workflowLevel']) { // Not same workflowLevel
+                                if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
+                                    error_log("Adding $userId to Deny List for {$project_task['id']} {$project_task['internalId']}");
+                                    $taskDao->addUserToTaskBlacklist($userId, $project_task['id']);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         $taskDao = new TaskDao();
         $matecat_tasks = $taskDao->getTaskChunk($taskId);
@@ -453,6 +589,42 @@ class UserDao extends BaseDao
         }
 
         return $ret;
+    }
+
+    public function create_memsource_user($user_id)
+    {
+        $ch = curl_init($this->memsourceApiV2 . 'users');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $user_personal_info = $this->getUserPersonalInformation($user_id);
+        $user_info = $this->getUser($user_id);
+        $user_country = $this->getUserPersonalInformation($user_id)->country;
+        $timezones = Common\Lib\MemsourceTimezone::timezones();
+        $timezone = !empty($timezones[$user_country]) ? $timezones[$user_country] : 'Europe/Rome';
+        $data = array(
+            'email' => $user_info->email,
+            'password' => uniqid(),
+            'firstName' => $user_personal_info->firstName,
+            'lastName' => $user_personal_info->lastName,
+            'role' => Common\Enums\MemsourceRoleEnum::PROJECT_MANAGER,
+            'timezone' => $timezone,
+            'userName' => $user_info->display_name
+        );
+        $payload = json_encode($data);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+        $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
+        $result_exec = curl_exec($ch);
+        $result = json_decode($result_exec, true);
+        curl_close($ch);
+        if (!empty($result['id'])) {
+            $memsource_user_id = $result['id'];
+            $this->set_memsource_user($user_id, $memsource_user_id);
+            error_log("PROJECT_MANAGER memsource user $memsource_user_id created for $user_id");
+            return $memsource_user_id;
+        } else {
+            error_log("No PROJECT_MANAGER memsource user created for $user_id");
+            return 0;
+        }
     }
 
     public function queue_claim_task($user_id, $task_id)
@@ -1397,6 +1569,238 @@ class UserDao extends BaseDao
         $result = LibAPI\PDOWrapper::call('get_tracked_registration', LibAPI\PDOWrapper::cleanse($user_id));
         if (!empty($result) && in_array($result[0]['referer'], ['RWS Moravia', 'Welocalize', 'Lionbridge', 'SDL'])) return true;
         return false;
+    }
+
+    public function get_memsource_user($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_memsource_user', LibAPI\PDOWrapper::cleanse($user_id));
+
+        if (empty($result)) return 0;
+
+        return $result[0]['memsource_user_id'];
+    }
+
+    public function set_memsource_user($user_id, $memsource_user_id)
+    {
+        LibAPI\PDOWrapper::call('set_memsource_user', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($memsource_user_id));
+    }
+
+    public function memsource_list_jobs($memsource_project_uid)
+    {
+        $url = $this->memsourceApiV1 . "projects/$memsource_project_uid/workflowSteps";
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+        $result = curl_exec($ch);
+        $result = json_decode($result, true);
+        curl_close($ch);
+        if (!isset($result['projectWorkflowSteps'])) return [];
+        $workflowlevels = count($result['projectWorkflowSteps']);
+
+        $jobs = [];
+        $totalPages = 1;
+        if ($workflowlevels) {
+            for ($workflow_param = 1; $workflow_param <= $workflowlevels; $workflow_param++) {
+                for ($p = 0; $p < $totalPages; $p++) {
+                    $url = $this->memsourceApiV2 . "projects/$memsource_project_uid/jobs?pageNumber=$p&workflowLevel=$workflow_param";
+                    $ch = curl_init($url);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+                    $result = curl_exec($ch);
+                    $result = json_decode($result, true);
+                    if (!empty($result['content'])) {
+                        foreach ($result['content'] as $job) {
+                            if (!empty($job['uid'])) $jobs[$job['uid']] = $job;
+                        }
+                    }
+                    curl_close($ch);
+
+                    if (!empty($result['totalPages'])) $totalPages = $result['totalPages'];
+                }
+             }
+        } else {
+                for ($p = 0; $p < $totalPages; $p++) {
+                    $url = $this->memsourceApiV2 . "projects/$memsource_project_uid/jobs?pageNumber=$p";
+                    $ch = curl_init($url);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+                    $result = curl_exec($ch);
+                    $result = json_decode($result, true);
+                    if (!empty($result['content'])) {
+                        foreach ($result['content'] as $job) {
+                            if (!empty($job['uid'])) $jobs[$job['uid']] = $job;
+                        }
+                    }
+                    curl_close($ch);
+
+                    if (!empty($result['totalPages'])) $totalPages = $result['totalPages'];
+                }
+        }
+        return $jobs;
+    }
+
+    public function memsource_get_job($memsource_project_uid, $memsource_task_uid)
+    {
+        $url = $this->memsourceApiV1 . "projects/$memsource_project_uid/jobs/$memsource_task_uid";
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+        $result = curl_exec($ch);
+        $job = json_decode($result, true);
+        curl_close($ch);
+
+        if (empty($job['innerId'])) return 0;
+        return $job;
+    }
+
+    public function memsource_get_target_file($memsource_project_uid, $memsource_task_uid)
+    {
+        $url = "{$this->memsourceApiV1}projects/$memsource_project_uid/jobs/$memsource_task_uid/targetFile";
+        $re = curl_init($url);
+        $httpHeaders = ["Authorization: Bearer $this->memsourceApiToken"];
+        curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
+        curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
+        $res = curl_exec($re);
+        if ($error_number = curl_errno($re)) error_log("memsource_get_target_file($memsource_project_uid, $memsource_task_uid) Curl error ($error_number): " . curl_error($re));
+        $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
+        curl_close($re);
+        if ($responseCode != 200 || strlen($res) > 100000000) {
+            error_log("ERROR memsource_get_target_file($memsource_project_uid, $memsource_task_uid) responseCode: $responseCode");
+            return 0;
+        }
+        return $res;
+    }
+
+    public function create_memsource_project($post, $project, $file_name, $file)
+    {
+        $projectDao = new ProjectDao();
+
+        [$kp_language, $kp_country] = $projectDao->convert_selection_to_language_country($post['sourceLanguageSelect']);
+        $sourceLang = $projectDao->convert_language_country_to_memsource($kp_language, $kp_country);
+        if (!$sourceLang) return 0;
+
+        $targetCount = 0;
+        $langs = [];
+        while (!empty($post["target_language_$targetCount"])) {
+            [$kp_language, $kp_country] = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
+            $lang = $projectDao->convert_language_country_to_memsource($kp_language, $kp_country);
+            if (!$lang) return 0;
+            $langs[] = $lang;
+            $targetCount++;
+        }
+        if (empty($langs)) return 0;
+
+        // Create Project
+        $url = 'https://cloud.memsource.com/web/api2/v1/projects';
+        $ch = curl_init($url);
+        $deadline = $project->getDeadline();
+        $data = [
+            'name' => $post['project_title'],
+            'note' => $post['project_description'],
+            'sourceLang' => $sourceLang,
+            'targetLangs' => $langs,
+            'workflowSteps' => [
+                ['id' => 'cFUVHSAAmsVrftA3GC0Ak6'],
+                ['id' => '1Y5F5rJDuvNTnyQBkCUhw0']
+            ],
+            'dateDue' => substr($deadline, 0, 10) . 'T' . substr($deadline, 11, 8) . 'Z',
+        ];
+        if ($client = $projectDao->get_memsource_client($project->getOrganisationId())) $data['client'] = ['id' => $client['memsource_client_uid']];
+
+        $payload = json_encode($data);
+error_log("Project payload: $payload");//(**)
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+        $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $project_result = curl_exec($ch);
+        $project_result = json_decode($project_result, true);
+error_log(print_r($project_result, true));//(**)
+        curl_close($ch);
+        if (empty($project_result['uid'])) {
+            error_log('memsource Project Create Failed: ' . print_r($project_result, true));
+            return 0;
+        }
+
+        // Pre-Translate Settings
+        $url = "https://cloud.memsource.com/web/api2/v1/projects/{$project_result['uid']}/preTranslateSettings";
+        $ch = curl_init($url);
+        $data = [
+            'translationMemory' => true,
+            'translationMemoryThreshold' => .7,
+            'autoPropagateRepetitions' => true,
+            'machineTranslation' => false,
+            'nonTranslatables' => true,
+            'repetitionsAsConfirmed' => true,
+            'matches100AsTranslated' => false,
+            'matches101AsTranslate' => true,
+            'nonTranslatablesAsTranslated' => false,
+            'preTranslateOnJobCreation' => true,
+            'setJobStatusCompleted' => false,
+            'setJobStatusCompletedWhenConfirmed' => false,
+            'setProjectStatusCompleted' => false,
+            'lockNonTranslatables' => false,
+            'lock100' => false,
+            'lock101' => false,
+            'nonTranslatablesInEditors' => true,
+            'overwrite' => false
+        ];
+        $payload = json_encode($data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+        $result = curl_exec($ch);
+        $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        if ($responseCode > 204) error_log("$url responseCode: $responseCode");
+        curl_close($ch);
+
+        // Create Job
+        $url = "https://cloud.memsource.com/web/api2/v1/projects/{$project_result['uid']}/jobs";
+        $ch = curl_init($url);
+        $metadata = json_encode(['targetLangs' => $langs]);
+        $headers = [
+            $authorization,
+            "Memsource: $metadata",
+            "Content-Disposition: attachment; filename*=UTF-8''" . rawurlencode($file_name),
+            'Content-type: application/octet-stream',
+            'Content-Length: ' . strlen($file),
+        ];
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $file);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        $result = json_decode($result, true);
+error_log(print_r($result, true));//(**)
+        curl_close($ch);
+        if (empty($result['jobs'])) {
+            error_log('memsource Job Create Failed: ' . print_r($result, true));
+            return 0;
+        }
+
+        $workflowLevels = ['', '', '']; // Will contain 'Translation' or 'Revision' for workflowLevel 1 possibly up to 3
+        if (!empty($project_result['workflowSteps'])) {
+            foreach ($project_result['workflowSteps'] as $step) {
+                foreach ($workflowLevels as $i => $w) {
+                    if ($step['workflowLevel'] == $i + 1) $workflowLevels[$i] = $step['name'];
+                }
+            }
+        }
+        $projectDao->set_memsource_project($project->getId(), $project_result['id'], $project_result['uid'],
+            empty($project_result['createdBy']['id']) ? 0 : $project_result['createdBy']['id'],
+            empty($project_result['owner']['id']) ? 0 : $project_result['owner']['id'],
+            $workflowLevels);
+        $memsource_project = $projectDao->get_memsource_project($project->getId());
+
+        $jobs_indexed = [];
+        foreach ($result['jobs'] as $job) {
+            $jobs_indexed["{$job['targetLang']}-{$job['workflowLevel']}"] = $job;
+        }
+        $memsource_project['jobs'] = $jobs_indexed;
+        return $memsource_project;
     }
 
     public function record_referer($referer)

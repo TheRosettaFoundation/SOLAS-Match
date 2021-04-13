@@ -52,7 +52,7 @@
             <tr align="center">
                 <td>
                     <label for="title" style="font-size: large"><strong>{Localisation::getTranslation('common_title')}</strong><span style="color: red">*</span></label>
-                    <textarea wrap="soft" cols="1" rows="4" style="width: 400px; margin-bottom: 40px" name="project_title" id="project_title" onblur="checkTitleNotUsed();">{$project->getTitle()|escape:'html':'UTF-8'}</textarea>
+                    <textarea wrap="soft" cols="1" rows="4" style="width: 400px; margin-bottom: 40px" name="project_title" id="project_title" {if empty($memsource_project)}onblur="checkTitleNotUsed();"{/if}>{$project->getTitle()|escape:'html':'UTF-8'}</textarea>
 
                     <label for="description" style="font-size: large"><strong>{Localisation::getTranslation('common_description')}</strong><span style="color: red">*</span></label>
                     <textarea wrap="soft" cols="1" rows="6" style="width: 400px; margin-bottom: 40px" name="project_description" id="project_description">{$project->getDescription()|escape:'html':'UTF-8'}</textarea>

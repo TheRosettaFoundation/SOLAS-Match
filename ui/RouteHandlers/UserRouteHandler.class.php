@@ -1630,6 +1630,8 @@ EOD;
         $testing_center_projects_by_code = [];
         $testing_center_projects = $projectDao->get_testing_center_projects($user_id, $testing_center_projects_by_code);
 
+        $show_create_memsource_user = $isSiteAdmin && !$userDao->get_memsource_user($user_id) && $adminDao->isSiteAdmin($user_id);
+
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
             Common\Lib\UserSession::checkCSRFKey($post, 'userPublicProfile');
@@ -1663,6 +1665,11 @@ EOD;
 
             if ($isSiteAdmin && !empty($post['mark_reviewed'])) {
                 $userDao->updateUserHowheard($user_id, 1);
+            }
+
+            if ($show_create_memsource_user && !empty($post['mark_create_memsource_user'])) {
+                if ($memsource_user_id = $userDao->create_memsource_user($user_id)) $app->flashNow('success', "Memsource user $memsource_user_id created");
+                $show_create_memsource_user = 0;
             }
 
             if ($isSiteAdmin && !empty($post['mark_certification_reviewed'])) {
@@ -1920,6 +1927,7 @@ EOD;
             'certifications'         => $userDao->getUserCertifications($user_id),
             'tracked_registration'   => $userDao->get_tracked_registration($user_id),
             'testing_center_projects_by_code' => $testing_center_projects_by_code,
+            'show_create_memsource_user'      => $show_create_memsource_user,
         ));
 
         $app->render("user/user-public-profile.tpl");

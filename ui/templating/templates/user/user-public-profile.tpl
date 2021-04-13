@@ -43,6 +43,12 @@
                                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
                             </form>
                         {/if}
+                        {if $show_create_memsource_user}
+                            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                                <input type="submit" class="btn btn-primary" name="mark_create_memsource_user" value="Create Matching Memsource User" />
+                                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                            </form>
+                        {/if}
                     </div>
                 </td>
             </tr>
@@ -189,7 +195,7 @@
 
                                     {foreach from=$userQualifiedPairs item=userQualifiedPair}
                                         <p>
-                                            {$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']} &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; {$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}&nbsp;&nbsp;&nbsp;&nbsp;
+                                            {if $userQualifiedPair['country_source'] == 'ANY'}{$userQualifiedPair['language_source']}{else}{$userQualifiedPair['language_source']} - {$userQualifiedPair['country_source']}{/if} &nbsp;&nbsp;&nbsp;{Localisation::getTranslation('common_to')}&nbsp;&nbsp;&nbsp; {if $userQualifiedPair['country_target'] == 'ANY'}{$userQualifiedPair['language_target']}{else}{$userQualifiedPair['language_target']} - {$userQualifiedPair['country_target']}{/if}&nbsp;&nbsp;&nbsp;&nbsp;
                                             <strong>
                                             {if $userQualifiedPair['qualification_level'] == 1}({Localisation::getTranslation('user_qualification_level_1')}){/if}
                                             {if $userQualifiedPair['qualification_level'] == 2}({Localisation::getTranslation('user_qualification_level_2')}){/if}
@@ -197,7 +203,7 @@
                                             </strong>
 
                                             {assign var="pair" value="`$userQualifiedPair['language_code_source']`-`$userQualifiedPair['language_code_target']`"}
-                                            {if $userQualifiedPair['qualification_level'] == 1 && in_array($pair, ['en-ar', 'en-fr', 'en-es', 'fr-en', 'es-en', 'en-pt', 'en-it']) && $native_language_code === $userQualifiedPair['language_code_target'] && ($private_access || $isSiteAdmin) && $button_count.$pair == 0}
+                                            {if false && $userQualifiedPair['qualification_level'] == 1 && in_array($pair, ['en-ar', 'en-fr', 'en-es', 'fr-en', 'es-en', 'en-pt', 'en-it']) && $native_language_code === $userQualifiedPair['language_code_target'] && ($private_access || $isSiteAdmin) && $button_count.$pair == 0}
                                                 {$button_count.$pair=1}
                                             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                                                 <input type="hidden" name="source_language_country" value="{$userQualifiedPair['language_code_source']}-{$userQualifiedPair['country_code_source']}" />

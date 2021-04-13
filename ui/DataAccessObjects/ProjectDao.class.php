@@ -4,6 +4,7 @@ namespace SolasMatch\UI\DAO;
 
 use \SolasMatch\API\Lib as LibAPI;
 use \SolasMatch\Common as Common;
+use \SolasMatch\UI\RouteHandlers as Route;
 
 require_once __DIR__."/../../Common/lib/APIHelper.class.php";
 require_once __DIR__."/BaseDao.php";
@@ -123,6 +124,25 @@ class ProjectDao extends BaseDao
             $project
         );
         return $ret;
+    }
+
+    public function updateProjectDirectly($project)
+    {
+        $sourceLocale = $project->getSourceLocale();
+        $args = LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getId()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getTitle()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getDescription()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getImpact()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getDeadline()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($project->getOrganisationId()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getReference()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($project->getWordCount()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($project->getCreatedTime()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getCountryCode()) . ',' .
+            LibAPI\PDOWrapper::cleanseNullOrWrapStr($sourceLocale->getLanguageCode()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($project->getImageUploaded()) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($project->getImageApproved());
+        LibAPI\PDOWrapper::call('projectInsertAndUpdate', $args);
     }
 
     public function saveProjectFile($project, $userId, $filename, $fileData)
@@ -261,6 +281,9 @@ class ProjectDao extends BaseDao
     public function discourse_parameterize($project)
     {
         $a = $project->getTitle();
+        $project_id = $project->getId();
+//dev server        if ($project_id > 9277) $a .= " $project_id"; //(**)[dev server ID] Backwards compatible
+        if ($project_id > 26399) $a .= " $project_id"; //(**)[KP ID] Backwards compatible
 
         mb_internal_encoding('UTF-8');
         mb_regex_encoding('UTF-8');
@@ -381,7 +404,7 @@ $replace = array(
         $a = preg_replace('/-+/', '-', $a);
         $a = strtolower($a);
 
-        $topic_id = $this->get_discourse_id($project->getId());
+        $topic_id = $this->get_discourse_id($project_id);
         if (!empty($topic_id)) $a .= "/$topic_id";
 
         return $a;
@@ -408,14 +431,9 @@ $replace = array(
         return $result;
     }
 
-    public function generate_language_selection()
+    public function generate_language_selection($create_memsource = 0)
     {
-        global $from_neon_to_trommons_pair, $from_neon_to_trommons_pair_options_remove, $language_options_changes;
-        unset($from_neon_to_trommons_pair["Norwegian Bokm\xE5l"]); // Remove as it is just here to support bad Neon hook
-
-        foreach ($from_neon_to_trommons_pair_options_remove as $remove) {
-            unset($from_neon_to_trommons_pair[$remove]);
-        }
+        global $from_neon_to_trommons_pair, $language_options_changes;
 
         $language_options = [];
         foreach ($from_neon_to_trommons_pair as $language => $trommons_pair) {
@@ -436,6 +454,114 @@ $replace = array(
         $trommons_language_code = substr($language_code, 0, strpos($language_code, '-'));
         $trommons_country_code  = substr($language_code, strpos($language_code, '-') + 1);
         return [$trommons_language_code, $trommons_country_code];
+    }
+
+    public function convert_memsource_to_language_country($memsource)
+    {
+$memsource_change_language_to_kp = [
+'as' => 'asm',
+'ilt' => 'ilo',
+'kz' => 'ky',
+'rn' => 'run',
+'tir' => 'ti',
+'mfi' => 'mf0',
+'nb' => 'no',
+];
+
+$memsource_change_country_to_kp = [
+'001' => '--',
+'mod' => '--',
+'419' => '49',
+'latn' => '90',
+'latn_az' => '90',
+'latn_bg' => '90',
+'latn_ba' => '90',
+'latn_gr' => '90',
+'latn_ir' => '90',
+'latn_am' => '90',
+'latn_in' => '90',
+'latn_ru' => '90',
+'latn_rs' => '90',
+'latn_ua' => '90',
+'latn_uz' => '90',
+'latn_ng' => '90',
+
+'cyrl_rs' => '91',
+'cyrl' => '91',
+'cyrl_az' => '91',
+'cyrl_ba' => '91',
+'cyrl_tj' => '91',
+'cyrl_uz' => '91',
+
+'arab' => 'pk', // Because sd_arab is the only active 'arab'
+
+'cn' => '92',
+'hans' => '92',
+'hans_cn' => '92',
+'tw' => '93',
+'hant' => '93',
+'hant_tw' => '93',
+];
+        $trommons_language_code = $memsource;
+        $trommons_country_code  = '';
+        $pos = strpos($memsource, '_');
+        if ($pos != false) {
+            $trommons_language_code = substr($memsource, 0, $pos);
+            $trommons_country_code  = substr($memsource, $pos + 1);
+            if (!empty($memsource_change_country_to_kp[$trommons_country_code])) $trommons_country_code = $memsource_change_country_to_kp[$trommons_country_code];
+            $trommons_country_code = strtoupper($trommons_country_code);
+        } else {
+            $trommons_country_code = '--';
+        }
+        if (!empty($memsource_change_language_to_kp[$trommons_language_code])) $trommons_language_code = $memsource_change_language_to_kp[$trommons_language_code];
+
+        if ($trommons_language_code === 'sw' && $trommons_country_code === 'CD') $trommons_language_code = 'swc';
+        if ($trommons_country_code === 'LATN_ME') { $trommons_language_code = 'cnr'; $trommons_country_code = '90';}
+        if ($trommons_country_code === 'CYRL_ME') { $trommons_language_code = 'cnr'; $trommons_country_code = '91';}
+
+        return [$trommons_language_code, $trommons_country_code];
+    }
+
+    public function convert_language_country_to_memsource($kp_language, $kp_country)
+    {
+        $kp_country = strtolower($kp_country);
+        $kp_change_language_to_memsource = [
+            'asm' => 'as',
+            'run' => 'rn',
+            'swc' => 'sw',
+            'mf0' => 'mfi',
+            'no' => 'nb',
+        ];
+        if (!empty($kp_change_language_to_memsource[$kp_language])) $kp_language = $kp_change_language_to_memsource[$kp_language];
+        $kp_change_country_to_memsource = [
+            '49' => '419',  // Latin America
+            '90' => 'latn', // Latin Script
+            '91' => 'cyrl', // Cyrillic Script
+            '92' => 'cn',   // Simplified Script
+            '93' => 'tw',   // Traditional Script
+        ];
+        if (!empty($kp_change_country_to_memsource[$kp_country])) $kp_country = $kp_change_country_to_memsource[$kp_country];
+
+        $memsource_valid = ['aa','af_za','sq','am_et','ar_sa','pga','apc','hy_am','as','ay','az_cyrl','az_latn','eu','be_by','bem','bn_bd','bn_in','bik','bi','bs_cyrl','bs_latn','bg','bwr','my_mm','ca','ceb','ckb','shu_td','shu_latn_ng','cbk','ce_ru','ny','zh_cn','zh_tw','ctg_bd','ckl','hr','cs','da','prs_af','dv_mv','din_ss','nl','dyu','bin_ng','en_gb','en_us','et','fa_ir','fj','fil_ph','fi','fr_ca','fr_cd','fr_fr','ff','gl','mfi_ng','lg','ka_ge','de','glw','el','gn','gu_in','guz_ke','ht','ha','he','hi_in','hmn','hu','is','ig_ng','ilo_ph','hil','id_id','ga','it','ja','quc','kea_cv','kln_ke','kam_ke','hig','kn_in','kr','pam','kar','kk_kz','km','ki','rw','rn_bi','kg','kok','ko_kr','kri','ky_kg','hia','lo','lv','ln','ln_cd','lt','lua','luo_ke','mk_mk','mdh','mg_mg','ms_my','ml_in','mt_mt','mi_nz','mrw','mr_in','mrt','lol','mn_mn','nnb','ne_np','ngc','kmr','nd','nso','nb','nn','nus','om_et','pag','ps','ps_af','pis','pl','pt_br','pt_mz','pt_pt','pa_in','qu','rhg','rhg_latn','ro','ru_ru','sm','sg_cf','seh','sr_cyrl_me','sr_cyrl_rs','sr_latn_me','sr_latn_rs','shr','sn','sd','sd_arab','si_lk','sk','sl','so_et','so_so','nr','st','es_co','es_419','es_mx','es_es','sw','sw_cd','sv','syl','tl','tg_cyrl_tj','ta_in','ta_lk','tt','tsg_ph','te','th_th','bo','ti','tpi','to','ts','tn','tr','tk','uk_ua','ur_pk','uz_cyrl_uz','vi_vn','war','cy_gb','wo_sn','xh','yo','zu_za','tig','lu',];
+
+        if ($kp_country != '--') $memsource_pair = $kp_language . '_' . $kp_country;
+        else                     $memsource_pair = $kp_language;
+
+        if ($memsource_pair === 'sd_pk') $memsource_pair = 'sd_arab';
+        if ($memsource_pair === 'shu_latn') $memsource_pair = 'shu_latn_ng';
+        if ($memsource_pair === 'uz_cyrl') $memsource_pair = 'uz_cyrl_uz';
+        if ($memsource_pair === 'tg_cyrl') $memsource_pair = 'tg_cyrl_tj';
+        if ($memsource_pair === 'sr_latn') $memsource_pair = 'sr_latn_rs';
+        if ($memsource_pair === 'sr_cyrl') $memsource_pair = 'sr_cyrl_rs';
+        if ($memsource_pair === 'cnr_latn') $memsource_pair = 'sr_latn_me';
+        if ($memsource_pair === 'cnr_cyrl') $memsource_pair = 'sr_cyrl_me';
+        if ($memsource_pair === 'mfi_cm') $memsource_pair = 'mfi_ng';//(**)
+
+        if (in_array($memsource_pair, $memsource_valid)) return $memsource_pair;
+        if (in_array($kp_language,    $memsource_valid)) return $kp_language;
+
+        error_log("Failed: convert_language_country_to_memsource($kp_language, $kp_country)");
+        return 0;
     }
 
     public function copy_project_file($project_to_copy_id, $project_id, $user_id_owner)
@@ -545,5 +671,409 @@ $replace = array(
             }
         }
         return $testing_center_projects;
+    }
+
+    public function save_task_file($user_id, $project_id, $task_id, $filename, $file)
+    {
+        $userDao = new UserDao();
+        $mime = $userDao->detectMimeType($file, $filename);
+
+        $args = LibAPI\PDOWrapper::cleanseNull($task_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($filename) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($mime) . ',' .
+            LibAPI\PDOWrapper::cleanseNull($user_id) . ',' .
+            'NULL';
+        $result = LibAPI\PDOWrapper::call('recordFileUpload', $args);
+        $version = $result[0]['version'];
+
+        $uploadFolder = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-$version";
+        if (!is_dir($uploadFolder)) mkdir($uploadFolder, 0755, true);
+
+        $min_id = $this->get_first_project_task($project_id);
+        if ($min_id) {
+            $previous_path = "files/proj-$project_id/task-$min_id/v-0/$filename";
+            $previous_file = '';
+            if (file_exists(Common\Lib\Settings::get('files.upload_path') . $previous_path)) {
+                $previous_file = file_get_contents(Common\Lib\Settings::get('files.upload_path') . $previous_path);
+            }
+            if ($previous_file && $previous_file === $file) {                 // If a previously stored file is identical
+                file_put_contents("$uploadFolder/$filename", $previous_path); // Point to files folder for previous file
+                return;
+            }
+        }
+
+        $filesFolder = "files/proj-$project_id/task-$task_id/v-$version";
+        $filesFolderFull = Common\Lib\Settings::get('files.upload_path') . $filesFolder;
+        if (!is_dir($filesFolderFull)) mkdir($filesFolderFull, 0755, true);
+
+        file_put_contents($filesFolderFull . "/$filename", $file); // Save the file in files folder
+        file_put_contents("$uploadFolder/$filename", "$filesFolder/$filename"); // Point to files folder
+    }
+
+    public function set_memsource_client($org_id, $memsource_client_id, $memsource_client_uid)
+    {
+        LibAPI\PDOWrapper::call('set_memsource_client', LibAPI\PDOWrapper::cleanse($org_id) . ',' . LibAPI\PDOWrapper::cleanse($memsource_client_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($memsource_client_uid));
+    }
+
+    public function get_memsource_client($org_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_memsource_client', LibAPI\PDOWrapper::cleanse($org_id));
+
+        if (empty($result)) return 0;
+
+        return $result[0];
+    }
+
+    public function get_memsource_client_by_memsource_id($memsource_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_memsource_client_by_memsource_id', LibAPI\PDOWrapper::cleanse($memsource_id));
+
+        if (empty($result)) return 0;
+
+        return $result[0];
+    }
+
+    public function set_memsource_project($project_id, $memsource_project_id, $memsource_project_uid, $created_by_id, $owner_id, $workflowLevels)
+    {
+        LibAPI\PDOWrapper::call('set_memsource_project',
+            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($memsource_project_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($memsource_project_uid) . ',' .
+            LibAPI\PDOWrapper::cleanse($created_by_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($owner_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[0]) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[1]) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[2]));
+    }
+
+    public function get_memsource_project($project_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_memsource_project', LibAPI\PDOWrapper::cleanse($project_id));
+
+        if (empty($result)) return 0;
+
+        return $result[0];
+    }
+
+    public function get_memsource_project_by_memsource_id($memsource_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_memsource_project_by_memsource_id', LibAPI\PDOWrapper::cleanse($memsource_id));
+
+        if (empty($result)) return 0;
+
+        return $result[0];
+    }
+
+    public function get_memsource_project_by_memsource_uid($memsource_uid)
+    {
+        $result = LibAPI\PDOWrapper::call('get_memsource_project_by_memsource_uid', LibAPI\PDOWrapper::cleanseWrapStr($memsource_uid));
+
+        if (empty($result)) return 0;
+
+        return $result[0];
+    }
+
+    public function set_memsource_task($task_id, $memsource_task_id, $memsource_task_uid, $task, $internalId, $workflowLevel, $beginIndex, $endIndex, $prerequisite)
+    {
+        LibAPI\PDOWrapper::call('set_memsource_task',
+            LibAPI\PDOWrapper::cleanse($task_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($memsource_task_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($memsource_task_uid) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($task) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($internalId) . ',' .
+            LibAPI\PDOWrapper::cleanse($workflowLevel) . ',' .
+            LibAPI\PDOWrapper::cleanse($beginIndex) . ',' .
+            LibAPI\PDOWrapper::cleanse($endIndex) . ',' .
+            LibAPI\PDOWrapper::cleanse($prerequisite));
+    }
+
+    public function update_memsource_task($task_id, $memsource_task_id, $task, $internalId, $beginIndex, $endIndex)
+    {
+        LibAPI\PDOWrapper::call('update_memsource_task',
+            LibAPI\PDOWrapper::cleanse($task_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($memsource_task_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($task) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($internalId) . ',' .
+            LibAPI\PDOWrapper::cleanse($beginIndex) . ',' .
+            LibAPI\PDOWrapper::cleanse($endIndex));
+    }
+
+    public function get_memsource_task($task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_memsource_task', LibAPI\PDOWrapper::cleanse($task_id));
+
+        if (empty($result)) return 0;
+
+        return $result[0];
+    }
+
+    public function get_memsource_task_by_memsource_id($memsource_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_memsource_task_by_memsource_id', LibAPI\PDOWrapper::cleanse($memsource_id));
+
+        if (empty($result)) return 0;
+
+        return $result[0];
+    }
+
+    public function get_memsource_task_by_memsource_uid($memsource_uid)
+    {
+        $result = LibAPI\PDOWrapper::call('get_memsource_task_by_memsource_uid', LibAPI\PDOWrapper::cleanseWrapStr($memsource_uid));
+
+        if (empty($result)) return 0;
+
+        return $result[0];
+    }
+
+    public function get_memsource_tasks_for_project_language_type($project_id, $task, $type_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_memsource_tasks_for_project_language_type',
+            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($task) . ',' .
+            LibAPI\PDOWrapper::cleanse($type_id));
+
+        if (empty($result)) return 0;
+
+        return $result[0];
+    }
+
+    public function queue_copy_task_original_file($project_id, $task_id, $memsource_task_uid, $filename)
+    {
+        LibAPI\PDOWrapper::call('queue_copy_task_original_file',
+            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($task_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($memsource_task_uid) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($filename));
+    }
+
+    public function get_queue_copy_task_original_files()
+    {
+        return LibAPI\PDOWrapper::call('get_queue_copy_task_original_files', '');
+    }
+
+    public static function dequeue_copy_task_original_file($task_id)
+    {
+        LibAPI\PDOWrapper::call('dequeue_copy_task_original_file', LibAPI\PDOWrapper::cleanse($task_id));
+    }
+
+    public function get_user_id_from_memsource_user($memsource_user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_user_id_from_memsource_user', LibAPI\PDOWrapper::cleanse($memsource_user_id));
+
+        if (empty($result)) return 0;
+
+        return $result[0]['user_id'];
+    }
+
+    public function get_first_project_task($project_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_first_project_task', LibAPI\PDOWrapper::cleanse($project_id));
+        if (empty($result[0]['min_id'])) return 0;
+
+        return $result[0]['min_id'];
+    }
+
+    public function update_project_due_date($project_id, $deadline)
+    {
+        LibAPI\PDOWrapper::call('update_project_due_date', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($deadline));
+    }
+
+    public function update_project_organisation($project_id, $org_id)
+    {
+        LibAPI\PDOWrapper::call('update_project_organisation', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($org_id));
+    }
+
+    public function update_task_due_date($task_id, $deadline)
+    {
+        LibAPI\PDOWrapper::call('update_task_due_date', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($deadline));
+    }
+
+    public function get_user($user_id)
+    {
+        return LibAPI\PDOWrapper::call('get_user', LibAPI\PDOWrapper::cleanse($user_id));
+    }
+
+    public function getUserClaimedTask($task_id)
+    {
+        $result = LibAPI\PDOWrapper::call('getUserClaimedTask', LibAPI\PDOWrapper::cleanse($task_id));
+        if (empty($result)) return 0;
+
+        return $result[0]['id'];
+    }
+
+    public function sync_split_jobs($memsource_project)
+    {
+        $userDao = new UserDao();
+        $taskDao = new TaskDao();
+        $project_route_handler = new Route\ProjectRouteHandler();
+        $project_id            = $memsource_project['project_id'];
+        $memsource_project_uid = $memsource_project['memsource_project_uid'];
+
+        $jobs = $userDao->memsource_list_jobs($memsource_project_uid);
+        $top_level = [];
+        foreach ($jobs as $uid => $job) {
+            $memsource_task = $this->get_memsource_task_by_memsource_uid($uid);
+            if (empty($memsource_task)) {
+                $full_job = $userDao->memsource_get_job($memsource_project_uid, $uid);
+                if ($full_job && strpos($full_job['innerId'], '.')) { // Make sure, as safety check, not top level
+                    if ($this->create_task($memsource_project, $full_job)) {
+                        $top_level[] = $this->get_top_level($full_job['innerId']);
+                        error_log("Created task for job $uid {$full_job['innerId']} in project $project_id");
+                    }
+                } else error_log("Could not find job $uid in project $project_id (or is top level)");
+            }
+        }
+
+        $project_tasks = $this->get_tasks_for_project($project_id);
+        foreach ($project_tasks as $uid => $project_task) {
+            if (in_array($this->get_top_level($project_task['internalId']), $top_level)) { // This is extra projection against wrongly deleting tasks
+                if (empty($jobs[$uid])) {
+                    $this->delete_task_directly($project_task['id']);
+                    error_log("Deleted task {$project_task['id']} for job $uid {$project_task['internalId']} in project $project_id");
+                } elseif (($prerequisite = $project_task['prerequisite']) && $project_task['task-status_id'] == Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES) {
+                    $prerequisite_uid = 0;
+                    foreach ($project_tasks as $u => $pt) {
+                        if ($pt['id'] == $prerequisite) $prerequisite_uid = $u;
+                    }
+                    if (empty($jobs[$prerequisite_uid])) { // Has been (or will be) deleted
+                        $taskDao->setTaskStatus($project_task['id'], Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+                    }
+                }
+            }
+        }
+    }
+
+    private function create_task($memsource_project, $job)
+    {
+        $taskDao = new TaskDao();
+        $task = new Common\Protobufs\Models\Task();
+
+        if (empty($job['filename'])) {
+            error_log("No filename in new jobPart {$job['uid']}");
+            return 0;
+        }
+        $task->setProjectId($memsource_project['project_id']);
+        $task->setTitle("{$job['innerId']} {$job['filename']}");
+
+        $project = $this->getProject($memsource_project['project_id']);
+        $projectSourceLocale = $project->getSourceLocale();
+        $taskSourceLocale = new Common\Protobufs\Models\Locale();
+        $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
+        $taskSourceLocale->setCountryCode($projectSourceLocale->getCountryCode());
+        $task->setSourceLocale($taskSourceLocale);
+        $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+
+        $taskTargetLocale = new Common\Protobufs\Models\Locale();
+        list($target_language, $target_country) = $this->convert_memsource_to_language_country($job['targetLang']);
+        $taskTargetLocale->setLanguageCode($target_language);
+        $taskTargetLocale->setCountryCode($target_country);
+        $task->setTargetLocale($taskTargetLocale);
+
+        if (empty($job['workflowLevel']) || $job['workflowLevel'] > 3) {
+            error_log("Can't find workflowLevel in new job {$job['uid']} for: {$job['filename']}, assuming Translation");
+            $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
+        } else {
+            $taskType = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3']][$job['workflowLevel'] - 1];
+            if     ($taskType == 'Translation' || $taskType == '') $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
+            elseif ($taskType == 'Revision')                       $taskType = Common\Enums\TaskTypeEnum::PROOFREADING;
+            else {
+                error_log("Can't find expected taskType ($taskType) in new job {$job['uid']} for: {$job['filename']}");
+                return 0;
+            }
+        }
+        $task->setTaskType($taskType);
+
+        if (!empty($job['wordsCount'])) {
+            $task->setWordCount($job['wordsCount']);
+        } else {
+            $task->setWordCount(1);
+        }
+
+        if (!empty($job['dateDue'])) $task->setDeadline(substr($job['dateDue'], 0, 10) . ' ' . substr($job['dateDue'], 11, 8));
+        else                         $task->setDeadline($project->getDeadline());
+
+        $task->setPublished(1);
+
+        $task_id = $taskDao->createTaskDirectly($task);
+        if (!$task_id) {
+            error_log("Failed to add task for new job {$job['uid']} for: {$job['filename']}");
+            return 0;
+        }
+        error_log("Added Task: $task_id for new job {$job['uid']} for: {$job['filename']}");
+
+        $this->set_memsource_task($task_id, 0, $job['uid'], '',
+            empty($job['innerId'])       ? 0 : $job['innerId'],
+            empty($job['workflowLevel']) ? 0 : $job['workflowLevel'],
+            empty($job['beginIndex'])    ? 0 : $job['beginIndex'],
+            empty($job['endIndex'])      ? 0 : $job['endIndex'],
+            0);
+
+        $project_id = $project->getId();
+
+        $project_restrictions = $taskDao->get_project_restrictions($project_id);
+        if ($project_restrictions && (
+                ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION  && $project_restrictions['restrict_translate_tasks'])
+                    ||
+                ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $project_restrictions['restrict_revise_tasks']))) {
+            $taskDao->setRestrictedTask($task_id);
+        }
+
+        $uploadFolder = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0";
+        mkdir($uploadFolder, 0755, true);
+        $filesFolder = Common\Lib\Settings::get('files.upload_path') . "files/proj-$project_id/task-$task_id/v-0";
+        mkdir($filesFolder, 0755, true);
+
+        $filename = $job['filename'];
+        file_put_contents("$filesFolder/$filename", ''); // Placeholder
+        file_put_contents("$uploadFolder/$filename", "files/proj-$project_id/task-$task_id/v-0/$filename"); // Point to it
+
+        $this->queue_copy_task_original_file($project_id, $task_id, $job['uid'], $filename); // cron will copy file from memsource
+        return 1;
+    }
+
+    public function get_top_level($id)
+    {
+        $pos = strpos($id, '.');
+        if ($pos === false) return $id;
+        return substr($id, 0, $pos);
+    }
+
+    public function get_tasks_for_project($project_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_tasks_for_project', LibAPI\PDOWrapper::cleanse($project_id));
+        if (empty($result)) return [];
+        $tasks = [];
+        foreach ($result as $row) {
+            $tasks[$row['memsource_task_uid']] = $row;
+        }
+        return $tasks;
+    }
+
+    public function are_translations_not_all_complete($task, $memsource_task)
+    {
+
+        $translations_not_all_complete = 0;
+        if ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $memsource_task) {
+            $top_level = $this->get_top_level($memsource_task['internalId']);
+            $project_tasks = $this->get_tasks_for_project($task->getProjectId());
+            foreach ($project_tasks as $project_task) {
+                if ($top_level == $this->get_top_level($project_task['internalId'])) {
+                    if ($memsource_task['workflowLevel'] > $project_task['workflowLevel']) { // Dependent on
+                        if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
+                            if ($project_task['task-status_id'] != Common\Enums\TaskStatusEnum::COMPLETE) {
+                                $translations_not_all_complete = 1;
+                                error_log("translations_not_all_complete {$memsource_task['task_id']}: {$project_task['id']} {$project_task['internalId']}");//(**)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $translations_not_all_complete;
+    }
+
+    public function delete_task_directly($task_id)
+    {
+        LibAPI\PDOWrapper::call('delete_task_directly', LibAPI\PDOWrapper::cleanse($task_id));
     }
 }

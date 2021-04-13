@@ -106,140 +106,135 @@ class TemplateHelper
 
     public static function getTaskSourceLanguage($task)
     {
-        $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
+        $languageCode = $task->getSourceLocale()->getLanguageCode();
+        $languageName = $task->getSourceLocale()->getLanguageName();
+        $countryCode = $task->getSourceLocale()->getCountryCode();
+        $countryName = $task->getSourceLocale()->getCountryName();
+        $use_language_codes = Common\Lib\Settings::get('ui.language_codes');
 
-        if ($use_language_codes == "y") {
-            return $task->getSourceLocale()->getLanguageCode()."-".$task->getSourceLocale()->getCountryCode();
-        } elseif ($use_language_codes == "n") {
-            $language = $task->getSourceLocale()->getLanguageName();
-            $region = $task->getSourceLocale()->getCountryName();
-            return $language." - ".$region;
-        } elseif ($use_language_codes == "h") {
-            return $task->getSourceLocale()->getLanguageName()." - "
-                .$task->getSourceLocale()->getCountryName()
-                ." (".$task->getSourceLocale()->getLanguageCode()."-".$task->getSourceLocale()->getCountryCode().")";
+        if ($use_language_codes == 'y') {
+            return "$languageCode - $countryCode";
+        } elseif ($use_language_codes == 'n') {
+            return "$languageName - $countryName";
+        } elseif ($use_language_codes == 'h') {
+            if ($countryName === 'ANY') return "$languageName ($languageCode)";
+            return "$languageName - $countryName ($languageCode-$countryCode)";
         }
     }
 
     public static function getTaskTargetLanguage($task)
     {
-        $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
+        $languageCode = $task->getTargetLocale()->getLanguageCode();
+        $languageName = $task->getTargetLocale()->getLanguageName();
+        $countryCode = $task->getTargetLocale()->getCountryCode();
+        $countryName = $task->getTargetLocale()->getCountryName();
+        $use_language_codes = Common\Lib\Settings::get('ui.language_codes');
 
-        if ($use_language_codes == "y") {
-            return $task->getTargetLocale()->getLanguageCode()."-".$task->getTargetLocale()->getCountryCode();
-        } elseif ($use_language_codes == "n") {
-            $language = $task->getTargetLocale()->getLanguageName();
-            $region = $task->getTargetLocale()->getCountryName();
-            return $language." - ".$region;
-        } elseif ($use_language_codes == "h") {
-            return $task->getTargetLocale()->getLanguageName()." - "
-                .$task->getTargetLocale()->getCountryName()
-                ." (".$task->getTargetLocale()->getLanguageCode()."-".$task->getTargetLocale()->getCountryCode().")";
+        if ($use_language_codes == 'y') {
+            return "$languageCode-$countryCode";
+        } elseif ($use_language_codes == 'n') {
+            return "$languageName - $countryName";
+        } elseif ($use_language_codes == 'h') {
+            if ($countryName === 'ANY') return "$languageName ($languageCode)";
+            return "$languageName - $countryName ($languageCode-$countryCode)";
         }
     }
 
     public static function getProjectSourceLanguage($project)
     {
-        $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
+        $languageCode = $project->getSourceLanguageCode();
+        $languageName = TemplateHelper::languageNameFromCode($languageCode);
+        $countryCode = $project->getSourceCountryCode();
+        $countryName = TemplateHelper::countryNameFromCode($countryCode);
+        $use_language_codes = Common\Lib\Settings::get('ui.language_codes');
 
-        if ($use_language_codes == "y") {
-            return $project->getSourceLanguageCode()."-".$project->getSourceCountryCode();
-        } elseif ($use_language_codes == "n") {
-            $language = TemplateHelper::languageNameFromCode($project->getSourceLanguageCode());
-            $region = TemplateHelper::countryNameFromCode($project->getSourceCountryCode());
-            return $language." - ".$region;
-        } elseif ($use_language_codes == "h") {
-            return TemplateHelper::languageNameFromCode($project->getSourceLanguageCode())." - "
-                .TemplateHelper::countryNameFromCode($project->getSourceCountryCode())
-                ." (".$project->getSourceLanguageCode()."-".$project->getSourceCountryCode().")";
+        if ($use_language_codes == 'y') {
+            return "$languageCode-$countryCode";
+        } elseif ($use_language_codes == 'n') {
+            return "$languageName - $countryName";
+        } elseif ($use_language_codes == 'h') {
+            if ($countryName === 'ANY') return "$languageName ($languageCode)";
+            return "$languageName - $countryName ($languageCode-$countryCode)";
         }
     }
 
     public static function getLanguage($locale)
     {
-        $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
-
         $languageName = $locale->getLanguageName();
         $languageCode = $locale->getLanguageCode();
+        $use_language_codes = Common\Lib\Settings::get('ui.language_codes');
 
-        if ($use_language_codes == "y") {
+        if ($use_language_codes == 'y') {
             return $languageCode;
-        } elseif ($use_language_codes == "n") {
+        } elseif ($use_language_codes == 'n') {
             return $languageName;
-        } elseif ($use_language_codes == "h") {
-            return $languageName." (".$languageCode.")";
+        } elseif ($use_language_codes == 'h') {
+            return "$languageName ($languageCode)";
         }
-
         return $languageName;
     }
 
     public static function getCountry($locale)
     {
-        $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
-
-        $countryName = $locale->getCountryName();
         $countryCode = $locale->getCountryCode();
+        $countryName = $locale->getCountryName();
+        $use_language_codes = Common\Lib\Settings::get('ui.language_codes');
 
-        if ($use_language_codes == "y") {
+        if ($use_language_codes == 'y') {
             return $countryCode;
-        } elseif ($use_language_codes == "n") {
+        } elseif ($use_language_codes == 'n') {
             return $countryName;
-        } elseif ($use_language_codes == "h") {
-            return $countryName." (".$countryCode.")";
+        } elseif ($use_language_codes == 'h') {
+            return "$countryName ($countryCode)";
         }
-
         return $countryName;
     }
 
     public static function getLanguageAndCountry($locale)
     {
-        $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
-
-        $languageName = $locale->getLanguageName();
         $languageCode = $locale->getLanguageCode();
-        $countryName = $locale->getCountryName();
+        $languageName = $locale->getLanguageName();
         $countryCode = $locale->getCountryCode();
+        $countryName = $locale->getCountryName();
+        $use_language_codes = Common\Lib\Settings::get('ui.language_codes');
 
-        if ($use_language_codes == "y") {
-            return $languageCode." - ".$countryCode;
-        } elseif ($use_language_codes == "n") {
-            return $languageName." - ".$countryName;
-        } elseif ($use_language_codes == "h") {
-            return $languageName." - ".$countryName
-                    ." (".$languageCode." - ".$countryCode.")";
+        if ($use_language_codes == 'y') {
+            return "$languageCode - $countryCode";
+        } elseif ($use_language_codes == 'n') {
+            return "$languageName - $countryName";
+        } elseif ($use_language_codes == 'h') {
+            if ($countryName === 'ANY') return "$languageName ($languageCode)";
+            return "$languageName - $countryName ($languageCode - $countryCode)";
         }
-
-        return $languageName." - ".$countryName;
+        return "$languageName - $countryName";
     }
 
     public static function getLanguageAndCountryNoCodes($locale)
     {
         $languageName = $locale->getLanguageName();
         $countryName = $locale->getCountryName();
-        return $languageName." - ".$countryName;
+        if ($countryName === 'ANY') return $languageName;
+        return "$languageName - $countryName";
     }
 
     public static function getLanguageAndCountryFromCode($codes)
     {
-        $splitCodes = explode(",", $codes);
+        $splitCodes = explode(',', $codes);
         $languageCode = $splitCodes[0];
         $countryCode = $splitCodes[1];
+        $languageName = TemplateHelper::languageNameFromCode($languageCode);
+        $countryName  = TemplateHelper::countryNameFromCode($countryCode);
+        $use_language_codes = Common\Lib\Settings::get('ui.language_codes');
 
-        $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
-
-        if ($use_language_codes == "y") {
-            return $languageCode." - ".$countryCode;
-        } elseif ($use_language_codes == "n") {
-            $language = TemplateHelper::languageNameFromCode($languageCode);
-            $region = TemplateHelper::countryNameFromCode($countryCode);
-            return $language." - ".$region;
-        } elseif ($use_language_codes == "h") {
-            return TemplateHelper::languageNameFromCode($languageCode)." - "
-                .TemplateHelper::countryNameFromCode($countryCode)
-                ." (".$languageCode." - ".$countryCode.")";
+        if ($use_language_codes == 'y') {
+            return "$languageCode - $countryCode";
+        } elseif ($use_language_codes == 'n') {
+            return "$languageName - $countryName";
+        } elseif ($use_language_codes == 'h') {
+            if ($countryName === 'ANY') return "$languageName ($languageCode)";
+            return "$languageName - $countryName ($languageCode - $countryCode)";
         }
-
-        return $language." - ".$region;
+        return "$language - $countryName";
     }
 
     public static function languageNameFromId($languageID)
@@ -283,16 +278,16 @@ class TemplateHelper
 
     public static function getLanguageList()
     {
-        $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
+        $use_language_codes = Common\Lib\Settings::get('ui.language_codes');
         $langDao = new DAO\LanguageDao();
         $languages = $langDao->getLanguages();
 
         foreach ($languages as $lang) {
-            if ($use_language_codes == "y") {
+            if ($use_language_codes == 'y') {
                 $lang->setName(self::cleanse($lang->getCode()));
-            } elseif ($use_language_codes == "n") {
+            } elseif ($use_language_codes == 'n') {
                 $lang->setName(self::cleanse($lang->getName()));
-            } elseif ($use_language_codes == "h") {
+            } elseif ($use_language_codes == 'h') {
                 $lang->setName(self::cleanse($lang->getName())." (".self::cleanse($lang->getCode()).")");
             }
         }
@@ -301,16 +296,16 @@ class TemplateHelper
 
     public static function getCountryList()
     {
-        $use_language_codes = Common\Lib\Settings::get("ui.language_codes");
+        $use_language_codes = Common\Lib\Settings::get('ui.language_codes');
         $countryDao = new DAO\CountryDao();
         $countries = $countryDao->getCountries();
 
         foreach ($countries as $country) {
-            if ($use_language_codes == "y") {
+            if ($use_language_codes == 'y') {
                 $country->setName(self::cleanse($country->getCode()));
-            } elseif ($use_language_codes == "n") {
+            } elseif ($use_language_codes == 'n') {
                 $country->setName(self::cleanse($country->getName()));
-            } elseif ($use_language_codes == "h") {
+            } elseif ($use_language_codes == 'h') {
                 $country->setName(
                     self::cleanse($country->getName())." (".
                     self::cleanse($country->getCode()).")"

@@ -11,13 +11,13 @@
         
     <section>
             <h1>{Localisation::getTranslation('common_what_happens_now')} <small>{Localisation::getTranslation('task_claimed_translation_we_need_your_translation')}</small></h1>
-            <p>{Localisation::getTranslation('common_this_is_what_you_need_to_do_as_soon_as_possible')}</p>
+            <p>{Localisation::getTranslation('common_this_is_what_you_need_to_do_as_soon_as_possible')}:</p>
             <ol>
                 {if $matecat_url != ''}
-                <li>{Localisation::getTranslation('task_claimed_please_read_kato')}</li>
+                <li>{if !empty($memsource_task)}Please take a look at our <a href="https://community.translatorswb.org/t/the-kato-translators-toolkit/3138" target="_blank">Translator’s Toolkit</a> before working on this task.{else}{Localisation::getTranslation('task_claimed_please_read_kato')}{/if}</li>
                 <li>{sprintf(Localisation::getTranslation('task_claimed_translation_translate_the_file_to_plain'), {TemplateHelper::getLanguage($task->getTargetLocale())})}<br />
                     <a href="{$matecat_url}" class="btn btn-primary" target="_blank">
-                    <i class="icon-th-list icon-white"></i> {Localisation::getTranslation('task_claimed_translate_using_kato')}</a></li>
+                    <i class="icon-th-list icon-white"></i> {if !empty($memsource_task)}Translate using Memsource{else}{Localisation::getTranslation('task_claimed_translate_using_kato')}{/if}</a></li>
                 {else}
                 <li>{Localisation::getTranslation('common_can_you_open_file')}</li>
                 <li>{sprintf(Localisation::getTranslation('task_claimed_translation_translate_the_file_to'), {TemplateHelper::getLanguage($task->getTargetLocale())})}</li>
@@ -33,9 +33,11 @@
     <section>
         <h3>When you have finished translating:</h3>
         <p>
+            {if empty($memsource_task)}
             <a href="{urlFor name="task" options="task_id.$task_id"}" class="btn btn-primary">
                 <i class="icon-share-alt icon-white"></i> {Localisation::getTranslation('task_claimed_translation_upload_translated_task')}
             </a>
+            {/if}
             {if isset($user)}
             <a href="{urlFor name="claimed-tasks" options="user_id.{$user->getId()}"}" class="btn">
             {else}
@@ -56,6 +58,14 @@
         <small>
             ({Localisation::getTranslation('common_cant_find_the_file_on_your_desktop')}
             {sprintf(Localisation::getTranslation('common_download_the_file'), {urlFor name="download-task" options="task_id.$task_id"})})
+        </small>
+    </p>
+    {/if}
+    {if !empty($memsource_task)}
+    <p>
+        <small>
+            ({Localisation::getTranslation('common_cant_find_the_file_on_your_desktop')}
+            {sprintf('Download the <a href="%s">original file</a> in its source language and save it to your desktop.', {urlFor name="download-task" options="task_id.$task_id"})})
         </small>
     </p>
     {/if}

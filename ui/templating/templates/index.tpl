@@ -255,20 +255,18 @@
                 There are currently no tasks available for your language combinations. However, some may come up soon, so don't forget to <a href="https://community.translatorswb.org/t/signing-up-for-kato-platform-email-notifications/121" target="_blank">set up email alerts</a> to be notified of new available tasks. Meanwhile, you can:
                 <ol>
                 <li>
-                    Take our <a href="https://community.translatorswb.org/t/introduction-to-humanitarian-translation-for-kato-translators/1714" target="_blank">online course</a>, Introduction to Humanitarian Translation
-                </li>
-                <li>
-                    <a href="https://community.translatorswb.org/t/how-to-become-a-kato-verified-translator/262" target="_blank">Become a Kató Verified Translator</a>
-                </li>
-                <li>
                     <a href="https://translatorswithoutborders.org/blog/" target="_blank">Learn more</a> about the work we do
                 </li>
                 <li>
                     <a href="https://community.translatorswb.org/t/creating-and-personalizing-your-kato-community-profile/3048" target="_blank">Register</a> and browse our forum
                 </li>
+                <li>
+                    New to TWB? Have a look at our <a href="https://community.translatorswb.org/t/welcome-pack-for-kato-translators/3138" target="_blank">Translator's Toolkit</a> to find out how to get started with us.
+                </li>
                 </ol>
-                    <p>New to TWB? Have a look at our <a href="https://community.translatorswb.org/t/welcome-pack-for-kato-translators/3138" target="_blank">Translator's Toolkit</a> to find out how to get started with us.</p>
+                    <p>
                     For any questions or comments, please email <a href="mailto:translators@translatorswithoutborders.org" target="_blank">translators@translatorswithoutborders.org</a>
+                    </p>
                 {else}
                     Since you are not a translator, there are no tasks here. Click on <a href="https://kato.translatorswb.org/org/dashboard/">your organization's Dashboard</a>
                 {/if}

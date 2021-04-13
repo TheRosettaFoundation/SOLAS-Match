@@ -15,7 +15,7 @@
                         <i class="icon-upload icon-white"></i> Update Chunks
                     </a>
                     <a href="{$matecat_analyze_url}" class="btn btn-primary" target="_blank">
-                        <i class="icon-th-list icon-white"></i> Kató TM analysis
+                        <i class="icon-th-list icon-white"></i> {if !empty($memsource_project)}Memsource Project{else}Kató TM analysis{/if}
                     </a>
                 {/if}
                 {if (!$isOrgMember)}
@@ -253,9 +253,28 @@ Tweet</a>
         {Localisation::getTranslation('project_view_tasks')}
         <small>{Localisation::getTranslation('project_view_0')}</small>
 
+        {if empty($memsource_project)}
         <a class="pull-right btn btn-success" href="{urlFor name="task-create" options="project_id.$project_id"}">
             <i class="icon-upload icon-white"></i> {Localisation::getTranslation('common_create_task')}
         </a> 
+        {else if !empty($memsource_project)}
+        <div class="pull-right">
+        <form id="unpublish_all_translated" class=" btn btn-small btn-inverse" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            <a class="" onclick="$('#unpublish_all_translated').submit();"   style="color:#FFFFFF;">
+                <i class="icon-remove-circle icon-white"></i> Unpublish all Translation Tasks
+            </a>
+            <input type="hidden" name="unpublish_all_translated" value="1" />
+            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+        </form>
+        <form id="unpublish_all_revisions" class=" btn btn-small btn-inverse" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}" >
+            <a class="" onclick="$('#unpublish_all_revisions').submit();" style="color:#FFFFFF;">
+                <i class="icon-remove-circle icon-white"></i> Unpublish all Revision Tasks
+            </a>
+            <input type="hidden" name="unpublish_all_revisions" value="1" />
+            {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+        </form>
+        </div>
+        {/if}
     </h1> 
             
     {if isset($flash['taskSuccess'])}

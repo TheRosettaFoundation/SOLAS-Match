@@ -84,7 +84,7 @@
 'mi' => 'mi-NZ',
 'mr' => 'mr-IN',
 'mn' => 'mn-MN',
-'sr-ME' => 'sr-ME',
+'cnr' => 'sr-ME',
 'nr' => 'nr-ZA',
 'ne' => 'ne-NP',
 'ny' => 'ny-NYA',

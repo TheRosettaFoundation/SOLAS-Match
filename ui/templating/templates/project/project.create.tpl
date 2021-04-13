@@ -144,7 +144,7 @@
                         <input type="text" name="tagList" id="tagList" style="width: 400px" />
                     </div>
                 </div>
-                {if $isSiteAdmin}
+                {if $isSiteAdmin && !$create_memsource}
                 <div class="projFormInput">
                     <div style="margin-bottom:25px;">
                         <h2>Additional Private TM Keys</h2>
@@ -194,7 +194,7 @@
                     </div>
                 </div>
                 {/if}
-                {if $isSiteAdmin}
+                {if $isSiteAdmin && !$create_memsource}
                 <div class="projFormInput">
                     <div style="margin-bottom:25px;">
                         <h2>Verification System Project:</h2>
@@ -224,7 +224,7 @@
             </div>
             <div id="projFormBottomBlockRight">
                 <h2>{Localisation::getTranslation('common_task_type')}: <span style="color: red">*</span></h2>
-                <p class="desc" style ="margin-bottom:63px">{Localisation::getTranslation('project_create_9')}</p>
+                <p class="desc" style ="margin-bottom:63px">{Localisation::getTranslation('project_create_9')}{if $create_memsource} memsource projects must have both Translation and Revising.{/if}</p>
                 <div> <!-- <table border="0" width="100%"> -->
                     <div>
                         <!--

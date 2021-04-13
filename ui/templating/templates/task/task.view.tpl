@@ -139,6 +139,8 @@
             <div class="well">
         {/if}
 		    {if $isSiteAdmin and !isset($registered)}
+            <table><tr>
+              <td>
 		            <form id="assignTaskToUserForm" method="post" action="{urlFor name="task" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
                     {Localisation::getTranslation('task_view_assign_label')}<br />
                     <input type="text" name="userIdOrEmail" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
@@ -155,6 +157,18 @@
 		                </a>
                     {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 		            </form> 
+              </td>
+              <td>
+                <form id="removeUserFromDenyListForm" method="post" action="{urlFor name="task" options="task_id.$task_id"}" onsubmit="return confirm('{Localisation::getTranslation("task_view_assign_confirmation")}');">
+                    Remove a user from deny list for this task:<br />
+                    <input type="text" name="userIdOrEmailDenyList" placeholder="{Localisation::getTranslation('task_view_assign_placeholder')}"><br />
+                    <a class="btn btn-primary" onclick="$('#removeUserFromDenyListForm').submit();">
+                        <i class="icon-user icon-white"></i>&nbsp;Remove User from Deny List for this Task
+                    </a>
+                    {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+                </form>
+              </td>
+            </tr></table>
 		    {/if}
         {if $isSiteAdmin}
                 {if $task->getTaskStatus() != TaskStatusEnum::COMPLETE && $task->getTaskStatus() != TaskStatusEnum::IN_PROGRESS}

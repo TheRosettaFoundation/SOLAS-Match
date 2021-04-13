@@ -125,12 +125,12 @@
                                {if $status_id == 3 && ($type_id == 3 || $type_id == 2)}
                                     {if $matecat_urls[$task_id] != ''}
                                         {if $type_id == 2}
-                                            <a href="{$matecat_urls[$task_id]}" class="btn btn-small btn-success">
-                                                {Localisation::getTranslation('task_claimed_translate_using_kato')}
+                                            <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
+                                                {if $memsource_tasks[$task_id]}Translate using Memsource{else}{Localisation::getTranslation('task_claimed_translate_using_kato')}{/if}
                                             </a>
                                         {else}
-                                            <a href="{$matecat_urls[$task_id]}" class="btn btn-small btn-success">
-                                                {Localisation::getTranslation('task_claimed_proofread_using_kato')}
+                                            <a href="{$matecat_urls[$task_id]}" target="_blank" class="btn btn-small btn-success">
+                                                {if $memsource_tasks[$task_id]}Revise using Memsource{else}{Localisation::getTranslation('task_claimed_proofread_using_kato')}{/if}
                                             </a>
                                         {/if}
                                     {/if}
@@ -175,6 +175,11 @@
                                 {/if}
                                 {if $parentTaskIds[$task_id]}
                                     <a href="{$siteLocation}task/{$parentTaskIds[$task_id]}/download-task-latest-file/" class="btn btn-small btn-info">
+                                        Download Complete Revised Version
+                                    </a>
+                                {/if}
+                                {if $show_memsource_revision[$task_id]}
+                                    <a href="{$siteLocation}task/{$show_memsource_revision[$task_id]}/download-task-latest-file/" class="btn btn-small btn-info">
                                         Download Complete Revised Version
                                     </a>
                                 {/if}

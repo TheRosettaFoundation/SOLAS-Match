@@ -250,7 +250,7 @@ class TaskRouteHandler
         if ($loggedInUserId != $user_id) {
             $adminDao = new DAO\AdminDao();
             if (!$adminDao->isSiteAdmin($loggedInUserId)) {
-                $app->flash('error', "You are not authorized to view this page");
+                $app->flash('error', 'You are not authorized to view this page');
                 $app->redirect($app->urlFor('home'));
             }
         }
@@ -312,9 +312,11 @@ class TaskRouteHandler
         $discourse_slug = array();
         $proofreadTaskIds = array();
         $parentTaskIds = [];
+        $show_memsource_revision = [];
         $matecat_urls = array();
         $allow_downloads = array();
         $show_mark_chunk_complete = array();
+        $memsource_tasks = [];
 
         $lastScrollPage = ceil($topTasksCount / $itemsPerScrollPage);
         if ($currentScrollPage <= $lastScrollPage) {
@@ -365,8 +367,11 @@ class TaskRouteHandler
                     htmlspecialchars($orgName, ENT_COMPAT, 'UTF-8')
                 );
 
-                $matecat_urls[$taskId] = $taskDao->get_matecat_url($topTask);
-                $allow_downloads[$taskId] = $taskDao->get_allow_download($topTask);
+                $memsource_task = $projectDao->get_memsource_task($taskId);
+                $memsource_tasks[$taskId] = $memsource_task;
+                if ($projectDao->are_translations_not_all_complete($topTask, $memsource_task)) $matecat_urls[$taskId] = '';
+                else                                                                           $matecat_urls[$taskId] = $taskDao->get_matecat_url($topTask, $memsource_task);
+                $allow_downloads[$taskId] = $taskDao->get_allow_download($topTask, $memsource_task);
                 $show_mark_chunk_complete[$taskId] = 0;
                 if (!$allow_downloads[$taskId] && $matecat_urls[$taskId]) { // it's a chunk && a bit of optimisation
                     $matecat_tasks = $taskDao->getTaskChunk($taskId);
@@ -381,6 +386,26 @@ class TaskRouteHandler
 
                 $discourse_slug[$taskId] = $projectDao->discourse_parameterize($project);
 
+                $show_memsource_revision[$taskId] = null;
+                if ($memsource_task) {
+                    $project_tasks = $projectDao->get_tasks_for_project($topTask->getProjectId());
+                    foreach ($project_tasks as $project_task) {
+                        if ($taskId == $project_task['id']) $top_level = $projectDao->get_top_level($project_task['internalId']);
+                    }
+                    $revision_task = 0;
+                    $revision_complete = 1;
+                    foreach ($project_tasks as $project_task) {
+                        if ($top_level == $projectDao->get_top_level($project_task['internalId'])) {
+                            if ($project_task['task-type_id'] == Common\Enums\TaskTypeEnum::PROOFREADING) { // Revision
+                                if (!$revision_task) $revision_task = $project_task['id'];
+                                if ($project_task['task-status_id'] != Common\Enums\TaskStatusEnum::COMPLETE) $revision_complete = 0;
+                            }
+                        }
+                    }
+                    if ($revision_task && $revision_complete) $show_memsource_revision[$taskId] = $revision_task;
+                    $proofreadTaskIds[$taskId] = null;
+                    $parentTaskIds[$taskId] = null;
+                } else {
                 if ($topTask->getTaskType() == 2) { // If current task is a translation task
                     try {
                         $proofreadTask = $taskDao->getProofreadTask($taskId);
@@ -402,6 +427,7 @@ class TaskRouteHandler
                             $parentTaskIds[$taskId] = $parent_translation_id;
                         }
                     }
+                }
                 }
             }
         }
@@ -436,6 +462,8 @@ class TaskRouteHandler
             'discourse_slug' => $discourse_slug,
             'proofreadTaskIds' => $proofreadTaskIds,
             'parentTaskIds'    => $parentTaskIds,
+            'show_memsource_revision' => $show_memsource_revision,
+            'memsource_tasks' => $memsource_tasks,
             'currentScrollPage' => $currentScrollPage,
             'itemsPerScrollPage' => $itemsPerScrollPage,
             'lastScrollPage' => $lastScrollPage,
@@ -577,7 +605,35 @@ class TaskRouteHandler
         $task = $taskDao->getTask($task_id);
         $latest_version = $taskDao->getTaskVersion($task_id);
         try {
-            $this->downloadTaskVersion($task_id, $latest_version);
+            $projectDao = new DAO\ProjectDao();
+            $memsource_task = $projectDao->get_memsource_task($task_id);
+            if ($memsource_task) {
+                $user_id = Common\Lib\UserSession::getCurrentUserID();
+                if (is_null($user_id) || $taskDao->isUserRestrictedFromTaskButAllowTranslatorToDownload($task_id, $user_id)) {
+                    $app->flash('error', 'You are not authorized to view this page');
+                    $app->redirect($app->urlFor('home'));
+                }
+                $memsource_project = $projectDao->get_memsource_project($task->getProjectId());
+                $userDao = new DAO\UserDao();
+                $file = $userDao->memsource_get_target_file($memsource_project['memsource_project_uid'], $memsource_task['memsource_task_uid']);
+                if (empty($file)) {
+                    $app->flash('error', 'Could not retrieve file');
+                    $app->redirect($app->urlFor('home'));
+                }
+                $task_file_info = $taskDao->getTaskInfo($task_id, 0);
+                $filename = $task_file_info->getFilename();
+                $mime = $userDao->detectMimeType($file, $filename);
+                header("Content-type: $mime");
+                header('Content-Disposition: attachment; filename="' . $filename . '"');
+                header('Content-length: ' . strlen($file));
+                header('X-Frame-Options: ALLOWALL');
+                header('Pragma: no-cache');
+                header('Cache-control: no-cache, must-revalidate, no-transform');
+                echo $file;
+                die;
+            } else {
+                $this->downloadTaskVersion($task_id, $latest_version);
+            }
         } catch (Common\Exceptions\SolasMatchException $e) {
             $app->flash(
                 "error",
@@ -700,6 +756,7 @@ class TaskRouteHandler
         $taskDao = new DAO\TaskDao();
         $userDao = new DAO\UserDao();
         $languageDao = new DAO\LanguageDao();
+        $projectDao = new DAO\ProjectDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
@@ -714,6 +771,8 @@ class TaskRouteHandler
             $app->redirect($app->urlFor('home'));
         }
 
+        $memsource_task = $projectDao->get_memsource_task($taskId);
+
         $task = $taskDao->getTask($taskId);
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
@@ -722,11 +781,13 @@ class TaskRouteHandler
             $user_id = Common\Lib\UserSession::getCurrentUserID();
 
             $taskDao->record_task_if_translated_in_matecat($task);
-            $userDao->claimTask($user_id, $taskId);
-
+            $success = $userDao->claimTask($user_id, $taskId, $memsource_task, $task->getProjectId());
+            if ($success) {
             $app->redirect($app->urlFor("task-claimed", array(
                 "task_id" => $taskId
             )));
+            }
+            $app->flashNow('error', 'The task could not be assigned, likely not found on memsource.');
         }
 
         $convert = $app->request()->get("convertToXliff");
@@ -754,7 +815,8 @@ class TaskRouteHandler
                     "targetLanguage"=> $targetLanguage,
 //                    'matecat_url'   => $taskDao->get_matecat_url($task),
                     'matecat_url'   => '',
-                    'allow_download'=> $taskDao->get_allow_download($task),
+                    'allow_download'=> $taskDao->get_allow_download($task, $memsource_task),
+                    'memsource_task'=> $memsource_task,
                     "taskMetadata"  => $taskMetaData
         ));
 
@@ -766,13 +828,18 @@ class TaskRouteHandler
         $app = \Slim\Slim::getInstance();
         $taskDao = new DAO\TaskDao();
         $adminDao = new DAO\AdminDao();
+        $projectDao = new DAO\ProjectDao();
 
         $task = $taskDao->getTask($task_id);
         $app->view()->setData("task", $task);
 
+        $memsource_task = $projectDao->get_memsource_task($task_id);
+
         $app->view()->appendData(array(
-            'matecat_url' => $taskDao->get_matecat_url($task),
-            'allow_download' => $taskDao->get_allow_download($task),
+            'matecat_url' => $taskDao->get_matecat_url($task, $memsource_task),
+            'allow_download' => $taskDao->get_allow_download($task, $memsource_task),
+            'memsource_task' => $memsource_task,
+            'translations_not_all_complete' => $projectDao->are_translations_not_all_complete($task, $memsource_task),
             'isSiteAdmin'    => $adminDao->isSiteAdmin(Common\Lib\UserSession::getCurrentUserID()),
         ));
 
@@ -827,6 +894,8 @@ class TaskRouteHandler
         $taskClaimed = $taskDao->isTaskClaimed($taskId);
         $trackTaskView = $taskDao->recordTaskView($taskId,$user_id);
 
+        $memsource_task = $projectDao->get_memsource_task($taskId);
+
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
             Common\Lib\UserSession::checkCSRFKey($post, 'task');
@@ -866,6 +935,9 @@ class TaskRouteHandler
         }
         if ($taskClaimed) {
             $app->flashKeep();
+
+           if ($memsource_task) $app->redirect($app->urlFor('task-view', array('task_id' => $taskId)));
+
             switch ($task->getTaskType()) {
                 case Common\Enums\TaskTypeEnum::DESEGMENTATION:
                     // $app->redirect($app->urlFor("task-desegmentation", array("task_id" => $taskId)));
@@ -873,7 +945,7 @@ class TaskRouteHandler
                     break;
                 case Common\Enums\TaskTypeEnum::TRANSLATION:
                 case Common\Enums\TaskTypeEnum::PROOFREADING:
-                  if ($taskDao->get_allow_download($task)) {
+                  if ($taskDao->get_allow_download($task, $memsource_task)) {
                     $app->redirect($app->urlFor("task-simple-upload", array("task_id" => $taskId)));
                   } else {
                     $app->redirect($app->urlFor('task-chunk-complete', array('task_id' => $taskId)));
@@ -917,14 +989,27 @@ class TaskRouteHandler
                         $app->flashNow("error", sprintf(Lib\Localisation::getTranslation('task_view_assign_task_banned_error'), $userDisplayName));
                     } else {
                         $taskDao->record_task_if_translated_in_matecat($task);
-                        $userDao->claimTask($assgneeId, $taskId);
-
+                        $success = $userDao->claimTask($assgneeId, $taskId, $memsource_task, $task->getProjectId());
+                        if ($success) {
                         $app->flash("success", sprintf(Lib\Localisation::getTranslation('task_view_assign_task_success'), $userDisplayName));
                         $app->redirect($app->urlFor("project-view", array("project_id" => $task->getProjectId())));
+                        }
+                        $app->flashNow('error', 'The task could not be assigned, likely not found on memsource.');
                     }
                 }
                 $post['userIdOrEmail']="";
-        }
+            }
+            if ($isSiteAdmin && !empty($post['userIdOrEmailDenyList'])) {
+                $userIdOrEmail = trim($post['userIdOrEmailDenyList']);
+                if (ctype_digit($userIdOrEmail)) $remove_deny_user = $userDao->getUser($userIdOrEmail);
+                else                             $remove_deny_user = $userDao->getUserByEmail($userIdOrEmail);
+                if (empty($remove_deny_user)) {
+                    $app->flashNow('error', 'User does not exist.');
+                } else {
+                    $taskDao->removeUserFromTaskBlacklist($remove_deny_user->getId(), $taskId);
+                    $app->flashNow('success', 'Removed (assuming was actually in deny list)');
+                }
+            }
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $project = $projectDao->getProject($task->getProjectId());
@@ -1029,14 +1114,14 @@ class TaskRouteHandler
             'taskTypeTexts' => $taskTypeTexts,
             'projectAndOrgs' => $projectAndOrgs,
             'discourse_slug' => $projectDao->discourse_parameterize($project),
-            'matecat_url' => $taskDao->get_matecat_url_regardless($task),
+            'memsource_task' => $memsource_task,
+            'matecat_url' => $taskDao->get_matecat_url_regardless($task, $memsource_task),
             'list_qualified_translators' => $list_qualified_translators,
             'display_treat_as_translated' => 0,
             'taskStatusTexts' => $taskStatusTexts
         ));
 
         $app->render("task/task.view.tpl");
-
         }
     }
 
@@ -1061,7 +1146,8 @@ class TaskRouteHandler
         $task = $taskDao->getTask($taskId);
         $project = $projectDao->getProject($task->getProjectId());
 
-        if (!$taskDao->get_allow_download($task)) {
+        $memsource_task = $projectDao->get_memsource_task($taskId); // $memsource_task should never be set, protect against this
+        if ($memsource_task || !$taskDao->get_allow_download($task, $memsource_task)) {
             $app->redirect($app->urlFor("task-view", array("task_id" => $taskId)));
         }
 
@@ -1503,16 +1589,22 @@ class TaskRouteHandler
 
         $task = $taskDao->getTask($task_id);
 
+        $memsource_task = $projectDao->get_memsource_task($task_id);
+
         $preReqTasks = $taskDao->getTaskPreReqs($task_id);
         if (!$preReqTasks) {
             $preReqTasks = array();
         }
 
         $project = $projectDao->getProject($task->getProjectId());
-        $projectTasks = $projectDao->getProjectTasks($task->getProjectId());
+
+        $projectTasks = [];
+        if (!$memsource_task) $projectTasks = $projectDao->getProjectTasks($task->getProjectId());
         $allow_downloads = array();
+        $tasksEnabled = [];
+        $thisTaskPreReqIds = 0;
         foreach ($projectTasks as $projectTask) {
-            $allow_downloads[$projectTask->getId()] = $taskDao->get_allow_download($projectTask);
+            $allow_downloads[$projectTask->getId()] = $taskDao->get_allow_download($projectTask, $memsource_task);
 
             if ($projectTask->getTaskStatus() == Common\Enums\TaskStatusEnum::IN_PROGRESS ||
                         $projectTask->getTaskStatus() == Common\Enums\TaskStatusEnum::COMPLETE) {
@@ -1575,7 +1667,7 @@ class TaskRouteHandler
                     $targetLocale->setCountryCode($post['targetCountry']);
                 }
 
-                $task->setTargetLocale($targetLocale);
+                if (!$memsource_task) $task->setTargetLocale($targetLocale);
             }
 
             if ($site_admin || $task->getTaskStatus() < Common\Enums\TaskStatusEnum::IN_PROGRESS) {
@@ -1601,6 +1693,7 @@ class TaskRouteHandler
                 $task->setComment($post['impact']);
             }
 
+          if (!$memsource_task) {
             if ($word_count_err == "" && $deadlineError == "") {
                 $selectedPreReqs = array();
                 if (isset($post['totalTaskPreReqs']) && $post['totalTaskPreReqs'] > 0) {
@@ -1676,8 +1769,17 @@ class TaskRouteHandler
                     $taskPreReqIds[$task->getId()] = $oldPreReqs;
                 }
             }
+          } else {
+                $taskDao->updateTask($task);
+
+                if ($adminAccess && ($task->getTaskStatus() <= Common\Enums\TaskStatusEnum::PENDING_CLAIM) && !empty($post['required_qualification_level'])) {
+                    $taskDao->updateRequiredTaskQualificationLevel($task_id, $post['required_qualification_level']);
+                }
+                $app->redirect($app->urlFor("task-view", array("task_id" => $task_id)));
+          }
         }
 
+        if (!$memsource_task) {
         $graphBuilder = new Lib\UIWorkflowBuilder();
         //Maybe replace with an API call
         $graph = $graphBuilder->parseAndBuild($taskPreReqIds);
@@ -1706,6 +1808,7 @@ class TaskRouteHandler
                 $previousRow = array();
             }
         }
+        }
 
         $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
         $taskTypeColours = array();
@@ -1714,8 +1817,13 @@ class TaskRouteHandler
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
 
+        if (!$memsource_task) {
         $languages = Lib\TemplateHelper::getLanguageList();
         $countries = Lib\TemplateHelper::getCountryList();
+        } else {
+            $languages = [];
+            $countries = [];
+        }
 
         $publishStatus="";
         if ($task->getPublished())
@@ -1776,7 +1884,9 @@ class TaskRouteHandler
         $project = $projectDao->getProject($task->getProjectId());
         $user = $userDao->getUser($user_id);
 
-        list ($matecat_id_job, $matecat_id_job_password, $recorded_status) = $taskDao->get_matecat_job_id_recorded_status($task);
+        $memsource_task = $projectDao->get_memsource_task($task_id);
+        if ($memsource_task) list ($matecat_id_job, $matecat_id_job_password, $recorded_status) = [0, '', ''];
+        else                 list ($matecat_id_job, $matecat_id_job_password, $recorded_status) = $taskDao->get_matecat_job_id_recorded_status($task);
 
         $trackTaskView = $taskDao->recordTaskView($task_id,$user_id);
 
@@ -1927,7 +2037,8 @@ class TaskRouteHandler
                 "isSiteAdmin" => $isSiteAdmin,
                 'alsoViewedTasksCount' => $alsoViewedTasksCount,
                 'discourse_slug' => $projectDao->discourse_parameterize($project),
-                'matecat_url' => $taskDao->get_matecat_url_regardless($task),
+                'memsource_task' => $memsource_task,
+                'matecat_url' => $taskDao->get_matecat_url_regardless($task, $memsource_task),
                 'recorded_status' => $recorded_status,
                 'display_treat_as_translated' => !empty($matecat_id_job) && empty($taskDao->is_parent_of_chunk($task->getProjectId(), $task_id)),
                 "userSubscribedToOrganisation" => $userSubscribedToOrganisation
@@ -1945,6 +2056,8 @@ class TaskRouteHandler
         $project    = $projectDao->getProject($task->getProjectId());
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
+
+        $memsource_task = $projectDao->get_memsource_task($task_id);
 
         $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
         $taskTypeColours = array();
@@ -2026,7 +2139,8 @@ class TaskRouteHandler
             'isSiteAdmin'     => 1,
             'isMember'        => 1,
             'discourse_slug'  => $projectDao->discourse_parameterize($project),
-            'matecat_url'     => $taskDao->get_matecat_url_regardless($task),
+            'memsource_task'  => $memsource_task,
+            'matecat_url'     => $taskDao->get_matecat_url_regardless($task, $memsource_task),
             'required_qualification_for_details' => $taskDao->getRequiredTaskQualificationLevel($task_id),
             'sent_users'      => $taskDao->list_task_invites_sent($task_id),
             'all_users'       => $all_users,
@@ -2081,6 +2195,8 @@ class TaskRouteHandler
         $user_id = Common\Lib\UserSession::getCurrentUserID();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
+
+        if ($projectDao->get_memsource_project($project_id)) $app->redirect($app->urlFor('project-view', ['project_id' => $project_id]));
 
         $titleError = null;
         $wordCountError = null;
@@ -2483,6 +2599,26 @@ class TaskRouteHandler
                 $preReqTasks = array();
                 $preReqTasks[] = $dummyTask;
                 error_log('preReqTasks for chunked PROOFREADING Task... ' . print_r($preReqTasks, true));
+            }
+        }
+        $projectDao = new DAO\ProjectDao();
+        if (empty($preReqTasks) && $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $memsource_task = $projectDao->get_memsource_task($taskId)) {
+            $preReqTasks = [];
+            $dummyTask = new Common\Protobufs\Models\Task();
+            $top_level = $projectDao->get_top_level($memsource_task['internalId']);
+            $project_tasks = $projectDao->get_tasks_for_project($task->getProjectId());
+            foreach ($project_tasks as $project_task) {
+                if ($top_level == $projectDao->get_top_level($project_task['internalId'])) {
+                    if ($memsource_task['workflowLevel'] > $project_task['workflowLevel']) { // Dependent on
+                        if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
+                            $dummyTask->setId($project_task['id']);
+                            $dummyTask->setProjectId($task->getProjectId());
+                            $dummyTask->setTitle($project_task['title']);
+                            $preReqTasks[] = $dummyTask;
+                            error_log('preReqTasks for memsource PROOFREADING Task... ' . print_r($preReqTasks, true));
+                        }
+                    }
+                }
             }
         }
         if ($preReqTasks == null || count($preReqTasks) == 0) {

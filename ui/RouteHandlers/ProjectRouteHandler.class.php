@@ -68,9 +68,409 @@ class ProjectRouteHandler
         )->name('project_cron_1_minute');
 
         $app->get(
+            '/task_cron_1_minute/',
+            array($this, 'task_cron_1_minute')
+        )->name('task_cron_1_minute');
+
+        $app->get(
             '/project/:project_id/getwordcount/',
             array($this, 'project_get_wordcount')
         )->name('project_get_wordcount');
+
+        $app->get(
+            '/memsource_hook/',
+            array($this, 'memsourceHook')
+        )->via("POST")->name('memsource_hook');
+    }
+
+    public function memsourceHook()
+    {
+        $app = \Slim\Slim::getInstance();
+        if ($app->request->headers->get('X-Memsource-Token') !== Common\Lib\Settings::get('memsource.X-Memsource-Token')) {
+            error_log('X-Memsource-Token does not match!');
+            die;
+        }
+        $body = $app->request()->getBody();
+        error_log(print_r(json_decode($body, true), true));
+        $hook = json_decode($body, true);
+
+        switch ($hook['event']) {
+            case 'PROJECT_CREATED':
+                $this->create_project($hook);
+                break;
+            case 'PROJECT_DUE_DATE_CHANGED':
+                $this->update_project_due_date($hook);
+                break;
+            case 'PROJECT_METADATA_UPDATED':
+                $this->update_project_client($hook);
+                break;
+            case 'JOB_CREATED':
+                $this->create_task($hook);
+                break;
+            case 'JOB_STATUS_CHANGED':
+                $this->update_task_status($hook);
+                break;
+            case 'JOB_ASSIGNED':
+                $this->job_assigned($hook);
+                break;
+            case 'JOB_DUE_DATE_CHANGED':
+                $this->update_task_due_date($hook);
+                break;
+        }
+        die;
+    }
+
+    private function create_project($hook)
+    {
+        $hook = $hook['project'];
+        $project = new Common\Protobufs\Models\Project();
+        $projectDao = new DAO\ProjectDao();
+        if ($projectDao->get_memsource_project_by_memsource_id($hook['id'])) return; // Likely self service project
+
+        $project->setTitle($hook['name']);
+        if (!empty($hook['note'])) $project->setDescription($hook['note']);
+        else                       $project->setDescription('-');
+        $project->setImpact('-');
+        if (!empty($hook['dateDue'])) $project->setDeadline(substr($hook['dateDue'], 0, 10) . ' ' . substr($hook['dateDue'], 11, 8));
+        else                          $project->setDeadline(gmdate('Y-m-d H:i:s', strtotime('25 days')));
+        $project->setWordCount(1);
+        list($trommons_source_language_code, $trommons_source_country_code) = $projectDao->convert_memsource_to_language_country($hook['sourceLang']);
+        $sourceLocale = new Common\Protobufs\Models\Locale();
+        $sourceLocale->setCountryCode($trommons_source_country_code);
+        $sourceLocale->setLanguageCode($trommons_source_language_code);
+        $project->setSourceLocale($sourceLocale);
+
+        if (empty($hook['client']['id'])) {
+            error_log("No client id in new project: {$hook['name']}");
+            $hook['client']['id'] = 0;
+        }
+        if ($hook['client']['id'] == 305070) {
+            error_log('Testing Client (No KP link)');
+            return;
+        }
+        $memsource_client = $projectDao->get_memsource_client_by_memsource_id($hook['client']['id']);
+        if (empty($memsource_client)) {
+            error_log("No MemsourceOrganisations record for new project: {$hook['name']}, client id: {$hook['client']['id']}");
+            $memsource_client = ['org_id' => 456]; // TWB
+        }
+        $project->setOrganisationId($memsource_client['org_id']);
+
+        if (!empty($hook['dateCreated'])) $project->setCreatedTime(substr($hook['dateCreated'], 0, 10) . ' ' . substr($hook['dateCreated'], 11, 8));
+        else                              $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
+
+        $project = $projectDao->createProjectDirectly($project);
+        error_log("Created Project: {$hook['name']}");
+        if (empty($project)) {
+            error_log("Failed to create Project: {$hook['name']}");
+            return;
+        }
+
+        $project_id = $project->getId();
+        $destination = Common\Lib\Settings::get("files.upload_path") . "proj-$project_id/";
+        mkdir($destination, 0755);
+
+        $workflowLevels = ['', '', '']; // Will contain 'Translation' or 'Revision' for workflowLevel 1 possibly up to 3
+        if (!empty($hook['workflowSteps'])) {
+            foreach ($hook['workflowSteps'] as $step) {
+                foreach ($workflowLevels as $i => $w) {
+                    if ($step['workflowLevel'] == $i + 1) $workflowLevels[$i] = $step['name'];
+                }
+            }
+        }
+
+        $projectDao->set_memsource_project($project_id, $hook['id'], $hook['uid'],
+            empty($hook['createdBy']['id']) ? 0 : $hook['createdBy']['id'],
+            empty($hook['owner']['id']) ? 0 : $hook['owner']['id'],
+            $workflowLevels);
+
+         $taskDao = new DAO\TaskDao();
+         if ($taskDao->organisationHasQualifiedBadge($memsource_client['org_id'])) $taskDao->insert_project_restrictions($project_id, true, true);
+
+        // Create a topic in the Community forum (Discourse) and a project in Asana
+        $target_languages = '';
+        if (!empty($hook['targetLangs'])) {
+            foreach ($hook['targetLangs'] as $index => $value) {
+                list($trommons_source_language_code, $trommons_source_country_code) = $projectDao->convert_memsource_to_language_country($value);
+                $hook['targetLangs'][$index] = "{$trommons_source_language_code}-{$trommons_source_country_code}";
+            }
+            $target_languages = implode(',', $hook['targetLangs']);
+        }
+        error_log("projectCreate create_discourse_topic($project_id, $target_languages)");
+        try {
+            $this->create_discourse_topic($project_id, $target_languages, ['created_by_id' => empty($hook['createdBy']['id']) ? 0 : $hook['createdBy']['id']]);
+        } catch (\Exception $e) {
+            error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
+        }
+    }
+
+    private function update_project_due_date($hook)
+    {
+        $hook = $hook['project'];
+        $projectDao = new DAO\ProjectDao();
+
+        $memsource_project = $projectDao->get_memsource_project_by_memsource_id($hook['id']);
+        if (empty($memsource_project)) {
+            error_log("Can't find memsource_project for {$hook['id']} in event PROJECT_DUE_DATE_CHANGED");
+            return;
+        }
+        if (!empty($hook['dateDue'])) $projectDao->update_project_due_date($memsource_project['project_id'], substr($hook['dateDue'], 0, 10) . ' ' . substr($hook['dateDue'], 11, 8));
+    }
+
+    private function update_project_client($hook)
+    {
+        $hook = $hook['project'];
+        $projectDao = new DAO\ProjectDao();
+
+        $memsource_project = $projectDao->get_memsource_project_by_memsource_id($hook['id']);
+        if (empty($memsource_project)) {
+            error_log("Can't find memsource_project for {$hook['id']} in event PROJECT_METADATA_UPDATED");
+            return;
+        }
+        if (empty($hook['client']['id'])) return;
+
+        $memsource_client = $projectDao->get_memsource_client_by_memsource_id($hook['client']['id']);
+        if (empty($memsource_client)) {
+            error_log("No MemsourceOrganisations record for project: {$hook['name']}, client id: {$hook['client']['id']} in event PROJECT_METADATA_UPDATED");
+            return;
+        }
+        $projectDao->update_project_organisation($memsource_project['project_id'], $memsource_client['org_id']);
+    }
+
+    private function create_task($hook)
+    {
+        $hook = $hook['jobParts'];
+        $projectDao = new DAO\ProjectDao();
+        $taskDao    = new DAO\TaskDao();
+        foreach ($hook as $part) {
+            $task = new Common\Protobufs\Models\Task();
+
+            if (empty($part['fileName'])) {
+                error_log("No fileName in new jobPart {$part['uid']}");
+                continue;
+            }
+            if (empty($part['project']['id'])) {
+                error_log("No project id in new jobPart {$part['uid']} for: {$part['fileName']}");
+                continue;
+            }
+            $memsource_project = $projectDao->get_memsource_project_by_memsource_id($part['project']['id']);
+            if (empty($memsource_project)) {
+                error_log("Can't find memsource_project for {$part['project']['id']} in new jobPart {$part['uid']} for: {$part['fileName']}");
+                continue;
+            }
+            $task->setProjectId($memsource_project['project_id']);
+            $task->setTitle((empty($part['internalId']) ? '' : $part['internalId'] . ' ') . $part['fileName']);
+
+            $project = $projectDao->getProject($memsource_project['project_id']);
+
+            if ($memsource_task = $projectDao->get_memsource_task_by_memsource_uid($part['uid'])) { // Likely self service project
+                if (!empty($part['wordsCount'])) $taskDao->updateWordCountForProject($memsource_project['project_id'], $part['wordsCount']);
+
+                $projectDao->update_memsource_task($memsource_task['task_id'], !empty($part['id']) ? $part['id'] : 0, $part['task'],
+                    empty($part['internalId'])    ? 0 : $part['internalId'],
+                    empty($part['beginIndex'])    ? 0 : $part['beginIndex'],
+                    empty($part['endIndex'])      ? 0 : $part['endIndex']);
+                continue;
+            }
+
+            $projectSourceLocale = $project->getSourceLocale();
+            $taskSourceLocale = new Common\Protobufs\Models\Locale();
+            $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
+            $taskSourceLocale->setCountryCode($projectSourceLocale->getCountryCode());
+            $task->setSourceLocale($taskSourceLocale);
+            $task->setTaskStatus(Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+
+            $taskTargetLocale = new Common\Protobufs\Models\Locale();
+            list($target_language, $target_country) = $projectDao->convert_memsource_to_language_country($part['targetLang']);
+            $taskTargetLocale->setLanguageCode($target_language);
+            $taskTargetLocale->setCountryCode($target_country);
+            $task->setTargetLocale($taskTargetLocale);
+
+            if (empty($part['workflowLevel']) || $part['workflowLevel'] > 3) {
+                error_log("Can't find workflowLevel in new jobPart {$part['uid']} for: {$part['fileName']}, assuming Translation");
+                $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
+            } else {
+                $taskType = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3']][$part['workflowLevel'] - 1];
+                if     ($taskType == 'Translation' || $taskType == '') $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
+                elseif ($taskType == 'Revision')                       $taskType = Common\Enums\TaskTypeEnum::PROOFREADING;
+                else {
+                    error_log("Can't find expected taskType ($taskType) in new jobPart {$part['uid']} for: {$part['fileName']}");
+                    continue;
+                }
+            }
+            $task->setTaskType($taskType);
+
+            if (!empty($part['wordsCount'])) {
+                $task->setWordCount($part['wordsCount']);
+                $project->setWordCount($part['wordsCount']);
+            } else {
+                $task->setWordCount(1);
+            }
+
+            if (!empty($part['dateDue'])) $task->setDeadline(substr($part['dateDue'], 0, 10) . ' ' . substr($part['dateDue'], 11, 8));
+            else                          $task->setDeadline($project->getDeadline());
+
+            $task->setPublished(1);
+
+            $prerequisite = 0;
+            if (!empty($part['task']) && $taskType == Common\Enums\TaskTypeEnum::PROOFREADING) {
+                $prerequisite_task = $projectDao->get_memsource_tasks_for_project_language_type($memsource_project['project_id'], $part['task'], Common\Enums\TaskTypeEnum::TRANSLATION);
+                if ($prerequisite_task) {
+                    $prerequisite = $prerequisite_task['task_id'];
+                    $task->setTaskStatus(Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
+                }
+            }
+
+            $task_id = $taskDao->createTaskDirectly($task);
+            if (!$task_id) {
+                error_log("Failed to add task for new jobPart {$part['uid']} for: {$part['fileName']}");
+                continue;
+            }
+            error_log("Added Task: $task_id for new jobPart {$part['uid']} for: {$part['fileName']}");
+
+            $projectDao->set_memsource_task($task_id, !empty($part['id']) ? $part['id'] : 0, $part['uid'], $part['task'], // note 'task' is for Language pair (independent of workflow step)
+                empty($part['internalId'])    ? 0 : $part['internalId'],
+                empty($part['workflowLevel']) ? 0 : $part['workflowLevel'],
+                empty($part['beginIndex'])    ? 0 : $part['beginIndex'], // Begin Segment number
+                empty($part['endIndex'])      ? 0 : $part['endIndex'],
+                $prerequisite);
+
+            $projectDao->updateProjectDirectly($project);
+
+            $project_id = $project->getId();
+
+            $project_restrictions = $taskDao->get_project_restrictions($project_id);
+            if ($project_restrictions && (
+                    ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION  && $project_restrictions['restrict_translate_tasks'])
+                        ||
+                    ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $project_restrictions['restrict_revise_tasks']))) {
+                $taskDao->setRestrictedTask($task_id);
+            }
+
+            $uploadFolder = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0";
+            mkdir($uploadFolder, 0755, true);
+            $filesFolder = Common\Lib\Settings::get('files.upload_path') . "files/proj-$project_id/task-$task_id/v-0";
+            mkdir($filesFolder, 0755, true);
+
+            $filename = $part['fileName'];
+            file_put_contents("$filesFolder/$filename", ''); // Placeholder
+            file_put_contents("$uploadFolder/$filename", "files/proj-$project_id/task-$task_id/v-0/$filename"); // Point to it
+
+            $projectDao->queue_copy_task_original_file($project_id, $task_id, $part['uid'], $filename); // cron will copy file from memsource
+        }
+    }
+
+    private function update_task_status($hook)
+    {
+        $hook = $hook['jobParts'];
+        $projectDao = new DAO\ProjectDao();
+        $taskDao    = new DAO\TaskDao();
+        foreach ($hook as $part) {
+            $memsource_task = $projectDao->get_memsource_task_by_memsource_uid($part['uid']);
+            if (empty($memsource_task)) {
+                error_log("Can't find memsource_task for {$part['uid']} in event JOB_STATUS_CHANGED, jobPart status: {$part['status']}");
+                continue;
+            }
+            $task_id = $memsource_task['task_id'];
+            $taskDao->set_memsource_status($task_id, $part['uid'], $part['status']);
+
+            if ($part['status'] == 'ASSIGNED') {
+                if (!empty($part['assignedTo'][0]['linguist']['id']) && count($part['assignedTo']) == 1) {
+                    $user_id = $projectDao->get_user_id_from_memsource_user($part['assignedTo'][0]['linguist']['id']);
+                    if (!$user_id) {
+                        error_log("Can't find user_id for {$part['assignedTo'][0]['linguist']['id']} in event JOB_STATUS_CHANGED, jobPart status: ASSIGNED");
+                        continue;
+                    }
+
+                    if (!$taskDao->taskIsClaimed($task_id)) {
+                        $taskDao->claimTask($task_id, $user_id);
+                        error_log("JOB_STATUS_CHANGED ASSIGNED in memsource task_id: $task_id, user_id: $user_id, memsource job: {$part['uid']}, user: {$part['assignedTo'][0]['linguist']['id']}");
+                    }
+                }
+            }
+            if ($part['status'] == 'COMPLETED_BY_LINGUIST') {
+                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 62927); // translators@translatorswithoutborders.org
+//(**)dev server                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 3297);
+
+                $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::COMPLETE);
+                $taskDao->sendTaskUploadNotifications($task_id, 1);
+                $taskDao->set_task_complete_date($task_id);
+
+                if (strpos($memsource_task['internalId'], '.') === false) { // Not split
+                    if (empty($part['project']['id'])) {
+                        error_log("No project id in {$part['uid']} in event JOB_STATUS_CHANGED, jobPart status: COMPLETED_BY_LINGUIST");
+                        continue;
+                    }
+                    $memsource_project = $projectDao->get_memsource_project_by_memsource_id($part['project']['id']);
+                    if (empty($memsource_project)) {
+                        error_log("Can't find memsource_project for {$part['project']['id']} in {$part['uid']} in event JOB_STATUS_CHANGED, jobPart status: COMPLETED_BY_LINGUIST");
+                        continue;
+                    }
+                    $dependent_task = $projectDao->get_memsource_tasks_for_project_language_type($memsource_project['project_id'], $memsource_task['task'], Common\Enums\TaskTypeEnum::PROOFREADING);
+                    if ($dependent_task && $dependent_task['prerequisite'] == $task_id) {
+                        $taskDao->setTaskStatus($dependent_task['task_id'], Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+                        $user_id = $projectDao->getUserClaimedTask($task_id);
+                        if ($user_id) $taskDao->addUserToTaskBlacklist($user_id, $dependent_task['task_id']);
+                    }
+                }
+                error_log("COMPLETED_BY_LINGUIST task_id: $task_id, memsource: {$part['uid']}");
+            }
+            if ($part['status'] == 'DECLINED_BY_LINGUIST') {
+                if (!empty($part['assignedTo'][0]['linguist']['id']) && count($part['assignedTo']) == 1) {
+                    $user_id = $projectDao->get_user_id_from_memsource_user($part['assignedTo'][0]['linguist']['id']);
+                    if (!$user_id) {
+                        error_log("Can't find user_id for {$part['assignedTo'][0]['linguist']['id']} in event JOB_STATUS_CHANGED, jobPart status: DECLINED_BY_LINGUIST");
+                        continue;
+                    }
+
+                    if ($taskDao->taskIsClaimed($task_id)) {
+                        $taskDao->unclaimTask($task_id, $user_id);
+                        error_log("JOB_STATUS_CHANGED DECLINED_BY_LINGUIST in memsource task_id: $task_id, user_id: $user_id, memsource job: {$part['uid']}, user: {$part['assignedTo'][0]['linguist']['id']}");
+                    }
+                }
+            }
+        }
+    }
+
+    private function job_assigned($hook)
+    {
+        $hook = $hook['jobParts'];
+        $projectDao = new DAO\ProjectDao();
+        $taskDao    = new DAO\TaskDao();
+        foreach ($hook as $part) {
+            if (!empty($part['assignedTo'][0]['linguist']['id']) && count($part['assignedTo']) == 1) {
+                $memsource_task = $projectDao->get_memsource_task_by_memsource_uid($part['uid']);
+                if (empty($memsource_task)) {
+                    error_log("Can't find memsource_task for {$part['uid']} in event JOB_ASSIGNED jobPart");
+                    continue;
+                }
+                $task_id = $memsource_task['task_id'];
+
+                $user_id = $projectDao->get_user_id_from_memsource_user($part['assignedTo'][0]['linguist']['id']);
+                if (!$user_id) {
+                    error_log("Can't find user_id for {$part['assignedTo'][0]['linguist']['id']} in event JOB_ASSIGNED jobPart");
+                    continue;
+                }
+
+                if (!$taskDao->taskIsClaimed($task_id)) {
+                    $taskDao->claimTask($task_id, $user_id);
+                    error_log("JOB_ASSIGNED in memsource task_id: $task_id, user_id: $user_id, memsource job: {$part['uid']}, user: {$part['assignedTo'][0]['linguist']['id']}");
+                }
+            }
+        }
+    }
+
+    private function update_task_due_date($hook)
+    {
+        $hook = $hook['jobParts'];
+        $projectDao = new DAO\ProjectDao();
+        foreach ($hook as $part) {
+            $memsource_task = $projectDao->get_memsource_task_by_memsource_uid($part['uid']);
+            if (empty($memsource_task)) {
+                error_log("Can't find memsource_task for {$part['uid']} in event JOB_DUE_DATE_CHANGED");
+                continue;
+            }
+            if (!empty($part['dateDue'])) $projectDao->update_task_due_date($memsource_task['task_id'], substr($part['dateDue'], 0, 10) . ' ' . substr($part['dateDue'], 11, 8));
+        }
     }
 
     public function test($projectId)
@@ -137,6 +537,8 @@ class ProjectRouteHandler
             $app->flash('error', 'You cannot access this project!');
             $app->redirect($app->urlFor('home'));
         }
+
+        $memsource_project = $projectDao->get_memsource_project($project_id);
 
         $app->view()->setData("project", $project);
 
@@ -293,7 +695,7 @@ class ProjectRouteHandler
                 }
             }
 
-            if (!empty($post['copyChunks'])) {
+            if (!empty($post['copyChunks']) && empty($memsource_project)) {
                 $matecat_language_pairs = $taskDao->getMatecatLanguagePairsForProject($project_id);
                 $matecat_language_pairs_populated = false;
                 if (!empty($matecat_language_pairs)) {
@@ -509,6 +911,21 @@ class ProjectRouteHandler
                     $app->flashNow('error', 'No MateCat project (MatecatLanguagePairs) found for this project in Kató Platform');
                 }
             }
+            if (!empty($post['copyChunks']) && !empty($memsource_project)) {
+                $projectDao->sync_split_jobs($memsource_project);
+            }
+            if (!empty($post['unpublish_all_translated']) || !empty($post['unpublish_all_revisions'])) {
+                $project_tasks = $projectDao->getProjectTasks($project_id);
+                if (!empty($project_tasks)) {
+                    foreach ($project_tasks as $project_task) {
+                        if ((!empty($post['unpublish_all_translated']) && ($project_task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION)) ||
+                            (!empty($post['unpublish_all_revisions'])  && ($project_task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING))) {
+                                $project_task->setPublished(false);
+                                $taskDao->updateTask($project_task);
+                        }
+                    }
+                }
+            }
         }
 
         $org = $orgDao->getOrganisation($project->getOrganisationId());
@@ -593,7 +1010,7 @@ class ProjectRouteHandler
 
         $preventImageCacheToken = time(); //see http://stackoverflow.com/questions/126772/how-to-force-a-web-browser-not-to-cache-images
 
-        $creator = $taskDao->get_creator($project_id);
+        $creator = $taskDao->get_creator($project_id, $memsource_project);
         $pm = $creator['email'];
         if (strpos($pm, '@translatorswithoutborders.org') === false) $pm = 'projects@translatorswithoutborders.org';
 
@@ -605,7 +1022,8 @@ class ProjectRouteHandler
                 'taskTypeColours' => $taskTypeColours,
                 "imgCacheToken" => $preventImageCacheToken,
                 'discourse_slug' => $projectDao->discourse_parameterize($project),
-                'matecat_analyze_url' => $taskDao->get_matecat_analyze_url($project_id),
+                'memsource_project'   => $memsource_project,
+                'matecat_analyze_url' => $taskDao->get_matecat_analyze_url($project_id, $memsource_project),
                 'pm' => $pm,
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation
         ));
@@ -671,6 +1089,8 @@ class ProjectRouteHandler
         $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
 
         $project = $projectDao->getProject($project_id);
+
+        $memsource_project = $projectDao->get_memsource_project($project_id);
 
         if ($post = $app->request()->post()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
@@ -929,6 +1349,7 @@ class ProjectRouteHandler
             'sourceCountrySelectCode'  => $sourceCountrySelectCode,
             'userIsAdmin'    => $userIsAdmin,
             'enter_analyse_url' => $enter_analyse_url,
+            'memsource_project' => $memsource_project,
             'sesskey'        => $sesskey,
         ));
 
@@ -945,11 +1366,14 @@ class ProjectRouteHandler
         $orgDao = new DAO\OrganisationDao();
         $subscriptionDao = new DAO\SubscriptionDao();
         $taskDao = new DAO\TaskDao();
+        $userDao = new DAO\UserDao();
 
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
             $_SESSION['SESSION_CSRF_KEY'] = $this->random_string(10);
         }
         $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
+
+        $create_memsource = 0;//(**)If this org is a memsource one
 
         if ($post = $app->request()->post()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
@@ -1021,8 +1445,12 @@ class ProjectRouteHandler
                             $projectDao->saveProjectFile($project, $user_id, $projectFileName, $data);
                             error_log("Project File Saved($user_id): " . $post['project_title']);
                             $success = true;
+                            if ($create_memsource) {
+                                $memsource_project = $userDao->create_memsource_project($post, $project, $projectFileName, $data);
+                                if (!$memsource_project) $success = false;
+                            } else $memsource_project = 0;
                         } catch (\Exception $e) {
-                            error_log("Project File Save Error($user_id): " . $post['project_title']);
+                            error_log("Project File Save Error($user_id): " . $post['project_title'] . ' ' . $e->getMessage());
                             $success = false;
                         }
                         if (!$success) {
@@ -1128,9 +1556,10 @@ class ProjectRouteHandler
                                 $matecat_proofreading_target_countrys = array();
                                 while (!empty($post["target_language_$targetCount"])) {
                                     list($trommons_language_code, $trommons_country_code) = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
-                                        if (!empty($post["translation_$targetCount"])) {
+                                        if ($create_memsource || !empty($post["translation_$targetCount"])) {
                                             $translation_Task_Id = $this->addProjectTask(
                                                 $project,
+                                                $memsource_project,
                                                 $trommons_language_code,
                                                 $trommons_country_code,
                                                 Common\Enums\TaskTypeEnum::TRANSLATION,
@@ -1139,6 +1568,7 @@ class ProjectRouteHandler
                                                 $user_id,
                                                 $projectDao,
                                                 $taskDao,
+                                                $userDao,
                                                 $app,
                                                 $post);
                                             if (!$translation_Task_Id) {
@@ -1149,9 +1579,10 @@ class ProjectRouteHandler
                                             $matecat_translation_target_languages[] = $trommons_language_code;
                                             $matecat_translation_target_countrys[]  = $trommons_country_code;
 
-                                            if (!empty($post["proofreading_$targetCount"])) {
+                                            if ($create_memsource || !empty($post["proofreading_$targetCount"])) {
                                                 $id = $this->addProjectTask(
                                                     $project,
+                                                    $memsource_project,
                                                     $trommons_language_code,
                                                     $trommons_country_code,
                                                     Common\Enums\TaskTypeEnum::PROOFREADING,
@@ -1160,6 +1591,7 @@ class ProjectRouteHandler
                                                     $user_id,
                                                     $projectDao,
                                                     $taskDao,
+                                                    $userDao,
                                                     $app,
                                                     $post);
                                                 if (!$id) {
@@ -1170,10 +1602,11 @@ class ProjectRouteHandler
                                                 $matecat_proofreading_target_languages[] = $trommons_language_code;
                                                 $matecat_proofreading_target_countrys[]  = $trommons_country_code;
                                             }
-                                        } elseif (empty($post["translation_$targetCount"]) && !empty($post["proofreading_$targetCount"])) {
+                                        } elseif (!$create_memsource && empty($post["translation_$targetCount"]) && !empty($post["proofreading_$targetCount"])) {
                                             // Only a proofreading task to be created
                                             $id = $this->addProjectTask(
                                                 $project,
+                                                $memsource_project,
                                                 $trommons_language_code,
                                                 $trommons_country_code,
                                                 Common\Enums\TaskTypeEnum::PROOFREADING,
@@ -1182,6 +1615,7 @@ class ProjectRouteHandler
                                                 $user_id,
                                                 $projectDao,
                                                 $taskDao,
+                                                $userDao,
                                                 $app,
                                                 $post);
                                             if (!$id) {
@@ -1211,10 +1645,11 @@ class ProjectRouteHandler
                                     }
                                 } else {
                                     try {
+                                      if (!$memsource_project) {
                                         error_log('projectCreate calculateProjectDeadlines: ' . $project->getId());
                                         $projectDao->calculateProjectDeadlines($project->getId());
-
                                         $source_language = $trommons_source_language_code . '-' . $trommons_source_country_code;
+                                      }
                                         $target_languages = '';
                                         $targetCount = 0;
                                         if (!empty($post["target_language_$targetCount"])) {
@@ -1227,6 +1662,8 @@ class ProjectRouteHandler
                                             $target_languages .= ',' . $trommons_language_code . '-' . $trommons_country_code;
                                             $targetCount++;
                                         }
+
+                                      if (!$memsource_project) {
                                         // $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, $post['wordCountInput']);
                                         $taskDao->insertWordCountRequestForProjects($project->getId(), $source_language, $target_languages, 0);
 
@@ -1270,6 +1707,7 @@ class ProjectRouteHandler
                                                 $taskDao->set_project_tm_key($project->getId(), $mt_engine, $pretranslate_100, $lexiqa, $private_tm_key);
                                             }
                                         }
+                                      }
 
                                         $restrict_translate_tasks = !empty($post['restrict_translate_tasks']);
                                         $restrict_revise_tasks    = !empty($post['restrict_revise_tasks']);
@@ -1317,145 +1755,6 @@ class ProjectRouteHandler
             12 => Lib\Localisation::getTranslation('common_december'),
         );
 
-        $subscription_text = null;
-        $paypal_email = Common\Lib\Settings::get('banner.paypal_email');
-        $paypal_email = null;
-        if (!empty($paypal_email)) {
-            $text_start = '<p style="font-size: 14px">' . Lib\Localisation::getTranslation('project_subscription') . '<br />';
-
-            //$siteLocation = Common\Lib\Settings::get('site.location');
-            $text_end = Lib\Localisation::getTranslation('project_subscription_annual_donation') . '</p>';
-            $text_end .= '<table style="font-size: 14px">';
-            $text_end .= '<tr><td>';
-            $text_end .=
-                '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
-                <input name="business" type="hidden" value="' . Common\Lib\Settings::get('banner.paypal_email') . '" />
-                <input name="cmd" type="hidden" value="_donations" />
-                <input name="item_name" type="hidden" value="Subscription: Intermittent use" />
-                <input name="item_number" type="hidden" value="Subscription: Intermittent use" />
-                <input name="amount" type="hidden" value="35.00" />
-                <input name="currency_code" type="hidden" value="EUR" />
-                <button type="submit" class="btn btn-success" style="width: 40%; text-align: left; margin-bottom: 3px;">
-                    <i class="icon-gift icon-white"></i> ' . Lib\Localisation::getTranslation('project_subscription_intermittent') .
-                '</button>' .
-                /*<input alt="PayPal - The safer, easier way to pay online" name="submit" src="' . $siteLocation . 'ui/img/p35.png" type="image" style="height:29px; width:64px;" />*/
-                '</form>';
-            //$text_end .= Lib\Localisation::getTranslation('project_subscription_intermittent');
-            $text_end .= '</td></tr>';
-            $text_end .= '<tr><td>';
-            $text_end .=
-                '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
-                <input name="business" type="hidden" value="' . Common\Lib\Settings::get('banner.paypal_email') . '" />
-                <input name="cmd" type="hidden" value="_donations" />
-                <input name="item_name" type="hidden" value="Subscription: Moderate use" />
-                <input name="item_number" type="hidden" value="Subscription: Moderate use" />
-                <input name="amount" type="hidden" value="75.00" />
-                <input name="currency_code" type="hidden" value="EUR" />
-                <button type="submit" class="btn btn-success" style="width: 40%; text-align: left; margin-bottom: 3px;">
-                    <i class="icon-gift icon-white"></i> ' . Lib\Localisation::getTranslation('project_subscription_moderate') .
-                '</button>' .
-                /*<input alt="PayPal - The safer, easier way to pay online" name="submit" src="' . $siteLocation . 'ui/img/p75.png" type="image" style="height:29px; width:64px;" />*/
-                '</form>';
-            //$text_end .= Lib\Localisation::getTranslation('project_subscription_moderate');
-            $text_end .= '</td></tr>';
-            $text_end .= '<tr><td>';
-            $text_end .=
-                '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
-                <input name="business" type="hidden" value="' . Common\Lib\Settings::get('banner.paypal_email') . '" />
-                <input name="cmd" type="hidden" value="_donations" />
-                <input name="item_name" type="hidden" value="Subscription: Heavy use" />
-                <input name="item_number" type="hidden" value="Subscription: Heavy use" />
-                <input name="amount" type="hidden" value="300.00" />
-                <input name="currency_code" type="hidden" value="EUR" />
-                <button type="submit" class="btn btn-success" style="width: 40%; text-align: left; margin-bottom: 3px;">
-                    <i class="icon-gift icon-white"></i> ' . Lib\Localisation::getTranslation('project_subscription_heavy') .
-                '</button>' .
-                /*<input alt="PayPal - The safer, easier way to pay online" name="submit" src="' . $siteLocation . 'ui/img/p300.jpg" type="image" style="height:29px; width:64px;" />*/
-                '</form>';
-            //$text_end .= Lib\Localisation::getTranslation('project_subscription_heavy');
-            $text_end .= '</td></tr>';
-            $text_end .= '<tr><td>';
-            $text_end .=
-                '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" style="display:inline;">
-                <input name="business" type="hidden" value="' . Common\Lib\Settings::get('banner.paypal_email') . '" />
-                <input name="cmd" type="hidden" value="_donations" />
-                <input name="item_name" type="hidden" value="Subscription: Upgrade other" />
-                <input name="item_number" type="hidden" value="Subscription: Upgrade other" />
-                <input name="currency_code" type="hidden" value="EUR" />
-                <button type="submit" class="btn btn-success" style="width: 40%; text-align: left; margin-bottom: 3px;">
-                    <i class="icon-gift icon-white"></i> ' . Lib\Localisation::getTranslation('project_subscription_other') .
-                '</button>' .
-                /*<input alt="PayPal - The safer, easier way to pay online" name="submit" src="' . $siteLocation . 'ui/img/pother.jpg" type="image" style="height:29px; width:64px;" />*/
-                '</form>';
-            //$text_end .= Lib\Localisation::getTranslation('project_subscription_other');
-            $text_end .= '</td></tr>';
-            $text_end .= '</table>';
-            $text_end .= '<p style="font-size: 14px">' . Lib\Localisation::getTranslation('project_subscription_cannot') . '</p>';
-
-            $subscription = $orgDao->getSubscription($org_id);
-            if (empty($subscription)) {
-                $number_of_projects_ever = $subscriptionDao->number_of_projects_ever($org_id);
-
-                $text_middle_pay = Lib\Localisation::getTranslation('project_subscription_initial');
-                if ($number_of_projects_ever == 1) {
-                    $text_middle_pay .= ' ' . Lib\Localisation::getTranslation('project_subscription_number');
-                } elseif ($number_of_projects_ever > 1) {
-                    $text_middle_pay .= ' ' . sprintf(Lib\Localisation::getTranslation('project_subscription_numbers'), $number_of_projects_ever);
-                }
-                $text_middle_pay .= '<br />';
-                $text_middle_pay .= Lib\Localisation::getTranslation('project_subscription_remind') . '<br /><br />';
-
-                if ($number_of_projects_ever < 2) {
-                    $subscription_text = $text_start . $text_middle_pay . $text_end;
-                } else {
-                    $subscription_text = $text_start . $text_middle_pay . $text_end;
-                }
-            } else {
-                $year_ago = gmdate('Y-m-d H:i:s', strtotime('-1 year'));
-                $outside_year = $subscription['start_date'] < $year_ago;
-
-                $number_of_projects_since_last_donation = $subscriptionDao->number_of_projects_since_last_donation($org_id);
-                $number_of_projects_since_donation_anniversary = $subscriptionDao->number_of_projects_since_donation_anniversary($org_id);
-
-                $text_middle_renew = sprintf(Lib\Localisation::getTranslation('project_subscription_last_donation'), substr($subscription['start_date'], 8, 2) . ' ' . $month_list[(int)substr($subscription['start_date'], 5, 2)] . ' ' . substr($subscription['start_date'], 0, 4)) . ' ';
-                if ($number_of_projects_since_donation_anniversary == 1) {
-                    $text_middle_renew .= Lib\Localisation::getTranslation('project_subscription_number_renew') . '<br />';
-                } elseif ($number_of_projects_since_donation_anniversary > 1) {
-                    $text_middle_renew .= sprintf(Lib\Localisation::getTranslation('project_subscription_numbers_renew'), $number_of_projects_since_donation_anniversary) . '<br />';
-                }
-                $text_middle_renew .= Lib\Localisation::getTranslation('project_subscription_remind_renew') . '<br /><br />';
-
-                $text_middle_upgrade  = sprintf(Lib\Localisation::getTranslation('project_subscription_numbers_upgrade'), $number_of_projects_since_last_donation) . '<br />';
-                $text_middle_upgrade .= Lib\Localisation::getTranslation('project_subscription_remind_upgrade') . '<br /><br />';
-
-                switch ($subscription['level']) {
-                    case 1000: // Free because unable to pay
-                        break;
-                    case 100:  // Partner
-                        break;
-                    case 10:   // Intermittent use for year
-                        if ($outside_year) {
-                            $subscription_text = $text_start . $text_middle_renew . $text_end;
-                        } elseif ($number_of_projects_since_last_donation >= 3) {
-                            $subscription_text = $text_start . $text_middle_upgrade . $text_end;
-                        }
-                        break;
-                    case 20:   // Moderate use for year
-                        if ($outside_year) {
-                            $subscription_text = $text_start . $text_middle_renew . $text_end;
-                        } elseif ($number_of_projects_since_last_donation >= 10) {
-                            $subscription_text = $text_start . $text_middle_upgrade . $text_end;
-                        }
-                        break;
-                    case 30:   // Heavy use for year
-                        if ($outside_year) {
-                            $subscription_text = $text_start . $text_middle_renew . $text_end;
-                        }
-                    break;
-                }
-            }
-        }
-
         $year_list = array();
         $yeari = (int)date('Y');
         for ($i = 0; $i < 10; $i++) {
@@ -1483,7 +1782,7 @@ class ProjectRouteHandler
             "supportedImageFormats" => Common\Lib\Settings::get('projectImages.supported_formats'),
             "org_id"         => $org_id,
             "user_id"        => $user_id,
-            'subscription_text' => $subscription_text,
+            'subscription_text' => null,
             "extra_scripts"  => $extraScripts,
             'month_list'     => $month_list,
             'selected_month' => (int)date('n'),
@@ -1493,18 +1792,20 @@ class ProjectRouteHandler
             'selected_hour'  => 0,
             'minute_list'    => $minute_list,
             'selected_minute'=> 0,
-            'languages'      => $projectDao->generate_language_selection(),
+            'create_memsource'=> $create_memsource,
+            'languages'      => $projectDao->generate_language_selection($create_memsource),
             'showRestrictTask' => $taskDao->organisationHasQualifiedBadge($org_id),
             'isSiteAdmin'    => $adminDao->isSiteAdmin($user_id),
             'sesskey'        => $sesskey,
             'template1'      => '{"source": "en-GB", "targets": ["zh-CN", "zh-TW", "th-TH", "vi-VN", "id-ID", "tl-PH", "ko-KR", "ja-JP", "ms-MY", "my-MM", "hi-IN", "bn-IN"]}',
-            'template2'      => '{"source": "en-GB", "targets": ["ar-SA", "hi-IN", "swh-KE", "fr-FR", "es-MX", "pt-BR"]}',
+            'template2'      => '{"source": "en-GB", "targets": ["ar-SA", "hi-IN", "swh-KE", "fr-FR", "es-49", "pt-BR"]}',
         ));
         $app->render("project/project.create.tpl");
     }
 
     private function addProjectTask(
         $project,
+        $memsource_project,
         $target_language,
         $target_country,
         $taskType,
@@ -1513,17 +1814,12 @@ class ProjectRouteHandler
         $user_id,
         $projectDao,
         $taskDao,
+        $userDao,
         $app,
         $post)
     {
         $taskPreReqs = array();
         $task = new Common\Protobufs\Models\Task();
-        try {
-            $projectTasks = $projectDao->getProjectTasks($project->getId());
-        } catch (\Exception $e) {
-            return 0;
-        }
-
         $task->setProjectId($project->getId());
 
         $task->setTitle($project->getTitle());
@@ -1542,7 +1838,21 @@ class ProjectRouteHandler
 
         $task->setTaskType($taskType);
         $task->setWordCount($project->getWordCount());
-        $task->setDeadline($project->getDeadline());
+        if ($memsource_project) {
+            $deadline = strtotime($project->getDeadline());
+            $deadline_less_7_days = $deadline - 7*24*60*60; // 7-4 days Translation
+            $deadline_less_4_days = $deadline - 4*24*60*60; // 4-1 days Revising
+            $deadline_less_1_days = $deadline - 1*24*60*60; // 1 day for pm
+            $now = time();
+            if ($deadline_less_7_days < $now) { // We are squashed for time
+                $total = $deadline - $now;
+                if ($total < 0) $total = 0;
+                $deadline_less_4_days = $deadline - $total*4/7;
+                $deadline_less_1_days = $deadline - $total*1/7;
+            }
+            if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION) $task->setDeadline(gmdate('Y-m-d H:i:s', $deadline_less_4_days));
+            else                                                     $task->setDeadline(gmdate('Y-m-d H:i:s', $deadline_less_1_days));
+        } else                                                       $task->setDeadline($project->getDeadline());
 
         if (!empty($post['publish'])) {
             $task->setPublished(1);
@@ -1555,6 +1865,11 @@ class ProjectRouteHandler
         }
 
         try {
+            if ($memsource_project) {
+                if ($preReqTaskId) {
+                    $task->setTaskStatus(Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
+                }
+            }
             error_log("addProjectTask");
             $newTask = $taskDao->createTask($task);
             $newTaskId = $newTask->getId();
@@ -1571,12 +1886,37 @@ class ProjectRouteHandler
                 $projectDao->getProjectFile($project->getId())
             );
 
-            if ($newTaskId && $preReqTaskId) {
-                $taskDao->addTaskPreReq($newTaskId, $preReqTaskId);
+            if ($memsource_project) {
+                $memsource_target = $projectDao->convert_language_country_to_memsource($target_language, $target_country);
+                if (!$memsource_target) return 0;
+
+                if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION) {
+                    $type_text = 'Translation';
+                    $default_workflow = 1;
+                } else {
+                    $type_text = 'Revision';
+                    $default_workflow = 2;
+                }
+                $levels = [$memsource_project['workflow_level_1'] => 1, $memsource_project['workflow_level_2'] => 2, $memsource_project['workflow_level_3'] => 3];
+                if (!empty($levels[$type_text])) $workflow = $levels[$type_text];
+                else                             $workflow = $default_workflow;
+
+                if (empty($memsource_project['jobs']["$memsource_target-$workflow"])) return 0;
+                $job = $memsource_project['jobs']["$memsource_target-$workflow"];
+                // Missing items should be updated by memsource hook...
+                $projectDao->set_memsource_task($newTaskId, 0, $job['uid'], '',
+                    0,
+                    empty($job['workflowLevel']) ? 0 : $job['workflowLevel'],
+                    0,
+                    0,
+                    $preReqTaskId);
+            } else {
+                if ($newTaskId && $preReqTaskId) {
+                    $taskDao->addTaskPreReq($newTaskId, $preReqTaskId);
+                }
             }
 
             if (!empty($post['trackProject'])) {
-                $userDao = new DAO\UserDao();
                 $userDao->trackTask($user_id, $newTaskId);
             }
 
@@ -1664,8 +2004,28 @@ class ProjectRouteHandler
             $app->redirect($app->urlFor('home'));
         }
 
+        $project_tasks = $projectDao->get_tasks_for_project($projectId); // Is a memsource project if any memsource jobs
         try {
+            if ($project_tasks) {
+                $task_id = 0;
+                $unitary = 1;
+                foreach ($project_tasks as $project_task) {
+                    $title = $project_task['title'];
+                    if (strpos($project_task['internalId'], '.')) $title = substr($project_task['title'], strlen($project_task['internalId']) + 1);
+                    if (!$task_id) { // First time through
+                        $task_id = $project_task['id'];
+                        $title_0 = $title;
+                    }
+                    if ($title_0 !== $title) $unitary = 0; // Not a unitary project with a single source file (1 => probably it is)
+                }
+                if (!$unitary) {
+                    $app->flash('error', 'We could not find a matching file.');
+                    $app->redirect($app->urlFor('home'));
+                }
+                $headArr = $taskDao->downloadTaskVersion($task_id, 0, 0); // Download an original Task file as "Project" file
+            } else {
             $headArr = $projectDao->downloadProjectFile($projectId);
+            }
             //Convert header data to array and set headers appropriately
             if (!empty($headArr)) {
                 $headArr = unserialize($headArr);
@@ -1713,7 +2073,7 @@ class ProjectRouteHandler
         }
     }
 
-    public function create_discourse_topic($projectId, $targetlanguages)
+    public function create_discourse_topic($projectId, $targetlanguages, $memsource_project = 0)
     {
         $app = \Slim\Slim::getInstance();
         $projectDao = new DAO\ProjectDao();
@@ -1729,18 +2089,21 @@ class ProjectRouteHandler
         $i = 0;
         $languages = array();
         foreach($langcodearray as $langcode){
+          if (!empty($langcode)) {
             $langcode = substr($langcode,0,strpos($langcode."-","-"));
             $language = $langDao->getLanguageByCode($langcode);
             $languages[$i++] = $language->getName();
+          }
         }
 
-        $creator = $taskDao->get_creator($projectId);
+        $creator = $taskDao->get_creator($projectId, $memsource_project);
         $pm = $creator['email'];
         if (strpos($pm, '@translatorswithoutborders.org') === false) $pm = 'projects@translatorswithoutborders.org';
 
+        $title = str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getTitle() . " $projectId"); // Discourse does not like duplicates
         $discourseapiparams = array(
             'category' => '7',
-            'title' => str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getTitle()),
+            'title' => $title,
             'raw' => "Partner: $org_name. Project Manager: $pm URL: /"."/".$_SERVER['SERVER_NAME']."/project/$projectId/view ".str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getDescription()),
         );
         $fields = '';
@@ -1754,6 +2117,7 @@ class ProjectRouteHandler
             $fields .= '&tags[]=' . urlencode($language);
             if (++$language_count == 4) break; // Limit in Discourse on number of tags?
         }
+error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
 
         $re = curl_init(Common\Lib\Settings::get('discourse.url').'/posts');
         curl_setopt($re, CURLOPT_POSTFIELDS, $fields);
@@ -1771,6 +2135,7 @@ class ProjectRouteHandler
                 $projectDao->set_discourse_id($projectId, $topic_id);
             } else {
                 error_log('Discourse API error: No topic_id returned');
+                error_log($res);
             }
         }
         curl_close($re);
@@ -1778,7 +2143,7 @@ class ProjectRouteHandler
         //Asana
         $re = curl_init('https://app.asana.com/api/1.0/tasks');
         curl_setopt($re, CURLOPT_POSTFIELDS, array(
-            'name' => str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getTitle()),
+            'name' => $title,
             'notes' => "Partner: $org_name, Target: $targetlanguages, Deadline: ".$project->getDeadline() . ' https:/'.'/'.$_SERVER['SERVER_NAME']."/project/$projectId/view",
             'projects' => Common\Lib\Settings::get('asana.project')
             )
@@ -1796,7 +2161,7 @@ class ProjectRouteHandler
         // Asana 2nd Project
         $re = curl_init('https://app.asana.com/api/1.0/tasks');
         curl_setopt($re, CURLOPT_POSTFIELDS, array(
-            'name' => str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getTitle()),
+            'name' => $title,
             'notes' => "Partner: $org_name, Target: $targetlanguages, Deadline: ".$project->getDeadline() . ' https:/'.'/'.$_SERVER['SERVER_NAME']."/project/$projectId/view",
             'projects' => '1169104501864281'
             )
@@ -1814,7 +2179,7 @@ class ProjectRouteHandler
         // Asana 3rd Project
         $re = curl_init('https://app.asana.com/api/1.0/tasks');
         curl_setopt($re, CURLOPT_POSTFIELDS, array(
-            'name' => str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getTitle()),
+            'name' => $title,
             'notes' => "Partner: $org_name, Target: $targetlanguages, Deadline: ".$project->getDeadline() . ' https:/'.'/'.$_SERVER['SERVER_NAME']."/project/$projectId/view",
             'projects' => '1174689961513340'
             )
@@ -1832,7 +2197,7 @@ class ProjectRouteHandler
         // Asana 5th Project
         $re = curl_init('https://app.asana.com/api/1.0/tasks');
         curl_setopt($re, CURLOPT_POSTFIELDS, array(
-            'name' => str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getTitle()),
+            'name' => $title,
             'notes' => "Partner: $org_name, Target: $targetlanguages, Deadline: ".$project->getDeadline() . ' https:/'.'/'.$_SERVER['SERVER_NAME']."/project/$projectId/view",
             'projects' => '1186619555316417'
             )
@@ -2159,13 +2524,84 @@ class ProjectRouteHandler
       die;
     }
 
+    public function task_cron_1_minute()
+    {
+        $projectDao = new DAO\ProjectDao();
+
+        $fp_for_lock = fopen(__DIR__ . '/task_cron_1_minute_lock.txt', 'r');
+        if (flock($fp_for_lock, LOCK_EX | LOCK_NB)) { // Acquire an exclusive lock, if possible, if not we will wait for next time
+            $queue_copy_task_original_files = $projectDao->get_queue_copy_task_original_files();
+            $count = 0;
+            foreach ($queue_copy_task_original_files as $queue_copy_task_original_file) {
+                if (++$count > 1) break; // Limit number done at one time, just in case
+
+                $project_id         = $queue_copy_task_original_file['project_id'];
+                $task_id            = $queue_copy_task_original_file['task_id'];
+                $memsource_task_uid = $queue_copy_task_original_file['memsource_task_uid'];
+                $filename           = $queue_copy_task_original_file['filename'];
+
+                $memsource_project = $projectDao->get_memsource_project($project_id);
+                $memsource_project_uid = $memsource_project['memsource_project_uid'];
+                $created_by_id         = $memsource_project['created_by_id'];
+                $user_id = $projectDao->get_user_id_from_memsource_user($created_by_id);
+                if (!$user_id) $user_id = 62927; // translators@translatorswithoutborders.org
+//(**)dev server                if (!$user_id) $user_id = 3297;
+
+                $memsourceApiV1 = Common\Lib\Settings::get("memsource.api_url_v1");                    
+                $memsourceApiToken = Common\Lib\Settings::get("memsource.memsource_api_token");
+                $url = "{$memsourceApiV1}projects/$memsource_project_uid/jobs/$memsource_task_uid/original";
+
+                $re = curl_init($url);
+                $httpHeaders = ["Authorization: Bearer $memsourceApiToken"];
+                curl_setopt($re, CURLOPT_HTTPHEADER, $httpHeaders);
+                curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($re, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
+
+                $res = curl_exec($re);
+                if ($error_number = curl_errno($re)) {
+                    error_log("task_cron ($task_id) Curl error ($error_number): " . curl_error($re)); 
+                }
+
+                $responseCode = curl_getinfo($re, CURLINFO_HTTP_CODE);
+
+                curl_close($re);
+
+                if ($responseCode == 200) {
+                    if (strlen($res) <= 100000000) {
+                        $projectDao->save_task_file($user_id, $project_id, $task_id, $filename, $res);
+                    } else {
+                        error_log('File too big: ' . strlen($res));
+                    }
+                    error_log("dequeue_copy_task_original_file() task_id: $task_id Removing");
+                    $projectDao->dequeue_copy_task_original_file($task_id);
+                } else {
+                    if (in_array($responseCode,[400,401,403,404,405,410,415,501,202])) {
+                        $projectDao->dequeue_copy_task_original_file($task_id);
+                    }
+                    error_log("task_cron ERROR ($task_id) responseCode: $responseCode");
+                }
+            }
+
+            flock($fp_for_lock, LOCK_UN); // Release the lock
+        }
+        fclose($fp_for_lock);
+
+        die;
+    }
+
     public function valid_language_for_matecat($language_code)
     {
         global $matecat_acceptable_languages;
         if (in_array($language_code, $matecat_acceptable_languages)) return $language_code;
         // Special case...
         if ($language_code === 'tn-BW') return 'tsn-BW';
-        if ($language_code === 'ca---') return 'cav-ES';
+        if ($language_code === 'es-49') return 'es-MX';
+        if ($language_code === 'sr-90') return 'sr-ME';
+        if ($language_code === 'shu-90') return 'shu-NG';
+        if ($language_code === 'rhg-90') return 'rhl-MM';
+        if ($language_code === 'sr-90') return 'sr-Latn-RS';
+        if ($language_code === 'sr-91') return 'sr-Cyrl-RS';
+        if ($language_code === 'zh-93') return 'zh-TW';
 
         if (!empty($matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))])) return $matecat_acceptable_languages[substr($language_code, 0, strpos($language_code, '-'))];
         return '';
