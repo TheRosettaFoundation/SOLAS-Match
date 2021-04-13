@@ -635,6 +635,7 @@ $orgs_to_create = [
 //DOAGAIN(**)689,
 //(**)DO AGAIN 759,
 //(**)DO AGAIN 544,
+/*
 598,
 691,
 780,
@@ -658,9 +659,10 @@ $orgs_to_create = [
 761,
 760,
 759,
-//758, Hand Map
-757,
-756,
+*/
+//758, Hand Map BUT MISSING(**)
+//757,
+//(**)DO AGAIN 756,
 755,
 754,
 753,
