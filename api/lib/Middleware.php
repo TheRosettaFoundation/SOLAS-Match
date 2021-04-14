@@ -33,6 +33,7 @@ class Middleware
         if (isset($params['email']) && isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'])) {
             $headerHash = $_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'];
             $email = $params['email'];
+error_log("Incomming email: $email");
             if (!is_numeric($email) && strstr($email, '.')) {
                 $temp = array();
                 $temp = explode('.', $email);
@@ -45,7 +46,9 @@ class Middleware
                     }
                 }
             }
+error_log("Outgoing email: $email");
             $openidHash = md5($email.substr(Common\Lib\Settings::get("session.site_key"), 0, 20));
+error_log("headerHash != openidHash: $headerHash != $openidHash");
             if ($headerHash != $openidHash) {
                 Dispatcher::getDispatcher()->halt(
                     Common\Enums\HttpStatusEnum::FORBIDDEN,
