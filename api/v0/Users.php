@@ -1248,20 +1248,6 @@ class Users
 
     public static function getUserByEmail($email, $format = ".json")
     {
-        if (!is_numeric($email) && strstr($email, '.')) {
-            $temp = array();
-            $temp = explode('.', $email);
-            $lastIndex = sizeof($temp)-1;
-            if ($lastIndex > 0) {
-                $email = $temp[0];
-                for ($i = 1; $i < $lastIndex; $i++) {
-                    $email = "{$email}.{$temp[$i]}";
-                }
-                if ($temp[$lastIndex] != "json") {
-                    $email = "{$email}.{$temp[$lastIndex]}";
-                }
-            }
-        }
         $data = DAO\UserDao::getUser(null, $email);
         API\Dispatcher::sendResponse(null, $data, null, $format);
     }

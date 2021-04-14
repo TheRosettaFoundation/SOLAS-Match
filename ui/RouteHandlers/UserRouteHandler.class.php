@@ -428,7 +428,6 @@ class UserRouteHandler
         if (\SolasMatch\UI\isValidPost($app)) {
             $post = $app->request()->post();
             $temp = md5($post['email'].substr(Common\Lib\Settings::get("session.site_key"), 0, 20));
-error_log("UserRouteHandler Incomming email: {$post['email']}, $temp");
             Common\Lib\UserSession::clearCurrentUserID();
             if (!Lib\Validator::validateEmail($post['email'])) {
                 $error = Lib\Localisation::getTranslation('register_1');
