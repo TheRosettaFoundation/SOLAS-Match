@@ -1968,6 +1968,7 @@ EOD;
             'supported_ngos'         => $userDao->supported_ngos($user_id),
             'quality_score'          => $userDao->quality_score($user_id),
             'certifications'         => $userDao->getUserCertifications($user_id),
+            'show_create_memsource_user' => 0,
         ));
 
         $app->render('user/user-public-profile.tpl');
