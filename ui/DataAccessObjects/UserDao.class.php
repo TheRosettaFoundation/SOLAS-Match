@@ -1724,6 +1724,57 @@ error_log(print_r($project_result, true));//(**)
             return 0;
         }
 
+1.1 - Check TM for client exists, with relevant (strict) source language and "_Working" in the TM name. Note only one TM for each source language for each client
+      If not (source & Working) create: https://cloud.memsource.com/web/docs/api#operation/createTransMemory
+        $url = "https://cloud.memsource.com/web/api2/v1/transMemories?clientId=$memsource_client_uid";
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [$authorization]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        if (($responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE)) > 204) {
+            error_log("Failed: $url responseCode: $responseCode";
+            return 0;
+        }
+        curl_close($ch);
+        $result = json_decode($result, true);
+        if (!empty($result['content'])) {
+            $content = $result['content'];
+            foreach ($content as $i => $row) {
+                echo "\n$i => name: {$row['name']}, sourceLang: {$row['sourceLang']}, targetLangs: " . implode(', ', $row['targetLangs']) . ", uid: {$row['uid']}, id: {$row['id']}";
+            }
+        } else {
+            echo "\nNo Content\n\n";
+            return 0;
+        }
+
+1.2 - Add all (strict) target languages which do not exist to new or existing translation memory
+      https://cloud.memsource.com/web/docs/api#operation/addTargetLangToTransMemory
+
+1.3 - Add TMs to project: https://cloud.memsource.com/web/docs/api#operation/setProjectTransMemoriesV2
+        [Need to add all TMs that already exist or were created in 1.2 !!!!!no just working TMs]
+        [It looks like we have to do an API call for each target language/workflow step (but we are querying with Memsource)]
+      Parameters:
+      Set readMode to true
+      Set writeMode to true only for Working TM (substring of name in step 1.0) [will always be Working]
+      All non Working TMs have penalty of 5 [will always be Working]
+      Working ones have 0 [will always be Working]
+      applyPenaltyTo101Only false
+
+Need to make Memsource's client names IDENTICAL to KP (I will do), so that TMs are named correctly
+Need to decide exact name format (e.g. use KP name with underscores, non duplicated for all non Alphanumeric)?? not CamelCase
+[??International_Rescue_Committee_IRC_Nigeria_DFID]
+
+TM creation - Fields
+Name: PartnerName_Working
+Source language: [from project]
+Target languages: [from project]
+Client: [from project, should match]
+Note: include everything below from "Short" to last "KP"
+Short description of the TM*: Created automatically from KP for self-service partner[\r\n]
+Last maintenance: [Date yyyy-mm-dd][\r\n]
+Maintenance lead: TWB API[\r\n]
+Tasks performed: Created from KP
+
         // Pre-Translate Settings
         $url = "https://cloud.memsource.com/web/api2/v1/projects/{$project_result['uid']}/preTranslateSettings";
         $ch = curl_init($url);
