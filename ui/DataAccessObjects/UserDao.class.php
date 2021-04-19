@@ -1735,24 +1735,27 @@ error_log(print_r($project_result, true));//(**)
             curl_close($ch);
             if ($responseCode <= 204) {
                 $result = json_decode($result, true);
+                $working_tm_uid = '';
                 if (!empty($result['content'])) {
                     $content = $result['content'];
                     foreach ($content as $i => $row) {
-1.1 - Check TM for client exists, with relevant (strict) source language and "_Working" in the TM name. Note only one TM for each source language for each client
-      If not (source & Working) create: https://cloud.memsource.com/web/docs/api#operation/createTransMemory
-
-if (strpos($row['name'], '_Working') && $row['sourceLang'] === ????)
+if (strpos($row['name'], '_Working') && $row['sourceLang'] === ????) {
+    $working_tm_uid = $row['uid'];
+    break;
+}
 
 
                 echo "\n$i => name: {$row['name']}, sourceLang: {$row['sourceLang']}, targetLangs: " . implode(', ', $row['targetLangs']) . ", uid: {$row['uid']}, id: {$row['id']}";
             }
-        } else {
-            echo "\nNo Content\n\n";
-            return 0;NO
         }
+
+if (!$working_tm_uid) create: https://cloud.memsource.com/web/docs/api#operation/createTransMemory
+
 
 1.2 - Add all (strict) target languages which do not exist to new or existing translation memory
       https://cloud.memsource.com/web/docs/api#operation/addTargetLangToTransMemory
+      POST
+      https://cloud.memsource.com/web/api2/v1/transMemories/{transMemoryUid}/targetLanguages
 
 1.3 - Add TMs to project: https://cloud.memsource.com/web/docs/api#operation/setProjectTransMemoriesV2
         [Need to add all TMs that already exist or were created in 1.2 !!!!!no just working TMs]
