@@ -1724,27 +1724,31 @@ error_log(print_r($project_result, true));//(**)
             return 0;
         }
 
+        if ($client) {
+            $memsource_client_uid = $client['memsource_client_uid'];
+            $url = "https://cloud.memsource.com/web/api2/v1/transMemories?clientId=$memsource_client_uid";
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [$authorization]);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $result = curl_exec($ch);
+            $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            if ($responseCode <= 204) {
+                $result = json_decode($result, true);
+                if (!empty($result['content'])) {
+                    $content = $result['content'];
+                    foreach ($content as $i => $row) {
 1.1 - Check TM for client exists, with relevant (strict) source language and "_Working" in the TM name. Note only one TM for each source language for each client
       If not (source & Working) create: https://cloud.memsource.com/web/docs/api#operation/createTransMemory
-        $url = "https://cloud.memsource.com/web/api2/v1/transMemories?clientId=$memsource_client_uid";
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [$authorization]);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
-        if (($responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE)) > 204) {
-            error_log("Failed: $url responseCode: $responseCode";
-            return 0;
-        }
-        curl_close($ch);
-        $result = json_decode($result, true);
-        if (!empty($result['content'])) {
-            $content = $result['content'];
-            foreach ($content as $i => $row) {
+
+if (strpos($row['name'], '_Working') && $row['sourceLang'] === ????)
+
+
                 echo "\n$i => name: {$row['name']}, sourceLang: {$row['sourceLang']}, targetLangs: " . implode(', ', $row['targetLangs']) . ", uid: {$row['uid']}, id: {$row['id']}";
             }
         } else {
             echo "\nNo Content\n\n";
-            return 0;
+            return 0;NO
         }
 
 1.2 - Add all (strict) target languages which do not exist to new or existing translation memory
@@ -1774,6 +1778,12 @@ Short description of the TM*: Created automatically from KP for self-service par
 Last maintenance: [Date yyyy-mm-dd][\r\n]
 Maintenance lead: TWB API[\r\n]
 Tasks performed: Created from KP
+            } else {
+                error_log("Failed to list TMs: $url responseCode: $responseCode";
+            }
+        } else {
+            error_log('Failed to list TMs because memsource client not mapped for project_id: ' . $project->getId() . ', org_id: ' . $project->getOrganisationId());
+        }
 
         // Pre-Translate Settings
         $url = "https://cloud.memsource.com/web/api2/v1/projects/{$project_result['uid']}/preTranslateSettings";
