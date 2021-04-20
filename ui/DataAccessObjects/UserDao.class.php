@@ -1755,13 +1755,11 @@ error_log(print_r($project_result, true));//(**)
                     $url = 'https://cloud.memsource.com/web/api2/v1/transMemories';
                     $ch = curl_init($url);
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                    $data = array(
+                    $data = [
                         'name' => "{$org_name}_Working",
                         'sourceLang' => $sourceLang,
-                        'targetLangs' => ,
-array
-                        'client' => ,
-object (IdReference)
+                        'targetLangs' => $langs,
+                        'client' => ['id' => $memsource_client_uid],
                         'note' => ,
 [[
 Note: include everything below from "Short" to last "KP"
@@ -1770,13 +1768,62 @@ Last maintenance: [Date yyyy-mm-dd][\r\n]
 Maintenance lead: TWB API[\r\n]
 Tasks performed: Created from KP
 ]]
-                    );
+                    ];
                     $payload = json_encode($data);
                     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
                     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
                     $result_exec = curl_exec($ch);
                     $result = json_decode($result_exec, true);
                     curl_close($ch);
+[[[[[[[[RESPONSE (((201)))
+{
+"id": "string",
+"uid": "string",
+"internalId": 0,
+"name": "string",
+"sourceLang": "string",
+"targetLangs": [
+"string"
+],
+"client": {
+"uid": "string",
+"name": "string",
+"note": "string"
+},
+"businessUnit": {
+"uid": "string",
+"name": "string"
+},
+"domain": {
+"uid": "string",
+"name": "string"
+},
+"subDomain": {
+"uid": "string",
+"name": "string"
+},
+"note": "string",
+"dateCreated": "2021-04-20T13:19:14Z",
+"createdBy": {
+"firstName": "string",
+"lastName": "string",
+"userName": "string",
+"email": "string",
+"role": "SYS_ADMIN",
+"id": "string",
+"uid": "string"
+},
+"owner": {
+"firstName": "string",
+"lastName": "string",
+"userName": "string",
+"email": "string",
+"role": "SYS_ADMIN",
+"id": "string",
+"uid": "string"
+}
+}
+]]]]]]]]
                     if (!empty($result['id'])) {
                         $memsource_user_id = $result['id'];
                         $this->set_memsource_user($userId, $memsource_user_id);
