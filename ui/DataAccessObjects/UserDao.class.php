@@ -1748,16 +1748,15 @@ error_log(print_r($project_result, true));//(**)
                 }
 
                 if (!$working_tm_uid) { // Must create a TM
+                    $orgDao = new OrganisationDao();
+                    $org = $orgDao->getOrganisation($org_id);
+                    $org_name = $org->getName();
+
                     $url = 'https://cloud.memsource.com/web/api2/v1/transMemories';
                     $ch = curl_init($url);
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                     $data = array(
-                        'name' => ,
-[[
-Name: PartnerName_Working
-Need to decide exact name format (e.g. use KP name with underscores, non duplicated for all non Alphanumeric)?? not CamelCase
-[??International_Rescue_Committee_IRC_Nigeria_DFID]
-]]
+                        'name' => "{$org_name}_Working",
                         'sourceLang' => $sourceLang,
                         'targetLangs' => ,
 array
