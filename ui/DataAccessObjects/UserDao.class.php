@@ -1739,18 +1739,53 @@ error_log(print_r($project_result, true));//(**)
                 if (!empty($result['content'])) {
                     $content = $result['content'];
                     foreach ($content as $i => $row) {
-if (strpos($row['name'], '_Working') && $row['sourceLang'] === ????) {
-    $working_tm_uid = $row['uid'];
-    break;
-}
+                        if (strpos($row['name'], '_Working') && $row['sourceLang'] === $sourceLang) {
+                            $working_tm_uid = $row['uid'];
+                            $working_tm_targets = $row['targetLangs'];
+                            break;
+                        }
+                    }
+                }
 
-
-                echo "\n$i => name: {$row['name']}, sourceLang: {$row['sourceLang']}, targetLangs: " . implode(', ', $row['targetLangs']) . ", uid: {$row['uid']}, id: {$row['id']}";
-            }
-        }
-
-if (!$working_tm_uid) create: https://cloud.memsource.com/web/docs/api#operation/createTransMemory
-
+                if (!$working_tm_uid) { // Must create a TM
+                    $url = 'https://cloud.memsource.com/web/api2/v1/transMemories';
+                    $ch = curl_init($url);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    $data = array(
+                        'name' => ,
+[[
+Name: PartnerName_Working
+Need to decide exact name format (e.g. use KP name with underscores, non duplicated for all non Alphanumeric)?? not CamelCase
+[??International_Rescue_Committee_IRC_Nigeria_DFID]
+]]
+                        'sourceLang' => $sourceLang,
+                        'targetLangs' => ,
+array
+                        'client' => ,
+object (IdReference)
+                        'note' => ,
+[[
+Note: include everything below from "Short" to last "KP"
+Short description of the TM*: Created automatically from KP for self-service partner[\r\n]
+Last maintenance: [Date yyyy-mm-dd][\r\n]
+Maintenance lead: TWB API[\r\n]
+Tasks performed: Created from KP
+]]
+                    );
+                    $payload = json_encode($data);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
+                    $result_exec = curl_exec($ch);
+                    $result = json_decode($result_exec, true);
+                    curl_close($ch);
+                    if (!empty($result['id'])) {
+                        $memsource_user_id = $result['id'];
+                        $this->set_memsource_user($userId, $memsource_user_id);
+                    } else {
+                        error_log("No memsource user created for $userId");
+                        $memsource_user_id = 0;
+                    }
+                }
 
 1.2 - Add all (strict) target languages which do not exist to new or existing translation memory
       https://cloud.memsource.com/web/docs/api#operation/addTargetLangToTransMemory
@@ -1766,21 +1801,6 @@ if (!$working_tm_uid) create: https://cloud.memsource.com/web/docs/api#operation
       All non Working TMs have penalty of 5 [will always be Working]
       Working ones have 0 [will always be Working]
       applyPenaltyTo101Only false
-
-Need to make Memsource's client names IDENTICAL to KP (I will do), so that TMs are named correctly
-Need to decide exact name format (e.g. use KP name with underscores, non duplicated for all non Alphanumeric)?? not CamelCase
-[??International_Rescue_Committee_IRC_Nigeria_DFID]
-
-TM creation - Fields
-Name: PartnerName_Working
-Source language: [from project]
-Target languages: [from project]
-Client: [from project, should match]
-Note: include everything below from "Short" to last "KP"
-Short description of the TM*: Created automatically from KP for self-service partner[\r\n]
-Last maintenance: [Date yyyy-mm-dd][\r\n]
-Maintenance lead: TWB API[\r\n]
-Tasks performed: Created from KP
             } else {
                 error_log("Failed to list TMs: $url responseCode: $responseCode";
             }
