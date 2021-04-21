@@ -1790,6 +1790,7 @@ Add all target languages which do not exist to translation memory
                     $result = curl_exec($ch);
                     $result = json_decode($result, true);
                     curl_close($ch);
+https://cloud.memsource.com/web/docs/api#operation/addTargetLangToTransMemory
                     if (!empty($result['uid'])) {
                         $working_tm_uid = $result['uid'];
                     } else {
