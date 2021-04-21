@@ -373,7 +373,7 @@ class TaskRouteHandler
                 else                                                                           $matecat_urls[$taskId] = $taskDao->get_matecat_url($topTask, $memsource_task);
                 $allow_downloads[$taskId] = $taskDao->get_allow_download($topTask, $memsource_task);
                 $show_mark_chunk_complete[$taskId] = 0;
-                if (!$allow_downloads[$taskId] && $matecat_urls[$taskId]) { // it's a chunk && a bit of optimisation
+                if (!$allow_downloads[$taskId] && $matecat_urls[$taskId] && !$memsource_task) { // it's a chunk && a bit of optimisation
                     $matecat_tasks = $taskDao->getTaskChunk($taskId);
                     $matecat_id_job = $matecat_tasks[0]['matecat_id_job'];
                     $matecat_id_job_password = $matecat_tasks[0]['matecat_id_chunk_password'];
