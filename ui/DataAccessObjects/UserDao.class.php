@@ -1768,64 +1768,16 @@ error_log(print_r($project_result, true));//(**)
                     $result_exec = curl_exec($ch);
                     $result = json_decode($result_exec, true);
                     curl_close($ch);
-[[[[[[[[RESPONSE (((201)))
-{
-"id": "string",
-"uid": "string",
-"internalId": 0,
-"name": "string",
-"sourceLang": "string",
-"targetLangs": [
-"string"
-],
-"client": {
-"uid": "string",
-"name": "string",
-"note": "string"
-},
-"businessUnit": {
-"uid": "string",
-"name": "string"
-},
-"domain": {
-"uid": "string",
-"name": "string"
-},
-"subDomain": {
-"uid": "string",
-"name": "string"
-},
-"note": "string",
-"dateCreated": "2021-04-20T13:19:14Z",
-"createdBy": {
-"firstName": "string",
-"lastName": "string",
-"userName": "string",
-"email": "string",
-"role": "SYS_ADMIN",
-"id": "string",
-"uid": "string"
-},
-"owner": {
-"firstName": "string",
-"lastName": "string",
-"userName": "string",
-"email": "string",
-"role": "SYS_ADMIN",
-"id": "string",
-"uid": "string"
-}
-}
-]]]]]]]]
-                    if (!empty($result['id'])) {
-                        $memsource_user_id = $result['id'];
-                        $this->set_memsource_user($userId, $memsource_user_id);
+//not needed?(**) "id": "string",
+                    if (!empty($result['uid'])) {
+                        $working_tm_uid = $result['iud'];
                     } else {
                         error_log("No memsource user created for $userId");
-                        $memsource_user_id = 0;
                     }
                 }
 
+if (!$working_tm_uid) {
+}
 1.2 - Add all (strict) target languages which do not exist to new or existing translation memory
       https://cloud.memsource.com/web/docs/api#operation/addTargetLangToTransMemory
       POST
