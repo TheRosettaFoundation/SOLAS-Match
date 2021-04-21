@@ -1746,7 +1746,6 @@ error_log(print_r($project_result, true));//(**)
                         }
                     }
                 }
-
                 if (!$working_tm_uid) { // Must create a TM
                     $orgDao = new OrganisationDao();
                     $org = $orgDao->getOrganisation($org_id);
@@ -1765,23 +1764,38 @@ error_log(print_r($project_result, true));//(**)
                     $payload = json_encode($data);
                     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
                     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
-                    $result_exec = curl_exec($ch);
-                    $result = json_decode($result_exec, true);
+                    $result = curl_exec($ch);
+                    $result = json_decode($result, true);
                     curl_close($ch);
 //not needed?(**) "id": "string",
                     if (!empty($result['uid'])) {
-                        $working_tm_uid = $result['iud'];
+                        $working_tm_uid = $result['uid'];
                     } else {
-                        error_log("No memsource user created for $userId");
+                        error_log("Failed to create TM: {$org_name}_Working ($sourceLang)");
                     }
                 }
 
-if (!$working_tm_uid) {
-}
-1.2 - Add all (strict) target languages which do not exist to new or existing translation memory
-      https://cloud.memsource.com/web/docs/api#operation/addTargetLangToTransMemory
-      POST
-      https://cloud.memsource.com/web/api2/v1/transMemories/{transMemoryUid}/targetLanguages
+                if ($working_tm_uid) {
+One by one...
+Add all target languages which do not exist to translation memory
+                    $url = "https://cloud.memsource.com/web/api2/v1/transMemories/$working_tm_uid/targetLanguages";
+                    $ch = curl_init($url);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    $data = [
+                        'language' => ????$Lang
+                    ];
+                    $payload = json_encode($data);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
+                    $result = curl_exec($ch);
+                    $result = json_decode($result, true);
+                    curl_close($ch);
+                    if (!empty($result['uid'])) {
+                        $working_tm_uid = $result['uid'];
+                    } else {
+                        error_log("Failed to create TM: {$org_name}_Working ($sourceLang)");
+                    }
+
 
 1.3 - Add TMs to project: https://cloud.memsource.com/web/docs/api#operation/setProjectTransMemoriesV2
         [Need to add all TMs that already exist or were created in 1.2 !!!!!no just working TMs]
@@ -1792,6 +1806,7 @@ if (!$working_tm_uid) {
       All non Working TMs have penalty of 5 [will always be Working]
       Working ones have 0 [will always be Working]
       applyPenaltyTo101Only false
+                }
             } else {
                 error_log("Failed to list TMs: $url responseCode: $responseCode";
             }
