@@ -461,7 +461,9 @@ class UserDao extends BaseDao
                     'lastName' => $user_personal_info->lastName,
                     'role' => Common\Enums\MemsourceRoleEnum::LINGUIST,
                     'timezone' => $timezone,
-                    'userName' => $user_info->display_name
+                    'userName' => 'TWB_' . str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '', $user_info->display_name) . "_$userId",
+                    'receiveNewsletter' => false,
+                    'editorMachineTranslateEnabled' => false,
                 );
                 $payload = json_encode($data);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
@@ -607,7 +609,9 @@ class UserDao extends BaseDao
             'lastName' => $user_personal_info->lastName,
             'role' => Common\Enums\MemsourceRoleEnum::PROJECT_MANAGER,
             'timezone' => $timezone,
-            'userName' => $user_info->display_name
+            'userName' => 'TWB_' . str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '', $user_info->display_name) . "_$user_id",
+            'receiveNewsletter' => false,
+            'editorMachineTranslateEnabled' => false,
         );
         $payload = json_encode($data);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
