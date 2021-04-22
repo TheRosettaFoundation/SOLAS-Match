@@ -1730,6 +1730,7 @@ error_log(print_r($project_result, true));//(**)
         }
 
         if ($client) {
+            // List clients's TMs
             $memsource_client_uid = $client['memsource_client_uid'];
             $url = "https://cloud.memsource.com/web/api2/v1/transMemories?clientId=$memsource_client_uid";
             $ch = curl_init($url);
@@ -1775,36 +1776,36 @@ error_log(print_r($project_result, true));//(**)
 //not needed?(**) "id": "string",
                     if (!empty($result['uid'])) {
                         $working_tm_uid = $result['uid'];
+                        $working_tm_targets = $langs;
                     } else {
                         error_log("Failed to create TM: {$org_name}_Working ($sourceLang)");
                     }
                 }
 
                 if ($working_tm_uid) {
-One by one...
-Add all target languages which do not exist to translation memory
-                    $url = "https://cloud.memsource.com/web/api2/v1/transMemories/$working_tm_uid/targetLanguages";
-                    $ch = curl_init($url);
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                    $data = [
-                        'language' => ????$Lang
-                    ];
-                    $payload = json_encode($data);
-                    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-                    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
-                    $result = curl_exec($ch);
-                    $result = json_decode($result, true);
-                    curl_close($ch);
-https://cloud.memsource.com/web/docs/api#operation/addTargetLangToTransMemory
-                    if (!empty($result['uid'])) {
-                        $working_tm_uid = $result['uid'];
-                    } else {
-                        error_log("Failed to create TM: {$org_name}_Working ($sourceLang)");
+                    foreach ($langs as $language) {
+                        if (!in_array($language, $working_tm_targets)) {
+                            // Add $language to TM
+                            $url = "https://cloud.memsource.com/web/api2/v1/transMemories/$working_tm_uid/targetLanguages";
+                            $ch = curl_init($url);
+                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                            $data = [
+                                'language' => $language
+                            ];
+                            $payload = json_encode($data);
+                            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+                            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
+                            $result = curl_exec($ch);
+                            $result = json_decode($result, true);
+                            curl_close($ch);
+                            if (empty($result['targetLangs']) || !in_array($language, $result['targetLangs'])) {
+                                error_log("Failed to add $language to TM: {$org_name}_Working ($sourceLang)");
+                            }
+                        }
                     }
 
-
-1.3 - Add TMs to project: https://cloud.memsource.com/web/docs/api#operation/setProjectTransMemoriesV2
-        [Need to add all TMs that already exist or were created in 1.2 !!!!!no just working TMs]
+                    // Add TM to project
+                    https://cloud.memsource.com/web/docs/api#operation/setProjectTransMemoriesV2
         [It looks like we have to do an API call for each target language/workflow step (but we are querying with Memsource)]
       Parameters:
       Set readMode to true
