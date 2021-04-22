@@ -21,6 +21,7 @@ class UserDao extends BaseDao
     {
         $this->client = new Common\Lib\APIHelper(Common\Lib\Settings::get("ui.api_format"));
         $this->siteApi = Common\Lib\Settings::get("site.api");
+        $this->usernamePrefix = strpos($this->siteApi, 'kato') ? 'TWB_' : 'DEV_';
         $this->memsourceAuthUrlApi = Common\Lib\Settings::get("memsource.api_auth_url");
         $this->memsourceApiV1 = Common\Lib\Settings::get("memsource.api_url_v1");
         $this->memsourceApiV2 = Common\Lib\Settings::get("memsource.api_url_v2");
@@ -461,7 +462,7 @@ class UserDao extends BaseDao
                     'lastName' => $user_personal_info->lastName,
                     'role' => Common\Enums\MemsourceRoleEnum::LINGUIST,
                     'timezone' => $timezone,
-                    'userName' => 'TWB_' . str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '', $user_info->display_name) . "_$userId",
+                    'userName' => $this->usernamePrefix . str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '', $user_info->display_name) . "_$userId",
                     'receiveNewsletter' => false,
                     'editorMachineTranslateEnabled' => false,
                 );
@@ -609,7 +610,7 @@ class UserDao extends BaseDao
             'lastName' => $user_personal_info->lastName,
             'role' => Common\Enums\MemsourceRoleEnum::PROJECT_MANAGER,
             'timezone' => $timezone,
-            'userName' => 'TWB_' . str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '', $user_info->display_name) . "_$user_id",
+            'userName' => $this->usernamePrefix . str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '', $user_info->display_name) . "_$user_id",
             'receiveNewsletter' => false,
             'editorMachineTranslateEnabled' => false,
         );
