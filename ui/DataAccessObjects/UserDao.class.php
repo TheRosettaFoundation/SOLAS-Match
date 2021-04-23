@@ -1765,7 +1765,7 @@ error_log(print_r($project_result, true));//(**)
                         'sourceLang' => $sourceLang,
                         'targetLangs' => $langs,
                         'client' => ['id' => $memsource_client_uid],
-                        'note' => "Short description of the TM*: Created automatically from KP for self-service partner\r\nLast maintenance: " . Date date('Y-m-d') . "\r\nMaintenance lead: TWB API\r\nTasks performed: Created from KP",
+                        'note' => "Short description of the TM*: Created automatically from KP for self-service partner\r\nLast maintenance: " . date('Y-m-d') . "\r\nMaintenance lead: TWB API\r\nTasks performed: Created from KP",
                     ];
                     $payload = json_encode($data);
                     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
