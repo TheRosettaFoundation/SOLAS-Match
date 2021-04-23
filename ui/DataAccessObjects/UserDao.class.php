@@ -1773,7 +1773,6 @@ error_log(print_r($project_result, true));//(**)
                     $result = curl_exec($ch);
                     $result = json_decode($result, true);
                     curl_close($ch);
-//not needed?(**) "id": "string",
                     if (!empty($result['uid'])) {
                         $working_tm_uid = $result['uid'];
                         $working_tm_targets = $langs;
@@ -1805,14 +1804,30 @@ error_log(print_r($project_result, true));//(**)
                     }
 
                     // Add TM to project
-                    https://cloud.memsource.com/web/docs/api#operation/setProjectTransMemoriesV2
-        [It looks like we have to do an API call for each target language/workflow step (but we are querying with Memsource)]
-      Parameters:
-      Set readMode to true
-      Set writeMode to true only for Working TM (substring of name in step 1.0) [will always be Working]
-      All non Working TMs have penalty of 5 [will always be Working]
-      Working ones have 0 [will always be Working]
-      applyPenaltyTo101Only false
+                    $url = "https://cloud.memsource.com/web/api2/v2/projects/{$project_result['uid']}/transMemories";
+                    $ch = curl_init($url);
+                    $data = [
+                        'transMemories' => [
+                            [
+                                'transMemory' => ['id' => $working_tm_uid],
+                                'readMode' => true,
+                                'writeMode' => true,
+                                'penalty' => 0,
+                                'applyPenaltyTo101Only' => false
+                            ]
+                        ],
+                        //'targetLang' => 'lll',
+                        //'workflowStep' => ['id' => 'wfwf']
+                    ];
+                    $payload = json_encode($data);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
+                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+                    $result = curl_exec($ch);
+                    $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                    if ($responseCode > 204) error_log("Add TM $url responseCode: $responseCode");
+                    curl_close($ch);
                 }
             } else {
                 error_log("Failed to list TMs: $url responseCode: $responseCode";
@@ -1851,7 +1866,7 @@ error_log(print_r($project_result, true));//(**)
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
         $result = curl_exec($ch);
         $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        if ($responseCode > 204) error_log("$url responseCode: $responseCode");
+        if ($responseCode > 204) error_log("Pre-Translate $url responseCode: $responseCode");
         curl_close($ch);
 
         // Create Job
