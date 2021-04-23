@@ -1830,7 +1830,7 @@ error_log(print_r($project_result, true));//(**)
                     curl_close($ch);
                 }
             } else {
-                error_log("Failed to list TMs: $url responseCode: $responseCode";
+                error_log("Failed to list TMs: $url responseCode: $responseCode");
             }
         } else {
             error_log('Failed to list TMs because memsource client not mapped for project_id: ' . $project->getId() . ', org_id: ' . $project->getOrganisationId());
