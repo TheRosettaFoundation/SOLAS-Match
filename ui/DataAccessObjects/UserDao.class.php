@@ -1712,6 +1712,12 @@ class UserDao extends BaseDao
             ],
             'dateDue' => substr($deadline, 0, 10) . 'T' . substr($deadline, 11, 8) . 'Z',
         ];
+        if ($this->usernamePrefix === 'DEV_') {
+            $data['workflowSteps'] = [
+                ['id' => 'MyL6Z9IF6ZqQexoZ1OLAS3'],
+                ['id' => '07djiVynQ1FIiQbaKWZzja']
+            ];
+        }
         if ($client = $projectDao->get_memsource_client($project->getOrganisationId())) $data['client'] = ['id' => $client['memsource_client_uid']];
 
         $payload = json_encode($data);
