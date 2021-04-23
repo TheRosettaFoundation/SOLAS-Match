@@ -1743,6 +1743,7 @@ error_log(print_r($project_result, true));//(**)
             curl_setopt($ch, CURLOPT_HTTPHEADER, [$authorization]);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $result = curl_exec($ch);
+error_log($result);//(**)
             $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
             if ($responseCode <= 204) {
@@ -1760,7 +1761,7 @@ error_log(print_r($project_result, true));//(**)
                 }
                 if (!$working_tm_uid) { // Must create a TM
                     $orgDao = new OrganisationDao();
-                    $org = $orgDao->getOrganisation($org_id);
+                    $org = $orgDao->getOrganisation($project->getOrganisationId());
                     $org_name = $org->getName();
 
                     $url = 'https://cloud.memsource.com/web/api2/v1/transMemories';
@@ -1774,9 +1775,11 @@ error_log(print_r($project_result, true));//(**)
                         'note' => "Short description of the TM*: Created automatically from KP for self-service partner\r\nLast maintenance: " . date('Y-m-d') . "\r\nMaintenance lead: TWB API\r\nTasks performed: Created from KP",
                     ];
                     $payload = json_encode($data);
+error_log($payload);//(**)
                     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
                     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
                     $result = curl_exec($ch);
+error_log($result);//(**)
                     $result = json_decode($result, true);
                     curl_close($ch);
                     if (!empty($result['uid'])) {
@@ -1798,9 +1801,11 @@ error_log(print_r($project_result, true));//(**)
                                 'language' => $language
                             ];
                             $payload = json_encode($data);
+error_log($payload);//(**)
                             curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
                             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
                             $result = curl_exec($ch);
+error_log($result);//(**)
                             $result = json_decode($result, true);
                             curl_close($ch);
                             if (empty($result['targetLangs']) || !in_array($language, $result['targetLangs'])) {
@@ -1826,11 +1831,13 @@ error_log(print_r($project_result, true));//(**)
                         //'workflowStep' => ['id' => 'wfwf']
                     ];
                     $payload = json_encode($data);
+error_log($payload);//(**)
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
                     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
                     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
                     $result = curl_exec($ch);
+error_log($result);//(**)
                     $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
                     if ($responseCode > 204) error_log("Add TM $url responseCode: $responseCode");
                     curl_close($ch);
