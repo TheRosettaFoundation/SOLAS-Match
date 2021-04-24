@@ -746,14 +746,14 @@ $memsource_change_country_to_kp = [
             LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[2]));
     }
 
-    public function set_memsource_self_service_project($memsource_project_uid)
+    public function set_memsource_self_service_project($memsource_project_id)
     {
-        LibAPI\PDOWrapper::call('set_memsource_self_service_project', LibAPI\PDOWrapper::cleanseWrapStr($memsource_project_uid));
+        LibAPI\PDOWrapper::call('set_memsource_self_service_project', LibAPI\PDOWrapper::cleanse($memsource_project_id));
     }
 
-    public function get_memsource_self_service_project($memsource_project_uid)
+    public function get_memsource_self_service_project($memsource_project_id)
     {
-        $result = LibAPI\PDOWrapper::call('get_memsource_self_service_project', LibAPI\PDOWrapper::cleanseWrapStr($memsource_project_uid));
+        $result = LibAPI\PDOWrapper::call('get_memsource_self_service_project', LibAPI\PDOWrapper::cleanse($memsource_project_id));
 
         if (empty($result)) return 0;
 

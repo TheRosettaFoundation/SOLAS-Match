@@ -1689,8 +1689,8 @@ CREATE TABLE IF NOT EXISTS `MemsourceProjects` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `MemsourceSelfServiceProjects` (
-  memsource_project_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (memsource_project_uid)
+  memsource_project_id  BIGINT(20) UNSIGNED NOT NULL,
+  PRIMARY KEY (memsource_project_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `MemsourceTasks` (
@@ -9203,18 +9203,18 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `set_memsource_self_service_project`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_self_service_project`(IN memsourceUID VARCHAR(30))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_self_service_project`(IN memsourceID BIGINT)
 BEGIN
-    INSERT INTO MemsourceSelfServiceProjects (memsource_project_uid)
-    VALUES                                   (         memsourceUID);
+    INSERT INTO MemsourceSelfServiceProjects (memsource_project_id)
+    VALUES                                   (         memsourceID);
 END//
 DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `get_memsource_self_service_project`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_self_service_project`(IN memsourceUID VARCHAR(30))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_self_service_project`(IN memsourceID BIGINT)
 BEGIN
-    SELECT * FROM MemsourceSelfServiceProjects WHERE memsource_project_uid=memsourceUID;
+    SELECT * FROM MemsourceSelfServiceProjects WHERE memsource_project_id=memsourceID;
 END//
 DELIMITER ;
 
