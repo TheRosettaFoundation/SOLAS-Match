@@ -1734,6 +1734,7 @@ error_log(print_r($project_result, true));//(**)
             error_log('memsource Project Create Failed: ' . print_r($project_result, true));
             return 0;
         }
+        $projectDao->set_memsource_self_service_project($project_result['uid']);
 
         if ($client) {
             // List clients's TMs

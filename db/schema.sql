@@ -1688,6 +1688,11 @@ CREATE TABLE IF NOT EXISTS `MemsourceProjects` (
   CONSTRAINT FK_MemsourceProjects_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `MemsourceSelfServiceProjects` (
+  memsource_project_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (memsource_project_uid)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS `MemsourceTasks` (
   task_id            BIGINT(20) UNSIGNED NOT NULL,
   memsource_task_id  BIGINT(20) UNSIGNED NOT NULL,
@@ -9193,6 +9198,23 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_project`(IN projectID
 BEGIN
     INSERT INTO MemsourceProjects (project_id, memsource_project_id, memsource_project_uid, created_by_id, owner_id, workflow_level_1, workflow_level_2, workflow_level_3)
     VALUES                        ( projectID,          memsourceID,          memsourceUID,     createdID,  ownerID,        workflow1,        workflow2,        workflow3);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_memsource_self_service_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_self_service_project`(IN memsourceUID VARCHAR(30))
+BEGIN
+    INSERT INTO MemsourceSelfServiceProjects (memsource_project_uid)
+    VALUES                                   (         memsourceUID);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_memsource_self_service_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_self_service_project`(IN memsourceUID VARCHAR(30))
+BEGIN
+    SELECT * FROM MemsourceSelfServiceProjects WHERE memsource_project_uid=memsourceUID;
 END//
 DELIMITER ;
 
