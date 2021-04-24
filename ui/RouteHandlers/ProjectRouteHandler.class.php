@@ -91,8 +91,8 @@ class ProjectRouteHandler
             die;
         }
         $body = $app->request()->getBody();
-        error_log(print_r(json_decode($body, true), true));
         $hook = json_decode($body, true);
+        error_log($hook['event'] . ' ' . print_r(json_decode($body, true), true));
 
         switch ($hook['event']) {
             case 'PROJECT_CREATED':
@@ -159,7 +159,7 @@ class ProjectRouteHandler
         else                              $project->setCreatedTime(gmdate('Y-m-d H:i:s'));
 
         $project = $projectDao->createProjectDirectly($project);
-        error_log("Created Project: {$hook['name']}");
+        error_log("Created Project (PROJECT_CREATED): {$hook['name']}");
         if (empty($project)) {
             error_log("Failed to create Project: {$hook['name']}");
             return;
