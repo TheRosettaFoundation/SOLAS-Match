@@ -255,10 +255,6 @@ class ProjectRouteHandler
                 error_log("No project id in new jobPart {$part['uid']} for: {$part['fileName']}");
                 continue;
             }
-            if ($projectDao->get_memsource_self_service_project($part['project']['id'])) {
-                error_log("Self Service JOB_CREATED ignored: {$part['project']['id']}");
-                continue;
-            }
             $memsource_project = $projectDao->get_memsource_project_by_memsource_id($part['project']['id']);
             if (empty($memsource_project)) {
                 error_log("Can't find memsource_project for {$part['project']['id']} in new jobPart {$part['uid']} for: {$part['fileName']}");
@@ -1917,6 +1913,7 @@ class ProjectRouteHandler
                     0,
                     0,
                     $preReqTaskId);
+                error_log("set_memsource_task($newTaskId, 0, {$job['uid']}...)");
             } else {
                 if ($newTaskId && $preReqTaskId) {
                     $taskDao->addTaskPreReq($newTaskId, $preReqTaskId);
