@@ -125,7 +125,10 @@ class ProjectRouteHandler
         $hook = $hook['project'];
         $project = new Common\Protobufs\Models\Project();
         $projectDao = new DAO\ProjectDao();
-        if ($projectDao->get_memsource_project_by_memsource_id($hook['id'])) return; // Likely self service project
+        if ($projectDao->get_memsource_project_by_memsource_id($hook['id']) || $projectDao->get_memsource_self_service_project($hook['id'])) {
+            error_log("Self Service PROJECT_CREATED ignored: {$hook['id']}");
+            return;
+        }
 
         $project->setTitle($hook['name']);
         if (!empty($hook['note'])) $project->setDescription($hook['note']);
@@ -250,6 +253,10 @@ class ProjectRouteHandler
             }
             if (empty($part['project']['id'])) {
                 error_log("No project id in new jobPart {$part['uid']} for: {$part['fileName']}");
+                continue;
+            }
+            if ($projectDao->get_memsource_self_service_project($part['project']['id'])) {
+                error_log("Self Service JOB_CREATED ignored: {$part['project']['id']}");
                 continue;
             }
             $memsource_project = $projectDao->get_memsource_project_by_memsource_id($part['project']['id']);
