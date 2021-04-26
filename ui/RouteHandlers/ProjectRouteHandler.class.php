@@ -1376,7 +1376,7 @@ class ProjectRouteHandler
         }
         $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
 
-        $create_memsource = 1;//(**)If this org is a memsource one
+        $create_memsource = 0;//(**)If this org is a memsource one
 
         if ($post = $app->request()->post()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
