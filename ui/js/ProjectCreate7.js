@@ -233,7 +233,7 @@ function addMoreTargetLanguages()
     translationCheckbox.id   = "translation_" + targetCount;
     translationCheckbox.value = "1";
     translationCheckbox.checked = true;
-    if (create_memsource) translationCheckbox.disabled = true;
+    if (create_memsource == 1) translationCheckbox.disabled = true;
 
     var proofreadingRequiredDiv = document.createElement("div");
     proofreadingRequiredDiv.className = "pull-left proj-task-type-checkbox";
@@ -245,7 +245,7 @@ function addMoreTargetLanguages()
     proofreadingCheckbox.id = "proofreading_" + targetCount;
     proofreadingCheckbox.value = "1";
     proofreadingCheckbox.checked = true;
-    if (create_memsource) proofreadingCheckbox.disabled = true;
+    if (create_memsource == 1) proofreadingCheckbox.disabled = true;
 
     // Put the Select Elements into their div
     targetLanguageCell.appendChild(targetLanguageSelect);
