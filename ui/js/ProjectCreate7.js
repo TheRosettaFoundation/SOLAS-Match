@@ -10,6 +10,7 @@ var imageMaxFileSize;
 var supportedImageFormats;
 var org_id;
 var user_id;
+var create_memsource;
 
 // Errors
 var createProjectError;
@@ -161,6 +162,7 @@ function documentReady()
   imageMaxFileSize = parseInt(getSetting("imageMaxFileSize")) * 1024 * 1024;
   org_id           = document.getElementById("org_id").innerHTML;
   user_id          = document.getElementById("user_id").innerHTML;
+  create_memsource = document.getElementById("create_memsource").innerHTML;
   supportedImageFormats = getSetting("supportedImageFormats").toString().split(","); // Image format string is comma separated, split it into a list
 
   // Set the options for the day in month select field based on month/year
@@ -231,6 +233,7 @@ function addMoreTargetLanguages()
     translationCheckbox.id   = "translation_" + targetCount;
     translationCheckbox.value = "1";
     translationCheckbox.checked = true;
+    if (create_memsource) translationCheckbox.disabled = true;
 
     var proofreadingRequiredDiv = document.createElement("div");
     proofreadingRequiredDiv.className = "pull-left proj-task-type-checkbox";
@@ -242,6 +245,7 @@ function addMoreTargetLanguages()
     proofreadingCheckbox.id = "proofreading_" + targetCount;
     proofreadingCheckbox.value = "1";
     proofreadingCheckbox.checked = true;
+    if (create_memsource) proofreadingCheckbox.disabled = true;
 
     // Put the Select Elements into their div
     targetLanguageCell.appendChild(targetLanguageSelect);

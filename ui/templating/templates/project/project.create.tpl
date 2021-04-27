@@ -10,6 +10,7 @@
         <div id="supportedImageFormats">{$supportedImageFormats}</div>
         <div id="org_id">{$org_id}</div>
         <div id="user_id">{$user_id}</div>
+        <div id="create_memsource">{$create_memsource}</div>
 
         <!-- Templates... -->
         <div id="template_language_options">
