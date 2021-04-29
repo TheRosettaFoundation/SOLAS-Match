@@ -265,15 +265,16 @@ class ProjectRouteHandler
 
             $project = $projectDao->getProject($memsource_project['project_id']);
 
-            //if ($memsource_task = $projectDao->get_memsource_task_by_memsource_uid($part['uid'])) { // Likely self service project
+            if ($memsource_task = $projectDao->get_memsource_task_by_memsource_uid($part['uid'])) {
+                error_log("Job uid is a duplicate for {$part['project']['id']} in new jobPart {$part['uid']} for: {$part['fileName']}");
             //    if (!empty($part['wordsCount'])) $taskDao->updateWordCountForProject($memsource_project['project_id'], $part['wordsCount']);
 
             //    $projectDao->update_memsource_task($memsource_task['task_id'], !empty($part['id']) ? $part['id'] : 0, $part['task'],
             //        empty($part['internalId'])    ? 0 : $part['internalId'],
             //        empty($part['beginIndex'])    ? 0 : $part['beginIndex'],
             //        empty($part['endIndex'])      ? 0 : $part['endIndex']);
-            //    continue;
-            //}
+                continue;
+            }
 
             $projectSourceLocale = $project->getSourceLocale();
             $taskSourceLocale = new Common\Protobufs\Models\Locale();
