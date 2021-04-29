@@ -1734,6 +1734,20 @@ error_log(print_r($project_result, true));//(**)
             error_log('memsource Project Create Failed: ' . print_r($project_result, true));
             return 0;
         }
+
+        $workflowLevels = ['', '', '']; // Will contain 'Translation' or 'Revision' for workflowLevel 1 possibly up to 3
+        if (!empty($project_result['workflowSteps'])) {
+            foreach ($project_result['workflowSteps'] as $step) {
+                foreach ($workflowLevels as $i => $w) {
+                    if ($step['workflowLevel'] == $i + 1) $workflowLevels[$i] = $step['name'];
+                }
+            }
+        }
+        $projectDao->set_memsource_project($project->getId(), $project_result['id'], $project_result['uid'],
+            empty($project_result['createdBy']['id']) ? 0 : $project_result['createdBy']['id'],
+            empty($project_result['owner']['id']) ? 0 : $project_result['owner']['id'],
+            $workflowLevels);
+
         $projectDao->set_memsource_self_service_project($project_result['id']);
 
         if ($client) {
@@ -1905,25 +1919,13 @@ error_log(print_r($result, true));//(**)
             return 0;
         }
 
-        $workflowLevels = ['', '', '']; // Will contain 'Translation' or 'Revision' for workflowLevel 1 possibly up to 3
-        if (!empty($project_result['workflowSteps'])) {
-            foreach ($project_result['workflowSteps'] as $step) {
-                foreach ($workflowLevels as $i => $w) {
-                    if ($step['workflowLevel'] == $i + 1) $workflowLevels[$i] = $step['name'];
-                }
-            }
-        }
-        $projectDao->set_memsource_project($project->getId(), $project_result['id'], $project_result['uid'],
-            empty($project_result['createdBy']['id']) ? 0 : $project_result['createdBy']['id'],
-            empty($project_result['owner']['id']) ? 0 : $project_result['owner']['id'],
-            $workflowLevels);
         $memsource_project = $projectDao->get_memsource_project($project->getId());
 
-        $jobs_indexed = [];
-        foreach ($result['jobs'] as $job) {
-            $jobs_indexed["{$job['targetLang']}-{$job['workflowLevel']}"] = $job;
-        }
-        $memsource_project['jobs'] = $jobs_indexed;
+        //$jobs_indexed = [];
+        //foreach ($result['jobs'] as $job) {
+        //    $jobs_indexed["{$job['targetLang']}-{$job['workflowLevel']}"] = $job;
+        //}
+        //$memsource_project['jobs'] = $jobs_indexed;
         return $memsource_project;
     }
 

@@ -265,15 +265,15 @@ class ProjectRouteHandler
 
             $project = $projectDao->getProject($memsource_project['project_id']);
 
-            if ($memsource_task = $projectDao->get_memsource_task_by_memsource_uid($part['uid'])) { // Likely self service project
-                if (!empty($part['wordsCount'])) $taskDao->updateWordCountForProject($memsource_project['project_id'], $part['wordsCount']);
+            //if ($memsource_task = $projectDao->get_memsource_task_by_memsource_uid($part['uid'])) { // Likely self service project
+            //    if (!empty($part['wordsCount'])) $taskDao->updateWordCountForProject($memsource_project['project_id'], $part['wordsCount']);
 
-                $projectDao->update_memsource_task($memsource_task['task_id'], !empty($part['id']) ? $part['id'] : 0, $part['task'],
-                    empty($part['internalId'])    ? 0 : $part['internalId'],
-                    empty($part['beginIndex'])    ? 0 : $part['beginIndex'],
-                    empty($part['endIndex'])      ? 0 : $part['endIndex']);
-                continue;
-            }
+            //    $projectDao->update_memsource_task($memsource_task['task_id'], !empty($part['id']) ? $part['id'] : 0, $part['task'],
+            //        empty($part['internalId'])    ? 0 : $part['internalId'],
+            //        empty($part['beginIndex'])    ? 0 : $part['beginIndex'],
+            //        empty($part['endIndex'])      ? 0 : $part['endIndex']);
+            //    continue;
+            //}
 
             $projectSourceLocale = $project->getSourceLocale();
             $taskSourceLocale = new Common\Protobufs\Models\Locale();
@@ -309,8 +309,25 @@ class ProjectRouteHandler
                 $task->setWordCount(1);
             }
 
-            if (!empty($part['dateDue'])) $task->setDeadline(substr($part['dateDue'], 0, 10) . ' ' . substr($part['dateDue'], 11, 8));
-            else                          $task->setDeadline($project->getDeadline());
+            $self_service_project = $projectDao->get_memsource_self_service_project($part['project']['id']);
+            if ($self_service_project) {
+                $deadline = strtotime($project->getDeadline());
+                $deadline_less_7_days = $deadline - 7*24*60*60; // 7-4 days Translation
+                $deadline_less_4_days = $deadline - 4*24*60*60; // 4-1 days Revising
+                $deadline_less_1_days = $deadline - 1*24*60*60; // 1 day for pm
+                $now = time();
+                if ($deadline_less_7_days < $now) { // We are squashed for time
+                    $total = $deadline - $now;
+                    if ($total < 0) $total = 0;
+                    $deadline_less_4_days = $deadline - $total*4/7;
+                    $deadline_less_1_days = $deadline - $total*1/7;
+                }
+                if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION) $task->setDeadline(gmdate('Y-m-d H:i:s', $deadline_less_4_days));
+                else                                                     $task->setDeadline(gmdate('Y-m-d H:i:s', $deadline_less_1_days));
+            } else {
+                if (!empty($part['dateDue'])) $task->setDeadline(substr($part['dateDue'], 0, 10) . ' ' . substr($part['dateDue'], 11, 8));
+                else                          $task->setDeadline($project->getDeadline());
+            }
 
             $task->setPublished(1);
 
@@ -347,6 +364,12 @@ class ProjectRouteHandler
                         ||
                     ($task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $project_restrictions['restrict_revise_tasks']))) {
                 $taskDao->setRestrictedTask($task_id);
+            }
+
+            if ($self_service_project) {
+                $creator = $taskDao->get_creator($project_id, $memsource_project);
+                $userDao = new DAO\UserDao();
+                $userDao->trackTask($creator['id'], $task_id);
             }
 
             $uploadFolder = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0";
@@ -1557,7 +1580,7 @@ class ProjectRouteHandler
                                 $matecat_proofreading_task_ids        = array();
                                 $matecat_proofreading_target_languages= array();
                                 $matecat_proofreading_target_countrys = array();
-                                while (!empty($post["target_language_$targetCount"])) {
+                                while (!$create_memsource && !empty($post["target_language_$targetCount"])) {
                                     list($trommons_language_code, $trommons_country_code) = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
                                         if ($create_memsource || !empty($post["translation_$targetCount"])) {
                                             $translation_Task_Id = $this->addProjectTask(
