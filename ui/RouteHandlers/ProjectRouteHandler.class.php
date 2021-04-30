@@ -305,7 +305,11 @@ class ProjectRouteHandler
 
             if (!empty($part['wordsCount'])) {
                 $task->setWordCount($part['wordsCount']);
-                $project->setWordCount($part['wordsCount']);
+                $project_wordcount = $project->getWordCount();
+                if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION) {
+                    if ($project_wordcount == 1) $project->setWordCount($part['wordsCount']);
+                    else                         $project->setWordCount($part['wordsCount'] + $project_wordcount);
+                }
             } else {
                 $task->setWordCount(1);
             }
@@ -1748,6 +1752,7 @@ class ProjectRouteHandler
                                             error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
                                         }
                                         try {
+                                            $app->flash('success', 'It may take a while for all Tasks to appear below, please refresh the page until they all appear');
                                             $app->redirect($app->urlFor('project-view', array('project_id' => $project->getId())));
                                         } catch (\Exception $e) { // redirect throws \Slim\Exception\Stop
                                         }
