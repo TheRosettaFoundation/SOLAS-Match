@@ -265,7 +265,7 @@ class ProjectRouteHandler
 
             $project = $projectDao->getProject($memsource_project['project_id']);
 
-            if ($memsource_task = $projectDao->get_memsource_task_by_memsource_uid($part['uid'])) {
+            if ($projectDao->is_job_uid_already_processed($part['uid'])) {
                 error_log("Job uid is a duplicate for {$part['project']['id']} in new jobPart {$part['uid']} for: {$part['fileName']}");
             //    if (!empty($part['wordsCount'])) $taskDao->updateWordCountForProject($memsource_project['project_id'], $part['wordsCount']);
 

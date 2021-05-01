@@ -839,6 +839,12 @@ $memsource_change_country_to_kp = [
         return $result[0];
     }
 
+    public function is_job_uid_already_processed($memsource_task_uid)
+    {
+        $result = LibAPI\PDOWrapper::call('is_job_uid_already_processed', LibAPI\PDOWrapper::cleanseWrapStr($memsource_task_uid));
+        return $result[0];
+    }
+
     public function get_memsource_tasks_for_project_language_type($project_id, $task, $type_id)
     {
         $result = LibAPI\PDOWrapper::call('get_memsource_tasks_for_project_language_type',

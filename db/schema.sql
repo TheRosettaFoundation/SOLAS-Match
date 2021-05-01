@@ -1708,6 +1708,11 @@ CREATE TABLE IF NOT EXISTS `MemsourceTasks` (
   CONSTRAINT FK_MemsourceTasks_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `ProcessedMemsourceTaskUIDs` (
+  memsource_task_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (memsource_task_uid)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS `memsource_statuses` (
   task_id            BIGINT(20) UNSIGNED NOT NULL,
   memsource_task_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -9287,6 +9292,16 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_task_by_memsource_uid`(IN memsourceUID VARCHAR(30))
 BEGIN
     SELECT * FROM MemsourceTasks WHERE memsource_task_uid=memsourceUID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `is_job_uid_already_processed`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `is_job_uid_already_processed`(IN memsourceUID VARCHAR(30))
+BEGIN
+    INSERT IGNORE INTO ProcessedMemsourceTaskUIDs (memsource_task_uid)
+    VALUES                                        (memsourceUID);
+    SELECT IF(ROW_COUNT()=0, 1, 0) AS result;
 END//
 DELIMITER ;
 
