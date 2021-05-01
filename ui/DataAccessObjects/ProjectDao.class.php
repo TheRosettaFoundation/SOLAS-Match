@@ -746,6 +746,21 @@ $memsource_change_country_to_kp = [
             LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[2]));
     }
 
+    public function record_memsource_project_languages($project_id, $source_language_pair, $target_languages)
+    {
+        LibAPI\PDOWrapper::call('record_memsource_project_languages',
+            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($source_language_pair) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($target_languages));
+    }
+
+    public function get_memsource_project_languages($project_id, $source_language_pair, $target_languages)
+    {
+        $result = LibAPI\PDOWrapper::call('get_memsource_project_languages', LibAPI\PDOWrapper::cleanse($project_id));
+        if (empty($result)) return 0;
+        return $result[0];
+    }
+
     public function set_memsource_self_service_project($memsource_project_id)
     {
         LibAPI\PDOWrapper::call('set_memsource_self_service_project', LibAPI\PDOWrapper::cleanse($memsource_project_id));
