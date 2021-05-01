@@ -1685,17 +1685,22 @@ class UserDao extends BaseDao
         [$kp_language, $kp_country] = $projectDao->convert_selection_to_language_country($post['sourceLanguageSelect']);
         $sourceLang = $projectDao->convert_language_country_to_memsource($kp_language, $kp_country);
         if (!$sourceLang) return 0;
+        $kp_source_language = "{$kp_language}-{$kp_country}";
 
         $targetCount = 0;
         $langs = [];
+        $kp_target_languages = [];
         while (!empty($post["target_language_$targetCount"])) {
             [$kp_language, $kp_country] = $projectDao->convert_selection_to_language_country($post["target_language_$targetCount"]);
             $lang = $projectDao->convert_language_country_to_memsource($kp_language, $kp_country);
             if (!$lang) return 0;
             $langs[] = $lang;
+            $kp_target_languages[] = "{$kp_language}-{$kp_country}";
             $targetCount++;
         }
         if (empty($langs)) return 0;
+        $kp_target_languages = implode(',', $kp_target_languages);
+        $projectDao->record_memsource_project_languages($project->getId(), $kp_source_language, $kp_target_languages);
 
         // Create Project
         $url = 'https://cloud.memsource.com/web/api2/v1/projects';

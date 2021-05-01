@@ -138,6 +138,7 @@ class ProjectRouteHandler
         else                          $project->setDeadline(gmdate('Y-m-d H:i:s', strtotime('25 days')));
         $project->setWordCount(1);
         list($trommons_source_language_code, $trommons_source_country_code) = $projectDao->convert_memsource_to_language_country($hook['sourceLang']);
+        $source_language_pair = "{$trommons_source_language_code}-{$trommons_source_country_code}";
         $sourceLocale = new Common\Protobufs\Models\Locale();
         $sourceLocale->setCountryCode($trommons_source_country_code);
         $sourceLocale->setLanguageCode($trommons_source_language_code);
@@ -186,10 +187,6 @@ class ProjectRouteHandler
             empty($hook['owner']['id']) ? 0 : $hook['owner']['id'],
             $workflowLevels);
 
-         $taskDao = new DAO\TaskDao();
-         if ($taskDao->organisationHasQualifiedBadge($memsource_client['org_id'])) $taskDao->insert_project_restrictions($project_id, true, true);
-
-        // Create a topic in the Community forum (Discourse) and a project in Asana
         $target_languages = '';
         if (!empty($hook['targetLangs'])) {
             foreach ($hook['targetLangs'] as $index => $value) {
@@ -197,7 +194,13 @@ class ProjectRouteHandler
                 $hook['targetLangs'][$index] = "{$trommons_source_language_code}-{$trommons_source_country_code}";
             }
             $target_languages = implode(',', $hook['targetLangs']);
+            $projectDao->record_memsource_project_languages($project_id, $source_language_pair, $target_languages);
         }
+
+         $taskDao = new DAO\TaskDao();
+         if ($taskDao->organisationHasQualifiedBadge($memsource_client['org_id'])) $taskDao->insert_project_restrictions($project_id, true, true);
+
+        // Create a topic in the Community forum (Discourse) and a project in Asana
         error_log("projectCreate create_discourse_topic($project_id, $target_languages)");
         try {
             $this->create_discourse_topic($project_id, $target_languages, ['created_by_id' => empty($hook['createdBy']['id']) ? 0 : $hook['createdBy']['id']]);
