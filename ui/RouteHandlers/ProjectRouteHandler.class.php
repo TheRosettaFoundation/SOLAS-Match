@@ -232,8 +232,10 @@ class ProjectRouteHandler
             error_log("Can't find memsource_project for {$hook['id']} in event PROJECT_METADATA_UPDATED");
             return;
         }
-        if (empty($hook['client']['id'])) return;
 
+        if (!empty($hook['note'])) $projectDao->update_project_description($memsource_project['project_id'], $hook['note']);
+
+        if (empty($hook['client']['id'])) return;
         $memsource_client = $projectDao->get_memsource_client_by_memsource_id($hook['client']['id']);
         if (empty($memsource_client)) {
             error_log("No MemsourceOrganisations record for project: {$hook['name']}, client id: {$hook['client']['id']} in event PROJECT_METADATA_UPDATED");
