@@ -9402,6 +9402,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `update_project_description`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_description`(IN projectID INT, IN d VARCHAR(4096))
+BEGIN
+    UPDATE Projects SET description=d WHERE id=projectID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `update_project_organisation`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_project_organisation`(IN projectID INT, IN orgID INT)
