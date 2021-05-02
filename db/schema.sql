@@ -1688,6 +1688,14 @@ CREATE TABLE IF NOT EXISTS `MemsourceProjects` (
   CONSTRAINT FK_MemsourceProjects_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `MemsourceProjectLanguages` (
+  project_id               INT(10) UNSIGNED NOT NULL,
+  kp_source_language_pair  VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  kp_target_language_pairs VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY FK_MemsourceProjectLanguages_project_id (project_id),
+  CONSTRAINT FK_MemsourceProjectLanguages_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS `MemsourceSelfServiceProjects` (
   memsource_project_id  BIGINT(20) UNSIGNED NOT NULL,
   PRIMARY KEY (memsource_project_id)
@@ -9244,6 +9252,23 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_project_by_memsource_uid`(IN memsourceUID VARCHAR(30))
 BEGIN
     SELECT * FROM MemsourceProjects WHERE memsource_project_uid=memsourceUID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `record_memsource_project_languages`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `record_memsource_project_languages`(IN projectID INT, source VARCHAR(30), target VARCHAR(255))
+BEGIN
+    INSERT INTO MemsourceProjectLanguages (project_id, kp_source_language_pair, kp_target_language_pairs)
+    VALUES                                ( projectID,                  source,                   target);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_memsource_project_languages`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_project_languages`(IN projectID INT)
+BEGIN
+    SELECT * FROM MemsourceProjectLanguages WHERE project_id=projectID;
 END//
 DELIMITER ;
 

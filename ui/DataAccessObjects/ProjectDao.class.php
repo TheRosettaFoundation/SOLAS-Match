@@ -754,7 +754,7 @@ $memsource_change_country_to_kp = [
             LibAPI\PDOWrapper::cleanseWrapStr($target_languages));
     }
 
-    public function get_memsource_project_languages($project_id, $source_language_pair, $target_languages)
+    public function get_memsource_project_languages($project_id)
     {
         $result = LibAPI\PDOWrapper::call('get_memsource_project_languages', LibAPI\PDOWrapper::cleanse($project_id));
         if (empty($result)) return 0;
