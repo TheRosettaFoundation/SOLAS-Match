@@ -1716,6 +1716,7 @@ class UserDao extends BaseDao
                 ['id' => '1Y5F5rJDuvNTnyQBkCUhw0']
             ],
             'dateDue' => substr($deadline, 0, 10) . 'T' . substr($deadline, 11, 8) . 'Z',
+            'purchaseOrder' => 'https://kato.translatorswb.org/project/' . $project->getId() . '/view',
         ];
         if ($this->usernamePrefix === 'DEV_') {
             $data['workflowSteps'] = [
