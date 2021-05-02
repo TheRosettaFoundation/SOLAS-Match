@@ -306,12 +306,22 @@ class ProjectRouteHandler
             }
             $task->setTaskType($taskType);
 
+            $project_id = $project->getId();
             if (!empty($part['wordsCount'])) {
                 $task->setWordCount($part['wordsCount']);
                 $project_wordcount = $project->getWordCount();
                 if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION) {
-                    if ($project_wordcount == 1) $project->setWordCount($part['wordsCount']);
-                    else                         $project->setWordCount($part['wordsCount'] + $project_wordcount);
+                    if (empty($part['internalId']) || (strpos($part['internalId'], '.') === false)) { // Only allow top level
+                        $project_languages = $projectDao->get_memsource_project_languages($project_id);
+                        if (!empty($project_languages['kp_target_language_pairs'])) {
+                            $project_languages = explode(',', $project_languages['kp_target_language_pairs']);
+error_log("Translation {$target_language}-{$target_country} vs first get_memsource_project_languages($project_id): {$project_languages[0]} $project_wordcount + {$part['wordsCount']}");//(**)
+                            if ("{$target_language}-{$target_country}" === $project_languages[0]) {
+                                if ($project_wordcount == 1) $project->setWordCount($part['wordsCount']);
+                                else                         $project->setWordCount($part['wordsCount'] + $project_wordcount);
+                            }
+                        }
+                    }
                 }
             } else {
                 $task->setWordCount(1);
@@ -363,8 +373,6 @@ class ProjectRouteHandler
                 $prerequisite);
 
             $projectDao->updateProjectDirectly($project);
-
-            $project_id = $project->getId();
 
             $project_restrictions = $taskDao->get_project_restrictions($project_id);
             if ($project_restrictions && (
