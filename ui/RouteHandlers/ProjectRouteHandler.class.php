@@ -313,17 +313,15 @@ error_log("Processing part['uid']: {$part['uid']} [hookID: $hookID ]");//(**)
             $project_id = $project->getId();
             if (!empty($part['wordsCount'])) {
                 $task->setWordCount($part['wordsCount']);
-                $project_wordcount = $project->getWordCount();
                 if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION) {
                     if (empty($part['internalId']) || (strpos($part['internalId'], '.') === false)) { // Only allow top level
                         $project_languages = $projectDao->get_memsource_project_languages($project_id);
                         if (!empty($project_languages['kp_target_language_pairs'])) {
                             $project_languages = explode(',', $project_languages['kp_target_language_pairs']);
-error_log("Translation {$target_language}-{$target_country} vs first get_memsource_project_languages($project_id): {$project_languages[0]} $project_wordcount + {$part['wordsCount']}");//(**)
+error_log("Translation {$target_language}-{$target_country} vs first get_memsource_project_languages($project_id): {$project_languages[0]} + {$part['wordsCount']}");//(**)
                             if ("{$target_language}-{$target_country}" === $project_languages[0]) {
-error_log("Updating project_wordcount: $project_wordcount with {$part['wordsCount']}");//(**)
-                                if ($project_wordcount == 1) $project->setWordCount($part['wordsCount']);
-                                else                         $project->setWordCount($part['wordsCount'] + $project_wordcount);
+error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
+                                $projectDao->add_to_project_word_count($project_id, $part['wordsCount']);
                             }
                         }
                     }
@@ -378,9 +376,6 @@ error_log("before taskDao->createTaskDirectly");//(**)
                 empty($part['beginIndex'])    ? 0 : $part['beginIndex'], // Begin Segment number
                 empty($part['endIndex'])      ? 0 : $part['endIndex'],
                 $prerequisite);
-
-error_log("before projectDao->updateProjectDirectly");//(**)
-            $projectDao->updateProjectDirectly($project);
 
             $project_restrictions = $taskDao->get_project_restrictions($project_id);
             if ($project_restrictions && (

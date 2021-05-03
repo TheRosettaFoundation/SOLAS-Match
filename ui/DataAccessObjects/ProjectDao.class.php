@@ -145,6 +145,11 @@ class ProjectDao extends BaseDao
         LibAPI\PDOWrapper::call('projectInsertAndUpdate', $args);
     }
 
+    public function add_to_project_word_count($project_id, $word_count)
+    {
+        LibAPI\PDOWrapper::call('add_to_project_word_count', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($word_count));
+    }
+
     public function saveProjectFile($project, $userId, $filename, $fileData)
     {
         $filename = urlencode($filename);
