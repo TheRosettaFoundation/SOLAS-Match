@@ -246,6 +246,7 @@ class ProjectRouteHandler
 
     private function create_task($hook)
     {
+$hookID = uniqid();//(**)
         $hook = $hook['jobParts'];
         $projectDao = new DAO\ProjectDao();
         $taskDao    = new DAO\TaskDao();
@@ -265,7 +266,7 @@ class ProjectRouteHandler
                 error_log("Can't find memsource_project for {$part['project']['id']} in new jobPart {$part['uid']} for: {$part['fileName']}");
                 continue;
             }
-error_log("Processing part['uid']: {$part['uid']}");//(**)
+error_log("Processing part['uid']: {$part['uid']} [hookID: $hookID ]");//(**)
             $task->setProjectId($memsource_project['project_id']);
             $task->setTitle((empty($part['internalId']) ? '' : $part['internalId'] . ' ') . $part['fileName']);
 
@@ -389,23 +390,27 @@ error_log("before projectDao->updateProjectDirectly");//(**)
                 $taskDao->setRestrictedTask($task_id);
             }
 
+error_log("before taskDao->get_creator [hookID: $hookID ]");//(**)
             if ($self_service_project) {
                 $creator = $taskDao->get_creator($project_id, $memsource_project);
                 $userDao = new DAO\UserDao();
                 $userDao->trackTask($creator['id'], $task_id);
             }
 
+error_log("before uploadFolder = [hookID: $hookID ]");//(**)
             $uploadFolder = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0";
             mkdir($uploadFolder, 0755, true);
             $filesFolder = Common\Lib\Settings::get('files.upload_path') . "files/proj-$project_id/task-$task_id/v-0";
             mkdir($filesFolder, 0755, true);
 
             $filename = $part['fileName'];
+error_log("before file_put_contents [hookID: $hookID ]");//(**)
             file_put_contents("$filesFolder/$filename", ''); // Placeholder
             file_put_contents("$uploadFolder/$filename", "files/proj-$project_id/task-$task_id/v-0/$filename"); // Point to it
 
+error_log("before projectDao->queue_copy_task_original_file [hookID: $hookID ]");//(**)
             $projectDao->queue_copy_task_original_file($project_id, $task_id, $part['uid'], $filename); // cron will copy file from memsource
-error_log("Finished Processing part['uid']: {$part['uid']}");//(**)
+error_log("Finished Processing part['uid']: {$part['uid']} [hookID: $hookID ]");//(**)
         }
     }
 
