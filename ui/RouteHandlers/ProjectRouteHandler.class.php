@@ -439,8 +439,9 @@ error_log("Finished Processing part['uid']: {$part['uid']} [hookID: $hookID ]");
                 }
             }
             if ($part['status'] == 'COMPLETED_BY_LINGUIST') {
-                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 62927); // translators@translatorswithoutborders.org
+//                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 62927); // translators@translatorswithoutborders.org
 //(**)dev server                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 3297);
+                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 3297);//(**)
 
                 $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::COMPLETE);
                 $taskDao->sendTaskUploadNotifications($task_id, 1);
