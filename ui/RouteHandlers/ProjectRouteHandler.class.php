@@ -265,6 +265,7 @@ class ProjectRouteHandler
                 error_log("Can't find memsource_project for {$part['project']['id']} in new jobPart {$part['uid']} for: {$part['fileName']}");
                 continue;
             }
+error_log("Processing part['uid']: {$part['uid']}");//(**)
             $task->setProjectId($memsource_project['project_id']);
             $task->setTitle((empty($part['internalId']) ? '' : $part['internalId'] . ' ') . $part['fileName']);
 
@@ -319,6 +320,7 @@ class ProjectRouteHandler
                             $project_languages = explode(',', $project_languages['kp_target_language_pairs']);
 error_log("Translation {$target_language}-{$target_country} vs first get_memsource_project_languages($project_id): {$project_languages[0]} $project_wordcount + {$part['wordsCount']}");//(**)
                             if ("{$target_language}-{$target_country}" === $project_languages[0]) {
+error_log("Updating project_wordcount: $project_wordcount with {$part['wordsCount']}");//(**)
                                 if ($project_wordcount == 1) $project->setWordCount($part['wordsCount']);
                                 else                         $project->setWordCount($part['wordsCount'] + $project_wordcount);
                             }
@@ -329,6 +331,7 @@ error_log("Translation {$target_language}-{$target_country} vs first get_memsour
                 $task->setWordCount(1);
             }
 
+error_log("before projectDao->get_memsource_self_service_project");//(**)
             $self_service_project = $projectDao->get_memsource_self_service_project($part['project']['id']);
             if ($self_service_project) {
                 $deadline = strtotime($project->getDeadline());
@@ -360,6 +363,7 @@ error_log("Translation {$target_language}-{$target_country} vs first get_memsour
                 }
             }
 
+error_log("before taskDao->createTaskDirectly");//(**)
             $task_id = $taskDao->createTaskDirectly($task);
             if (!$task_id) {
                 error_log("Failed to add task for new jobPart {$part['uid']} for: {$part['fileName']}");
@@ -374,6 +378,7 @@ error_log("Translation {$target_language}-{$target_country} vs first get_memsour
                 empty($part['endIndex'])      ? 0 : $part['endIndex'],
                 $prerequisite);
 
+error_log("before projectDao->updateProjectDirectly");//(**)
             $projectDao->updateProjectDirectly($project);
 
             $project_restrictions = $taskDao->get_project_restrictions($project_id);
@@ -400,6 +405,7 @@ error_log("Translation {$target_language}-{$target_country} vs first get_memsour
             file_put_contents("$uploadFolder/$filename", "files/proj-$project_id/task-$task_id/v-0/$filename"); // Point to it
 
             $projectDao->queue_copy_task_original_file($project_id, $task_id, $part['uid'], $filename); // cron will copy file from memsource
+error_log("Finished Processing part['uid']: {$part['uid']}");//(**)
         }
     }
 
