@@ -389,9 +389,8 @@ error_log("before taskDao->get_creator [hookID: $hookID ]");//(**)
             if ($self_service_project) {
                 $creator = $taskDao->get_creator($project_id, $memsource_project);
 error_log("after taskDao->get_creator($project_id...) [hookID: $hookID ]");//(**)
-                $userDao = new DAO\UserDao();
-error_log("before userDao->trackTask({$creator['id']}, $task_id) [hookID: $hookID ]");//(**)
-                $userDao->trackTask($creator['id'], $task_id);
+error_log("before taskDao->trackTask({$creator['id']}, $task_id) [hookID: $hookID ]");//(**)
+                $taskDao->trackTaskDirectly($creator['id'], $task_id);
             }
 
 error_log("before uploadFolder = [hookID: $hookID ]");//(**)

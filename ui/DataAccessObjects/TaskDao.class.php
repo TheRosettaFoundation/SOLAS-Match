@@ -210,6 +210,11 @@ class TaskDao extends BaseDao
         return $task_id;
     }
 
+    public function trackTaskDirectly($user_id, $task_id)
+    {
+        LibAPI\PDOWrapper::call('UserTrackTask', LibAPI\PDOWrapper::cleanseNull($user_id) . ',' . LibAPI\PDOWrapper::cleanseNull($task_id));
+    }
+
     public function updateTask($task)
     {
         $u = Common\Lib\UserSession::getCurrentUserID();
