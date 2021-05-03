@@ -246,7 +246,6 @@ class ProjectRouteHandler
 
     private function create_task($hook)
     {
-$hookID = uniqid();//(**)
         $hook = $hook['jobParts'];
         $projectDao = new DAO\ProjectDao();
         $taskDao    = new DAO\TaskDao();
@@ -266,7 +265,6 @@ $hookID = uniqid();//(**)
                 error_log("Can't find memsource_project for {$part['project']['id']} in new jobPart {$part['uid']} for: {$part['fileName']}");
                 continue;
             }
-error_log("Processing part['uid']: {$part['uid']} [hookID: $hookID ]");//(**)
             $task->setProjectId($memsource_project['project_id']);
             $task->setTitle((empty($part['internalId']) ? '' : $part['internalId'] . ' ') . $part['fileName']);
 
@@ -318,9 +316,7 @@ error_log("Processing part['uid']: {$part['uid']} [hookID: $hookID ]");//(**)
                         $project_languages = $projectDao->get_memsource_project_languages($project_id);
                         if (!empty($project_languages['kp_target_language_pairs'])) {
                             $project_languages = explode(',', $project_languages['kp_target_language_pairs']);
-error_log("Translation {$target_language}-{$target_country} vs first get_memsource_project_languages($project_id): {$project_languages[0]} + {$part['wordsCount']}");//(**)
                             if ("{$target_language}-{$target_country}" === $project_languages[0]) {
-error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
                                 $projectDao->add_to_project_word_count($project_id, $part['wordsCount']);
                             }
                         }
@@ -330,7 +326,6 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
                 $task->setWordCount(1);
             }
 
-error_log("before projectDao->get_memsource_self_service_project");//(**)
             $self_service_project = $projectDao->get_memsource_self_service_project($part['project']['id']);
             if ($self_service_project) {
                 $deadline = strtotime($project->getDeadline());
@@ -362,7 +357,6 @@ error_log("before projectDao->get_memsource_self_service_project");//(**)
                 }
             }
 
-error_log("before taskDao->createTaskDirectly");//(**)
             $task_id = $taskDao->createTaskDirectly($task);
             if (!$task_id) {
                 error_log("Failed to add task for new jobPart {$part['uid']} for: {$part['fileName']}");
@@ -385,28 +379,21 @@ error_log("before taskDao->createTaskDirectly");//(**)
                 $taskDao->setRestrictedTask($task_id);
             }
 
-error_log("before taskDao->get_creator [hookID: $hookID ]");//(**)
             if ($self_service_project) {
                 $creator = $taskDao->get_creator($project_id, $memsource_project);
-error_log("after taskDao->get_creator($project_id...) [hookID: $hookID ]");//(**)
-error_log("before taskDao->trackTask({$creator['id']}, $task_id) [hookID: $hookID ]");//(**)
                 $taskDao->trackTaskDirectly($creator['id'], $task_id);
             }
 
-error_log("before uploadFolder = [hookID: $hookID ]");//(**)
             $uploadFolder = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/task-$task_id/v-0";
             mkdir($uploadFolder, 0755, true);
             $filesFolder = Common\Lib\Settings::get('files.upload_path') . "files/proj-$project_id/task-$task_id/v-0";
             mkdir($filesFolder, 0755, true);
 
             $filename = $part['fileName'];
-error_log("before file_put_contents [hookID: $hookID ]");//(**)
             file_put_contents("$filesFolder/$filename", ''); // Placeholder
             file_put_contents("$uploadFolder/$filename", "files/proj-$project_id/task-$task_id/v-0/$filename"); // Point to it
 
-error_log("before projectDao->queue_copy_task_original_file [hookID: $hookID ]");//(**)
             $projectDao->queue_copy_task_original_file($project_id, $task_id, $part['uid'], $filename); // cron will copy file from memsource
-error_log("Finished Processing part['uid']: {$part['uid']} [hookID: $hookID ]");//(**)
         }
     }
 
