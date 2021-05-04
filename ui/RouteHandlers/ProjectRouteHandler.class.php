@@ -448,7 +448,8 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
                     }
                     $dependent_task = $projectDao->get_memsource_tasks_for_project_language_type($memsource_project['project_id'], $memsource_task['task'], Common\Enums\TaskTypeEnum::PROOFREADING);
                     if ($dependent_task && $dependent_task['prerequisite'] == $task_id) {
-                        $taskDao->setTaskStatus($dependent_task['task_id'], Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+                        if ($dependent_task['task-status_id'] == Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES)
+                            $taskDao->setTaskStatus($dependent_task['task_id'], Common\Enums\TaskStatusEnum::PENDING_CLAIM);
                         $user_id = $projectDao->getUserClaimedTask($task_id);
                         if ($user_id) $taskDao->addUserToTaskBlacklist($user_id, $dependent_task['task_id']);
                     }
