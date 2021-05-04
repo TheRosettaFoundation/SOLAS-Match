@@ -428,9 +428,8 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
                 }
             }
             if ($part['status'] == 'COMPLETED_BY_LINGUIST') {
-//                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 62927); // translators@translatorswithoutborders.org
+                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 62927); // translators@translatorswithoutborders.org
 //(**)dev server                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 3297);
-                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 3297);//(**)
 
                 $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::COMPLETE);
                 $taskDao->sendTaskUploadNotifications($task_id, 1);
@@ -1408,7 +1407,7 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
         }
         $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
 
-        $create_memsource = 1;//(**)If this org is a memsource one
+        $create_memsource = 0;//(**)If this org is a memsource one
 
         if ($post = $app->request()->post()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
