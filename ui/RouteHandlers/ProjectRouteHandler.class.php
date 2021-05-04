@@ -456,17 +456,10 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
                 error_log("COMPLETED_BY_LINGUIST task_id: $task_id, memsource: {$part['uid']}");
             }
             if ($part['status'] == 'DECLINED_BY_LINGUIST') {
-                if (!empty($part['assignedTo'][0]['linguist']['id']) && count($part['assignedTo']) == 1) {
-                    $user_id = $projectDao->get_user_id_from_memsource_user($part['assignedTo'][0]['linguist']['id']);
-                    if (!$user_id) {
-                        error_log("Can't find user_id for {$part['assignedTo'][0]['linguist']['id']} in event JOB_STATUS_CHANGED, jobPart status: DECLINED_BY_LINGUIST");
-                        continue;
-                    }
-
-                    if ($taskDao->taskIsClaimed($task_id)) {
-                        $taskDao->unclaimTask($task_id, $user_id);
-                        error_log("JOB_STATUS_CHANGED DECLINED_BY_LINGUIST in memsource task_id: $task_id, user_id: $user_id, memsource job: {$part['uid']}, user: {$part['assignedTo'][0]['linguist']['id']}");
-                    }
+                if ($taskDao->taskIsClaimed($task_id)) {
+                    $user_id = $projectDao->getUserClaimedTask($task_id);
+                    if ($user_id) $taskDao->unclaimTask($task_id, $user_id);
+                    error_log("JOB_STATUS_CHANGED DECLINED_BY_LINGUIST in memsource task_id: $task_id, user_id: $user_id, memsource job: {$part['uid']}");
                 }
             }
         }
