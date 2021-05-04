@@ -1685,6 +1685,7 @@ class UserDao extends BaseDao
         [$kp_language, $kp_country] = $projectDao->convert_selection_to_language_country($post['sourceLanguageSelect']);
         $sourceLang = $projectDao->convert_language_country_to_memsource($kp_language, $kp_country);
         if (!$sourceLang) return 0;
+        [$kp_language, $kp_country] = $projectDao->convert_memsource_to_language_country($sourceLang);
         $kp_source_language = "{$kp_language}-{$kp_country}";
 
         $targetCount = 0;
@@ -1695,6 +1696,7 @@ class UserDao extends BaseDao
             $lang = $projectDao->convert_language_country_to_memsource($kp_language, $kp_country);
             if (!$lang) return 0;
             $langs[] = $lang;
+            [$kp_language, $kp_country] = $projectDao->convert_memsource_to_language_country($lang);
             $kp_target_languages[] = "{$kp_language}-{$kp_country}";
             $targetCount++;
         }

@@ -314,9 +314,11 @@ class ProjectRouteHandler
                 if ($taskType == Common\Enums\TaskTypeEnum::TRANSLATION) {
                     if (empty($part['internalId']) || (strpos($part['internalId'], '.') === false)) { // Only allow top level
                         $project_languages = $projectDao->get_memsource_project_languages($project_id);
+error_log("Translation {$target_language}-{$target_country} vs first get_memsource_project_languages($project_id): {$project_languages[0]} + {$part['wordsCount']}");//(**)
                         if (!empty($project_languages['kp_target_language_pairs'])) {
                             $project_languages = explode(',', $project_languages['kp_target_language_pairs']);
                             if ("{$target_language}-{$target_country}" === $project_languages[0]) {
+error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
                                 $projectDao->add_to_project_word_count($project_id, $part['wordsCount']);
                             }
                         }
