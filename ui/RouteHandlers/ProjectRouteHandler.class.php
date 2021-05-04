@@ -2569,7 +2569,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
             $queue_copy_task_original_files = $projectDao->get_queue_copy_task_original_files();
             $count = 0;
             foreach ($queue_copy_task_original_files as $queue_copy_task_original_file) {
-                if (++$count > 1) break; // Limit number done at one time, just in case
+                if (++$count > 4) break; // Limit number done at one time, just in case
 
                 $project_id         = $queue_copy_task_original_file['project_id'];
                 $task_id            = $queue_copy_task_original_file['task_id'];
