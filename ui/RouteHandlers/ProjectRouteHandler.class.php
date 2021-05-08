@@ -1407,7 +1407,7 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
         }
         $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
 
-        $create_memsource = 0;//(**)If this org is a memsource one
+        $create_memsource = 1; // This org uses memsource
 
         if ($post = $app->request()->post()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey
