@@ -373,8 +373,8 @@ function validateForm()
   selectedMinute = document.getElementById("selectedMinute").value;
   // wordCountInput = document.getElementById("wordCountInput").value;
   wordCountInput = null;
-  trackProject   = document.getElementById("trackProject").checked;
-  publish        = document.getElementById("publish").checked;
+  // trackProject   = document.getElementById("trackProject").checked;
+  // publish        = document.getElementById("publish").checked;
 
   project.organisationId = org_id;
   project.title = title;
