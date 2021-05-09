@@ -168,6 +168,7 @@
                     </div>
                 </div>
                 {/if}
+                {if !$create_memsource}
                 <div class="projFormInput">
                     <div style="margin-bottom:25px;">
                         <h2>{Localisation::getTranslation('project_create_publish_tasks')}:</h2>
@@ -184,6 +185,7 @@
                         <input type="checkbox" name="trackProject" id="trackProject" value="1" checked />
                     </div>
                 </div>
+                {/if}
                 {if $showRestrictTask}
                 <div class="projFormInput">
                     <div style="margin-bottom:25px;">
