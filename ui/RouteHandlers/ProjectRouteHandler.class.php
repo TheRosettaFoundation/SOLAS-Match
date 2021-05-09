@@ -382,7 +382,7 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
             }
 
             if ($self_service_project) {
-                $creator = $taskDao->get_creator($project_id, $memsource_project);
+                $creator = $taskDao->get_self_creator_from_project_file($project_id);
                 $taskDao->trackTaskDirectly($creator['id'], $task_id);
             }
 

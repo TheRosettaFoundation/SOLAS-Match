@@ -691,6 +691,11 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
         return $result[0];
     }
 
+    public function get_self_creator_from_project_file($project_id) {
+        $result = LibAPI\PDOWrapper::call('get_creator', LibAPI\PDOWrapper::cleanse($project_id));
+        return $result[0];
+    }
+
     public function getProjectFileLocation($project_id) {
         $result = LibAPI\PDOWrapper::call('getProjectFile', LibAPI\PDOWrapper::cleanse($project_id) . ',NULL,NULL,NULL,NULL');
         if ($result) {
