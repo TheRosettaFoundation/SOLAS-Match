@@ -3360,8 +3360,8 @@ BEGIN
             and (tStatus is null or t.`task-status_id` = tStatus)
             and (tType is null or t.`task-type_id` = tType)
             and (pub is null or t.`published` = pub)
-            and (dLine is null or dLine = '0000-00-00 00:00:00' or t.`deadline` = dLine);
-
+            and (dLine is null or dLine = '0000-00-00 00:00:00' or t.`deadline` = dLine)
+  ORDER BY targetLanguageName, targetCountryName, t.`task-type_id`, t.id;
 END//
 DELIMITER ;
 
@@ -3398,7 +3398,7 @@ BEGIN
             b.id IN (SELECT ub.badge_id FROM UserBadges ub WHERE ub.user_id=uID)
         )
     GROUP BY t.id
-    ORDER BY target_language_name, target_country_name, t.id;
+    ORDER BY target_language_name, target_country_name, t.`task-type_id`, t.id;
 END//
 DELIMITER ;
 
