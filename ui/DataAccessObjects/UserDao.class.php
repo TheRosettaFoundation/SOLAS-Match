@@ -438,7 +438,7 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function claimTask($userId, $taskId, $memsource_task, $project_id)
+    public function claimTask($userId, $taskId, $memsource_task, $project_id, $task)
     {
         $ret = null;
         $request = "{$this->siteApi}v0/users/$userId/tasks/$taskId";
@@ -490,8 +490,10 @@ class UserDao extends BaseDao
 
                 $url = $this->memsourceApiV1.'projects/' . $projectUid . '/jobs/' . $taskUid;
                 $ch = curl_init($url);
+                $deadline = $task->getDeadline();
                 $data = array(
                     'status' => 'ACCEPTED',
+                    'dateDue' => substr($deadline, 0, 10) . 'T' . substr($deadline, 11, 8) . 'Z',
                     'providers' => array(
                         array(
                             'type' => 'USER',
