@@ -809,7 +809,7 @@ $memsource_change_country_to_kp = [
 
     public function set_memsource_task($task_id, $memsource_task_id, $memsource_task_uid, $task, $internalId, $workflowLevel, $beginIndex, $endIndex, $prerequisite)
     {
-        LibAPI\PDOWrapper::call('set_memsource_task',
+        $result = LibAPI\PDOWrapper::call('set_memsource_task',
             LibAPI\PDOWrapper::cleanse($task_id) . ',' .
             LibAPI\PDOWrapper::cleanse($memsource_task_id) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($memsource_task_uid) . ',' .
@@ -819,6 +819,7 @@ $memsource_change_country_to_kp = [
             LibAPI\PDOWrapper::cleanse($beginIndex) . ',' .
             LibAPI\PDOWrapper::cleanse($endIndex) . ',' .
             LibAPI\PDOWrapper::cleanse($prerequisite));
+        return $result[0]['result'];
     }
 
     public function update_memsource_task($task_id, $memsource_task_id, $task, $internalId, $beginIndex, $endIndex)
@@ -1046,12 +1047,17 @@ $memsource_change_country_to_kp = [
         }
         error_log("Added Task: $task_id for new job {$job['uid']} for: {$job['filename']}");
 
-        $this->set_memsource_task($task_id, 0, $job['uid'], '',
+        $success = $this->set_memsource_task($task_id, 0, $job['uid'], '',
             empty($job['innerId'])       ? 0 : $job['innerId'],
             empty($job['workflowLevel']) ? 0 : $job['workflowLevel'],
             empty($job['beginIndex'])    ? 0 : $job['beginIndex'],
             empty($job['endIndex'])      ? 0 : $job['endIndex'],
             0);
+error_log("set_memsource_task($task_id, 0, {$job['uid']}...), success: $success");//(**)
+        if (!$success) { // May be because of button double click
+            $this->delete_task_directly($task_id);
+            return 0;
+        }
 
         $project_id = $project->getId();
 
