@@ -9227,6 +9227,16 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `update_memsource_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_memsource_project`(IN projectID INT, IN workflow1 VARCHAR(20), IN workflow2 VARCHAR(20), IN workflow3 VARCHAR(20))
+BEGIN
+    UPDATE MemsourceProjects
+    SET workflow_level_1=workflow1, workflow_level_2=workflow2, workflow_level_3=workflow3
+    WHERE project_id=projectID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `set_memsource_self_service_project`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_self_service_project`(IN memsourceID BIGINT)

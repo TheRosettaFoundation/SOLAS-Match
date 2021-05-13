@@ -235,6 +235,20 @@ class ProjectRouteHandler
 
         if (!empty($hook['note'])) $projectDao->update_project_description($memsource_project['project_id'], $hook['note']);
 
+        if (!empty($hook['workflowSteps'])) {
+            $workflowLevels = ['', '', '']; // Will contain 'Translation' or 'Revision' for workflowLevel 1 possibly up to 3
+            $found_something = 0;
+            foreach ($hook['workflowSteps'] as $step) {
+                foreach ($workflowLevels as $i => $w) {
+                    if ($step['workflowLevel'] == $i + 1) {
+                        $workflowLevels[$i] = $step['name'];
+                        if (!empty($step['name'])) $found_something = 1;
+                    }
+                }
+            }
+            if ($found_something) $projectDao->update_memsource_project($memsource_project['project_id'], $workflowLevels);
+        }
+
         if (empty($hook['client']['id'])) return;
         $memsource_client = $projectDao->get_memsource_client_by_memsource_id($hook['client']['id']);
         if (empty($memsource_client)) {
