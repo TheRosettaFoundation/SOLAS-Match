@@ -27,6 +27,7 @@ var project_create_set_source_country;
 var project_create_set_target_language;
 var project_create_set_target_country;
 var duplicateLocale;
+var source_equals_target;
 var fileError;
 var imageError;
 
@@ -138,6 +139,9 @@ function set_errors_for_submission(id, id_for_div)
         }
         if (duplicateLocale != null) {
           html += '<li>' + duplicateLocale + '</li>';
+        }
+        if (source_equals_target != null) {
+          html += '<li>' + source_equals_target + '</li>';
         }
         if (fileError != null) {
           html += '<li>' + fileError + '</li>';
@@ -357,6 +361,7 @@ function validateForm()
   project_create_set_target_language = null;
   project_create_set_target_country = null;
   duplicateLocale = null;
+  source_equals_target = null;
   fileError = null;
   imageError = null;
 
@@ -546,6 +551,7 @@ function validateLocalValues()
     success = false;
   }
 
+  var encounteredSourceLocale = project.sourceLocale.languageCode.replace("#", "");
   var encounteredLocales = [];
   segmentationRequired   = [];
   translationRequired    = [];
@@ -582,6 +588,11 @@ function validateLocalValues()
     } else {
       encounteredLocales[i] = encounteredLocale;
     }
+
+    if (encounteredSourceLocale == encounteredLocale) {
+      source_equals_target = "Source and Target Languages must be different.";
+      success = false;
+	}
   }
 
   return success;
