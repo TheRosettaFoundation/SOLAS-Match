@@ -1713,7 +1713,7 @@ class UserDao extends BaseDao
         if (!empty($post['translation_0']) && empty($post['proofreading_0'])) {
             $workflowSteps = [
                 ['id' => 'cFUVHSAAmsVrftA3GC0Ak6'],
-            ],
+            ];
             if ($this->usernamePrefix === 'DEV_') {
                 $workflowSteps = [
                     ['id' => 'MyL6Z9IF6ZqQexoZ1OLAS3'],
@@ -1722,7 +1722,7 @@ class UserDao extends BaseDao
         } elseif (empty($post['translation_0']) && !empty($post['proofreading_0'])) {
             $workflowSteps = [
                 ['id' => '1Y5F5rJDuvNTnyQBkCUhw0']
-            ],
+            ];
             if ($this->usernamePrefix === 'DEV_') {
                 $workflowSteps = [
                     ['id' => '07djiVynQ1FIiQbaKWZzja']
@@ -1732,7 +1732,7 @@ class UserDao extends BaseDao
             $workflowSteps = [
                 ['id' => 'cFUVHSAAmsVrftA3GC0Ak6'],
                 ['id' => '1Y5F5rJDuvNTnyQBkCUhw0']
-            ],
+            ];
             if ($this->usernamePrefix === 'DEV_') {
                 $workflowSteps = [
                     ['id' => 'MyL6Z9IF6ZqQexoZ1OLAS3'],
