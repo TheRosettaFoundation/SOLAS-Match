@@ -227,7 +227,7 @@
             </div>
             <div id="projFormBottomBlockRight">
                 <h2>{Localisation::getTranslation('common_task_type')}: <span style="color: red">*</span></h2>
-                <p class="desc" style ="margin-bottom:63px">{Localisation::getTranslation('project_create_9')}{if $create_memsource} memsource projects must have both Translation and Revising.{/if}</p>
+                <p class="desc" style ="margin-bottom:63px">{Localisation::getTranslation('project_create_9')}</p>
                 <div> <!-- <table border="0" width="100%"> -->
                     <div>
                         <!--
