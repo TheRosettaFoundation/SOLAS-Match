@@ -1825,7 +1825,7 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
         }
 
         $extraScripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
-        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/ProjectCreate8.js\"></script>";
+        $extraScripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/ProjectCreate9.js\"></script>";
 
         $app->view()->appendData(array(
             "siteLocation"          => Common\Lib\Settings::get('site.location'),
