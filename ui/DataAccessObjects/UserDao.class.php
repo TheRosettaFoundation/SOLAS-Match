@@ -1710,24 +1710,45 @@ class UserDao extends BaseDao
         $url = 'https://cloud.memsource.com/web/api2/v1/projects';
         $ch = curl_init($url);
         $deadline = $project->getDeadline();
+        if (!empty($post['translation_0']) && empty($post['proofreading_0'])) {
+            $workflowSteps = [
+                ['id' => 'cFUVHSAAmsVrftA3GC0Ak6'],
+            ],
+            if ($this->usernamePrefix === 'DEV_') {
+                $workflowSteps = [
+                    ['id' => 'MyL6Z9IF6ZqQexoZ1OLAS3'],
+                ];
+            }
+        } elseif (empty($post['translation_0']) && !empty($post['proofreading_0'])) {
+            $workflowSteps = [
+                ['id' => '1Y5F5rJDuvNTnyQBkCUhw0']
+            ],
+            if ($this->usernamePrefix === 'DEV_') {
+                $workflowSteps = [
+                    ['id' => '07djiVynQ1FIiQbaKWZzja']
+                ];
+            }
+        } else {
+            $workflowSteps = [
+                ['id' => 'cFUVHSAAmsVrftA3GC0Ak6'],
+                ['id' => '1Y5F5rJDuvNTnyQBkCUhw0']
+            ],
+            if ($this->usernamePrefix === 'DEV_') {
+                $workflowSteps = [
+                    ['id' => 'MyL6Z9IF6ZqQexoZ1OLAS3'],
+                    ['id' => '07djiVynQ1FIiQbaKWZzja']
+                ];
+            }
+        }
         $data = [
             'name' => $post['project_title'],
             'note' => $post['project_description'],
             'sourceLang' => $sourceLang,
             'targetLangs' => $langs,
-            'workflowSteps' => [
-                ['id' => 'cFUVHSAAmsVrftA3GC0Ak6'],
-                ['id' => '1Y5F5rJDuvNTnyQBkCUhw0']
-            ],
+            'workflowSteps' => $workflowSteps,
             'dateDue' => substr($deadline, 0, 10) . 'T' . substr($deadline, 11, 8) . 'Z',
             'purchaseOrder' => 'https://kato.translatorswb.org/project/' . $project->getId() . '/view',
         ];
-        if ($this->usernamePrefix === 'DEV_') {
-            $data['workflowSteps'] = [
-                ['id' => 'MyL6Z9IF6ZqQexoZ1OLAS3'],
-                ['id' => '07djiVynQ1FIiQbaKWZzja']
-            ];
-        }
         if ($client = $projectDao->get_memsource_client($project->getOrganisationId())) $data['client'] = ['id' => $client['memsource_client_uid']];
 
         $payload = json_encode($data);

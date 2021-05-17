@@ -183,7 +183,7 @@ function loadingComplete()
   document.getElementById("image_file_desc").innerHTML =
     parameters.getTranslation("project_create_upload_project_image") + " " + parameters.getTranslation("common_maximum_file_size_is").replace("%s", imageMaxFileSize / 1024 / 1024);
 
-  addMoreTargetLanguages();
+  addMoreTargetLanguages(0);
 
   document.getElementById("loading_warning").innerHTML = "";
 }
@@ -191,7 +191,7 @@ function loadingComplete()
 /**
  * Add target languages to the form.
  */
-function addMoreTargetLanguages()
+function addMoreTargetLanguages(index)
 {
   // Unless the targetCount is less than the maxTargetLanguages, don't do anything.
   // On the UI this shouldn't be an issue anyway because this function will disable the add button when
@@ -237,7 +237,7 @@ function addMoreTargetLanguages()
     translationCheckbox.id   = "translation_" + targetCount;
     translationCheckbox.value = "1";
     translationCheckbox.checked = true;
-    if (create_memsource == 1) translationCheckbox.disabled = true;
+    if (create_memsource == 1 && index != 0) translationCheckbox.disabled = true;
 
     var proofreadingRequiredDiv = document.createElement("div");
     proofreadingRequiredDiv.className = "pull-left proj-task-type-checkbox";
@@ -249,7 +249,7 @@ function addMoreTargetLanguages()
     proofreadingCheckbox.id = "proofreading_" + targetCount;
     proofreadingCheckbox.value = "1";
     proofreadingCheckbox.checked = true;
-    if (create_memsource == 1) proofreadingCheckbox.disabled = true;
+    if (create_memsource == 1 && index != 0) proofreadingCheckbox.disabled = true;
 
     // Put the Select Elements into their div
     targetLanguageCell.appendChild(targetLanguageSelect);
@@ -259,8 +259,10 @@ function addMoreTargetLanguages()
 
     // Put the checkbox Input Elements into their own divs
     segmentationRequiredDiv.appendChild(segmentationCheckbox);
+    if (create_memsource != 1 || index == 0) {
     translationRequiredDiv.appendChild(translationCheckbox);
     proofreadingRequiredDiv.appendChild(proofreadingCheckbox);
+    }
 
     // Put each checkbox div into the div that is to contain them all
     // taskTypesRow.appendChild(segmentationRequiredDiv);
@@ -336,7 +338,7 @@ function setTemplateLanguages(template_number)
   document.getElementById("sourceLanguageSelect").value = templateObj.source;
 
   for (i = 0; i < templateObj.targets.length && i < maxTargetLanguages; i++) {
-    if (i > 0) addMoreTargetLanguages();
+    if (i > 0) addMoreTargetLanguages(i);
     document.getElementById("target_language_" + i).value = templateObj.targets[i];
   }
 }
@@ -563,8 +565,13 @@ function validateLocalValues()
   for (var i = 0; i < targetCount; i++) {
     // segmentationRequired[i] = document.getElementById("segmentation_" + i).checked;
     segmentationRequired[i] = false;
+    if (create_memsource != 1 || i == 0) {
     translationRequired [i] = document.getElementById("translation_" + i).checked;
     proofreadingRequired[i] = document.getElementById("proofreading_" + i).checked;
+    } else {
+      translationRequired [i] = true;
+      proofreadingRequired[i] = true;
+    }
 
     // If no task type is set, display error message
     if (!segmentationRequired[i] && !translationRequired[i] && !proofreadingRequired[i]) {
