@@ -1011,6 +1011,7 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
                     $response = $userDao->isSubscribedToTask($user_id, $task_id);
                     if ($response == 1) {
                         $metaData['tracking'] = true;
+                        $userSubscribedToProject = 1; // For self service projects, $userSubscribedToProject will not have been set (other projects are not initially tracked for creator)
                     } else {
                         $metaData['tracking'] = false;
                     }
