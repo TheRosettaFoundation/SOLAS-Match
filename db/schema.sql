@@ -6120,41 +6120,16 @@ BEGIN
 END//
 DELIMITER ;
 
-
 -- Dumping structure for procedure Solas-Match-Test.userUnTrackProject
 DROP PROCEDURE IF EXISTS `userUnTrackProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userUnTrackProject`(IN `pID` INT, IN `uID` INT)
 BEGIN
-	DECLARE taskId INT DEFAULT FALSE;
-	DECLARE done INT DEFAULT FALSE;
-	DECLARE cur1 CURSOR FOR SELECT t.id FROM Tasks t WHERE t.project_id=pID;
-	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-	
-	if exists (select 1 from UserTrackedProjects utp where utp.user_id=uID and utp.Project_id=pID) then
-		
-		START TRANSACTION;
-		delete from UserTrackedProjects  where user_id=uID and Project_id=pID;
-		
-		OPEN cur1;
-		
-		read_loop: LOOP
-			FETCH cur1 INTO taskId;
-			IF done THEN
-			 	LEAVE read_loop;
-			END IF;
-         call userUnTrackTask(uID, taskId);
-		END LOOP;
-		CLOSE cur1;
-		COMMIT;
-		
-		select 1 as result;
-	else
-		select 0 as result;
-	end if;
+  DELETE FROM UserTrackedProjects WHERE user_id=uID AND Project_id=pID;
+  DELETE FROM UserTrackedTasks    WHERE user_id=uID AND task_id IN (SELECT id FROM Tasks WHERE project_id=pID);
+  SELECT 1 as result;
 END//
 DELIMITER ;
-
 
 -- Dumping structure for procedure Solas-Match-Test.userUnTrackTask
 DROP PROCEDURE IF EXISTS `userUnTrackTask`;
