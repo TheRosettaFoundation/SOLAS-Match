@@ -155,7 +155,7 @@ class ProjectRouteHandler
         $memsource_client = $projectDao->get_memsource_client_by_memsource_id($hook['client']['id']);
         if (empty($memsource_client)) {
             error_log("No MemsourceOrganisations record for new project: {$hook['name']}, client id: {$hook['client']['id']}");
-            $memsource_client = ['org_id' => 456]; // TWB
+            $memsource_client = ['org_id' => 790]; // SUPPORT TWB
         }
         $project->setOrganisationId($memsource_client['org_id']);
 
