@@ -1596,7 +1596,7 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
                                         $destination = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/image";
                                         mkdir($destination, 0755);
                                         $ext = pathinfo($image_file, PATHINFO_EXTENSION);
-                                        copy($image_file, "$destination/image$ext");
+                                        copy($image_file, "$destination/image.$ext");
                                         $projectDao->set_uploaded_approved($project_id);
                                     }
                                 }
