@@ -3122,6 +3122,28 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_project_id_for_latest_org_image`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_project_id_for_latest_org_image`(IN `orgId` INT)
+BEGIN
+    SELECT id
+    FROM Projects p
+    WHERE
+        p.organisation_id=orgId AND
+        image_uploaded AND image_approved
+    ORDER BY p.created DESC
+    LIMIT 1;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_uploaded_approved`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_uploaded_approved`(IN `projectID` INT)
+BEGIN
+    UPDATE Projects SET image_uploaded=b'1', image_approved=b'1' WHERE id=projectID;
+END//
+DELIMITER ;
+
 -- Dumping structure for procedure Solas-Match-Test.getProjectByTag
 DROP PROCEDURE IF EXISTS `getProjectByTag`;
 DELIMITER //

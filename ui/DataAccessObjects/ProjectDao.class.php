@@ -436,6 +436,18 @@ $replace = array(
         return $result;
     }
 
+    public function get_project_id_for_latest_org_image($org_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_project_id_for_latest_org_image', LibAPI\PDOWrapper::cleanse($org_id));
+        if (!empty($result)) return $result[0]['id'];
+        return 0;
+    }
+
+    public function set_uploaded_approved($project_id)
+    {
+        LibAPI\PDOWrapper::call('set_uploaded_approved', LibAPI\PDOWrapper::cleanse($project_id));
+    }
+
     public function generate_language_selection($create_memsource = 0)
     {
         global $from_neon_to_trommons_pair, $language_options_changes;

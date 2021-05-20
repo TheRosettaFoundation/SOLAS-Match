@@ -94,6 +94,7 @@
                     <div style="margin-bottom:25px;">
                         <h2>{Localisation::getTranslation('common_project_image')}</h2>
                         <p id="image_file_desc" class="desc"></p>
+                        <p>If you do not upload an image, the most recent will be reused.</p>
                         <input type="file" name="projectImageFile" id="projectImageFile" />
                     </div>
                 </div>
