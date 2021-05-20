@@ -1589,10 +1589,10 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
                                 }
                             } else { // If no image uploaded, copy an old one
                                 if ($old_project_id = $projectDao->get_project_id_for_latest_org_image($org_id)) {
-                                    $project_id = $project->getId();
-                                    $image_files = glob(Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/image/image.*");
+                                    $image_files = glob(Common\Lib\Settings::get('files.upload_path') . "proj-$old_project_id/image/image.*");
                                     if (!empty($image_files)) {
                                         $image_file = $image_files[0];
+                                        $project_id = $project->getId();
                                         $destination = Common\Lib\Settings::get('files.upload_path') . "proj-$project_id/image";
                                         mkdir($destination, 0755);
                                         $ext = pathinfo($image_file, PATHINFO_EXTENSION);
