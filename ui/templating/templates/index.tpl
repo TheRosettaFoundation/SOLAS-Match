@@ -107,7 +107,7 @@
         </div>
     </div>
 
-    <div class="pull-left" style="max-width: 70%; overflow-wrap: break-word; word-break:break-all;">
+    <div class="pull-left" style="width: 70%; overflow-wrap: break-word; word-break:break-all;">
 
         <div id="loading_warning">
             <p>{Localisation::getTranslation('common_loading')}</p>
