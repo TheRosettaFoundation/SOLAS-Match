@@ -37,8 +37,8 @@
       {else}
       <td></td>
       {/if}
-      <td><a href="https://cloud.memsource.com/web/project2/show/{$user_row['memsource_project_uid']}" target="_blank">Memsource Project</a></td>
       <td><a href="{urlFor name="org-public-profile" options="org_id.{$user_row['organisation_id']}"}" target="_blank">{$user_row['name']|escape:'html':'UTF-8'}</a></td>
+      <td><a href="https://cloud.memsource.com/web/project2/show/{$user_row['memsource_project_uid']}" target="_blank">Memsource Project</a></td>
       <td>{$user_row['word-count']}</td>
     </tr>
 
