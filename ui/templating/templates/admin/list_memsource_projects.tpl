@@ -19,11 +19,11 @@
 <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
     <th width="7%">ID</th>
-    <th width="27%">Title</th>
+    <th width="26%">Title</th>
     <th width="24%">Creator</th>
     <th width="25%">Partner</th>
     <th width="10%">Memsource URL</th>
-    <th width="7%">Word Count</th>
+    <th width="8%">Word Count</th>
   </thead>
 
   <tbody>
