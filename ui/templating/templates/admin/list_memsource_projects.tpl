@@ -18,11 +18,12 @@
 
 <table id="myTable" style="overflow-wrap: break-word; word-break:break-all;" class="container table table-striped">
   <thead>
-    <th width="10%">ID</th>
-    <th width="30%">Title</th>
-    <th width="30%">Creator</th>
-    <th width="20%">memsource URL</th>
-    <th width="10%">Word Count</th>
+    <th width="7%">ID</th>
+    <th width="27%">Title</th>
+    <th width="24%">Creator</th>
+    <th width="25%">Partner</th>
+    <th width="10%">Memsource URL</th>
+    <th width="7%">Word Count</th>
   </thead>
 
   <tbody>
@@ -36,7 +37,8 @@
       {else}
       <td></td>
       {/if}
-      <td><a href="https://cloud.memsource.com/web/project2/show/{$user_row['memsource_project_uid']}" target="_blank">memsource Project</td>
+      <td><a href="https://cloud.memsource.com/web/project2/show/{$user_row['memsource_project_uid']}" target="_blank">Memsource Project</a></td>
+      <td><a href="{urlFor name="org-public-profile" options="org_id.{$user_row['org_id']}"}" target="_blank">{$user_row['org_name']|escape:'html':'UTF-8'}</a></td>
       <td>{$user_row['word-count']}</td>
     </tr>
 
