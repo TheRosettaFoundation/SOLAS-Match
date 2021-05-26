@@ -3269,12 +3269,7 @@ BEGIN
             join UserTrackedTasks utt on u.id=utt.user_id
             WHERE task_id = taskId;
     else
-        SET @orgId = -1;
-        SELECT p.organisation_id INTO @orgId
-            FROM Tasks t JOIN Projects p
-            ON t.project_id = p.id
-            WHERE t.id = taskId;
-        CALL getAdmin(NULL, @orgId);
+        SELECT * FROM Users WHERE FALSE;
     end if;
 END//
 DELIMITER ;
