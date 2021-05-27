@@ -12,7 +12,7 @@
                 {if $isSiteAdmin && !empty($matecat_analyze_url)}
                     <input type="hidden" name="copyChunks" value="1" />
                     <a class="btn btn-success" onclick="$('#copyChunksProjectForm').submit();" >
-                        <i class="icon-upload icon-white"></i> Sync Tasks with Memsource
+                        <i class="icon-upload icon-white"></i> Sync Memsource Jobs
                     </a>
                     <a href="{$matecat_analyze_url}" class="btn btn-primary" target="_blank">
                         <i class="icon-th-list icon-white"></i> {if !empty($memsource_project)}Memsource Project{else}Kató TM analysis{/if}
