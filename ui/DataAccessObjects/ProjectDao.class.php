@@ -1012,7 +1012,8 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
 like
 "innerId":"81","continuousJobInfo":null,
 ]]
-                if ($full_job && strpos($full_job['innerId'], '.')) { // Make sure, as safety check, not top level
+DELETE                if ($full_job && strpos($full_job['innerId'], '.')) { // Make sure, as safety check, not top level
+                if ($full_job) {
                     if ($this->create_task($memsource_project, $full_job)) {
                         $top_level[] = $this->get_top_level($full_job['innerId']);
                         error_log("Created task for job $uid {$full_job['innerId']} in project $project_id");
@@ -1023,7 +1024,7 @@ like
 
         $project_tasks = $this->get_tasks_for_project($project_id);
         foreach ($project_tasks as $uid => $project_task) {
-            if (in_array($this->get_top_level($project_task['internalId']), $top_level)) { // This is extra projection against wrongly deleting tasks
+DELETE MATCH BRACE            if (in_array($this->get_top_level($project_task['internalId']), $top_level)) { // This is extra projection against wrongly deleting tasks
                 if (empty($jobs[$uid])) {
                     $this->delete_task_directly($project_task['id']);
                     error_log("Deleted task {$project_task['id']} for job $uid {$project_task['internalId']} in project $project_id");
