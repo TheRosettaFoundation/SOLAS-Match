@@ -977,11 +977,41 @@ $memsource_change_country_to_kp = [
         $memsource_project_uid = $memsource_project['memsource_project_uid'];
 
         $jobs = $userDao->memsource_list_jobs($memsource_project_uid);
+        if (empty($jobs)) return;
+
         $top_level = [];
         foreach ($jobs as $uid => $job) {
             $memsource_task = $this->get_memsource_task_by_memsource_uid($uid);
             if (empty($memsource_task)) {
                 $full_job = $userDao->memsource_get_job($memsource_project_uid, $uid);
+[[
+if top level and correct language
+"wordsCount":27,"originalFileDirectory":null, do not empty
+[[[[[[[[[[[[[[
+            if (!empty($part['wordsCount'])) {
+                $task->setWordCount($part['wordsCount']);
+                if ( $taskType == Common\Enums\TaskTypeEnum::TRANSLATION ||
+                    ($taskType == Common\Enums\TaskTypeEnum::PROOFREADING &&
+                     ($memsource_project['workflow_level_1'] === 'Revision' && $memsource_project['workflow_level_2'] !== 'Translation' && $memsource_project['workflow_level_3'] !== 'Translation'))
+                   ) {
+                    if (empty($part['internalId']) || (strpos($part['internalId'], '.') === false)) { // Only allow top level
+                        $project_languages = $projectDao->get_memsource_project_languages($project_id);
+error_log("Translation {$target_language}-{$target_country} vs first get_memsource_project_languages($project_id): {$project_languages[0]} + {$part['wordsCount']}");//(**)
+                        if (!empty($project_languages['kp_target_language_pairs'])) {
+                            $project_languages = explode(',', $project_languages['kp_target_language_pairs']);
+                            if ("{$target_language}-{$target_country}" === $project_languages[0]) {
+error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
+                                $projectDao->add_to_project_word_count($project_id, $part['wordsCount']);
+                            }
+                        }
+                    }
+                }
+            }
+]]]]]]]]]]]]]] also delete wc below ((make sure not -ve or 0)
+
+like
+"innerId":"81","continuousJobInfo":null,
+]]
                 if ($full_job && strpos($full_job['innerId'], '.')) { // Make sure, as safety check, not top level
                     if ($this->create_task($memsource_project, $full_job)) {
                         $top_level[] = $this->get_top_level($full_job['innerId']);
