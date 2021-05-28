@@ -1061,7 +1061,7 @@ DELETE MATCH BRACE            if (in_array($this->get_top_level($project_task['i
 [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[
 [[
 [[[[[[[[[[[[[[
-NNED ERRORLOG $full_job and see proper parms
+NEED ERRORLOG $full_job and see proper parms
 
                 if ( $taskType == Common\Enums\TaskTypeEnum::TRANSLATION ||
                     ($taskType == Common\Enums\TaskTypeEnum::PROOFREADING &&
@@ -1090,16 +1090,8 @@ May have to do... like this for top level only
                     $task->setTaskStatus(Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
                 }
             }
-
-            $projectDao->set_memsource_task($task_id, !empty($full_job['id']) ? $full_job['id'] : 0, $full_job['uid'], $full_job['task'], // note 'task' is for Language pair (independent of workflow step)
-                empty($full_job['innerId'])    ? 0 : $full_job['innerId'],
-                empty($full_job['workflowLevel']) ? 0 : $full_job['workflowLevel'],
-                empty($full_job['beginIndex'])    ? 0 : $full_job['beginIndex'], // Begin Segment number
-                empty($full_job['endIndex'])      ? 0 : $full_job['endIndex'],
-                $prerequisite);
 ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
-]]]]]]]]]]]]]] also delete wc below ((make sure not -ve or 0) NOW ABOVE
-
+]]]]]]]]]]]]]] also delete wc ABOVE ((make sure not -ve or 0)
 like
 "innerId":"81","continuousJobInfo":null,
 ]]
@@ -1122,7 +1114,7 @@ like
             empty($job['workflowLevel']) ? 0 : $job['workflowLevel'],
             empty($job['beginIndex'])    ? 0 : $job['beginIndex'],
             empty($job['endIndex'])      ? 0 : $job['endIndex'],
-            0);
+            $prerequisite);
 error_log("set_memsource_task($task_id, 0, {$job['uid']}...), success: $success");//(**)
         if (!$success) { // May be because of button double click
             $this->delete_task_directly($task_id);
