@@ -1024,7 +1024,7 @@ $memsource_change_country_to_kp = [
             return 0;
         }
         $task->setProjectId($memsource_project['project_id']);
-        $task->setTitle("{$job['innerId']} {$job['filename']}");
+        $task->setTitle(mb_substr("{$job['innerId']} {$job['filename']}", 0, 128));
 
         $project = $this->getProject($memsource_project['project_id']);
         $projectSourceLocale = $project->getSourceLocale();
@@ -1144,7 +1144,7 @@ error_log("set_memsource_task($task_id, 0, {$job['uid']}...), success: $success"
         file_put_contents("$filesFolder/$filename", ''); // Placeholder
         file_put_contents("$uploadFolder/$filename", "files/proj-$project_id/task-$task_id/v-0/$filename"); // Point to it
 
-        $this->queue_copy_task_original_file($project_id, $task_id, $job['uid'], $filename); // cron will copy file from memsource
+        if (mb_strlen($filename) <= 255) $this->queue_copy_task_original_file($project_id, $task_id, $job['uid'], $filename); // cron will copy file from memsource
         return 1;
     }
 

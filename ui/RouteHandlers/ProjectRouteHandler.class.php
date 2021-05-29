@@ -130,7 +130,7 @@ class ProjectRouteHandler
             return;
         }
 
-        $project->setTitle($hook['name']);
+        $project->setTitle(mb_substr($hook['name'], 0, 128));
         if (!empty($hook['note'])) $project->setDescription($hook['note']);
         else                       $project->setDescription('-');
         $project->setImpact('-');
@@ -294,7 +294,7 @@ class ProjectRouteHandler
                 continue;
             }
             $task->setProjectId($memsource_project['project_id']);
-            $task->setTitle((empty($part['internalId']) ? '' : $part['internalId'] . ' ') . $part['fileName']);
+            $task->setTitle(mb_substr((empty($part['internalId']) ? '' : $part['internalId'] . ' ') . $part['fileName'], 0, 128));
 
             $project = $projectDao->getProject($memsource_project['project_id']);
 
@@ -427,7 +427,7 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
             file_put_contents("$filesFolder/$filename", ''); // Placeholder
             file_put_contents("$uploadFolder/$filename", "files/proj-$project_id/task-$task_id/v-0/$filename"); // Point to it
 
-            $projectDao->queue_copy_task_original_file($project_id, $task_id, $part['uid'], $filename); // cron will copy file from memsource
+            if (mb_strlen($filename) <= 255) $projectDao->queue_copy_task_original_file($project_id, $task_id, $part['uid'], $filename); // cron will copy file from memsource
         }
     }
 
@@ -1169,7 +1169,7 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
             } else {
                 $sourceLocale = new Common\Protobufs\Models\Locale();
 
-                $project->setTitle($post['project_title']);
+                $project->setTitle(mb_substr($post['project_title'], 0, 128));
                 $project->setDescription($post['project_description']);
                 $project->setDeadline($post['project_deadline']);
                 $project->setImpact($post['project_impact']);
@@ -1454,7 +1454,7 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
                 $sourceLocale = new Common\Protobufs\Models\Locale();
                 $project = new Common\Protobufs\Models\Project();
 
-                $project->setTitle($post['project_title']);
+                $project->setTitle(mb_substr($post['project_title'], 0, 128));
                 $project->setDescription($post['project_description']);
                 $project->setDeadline($post['project_deadline']);
                 $project->setImpact($post['project_impact']);

@@ -1642,7 +1642,7 @@ class TaskRouteHandler
 
             if ($task->getTaskStatus() < Common\Enums\TaskStatusEnum::IN_PROGRESS) {
                 if (isset($post['title']) && $post['title'] != "") {
-                    $task->setTitle($post['title']);
+                    $task->setTitle(mb_substr($post['title'], 0, 128));
                 }
 
                 if (isset($post['publishTask'])) {
@@ -2211,7 +2211,7 @@ class TaskRouteHandler
             Common\Lib\UserSession::checkCSRFKey($post, 'taskCreate');
 
             if (isset($post['title'])) {
-                $task->setTitle($post['title']);
+                $task->setTitle(mb_substr($post['title'], 0, 128));
             } else {
                 $titleError = Lib\Localisation::getTranslation('task_create_5');
             }
