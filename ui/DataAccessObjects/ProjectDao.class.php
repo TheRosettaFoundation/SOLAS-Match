@@ -1059,6 +1059,7 @@ $memsource_change_country_to_kp = [
         } else {
             $task->setWordCount(1);
         }
+$prerequisite = 0;
 /*
 [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[
 [[
