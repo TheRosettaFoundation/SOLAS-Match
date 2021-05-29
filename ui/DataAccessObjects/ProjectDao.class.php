@@ -984,7 +984,8 @@ $memsource_change_country_to_kp = [
             $memsource_task = $this->get_memsource_task_by_memsource_uid($uid);
             if (empty($memsource_task)) {
                 $full_job = $userDao->memsource_get_job($memsource_project_uid, $uid);
-DELETE                if ($full_job && strpos($full_job['innerId'], '.')) { // Make sure, as safety check, not top level
+//DELETE                if ($full_job && strpos($full_job['innerId'], '.')) { // Make sure, as safety check, not top level
+//}
                 if ($full_job) {
                     if ($this->create_task($memsource_project, $full_job)) {
                         $top_level[] = $this->get_top_level($full_job['innerId']);
@@ -996,7 +997,7 @@ DELETE                if ($full_job && strpos($full_job['innerId'], '.')) { // M
 
         $project_tasks = $this->get_tasks_for_project($project_id);
         foreach ($project_tasks as $uid => $project_task) {
-DELETE MATCH BRACE            if (in_array($this->get_top_level($project_task['internalId']), $top_level)) { // This is extra projection against wrongly deleting tasks
+//DELETE MATCH BRACE            if (in_array($this->get_top_level($project_task['internalId']), $top_level)) { // This is extra projection against wrongly deleting tasks
                 if (empty($jobs[$uid])) {
                     $this->delete_task_directly($project_task['id']);
                     error_log("Deleted task {$project_task['id']} for job $uid {$project_task['internalId']} in project $project_id");
@@ -1009,7 +1010,7 @@ DELETE MATCH BRACE            if (in_array($this->get_top_level($project_task['i
                         $taskDao->setTaskStatus($project_task['id'], Common\Enums\TaskStatusEnum::PENDING_CLAIM);
                     }
                 }
-            }
+//            }
         }
     }
 
@@ -1058,6 +1059,7 @@ DELETE MATCH BRACE            if (in_array($this->get_top_level($project_task['i
         } else {
             $task->setWordCount(1);
         }
+/*
 [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[
 [[
 [[[[[[[[[[[[[[
@@ -1096,6 +1098,7 @@ like
 "innerId":"81","continuousJobInfo":null,
 ]]
 ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+*/
 
         if (!empty($job['dateDue'])) $task->setDeadline(substr($job['dateDue'], 0, 10) . ' ' . substr($job['dateDue'], 11, 8));
         else                         $task->setDeadline($project->getDeadline());
