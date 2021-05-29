@@ -979,16 +979,12 @@ $memsource_change_country_to_kp = [
         $jobs = $userDao->memsource_list_jobs($memsource_project_uid);
         if (empty($jobs)) return;
 
-        $top_level = [];
         foreach ($jobs as $uid => $job) {
             $memsource_task = $this->get_memsource_task_by_memsource_uid($uid);
             if (empty($memsource_task)) {
                 $full_job = $userDao->memsource_get_job($memsource_project_uid, $uid);
-//DELETE                if ($full_job && strpos($full_job['innerId'], '.')) { // Make sure, as safety check, not top level
-//}
                 if ($full_job) {
                     if ($this->create_task($memsource_project, $full_job)) {
-                        $top_level[] = $this->get_top_level($full_job['innerId']);
                         error_log("Created task for job $uid {$full_job['innerId']} in project $project_id");
                     }
                 } else error_log("Could not find job $uid in project $project_id (or is top level)");
@@ -997,7 +993,6 @@ $memsource_change_country_to_kp = [
 
         $project_tasks = $this->get_tasks_for_project($project_id);
         foreach ($project_tasks as $uid => $project_task) {
-//DELETE MATCH BRACE            if (in_array($this->get_top_level($project_task['internalId']), $top_level)) { // This is extra projection against wrongly deleting tasks
                 if (empty($jobs[$uid])) {
                     $this->delete_task_directly($project_task['id']);
                     error_log("Deleted task {$project_task['id']} for job $uid {$project_task['internalId']} in project $project_id");
@@ -1010,7 +1005,6 @@ $memsource_change_country_to_kp = [
                         $taskDao->setTaskStatus($project_task['id'], Common\Enums\TaskStatusEnum::PENDING_CLAIM);
                     }
                 }
-//            }
         }
     }
 
