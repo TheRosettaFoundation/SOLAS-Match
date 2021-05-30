@@ -1053,21 +1053,18 @@ error_log('Sync create_task job: ' . print_r($job, true));
 
         if (!empty($job['wordsCount'])) {
             $task->setWordCount($job['wordsCount']);
-below? Only allow top level
 also delete wc ABOVE ((make sure not -ve or 0)
             if ( $taskType == Common\Enums\TaskTypeEnum::TRANSLATION ||
                 ($taskType == Common\Enums\TaskTypeEnum::PROOFREADING &&
                  ($memsource_project['workflow_level_1'] === 'Revision' && $memsource_project['workflow_level_2'] !== 'Translation' && $memsource_project['workflow_level_3'] !== 'Translation'))
                ) {
-                if (empty($job['innerId']) || (strpos($job['innerId'], '.') === false)) { // Only allow top level
-                    $project_languages = $this->get_memsource_project_languages($project_id);
+                $project_languages = $this->get_memsource_project_languages($project_id);
 error_log("Sync Translation {$target_language}-{$target_country} vs first get_memsource_project_languages($project_id): {$project_languages[0]} + {$job['wordsCount']}");//(**)
-                    if (!empty($project_languages['kp_target_language_pairs'])) {
-                        $project_languages = explode(',', $project_languages['kp_target_language_pairs']);
-                        if ("{$target_language}-{$target_country}" === $project_languages[0]) {
+                if (!empty($project_languages['kp_target_language_pairs'])) {
+                    $project_languages = explode(',', $project_languages['kp_target_language_pairs']);
+                    if ("{$target_language}-{$target_country}" === $project_languages[0]) {
 error_log("Sync Updating project_wordcount with {$job['wordsCount']}");//(**)
-                            $this->add_to_project_word_count($project_id, $job['wordsCount']);
-                        }
+                        $this->add_to_project_word_count($project_id, $job['wordsCount']);
                     }
                 }
             }
