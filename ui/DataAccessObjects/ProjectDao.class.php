@@ -995,6 +995,7 @@ $memsource_change_country_to_kp = [
         foreach ($project_tasks as $uid => $project_task) {
                 if (empty($jobs[$uid])) {
                     $this->delete_task_directly($project_task['id']);
+                    $this->adjust_for_deleted_task($memsource_project, $project_task);
                     error_log("Deleted task {$project_task['id']} for job $uid {$project_task['internalId']} in project $project_id");
                 } elseif (($prerequisite = $project_task['prerequisite']) && $project_task['task-status_id'] == Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES) {
                     $prerequisite_uid = 0;
@@ -1130,6 +1131,45 @@ error_log("set_memsource_task($task_id, 0, {$job['uid']}...), success: $success"
 
         if (mb_strlen($filename) <= 255) $this->queue_copy_task_original_file($project_id, $task_id, $job['uid'], $filename); // cron will copy file from memsource
         return 1;
+    }
+
+    private function adjust_for_deleted_task($memsource_project, $project_task)
+    {
+        $taskDao = new TaskDao();
+        $task = new Common\Protobufs\Models\Task();
+
+error_log('Sync create_task job: ' . print_r($job, true));
+
+        $project_id = $project_task['project_id'];
+
+        list($target_language, $target_country) = $this->convert_memsource_to_language_country($job['targetLang']);
+              $taskTargetLocale->setLanguageCode($target_language);
+              $taskTargetLocale->setCountryCode($target_country);
+
+
+$taskType = $project_task['task-type_id'];
+
+$project_task['word-count']
+        if (!empty($job['wordsCount'])) {
+            $task->setWordCount($job['wordsCount']);
+            if ( $taskType == Common\Enums\TaskTypeEnum::TRANSLATION ||
+                ($taskType == Common\Enums\TaskTypeEnum::PROOFREADING &&
+                 ($memsource_project['workflow_level_1'] === 'Revision' && $memsource_project['workflow_level_2'] !== 'Translation' && $memsource_project['workflow_level_3'] !== 'Translation'))
+               ) {
+                $project_languages = $this->get_memsource_project_languages($project_id);
+error_log("Sync Translation {$target_language}-{$target_country} vs first get_memsource_project_languages($project_id): {$project_languages[0]} + {$job['wordsCount']}");//(**)
+                if (!empty($project_languages['kp_target_language_pairs'])) {
+                    $project_languages = explode(',', $project_languages['kp_target_language_pairs']);
+                    if ("{$target_language}-{$target_country}" === $project_languages[0]) {
+error_log("Sync Updating project_wordcount with {$job['wordsCount']}");//(**)
+(make sure not -ve or 0)
+                        $this->delete_from_project_word_count($project_id, $project_task['word-count']);
+                    }
+                }
+            }
+        } else {
+            $task->setWordCount(1);
+        }
     }
 
     public function get_top_level($id)
