@@ -1017,10 +1017,13 @@ $memsource_change_country_to_kp = [
             error_log("No filename in new jobPart {$job['uid']}");
             return 0;
         }
-        $task->setProjectId($memsource_project['project_id']);
+error_log('Sync create_task job: ' . print_r($job, true));
+
+        $project_id = $memsource_project['project_id'];
+        $task->setProjectId($project_id);
         $task->setTitle(mb_substr("{$job['innerId']} {$job['filename']}", 0, 128));
 
-        $project = $this->getProject($memsource_project['project_id']);
+        $project = $this->getProject($project_id);
         $projectSourceLocale = $project->getSourceLocale();
         $taskSourceLocale = new Common\Protobufs\Models\Locale();
         $taskSourceLocale->setLanguageCode($projectSourceLocale->getLanguageCode());
@@ -1050,49 +1053,39 @@ $memsource_change_country_to_kp = [
 
         if (!empty($job['wordsCount'])) {
             $task->setWordCount($job['wordsCount']);
-        } else {
-            $task->setWordCount(1);
-        }
-$prerequisite = 0;
-/*
-[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[
-[[
-[[[[[[[[[[[[[[
-NEED ERRORLOG $full_job and see proper parms
-
-                if ( $taskType == Common\Enums\TaskTypeEnum::TRANSLATION ||
-                    ($taskType == Common\Enums\TaskTypeEnum::PROOFREADING &&
-                     ($memsource_project['workflow_level_1'] === 'Revision' && $memsource_project['workflow_level_2'] !== 'Translation' && $memsource_project['workflow_level_3'] !== 'Translation'))
-                   ) {
-                    if (empty($full_job['innerId']) || (strpos($full_job['innerId'], '.') === false)) { // Only allow top level
-                        $project_languages = $projectDao->get_memsource_project_languages($project_id);
-error_log("Translation {$target_language}-{$target_country} vs first get_memsource_project_languages($project_id): {$project_languages[0]} + {$full_job['wordsCount']}");//(**)
-                        if (!empty($project_languages['kp_target_language_pairs'])) {
-                            $project_languages = explode(',', $project_languages['kp_target_language_pairs']);
-                            if ("{$target_language}-{$target_country}" === $project_languages[0]) {
-error_log("Updating project_wordcount with {$full_job['wordsCount']}");//(**)
-                                $projectDao->add_to_project_word_count($project_id, $full_job['wordsCount']);
-                            }
+below? Only allow top level
+also delete wc ABOVE ((make sure not -ve or 0)
+            if ( $taskType == Common\Enums\TaskTypeEnum::TRANSLATION ||
+                ($taskType == Common\Enums\TaskTypeEnum::PROOFREADING &&
+                 ($memsource_project['workflow_level_1'] === 'Revision' && $memsource_project['workflow_level_2'] !== 'Translation' && $memsource_project['workflow_level_3'] !== 'Translation'))
+               ) {
+                if (empty($job['innerId']) || (strpos($job['innerId'], '.') === false)) { // Only allow top level
+                    $project_languages = $this->get_memsource_project_languages($project_id);
+error_log("Sync Translation {$target_language}-{$target_country} vs first get_memsource_project_languages($project_id): {$project_languages[0]} + {$job['wordsCount']}");//(**)
+                    if (!empty($project_languages['kp_target_language_pairs'])) {
+                        $project_languages = explode(',', $project_languages['kp_target_language_pairs']);
+                        if ("{$target_language}-{$target_country}" === $project_languages[0]) {
+error_log("Sync Updating project_wordcount with {$job['wordsCount']}");//(**)
+                            $this->add_to_project_word_count($project_id, $job['wordsCount']);
                         }
                     }
                 }
             }
-[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[
+        } else {
+            $task->setWordCount(1);
+        }
+
+$prerequisite = 0;
+/*
 May have to do... like this for top level only
             $prerequisite = 0;
-            if (!empty($full_job['task']) && $taskType == Common\Enums\TaskTypeEnum::PROOFREADING) {
-                $prerequisite_task = $projectDao->get_memsource_tasks_for_project_language_type($memsource_project['project_id'], $full_job['task'], Common\Enums\TaskTypeEnum::TRANSLATION);
+            if (!empty($job['task']) && $taskType == Common\Enums\TaskTypeEnum::PROOFREADING) {
+                $prerequisite_task = $this->get_memsource_tasks_for_project_language_type($project_id, $job['task'], Common\Enums\TaskTypeEnum::TRANSLATION);
                 if ($prerequisite_task) {
                     $prerequisite = $prerequisite_task['task_id'];
                     $task->setTaskStatus(Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
                 }
             }
-]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
-]]]]]]]]]]]]]] also delete wc ABOVE ((make sure not -ve or 0)
-like
-"innerId":"81","continuousJobInfo":null,
-]]
-]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 */
 
         if (!empty($job['dateDue'])) $task->setDeadline(substr($job['dateDue'], 0, 10) . ' ' . substr($job['dateDue'], 11, 8));
