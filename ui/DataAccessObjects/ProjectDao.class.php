@@ -150,6 +150,11 @@ class ProjectDao extends BaseDao
         LibAPI\PDOWrapper::call('add_to_project_word_count', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($word_count));
     }
 
+    public function delete_from_project_word_count($project_id, $word_count)
+    {
+        LibAPI\PDOWrapper::call('delete_from_project_word_count', LibAPI\PDOWrapper::cleanse($project_id) . ',' . LibAPI\PDOWrapper::cleanse($word_count));
+    }
+
     public function saveProjectFile($project, $userId, $filename, $fileData)
     {
         $filename = urlencode($filename);
@@ -1054,7 +1059,6 @@ error_log('Sync create_task job: ' . print_r($job, true));
 
         if (!empty($job['wordsCount'])) {
             $task->setWordCount($job['wordsCount']);
-also delete wc ABOVE ((make sure not -ve or 0)
             if ( $taskType == Common\Enums\TaskTypeEnum::TRANSLATION ||
                 ($taskType == Common\Enums\TaskTypeEnum::PROOFREADING &&
                  ($memsource_project['workflow_level_1'] === 'Revision' && $memsource_project['workflow_level_2'] !== 'Translation' && $memsource_project['workflow_level_3'] !== 'Translation'))
@@ -1152,7 +1156,6 @@ error_log("adjust_for_deleted_task check: {$target_language}-{$target_country} v
                 $project_languages = explode(',', $project_languages['kp_target_language_pairs']);
                 if ("{$target_language}-{$target_country}" === $project_languages[0]) {
 error_log("adjust_for_deleted_task updating: {$project_task['word-count']}");//(**)
-(make sure not -ve or 0)
                     $this->delete_from_project_word_count($project_id, $project_task['word-count']);
                 }
             }
