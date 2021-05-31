@@ -5044,6 +5044,14 @@ BEGIN
  END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `delete_from_project_word_count`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_from_project_word_count`(IN `projectId` INT, IN `wordCount` INT)
+BEGIN
+    UPDATE Projects SET `word-count`=IF(`word-count`<=(wordCount+1), 1, `word-count`-wordCount)  WHERE id=projectId;
+END//
+DELIMITER ;
+
 -- Dumping structure for procedure Solas-Match-Test.recordFileUpload
 DROP PROCEDURE IF EXISTS `recordFileUpload`;
 DELIMITER //
