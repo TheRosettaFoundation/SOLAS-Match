@@ -1077,18 +1077,20 @@ error_log("Sync Updating project_wordcount with {$job['wordsCount']}");//(**)
             $task->setWordCount(1);
         }
 
-$prerequisite = 0;
-/*
-May have to do... like this for top level only
-            $prerequisite = 0;
-            if (!empty($job['task']) && $taskType == Common\Enums\TaskTypeEnum::PROOFREADING) {
-                $prerequisite_task = $this->get_memsource_tasks_for_project_language_type($project_id, $job['task'], Common\Enums\TaskTypeEnum::TRANSLATION);
-                if ($prerequisite_task) {
-                    $prerequisite = $prerequisite_task['task_id'];
-                    $task->setTaskStatus(Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
+        $prerequisite = 0;
+        $innerId       = empty($job['innerId']) ? 0 : $job['innerId'];
+        $workflowLevel = empty($job['workflowLevel']) ? 0 : $job['workflowLevel'];
+        if ($taskType == Common\Enums\TaskTypeEnum::PROOFREADING && strpos($innerId, '.') === false) { // Revision & top level
+            $project_tasks = $this->get_tasks_for_project($project_id); // Translation task should already have been created
+            foreach ($project_tasks as $project_task) {
+                if ($innerId == $project_task['internalId']) {
+                    if ($workflowLevel > $project_task['workflowLevel']) { // Dependent on
+                        $prerequisite = $project_task['task_id'];
+                        $task->setTaskStatus(Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
+                    }
                 }
             }
-*/
+        }
 
         if (!empty($job['dateDue'])) $task->setDeadline(substr($job['dateDue'], 0, 10) . ' ' . substr($job['dateDue'], 11, 8));
         else                         $task->setDeadline($project->getDeadline());
