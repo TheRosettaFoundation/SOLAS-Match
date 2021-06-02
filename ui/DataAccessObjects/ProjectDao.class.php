@@ -1153,7 +1153,7 @@ error_log("set_memsource_task($task_id, 0, {$job['uid']}...), success: $success"
              ($memsource_project['workflow_level_1'] === 'Revision' && $memsource_project['workflow_level_2'] !== 'Translation' && $memsource_project['workflow_level_3'] !== 'Translation'))
            ) {
             $project_languages = $this->get_memsource_project_languages($project_id);
-error_log("adjust_for_deleted_task check: {$target_language}-{$target_country} vs first get_memsource_project_languages($project_id): {$project_languages[0]} + {$project_task['word-count']}");//(**)
+error_log("adjust_for_deleted_task check: {$target_language}-{$target_country} vs first get_memsource_project_languages($project_id): {$project_languages[0]} - {$project_task['word-count']}");//(**)
             if (!empty($project_languages['kp_target_language_pairs'])) {
                 $project_languages = explode(',', $project_languages['kp_target_language_pairs']);
                 if ("{$target_language}-{$target_country}" === $project_languages[0]) {
