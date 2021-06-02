@@ -1023,7 +1023,7 @@ $memsource_change_country_to_kp = [
             error_log("No filename in new jobPart {$job['uid']}");
             return 0;
         }
-error_log('Sync create_task job: ' . print_r($job, true));
+//error_log('Sync create_task job: ' . print_r($job, true));
 
         $project_id = $memsource_project['project_id'];
         $task->setProjectId($project_id);
@@ -1141,7 +1141,7 @@ error_log("set_memsource_task($task_id, 0, {$job['uid']}...), success: $success"
 
     private function adjust_for_deleted_task($memsource_project, $project_task)
     {
-        error_log('adjust_for_deleted_task project_task: ' . print_r($project_task, true));
+        // error_log('adjust_for_deleted_task project_task: ' . print_r($project_task, true));
         $taskDao = new TaskDao();
         $project_id = $memsource_project['project_id'];
         $task = $taskDao->getTask($project_task['task_id']);
