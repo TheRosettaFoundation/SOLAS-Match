@@ -606,8 +606,7 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
 
         $memsource_project = $projectDao->get_memsource_project($project_id);
 
-        $app->view()->setData("project", $project);
-
+        $reload_for_wordcount = 0;
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
             Common\Lib\UserSession::checkCSRFKey($post, 'projectView');
@@ -979,6 +978,7 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
             }
             if (!empty($post['copyChunks']) && !empty($memsource_project)) {
                 $projectDao->sync_split_jobs($memsource_project);
+                $reload_for_wordcount = 1;
             }
             if (!empty($post['unpublish_all_translated']) || !empty($post['unpublish_all_revisions'])) {
                 $project_tasks = $projectDao->getProjectTasks($project_id);
@@ -1081,6 +1081,8 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
         $pm = $creator['email'];
         if (strpos($pm, '@translatorswithoutborders.org') === false) $pm = 'projects@translatorswithoutborders.org';
 
+        if ($reload_for_wordcount) $project = $projectDao->getProject($project_id);
+
         $app->view()->appendData(array(
                 'sesskey'       => $sesskey,
                 "isOrgMember"   => $isOrgMember,
@@ -1092,6 +1094,7 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
                 'memsource_project'   => $memsource_project,
                 'matecat_analyze_url' => $taskDao->get_matecat_analyze_url($project_id, $memsource_project),
                 'pm' => $pm,
+                'project' => $project,
                 'userSubscribedToOrganisation' => $userSubscribedToOrganisation
         ));
                 //'allow_downloads'     => $allow_downloads,
