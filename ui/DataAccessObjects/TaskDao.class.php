@@ -656,7 +656,7 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
 
     public function get_matecat_analyze_url($project_id, $memsource_project)
     {
-        if ($memsource_project) return "https://cloud.memsource.com/web/project2/show/{$memsource_project['memsource_project_uid']}";
+        if ($memsource_project) return "https://kato.translatorswb.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://cloud.memsource.com/web/saml2Login/metadata/127330&RelayState=https://cloud.memsource.com/web/project2/show/{$memsource_project['memsource_project_uid']}";
 
         $matecat_analyze_url = '';
         $result = LibAPI\PDOWrapper::call('getWordCountRequestForProject', LibAPI\PDOWrapper::cleanse($project_id));
@@ -786,7 +786,7 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
 
     public function get_matecat_url_regardless($task, $memsource_task)
     {
-        if ($memsource_task) return "https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
+        if ($memsource_task) return "https://kato.translatorswb.org/simplesaml/saml2/idp/SSOService.php?spentityid=https://cloud.memsource.com/web/saml2Login/metadata/127330&RelayState=https://cloud.memsource.com/web/job/{$memsource_task['memsource_task_uid']}/translate";
 
         $matecat_url = '';
         if ($task->getTaskType() == Common\Enums\TaskTypeEnum::TRANSLATION || $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING) {
