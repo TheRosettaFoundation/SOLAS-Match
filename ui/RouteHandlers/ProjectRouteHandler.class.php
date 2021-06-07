@@ -461,25 +461,18 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
 
                         // See if the current task is the Translation matching a prerequisite for a Revision, if so set Revision back to WAITING_FOR_PREREQUISITES
                         if ($memsource_task['task'] && strpos($memsource_task['internalId'], '.') === false) { // Not split
-error_log("Here 1");
                             if (empty($part['project']['id'])) {
                                 error_log("No project id in {$part['uid']} in event JOB_STATUS_CHANGED, jobPart status: ASSIGNED");
                                 continue;
                             }
-error_log("Here 2");
                             $memsource_project = $projectDao->get_memsource_project_by_memsource_id($part['project']['id']);
                             if (empty($memsource_project)) {
                                 error_log("Can't find memsource_project for {$part['project']['id']} in {$part['uid']} in event JOB_STATUS_CHANGED, jobPart status: ASSIGNED");
                                 continue;
                             }
-error_log("Here 3 $task_id");
                             $dependent_task = $projectDao->get_memsource_tasks_for_project_language_type($memsource_project['project_id'], $memsource_task['task'], Common\Enums\TaskTypeEnum::PROOFREADING);
-if (!empty($dependent_task)) error_log("Here 4 {$dependent_task['prerequisite']}");
-if ($dependent_task['prerequisite'] == $task_id) error_log("Here 5");
                             if ($dependent_task && $dependent_task['prerequisite'] == $task_id) {
-error_log("Here 6");
                                 if ($dependent_task['task-status_id'] == Common\Enums\TaskStatusEnum::PENDING_CLAIM)
-error_log("Here 7 {$dependent_task['task_id']}");
                                     $taskDao->setTaskStatus($dependent_task['task_id'], Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
                             }
                         }
