@@ -456,6 +456,27 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
                     if (!$taskDao->taskIsClaimed($task_id)) {
                         $taskDao->claimTask($task_id, $user_id);
                         error_log("JOB_STATUS_CHANGED ASSIGNED in memsource task_id: $task_id, user_id: $user_id, memsource job: {$part['uid']}, user: {$part['assignedTo'][0]['linguist']['id']}");
+                    } else { // Probably being set by admin in Memsource from COMPLETED_BY_LINGUIST back to ASSIGNED
+                        $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::IN_PROGRESS);
+
+                        // See if the current task is the Translation matching a prerequisite for a Revision, if so set Revision back to WAITING_FOR_PREREQUISITES
+                        if ($memsource_task['task'] && strpos($memsource_task['internalId'], '.') === false) { // Not split
+                            if (empty($part['project']['id'])) {
+                                error_log("No project id in {$part['uid']} in event JOB_STATUS_CHANGED, jobPart status: ASSIGNED");
+                                continue;
+                            }
+                            $memsource_project = $projectDao->get_memsource_project_by_memsource_id($part['project']['id']);
+                            if (empty($memsource_project)) {
+                                error_log("Can't find memsource_project for {$part['project']['id']} in {$part['uid']} in event JOB_STATUS_CHANGED, jobPart status: ASSIGNED");
+                                continue;
+                            }
+                            $dependent_task = $projectDao->get_memsource_tasks_for_project_language_type($memsource_project['project_id'], $memsource_task['task'], Common\Enums\TaskTypeEnum::PROOFREADING);
+                            if ($dependent_task && $dependent_task['prerequisite'] == $task_id) {
+                                if ($dependent_task['task-status_id'] == Common\Enums\TaskStatusEnum::PENDING_CLAIM)
+                                    $taskDao->setTaskStatus($dependent_task['task_id'], Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
+                            }
+                        }
+                        error_log("ASSIGNED task_id: $task_id, memsource: {$part['uid']}, reverting from COMPLETED_BY_LINGUIST");
                     }
                 }
             }
