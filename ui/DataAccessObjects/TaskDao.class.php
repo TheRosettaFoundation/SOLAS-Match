@@ -204,6 +204,7 @@ class TaskDao extends BaseDao
             LibAPI\PDOWrapper::cleanseNull($task->getTaskStatus()) . ',' .
             LibAPI\PDOWrapper::cleanseNull($task->getPublished());
         $result = LibAPI\PDOWrapper::call('taskInsertAndUpdate', $args);
+error_log("createTaskDirectly: $args");
         if (empty($result[0]['id'])) return 0;
         $task_id = $result[0]['id'];
         $this->inheritRequiredTaskQualificationLevel($task_id);

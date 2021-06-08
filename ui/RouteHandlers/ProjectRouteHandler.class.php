@@ -327,6 +327,7 @@ class ProjectRouteHandler
                 $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
             } else {
                 $taskType = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3']][$part['workflowLevel'] - 1];
+error_log("taskType: $taskType ({$part['workflowLevel']})");//(**)
                 if     ($taskType == 'Translation' || $taskType == '') $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
                 elseif ($taskType == 'Revision')                       $taskType = Common\Enums\TaskTypeEnum::PROOFREADING;
                 else {
