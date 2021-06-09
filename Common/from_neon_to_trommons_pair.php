@@ -202,6 +202,7 @@ $from_neon_to_trommons_pair = array(
 'Bikol' => array('bik', 'PH'),
 'Kapampangan' => array('pam', 'PH'),
 'Pangasinan' => array('pag', 'PH'),
+'Twi' => array('tw', '--'),
 );
 
 $language_options_changes = [
