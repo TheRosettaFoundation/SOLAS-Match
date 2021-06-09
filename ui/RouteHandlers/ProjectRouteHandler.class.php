@@ -2318,6 +2318,67 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
           error_log("Asana 5 API error ($error_number): " . curl_error($re));
         }
         curl_close($re);
+
+        //Asana - Incoming Tasks project    
+        $tasks = $projectDao->getProjectTasks($projectId);
+        $project = $projectDao->getProject($projectId);
+        $project_details = json_decode(json_encode($project), true);
+        $project_id = $project_details['id'];
+        $project_name = $project_details['title'];
+        $wordCount = $project_details['wordCount'];
+        $objDateTime = new \DateTime($project_details['deadline']); 
+        $sourceLocale = $project_details['sourceLocale']['languageName'];
+        $sourceLocale_code = $project_details['sourceLocale']['languageCode'];
+
+        $tasks = json_decode(json_encode($tasks), true);
+
+        $project_target_langs = array();
+        for($i=0;$i<count($tasks);$i++) {
+            array_push($project_target_langs,$tasks[$i]['targetLocale']);
+        }
+        $project_target_langs = $this->unique_multidim_array($project_target_langs,'languageCode');
+        $project_target_langs = array_values($project_target_langs);
+
+        for($i=0;$i<count($project_target_langs);$i++) {
+            $targetLocale = $project_target_langs[$i]['languageName'];
+            $targetLocale_code = $project_target_langs[$i]['languageCode'];
+            $project_url = "https://".$_SERVER['SERVER_NAME']."/project/$projectId/view/";  
+
+            $url = "https://app.asana.com/api/1.0/tasks";
+        
+            $ch = curl_init($url);
+            $data = array('data' => array(
+                "name" => $project_name,
+                "assignee" => $pm,
+                "projects" => array(
+                    "1200067882657242"
+                ),
+                "custom_fields" => array(
+                    "1200067882657247" => $wordCount, 
+                    "1200067882657245" => $org_name,
+                    "1200068101079960" => $sourceLocale,
+                    "1200269602122253" => $sourceLocale_code,
+                    "1200067882657251" => $targetLocale,
+                    "1200269602122255" => $targetLocale_code,
+                    "1200226775862070" => $project_url,
+                    "1200269602122257" => $projectId                    
+                ),
+
+                "due_at" => $objDateTime->format('c'),
+                "notes" => "Tests- Fields added on creating a task from the Asana API - ".$projectId,
+
+            ));
+            $payload = json_encode($data);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+            $authorization = "Authorization: Bearer ". Common\Lib\Settings::get('asana.api_key6');
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));          
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);           
+            curl_exec($ch);
+            if ($error_number = curl_errno($ch)) {
+                error_log("Asana Incoming Tasks API error ($error_number): " . curl_error($ch));
+              }
+            curl_close($ch);
+            
     }
 
     public function project_cron_1_minute()
