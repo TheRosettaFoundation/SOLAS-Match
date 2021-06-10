@@ -1592,8 +1592,10 @@ class UserDao extends BaseDao
         LibAPI\PDOWrapper::call('set_memsource_user', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($memsource_user_id));
     }
 
-    public function memsource_list_jobs($memsource_project_uid)
+    public function memsource_list_jobs($memsource_project_uid, $project_id)
     {
+        $projectDao = new ProjectDao();
+
         $url = $this->memsourceApiV1 . "projects/$memsource_project_uid/workflowSteps";
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -1604,6 +1606,20 @@ class UserDao extends BaseDao
         curl_close($ch);
         if (!isset($result['projectWorkflowSteps'])) return [];
         $workflowlevels = count($result['projectWorkflowSteps']);
+
+        if (!empty($result['projectWorkflowSteps'])) {
+            $workflowLevels_array = ['', '', '']; // Will contain 'Translation' or 'Revision' for workflowLevel 1 possibly up to 3
+            $found_something = 0;
+            foreach ($result['projectWorkflowSteps'] as $step) {
+                foreach ($workflowLevels_array as $i => $w) {
+                    if ($step['workflowLevel'] == $i + 1) {
+                        $workflowLevels_array[$i] = $step['name'];
+                        if (!empty($step['name'])) $found_something = 1;
+                    }
+                }
+            }
+            if ($found_something) $projectDao->update_memsource_project($project_id, $workflowLevels_array);
+        }
 
         $jobs = [];
         $totalPages = 1;

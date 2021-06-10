@@ -981,7 +981,7 @@ $memsource_change_country_to_kp = [
         $project_id            = $memsource_project['project_id'];
         $memsource_project_uid = $memsource_project['memsource_project_uid'];
 
-        $jobs = $userDao->memsource_list_jobs($memsource_project_uid);
+        $jobs = $userDao->memsource_list_jobs($memsource_project_uid, $project_id);
         if (empty($jobs)) return;
 
         foreach ($jobs as $uid => $job) {
