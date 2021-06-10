@@ -993,6 +993,8 @@ $memsource_change_country_to_kp = [
                         error_log("Created task for job $uid {$full_job['innerId']} in project $project_id");
                     }
                 } else error_log("Could not find job $uid in project $project_id (or is top level)");
+            } else {
+                $this->update_task_from_job($memsource_project, $full_job, $memsource_task)
             }
         }
 
