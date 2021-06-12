@@ -489,7 +489,7 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
                 $taskDao->sendTaskUploadNotifications($task_id, 1);
                 $taskDao->set_task_complete_date($task_id);
 
-                if (strpos($memsource_task['internalId'], '.') === false) { // Not split
+                if ($memsource_task['task'] && strpos($memsource_task['internalId'], '.') === false) { // Not split
                     if (empty($part['project']['id'])) {
                         error_log("No project id in {$part['uid']} in event JOB_STATUS_CHANGED, jobPart status: COMPLETED_BY_LINGUIST");
                         continue;
