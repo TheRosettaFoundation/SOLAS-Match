@@ -989,6 +989,14 @@ CREATE TABLE IF NOT EXISTS `queue_claim_tasks` (
   CONSTRAINT FK_queue_claim_tasks_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `AsanaProjects` (
+  project_id INT(10) UNSIGNED NOT NULL,
+  run_time   DATETIME NOT NULL,
+  PRIMARY KEY (run_time),
+  KEY FK_AsanaProjects_project_id (project_id),
+  CONSTRAINT FK_AsanaProjects_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 -- Data exporting was unselected.
 
@@ -9407,6 +9415,31 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `dequeue_copy_task_original_file`(IN taskID BIGINT)
 BEGIN
     DELETE FROM queue_copy_task_original_files WHERE task_id=taskID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `queue_asana_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `queue_asana_project`(IN pID INT)
+BEGIN
+    INSERT INTO AsanaProjects (project_id, run_time)
+                       VALUES (       pID, DATE_ADD(NOW(), INTERVAL 1 HOUR));
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_queue_asana_projects`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_queue_asana_projects`()
+BEGIN
+    SELECT * FROM AsanaProjects WHERE run_time < NOW();
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `dequeue_asana_project`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `dequeue_asana_project`(IN pID INT)
+BEGIN
+    DELETE FROM AsanaProjects WHERE project_id=pID;
 END//
 DELIMITER ;
 

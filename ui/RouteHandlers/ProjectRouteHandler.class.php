@@ -2319,6 +2319,8 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
         }
         curl_close($re);
 
+        $projectDao->queue_asana_project($projectId); // cron will post to Asana
+
         //Asana - Incoming Tasks project    
         $tasks = $projectDao->getProjectTasks($projectId);
         $project = $projectDao->getProject($projectId);
@@ -2762,6 +2764,16 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
                 $result = curl_exec($ch);
                 curl_close($ch);
+            }
+
+            $queue_asana_projects = $projectDao->get_queue_asana_projects();
+            $count = 0;
+            foreach ($queue_asana_projects as $queue_asana_project) {
+                if (++$count > 4) break; // Limit number done at one time, just in case
+                    $project_id = $queue_asana_project['project_id'];
+
+                    error_log("dequeue_asana_project() project_id: $project_id Removing");
+                    $projectDao->dequeue_asana_project($project_id);
             }
 
             flock($fp_for_lock, LOCK_UN); // Release the lock
