@@ -1618,7 +1618,10 @@ class UserDao extends BaseDao
                     }
                 }
             }
-            if ($found_something) $projectDao->update_memsource_project($project_id, $workflowLevels_array);
+            if ($found_something) {
+                $projectDao->update_memsource_project($project_id, $workflowLevels_array);
+error_log("Sync memsource_list_jobs() project_id: $project_id, workflowLevels_array: {$workflowLevels_array[0]}, {$workflowLevels_array[1]}, {$workflowLevels_array[2]}");//(**)
+            }
         }
 
         $jobs = [];

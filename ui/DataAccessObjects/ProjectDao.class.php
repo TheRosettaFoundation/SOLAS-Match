@@ -1166,6 +1166,71 @@ error_log("adjust_for_deleted_task updating: {$project_task['word-count']}");//(
         }
     }
 
+    private function update_task_from_job($memsource_project, $job, $memsource_task)
+    {
+        $taskDao = new TaskDao();
+        $task_id = $memsource_task['task_id'];
+
+        $status = $job['status'];
+error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: " . print_r($job, true));//(**)
+        $taskDao->set_memsource_status($task_id, $memsource_task['memsource_task_uid'], $status);
+
+        if (!empty($job['dateDue'])) $this->update_task_due_date($task_id, substr($job['dateDue'], 0, 10) . ' ' . substr($job['dateDue'], 11, 8));
+
+        if ($status == 'ACCEPTED') { // In Progress ('ASSIGNED' in Hook)
+            if (!empty($job['providers'][0]['id']) && count($job['providers']) == 1) {
+                $user_id = $this->get_user_id_from_memsource_user($job['providers'][0]['id']);
+                if (!$user_id) {
+                    error_log("Can't find user_id for {$job['providers'][0]['id']} in Sync status: ACCEPTED");
+                    continue;
+                }
+
+                if (!$taskDao->taskIsClaimed($task_id)) {
+                    $taskDao->claimTask($task_id, $user_id);
+                    error_log("Sync ACCEPTED in memsource task_id: $task_id, user_id: $user_id, memsource job: {$job['uid']}, user: {$job['providers'][0]['id']}");
+                } else { // Probably being set by admin in Memsource from COMPLETED_BY_LINGUIST back to ASSIGNED
+                    $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::IN_PROGRESS);
+
+                    // See if the current task is the Translation matching a prerequisite for a Revision, if so set Revision back to WAITING_FOR_PREREQUISITES
+                    if ($memsource_task['task'] && strpos($memsource_task['internalId'], '.') === false) { // Not split
+                        $dependent_task = $this->get_memsource_tasks_for_project_language_type($memsource_project['project_id'], $memsource_task['task'], Common\Enums\TaskTypeEnum::PROOFREADING);
+                        if ($dependent_task && $dependent_task['prerequisite'] == $task_id) {
+                            if ($dependent_task['task-status_id'] == Common\Enums\TaskStatusEnum::PENDING_CLAIM)
+                                $taskDao->setTaskStatus($dependent_task['task_id'], Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
+                        }
+                    }
+                    error_log("Sync ACCEPTED task_id: $task_id, memsource: {$job['uid']}, reverting from COMPLETED_BY_LINGUIST");
+                }
+            }
+        }
+        if ($status == 'COMPLETED') { // Complete ('COMPLETED_BY_LINGUIST' in Hook)
+            if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 62927); // translators@translatorswithoutborders.org
+//(**)dev server                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 3297);
+
+            $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::COMPLETE);
+            $taskDao->sendTaskUploadNotifications($task_id, 1);
+            $taskDao->set_task_complete_date($task_id);
+
+            if ($memsource_task['task'] && strpos($memsource_task['internalId'], '.') === false) { // Not split
+                $dependent_task = $this->get_memsource_tasks_for_project_language_type($memsource_project['project_id'], $memsource_task['task'], Common\Enums\TaskTypeEnum::PROOFREADING);
+                if ($dependent_task && $dependent_task['prerequisite'] == $task_id) {
+                    if ($dependent_task['task-status_id'] == Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES)
+                        $taskDao->setTaskStatus($dependent_task['task_id'], Common\Enums\TaskStatusEnum::PENDING_CLAIM);
+                    $user_id = $this->getUserClaimedTask($task_id);
+                    if ($user_id) $taskDao->addUserToTaskBlacklist($user_id, $dependent_task['task_id']);
+                }
+            }
+            error_log("Sync COMPLETED task_id: $task_id, memsource: {$job['uid']}");
+        }
+        if ($status == 'DECLINED' || $status == 'NEW') { // Unclaimed ('DECLINED_BY_LINGUIST' in Hook)
+            if ($taskDao->taskIsClaimed($task_id)) {
+                $user_id = $this->getUserClaimedTask($task_id);
+                if ($user_id) $taskDao->unclaimTask($task_id, $user_id);
+                error_log("Sync DECLINED task_id: $task_id, user_id: $user_id, memsource job: {$job['uid']}");
+            }
+        }
+    }
+
     public function get_top_level($id)
     {
         $pos = strpos($id, '.');
