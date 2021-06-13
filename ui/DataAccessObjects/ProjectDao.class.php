@@ -1182,7 +1182,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
                 $user_id = $this->get_user_id_from_memsource_user($job['providers'][0]['id']);
                 if (!$user_id) {
                     error_log("Can't find user_id for {$job['providers'][0]['id']} in Sync status: ACCEPTED");
-                    continue;
+                    return;
                 }
 
                 if (!$taskDao->taskIsClaimed($task_id)) {
