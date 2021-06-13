@@ -986,16 +986,16 @@ $memsource_change_country_to_kp = [
 
         foreach ($jobs as $uid => $job) {
             $memsource_task = $this->get_memsource_task_by_memsource_uid($uid);
-            if (empty($memsource_task)) {
-                $full_job = $userDao->memsource_get_job($memsource_project_uid, $uid);
-                if ($full_job) {
+            $full_job = $userDao->memsource_get_job($memsource_project_uid, $uid);
+            if ($full_job) {
+                if (empty($memsource_task)) {
                     if ($this->create_task($memsource_project, $full_job)) {
                         error_log("Created task for job $uid {$full_job['innerId']} in project $project_id");
                     }
-                } else error_log("Could not find job $uid in project $project_id (or is top level)");
-            } else {
-                $this->update_task_from_job($memsource_project, $full_job, $memsource_task);
-            }
+                } else {
+                    $this->update_task_from_job($memsource_project, $full_job, $memsource_task);
+                }
+            } else error_log("Could not find job $uid in project $project_id (or is top level)");
         }
 
         $project_tasks = $this->get_tasks_for_project($project_id);
