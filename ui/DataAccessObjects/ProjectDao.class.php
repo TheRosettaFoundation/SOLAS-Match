@@ -1204,8 +1204,8 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
                     $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::IN_PROGRESS);
 
                     // See if the current task is the Translation matching a prerequisite for a Revision, if so set Revision back to WAITING_FOR_PREREQUISITES
-                    if ($memsource_task['task'] && strpos($memsource_task['internalId'], '.') === false) { // Not split
-                        $dependent_task = $this->get_memsource_tasks_for_project_language_type($memsource_project['project_id'], $memsource_task['task'], Common\Enums\TaskTypeEnum::PROOFREADING);
+                    if (strpos($memsource_task['internalId'], '.') === false) { // Not split
+                        $dependent_task = $this->get_memsource_tasks_for_project_internal_id_type($memsource_project['project_id'], $memsource_task['internalId'], Common\Enums\TaskTypeEnum::PROOFREADING);
                         if ($dependent_task && $dependent_task['prerequisite'] == $task_id) {
                             if ($dependent_task['task-status_id'] == Common\Enums\TaskStatusEnum::PENDING_CLAIM)
                                 $taskDao->setTaskStatus($dependent_task['task_id'], Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
@@ -1223,8 +1223,8 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
             $taskDao->sendTaskUploadNotifications($task_id, 1);
             $taskDao->set_task_complete_date($task_id);
 
-            if ($memsource_task['task'] && strpos($memsource_task['internalId'], '.') === false) { // Not split
-                $dependent_task = $this->get_memsource_tasks_for_project_language_type($memsource_project['project_id'], $memsource_task['task'], Common\Enums\TaskTypeEnum::PROOFREADING);
+            if (strpos($memsource_task['internalId'], '.') === false) { // Not split
+                $dependent_task = $this->get_memsource_tasks_for_project_internal_id_type($memsource_project['project_id'], $memsource_task['internalId'], Common\Enums\TaskTypeEnum::PROOFREADING);
                 if ($dependent_task && $dependent_task['prerequisite'] == $task_id) {
                     if ($dependent_task['task-status_id'] == Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES)
                         $taskDao->setTaskStatus($dependent_task['task_id'], Common\Enums\TaskStatusEnum::PENDING_CLAIM);
