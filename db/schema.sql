@@ -9376,6 +9376,26 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `get_memsource_tasks_for_project_internal_id_type`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_memsource_tasks_for_project_internal_id_type`(IN projectID INT, IN intID VARCHAR(30), IN typeID INT)
+BEGIN
+    SELECT
+        mt.*,
+        t.`language_id-source`,
+        t.`language_id-target`,
+        t.`country_id-source`,
+        t.`country_id-target`,
+        t.`task-status_id`
+    FROM Tasks           t
+    JOIN MemsourceTasks mt ON t.id=mt.task_id
+    WHERE
+        t.project_id=projectID AND
+        mt.internalId=intID AND
+        t.`task-type_id`=typeID;
+END//
+DELIMITER ;
+
 DROP PROCEDURE IF EXISTS `set_memsource_status`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_status`(IN taskID BIGINT, IN memsourceUID VARCHAR(30), IN statusID VARCHAR(30))
