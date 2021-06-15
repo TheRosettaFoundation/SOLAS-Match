@@ -322,14 +322,17 @@ class ProjectRouteHandler
             $taskTargetLocale->setCountryCode($target_country);
             $task->setTargetLocale($taskTargetLocale);
 
-            if (empty($part['workflowLevel']) || $part['workflowLevel'] > 3) {
+            if (empty($part['workflowLevel'])) {
                 error_log("Can't find workflowLevel in new jobPart {$part['uid']} for: {$part['fileName']}, assuming Translation");
                 $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
+            elseif ($part['workflowLevel'] > 3) {
+                error_log("Don't support workflowLevel > 3: {$part['workflowLevel']} in new jobPart {$part['uid']} for: {$part['fileName']}");
+                continue;
             } else {
                 $taskType = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3']][$part['workflowLevel'] - 1];
-error_log("taskType: $taskType ({$part['workflowLevel']})");//(**)
-                if     ($taskType == 'Translation' || $taskType == '') $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
-                elseif ($taskType == 'Revision')                       $taskType = Common\Enums\TaskTypeEnum::PROOFREADING;
+                error_log("taskType: $taskType, workflowLevel: {$part['workflowLevel']}");
+                if     ($taskType == 'Translation') $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
+                elseif ($taskType == 'Revision')    $taskType = Common\Enums\TaskTypeEnum::PROOFREADING;
                 else {
                     error_log("Can't find expected taskType ($taskType) in new jobPart {$part['uid']} for: {$part['fileName']}");
                     continue;
