@@ -1057,15 +1057,19 @@ $memsource_change_country_to_kp = [
         $taskTargetLocale->setCountryCode($target_country);
         $task->setTargetLocale($taskTargetLocale);
 
-        if (empty($job['workflowLevel']) || $job['workflowLevel'] > 3) {
-            error_log("Can't find workflowLevel in new job {$job['uid']} for: {$job['filename']}, assuming Translation");
+        if (empty($job['workflowLevel'])) {
+            error_log("Sync Can't find workflowLevel in new job {$job['uid']} for: {$job['filename']}, assuming Translation");
             $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
+        } elseif ($job['workflowLevel'] > 3) {
+            error_log("Sync Don't support workflowLevel > 3: {$job['workflowLevel']} in new job {$job['uid']} for: {$job['fileName']}");
+            return 0;
         } else {
             $taskType = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3']][$job['workflowLevel'] - 1];
-            if     ($taskType == 'Translation' || $taskType == '') $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
-            elseif ($taskType == 'Revision')                       $taskType = Common\Enums\TaskTypeEnum::PROOFREADING;
+            error_log("Sync taskType: $taskType, workflowLevel: {$job['workflowLevel']}");
+            if     ($taskType == 'Translation') $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
+            elseif ($taskType == 'Revision')    $taskType = Common\Enums\TaskTypeEnum::PROOFREADING;
             else {
-                error_log("Can't find expected taskType ($taskType) in new job {$job['uid']} for: {$job['filename']}");
+                error_log("Sync Can't find expected taskType ($taskType) in new job {$job['uid']} for: {$job['filename']}");
                 return 0;
             }
         }

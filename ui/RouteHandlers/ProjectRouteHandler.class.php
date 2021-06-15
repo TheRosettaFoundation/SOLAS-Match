@@ -325,7 +325,7 @@ class ProjectRouteHandler
             if (empty($part['workflowLevel'])) {
                 error_log("Can't find workflowLevel in new jobPart {$part['uid']} for: {$part['fileName']}, assuming Translation");
                 $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
-            elseif ($part['workflowLevel'] > 3) {
+            } elseif ($part['workflowLevel'] > 3) {
                 error_log("Don't support workflowLevel > 3: {$part['workflowLevel']} in new jobPart {$part['uid']} for: {$part['fileName']}");
                 continue;
             } else {
