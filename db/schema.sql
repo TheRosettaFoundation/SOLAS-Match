@@ -5418,6 +5418,13 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getTaskStatus`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskStatus`(IN `tID` BIGINT)
+BEGIN
+  SELECT * FROM Tasks WHERE id=tID;
+END//
+DELIMITER ;
 
 -- Dumping structure for procedure Solas-Match-Test.statsUpdateAll
 DROP PROCEDURE IF EXISTS `statsUpdateAll`;
