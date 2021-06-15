@@ -1201,6 +1201,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
                     $taskDao->claimTask($task_id, $user_id);
                     error_log("Sync ACCEPTED in memsource task_id: $task_id, user_id: $user_id, memsource job: {$job['uid']}, user: {$job['providers'][0]['id']}");
                 } else { // Probably being set by admin in Memsource from COMPLETED_BY_LINGUIST back to ASSIGNED
+                  if ($taskDao->getTaskStatus($task_id) == Common\Enums\TaskStatusEnum::COMPLETE) {
                     $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::IN_PROGRESS);
 
                     // See if the current task is the Translation matching a prerequisite for a Revision, if so set Revision back to WAITING_FOR_PREREQUISITES
@@ -1212,6 +1213,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
                         }
                     }
                     error_log("Sync ACCEPTED task_id: $task_id, memsource: {$job['uid']}, reverting from COMPLETED_BY_LINGUIST");
+                  }
                 }
             }
         }
@@ -1219,6 +1221,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
             if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 62927); // translators@translatorswithoutborders.org
 //(**)dev server                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 3297);
 
+          if ($taskDao->getTaskStatus($task_id) != Common\Enums\TaskStatusEnum::COMPLETE) {
             $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::COMPLETE);
             $taskDao->sendTaskUploadNotifications($task_id, 1);
             $taskDao->set_task_complete_date($task_id);
@@ -1233,6 +1236,7 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
                 }
             }
             error_log("Sync COMPLETED task_id: $task_id, memsource: {$job['uid']}");
+          }
         }
         if ($status == 'DECLINED' || $status == 'NEW') { // Unclaimed ('DECLINED_BY_LINGUIST' in Hook)
             if ($taskDao->taskIsClaimed($task_id)) {

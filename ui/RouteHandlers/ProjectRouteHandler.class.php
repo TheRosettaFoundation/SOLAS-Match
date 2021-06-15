@@ -458,6 +458,7 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
                         $taskDao->claimTask($task_id, $user_id);
                         error_log("JOB_STATUS_CHANGED ASSIGNED in memsource task_id: $task_id, user_id: $user_id, memsource job: {$part['uid']}, user: {$part['assignedTo'][0]['linguist']['id']}");
                     } else { // Probably being set by admin in Memsource from COMPLETED_BY_LINGUIST back to ASSIGNED
+                      if ($taskDao->getTaskStatus($task_id) == Common\Enums\TaskStatusEnum::COMPLETE) {
                         $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::IN_PROGRESS);
 
                         // See if the current task is the Translation matching a prerequisite for a Revision, if so set Revision back to WAITING_FOR_PREREQUISITES
@@ -478,6 +479,7 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
                             }
                         }
                         error_log("ASSIGNED task_id: $task_id, memsource: {$part['uid']}, reverting from COMPLETED_BY_LINGUIST");
+                      }
                     }
                 }
             }
@@ -485,6 +487,7 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
                 if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 62927); // translators@translatorswithoutborders.org
 //(**)dev server                if (!$taskDao->taskIsClaimed($task_id)) $taskDao->claimTask($task_id, 3297);
 
+              if ($taskDao->getTaskStatus($task_id) != Common\Enums\TaskStatusEnum::COMPLETE) {
                 $taskDao->setTaskStatus($task_id, Common\Enums\TaskStatusEnum::COMPLETE);
                 $taskDao->sendTaskUploadNotifications($task_id, 1);
                 $taskDao->set_task_complete_date($task_id);
@@ -508,8 +511,9 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
                     }
                 }
                 error_log("COMPLETED_BY_LINGUIST task_id: $task_id, memsource: {$part['uid']}");
+              }
             }
-            if ($part['status'] == 'DECLINED_BY_LINGUIST') {
+            if ($part['status'] == 'DECLINED_BY_LINGUIST' || $part['status'] == 'NEW') {
                 if ($taskDao->taskIsClaimed($task_id)) {
                     $user_id = $projectDao->getUserClaimedTask($task_id);
                     if ($user_id) $taskDao->unclaimTask($task_id, $user_id);
