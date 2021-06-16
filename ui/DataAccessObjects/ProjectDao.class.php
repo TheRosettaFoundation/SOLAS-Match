@@ -1068,6 +1068,7 @@ $memsource_change_country_to_kp = [
             error_log("Sync taskType: $taskType, workflowLevel: {$job['workflowLevel']}");
             if     ($taskType == 'Translation') $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
             elseif ($taskType == 'Revision')    $taskType = Common\Enums\TaskTypeEnum::PROOFREADING;
+            elseif ($taskType == '' && $job['workflowLevel'] == 1) $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
             else {
                 error_log("Sync Can't find expected taskType ($taskType) in new job {$job['uid']} for: {$job['filename']}");
                 return 0;

@@ -333,6 +333,7 @@ class ProjectRouteHandler
                 error_log("taskType: $taskType, workflowLevel: {$part['workflowLevel']}");
                 if     ($taskType == 'Translation') $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
                 elseif ($taskType == 'Revision')    $taskType = Common\Enums\TaskTypeEnum::PROOFREADING;
+                elseif ($taskType == '' && $part['workflowLevel'] == 1) $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
                 else {
                     error_log("Can't find expected taskType ($taskType) in new jobPart {$part['uid']} for: {$part['fileName']}");
                     continue;
