@@ -1244,10 +1244,11 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
         }
         if ($status == 'DECLINED' || $status == 'NEW') { // Unclaimed ('DECLINED_BY_LINGUIST' in Hook)
             if ($taskDao->taskIsClaimed($task_id)) {
+                $old_status = $taskDao->getTaskStatus($task_id);
                 $user_id = $this->getUserClaimedTask($task_id);
                 if ($user_id) $taskDao->unclaimTask($task_id, $user_id);
                 error_log("Sync DECLINED task_id: $task_id, user_id: $user_id, memsource job: {$job['uid']}");
-                if ($taskDao->getTaskStatus($task_id) == Common\Enums\TaskStatusEnum::COMPLETE) {
+                if ($old_status == Common\Enums\TaskStatusEnum::COMPLETE) {
                     // See if the current task is the Translation matching a prerequisite for a Revision, if so set Revision back to WAITING_FOR_PREREQUISITES
                     if (strpos($memsource_task['internalId'], '.') === false) { // Not split
                         $dependent_task = $this->get_memsource_tasks_for_project_internal_id_type($memsource_project['project_id'], $memsource_task['internalId'], Common\Enums\TaskTypeEnum::PROOFREADING);

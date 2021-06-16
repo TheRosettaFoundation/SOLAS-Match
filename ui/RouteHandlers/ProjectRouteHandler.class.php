@@ -518,10 +518,11 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
             }
             if ($part['status'] == 'DECLINED_BY_LINGUIST' || $part['status'] == 'NEW') {
                 if ($taskDao->taskIsClaimed($task_id)) {
+                    $old_status = $taskDao->getTaskStatus($task_id);
                     $user_id = $projectDao->getUserClaimedTask($task_id);
                     if ($user_id) $taskDao->unclaimTask($task_id, $user_id);
                     error_log("JOB_STATUS_CHANGED DECLINED_BY_LINGUIST in memsource task_id: $task_id, user_id: $user_id, memsource job: {$part['uid']}");
-                    if ($taskDao->getTaskStatus($task_id) == Common\Enums\TaskStatusEnum::COMPLETE) {
+                    if ($old_status == Common\Enums\TaskStatusEnum::COMPLETE) {
                         // See if the current task is the Translation matching a prerequisite for a Revision, if so set Revision back to WAITING_FOR_PREREQUISITES
                         if (strpos($memsource_task['internalId'], '.') === false) { // Not split
                             if (empty($part['project']['id'])) {
