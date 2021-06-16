@@ -996,6 +996,8 @@ $memsource_change_country_to_kp = [
         $jobs = $userDao->memsource_list_jobs($memsource_project_uid, $project_id);
         if (empty($jobs)) return;
 
+        $memsource_project = $this->get_memsource_project($project_id); // Workflow could have been updated
+
         foreach ($jobs as $uid => $job) {
             $memsource_task = $this->get_memsource_task_by_memsource_uid($uid);
             $full_job = $userDao->memsource_get_job($memsource_project_uid, $uid);
