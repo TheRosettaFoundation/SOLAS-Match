@@ -521,6 +521,26 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
                     $user_id = $projectDao->getUserClaimedTask($task_id);
                     if ($user_id) $taskDao->unclaimTask($task_id, $user_id);
                     error_log("JOB_STATUS_CHANGED DECLINED_BY_LINGUIST in memsource task_id: $task_id, user_id: $user_id, memsource job: {$part['uid']}");
+                    if ($taskDao->getTaskStatus($task_id) == Common\Enums\TaskStatusEnum::COMPLETE) {
+                        // See if the current task is the Translation matching a prerequisite for a Revision, if so set Revision back to WAITING_FOR_PREREQUISITES
+                        if (strpos($memsource_task['internalId'], '.') === false) { // Not split
+                            if (empty($part['project']['id'])) {
+                                error_log("No project id in {$part['uid']} in event JOB_STATUS_CHANGED, jobPart status: DECLINED_BY_LINGUIST");
+                                continue;
+                            }
+                            $memsource_project = $projectDao->get_memsource_project_by_memsource_id($part['project']['id']);
+                            if (empty($memsource_project)) {
+                                error_log("Can't find memsource_project for {$part['project']['id']} in {$part['uid']} in event JOB_STATUS_CHANGED, jobPart status: DECLINED_BY_LINGUIST");
+                                continue;
+                            }
+                            $dependent_task = $projectDao->get_memsource_tasks_for_project_internal_id_type($memsource_project['project_id'], $memsource_task['internalId'], Common\Enums\TaskTypeEnum::PROOFREADING);
+                            if ($dependent_task && $dependent_task['prerequisite'] == $task_id) {
+                                if ($dependent_task['task-status_id'] == Common\Enums\TaskStatusEnum::PENDING_CLAIM)
+                                    $taskDao->setTaskStatus($dependent_task['task_id'], Common\Enums\TaskStatusEnum::WAITING_FOR_PREREQUISITES);
+                            }
+                        }
+                        error_log("DECLINED_BY_LINGUIST task_id: $task_id, memsource: {$part['uid']}, reverting from COMPLETED_BY_LINGUIST");
+                    }
                 }
             }
         }
