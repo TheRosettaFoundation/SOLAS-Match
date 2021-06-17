@@ -44,6 +44,11 @@ class ProjectDao extends BaseDao
         return $ret;
     }
 
+    public function getProjectTasksArray($project_id)
+    {
+        return LibAPI\PDOWrapper::call('getTask', 'null, ' . LibAPI\PDOWrapper::cleanseNull($project_id) . ', null, null, null, null, null, null, null, null, null, null, null, null');
+    }
+
     public function getProjectReviews($projectId)
     {
         $ret = null;
