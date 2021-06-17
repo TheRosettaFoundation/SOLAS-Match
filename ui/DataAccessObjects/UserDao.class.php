@@ -1764,6 +1764,7 @@ error_log("Sync memsource_list_jobs() project_id: $project_id, workflowLevels_ar
             'note' => $post['project_description'],
             'sourceLang' => $sourceLang,
             'targetLangs' => $langs,
+            'useDefaultProjectSettings' => true,
             'workflowSteps' => $workflowSteps,
             'dateDue' => substr($deadline, 0, 10) . 'T' . substr($deadline, 11, 8) . 'Z',
             'purchaseOrder' => 'https://kato.translatorswb.org/project/' . $project->getId() . '/view',
