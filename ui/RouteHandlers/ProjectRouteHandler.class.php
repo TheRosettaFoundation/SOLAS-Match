@@ -402,12 +402,18 @@ error_log("Updating project_wordcount with {$part['wordsCount']}");//(**)
             }
             error_log("Added Task: $task_id for new jobPart {$part['uid']} for: {$part['fileName']}");
 
-            $projectDao->set_memsource_task($task_id, !empty($part['id']) ? $part['id'] : 0, $part['uid'], $part['task'], // note 'task' is for Language pair (independent of workflow step)
+            $success = $projectDao->set_memsource_task($task_id, !empty($part['id']) ? $part['id'] : 0, $part['uid'], $part['task'], // note 'task' is for Language pair (independent of workflow step)
                 empty($part['internalId'])    ? 0 : $part['internalId'],
                 empty($part['workflowLevel']) ? 0 : $part['workflowLevel'],
                 empty($part['beginIndex'])    ? 0 : $part['beginIndex'], // Begin Segment number
                 empty($part['endIndex'])      ? 0 : $part['endIndex'],
                 $prerequisite);
+error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success");//(**)
+            if (!$success) { // May be because of double hook?
+                $projectDao->delete_task_directly($task_id);
+                error_log("delete_task_directly($task_id) because of set_memsource_task fail");
+                continue;
+            }
 
             $project_restrictions = $taskDao->get_project_restrictions($project_id);
             if ($project_restrictions && (

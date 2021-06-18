@@ -1134,6 +1134,7 @@ error_log("Sync Updating project_wordcount with {$job['wordsCount']}");//(**)
 error_log("set_memsource_task($task_id, 0, {$job['uid']}...), success: $success");//(**)
         if (!$success) { // May be because of button double click
             $this->delete_task_directly($task_id);
+            error_log("Sync delete_task_directly($task_id) because of set_memsource_task fail");
             return 0;
         }
 
