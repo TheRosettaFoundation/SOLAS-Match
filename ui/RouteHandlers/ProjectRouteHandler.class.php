@@ -92,6 +92,9 @@ class ProjectRouteHandler
         }
         $body = $app->request()->getBody();
         $hook = json_decode($body, true);
+        if (empty($hook)) {
+            error_log("Hook not decoded: $body");
+        }
         error_log($hook['event'] . ' ' . print_r(json_decode($body, true), true));
 
         switch ($hook['event']) {
