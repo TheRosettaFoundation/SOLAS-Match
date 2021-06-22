@@ -2729,7 +2729,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 $tasks = $projectDao->getProjectTasksArray($projectId);
                 $project_lang_pair = array_values($this->unique_multidim_array($tasks, 'targetLanguageCode'));
 
-                for ($i=0; $i < count($project_lang_pair); $i++) {
+                for ($i = 0; $i < count($project_lang_pair); $i++) {
                     $targetLocale = $project_lang_pair[$i]['targetLanguageName'];
                     $targetLocale_code = $project_lang_pair[$i]['targetLanguageCode'];
                     $project_url = "https://".$_SERVER['SERVER_NAME']."/project/$projectId/view/";
@@ -2760,7 +2760,9 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                     $authorization = "Authorization: Bearer ". Common\Lib\Settings::get('asana.api_key6');
                     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
                     $result = curl_exec($ch);
+                    curl_close($ch);
                     error_log("Posting to Asana Incoming Task project: $result");
                 }
 
