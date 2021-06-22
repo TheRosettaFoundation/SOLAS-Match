@@ -61,6 +61,7 @@ class ProjectRouteHandler
         )->name("download-project-image");
 
         $app->get("/project/:project_id/test/", array($this, "test"));
+        $app->get("/project/:project_id/test1/", array($this, "test1"));
 
         $app->get(
             '/project_cron_1_minute/',
@@ -119,6 +120,41 @@ class ProjectRouteHandler
         }
         die;
     }
+
+    public function test1($projectId){
+        
+        $projectDao = new DAO\ProjectDao();
+        $orgDao = new DAO\OrganisationDao();
+        $taskDao = new DAO\TaskDao();
+        $tasks = $projectDao->getProjectTasksArray($projectId);
+         $project_lang_pair = array_values($this->unique_multidim_array($tasks, 'targetLanguageCode'));
+                 
+     
+
+       
+     
+       echo '<pre>',print_r($tasks,1),'</pre>';
+        
+     
+              
+              
+          
+         
+    }
+    public function unique_multidim_array($array, $key) { 
+        $temp_array = array(); 
+        $i = 0; 
+        $key_array = array();           
+        foreach( $array as $val ) { 
+            if ( ! in_array( $val[$key], $key_array ) ) { 
+                $key_array[$i] = $val[$key]; 
+                $temp_array[$i] = $val; 
+            }
+            $i++; 
+        } 
+        return $temp_array; 
+    } 
+
 
     private function create_project($hook)
     {
@@ -2320,7 +2356,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
         curl_close($re);
 
         $projectDao->queue_asana_project($projectId); // cron will post to Asana
-
+/*
         //Asana - Incoming Tasks project    
         $tasks = $projectDao->getProjectTasks($projectId);
         $project = $projectDao->getProject($projectId);
@@ -2380,9 +2416,9 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 error_log("Asana Incoming Tasks API error ($error_number): " . curl_error($ch));
               }
             curl_close($ch);
-            
+ */          
     }
-
+ 
     public function project_cron_1_minute()
     {
       $matecat_api = Common\Lib\Settings::get('matecat.url');
@@ -2697,11 +2733,14 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
     public function task_cron_1_minute()
     {
         $projectDao = new DAO\ProjectDao();
+        $taskDao = new DAO\TaskDao();
+        $orgDao = new DAO\OrganisationDao();
 
         $fp_for_lock = fopen(__DIR__ . '/task_cron_1_minute_lock.txt', 'r');
         if (flock($fp_for_lock, LOCK_EX | LOCK_NB)) { // Acquire an exclusive lock, if possible, if not we will wait for next time
             $queue_copy_task_original_files = $projectDao->get_queue_copy_task_original_files();
-            $count = 0;
+	    $count = 0;
+	    $queue_copy_task_original_files = [];
             foreach ($queue_copy_task_original_files as $queue_copy_task_original_file) {
                 if (++$count > 4) break; // Limit number done at one time, just in case
 
@@ -2767,15 +2806,67 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
             }
 
             $queue_asana_projects = $projectDao->get_queue_asana_projects();
-            $count = 0;
-            foreach ($queue_asana_projects as $queue_asana_project) {
-                if (++$count > 4) break; // Limit number done at one time, just in case
-                    $project_id = $queue_asana_project['project_id'];
+	       $count = 0;
 
-                    error_log("dequeue_asana_project() project_id: $project_id Removing");
-                    $projectDao->dequeue_asana_project($project_id);
+foreach ($queue_asana_projects as $queue_asana_project) {
+    if (++$count > 4) break; // Limit number done at one time, just in case
+        $projectId = $queue_asana_project['project_id'];
+        $project = $projectDao->getProject($projectId);
+        $org_id = $project->getOrganisationId();                    
+        $org = $orgDao->getOrganisation($org_id);
+        $org_name = $org->getName();
+        $project_name = $project->getTitle();
+        $wordCount = $project->getWordCount();
+        $objDateTime = new \DateTime($project->getDeadline()); 
+        $sourceLocale_code = $project->getSourceLocale()->getLanguageCode();
+        $sourceLocale      = $project->getSourceLocale()->getLanguageName();
+        $memsource_project = $projectDao->get_memsource_project($projectId);
+        $creator = $taskDao->get_creator($projectId, $memsource_project);
+        $pm = $creator['email'];
+        if (strpos($pm, '@translatorswithoutborders.org') === false) $pm = 'projects@translatorswithoutborders.org';
+
+        $tasks = $projectDao->getProjectTasksArray($projectId);
+        $project_lang_pair = array_values($this->unique_multidim_array($tasks, 'targetLanguageCode')); 
+
+        for($i=0;$i<count($project_lang_pair);$i++) {
+             $targetLocale = $project_lang_pair[$i]['targetLanguageName'];
+             $targetLocale_code = $project_lang_pair[$i]['targetLanguageCode'];
+             $project_url = "https://".$_SERVER['SERVER_NAME']."/project/$projectId/view/";  
+             $url = "https://app.asana.com/api/1.0/tasks";
+             $ch = curl_init($url);
+              
+             $data = array('data' => array(
+                "name" => $project_name,
+                "assignee" => $pm,
+                "projects" => array(
+                        "1200067882657242"
+                    ),
+                "custom_fields" => array(
+                        "1200067882657247" => $wordCount, 
+                        "1200067882657245" => $org_name,
+                        "1200068101079960" => $sourceLocale,
+                        "1200269602122253" => $sourceLocale_code,
+                        "1200067882657251" => $targetLocale,
+                        "1200269602122255" => $targetLocale_code,
+                        "1200226775862070" => $project_url,
+                        "1200269602122257" => "$projectId"                    
+                    ),
+                "due_at" => $objDateTime->format('c'),
+                "notes" => "KP Project details per language pair.Project ID - ".$projectId,
+        
+                ));
+             $payload = json_encode($data);
+             curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+             $authorization = "Authorization: Bearer ". Common\Lib\Settings::get('asana.api_key6');  
+             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));          
+             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);           
+             $result = curl_exec($ch);
+             error_log("Posting to Asana Incoming Task project: $result");
             }
 
+        error_log("dequeue_asana_project() project_id: $projectId Removing");
+        $projectDao->dequeue_asana_project($projectId);
+}
             flock($fp_for_lock, LOCK_UN); // Release the lock
         }
         fclose($fp_for_lock);
