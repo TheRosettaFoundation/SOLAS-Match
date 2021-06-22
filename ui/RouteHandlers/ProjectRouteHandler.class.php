@@ -2642,7 +2642,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
         $fp_for_lock = fopen(__DIR__ . '/task_cron_1_minute_lock.txt', 'r');
         if (flock($fp_for_lock, LOCK_EX | LOCK_NB)) { // Acquire an exclusive lock, if possible, if not we will wait for next time
             $queue_copy_task_original_files = $projectDao->get_queue_copy_task_original_files();
-	          $count = 0;
+            $count = 0;
             foreach ($queue_copy_task_original_files as $queue_copy_task_original_file) {
                 if (++$count > 4) break; // Limit number done at one time, just in case
 
