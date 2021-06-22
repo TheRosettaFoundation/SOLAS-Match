@@ -61,7 +61,7 @@ class ProjectRouteHandler
         )->name("download-project-image");
 
         $app->get("/project/:project_id/test/", array($this, "test"));
-        $app->get("/project/:project_id/test1/", array($this, "test1"));
+        
 
         $app->get(
             '/project_cron_1_minute/',
@@ -121,26 +121,7 @@ class ProjectRouteHandler
         die;
     }
 
-    public function test1($projectId){
-        
-        $projectDao = new DAO\ProjectDao();
-        $orgDao = new DAO\OrganisationDao();
-        $taskDao = new DAO\TaskDao();
-        $tasks = $projectDao->getProjectTasksArray($projectId);
-         $project_lang_pair = array_values($this->unique_multidim_array($tasks, 'targetLanguageCode'));
-                 
-     
 
-       
-     
-       echo '<pre>',print_r($tasks,1),'</pre>';
-        
-     
-              
-              
-          
-         
-    }
     public function unique_multidim_array($array, $key) { 
         $temp_array = array(); 
         $i = 0; 
