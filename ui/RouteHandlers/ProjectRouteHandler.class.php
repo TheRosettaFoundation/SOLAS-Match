@@ -61,7 +61,6 @@ class ProjectRouteHandler
         )->name("download-project-image");
 
         $app->get("/project/:project_id/test/", array($this, "test"));
-        
 
         $app->get(
             '/project_cron_1_minute/',
@@ -120,22 +119,6 @@ class ProjectRouteHandler
         }
         die;
     }
-
-
-    public function unique_multidim_array($array, $key) { 
-        $temp_array = array(); 
-        $i = 0; 
-        $key_array = array();           
-        foreach( $array as $val ) { 
-            if ( ! in_array( $val[$key], $key_array ) ) { 
-                $key_array[$i] = $val[$key]; 
-                $temp_array[$i] = $val; 
-            }
-            $i++; 
-        } 
-        return $temp_array; 
-    } 
-
 
     private function create_project($hook)
     {
@@ -2337,67 +2320,6 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
         curl_close($re);
 
         $projectDao->queue_asana_project($projectId); // cron will post to Asana
-/*
-        //Asana - Incoming Tasks project    
-        $tasks = $projectDao->getProjectTasks($projectId);
-        $project = $projectDao->getProject($projectId);
-        $project_details = json_decode(json_encode($project), true);
-        $project_id = $project_details['id'];
-        $project_name = $project_details['title'];
-        $wordCount = $project_details['wordCount'];
-        $objDateTime = new \DateTime($project_details['deadline']); 
-        $sourceLocale = $project_details['sourceLocale']['languageName'];
-        $sourceLocale_code = $project_details['sourceLocale']['languageCode'];
-
-        $tasks = json_decode(json_encode($tasks), true);
-
-        $project_target_langs = array();
-        for($i=0;$i<count($tasks);$i++) {
-            array_push($project_target_langs,$tasks[$i]['targetLocale']);
-        }
-        $project_target_langs = $this->unique_multidim_array($project_target_langs,'languageCode');
-        $project_target_langs = array_values($project_target_langs);
-
-        for($i=0;$i<count($project_target_langs);$i++) {
-            $targetLocale = $project_target_langs[$i]['languageName'];
-            $targetLocale_code = $project_target_langs[$i]['languageCode'];
-            $project_url = "https://".$_SERVER['SERVER_NAME']."/project/$projectId/view/";  
-
-            $url = "https://app.asana.com/api/1.0/tasks";
-        
-            $ch = curl_init($url);
-            $data = array('data' => array(
-                "name" => $project_name,
-                "assignee" => $pm,
-                "projects" => array(
-                    "1200067882657242"
-                ),
-                "custom_fields" => array(
-                    "1200067882657247" => $wordCount, 
-                    "1200067882657245" => $org_name,
-                    "1200068101079960" => $sourceLocale,
-                    "1200269602122253" => $sourceLocale_code,
-                    "1200067882657251" => $targetLocale,
-                    "1200269602122255" => $targetLocale_code,
-                    "1200226775862070" => $project_url,
-                    "1200269602122257" => $projectId                    
-                ),
-
-                "due_at" => $objDateTime->format('c'),
-                "notes" => "Tests- Fields added on creating a task from the Asana API - ".$projectId,
-
-            ));
-            $payload = json_encode($data);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-            $authorization = "Authorization: Bearer ". Common\Lib\Settings::get('asana.api_key6');
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));          
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);           
-            curl_exec($ch);
-            if ($error_number = curl_errno($ch)) {
-                error_log("Asana Incoming Tasks API error ($error_number): " . curl_error($ch));
-              }
-            curl_close($ch);
- */          
     }
  
     public function project_cron_1_minute()
@@ -2720,8 +2642,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
         $fp_for_lock = fopen(__DIR__ . '/task_cron_1_minute_lock.txt', 'r');
         if (flock($fp_for_lock, LOCK_EX | LOCK_NB)) { // Acquire an exclusive lock, if possible, if not we will wait for next time
             $queue_copy_task_original_files = $projectDao->get_queue_copy_task_original_files();
-	    $count = 0;
-	    $queue_copy_task_original_files = [];
+	          $count = 0;
             foreach ($queue_copy_task_original_files as $queue_copy_task_original_file) {
                 if (++$count > 4) break; // Limit number done at one time, just in case
 
@@ -2853,6 +2774,20 @@ foreach ($queue_asana_projects as $queue_asana_project) {
         fclose($fp_for_lock);
 
         die;
+    }
+
+    private function unique_multidim_array($array, $key) {
+        $temp_array = array();
+        $i = 0;
+        $key_array = array();
+        foreach($array as $val) {
+            if (!in_array($val[$key], $key_array)) {
+                $key_array[$i] = $val[$key];
+                $temp_array[$i] = $val;
+            }
+            $i++;
+        }
+        return $temp_array;
     }
 
     public function valid_language_for_matecat($language_code)
