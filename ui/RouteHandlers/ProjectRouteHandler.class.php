@@ -2318,8 +2318,6 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
           error_log("Asana 5 API error ($error_number): " . curl_error($re));
         }
         curl_close($re);
-
-        $projectDao->queue_asana_project($projectId); // cron will post to Asana
     }
 
     public function project_cron_1_minute()

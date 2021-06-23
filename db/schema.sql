@@ -5048,6 +5048,9 @@ DROP PROCEDURE IF EXISTS `add_to_project_word_count`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `add_to_project_word_count`(IN `projectId` INT, IN `wordCount` INT)
 BEGIN
+    IF 1=(SELECT `word-count` FROM Projects WHERE id=projectId) THEN
+        CALL queue_asana_project(projectId);
+    END IF;
     UPDATE Projects SET `word-count`=IF(`word-count`<=1, 0, `word-count`)+wordCount  WHERE id=projectId;
  END//
 DELIMITER ;
