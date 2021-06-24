@@ -46,7 +46,9 @@ class ProjectDao extends BaseDao
 
     public function getProjectTasksArray($project_id)
     {
-        return LibAPI\PDOWrapper::call('getTask', 'null, ' . LibAPI\PDOWrapper::cleanseNull($project_id) . ', null, null, null, null, null, null, null, null, null, null, null, null');
+        $result = LibAPI\PDOWrapper::call('getTask', 'null, ' . LibAPI\PDOWrapper::cleanseNull($project_id) . ', null, null, null, null, null, null, null, null, null, null, null, null');
+        if (empty($result)) return [];
+        return $result;
     }
 
     public function getProjectReviews($projectId)
@@ -938,7 +940,9 @@ $memsource_change_country_to_kp = [
 
     public function get_queue_copy_task_original_files()
     {
-        return LibAPI\PDOWrapper::call('get_queue_copy_task_original_files', '');
+        $result = LibAPI\PDOWrapper::call('get_queue_copy_task_original_files', '');
+        if (empty($result)) return [];
+        return $result;
     }
 
     public static function dequeue_copy_task_original_file($task_id)
@@ -953,7 +957,9 @@ $memsource_change_country_to_kp = [
 
     public function get_queue_asana_projects()
     {
-        return LibAPI\PDOWrapper::call('get_queue_asana_projects', '');
+        $result = LibAPI\PDOWrapper::call('get_queue_asana_projects', '');
+        if (empty($result)) return [];
+        return $result;
     }
 
     public static function dequeue_asana_project($project_id)
