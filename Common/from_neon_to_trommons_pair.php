@@ -53,6 +53,7 @@ $from_neon_to_trommons_pair = array(
 'Khmer' => array('km', 'KH'),
 'Korean' => array('ko', 'KR'),
 'Kurdish Kurmanji' => array('kmr', '--'),
+'Kurdish Bahdini' => array('kmr', '94'),
 'Kurdish Sorani' => array('ckb', '--'),
 'Kyrgyz' => array('ky', 'KG'),
 'Latvian' => array('lv', '--'),

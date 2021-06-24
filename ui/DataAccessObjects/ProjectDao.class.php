@@ -488,6 +488,8 @@ $memsource_change_language_to_kp = [
 'tir' => 'ti',
 'mfi' => 'mf0',
 'nb' => 'no',
+
+'ku' => 'kmr',
 ];
 
 $memsource_change_country_to_kp = [
@@ -523,6 +525,8 @@ $memsource_change_country_to_kp = [
 'tw' => '93',
 'hant' => '93',
 'hant_tw' => '93',
+
+'arab_iq' => '94',
 ];
         $trommons_language_code = $memsource;
         $trommons_country_code  = '';
@@ -561,10 +565,11 @@ $memsource_change_country_to_kp = [
             '91' => 'cyrl', // Cyrillic Script
             '92' => 'cn',   // Simplified Script
             '93' => 'tw',   // Traditional Script
+            '94' => 'arab_iq', // Bahdini Variant
         ];
         if (!empty($kp_change_country_to_memsource[$kp_country])) $kp_country = $kp_change_country_to_memsource[$kp_country];
 
-        $memsource_valid = ['aa','af_za','sq','am_et','ar_sa','pga','apc','hy_am','as','ay','az_cyrl','az_latn','eu','be_by','bem','bn_bd','bn_in','bik','bi','bs_cyrl','bs_latn','bg','bwr','my_mm','ca','ceb','ckb','shu_td','shu_latn_ng','cbk','ce_ru','ny','zh_cn','zh_tw','ctg_bd','ckl','hr','cs','da','prs_af','dv_mv','din_ss','nl','dyu','tw','bin_ng','en_gb','en_us','et','fa_ir','fj','fil_ph','fi','fr_ca','fr_cd','fr_fr','ff','gl','mfi_ng','lg','ka_ge','de','glw','el','gn','gu_in','guz_ke','ht','ha','he','hi_in','hmn','hu','is','ig_ng','ilo_ph','hil','id_id','ga','it','ja','quc','kea_cv','kln_ke','kam_ke','hig','kn_in','kr','pam','kar','kk_kz','km','ki','rw','rn_bi','kg','kok','ko_kr','kri','ky_kg','hia','lo','lv','ln','ln_cd','lt','lua','luo_ke','mk_mk','mdh','mg_mg','ms_my','ml_in','mt_mt','mi_nz','mrw','mr_in','mrt','lol','mn_mn','nnb','ne_np','ngc','kmr','nd','nso','nb','nn','nus','om_et','pag','ps','ps_af','pis','pl','pt_br','pt_mz','pt_pt','pa_in','qu','rhg','rhg_latn','ro','ru_ru','sm','sg_cf','seh','sr_cyrl_me','sr_cyrl_rs','sr_latn_me','sr_latn_rs','shr','sn','sd','sd_arab','si_lk','sk','sl','so_et','so_so','nr','st','es_co','es_419','es_mx','es_es','sw','sw_cd','sv','syl','tl','tg_cyrl_tj','ta_in','ta_lk','tt','tsg_ph','te','th_th','bo','ti','tpi','to','ts','tn','tr','tk','uk_ua','ur_pk','uz_cyrl_uz','vi_vn','war','cy_gb','wo_sn','xh','yo','zu_za','tig','lu',];
+        $memsource_valid = ['aa','af_za','sq','am_et','ar_sa','pga','apc','hy_am','as','ay','az_cyrl','az_latn','eu','be_by','bem','bn_bd','bn_in','bik','bi','bs_cyrl','bs_latn','bg','bwr','my_mm','ca','ceb','ckb','ku_arab_iq','shu_td','shu_latn_ng','cbk','ce_ru','ny','zh_cn','zh_tw','ctg_bd','ckl','hr','cs','da','prs_af','dv_mv','din_ss','nl','dyu','tw','bin_ng','en_gb','en_us','et','fa_ir','fj','fil_ph','fi','fr_ca','fr_cd','fr_fr','ff','gl','mfi_ng','lg','ka_ge','de','glw','el','gn','gu_in','guz_ke','ht','ha','he','hi_in','hmn','hu','is','ig_ng','ilo_ph','hil','id_id','ga','it','ja','quc','kea_cv','kln_ke','kam_ke','hig','kn_in','kr','pam','kar','kk_kz','km','ki','rw','rn_bi','kg','kok','ko_kr','kri','ky_kg','hia','lo','lv','ln','ln_cd','lt','lua','luo_ke','mk_mk','mdh','mg_mg','ms_my','ml_in','mt_mt','mi_nz','mrw','mr_in','mrt','lol','mn_mn','nnb','ne_np','ngc','kmr','nd','nso','nb','nn','nus','om_et','pag','ps','ps_af','pis','pl','pt_br','pt_mz','pt_pt','pa_in','qu','rhg','rhg_latn','ro','ru_ru','sm','sg_cf','seh','sr_cyrl_me','sr_cyrl_rs','sr_latn_me','sr_latn_rs','shr','sn','sd','sd_arab','si_lk','sk','sl','so_et','so_so','nr','st','es_co','es_419','es_mx','es_es','sw','sw_cd','sv','syl','tl','tg_cyrl_tj','ta_in','ta_lk','tt','tsg_ph','te','th_th','bo','ti','tpi','to','ts','tn','tr','tk','uk_ua','ur_pk','uz_cyrl_uz','vi_vn','war','cy_gb','wo_sn','xh','yo','zu_za','tig','lu',];
 
         if ($kp_country != '--') $memsource_pair = $kp_language . '_' . $kp_country;
         else                     $memsource_pair = $kp_language;
@@ -578,6 +583,7 @@ $memsource_change_country_to_kp = [
         if ($memsource_pair === 'cnr_latn') $memsource_pair = 'sr_latn_me';
         if ($memsource_pair === 'cnr_cyrl') $memsource_pair = 'sr_cyrl_me';
         if ($memsource_pair === 'mfi_cm') $memsource_pair = 'mfi_ng';//(**)
+        if ($memsource_pair === 'kmr_arab_iq') $memsource_pair = 'ku_arab_iq';
 
         if (in_array($memsource_pair, $memsource_valid)) return $memsource_pair;
         if (in_array($kp_language,    $memsource_valid)) return $kp_language;
