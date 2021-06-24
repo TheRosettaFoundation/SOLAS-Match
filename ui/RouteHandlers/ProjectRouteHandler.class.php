@@ -2672,6 +2672,8 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
     public function task_cron_1_minute()
     {
         $projectDao = new DAO\ProjectDao();
+        $taskDao = new DAO\TaskDao();
+        $orgDao = new DAO\OrganisationDao();
 
         $fp_for_lock = fopen(__DIR__ . '/task_cron_1_minute_lock.txt', 'r');
         if (flock($fp_for_lock, LOCK_EX | LOCK_NB)) { // Acquire an exclusive lock, if possible, if not we will wait for next time
@@ -2741,11 +2743,87 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 curl_close($ch);
             }
 
+            $queue_asana_projects = $projectDao->get_queue_asana_projects();
+            $count = 0;
+            foreach ($queue_asana_projects as $queue_asana_project) {
+                if (++$count > 4) break; // Limit number done at one time, just in case
+                $projectId = $queue_asana_project['project_id'];
+                $project = $projectDao->getProject($projectId);
+                $org_id = $project->getOrganisationId();
+                $org = $orgDao->getOrganisation($org_id);
+                $org_name = $org->getName();
+                $project_name = $project->getTitle();
+                $wordCount = $project->getWordCount();
+                $objDateTime = new \DateTime($project->getDeadline());
+                $sourceLocale_code = $project->getSourceLocale()->getLanguageCode();
+                $sourceLocale      = $project->getSourceLocale()->getLanguageName();
+                $memsource_project = $projectDao->get_memsource_project($projectId);
+                $creator = $taskDao->get_creator($projectId, $memsource_project);
+                $pm = $creator['email'];
+                if (strpos($pm, '@translatorswithoutborders.org') === false) $pm = 'projects@translatorswithoutborders.org';
+
+                $tasks = $projectDao->getProjectTasksArray($projectId);
+                $project_lang_pair = array_values($this->unique_multidim_array($tasks, 'targetLanguageCode'));
+
+                for ($i = 0; $i < count($project_lang_pair); $i++) {
+                    $targetLocale = $project_lang_pair[$i]['targetLanguageName'];
+                    $targetLocale_code = $project_lang_pair[$i]['targetLanguageCode'];
+                    $project_url = "https://".$_SERVER['SERVER_NAME']."/project/$projectId/view/";
+                    $url = "https://app.asana.com/api/1.0/tasks";
+                    $ch = curl_init($url);
+              
+                    $data = array('data' => array(
+                        "name" => $project_name,
+                        "assignee" => $pm,
+                        "projects" => array(
+                            "1200067882657242"
+                        ),
+                        "custom_fields" => array(
+                            "1200067882657247" => $wordCount,
+                            "1200067882657245" => $org_name,
+                            "1200068101079960" => $sourceLocale,
+                            "1200269602122253" => $sourceLocale_code,
+                            "1200067882657251" => $targetLocale,
+                            "1200269602122255" => $targetLocale_code,
+                            "1200226775862070" => $project_url,
+                            "1200269602122257" => "$projectId"
+                        ),
+                        "due_at" => $objDateTime->format('c'),
+                        "notes" => "KP Project details per language pair.Project ID - ".$projectId,
+                        ));
+                    $payload = json_encode($data);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+                    $authorization = "Authorization: Bearer ". Common\Lib\Settings::get('asana.api_key6');
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
+                    $result = curl_exec($ch);
+                    curl_close($ch);
+                    error_log("Posting to Asana Incoming Task project: $result");
+                }
+
+                error_log("dequeue_asana_project() project_id: $projectId Removing");
+                $projectDao->dequeue_asana_project($projectId);
+            }
             flock($fp_for_lock, LOCK_UN); // Release the lock
         }
         fclose($fp_for_lock);
 
         die;
+    }
+
+    private function unique_multidim_array($array, $key) {
+        $temp_array = array();
+        $i = 0;
+        $key_array = array();
+        foreach($array as $val) {
+            if (!in_array($val[$key], $key_array)) {
+                $key_array[$i] = $val[$key];
+                $temp_array[$i] = $val;
+            }
+            $i++;
+        }
+        return $temp_array;
     }
 
     public function valid_language_for_matecat($language_code)
