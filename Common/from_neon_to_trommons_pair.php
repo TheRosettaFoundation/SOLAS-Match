@@ -204,6 +204,8 @@ $from_neon_to_trommons_pair = array(
 'Kapampangan' => array('pam', 'PH'),
 'Pangasinan' => array('pag', 'PH'),
 'Twi' => array('tw', '--'),
+'Bambara' => array('bm', '--'),
+'Tamasheq (Mali)' => array('taq', 'ML'),
 );
 
 $language_options_changes = [
