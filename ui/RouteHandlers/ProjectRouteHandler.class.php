@@ -2774,7 +2774,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
               
                     $data = array('data' => array(
                         "name" => $project_name,
-                        "assignee" => $pm,
+//(**)                        "assignee" => $pm,
                         "projects" => array(
                             "1200067882657242"
                         ),
