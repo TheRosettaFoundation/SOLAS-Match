@@ -1,4 +1,10 @@
 <h2>{TemplateHelper::uiCleanseHTML($reviewedTask->getTitle())}</h2>
+
+{if $reviewedTask->getTaskType() != null && $reviewedTask->getTaskStatus() != null}
+    <!-- These contain $project_task['beginIndex'] and $project_task['endIndex'] -->
+    <h3>Starting segment: {$reviewedTask->getTaskType()}, ending segment: {$reviewedTask->getTaskStatus()}</h3>
+{/if}
+
 {if $reviewedTask->getId() != null}
     {assign var="id" value=$reviewedTask->getId()}
     <p>
