@@ -2327,13 +2327,13 @@ class OrgRouteHandler
         $projectDao = new DAO\ProjectDao();
         if (empty($preReqs) && $task->getTaskType() == Common\Enums\TaskTypeEnum::PROOFREADING && $memsource_task = $projectDao->get_memsource_task($taskId)) {
             $preReqs = [];
-            $dummyTask = new Common\Protobufs\Models\Task();
             $top_level = $projectDao->get_top_level($memsource_task['internalId']);
             $project_tasks = $projectDao->get_tasks_for_project($task->getProjectId());
             foreach ($project_tasks as $project_task) {
                 if ($top_level == $projectDao->get_top_level($project_task['internalId'])) {
                     if ($memsource_task['workflowLevel'] > $project_task['workflowLevel']) { // Dependent on
                         if (($memsource_task['beginIndex'] <= $project_task['endIndex']) && ($project_task['beginIndex'] <= $memsource_task['endIndex'])) { // Overlap
+                            $dummyTask = new Common\Protobufs\Models\Task();
                             $dummyTask->setId($project_task['id']);
                             $dummyTask->setProjectId($task->getProjectId());
                             $dummyTask->setTitle($project_task['title']);
