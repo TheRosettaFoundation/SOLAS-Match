@@ -1116,7 +1116,7 @@ $memsource_change_country_to_kp = [
             error_log("Sync Don't support workflowLevel > 12: {$job['workflowLevel']} in new job {$job['uid']} for: {$job['fileName']}");
             return 0;
         } else {
-            $taskType = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3']][$job['workflowLevel'] - 1];
+            $taskType = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3'], $memsource_project['workflow_level_4'], $memsource_project['workflow_level_5'], $memsource_project['workflow_level_6'], $memsource_project['workflow_level_7'], $memsource_project['workflow_level_8'], $memsource_project['workflow_level_9'], $memsource_project['workflow_level_10'], $memsource_project['workflow_level_11'], $memsource_project['workflow_level_12']][$job['workflowLevel'] - 1];
             error_log("Sync taskType: $taskType, workflowLevel: {$job['workflowLevel']}");
             if     ($taskType == 'Translation') $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
             elseif ($taskType == 'Revision')    $taskType = Common\Enums\TaskTypeEnum::PROOFREADING;
