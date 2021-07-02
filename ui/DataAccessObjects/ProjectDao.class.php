@@ -778,7 +778,16 @@ $memsource_change_country_to_kp = [
             LibAPI\PDOWrapper::cleanse($owner_id) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[0]) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[1]) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[2]));
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[2]) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[3]) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[4]) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[5]) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[6]) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[7]) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[8]) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[9]) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[10]) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[11]));
     }
 
     public function update_memsource_project($project_id, $workflowLevels)
@@ -787,7 +796,16 @@ $memsource_change_country_to_kp = [
             LibAPI\PDOWrapper::cleanse($project_id) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[0]) . ',' .
             LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[1]) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[2]));
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[2]) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[3]) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[4]) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[5]) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[6]) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[7]) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[8]) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[9]) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[10]) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[11]));
     }
 
     public function record_memsource_project_languages($project_id, $source_language_pair, $target_languages)
@@ -1094,8 +1112,8 @@ $memsource_change_country_to_kp = [
         if (empty($job['workflowLevel'])) {
             error_log("Sync Can't find workflowLevel in new job {$job['uid']} for: {$job['filename']}, assuming Translation");
             $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
-        } elseif ($job['workflowLevel'] > 3) {
-            error_log("Sync Don't support workflowLevel > 3: {$job['workflowLevel']} in new job {$job['uid']} for: {$job['fileName']}");
+        } elseif ($job['workflowLevel'] > 12) {
+            error_log("Sync Don't support workflowLevel > 12: {$job['workflowLevel']} in new job {$job['uid']} for: {$job['fileName']}");
             return 0;
         } else {
             $taskType = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3']][$job['workflowLevel'] - 1];

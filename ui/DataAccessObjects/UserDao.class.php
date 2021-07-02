@@ -1608,7 +1608,7 @@ class UserDao extends BaseDao
         $workflowlevels = count($result['projectWorkflowSteps']);
 
         if (!empty($result['projectWorkflowSteps'])) {
-            $workflowLevels_array = ['', '', '']; // Will contain 'Translation' or 'Revision' for workflowLevel 1 possibly up to 3
+            $workflowLevels_array = ['', '', '', '', '', '', '', '', '', '', '', '']; // Will contain e.g. 'Translation' or 'Revision' for workflowLevel 1 possibly up to 12
             $found_something = 0;
             foreach ($result['projectWorkflowSteps'] as $step) {
                 foreach ($workflowLevels_array as $i => $w) {
@@ -1786,7 +1786,7 @@ error_log(print_r($project_result, true));//(**)
             return 0;
         }
 
-        $workflowLevels = ['', '', '']; // Will contain 'Translation' or 'Revision' for workflowLevel 1 possibly up to 3
+        $workflowLevels = ['', '', '', '', '', '', '', '', '', '', '', '']; // Will contain e.g. 'Translation' or 'Revision' for workflowLevel 1 possibly up to 12
         if (!empty($project_result['workflowSteps'])) {
             foreach ($project_result['workflowSteps'] as $step) {
                 foreach ($workflowLevels as $i => $w) {

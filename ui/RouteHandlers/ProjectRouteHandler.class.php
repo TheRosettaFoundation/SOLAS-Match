@@ -176,7 +176,7 @@ class ProjectRouteHandler
         $destination = Common\Lib\Settings::get("files.upload_path") . "proj-$project_id/";
         mkdir($destination, 0755);
 
-        $workflowLevels = ['', '', '']; // Will contain 'Translation' or 'Revision' for workflowLevel 1 possibly up to 3
+        $workflowLevels = ['', '', '', '', '', '', '', '', '', '', '', '']; // Will contain e.g. 'Translation' or 'Revision' for workflowLevel 1 possibly up to 12
         if (!empty($hook['workflowSteps'])) {
             foreach ($hook['workflowSteps'] as $step) {
                 foreach ($workflowLevels as $i => $w) {
@@ -253,7 +253,7 @@ class ProjectRouteHandler
         if (!empty($hook['note'])) $projectDao->update_project_description($memsource_project['project_id'], $hook['note']);
 
         if (!empty($hook['workflowSteps'])) {
-            $workflowLevels = ['', '', '']; // Will contain 'Translation' or 'Revision' for workflowLevel 1 possibly up to 3
+            $workflowLevels = ['', '', '', '', '', '', '', '', '', '', '', '']; // Will contain e.g. 'Translation' or 'Revision' for workflowLevel 1 possibly up to 12
             $found_something = 0;
             foreach ($hook['workflowSteps'] as $step) {
                 foreach ($workflowLevels as $i => $w) {
@@ -328,8 +328,8 @@ class ProjectRouteHandler
             if (empty($part['workflowLevel'])) {
                 error_log("Can't find workflowLevel in new jobPart {$part['uid']} for: {$part['fileName']}, assuming Translation");
                 $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
-            } elseif ($part['workflowLevel'] > 3) {
-                error_log("Don't support workflowLevel > 3: {$part['workflowLevel']} in new jobPart {$part['uid']} for: {$part['fileName']}");
+            } elseif ($part['workflowLevel'] > 12) {
+                error_log("Don't support workflowLevel > 12: {$part['workflowLevel']} in new jobPart {$part['uid']} for: {$part['fileName']}");
                 continue;
             } else {
                 $taskType = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3']][$part['workflowLevel'] - 1];
