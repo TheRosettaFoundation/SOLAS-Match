@@ -1132,7 +1132,7 @@ $memsource_change_country_to_kp = [
             $task->setWordCount($job['wordsCount']);
             if ( $taskType == Common\Enums\TaskTypeEnum::TRANSLATION ||
                 ($taskType == Common\Enums\TaskTypeEnum::PROOFREADING &&
-                 ($memsource_project['workflow_level_1'] === 'Revision' && $memsource_project['workflow_level_2'] !== 'Translation' && $memsource_project['workflow_level_3'] !== 'Translation'))
+                 $this->no_translation_workflow($memsource_project))
                ) {
                 $project_languages = $this->get_memsource_project_languages($project_id);
 error_log("Sync Translation {$target_language}-{$target_country} vs first get_memsource_project_languages($project_id): {$project_languages[0]} + {$job['wordsCount']}");//(**)
@@ -1222,7 +1222,7 @@ error_log("set_memsource_task($task_id, 0, {$job['uid']}...), success: $success"
         $taskType = $project_task['task-type_id'];
         if ( $taskType == Common\Enums\TaskTypeEnum::TRANSLATION ||
             ($taskType == Common\Enums\TaskTypeEnum::PROOFREADING &&
-             ($memsource_project['workflow_level_1'] === 'Revision' && $memsource_project['workflow_level_2'] !== 'Translation' && $memsource_project['workflow_level_3'] !== 'Translation'))
+             $this->no_translation_workflow($memsource_project))
            ) {
             $project_languages = $this->get_memsource_project_languages($project_id);
 error_log("adjust_for_deleted_task check: {$target_language}-{$target_country} vs first get_memsource_project_languages($project_id): {$project_languages[0]} - {$project_task['word-count']}");//(**)
@@ -1234,6 +1234,15 @@ error_log("adjust_for_deleted_task updating: {$project_task['word-count']}");//(
                 }
             }
         }
+    }
+
+    public function no_translation_workflow($memsource_project)
+    {
+        $translation = false;
+        for ($workflowLevel = 1; $workflowLevel <= 12; $workflowLevel++) {
+            if ($memsource_project["workflow_level_$workflowLevel"] === 'Translation') $translation = true;
+        }
+        return !$translation;
     }
 
     private function update_task_from_job($memsource_project, $job, $memsource_task)

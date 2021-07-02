@@ -349,7 +349,7 @@ class ProjectRouteHandler
                 $task->setWordCount($part['wordsCount']);
                 if ( $taskType == Common\Enums\TaskTypeEnum::TRANSLATION ||
                     ($taskType == Common\Enums\TaskTypeEnum::PROOFREADING &&
-                     ($memsource_project['workflow_level_1'] === 'Revision' && $memsource_project['workflow_level_2'] !== 'Translation' && $memsource_project['workflow_level_3'] !== 'Translation'))
+                     $projectDao->no_translation_workflow($memsource_project))
                    ) {
                     if (empty($part['internalId']) || (strpos($part['internalId'], '.') === false)) { // Only allow top level
                         $project_languages = $projectDao->get_memsource_project_languages($project_id);
