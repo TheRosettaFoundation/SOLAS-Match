@@ -770,25 +770,6 @@ $memsource_change_country_to_kp = [
 
     public function set_memsource_project($project_id, $memsource_project_id, $memsource_project_uid, $created_by_id, $owner_id, $workflowLevels)
     {
-error_log(
-            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
-            LibAPI\PDOWrapper::cleanse($memsource_project_id) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($memsource_project_uid) . ',' .
-            LibAPI\PDOWrapper::cleanse($created_by_id) . ',' .
-            LibAPI\PDOWrapper::cleanse($owner_id) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[0]) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[1]) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[2]) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[3]) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[4]) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[5]) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[6]) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[7]) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[8]) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[9]) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[10]) . ',' .
-            LibAPI\PDOWrapper::cleanseWrapStr($workflowLevels[11]));
-
         LibAPI\PDOWrapper::call('set_memsource_project',
             LibAPI\PDOWrapper::cleanse($project_id) . ',' .
             LibAPI\PDOWrapper::cleanse($memsource_project_id) . ',' .
