@@ -1687,18 +1687,18 @@ CREATE TABLE IF NOT EXISTS `MemsourceProjects` (
   memsource_project_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   created_by_id         BIGINT(20) UNSIGNED NOT NULL,
   owner_id              BIGINT(20) UNSIGNED NOT NULL,
-  workflow_level_1      VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  workflow_level_2      VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  workflow_level_3      VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  workflow_level_4      VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  workflow_level_5      VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  workflow_level_6      VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  workflow_level_7      VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  workflow_level_8      VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  workflow_level_9      VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  workflow_level_10     VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  workflow_level_11     VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  workflow_level_12     VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  workflow_level_1      VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  workflow_level_2      VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  workflow_level_3      VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  workflow_level_4      VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  workflow_level_5      VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  workflow_level_6      VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  workflow_level_7      VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  workflow_level_8      VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  workflow_level_9      VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  workflow_level_10     VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  workflow_level_11     VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  workflow_level_12     VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY FK_MemsourceProjects_project_id (project_id),
   UNIQUE  KEY memsource_project_id            (memsource_project_id),
   UNIQUE  KEY memsource_project_uid           (memsource_project_uid),
@@ -9249,7 +9249,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `set_memsource_project`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_project`(IN projectID INT, IN memsourceID BIGINT, IN memsourceUID VARCHAR(30), IN createdID BIGINT, IN ownerID BIGINT, IN workflow1 VARCHAR(20), IN workflow2 VARCHAR(20), IN workflow3 VARCHAR(20), IN workflow4 VARCHAR(20), IN workflow5 VARCHAR(20), IN workflow6 VARCHAR(20), IN workflow7 VARCHAR(20), IN workflow8 VARCHAR(20), IN workflow9 VARCHAR(20), IN workflow10 VARCHAR(20), IN workflow11 VARCHAR(20), IN workflow12 VARCHAR(20))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_memsource_project`(IN projectID INT, IN memsourceID BIGINT, IN memsourceUID VARCHAR(30), IN createdID BIGINT, IN ownerID BIGINT, IN workflow1 VARCHAR(30), IN workflow2 VARCHAR(30), IN workflow3 VARCHAR(30), IN workflow4 VARCHAR(30), IN workflow5 VARCHAR(30), IN workflow6 VARCHAR(30), IN workflow7 VARCHAR(30), IN workflow8 VARCHAR(30), IN workflow9 VARCHAR(30), IN workflow10 VARCHAR(30), IN workflow11 VARCHAR(30), IN workflow12 VARCHAR(30))
 BEGIN
     INSERT INTO MemsourceProjects (project_id, memsource_project_id, memsource_project_uid, created_by_id, owner_id, workflow_level_1, workflow_level_2, workflow_level_3, workflow_level_4, workflow_level_5, workflow_level_6, workflow_level_7, workflow_level_8, workflow_level_9, workflow_level_10, workflow_level_11, workflow_level_12)
     VALUES                        ( projectID,          memsourceID,          memsourceUID,     createdID,  ownerID,        workflow1,        workflow2,        workflow3,        workflow4,        workflow5,        workflow6,        workflow7,        workflow8,        workflow9,        workflow10,        workflow11,        workflow12);
@@ -9258,7 +9258,7 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `update_memsource_project`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_memsource_project`(IN projectID INT, IN workflow1 VARCHAR(20), IN workflow2 VARCHAR(20), IN workflow3 VARCHAR(20), IN workflow4 VARCHAR(20), IN workflow5 VARCHAR(20), IN workflow6 VARCHAR(20), IN workflow7 VARCHAR(20), IN workflow8 VARCHAR(20), IN workflow9 VARCHAR(20), IN workflow10 VARCHAR(20), IN workflow11 VARCHAR(20), IN workflow12 VARCHAR(20))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_memsource_project`(IN projectID INT, IN workflow1 VARCHAR(30), IN workflow2 VARCHAR(30), IN workflow3 VARCHAR(30), IN workflow4 VARCHAR(30), IN workflow5 VARCHAR(30), IN workflow6 VARCHAR(30), IN workflow7 VARCHAR(30), IN workflow8 VARCHAR(30), IN workflow9 VARCHAR(30), IN workflow10 VARCHAR(30), IN workflow11 VARCHAR(30), IN workflow12 VARCHAR(30))
 BEGIN
     UPDATE MemsourceProjects
     SET workflow_level_1=workflow1, workflow_level_2=workflow2, workflow_level_3=workflow3, workflow_level_4=workflow4, workflow_level_5=workflow5, workflow_level_6=workflow6, workflow_level_7=workflow7, workflow_level_8=workflow8, workflow_level_9=workflow9, workflow_level_10=workflow10, workflow_level_11=workflow11, workflow_level_12=workflow12
