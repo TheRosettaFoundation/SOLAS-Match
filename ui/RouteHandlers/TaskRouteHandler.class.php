@@ -2661,12 +2661,13 @@ class TaskRouteHandler
 
             if (isset($post['submitReview'])) {
                 $i = 0;
+                $tasks_titles = '';
                 $error = null;
                 while ($i < count($preReqTasks) && $error == null) {
                     $pTask = $preReqTasks[$i++];
                     $review = new Common\Protobufs\Models\TaskReview();
                     $id = $pTask->getId();
-
+                    $tasks_titles .= $pTask->getTitle() . ' ';
 
                     $review->setUserId($userId);
                     if (!is_null($id)) {
@@ -2730,7 +2731,7 @@ class TaskRouteHandler
                 if ($error == null) {
                     $app->flash(
                         "success",
-                        sprintf(Lib\Localisation::getTranslation('task_review_10'), $pTask->getTitle())
+                        sprintf(Lib\Localisation::getTranslation('task_review_10'), $tasks_titles)
                     );
                     if ($taskDao->getTaskChunk($taskId)) {
                         $app->redirect($app->urlFor('task-chunk-completed', array('task_id' => $taskId)));
