@@ -306,6 +306,15 @@ class ModelFactory
         if (isset($modelData['password'])) {
             $ret->setPassword($modelData['password']);
         }
+        if (isset($modelData['firstName'])) {
+            $ret->setFirstName($modelData['firstName']);
+        }
+        if (isset($modelData['lastName'])) {
+            $ret->setLastName($modelData['lastName']);
+        }
+        if (isset($modelData['communicationsConsent'])) {
+            $ret->setCommunicationsConsent($modelData['communicationsConsent']);
+        }
 
         return $ret;
     }
