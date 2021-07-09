@@ -1037,7 +1037,8 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
                 }
             }
             if (!empty($post['copyChunks']) && !empty($memsource_project)) {
-                $projectDao->sync_split_jobs($memsource_project);
+                $error = $projectDao->sync_split_jobs($memsource_project);
+                if ($error) $app->flashNow('error', $error);
                 $reload_for_wordcount = 1;
             }
             if (!empty($post['unpublish_all_translated']) || !empty($post['unpublish_all_revisions'])) {
