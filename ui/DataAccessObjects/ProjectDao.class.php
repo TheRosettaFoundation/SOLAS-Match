@@ -1129,6 +1129,10 @@ $memsource_change_country_to_kp = [
         $task->setTaskType($taskType);
 
         if (!empty($job['wordsCount'])) {
+            if ($job['wordsCount'] == -1) {
+                error_log("Sync Memsource not ready (wordsCount: -1) in new job {$job['innerId']}/{$job['uid']} for: {$job['filename']}");
+                return "Memsource not ready for job ID: {$job['innerId']}, wait a bit and click Sync Memsource again";
+            }
             $task->setWordCount($job['wordsCount']);
             if ( $taskType == Common\Enums\TaskTypeEnum::TRANSLATION ||
                 ($taskType == Common\Enums\TaskTypeEnum::PROOFREADING &&
