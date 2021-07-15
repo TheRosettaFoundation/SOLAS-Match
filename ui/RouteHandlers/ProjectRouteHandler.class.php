@@ -466,6 +466,7 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
                         error_log("Can't find user_id for {$part['assignedTo'][0]['linguist']['id']} in event JOB_STATUS_CHANGED, jobPart status: ASSIGNED");
                         $user_id = 62927; // translators@translatorswithoutborders.org
 //(**)dev server                        $user_id = 3297;
+$user_id = 3297;//TEST
                     }
 
                     if (!$taskDao->taskIsClaimed($task_id)) {
