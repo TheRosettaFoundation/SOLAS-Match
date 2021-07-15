@@ -464,7 +464,8 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
                     $user_id = $projectDao->get_user_id_from_memsource_user($part['assignedTo'][0]['linguist']['id']);
                     if (!$user_id) {
                         error_log("Can't find user_id for {$part['assignedTo'][0]['linguist']['id']} in event JOB_STATUS_CHANGED, jobPart status: ASSIGNED");
-                        continue;
+                        $user_id = 62927; // translators@translatorswithoutborders.org
+//(**)dev server                        $user_id = 3297;
                     }
 
                     if (!$taskDao->taskIsClaimed($task_id)) {
@@ -574,7 +575,8 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
                 $user_id = $projectDao->get_user_id_from_memsource_user($part['assignedTo'][0]['linguist']['id']);
                 if (!$user_id) {
                     error_log("Can't find user_id for {$part['assignedTo'][0]['linguist']['id']} in event JOB_ASSIGNED jobPart");
-                    continue;
+                    $user_id = 62927; // translators@translatorswithoutborders.org
+//(**)dev server                    $user_id = 3297;
                 }
 
                 if (!$taskDao->taskIsClaimed($task_id)) {
