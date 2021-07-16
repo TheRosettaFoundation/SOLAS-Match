@@ -457,7 +457,7 @@ class UserDao extends BaseDao
                 $timezone = !empty($timezones[$user_country]) ? $timezones[$user_country] : 'Europe/Rome';
                 $data = array(
                     'email' => $user_info->email,
-                    'password' => uniqid(),
+                    'password' => 'A#' . uniqid(),
                     'firstName' => $user_personal_info->firstName,
                     'lastName' => $user_personal_info->lastName,
                     'role' => Common\Enums\MemsourceRoleEnum::LINGUIST,
@@ -607,7 +607,7 @@ class UserDao extends BaseDao
         $timezone = !empty($timezones[$user_country]) ? $timezones[$user_country] : 'Europe/Rome';
         $data = array(
             'email' => $user_info->email,
-            'password' => uniqid(),
+            'password' => 'A#' . uniqid(),
             'firstName' => $user_personal_info->firstName,
             'lastName' => $user_personal_info->lastName,
             'role' => Common\Enums\MemsourceRoleEnum::PROJECT_MANAGER,
