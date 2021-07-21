@@ -139,8 +139,8 @@ function addSecondaryLanguage(
     button = document.getElementById("removeLanguageButton");
     button.disabled = false;
 
-    $("language_code_source_" + userQualifiedPairsCount).select2();
-    $("language_code_target_" + userQualifiedPairsCount).select2();
+    $("#language_code_source_" + userQualifiedPairsCount).select2();
+    $("#language_code_target_" + userQualifiedPairsCount).select2();
   }
 
   return false;
