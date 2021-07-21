@@ -63,7 +63,9 @@ function loadingComplete()
       );
   }
 
+  $('#country').select2();
   $('#nativeLanguageSelect').select2();
+  $('#nativeCountrySelect').select2();
 
   document.getElementById("loading_warning").innerHTML = "";
   document.getElementById("loading_warning1").innerHTML = "";
@@ -136,6 +138,9 @@ function addSecondaryLanguage(
     }
     button = document.getElementById("removeLanguageButton");
     button.disabled = false;
+
+    $("language_code_source_" + userQualifiedPairsCount).select2();
+    $("language_code_target_" + userQualifiedPairsCount).select2();
   }
 
   return false;
