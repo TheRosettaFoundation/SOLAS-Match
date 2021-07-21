@@ -63,6 +63,8 @@ function loadingComplete()
       );
   }
 
+  $('#nativeLanguageSelect').select2();
+
   document.getElementById("loading_warning").innerHTML = "";
   document.getElementById("loading_warning1").innerHTML = "";
 }
