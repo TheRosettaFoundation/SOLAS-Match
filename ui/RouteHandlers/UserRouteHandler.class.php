@@ -767,6 +767,10 @@ class UserRouteHandler
                     if ($nativeLocale && $nativeLocale->getLanguageCode()) {
                         $app->redirect($app->urlFor("home"));
                     } else {
+                        if ($userDao->terms_accepted($user->getId()) < 1) {
+                            // Since they are logged in (via Google)...
+                            $app->redirect($app->urlFor('IANGoogleuser-private-profile', array('user_id' => $user->getId())));
+                        }
                         $app->redirect($app->urlFor('user-private-profile', array('user_id' => $user->getId())));
                     }
                   }
