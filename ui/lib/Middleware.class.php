@@ -24,7 +24,7 @@ class Middleware
 
         if (empty($_SESSION['profile_completed'])) {
             $app->flash('error', 'You must accept the Code of Conduct before continuing'); // Since they are logged in (via Google)...
-            $app->redirect($app->urlFor('IANGoogleuser-private-profile', array('user_id' => $_SESSION['user_id'])));
+            $app->redirect($app->urlFor('googleregister', array('user_id' => $_SESSION['user_id'])));
         } elseif ($_SESSION['profile_completed'] == 1) {
             $userDao = new DAO\UserDao();
             if (!$userDao->is_admin_or_org_member($_SESSION['user_id'])) {
