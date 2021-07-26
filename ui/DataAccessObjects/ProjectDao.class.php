@@ -1137,6 +1137,7 @@ $memsource_change_country_to_kp = [
                 return "Memsource not ready for job ID: {$job['innerId']}, wait a bit and click Sync Memsource again";
             }
             $task->setWordCount($job['wordsCount']);
+            $this->queue_asana_project($project_id);
             if ( $taskType == Common\Enums\TaskTypeEnum::TRANSLATION ||
                 ($taskType == Common\Enums\TaskTypeEnum::PROOFREADING &&
                  $this->no_translation_workflow($memsource_project))

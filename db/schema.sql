@@ -5068,9 +5068,6 @@ DROP PROCEDURE IF EXISTS `add_to_project_word_count`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `add_to_project_word_count`(IN `projectId` INT, IN `wordCount` INT)
 BEGIN
-    IF 1=(SELECT `word-count` FROM Projects WHERE id=projectId) THEN
-        CALL queue_asana_project(projectId);
-    END IF;
     UPDATE Projects SET `word-count`=IF(`word-count`<=1, 0, `word-count`)+wordCount  WHERE id=projectId;
  END//
 DELIMITER ;
@@ -9472,8 +9469,12 @@ DROP PROCEDURE IF EXISTS `queue_asana_project`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `queue_asana_project`(IN pID INT)
 BEGIN
+  IF NOT EXISTS (SELECT 1 FROM AsanaProjects WHERE project_id=pID) THEN
     INSERT INTO AsanaProjects (project_id, run_time)
-                       VALUES (       pID, DATE_ADD(NOW(), INTERVAL 1 HOUR));
+                       VALUES (       pID, DATE_ADD(NOW(), INTERVAL 10 MINUTE));
+  ELSE
+    UPDATE AsanaProjects SET run_time=DATE_ADD(NOW(), INTERVAL 10 MINUTE) WHERE project_id=pID;
+  END IF;
 END//
 DELIMITER ;
 
