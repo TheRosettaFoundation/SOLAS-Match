@@ -985,6 +985,22 @@ $memsource_change_country_to_kp = [
         LibAPI\PDOWrapper::call('dequeue_asana_project', LibAPI\PDOWrapper::cleanse($project_id));
     }
 
+    public function set_asana_task($project_id, $language_code_source, $language_code_target, $asana_task_id)
+    {
+        LibAPI\PDOWrapper::call('set_asana_task',
+            LibAPI\PDOWrapper::cleanse($project_id) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($language_code_source) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($language_code_target) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($asana_task_id));
+    }
+
+    public function get_asana_tasks($project_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_asana_tasks', LibAPI\PDOWrapper::cleanse($project_id));
+        if (empty($result)) return [];
+        return $result;
+    }
+
     public function get_user_id_from_memsource_user($memsource_user_id)
     {
         $result = LibAPI\PDOWrapper::call('get_user_id_from_memsource_user', LibAPI\PDOWrapper::cleanse($memsource_user_id));
