@@ -31,7 +31,7 @@ class MemsourceTimezone
             'ANGOLA' => 'Africa/Luanda',
             'ZAMBIA' => 'Africa/Lusaka',
             'MOZAMBIQUE' => 'Africa/Maputo',
-            'SWAZILAND' => 'Africa/Mbabane',
+            'ESWATINI' => 'Africa/Mbabane',
             'SOMALIA' => 'Africa/Mogadishu',
             'KENYA' => 'Africa/Nairobi',
             'CHAD' => 'Africa/Ndjamena',
