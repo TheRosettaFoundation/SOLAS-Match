@@ -997,6 +997,15 @@ CREATE TABLE IF NOT EXISTS `AsanaProjects` (
   CONSTRAINT FK_AsanaProjects_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `AsanaTasks` (
+  project_id INT(10) UNSIGNED NOT NULL,
+  language_code_source VARCHAR(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  language_code_target VARCHAR(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  asana_task_id        VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  KEY `project_id` (`project_id`),
+  CONSTRAINT `FK_AsanaTasks_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 -- Data exporting was unselected.
 
@@ -5068,9 +5077,6 @@ DROP PROCEDURE IF EXISTS `add_to_project_word_count`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `add_to_project_word_count`(IN `projectId` INT, IN `wordCount` INT)
 BEGIN
-    IF 1=(SELECT `word-count` FROM Projects WHERE id=projectId) THEN
-        CALL queue_asana_project(projectId);
-    END IF;
     UPDATE Projects SET `word-count`=IF(`word-count`<=1, 0, `word-count`)+wordCount  WHERE id=projectId;
  END//
 DELIMITER ;
@@ -9472,8 +9478,12 @@ DROP PROCEDURE IF EXISTS `queue_asana_project`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `queue_asana_project`(IN pID INT)
 BEGIN
+  IF NOT EXISTS (SELECT 1 FROM AsanaProjects WHERE project_id=pID) THEN
     INSERT INTO AsanaProjects (project_id, run_time)
-                       VALUES (       pID, DATE_ADD(NOW(), INTERVAL 1 HOUR));
+                       VALUES (       pID, DATE_ADD(NOW(), INTERVAL 10 MINUTE));
+  ELSE
+    UPDATE AsanaProjects SET run_time=DATE_ADD(NOW(), INTERVAL 10 MINUTE) WHERE project_id=pID;
+  END IF;
 END//
 DELIMITER ;
 
@@ -9490,6 +9500,23 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `dequeue_asana_project`(IN pID INT)
 BEGIN
     DELETE FROM AsanaProjects WHERE project_id=pID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_asana_task`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_asana_task`(IN pID INT, IN code_source VARCHAR(10), IN code_target VARCHAR(10), IN asana_id VARCHAR(30))
+BEGIN
+    INSERT INTO AsanaTasks (project_id, language_code_source, language_code_target, asana_task_id)
+    VALUES                 (       pID,          code_source,          code_target,      asana_id);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_asana_tasks`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_asana_tasks`(IN pID INT)
+BEGIN
+    SELECT * FROM AsanaTasks WHERE project_id=pID;
 END//
 DELIMITER ;
 
