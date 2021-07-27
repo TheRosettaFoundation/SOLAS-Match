@@ -879,7 +879,7 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function register($email, $password, $first_name = '', $last_name = '', $communications_consent = 0)
+    public function register($email, $password, $first_name, $last_name, $communications_consent)
     {
         $ret = null;
         $registerData = new Common\Protobufs\Models\Register();

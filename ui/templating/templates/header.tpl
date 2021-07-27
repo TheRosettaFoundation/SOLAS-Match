@@ -60,12 +60,19 @@
             {$extra_scripts}
         {/if}
     </head>
+    <style>
+    .navbar .nav li a{
+        color:#143878 !important;
+    }
+   
+    </style>
 
         <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if}>
         <div class="navbar navbar-fixed-top">
            <div class="navbar-inner">
                 <div class="container">
-                    <a href="{urlFor name='home'}" class="pull-left"><img height="40px" src="{urlFor name='home'}ui/img/logo_katotrommons.png"></a>
+                   <a href="{urlFor name='home'}" class="pull-left header-link"><img height="40px" src="{urlFor name='home'}ui/img/logo_katotrommons.png"></a> 
+                   <!-- <a href="{urlFor name='home'}" class="pull-left header-link"><img height="40px" src="https://translatorswithoutborders.org/wp-content/uploads/2019/03/cropped-800x300.png"></a> -->
                     <ul class="nav">
                         {if !isset($site_admin)}
                         <li {if isset($current_page) && $current_page == 'home'}class="active"{/if} >

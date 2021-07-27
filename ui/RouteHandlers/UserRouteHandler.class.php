@@ -419,14 +419,75 @@ class UserRouteHandler
         }
         
         if ($appendExtraScripts) {
-            $extra_scripts .= '<script type="text/javascript">function compareEmails() {if (document.getElementById("email").value != document.getElementById("email2").value) {window.alert("Entered emails must be identical."); return false;} return true;}</script>';
+            $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script> ';
+            $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script> ';
+            $extra_scripts .= '<script type="text/javascript">function compareEmails() {if (document.getElementById("email").value != document.getElementById("email2").value) {window.alert("Entered emails must be identical."); return false;} return true; }
+            $().ready(function() {
+            $("#registerform").validate({
+                rules: {
+                    first_name: "required",
+                    last_name: "required",
+                    username: {
+                        required: true,
+                        minlength: 2
+                    },
+                    password: {
+                        required: true,
+                        minlength: 5
+                    },
+                    confirm_password: {
+                        required: true,
+                        minlength: 5,
+                        equalTo: "#password"
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    email2: {
+                        required: true,
+                        email: true,
+                        equalTo: "#email"
+                    },
+                    age_consent: "required",
+                    conduct_consent: "required"
+                },
+                messages: {
+                    first_name: "Please enter your firstname",
+                    last_name: "Please enter your lastname",
+                    username: {
+                        required: "Please enter a username",
+                        minlength: "Your username must consist of at least 2 characters"
+                    },
+                    password: {
+                        required: "Please provide a password",
+                        minlength: "Your password must be at least 5 characters long"
+                    },
+                    confirm_password: {
+                        required: "Please provide a password",
+                        minlength: "Your password must be at least 5 characters long",
+                        equalTo: "Please enter the same password as above"
+                    },
+                    email: "Please enter a valid email address",
+                    email2: {
+                        required:"Please enter a valid email address",
+                        equalTo: "Please enter the same email address as above"
+                    },
+                    age_consent: "Please ensure you are above 18 years of age",
+                    conduct_consent: "You need to agree to this to proceed",
+                    
+                }
+            });
+            $("#tool").tooltip();
+        });
+            </script>';
             $app->view()->appendData(array("extra_scripts" => $extra_scripts));
         }
         
         $error = null;
         $warning = null;
         if (\SolasMatch\UI\isValidPost($app)) {
-            $post = $app->request()->post();
+            $post = $app->request()->post();           
             $temp = md5($post['email'].substr(Common\Lib\Settings::get("session.site_key"), 0, 20));
             Common\Lib\UserSession::clearCurrentUserID();
             if (!Lib\Validator::validateEmail($post['email'])) {
@@ -441,9 +502,21 @@ class UserRouteHandler
                     // notify user that they are not yet verified an resent verification email
                 }
             }
+            elseif(is_null($post['username']) || empty($post['username'])){
+                $error = "You did not enter username";
+            }
+            elseif(is_null($post['first_name']) || empty($post['first_name'])){
+                $error = "You did not enter First name";
+            }
+            elseif(is_null($post['last_name']) || empty($post['last_name'])){
+                $error = "You did not enter Last name";
+            }
             
             if (is_null($error)) {
-                if ($userDao->register($post['email'], $post['password'])) {
+
+                array_key_exists('newsletter_consent', $post) ? $communications_consent = 1 : $communications_consent = 0;
+           
+                if ($userDao->register($post['email'], $post['password'],$post['first_name'],$post['last_name'],$communications_consent)) {
                     $app->flashNow(
                         "success",
                         sprintf(Lib\Localisation::getTranslation('register_4'), $app->urlFor("login"))
@@ -647,6 +720,7 @@ class UserRouteHandler
             $post = $app->request()->post();
 
             if (isset($post['login'])) {
+                
                 $user = null;
                 try {
                     $user = $userDao->login($post['email'], $post['password']);
@@ -950,7 +1024,7 @@ class UserRouteHandler
                 gapi.signin2.render('g-signin2', {
                     scope: '$scope',
                     width: 219,
-                    height: 36,
+                    height: 40,
                     longtitle: true,
                     theme: 'dark',
                     onsuccess: onSignIn,
@@ -960,11 +1034,13 @@ class UserRouteHandler
 
             function onSignIn(googleUser) {
                 $('#gSignInWrapper').attr('style', 'display: none');
+                console.log(googleUser);
                 window.location.replace('$redirectUri?gplustoken=' + googleUser.getAuthResponse().id_token);
             }
 
             function onSignInFailure() {
                 console.log('Google SignIn Failure');
+                alert('Google SignIn Failure');
             }
             </script>
             <script src="https://apis.google.com/js/client:platform.js?onload=render" async defer></script>
