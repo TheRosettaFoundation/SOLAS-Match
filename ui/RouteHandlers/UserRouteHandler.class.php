@@ -841,6 +841,10 @@ class UserRouteHandler
                     if ($nativeLocale && $nativeLocale->getLanguageCode()) {
                         $app->redirect($app->urlFor("home"));
                     } else {
+                        if ($userDao->terms_accepted($user->getId()) < 1) {
+                            // Since they are logged in (via Google)...
+                            $app->redirect($app->urlFor('googleregister', array('user_id' => $user->getId())));
+                        }
                         $app->redirect($app->urlFor('user-private-profile', array('user_id' => $user->getId())));
                     }
                   }
@@ -1301,7 +1305,7 @@ EOD;
                     if (!empty($post['communications_consent'])) $userDao->insert_communications_consent($user_id, 1);
                     else                                         $userDao->insert_communications_consent($user_id, 0);
 
-                    $userDao->update_terms_accepted($user_id);
+                    $userDao->update_terms_accepted($user_id, 2);
 
                     $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user_id)));
                 } catch (\Exception $e) {
@@ -1321,6 +1325,8 @@ EOD;
         }
 
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $extra_scripts .= '<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />';
+        $extra_scripts .= '<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>';
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/UserPrivateProfile4.js\"></script>";
 
         foreach ($userQualifiedPairs as $index => $userQualifiedPair) {
@@ -1418,7 +1424,7 @@ EOD;
                     if (!empty($post['communications_consent'])) $userDao->insert_communications_consent($user_id, 1);
                     else                                         $userDao->insert_communications_consent($user_id, 0);
 
-                    $userDao->update_terms_accepted($user_id);
+                    $userDao->update_terms_accepted($user_id, 2);
 
                     $app->redirect($app->urlFor('org-dashboard'));
                 } catch (\Exception $e) {

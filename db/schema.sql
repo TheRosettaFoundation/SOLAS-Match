@@ -1762,6 +1762,14 @@ CREATE TABLE IF NOT EXISTS `Referers` (
   PRIMARY KEY (referer)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `GoogleUserDetails` (
+  email      VARCHAR(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  first_name VARCHAR(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  last_name  VARCHAR(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  retrieved  datetime NOT NULL,
+  KEY (email)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -2289,6 +2297,9 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteUser`(IN `userId` INT)
 BEGIN
     if EXISTS (select 1 from Users where Users.id = userId) then
+
+        SELECT email INTO @email FROM Users WHERE id=userId;
+        DELETE FROM GoogleUserDetails WHERE email=@email;
 
         UPDATE UserPersonalInformation SET
            `first-name`='',
@@ -9566,6 +9577,22 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_referers`()
 BEGIN
     SELECT * FROM Referers;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `set_google_user_details`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `set_google_user_details`(IN mail VARCHAR(128), IN firstName VARCHAR(128), IN lastName VARCHAR(128))
+BEGIN
+    INSERT INTO GoogleUserDetails (email, first_name, last_name, retrieved) VALUES (mail, firstName, lastName, NOW());
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `get_google_user_details`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_google_user_details`(IN mail VARCHAR(128))
+BEGIN
+    SELECT * FROM GoogleUserDetails WHERE email=mail ORDER BY retrieved DESC;
 END//
 DELIMITER ;
 

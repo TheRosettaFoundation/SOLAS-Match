@@ -1093,6 +1093,12 @@ class Users
             $english = DAO\LanguageDao::getLanguage(null, "en");
             $userInfo->setUserId($newUser->getId());
             $userInfo->setLanguagePreference($english->getId());
+
+            if ($google = DAO\UserDao::get_google_user_details($email)) {
+                $userInfo->setFirstName($google['first_name']);
+                $userInfo->setLastName($google['last_name']);
+            }
+
             $personal_info = DAO\UserDao::savePersonalInfo($userInfo);
         }
         $params = array();
@@ -1213,6 +1219,8 @@ class Users
             if (empty($response->email)) {
                 throw new \Exception("Unable to obtain user's email address from Google.");
            }
+
+            if (!empty($response->given_name) && !empty($response->family_name)) DAO\UserDao::set_google_user_details($response->email, $response->given_name, $response->family_name);
 
             API\Dispatcher::sendResponse(null, $response->email, null, $format, null);
         } catch (\Exception $e) {

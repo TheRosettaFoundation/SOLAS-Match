@@ -1044,7 +1044,7 @@ $memsource_change_country_to_kp = [
         $memsource_project_uid = $memsource_project['memsource_project_uid'];
 
         $jobs = $userDao->memsource_list_jobs($memsource_project_uid, $project_id);
-        if (empty($jobs)) return;
+        if (empty($jobs)) return 0;
 
         $memsource_project = $this->get_memsource_project($project_id); // Workflow could have been updated
 
@@ -1053,8 +1053,10 @@ $memsource_change_country_to_kp = [
             $full_job = $userDao->memsource_get_job($memsource_project_uid, $uid);
             if ($full_job) {
                 if (empty($memsource_task)) {
-                    if ($this->create_task($memsource_project, $full_job)) {
+                    if (!$error = $this->create_task($memsource_project, $full_job)) {
                         error_log("Created task for job $uid {$full_job['innerId']} in project $project_id");
+                    } elseif ($error != '-') {
+                        return $error;
                     }
                 } else {
                     $this->update_task_from_job($memsource_project, $full_job, $memsource_task);
@@ -1078,6 +1080,7 @@ $memsource_change_country_to_kp = [
                     }
                 }
         }
+        return 0;
     }
 
     private function create_task($memsource_project, $job)
@@ -1087,7 +1090,7 @@ $memsource_change_country_to_kp = [
 
         if (empty($job['filename'])) {
             error_log("No filename in new jobPart {$job['uid']}");
-            return 0;
+            return '-';
         }
 //error_log('Sync create_task job: ' . print_r($job, true));
 
@@ -1114,7 +1117,7 @@ $memsource_change_country_to_kp = [
             $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
         } elseif ($job['workflowLevel'] > 12) {
             error_log("Sync Don't support workflowLevel > 12: {$job['workflowLevel']} in new job {$job['uid']} for: {$job['fileName']}");
-            return 0;
+            return '-';
         } else {
             $taskType = [$memsource_project['workflow_level_1'], $memsource_project['workflow_level_2'], $memsource_project['workflow_level_3'], $memsource_project['workflow_level_4'], $memsource_project['workflow_level_5'], $memsource_project['workflow_level_6'], $memsource_project['workflow_level_7'], $memsource_project['workflow_level_8'], $memsource_project['workflow_level_9'], $memsource_project['workflow_level_10'], $memsource_project['workflow_level_11'], $memsource_project['workflow_level_12']][$job['workflowLevel'] - 1];
             error_log("Sync taskType: $taskType, workflowLevel: {$job['workflowLevel']}");
@@ -1123,12 +1126,16 @@ $memsource_change_country_to_kp = [
             elseif ($taskType == '' && $job['workflowLevel'] == 1) $taskType = Common\Enums\TaskTypeEnum::TRANSLATION;
             else {
                 error_log("Sync Can't find expected taskType ($taskType) in new job {$job['uid']} for: {$job['filename']}");
-                return 0;
+                return '-';
             }
         }
         $task->setTaskType($taskType);
 
         if (!empty($job['wordsCount'])) {
+            if ($job['wordsCount'] == -1) {
+                error_log("Sync Memsource not ready (wordsCount: -1) in new job {$job['innerId']}/{$job['uid']} for: {$job['filename']}");
+                return "Memsource not ready for job ID: {$job['innerId']}, wait a bit and click Sync Memsource again";
+            }
             $task->setWordCount($job['wordsCount']);
             if ( $taskType == Common\Enums\TaskTypeEnum::TRANSLATION ||
                 ($taskType == Common\Enums\TaskTypeEnum::PROOFREADING &&
@@ -1171,7 +1178,7 @@ error_log("Sync Updating project_wordcount with {$job['wordsCount']}");//(**)
         $task_id = $taskDao->createTaskDirectly($task);
         if (!$task_id) {
             error_log("Failed to add task for new job {$job['uid']} for: {$job['filename']}");
-            return 0;
+            return '-';
         }
         error_log("Added Task: $task_id for new job {$job['uid']} for: {$job['filename']}");
 
@@ -1185,7 +1192,7 @@ error_log("set_memsource_task($task_id, 0, {$job['uid']}...), success: $success"
         if (!$success) { // May be because of button double click
             $this->delete_task_directly($task_id);
             error_log("Sync delete_task_directly($task_id) because of set_memsource_task fail");
-            return 0;
+            return '-';
         }
 
         $project_id = $project->getId();
@@ -1208,7 +1215,7 @@ error_log("set_memsource_task($task_id, 0, {$job['uid']}...), success: $success"
         file_put_contents("$uploadFolder/$filename", "files/proj-$project_id/task-$task_id/v-0/$filename"); // Point to it
 
         if (mb_strlen($filename) <= 255) $this->queue_copy_task_original_file($project_id, $task_id, $job['uid'], $filename); // cron will copy file from memsource
-        return 1;
+        return 0;
     }
 
     private function adjust_for_deleted_task($memsource_project, $project_task)

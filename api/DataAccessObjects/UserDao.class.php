@@ -952,4 +952,17 @@ class UserDao
             return null;
         }
     }
+
+    public static function set_google_user_details($email, $first_name, $last_name)
+    {
+        Lib\PDOWrapper::call('set_google_user_details', Lib\PDOWrapper::cleanseNullOrWrapStr($email) . ',' . Lib\PDOWrapper::cleanseNullOrWrapStr($first_name) . ',' . Lib\PDOWrapper::cleanseNullOrWrapStr($last_name));
+    }
+
+    public static function get_google_user_details($email)
+    {
+        $result = Lib\PDOWrapper::call('get_google_user_details', Lib\PDOWrapper::cleanseNullOrWrapStr($email));
+        if (empty($result)) return 0;
+
+        return $result[0];
+    }
 }

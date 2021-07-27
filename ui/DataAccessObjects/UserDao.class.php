@@ -457,7 +457,7 @@ class UserDao extends BaseDao
                 $timezone = !empty($timezones[$user_country]) ? $timezones[$user_country] : 'Europe/Rome';
                 $data = array(
                     'email' => $user_info->email,
-                    'password' => uniqid(),
+                    'password' => 'Ab#0' . uniqid(),
                     'firstName' => $user_personal_info->firstName,
                     'lastName' => $user_personal_info->lastName,
                     'role' => Common\Enums\MemsourceRoleEnum::LINGUIST,
@@ -607,7 +607,7 @@ class UserDao extends BaseDao
         $timezone = !empty($timezones[$user_country]) ? $timezones[$user_country] : 'Europe/Rome';
         $data = array(
             'email' => $user_info->email,
-            'password' => uniqid(),
+            'password' => 'Ab#0' . uniqid(),
             'firstName' => $user_personal_info->firstName,
             'lastName' => $user_personal_info->lastName,
             'role' => Common\Enums\MemsourceRoleEnum::PROJECT_MANAGER,
@@ -909,25 +909,25 @@ class UserDao extends BaseDao
 
     public function terms_accepted($user_id)
     {
-        $terms_accepted = false;
+        $terms_accepted = 0;
         $result = LibAPI\PDOWrapper::call('terms_accepted', LibAPI\PDOWrapper::cleanse($user_id));
         if (!empty($result)) {
-            $terms_accepted = $result[0]['accepted_level'] >= 1;
+            $terms_accepted = $result[0]['accepted_level'];
         }
         return $terms_accepted;
     }
 
     public function setRequiredProfileCompletedinSESSION($user_id)
     {
-        if ($this->terms_accepted($user_id)) {
-            $_SESSION['profile_completed'] = 1;
+        if ($accepted_level = $this->terms_accepted($user_id)) {
+            $_SESSION['profile_completed'] = $accepted_level;
         }
     }
 
-    public function update_terms_accepted($user_id)
+    public function update_terms_accepted($user_id, $accepted_level = 1)
     {
-        $_SESSION['profile_completed'] = 1;
-        LibAPI\PDOWrapper::call('update_terms_accepted', LibAPI\PDOWrapper::cleanse($user_id) . ',1');
+        $_SESSION['profile_completed'] = $accepted_level;
+        LibAPI\PDOWrapper::call('update_terms_accepted', LibAPI\PDOWrapper::cleanse($user_id) . ",$accepted_level");
     }
 
     public function saveUser($user)

@@ -63,6 +63,10 @@ function loadingComplete()
       );
   }
 
+  $('#country').select2();
+  $('#nativeLanguageSelect').select2();
+  $('#nativeCountrySelect').select2();
+
   document.getElementById("loading_warning").innerHTML = "";
   document.getElementById("loading_warning1").innerHTML = "";
 }
@@ -128,6 +132,10 @@ function addSecondaryLanguage(
 
     var button = document.getElementById("addLanguageButton");
     secondaryLanguageDiv.insertBefore(locale, button);
+
+    $("#language_code_source_" + userQualifiedPairsCount).select2();
+    $("#language_code_target_" + userQualifiedPairsCount).select2();
+
     userQualifiedPairsCount++;
     if (userQualifiedPairsCount >= userQualifiedPairsLimit) {
       button.disabled = true;
