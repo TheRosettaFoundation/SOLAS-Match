@@ -2804,8 +2804,8 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                     curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
                     $result = curl_exec($ch);
                     curl_close($ch);
-(**) */
                     error_log("Posting to Asana Incoming Task project: $result");
+(**) */
                 }
 
                 error_log("dequeue_asana_project() project_id: $projectId Removing");
