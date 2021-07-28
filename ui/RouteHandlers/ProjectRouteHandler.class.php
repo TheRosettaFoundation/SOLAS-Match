@@ -347,6 +347,7 @@ class ProjectRouteHandler
             $project_id = $project->getId();
             if (!empty($part['wordsCount'])) {
                 $task->setWordCount($part['wordsCount']);
+                $projectDao->queue_asana_project($project_id);
                 if ( $taskType == Common\Enums\TaskTypeEnum::TRANSLATION ||
                     ($taskType == Common\Enums\TaskTypeEnum::PROOFREADING &&
                      $projectDao->no_translation_workflow($memsource_project))

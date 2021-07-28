@@ -1673,6 +1673,7 @@ class TaskRouteHandler
             if ($site_admin || $task->getTaskStatus() < Common\Enums\TaskStatusEnum::IN_PROGRESS) {
                 if (isset($post['word_count']) && ctype_digit($post['word_count'])) {
                     $task->setWordCount($post['word_count']);
+                    $projectDao->queue_asana_project($task->getProjectId());
                 } elseif (isset($post['word_count']) && $post['word_count'] != "") {
                     $word_count_err = Lib\Localisation::getTranslation('task_alter_6');
                 } else {
