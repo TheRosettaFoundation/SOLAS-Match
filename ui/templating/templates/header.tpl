@@ -145,13 +145,13 @@
                             {/if}
                         </li>
                         {if isset($user)}
-                            <li>
+                            <li class="profile">
                                 <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                                     <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
                                        {TemplateHelper::uiCleanseHTML($user->getDisplayName())}
                                 </a>
                             </li>
-                            <li>
+                            <li class="logout">
                                 <a href="{urlFor name="logout"}">{Localisation::getTranslation('header_log_out')}</a>
                             </li>
                         {else}

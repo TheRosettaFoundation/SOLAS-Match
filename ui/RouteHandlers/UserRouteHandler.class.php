@@ -91,6 +91,11 @@ class UserRouteHandler
             array($middleware, "authUserIsLoggedInNoProfile"),
             array($this, "userPrivateProfile")
         )->via("POST")->name("user-private-profile");
+        $app->get(
+            "/:user_id/googleregister/",
+            array($middleware, "authUserIsLoggedInNoProfile"),
+            array($this, "googleregister")
+        )->via("POST")->name("googleregister");
 
         $app->get(
             '/:user_id/user-code-of-conduct/',
@@ -1072,6 +1077,111 @@ EOD;
                 $userDao->requestAuthCode($retvals['contact/email']);
             }
         }
+    }
+
+    public function googleregister($user_id){
+
+        $app = \Slim\Slim::getInstance();       
+      
+        $userDao = new DAO\UserDao();
+        $user_personal_info = $userDao->getUserPersonalInformation($user_id);
+        $user_info = $userDao->getUser($user_id);
+
+        if ($app->request()->isPost()) {
+            $post = $app->request()->post();
+            $user_id = $post['user_id'];
+            $user_personal_info = $userDao->getUserPersonalInformation($user_id);
+            $user_info = $userDao->getUser($user_id);
+           
+            $user_info->setDisplayName($post['username']);
+            $user_info->setEmail($post['email']);
+            $user_personal_info->setFirstName($post['first_name']);
+            $user_personal_info->setLastName($post['last_name']);
+            $userDao->updateUser($user_info);
+            $userDao->updatePersonalInfo($user_id, $user_personal_info);
+            array_key_exists('newsletter_consent', $post) ? $userDao->insert_communications_consent($user_id, 1) : $userDao->insert_communications_consent($user_id, 0);
+            $app->redirect($app->urlFor("home"));
+
+        }
+        else{
+            
+            
+            $email = $user_info->email;
+            $username = $user_info->display_name;
+            $firstName = $user_personal_info->firstName;
+            $lastName = $user_personal_info->lastName;
+            
+    
+            $extra_scripts  = '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script> ';
+            $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script> ';
+            $extra_scripts .= '<script type="text/javascript">function compareEmails() {if (document.getElementById("email").value != document.getElementById("email2").value) {window.alert("Entered emails must be identical."); return false;} return true; }
+            $().ready(function() {
+            $("#gregisterform").validate({
+                rules: {
+                    first_name: "required",
+                    last_name: "required",
+                    username: {
+                        required: true,
+                        minlength: 2
+                    },
+                    password: {
+                        required: true,
+                        minlength: 5
+                    },
+                    confirm_password: {
+                        required: true,
+                        minlength: 5,
+                        equalTo: "#password"
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    email2: {
+                        required: true,
+                        email: true,
+                        equalTo: "#email"
+                    },
+                    age_consent: "required",
+                    conduct_consent: "required"
+                },
+                messages: {
+                    first_name: "Please enter your firstname",
+                    last_name: "Please enter your lastname",
+                    username: {
+                        required: "Please enter a username",
+                        minlength: "Your username must consist of at least 2 characters"
+                    },
+                    
+                    email: "Please enter a valid email address",
+                   
+                    age_consent: "Please ensure you are above 18 years of age",
+                    conduct_consent: "You need to agree to this to proceed",
+                    
+                }
+            });
+            $("#tool").tooltip();
+            $(".profile").hide();
+            $(".logout").hide();
+        });
+            </script>';
+            $app->view()->appendData(array("extra_scripts" => $extra_scripts));
+            $app->view()->appendData(array('firstname' => $firstName, 'lastname' => $lastName, 'email' => $email, 'username' => $username, 'user_id' => $user_id));
+           
+            $app->render("user/googleregister.tpl");
+    
+            
+    
+
+        }
+        
+       
+       
+     
+
+     
+        
+       
     }
 
     public static function userPrivateProfile($user_id)
