@@ -573,7 +573,7 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjectsMetadata` (
   `file-token` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   `mime-type` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   `archived-date` datetime NOT NULL,
-  `tags` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `tags` varchar(512) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   UNIQUE KEY `archivedProject_id` (`archivedProject_id`),
   KEY `FK_ArchivedProjectsMetadata_Users` (`user_id-archived`),
   KEY `FK_ArchivedProjectsMetadata_Users_2` (`user_id-projectCreator`),
