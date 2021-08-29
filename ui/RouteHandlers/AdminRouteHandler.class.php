@@ -1477,6 +1477,7 @@ class AdminRouteHandler
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->afghanistan_2021_projects();
+        if (empty($all_users)) $all_users = [];
 
         $data = "\xEF\xBB\xBF" . '"Title","Partner","Creator","Word Count","Language Pairs","Number","Created Time","Deadline","Completed Time"' . "\n";
 
@@ -1506,6 +1507,7 @@ class AdminRouteHandler
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->haiti_2021_projects();
+        if (empty($all_users)) $all_users = [];
 
         $data = "\xEF\xBB\xBF" . '"Title","Partner","Creator","Word Count","Language Pairs","Number","Created Time","Deadline","Completed Time"' . "\n";
 
