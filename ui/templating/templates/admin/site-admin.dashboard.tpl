@@ -40,6 +40,8 @@
     <p><a href="{urlFor name="users_new"}">List new users</a> <a href="{urlFor name="download_users_new"}">[Download]</a> <a href="{urlFor name="download_users_new_unreviewed"}">[Download Unreviewed]</a></p>
     <p><a href="{urlFor name="users_tracked"}">List tracked Registrations</a> <a href="{urlFor name="download_users_tracked"}">[Download]</a> <a href="{urlFor name="add_tracking_code"}" target="_blank">Add a new tracking code</a></p>
     <p><a href="{urlFor name="download_covid_projects"}">[Download covid projects]</a></p>
+    <p><a href="{urlFor name="download_afghanistan_2021_projects"}">[Download 2021-afghanistan projects]</a></p>
+    <p><a href="{urlFor name="download_haiti_2021_projects"}">[Download 2021-haiti projects]</a></p>
     <hr />
 
     <form method="post" enctype="multipart/form-data" action="{urlFor name="search_users_by_language_pair"}" accept-charset="utf-8" target="_blank">

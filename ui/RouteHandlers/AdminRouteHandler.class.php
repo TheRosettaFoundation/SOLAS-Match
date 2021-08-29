@@ -74,6 +74,18 @@ class AdminRouteHandler
         )->via('POST')->name('download_covid_projects');
 
         $app->get(
+            '/download_afghanistan_2021_projects/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_afghanistan_2021_projects')
+        )->via('POST')->name('download_afghanistan_2021_projects');
+
+        $app->get(
+            '/download_haiti_2021_projects/',
+            array($middleware, 'authIsSiteAdmin'),
+            array($this, 'download_haiti_2021_projects')
+        )->via('POST')->name('download_haiti_2021_projects');
+
+        $app->get(
             '/late_matecat/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'late_matecat')
@@ -1453,6 +1465,66 @@ class AdminRouteHandler
 
         header('Content-type: text/csv');
         header('Content-Disposition: attachment; filename="covid_projects.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
+    }
+}
+
+    public function download_afghanistan_2021_projects()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $all_users = $statsDao->afghanistan_2021_projects();
+
+        $data = "\xEF\xBB\xBF" . '"Title","Partner","Creator","Word Count","Language Pairs","Number","Created Time","Deadline","Completed Time"' . "\n";
+
+        foreach ($all_users as $user_row) {
+            $data .= '"' . str_replace('"', '""', $user_row['project_title']) . '","' .
+                str_replace('"', '""', $user_row['org_name']) . '","' .
+                $user_row['creator_email'] . '","' .
+                $user_row['word_count'] . '","' .
+                $user_row['language_pairs'] . '","' .
+                $user_row['language_pairs_number'] . '","' .
+                $user_row['created'] . '","' .
+                $user_row['deadline'] . '","' .
+                $user_row['completed'] . '"' . "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="afghanistan_2021_projects.csv"');
+        header('Content-length: ' . strlen($data));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        echo $data;
+        die;
+    }
+}
+
+    public function download_haiti_2021_projects()
+    {
+        $statsDao = new DAO\StatisticsDao();
+        $all_users = $statsDao->haiti_2021_projects();
+
+        $data = "\xEF\xBB\xBF" . '"Title","Partner","Creator","Word Count","Language Pairs","Number","Created Time","Deadline","Completed Time"' . "\n";
+
+        foreach ($all_users as $user_row) {
+            $data .= '"' . str_replace('"', '""', $user_row['project_title']) . '","' .
+                str_replace('"', '""', $user_row['org_name']) . '","' .
+                $user_row['creator_email'] . '","' .
+                $user_row['word_count'] . '","' .
+                $user_row['language_pairs'] . '","' .
+                $user_row['language_pairs_number'] . '","' .
+                $user_row['created'] . '","' .
+                $user_row['deadline'] . '","' .
+                $user_row['completed'] . '"' . "\n";
+        }
+
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename="haiti_2021_projects.csv"');
         header('Content-length: ' . strlen($data));
         header('X-Frame-Options: ALLOWALL');
         header('Pragma: no-cache');

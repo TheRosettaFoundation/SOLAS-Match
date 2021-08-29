@@ -495,4 +495,16 @@ class StatisticsDao extends BaseDao
         $result = LibAPI\PDOWrapper::call('covid_projects', '');
         return $result;
     }
+
+    public function afghanistan_2021_projects()
+    {
+        $result = LibAPI\PDOWrapper::call('afghanistan_2021_projects', '');
+        return $result;
+    }
+
+    public function haiti_2021_projects()
+    {
+        $result = LibAPI\PDOWrapper::call('haiti_2021_projects', '');
+        return $result;
+    }
 }
