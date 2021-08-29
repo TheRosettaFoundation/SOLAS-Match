@@ -1472,7 +1472,6 @@ class AdminRouteHandler
         echo $data;
         die;
     }
-}
 
     public function download_afghanistan_2021_projects()
     {
@@ -1502,7 +1501,6 @@ class AdminRouteHandler
         echo $data;
         die;
     }
-}
 
     public function download_haiti_2021_projects()
     {
