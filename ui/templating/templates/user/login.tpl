@@ -52,8 +52,21 @@
                 <div id="openid_choice">
                     {if isset($gplus) && ($gplus === 'y')}
                         <div id="gSignInWrapper" style="margin-bottom: 10px;">
-                            <div id="g-signin2" class="g-signin2">
-                            </div>
+                          <div id="g_id_onload"
+                              data-client_id="{Settings::get('googlePlus.client_id')}"
+                              data-context="signin"
+                              data-ux_mode="popup"
+                              data-login_uri="{urlFor name='login'}"
+                              data-auto_prompt="false">
+                          </div>
+                          <div class="g_id_signin"
+                              data-type="standard"
+                              data-shape="rectangular"
+                              data-theme="outline"
+                              data-text="signin_with"
+                              data-size="large"
+                              data-logo_alignment="left">
+                          </div>
                         </div>
                     {/if}
                     <div id="pSignInWrapper">

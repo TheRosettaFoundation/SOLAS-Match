@@ -934,43 +934,7 @@ class UserRouteHandler
 
     private static function createGooglePlusJavaScript()
     {
-        $app = \Slim\Slim::getInstance();    
-        $scope = Common\Lib\Settings::get("googlePlus.scope");
-        $redirectUri = '';
-        if (isset($_SERVER['HTTPS']) && !is_null($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
-            $redirectUri = 'https://';
-        } else {
-            $redirectUri = 'http://';
-        }
-        $redirectUri .= $_SERVER['SERVER_NAME'].$app->urlFor('login');
-        
-        $script = <<<EOD
-            <script type="text/javascript">
-            function render() {
-                gapi.signin2.render('g-signin2', {
-                    scope: '$scope',
-                    width: 219,
-                    height: 36,
-                    longtitle: true,
-                    theme: 'dark',
-                    onsuccess: onSignIn,
-                    onfailure: onSignInFailure
-                });
-            }
-
-            function onSignIn(googleUser) {
-                $('#gSignInWrapper').attr('style', 'display: none');
-                window.location.replace('$redirectUri?gplustoken=' + googleUser.getAuthResponse().id_token);
-            }
-
-            function onSignInFailure() {
-                console.log('Google SignIn Failure');
-            }
-            </script>
-            <script src="https://apis.google.com/js/client:platform.js?onload=render" async defer></script>
-EOD;
-        
-        return $script;
+        return '<script src="https://accounts.google.com/gsi/client" async defer></script>;
     }
     
     public function openIdLogin($openid, $app)
