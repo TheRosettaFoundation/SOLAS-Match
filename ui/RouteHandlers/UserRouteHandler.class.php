@@ -703,6 +703,34 @@ class UserRouteHandler
                 }
             } elseif (isset($post['password_reset'])) {
                 $app->redirect($app->urlFor("password-reset-request"));
+            } elseif (isset($post['credential'])) { // Google Sign-In
+                if (empty($post['g_csrf_token']))     $error = 'No CSRF token in post body.';
+                if (empty($_SESSION['g_csrf_token'])) $error = 'No CSRF token in Cookie.';
+                if (!$error && $_SESSION['g_csrf_token'] != $post['g_csrf_token']) {
+                    $error = 'Failed to verify double submit cookie.';
+                } else {
+                    // https://github.com/googleapis/google-api-php-client/releases/download/v2.10.1/google-api-php-client--PHP7.0.zip
+                    // Could use composer: https://github.com/googleapis/google-api-php-client
+                    require_once 'google-api-php-client/vendor/autoload.php';
+                    $client = new Google_Client(['client_id' => Common\Lib\Settings::get('googlePlus.client_id')]);
+                    $payload = $client->verifyIdToken($post['credential']);
+                    if ($payload) {
+$userid = $payload['sub'];
+handle...
+An unregistered email address: You can show a sign-up user interface (UI) that allows the user to provide additional profile information, if required. It also allows the user to silently create the new account and a logged-in user session.
+
+A legacy account that exists for the email address: You can show a web page that allows the end user to input their password and link the legacy account with their Google credentials. This confirms that the user has access to the existing account.
+
+A returning federated user: You can silently sign the user in.
+
+                    } else {
+                        $error = 'Invalid ID token';
+                    }
+                }
+
+                $error = sprintf(Lib\Localisation::getTranslation('gplus_error'), $app->urlFor('login'), $app->urlFor('register'), "[$error]");
+                $app->flash('error', $error);
+                $app->redirect($app->urlFor('home'));
             } else {
                 try {
                     $this->openIdLogin($openid, $app);
