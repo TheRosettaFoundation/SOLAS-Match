@@ -928,7 +928,7 @@ class UserRouteHandler
 
     private static function createGooglePlusJavaScript()
     {
-        return '<script src="https://accounts.google.com/gsi/client" async defer></script>;
+        return '<script src="https://accounts.google.com/gsi/client" async defer></script>';
     }
     
     public function openIdLogin($openid, $app)
