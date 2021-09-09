@@ -715,7 +715,7 @@ class UserRouteHandler
                     $payload = $client->verifyIdToken($post['credential']);
                     if ($payload) {
                         if (empty($payload['email'])) $error = 'email empty.';
-                        if (!error) {
+                        if (!$error) {
                             $email = $payload['email'];
                             if (!empty($payload['given_name']) && !empty($payload['family_name'])) $userDao->set_google_user_details($email, $payload['given_name'], $payload['family_name']);
                             error_log("Google Sign-In, Login: $email");
