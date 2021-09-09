@@ -705,8 +705,8 @@ class UserRouteHandler
                 $app->redirect($app->urlFor("password-reset-request"));
             } elseif (isset($post['credential'])) { // Google Sign-In
 error_log("START===========================================");
-error_log($post);
-error_log($_SESSION);
+error_log(print_r($post, true));
+error_log(print_r($_SESSION, true));
 error_log("END  ===========================================");
 //                if (empty($post['g_csrf_token']))     $error = 'No CSRF token in post body.';
 //                if (empty($_SESSION['g_csrf_token'])) $error = 'No CSRF token in Cookie.';
