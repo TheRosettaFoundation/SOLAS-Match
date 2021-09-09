@@ -710,7 +710,7 @@ class UserRouteHandler
                     $error = 'Failed to verify double submit cookie.';
                 } else {
                     // https://github.com/googleapis/google-api-php-client
-                    require_once 'google-api-php-client/vendor/autoload.php';
+                    require_once 'ui/google-api-php-client/vendor/autoload.php';
                     $client = new Google_Client(['client_id' => Common\Lib\Settings::get('googlePlus.client_id')]);
                     $payload = $client->verifyIdToken($post['credential']);
                     if ($payload) {
