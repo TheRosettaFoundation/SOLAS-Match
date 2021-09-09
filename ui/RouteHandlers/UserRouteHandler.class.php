@@ -704,10 +704,15 @@ class UserRouteHandler
             } elseif (isset($post['password_reset'])) {
                 $app->redirect($app->urlFor("password-reset-request"));
             } elseif (isset($post['credential'])) { // Google Sign-In
-                if (empty($post['g_csrf_token']))     $error = 'No CSRF token in post body.';
-                if (empty($_SESSION['g_csrf_token'])) $error = 'No CSRF token in Cookie.';
-                if (!$error && $_SESSION['g_csrf_token'] != $post['g_csrf_token']) {
-                    $error = 'Failed to verify double submit cookie.';
+error_log("START===========================================");
+error_log($post);
+error_log($_SESSION);
+error_log("END  ===========================================");
+//                if (empty($post['g_csrf_token']))     $error = 'No CSRF token in post body.';
+//                if (empty($_SESSION['g_csrf_token'])) $error = 'No CSRF token in Cookie.';
+//                if (!$error && $_SESSION['g_csrf_token'] != $post['g_csrf_token']) {
+//                    $error = 'Failed to verify double submit cookie.';
+if (false) {
                 } else {
                     // https://github.com/googleapis/google-api-php-client
                     require_once 'ui/google-api-php-client/vendor/autoload.php';
