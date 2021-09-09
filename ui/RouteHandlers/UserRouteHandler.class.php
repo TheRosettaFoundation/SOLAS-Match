@@ -799,38 +799,6 @@ class UserRouteHandler
                 }
             }
             
-            $params = $app->request()->params();
-            if (isset($params["gplustoken"])) //if sign in using google plus
-            {
-                $access_token = $params["gplustoken"];
-                if (!empty($access_token)) {
-                    try {
-                        $userDao->loginWithGooglePlus($access_token);
-                    } catch (\Exception $e) {
-                        $error = sprintf(
-                            Lib\Localisation::getTranslation('gplus_error'),
-                            $app->urlFor("login"),
-                            $app->urlFor("register"),
-                            "[".$e->getMessage()."]"
-                        );
-                        
-                        if ($e->getCode() == 400 || $e->getMessage() != "") {
-                            $app->flash('error', $error);
-                            $app->redirect($app->urlFor('home'));
-                        }
-                    }
-                } else {
-                    $error = sprintf(
-                            Lib\Localisation::getTranslation('gplus_error'),
-                            $app->urlFor("login"),
-                            $app->urlFor("register"),
-                            "[An empty access token received.]"
-                        );
-                    $app->flash('error', $error);
-                    $app->redirect($app->urlFor('home'));   
-                }
-            }
-
             $return_to_SAML_url = $app->request()->get('ReturnTo');
             if (!empty($return_to_SAML_url)) {
                 $_SESSION['return_to_SAML_url'] = $return_to_SAML_url;
