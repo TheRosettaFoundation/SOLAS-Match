@@ -711,7 +711,7 @@ class UserRouteHandler
                 } else {
                     // https://github.com/googleapis/google-api-php-client
                     require_once 'ui/google-api-php-client/vendor/autoload.php';
-                    $client = new Google_Client(['client_id' => Common\Lib\Settings::get('googlePlus.client_id')]);
+                    $client = new \Google_Client(['client_id' => Common\Lib\Settings::get('googlePlus.client_id')]);
                     $payload = $client->verifyIdToken($post['credential']);
                     if ($payload) {
                         if (empty($payload['email'])) $error = 'email empty.';
