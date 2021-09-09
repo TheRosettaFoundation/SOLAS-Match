@@ -1000,6 +1000,12 @@ $memsource_change_country_to_kp = [
         if (empty($result)) return [];
         return $result;
     }
+    public function get_asana_tasks_by_tag($project_id)
+    {
+        $result = LibAPI\PDOWrapper::call('get_asana_tasks_by_tag', LibAPI\PDOWrapper::cleanse($project_id));
+        if (empty($result)) return [];
+        return $result;
+    }
 
     public function get_user_id_from_memsource_user($memsource_user_id)
     {

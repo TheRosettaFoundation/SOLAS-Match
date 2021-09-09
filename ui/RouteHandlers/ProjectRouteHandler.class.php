@@ -73,6 +73,11 @@ class ProjectRouteHandler
         )->name('task_cron_1_minute');
 
         $app->get(
+            '/task_cron_1_minute1/',
+            array($this, 'task_cron_1_minute1')
+        )->name('task_cron_1_minute1');
+
+        $app->get(
             '/project/:project_id/getwordcount/',
             array($this, 'project_get_wordcount')
         )->name('project_get_wordcount');
@@ -2673,6 +2678,232 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
       die;
     }
 
+
+    public function task_cron_1_minute1(){
+        
+        $projectDao = new DAO\ProjectDao();
+        $taskDao = new DAO\TaskDao();
+        $orgDao = new DAO\OrganisationDao();
+        $projectId = 9233;
+        $tasks = $projectDao->getProjectTasksArray($projectId);
+        $project_lang_pair = array_values($this->unique_multidim_array($tasks, 'targetLanguageCode'));
+        $objDateTime = new \DateTime($project->getDeadline());
+        //echo '<pre>',print_r($project_lang_pair,1),'</pre>';
+        $asana_tasks = $projectDao->get_asana_tasks($projectId);
+        $asana_proj_count = count($asana_tasks);
+
+        if($asana_proj_count == 0){
+            //Create tasks in Asana
+            
+            error_log("Creating Asana Tasks:");
+            $project = $projectDao->getProject($projectId);
+            $org_id = $project->getOrganisationId();
+            $org = $orgDao->getOrganisation($org_id);
+            $org_name = $org->getName();
+            $project_name = $project->getTitle();
+            $wordCount = $project->getWordCount();
+           
+            $sourceLocale_code = $project->getSourceLocale()->getLanguageCode();
+            $sourceLocale      = $project->getSourceLocale()->getLanguageName();
+            $memsource_project = $projectDao->get_memsource_project($projectId);
+            $creator = $taskDao->get_creator($projectId, $memsource_project);
+            $pm = $creator['email'];
+            if (strpos($pm, '@translatorswithoutborders.org') === false) $pm = 'projects@translatorswithoutborders.org';
+
+            for ($i = 0; $i < count($project_lang_pair); $i++) {
+                $task_id = $project_lang_pair[$i]['id'];
+                $targetLocale = $project_lang_pair[$i]['targetLanguageName'];
+                $targetLocale_code = $project_lang_pair[$i]['targetLanguageCode'];
+                $project_url = "https://".$_SERVER['SERVER_NAME']."/project/$projectId/view/";
+                $url = "https://app.asana.com/api/1.0/tasks";
+                $ch = curl_init($url);
+          
+                $data = array('data' => array(
+                    "name" => $project_name,
+//(**)                        "assignee" => $pm,
+                    "projects" => array(
+                        "1200067882657242"
+                    ),
+                    "custom_fields" => array(
+                        "1200067882657247" => $wordCount,
+                        "1200067882657245" => $org_name,
+                        "1200068101079960" => $sourceLocale,
+                        "1200269602122253" => $sourceLocale_code,
+                        "1200067882657251" => $targetLocale,
+                        "1200269602122255" => $targetLocale_code,
+                        "1200226775862070" => $project_url,
+                        "1200269602122257" => "$projectId"
+                    ),
+                    "due_at" => $objDateTime->format('c'),
+                    "notes" => "KP Project details per language pair.Project ID - ".$projectId,
+                    "tags" =>array($task_id),
+                    ));
+                $payload = json_encode($data);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+                $authorization = "Authorization: Bearer ". Common\Lib\Settings::get('asana.api_key6');
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
+                $result = curl_exec($ch);
+                error_log("Posting to Asana Incoming Task project: $result");
+                $asana_task_details = json_decode($result, true);
+                $asana_task_id =  $asana_task_details['data']['gid'];
+                $asana_details = $projectDao->set_asana_task($projectId, $sourceLocale_code, $targetLocale_code, $asana_task_id);
+                curl_close($ch);
+                error_log("Asana details: $asana_details");
+                
+            }
+        }
+        else{
+            //Update
+            $asana_tasks = $projectDao->get_asana_tasks($projectId);
+            
+            $project_lang_pair = array_values($this->unique_multidim_array($tasks, 'targetLanguageCode'));
+           // echo '<pre>',print_r($project_lang_pair,1),'</pre>';
+
+           $pushed_tasks_id = array();
+
+            foreach($asana_tasks as $key =>$value){
+
+              
+                //array_push($pushed_tasks_id,$this->searchForId($value['tag'], $project_lang_pair));
+                array_push($pushed_tasks_id,array_search($value['tag'], array_column($project_lang_pair, 'id')));
+                
+
+            }
+
+           //tasks to edit
+           $tasks_asana_update =  array_intersect_key($project_lang_pair,array_flip($pushed_tasks_id));
+         // echo '<pre>',print_r($tasks_asana_update,1),'</pre>';
+
+           foreach($tasks_asana_update as $key => $value){
+
+            //$value - Values to update
+
+             //Get Asana Task Id by Tag
+             $asana_tasks_by_tag = $projectDao->get_asana_tasks_by_tag($value['id']);
+             $asana_gid = $asana_tasks_by_tag[0]['asana_task_id'];
+
+             //Push update to Asana
+             $project = $projectDao->getProject($projectId);
+             $org_id = $project->getOrganisationId();
+             $org = $orgDao->getOrganisation($org_id);
+             $org_name = $org->getName();
+             $task_id = $value['id'];
+             $wordCount = $value['wordCount'];
+             $targetLocale = $value['targetLanguageName'];
+             $targetLocale_code = $value['targetLanguageCode'];
+             $project_url = "https://".$_SERVER['SERVER_NAME']."/project/$projectId/view/";
+            // $url = "https://app.asana.com/api/1.0/tasks";
+            $url = "https://app.asana.com/api/1.0/tasks/$asana_gid";
+             $ch = curl_init($url);
+       
+             $data = array('data' => array(
+               
+                 "projects" => array(
+                     "1200067882657242"
+                 ),
+                 "custom_fields" => array(
+                     "1200067882657247" => $wordCount,
+                     "1200067882657245" => $org_name,
+                     "1200068101079960" => $sourceLocale,
+                     "1200269602122253" => $sourceLocale_code,
+                     "1200067882657251" => $targetLocale,
+                     "1200269602122255" => $targetLocale_code,
+                     "1200226775862070" => $project_url,
+                     "1200269602122257" => "$projectId"
+                 ),
+                 "due_at" => $objDateTime->format('c'),
+                 "notes" => "KP Project details per language pair.Project ID - ".$projectId,
+                 "tags" =>array($task_id),
+                 ));
+             $payload = json_encode($data);
+             curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+             $authorization = "Authorization: Bearer ". Common\Lib\Settings::get('asana.api_key6');
+             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+             curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
+             $result = curl_exec($ch);
+             error_log("Posting to Asana Incoming Task project: $result");
+             $asana_task_details = json_decode($result, true);
+             $asana_task_id =  $asana_task_details['data']['gid'];
+             $asana_details = $projectDao->set_asana_task($projectId, $sourceLocale_code, $targetLocale_code, $asana_task_id);
+             curl_close($ch);
+             error_log("Asana details: $asana_details");
+
+
+           }
+           
+           //Create new task based on new language pair
+           $new_tasks = array_diff_key($project_lang_pair,$tasks_asana_update);
+           //loop and push to asana as new Task
+         error_log("Creating New Tasks based on new language pair:");
+         $project = $projectDao->getProject($projectId);
+         $org_id = $project->getOrganisationId();
+         $org = $orgDao->getOrganisation($org_id);
+         $org_name = $org->getName();
+         $project_name = $project->getTitle();
+         $wordCount = $project->getWordCount();
+         $objDateTime = new \DateTime($project->getDeadline());
+         $sourceLocale_code = $project->getSourceLocale()->getLanguageCode();
+         $sourceLocale      = $project->getSourceLocale()->getLanguageName();
+         $memsource_project = $projectDao->get_memsource_project($projectId);
+         $creator = $taskDao->get_creator($projectId, $memsource_project);
+         $pm = $creator['email'];
+         if (strpos($pm, '@translatorswithoutborders.org') === false) $pm = 'projects@translatorswithoutborders.org';
+
+         for ($i = 0; $i < count($new_tasks); $i++) {
+             $task_id = $new_tasks[$i]['id'];
+             $targetLocale = $new_tasks[$i]['targetLanguageName'];
+             $targetLocale_code = $new_tasks[$i]['targetLanguageCode'];
+             $project_url = "https://".$_SERVER['SERVER_NAME']."/project/$projectId/view/";
+             $url = "https://app.asana.com/api/1.0/tasks";
+             $ch = curl_init($url);
+       
+             $data = array('data' => array(
+                 "name" => $project_name,
+//(**)                        "assignee" => $pm,
+                 "projects" => array(
+                     "1200067882657242"
+                 ),
+                 "custom_fields" => array(
+                     "1200067882657247" => $wordCount,
+                     "1200067882657245" => $org_name,
+                     "1200068101079960" => $sourceLocale,
+                     "1200269602122253" => $sourceLocale_code,
+                     "1200067882657251" => $targetLocale,
+                     "1200269602122255" => $targetLocale_code,
+                     "1200226775862070" => $project_url,
+                     "1200269602122257" => "$projectId"
+                 ),
+                 "due_at" => $objDateTime->format('c'),
+                 "notes" => "KP Project details per language pair.Project ID - ".$projectId,
+                 "tags" =>array($task_id),
+                 ));
+             $payload = json_encode($data);
+             curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+             $authorization = "Authorization: Bearer ". Common\Lib\Settings::get('asana.api_key6');
+             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+             curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
+             $result = curl_exec($ch);
+             error_log("Posting to Asana Incoming Task project: $result");
+             $asana_task_details = json_decode($result, true);
+             $asana_task_id =  $asana_task_details['data']['gid'];
+             $asana_details = $projectDao->set_asana_task($projectId, $sourceLocale_code, $targetLocale_code, $asana_task_id);
+             curl_close($ch);
+             error_log("Asana details: $asana_details");
+             
+        
+            
+           
+        }
+       
+
+        
+    }
+}
+
     public function task_cron_1_minute()
     {
         $projectDao = new DAO\ProjectDao();
@@ -2751,6 +2982,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
             $count = 0;
             foreach ($queue_asana_projects as $queue_asana_project) {
                 if (++$count > 4) break; // Limit number done at one time, just in case
+                /*
                 $projectId = $queue_asana_project['project_id'];
                 $project = $projectDao->getProject($projectId);
                 $org_id = $project->getOrganisationId();
@@ -2802,12 +3034,228 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                     curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
                     $result = curl_exec($ch);
-                    curl_close($ch);
                     error_log("Posting to Asana Incoming Task project: $result");
+                    $asana_task_details = json_decode($result, true);
+                    $asana_task_id =  $asana_task_details['data']['gid'];
+                    $asana_details = $projectDao->set_asana_task($projectId, $sourceLocale_code, $targetLocale_code, $asana_task_id);
+                    curl_close($ch);
+                    error_log("Asana details: $asana_details");
+                    
                 }
 
                 error_log("dequeue_asana_project() project_id: $projectId Removing");
                 $projectDao->dequeue_asana_project($projectId);
+                */
+               
+                $projectId = $queue_asana_project['project_id'];
+                $tasks = $projectDao->getProjectTasksArray($projectId);
+                $project_lang_pair = array_values($this->unique_multidim_array($tasks, 'targetLanguageCode'));
+                $objDateTime = new \DateTime($project->getDeadline());
+                //echo '<pre>',print_r($project_lang_pair,1),'</pre>';
+                $asana_tasks = $projectDao->get_asana_tasks($projectId);
+                $asana_proj_count = count($asana_tasks);
+        
+                if($asana_proj_count == 0){
+                    //Create tasks in Asana
+                    
+                    error_log("Creating Asana Tasks:");
+                    $project = $projectDao->getProject($projectId);
+                    $org_id = $project->getOrganisationId();
+                    $org = $orgDao->getOrganisation($org_id);
+                    $org_name = $org->getName();
+                    $project_name = $project->getTitle();
+                    $wordCount = $project->getWordCount();
+                   
+                    $sourceLocale_code = $project->getSourceLocale()->getLanguageCode();
+                    $sourceLocale      = $project->getSourceLocale()->getLanguageName();
+                    $memsource_project = $projectDao->get_memsource_project($projectId);
+                    $creator = $taskDao->get_creator($projectId, $memsource_project);
+                    $pm = $creator['email'];
+                    if (strpos($pm, '@translatorswithoutborders.org') === false) $pm = 'projects@translatorswithoutborders.org';
+        
+                    for ($i = 0; $i < count($project_lang_pair); $i++) {
+                        $task_id = $project_lang_pair[$i]['id'];
+                        $targetLocale = $project_lang_pair[$i]['targetLanguageName'];
+                        $targetLocale_code = $project_lang_pair[$i]['targetLanguageCode'];
+                        $project_url = "https://".$_SERVER['SERVER_NAME']."/project/$projectId/view/";
+                        $url = "https://app.asana.com/api/1.0/tasks";
+                        $ch = curl_init($url);
+                  
+                        $data = array('data' => array(
+                            "name" => $project_name,
+                            "assignee" => $pm,
+                            "projects" => array(
+                                "1200067882657242"
+                            ),
+                            "custom_fields" => array(
+                                "1200067882657247" => $wordCount,
+                                "1200067882657245" => $org_name,
+                                "1200068101079960" => $sourceLocale,
+                                "1200269602122253" => $sourceLocale_code,
+                                "1200067882657251" => $targetLocale,
+                                "1200269602122255" => $targetLocale_code,
+                                "1200226775862070" => $project_url,
+                                "1200269602122257" => "$projectId"
+                            ),
+                            "due_at" => $objDateTime->format('c'),
+                            "notes" => "KP Project details per language pair.Project ID - ".$projectId,
+                            "tags" =>array($task_id),
+                            ));
+                        $payload = json_encode($data);
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+                        $authorization = "Authorization: Bearer ". Common\Lib\Settings::get('asana.api_key6');
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                        curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
+                        $result = curl_exec($ch);
+                        error_log("Posting to Asana Incoming Task project: $result");
+                        $asana_task_details = json_decode($result, true);
+                        $asana_task_id =  $asana_task_details['data']['gid'];
+                        $asana_details = $projectDao->set_asana_task($projectId, $sourceLocale_code, $targetLocale_code, $asana_task_id);
+                        curl_close($ch);
+                        error_log("Asana details: $asana_details");
+                        
+                    }
+                }
+                else{
+                    //Update
+                    $asana_tasks = $projectDao->get_asana_tasks($projectId);
+                    
+                    $project_lang_pair = array_values($this->unique_multidim_array($tasks, 'targetLanguageCode'));
+                   // echo '<pre>',print_r($project_lang_pair,1),'</pre>';
+        
+                   $pushed_tasks_id = array();
+        
+                    foreach($asana_tasks as $key =>$value){
+        
+                      
+                        //array_push($pushed_tasks_id,$this->searchForId($value['tag'], $project_lang_pair));
+                        array_push($pushed_tasks_id,array_search($value['tag'], array_column($project_lang_pair, 'id')));
+                        
+        
+                    }
+        
+                   //tasks to edit
+                   $tasks_asana_update =  array_intersect_key($project_lang_pair,array_flip($pushed_tasks_id));
+                 // echo '<pre>',print_r($tasks_asana_update,1),'</pre>';
+        
+                   foreach($tasks_asana_update as $key => $value){
+        
+                    //$value - Values to update
+        
+                     //Get Asana Task Id by Tag
+                     $asana_tasks_by_tag = $projectDao->get_asana_tasks_by_tag($value['id']);
+                     $asana_gid = $asana_tasks_by_tag[0]['asana_task_id'];
+        
+                     //Push update to Asana
+                     $project = $projectDao->getProject($projectId);
+                     $org_id = $project->getOrganisationId();
+                     $org = $orgDao->getOrganisation($org_id);
+                     $org_name = $org->getName();
+                     $task_id = $value['id'];
+                     $wordCount = $value['wordCount'];
+                     $targetLocale = $value['targetLanguageName'];
+                     $targetLocale_code = $value['targetLanguageCode'];
+                     $project_url = "https://".$_SERVER['SERVER_NAME']."/project/$projectId/view/";
+                    // $url = "https://app.asana.com/api/1.0/tasks";
+                    $url = "https://app.asana.com/api/1.0/tasks/$asana_gid";
+                     $ch = curl_init($url);
+               
+                     $data = array('data' => array(
+                       
+                         "projects" => array(
+                             "1200067882657242"
+                         ),
+                         "custom_fields" => array(
+                             "1200067882657247" => $wordCount,
+                             "1200067882657245" => $org_name,
+                             "1200068101079960" => $sourceLocale,
+                             "1200269602122253" => $sourceLocale_code,
+                             "1200067882657251" => $targetLocale,
+                             "1200269602122255" => $targetLocale_code,
+                             "1200226775862070" => $project_url,
+                             "1200269602122257" => "$projectId"
+                         ),
+                         "due_at" => $objDateTime->format('c'),
+                         "notes" => "KP Project details per language pair.Project ID - ".$projectId,
+                         "tags" =>array($task_id),
+                         ));
+                     $payload = json_encode($data);
+                     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+                     $authorization = "Authorization: Bearer ". Common\Lib\Settings::get('asana.api_key6');
+                     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                     curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
+                     $result = curl_exec($ch);
+                     error_log("Posting to Asana Incoming Task project: $result");
+                     $asana_task_details = json_decode($result, true);
+                     $asana_task_id =  $asana_task_details['data']['gid'];
+                     $asana_details = $projectDao->set_asana_task($projectId, $sourceLocale_code, $targetLocale_code, $asana_task_id);
+                     curl_close($ch);
+                     error_log("Asana details: $asana_details");
+        
+        
+                   }
+                   
+                   //Create new task based on new language pair
+                   $new_tasks = array_diff_key($project_lang_pair,$tasks_asana_update);
+                   //loop and push to asana as new Task
+                 error_log("Creating New Tasks based on new language pair:");
+                 $project = $projectDao->getProject($projectId);
+                 $org_id = $project->getOrganisationId();
+                 $org = $orgDao->getOrganisation($org_id);
+                 $org_name = $org->getName();
+                 $project_name = $project->getTitle();
+                 $wordCount = $project->getWordCount();
+                 $objDateTime = new \DateTime($project->getDeadline());
+                 $sourceLocale_code = $project->getSourceLocale()->getLanguageCode();
+                 $sourceLocale      = $project->getSourceLocale()->getLanguageName();
+                 $memsource_project = $projectDao->get_memsource_project($projectId);
+                 $creator = $taskDao->get_creator($projectId, $memsource_project);
+                 $pm = $creator['email'];
+                 if (strpos($pm, '@translatorswithoutborders.org') === false) $pm = 'projects@translatorswithoutborders.org';
+        
+                 for ($i = 0; $i < count($new_tasks); $i++) {
+                     $task_id = $new_tasks[$i]['id'];
+                     $targetLocale = $new_tasks[$i]['targetLanguageName'];
+                     $targetLocale_code = $new_tasks[$i]['targetLanguageCode'];
+                     $project_url = "https://".$_SERVER['SERVER_NAME']."/project/$projectId/view/";
+                     $url = "https://app.asana.com/api/1.0/tasks";
+                     $ch = curl_init($url);
+               
+                     $data = array('data' => array(
+                         "name" => $project_name,
+                         "assignee" => $pm,
+                         "projects" => array(
+                             "1200067882657242"
+                         ),
+                         "custom_fields" => array(
+                             "1200067882657247" => $wordCount,
+                             "1200067882657245" => $org_name,
+                             "1200068101079960" => $sourceLocale,
+                             "1200269602122253" => $sourceLocale_code,
+                             "1200067882657251" => $targetLocale,
+                             "1200269602122255" => $targetLocale_code,
+                             "1200226775862070" => $project_url,
+                             "1200269602122257" => "$projectId"
+                         ),
+                         "due_at" => $objDateTime->format('c'),
+                         "notes" => "KP Project details per language pair.Project ID - ".$projectId,
+                         "tags" =>array($task_id),
+                         ));
+                     $payload = json_encode($data);
+                     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+                     $authorization = "Authorization: Bearer ". Common\Lib\Settings::get('asana.api_key6');
+                     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                     curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
+                     $result = curl_exec($ch);
+                     error_log("Posting to Asana Incoming Task project: $result");
+                     $asana_task_details = json_decode($result, true);
+                     $asana_task_id =  $asana_task_details['data']['gid'];
+                     $asana_details = $projectDao->set_asana_task($projectId, $sourceLocale_code, $targetLocale_code, $asana_task_id);
+                     curl_close($ch);
+                     error_log("Asana details: $asana_details");
             }
             flock($fp_for_lock, LOCK_UN); // Release the lock
         }
@@ -2815,6 +3263,9 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
 
         die;
     }
+}
+    }
+    
 
     private function unique_multidim_array($array, $key) {
         $temp_array = array();

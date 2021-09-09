@@ -1996,4 +1996,11 @@ error_log(print_r($result, true));//(**)
         foreach ($results as $result) $referers[] = $result['referer'];
         return $referers;
     }
+
+    public function get_users_by_month()
+    {
+        $result = LibAPI\PDOWrapper::call('getUsersAddedLast30Days','');
+        if (empty($result)) return [];
+        return $result;
+    }
 }

@@ -28,6 +28,7 @@
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min1.css"/>
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.2.css"/>
         <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 		<link rel="shortcut icon" type="image/x-icon" href="{urlFor name="home"}favicon.ico">
 		
@@ -64,6 +65,13 @@
     .navbar .nav li a{
         color:#143878 !important;
     }
+    .header-link{
+        margin-bottom:1%;
+        margin-right:1%;
+       }
+       .navbar-inner{
+           margin-top:0.2%;
+       }
    
     </style>
 
@@ -71,7 +79,7 @@
         <div class="navbar navbar-fixed-top">
            <div class="navbar-inner">
                 <div class="container">
-                   <a href="{urlFor name='home'}" class="pull-left header-link"><img height="40px" src="{urlFor name='home'}ui/img/logo_katotrommons.png"></a> 
+                   <a href="{urlFor name='home'}" class="pull-left header-link"><img height="60px" src="{urlFor name='home'}ui/img/logo_KP-removebg-preview.png"></a> 
                    <!-- <a href="{urlFor name='home'}" class="pull-left header-link"><img height="40px" src="https://translatorswithoutborders.org/wp-content/uploads/2019/03/cropped-800x300.png"></a> -->
                     <ul class="nav">
                         {if !isset($site_admin)}

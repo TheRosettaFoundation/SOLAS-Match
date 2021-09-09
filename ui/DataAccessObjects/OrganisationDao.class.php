@@ -222,4 +222,11 @@ class OrganisationDao extends BaseDao
         $ret = $this->client->call(array("\SolasMatch\Common\Protobufs\Models\User"), $request);
         return $ret;
     }
+
+    public function get_orgs_by_month()
+    {
+        $result = LibAPI\PDOWrapper::call('getOrgsAddedLast30Days','');
+        if (empty($result)) return [];
+        return $result;
+    }
 }

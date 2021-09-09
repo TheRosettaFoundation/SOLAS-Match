@@ -91,7 +91,7 @@
             <input type="hidden" name="user_id" id="user_id"  value="{$user_id}"/>
            
             <label class="checkbox required check">
-            <input name="age_consent" id="age_consent" type="checkbox"> I confirm I am over the age of 18 <i class="icon-question-sign" id="tool" data-toggle="tooltip" title="I confirm that I am over the age of 18"></i>
+            <input name="age_consent" id="age_consent" type="checkbox"> I confirm I am over the age of 18 <i class="icon-question-sign" id="tool" data-toggle="tooltip" title="If you are under 18 years of age, you can't work with us. Our child protection policy prevents it"></i>
             </label>
            
             <label class="checkbox required check">

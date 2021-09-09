@@ -51,8 +51,8 @@
     </div>
     <div class="span">
     
-    <h3><span class="register_header1">Register with</span><br />
-<span class="register_header2">Translators without Borders</span></h3>
+    <h3><span class="register_header1">Register with Translators without Borders</span><br />
+<span class="register_header2">using your email or Google account</span></h3>
 </div>
     </div>
  
@@ -78,8 +78,8 @@
     <div class="span4">
       {if isset($openid)&& ($openid==='n'||$openid==='h' )}
     <form method="post" id="registerform" action="{urlFor name="register"}" class="well" accept-charset="utf-8">
-            <label for="username" class="required "><strong>Username</strong></label>
-            <input type="text" name="username" id="username" placeholder="Username" required/>
+            <!-- <label for="username" class="required "><strong>Username</strong></label>
+            <input type="text" name="username" id="username" placeholder="Username" required/> -->
             <label for="first_name" class="required "><strong>First name</strong></label>
             <input type="text" name="first_name" id="first_name" placeholder="First name" required/>
             <label for="last_name" class="required"><strong>Last name</strong></label>
@@ -93,11 +93,11 @@
             <label for="password" class="required"><strong>Confirm Password</strong></label>
             <input type="password" name="confirm_password" id="confirm_password" placeholder="Please confirm your password"/>
             <label class="checkbox required check">
-            <input name="age_consent" id="age_consent" type="checkbox"> I confirm I am over the age of 18 <i class="icon-question-sign" id="tool" data-toggle="tooltip" title="I confirm that I am over the age of 18"></i>
+            <input name="age_consent" id="age_consent" type="checkbox"> I confirm I am over the age of 18 <i class="icon-question-sign" id="tool" data-toggle="tooltip" title="If you are under 18 years of age, you can't work with us. Our child protection policy prevents it"></i>
             </label>
            
             <label class="checkbox required check">
-            <input name="conduct_consent" id="conduct_consent" type="checkbox"> I agree to the <a href="https://www.translatorswithoutborders.org/volunteer/volunteer-translators/translators-code-of-conduct/" target="_blank">TWB Code of Conduct for translators</a> and the <a href="https://translatorswithoutborders.org/privacy-policy/?__hstc=6552685.50947dd5d22eb95562a1c48227dc4cde.1624948951679.1624948951679.1624948951679.1&__hssc=6552685.1.1624948951679&__hsfp=1528584403" target="_blank">TWB Privacy policy</a>
+            <input name="conduct_consent" id="conduct_consent" type="checkbox"> I agree to the <a href="https://www.translatorswithoutborders.org/volunteer/volunteer-translators/translators-code-of-conduct/" target="_blank">TWB Code of Conduct for Translators</a> and the <a href="https://translatorswithoutborders.org/privacy-policy/?__hstc=6552685.50947dd5d22eb95562a1c48227dc4cde.1624948951679.1624948951679.1624948951679.1&__hssc=6552685.1.1624948951679&__hsfp=1528584403" target="_blank">TWB Privacy Policy</a>
             </label>
              <label class="checkbox check">
             <input name="newsletter_consent" id="newsletter_consent"  type="checkbox"> Subscribe to the TWB email newsletter.
