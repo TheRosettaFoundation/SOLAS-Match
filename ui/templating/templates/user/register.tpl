@@ -57,6 +57,7 @@ If you are having problems registering please contact <a href="mailto:translator
                               data-theme="outline"
                               data-text="signin_with"
                               data-size="large"
+                              data-width=219
                               data-logo_alignment="left">
                           </div>
                     </div>
