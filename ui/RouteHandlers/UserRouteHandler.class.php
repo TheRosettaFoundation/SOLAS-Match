@@ -709,20 +709,18 @@ class UserRouteHandler
                 if (!$error && $_SESSION['g_csrf_token'] != $post['g_csrf_token']) {
                     $error = 'Failed to verify double submit cookie.';
                 } else {
-                    // https://github.com/googleapis/google-api-php-client/releases/download/v2.10.1/google-api-php-client--PHP7.0.zip
-                    // Could use composer: https://github.com/googleapis/google-api-php-client
+                    // https://github.com/googleapis/google-api-php-client
                     require_once 'google-api-php-client/vendor/autoload.php';
                     $client = new Google_Client(['client_id' => Common\Lib\Settings::get('googlePlus.client_id')]);
                     $payload = $client->verifyIdToken($post['credential']);
                     if ($payload) {
-$userid = $payload['sub'];
-handle...
-An unregistered email address: You can show a sign-up user interface (UI) that allows the user to provide additional profile information, if required. It also allows the user to silently create the new account and a logged-in user session.
-
-A legacy account that exists for the email address: You can show a web page that allows the end user to input their password and link the legacy account with their Google credentials. This confirms that the user has access to the existing account.
-
-A returning federated user: You can silently sign the user in.
-
+                        if (empty($payload['email'])) $error = 'email empty.';
+                        if (!error) {
+                            $email = $payload['email'];
+                            if (!empty($payload['given_name']) && !empty($payload['family_name'])) $userDao->set_google_user_details($email, $payload['given_name'], $payload['family_name']);
+                            error_log("Google Sign-In, Login: $email");
+                            $userDao->requestAuthCode($email); // Does a redirect
+                        }
                     } else {
                         $error = 'Invalid ID token';
                     }

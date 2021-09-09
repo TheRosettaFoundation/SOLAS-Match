@@ -1993,4 +1993,9 @@ error_log(print_r($result, true));//(**)
         foreach ($results as $result) $referers[] = $result['referer'];
         return $referers;
     }
+
+    public function set_google_user_details($email, $first_name, $last_name)
+    {
+        LibAPI\PDOWrapper::call('set_google_user_details', LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($first_name) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($last_name));
+    }
 }
