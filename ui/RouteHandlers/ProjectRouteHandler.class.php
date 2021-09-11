@@ -2774,7 +2774,6 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                     $targetLocale_code = $project_lang_pair[$i]['targetLanguageCode'];
                     $project_url = "https://".$_SERVER['SERVER_NAME']."/project/$projectId/view/";
                     $url = "https://app.asana.com/api/1.0/tasks";
-/* (**)
                     $ch = curl_init($url);
               
                     $data = array('data' => array(
@@ -2805,7 +2804,6 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                     $result = curl_exec($ch);
                     curl_close($ch);
                     error_log("Posting to Asana Incoming Task project: $result");
-(**) */
                 }
 
                 error_log("dequeue_asana_project() project_id: $projectId Removing");
