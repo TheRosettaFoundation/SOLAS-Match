@@ -2759,23 +2759,25 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 $project_name = $project->getTitle();
                 $project_url = 'https://' . $_SERVER['SERVER_NAME'] . "/project/$projectId/view/";
                 $objDateTime = new \DateTime($project->getDeadline());
-                $sourceLocale_code = $project->getSourceLocale()->getLanguageCode();
-                $sourceLocale      = $project->getSourceLocale()->getLanguageName();
+                $sourceLocale_code = $project->getSourceLocale()->getLanguageCode() .  '-'  . $project->getSourceLocale()->getCountryCode();
+                $sourceLocale      = $project->getSourceLocale()->getLanguageName() . ' - ' . $project->getSourceLocale()->getCountryName();
                 $memsource_project = $projectDao->get_memsource_project($projectId);
                 $creator = $taskDao->get_creator($projectId, $memsource_project);
                 $pm = $creator['email'];
                 $self_service = strpos($pm, '@translatorswithoutborders.org') === false;
-                if ($self_service) $asana_project = '1200067882657242';
+                if ($self_service) $asana_project = '778921846018141';
                 else               $asana_project = '1200067882657242';
 
                 $tasks = $projectDao->getProjectTasksArray($projectId);
                 $project_lang_pairs = [];
                 foreach ($tasks as $task) {
-                    if (empty($project_lang_pairs[$task['targetLanguageCode']])) {
-                        $project_lang_pairs[$task['targetLanguageCode']] = ['targetLanguageCode' => $task['targetLanguageCode'], 'targetLanguageName' => $task['targetLanguageName'], 'tWordCount' => 0, 'rWordCount' => 0];
+                    $targetLanguageCode = $task['targetLanguageCode'] .  '-'  . $task['targetCountryCode'];
+                    $targetLanguageName = $task['targetLanguageName'] . ' - ' . $task['targetCountryName'];
+                    if (empty($project_lang_pairs[$targetLanguageCode])) {
+                        $project_lang_pairs[$targetLanguageCode] = ['targetLanguageCode' => $targetLanguageCode, 'targetLanguageName' => $targetLanguageName, 'tWordCount' => 0, 'rWordCount' => 0];
                     }
-                    if ($task['taskType'] == Common\Enums\TaskTypeEnum::TRANSLATION)  $project_lang_pairs[$task['targetLanguageCode']]['tWordCount'] += $task['wordCount'];
-                    if ($task['taskType'] == Common\Enums\TaskTypeEnum::PROOFREADING) $project_lang_pairs[$task['targetLanguageCode']]['rWordCount'] += $task['wordCount'];
+                    if ($task['taskType'] == Common\Enums\TaskTypeEnum::TRANSLATION)  $project_lang_pairs[$targetLanguageCode]['tWordCount'] += $task['wordCount'];
+                    if ($task['taskType'] == Common\Enums\TaskTypeEnum::PROOFREADING) $project_lang_pairs[$targetLanguageCode]['rWordCount'] += $task['wordCount'];
                 }
 
                 $asana_tasks = $projectDao->get_asana_tasks($projectId);
