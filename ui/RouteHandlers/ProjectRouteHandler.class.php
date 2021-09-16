@@ -2843,8 +2843,10 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                     error_log("Posted to Asana Incoming Tasks project ($targetLocale_code), result: $result");
                     if ($create) {
                         $asana_task_details = json_decode($result, true);
-                        $asana_task_id = $asana_task_details['data']['gid'];
-                        $projectDao->set_asana_task($projectId, $sourceLocale_code, $targetLocale_code, $asana_task_id);
+                        if (!empty($asana_task_details['data']['gid'])) {
+                            $asana_task_id = $asana_task_details['data']['gid'];
+                            $projectDao->set_asana_task($projectId, $sourceLocale_code, $targetLocale_code, $asana_task_id);
+                        }
                     }
                 }
 
