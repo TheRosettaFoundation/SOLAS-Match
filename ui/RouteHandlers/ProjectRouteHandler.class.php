@@ -2767,6 +2767,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 $self_service = strpos($pm, '@translatorswithoutborders.org') === false;
                 if ($self_service) $asana_project = '778921846018141';
                 else               $asana_project = '1200067882657242';
+$asana_project = '1200067882657242';//(**)
 
                 $tasks = $projectDao->getProjectTasksArray($projectId);
                 $project_lang_pairs = [];
