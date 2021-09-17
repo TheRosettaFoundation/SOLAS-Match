@@ -703,6 +703,32 @@ class UserRouteHandler
                 }
             } elseif (isset($post['password_reset'])) {
                 $app->redirect($app->urlFor("password-reset-request"));
+            } elseif (isset($post['credential'])) { // Google Sign-In
+                if (empty($post['g_csrf_token']))    $error = 'No CSRF token in post body.';
+                if (empty($_COOKIE['g_csrf_token'])) $error = 'No CSRF token in Cookie.';
+                if (!$error && $_COOKIE['g_csrf_token'] != $post['g_csrf_token']) {
+                    $error = 'Failed to verify double submit cookie.';
+                } else {
+                    // https://github.com/googleapis/google-api-php-client
+                    require_once 'ui/google-api-php-client/vendor/autoload.php';
+                    $client = new \Google_Client(['client_id' => Common\Lib\Settings::get('googlePlus.client_id')]);
+                    $payload = $client->verifyIdToken($post['credential']);
+                    if ($payload) {
+                        if (empty($payload['email'])) $error = 'email empty.';
+                        if (!$error) {
+                            $email = $payload['email'];
+                            if (!empty($payload['given_name']) && !empty($payload['family_name'])) $userDao->set_google_user_details($email, $payload['given_name'], $payload['family_name']);
+                            error_log("Google Sign-In, Login: $email");
+                            $userDao->requestAuthCode($email); // Does a redirect
+                        }
+                    } else {
+                        $error = 'Invalid ID token';
+                    }
+                }
+
+                $error = sprintf(Lib\Localisation::getTranslation('gplus_error'), $app->urlFor('login'), $app->urlFor('register'), "[$error]");
+                $app->flash('error', $error);
+                $app->redirect($app->urlFor('home'));
             } else {
                 try {
                     $this->openIdLogin($openid, $app);
@@ -777,38 +803,6 @@ class UserRouteHandler
                 }
             }
             
-            $params = $app->request()->params();
-            if (isset($params["gplustoken"])) //if sign in using google plus
-            {
-                $access_token = $params["gplustoken"];
-                if (!empty($access_token)) {
-                    try {
-                        $userDao->loginWithGooglePlus($access_token);
-                    } catch (\Exception $e) {
-                        $error = sprintf(
-                            Lib\Localisation::getTranslation('gplus_error'),
-                            $app->urlFor("login"),
-                            $app->urlFor("register"),
-                            "[".$e->getMessage()."]"
-                        );
-                        
-                        if ($e->getCode() == 400 || $e->getMessage() != "") {
-                            $app->flash('error', $error);
-                            $app->redirect($app->urlFor('home'));
-                        }
-                    }
-                } else {
-                    $error = sprintf(
-                            Lib\Localisation::getTranslation('gplus_error'),
-                            $app->urlFor("login"),
-                            $app->urlFor("register"),
-                            "[An empty access token received.]"
-                        );
-                    $app->flash('error', $error);
-                    $app->redirect($app->urlFor('home'));   
-                }
-            }
-
             $return_to_SAML_url = $app->request()->get('ReturnTo');
             if (!empty($return_to_SAML_url)) {
                 $_SESSION['return_to_SAML_url'] = $return_to_SAML_url;
@@ -938,43 +932,7 @@ class UserRouteHandler
 
     private static function createGooglePlusJavaScript()
     {
-        $app = \Slim\Slim::getInstance();    
-        $scope = Common\Lib\Settings::get("googlePlus.scope");
-        $redirectUri = '';
-        if (isset($_SERVER['HTTPS']) && !is_null($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
-            $redirectUri = 'https://';
-        } else {
-            $redirectUri = 'http://';
-        }
-        $redirectUri .= $_SERVER['SERVER_NAME'].$app->urlFor('login');
-        
-        $script = <<<EOD
-            <script type="text/javascript">
-            function render() {
-                gapi.signin2.render('g-signin2', {
-                    scope: '$scope',
-                    width: 219,
-                    height: 36,
-                    longtitle: true,
-                    theme: 'dark',
-                    onsuccess: onSignIn,
-                    onfailure: onSignInFailure
-                });
-            }
-
-            function onSignIn(googleUser) {
-                $('#gSignInWrapper').attr('style', 'display: none');
-                window.location.replace('$redirectUri?gplustoken=' + googleUser.getAuthResponse().id_token);
-            }
-
-            function onSignInFailure() {
-                console.log('Google SignIn Failure');
-            }
-            </script>
-            <script src="https://apis.google.com/js/client:platform.js?onload=render" async defer></script>
-EOD;
-        
-        return $script;
+        return '<script src="https://accounts.google.com/gsi/client" async defer></script>';
     }
     
     public function openIdLogin($openid, $app)

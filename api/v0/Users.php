@@ -407,11 +407,6 @@ class Users
                     '\SolasMatch\API\V0\Users::getAccessToken'
                 );
 
-                $app->post(
-                    '/gplus/login(:format)/',
-                    '\SolasMatch\API\V0\Users::loginWithGooglePlus'
-                );
-
                 $app->get(
                     '/getByEmail/:email/email(:format)/',
                     '\SolasMatch\API\Lib\Middleware::registerValidation',
@@ -1189,43 +1184,6 @@ class Users
         }
         $data = DAO\TaskDao::getUserTasksCount($userId);
         API\Dispatcher::sendResponse(null, $data, null, $format);
-    }
-    
-    
-    public static function loginWithGooglePlus($format = '.json')
-    {
-        try {
-            $data = API\Dispatcher::getDispatcher()->request()->getBody();
-            $parsed_data = array();
-            parse_str($data, $parsed_data);
-            $id_token = $parsed_data['token'];
-
-            $request =  Common\Lib\Settings::get('googlePlus.token_validation_endpoint');
-            $client = new Common\Lib\APIHelper('');
-            $ret = $client->externalCall(
-                null,
-                $request,
-                Common\Enums\HttpMethodEnum::GET,
-                null,
-                array('id_token' => $id_token)
-            );
-            $response = json_decode($ret);
-            // error_log("oauth2/v3/tokeninfo response: " . print_r($response, true));
-
-            $client_id = Common\Lib\Settings::get('googlePlus.client_id');
-            if ($client_id != $response->aud) {
-                throw new \Exception("Received token is not intended for this application.");
-            }
-            if (empty($response->email)) {
-                throw new \Exception("Unable to obtain user's email address from Google.");
-           }
-
-            if (!empty($response->given_name) && !empty($response->family_name)) DAO\UserDao::set_google_user_details($response->email, $response->given_name, $response->family_name);
-
-            API\Dispatcher::sendResponse(null, $response->email, null, $format, null);
-        } catch (\Exception $e) {
-            API\Dispatcher::sendResponse(null, $e->getMessage(), Common\Enums\HttpStatusEnum::BAD_REQUEST, $format);
-        }
     }
 
     public static function getAccessToken($format = '.json')

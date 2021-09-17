@@ -808,21 +808,6 @@ class UserDao extends BaseDao
         $app->redirect($request);
     }
     
-    public function loginWithGooglePlus($accessToken)
-    {
-        $app = \Slim\Slim::getInstance();
-        $request = "{$this->siteApi}v0/users/gplus/login";
-        $postArg = "token=$accessToken"; 
-        $email = $this->client->call(
-            null,
-            $request,
-            Common\Enums\HttpMethodEnum::POST,
-            $postArg
-        );
-        error_log("loginWithGooglePlus, Login: $email");
-        self::requestAuthCode($email);
-    }
-
     public function loginWithAuthCode($authCode)
     {
         $app = \Slim\Slim::getInstance();
@@ -1995,5 +1980,10 @@ error_log(print_r($result, true));//(**)
         $results = LibAPI\PDOWrapper::call('get_referers', '');
         foreach ($results as $result) $referers[] = $result['referer'];
         return $referers;
+    }
+
+    public function set_google_user_details($email, $first_name, $last_name)
+    {
+        LibAPI\PDOWrapper::call('set_google_user_details', LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($first_name) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($last_name));
     }
 }
