@@ -1986,4 +1986,11 @@ error_log(print_r($result, true));//(**)
     {
         LibAPI\PDOWrapper::call('set_google_user_details', LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($first_name) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($last_name));
     }
+
+    public function get_users_by_month()
+    {
+        $result = LibAPI\PDOWrapper::call('getUsersAddedLast30Days', '');
+        if (empty($result)) return [];
+        return $result;
+    }
 }
