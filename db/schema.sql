@@ -9683,6 +9683,17 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getUsersAddedLast30Days`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUsersAddedLast30Days`()
+BEGIN
+    SELECT count(DATE_FORMAT(`created-time`, '%m/%d/%Y')) as users_joined
+    FROM Users
+    WHERE `created-time` BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE();
+END//
+DELIMITER ;
+
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
