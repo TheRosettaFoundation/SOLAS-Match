@@ -767,6 +767,10 @@ class UserRouteHandler
                     if ($nativeLocale && $nativeLocale->getLanguageCode()) {
                         $app->redirect($app->urlFor("home"));
                     } else {
+                        if ($userDao->terms_accepted($user->getId()) < 1) {
+                            // Since they are logged in (via Google)...
+                            $app->redirect($app->urlFor('googleregister', array('user_id' => $user->getId())));
+                        }
                         $app->redirect($app->urlFor('user-private-profile', array('user_id' => $user->getId())));
                     }
                   }
@@ -1225,7 +1229,7 @@ EOD;
                     if (!empty($post['communications_consent'])) $userDao->insert_communications_consent($user_id, 1);
                     else                                         $userDao->insert_communications_consent($user_id, 0);
 
-                    $userDao->update_terms_accepted($user_id);
+                    $userDao->update_terms_accepted($user_id, 2);
 
                     $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user_id)));
                 } catch (\Exception $e) {
@@ -1344,7 +1348,7 @@ EOD;
                     if (!empty($post['communications_consent'])) $userDao->insert_communications_consent($user_id, 1);
                     else                                         $userDao->insert_communications_consent($user_id, 0);
 
-                    $userDao->update_terms_accepted($user_id);
+                    $userDao->update_terms_accepted($user_id, 2);
 
                     $app->redirect($app->urlFor('org-dashboard'));
                 } catch (\Exception $e) {
