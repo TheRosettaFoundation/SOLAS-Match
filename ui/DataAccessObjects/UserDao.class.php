@@ -879,12 +879,15 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function register($email, $password)
+    public function register($email, $password, $first_name = '', $last_name = '', $communications_consent = 0)
     {
         $ret = null;
         $registerData = new Common\Protobufs\Models\Register();
         $registerData->setEmail($email);
         $registerData->setPassword($password);
+        $registerData->setFirstName($first_name);
+        $registerData->setLastName($last_name);
+        $registerData->setCommunicationsConsent($communications_consent);
         $request = "{$this->siteApi}v0/users/register";
         $registered = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST, $registerData);
         if ($registered) {

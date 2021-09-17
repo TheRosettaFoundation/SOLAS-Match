@@ -1351,6 +1351,9 @@ class Users
         $english = DAO\LanguageDao::getLanguage(null, "en");
         $userInfo->setUserId($newUser->getId());
         $userInfo->setLanguagePreference($english->getId());
+        $userInfo->setFirstName($data->getFirstName());
+        $userInfo->setLastName($data->getLastName());
+        DAO\UserDao::insert_communications_consent($newUser->getId(), $data->getCommunicationsConsent());
         $personal_info = DAO\UserDao::savePersonalInfo($userInfo);
         
         API\Dispatcher::sendResponse(null, $registered, null, $format);
