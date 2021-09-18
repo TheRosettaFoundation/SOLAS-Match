@@ -2764,11 +2764,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 $memsource_project = $projectDao->get_memsource_project($projectId);
                 $creator = $taskDao->get_creator($projectId, $memsource_project);
                 $pm = $creator['email'];
-error_log("pm: $pm");
                 $memsource_project_id = $memsource_project['memsource_project_id'];
-error_log("memsource_project_id: $memsource_project_id");
-$ssp = $projectDao->get_memsource_self_service_project($memsource_project_id);//(**)
-error_log("memsource_project_id: $memsource_project_id, " . print_r($ssp, true));//(**)
                 $self_service = strpos($pm, '@translatorswithoutborders.org') === false || $projectDao->get_memsource_self_service_project($memsource_project_id);
                 if ($self_service) $asana_project = '778921846018141';
                 else               $asana_project = '1200067882657242';
@@ -2845,7 +2841,7 @@ error_log("memsource_project_id: $memsource_project_id, " . print_r($ssp, true))
                     curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
                     $result = curl_exec($ch);
                     curl_close($ch);
-                    error_log("Posted to Asana Incoming Tasks project ($targetLocale_code), result: $result");
+                    error_log("POST/PUT Asana task ($targetLocale_code), result: $result");
                     if ($create) {
                         $asana_task_details = json_decode($result, true);
                         if (!empty($asana_task_details['data']['gid'])) {
