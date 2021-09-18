@@ -2750,33 +2750,19 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
             $queue_asana_projects = $projectDao->get_queue_asana_projects();
             $count = 0;
             foreach ($queue_asana_projects as $queue_asana_project) {
-error_log("count: $count");
                 if (++$count > 4) break; // Limit number done at one time, just in case
-error_log("a1");
                 $projectId = $queue_asana_project['project_id'];
-error_log("a2");
                 $project = $projectDao->getProject($projectId);
-error_log("a3");
                 $org_id = $project->getOrganisationId();
-error_log("a4");
-                $org = $YorgDao->getOrganisation($org_id);
-error_log("a5");
+                $org = $orgDao->getOrganisation($org_id);
                 $org_name = $org->getName();
-error_log("a6");
                 $project_name = $project->getTitle();
-error_log("a7");
                 $project_url = 'https://' . $_SERVER['SERVER_NAME'] . "/project/$projectId/view/";
-error_log("a8");
                 $objDateTime = new \DateTime($project->getDeadline());
-error_log("a9");
                 $sourceLocale_code = $project->getSourceLocale()->getLanguageCode() .  '-'  . $project->getSourceLocale()->getCountryCode();
-error_log("a10");
                 $sourceLocale      = $project->getSourceLocale()->getLanguageName() . ' - ' . $project->getSourceLocale()->getCountryName();
-error_log("a11");
                 $memsource_project = $projectDao->get_memsource_project($projectId);
-error_log("a12");
                 $creator = $taskDao->get_creator($projectId, $memsource_project);
-error_log("a13");
                 $pm = $creator['email'];
 error_log("pm: $pm");
                 $memsource_project_id = $memsource_project['memsource_project_id'];
