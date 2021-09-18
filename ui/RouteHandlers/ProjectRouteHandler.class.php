@@ -2754,7 +2754,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 $projectId = $queue_asana_project['project_id'];
                 $project = $projectDao->getProject($projectId);
                 $org_id = $project->getOrganisationId();
-                $org = $orgDao->getOrganisation($org_id);
+                $org = $YorgDao->getOrganisation($org_id);
                 $org_name = $org->getName();
                 $project_name = $project->getTitle();
                 $project_url = 'https://' . $_SERVER['SERVER_NAME'] . "/project/$projectId/view/";
@@ -2764,7 +2764,10 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 $memsource_project = $projectDao->get_memsource_project($projectId);
                 $creator = $taskDao->get_creator($projectId, $memsource_project);
                 $pm = $creator['email'];
-                $self_service = strpos($pm, '@translatorswithoutborders.org') === false;
+                $memsource_project_id = $memsource_project['memsource_project_id'];
+$ssp = $projectDao->get_memsource_self_service_project($memsource_project_id);//(**)
+error_log("memsource_project_id: $memsource_project_id, " . print_r($ssp, true));//(**)
+                $self_service = strpos($pm, '@translatorswithoutborders.org') === false || $projectDao->get_memsource_self_service_project($memsource_project_id);
                 if ($self_service) $asana_project = '778921846018141';
                 else               $asana_project = '1200067882657242';
 
