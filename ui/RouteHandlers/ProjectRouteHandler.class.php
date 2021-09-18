@@ -2750,6 +2750,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
             $queue_asana_projects = $projectDao->get_queue_asana_projects();
             $count = 0;
             foreach ($queue_asana_projects as $queue_asana_project) {
+error_log("count: $count");
                 if (++$count > 4) break; // Limit number done at one time, just in case
                 $projectId = $queue_asana_project['project_id'];
                 $project = $projectDao->getProject($projectId);
@@ -2764,7 +2765,9 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 $memsource_project = $projectDao->get_memsource_project($projectId);
                 $creator = $taskDao->get_creator($projectId, $memsource_project);
                 $pm = $creator['email'];
+error_log("pm: $pm");
                 $memsource_project_id = $memsource_project['memsource_project_id'];
+error_log("memsource_project_id: $memsource_project_id");
 $ssp = $projectDao->get_memsource_self_service_project($memsource_project_id);//(**)
 error_log("memsource_project_id: $memsource_project_id, " . print_r($ssp, true));//(**)
                 $self_service = strpos($pm, '@translatorswithoutborders.org') === false || $projectDao->get_memsource_self_service_project($memsource_project_id);
