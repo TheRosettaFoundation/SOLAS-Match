@@ -2675,12 +2675,14 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
 
     public function task_cron_1_minute()
     {
+error_log("aaa");
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
         $orgDao = new DAO\OrganisationDao();
 
         $fp_for_lock = fopen(__DIR__ . '/task_cron_1_minute_lock.txt', 'r');
         if (flock($fp_for_lock, LOCK_EX | LOCK_NB)) { // Acquire an exclusive lock, if possible, if not we will wait for next time
+error_log("bbb");
             $queue_copy_task_original_files = $projectDao->get_queue_copy_task_original_files();
             $count = 0;
             foreach ($queue_copy_task_original_files as $queue_copy_task_original_file) {
@@ -2747,8 +2749,10 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 curl_close($ch);
             }
 
+error_log("ccc");
             $queue_asana_projects = $projectDao->get_queue_asana_projects();
             $count = 0;
+error_log(print_r($queue_asana_projects, true));
             foreach ($queue_asana_projects as $queue_asana_project) {
 error_log("count: $count");
                 if (++$count > 4) break; // Limit number done at one time, just in case
