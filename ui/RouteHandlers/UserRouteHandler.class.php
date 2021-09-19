@@ -537,12 +537,8 @@ class UserRouteHandler
             }
             
             if (is_null($error)) {
-                if ($userDao->register($post['email'], $post['password'])) {
-[[ADD REPALCE ABOVE
                 array_key_exists('newsletter_consent', $post) ? $communications_consent = 1 : $communications_consent = 0;
-
-                if ($userDao->register($post['email'], $post['password'],$post['first_name'],$post['last_name'],$communications_consent)) {
-]]
+                if ($userDao->register($post['email'], $post['password'], $post['first_name'], $post['last_name'], $communications_consent)) {
                     $app->flashNow(
                         "success",
                         sprintf(Lib\Localisation::getTranslation('register_4'), $app->urlFor("login"))
