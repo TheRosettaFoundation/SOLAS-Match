@@ -455,11 +455,9 @@ class UserRouteHandler
         }
         
         if ($appendExtraScripts) {
-            $extra_scripts .= '<script type="text/javascript">function compareEmails() {if (document.getElementById("email").value != document.getElementById("email2").value) {window.alert("Entered emails must be identical."); return false;} return true;}</script>';
-[[Added... replace above
-            $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script> ';
-            $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script> ';
-            $extra_scripts .= '<script type="text/javascript">function compareEmails() {if (document.getElementById("email").value != document.getElementById("email2").value) {window.alert("Entered emails must be identical."); return false;} return true; }
+            $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script>';
+            $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script>';
+            $extra_scripts .= '<script type="text/javascript">function compareEmails() {if (document.getElementById("email").value != document.getElementById("email2").value) {window.alert("Entered emails must be identical."); return false;} return true;}
             $().ready(function() {
             $("#registerform").validate({
                 rules: {
@@ -512,7 +510,6 @@ class UserRouteHandler
             </script>';
             $app->view()->appendData(array("extra_scripts" => $extra_scripts));
         }
-]]
         
         $error = null;
         $warning = null;
@@ -532,17 +529,12 @@ class UserRouteHandler
                     // notify user that they are not yet verified an resent verification email
                 }
             }
-[[
-            /*elseif(is_null($post['username']) || empty($post['username'])){
-                $error = "You did not enter username";
-            }*/
-            elseif(is_null($post['first_name']) || empty($post['first_name'])){
-                $error = "You did not enter First name";
+            elseif (empty($post['first_name'])) {
+                $error = 'You did not enter First name';
             }
-            elseif(is_null($post['last_name']) || empty($post['last_name'])){
-                $error = "You did not enter Last name";
+            elseif (empty($post['last_name'])) {
+                $error = 'You did not enter Last name';
             }
-]]
             
             if (is_null($error)) {
                 if ($userDao->register($post['email'], $post['password'])) {
