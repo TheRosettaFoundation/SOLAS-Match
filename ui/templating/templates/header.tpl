@@ -27,6 +27,7 @@
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min1.css"/>
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.2.css"/>
         <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 		<link rel="shortcut icon" type="image/x-icon" href="{urlFor name="home"}favicon.ico">
 		
@@ -58,13 +59,25 @@
         {if isset($extra_scripts)}
             {$extra_scripts}
         {/if}
+    <style>
+    .navbar .nav li a{
+        color:#143878 !important;
+    }
+    .header-link{
+        margin-bottom:1%;
+        margin-right:1%;
+       }
+       .navbar-inner{
+           margin-top:0.2%;
+       }
+    </style>
     </head>
 
         <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if}>
         <div class="navbar navbar-fixed-top">
            <div class="navbar-inner">
                 <div class="container">
-                    <a href="{urlFor name='home'}" class="pull-left"><img height="40px" src="{urlFor name='home'}ui/img/logo_katotrommons.png"></a>
+                    <a href="{urlFor name='home'}" class="pull-left header-link"><img height="60px" src="{urlFor name='home'}ui/img/logo_KP-removebg-preview.png"></a> 
                     <ul class="nav">
                         {if !isset($site_admin)}
                         <li {if isset($current_page) && $current_page == 'home'}class="active"{/if} >
@@ -137,13 +150,13 @@
                             {/if}
                         </li>
                         {if isset($user)}
-                            <li>
+                            <li class="profile">
                                 <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                                     <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
                                        {TemplateHelper::uiCleanseHTML($user->getDisplayName())}
                                 </a>
                             </li>
-                            <li>
+                            <li class="logout">
                                 <a href="{urlFor name="logout"}">{Localisation::getTranslation('header_log_out')}</a>
                             </li>
                         {else}
