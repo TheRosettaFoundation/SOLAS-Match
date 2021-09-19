@@ -362,6 +362,31 @@ class UserRouteHandler
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Home2.js\"></script>";
+[[
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"https://getbootstrap.com/2.3.2/assets/js/bootstrap-carousel.js\"></script>";
+        $extra_scripts .= "<script type=\"text/javascript\" >
+        $(document).ready(function(){
+          var user_count = $('#value').text();
+            $('.carousel').carousel({
+              interval: 7000
+            })
+            function animateValue(obj, start, end, duration) {
+                let startTimestamp = null;
+                const step = (timestamp) => {
+                  if (!startTimestamp) startTimestamp = timestamp;
+                  const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                  obj.innerHTML = Math.floor(progress * (end - start) + start);
+                  if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                  }
+                };
+                window.requestAnimationFrame(step);
+              }
+              const obj = document.getElementById('value');
+              animateValue(obj, 0, user_count, 3000);
+          });
+        </script>";
+]]
 
         $org_admin = false;
         if (empty($topTasks) && !empty($user_id)) {
@@ -392,7 +417,7 @@ class UserRouteHandler
             'org_admin' => $org_admin,
             'user_monthly_count' => $userDao->get_users_by_month(),
         ));
-        $app->render('index.tpl');
+        $app->render('index-home.tpl');
     }
 
     public function videos()
@@ -433,8 +458,63 @@ class UserRouteHandler
         
         if ($appendExtraScripts) {
             $extra_scripts .= '<script type="text/javascript">function compareEmails() {if (document.getElementById("email").value != document.getElementById("email2").value) {window.alert("Entered emails must be identical."); return false;} return true;}</script>';
+[[Added... replace above
+            $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script> ';
+            $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script> ';
+            $extra_scripts .= '<script type="text/javascript">function compareEmails() {if (document.getElementById("email").value != document.getElementById("email2").value) {window.alert("Entered emails must be identical."); return false;} return true; }
+            $().ready(function() {
+            $("#registerform").validate({
+                rules: {
+                    first_name: "required",
+                    last_name: "required",
+                    password: {
+                        required: true,
+                        minlength: 5
+                    },
+                    confirm_password: {
+                        required: true,
+                        minlength: 5,
+                        equalTo: "#password"
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    email2: {
+                        required: true,
+                        email: true,
+                        equalTo: "#email"
+                    },
+                    age_consent: "required",
+                    conduct_consent: "required"
+                },
+                messages: {
+                    first_name: "Please enter your First name",
+                    last_name: "Please enter your Last name",
+                    password: {
+                        required: "Please provide a password",
+                        minlength: "Your password must be at least 5 characters long"
+                    },
+                    confirm_password: {
+                        required: "Please provide a password",
+                        minlength: "Your password must be at least 5 characters long",
+                        equalTo: "Please enter the same password as above"
+                    },
+                    email: "Please enter a valid email address",
+                    email2: {
+                        required:"Please enter a valid email address",
+                        equalTo: "Please enter the same email address as above"
+                    },
+                    age_consent: "Please ensure you are above 18 years of age",
+                    conduct_consent: "You need to agree to this to proceed",
+                }
+            });
+            $("#tool").tooltip();
+        });
+            </script>';
             $app->view()->appendData(array("extra_scripts" => $extra_scripts));
         }
+]]
         
         $error = null;
         $warning = null;
