@@ -1129,7 +1129,7 @@ class UserRouteHandler
             $app->view()->appendData(array("extra_scripts" => $extra_scripts));
             $app->view()->appendData(array('firstname' => $firstName, 'lastname' => $lastName, 'email' => $email, 'username' => $username, 'user_id' => $user_id));
 
-            $app->render("user/googleregister.tpl");
+            $app->render('user/googleregister.tpl');
         }
     }
 
@@ -1240,7 +1240,6 @@ class UserRouteHandler
                     $userDao->addUserBadgeById($user_id, $value);
                 }
             }
-
             if (isset($post['interval'])) {
                 if ($post['interval'] == 0 || $post['interval'] == 10) {
                     $userDao->removeTaskStreamNotification($user_id);
@@ -1249,11 +1248,7 @@ class UserRouteHandler
                     $notifData = new Common\Protobufs\Models\UserTaskStreamNotification();
                     $notifData->setUserId($user_id);
                     $notifData->setInterval($post['interval']);
-                    //if (isset($post['strictMode']) && $post['strictMode'] == 'enabled') {
-                        $notifData->setStrict(true);
-                    //} else {
-                    //    $notifData->setStrict(false);
-                    //}
+                    $notifData->setStrict(true);
                     $userDao->requestTaskStreamNotification($notifData);
                     if ($isSiteAdmin) $userDao->set_special_translator($user_id, 0);
                 }
@@ -1359,10 +1354,7 @@ class UserRouteHandler
         $("#tool3").tooltip();
         $("#tool4").tooltip();
         $("#tool5").tooltip();
-        //$(".profile").hide();
-        //$(".logout").hide();
 
-        //select2
         function formatCountry (country) {
             if (!country.id) { return country.text; }
             var $country = $(
@@ -1469,7 +1461,7 @@ class UserRouteHandler
             return false;
     });
 
-      //Build language input fields
+      // Build language input fields
       $(document).on("click", "#add", function(e) {
         e.preventDefault();
         var lastField = $("#buildyourform div:last");
@@ -1491,8 +1483,6 @@ class UserRouteHandler
         placeholder: "--Select a language--",
     });
 });
-
-//});
         </script>';
         $app->view()->appendData(array(
             "extra_scripts" => $extra_scripts,
@@ -1507,7 +1497,7 @@ class UserRouteHandler
             'languages_target'       => $languages_target,
             'communications_consent' => $userDao->get_communications_consent($user_id),
         ));
-        $app->render("user/userprofile.tpl");
+        $app->render('user/userprofile.tpl');
     }
 
     public static function userPrivateProfile($user_id)
