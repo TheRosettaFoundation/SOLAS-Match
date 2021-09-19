@@ -87,6 +87,12 @@ class UserRouteHandler
         )->name('shared_with_key');
 
         $app->get(
+            '/userprofile/',
+            array($middleware, 'authUserIsLoggedInNoProfile'),
+            array($this, 'userprofile')
+        )->via('GET', 'POST')->name('userprofile');
+
+        $app->get(
             "/:user_id/privateProfile/",
             array($middleware, "authUserIsLoggedInNoProfile"),
             array($this, "userPrivateProfile")
