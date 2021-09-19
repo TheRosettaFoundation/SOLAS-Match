@@ -99,6 +99,12 @@ class UserRouteHandler
         )->via("POST")->name("user-private-profile");
 
         $app->get(
+            "/:user_id/googleregister/",
+            array($middleware, "authUserIsLoggedInNoProfile"),
+            array($this, "googleregister")
+        )->via("POST")->name("googleregister");
+
+        $app->get(
             '/:user_id/user-code-of-conduct/',
             array($middleware, 'authUserIsLoggedInNoProfile'),
             array($this, 'userCodeOfConduct')
