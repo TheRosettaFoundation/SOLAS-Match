@@ -390,6 +390,7 @@ class UserRouteHandler
             'extra_scripts' => $extra_scripts,
             'user_id' => $user_id,
             'org_admin' => $org_admin,
+            'user_monthly_count' => $userDao->get_users_by_month(),
         ));
         $app->render('index.tpl');
     }

@@ -1990,7 +1990,7 @@ error_log(print_r($result, true));//(**)
     public function get_users_by_month()
     {
         $result = LibAPI\PDOWrapper::call('getUsersAddedLast30Days', '');
-        if (empty($result)) return [];
-        return $result;
+        if (empty($result)) 0;
+        return $result[0]['users_joined'];
     }
 }
