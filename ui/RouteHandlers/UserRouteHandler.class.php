@@ -1065,6 +1065,465 @@ class UserRouteHandler
         }
     }
 
+    public function googleregister($user_id) {
+        $app = \Slim\Slim::getInstance();
+        $userDao = new DAO\UserDao();
+        $user_personal_info = $userDao->getUserPersonalInformation($user_id);
+        $user_info = $userDao->getUser($user_id);
+
+        if ($app->request()->isPost()) {
+            $post = $app->request()->post();
+            $user_id = $post['user_id'];
+            $user_personal_info = $userDao->getUserPersonalInformation($user_id);
+            $user_info = $userDao->getUser($user_id);
+            $user_info->setDisplayName($post['username']);
+            $user_info->setEmail($post['email']);
+            $user_personal_info->setFirstName($post['first_name']);
+            $user_personal_info->setLastName($post['last_name']);
+            $userDao->updateUser($user_info);
+            $userDao->updatePersonalInfo($user_id, $user_personal_info);
+            array_key_exists('newsletter_consent', $post) ? $userDao->insert_communications_consent($user_id, 1) : $userDao->insert_communications_consent($user_id, 0);
+            $app->redirect($app->urlFor("home"));
+        } else {
+            $email = $user_info->email;
+            $username = $user_info->display_name;
+            $firstName = $user_personal_info->firstName;
+            $lastName = $user_personal_info->lastName;
+
+            $extra_scripts  = '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script> ';
+            $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script> ';
+            $extra_scripts .= '<script type="text/javascript">function compareEmails() {if (document.getElementById("email").value != document.getElementById("email2").value) {window.alert("Entered emails must be identical."); return false;} return true; }
+            $().ready(function() {
+            $("#gregisterform").validate({
+                rules: {
+                    first_name: "required",
+                    last_name: "required",
+                    username: {
+                        required: true,
+                        minlength: 2
+                    },
+                    password: {
+                        required: true,
+                        minlength: 5
+                    },
+                    confirm_password: {
+                        required: true,
+                        minlength: 5,
+                        equalTo: "#password"
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    email2: {
+                        required: true,
+                        email: true,
+                        equalTo: "#email"
+                    },
+                    age_consent: "required",
+                    conduct_consent: "required"
+                },
+                messages: {
+                    first_name: "Please enter your First name",
+                    last_name: "Please enter your Last name",
+                    username: {
+                        required: "Please enter a username",
+                        minlength: "Your username must consist of at least 2 characters"
+                    },
+                    email: "Please enter a valid email address",
+                    age_consent: "Please ensure you are above 18 years of age",
+                    conduct_consent: "You need to agree to this to proceed",
+                }
+            });
+            $("#tool").tooltip();
+            $(".profile").hide();
+            $(".logout").hide();
+        });
+            </script>';
+            $app->view()->appendData(array("extra_scripts" => $extra_scripts));
+            $app->view()->appendData(array('firstname' => $firstName, 'lastname' => $lastName, 'email' => $email, 'username' => $username, 'user_id' => $user_id));
+
+            $app->render("user/googleregister.tpl");
+        }
+    }
+
+    public static function userprofile() {
+        $app = \Slim\Slim::getInstance();
+        $countryDao = new DAO\CountryDao();
+        $userDao = new DAO\UserDao();
+        $langDao = new DAO\LanguageDao();
+        $projectDao = new DAO\projectDao();
+        $adminDao = new DAO\AdminDao();
+
+        $countries = $countryDao->getCountries();
+        $user_id = Common\Lib\UserSession::getCurrentUserID();
+        $userPersonalInfo = $userDao->getUserPersonalInformation($user_id);
+        $languages = $langDao->getLanguages();
+        $languages_source = $langDao->getActiveSourceLanguages();
+        $languages_target = $langDao->getActiveTargetLanguages();
+
+        $user = $userDao->getUser($user_id);
+
+        if (!is_null($user_id)) {
+            $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
+        } else {
+            $isSiteAdmin = false;
+        }
+        if (!is_object($user)) {
+            $app->flash("error", Lib\Localisation::getTranslation('common_login_required_to_access_page'));
+            $app->redirect($app->urlFor("login"));
+        }
+        $languages_array = [];
+        foreach ($languages as $language) {
+            $languages_array[$language->getCode()] = $language->getName();
+        }
+        $countries = $countryDao->getCountries();
+        $language_selection = $projectDao->generate_language_selection();
+
+        $nativeLocale = $user->getNativeLocale();
+        if ($nativeLocale) {
+            $nativeLanguageSelectCode = $nativeLocale->getLanguageCode();
+            $nativeCountrySelectCode = $nativeLocale->getCountryCode();
+        }
+        else {
+            $nativeLanguageSelectCode = '999999999';
+            $nativeCountrySelectCode = '999999999';
+        }
+
+        if (\SolasMatch\UI\isValidPost($app)) {
+            $post = $app->request()->post();
+            $user->setDisplayName($post['username']);
+            $user->setBiography($post['about']);
+            $userPersonalInfo->setFirstName($post['first_name']);
+            $userPersonalInfo->setLastName($post['last_name']);
+            $userPersonalInfo->setCity($post['city']);
+            $userPersonalInfo->setCountry($post['country']);
+            $url_list           = $userDao->getURLList($user_id);
+
+            $lang_details = $langDao->getLanguageByCode($post['nativeLanguageSelect']);
+            $array = json_decode(json_encode($lang_details), true);
+
+            if(isset($post['translate_from1'])){
+                $array = array_merge(array('from'=> $post['translate_from1']),array('to'=>$post['translate_to1']));
+                for($i = 0;$i< count($array);$i++){
+                    $userDao->createUserQualifiedPair($user_id, $array['from'][$i], $country_code_source = "--", $array['to'][$i], $country_code_target = "--", $qualification_level = 1);
+                }
+            }
+
+            if (isset($post['nativeLanguageSelect']) ||isset($post['variant']) ) {
+                if (empty($post['nativeCountrySelect'])) $post['nativeCountrySelect'] = '--';
+                $locale = new Common\Protobufs\Models\Locale();
+                $locale->setLanguageCode($post['nativeLanguageSelect']);
+                $locale->setCountryCode($post['nativeCountrySelect']);
+                foreach ($languages as $language) {
+                    if ($language->getCode() == $post['nativeLanguageSelect']) {
+                        $locale->setLanguageName($language->getName());
+                    }
+                }
+                foreach ($countries as $country) {
+                    if ($country->getCode() == $post['nativeCountrySelect']) {
+                        $locale->setCountryName($country->getName());
+                    }
+                }
+                $user->setNativeLocale($locale);
+
+                $language_code_source = $post['nativeLanguageSelect'];
+                $country_code_source = "--";
+                $language_code_target = $post['variant'];
+                $country_code_target = "--";
+                $qualification_level = 1;
+
+                $user_qualified_pairs_count = count($userDao->getUserQualifiedPairs($user_id));
+                if($user_qualified_pairs_count > 0){
+                    $userDao->updateUserQualifiedPair($user_id, $language_code_source, $country_code_source, $language_code_target, $country_code_target, $qualification_level);
+                } else{
+                    $userDao->createUserQualifiedPair($user_id, $language_code_source, $country_code_source, $language_code_target, $country_code_target, $qualification_level);
+                }
+            }
+
+            foreach ($url_list as $name => $url) {
+                if ($post[$name] != $url['state']) $userDao->insertUserURL($user_id, $name, $post[$name]);
+            }
+            if (isset($post['expertise'])) {
+                foreach($post['expertise'] as $key => $value){
+                    $userDao->addUserExpertise($user_id, $value);
+                }
+            }
+            if (isset($post['services'])){
+                foreach($post['services'] as $key => $value){
+                    $userDao->addUserBadgeById($user_id, $value);
+                }
+            }
+
+            if (isset($post['interval'])) {
+                if ($post['interval'] == 0 || $post['interval'] == 10) {
+                    $userDao->removeTaskStreamNotification($user_id);
+                    if ($post['interval'] == 10 && $isSiteAdmin) $userDao->set_special_translator($user_id, 1);
+                } else {
+                    $notifData = new Common\Protobufs\Models\UserTaskStreamNotification();
+                    $notifData->setUserId($user_id);
+                    $notifData->setInterval($post['interval']);
+                    //if (isset($post['strictMode']) && $post['strictMode'] == 'enabled') {
+                        $notifData->setStrict(true);
+                    //} else {
+                    //    $notifData->setStrict(false);
+                    //}
+                    $userDao->requestTaskStreamNotification($notifData);
+                    if ($isSiteAdmin) $userDao->set_special_translator($user_id, 0);
+                }
+            }
+            if (!empty($post['nativeLanguageSelect'])) {
+                if (empty($post['nativeCountrySelect'])) $post['nativeCountrySelect'] = '--';
+                $locale = new Common\Protobufs\Models\Locale();
+                $locale->setLanguageCode($post['nativeLanguageSelect']);
+                $locale->setCountryCode($post['nativeCountrySelect']);
+                foreach ($languages as $language) {
+                    if ($language->getCode() == $post['nativeLanguageSelect']) {
+                        $locale->setLanguageName($language->getName());
+                    }
+                }
+                foreach ($countries as $country) {
+                    if ($country->getCode() == $post['nativeCountrySelect']) {
+                        $locale->setCountryName($country->getName());
+                    }
+                }
+                $user->setNativeLocale($locale);
+            }
+            // $userDao->updateUser($user);
+            //$userDao->updatePersonalInfo($user_id, $userPersonalInfo);
+        }
+        $userQualifiedPairs = $userDao->getUserQualifiedPairs($user_id);
+
+        foreach ($userQualifiedPairs as $index => $userQualifiedPair) {
+            $userQualifiedPairs[$index]['language_code_source'] = $userQualifiedPair['language_code_source'] . '-' . $userQualifiedPair['country_code_source'];
+            $userQualifiedPairs[$index]['language_code_target'] = $userQualifiedPair['language_code_target'] . '-' . $userQualifiedPair['country_code_target'];
+            if (empty($language_selection[$userQualifiedPairs[$index]['language_code_source']])) $language_selection[$userQualifiedPairs[$index]['language_code_source']] = $languages_array[$userQualifiedPair['language_code_source']] . ($userQualifiedPair['country_code_source'] === '--' ? '' : ('-' . $userQualifiedPair['country_code_source']));
+            if (empty($language_selection[$userQualifiedPairs[$index]['language_code_target']])) $language_selection[$userQualifiedPairs[$index]['language_code_target']] = $languages_array[$userQualifiedPair['language_code_target']] . ($userQualifiedPair['country_code_target'] === '--' ? '' : ('-' . $userQualifiedPair['country_code_target']));
+        }
+        if (empty($userQualifiedPairs)) {
+            $userQualifiedPairs[] = array('language_code_source' => '', 'language_code_target' => '', 'qualification_level' => 1);
+        }
+
+        $target_lang = '';
+        foreach($languages_target as $language){
+            $target_lang .="<option value=".$language->getCode().">".$language->getName()."</option>";
+        }
+
+        $source_lang = '';
+        foreach($languages_source as $language){
+            $source_lang .="<option value=".$language->getCode().">".$language->getName()."</option>";
+        }
+
+        $extra_scripts  = '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script> ';
+        $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script> ';
+        $extra_scripts .='<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>';
+        $extra_scripts .= '<script type="text/javascript">
+        $(document).ready(function() {
+    var newsletter_val = $("#newsletter_consent").val();
+    if (newsletter_val == 1){
+        $("#newsletter_consent").attr("checked", true);
+    } else{
+        $("#newsletter_consent").attr("checked", false);
+    }
+
+        $("#userprofile").validate({
+            rules: {
+                first_name: "required",
+                last_name: "required",
+                username: {
+                    required: true,
+                    minlength: 2
+                },
+                password: {
+                    required: true,
+                    minlength: 5
+                },
+                confirm_password: {
+                    required: true,
+                    minlength: 5,
+                    equalTo: "#password"
+                },
+                email: {
+                    required: true,
+                    email: true
+                },
+                email2: {
+                    required: true,
+                    email: true,
+                    equalTo: "#email"
+                },
+                age_consent: "required",
+                conduct_consent: "required"
+            },
+            messages: {
+                first_name: "Please enter your First name",
+                last_name: "Please enter your Last name",
+                username: {
+                    required: "Please enter a username",
+                    minlength: "Your username must consist of at least 2 characters"
+                },
+                email: "Please enter a valid email address",
+                age_consent: "Please ensure you are above 18 years of age",
+                conduct_consent: "You need to agree to this to proceed",
+            }
+        });
+        $("#tool").tooltip();
+        $("#tool1").tooltip();
+        $("#tool2").tooltip();
+        $("#tool3").tooltip();
+        $("#tool4").tooltip();
+        $("#tool5").tooltip();
+        //$(".profile").hide();
+        //$(".logout").hide();
+
+        //select2
+        function formatCountry (country) {
+            if (!country.id) { return country.text; }
+            var $country = $(
+              "<span class=\"flag-icon flag-icon-"+ country.id.toLowerCase() +" flag-icon-squared\"></span>" +
+              "<span class=\"flag-text\">"+ country.text+"</span>"
+            );
+            return $country;
+          };
+
+        $(".country").select2({
+            placeholder: "Select a country",
+            templateResult: formatCountry
+        });
+        $(".nativeLanguageSelect").select2({
+            placeholder: "Select a native language",
+        });
+        $(".variant").select2({
+            placeholder: "Select a variant",
+        });
+        $(".translate_from").select2({
+            placeholder: "--Select--",
+        });
+        $(".translate_to").select2({
+            placeholder: "--Select--",
+        });
+
+        if (jQuery("#myTab li:eq(0) a").tab("show")) {
+            $(".tabcounter").text("1/3");
+        }
+        else if (jQuery("#myTab li:eq(1) a").tab("show")) {
+            $(".tabcounter").text("2/3");
+        } else {
+            $(".tabcounter").text("3/3");
+        }
+
+        $(document).on("click", ".next11", function(e) {
+            e.preventDefault();
+            $(".tabcounter").text("2/3");
+            jQuery("#myTab li:eq(1) a").tab("show");
+         });
+
+         $(document).on("click", ".next111a", function(e) {
+            e.preventDefault();
+            if ($(this).attr("href") == "#home"){
+                $(".tabcounter").text("2/3");
+                jQuery("#myTab li:eq(1) a").tab("show");
+            }
+            else if ($(this).attr("href") == "#profile") {
+                $(".tabcounter").text("3/3");
+                jQuery("#myTab li:eq(2) a").tab("show");
+            }
+         });
+    });
+
+    $(document).on("click", "#btnTrigger", function(e) {
+        e.preventDefault();
+        if ($(this).attr("href") == "#home") {
+            $(".tabcounter").text("1/3");
+            jQuery("#myTab li:eq(0) a").tab("show");
+        }
+        else if ($(this).attr("href") == "#profile") {
+            $(".tabcounter").text("2/3");
+            jQuery("#myTab li:eq(1) a").tab("show");
+        }  else if ($(this).attr("href") == "#verifications") {
+            $(".tabcounter").text("3/3");
+            jQuery("#myTab li:eq(2) a").tab("show");
+        }
+    });
+
+        $(document).on("click", "#btnTrigger1", function(e) {
+            e.preventDefault();
+            if ($(this).attr("href") == "#home") {
+                $(".tabcounter").text("1/3");
+                jQuery("#myTab li:eq(0) a").tab("show");
+            }
+            else if ($(this).attr("href") == "#profile1") {
+                $(".tabcounter").text("2/3");
+                jQuery("#myTab li:eq(1) a").tab("show");
+            } else if($(this).attr("href") == "#verifications") {
+                $(".tabcounter").text("3/3");
+                jQuery("#myTab li:eq(2) a").tab("show");
+            }
+        });
+
+        $(document).on("click", "#btnTrigger11", function(e) {
+            e.preventDefault();
+            if ($(this).attr("href") == "#home") {
+                $(".tabcounter1").text("1/3");
+                jQuery("#myTab li:eq(0) a").tab("show");
+            }
+            else if ($(this).attr("href") == "#profile1") {
+                $(".tabcounter1").text("2/3");
+                jQuery("#myTab li:eq(1) a").tab("show");
+            } else if ($(this).attr("href") == "#verifications") {
+                $(".tabcounter1").text("3/3");
+                jQuery("#myTab li:eq(2) a").tab("show");
+            }
+        });
+
+        $(".btn").click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            return false;
+    });
+
+      //Build language input fields
+      $(document).on("click", "#add", function(e) {
+        e.preventDefault();
+        var lastField = $("#buildyourform div:last");
+    var intId = (lastField && lastField.length && lastField.data("idx") + 1) || 1;
+    var fieldWrapper = $("<div class=\"row-fluid\" id=\"field" + intId + "\"/>");
+    fieldWrapper.data("idx", intId);
+    var fName = $("<div class=\"span6\"> <select name=\"translate_from" + intId + "[]\" id=\"from" + intId + "\" class=\"fieldtype\"><option value>--Select--</option>'.$source_lang.'</select></div>");
+    var fType = $("<div class=\"span5\"><select name=\"translate_to" + intId + "[]\" id=\"to" + intId + "\" class=\"fieldtype\"><option value>--Select--</option>'.$target_lang.'</select></div>");
+    var removeButton = $("<div class=\"span1\" style=\"margin-top: 1.%;margin-left: -18%;\"><input type=\"button\" class=\"remove\" value=\"-\"  /><div>");
+    removeButton.click(function() {
+        console.log($(this));
+        $(this).parent().remove();
+    });
+    fieldWrapper.append(fName);
+    fieldWrapper.append(fType);
+    fieldWrapper.append(removeButton);
+    $("#buildyourform").append(fieldWrapper);
+    $(".fieldtype").select2({
+        placeholder: "--Select a language--",
+    });
+});
+
+//});
+        </script>';
+        $app->view()->appendData(array(
+            "extra_scripts" => $extra_scripts,
+            'user_id' => $user_id,
+            'countries'=> $countries,
+            'languages' => $languages,
+            'userPersonalInfo' => $userPersonalInfo,
+            'nativeLanguageSelectCode' => $nativeLanguageSelectCode,
+            'nativeCountrySelectCode'  => $nativeCountrySelectCode,
+            'userQualifiedPairs'       => $userQualifiedPairs,
+            'languages_source'       => $languages_source,
+            'languages_target'       => $languages_target,
+            'communications_consent' => $userDao->get_communications_consent($user_id),
+        ));
+        $app->render("user/userprofile.tpl");
+    }
+
     public static function userPrivateProfile($user_id)
     {
         $app = \Slim\Slim::getInstance();
