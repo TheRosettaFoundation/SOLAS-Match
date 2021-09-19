@@ -534,9 +534,25 @@ class UserRouteHandler
                     // notify user that they are not yet verified an resent verification email
                 }
             }
+[[
+            /*elseif(is_null($post['username']) || empty($post['username'])){
+                $error = "You did not enter username";
+            }*/
+            elseif(is_null($post['first_name']) || empty($post['first_name'])){
+                $error = "You did not enter First name";
+            }
+            elseif(is_null($post['last_name']) || empty($post['last_name'])){
+                $error = "You did not enter Last name";
+            }
+]]
             
             if (is_null($error)) {
                 if ($userDao->register($post['email'], $post['password'])) {
+[[ADD REPALCE ABOVE
+                array_key_exists('newsletter_consent', $post) ? $communications_consent = 1 : $communications_consent = 0;
+
+                if ($userDao->register($post['email'], $post['password'],$post['first_name'],$post['last_name'],$communications_consent)) {
+]]
                     $app->flashNow(
                         "success",
                         sprintf(Lib\Localisation::getTranslation('register_4'), $app->urlFor("login"))
