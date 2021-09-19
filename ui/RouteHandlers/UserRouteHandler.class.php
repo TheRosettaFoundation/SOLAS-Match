@@ -362,10 +362,9 @@ class UserRouteHandler
         $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/jquery-ias.min.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Home2.js\"></script>";
-[[
         $extra_scripts .= "<script type=\"text/javascript\" src=\"https://getbootstrap.com/2.3.2/assets/js/bootstrap-carousel.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" >
-        $(document).ready(function(){
+        $(document).ready(function() {
           var user_count = $('#value').text();
             $('.carousel').carousel({
               interval: 7000
@@ -386,7 +385,6 @@ class UserRouteHandler
               animateValue(obj, 0, user_count, 3000);
           });
         </script>";
-]]
 
         $org_admin = false;
         if (empty($topTasks) && !empty($user_id)) {
