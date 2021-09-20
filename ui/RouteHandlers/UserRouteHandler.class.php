@@ -1056,26 +1056,20 @@ class UserRouteHandler
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
         $user_personal_info = $userDao->getUserPersonalInformation($user_id);
-        $user_info = $userDao->getUser($user_id);
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
-            $user_id = $post['user_id'];
-            $user_personal_info = $userDao->getUserPersonalInformation($user_id);
-            $user_info = $userDao->getUser($user_id);
-            $user_info->setDisplayName($post['username']);
-            $user_info->setEmail($post['email']);
+            Common\Lib\UserSession::checkCSRFKey($post, 'googleregister');
+
             $user_personal_info->setFirstName($post['first_name']);
             $user_personal_info->setLastName($post['last_name']);
-            $userDao->updateUser($user_info);
             $userDao->updatePersonalInfo($user_id, $user_personal_info);
             array_key_exists('newsletter_consent', $post) ? $userDao->insert_communications_consent($user_id, 1) : $userDao->insert_communications_consent($user_id, 0);
-            $app->redirect($app->urlFor("home"));
+            $userDao->update_terms_accepted($user_id, 1);
+            $app->redirect($app->urlFor('userprofile', array('user_id' => $user_id)));
         } else {
-            $email = $user_info->email;
-            $username = $user_info->display_name;
             $firstName = $user_personal_info->firstName;
             $lastName = $user_personal_info->lastName;
 
@@ -1136,7 +1130,8 @@ class UserRouteHandler
         }
     }
 
-    public static function userprofile() {
+    public static function userprofile()
+    {
         $app = \Slim\Slim::getInstance();
         $countryDao = new DAO\CountryDao();
         $userDao = new DAO\UserDao();
