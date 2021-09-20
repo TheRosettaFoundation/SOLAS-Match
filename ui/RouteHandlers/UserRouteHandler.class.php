@@ -1055,7 +1055,11 @@ class UserRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
+        $user_info = $userDao->getUser($user_id);
+        $username = $user_info->display_name;
         $user_personal_info = $userDao->getUserPersonalInformation($user_id);
+        $firstName = $user_personal_info->firstName;
+        $lastName = $user_personal_info->lastName;
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
@@ -1070,50 +1074,20 @@ class UserRouteHandler
             $userDao->update_terms_accepted($user_id, 1);
             $app->redirect($app->urlFor('userprofile', array('user_id' => $user_id)));
         } else {
-            $firstName = $user_personal_info->firstName;
-            $lastName = $user_personal_info->lastName;
-
             $extra_scripts  = '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script> ';
             $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script> ';
-            $extra_scripts .= '<script type="text/javascript">function compareEmails() {if (document.getElementById("email").value != document.getElementById("email2").value) {window.alert("Entered emails must be identical."); return false;} return true; }
+            $extra_scripts .= '<script type="text/javascript">
             $().ready(function() {
             $("#gregisterform").validate({
                 rules: {
                     first_name: "required",
                     last_name: "required",
-                    username: {
-                        required: true,
-                        minlength: 2
-                    },
-                    password: {
-                        required: true,
-                        minlength: 5
-                    },
-                    confirm_password: {
-                        required: true,
-                        minlength: 5,
-                        equalTo: "#password"
-                    },
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    email2: {
-                        required: true,
-                        email: true,
-                        equalTo: "#email"
-                    },
                     age_consent: "required",
                     conduct_consent: "required"
                 },
                 messages: {
                     first_name: "Please enter your First name",
                     last_name: "Please enter your Last name",
-                    username: {
-                        required: "Please enter a username",
-                        minlength: "Your username must consist of at least 2 characters"
-                    },
-                    email: "Please enter a valid email address",
                     age_consent: "Please ensure you are above 18 years of age",
                     conduct_consent: "You need to agree to this to proceed",
                 }
@@ -1124,8 +1098,7 @@ class UserRouteHandler
         });
             </script>';
             $app->view()->appendData(array("extra_scripts" => $extra_scripts));
-            $app->view()->appendData(array('firstname' => $firstName, 'lastname' => $lastName, 'email' => $email, 'username' => $username, 'user_id' => $user_id, 'sesskey' => $sesskey));
-
+            $app->view()->appendData(array('firstname' => $firstName, 'lastname' => $lastName, 'username' => $username, 'user_id' => $user_id, 'sesskey' => $sesskey));
             $app->render('user/googleregister.tpl');
         }
     }
