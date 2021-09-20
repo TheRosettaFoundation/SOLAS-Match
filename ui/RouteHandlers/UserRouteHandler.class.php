@@ -1051,11 +1051,14 @@ class UserRouteHandler
         }
     }
 
-    public function googleregister($user_id) {
+    public function googleregister($user_id)
+    {
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
         $user_personal_info = $userDao->getUserPersonalInformation($user_id);
         $user_info = $userDao->getUser($user_id);
+
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
@@ -1127,7 +1130,7 @@ class UserRouteHandler
         });
             </script>';
             $app->view()->appendData(array("extra_scripts" => $extra_scripts));
-            $app->view()->appendData(array('firstname' => $firstName, 'lastname' => $lastName, 'email' => $email, 'username' => $username, 'user_id' => $user_id));
+            $app->view()->appendData(array('firstname' => $firstName, 'lastname' => $lastName, 'email' => $email, 'username' => $username, 'user_id' => $user_id, 'sesskey' => $sesskey));
 
             $app->render('user/googleregister.tpl');
         }
