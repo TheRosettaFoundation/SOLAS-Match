@@ -1274,6 +1274,9 @@ EOD;
 
             $lang_details = $langDao->getLanguageByCode($post['nativeLanguageSelect']);
             $array = json_decode(json_encode($lang_details), true);
+            if(isset($post['translate_from'])&&isset($post['translate_to'])){
+                    $userDao->createUserQualifiedPair($user_id, $post['translate_from'], $country_code_source = "--", $post['translate_to'], $country_code_target = "--", $qualification_level = 1);    
+            }
 
             if(isset($post['translate_from1'])){
 
@@ -1322,7 +1325,11 @@ EOD;
             }      
 
             foreach ($url_list as $name => $url) {
-                if ($post[$name] != $url['state']) $userDao->insertUserURL($user_id, $name, $post[$name]);
+                if(isset($post[$name])){
+                    if ($post[$name] != $url['state']) $userDao->insertUserURL($user_id, $name, $post[$name]);
+
+                }
+                
             }
            if(isset($post['expertise'])){
 
@@ -1376,6 +1383,58 @@ EOD;
                 }
                 $user->setNativeLocale($locale);
             }
+
+            if (!empty($post['receiveCredit'])) {
+                $userPersonalInfo->setReceiveCredit(true);
+            } else {
+                $userPersonalInfo->setReceiveCredit(false);
+            }
+
+            $userDao->update_terms_accepted($user_id, 2);
+
+            //Error Handle
+
+            if (!Lib\Validator::validateEmail($post['email'])) {
+                $error = Lib\Localisation::getTranslation('register_1');
+            }  elseif ($user = $userDao->getUserByEmail($post['email'], $temp)) {
+                if ($userDao->isUserVerified($user->getId())) {
+                    $error = sprintf(Lib\Localisation::getTranslation('register_3'), $app->urlFor("login"));
+                } else {
+                    $error = "User is not verified";
+                    // notify user that they are not yet verified an resent verification email
+                }
+            }
+            /*elseif(is_null($post['username']) || empty($post['username'])){
+                $error = "You did not enter username";
+            }*/
+            elseif(is_null($post['first_name']) || empty($post['first_name'])){
+                $error = "You did not enter First name";
+            }
+            elseif(is_null($post['last_name']) || empty($post['last_name'])){
+                $error = "You did not enter Last name";
+            }
+            elseif(is_null($post['nativeLanguageSelect']) || empty($post['nativeLanguageSelect'])){
+                $error = "You did not select Native Language";
+            }
+            elseif(is_null($post['variant']) || empty($post['variant'])){
+                $error = "You did not select variant";
+            }
+            elseif(is_null($post['translate_from']) || empty($post['translate_from'])){
+                $error = "You did not select you can translate from";
+            }
+            elseif(is_null($post['translate_to']) || empty($post['translate_to'])){
+                $error = "You did not select you can translate to";
+            }
+            elseif(is_null($post['services']) || empty($post['services'])){
+                $error = "You did not select services you can provide";
+            }
+            elseif(is_null($post['expertise']) || empty($post['expertise'])){
+                $error = "You did not select your expertise";
+            }
+
+            if ($error !== null) {
+                $app->view()->appendData(array("error" => $error));
+            }
             // $userDao->updateUser($user);
             //$userDao->updatePersonalInfo($user_id, $userPersonalInfo);
             
@@ -1414,7 +1473,12 @@ EOD;
         $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script> ';
         $extra_scripts .='<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>';
         $extra_scripts .= '<script type="text/javascript">
-        $(document).ready(function() {
+        $.validator.setDefaults({
+            submitHandler: function() {
+                alert("submitted!");
+            }
+        });
+        $().ready(function() {
 
             //Newsletter
     
@@ -1434,24 +1498,7 @@ EOD;
                     required: true,
                     minlength: 2
                 },
-                password: {
-                    required: true,
-                    minlength: 5
-                },
-                confirm_password: {
-                    required: true,
-                    minlength: 5,
-                    equalTo: "#password"
-                },
-                email: {
-                    required: true,
-                    email: true
-                },
-                email2: {
-                    required: true,
-                    email: true,
-                    equalTo: "#email"
-                },
+     
                 age_consent: "required",
                 conduct_consent: "required"
             },

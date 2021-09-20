@@ -10,12 +10,35 @@
     content:" *";
     color: #F00;
   }
+ 
+
+	 #userprofile label {
+  color:#143878 !important;
+}
+ #userprofile .check {
+  color:#333 !important;
+}
+#userprofile label.error {
+		
+		width: auto;
+	
+	}
+#userprofile .error{
+    color:#F00 !important;
+}
+
+	
 </style>
 
 <div class="hero-unit">
 <br/>
 <h2 class="twb_color">Please complete your profile <span class="tabcounter twb_color tabcounter1"></span></h2>
-
+{include file="handle-flash-messages.tpl"}
+{if isset($error)}
+    <div class="alert alert-error">
+        <strong>{Localisation::getTranslation('common_error')}:</strong> {$error}
+    </div>
+{/if}
 
 <div class="bs-docs-example">
 <form method="post" id="userprofile" action="{urlFor name="userprofile"}" class="well" accept-charset="utf-8">
@@ -64,7 +87,7 @@
                 </div>
                 <div>
                           <label  class="checkbox clear_brand">
-                          <input type="checkbox" name="community_consent"> Make my information including,which non-profits I contribute to visible to the TWB Community   
+                          <input type="checkbox" name="receiveCredit"> Make my information including,which non-profits I contribute to visible to the TWB Community   
                           </label>
                 </div>
                  

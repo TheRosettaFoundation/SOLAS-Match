@@ -204,7 +204,7 @@
          <div class="span4">
          <div id="globe" style="text-align: center">
                 <button class="btn btn-primary" type="submit">
-	                <a class="login">JOIN NOW</a>
+	                <a class="login" href="{urlFor name="register"}">JOIN NOW</a>
 	            </button>
                 </div>
          </div>
