@@ -87,7 +87,7 @@ class UserRouteHandler
         )->name('shared_with_key');
 
         $app->get(
-            '/userprofile/',
+            '/:user_id/userprofile/',
             array($middleware, 'authUserIsLoggedInNoProfile'),
             array($this, 'userprofile')
         )->via('GET', 'POST')->name('userprofile');
@@ -1055,6 +1055,15 @@ class UserRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
+        $adminDao = new DAO\AdminDao();
+
+        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
+        $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
+        if ($user_id != $loggedInUserId && !$isSiteAdmin) {
+            $app->flash('error', Lib\Localisation::getTranslation('common_login_required_to_access_page'));
+            $app->redirect($app->urlFor('login'));
+        }
+
         $user_info = $userDao->getUser($user_id);
         $username = $user_info->display_name;
         $user_personal_info = $userDao->getUserPersonalInformation($user_id);
@@ -1103,12 +1112,13 @@ class UserRouteHandler
         }
     }
 
-    public static function userprofile()
+    public static function userprofile($user_id)
     {
         $app = \Slim\Slim::getInstance();
-        $countryDao = new DAO\CountryDao();
         $userDao = new DAO\UserDao();
+        $adminDao = new DAO\AdminDao();
         $langDao = new DAO\LanguageDao();
+        $countryDao = new DAO\CountryDao();
         $projectDao = new DAO\projectDao();
         $adminDao = new DAO\AdminDao();
 
