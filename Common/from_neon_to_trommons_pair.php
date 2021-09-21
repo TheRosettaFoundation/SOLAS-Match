@@ -70,6 +70,7 @@ $from_neon_to_trommons_pair = array(
 'Nepali' => array('ne', 'NP'),
 'Nyanja/Chewa' => array('ny', '--'),
 'Panjabi' => array('pa', 'IN'),
+'Punjabi (Pakistan, Arabic)' => array('pa', 'PK'),
 'Pashto' => array('ps', 'PK'),
 'Pashto (Afghanistan)' => array('ps', 'AF'),
 'Dari' => array('prs', 'AF'),
