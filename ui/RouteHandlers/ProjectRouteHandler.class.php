@@ -2757,55 +2757,98 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 $org = $orgDao->getOrganisation($org_id);
                 $org_name = $org->getName();
                 $project_name = $project->getTitle();
-                $wordCount = $project->getWordCount();
+                $project_url = 'https://' . $_SERVER['SERVER_NAME'] . "/project/$projectId/view/";
                 $objDateTime = new \DateTime($project->getDeadline());
-                $sourceLocale_code = $project->getSourceLocale()->getLanguageCode();
-                $sourceLocale      = $project->getSourceLocale()->getLanguageName();
+                $sourceLocale_code = $project->getSourceLocale()->getLanguageCode() .  '-'  . $project->getSourceLocale()->getCountryCode();
+                $sourceLocale      = $project->getSourceLocale()->getLanguageName() . ' - ' . $project->getSourceLocale()->getCountryName();
                 $memsource_project = $projectDao->get_memsource_project($projectId);
                 $creator = $taskDao->get_creator($projectId, $memsource_project);
                 $pm = $creator['email'];
-                if (strpos($pm, '@translatorswithoutborders.org') === false) $pm = 'projects@translatorswithoutborders.org';
+                $memsource_project_id = $memsource_project['memsource_project_id'];
+                $self_service = strpos($pm, '@translatorswithoutborders.org') === false || $projectDao->get_memsource_self_service_project($memsource_project_id);
+                if ($self_service) $asana_project = '778921846018141';
+                else               $asana_project = '1200067882657242';
 
                 $tasks = $projectDao->getProjectTasksArray($projectId);
-                $project_lang_pair = array_values($this->unique_multidim_array($tasks, 'targetLanguageCode'));
+                $project_lang_pairs = [];
+                foreach ($tasks as $task) {
+                    $targetLanguageCode = $task['targetLanguageCode'] .  '-'  . $task['targetCountryCode'];
+                    $targetLanguageName = $task['targetLanguageName'] . ' - ' . $task['targetCountryName'];
+                    if (empty($project_lang_pairs[$targetLanguageCode])) {
+                        $project_lang_pairs[$targetLanguageCode] = ['targetLanguageCode' => $targetLanguageCode, 'targetLanguageName' => $targetLanguageName, 'tWordCount' => 0, 'rWordCount' => 0];
+                    }
+                    if ($task['taskType'] == Common\Enums\TaskTypeEnum::TRANSLATION)  $project_lang_pairs[$targetLanguageCode]['tWordCount'] += $task['wordCount'];
+                    if ($task['taskType'] == Common\Enums\TaskTypeEnum::PROOFREADING) $project_lang_pairs[$targetLanguageCode]['rWordCount'] += $task['wordCount'];
+                }
 
-                for ($i = 0; $i < count($project_lang_pair); $i++) {
-                    $targetLocale = $project_lang_pair[$i]['targetLanguageName'];
-                    $targetLocale_code = $project_lang_pair[$i]['targetLanguageCode'];
-                    $project_url = "https://".$_SERVER['SERVER_NAME']."/project/$projectId/view/";
-                    $url = "https://app.asana.com/api/1.0/tasks";
-/* (**)
+                $asana_tasks = $projectDao->get_asana_tasks($projectId);
+                foreach ($project_lang_pairs as $key => $project_lang_pair) {
+                    if (empty($asana_tasks[$key])) {
+                        $create = true;
+                        $url = 'https://app.asana.com/api/1.0/tasks';
+                    } else {
+                        $create = false;
+                        $url = 'https://app.asana.com/api/1.0/tasks/' . $asana_tasks[$key]['asana_task_id'];
+                        error_log('Updating Asana task: ' . $asana_tasks[$key]['asana_task_id']);
+                    }
+                    $targetLocale = $project_lang_pair['targetLanguageName'];
+                    $targetLocale_code = $project_lang_pair['targetLanguageCode'];
+
                     $ch = curl_init($url);
-              
-                    $data = array('data' => array(
-                        "name" => $project_name,
-//(**)                        "assignee" => $pm,
-                        "projects" => array(
-                            "1200067882657242"
-                        ),
-                        "custom_fields" => array(
-                            "1200067882657247" => $wordCount,
-                            "1200067882657245" => $org_name,
-                            "1200068101079960" => $sourceLocale,
-                            "1200269602122253" => $sourceLocale_code,
-                            "1200067882657251" => $targetLocale,
-                            "1200269602122255" => $targetLocale_code,
-                            "1200226775862070" => $project_url,
-                            "1200269602122257" => "$projectId"
-                        ),
-                        "due_at" => $objDateTime->format('c'),
-                        "notes" => "KP Project details per language pair.Project ID - ".$projectId,
-                        ));
+
+                    $wordCount = $project_lang_pair['tWordCount'];
+                    if ($wordCount == 0) $wordCount = $project_lang_pair['rWordCount'];
+
+                    // https://developers.asana.com/docs/create-a-task
+                    // https://developers.asana.com/docs/update-a-task
+                    // https://app.asana.com/0/1200067882657242/board
+                    if ($create) {
+                        $data = array('data' => array(
+                            "name" => $project_name,
+                            "projects" => array(
+                                $asana_project
+                            ),
+                            "custom_fields" => array(
+                                "1200067882657247" => $wordCount,
+                                "1200067882657245" => $org_name,
+                                "1200068101079960" => $sourceLocale,
+                                "1200269602122253" => $sourceLocale_code,
+                                "1200067882657251" => $targetLocale,
+                                "1200269602122255" => $targetLocale_code,
+                                "1200226775862070" => $project_url,
+                                "1200269602122257" => "$projectId"
+                            ),
+                            "due_at" => $objDateTime->format('c'),
+                            "notes" => "KP Project details per language pair, Project ID: $projectId",
+                            ));
+                            if (!$self_service) $data['data']['assignee'] = $pm;
+                    } else {
+                        $data = array('data' => array(
+                            "custom_fields" => array(
+                                "1200067882657247" => $wordCount,
+                                "1200067882657245" => $org_name,
+                            ),
+                            "due_at" => $objDateTime->format('c'),
+                            ));
+                    }
                     $payload = json_encode($data);
                     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+                    if ($create) curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+                    else         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
                     $authorization = "Authorization: Bearer ". Common\Lib\Settings::get('asana.api_key6');
                     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                     curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Just so it does not hang forever and block because of file lock
                     $result = curl_exec($ch);
                     curl_close($ch);
-                    error_log("Posting to Asana Incoming Task project: $result");
-(**) */
+                    error_log("POST/PUT Asana task ($targetLocale_code), result: $result");
+                    if ($create) {
+                        $asana_task_details = json_decode($result, true);
+                        if (!empty($asana_task_details['data']['gid'])) {
+                            $asana_task_id = $asana_task_details['data']['gid'];
+                            $projectDao->set_asana_task($projectId, $sourceLocale_code, $targetLocale_code, $asana_task_id);
+                        }
+                    }
                 }
 
                 error_log("dequeue_asana_project() project_id: $projectId Removing");
@@ -2816,20 +2859,6 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
         fclose($fp_for_lock);
 
         die;
-    }
-
-    private function unique_multidim_array($array, $key) {
-        $temp_array = array();
-        $i = 0;
-        $key_array = array();
-        foreach($array as $val) {
-            if (!in_array($val[$key], $key_array)) {
-                $key_array[$i] = $val[$key];
-                $temp_array[$i] = $val;
-            }
-            $i++;
-        }
-        return $temp_array;
     }
 
     public function valid_language_for_matecat($language_code)

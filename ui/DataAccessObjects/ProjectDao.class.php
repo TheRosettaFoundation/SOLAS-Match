@@ -1000,7 +1000,11 @@ $memsource_change_country_to_kp = [
     {
         $result = LibAPI\PDOWrapper::call('get_asana_tasks', LibAPI\PDOWrapper::cleanse($project_id));
         if (empty($result)) return [];
-        return $result;
+        $results = [];
+        foreach ($result as $r) {
+            $results[$r['language_code_target']] = $r;
+        }
+        return $results;
     }
 
     public function get_user_id_from_memsource_user($memsource_user_id)
