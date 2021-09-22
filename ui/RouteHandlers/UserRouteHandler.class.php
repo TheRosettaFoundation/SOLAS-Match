@@ -1081,7 +1081,8 @@ class UserRouteHandler
             $userDao->updatePersonalInfo($user_id, $user_personal_info);
             array_key_exists('newsletter_consent', $post) ? $userDao->insert_communications_consent($user_id, 1) : $userDao->insert_communications_consent($user_id, 0);
             $userDao->update_terms_accepted($user_id, 1);
-            $app->redirect($app->urlFor('userprofile', array('user_id' => $user_id)));
+            //(**)$app->redirect($app->urlFor('userprofile', array('user_id' => $user_id)));
+            $app->redirect($app->urlFor('user-private-profile', array('user_id' => $user_id)));
         } else {
             $extra_scripts  = '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script> ';
             $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script> ';
