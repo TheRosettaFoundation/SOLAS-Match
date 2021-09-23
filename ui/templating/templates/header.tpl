@@ -27,7 +27,6 @@
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min1.css"/>
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.2.css"/>
         <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
-        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 		<link rel="shortcut icon" type="image/x-icon" href="{urlFor name="home"}favicon.ico">
 		
