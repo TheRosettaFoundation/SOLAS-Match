@@ -433,32 +433,11 @@ class UserRouteHandler
         $userDao = new DAO\UserDao();
         $langDao = new DAO\LanguageDao();
 
-        $use_openid = Common\Lib\Settings::get("site.openid");
-        $app->view()->setData("openid", $use_openid);
-        
-        $use_google_plus = Common\Lib\Settings::get("googlePlus.enabled");
-        $app->view()->setData("gplus", $use_google_plus);
-        $appendExtraScripts = False;
-        if (isset($use_openid)) {
-            if ($use_openid == "y" || $use_openid == "h") {
-                $extra_scripts = "
-                    <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-jquery.js\"></script>
-                    <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-en.js\"></script>
-                    <link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/openid.css\" />";
-                $appendExtraScripts = True;
-            }
-        }
-        
-        if (isset($use_google_plus) && ($use_google_plus == 'y')) {
-            $extra_scripts = $extra_scripts.self::createGooglePlusJavaScript();
-            $appendExtraScripts = True;
-        }
-        
-        if ($appendExtraScripts) {
-            $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script>';
-            $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script>';
-            $extra_scripts .= '<script type="text/javascript">function compareEmails() {if (document.getElementById("email").value != document.getElementById("email2").value) {window.alert("Entered emails must be identical."); return false;} return true;}
-            $().ready(function() {
+        $extra_scripts = $extra_scripts.self::createGooglePlusJavaScript();
+        $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script>';
+        $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script>';
+        $extra_scripts .= '<script type="text/javascript">
+        $().ready(function() {
             $("#registerform").validate({
                 rules: {
                     first_name: "required",
@@ -507,12 +486,10 @@ class UserRouteHandler
             });
             $("#tool").tooltip();
         });
-            </script>';
-            $app->view()->appendData(array("extra_scripts" => $extra_scripts));
-        }
+        </script>';
+        $app->view()->appendData(array('extra_scripts' => $extra_scripts));
         
         $error = null;
-        $warning = null;
         if (\SolasMatch\UI\isValidPost($app)) {
             $post = $app->request()->post();
             $temp = md5($post['email'].substr(Common\Lib\Settings::get("session.site_key"), 0, 20));
@@ -554,15 +531,6 @@ class UserRouteHandler
         if ($error !== null) {
             $app->view()->appendData(array("error" => $error));
         }
-        if ($warning !== null) {
-            $app->view()->appendData(array("warning" => $warning));
-        }
-
-        $app->view()->appendData(array(
-            'client_id'    => Common\Lib\Settings::get('proz.client_id'),
-            'redirect_uri' => urlencode(Common\Lib\Settings::get('proz.redirect_uri')),
-        ));
-
         $app->render("user/register.tpl");
     }
 
