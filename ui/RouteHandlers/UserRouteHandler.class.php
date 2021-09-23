@@ -1065,7 +1065,6 @@ class UserRouteHandler
         }
 
         $user_info = $userDao->getUser($user_id);
-        $username = $user_info->display_name;
         $user_personal_info = $userDao->getUserPersonalInformation($user_id);
         $firstName = $user_personal_info->firstName;
         $lastName = $user_personal_info->lastName;
@@ -1108,7 +1107,7 @@ class UserRouteHandler
         });
             </script>';
             $app->view()->appendData(array("extra_scripts" => $extra_scripts));
-            $app->view()->appendData(array('firstname' => $firstName, 'lastname' => $lastName, 'username' => $username, 'user_id' => $user_id, 'sesskey' => $sesskey));
+            $app->view()->appendData(array('firstname' => $firstName, 'lastname' => $lastName, 'user_id' => $user_id, 'sesskey' => $sesskey));
             $app->render('user/googleregister.tpl');
         }
     }
