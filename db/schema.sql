@@ -9693,6 +9693,30 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `delete_not_accepted_user`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_not_accepted_user`()
+BEGIN
+    DECLARE uID INT;
+    DECLARE mail VARCHAR(128) CHARSET utf8mb4 COLLATE 'utf8mb4_unicode_ci';
+
+    SELECT u.id, u.email INTO uID, mail
+    FROM      Users               u
+    LEFT JOIN TermsAcceptedUsers ta ON u.id=ta.user_id
+    WHERE
+        (ta.user_id IS NULL OR ta.accepted_level=1) AND
+        u.`created-time`>'2021-07-24 08:00:00' AND
+        u.`created-time`<(NOW() - INTERVAL 24 HOUR)
+        ORDER BY u.`created-time`
+    LIMIT 1;
+
+    IF uID IS NOT NULL THEN
+        DELETE FROM GoogleUserDetails WHERE email=mail;
+        DELETE FROM Users WHERE id=uID;
+    END IF;
+END//
+DELIMITER ;
+
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
