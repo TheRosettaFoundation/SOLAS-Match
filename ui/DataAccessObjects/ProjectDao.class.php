@@ -1395,4 +1395,9 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
     {
         LibAPI\PDOWrapper::call('delete_task_directly', LibAPI\PDOWrapper::cleanse($task_id));
     }
+
+    public function delete_not_accepted_user()
+    {
+        LibAPI\PDOWrapper::call('delete_not_accepted_user', '');
+    }
 }
