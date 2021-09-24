@@ -2811,6 +2811,9 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                 error_log("dequeue_asana_project() project_id: $projectId Removing");
                 $projectDao->dequeue_asana_project($projectId);
             }
+
+            $projectDao->delete_not_accepted_user();
+
             flock($fp_for_lock, LOCK_UN); // Release the lock
         }
         fclose($fp_for_lock);
