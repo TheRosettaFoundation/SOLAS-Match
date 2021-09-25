@@ -757,8 +757,10 @@ class UserRouteHandler
                       } else {
                         $nativeLocale = $user->getNativeLocale();
                         if ($nativeLocale && $nativeLocale->getLanguageCode()) {
+error_log("login username/pw send to home after login");
                             $app->redirect($app->urlFor("home"));
                         } else {
+error_log("login username/pw force to user-private-profile because no native language");
                             $app->redirect($app->urlFor('user-private-profile', array('user_id' => $user->getId())));
                         }
                       }
@@ -854,12 +856,15 @@ class UserRouteHandler
                   } else {
                     $nativeLocale = $user->getNativeLocale();
                     if ($nativeLocale && $nativeLocale->getLanguageCode()) {
+error_log("login google?? send to home after login");
                         $app->redirect($app->urlFor("home"));
                     } else {
                         if ($userDao->terms_accepted($user->getId()) < 1) {
                             // Since they are logged in (via Google)...
+error_log("login google?? send to googleregister after login");
                             $app->redirect($app->urlFor('googleregister', array('user_id' => $user->getId())));
                         }
+error_log("login google?? send to user-private-profile after login");
                         $app->redirect($app->urlFor('user-private-profile', array('user_id' => $user->getId())));
                     }
                   }

@@ -15,6 +15,8 @@ class Middleware
         
         $this->isUserBanned();
         if (!Common\Lib\UserSession::getCurrentUserID()) {
+error_log("authUserIsLoggedIn getCurrentUserID() None");
+error_log("redirect login");
             Common\Lib\UserSession::setReferer(
                 $app->request()->getUrl().$app->request()->getScriptName().$app->request()->getPathInfo()
             );
@@ -23,11 +25,15 @@ class Middleware
         }
 
         if (empty($_SESSION['profile_completed'])) {
+error_log("authUserIsLoggedIn profile_completed empty()");
+error_log("redirect googleregister");
             $app->flash('error', 'You must accept the Code of Conduct before continuing'); // Since they are logged in (via Google)...
             $app->redirect($app->urlFor('googleregister', array('user_id' => $_SESSION['user_id'])));
         } elseif ($_SESSION['profile_completed'] == 1) {
+error_log("authUserIsLoggedIn profile_completed == 1");
             $userDao = new DAO\UserDao();
             if (!$userDao->is_admin_or_org_member($_SESSION['user_id'])) {
+error_log("redirect user-private-profile");
                 $app->flash('error', 'You must fill in your profile before continuing');
                 $app->redirect($app->urlFor('user-private-profile', array('user_id' => $_SESSION['user_id'])));
             }
