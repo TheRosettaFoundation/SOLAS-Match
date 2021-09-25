@@ -58,6 +58,9 @@ error_log("redirect googleregister");
         if (!empty($_SESSION['profile_completed']) && $_SESSION['profile_completed'] == 1) {
 error_log("authUserIsLoggedInNoProfile profile_completed == 1");
 error_log("redirect googleregister");
+error_log($app->request()->getUrl());
+error_log($app->request()->getScriptName());
+error_log($app->request()->getPathInfo());
             $app->flash('error', 'You must accept the Code of Conduct before continuing'); // Since they are logged in (via Google)...
             $app->redirect($app->urlFor('googleregister', array('user_id' => $_SESSION['user_id'])));
         }
