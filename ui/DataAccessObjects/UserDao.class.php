@@ -909,7 +909,7 @@ class UserDao extends BaseDao
         }
     }
 
-    public function update_terms_accepted($user_id, $accepted_level = 1)
+    public function update_terms_accepted($user_id, $accepted_level)
     {
         $_SESSION['profile_completed'] = $accepted_level;
         LibAPI\PDOWrapper::call('update_terms_accepted', LibAPI\PDOWrapper::cleanse($user_id) . ",$accepted_level");

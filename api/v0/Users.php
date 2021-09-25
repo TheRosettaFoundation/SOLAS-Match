@@ -1092,6 +1092,7 @@ class Users
             if ($google = DAO\UserDao::get_google_user_details($email)) {
                 $userInfo->setFirstName($google['first_name']);
                 $userInfo->setLastName($google['last_name']);
+                DAO\UserDao::update_terms_accepted($user->getId(), 1);
             }
 
             $personal_info = DAO\UserDao::savePersonalInfo($userInfo);
