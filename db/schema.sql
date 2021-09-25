@@ -9714,11 +9714,11 @@ BEGIN
       IF NOT EXISTS (
         SELECT user_id
         FROM Admins
-            WHERE user_id=uID
-            UNION
-            SELECT user_id
-            FROM OrganisationMembers
-            WHERE user_id=uID
+        WHERE user_id=uID
+        UNION
+        SELECT user_id
+        FROM OrganisationMembers
+        WHERE user_id=uID
       ) THEN
         DELETE FROM GoogleUserDetails WHERE email=mail;
         DELETE FROM Users WHERE id=uID;
