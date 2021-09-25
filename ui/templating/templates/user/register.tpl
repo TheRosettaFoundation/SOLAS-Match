@@ -97,10 +97,10 @@
       </form>
 
       <div style="width: 100%; height: 10px; border-bottom: 1px solid #F3F5F6; text-align: center">
-      <span style="font-size: 14px; background-color: #F3F5F6; padding: 0 10px;">
+      <span style="font-size: 14px; background-color: #F3F5F6;">
         OR <!--Padding is optional-->
       </span>
-      </div><br/><br/>
+      </div>
                     <div id="gSignInWrapper" style="margin-bottom: 10px;">
                           <div id="g_id_onload"
                               data-client_id="{Settings::get('googlePlus.client_id')}"
