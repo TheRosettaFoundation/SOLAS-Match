@@ -24,19 +24,19 @@ error_log("redirect login");
             $app->redirect($app->urlFor('login'));
         }
 
-        if (empty($_SESSION['profile_completed'])) {
-error_log("authUserIsLoggedIn profile_completed empty()");
-error_log("redirect googleregister");
-            $app->flash('error', 'You must accept the Code of Conduct before continuing'); // Since they are logged in (via Google)...
-            $app->redirect($app->urlFor('googleregister', array('user_id' => $_SESSION['user_id'])));
-        } elseif ($_SESSION['profile_completed'] == 1) {
-error_log("authUserIsLoggedIn profile_completed == 1");
+        if (empty($_SESSION['profile_completed']) || $_SESSION['profile_completed'] == 2) {
+error_log("authUserIsLoggedIn profile_completed empty() OR 2");
             $userDao = new DAO\UserDao();
             if (!$userDao->is_admin_or_org_member($_SESSION['user_id'])) {
 error_log("redirect user-private-profile");
                 $app->flash('error', 'You must fill in your profile before continuing');
                 $app->redirect($app->urlFor('user-private-profile', array('user_id' => $_SESSION['user_id'])));
             }
+        } elseif ($_SESSION['profile_completed'] == 1) {
+error_log("authUserIsLoggedIn profile_completed == 1");
+error_log("redirect googleregister");
+            $app->flash('error', 'You must accept the Code of Conduct before continuing'); // Since they are logged in (via Google)...
+            $app->redirect($app->urlFor('googleregister', array('user_id' => $_SESSION['user_id'])));
         }
 
         return true;
@@ -53,6 +53,13 @@ error_log("redirect user-private-profile");
             );
             $app->flash('error', Localisation::getTranslation('common_login_required_to_access_page'));
             $app->redirect($app->urlFor('login'));
+        }
+
+        if (!empty($_SESSION['profile_completed']) && $_SESSION['profile_completed'] == 1) {
+error_log("authUserIsLoggedInNoProfile profile_completed == 1");
+error_log("redirect googleregister");
+            $app->flash('error', 'You must accept the Code of Conduct before continuing'); // Since they are logged in (via Google)...
+            $app->redirect($app->urlFor('googleregister', array('user_id' => $_SESSION['user_id'])));
         }
 
         return true;
