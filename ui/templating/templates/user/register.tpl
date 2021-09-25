@@ -100,7 +100,7 @@
       <span style="font-size: 14px; background-color: #F3F5F6; padding: 0 10px;">
         OR <!--Padding is optional-->
       </span>
-      </div>
+      </div><br/><br/>
                     <div id="gSignInWrapper" style="margin-bottom: 10px;">
                           <div id="g_id_onload"
                               data-client_id="{Settings::get('googlePlus.client_id')}"
