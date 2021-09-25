@@ -433,7 +433,7 @@ class UserRouteHandler
         $userDao = new DAO\UserDao();
         $langDao = new DAO\LanguageDao();
 
-        $extra_scripts = $extra_scripts.self::createGooglePlusJavaScript();
+        $extra_scripts  = self::createGooglePlusJavaScript();
         $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script>';
         $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script>';
         $extra_scripts .= '<script type="text/javascript">
