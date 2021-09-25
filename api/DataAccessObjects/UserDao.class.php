@@ -960,4 +960,9 @@ class UserDao
 
         return $result[0];
     }
+
+    public static function update_terms_accepted($user_id, $accepted_level)
+    {
+        Lib\PDOWrapper::call('update_terms_accepted', Lib\PDOWrapper::cleanse($user_id) . ",$accepted_level");
+    }
 }
