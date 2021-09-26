@@ -9703,26 +9703,20 @@ BEGIN
     SELECT u.id, u.email INTO uID, mail
     FROM      Users               u
     LEFT JOIN TermsAcceptedUsers ta ON u.id=ta.user_id
+    LEFT JOIN Admins              a ON u.id=a.user_id
+    LEFT JOIN OrganisationMembers o ON u.id=o.user_id
     WHERE
         (ta.user_id IS NULL OR ta.accepted_level!=3) AND
         u.`created-time`>'2021-07-24 08:00:00' AND
-        u.`created-time`<(NOW() - INTERVAL 24 HOUR)
+        u.`created-time`<(NOW() - INTERVAL 24 HOUR) AND
+        a.user_id IS NULL AND
+        o.user_id IS NULL
         ORDER BY u.`created-time`
     LIMIT 1;
 
     IF uID IS NOT NULL THEN
-      IF NOT EXISTS (
-        SELECT user_id
-        FROM Admins
-        WHERE user_id=uID
-        UNION
-        SELECT user_id
-        FROM OrganisationMembers
-        WHERE user_id=uID
-      ) THEN
         DELETE FROM GoogleUserDetails WHERE email=mail;
         DELETE FROM Users WHERE id=uID;
-      END IF;
     END IF;
 END//
 DELIMITER ;
