@@ -106,9 +106,11 @@
                                 <a href="{urlFor name="site-admin-dashboard" options="user_id.$user_id"}">{Localisation::getTranslation('header_admin')}</a>
                             </li>
                         {/if}
+                        {if !isset($site_admin)}
                              <li {if isset($current_page) && $current_page == 'faq'}class="active" {/if}>
                                 <a href="https://community.translatorswb.org/c/kato-q-a">{Localisation::getTranslation('common_faq')}</a>
                             </li>
+                        {/if}
                            	{if Settings::get('site.forum_enabled') == 'y'}
 	                            <li>
 	                                <a href="{Settings::get('site.forum_link')}" target="_blank">{Localisation::getTranslation('common_forum')}</a>
