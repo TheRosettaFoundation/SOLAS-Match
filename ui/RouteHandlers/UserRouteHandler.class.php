@@ -1047,7 +1047,7 @@ class UserRouteHandler
             $user_personal_info->setLastName($post['last_name']);
             $userDao->updatePersonalInfo($user_id, $user_personal_info);
             array_key_exists('newsletter_consent', $post) ? $userDao->insert_communications_consent($user_id, 1) : $userDao->insert_communications_consent($user_id, 0);
-            $userDao->update_terms_accepted($user_id, 2);
+            if ($userDao->terms_accepted($user_id) < 2) $userDao->update_terms_accepted($user_id, 2);
             //(**)$app->redirect($app->urlFor('userprofile', array('user_id' => $user_id)));
             $app->redirect($app->urlFor('user-private-profile', array('user_id' => $user_id)));
         } else {
