@@ -237,6 +237,7 @@ class ProjectRouteHandler
             return;
         }
         if (!empty($hook['dateDue'])) $projectDao->update_project_due_date($memsource_project['project_id'], substr($hook['dateDue'], 0, 10) . ' ' . substr($hook['dateDue'], 11, 8));
+        $projectDao->queue_asana_project($memsource_project['project_id']);
     }
 
     private function update_project_client($hook)
@@ -1239,6 +1240,7 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
                 $project->setTitle(mb_substr($post['project_title'], 0, 128));
                 $project->setDescription($post['project_description']);
                 $project->setDeadline($post['project_deadline']);
+                $projectDao->queue_asana_project($project_id);
                 $project->setImpact($post['project_impact']);
                 $project->setReference($post['project_reference']);
                 // Done by DAOupdateProjectWordCount(), which only saves it conditionally...
