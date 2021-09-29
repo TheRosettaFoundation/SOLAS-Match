@@ -365,6 +365,7 @@ class UserRouteHandler
         $extra_scripts .= "<script type=\"text/javascript\" src=\"https://getbootstrap.com/2.3.2/assets/js/bootstrap-carousel.js\"></script>";
         $extra_scripts .= "<script type=\"text/javascript\" >
         $(document).ready(function() {
+            /*
           var user_count = $('#value').text();
             $('.carousel').carousel({
               interval: 7000
@@ -383,6 +384,7 @@ class UserRouteHandler
               }
               const obj = document.getElementById('value');
               animateValue(obj, 0, user_count, 3000);
+              */
           });
         </script>";
 

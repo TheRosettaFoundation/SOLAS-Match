@@ -27,6 +27,12 @@
 }
 .btn-block {
     width: 100px !important;
+    
+}
+
+.btn-home-slider{
+    display: inline-block;
+    height: 30px;
 }
 
 #globe{
@@ -61,15 +67,14 @@
                     <img src="{urlFor name='home'}ui/img/homepage/slider1.png" alt="Slider_1_Img">
                     <div class="top-left"><h2>We provide growth opportunities for<br/> our community members</h2><br/><h3>Join to gain new experiences, learn relevant<br/> skills and increase your qualifications.</h3>
                     <br/>
-                     <button class=" btn-white btn-block" type="submit">
+                     <button class=" btn-white btn-block btn-home-slider" type="submit">
 	               <a href="{urlFor name='register'}"> Join</a>
 	            </button>
-                <button class=" btn-blue btn-block" type="submit">
+                <button class=" btn-blue btn-block btn-home-slider" type="submit">
 	               <a style="color:white;" href="#learnmore"> Learn More</a>
 	            </button>
                 <br/> 
-                
- 
+                <br/>  
                  <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>
                     </div>
                     <div class="carousel-caption">
@@ -87,13 +92,14 @@
                     <img src="{urlFor name='home'}ui/img/homepage/slider2.png" alt="Slider_2_Img">
                     <div class="top-left"><h2>We connect community members<br/> and humanitarian organisations</h2><br/><h3>Join to meet other humanitarian linguists and<br/>support non-profits.</h3>
                     <br/>
-                     <button class=" btn-white btn-block" type="submit">
+                     <button class=" btn-white btn-block btn-home-slider" type="submit">
 	               <a href="{urlFor name='register'}"> Join</a>
 	            </button>
-                <button class=" btn-blue btn-block" type="submit">
+                <button class=" btn-blue btn-block btn-home-slider" type="submit">
 	               <a style="color:white;" href="#learnmore"> Learn More</a>
 	            </button>
                 <br/>
+                <br/> 
                  <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>
                     </div>
                    
@@ -111,13 +117,14 @@
                     <img src="{urlFor name='home'}ui/img/homepage/slider3.png"  alt="Slider_3_Img">
                     <div class="top-left"><h2>We offer references, certificates, <br/>and courses</h2><br/><h3>Join to grow your professional profile and <br/>advance your career.</h3>
                     <br/>
-                     <button class=" btn-white btn-block" type="submit">
+                     <button class=" btn-white btn-block btn-home-slider" type="submit">
 	               <a href="{urlFor name='register'}"> Join</a>
 	            </button>
-                <button class=" btn-blue btn-block" type="submit">
+                <button class=" btn-blue btn-block btn-home-slider" type="submit">
 	               <a style="color:white;" href="#learnmore"> Learn More</a>
 	            </button>
                 <br/>
+                <br/> 
                  <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>
                     </div>
                      <div class="carousel-caption">
@@ -134,13 +141,14 @@
                     <img src="{urlFor name='home'}ui/img/homepage/slider4.png" alt="Slider_4_Img">
                      <div class="top-left"><h2>TWB helps people get vital information, and <br/>be heard, whatever language they speak. </h2><br/><h3>Join to have a real world impact.</h3>
                      <br/>
-                     <button class=" btn-white btn-block" type="submit">
+                     <button class=" btn-white btn-block btn-home-slider" type="submit">
 	               <a href="{urlFor name='register'}"> Join</a>
 	            </button>
-                <button class=" btn-blue btn-block" type="submit">
+                <button class=" btn-blue btn-block btn-home-slider" type="submit">
 	               <a style="color:white;" href="#learnmore"> Learn More</a>
 	            </button>
                 <br/>
+                <br/> 
                  <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>
                      </div>
                       <div class="carousel-caption">
@@ -158,7 +166,7 @@
                 <a class="right carousel-control" href="#myCarousel" data-slide="next">›</a>
               </div> 
               
-    <div class="row-fluid">
+   <!-- <div class="row-fluid">
 
          <h2 class="twbheader" style="text-align: center">In the last 30 days</h2>
          <div style="text-align: center" class="span4">
@@ -172,7 +180,7 @@
           <p></p>
          </div>
   
-   </div>
+   </div> -->
 
  <div class="row-fluid">
     
@@ -203,8 +211,8 @@
          </div>
          <div class="span4">
          <div id="globe" style="text-align: center">
-                <button class="btn btn-primary" type="submit">
-	                <a class="login" href="{urlFor name="register"}">JOIN NOW</a>
+                <button class="btn btn-primary btn-home-slider" type="submit">
+	                <a class="login" style="text-decoration:none;" href="{urlFor name="register"}">JOIN NOW</a>
 	            </button>
                 </div>
          </div>
@@ -241,9 +249,9 @@
 
 <div class="row-fluid">
 <div class="span3">
-<span>Meet other linguists from around the world in the TWB Community Forum.Ask and answer questions, exchange and chat with other volunteer linguist and TWB staff.<br/>
+<span>Meet other linguists from around the world in the TWB Community Forum. Ask and answer questions, exchange and chat with other volunteer linguists and TWB staff.<br/>
            Learn about the nonprofits that work with TWB and why they come to us.<br/>
-           Attend one of our online initiatives like topical meetups, webinars and chat freely with other attendees </span>
+           Attend one of our online initiatives like topical meetups, webinars and chat freely with other attendees. </span>
 </div>
 <div class="span3">
   <span>Learn about translation in the humanitarian field by taking one of our courses and receive a certificate upon successful completion<br/>
@@ -252,8 +260,8 @@
     </span>
 </div>
 <div class="span3">
-  <span>Receive public acknowledgements of your contributions on the TWB platform.Request reference letters, translator feedback and skill endorsements on professional platforms and build out your resume.<br/>
-            The most active linguists also gets featured on TWB's blog and in the TWB Community Forum  </span>
+  <span>Receive public acknowledgements of your contributions on the TWB platform. Request reference letters, translator feedback and skill endorsements on professional platforms and build out your resume.<br/>
+            The most active linguists also get featured on TWB's blog and in the TWB Community Forum.  </span>
 </div>
 <div class="span3">
   <span>Have real-world impact on communities by translating humanitarian and development content in the languages those communities speak.<br/>
@@ -384,11 +392,15 @@
         {if isset($statsArray) && is_array($statsArray)}
             {include file="statistics.tpl"}
         {/if} 
-        <div id="globe" style="text-align: center">
-            <br/>
-            <script type="text/javascript" src="//rf.revolvermaps.com/0/0/4.js?i=7puikkj5km8&amp;m=7&amp;h=150&amp;c=ff00ff&amp;r=0" async="async"></script>
-            <br/>
+        <div class="row-fluid">
+        <div class="span3"></div>
+        <div class="span4">
+        <script type="text/javascript" src="//rf.revolvermaps.com/0/0/4.js?i=7puikkj5km8&amp;m=7&amp;h=200&amp;c=ff00ff&amp;r=0" async="async"></script>
         </div>
+        
+        </div>
+        
+     
         {/if} 
         
     </div>
