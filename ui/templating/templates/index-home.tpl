@@ -74,8 +74,7 @@
 	               <a style="color:white;" href="#learnmore"> Learn More</a>
 	            </button>
                 <br/> 
-                
- 
+                <br/>  
                  <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>
                     </div>
                     <div class="carousel-caption">
@@ -100,6 +99,7 @@
 	               <a style="color:white;" href="#learnmore"> Learn More</a>
 	            </button>
                 <br/>
+                <br/> 
                  <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>
                     </div>
                    
@@ -124,6 +124,7 @@
 	               <a style="color:white;" href="#learnmore"> Learn More</a>
 	            </button>
                 <br/>
+                <br/> 
                  <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>
                     </div>
                      <div class="carousel-caption">
@@ -147,6 +148,7 @@
 	               <a style="color:white;" href="#learnmore"> Learn More</a>
 	            </button>
                 <br/>
+                <br/> 
                  <p>Already registered?<a class="login" href="{urlFor name='login'}"> Log In</a></p>
                      </div>
                       <div class="carousel-caption">
