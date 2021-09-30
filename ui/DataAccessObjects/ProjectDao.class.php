@@ -972,6 +972,7 @@ $memsource_change_country_to_kp = [
 
     public function queue_asana_project($project_id)
     {
+error_log("queue_asana_project($project_id)");//(**)
         LibAPI\PDOWrapper::call('queue_asana_project', LibAPI\PDOWrapper::cleanse($project_id));
     }
 

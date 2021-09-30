@@ -2678,6 +2678,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
             }
 
             $queue_asana_projects = $projectDao->get_queue_asana_projects();
+error_log('get_queue_asana_projects');//(**)
             $count = 0;
             foreach ($queue_asana_projects as $queue_asana_project) {
                 if (++$count > 4) break; // Limit number done at one time, just in case
@@ -2686,6 +2687,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
                     $projectDao->dequeue_asana_project($projectId);
                     break;
                 }
+error_log("get_queue_asana_projects: $projectId");//(**)
                 $project = $projectDao->getProject($projectId);
                 $org_id = $project->getOrganisationId();
                 $org = $orgDao->getOrganisation($org_id);
