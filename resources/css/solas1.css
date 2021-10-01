@@ -315,3 +315,26 @@ table {
 	width: 35%;
 	text-align: right;
 }
+.twb_color {
+	color: #e8991c;
+}
+.clear_brand {
+	color: #143878;
+}
+.required:after {
+	content: " *";
+	color: #f00;
+}
+
+#userprofile label {
+	color: #143878 !important;
+}
+#userprofile .check {
+	color: #333 !important;
+}
+#userprofile label.error {
+	width: auto;
+}
+#userprofile .error {
+	color: #f00 !important;
+}

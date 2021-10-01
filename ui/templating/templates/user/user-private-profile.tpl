@@ -38,7 +38,7 @@
 
 </span>
 
-{if isset($user)}
+<!-- {if isset($user)}
     <div class="page-header">
         <h1>
             <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=80&r=g" alt="" />
@@ -51,13 +51,13 @@
             <small>{Localisation::getTranslation('common_denotes_a_required_field')}</small>
         </h1>
     </div>
-{/if}
+{/if} -->
 
-<div class="well alert-info">
+<!-- <div class="well alert-info">
     <p><strong>Thank you for your interest in Translators without Borders! Please fill out the form below to join the TWB Kató Translator community.<br />
 Anyone fluent in at least two languages is welcome to apply.<br /><br />
 If you have any questions about submitting the form, please email <a href="mailto:translators@translatorswithoutborders.org?subject={rawurlencode('Translator Registration Form')}" target="_blank">translators@translatorswithoutborders.org</a></strong></p>
-</div>
+</div> -->
 
 <div class="well">
 
@@ -68,37 +68,39 @@ If you have any questions about submitting the form, please email <a href="mailt
     {/if}
 
     <div id="placeholder_for_errors_1"></div>
+    
 
-    <form method="post" action="{urlFor name="user-private-profile" options="user_id.$user_id"}" enctype="multipart/form-data" accept-charset="utf-8">
+<!-- <form method="post" action="{urlFor name="user-private-profile" options="user_id.$user_id"}" enctype="multipart/form-data" accept-charset="utf-8">
         <table>
             <tr><td>
                 <div id="loading_warning">
                     <p><i>{Localisation::getTranslation('common_loading')}</i></p>
-                </div>
-                <label for='displayName'><strong>{Localisation::getTranslation('common_display_name')}: <span style="color: red">*</span></strong></label>
+                </div> -->
+              <!--  <label for='displayName'><strong>{Localisation::getTranslation('common_display_name')}: <span style="color: red">*</span></strong></label>
                 <input type='text' style="width: 80%" value="{$user->getDisplayName()|escape:'html':'UTF-8'}" name="displayName" id="displayName" />
 
                 <label for='firstName'><strong>{Localisation::getTranslation('common_first_name')}: <span style="color: red">*</span></strong></label>
                 <input type='text' value="{$userPersonalInfo->getFirstName()|escape:'html':'UTF-8'}" style="width: 80%" name="firstName" id="firstName"/>
 
                 <label for='lastName'><strong>{Localisation::getTranslation('common_last_name')}: <span style="color: red">*</span></strong></label>
-                <input type='text' value="{$userPersonalInfo->getLastName()|escape:'html':'UTF-8'}" style="width: 80%" name="lastName" id="lastName" />
+                <input type='text' value="{$userPersonalInfo->getLastName()|escape:'html':'UTF-8'}" style="width: 80%" name="lastName" id="lastName" /> -->
 
-                <label for='over18'><strong>Please confirm you are over the age of 18 years old: <span style="color: red">*</span></strong></label>
+               <!-- <label for='over18'><strong>Please confirm you are over the age of 18 years old: <span style="color: red">*</span></strong></label>
                 <p class="desc">Translators without Borders (TWB) is a non-profit organization with strong child protection principles, and we cannot consider for volunteer work anyone below the age of 18.</p>
-                <input type="checkbox" value="1" name="over18" id="over18" {if $profile_completed}checked="checked"{/if} /> I confirm I am over the age of 18.<br /><br />
+                <input type="checkbox" value="1" name="over18" id="over18" {if $profile_completed}checked="checked"{/if} /> I confirm I am over the age of 18.<br /><br /> -->
 
-                {foreach from=$url_list key=name item=url}
+                <!--{foreach from=$url_list key=name item=url}
                 <label for='{$name}'><strong>{$url['desc']}:</strong></label>
                 <input type='text' value="{$url['state']|escape:'html':'UTF-8'}" style="width: 80%" name="{$name}" id="{$name}" />
-                {/foreach}
-
+                {/foreach} -->
+                <!--
                 <label for='mobileNumber'><strong>{Localisation::getTranslation('common_mobile_number')}:</strong></label>
                 <input type='text' value="{$userPersonalInfo->getMobileNumber()|escape:'html':'UTF-8'}" style="width: 80%" name="mobileNumber" id="mobileNumber" />
 
                 <label for='city'><strong>{Localisation::getTranslation('common_city')}:</strong></label>
-                <input type='text' value="{$userPersonalInfo->getCity()|escape:'html':'UTF-8'}" style="width: 80%" name="city" id="city" />
-
+                <input type='text' value="{$userPersonalInfo->getCity()|escape:'html':'UTF-8'}" style="width: 80%" name="city" id="city" /> -->
+                
+                <!--
                 <label for='country'><strong>{Localisation::getTranslation('common_country')}:</strong></label>
                 <select name="country" id="country" style="width: 80%">
                     <option value="{$userPersonalInfo->getCountry()|escape:'html':'UTF-8'}" selected="selected">{$userPersonalInfo->getCountry()|escape:'html':'UTF-8'}</option>
@@ -107,9 +109,9 @@ If you have any questions about submitting the form, please email <a href="mailt
                         <option value="{$country->getName()|escape:'html':'UTF-8'}">{$country->getName()|escape:'html':'UTF-8'}</option>
                         {/if}
                     {/foreach}
-                </select>
+                </select> -->
 
-                <div id="language_area">
+              <!--  <div id="language_area">
                     <div id = "nativeLanguageDiv">
                         <label><strong>{Localisation::getTranslation('common_native_language')}: <span style="color: red">*</span></strong></label>
                         <p class="desc">Your native language is a language you have been exposed to from birth or within a long period of your life or education. It generally is the language you are more fluent in.</p>
@@ -127,9 +129,9 @@ If you have any questions about submitting the form, please email <a href="mailt
                                 {/if}
                             {/foreach}
                         </select>
-                    </div>
+                    </div> -->
 
-                    <div id="secondaryLanguageDiv">
+                   <!-- <div id="secondaryLanguageDiv">
                         <hr/>
                         <label><strong>Language Pairs (From/To): <span style="color: red">*</span></strong></label>
                         <p class="desc">In general, people translate from any language they are proficient in, into their first/native language. For example, if the language you are more fluent in is Spanish, and you are also fluent in English and French, you can translate from English to Spanish and from French to Spanish.</p>
@@ -140,17 +142,17 @@ If you have any questions about submitting the form, please email <a href="mailt
                             <i class="icon-fire icon-white"></i> {Localisation::getTranslation('common_remove')}
                         </button>
                         <hr/>
-                    </div>
+                    </div> -->
                 </div>
 
-                <label for='conduct'><strong>Please read the <a href="https://www.translatorswithoutborders.org/volunteer/volunteer-translators/translators-code-of-conduct/" target="_blank">TWB Code of Conduct for Translators</a>: <span style="color: red">*</span></strong></label>
-                <input type="checkbox" value="1" name="conduct" id="conduct" {if $profile_completed}checked="checked"{/if} /> I agree to abide by the TWB Code of Conduct for translators.<br /><br />
+              <!--  <label for='conduct'><strong>Please read the <a href="https://www.translatorswithoutborders.org/volunteer/volunteer-translators/translators-code-of-conduct/" target="_blank">TWB Code of Conduct for Translators</a>: <span style="color: red">*</span></strong></label>
+                <input type="checkbox" value="1" name="conduct" id="conduct" {if $profile_completed}checked="checked"{/if} /> I agree to abide by the TWB Code of Conduct for translators.<br /><br /> -->
 
-                <label for='biography'><strong>About Me:</strong></label>
-                <textarea cols='40' rows='7' style="width: 80%" name="biography" id="biography">{$user->getBiography()|escape:'html':'UTF-8'}</textarea>
+                <!--<label for='biography'><strong>About Me:</strong></label>
+                <textarea cols='40' rows='7' style="width: 80%" name="biography" id="biography">{$user->getBiography()|escape:'html':'UTF-8'}</textarea> -->
             </td></tr>
 
-            <tr><td>
+          <!--  <tr><td>
                 <hr/>
                 {if $isSiteAdmin}
                     {if !(isset($strict))}
@@ -212,37 +214,37 @@ If you have any questions about submitting the form, please email <a href="mailt
                     {if $in_kind}&nbsp;In-kind Sponsor{/if}
                 </p>
                 <hr/>
-            </td></tr>
+            </td></tr> -->
 
-            <tr><td style="font-weight: bold">Services I can provide: <span style="color: red">*</span></td></tr>
+           <!-- <tr><td style="font-weight: bold">Services I can provide: <span style="color: red">*</span></td></tr>
                 {assign var="i" value=0}
                 {foreach from=$capability_list key=name item=capability}
                     <tr><td><input type="checkbox" {if $capability['state']}checked="checked"{/if} name="{$name}" id="capability{$i}" /> {$capability['desc']|escape:'html':'UTF-8'}</td></tr>
                     {assign var="i" value=$i+1}
-                {/foreach}
+                {/foreach} -->
 
-            <tr><td style="font-weight: bold"><br />My fields of expertise are: <span style="color: red">*</span></td></tr>
+           <!-- <tr><td style="font-weight: bold"><br />My fields of expertise are: <span style="color: red">*</span></td></tr>
                 {assign var="i" value=0}
                 {foreach from=$expertise_list key=name item=expertise}
                     <tr><td><input type="checkbox" {if $expertise['state']}checked="checked"{/if} name="{$name}" id="expertise{$i}" /> {$expertise['desc']|escape:'html':'UTF-8'}</td></tr>
                     {assign var="i" value=$i+1}
                 {/foreach}
 
-            <tr><td>
-                <hr/>
+            <tr><td> -->
+               <!-- <hr/>
                 <label for='twbprivacy'><strong>Please read the <a href="https://translatorswithoutborders.org/privacy-policy/" target="_blank">TWB Privacy Policy</a>: <span style="color: red">*</span></strong></label>
                 <input type="checkbox" value="1" name="twbprivacy" id="twbprivacy" {if $profile_completed}checked="checked"{/if} /> I have read and agree to the Translators without Borders Privacy Policy.
-                <hr/>
-            </td></tr>
+                <hr/> 
+            </td></tr>-->
 
-            <tr><td>
+          <!--  <tr><td>
                 <label for='communications_consent'><strong>Communications Consent:</strong></label>
                 <p class="desc">We’d like to keep in touch with you about the lives we can change thanks to your support.</p>
                 <input type="checkbox" value="1" name="communications_consent" id="communications_consent" {if $communications_consent}checked="checked"{/if} /> Subscribe to the TWB email newsletter. <i>You can unsubscribe at any time.</i>
                 <hr/>
-            </td></tr>
+            </td></tr> -->
 
-            <tr><td style="font-weight: bold">Where did you hear about TWB? <span style="color: red">*</span></td></tr>
+           <!-- <tr><td style="font-weight: bold">Where did you hear about TWB? <span style="color: red">*</span></td></tr>
             <tr><td>
                 <select name="howheard" id="howheard">
                 <option value="0"></option>
@@ -251,9 +253,9 @@ If you have any questions about submitting the form, please email <a href="mailt
                 {/foreach}
                 </select>
             <hr/>
-            </td></tr>
+            </td></tr> -->
 
-            <tr><td style="font-weight: bold">Verifications</td></tr>
+            <!-- <tr><td style="font-weight: bold">Verifications</td></tr>
             <tr><td><p class="desc">If you hold a certification or membership from any of the organizations below, you could qualify to be a verified translator. Please select the organization and click to submit a proof of certification/membership. You will be upgraded to Verified Translator, which will give you immediate access to all projects available, for the verified combination. if you have any questions or can't upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject={rawurlencode('Translation Certification')}" target="_blank">translators@translatorswithoutborders.org</a></p></td></tr>
             {foreach from=$certification_list key=name item=certification}
                 <tr><td>{if $certification['state']}Already submitted{if $certification['reviewed'] == 1} and reviewed{/if}: {/if}<a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$name"}" target="_blank">{$certification['desc']|escape:'html':'UTF-8'}</a></td></tr>
@@ -263,19 +265,19 @@ If you have any questions about submitting the form, please email <a href="mailt
             <tr><td><p class="desc">Certificates or other relevant documents about your translation qualifications. Please provide a short title for your qualification and upload the corresponding file. Project Officers will also upload here any certificates you obtain while volunteering with TWB. If you have any questions or can’t upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject={rawurlencode('Translation Certification')}" target="_blank">translators@translatorswithoutborders.org</a></p></td></tr>
             <tr><td><a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TRANSLATOR"}" target="_blank">Upload file</a></td></tr>
 
-            <tr><td>
-                <hr/>
+            <tr><td> -->
+            <!--    <hr/>
                 <label for='receiveCredit'><strong>Do you want all the above (including NGOs you have contributed to) to be visible to all members of the TWB community?:</strong></label>
                 <p class="desc">If at any point you wish to change this setting, you can always do that. Additionally you will be able to have a link to this information which you can share with selected people.</p>
                 <input type="checkbox" value="1" name="receiveCredit" id="receiveCredit" {if $userPersonalInfo->getReceiveCredit()}checked="checked"{/if} /> Make the above information visible to TWB community
-            </td></tr>
+            </td></tr> -->
 
             <tr><td style="padding-bottom: 20px">
-                <hr/>
+               <!-- <hr/> -->
                 <div id="placeholder_for_errors_2"></div>
             </td></tr>
 
-            <tr><td align="center">
+           <!-- <tr><td align="center">
                 <div id="loading_warning1">
                     <p><i>{Localisation::getTranslation('common_loading')}</i></p>
                 </div>
@@ -285,10 +287,296 @@ If you have any questions about submitting the form, please email <a href="mailt
                 <button onclick="deleteUser(); return false;" class="btn btn-inverse" id="deleteBtn">
                     <i class="icon-fire icon-white"></i> {Localisation::getTranslation('user_private_profile_delete_user_account')}
                 </button>
-            </td></tr>
+            </td></tr> -->
         </table>
 
         <input type="hidden" name="sesskey" value="{$sesskey}" />
+    </form>
+    <h2 class="twb_color">Please complete your profile <span class="tabcounter twb_color tabcounter1"></span></h2>
+    <form method="post" id="userprofile" action="{urlFor name="user-private-profile" options="user_id.$user_id"}" enctype="multipart/form-data" accept-charset="utf-8">
+            <ul id="myTab" class="nav nav-tabs">
+              <li class="active"><a href="#home" data-toggle="tab" id="btnTrigger"><span class="clear_brand">1. Personal Information</span></a></li>
+              <li class=""><a href="#profile" data-toggle="tab" id="btnTrigger"><span class="clear_brand">2. Language and professional Information</span></a></li>
+              <li class=""><a href="#verifications" data-toggle="tab" id="btnTrigger"><span class="clear_brand">3. Verfications</span></a></li>
+           
+            </ul>
+             <div id="myTabContent" class="tab-content">
+              <div class="tab-pane fade active in" id="home">
+              <br/>
+            
+                <div class="row-fluid">
+                 <div class="span6">
+                    <div>
+                        <label for='displayName' class="clear_brand required">Username</label>
+                        <input type="text" name="displayName" id="displayName" placeholder="displayName" placeholder="Type something…" value="{$user->getDisplayName()|escape:'html':'UTF-8'}">
+                    </div>
+                <div>
+                         <label for='firstName' class="clear_brand required">First name</label>
+                         <input type="text" name="firstName" value="{$userPersonalInfo->getFirstName()|escape:'html':'UTF-8'}" id="firstName" placeholder="First name" >
+                </div>
+                <div>
+                         <label for='lastName' class="clear_brand required">Last name</label>
+                         <input type="text" name="lastName" value="{$userPersonalInfo->getLastName()|escape:'html':'UTF-8'}" id="lastName" placeholder="Last name" >
+                </div>
+                <div>
+                         <label class="clear_brand required">Email</label>
+                         <input type="text" name="email" id="email" placeholder="Your email" value="{$user->getEmail()|escape:'html':'UTF-8'}">
+                </div>
+                <div>
+
+                         <label for='city' class="clear_brand">City</label>
+                         <input type="text" name="city" id="city" value="{$userPersonalInfo->getCity()|escape:'html':'UTF-8'}" placeholder="Your city">
+                </div>
+                <div>
+               
+                         <label class="clear_brand">Country</label>
+                         <select name="country" id="country" class="country">
+                           <option value="{$userPersonalInfo->getCountry()|escape:'html':'UTF-8'}" selected="selected">{$userPersonalInfo->getCountry()|escape:'html':'UTF-8'}</option>
+                    {foreach $countries as $country}
+                        {if $country->getCode() != '90' && $country->getCode() != '91' && $country->getCode() != '49' && $country->getCode() != '92' && $country->getCode() != '93' && $country->getCode() != '94'}
+                        <option value="{$country->getName()|escape:'html':'UTF-8'}" data-id="{$country->getCode()}">  {$country->getName()|escape:'html':'UTF-8'}</option>
+                        {/if}
+                    {/foreach}
+                         </select>
+                </div>
+                <div>
+                          <label  class="checkbox clear_brand">
+                          <input type="checkbox" name="receiveCredit"> Make my information including,which non-profits I contribute to visible to the TWB Community   
+                          </label>
+                </div>
+                 
+                </div>
+                <div class="span6 clear_brand">
+                    <div >
+                    <label class="clear_brand">About me</label>
+                        <textarea name="biography" id="biography" style="width:400px;" rows="8">{$user->getBiography()|escape:'html':'UTF-8'}</textarea>
+                    </div>
+                  <!--<div>
+                         <label class="clear_brand">Linkedin URL</label>
+                         <input style="width:400px;" type="text" name="linked" placeholder="">
+                </div>
+                <div>
+                         <label class="clear_brand">Proz URL</label>
+                         <input style="width:400px;" type="text" name="proz" placeholder="Type something…">
+                </div>
+                <div>
+                         <label class="clear_brand">Other URL</label>
+                         <input style="width:400px;" type="text" name="other" placeholder="Type something…">
+                </div> -->
+                 {foreach from=$url_list key=name item=url}
+                 <div>
+                <label for='{$name}'><strong>{$url['desc']}:</strong></label>
+                <input type='text' value="{$url['state']|escape:'html':'UTF-8'}" style="width: 400px;" name="{$name}" id="{$name}" />
+                </div>
+                {/foreach}
+                <div>
+                          <label class="checkbox clear_brand">
+                          <input name="newsletter_consent" id="newsletter_consent" value="{$communications_consent}" type="checkbox"> Subscribe to the TWB Email newsletter
+                          <br/><small><i>You can unsubscribe at any time</i></small>   
+                          </label>
+                </div>
+                </div>
+                </div>
+                
+                 <a style="cursor:pointer;color:#FFFFFF;" href="#profile1" class="pull-right next111 pull-right btn btn-primary" id="btnTrigger1">Next</a>
+              </div>
+              <div class="tab-pane fade" id="profile">
+                 <br/>
+              
+              <div class="row-fluid" >
+              <div class="span6">
+              <label class="clear_brand required"><strong>Native language</strong> <i class="icon-question-sign" id="tool5" data-toggle="tooltip" title="Please choose your native language and the country of your dialect/variant"></i></label>
+              <select name="nativeLanguageSelect" class="nativeLanguageSelect">
+                {foreach $languages as $language}
+                                <option value="{$language->getCode()}" {if $language->getCode() == $nativeLanguageSelectCode}selected="selected"{/if}>{$language->getName()}</option>
+                            {/foreach}
+              </select>
+              </div>
+              <div class="span6">
+              <label class="clear_brand required"><strong>Variant</strong> <i class="icon-question-sign" id="tool4" data-toggle="tooltip" title="--"></i></label>
+                <select name="nativeCountrySelect" class="variant">
+                    {foreach $countries as $country}
+                                {if $country->getCode() != '90' && $country->getCode() != '91' && $country->getCode() != '49' && $country->getCode() != '92' && $country->getCode() != '93' && $country->getCode() != '94'}
+                                <option value="{$country->getCode()}" {if $country->getCode() == $nativeCountrySelectCode}selected="selected"{/if}>{$country->getName()}</option>
+                                {/if}
+                            {/foreach}
+              </select>
+              </div>
+              </div>
+              <div id="buildyourform">
+               <div class="row-fluid" >
+           
+              <div class="span6">
+              <label class="clear_brand required"><strong>I can translate from</strong> <i class="icon-question-sign" id="tool3" data-toggle="tooltip" title="Your language pairs should reflect the languages you are proficient or native in. We encourage linguists to translate into their native language(s)."></i></label>
+              <select name="language_code_source_0" class="translate_from">
+              <option>Select a language</option>
+               {foreach from=$language_selection key=codes item=language}
+                    <option value="{$codes}" >{$language}</option>
+               {/foreach}
+             
+              </select>
+              </div>
+              <div class="span5">
+              <label class="clear_brand required"><strong>To</strong> <i class="icon-question-sign" id="tool2" data-toggle="tooltip" title="--"></i></label>
+                <select name="language_code_target_0" class="translate_to">
+                <option>Select a language</option>
+                 {foreach from=$language_selection key=codes item=language}
+                    <option value="{$codes}" >{$language}</option>
+                 {/foreach}
+               
+             
+             
+              </select> 
+              </div>
+              <div class="span1" style="margin-top: 1.6%;margin-left: -18%;">
+              <label></label>
+              <input type="button" value="+" class="add" id="add"  /></div> <span id="btnclick" class="countclick"><span>
+           
+              </div>
+              </div>
+                    <div class="row-fluid">
+              <div class="span6 clear_brand">
+                  {if $isSiteAdmin}
+                    {if !(isset($strict))}
+                        {assign var="strict" value=false}
+                    {/if}
+                {else}
+                    {if !(isset($strict))}
+                        {assign var="strict" value=true}
+                    {/if}
+                    {if !(isset($intervalId))}
+                        {assign var="intervalId" value={NotificationIntervalEnum::DAILY}}
+                    {/if}
+                {/if}
+              How often do you want to receive tasks availability email <i class="icon-question-sign" id="tool1" data-toggle="tooltip" title="Let us know how often you want to receive email notifications about tasks available in your language pairs."></i><br/>
+            <select name="interval">
+                        <option value="0"
+                            {if !isset($intervalId)}
+                                selected="true"
+                            {/if}
+                        >
+                           {Localisation::getTranslation('user_task_stream_notification_edit_never')}
+                        </option>
+                        <option value="{NotificationIntervalEnum::DAILY}"
+                            {if isset($intervalId) && $intervalId == NotificationIntervalEnum::DAILY}
+                                selected="true"
+                            {/if}
+                        >
+                            {Localisation::getTranslation('user_task_stream_notification_edit_daily')}
+                        </option>
+                        <option value="{NotificationIntervalEnum::WEEKLY}"
+                            {if isset($intervalId) && $intervalId == NotificationIntervalEnum::WEEKLY}
+                                selected="true"
+                            {/if}
+                        >
+                            {Localisation::getTranslation('user_task_stream_notification_edit_weekly')}
+                        </option>
+                        <option value="{NotificationIntervalEnum::MONTHLY}"
+                            {if isset($intervalId) && $intervalId == NotificationIntervalEnum::MONTHLY}
+                                selected="true"
+                            {/if}
+                        >
+                            {Localisation::getTranslation('user_task_stream_notification_edit_monthly')}
+                        </option>
+
+                        {if $isSiteAdmin}
+                        <option value="10">
+                            Set this volunteer as in-kind sponsor
+                        </option>
+                        {/if}
+                    </select>
+                    {if $in_kind}&nbsp;In-kind Sponsor{/if}
+              </div>
+              </div>
+              <div class="row-fluid">
+              <div class="span4 clear_brand">
+              <label class="clear_brand required"><strong>Services I can provide</strong></label>
+                   {assign var="i" value=0}
+                {foreach from=$capability_list key=name item=capability}
+                    <input type="checkbox" {if $capability['state']}checked="checked"{/if} name="{$name}" id="capability{$i}" /> {$capability['desc']|escape:'html':'UTF-8'}  <br/>
+                    {assign var="i" value=$i+1}
+                {/foreach}
+         
+              </div>
+              <div class="span8 clear_brand">
+              <div class="span6">
+              <label class="clear_brand required"><strong>Fields of expertise</strong></label>
+                {assign var="i" value=0}
+                {foreach from=$expertise_list key=name item=expertise}
+                    <input type="checkbox" {if $expertise['state']}checked="checked"{/if} name="{$name}" id="expertise{$i}" /> {$expertise['desc']|escape:'html':'UTF-8'}<br/>
+                    {assign var="i" value=$i+1}
+                {/foreach}
+             
+                       <!--  <input  type="checkbox" name="expertise[]" value="Accounting"> Accounting & Finance
+                         <br/>
+                         <input  type="checkbox" name="expertise[]" value="Legal"> Legal documents / Contracts / Law 
+                         <br/>
+                         <input  type="checkbox" name="expertise[]" value="Technical"> Technical / Engineering
+                         <br/>
+                         <input  type="checkbox" name="expertise[]" value="IT"> Information Technology (IT)
+                         <br/>
+                         <input  type="checkbox" name="expertise[]" value="Medical"> Medical / Pharmaceutical
+                         <br/>
+                         <input  type="checkbox" name="expertise[]" value="Science"> Science / Scientific
+                         <br/>
+                         <input  type="checkbox" name="expertise[]" value="Health"> Health
+                         <br/>
+                         <input  type="checkbox" name="expertise[]" value="Nutrition"> Food security & Nutrition
+                         <br/>
+                         <input  type="checkbox" name="expertise[]" value="Telecommunications"> Telecommunications
+                         <br/>
+                         <input  type="checkbox" class="clear_brand" name="expertise[]" value="Education"> Education -->
+              
+              </div>
+            <!--  <div class="span4">
+               <br/>
+              <input  type="checkbox" class="clear_brand" name="expertise[]" value="Migration"> Migration & Displacement
+                         <br/>
+                         <input  type="checkbox" class="clear_brand" name="expertise[]" value="CCCM"> Camp cordination & management
+                         <br/>
+                         <input  type="checkbox" name="expertise[]" value="Shelter"> Shelter
+                         <br/>
+                         <input  type="checkbox" name="expertise[]" value="WASH"> Water,sanitation and Hygiene promotion
+                         <br/>
+                         <input  type="checkbox" name="expertise[]" value="Logistics"> Logistics
+                         <br/>
+                         <input  type="checkbox" name="expertise[]" value="Equality"> Equality & Inclusion
+                         <br/>
+                         <input  type="checkbox" name="expertise[]" value="Gender"> Gender equality
+                         <br/>
+                         <input  type="checkbox" name="expertise[]" value="Peace"> Peace & Justice
+                         <br/>
+                         <input  type="checkbox" name="expertise[]" value="Environment"> Environment & Climate Action
+                         <br/>
+                         <input  type="checkbox" name="expertise[]" value="Protection"> Protection & Early recovery
+              </div> -->
+              </div>
+              </div>
+              <br/>
+        <a style="cursor:pointer;color:#FFFFFF;" href="#verifications" class="pull-right next111 btn btn-primary" id="btnTrigger1">Next</a> <a style="cursor:pointer;color:#FFFFFF;" href="#home" class="pull-right next111 btn btn-primary" id="btnTrigger11">Prev</a>
+              
+              </div>
+              <div class="tab-pane fade" id="verifications">
+              <br/>
+              <p class="desc">If you hold a certification or membership from any of the organizations below, you could qualify to be a verified translator. Please select the organization and click to submit a proof of certification/membership. You will be upgraded to Verified Translator, which will give you immediate access to all projects available, for the verified combination. if you have any questions or can't upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject=Translation%20Certification" target="_blank">translators@translatorswithoutborders.org</a></p>
+              
+              <ul>
+               {foreach from=$certification_list key=name item=certification}
+                <li>{if $certification['state']}Already submitted{if $certification['reviewed'] == 1} and reviewed{/if}: {/if}<a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$name"}" target="_blank">{$certification['desc']|escape:'html':'UTF-8'}</a></li>
+            {/foreach}
+  
+              </ul>
+              <br/>
+               <h4 style="font-weight: bold"><br />Other Certificates and Documentation</h4>
+              <p class="desc">Certificates or other relevant documents about your translation qualifications. Please provide a short title for your qualification and upload the corresponding file. Project Officers will also upload here any certificates you obtain while volunteering with TWB. If you have any questions or can’t upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject=Translation%20Certification" target="_blank">translators@translatorswithoutborders.org</a></p>
+              <a href="/{$user_id}/user-uploads/TRANSLATOR/" target="_blank">Upload file</a>
+              <br/>
+                <button type="submit" onclick="return validateForm();" class='pull-right btn btn-primary' id="updateBtn">
+                    <i class="icon-refresh icon-white"></i> Complete
+                </button> <a style="cursor:pointer;color:#FFFFFF;" href="#profile1" class="pull-right next111 btn btn-primary" id="btnTrigger11">Prev</a>
+              </div>
+            </div>
+            <input type="hidden" name="sesskey" value="{$sesskey}" />
     </form>
 </div>
 
