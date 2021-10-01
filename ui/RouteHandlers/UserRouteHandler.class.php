@@ -1461,6 +1461,9 @@ class UserRouteHandler
         $countryDao = new DAO\CountryDao();
         $projectDao = new DAO\projectDao();
 
+        $languages_source = $langDao->getActiveSourceLanguages();
+        $languages_target = $langDao->getActiveTargetLanguages();
+
         if (!empty($_SESSION['track_code'])) {
             $userDao->insert_tracked_registration($user_id, $_SESSION['track_code']);
             unset($_SESSION['track_code']);
@@ -1522,6 +1525,8 @@ class UserRouteHandler
         }
 
         if ($post = $app->request()->post()) {
+            echo '<pre>',print_r($post,1),'</pre>';
+            die;
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
                 $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
             } else {
@@ -1701,10 +1706,251 @@ class UserRouteHandler
             ));
         }
 
-        $extra_scripts  = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
+        $target_lang = '';
+        foreach($language_selection as $key => $language){
+            $target_lang .="<option value=".$key.">".$language."</option>";
+        }
+
+        $source_lang = '';
+        foreach($language_selection as $key => $language){
+            $source_lang .="<option value=".$key.">".$language."</option>";
+        }
+
+        $extra_scripts  = '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script> ';
+        $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script> ';
+        $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= '<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />';
         $extra_scripts .= '<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>';
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/UserPrivateProfile4.js\"></script>";
+        $extra_scripts .= '<script type="text/javascript">
+        $(document).ready(function() {
+            $(".countclick").hide();
+        var newsletter_val = $("#newsletter_consent").val();
+        if (newsletter_val == 1){
+            $("#newsletter_consent").attr("checked", true);
+        } else{
+            $("#newsletter_consent").attr("checked", false);
+        }
+
+            $("#userprofile").validate({
+                rules: {
+                    first_name: "required",
+                    last_name: "required",
+                    username: {
+                        required: true,
+                        minlength: 2
+                    },
+                    password: {
+                        required: true,
+                        minlength: 5
+                    },
+                    confirm_password: {
+                        required: true,
+                        minlength: 5,
+                        equalTo: "#password"
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    email2: {
+                        required: true,
+                        email: true,
+                        equalTo: "#email"
+                    },
+                    age_consent: "required",
+                    conduct_consent: "required"
+                },
+                messages: {
+                    first_name: "Please enter your First name",
+                    last_name: "Please enter your Last name",
+                    username: {
+                        required: "Please enter a username",
+                        minlength: "Your username must consist of at least 2 characters"
+                    },
+                    email: "Please enter a valid email address",
+                    age_consent: "Please ensure you are above 18 years of age",
+                    conduct_consent: "You need to agree to this to proceed",
+                }
+            });
+            $("#tool").tooltip();
+            $("#tool1").tooltip();
+            $("#tool2").tooltip();
+            $("#tool3").tooltip();
+            $("#tool4").tooltip();
+            $("#tool5").tooltip();
+
+            function formatCountry (country) {
+                if (!country.id) { return country.text; }
+                var $country = $(
+                "<span class=\"flag-icon flag-icon-"+ country.id.toLowerCase() +" flag-icon-squared\"></span>" +
+                "<span class=\"flag-text\">"+ country.text+"</span>"
+                );
+                return $country;
+            };
+
+            $(".country").select2({
+                placeholder: "Select a country",
+                templateResult: formatCountry
+            });
+            $(".nativeLanguageSelect").select2({
+                placeholder: "Select a native language",
+            });
+            $(".variant").select2({
+                placeholder: "Select a variant",
+            });
+            $(".translate_from").select2({
+                placeholder: "--Select--",
+            });
+            $(".translate_to").select2({
+                placeholder: "--Select--",
+            });
+
+            if (jQuery("#myTab li:eq(0) a").tab("show")) {
+                $(".tabcounter").text("1/3");
+            }
+            else if (jQuery("#myTab li:eq(1) a").tab("show")) {
+                $(".tabcounter").text("2/3");
+            } else {
+                $(".tabcounter").text("3/3");
+            }
+
+            $(document).on("click", ".next11", function(e) {
+                e.preventDefault();
+                $(".tabcounter").text("2/3");
+                jQuery("#myTab li:eq(1) a").tab("show");
+            });
+
+            $(document).on("click", ".next111a", function(e) {
+                e.preventDefault();
+                if ($(this).attr("href") == "#home"){
+                    $(".tabcounter").text("2/3");
+                    jQuery("#myTab li:eq(1) a").tab("show");
+                }
+                else if ($(this).attr("href") == "#profile") {
+                    $(".tabcounter").text("3/3");
+                    jQuery("#myTab li:eq(2) a").tab("show");
+                }
+            });
+        });
+
+        $(document).on("click", "#btnTrigger", function(e) {
+            e.preventDefault();
+            if ($(this).attr("href") == "#home") {
+                $(".tabcounter").text("1/3");
+                jQuery("#myTab li:eq(0) a").tab("show");
+            }
+            else if ($(this).attr("href") == "#profile") {
+                $(".tabcounter").text("2/3");
+                jQuery("#myTab li:eq(1) a").tab("show");
+            }  else if ($(this).attr("href") == "#verifications") {
+                $(".tabcounter").text("3/3");
+                jQuery("#myTab li:eq(2) a").tab("show");
+            }
+        });
+
+        $(document).on("click", "#btnTrigger1", function(e) {
+            e.preventDefault();
+            if ($(this).attr("href") == "#home") {
+                $(".tabcounter").text("1/3");
+                jQuery("#myTab li:eq(0) a").tab("show");
+            }
+            else if ($(this).attr("href") == "#profile1") {
+                $(".tabcounter").text("2/3");
+                jQuery("#myTab li:eq(1) a").tab("show");
+            } else if($(this).attr("href") == "#verifications") {
+                $(".tabcounter").text("3/3");
+                jQuery("#myTab li:eq(2) a").tab("show");
+            }
+        });
+
+        $(document).on("click", "#btnTrigger11", function(e) {
+            e.preventDefault();
+            if ($(this).attr("href") == "#home") {
+                $(".tabcounter1").text("1/3");
+                jQuery("#myTab li:eq(0) a").tab("show");
+            }
+            else if ($(this).attr("href") == "#profile1") {
+                $(".tabcounter1").text("2/3");
+                jQuery("#myTab li:eq(1) a").tab("show");
+            } else if ($(this).attr("href") == "#verifications") {
+                $(".tabcounter1").text("3/3");
+                jQuery("#myTab li:eq(2) a").tab("show");
+            }
+        });
+
+        $(".btn").click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            return false;
+    });
+    
+    var count = 0;
+    function Count() {
+        count++;
+        $("#btnclick").text(count);
+        return false;
+    }
+
+    function Count1() {
+        count--;
+        $("#btnclick").text(count);
+        return false;
+    }
+
+    
+
+      // Build language input fields
+      $(document).on("click", "#add", function(e) {
+          Count();
+          var select_count = $("#btnclick").text();
+
+          if($("#btnclick").text() == 5){
+            $("#add").hide();
+
+          }
+          else{
+
+            $("#add").show();
+          }
+        e.preventDefault();
+        var lastField = $("#buildyourform div:last");
+        
+    var intId = (lastField && lastField.length && lastField.data("idx") + 1) || 1;
+    
+    var fieldWrapper = $("<div class=\"row-fluid\" id=\"field" + intId + "\"/>");
+    fieldWrapper.data("idx", intId);
+    var fName = $("<div class=\"span6\"> <select name=\"language_code_source_" + select_count + "\" id=\"from" + intId + "\" class=\"fieldtype\"><option value>--Select--</option>'.$source_lang.'</select></div>");
+    var fType = $("<div class=\"span5\"><select name=\"language_code_target_" + select_count + "\" id=\"to" + intId + "\" class=\"fieldtype\"><option value>--Select--</option>'.$target_lang.'</select></div>");
+    var removeButton = $("<div class=\"span1\" style=\"margin-top: 1.%;margin-left: -18%;\"><input type=\"button\" class=\"remove\" value=\"-\"  /><div>");
+   
+    removeButton.click(function() {
+        Count1();
+        if($("#btnclick").text() <= 5){
+            $("#add").show();
+
+          }
+          else{
+
+            $("#add").hide();
+          }
+          
+        console.log($(this));
+        $(this).parent().remove();
+    });
+  
+    fieldWrapper.append(fName);
+    fieldWrapper.append(fType);
+    fieldWrapper.append(removeButton);
+
+    $("#buildyourform").append(fieldWrapper);
+    $(".fieldtype").select2({
+        placeholder: "--Select a language--",
+    });
+    
+});
+        </script>';
 
         foreach ($userQualifiedPairs as $index => $userQualifiedPair) {
             $userQualifiedPairs[$index]['language_code_source'] = $userQualifiedPair['language_code_source'] . '-' . $userQualifiedPair['country_code_source'];
@@ -1725,6 +1971,7 @@ class UserRouteHandler
             'userPersonalInfo' => $userPersonalInfo,
             'languages' => $languages,
             'countries' => $countries,
+          //  'language_code_source_1' => $language_code_source,
             'language_selection' => $language_selection,
             'nativeLanguageSelectCode' => $nativeLanguageSelectCode,
             'nativeCountrySelectCode'  => $nativeCountrySelectCode,
