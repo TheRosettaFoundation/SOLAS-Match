@@ -165,101 +165,100 @@
                 </div>
                 <div class="row-fluid">
                     <div class="span6 clear_brand">
-                  {if $isSiteAdmin}
-                    {if !(isset($strict))}
-                        {assign var="strict" value=false}
-                    {/if}
-                {else}
-                    {if !(isset($strict))}
-                        {assign var="strict" value=true}
-                    {/if}
-                    {if !(isset($intervalId))}
-                        {assign var="intervalId" value={NotificationIntervalEnum::DAILY}}
-                    {/if}
-                {/if}
-              How often do you want to receive tasks availability email <i class="icon-question-sign" id="tool1" data-toggle="tooltip" title="Let us know how often you want to receive email notifications about tasks available in your language pairs."></i><br/>
-            <select name="interval">
-                        <option value="0"
-                            {if !isset($intervalId)}
-                                selected="true"
-                            {/if}
-                        >
-                           {Localisation::getTranslation('user_task_stream_notification_edit_never')}
-                        </option>
-                        <option value="{NotificationIntervalEnum::DAILY}"
-                            {if isset($intervalId) && $intervalId == NotificationIntervalEnum::DAILY}
-                                selected="true"
-                            {/if}
-                        >
-                            {Localisation::getTranslation('user_task_stream_notification_edit_daily')}
-                        </option>
-                        <option value="{NotificationIntervalEnum::WEEKLY}"
-                            {if isset($intervalId) && $intervalId == NotificationIntervalEnum::WEEKLY}
-                                selected="true"
-                            {/if}
-                        >
-                            {Localisation::getTranslation('user_task_stream_notification_edit_weekly')}
-                        </option>
-                        <option value="{NotificationIntervalEnum::MONTHLY}"
-                            {if isset($intervalId) && $intervalId == NotificationIntervalEnum::MONTHLY}
-                                selected="true"
-                            {/if}
-                        >
-                            {Localisation::getTranslation('user_task_stream_notification_edit_monthly')}
-                        </option>
-
                         {if $isSiteAdmin}
-                        <option value="10">
-                            Set this volunteer as in-kind sponsor
-                        </option>
+                            {if !(isset($strict))}
+                                {assign var="strict" value=false}
+                            {/if}
+                        {else}
+                            {if !(isset($strict))}
+                                {assign var="strict" value=true}
+                            {/if}
+                            {if !(isset($intervalId))}
+                                {assign var="intervalId" value={NotificationIntervalEnum::DAILY}}
+                            {/if}
                         {/if}
-                    </select>
-                    {if $in_kind}&nbsp;In-kind Sponsor{/if}
+                        How often do you want to receive tasks availability email <i class="icon-question-sign" id="tool1" data-toggle="tooltip" title="Let us know how often you want to receive email notifications about tasks available in your language pairs."></i><br/>
+                        <select name="interval">
+                            <option value="0"
+                                {if !isset($intervalId)}
+                                    selected="true"
+                                {/if}
+                            >
+                               {Localisation::getTranslation('user_task_stream_notification_edit_never')}
+                            </option>
+                            <option value="{NotificationIntervalEnum::DAILY}"
+                                {if isset($intervalId) && $intervalId == NotificationIntervalEnum::DAILY}
+                                    selected="true"
+                                {/if}
+                            >
+                                {Localisation::getTranslation('user_task_stream_notification_edit_daily')}
+                            </option>
+                            <option value="{NotificationIntervalEnum::WEEKLY}"
+                                {if isset($intervalId) && $intervalId == NotificationIntervalEnum::WEEKLY}
+                                    selected="true"
+                                {/if}
+                            >
+                                {Localisation::getTranslation('user_task_stream_notification_edit_weekly')}
+                            </option>
+                            <option value="{NotificationIntervalEnum::MONTHLY}"
+                                {if isset($intervalId) && $intervalId == NotificationIntervalEnum::MONTHLY}
+                                    selected="true"
+                                {/if}
+                            >
+                                {Localisation::getTranslation('user_task_stream_notification_edit_monthly')}
+                            </option>
+                            {if $isSiteAdmin}
+                            <option value="10">
+                                Set this volunteer as in-kind sponsor
+                            </option>
+                            {/if}
+                        </select>
+                        {if $in_kind}&nbsp;In-kind Sponsor{/if}
+                    </div>
                 </div>
-            </div>
-            <div class="row-fluid">
-                <div class="span4 clear_brand">
-                    <label class="clear_brand required"><strong>Services I can provide</strong></label>
-                    {assign var="i" value=0}
-                    {foreach from=$capability_list key=name item=capability}
-                        <input type="checkbox" {if $capability['state']}checked="checked"{/if} name="{$name}" id="capability{$i}" /> {$capability['desc']|escape:'html':'UTF-8'}  <br/>
-                        {assign var="i" value=$i+1}
-                    {/foreach}
-                </div>
-                <div class="span8 clear_brand">
-                    <div class="span6">
-                        <label class="clear_brand required"><strong>Fields of expertise</strong></label>
+                <div class="row-fluid">
+                    <div class="span4 clear_brand">
+                        <label class="clear_brand required"><strong>Services I can provide</strong></label>
                         {assign var="i" value=0}
-                        {foreach from=$expertise_list key=name item=expertise}
-                            <input type="checkbox" {if $expertise['state']}checked="checked"{/if} name="{$name}" id="expertise{$i}" /> {$expertise['desc']|escape:'html':'UTF-8'}<br/>
+                        {foreach from=$capability_list key=name item=capability}
+                            <input type="checkbox" {if $capability['state']}checked="checked"{/if} name="{$name}" id="capability{$i}" /> {$capability['desc']|escape:'html':'UTF-8'}  <br/>
                             {assign var="i" value=$i+1}
                         {/foreach}
+                    </div>
+                    <div class="span8 clear_brand">
+                        <div class="span6">
+                            <label class="clear_brand required"><strong>Fields of expertise</strong></label>
+                            {assign var="i" value=0}
+                            {foreach from=$expertise_list key=name item=expertise}
+                                <input type="checkbox" {if $expertise['state']}checked="checked"{/if} name="{$name}" id="expertise{$i}" /> {$expertise['desc']|escape:'html':'UTF-8'}<br/>
+                                {assign var="i" value=$i+1}
+                            {/foreach}
+                        </div>
+                    </div>
                 </div>
+                <br/>
+                <a style="cursor:pointer;color:#FFFFFF;" href="#verifications" class="pull-right next111 btn btn-primary" id="btnTrigger1">Next</a> <a style="cursor:pointer;color:#FFFFFF;" href="#home" class="pull-right next111 btn btn-primary" id="btnTrigger11">Prev</a>
+            </div>
+            <div class="tab-pane fade" id="verifications">
+                <br/>
+                <p class="desc">If you hold a certification or membership from any of the organizations below, you could qualify to be a verified translator. Please select the organization and click to submit a proof of certification/membership. You will be upgraded to Verified Translator, which will give you immediate access to all projects available, for the verified combination. if you have any questions or can't upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject=Translation%20Certification" target="_blank">translators@translatorswithoutborders.org</a></p>
+                <ul>
+                    {foreach from=$certification_list key=name item=certification}
+                        <li>{if $certification['state']}Already submitted{if $certification['reviewed'] == 1} and reviewed{/if}: {/if}<a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$name"}" target="_blank">{$certification['desc']|escape:'html':'UTF-8'}</a></li>
+                    {/foreach}
+                </ul>
+                <br/>
+                <h4 style="font-weight: bold"><br />Other Certificates and Documentation</h4>
+                <p class="desc">Certificates or other relevant documents about your translation qualifications. Please provide a short title for your qualification and upload the corresponding file. Project Officers will also upload here any certificates you obtain while volunteering with TWB. If you have any questions or can’t upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject=Translation%20Certification" target="_blank">translators@translatorswithoutborders.org</a></p>
+                <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TRANSLATOR"}" target="_blank">Upload file</a>
+                <br/>
+                <button type="submit" onclick="return validateForm();" class='pull-right btn btn-primary' id="updateBtn">
+                    <i class="icon-refresh icon-white"></i> Complete
+                </button>
+                <a style="cursor:pointer;color:#FFFFFF;" href="#profile1" class="pull-right next111 btn btn-primary" id="btnTrigger11">Prev</a>
             </div>
         </div>
-        <br/>
-        <a style="cursor:pointer;color:#FFFFFF;" href="#verifications" class="pull-right next111 btn btn-primary" id="btnTrigger1">Next</a> <a style="cursor:pointer;color:#FFFFFF;" href="#home" class="pull-right next111 btn btn-primary" id="btnTrigger11">Prev</a>
-    </div>
-    <div class="tab-pane fade" id="verifications">
-        <br/>
-        <p class="desc">If you hold a certification or membership from any of the organizations below, you could qualify to be a verified translator. Please select the organization and click to submit a proof of certification/membership. You will be upgraded to Verified Translator, which will give you immediate access to all projects available, for the verified combination. if you have any questions or can't upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject=Translation%20Certification" target="_blank">translators@translatorswithoutborders.org</a></p>
-        <ul>
-            {foreach from=$certification_list key=name item=certification}
-                <li>{if $certification['state']}Already submitted{if $certification['reviewed'] == 1} and reviewed{/if}: {/if}<a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$name"}" target="_blank">{$certification['desc']|escape:'html':'UTF-8'}</a></li>
-            {/foreach}
-        </ul>
-        <br/>
-        <h4 style="font-weight: bold"><br />Other Certificates and Documentation</h4>
-        <p class="desc">Certificates or other relevant documents about your translation qualifications. Please provide a short title for your qualification and upload the corresponding file. Project Officers will also upload here any certificates you obtain while volunteering with TWB. If you have any questions or can’t upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject=Translation%20Certification" target="_blank">translators@translatorswithoutborders.org</a></p>
-        <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TRANSLATOR"}" target="_blank">Upload file</a>
-        <br/>
-        <button type="submit" onclick="return validateForm();" class='pull-right btn btn-primary' id="updateBtn">
-            <i class="icon-refresh icon-white"></i> Complete
-        </button>
-        <a style="cursor:pointer;color:#FFFFFF;" href="#profile1" class="pull-right next111 btn btn-primary" id="btnTrigger11">Prev</a>
-    </div>
-</div>
-    <input type="hidden" name="sesskey" value="{$sesskey}" />
+        <input type="hidden" name="sesskey" value="{$sesskey}" />
     </form>
 </div>
 
