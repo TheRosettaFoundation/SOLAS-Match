@@ -1387,7 +1387,7 @@ class UserRouteHandler
                 placeholder: "Select a variant",
             });
             $(".translate_from").select2({
-                placeholder: "--Select--",
+//                placeholder: "--Select--",
 val: "et---"
             });
             $(".translate_to").select2({
