@@ -1527,6 +1527,7 @@ class UserRouteHandler
             $(".fieldtype").select2({
                 placeholder: "--Select a language--",
             });
+            $("#from" + intId).select2("val", "et---");
         });
         </script>';
 
