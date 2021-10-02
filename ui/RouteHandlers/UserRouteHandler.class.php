@@ -1389,7 +1389,6 @@ class UserRouteHandler
             $(".translate_from").select2({
                 placeholder: "--Select--",
             });
-$(".translate_from").select2().val("et---").trigger("change");
             $(".translate_to").select2({
                 placeholder: "--Select--",
             });
@@ -1420,6 +1419,34 @@ $(".translate_from").select2().val("et---").trigger("change");
                     jQuery("#myTab li:eq(2) a").tab("show");
                 }
             });
+
+            var userQualifiedPairsCount = getSetting(userQualifiedPairsCount);
+            for (select_count = 0; select_count < userQualifiedPairsCount; select_count++) {
+                Count();
+
+                if($("#btnclick").text() >= 5) {
+                  $("#add").hide();
+                } else {
+                  $("#add").show();
+                }
+
+                var fieldWrapper = $("<div class=\"row-fluid\" id=\"field" + select_count + "\"/>");
+                fieldWrapper.data("idx", select_count);
+                var fName = $("<div class=\"span6\"> <select name=\"language_code_source_" + select_count + "\" id=\"from" + select_count + "\" class=\"fieldtype\"><option value>--Select--</option>'.$source_lang.'</select></div>");
+                var fType = $("<div class=\"span5\"><select name=\"language_code_target_" + select_count + "\" id=\"to" + select_count + "\" class=\"fieldtype\"><option value>--Select--</option>'.$target_lang.'</select></div>");
+                var removeButton = $("<div class=\"span1\" style=\"margin-top: 1.%;margin-left: -18%;\"><input type=\"button\" class=\"remove\" value=\"-\"  /><div>");
+
+                fieldWrapper.append(fName);
+                fieldWrapper.append(fType);
+                fieldWrapper.append(removeButton);
+
+                $("#buildyourform").append(fieldWrapper);
+                $(".fieldtype").select2({
+                    placeholder: "--Select a language--",
+                });
+                $("#from" + select_count).select2().val(getSetting("userQualifiedPairLanguageCodeSource_" + select_count)).trigger("change");
+                $("#to"   + select_count).select2().val(getSetting("userQualifiedPairLanguageCodeTarget_" + select_count)).trigger("change");
+            }
         });
 
         $(document).on("click", "#btnTrigger", function(e) {
@@ -1492,7 +1519,7 @@ $(".translate_from").select2().val("et---").trigger("change");
             Count();
             var select_count = $("#btnclick").text();
 
-            if($("#btnclick").text() == 5){
+            if ($("#btnclick").text() == 5) {
               $("#add").hide();
             } else {
               $("#add").show();
@@ -1528,8 +1555,6 @@ $(".translate_from").select2().val("et---").trigger("change");
             $(".fieldtype").select2({
                 placeholder: "--Select a language--",
             });
-$("#from" + intId).select2().val("en-US").trigger("change");
-$("#from" + intId).select2().val(getSetting("userQualifiedPairLanguageCodeSource_" + intId)).trigger("change");
         });
         </script>';
 
