@@ -165,14 +165,7 @@
                 </div>
                 <div class="row-fluid">
                     <div class="span6 clear_brand">
-                        {if $isSiteAdmin}
-                            {if !(isset($strict))}
-                                {assign var="strict" value=false}
-                            {/if}
-                        {else}
-                            {if !(isset($strict))}
-                                {assign var="strict" value=true}
-                            {/if}
+                        {if !$isSiteAdmin}
                             {if !(isset($intervalId))}
                                 {assign var="intervalId" value={NotificationIntervalEnum::DAILY}}
                             {/if}
