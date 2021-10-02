@@ -1318,14 +1318,11 @@ class UserRouteHandler
             ));
         }
 
-        $target_lang = '';
-        foreach($language_selection as $key => $language){
-            $target_lang .="<option value=".$key.">".$language."</option>";
-        }
-
         $source_lang = '';
-        foreach($language_selection as $key => $language){
-            $source_lang .="<option value=".$key.">".$language."</option>";
+        $target_lang = '';
+        foreach ($language_selection as $key => $language) {
+            $source_lang .= "<option value=$key>$language</option>";
+            $target_lang .= "<option value=$key>$language</option>";
         }
 
         $extra_scripts  = '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script> ';
@@ -1337,12 +1334,13 @@ class UserRouteHandler
         $extra_scripts .= '<script type="text/javascript">
         $(document).ready(function() {
             $(".countclick").hide();
-        var newsletter_val = $("#newsletter_consent").val();
-        if (newsletter_val == 1){
-            $("#newsletter_consent").attr("checked", true);
-        } else{
-            $("#newsletter_consent").attr("checked", false);
-        }
+
+            var newsletter_val = $("#newsletter_consent").val();
+            if (newsletter_val == 1) {
+                $("#newsletter_consent").attr("checked", true);
+            } else {
+                $("#newsletter_consent").attr("checked", false);
+            }
 
             $("#userprofile").validate({
                 rules: {
@@ -1351,27 +1349,7 @@ class UserRouteHandler
                     username: {
                         required: true,
                         minlength: 2
-                    },
-                    password: {
-                        required: true,
-                        minlength: 5
-                    },
-                    confirm_password: {
-                        required: true,
-                        minlength: 5,
-                        equalTo: "#password"
-                    },
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    email2: {
-                        required: true,
-                        email: true,
-                        equalTo: "#email"
-                    },
-                    age_consent: "required",
-                    conduct_consent: "required"
+                    }
                 },
                 messages: {
                     first_name: "Please enter your First name",
@@ -1380,9 +1358,6 @@ class UserRouteHandler
                         required: "Please enter a username",
                         minlength: "Your username must consist of at least 2 characters"
                     },
-                    email: "Please enter a valid email address",
-                    age_consent: "Please ensure you are above 18 years of age",
-                    conduct_consent: "You need to agree to this to proceed",
                 }
             });
             $("#tool").tooltip();
@@ -1496,72 +1471,63 @@ class UserRouteHandler
             e.stopPropagation();
             e.stopImmediatePropagation();
             return false;
-    });
-    
-    var count = 0;
-    function Count() {
-        count++;
-        $("#btnclick").text(count);
-        return false;
-    }
+        });
 
-    function Count1() {
-        count--;
-        $("#btnclick").text(count);
-        return false;
-    }
+        var count = 0;
+        function Count() {
+            count++;
+            $("#btnclick").text(count);
+            return false;
+        }
 
-    
+        function Count1() {
+            count--;
+            $("#btnclick").text(count);
+            return false;
+        }
 
-      // Build language input fields
-      $(document).on("click", "#add", function(e) {
-          Count();
-          var select_count = $("#btnclick").text();
+        // Build language input fields
+        $(document).on("click", "#add", function(e) {
+            Count();
+            var select_count = $("#btnclick").text();
 
-          if($("#btnclick").text() == 5){
-            $("#add").hide();
-
-          }
-          else{
-
-            $("#add").show();
-          }
-        e.preventDefault();
-        var lastField = $("#buildyourform div:last");
+            if($("#btnclick").text() == 5){
+              $("#add").hide();
+            } else {
+              $("#add").show();
+            }
+            e.preventDefault();
+            var lastField = $("#buildyourform div:last");
         
-    var intId = (lastField && lastField.length && lastField.data("idx") + 1) || 1;
+            var intId = (lastField && lastField.length && lastField.data("idx") + 1) || 1;
     
-    var fieldWrapper = $("<div class=\"row-fluid\" id=\"field" + intId + "\"/>");
-    fieldWrapper.data("idx", intId);
-    var fName = $("<div class=\"span6\"> <select name=\"language_code_source_" + select_count + "\" id=\"from" + intId + "\" class=\"fieldtype\"><option value>--Select--</option>'.$source_lang.'</select></div>");
-    var fType = $("<div class=\"span5\"><select name=\"language_code_target_" + select_count + "\" id=\"to" + intId + "\" class=\"fieldtype\"><option value>--Select--</option>'.$target_lang.'</select></div>");
-    var removeButton = $("<div class=\"span1\" style=\"margin-top: 1.%;margin-left: -18%;\"><input type=\"button\" class=\"remove\" value=\"-\"  /><div>");
+            var fieldWrapper = $("<div class=\"row-fluid\" id=\"field" + intId + "\"/>");
+            fieldWrapper.data("idx", intId);
+            var fName = $("<div class=\"span6\"> <select name=\"language_code_source_" + select_count + "\" id=\"from" + intId + "\" class=\"fieldtype\"><option value>--Select--</option>'.$source_lang.'</select></div>");
+            var fType = $("<div class=\"span5\"><select name=\"language_code_target_" + select_count + "\" id=\"to" + intId + "\" class=\"fieldtype\"><option value>--Select--</option>'.$target_lang.'</select></div>");
+            var removeButton = $("<div class=\"span1\" style=\"margin-top: 1.%;margin-left: -18%;\"><input type=\"button\" class=\"remove\" value=\"-\"  /><div>");
    
-    removeButton.click(function() {
-        Count1();
-        if($("#btnclick").text() <= 5){
-            $("#add").show();
+            removeButton.click(function() {
+                Count1();
+                if ($("#btnclick").text() <= 5) {
+                    $("#add").show();
+                } else {
+                    $("#add").hide();
+                }
 
-          }
-          else{
-
-            $("#add").hide();
-          }
-          
-        console.log($(this));
-        $(this).parent().remove();
-    });
+                console.log($(this));
+                $(this).parent().remove();
+            });
   
-    fieldWrapper.append(fName);
-    fieldWrapper.append(fType);
-    fieldWrapper.append(removeButton);
+            fieldWrapper.append(fName);
+            fieldWrapper.append(fType);
+            fieldWrapper.append(removeButton);
 
-    $("#buildyourform").append(fieldWrapper);
-    $(".fieldtype").select2({
-        placeholder: "--Select a language--",
-    });
-    
-});
+            $("#buildyourform").append(fieldWrapper);
+            $(".fieldtype").select2({
+                placeholder: "--Select a language--",
+            });
+        });
         </script>';
 
         foreach ($userQualifiedPairs as $index => $userQualifiedPair) {
