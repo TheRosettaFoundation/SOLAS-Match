@@ -1420,7 +1420,7 @@ class UserRouteHandler
                 }
             });
 
-            var userQualifiedPairsCount = getSetting(userQualifiedPairsCount);
+            var userQualifiedPairsCount = getSetting("userQualifiedPairsCount");
             for (select_count = 0; select_count < userQualifiedPairsCount; select_count++) {
                 Count();
 
