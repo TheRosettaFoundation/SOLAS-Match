@@ -1387,9 +1387,9 @@ class UserRouteHandler
                 placeholder: "Select a variant",
             });
             $(".translate_from").select2({
-//                placeholder: "--Select--",
-val: "et---"
+                placeholder: "--Select--",
             });
+$(".translate_from").select2().val("et---").trigger("change");
             $(".translate_to").select2({
                 placeholder: "--Select--",
             });
@@ -1526,10 +1526,9 @@ val: "et---"
 
             $("#buildyourform").append(fieldWrapper);
             $(".fieldtype").select2({
-//                placeholder: "--Select a language--",
-val: "et---"
+                placeholder: "--Select a language--",
             });
-            $("#from" + intId).select2("val", "et---");
+$("#from" + intId).select2().val("en-US").trigger("change");
         });
         </script>';
 
