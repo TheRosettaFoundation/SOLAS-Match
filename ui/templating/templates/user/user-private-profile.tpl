@@ -140,21 +140,9 @@
                     <div class="row-fluid" >
                         <div class="span6">
                             <label class="clear_brand required"><strong>I can translate from</strong> <i class="icon-question-sign" id="tool3" data-toggle="tooltip" title="Your language pairs should reflect the languages you are proficient or native in. We encourage linguists to translate into their native language(s)."></i></label>
-                            <select name="language_code_source_0" class="translate_from">
-                                <option>Select a language</option>
-                                {foreach from=$language_selection key=codes item=language}
-                                    <option value="{$codes}" >{$language}</option>
-                                {/foreach}
-                            </select>
                         </div>
                         <div class="span5">
                             <label class="clear_brand required"><strong>To</strong> <i class="icon-question-sign" id="tool2" data-toggle="tooltip" title="--"></i></label>
-                            <select name="language_code_target_0" class="translate_to">
-                                <option>Select a language</option>
-                                {foreach from=$language_selection key=codes item=language}
-                                    <option value="{$codes}" >{$language}</option>
-                                {/foreach}
-                            </select>
                         </div>
                         <div class="span1" style="margin-top: 1.6%;margin-left: -18%;">
                             <label></label>
