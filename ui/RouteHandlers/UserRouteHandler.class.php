@@ -1439,12 +1439,17 @@ class UserRouteHandler
                 fieldWrapper.data("idx", select_count);
                 var fName = $("<div class=\"span6\"> <select name=\"language_code_source_" + select_count + "\" id=\"from" + select_count + "\" class=\"fieldtype\"><option value>--Select--</option>'.$source_lang.'</select></div>");
                 var fType = $("<div class=\"span5\"><select name=\"language_code_target_" + select_count + "\" id=\"to" + select_count + "\" class=\"fieldtype\"><option value>--Select--</option>'.$target_lang.'</select></div>");
-                var removeButton = $("<div class=\"span1\" style=\"margin-top: 1.%;margin-left: -18%;\"><input type=\"button\" class=\"remove\" value=\"-\"  /><div>");
 
                 fieldWrapper.append(fName);
                 fieldWrapper.append(fType);
-                fieldWrapper.append(removeButton);
 
+                if (select_count == 0) {
+                    var addButton = $("<div class=\"span1\" style=\"margin-top: 1.6%;margin-left: -18%;\"><input type=\"button\" class=\"add\" id=\"add\" value=\"+\" /><div>");
+                    fieldWrapper.append(addButton);
+                } else {
+                    var removeButton = $("<div class=\"span1\" style=\"margin-top: 1.%;margin-left: -18%;\"><input type=\"button\" class=\"remove\" value=\"-\"  /><div>");
+                    fieldWrapper.append(removeButton);
+                }
                 $("#buildyourform").append(fieldWrapper);
                 $(".fieldtype").select2({
                     placeholder: "--Select a language--",
