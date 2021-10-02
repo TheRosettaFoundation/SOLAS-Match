@@ -1386,12 +1386,6 @@ class UserRouteHandler
             $(".variant").select2({
                 placeholder: "Select a variant",
             });
-            $(".translate_from").select2({
-                placeholder: "--Select--",
-            });
-            $(".translate_to").select2({
-                placeholder: "--Select--",
-            });
 
             if (jQuery("#myTab li:eq(0) a").tab("show")) {
                 $(".tabcounter").text("1/3");
@@ -1528,6 +1522,7 @@ class UserRouteHandler
 
         // Build language input fields
         $(document).on("click", "#add", function(e) {
+alert("triggering");
             Count();
             var select_count = $("#btnclick").text();
 
