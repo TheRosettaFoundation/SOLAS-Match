@@ -1388,6 +1388,7 @@ class UserRouteHandler
             });
             $(".translate_from").select2({
                 placeholder: "--Select--",
+val: "et---"
             });
             $(".translate_to").select2({
                 placeholder: "--Select--",
