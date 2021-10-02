@@ -1529,6 +1529,7 @@ $(".translate_from").select2().val("et---").trigger("change");
                 placeholder: "--Select a language--",
             });
 $("#from" + intId).select2().val("en-US").trigger("change");
+$("#from" + intId).select2().val(getSetting("userQualifiedPairLanguageCodeSource_" + intId)).trigger("change");
         });
         </script>';
 
