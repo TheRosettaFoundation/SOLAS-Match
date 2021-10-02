@@ -1421,7 +1421,6 @@ class UserRouteHandler
                 Pairs = false;
             }
             for (select_count = 0; select_count < userQualifiedPairsCount; select_count++) {
-alert("triggering: " + select_count);
                 Count();
 
                 if($("#btnclick").text() >= 5) {
@@ -1432,8 +1431,8 @@ alert("triggering: " + select_count);
 
                 var fieldWrapper = $("<div class=\"row-fluid\" id=\"field" + select_count + "\"/>");
                 fieldWrapper.data("idx", select_count);
-                var fName = $("<div class=\"span6\"> <select name=\"language_code_source_" + select_count + "\" id=\"from" + select_count + "\" class=\"fieldtype\"><option value>--Select--</option>'.$source_lang.'</select></div>");
-                var fType = $("<div class=\"span5\"><select name=\"language_code_target_" + select_count + "\" id=\"to" + select_count + "\" class=\"fieldtype\"><option value>--Select--</option>'.$target_lang.'</select></div>");
+                var fName = $("<div class=\"span6\"> <select name=\"language_code_source_" + select_count + "\" id=\"from" + select_count + "\" class=\"fieldtype\"><option value>--Select a language--</option>'.$source_lang.'</select></div>");
+                var fType = $("<div class=\"span5\"><select name=\"language_code_target_" + select_count + "\" id=\"to" + select_count + "\" class=\"fieldtype\"><option value>--Select a language--</option>'.$target_lang.'</select></div>");
 
                 fieldWrapper.append(fName);
                 fieldWrapper.append(fType);
@@ -1523,7 +1522,6 @@ alert("triggering: " + select_count);
 
         // Build language input fields
         $(document).on("click", "#add", function(e) {
-alert("triggering unexpected");
             Count();
             var select_count = $("#btnclick").text();
 
@@ -1539,8 +1537,8 @@ alert("triggering unexpected");
     
             var fieldWrapper = $("<div class=\"row-fluid\" id=\"field" + intId + "\"/>");
             fieldWrapper.data("idx", intId);
-            var fName = $("<div class=\"span6\"> <select name=\"language_code_source_" + select_count + "\" id=\"from" + intId + "\" class=\"fieldtype\"><option value>--Select--</option>'.$source_lang.'</select></div>");
-            var fType = $("<div class=\"span5\"><select name=\"language_code_target_" + select_count + "\" id=\"to" + intId + "\" class=\"fieldtype\"><option value>--Select--</option>'.$target_lang.'</select></div>");
+            var fName = $("<div class=\"span6\"> <select name=\"language_code_source_" + select_count + "\" id=\"from" + intId + "\" class=\"fieldtype\"><option value>--Select a language--</option>'.$source_lang.'</select></div>");
+            var fType = $("<div class=\"span5\"><select name=\"language_code_target_" + select_count + "\" id=\"to" + intId + "\" class=\"fieldtype\"><option value>--Select a language--</option>'.$target_lang.'</select></div>");
             var removeButton = $("<div class=\"span1\" style=\"margin-top: 1.%;margin-left: -18%;\"><input type=\"button\" class=\"remove\" value=\"-\"  /><div>");
    
             removeButton.click(function() {
