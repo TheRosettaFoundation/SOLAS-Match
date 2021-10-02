@@ -1421,6 +1421,7 @@ class UserRouteHandler
                 Pairs = false;
             }
             for (select_count = 0; select_count < userQualifiedPairsCount; select_count++) {
+alert("triggering: " + select_count);
                 Count();
 
                 if($("#btnclick").text() >= 5) {
@@ -1522,7 +1523,7 @@ class UserRouteHandler
 
         // Build language input fields
         $(document).on("click", "#add", function(e) {
-alert("triggering");
+alert("triggering unexpected");
             Count();
             var select_count = $("#btnclick").text();
 
