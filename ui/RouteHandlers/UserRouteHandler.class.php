@@ -1525,7 +1525,7 @@ class UserRouteHandler
 
             $("#buildyourform").append(fieldWrapper);
             $(".fieldtype").select2({
-                placeholder: "--Select a language--",
+//                placeholder: "--Select a language--",
 val: "et---"
             });
             $("#from" + intId).select2("val", "et---");
