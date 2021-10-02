@@ -1085,9 +1085,6 @@ class UserRouteHandler
         $countryDao = new DAO\CountryDao();
         $projectDao = new DAO\projectDao();
 
-        $languages_source = $langDao->getActiveSourceLanguages();
-        $languages_target = $langDao->getActiveTargetLanguages();
-
         if (!empty($_SESSION['track_code'])) {
             $userDao->insert_tracked_registration($user_id, $_SESSION['track_code']);
             unset($_SESSION['track_code']);
@@ -1149,8 +1146,6 @@ class UserRouteHandler
         }
 
         if ($post = $app->request()->post()) {
-            echo '<pre>',print_r($post,1),'</pre>';
-            die;
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
                 $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
             } else {
@@ -1588,7 +1583,6 @@ class UserRouteHandler
             'userPersonalInfo' => $userPersonalInfo,
             'languages' => $languages,
             'countries' => $countries,
-          //  'language_code_source_1' => $language_code_source,
             'language_selection' => $language_selection,
             'nativeLanguageSelectCode' => $nativeLanguageSelectCode,
             'nativeCountrySelectCode'  => $nativeCountrySelectCode,
