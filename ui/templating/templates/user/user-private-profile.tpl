@@ -144,10 +144,6 @@
                         <div class="span5">
                             <label class="clear_brand required"><strong>To</strong> <i class="icon-question-sign" id="tool2" data-toggle="tooltip" title="--"></i></label>
                         </div>
-                        <div class="span1" style="margin-top: 1.6%;margin-left: -18%;">
-                            <label></label>
-                            <input type="button" value="+" class="add" id="add"  />
-                        </div>
                         <span id="btnclick" class="countclick"><span>
                     </div>
                 </div>
