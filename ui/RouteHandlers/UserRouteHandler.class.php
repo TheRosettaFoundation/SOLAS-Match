@@ -1447,6 +1447,15 @@ class UserRouteHandler
                     fieldWrapper.append(addButton);
                 } else {
                     var removeButton = $("<div class=\"span1\" style=\"margin-top: 1.%;margin-left: -18%;\"><input type=\"button\" class=\"remove\" value=\"-\"  /><div>");
+                    removeButton.click(function() {
+                        Count1();
+                        if ($("#btnclick").text() <= 5) {
+                            $("#add").show();
+                        } else {
+                            $("#add").hide();
+                        }
+                        $(this).parent().remove();
+                    });
                     fieldWrapper.append(removeButton);
                 }
                 $("#buildyourform").append(fieldWrapper);
