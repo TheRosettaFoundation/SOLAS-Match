@@ -60,7 +60,7 @@
                     <div class="span6">
                         <div>
                             <label for='displayName' class="clear_brand required">Username</label>
-                            <input type="text" name="displayName" id="displayName" placeholder="displayName" placeholder="Type something…" value="{$user->getDisplayName()|escape:'html':'UTF-8'}">
+                            <input type="text" name="displayName" value="{$user->getDisplayName()|escape:'html':'UTF-8'}" id="displayName" placeholder="username">
                         </div>
                         <div>
                             <label for='firstName' class="clear_brand required">First name</label>

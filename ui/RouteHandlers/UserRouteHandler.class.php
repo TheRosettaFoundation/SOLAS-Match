@@ -1354,7 +1354,7 @@ class UserRouteHandler
                 rules: {
                     first_name: "required",
                     last_name: "required",
-                    username: {
+                    displayName: {
                         required: true,
                         minlength: 2
                     }
@@ -1362,7 +1362,7 @@ class UserRouteHandler
                 messages: {
                     first_name: "Please enter your First name",
                     last_name: "Please enter your Last name",
-                    username: {
+                    displayName: {
                         required: "Please enter a username",
                         minlength: "Your username must consist of at least 2 characters"
                     },

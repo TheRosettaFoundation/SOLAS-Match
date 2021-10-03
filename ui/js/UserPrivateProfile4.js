@@ -82,12 +82,6 @@ function validateForm()
 {
   alertError = null;
 
-  if (document.getElementById("displayName").value == "") {
-    alertError = parameters.getTranslation("user_private_profile_2");
-    set_all_errors_for_submission();
-    return false;
-  }
-
   if (document.getElementById("firstName").value == "" || document.getElementById("lastName").value == "") {
       alertError = "You must fill out the first name and last name fields.";
       set_all_errors_for_submission();
