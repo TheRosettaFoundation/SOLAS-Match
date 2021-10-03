@@ -1294,6 +1294,7 @@ class UserRouteHandler
                     }
 
                     if (!empty($post['howheard'])) $userDao->insertUserHowheard($user_id, $post['howheard']);
+                    else                           $userDao->insertUserHowheard($user_id, 'Other');
 
                     if (!empty($post['communications_consent'])) $userDao->insert_communications_consent($user_id, 1);
                     else                                         $userDao->insert_communications_consent($user_id, 0);
@@ -1341,11 +1342,11 @@ class UserRouteHandler
         $(document).ready(function() {
             $(".countclick").hide();
 
-            var newsletter_val = $("#newsletter_consent").val();
+            var newsletter_val = $("#communications_consent").val();
             if (newsletter_val == 1) {
-                $("#newsletter_consent").attr("checked", true);
+                $("#communications_consent").attr("checked", true);
             } else {
-                $("#newsletter_consent").attr("checked", false);
+                $("#communications_consent").attr("checked", false);
             }
 
             $("#userprofile").validate({
