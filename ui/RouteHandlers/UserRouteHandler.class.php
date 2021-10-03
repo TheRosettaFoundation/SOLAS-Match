@@ -1191,6 +1191,7 @@ class UserRouteHandler
                     while (!empty($post["language_code_source_$i"]) && !empty($post["language_code_target_$i"])) {
                         list($language_code_source, $country_code_source) = $projectDao->convert_selection_to_language_country($post["language_code_source_$i"]);
                         list($language_code_target, $country_code_target) = $projectDao->convert_selection_to_language_country($post["language_code_target_$i"]);
+                        if (empty($post["qualification_level_$i"])) $post["qualification_level_$i"] = 1;
 
                         $language_code_source = strtolower($language_code_source); // Just in case browser is manipulated...
                         $language_code_target = strtolower($language_code_target);
