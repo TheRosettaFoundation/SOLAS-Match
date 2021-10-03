@@ -1424,12 +1424,7 @@ class UserRouteHandler
                 }
             });
 
-            var userQualifiedPairsCount = getSetting("userQualifiedPairsCount");
-            var Pairs = true;
-            if (userQualifiedPairsCount == 0) {
-                userQualifiedPairsCount = 1;
-                Pairs = false;
-            }
+            var userQualifiedPairsCount = parseInt(getSetting("userQualifiedPairsCount"));
             for (select_count = 0; select_count < userQualifiedPairsCount; select_count++) {
                 Count();
 
@@ -1458,7 +1453,7 @@ class UserRouteHandler
                 $(".fieldtype").select2({
                     placeholder: "--Select a language--",
                 });
-                if (Pairs) {
+                if (getSetting("userQualifiedPairLanguageCodeSource_" + select_count) != "") {
                     $("#from" + select_count).select2().val(getSetting("userQualifiedPairLanguageCodeSource_" + select_count)).trigger("change");
                     $("#to"   + select_count).select2().val(getSetting("userQualifiedPairLanguageCodeTarget_" + select_count)).trigger("change");
                 }
