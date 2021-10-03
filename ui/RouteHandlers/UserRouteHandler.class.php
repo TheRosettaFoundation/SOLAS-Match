@@ -1428,7 +1428,7 @@ class UserRouteHandler
             for (select_count = 0; select_count < userQualifiedPairsCount; select_count++) {
                 Count();
 
-                if($("#btnclick").text() >= getSetting("userQualifiedPairsLimit")) {
+                if($("#btnclick").text() >= 5) {
                   $("#add").hide();
                 } else {
                   $("#add").show();
@@ -1449,7 +1449,7 @@ class UserRouteHandler
                     var removeButton = $("<div class=\"span1\" style=\"margin-top: 1.%;margin-left: -18%;\"><input type=\"button\" class=\"remove\" value=\"-\"  /><div>");
                     removeButton.click(function() {
                         Count1();
-                        if ($("#btnclick").text() <= getSetting("userQualifiedPairsLimit")) {
+                        if ($("#btnclick").text() <= 5) {
                             $("#add").show();
                         } else {
                             $("#add").hide();
@@ -1539,7 +1539,7 @@ class UserRouteHandler
             Count();
             var select_count = $("#btnclick").text();
 
-            if ($("#btnclick").text() == getSetting("userQualifiedPairsLimit")) {
+            if ($("#btnclick").text() == 5) {
               $("#add").hide();
             } else {
               $("#add").show();
@@ -1557,7 +1557,7 @@ class UserRouteHandler
    
             removeButton.click(function() {
                 Count1();
-                if ($("#btnclick").text() <= getSetting("userQualifiedPairsLimit")) {
+                if ($("#btnclick").text() <= 5) {
                     $("#add").show();
                 } else {
                     $("#add").hide();
