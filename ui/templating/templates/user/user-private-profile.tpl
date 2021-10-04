@@ -45,6 +45,9 @@
     {/if}
 
     <h2 class="twb_color">Please complete your profile <span class="tabcounter twb_color tabcounter1"></span></h2>
+
+    <div id="placeholder_for_errors_1"></div>
+
     <form method="post" id="userprofile" action="{urlFor name="user-private-profile" options="user_id.$user_id"}" enctype="multipart/form-data" accept-charset="utf-8">
         <ul id="myTab" class="nav nav-tabs">
             <li class="active"><a href="#home" data-toggle="tab" id="btnTrigger"><span class="clear_brand">1. Personal Information</span></a></li>
@@ -234,6 +237,9 @@
             </div>
         </div>
         <input type="hidden" name="sesskey" value="{$sesskey}" />
+
+        <div id="placeholder_for_errors_2"></div>
+
     </form>
 </div>
 
