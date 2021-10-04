@@ -1416,6 +1416,7 @@ class UserRouteHandler
             });
 
             var userQualifiedPairsCount = parseInt(getSetting("userQualifiedPairsCount"));
+alert("userQualifiedPairsCount: " + userQualifiedPairsCount);
             for (select_count = 0; select_count < userQualifiedPairsCount; select_count++) {
                 Count();
 
@@ -1429,6 +1430,7 @@ class UserRouteHandler
                 fieldWrapper.data("idx", select_count);
                 var fName = $("<div class=\"span6\"> <select name=\"language_code_source_" + select_count + "\" id=\"from" + select_count + "\" class=\"fieldtype\"><option value>--Select a language--</option>'.$source_lang.'</select></div>");
                 var fType = $("<div class=\"span5\"><select name=\"language_code_target_" + select_count + "\" id=\"to" + select_count + "\" class=\"fieldtype\"><option value>--Select a language--</option>'.$target_lang.'</select></div>");
+alert("language_code_source_" + select_count);
 
                 fieldWrapper.append(fName);
                 fieldWrapper.append(fType);
@@ -1457,6 +1459,7 @@ class UserRouteHandler
                     $("#from" + select_count).select2().val(getSetting("userQualifiedPairLanguageCodeSource_" + select_count)).trigger("change");
                     $("#to"   + select_count).select2().val(getSetting("userQualifiedPairLanguageCodeTarget_" + select_count)).trigger("change");
                 }
+if (document.getElementById("language_code_source_0")) alert("getElementById: " + document.getElementById("language_code_source_0").value);
             }
         });
 
