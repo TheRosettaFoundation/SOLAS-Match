@@ -50,8 +50,8 @@ function documentReady()
 
 function loadingComplete()
 {
-  document.getElementById("loading_warning").innerHTML = "";
-  document.getElementById("loading_warning1").innerHTML = "";
+  // document.getElementById("loading_warning").innerHTML = "";
+  // document.getElementById("loading_warning1").innerHTML = "";
 }
 
 function deleteUser()
