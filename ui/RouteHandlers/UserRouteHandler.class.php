@@ -1145,7 +1145,7 @@ class UserRouteHandler
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
                 $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
             } else {
-error_log("POST" . print_r($post, true));
+error_log("POST" . print_r($post, true));//(**)
                 $user->setDisplayName($post['displayName']);
                 $user->setBiography($post['biography']);
 
@@ -1528,8 +1528,8 @@ error_log("POST" . print_r($post, true));
 
         // Build language input fields
         $(document).on("click", "#add", function(e) {
-            Count();
             var select_count = $("#btnclick").text();
+            Count();
 
             if ($("#btnclick").text() == parseInt(getSetting("userQualifiedPairsLimit"))) {
               $("#add").hide();
