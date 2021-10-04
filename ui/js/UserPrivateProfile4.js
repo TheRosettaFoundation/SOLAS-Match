@@ -10,8 +10,6 @@ var user_id;
 // Errors
 var alertError;
 
-var userQualifiedPairsCount = 0;
-
 $(document).ready(documentReady);
 
 
@@ -82,7 +80,7 @@ function validateForm()
 {
   alertError = null;
 
-  if (userQualifiedPairsCount == 0 || document.getElementById("language_code_source_0").value == "" || document.getElementById("language_code_target_0").value == "") {
+  if (document.getElementById("language_code_source_0").value == "" || document.getElementById("language_code_target_0").value == "") {
       alertError = "You must fill out the languages you can translate from and to.";
       set_all_errors_for_submission();
       return false;
