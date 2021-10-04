@@ -1428,8 +1428,8 @@ alert("userQualifiedPairsCount: " + userQualifiedPairsCount);
 
                 var fieldWrapper = $("<div class=\"row-fluid\" id=\"field" + select_count + "\"/>");
                 fieldWrapper.data("idx", select_count);
-                var fName = $("<div class=\"span6\"> <select name=\"language_code_source_" + select_count + "\" id=\"from" + select_count + "\" class=\"fieldtype\"><option value>--Select a language--</option>'.$source_lang.'</select></div>");
-                var fType = $("<div class=\"span5\"><select name=\"language_code_target_" + select_count + "\" id=\"to" + select_count + "\" class=\"fieldtype\"><option value>--Select a language--</option>'.$target_lang.'</select></div>");
+                var fName = $("<div class=\"span6\"><select name=\"language_code_source_" + select_count + "\" id=\"language_code_source_" + select_count + "\" class=\"fieldtype\"><option value>--Select a language--</option>'.$source_lang.'</select></div>");
+                var fType = $("<div class=\"span5\"><select name=\"language_code_target_" + select_count + "\" id=\"language_code_target_" + select_count + "\" class=\"fieldtype\"><option value>--Select a language--</option>'.$target_lang.'</select></div>");
 alert("language_code_source_" + select_count);
 
                 fieldWrapper.append(fName);
@@ -1456,8 +1456,8 @@ alert("language_code_source_" + select_count);
                     placeholder: "--Select a language--",
                 });
                 if (getSetting("userQualifiedPairLanguageCodeSource_" + select_count) != "") {
-                    $("#from" + select_count).select2().val(getSetting("userQualifiedPairLanguageCodeSource_" + select_count)).trigger("change");
-                    $("#to"   + select_count).select2().val(getSetting("userQualifiedPairLanguageCodeTarget_" + select_count)).trigger("change");
+                    $("#language_code_source_" + select_count).select2().val(getSetting("userQualifiedPairLanguageCodeSource_" + select_count)).trigger("change");
+                    $("#language_code_target_" + select_count).select2().val(getSetting("userQualifiedPairLanguageCodeTarget_" + select_count)).trigger("change");
                 }
 if (document.getElementById("language_code_source_0")) alert("getElementById: " + document.getElementById("language_code_source_0").value);
             }
@@ -1545,8 +1545,8 @@ if (document.getElementById("language_code_source_0")) alert("getElementById: " 
     
             var fieldWrapper = $("<div class=\"row-fluid\" id=\"field" + intId + "\"/>");
             fieldWrapper.data("idx", intId);
-            var fName = $("<div class=\"span6\"> <select name=\"language_code_source_" + select_count + "\" id=\"from" + intId + "\" class=\"fieldtype\"><option value>--Select a language--</option>'.$source_lang.'</select></div>");
-            var fType = $("<div class=\"span5\"><select name=\"language_code_target_" + select_count + "\" id=\"to" + intId + "\" class=\"fieldtype\"><option value>--Select a language--</option>'.$target_lang.'</select></div>");
+            var fName = $("<div class=\"span6\"><select name=\"language_code_source_" + select_count + "\" id=\"language_code_source_" + intId + "\" class=\"fieldtype\"><option value>--Select a language--</option>'.$source_lang.'</select></div>");
+            var fType = $("<div class=\"span5\"><select name=\"language_code_target_" + select_count + "\" id=\"language_code_target_" + intId + "\" class=\"fieldtype\"><option value>--Select a language--</option>'.$target_lang.'</select></div>");
             var removeButton = $("<div class=\"span1\" style=\"margin-top: 1.%;margin-left: -18%;\"><input type=\"button\" class=\"remove\" value=\"-\"  /><div>");
    
             removeButton.click(function() {
