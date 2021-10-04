@@ -17,8 +17,6 @@
         {assign var="i" value=$i+1}
     {/foreach}
     <div id="isSiteAdmin">{if $isSiteAdmin}1{else}0{/if}</div>
-    <div id="langPrefSelectCodeSaved">{$langPrefSelectCode}</div>
-    <input type='text' value="{$langPrefSelectCode}" id="langPrefSelect"/>
     <div id="capabilityCount">{$capabilityCount}</div>
     <div id="expertiseCount">{$expertiseCount}</div>
 

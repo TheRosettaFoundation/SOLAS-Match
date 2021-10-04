@@ -1128,10 +1128,6 @@ class UserRouteHandler
         }
 
         $userQualifiedPairs = $userDao->getUserQualifiedPairs($user_id);
-
-        $langPref = $langDao->getLanguage($userPersonalInfo->getLanguagePreference());
-        $langPrefSelectCode = $langPref->getCode();
-
         $url_list           = $userDao->getURLList($user_id);
         $capability_list    = $userDao->getCapabilityList($user_id);
         $expertise_list     = $userDao->getExpertiseList($user_id);
@@ -1593,7 +1589,6 @@ class UserRouteHandler
             'userQualifiedPairs'       => $userQualifiedPairs,
             'userQualifiedPairsLimit'  => $isSiteAdmin ? 120 : max(6, count($userQualifiedPairs)),
             'userQualifiedPairsCount'  => count($userQualifiedPairs),
-            'langPrefSelectCode'       => $langPrefSelectCode,
             'url_list'          => $url_list,
             'capability_list'   => $capability_list,
             'capabilityCount'   => count($capability_list),

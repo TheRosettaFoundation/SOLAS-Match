@@ -88,11 +88,6 @@ function validateForm()
       return false;
   }
 
-  // Check if the user has changed their language preference
-  if (document.getElementById("langPrefSelect").value != getSetting("langPrefSelectCodeSaved")) {
-    window.alert(parameters.getTranslation("user_private_profile_language_preference_updated"));
-  }
-
   for (var i = 0; i < userQualifiedPairsCount; i++) {
     var languageCodeSource = document.getElementById("language_code_source_" + i);
     var languageCodeTarget = document.getElementById("language_code_target_" + i);
