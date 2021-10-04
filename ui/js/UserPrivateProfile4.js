@@ -78,7 +78,6 @@ function deleteUserFail()
 
 function validateForm()
 {
-alert("nativeLanguageSelect: " + document.getElementById("nativeLanguageSelect").value);
   alertError = null;
 
   if (document.getElementById("language_code_source_0").value == "" || document.getElementById("language_code_target_0").value == "") {
