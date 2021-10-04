@@ -118,7 +118,7 @@
                 <div class="row-fluid" >
                     <div class="span6">
                         <label class="clear_brand required"><strong>Native language</strong> <i class="icon-question-sign" id="tool5" data-toggle="tooltip" title="Please choose your native language and the country of your dialect/variant"></i></label>
-                        <select name="nativeLanguageSelect" class="nativeLanguageSelect">
+                        <select name="nativeLanguageSelect" class="nativeLanguageSelect" id="nativeLanguageSelect">
                             <option value=""></option>
                             {foreach $languages as $language}
                                 <option value="{$language->getCode()}" {if $language->getCode() == $nativeLanguageSelectCode}selected="selected"{/if}>{$language->getName()}</option>
