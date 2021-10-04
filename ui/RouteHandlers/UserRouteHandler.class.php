@@ -1416,7 +1416,6 @@ class UserRouteHandler
             });
 
             var userQualifiedPairsCount = parseInt(getSetting("userQualifiedPairsCount"));
-alert("userQualifiedPairsCount: " + userQualifiedPairsCount);
             for (select_count = 0; select_count < userQualifiedPairsCount; select_count++) {
                 Count();
 
@@ -1430,7 +1429,6 @@ alert("userQualifiedPairsCount: " + userQualifiedPairsCount);
                 fieldWrapper.data("idx", select_count);
                 var fName = $("<div class=\"span6\"><select name=\"language_code_source_" + select_count + "\" id=\"language_code_source_" + select_count + "\" class=\"fieldtype\"><option value>--Select a language--</option>'.$source_lang.'</select></div>");
                 var fType = $("<div class=\"span5\"><select name=\"language_code_target_" + select_count + "\" id=\"language_code_target_" + select_count + "\" class=\"fieldtype\"><option value>--Select a language--</option>'.$target_lang.'</select></div>");
-alert("language_code_source_" + select_count);
 
                 fieldWrapper.append(fName);
                 fieldWrapper.append(fType);
@@ -1459,7 +1457,6 @@ alert("language_code_source_" + select_count);
                     $("#language_code_source_" + select_count).select2().val(getSetting("userQualifiedPairLanguageCodeSource_" + select_count)).trigger("change");
                     $("#language_code_target_" + select_count).select2().val(getSetting("userQualifiedPairLanguageCodeTarget_" + select_count)).trigger("change");
                 }
-if (document.getElementById("language_code_source_0")) alert("getElementById: " + document.getElementById("language_code_source_0").value);
             }
         });
 
