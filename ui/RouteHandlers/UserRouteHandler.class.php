@@ -1166,11 +1166,6 @@ class UserRouteHandler
                     $user->setNativeLocale($locale);
                 }
 
-                if (!empty($post['langPrefSelect'])) {
-                    $lang = $langDao->getLanguageByCode($post['langPrefSelect']);
-                    $userPersonalInfo->setLanguagePreference($lang->getId());
-                }
-
                 $userPersonalInfo->setFirstName($post['firstName']);
                 $userPersonalInfo->setLastName($post['lastName']);
                 $userPersonalInfo->setCity($post['city']);
