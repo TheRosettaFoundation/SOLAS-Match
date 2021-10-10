@@ -9761,6 +9761,14 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `insertWillBeDeletedUser`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertWillBeDeletedUser`(IN uID INT)
+BEGIN
+    INSERT INTO WillBeDeletedUsers (user_id, date_warned) VALUES (uID, NOW());
+END//
+DELIMITER ;
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
