@@ -1779,6 +1779,12 @@ CREATE TABLE IF NOT EXISTS `GoogleUserDetails` (
   KEY (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `WillBeDeletedUsers` (
+  user_id     INT(10) UNSIGNED NOT NULL,
+  date_warned DATETIME DEFAULT NULL,
+  KEY user_id (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -9721,6 +9727,39 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `getRecordWarningUsers`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getRecordWarningUsers`()
+BEGIN
+    SELECT
+        u.id,
+        `display-name` AS display_name,
+        email,
+        u.password,
+        biography,
+        (SELECT `en-name`
+            FROM Languages
+            WHERE id=u.language_id) AS languageName,
+        (SELECT code
+            FROM Languages
+            WHERE id=u.language_id) AS languageCode,
+        (SELECT `en-name`
+            FROM Countries
+            WHERE id=u.country_id)  AS countryName,
+        (SELECT code
+            FROM Countries
+            WHERE id=u.country_id)  AS countryCode,
+        nonce,
+        `created-time` AS created_time
+    FROM      Users                u
+    LEFT JOIN TermsAcceptedUsers  ta ON u.id=ta.user_id
+    LEFT JOIN WillBeDeletedUsers wdu ON u.id=wdu.user_id
+    WHERE
+        (ta.user_id IS NULL OR ta.accepted_level!=3) AND
+        u.`created-time`<(NOW() - INTERVAL 12 HOUR) AND
+        wdu.id IS NULL;
+END//
+DELIMITER ;
 
 /*---------------------------------------end of procs----------------------------------------------*/
 
