@@ -1293,6 +1293,7 @@ error_log("POST" . print_r($post, true));//(**)
                     else                                         $userDao->insert_communications_consent($user_id, 0);
 
                     $userDao->update_terms_accepted($user_id, 3);
+                    $userDao->NotifyRegistered($user_id);
 
                     $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user_id)));
                 } catch (\Exception $e) {
@@ -1655,6 +1656,7 @@ error_log("POST" . print_r($post, true));//(**)
                     else                                         $userDao->insert_communications_consent($user_id, 0);
 
                     $userDao->update_terms_accepted($user_id, 3);
+                    $userDao->NotifyRegistered($user_id);
 
                     $app->redirect($app->urlFor('org-dashboard'));
                 } catch (\Exception $e) {

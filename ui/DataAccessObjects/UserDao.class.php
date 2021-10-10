@@ -391,6 +391,12 @@ class UserDao extends BaseDao
         return $ret;
     }
 
+    public function NotifyRegistered($userId)
+    {
+        $request = "{$this->siteApi}v0/users/NotifyRegistered/$userId";
+        $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
+    }
+
     public function assignBadge($email, $badgeId)
     {
         $ret = null;

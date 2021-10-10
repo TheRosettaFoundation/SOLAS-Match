@@ -396,6 +396,12 @@ class Users
                     '\SolasMatch\API\V0\Users::assignBadge'
                 );
 
+                $app->put(
+                    '/NotifyRegistered/:userId/',
+                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
+                    '\SolasMatch\API\V0\Users::NotifyRegistered'
+                );
+
                 $app->get(
                     '/getClaimedTasksCount/:userId/',
                     '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
@@ -534,6 +540,11 @@ class Users
             $badgeId = $badgeId[0];
         }
         API\Dispatcher::sendResponse(null, DAO\BadgeDao::assignBadge($userId, $badgeId), null, $format);
+    }
+
+    public static function NotifyRegistered($userId, $format = '.json')
+    {
+        API\Dispatcher::sendResponse(null, DAO\BadgeDao::NotifyRegistered($userId), null, $format);
     }
 
     public static function getUserTags($userId, $format = ".json")
