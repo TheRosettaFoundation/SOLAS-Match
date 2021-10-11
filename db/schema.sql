@@ -9756,8 +9756,9 @@ BEGIN
     LEFT JOIN WillBeDeletedUsers wdu ON u.id=wdu.user_id
     WHERE
         (ta.user_id IS NULL OR ta.accepted_level!=3) AND
+        u.`created-time`>'2021-10-01 01:00:00' AND
         u.`created-time`<(NOW() - INTERVAL 12 HOUR) AND
-        wdu.id IS NULL;
+        wdu.user_id IS NULL;
 END//
 DELIMITER ;
 
