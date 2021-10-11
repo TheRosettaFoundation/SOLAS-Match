@@ -544,7 +544,11 @@ class Users
 
     public static function NotifyRegistered($userId, $format = '.json')
     {
-error_log("NotifyRegistered($userId, $format)");//(**)
+        if (!is_numeric($userId) && strstr($userId, '.')) {
+            $userId = explode('.', $userId);
+            $format = '.' . $userId[1];
+            $userId = $userId[0];
+        }
         API\Dispatcher::sendResponse(null, DAO\BadgeDao::NotifyRegistered($userId), null, $format);
     }
 
