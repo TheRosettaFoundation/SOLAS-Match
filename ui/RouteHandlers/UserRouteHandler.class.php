@@ -6,12 +6,12 @@ use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
 use \SolasMatch\Common as Common;
 
-require_once __DIR__."/../DataAccessObjects/UserDao.class.php";
-require_once __DIR__."/../../Common/protobufs/models/Register.php";
-require_once __DIR__."/../../Common/protobufs/models/Login.php";
-require_once __DIR__."/../../Common/protobufs/models/PasswordResetRequest.php";
-require_once __DIR__."/../../Common/protobufs/models/PasswordReset.php";
-require_once __DIR__."/../../Common/protobufs/models/Locale.php";
+require_once __DIR__ . "/../DataAccessObjects/UserDao.class.php";
+require_once __DIR__ . "/../../Common/protobufs/models/Register.php";
+require_once __DIR__ . "/../../Common/protobufs/models/Login.php";
+require_once __DIR__ . "/../../Common/protobufs/models/PasswordResetRequest.php";
+require_once __DIR__ . "/../../Common/protobufs/models/PasswordReset.php";
+require_once __DIR__ . "/../../Common/protobufs/models/Locale.php";
 
 class UserRouteHandler
 {
@@ -59,12 +59,12 @@ class UserRouteHandler
             "/password/reset/",
             array($this, "passResetRequest")
         )->via("POST")->name("password-reset-request");
-        
+
         $app->get(
             "/logout/",
             array($this, "logout")
         )->name("logout");
-        
+
         $app->get(
             "/login/",
             array($this, "login")
@@ -163,7 +163,7 @@ class UserRouteHandler
             array($middleware, "authUserIsLoggedIn"),
             array($this, "editTaskStreamNotification")
         )->via("POST")->name("stream-notification-edit");
-  
+
         $app->get(
             "/user/task/:task_id/reviews/",
             array($middleware, "authenticateUserForTask"),
@@ -180,7 +180,7 @@ class UserRouteHandler
             array($this, 'no_application_error')
         )->name('no_application_error');
     }
-    
+
     public function home($currentScrollPage = 1, $selectedTaskType = 0, $selectedSourceLanguageCode = 0, $selectedTargetLanguageCode = 0)
     {
         $app = \Slim\Slim::getInstance();
@@ -287,8 +287,7 @@ class UserRouteHandler
                 $strict = false;
                 $topTasks      = $userDao->getUserTopTasks($user_id, $strict, $itemsPerScrollPage, $filter, $offset);
                 $topTasksCount = $userDao->getUserTopTasksCount($user_id, $strict, $filter);
-            }
-            else {
+            } else {
                 $topTasks      = $taskDao->getTopTasks($itemsPerScrollPage, $offset);
                 $topTasksCount = $taskDao->getTopTasksCount();
             }
@@ -334,7 +333,7 @@ class UserRouteHandler
                 $projectName = $project->getTitle();
                 $orgUri = "{$siteLocation}org/{$org_id}/profile";
                 $orgName = $org->getName();
-                $projectAndOrgs[$taskId]=sprintf(
+                $projectAndOrgs[$taskId] = sprintf(
                     Lib\Localisation::getTranslation('common_part_of_for'),
                     $projectUri,
                     htmlspecialchars($projectName, ENT_COMPAT, 'UTF-8'),
@@ -457,7 +456,7 @@ class UserRouteHandler
                         equalTo: "#email"
                     },
                     age_consent: "required",
-                    conduct_consent: "required"
+                    conduct_consent: "required",
                 },
                 messages: {
                     first_name: "Please enter your First name",
@@ -484,11 +483,11 @@ class UserRouteHandler
         });
         </script>';
         $app->view()->appendData(array('extra_scripts' => $extra_scripts));
-        
+
         $error = null;
         if (\SolasMatch\UI\isValidPost($app)) {
             $post = $app->request()->post();
-            $temp = md5($post['email'].substr(Common\Lib\Settings::get("session.site_key"), 0, 20));
+            $temp = md5($post['email'] . substr(Common\Lib\Settings::get("session.site_key"), 0, 20));
             Common\Lib\UserSession::clearCurrentUserID();
             if (!Lib\Validator::validateEmail($post['email'])) {
                 $error = Lib\Localisation::getTranslation('register_1');
@@ -501,14 +500,12 @@ class UserRouteHandler
                     $error = "User is not verified";
                     // notify user that they are not yet verified an resent verification email
                 }
-            }
-            elseif (empty($post['first_name'])) {
+            } elseif (empty($post['first_name'])) {
                 $error = 'You did not enter First name';
-            }
-            elseif (empty($post['last_name'])) {
+            } elseif (empty($post['last_name'])) {
                 $error = 'You did not enter Last name';
             }
-            
+
             if (is_null($error)) {
                 array_key_exists('newsletter_consent', $post) ? $communications_consent = 1 : $communications_consent = 0;
                 if ($userDao->register($post['email'], $post['password'], $post['first_name'], $post['last_name'], $communications_consent)) {
@@ -603,13 +600,13 @@ class UserRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
-        
+
         $reset_request = $userDao->getPasswordResetRequest($uid);
         if (!is_object($reset_request)) {
             $app->flash("error", Lib\Localisation::getTranslation('password_reset_1'));
             $app->redirect($app->urlFor("home"));
         }
-        
+
         $user_id = $reset_request->getUserId();
         $app->view()->setData("uid", $uid);
         if ($app->request()->isPost()) {
@@ -640,7 +637,7 @@ class UserRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
-        
+
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
             if (isset($post['password_reset'])) {
@@ -681,7 +678,7 @@ class UserRouteHandler
         }
         $app->render("user/user.reset-password.tpl");
     }
-    
+
     public function logout()
     {
         $app = \Slim\Slim::getInstance();
@@ -694,14 +691,14 @@ class UserRouteHandler
         $app = \Slim\Slim::getInstance();
         $userDao = new DAO\UserDao();
         $langDao = new DAO\LanguageDao();
-        
+
         $error = null;
-        $openid = new \LightOpenID("https://".$_SERVER["HTTP_HOST"].$app->urlFor("home"));
+        $openid = new \LightOpenID("https://" . $_SERVER["HTTP_HOST"] . $app->urlFor("home"));
         $use_openid = Common\Lib\Settings::get("site.openid");
         $use_google_plus = Common\Lib\Settings::get("googlePlus.enabled");
         $app->view()->setData("openid", $use_openid);
         $app->view()->setData("gplus", $use_google_plus);
-        
+
         if ($app->request()->isPost() || $openid->mode) {
             $post = $app->request()->post();
 
@@ -748,16 +745,16 @@ class UserRouteHandler
                     if ($request) {
                         $app->redirect($request);
                     } else {
-                      if ($userDao->is_admin_or_org_member($user->getId())) {
-                          $app->redirect($app->urlFor('home'));
-                      } else {
-                        $nativeLocale = $user->getNativeLocale();
-                        if ($nativeLocale && $nativeLocale->getLanguageCode()) {
-                            $app->redirect($app->urlFor("home"));
+                        if ($userDao->is_admin_or_org_member($user->getId())) {
+                            $app->redirect($app->urlFor('home'));
                         } else {
-                            $app->redirect($app->urlFor('user-private-profile', array('user_id' => $user->getId())));
+                            $nativeLocale = $user->getNativeLocale();
+                            if ($nativeLocale && $nativeLocale->getLanguageCode()) {
+                                $app->redirect($app->urlFor("home"));
+                            } else {
+                                $app->redirect($app->urlFor('user-private-profile', array('user_id' => $user->getId())));
+                            }
                         }
-                      }
                     }
                 }
             } elseif (isset($post['password_reset'])) {
@@ -841,32 +838,32 @@ class UserRouteHandler
                 }
 
                 $userDao->setRequiredProfileCompletedinSESSION($user->getId());
-                
+
                 if ($request) {
                     $app->redirect($request);
                 } else {
-                  if ($userDao->is_admin_or_org_member($user->getId())) {
-                      $app->redirect($app->urlFor('home'));
-                  } else {
-                    $nativeLocale = $user->getNativeLocale();
-                    if ($nativeLocale && $nativeLocale->getLanguageCode()) {
-                        $app->redirect($app->urlFor("home"));
+                    if ($userDao->is_admin_or_org_member($user->getId())) {
+                        $app->redirect($app->urlFor('home'));
                     } else {
-                        if ($userDao->terms_accepted($user->getId()) == 1) {
-                            // Since they are logged in (via Google)...
-                            $app->redirect($app->urlFor('googleregister', array('user_id' => $user->getId())));
+                        $nativeLocale = $user->getNativeLocale();
+                        if ($nativeLocale && $nativeLocale->getLanguageCode()) {
+                            $app->redirect($app->urlFor("home"));
+                        } else {
+                            if ($userDao->terms_accepted($user->getId()) == 1) {
+                                // Since they are logged in (via Google)...
+                                $app->redirect($app->urlFor('googleregister', array('user_id' => $user->getId())));
+                            }
+                            $app->redirect($app->urlFor('user-private-profile', array('user_id' => $user->getId())));
                         }
-                        $app->redirect($app->urlFor('user-private-profile', array('user_id' => $user->getId())));
                     }
-                  }
                 }
             }
-            
+
             $return_to_SAML_url = $app->request()->get('ReturnTo');
             if (!empty($return_to_SAML_url)) {
                 $_SESSION['return_to_SAML_url'] = $return_to_SAML_url;
             }
-            
+
             $error = $app->request()->get('error');
             if (!is_null($error)) {
                 $app->flashNow('error', $app->request()->get('error_message'));
@@ -884,12 +881,12 @@ class UserRouteHandler
                 $appendExtraScripts = True;
             }
         }
-        
+
         if (isset($use_google_plus) && ($use_google_plus == 'y')) {
-            $extra_scripts = $extra_scripts.self::createGooglePlusJavaScript();
+            $extra_scripts = $extra_scripts . self::createGooglePlusJavaScript();
             $appendExtraScripts = True;
         }
-        
+
         if ($appendExtraScripts) {
             $app->view()->appendData(array("extra_scripts" => $extra_scripts));
         }
@@ -993,7 +990,7 @@ class UserRouteHandler
     {
         return '<script src="https://accounts.google.com/gsi/client" async defer></script>';
     }
-    
+
     public function openIdLogin($openid, $app)
     {
         if (!$openid->mode) {
@@ -1078,7 +1075,7 @@ class UserRouteHandler
     public static function userPrivateProfile($user_id)
     {
         $app = \Slim\Slim::getInstance();
-        
+
         $userDao = new DAO\UserDao();
         $adminDao = new DAO\AdminDao();
         $langDao = new DAO\LanguageDao();
@@ -1096,7 +1093,7 @@ class UserRouteHandler
         $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
 
         $user = $userDao->getUser($user_id);
-        Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER.$user_id);
+        Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER . $user_id);
 
         if (!is_object($user)) {
             $app->flash("error", Lib\Localisation::getTranslation('common_login_required_to_access_page'));
@@ -1121,8 +1118,7 @@ class UserRouteHandler
         if ($nativeLocale) {
             $nativeLanguageSelectCode = $nativeLocale->getLanguageCode();
             $nativeCountrySelectCode = $nativeLocale->getCountryCode();
-        }
-        else {
+        } else {
             $nativeLanguageSelectCode = '999999999';
             $nativeCountrySelectCode = '999999999';
         }
@@ -1325,6 +1321,15 @@ error_log("POST" . print_r($post, true));//(**)
             $source_lang .= "<option value=$key>$language</option>";
             $target_lang .= "<option value=$key>$language</option>";
         }
+        $qualification_levels = [
+            1 => 'Kató Translator',
+            2 => 'Kató Verified Translator',
+            3 => 'Kató Senior Translator'
+        ];
+        $qualification_level = '';
+        foreach ($qualification_levels as $key => $qualification) {
+            $qualification_level .= "<option value=$key>$qualification</option>";
+        }
 
         $extra_scripts  = '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script> ';
         $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script> ';
@@ -1343,7 +1348,10 @@ error_log("POST" . print_r($post, true));//(**)
                 $("#communications_consent").attr("checked", false);
             }
 
-            $("#userprofile").validate({
+            //Admin
+            var admin = "'.$isSiteAdmin.'";
+
+            var validator = $("#userprofile").validate({
                 rules: {
                     firstName: "required",
                     lastName: "required",
@@ -1351,18 +1359,153 @@ error_log("POST" . print_r($post, true));//(**)
                     displayName: {
                         required: true,
                         minlength: 2
+                    },
+                    nativeLanguageSelect: "required",
+                    nativeCountrySelect: "required",
+                    groups: {
+                        capabilities: "badge_id_6 badge_id_7 badge_id_8 badge_id_10 badge_id_11 badge_id_12 badge_id_13",
+                        expertise: "Accounting Legal Technical IT Literary Medical Science Health Nutrition Telecommunications Education Protection Migration CCCM Shelter WASH Logistics Equality Gender Peace Environment"
                     }
                 },
                 messages: {
                     firstName: "Please enter your First name",
                     lastName: "Please enter your Last name",
                     nativeLanguageSelect: "Please select your Native language",
+                    nativeCountrySelect:"Please select your variant",
                     displayName: {
                         required: "Please enter a username",
                         minlength: "Your username must consist of at least 2 characters"
                     },
                 }
             });
+
+            $.validator.addMethod("checkone", function() {
+                if ($(".capabilities").is(":checked")) {
+                    return true;
+                }
+                return false;
+            }, "Please check at least of one");
+
+            $("[name^=badge_id_]").each(function() {
+                $(this).rules("add", {
+                    checkone: true
+                });
+            });
+
+            $.validator.addMethod("expertise_check", function() {
+                if ($(".expertise").is(":checked")) {
+                    return true;
+                }
+                return false;
+            }, "Please check at least of one");
+
+            $(".expertise").each(function() {
+                $(this).rules("add", {
+                    expertise_check: true
+                });
+            });
+
+            $(".nexttab").click(function() {
+                //var selected = $("#tabs").tabs("option", "selected");
+                //$("#tabs").tabs("option", "selected", selected + 1);
+                var valid = true;
+                var i = 0;
+                var $inputs = $(this).closest("div").find("input");
+                var $select = $(this).closest("div").find("select");
+
+                $inputs.each(function() {
+                    if (!validator.element(this) && valid) {
+                        valid = false;
+                    }
+                });
+
+                $select.each(function() {
+                    if (!validator.element(this) && valid) {
+                        valid = false;
+                    }
+                });
+
+                if (valid) {
+                    // $(".tabcounter").text("2/3");
+                    // jQuery("#myTab li:eq(1) a").tab("show");
+                    console.log($(this).attr("href"));
+
+                    if ($(this).attr("href") == "#profile1") {
+                        $(".tabcounter").text("2/3");
+                        jQuery("#myTab li:eq(1) a").tab("show");
+                        //Hide/Show delete a/c btn
+                        localStorage.setItem("selected_native_lang", $("#nativeLanguageSelect").val());
+                    } else if ($(this).attr("href") == "#verifications") {
+                        $(".tabcounter").text("3/3");
+                        jQuery("#myTab li:eq(2) a").tab("show");
+                    }
+                }
+                else {
+                    //alert("Form has errors");
+
+                    if ($(this).attr("href") == "#profile") {
+                        $(".tabcounter").text("1/3");
+                        jQuery("#myTab li:eq(0) a").tab("show");
+                        //$("#myTab li#prof").addClass("not-active");
+                    }  else if ($(this).attr("href") == "#verifications") {
+                        $(".tabcounter").text("2/3");
+                        jQuery("#myTab li:eq(1) a").tab("show");
+                    }
+                }
+            });
+
+console.log(typeof admin);
+            $(".nexttab1").click(function() {
+                console.log($("#userprofile").validate().settings.rules);
+                //var selected = $("#tabs").tabs("option", "selected");
+                //$("#tabs").tabs("option", "selected", selected + 1);
+                var valid = true;
+                var i = 0;
+                var $inputs = $(this).closest("div").find("input");
+                var $select = $(this).closest("div").find("select");
+
+                /*
+                $inputs.each(function() {
+                    if (!validator.element(this) && valid) {
+                        valid = false;
+                    }
+                });
+                */
+
+                $select.each(function() {
+                    console.log(validator.element(this));
+                    if (!validator.element(this) && valid) {
+                        valid = false;
+                    }
+                });
+
+                if (valid) {
+                    // $(".tabcounter").text("2/3");
+                    // jQuery("#myTab li:eq(1) a").tab("show");
+                    console.log("valid " + $(this).attr("href"));
+
+                  if ($(this).attr("href") == "#verifications") {
+                        $(".tabcounter").text("3/3");
+                        jQuery("#myTab li:eq(2) a").tab("show");
+
+                        if(localStorage.getItem("selected_native_lang") != null) {
+                            $("#deleteBtn").show();
+                        } else {
+                            $("#deleteBtn").hide();
+                        }
+                        console.log(localStorage.getItem("selected_native_lang"));
+                    }
+                }
+                else {
+                    //alert("Form has errors");
+                    console.log("Invalid "+ $(this).attr("href"));
+                if ($(this).attr("href") == "#verifications") {
+                        $(".tabcounter").text("2/3");
+                        jQuery("#myTab li:eq(1) a").tab("show");
+                    }
+                }
+            });
+
             $("#tool").tooltip();
             $("#tool1").tooltip();
             $("#tool2").tooltip();
@@ -1429,17 +1572,22 @@ error_log("POST" . print_r($post, true));//(**)
 
                 var fieldWrapper = $("<div class=\"row-fluid\" id=\"field" + select_count + "\"/>");
                 fieldWrapper.data("idx", select_count);
-                var fName = $("<div class=\"span6\"><select name=\"language_code_source_" + select_count + "\" id=\"language_code_source_" + select_count + "\" class=\"fieldtype\"><option value>--Select a language--</option>'.$source_lang.'</select></div>");
-                var fType = $("<div class=\"span5\"><select name=\"language_code_target_" + select_count + "\" id=\"language_code_target_" + select_count + "\" class=\"fieldtype\"><option value>--Select a language--</option>'.$target_lang.'</select></div>");
+                var fName = $("<div class=\"span5\"><select name=\"language_code_source_" + select_count + "\" id=\"language_code_source_" + select_count + "\" class=\"fieldtype\"><option value>--Select a language--</option>' . $source_lang . '</select></div>");
+                var fType = $("<div class=\"span4\"><select name=\"language_code_target_" + select_count + "\" id=\"language_code_target_" + select_count + "\" class=\"fieldtype\"><option value>--Select a language--</option>' . $target_lang . '</select></div>");
+                var fTypee = $("<div class=\"span2\"><select name=\"qualification_level_" + select_count + "\" id=\"qualification_level_" + select_count + "\" style=\"width: 75%\" class=\"fieldtype1\"><option value>--Select--</option>' . $qualification_level . '</select></div>");
 
                 fieldWrapper.append(fName);
                 fieldWrapper.append(fType);
 
+                if (admin == "1") {
+                fieldWrapper.append(fTypee);
+                }
+
                 if (select_count == 0) {
-                    var addButton = $("<div class=\"span1\" style=\"margin-top: 1.6%;margin-left: -18%;\"><input type=\"button\" class=\"add\" id=\"add\" value=\"+\" /><div>");
+                    var addButton = $("<div class=\"span1\" style=\"\"><input type=\"button\" class=\"add\" id=\"add\" value=\"+\" /><div>");
                     fieldWrapper.append(addButton);
                 } else {
-                    var removeButton = $("<div class=\"span1\" style=\"margin-top: 1.%;margin-left: -18%;\"><input type=\"button\" class=\"remove\" value=\"-\"  /><div>");
+                    var removeButton = $("<div class=\"span1\" style=\"\"><input type=\"button\" class=\"remove\" value=\"-\"  /><div>");
                     removeButton.click(function() {
                         Count1();
                         if ($("#btnclick").text() <= parseInt(getSetting("userQualifiedPairsLimit"))) {
@@ -1469,24 +1617,42 @@ error_log("POST" . print_r($post, true));//(**)
                 jQuery("#myTab li:eq(0) a").tab("show");
             }
             else if ($(this).attr("href") == "#profile") {
-                $(".tabcounter").text("2/3");
-                jQuery("#myTab li:eq(1) a").tab("show");
+               // $(".tabcounter").text("2/3");
+               // jQuery("#myTab li:eq(1) a").tab("show");
             }  else if ($(this).attr("href") == "#verifications") {
                 $(".tabcounter").text("3/3");
                 jQuery("#myTab li:eq(2) a").tab("show");
             }
         });
 
-        $(document).on("click", "#btnTrigger1", function(e) {
+        $(document).on("click", "#btnTrigger1999", function(e) {
             e.preventDefault();
             if ($(this).attr("href") == "#home") {
                 $(".tabcounter").text("1/3");
                 jQuery("#myTab li:eq(0) a").tab("show");
             }
             else if ($(this).attr("href") == "#profile1") {
-                $(".tabcounter").text("2/3");
-                jQuery("#myTab li:eq(1) a").tab("show");
-            } else if($(this).attr("href") == "#verifications") {
+               // $(".tabcounter").text("2/3");
+                //jQuery("#myTab li:eq(1) a").tab("show");
+                var valid = true;
+                var i = 0;
+                var $inputs = $(this).closest("div").find("input");
+
+                $inputs.each(function() {
+                    if (!validator.element(this) && valid) {
+                        valid = false;
+                    }
+                });
+
+                if (valid) {
+                  $(".tabcounter").text("2/3");
+                  jQuery("#myTab li:eq(1) a").tab("show");
+                } else {
+                  $(".tabcounter").text("1/3");
+                  jQuery("#myTab li:eq(0) a").tab("show");
+                  console.log("Err 2");
+                }
+            } else if ($(this).attr("href") == "#verifications") {
                 $(".tabcounter").text("3/3");
                 jQuery("#myTab li:eq(2) a").tab("show");
             }
@@ -1544,10 +1710,12 @@ error_log("POST" . print_r($post, true));//(**)
     
             var fieldWrapper = $("<div class=\"row-fluid\" id=\"field" + intId + "\"/>");
             fieldWrapper.data("idx", intId);
-            var fName = $("<div class=\"span6\"><select name=\"language_code_source_" + select_count + "\" id=\"language_code_source_" + intId + "\" class=\"fieldtype\"><option value>--Select a language--</option>'.$source_lang.'</select></div>");
-            var fType = $("<div class=\"span5\"><select name=\"language_code_target_" + select_count + "\" id=\"language_code_target_" + intId + "\" class=\"fieldtype\"><option value>--Select a language--</option>'.$target_lang.'</select></div>");
-            var removeButton = $("<div class=\"span1\" style=\"margin-top: 1.%;margin-left: -18%;\"><input type=\"button\" class=\"remove\" value=\"-\"  /><div>");
-   
+
+            var fName = $("<div class=\"span5\"><select name=\"language_code_source_" + select_count + "\" id=\"language_code_source_" + select_count + "\" class=\"fieldtype\" required=\"required\"><option value>--Select a language--</option>' . $source_lang . '</select></div>");
+            var fType = $("<div class=\"span4\"><select name=\"language_code_target_" + select_count + "\" id=\"language_code_target_" + select_count + "\" class=\"fieldtype\" required=\"required\"><option value>--Select a language--</option>' . $target_lang . '</select></div>");
+            var fTypee = $("<div class=\"span2\"><select name=\"qualification_level_" + select_count + "\" id=\"qualification_level_" + select_count + "\" style=\"width: 75%\" class=\"fieldtype1\"><option value>--Select--</option>' . $qualification_level . '</select></div>");
+            var removeButton = $("<div class=\"span1\" style=\"\"><input type=\"button\" class=\"remove\" value=\"-\"  /><div>");
+
             removeButton.click(function() {
                 Count1();
                 if ($("#btnclick").text() <= parseInt(getSetting("userQualifiedPairsLimit"))) {
@@ -1562,11 +1730,22 @@ error_log("POST" . print_r($post, true));//(**)
   
             fieldWrapper.append(fName);
             fieldWrapper.append(fType);
+
+            if (admin == "1") {
+                fieldWrapper.append(fTypee);
+            }
             fieldWrapper.append(removeButton);
+            $("#language_code_source_"+ select_count).rules("add", { required: true });
+            $("#language_code_source_"+ select_count).rules("add", { required: true });
 
             $("#buildyourform").append(fieldWrapper);
             $(".fieldtype").select2({
                 placeholder: "--Select a language--",
+            });
+
+            $(".fieldtype1").select2({
+                placeholder: "--Select--",
+                width: "resolve"
             });
         });
         </script>';
@@ -1599,7 +1778,7 @@ error_log("POST" . print_r($post, true));//(**)
             'extra_scripts' => $extra_scripts,
             'sesskey'       => $sesskey,
         ));
-       
+
         $app->render('user/user-private-profile.tpl');
     }
 
@@ -1620,7 +1799,7 @@ error_log("POST" . print_r($post, true));//(**)
         $sesskey = $_SESSION['SESSION_CSRF_KEY']; // This is a check against CSRF (Posts should come back with same sesskey)
 
         $user = $userDao->getUser($user_id);
-        Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER.$user_id);
+        Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER . $user_id);
 
         if (!is_object($user)) {
             $app->flash("error", Lib\Localisation::getTranslation('common_login_required_to_access_page'));
@@ -1799,15 +1978,15 @@ error_log("POST" . print_r($post, true));//(**)
         $data = "\xEF\xBB\xBF" . '"Name","Created","Native Language","Language Pairs","Biography","Certificates","Email"' . "\n";
 
         foreach ($all_users as $user_row) {
-          if ($all || empty($user_row['reviewed_text'])) {
-            $data .= '"' . str_replace('"', '""', $user_row['name']) . '","' .
-                $user_row['created_time'] . '","' .
-                str_replace('"', '""', $user_row['native_language']) . '","' .
-                $user_row['language_pairs'] . '","' .
-                str_replace(array('\r\n', '\n', '\r'), "\n", str_replace('"', '""', $user_row['bio'])) . '","' .
-                $user_row['certificates'] . '","' .
-                $user_row['email'] . '"' . "\n";
-          }
+            if ($all || empty($user_row['reviewed_text'])) {
+                $data .= '"' . str_replace('"', '""', $user_row['name']) . '","' .
+                    $user_row['created_time'] . '","' .
+                    str_replace('"', '""', $user_row['native_language']) . '","' .
+                    $user_row['language_pairs'] . '","' .
+                    str_replace(array('\r\n', '\n', '\r'), "\n", str_replace('"', '""', $user_row['bio'])) . '","' .
+                    $user_row['certificates'] . '","' .
+                    $user_row['email'] . '"' . "\n";
+            }
         }
 
         header('Content-type: text/csv');
@@ -1886,14 +2065,15 @@ error_log("POST" . print_r($post, true));//(**)
      * @param int $length The length of the string to be created.
      * @return string
      */
-    private static function random_string($length=15) {
+    private static function random_string($length = 15)
+    {
         $pool  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $pool .= 'abcdefghijklmnopqrstuvwxyz';
         $pool .= '0123456789';
         $poollen = strlen($pool);
         $string = '';
         for ($i = 0; $i < $length; $i++) {
-            $string .= substr($pool, (mt_rand()%($poollen)), 1);
+            $string .= substr($pool, (mt_rand() % ($poollen)), 1);
         }
         return $string;
     }
@@ -1926,7 +2106,7 @@ error_log("POST" . print_r($post, true));//(**)
 
         $user = null;
         try {
-            Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER.$user_id);
+            Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER . $user_id);
             $user = $userDao->getUser($user_id);
         } catch (Common\Exceptions\SolasMatchException $e) {
             $app->flash('error', Lib\Localisation::getTranslation('common_login_required_to_access_page'));
@@ -1949,12 +2129,12 @@ error_log("POST" . print_r($post, true));//(**)
         if ($app->request()->isPost()) {
             $post = $app->request()->post();
             Common\Lib\UserSession::checkCSRFKey($post, 'userPublicProfile');
-            
+
             if (isset($post['revokeBadge']) && isset($post['badge_id']) && $post['badge_id'] != "") {
                 $badge_id = $post['badge_id'];
                 $userDao->removeUserBadge($user_id, $badge_id);
             }
-                
+
             if (isset($post['revoke'])) {
                 $org_id = $post['org_id'];
                 $userDao->leaveOrganisation($user_id, $org_id);
@@ -2105,18 +2285,18 @@ error_log("POST" . print_r($post, true));//(**)
                             curl_setopt($re, CURLOPT_RETURNTRANSFER, true);
                             curl_exec($re);
                             if ($error_number = curl_errno($re)) {
-                              error_log("Asana 4 API error ($error_number): " . curl_error($re));
+                                error_log("Asana 4 API error ($error_number): " . curl_error($re));
                             }
                             curl_close($re);
 
                             $app->flashNow('success', '<a href="' . $app->urlFor('task-view', ['task_id' => $translation_task_id]) .
-                            '">This is your Translation Test</a>, which you <strong>must</strong> translate using Kató TM. You will find the <strong>Translate using Kató TM</strong> button under the Translation Test task in your <strong>Claimed Tasks</strong> section, which you can find in the upper menu. You will need to refresh that page after a few minutes in order to see the task and button. Please check your email inbox in a few minutes for instructions on completing the test');
+                                '">This is your Translation Test</a>, which you <strong>must</strong> translate using Kató TM. You will find the <strong>Translate using Kató TM</strong> button under the Translation Test task in your <strong>Claimed Tasks</strong> section, which you can find in the upper menu. You will need to refresh that page after a few minutes in order to see the task and button. Please check your email inbox in a few minutes for instructions on completing the test');
                         }
                     }
                 }
             }
         }
-                    
+
         $archivedJobs = $userDao->getUserArchivedTasks($user_id, 0, 10);
         $user_tags = $userDao->getUserTags($user_id);
         $user_orgs = $userDao->getUserOrgs($user_id);
@@ -2134,25 +2314,24 @@ error_log("POST" . print_r($post, true));//(**)
                 }
             }
         }
-       
+
         $org_creation = Common\Lib\Settings::get("site.organisation_creation");
-            
+
         $extra_scripts = "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}";
         $extra_scripts .= "resources/bootstrap/js/confirm-remove-badge.js\"></script>";
-        $extra_scripts .= file_get_contents(__DIR__."/../js/profile.js");
-        
+        $extra_scripts .= file_get_contents(__DIR__ . "/../js/profile.js");
+
         $numTaskTypes = Common\Lib\Settings::get("ui.task_types");
         $taskTypeColours = array();
 
-        for ($i=1; $i <= $numTaskTypes; $i++) {
+        for ($i = 1; $i <= $numTaskTypes; $i++) {
             $taskTypeColours[$i] = Common\Lib\Settings::get("ui.task_{$i}_colour");
         }
 
         if (isset($userPersonalInfo)) {
             $langPref = $langDao->getLanguage($userPersonalInfo->getLanguagePreference());
             $langPrefName = $langPref->getName();
-        }
-        else {
+        } else {
             $langPrefName = '';
         }
 
@@ -2189,7 +2368,7 @@ error_log("POST" . print_r($post, true));//(**)
                         $interval = Lib\Localisation::getTranslation('user_task_stream_notification_edit_weekly');
                         break;
                     case Common\Enums\NotificationIntervalEnum::MONTHLY:
-                        $interval = Lib\Localisation::getTranslation('user_task_stream_notification_edit_monthly'); 
+                        $interval = Lib\Localisation::getTranslation('user_task_stream_notification_edit_monthly');
                         break;
                 }
 
@@ -2309,11 +2488,7 @@ error_log("POST" . print_r($post, true));//(**)
                     $notifData = new Common\Protobufs\Models\UserTaskStreamNotification();
                     $notifData->setUserId($userId);
                     $notifData->setInterval($post['interval']);
-                    //if (isset($post['strictMode']) && $post['strictMode'] == 'enabled') {
-                        $notifData->setStrict(true);
-                    //} else {
-                    //    $notifData->setStrict(false);
-                    //}
+                    $notifData->setStrict(true);
                     $success = $userDao->requestTaskStreamNotification($notifData);
                 }
 
@@ -2371,7 +2546,7 @@ error_log("POST" . print_r($post, true));//(**)
 
         $extra_scripts = "";
         $extra_scripts .= "<link rel=\"stylesheet\" href=\"{$app->urlFor("home")}ui/js/RateIt/src/rateit.css\"/>";
-        $extra_scripts .= "<script>".file_get_contents(__DIR__."/../js/RateIt/src/jquery.rateit.min.js")."</script>";
+        $extra_scripts .= "<script>" . file_get_contents(__DIR__ . "/../js/RateIt/src/jquery.rateit.min.js") . "</script>";
 
         $app->view()->appendData(array(
             'task'          => $task,
@@ -2397,4 +2572,4 @@ error_log("POST" . print_r($post, true));//(**)
 
 $route_handler = new UserRouteHandler();
 $route_handler->init();
-unset ($route_handler);
+unset($route_handler);
