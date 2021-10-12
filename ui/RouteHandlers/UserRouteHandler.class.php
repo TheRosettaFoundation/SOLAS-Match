@@ -1606,6 +1606,7 @@ console.log(typeof admin);
                 if (getSetting("userQualifiedPairLanguageCodeSource_" + select_count) != "") {
                     $("#language_code_source_" + select_count).select2().val(getSetting("userQualifiedPairLanguageCodeSource_" + select_count)).trigger("change");
                     $("#language_code_target_" + select_count).select2().val(getSetting("userQualifiedPairLanguageCodeTarget_" + select_count)).trigger("change");
+                    $("#qualification_level_"  + select_count).select2().val(getSetting("userQualifiedPairQualificationLevel_" + select_count)).trigger("change");
                 }
             }
         });
