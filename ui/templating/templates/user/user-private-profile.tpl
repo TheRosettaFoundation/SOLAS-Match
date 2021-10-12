@@ -51,8 +51,8 @@
     <form method="post" id="userprofile" action="{urlFor name="user-private-profile" options="user_id.$user_id"}" enctype="multipart/form-data" accept-charset="utf-8">
         <ul id="myTab" class="nav nav-tabs">
             <li class="active"><a href="#home" data-toggle="tab" id="btnTrigger"><span class="clear_brand">1. Personal Information</span></a></li>
-            <li class=""><a href="#profile" data-toggle="tab" id="btnTrigger"><span class="clear_brand">2. Language and professional Information</span></a></li>
-            <li class=""><a href="#verifications" data-toggle="tab" id="btnTrigger"><span class="clear_brand">3. Verfications</span></a></li>
+            <li class="not-active" id="prof"><a href="#profile" data-toggle="tab" id="btnTrigger"><span class="clear_brand">2. Language and professional Information</span></a></li>
+            <li class="not-active"><a href="#verifications" data-toggle="tab" id="btnTrigger"><span class="clear_brand">3. Verfications</span></a></li>
         </ul>
         <div id="myTabContent" class="tab-content">
             <div class="tab-pane fade active in" id="home">
@@ -111,15 +111,15 @@
                         </div>
                     </div>
                 </div>
-                <a style="cursor:pointer;color:#FFFFFF;" href="#profile1" class="pull-right next111 pull-right btn btn-primary" id="btnTrigger1">Next</a>
+                <a style="cursor:pointer;color:#FFFFFF;" href="#profile1" class="pull-right nexttab nnext1 nnext111 pull-right btn btn-primary" id="btnTrigger1">Next</a>
             </div>
-            <div class="tab-pane fade" id="profile">
+            <div class="tab-pane fade profile" id="profile">
                 <br/>
                 <div class="row-fluid" >
                     <div class="span6">
                         <label class="clear_brand required"><strong>Native language</strong> <i class="icon-question-sign" id="tool5" data-toggle="tooltip" title="Please choose your native language and the country of your dialect/variant"></i></label>
                         <select name="nativeLanguageSelect" class="nativeLanguageSelect" id="nativeLanguageSelect">
-                            <option value=""></option>
+                            <option value="">--Select--</option>
                             {foreach $languages as $language}
                                 <option value="{$language->getCode()}" {if $language->getCode() == $nativeLanguageSelectCode}selected="selected"{/if}>{$language->getName()}</option>
                             {/foreach}
@@ -128,7 +128,7 @@
                     <div class="span6">
                         <label class="clear_brand required"><strong>Variant</strong> <i class="icon-question-sign" id="tool4" data-toggle="tooltip" title="--"></i></label>
                         <select name="nativeCountrySelect" class="variant">
-                            <option value=""></option>
+                            <option value="">--Select--</option>
                             {foreach $countries as $country}
                                 {if $country->getCode() != '90' && $country->getCode() != '91' && $country->getCode() != '49' && $country->getCode() != '92' && $country->getCode() != '93' && $country->getCode() != '94'}
                                 <option value="{$country->getCode()}" {if $country->getCode() == $nativeCountrySelectCode}selected="selected"{/if}>{$country->getName()}</option>
@@ -139,12 +139,17 @@
                 </div>
                 <div id="buildyourform">
                     <div class="row-fluid" >
-                        <div class="span6">
+                        <div class="span5">
                             <label class="clear_brand required"><strong>I can translate from</strong> <i class="icon-question-sign" id="tool3" data-toggle="tooltip" title="Your language pairs should reflect the languages you are proficient or native in. We encourage linguists to translate into their native language(s)."></i></label>
                         </div>
-                        <div class="span5">
+                        <div class="span4">
                             <label class="clear_brand required"><strong>To</strong> <i class="icon-question-sign" id="tool2" data-toggle="tooltip" title="--"></i></label>
                         </div>
+                        {if $isSiteAdmin}
+                        <div class="span2">
+                            <label class="clear_brand required"><strong>Qualification Level</strong> <i class="icon-question-sign" id="tool2" data-toggle="tooltip" title="--"></i></label>
+                        </div>
+                        {/if}
                         <span id="btnclick" class="countclick"><span>
                     </div>
                 </div>
@@ -199,7 +204,7 @@
                         <label class="clear_brand required"><strong>Services I can provide</strong></label>
                         {assign var="i" value=0}
                         {foreach from=$capability_list key=name item=capability}
-                            <input type="checkbox" {if $capability['state']}checked="checked"{/if} name="{$name}" id="capability{$i}" /> {$capability['desc']|escape:'html':'UTF-8'}  <br/>
+                            <input type="checkbox" class="capabilities" {if $capability['state']}checked="checked"{/if} name="{$name}" id="capability{$i}" /> {$capability['desc']|escape:'html':'UTF-8'}  <br/>
                             {assign var="i" value=$i+1}
                         {/foreach}
                     </div>
@@ -208,14 +213,14 @@
                             <label class="clear_brand required"><strong>Fields of expertise</strong></label>
                             {assign var="i" value=0}
                             {foreach from=$expertise_list key=name item=expertise}
-                                <input type="checkbox" {if $expertise['state']}checked="checked"{/if} name="{$name}" id="expertise{$i}" /> {$expertise['desc']|escape:'html':'UTF-8'}<br/>
+                                <input type="checkbox" class="expertise" {if $expertise['state']}checked="checked"{/if} name="{$name}" id="expertise{$i}" /> {$expertise['desc']|escape:'html':'UTF-8'}<br/>
                                 {assign var="i" value=$i+1}
                             {/foreach}
                         </div>
                     </div>
                 </div>
                 <br/>
-                <a style="cursor:pointer;color:#FFFFFF;" href="#verifications" class="pull-right next111 btn btn-primary" id="btnTrigger1">Next</a> <a style="cursor:pointer;color:#FFFFFF;" href="#home" class="pull-right next111 btn btn-primary" id="btnTrigger11">Prev</a>
+                <a style="cursor:pointer;color:#FFFFFF;" href="#verifications" class="pull-right nexttab1 next111 btn btn-primary" id="btnTrigger1">Next</a> <a style="cursor:pointer;color:#FFFFFF;" href="#home" class="pull-right next111 btn btn-primary" id="btnTrigger11">Prev</a>
             </div>
             <div class="tab-pane fade" id="verifications">
                 <br/>
@@ -230,10 +235,15 @@
                 <p class="desc">Certificates or other relevant documents about your translation qualifications. Please provide a short title for your qualification and upload the corresponding file. Project Officers will also upload here any certificates you obtain while volunteering with TWB. If you have any questions or can’t upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject=Translation%20Certification" target="_blank">translators@translatorswithoutborders.org</a></p>
                 <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TRANSLATOR"}" target="_blank">Upload file</a>
                 <br/>
-                <button type="submit" onclick="return validateForm();" class='pull-right btn btn-primary' id="updateBtn">
+                <button type="submit"  class='pull-right btn btn-primary' id="updateBtn">
                     <i class="icon-refresh icon-white"></i> Complete
                 </button>
                 <a style="cursor:pointer;color:#FFFFFF;" href="#profile1" class="pull-right next111 btn btn-primary" id="btnTrigger11">Prev</a>
+                <br/>
+                <br/>
+                <button onclick="deleteUser(); return false;" class="btn btn-inverse" id="deleteBtn">
+                    <i class="icon-fire icon-white"></i> Delete User Account
+                </button>
             </div>
         </div>
         <input type="hidden" name="sesskey" value="{$sesskey}" />
