@@ -69,6 +69,10 @@
        .navbar-inner{
            margin-top:0.2%;
        }
+        .not-active {
+        pointer-events: none;
+        cursor: default;
+    }
     </style>
     </head>
 
