@@ -117,6 +117,7 @@ $from_neon_to_trommons_pair = array(
 'Welsh' => array('cy', 'GB'),
 'Xhosa' => array('xh', 'ZA'),
 'Yoruba' => array('yo', 'NG'),
+'Zarma' => array('dje', 'NE'),
 'Zulu' => array('zu', 'ZA'),
 'Hmong' => array('hmn', '--'),
 'Karen' => array('kar', 'MM'),
