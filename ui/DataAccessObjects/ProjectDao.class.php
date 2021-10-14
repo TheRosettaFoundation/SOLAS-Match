@@ -535,6 +535,9 @@ $memsource_change_country_to_kp = [
 
 'arab_iq' => '94',
 'arab_pk' => 'pk',
+
+'beng' => '95',
+'rohg' => '96',
 ];
         $trommons_language_code = $memsource;
         $trommons_country_code  = '';
@@ -574,6 +577,8 @@ $memsource_change_country_to_kp = [
             '92' => 'cn',   // Simplified Script
             '93' => 'tw',   // Traditional Script
             '94' => 'arab_iq', // Bahdini Variant
+            '95' => 'beng', // Bangla Script
+            '96' => 'rohg', // Hanifi Script
         ];
         if (!empty($kp_change_country_to_memsource[$kp_country])) $kp_country = $kp_change_country_to_memsource[$kp_country];
 
