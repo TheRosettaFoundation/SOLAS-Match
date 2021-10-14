@@ -201,15 +201,18 @@
                 <div class="row-fluid">
                     <div class="span4 clear_brand">
                         <label class="clear_brand required"><strong>Services I can provide</strong></label>
+                        <div class="ch1" id="ch1" style="color:#F00;"></div>
                         {assign var="i" value=0}
                         {foreach from=$capability_list key=name item=capability}
                             <input type="checkbox" class="capabilities" {if $capability['state']}checked="checked"{/if} name="{$name}" id="capability{$i}" /> {$capability['desc']|escape:'html':'UTF-8'}  <br/>
                             {assign var="i" value=$i+1}
                         {/foreach}
+        
                     </div>
                     <div class="span8 clear_brand">
                         <div class="span6">
                             <label class="clear_brand required"><strong>Fields of expertise</strong></label>
+                            <div class="ch" id="ch" style="color:#F00;"></div>
                             {assign var="i" value=0}
                             {foreach from=$expertise_list key=name item=expertise}
                                 <input type="checkbox" class="expertise" {if $expertise['state']}checked="checked"{/if} name="{$name}" id="expertise{$i}" /> {$expertise['desc']|escape:'html':'UTF-8'}<br/>
@@ -217,6 +220,9 @@
                             {/foreach}
                         </div>
                     </div>
+                </div>
+                <div>
+                
                 </div>
                 <br/>
                 <a style="cursor:pointer;color:#FFFFFF;" href="#verifications" class="pull-right nexttab1 next111 btn btn-primary" id="btnTrigger1">Next</a> <a style="cursor:pointer;color:#FFFFFF;" href="#home" class="pull-right next111 btn btn-primary" id="btnTrigger11">Prev</a>

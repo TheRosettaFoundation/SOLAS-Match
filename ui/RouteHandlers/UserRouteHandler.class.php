@@ -1354,6 +1354,7 @@ class UserRouteHandler
 
         $extra_scripts  = '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script> ';
         $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script> ';
+        $extra_scripts .= '<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>';
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= '<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />';
         $extra_scripts .= '<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>';
@@ -1361,6 +1362,8 @@ class UserRouteHandler
         $extra_scripts .= '<script type="text/javascript">
         $(document).ready(function() {
             $(".countclick").hide();
+
+           
 
             var newsletter_val = $("#communications_consent").val();
             if (newsletter_val == 1) {
@@ -1371,6 +1374,10 @@ class UserRouteHandler
 
             //Admin
             var admin = "'.$isSiteAdmin.'";
+
+           
+
+           
 
             var validator = $("#userprofile").validate({
                 rules: {
@@ -1383,11 +1390,8 @@ class UserRouteHandler
                     },
                     nativeLanguageSelect: "required",
                     nativeCountrySelect: "required",
-                    groups: {
-                        capabilities: "badge_id_6 badge_id_7 badge_id_8 badge_id_10 badge_id_11 badge_id_12 badge_id_13",
-                        expertise: "Accounting Legal Technical IT Literary Medical Science Health Nutrition Telecommunications Education Protection Migration CCCM Shelter WASH Logistics Equality Gender Peace Environment"
-                    }
-
+                   
+                    
                     
                 },
                 messages: {
@@ -1399,37 +1403,13 @@ class UserRouteHandler
                         required: "Please enter a username",
                         minlength: "Your username must consist of at least 2 characters"
                     },
-           
+                   
                     
                 }
             });
 
+  
             
-            $.validator.addMethod("checkone", function() {
-                if ($(".capabilities").is(":checked")) {
-                    return true;
-                }
-                return false;
-            }, "Please check at least of one");
-        
-            $("[name^=badge_id_]").each(function() {
-                $(this).rules("add", {
-                    checkone: true
-                });
-            });
-
-            $.validator.addMethod("expertise_check", function() {
-                if ($(".expertise").is(":checked")) {
-                    return true;
-                }
-                return false;
-            }, "Please check at least of one");
-        
-            $(".expertise").each(function() {
-                $(this).rules("add", {
-                    expertise_check: true
-                });
-            });
 
            
         
@@ -1497,7 +1477,7 @@ class UserRouteHandler
             });
 
             
-console.log(typeof admin);
+
             $(".nexttab1").click(function() {
                 console.log($("#userprofile").validate().settings.rules);
                 //var selected = $("#tabs").tabs("option", "selected");
@@ -1506,6 +1486,37 @@ console.log(typeof admin);
                 var i = 0;
                 var $inputs = $(this).closest("div").find("input");
                 var $select = $(this).closest("div").find("select");
+
+              if($(".capabilities:checked").length > 0)
+                {
+                // at least one checkbox was checked
+             
+                     valid = true;
+
+                }
+                else
+                {
+                // no checkbox was checked
+                     $("#ch1").text("Please check at least one");
+                     valid = false;
+                }
+
+                if($(".expertise:checked").length > 0)
+                {
+                // at least one checkbox was checked
+             
+                     valid = true;
+                }
+                else
+                {
+                // no checkbox was checked
+                 $("#ch").text("Please check at least one");
+                 valid = false;
+                }
+             
+
+            
+              
                 
 
                 /*
@@ -1629,6 +1640,8 @@ console.log(typeof admin);
 
                 fieldWrapper.append(fName);
                 fieldWrapper.append(fType);
+
+                
 
                 if(admin == "1") {
                 fieldWrapper.append(fTypee);
@@ -1786,7 +1799,8 @@ console.log(typeof admin);
   
             fieldWrapper.append(fName);
             fieldWrapper.append(fType);
-
+            var admin = "'.$isSiteAdmin.'";
+        
             if(admin == "1") {
                 fieldWrapper.append(fTypee);
                 }  
