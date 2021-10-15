@@ -44,7 +44,7 @@
         <form action="{urlFor name='login'}" method="post">
             <input type="hidden" name="action" value="verify" />
             <fieldset>
-                <legend>{Localisation::getTranslation('common_signin_or_create_new_account')}</legend>
+                <legend><strong>{Localisation::getTranslation('common_signin_or_create_new_account')}</strong></legend>
                         <div id="gSignInWrapper" style="margin-bottom: 10px;">
                           <div id="g_id_onload"
                               data-client_id="{Settings::get('googlePlus.client_id')}"
