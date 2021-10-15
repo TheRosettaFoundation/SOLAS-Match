@@ -137,25 +137,6 @@
                                 <a>{Localisation::getTranslation('header_notifications')}<span id="notificationCount">{$userNotifications->lenght()}</span></a>
                             </li>
                         {/if}
-                        <li>
-                       
-                            {if isset($locs)}
-                            	
-                                <div class="languageForm">
-                                    <form id="languageListForm" method="post" action="{urlFor name="siteLanguage"}">
-                                        <select id="languageList" name="language" onchange="jQuery('#languageListForm').submit();">
-                                            {foreach $locs as $loc}
-                                                {if $loc->getCode() == {UserSession::getUserLanguage()}}
-                                                    <option value="{$loc->getCode()}" selected>{$loc->getName()}</option>
-                                                {else}
-                                                    <option value="{$loc->getCode()}">{$loc->getName()}</option>
-                                                {/if}
-                                            {/foreach}
-                                        </select>
-                                    </form>
-                                </div>
-                            {/if}
-                        </li>
                         {if isset($user)}
                             <li class="profile">
                                 <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">
