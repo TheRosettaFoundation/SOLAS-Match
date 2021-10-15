@@ -694,10 +694,6 @@ class UserRouteHandler
 
         $error = null;
         $openid = new \LightOpenID("https://" . $_SERVER["HTTP_HOST"] . $app->urlFor("home"));
-        $use_openid = Common\Lib\Settings::get("site.openid");
-        $use_google_plus = Common\Lib\Settings::get("googlePlus.enabled");
-        $app->view()->setData("openid", $use_openid);
-        $app->view()->setData("gplus", $use_google_plus);
 
         if ($app->request()->isPost() || $openid->mode) {
             $post = $app->request()->post();
@@ -870,28 +866,8 @@ class UserRouteHandler
             }
         }
 
-        $appendExtraScripts = False;
-        $extra_scripts = "";
-        if (isset($use_openid)) {
-            if ($use_openid == "y" || $use_openid == "h") {
-                $extra_scripts = "
-        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-jquery.js\"></script>
-        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-en.js\"></script>
-        <link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/openid.css\" />";
-                $appendExtraScripts = True;
-            }
-        }
-
-        if (isset($use_google_plus) && ($use_google_plus == 'y')) {
-            $extra_scripts = $extra_scripts . self::createGooglePlusJavaScript();
-            $appendExtraScripts = True;
-        }
-
-        if ($appendExtraScripts) {
-            $app->view()->appendData(array("extra_scripts" => $extra_scripts));
-        }
-
         $app->view()->appendData(array(
+            'extra_scripts' => self::createGooglePlusJavaScript(),
             'client_id'    => Common\Lib\Settings::get('proz.client_id'),
             'redirect_uri' => urlencode(Common\Lib\Settings::get('proz.redirect_uri')),
         ));
