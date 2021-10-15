@@ -46,7 +46,6 @@
             <fieldset>
                 <legend>{Localisation::getTranslation('common_signin_or_create_new_account')}</legend>
                 <div id="openid_choice">
-                    {if isset($gplus) && ($gplus === 'y')}
                         <div id="gSignInWrapper" style="margin-bottom: 10px;">
                           <div id="g_id_onload"
                               data-client_id="{Settings::get('googlePlus.client_id')}"
@@ -65,7 +64,6 @@
                               data-logo_alignment="left">
                           </div>
                         </div>
-                    {/if}
                     <div id="pSignInWrapper">
                         <div id="customProZBtn" class="customProZSignIn">
                             <span id="customProZBtnIcon"></span>
