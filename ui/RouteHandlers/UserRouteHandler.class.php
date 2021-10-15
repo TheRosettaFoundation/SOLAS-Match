@@ -457,6 +457,7 @@ class UserRouteHandler
                     },
                     age_consent: "required",
                     conduct_consent: "required",
+                   
                 },
                 messages: {
                     first_name: "Please enter your First name",
@@ -479,7 +480,10 @@ class UserRouteHandler
                     conduct_consent: "You need to agree to this to proceed",
                 }
             });
+
             $("#tool").tooltip();
+
+           
         });
         </script>';
         $app->view()->appendData(array('extra_scripts' => $extra_scripts));
@@ -613,8 +617,10 @@ class UserRouteHandler
             $post = $app->request()->post();
 
             if (isset($post['new_password']) && Lib\TemplateHelper::isValidPassword($post['new_password'])) {
-                if (isset($post['confirmation_password']) &&
-                        $post['confirmation_password'] == $post['new_password']) {
+                if (
+                    isset($post['confirmation_password']) &&
+                    $post['confirmation_password'] == $post['new_password']
+                ) {
 
                     $response = $userDao->resetPassword($post['new_password'], $uid);
                     if ($response) {
@@ -653,8 +659,8 @@ class UserRouteHandler
                         } else {
                             $app->flashNow(
                                 "error",
-                                "Failed to request password reset, are you sure you entered your email ".
-                                "address correctly?"
+                                "Failed to request password reset, are you sure you entered your email " .
+                                    "address correctly?"
                             );
                         }
                     } else {
@@ -670,7 +676,6 @@ class UserRouteHandler
                             $userDao->requestPasswordReset($email);
                         }
                     }
-
                 } else {
                     $app->flashNow("error", Lib\Localisation::getTranslation('user_reset_password_4'));
                 }
@@ -979,7 +984,7 @@ class UserRouteHandler
             $app->urlFor('login'),
             $app->urlFor('register'),
             "[$bad_message]"
-            );
+        );
         error_log($bad_message);
 
         $app->flash('error', $error);
@@ -1141,7 +1146,7 @@ class UserRouteHandler
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
                 $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
             } else {
-error_log("POST" . print_r($post, true));//(**)
+                error_log("POST" . print_r($post, true)); //(**)
                 $user->setDisplayName($post['displayName']);
                 $user->setBiography($post['biography']);
 
@@ -1193,14 +1198,19 @@ error_log("POST" . print_r($post, true));//(**)
                             if (($language_code_source == $userQualifiedPair['language_code_source']) &&
                                 ($country_code_source  == $userQualifiedPair['country_code_source'])  &&
                                 ($language_code_target == $userQualifiedPair['language_code_target']) &&
-                                ($country_code_target  == $userQualifiedPair['country_code_target'])) {
+                                ($country_code_target  == $userQualifiedPair['country_code_target'])
+                            ) {
                                 $found = true;
 
                                 if ($isSiteAdmin && ($post["qualification_level_$i"] != $userQualifiedPair['qualification_level'])) {
-                                    $userDao->updateUserQualifiedPair($user_id,
-                                        $language_code_source, $country_code_source,
-                                        $language_code_target, $country_code_target,
-                                        $post["qualification_level_$i"]);
+                                    $userDao->updateUserQualifiedPair(
+                                        $user_id,
+                                        $language_code_source,
+                                        $country_code_source,
+                                        $language_code_target,
+                                        $country_code_target,
+                                        $post["qualification_level_$i"]
+                                    );
                                 }
                             }
                         }
@@ -1215,10 +1225,14 @@ error_log("POST" . print_r($post, true));//(**)
                                 }
                             }
 
-                            $userDao->createUserQualifiedPair($user_id,
-                                $language_code_source, $country_code_source,
-                                $language_code_target, $country_code_target,
-                                $post["qualification_level_$i"]);
+                            $userDao->createUserQualifiedPair(
+                                $user_id,
+                                $language_code_source,
+                                $country_code_source,
+                                $language_code_target,
+                                $country_code_target,
+                                $post["qualification_level_$i"]
+                            );
                         }
                         $i++;
                     }
@@ -1233,15 +1247,20 @@ error_log("POST" . print_r($post, true));//(**)
                             if (($language_code_source == $userQualifiedPair['language_code_source']) &&
                                 ($country_code_source  == $userQualifiedPair['country_code_source'])  &&
                                 ($language_code_target == $userQualifiedPair['language_code_target']) &&
-                                ($country_code_target  == $userQualifiedPair['country_code_target'])) {
+                                ($country_code_target  == $userQualifiedPair['country_code_target'])
+                            ) {
                                 $found = true;
                             }
                             $i++;
                         }
                         if (!$found) {
-                            $userDao->removeUserQualifiedPair($user_id,
-                                $userQualifiedPair['language_code_source'], $userQualifiedPair['country_code_source'],
-                                $userQualifiedPair['language_code_target'], $userQualifiedPair['country_code_target']);
+                            $userDao->removeUserQualifiedPair(
+                                $user_id,
+                                $userQualifiedPair['language_code_source'],
+                                $userQualifiedPair['country_code_source'],
+                                $userQualifiedPair['language_code_target'],
+                                $userQualifiedPair['country_code_target']
+                            );
                         }
                     }
 
@@ -1289,7 +1308,6 @@ error_log("POST" . print_r($post, true));//(**)
                     else                                         $userDao->insert_communications_consent($user_id, 0);
 
                     $userDao->update_terms_accepted($user_id, 3);
-                    $userDao->NotifyRegistered($user_id);
 
                     $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user_id)));
                 } catch (\Exception $e) {
@@ -1317,22 +1335,26 @@ error_log("POST" . print_r($post, true));//(**)
 
         $source_lang = '';
         $target_lang = '';
+
+        $qualification_levels = array(
+            1 => "Kató Translator",
+            2 => "Kató Verified Translator",
+            3 => "Kató Senior Translator"
+        );
+        $qualification_level = '';
         foreach ($language_selection as $key => $language) {
             $source_lang .= "<option value=$key>$language</option>";
             $target_lang .= "<option value=$key>$language</option>";
         }
-        $qualification_levels = [
-            1 => 'Kató Translator',
-            2 => 'Kató Verified Translator',
-            3 => 'Kató Senior Translator'
-        ];
-        $qualification_level = '';
+
         foreach ($qualification_levels as $key => $qualification) {
             $qualification_level .= "<option value=$key>$qualification</option>";
+            
         }
 
         $extra_scripts  = '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script> ';
         $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script> ';
+        $extra_scripts .= '<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>';
         $extra_scripts .= "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/Parameters.js\"></script>";
         $extra_scripts .= '<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />';
         $extra_scripts .= '<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>';
@@ -1340,6 +1362,8 @@ error_log("POST" . print_r($post, true));//(**)
         $extra_scripts .= '<script type="text/javascript">
         $(document).ready(function() {
             $(".countclick").hide();
+
+           
 
             var newsletter_val = $("#communications_consent").val();
             if (newsletter_val == 1) {
@@ -1350,6 +1374,10 @@ error_log("POST" . print_r($post, true));//(**)
 
             //Admin
             var admin = "'.$isSiteAdmin.'";
+
+           
+
+           
 
             var validator = $("#userprofile").validate({
                 rules: {
@@ -1362,10 +1390,9 @@ error_log("POST" . print_r($post, true));//(**)
                     },
                     nativeLanguageSelect: "required",
                     nativeCountrySelect: "required",
-                    groups: {
-                        capabilities: "badge_id_6 badge_id_7 badge_id_8 badge_id_10 badge_id_11 badge_id_12 badge_id_13",
-                        expertise: "Accounting Legal Technical IT Literary Medical Science Health Nutrition Telecommunications Education Protection Migration CCCM Shelter WASH Logistics Equality Gender Peace Environment"
-                    }
+                   
+                    
+                    
                 },
                 messages: {
                     firstName: "Please enter your First name",
@@ -1376,35 +1403,16 @@ error_log("POST" . print_r($post, true));//(**)
                         required: "Please enter a username",
                         minlength: "Your username must consist of at least 2 characters"
                     },
+                   
+                    
                 }
             });
 
-            $.validator.addMethod("checkone", function() {
-                if ($(".capabilities").is(":checked")) {
-                    return true;
-                }
-                return false;
-            }, "Please check at least of one");
+  
+            
 
-            $("[name^=badge_id_]").each(function() {
-                $(this).rules("add", {
-                    checkone: true
-                });
-            });
-
-            $.validator.addMethod("expertise_check", function() {
-                if ($(".expertise").is(":checked")) {
-                    return true;
-                }
-                return false;
-            }, "Please check at least of one");
-
-            $(".expertise").each(function() {
-                $(this).rules("add", {
-                    expertise_check: true
-                });
-            });
-
+           
+        
             $(".nexttab").click(function() {
                 //var selected = $("#tabs").tabs("option", "selected");
                 //$("#tabs").tabs("option", "selected", selected + 1);
@@ -1413,6 +1421,8 @@ error_log("POST" . print_r($post, true));//(**)
                 var $inputs = $(this).closest("div").find("input");
                 var $select = $(this).closest("div").find("select");
 
+                
+                
                 $inputs.each(function() {
                     if (!validator.element(this) && valid) {
                         valid = false;
@@ -1424,29 +1434,41 @@ error_log("POST" . print_r($post, true));//(**)
                         valid = false;
                     }
                 });
-
+            
                 if (valid) {
-                    // $(".tabcounter").text("2/3");
+                    
+                   // $(".tabcounter").text("2/3");
                     // jQuery("#myTab li:eq(1) a").tab("show");
                     console.log($(this).attr("href"));
-
+                     
                     if ($(this).attr("href") == "#profile1") {
                         $(".tabcounter").text("2/3");
-                        jQuery("#myTab li:eq(1) a").tab("show");
+                        jQuery("#myTab li:eq(1) a").tab("show"); 
                         //Hide/Show delete a/c btn
+
                         localStorage.setItem("selected_native_lang", $("#nativeLanguageSelect").val());
-                    } else if ($(this).attr("href") == "#verifications") {
+       
+    
+                     
+                       
+                 
+                    }  else if ($(this).attr("href") == "#verifications") {
                         $(".tabcounter").text("3/3");
                         jQuery("#myTab li:eq(2) a").tab("show");
                     }
+                    
                 }
-                else {
+                else{
                     //alert("Form has errors");
-
+                   // console.log($(this).attr("href"));
+                   
+                
                     if ($(this).attr("href") == "#profile") {
                         $(".tabcounter").text("1/3");
                         jQuery("#myTab li:eq(0) a").tab("show");
                         //$("#myTab li#prof").addClass("not-active");
+                        
+                 
                     }  else if ($(this).attr("href") == "#verifications") {
                         $(".tabcounter").text("2/3");
                         jQuery("#myTab li:eq(1) a").tab("show");
@@ -1454,7 +1476,8 @@ error_log("POST" . print_r($post, true));//(**)
                 }
             });
 
-console.log(typeof admin);
+            
+
             $(".nexttab1").click(function() {
                 console.log($("#userprofile").validate().settings.rules);
                 //var selected = $("#tabs").tabs("option", "selected");
@@ -1463,6 +1486,38 @@ console.log(typeof admin);
                 var i = 0;
                 var $inputs = $(this).closest("div").find("input");
                 var $select = $(this).closest("div").find("select");
+
+              if($(".capabilities:checked").length > 0)
+                {
+                // at least one checkbox was checked
+             
+                     valid = true;
+
+                }
+                else
+                {
+                // no checkbox was checked
+                     $("#ch1").text("Please check at least one");
+                     valid = false;
+                }
+
+                if($(".expertise:checked").length > 0)
+                {
+                // at least one checkbox was checked
+             
+                     valid = true;
+                }
+                else
+                {
+                // no checkbox was checked
+                 $("#ch").text("Please check at least one");
+                 valid = false;
+                }
+             
+
+            
+              
+                
 
                 /*
                 $inputs.each(function() {
@@ -1478,31 +1533,37 @@ console.log(typeof admin);
                         valid = false;
                     }
                 });
-
+            
                 if (valid) {
-                    // $(".tabcounter").text("2/3");
+                    
+                   // $(".tabcounter").text("2/3");
                     // jQuery("#myTab li:eq(1) a").tab("show");
                     console.log("valid " + $(this).attr("href"));
-
+                    
                   if ($(this).attr("href") == "#verifications") {
                         $(".tabcounter").text("3/3");
                         jQuery("#myTab li:eq(2) a").tab("show");
 
-                        if(localStorage.getItem("selected_native_lang") != null) {
+                        if(localStorage.getItem("selected_native_lang") != null){
+
                             $("#deleteBtn").show();
-                        } else {
+                        }
+                        else{
                             $("#deleteBtn").hide();
                         }
-                        console.log(localStorage.getItem("selected_native_lang"));
+                        console.log(localStorage.getItem("selected_native_lang"));  
                     }
+                    
+                    
                 }
-                else {
+                else{
                     //alert("Form has errors");
                     console.log("Invalid "+ $(this).attr("href"));
                 if ($(this).attr("href") == "#verifications") {
                         $(".tabcounter").text("2/3");
                         jQuery("#myTab li:eq(1) a").tab("show");
                     }
+                    
                 }
             });
 
@@ -1576,12 +1637,16 @@ console.log(typeof admin);
                 var fType = $("<div class=\"span4\"><select name=\"language_code_target_" + select_count + "\" id=\"language_code_target_" + select_count + "\" class=\"fieldtype\"><option value>--Select a language--</option>' . $target_lang . '</select></div>");
                 var fTypee = $("<div class=\"span2\"><select name=\"qualification_level_" + select_count + "\" id=\"qualification_level_" + select_count + "\" style=\"width: 75%\" class=\"fieldtype1\"><option value>--Select--</option>' . $qualification_level . '</select></div>");
 
+
                 fieldWrapper.append(fName);
                 fieldWrapper.append(fType);
 
-                if (admin == "1") {
+                
+
+                if(admin == "1") {
                 fieldWrapper.append(fTypee);
-                }
+                }             
+                
 
                 if (select_count == 0) {
                     var addButton = $("<div class=\"span1\" style=\"\"><input type=\"button\" class=\"add\" id=\"add\" value=\"+\" /><div>");
@@ -1590,7 +1655,7 @@ console.log(typeof admin);
                     var removeButton = $("<div class=\"span1\" style=\"\"><input type=\"button\" class=\"remove\" value=\"-\"  /><div>");
                     removeButton.click(function() {
                         Count1();
-                        if ($("#btnclick").text() <= parseInt(getSetting("userQualifiedPairsLimit"))) {
+                        if ($("#btnclick").text() <= 5) {
                             $("#add").show();
                         } else {
                             $("#add").hide();
@@ -1606,7 +1671,6 @@ console.log(typeof admin);
                 if (getSetting("userQualifiedPairLanguageCodeSource_" + select_count) != "") {
                     $("#language_code_source_" + select_count).select2().val(getSetting("userQualifiedPairLanguageCodeSource_" + select_count)).trigger("change");
                     $("#language_code_target_" + select_count).select2().val(getSetting("userQualifiedPairLanguageCodeTarget_" + select_count)).trigger("change");
-                    $("#qualification_level_"  + select_count).select2().val(getSetting("userQualifiedPairQualificationLevel_" + select_count)).trigger("change");
                 }
             }
         });
@@ -1620,6 +1684,7 @@ console.log(typeof admin);
             else if ($(this).attr("href") == "#profile") {
                // $(".tabcounter").text("2/3");
                // jQuery("#myTab li:eq(1) a").tab("show");
+         
             }  else if ($(this).attr("href") == "#verifications") {
                 $(".tabcounter").text("3/3");
                 jQuery("#myTab li:eq(2) a").tab("show");
@@ -1638,22 +1703,23 @@ console.log(typeof admin);
                 var valid = true;
                 var i = 0;
                 var $inputs = $(this).closest("div").find("input");
-
+                
                 $inputs.each(function() {
                     if (!validator.element(this) && valid) {
                         valid = false;
                     }
                 });
-
+            
                 if (valid) {
                   $(".tabcounter").text("2/3");
                   jQuery("#myTab li:eq(1) a").tab("show");
-                } else {
+                }else{
                   $(".tabcounter").text("1/3");
                   jQuery("#myTab li:eq(0) a").tab("show");
                   console.log("Err 2");
+ 
                 }
-            } else if ($(this).attr("href") == "#verifications") {
+            } else if($(this).attr("href") == "#verifications") {
                 $(".tabcounter").text("3/3");
                 jQuery("#myTab li:eq(2) a").tab("show");
             }
@@ -1694,12 +1760,14 @@ console.log(typeof admin);
             return false;
         }
 
+        
+
         // Build language input fields
         $(document).on("click", "#add", function(e) {
             var select_count = $("#btnclick").text();
             Count();
 
-            if ($("#btnclick").text() == parseInt(getSetting("userQualifiedPairsLimit"))) {
+            if ($("#btnclick").text() == 5) {
               $("#add").hide();
             } else {
               $("#add").show();
@@ -1711,15 +1779,15 @@ console.log(typeof admin);
     
             var fieldWrapper = $("<div class=\"row-fluid\" id=\"field" + intId + "\"/>");
             fieldWrapper.data("idx", intId);
-
+            
             var fName = $("<div class=\"span5\"><select name=\"language_code_source_" + select_count + "\" id=\"language_code_source_" + select_count + "\" class=\"fieldtype\" required=\"required\"><option value>--Select a language--</option>' . $source_lang . '</select></div>");
             var fType = $("<div class=\"span4\"><select name=\"language_code_target_" + select_count + "\" id=\"language_code_target_" + select_count + "\" class=\"fieldtype\" required=\"required\"><option value>--Select a language--</option>' . $target_lang . '</select></div>");
             var fTypee = $("<div class=\"span2\"><select name=\"qualification_level_" + select_count + "\" id=\"qualification_level_" + select_count + "\" style=\"width: 75%\" class=\"fieldtype1\"><option value>--Select--</option>' . $qualification_level . '</select></div>");
             var removeButton = $("<div class=\"span1\" style=\"\"><input type=\"button\" class=\"remove\" value=\"-\"  /><div>");
-
+   
             removeButton.click(function() {
                 Count1();
-                if ($("#btnclick").text() <= parseInt(getSetting("userQualifiedPairsLimit"))) {
+                if ($("#btnclick").text() <= 5) {
                     $("#add").show();
                 } else {
                     $("#add").hide();
@@ -1731,13 +1799,14 @@ console.log(typeof admin);
   
             fieldWrapper.append(fName);
             fieldWrapper.append(fType);
-
-            if (admin == "1") {
+            var admin = "'.$isSiteAdmin.'";
+        
+            if(admin == "1") {
                 fieldWrapper.append(fTypee);
-            }
+                }  
             fieldWrapper.append(removeButton);
-            $("#language_code_source_"+ select_count).rules("add", { required: true });
-            $("#language_code_source_"+ select_count).rules("add", { required: true });
+            $("#language_code_source_"+ select_count).rules("add",  { required: true });
+            $("#language_code_source_"+ select_count).rules("add",  { required: true });
 
             $("#buildyourform").append(fieldWrapper);
             $(".fieldtype").select2({
@@ -1748,6 +1817,8 @@ console.log(typeof admin);
                 placeholder: "--Select--",
                 width: "resolve"
             });
+           
+            
         });
         </script>';
 
@@ -1836,7 +1907,6 @@ console.log(typeof admin);
                     else                                         $userDao->insert_communications_consent($user_id, 0);
 
                     $userDao->update_terms_accepted($user_id, 3);
-                    $userDao->NotifyRegistered($user_id);
 
                     $app->redirect($app->urlFor('org-dashboard'));
                 } catch (\Exception $e) {
@@ -1885,8 +1955,10 @@ console.log(typeof admin);
 
         $upload_pending = 1;
         if ($post = $app->request()->post()) {
-            if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['note']) || empty($_FILES['userFile']['name']) || !empty($_FILES['userFile']['error'])
-                    || (($data = file_get_contents($_FILES['userFile']['tmp_name'])) === false)) {
+            if (
+                empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['note']) || empty($_FILES['userFile']['name']) || !empty($_FILES['userFile']['error'])
+                || (($data = file_get_contents($_FILES['userFile']['tmp_name'])) === false)
+            ) {
                 $app->flashNow('error', 'Could not upload file, you must specify a file and a note');
             } else {
                 $userFileName = $_FILES['userFile']['name'];
@@ -1909,7 +1981,7 @@ console.log(typeof admin);
             'user_id'       => $user_id,
             'cert_id'       => $cert_id,
             'desc'          => empty($certification_list[$cert_id]['desc']) ? '' : $certification_list[$cert_id]['desc'],
-            'upload_pending'=> $upload_pending,
+            'upload_pending' => $upload_pending,
             'sesskey'       => $sesskey,
         ));
 
@@ -2187,8 +2259,10 @@ console.log(typeof admin);
                 $language_code_target = substr($target_language_country, 0, strpos($target_language_country, '-'));
                 $country_code_target  = substr($target_language_country, strpos($target_language_country, '-') + 1);
 
-                if (!empty($source_language_country) && !empty($target_language_country) &&
-                    (empty($testing_center_projects_by_code["$language_code_source-$language_code_target"]) || $isSiteAdmin)) { // Protect against browser manipulation or duplicate
+                if (
+                    !empty($source_language_country) && !empty($target_language_country) &&
+                    (empty($testing_center_projects_by_code["$language_code_source-$language_code_target"]) || $isSiteAdmin)
+                ) { // Protect against browser manipulation or duplicate
                     $user_id_owner = 62927; // translators@translatorswithoutborders.org
 
                     $projects_to_copy = [16987, 16982];
@@ -2241,7 +2315,8 @@ console.log(typeof admin);
                                 Common\Enums\TaskTypeEnum::TRANSLATION,
                                 0,
                                 $user_id_owner,
-                                $taskDao);
+                                $taskDao
+                            );
                             $proofreading_task_id = $projectDao->addProjectTask(
                                 $project_to_copy_id,
                                 $filename,
@@ -2252,7 +2327,8 @@ console.log(typeof admin);
                                 Common\Enums\TaskTypeEnum::PROOFREADING,
                                 $translation_task_id,
                                 $user_id_owner,
-                                $taskDao);
+                                $taskDao
+                            );
 
                             $projectDao->calculateProjectDeadlines($project_id);
 
@@ -2277,8 +2353,7 @@ console.log(typeof admin);
                                 'name' => "$language_code_source|$language_code_target, " . $project->getTitle() . ', ' . $user->getEmail(),
                                 'notes' => " https://$server_name/$user_id/profile , Target: $language_code_target, Deadline: " . gmdate('Y-m-d H:i:s', strtotime('10 days')) . " https://$server_name/project/$project_id/view https://$server_name/task/$translation_task_id/view",
                                 'projects' => '1127940658676844'
-                                )
-                            );
+                            ));
 
                             curl_setopt($re, CURLOPT_CUSTOMREQUEST, 'POST');
                             curl_setopt($re, CURLOPT_HEADER, true);
@@ -2489,7 +2564,11 @@ console.log(typeof admin);
                     $notifData = new Common\Protobufs\Models\UserTaskStreamNotification();
                     $notifData->setUserId($userId);
                     $notifData->setInterval($post['interval']);
+                    //if (isset($post['strictMode']) && $post['strictMode'] == 'enabled') {
                     $notifData->setStrict(true);
+                    //} else {
+                    //    $notifData->setStrict(false);
+                    //}
                     $success = $userDao->requestTaskStreamNotification($notifData);
                 }
 
@@ -2497,7 +2576,7 @@ console.log(typeof admin);
                 $app->redirect($app->urlFor("user-public-profile", array("user_id" => $userId)));
             }
         }
-        
+
         $notifData = $userDao->getUserTaskStreamNotification($userId);
         $interval = null;
         $lastSent = null;
@@ -2514,7 +2593,7 @@ console.log(typeof admin);
                     $interval = "monthly";
                     break;
             }
-            
+
             if ($notifData->getLastSent() != null) {
                 $lastSent = date(Common\Lib\Settings::get("ui.date_format"), strtotime($notifData->getLastSent()));
             }
@@ -2523,7 +2602,7 @@ console.log(typeof admin);
 
             $app->view()->appendData(array(
                 "interval"  => $interval,
-                "intervalId"=> $notifData->getInterval(),
+                "intervalId" => $notifData->getInterval(),
                 "lastSent"  => $lastSent,
                 'strict'    => $strict
             ));

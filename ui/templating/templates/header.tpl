@@ -27,6 +27,7 @@
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min1.css"/>
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.2.css"/>
         <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 		<link rel="shortcut icon" type="image/x-icon" href="{urlFor name="home"}favicon.ico">
 		
@@ -69,7 +70,7 @@
        .navbar-inner{
            margin-top:0.2%;
        }
-    .not-active {
+        .not-active {
         pointer-events: none;
         cursor: default;
     }
@@ -80,7 +81,7 @@
         <div class="navbar navbar-fixed-top">
            <div class="navbar-inner">
                 <div class="container">
-                    <a href="{urlFor name='home'}" class="pull-left header-link"><img height="60px" src="{urlFor name='home'}ui/img/logo_KP-removebg-preview.png"></a> 
+                    <a href="{urlFor name='home'}" class="pull-left header-link"><img height="60px" width="85%"  src="{urlFor name='home'}ui/img/TWB_logo1.PNG"></a> 
                     <ul class="nav">
                         {if !isset($site_admin)}
                         <li {if isset($current_page) && $current_page == 'home'}class="active"{/if} >
@@ -141,7 +142,7 @@
                        
                             {if isset($locs)}
                             	
-                                <div class="languageForm">
+                               <!-- <div class="languageForm">
                                     <form id="languageListForm" method="post" action="{urlFor name="siteLanguage"}">
                                         <select id="languageList" name="language" onchange="jQuery('#languageListForm').submit();">
                                             {foreach $locs as $loc}
@@ -153,7 +154,7 @@
                                             {/foreach}
                                         </select>
                                     </form>
-                                </div>
+                                </div> -->
                             {/if}
                         </li>
                         {if isset($user)}
@@ -167,7 +168,14 @@
                                 <a href="{urlFor name="logout"}">{Localisation::getTranslation('header_log_out')}</a>
                             </li>
                         {else}
-                            <li><a href="{urlFor name="register"}">{Localisation::getTranslation('common_register')}</a></li>
+            
+                            <li><a href="https://facebook.com/translatorswithoutborders" target="_blank"><img style="width:30%;" src="{urlFor name='home'}ui/img/social_media_icons/facebook_logo_social network_icon.png" alt="FB_Logo"></a></li>
+                            <li><a href="https://www.instagram.com/translatorswb/?hl=en" target="_blank"><img style="width:30%;" src="{urlFor name='home'}ui/img/social_media_icons/instagram logo_icon.png" alt="FB_Logo"></a></li>
+                            <li><a href="https://linkedin.com/company/translators-without-borders" target="_blank"><img style="width:30%;" src="{urlFor name='home'}ui/img/social_media_icons/linkedin logo_icon.png" alt="FB_Logo"></a></li>
+                            <li><a href="https://twitter.com/TranslatorsWB" target="_blank"><img style="width:30%;" src="{urlFor name='home'}ui/img/social_media_icons/twitter logo_icon.png" alt="FB_Logo"></a></li>
+                            <br/>
+
+                            <li><a href="{urlFor name="register"}">Join</a></li>
                             <li><a href="{urlFor name="login"}">{Localisation::getTranslation('common_log_in')}</a></li>
                         {/if}
                     </ul>
