@@ -1337,8 +1337,6 @@ class UserRouteHandler
         $(document).ready(function() {
             $(".countclick").hide();
 
-           
-
             var newsletter_val = $("#communications_consent").val();
             if (newsletter_val == 1) {
                 $("#communications_consent").attr("checked", true);
@@ -1348,10 +1346,6 @@ class UserRouteHandler
 
             //Admin
             var admin = "'.$isSiteAdmin.'";
-
-           
-
-           
 
             var validator = $("#userprofile").validate({
                 rules: {
@@ -1364,9 +1358,6 @@ class UserRouteHandler
                     },
                     nativeLanguageSelect: "required",
                     nativeCountrySelect: "required",
-                   
-                    
-                    
                 },
                 messages: {
                     firstName: "Please enter your First name",
@@ -1377,16 +1368,37 @@ class UserRouteHandler
                         required: "Please enter a username",
                         minlength: "Your username must consist of at least 2 characters"
                     },
-                   
-                    
                 }
             });
 
-  
-            
+            // This comes from ui_dev2 branch. Is it required?...(**)
+            $.validator.addMethod("checkone", function() {
+                if ($(".capabilities").is(":checked")) {
+                    return true;
+                }
+                return false;
+            }, "Please check at least one");
 
-           
-        
+            $("[name^=badge_id_]").each(function() {
+                $(this).rules("add", {
+                    checkone: true
+                });
+            });
+
+            $.validator.addMethod("expertise_check", function() {
+                if ($(".expertise").is(":checked")) {
+                    return true;
+                }
+                return false;
+            }, "Please check at least one");
+
+            $(".expertise").each(function() {
+                $(this).rules("add", {
+                    expertise_check: true
+                });
+            });
+            // Above comes from ui_dev2 branch. Is it required?(**)
+
             $(".nexttab").click(function() {
                 //var selected = $("#tabs").tabs("option", "selected");
                 //$("#tabs").tabs("option", "selected", selected + 1);
@@ -1447,15 +1459,14 @@ class UserRouteHandler
                 var $inputs = $(this).closest("div").find("input");
                 var $select = $(this).closest("div").find("select");
 
-              if ($(".capabilities:checked").length > 0) {
-                // at least one checkbox was checked
-                     valid = true;
+                if ($(".capabilities:checked").length > 0) {
+                    // at least one checkbox was checked
+                    valid = true;
                 } else {
                     // no checkbox was checked
                     $("#ch1").text("Please check at least one");
                     valid = false;
                 }
-
                 if ($(".expertise:checked").length > 0) {
                     // at least one checkbox was checked
                      valid = true;
@@ -1464,13 +1475,6 @@ class UserRouteHandler
                     $("#ch").text("Please check at least one");
                     valid = false;
                 }
-                /*
-                $inputs.each(function() {
-                    if (!validator.element(this) && valid) {
-                        valid = false;
-                    }
-                });
-                */
 
                 $select.each(function() {
                     console.log(validator.element(this));
