@@ -699,10 +699,6 @@ class UserRouteHandler
 
         $error = null;
         $openid = new \LightOpenID("https://" . $_SERVER["HTTP_HOST"] . $app->urlFor("home"));
-        $use_openid = Common\Lib\Settings::get("site.openid");
-        $use_google_plus = Common\Lib\Settings::get("googlePlus.enabled");
-        $app->view()->setData("openid", $use_openid);
-        $app->view()->setData("gplus", $use_google_plus);
 
         if ($app->request()->isPost() || $openid->mode) {
             $post = $app->request()->post();
@@ -875,28 +871,8 @@ class UserRouteHandler
             }
         }
 
-        $appendExtraScripts = False;
-        $extra_scripts = "";
-        if (isset($use_openid)) {
-            if ($use_openid == "y" || $use_openid == "h") {
-                $extra_scripts = "
-        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-jquery.js\"></script>
-        <script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/lib/openid-en.js\"></script>
-        <link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"{$app->urlFor("home")}resources/css/openid.css\" />";
-                $appendExtraScripts = True;
-            }
-        }
-
-        if (isset($use_google_plus) && ($use_google_plus == 'y')) {
-            $extra_scripts = $extra_scripts . self::createGooglePlusJavaScript();
-            $appendExtraScripts = True;
-        }
-
-        if ($appendExtraScripts) {
-            $app->view()->appendData(array("extra_scripts" => $extra_scripts));
-        }
-
         $app->view()->appendData(array(
+            'extra_scripts' => self::createGooglePlusJavaScript(),
             'client_id'    => Common\Lib\Settings::get('proz.client_id'),
             'redirect_uri' => urlencode(Common\Lib\Settings::get('proz.redirect_uri')),
         ));
@@ -1308,6 +1284,7 @@ class UserRouteHandler
                     else                                         $userDao->insert_communications_consent($user_id, 0);
 
                     $userDao->update_terms_accepted($user_id, 3);
+                    $userDao->NotifyRegistered($user_id);
 
                     $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user_id)));
                 } catch (\Exception $e) {
@@ -1335,21 +1312,18 @@ class UserRouteHandler
 
         $source_lang = '';
         $target_lang = '';
-
-        $qualification_levels = array(
-            1 => "Kató Translator",
-            2 => "Kató Verified Translator",
-            3 => "Kató Senior Translator"
-        );
-        $qualification_level = '';
         foreach ($language_selection as $key => $language) {
             $source_lang .= "<option value=$key>$language</option>";
             $target_lang .= "<option value=$key>$language</option>";
         }
-
+        $qualification_levels = [
+            1 => 'Kató Translator',
+            2 => 'Kató Verified Translator',
+            3 => 'Kató Senior Translator'
+        ];
+        $qualification_level = '';
         foreach ($qualification_levels as $key => $qualification) {
             $qualification_level .= "<option value=$key>$qualification</option>";
-            
         }
 
         $extra_scripts  = '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script> ';
@@ -1434,49 +1408,35 @@ class UserRouteHandler
                         valid = false;
                     }
                 });
-            
+
                 if (valid) {
-                    
-                   // $(".tabcounter").text("2/3");
+                    // $(".tabcounter").text("2/3");
                     // jQuery("#myTab li:eq(1) a").tab("show");
                     console.log($(this).attr("href"));
-                     
+
                     if ($(this).attr("href") == "#profile1") {
                         $(".tabcounter").text("2/3");
-                        jQuery("#myTab li:eq(1) a").tab("show"); 
+                        jQuery("#myTab li:eq(1) a").tab("show");
                         //Hide/Show delete a/c btn
 
                         localStorage.setItem("selected_native_lang", $("#nativeLanguageSelect").val());
-       
-    
-                     
-                       
-                 
-                    }  else if ($(this).attr("href") == "#verifications") {
+                    } else if ($(this).attr("href") == "#verifications") {
                         $(".tabcounter").text("3/3");
                         jQuery("#myTab li:eq(2) a").tab("show");
                     }
-                    
-                }
-                else{
+                } else {
                     //alert("Form has errors");
-                   // console.log($(this).attr("href"));
-                   
-                
+                    // console.log($(this).attr("href"));
                     if ($(this).attr("href") == "#profile") {
                         $(".tabcounter").text("1/3");
                         jQuery("#myTab li:eq(0) a").tab("show");
                         //$("#myTab li#prof").addClass("not-active");
-                        
-                 
-                    }  else if ($(this).attr("href") == "#verifications") {
+                    } else if ($(this).attr("href") == "#verifications") {
                         $(".tabcounter").text("2/3");
                         jQuery("#myTab li:eq(1) a").tab("show");
                     }
                 }
             });
-
-            
 
             $(".nexttab1").click(function() {
                 console.log($("#userprofile").validate().settings.rules);
@@ -1487,38 +1447,23 @@ class UserRouteHandler
                 var $inputs = $(this).closest("div").find("input");
                 var $select = $(this).closest("div").find("select");
 
-              if($(".capabilities:checked").length > 0)
-                {
+              if ($(".capabilities:checked").length > 0) {
                 // at least one checkbox was checked
-             
                      valid = true;
-
-                }
-                else
-                {
-                // no checkbox was checked
-                     $("#ch1").text("Please check at least one");
-                     valid = false;
+                } else {
+                    // no checkbox was checked
+                    $("#ch1").text("Please check at least one");
+                    valid = false;
                 }
 
-                if($(".expertise:checked").length > 0)
-                {
-                // at least one checkbox was checked
-             
+                if ($(".expertise:checked").length > 0) {
+                    // at least one checkbox was checked
                      valid = true;
+                } else {
+                    // no checkbox was checked
+                    $("#ch").text("Please check at least one");
+                    valid = false;
                 }
-                else
-                {
-                // no checkbox was checked
-                 $("#ch").text("Please check at least one");
-                 valid = false;
-                }
-             
-
-            
-              
-                
-
                 /*
                 $inputs.each(function() {
                     if (!validator.element(this) && valid) {
@@ -1533,37 +1478,30 @@ class UserRouteHandler
                         valid = false;
                     }
                 });
-            
+
                 if (valid) {
-                    
-                   // $(".tabcounter").text("2/3");
+                    // $(".tabcounter").text("2/3");
                     // jQuery("#myTab li:eq(1) a").tab("show");
                     console.log("valid " + $(this).attr("href"));
-                    
-                  if ($(this).attr("href") == "#verifications") {
+
+                    if ($(this).attr("href") == "#verifications") {
                         $(".tabcounter").text("3/3");
                         jQuery("#myTab li:eq(2) a").tab("show");
 
-                        if(localStorage.getItem("selected_native_lang") != null){
-
+                        if (localStorage.getItem("selected_native_lang") != null) {
                             $("#deleteBtn").show();
-                        }
-                        else{
+                        } else {
                             $("#deleteBtn").hide();
                         }
                         console.log(localStorage.getItem("selected_native_lang"));  
                     }
-                    
-                    
-                }
-                else{
+                } else {
                     //alert("Form has errors");
                     console.log("Invalid "+ $(this).attr("href"));
-                if ($(this).attr("href") == "#verifications") {
+                    if ($(this).attr("href") == "#verifications") {
                         $(".tabcounter").text("2/3");
                         jQuery("#myTab li:eq(1) a").tab("show");
                     }
-                    
                 }
             });
 
@@ -1637,16 +1575,12 @@ class UserRouteHandler
                 var fType = $("<div class=\"span4\"><select name=\"language_code_target_" + select_count + "\" id=\"language_code_target_" + select_count + "\" class=\"fieldtype\"><option value>--Select a language--</option>' . $target_lang . '</select></div>");
                 var fTypee = $("<div class=\"span2\"><select name=\"qualification_level_" + select_count + "\" id=\"qualification_level_" + select_count + "\" style=\"width: 75%\" class=\"fieldtype1\"><option value>--Select--</option>' . $qualification_level . '</select></div>");
 
-
                 fieldWrapper.append(fName);
                 fieldWrapper.append(fType);
 
-                
-
-                if(admin == "1") {
-                fieldWrapper.append(fTypee);
+                if (admin == "1") {
+                    fieldWrapper.append(fTypee);
                 }             
-                
 
                 if (select_count == 0) {
                     var addButton = $("<div class=\"span1\" style=\"\"><input type=\"button\" class=\"add\" id=\"add\" value=\"+\" /><div>");
@@ -1655,7 +1589,7 @@ class UserRouteHandler
                     var removeButton = $("<div class=\"span1\" style=\"\"><input type=\"button\" class=\"remove\" value=\"-\"  /><div>");
                     removeButton.click(function() {
                         Count1();
-                        if ($("#btnclick").text() <= 5) {
+                        if ($("#btnclick").text() <= parseInt(getSetting("userQualifiedPairsLimit"))) {
                             $("#add").show();
                         } else {
                             $("#add").hide();
@@ -1671,6 +1605,7 @@ class UserRouteHandler
                 if (getSetting("userQualifiedPairLanguageCodeSource_" + select_count) != "") {
                     $("#language_code_source_" + select_count).select2().val(getSetting("userQualifiedPairLanguageCodeSource_" + select_count)).trigger("change");
                     $("#language_code_target_" + select_count).select2().val(getSetting("userQualifiedPairLanguageCodeTarget_" + select_count)).trigger("change");
+                    $("#qualification_level_"  + select_count).select2().val(getSetting("userQualifiedPairQualificationLevel_" + select_count)).trigger("change");
                 }
             }
         });
@@ -1703,23 +1638,22 @@ class UserRouteHandler
                 var valid = true;
                 var i = 0;
                 var $inputs = $(this).closest("div").find("input");
-                
+
                 $inputs.each(function() {
                     if (!validator.element(this) && valid) {
                         valid = false;
                     }
                 });
-            
+
                 if (valid) {
                   $(".tabcounter").text("2/3");
                   jQuery("#myTab li:eq(1) a").tab("show");
-                }else{
+                } else {
                   $(".tabcounter").text("1/3");
                   jQuery("#myTab li:eq(0) a").tab("show");
                   console.log("Err 2");
- 
                 }
-            } else if($(this).attr("href") == "#verifications") {
+            } else if ($(this).attr("href") == "#verifications") {
                 $(".tabcounter").text("3/3");
                 jQuery("#myTab li:eq(2) a").tab("show");
             }
@@ -1760,53 +1694,50 @@ class UserRouteHandler
             return false;
         }
 
-        
-
         // Build language input fields
         $(document).on("click", "#add", function(e) {
             var select_count = $("#btnclick").text();
             Count();
 
-            if ($("#btnclick").text() == 5) {
+            if ($("#btnclick").text() == parseInt(getSetting("userQualifiedPairsLimit"))) {
               $("#add").hide();
             } else {
               $("#add").show();
             }
             e.preventDefault();
             var lastField = $("#buildyourform div:last");
-        
+
             var intId = (lastField && lastField.length && lastField.data("idx") + 1) || 1;
-    
+
             var fieldWrapper = $("<div class=\"row-fluid\" id=\"field" + intId + "\"/>");
             fieldWrapper.data("idx", intId);
-            
+
             var fName = $("<div class=\"span5\"><select name=\"language_code_source_" + select_count + "\" id=\"language_code_source_" + select_count + "\" class=\"fieldtype\" required=\"required\"><option value>--Select a language--</option>' . $source_lang . '</select></div>");
             var fType = $("<div class=\"span4\"><select name=\"language_code_target_" + select_count + "\" id=\"language_code_target_" + select_count + "\" class=\"fieldtype\" required=\"required\"><option value>--Select a language--</option>' . $target_lang . '</select></div>");
             var fTypee = $("<div class=\"span2\"><select name=\"qualification_level_" + select_count + "\" id=\"qualification_level_" + select_count + "\" style=\"width: 75%\" class=\"fieldtype1\"><option value>--Select--</option>' . $qualification_level . '</select></div>");
             var removeButton = $("<div class=\"span1\" style=\"\"><input type=\"button\" class=\"remove\" value=\"-\"  /><div>");
-   
+
             removeButton.click(function() {
                 Count1();
-                if ($("#btnclick").text() <= 5) {
+                if ($("#btnclick").text() <= parseInt(getSetting("userQualifiedPairsLimit"))) {
                     $("#add").show();
                 } else {
                     $("#add").hide();
                 }
-
                 console.log($(this));
                 $(this).parent().remove();
             });
-  
+
             fieldWrapper.append(fName);
             fieldWrapper.append(fType);
             var admin = "'.$isSiteAdmin.'";
-        
-            if(admin == "1") {
+
+            if (admin == "1") {
                 fieldWrapper.append(fTypee);
-                }  
+            }
             fieldWrapper.append(removeButton);
-            $("#language_code_source_"+ select_count).rules("add",  { required: true });
-            $("#language_code_source_"+ select_count).rules("add",  { required: true });
+            $("#language_code_source_"+ select_count).rules("add", { required: true });
+            $("#language_code_target_"+ select_count).rules("add", { required: true });
 
             $("#buildyourform").append(fieldWrapper);
             $(".fieldtype").select2({
@@ -1817,8 +1748,6 @@ class UserRouteHandler
                 placeholder: "--Select--",
                 width: "resolve"
             });
-           
-            
         });
         </script>';
 
@@ -1907,6 +1836,7 @@ class UserRouteHandler
                     else                                         $userDao->insert_communications_consent($user_id, 0);
 
                     $userDao->update_terms_accepted($user_id, 3);
+                    $userDao->NotifyRegistered($user_id);
 
                     $app->redirect($app->urlFor('org-dashboard'));
                 } catch (\Exception $e) {
@@ -2564,11 +2494,7 @@ class UserRouteHandler
                     $notifData = new Common\Protobufs\Models\UserTaskStreamNotification();
                     $notifData->setUserId($userId);
                     $notifData->setInterval($post['interval']);
-                    //if (isset($post['strictMode']) && $post['strictMode'] == 'enabled') {
                     $notifData->setStrict(true);
-                    //} else {
-                    //    $notifData->setStrict(false);
-                    //}
                     $success = $userDao->requestTaskStreamNotification($notifData);
                 }
 
@@ -2653,3 +2579,4 @@ class UserRouteHandler
 $route_handler = new UserRouteHandler();
 $route_handler->init();
 unset($route_handler);
+
