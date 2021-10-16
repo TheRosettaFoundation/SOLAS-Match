@@ -1122,7 +1122,7 @@ class UserRouteHandler
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
                 $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
             } else {
-                error_log("POST" . print_r($post, true)); //(**)
+                // error_log("POST" . print_r($post, true));
                 $user->setDisplayName($post['displayName']);
                 $user->setBiography($post['biography']);
 
@@ -1424,7 +1424,7 @@ class UserRouteHandler
                 if (valid) {
                     // $(".tabcounter").text("2/3");
                     // jQuery("#myTab li:eq(1) a").tab("show");
-                    console.log($(this).attr("href"));
+                    // console.log($(this).attr("href"));
 
                     if ($(this).attr("href") == "#profile1") {
                         $(".tabcounter").text("2/3");
@@ -1451,7 +1451,7 @@ class UserRouteHandler
             });
 
             $(".nexttab1").click(function() {
-                console.log($("#userprofile").validate().settings.rules);
+                //console.log($("#userprofile").validate().settings.rules);
                 //var selected = $("#tabs").tabs("option", "selected");
                 //$("#tabs").tabs("option", "selected", selected + 1);
                 var valid = true;
@@ -1477,7 +1477,7 @@ class UserRouteHandler
                 }
 
                 $select.each(function() {
-                    console.log(validator.element(this));
+                    // console.log(validator.element(this));
                     if (!validator.element(this) && valid) {
                         valid = false;
                     }
@@ -1486,7 +1486,7 @@ class UserRouteHandler
                 if (valid) {
                     // $(".tabcounter").text("2/3");
                     // jQuery("#myTab li:eq(1) a").tab("show");
-                    console.log("valid " + $(this).attr("href"));
+                    // console.log("valid " + $(this).attr("href"));
 
                     if ($(this).attr("href") == "#verifications") {
                         $(".tabcounter").text("3/3");
@@ -1497,11 +1497,11 @@ class UserRouteHandler
                         } else {
                             $("#deleteBtn").hide();
                         }
-                        console.log(localStorage.getItem("selected_native_lang"));  
+                        // console.log(localStorage.getItem("selected_native_lang"));
                     }
                 } else {
                     //alert("Form has errors");
-                    console.log("Invalid "+ $(this).attr("href"));
+                    //console.log("Invalid "+ $(this).attr("href"));
                     if ($(this).attr("href") == "#verifications") {
                         $(".tabcounter").text("2/3");
                         jQuery("#myTab li:eq(1) a").tab("show");
@@ -1655,7 +1655,7 @@ class UserRouteHandler
                 } else {
                   $(".tabcounter").text("1/3");
                   jQuery("#myTab li:eq(0) a").tab("show");
-                  console.log("Err 2");
+                  // console.log("Err 2");
                 }
             } else if ($(this).attr("href") == "#verifications") {
                 $(".tabcounter").text("3/3");
@@ -1728,7 +1728,7 @@ class UserRouteHandler
                 } else {
                     $("#add").hide();
                 }
-                console.log($(this));
+                // console.log($(this));
                 $(this).parent().remove();
             });
 
