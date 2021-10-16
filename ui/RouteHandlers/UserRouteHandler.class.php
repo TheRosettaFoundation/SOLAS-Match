@@ -644,6 +644,7 @@ class UserRouteHandler
         $app->view()->setData("gplus", $use_google_plus);
         
         if ($app->request()->isPost() || $openid->mode) {
+if (!$app->request()->isPost()) { error_log('$openid->mode true and allowing entry'); error_log("openid->mode: $openid->mode");}//(**)
             $post = $app->request()->post();
 
             if (isset($post['login'])) {
@@ -704,6 +705,7 @@ class UserRouteHandler
             } elseif (isset($post['password_reset'])) {
                 $app->redirect($app->urlFor("password-reset-request"));
             } else {
+error_log('openIdLogin()');//(**)
                 try {
                     $this->openIdLogin($openid, $app);
                 } catch (Exception $e) {
