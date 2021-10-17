@@ -18,24 +18,6 @@ function getSetting(text)
   return document.getElementById(text).innerHTML;
 }
 
-function set_all_errors_for_submission()
-{
-  set_errors_for_submission("placeholder_for_errors_1");
-  set_errors_for_submission("placeholder_for_errors_2");
-}
-
-function set_errors_for_submission(id)
-{
-  html = "";
-  if (alertError != null) {
-    html += '<p class="alert alert-error">';
-      html += '<strong>' + parameters.getTranslation('common_error') + ': </strong>';
-      html += alertError;
-    html += '</p>';
-  }
-  document.getElementById(id).innerHTML = html;
-}
-
 /**
  * Called by the DOM when the Document is Ready.
  */
@@ -74,53 +56,6 @@ function deleteUserFail()
   // Seems that the call (even though it deletes the user) always calls the "fail" handler
   DAOdestroyUserSession();
   window.location.replace(siteLocation);
-}
-
-function validateForm()
-{
-  alertError = null;
-
-  if (document.getElementById("language_code_source_0").value == "" || document.getElementById("language_code_target_0").value == "") {
-      alertError = "You must fill out the languages you can translate from and to.";
-      set_all_errors_for_submission();
-      return false;
-  }
-
-  for (var i = 0; i < userQualifiedPairsCount; i++) {
-    var languageCodeSource = document.getElementById("language_code_source_" + i);
-    var languageCodeTarget = document.getElementById("language_code_target_" + i);
-
-    if ((languageCodeSource.value == "" && languageCodeTarget.value != "") || (languageCodeTarget.value == "" && languageCodeSource.value != "") ||
-        (languageCodeSource.value == languageCodeTarget.value)) {
-      alertError = parameters.getTranslation("user_private_profile_secondary_languages_failed");
-      set_all_errors_for_submission();
-      return false;
-    }
-  }
-
-  var capabilityCount = parseInt(getSetting("capabilityCount"));
-  var checkedCount = 0;
-  for (var i = 0; i < capabilityCount; i++) {
-    if (document.getElementById("capability" + i).checked) checkedCount++;
-  }
-  if (!checkedCount) {
-    alertError = "You must indicate that you can provide at least one service such as translation.";
-    set_all_errors_for_submission();
-    return false;
-  }
-
-  var expertiseCount = parseInt(getSetting("expertiseCount"));
-  checkedCount = 0;
-  for (var i = 0; i < expertiseCount; i++) {
-    if (document.getElementById("expertise" + i).checked) checkedCount++;
-  }
-  if (!checkedCount && !parseInt(getSetting("isSiteAdmin"))) {
-    alertError = "You must indicate at least one field of expertise.";
-    set_all_errors_for_submission();
-    return false;
-  }
-
-  return true;
 }
 
 /**
