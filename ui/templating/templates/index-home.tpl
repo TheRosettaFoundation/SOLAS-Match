@@ -90,7 +90,7 @@
                   <div class="item">
                    
                     <img src="{urlFor name='home'}ui/img/homepage/slider22.jpg" alt="Slider_2_Img">
-                    <div class="top-left"><h2>We connect community members<br/> and humanitarian organisations</h2><br/><h3>Join to meet other humanitarian linguists and<br/>support non-profits.</h3>
+                    <div class="top-left"><h2>We connect community members<br/> and humanitarian organizations</h2><br/><h3>Join to meet other humanitarian linguists and<br/>support nonprofits.</h3>
                     <br/>
                      <button class=" btn-white btn-block btn-home-slider" type="submit">
 	               <a href="{urlFor name='register'}"> Join</a>
@@ -139,7 +139,7 @@
                   </div>
                      <div class="item">
                     <img src="{urlFor name='home'}ui/img/homepage/slider4.png" alt="Slider_4_Img">
-                     <div class="top-left"><h2>TWB helps people get vital information, and <br/>be heard, whatever language they speak. </h2><br/><h3>Join to have a real world impact.</h3>
+                     <div class="top-left"><h2>TWB helps people get vital information, and <br/>be heard, whatever language they speak. </h2><br/><h3>Join to have a real-world impact.</h3>
                      <br/>
                      <button class=" btn-white btn-block btn-home-slider" type="submit">
 	               <a href="{urlFor name='register'}"> Join</a>
@@ -265,8 +265,8 @@
 </div>
 <div class="span3">
   <span>Have real-world impact on communities by translating humanitarian and development content in the languages those communities speak.<br/>
-           Contribute to the development of glossaries and chatbots, create voice recordings and subtitle videos.Make humanitarian responses more effective by making localised information available in different formats.<br/>
-             Bridge the worlds's language gap and help respond more sensitively to the existing need.  </span>
+           Contribute to the development of glossaries and chatbots, create voice recordings and subtitle videos. Make humanitarian responses more effective by making localized information available in different formats.<br/>
+             Bridge the world's language gap and help respond more sensitively to the existing need.  </span>
 </div>
 </div>
 
@@ -393,7 +393,7 @@
             {include file="statistics.tpl"}
         {/if} 
         <div class="row-fluid">
-        <div class="span3"></div>
+    
         <div class="span4">
         <script type="text/javascript" src="//rf.revolvermaps.com/0/0/4.js?i=7puikkj5km8&amp;m=7&amp;h=200&amp;c=ff00ff&amp;r=0" async="async"></script>
         </div>

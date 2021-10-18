@@ -52,7 +52,7 @@
         <ul id="myTab" class="nav nav-tabs">
             <li class="active"><a href="#home" data-toggle="tab" id="btnTrigger"><span class="clear_brand">1. Personal Information</span></a></li>
             <li class="not-active" id="prof"><a href="#profile" data-toggle="tab" id="btnTrigger"><span class="clear_brand">2. Language and professional Information</span></a></li>
-            <li class="not-active"><a href="#verifications" data-toggle="tab" id="btnTrigger"><span class="clear_brand">3. Verfications</span></a></li>
+            <li class="not-active"><a href="#verifications" data-toggle="tab" id="btnTrigger"><span class="clear_brand">3. Verifications</span></a></li>
         </ul>
         <div id="myTabContent" class="tab-content">
             <div class="tab-pane fade active in" id="home">
@@ -88,7 +88,7 @@
                         </div>
                         <div>
                             <label class="checkbox clear_brand">
-                            <input type="checkbox" name="receiveCredit"> Make my information including,which non-profits I contribute to visible to the TWB Community
+                            <input type="checkbox" name="receiveCredit"> Make my information including which nonprofits I contribute to visible to the TWB Community
                             </label>
                         </div>
                     </div>
@@ -226,7 +226,7 @@
             </div>
             <div class="tab-pane fade" id="verifications">
                 <br/>
-                <p class="desc">If you hold a certification or membership from any of the organizations below, you could qualify to be a verified translator. Please select the organization and click to submit a proof of certification/membership. You will be upgraded to Verified Translator, which will give you immediate access to all projects available, for the verified combination. if you have any questions or can't upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject=Translation%20Certification" target="_blank">translators@translatorswithoutborders.org</a></p>
+                <p class="desc">If you hold a certification or membership from any of the organizations below, you could qualify to be a verified translator. Please select the organization and click to submit a proof of certification/membership. You will be upgraded to Verified Translator, which will give you immediate access to all projects available, for the verified combination. If you have any questions or can't upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject=Translation%20Certification" target="_blank">translators@translatorswithoutborders.org</a></p>
                 <ul>
                     {foreach from=$certification_list key=name item=certification}
                         <li>{if $certification['state']}Already submitted{if $certification['reviewed'] == 1} and reviewed{/if}: {/if}<a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$name"}" target="_blank">{$certification['desc']|escape:'html':'UTF-8'}</a></li>
