@@ -119,7 +119,7 @@ $from_neon_to_trommons_pair = array(
 'Welsh' => array('cy', 'GB'),
 'Xhosa' => array('xh', 'ZA'),
 'Yoruba' => array('yo', 'NG'),
-'Zarma' => array('dje', 'NE'),
+//'Zarma' => array('dje', 'NE'),
 'Zulu' => array('zu', 'ZA'),
 'Hmong' => array('hmn', '--'),
 'Karen' => array('kar', 'MM'),
@@ -217,4 +217,6 @@ $language_options_changes = [
   'bin-NG#' => 'Bini',
   'run-BI' => 'Rundi',
   'run-BI#' => 'Kirundi',
+  'cnr-90#' => 'Serbian (Latin, Montenegro)',
+  'cnr-91#' => 'Serbian (Cyrillic, Montenegro)',
 ];
