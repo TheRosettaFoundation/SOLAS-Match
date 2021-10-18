@@ -106,7 +106,7 @@
                         <div>
                             <label class="checkbox clear_brand">
                             <input name="communications_consent" id="communications_consent" value="{$communications_consent}" type="checkbox"> Subscribe to the TWB Email newsletter
-                            <br/><small><i>You can unsubscribe at any time</i></small>
+                            <br/><small><i>You can unsubscribe at any time </i></small>
                             </label>
                         </div>
                     </div>

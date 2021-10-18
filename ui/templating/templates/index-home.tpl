@@ -64,7 +64,7 @@
                 
                   <div class="item active">
                 
-                    <img src="{urlFor name='home'}ui/img/homepage/slider1.jpg" alt="Slider_1_Img">
+                    <img src="{urlFor name='home'}ui/img/homepage/slider1_bk.jpg" alt="Slider_1_Img">
                     <div class="top-left"><h2>We provide growth opportunities for<br/> our community members</h2><br/><h3>Join to gain new experiences, learn relevant<br/> skills and increase your qualifications.</h3>
                     <br/>
                      <button class=" btn-white btn-block btn-home-slider" type="submit">
