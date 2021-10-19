@@ -24,7 +24,7 @@
             <p><strong>{Localisation::getTranslation('common_success')}! </strong>{TemplateHelper::uiCleanseHTMLKeepMarkup($flash['success'])}</p>
         </div>
     {/if}
-
+<div class="row-fluid">
         <form method="post" action="{urlFor name='login'}" accept-charset="utf-8">
             <label for="email"><strong>{Localisation::getTranslation('common_email')}</strong></label>
             <input type="text" name="email" id="email"/>
@@ -71,4 +71,5 @@
                     </div>
             </fieldset>
         </form>
+        </div>
 {include file="footer.tpl"}

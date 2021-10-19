@@ -1506,6 +1506,8 @@ class UserDao extends BaseDao
         $certification_list['ATIA']    = ['desc' => 'Association of Translators and Interpreters of Alberta (ATIA) - Certified Members', 'state' => 0, 'reviewed' => 0];
         $certification_list['ATIS']    = ['desc' => 'Association of Translators and Interpreters of Saskatchewan (ATIS) - Certified Members', 'state' => 0, 'reviewed' => 0];
         $certification_list['ATINS']   = ['desc' => 'Association of Translators and Interpreters of Nova Scotia (ATINS) - Certified Members', 'state' => 0, 'reviewed' => 0];
+        //ksort($certification_list);
+        usort($certification_list, function($a, $b){ return strcmp($a["desc"], $b["desc"]); }); 
         $certifications = $this->getUserCertifications($user_id);
         foreach ($certifications as $certification) {
             if (!empty($certification_list[$certification['certification_key']])) {
