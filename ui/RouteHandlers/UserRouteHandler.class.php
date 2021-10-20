@@ -1904,7 +1904,8 @@ class UserRouteHandler
                 }
                 $userDao->saveUserFile($user_id, $cert_id, $post['note'], $userFileName, $data);
                 $upload_pending = 0;
-                $app->flashNow('success', 'Certificate uploaded sucessfully, please click <a href="javascript:window.close();">Close Window</a>');
+                // $app->flashNow('success', 'Certificate uploaded sucessfully, please click <a href="javascript:window.close();">Close Window</a>');
+                $app->flashNow('success', 'Certificate uploaded sucessfully, please close this window to get back to your profile page');
             }
         }
 
