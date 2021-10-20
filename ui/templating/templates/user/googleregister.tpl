@@ -74,7 +74,7 @@
             <input type="text" name="last_name" id="last_name" placeholder="Last name" value="{$lastname|escape:'html':'UTF-8'}" required/>
 
             <label class="checkbox required check">
-            <input name="age_consent" id="age_consent" type="checkbox"> I confirm I am over the age of 18 <i class="icon-question-sign" id="tool" data-toggle="tooltip" title="If you are under 18 years of age, you can't work with us. Our child protection policy prevents it"></i>
+            <input name="age_consent" id="age_consent" type="checkbox"> I confirm I am over the age of 18 <i class="icon-question-sign" id="tool" data-toggle="tooltip" title="If you are under 18 years of age, you can't volunteer with us. Our child protection policy prevents it"></i>
             </label>
            
             <label class="checkbox required check">
