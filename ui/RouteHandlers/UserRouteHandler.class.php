@@ -981,6 +981,7 @@ EOD;
             $openid->identity = $openid->data["openid_identifier"];
             $openid->required = array("contact/email");
             $url = $openid->authUrl();
+error_log("Redirecting in openIdLogin(), openid->identity: $openid->identity, url: $url");//(**)
             $app->redirect($openid->authUrl());
         } elseif ($openid->mode == "cancel") {
             $app->flash('error', (Lib\Localisation::getTranslation('login_2')));
