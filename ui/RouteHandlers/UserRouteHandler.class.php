@@ -1371,34 +1371,6 @@ class UserRouteHandler
                 }
             });
 
-            // This comes from ui_dev2 branch. Is it required?...(**)
-            $.validator.addMethod("checkone", function() {
-                if ($(".capabilities").is(":checked")) {
-                    return true;
-                }
-                return false;
-            }, "Please check at least one");
-
-            $("[name^=badge_id_]").each(function() {
-                $(this).rules("add", {
-                    checkone: true
-                });
-            });
-
-            $.validator.addMethod("expertise_check", function() {
-                if ($(".expertise").is(":checked")) {
-                    return true;
-                }
-                return false;
-            }, "Please check at least one");
-
-            $(".expertise").each(function() {
-                $(this).rules("add", {
-                    expertise_check: true
-                });
-            });
-            // Above comes from ui_dev2 branch. Is it required?(**)
-
             $(".nexttab").click(function() {
                 //var selected = $("#tabs").tabs("option", "selected");
                 //$("#tabs").tabs("option", "selected", selected + 1);
