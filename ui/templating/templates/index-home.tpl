@@ -183,24 +183,18 @@
    </div> -->
 
  <div class="row-fluid">
-    
-        
-         <div class="span4">
-           <p></p>
-           <p></p>
-         </div>
-         <div class="span4">
-              <div id="globe" style="text-align: center">
-            <br/>
-            <script type="text/javascript" src="//rf.revolvermaps.com/0/0/4.js?i=7puikkj5km8&amp;m=7&amp;h=250&amp;c=ff00ff&amp;r=0" async="async"></script>
-            <br/>
-        </div>
-         </div>
-         <div class="span4">
-          <p></p>
-         </div>
-  
+ <br/>
+    <p class="btn-primary" style="color:#FFFFFF;">Translators without Borders is a global community that brings together over 60000 volunteers who offer their time, language skills and voices to support our mission - to help people get vital
+    information and be heard, whatever language they speak. Through translation,subtitling and the power of their speech, our volunteers provide a wide range of information from medical
+    content for farmers in Latin America to crisis relief information for people affected by earthquakes in Haiti, and resources for victims of gender-based violence and sexual abuse around the globe.
+    <br/>
+    <br/>
+    You can volunteer with Translators without Borders if you are fluent in atleast one language other than your native language. 
+    <br/>
+    </p>  
    </div>
+   <br/>
+   <br/>
    <br/>
     <div class="row-fluid">
     
@@ -356,15 +350,17 @@
     </div>
 {/if}
 
+{if isset($user)}
+
 <div class="page-header">
-  <!-- <h1>
+     <h1>
         {Localisation::getTranslation('index_translation_tasks')} <small>{Localisation::getTranslation('index_1')}</small>
         <a href="{urlFor name='org-search'}" class="pull-right btn btn-primary">
             <i class="icon-search icon-white"></i> {Localisation::getTranslation('common_search_for_organisations')}
         </a>
-    </h1> -->
+    </h1> 
 </div>
-
+{/if}
 <div class="row">
 
     <div class="span4 pull-right">
