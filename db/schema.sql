@@ -9713,7 +9713,7 @@ BEGIN
     LEFT JOIN OrganisationMembers o ON u.id=o.user_id
     WHERE
         (ta.user_id IS NULL OR ta.accepted_level!=3) AND
-        u.`created-time`>'2021-07-24 08:00:00' AND
+        u.`created-time`>'2021-10-25 07:00:00' AND
         u.`created-time`<(NOW() - INTERVAL 84 HOUR) AND
         a.user_id IS NULL AND
         o.user_id IS NULL
@@ -9756,7 +9756,7 @@ BEGIN
     LEFT JOIN WillBeDeletedUsers wdu ON u.id=wdu.user_id
     WHERE
         (ta.user_id IS NULL OR ta.accepted_level!=3) AND
-        u.`created-time`>'2021-10-01 01:00:00' AND
+        u.`created-time`>'2021-10-25 07:00:00' AND
         u.`created-time`<(NOW() - INTERVAL 12 HOUR) AND
         wdu.user_id IS NULL;
 END//
