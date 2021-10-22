@@ -706,6 +706,8 @@ if (!$app->request()->isPost()) { error_log('$openid->mode true and allowing ent
                 $app->redirect($app->urlFor("password-reset-request"));
             } else {
 error_log('openIdLogin()');//(**)
+if (!empty($openid)) error_log(print_r($openid, true));//(**)
+else error_log("openid empty()");//(**)
                 try {
                     $this->openIdLogin($openid, $app);
                 } catch (Exception $e) {
