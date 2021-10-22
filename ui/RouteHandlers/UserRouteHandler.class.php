@@ -721,6 +721,7 @@ error_log("openIdLogin try failed");//(**)
 error_log("openIdLogin error: $error");//(**)
                     $app->flashNow('error', $error);
                 }
+error_log("exit else block");//(**)
             }
         } else {
             $authCode = $app->request()->get('code');
