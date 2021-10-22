@@ -711,12 +711,14 @@ else error_log("openid empty()");//(**)
                 try {
                     $this->openIdLogin($openid, $app);
                 } catch (Exception $e) {
+error_log("openIdLogin try failed");//(**)
                     $error = sprintf(
                         Lib\Localisation::getTranslation('login_1'),
                         $app->urlFor("login"),
                         $app->urlFor("register"),
                         $e->getMessage()
                     );
+error_log("openIdLogin error: $error");//(**)
                     $app->flashNow('error', $error);
                 }
             }
