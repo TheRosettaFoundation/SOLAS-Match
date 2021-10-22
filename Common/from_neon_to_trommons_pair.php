@@ -217,6 +217,4 @@ $language_options_changes = [
   'bin-NG#' => 'Bini',
   'run-BI' => 'Rundi',
   'run-BI#' => 'Kirundi',
-  'cnr-90#' => 'Serbian (Latin, Montenegro)',
-  'cnr-91#' => 'Serbian (Cyrillic, Montenegro)',
 ];
