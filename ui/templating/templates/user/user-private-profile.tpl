@@ -86,6 +86,8 @@
                                 {/foreach}
                             </select>
                         </div>
+                        <br/>
+                    
                         <div>
                             <label class="checkbox clear_brand">
                             <input type="checkbox" name="receiveCredit"> Make my information including which nonprofits I contribute to visible to the TWB Community
@@ -116,8 +118,8 @@
             <div class="tab-pane fade profile" id="profile">
                 <br/>
                 <div class="row-fluid" >
-                    <div class="span6">
-                        <label class="clear_brand required"><strong>Native language</strong> <i class="icon-question-sign" id="tool5" data-toggle="tooltip" title="Please choose your native language and the country of your dialect/variant"></i></label>
+                    <div class="span5">
+                        <label class="clear_brand required"><strong>Native language</strong> <i class="icon-question-sign" id="tool5" data-toggle="tooltip" title="Please choose your native language."></i></label>
                         <select name="nativeLanguageSelect" class="nativeLanguageSelect" id="nativeLanguageSelect">
                             <option value="">--Select--</option>
                             {foreach $languages as $language}
@@ -125,8 +127,8 @@
                             {/foreach}
                         </select>
                     </div>
-                    <div class="span6">
-                        <label class="clear_brand required"><strong>Variant</strong> <i class="icon-question-sign" id="tool4" data-toggle="tooltip" title="--"></i></label>
+                    <div class="span4">
+                        <label class="clear_brand required"><strong>Variant</strong> <i class="icon-question-sign" id="tool4" data-toggle="tooltip" title="Please choose the country of your native language dialect/variant)."></i></label>
                         <select name="nativeCountrySelect" class="variant">
                             <option value="">--Select--</option>
                             {foreach $countries as $country}
@@ -137,13 +139,14 @@
                         </select>
                     </div>
                 </div>
+                <br/>
                 <div id="buildyourform">
                     <div class="row-fluid" >
                         <div class="span5">
-                            <label class="clear_brand required"><strong>I can translate from</strong> <i class="icon-question-sign" id="tool3" data-toggle="tooltip" title="Your language pairs should reflect the languages you are proficient or native in. We encourage linguists to translate into their native language(s)."></i></label>
+                            <label class="clear_brand required"><strong>I can translate from</strong> <i class="icon-question-sign" id="tool3" data-toggle="tooltip" title="Please choose language/s you are proficient but not native in."></i></label>
                         </div>
                         <div class="span4">
-                            <label class="clear_brand required"><strong>To</strong> <i class="icon-question-sign" id="tool2" data-toggle="tooltip" title="--"></i></label>
+                            <label class="clear_brand required"><strong>To</strong> <i class="icon-question-sign" id="tool2" data-toggle="tooltip" title="We encourage translators to translate into their native language/s)."></i></label>
                         </div>
                         {if $isSiteAdmin}
                         <div class="span2">
@@ -222,7 +225,9 @@
                     </div>
                 </div>
                 <br/>
-                <a style="cursor:pointer;color:#FFFFFF;" href="#verifications" class="pull-right nexttab1 next111 btn btn-primary" id="btnTrigger1">Next</a> <a style="cursor:pointer;color:#FFFFFF;" href="#home" class="pull-right next111 btn btn-primary" id="btnTrigger11">Prev</a>
+        
+                <a style="cursor:pointer;color:#FFFFFF;margin-right:18%;" href="#verifications" class="pull-right nexttab1 next111 btn btn-primary" id="btnTrigger1">Next</a> <a style="cursor:pointer;color:#FFFFFF;" href="#home" class="pull-right next111 btn btn-primary" id="btnTrigger11">Prev</a>
+            
             </div>
             <div class="tab-pane fade" id="verifications">
                 <br/>
@@ -237,6 +242,7 @@
                 <p class="desc">Certificates or other relevant documents about your translation qualifications. Please provide a short title for your qualification and upload the corresponding file. Project Officers will also upload here any certificates you obtain while volunteering with TWB. If you have any questions or can’t upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject=Translation%20Certification" target="_blank">translators@translatorswithoutborders.org</a></p>
                 <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TRANSLATOR"}" target="_blank">Upload file</a>
                 <br/>
+                <span class="profile_btn">
                 <button type="submit"  class='pull-right btn btn-primary' id="updateBtn">
                     <i class="icon-refresh icon-white"></i> Complete
                 </button>

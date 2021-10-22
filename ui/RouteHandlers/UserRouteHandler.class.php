@@ -1515,6 +1515,7 @@ class UserRouteHandler
             $("#tool3").tooltip();
             $("#tool4").tooltip();
             $("#tool5").tooltip();
+            $("#tool6").tooltip();
 
             function formatCountry (country) {
                 if (!country.id) { return country.text; }
@@ -1587,7 +1588,8 @@ class UserRouteHandler
                 }             
 
                 if (select_count == 0) {
-                    var addButton = $("<div class=\"span1\" style=\"\"><input type=\"button\" class=\"add\" id=\"add\" value=\"+\" /><div>");
+                    var tool6tip = "<i class=\"icon-question-sign\" id=\"tool6\" data-toggle=\"tooltip\" title=\"Please choose your native language.\"></i>";
+                    var addButton = $("<div class=\"span1\" style=\"\"><input type=\"button\" class=\"add\" id=\"add\" value=\"+\" title=\"Please choose your native language.\" /><div>");
                     fieldWrapper.append(addButton);
                 } else {
                     var removeButton = $("<div class=\"span1\" style=\"\"><input type=\"button\" class=\"remove\" value=\"-\"  /><div>");

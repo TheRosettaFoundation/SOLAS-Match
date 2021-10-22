@@ -389,3 +389,28 @@ table {
 	background: #125688;
 	color: white;
 }
+
+.home_text {
+	color: #ffffff !important;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	padding-left: 20px;
+}
+
+.top_btn {
+	position: relative;
+	top: -45px;
+}
+
+input[value^="+"],
+input[value^="-"] {
+	color: #ffffff;
+}
+
+.add {
+	background: #000000;
+}
+
+.remove {
+	background: #c0c0c0;
+}
