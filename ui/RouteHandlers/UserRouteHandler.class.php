@@ -698,9 +698,7 @@ class UserRouteHandler
         $langDao = new DAO\LanguageDao();
 
         $error = null;
-        $openid = new \LightOpenID("https://" . $_SERVER["HTTP_HOST"] . $app->urlFor("home"));
-
-        if ($app->request()->isPost() || $openid->mode) {
+        if ($app->request()->isPost()) {
             $post = $app->request()->post();
 
             if (isset($post['login'])) {
@@ -786,18 +784,6 @@ class UserRouteHandler
                 $error = sprintf(Lib\Localisation::getTranslation('gplus_error'), $app->urlFor('login'), $app->urlFor('register'), "[$error]");
                 $app->flash('error', $error);
                 $app->redirect($app->urlFor('home'));
-            } else {
-                try {
-                    $this->openIdLogin($openid, $app);
-                } catch (Exception $e) {
-                    $error = sprintf(
-                        Lib\Localisation::getTranslation('login_1'),
-                        $app->urlFor("login"),
-                        $app->urlFor("register"),
-                        $e->getMessage()
-                    );
-                    $app->flashNow('error', $error);
-                }
             }
         } else {
             $authCode = $app->request()->get('code');
@@ -970,27 +956,6 @@ class UserRouteHandler
     private static function createGooglePlusJavaScript()
     {
         return '<script src="https://accounts.google.com/gsi/client" async defer></script>';
-    }
-
-    public function openIdLogin($openid, $app)
-    {
-        if (!$openid->mode) {
-            $openid->identity = $openid->data["openid_identifier"];
-            $openid->required = array("contact/email");
-            $url = $openid->authUrl();
-            $app->redirect($openid->authUrl());
-        } elseif ($openid->mode == "cancel") {
-            $app->flash('error', (Lib\Localisation::getTranslation('login_2')));
-            $app->redirect($app->urlFor('login'));
-        } else {
-            $retvals = $openid->getAttributes();
-            if ($openid->validate()) {
-                error_log("OpenID, Login: {$retvals['contact/email']}");
-                // Request Auth code and redirect
-                $userDao = new DAO\UserDao();
-                $userDao->requestAuthCode($retvals['contact/email']);
-            }
-        }
     }
 
     public function googleregister($user_id)

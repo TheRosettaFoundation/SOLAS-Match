@@ -277,36 +277,6 @@ class UserDao
         return $ret;
     }
 
-    public static function openIdLogin($openid, $app)
-    {
-        if (!$openid->mode) {
-            try {
-                $openid->identity = $openid->data['openid_identifier'];
-                $openid->required = array('contact/email');
-                $url = $openid->authUrl();
-                $app->redirect($openid->authUrl());
-            } catch (ErrorException $e) {
-                echo $e->getMessage();
-            }
-        } elseif ($openid->mode == 'cancel') {
-            throw new InvalidArgumentException('User has canceled authentication!');
-            return false;
-        } else {
-            $retvals = $openid->getAttributes();
-            if ($openid->validate()) {
-                $user = self::getUsers(null, $retvals['contact/email']);
-                if (is_array($user)) {
-                    $user = $user[0];
-                }
-                if (!is_object($user)) {
-                    $user = self::create($retvals['contact/email'], md5($retvals['contact/email']));
-                }
-                UserSession::setSession($user->getId());
-            }
-            return true;
-        }
-    }
-
     public static function logout()
     {
         UserSession::destroySession();
