@@ -1398,7 +1398,6 @@ class UserRouteHandler
 
                 if ($(".capabilities:checked").length > 0) {
                     // at least one checkbox was checked
-                    valid = true;
                 } else {
                     // no checkbox was checked
                     $("#ch1").text("Please check at least one");
@@ -1406,7 +1405,6 @@ class UserRouteHandler
                 }
                 if ($(".expertise:checked").length > 0) {
                     // at least one checkbox was checked
-                     valid = true;
                 } else {
                     // no checkbox was checked
                     $("#ch").text("Please check at least one");
