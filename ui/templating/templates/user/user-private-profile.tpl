@@ -143,10 +143,10 @@
                 <div id="buildyourform">
                     <div class="row-fluid" >
                         <div class="span5">
-                            <label class="clear_brand required"><strong>I can translate from</strong> <i class="icon-question-sign" id="tool3" data-toggle="tooltip" title="Please choose language/s you are proficient but not native in."></i></label>
+                            <label class="clear_brand required"><strong>I can translate from</strong> <i class="icon-question-sign" id="tool3" data-toggle="tooltip" title="Please choose languages you are proficient but not native in."></i></label>
                         </div>
                         <div class="span4">
-                            <label class="clear_brand required"><strong>To</strong> <i class="icon-question-sign" id="tool2" data-toggle="tooltip" title="We encourage translators to translate into their native language/s)."></i></label>
+                            <label class="clear_brand required"><strong>To</strong> <i class="icon-question-sign" id="tool2" data-toggle="tooltip" title="We encourage translators to translate into their native language."></i></label>
                         </div>
                         {if $isSiteAdmin}
                         <div class="span2">
@@ -246,6 +246,7 @@
                 <button type="submit"  class='pull-right btn btn-primary' id="updateBtn">
                     <i class="icon-refresh icon-white"></i> Complete
                 </button>
+                </span>
                 <a style="cursor:pointer;color:#FFFFFF;" href="#profile1" class="pull-right next111 btn btn-primary" id="btnTrigger11">Prev</a>
                 <br/>
                 <br/>
