@@ -981,6 +981,8 @@ error_log("in openIdLogin()");//(**)
         if (!$openid->mode) {
 error_log("in openIdLogin() !mode");//(**)
             $openid->identity = $openid->data["openid_identifier"];
+if (!empty($openid->identity)) error_log(print_r($openid, true));//(**)
+else error_log("in openIdLogin() openid->identity empty()");//(**)
             $openid->required = array("contact/email");
             $url = $openid->authUrl();
 error_log("Redirecting in openIdLogin(), openid->identity: $openid->identity, url: $url");//(**)
