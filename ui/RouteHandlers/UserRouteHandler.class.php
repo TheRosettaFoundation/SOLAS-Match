@@ -644,7 +644,6 @@ class UserRouteHandler
         $app->view()->setData("gplus", $use_google_plus);
         
         if ($app->request()->isPost() || $openid->mode) {
-if (!$app->request()->isPost()) { error_log('$openid->mode true and allowing entry'); error_log("openid->mode: $openid->mode");}//(**)
             $post = $app->request()->post();
 
             if (isset($post['login'])) {
@@ -705,23 +704,17 @@ if (!$app->request()->isPost()) { error_log('$openid->mode true and allowing ent
             } elseif (isset($post['password_reset'])) {
                 $app->redirect($app->urlFor("password-reset-request"));
             } else {
-error_log('openIdLogin()');//(**)
-if (!empty($openid)) error_log(print_r($openid, true));//(**)
-else error_log("openid empty()");//(**)
                 try {
                     $this->openIdLogin($openid, $app);
                 } catch (Exception $e) {
-error_log("openIdLogin try failed");//(**)
                     $error = sprintf(
                         Lib\Localisation::getTranslation('login_1'),
                         $app->urlFor("login"),
                         $app->urlFor("register"),
                         $e->getMessage()
                     );
-error_log("openIdLogin error: $error");//(**)
                     $app->flashNow('error', $error);
                 }
-error_log("exit else block");//(**)
             }
         } else {
             $authCode = $app->request()->get('code');
@@ -982,33 +975,23 @@ EOD;
     
     public function openIdLogin($openid, $app)
     {
-error_log("in openIdLogin()");//(**)
         if (!$openid->mode) {
-error_log("in openIdLogin() !mode");//(**)
             $openid->identity = $openid->data["openid_identifier"];
-if (!empty($openid->identity)) error_log(print_r($openid, true));//(**)
-else error_log("in openIdLogin() openid->identity empty()");//(**)
             $openid->required = array("contact/email");
             $url = $openid->authUrl();
-error_log("Redirecting in openIdLogin(), openid->identity: $openid->identity, url: $url");//(**)
             $app->redirect($openid->authUrl());
         } elseif ($openid->mode == "cancel") {
-error_log("in openIdLogin() mode cancel");//(**)
             $app->flash('error', (Lib\Localisation::getTranslation('login_2')));
             $app->redirect($app->urlFor('login'));
         } else {
-error_log("in openIdLogin() getAttributes()");//(**)
             $retvals = $openid->getAttributes();
             if ($openid->validate()) {
                 error_log("OpenID, Login: {$retvals['contact/email']}");
                 // Request Auth code and redirect
                 $userDao = new DAO\UserDao();
                 $userDao->requestAuthCode($retvals['contact/email']);
-error_log("in openIdLogin() after requestAuthCode()");//(**)
             }
-error_log("in openIdLogin() not validate()");//(**)
         }
-error_log("end openIdLogin()");//(**)
     }
 
     public static function userPrivateProfile($user_id)
