@@ -63,6 +63,9 @@
     .navbar .nav li a{
         color:#143878 !important;
     }
+     .main_nav li a:hover{
+        color:#FFFFFF !important;
+    }
     .header-link{
         margin-bottom:1%;
         margin-right:1%;
@@ -82,7 +85,7 @@
            <div class="navbar-inner">
                 <div class="container">
                     <a href="{urlFor name='home'}" class="pull-left header-link"><img height="60px" width="85%"  src="{urlFor name='home'}ui/img/TWB_logo1.PNG"></a> 
-                    <ul class="nav">
+                    <ul class="nav main_nav">
                         {if !isset($site_admin)}
                         <li {if isset($current_page) && $current_page == 'home'}class="active"{/if} >
                             <a href="{urlFor name="home"}">{Localisation::getTranslation('header_home')}</a>
@@ -132,7 +135,7 @@
                             </li>
                         {/if}
                     </ul>
-                    <ul class="nav pull-right" style="max-height: 38px">
+                    <ul class="nav pull-right main_nav_right" style="max-height: 38px">
                         {if isset($userNotifications)}   
                             <li>
                                 <a>{Localisation::getTranslation('header_notifications')}<span id="notificationCount">{$userNotifications->lenght()}</span></a>

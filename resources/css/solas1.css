@@ -173,6 +173,30 @@ table {
 	background-color: #cb7500;
 }
 
+.main_nav a:hover {
+	background-color: #e8991c !important;
+	color: #ffffff !important;
+}
+
+.main_nav_right li {
+	position: relative;
+	display: inline-block;
+}
+
+.main_nav_right li:after {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 80%;
+	width: 0;
+	height: 2px;
+	background-color: #e8991c;
+	transition: width 0.3s ease-in-out;
+}
+.main_nav_right li:hover:after {
+	width: 100%;
+}
+
 #trackedOrganisationForm {
 	float: right;
 	margin-top: -6px;

@@ -242,7 +242,7 @@
                 <p class="desc">Certificates or other relevant documents about your translation qualifications. Please provide a short title for your qualification and upload the corresponding file. Project Officers will also upload here any certificates you obtain while volunteering with TWB. If you have any questions or can’t upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject=Translation%20Certification" target="_blank">translators@translatorswithoutborders.org</a></p>
                 <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TRANSLATOR"}" target="_blank">Upload file</a>
                 <br/>
-                <span class="profile_btn">
+                
                 <button type="submit"  class='pull-right btn btn-primary' id="updateBtn">
                     <i class="icon-refresh icon-white"></i> Complete
                 </button>
