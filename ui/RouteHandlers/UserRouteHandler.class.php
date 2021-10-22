@@ -977,24 +977,31 @@ EOD;
     
     public function openIdLogin($openid, $app)
     {
+error_log("in openIdLogin()");//(**)
         if (!$openid->mode) {
+error_log("in openIdLogin() !mode");//(**)
             $openid->identity = $openid->data["openid_identifier"];
             $openid->required = array("contact/email");
             $url = $openid->authUrl();
 error_log("Redirecting in openIdLogin(), openid->identity: $openid->identity, url: $url");//(**)
             $app->redirect($openid->authUrl());
         } elseif ($openid->mode == "cancel") {
+error_log("in openIdLogin() mode cancel");//(**)
             $app->flash('error', (Lib\Localisation::getTranslation('login_2')));
             $app->redirect($app->urlFor('login'));
         } else {
+error_log("in openIdLogin() getAttributes()");//(**)
             $retvals = $openid->getAttributes();
             if ($openid->validate()) {
                 error_log("OpenID, Login: {$retvals['contact/email']}");
                 // Request Auth code and redirect
                 $userDao = new DAO\UserDao();
                 $userDao->requestAuthCode($retvals['contact/email']);
+error_log("in openIdLogin() after requestAuthCode()");//(**)
             }
+error_log("in openIdLogin() not validate()");//(**)
         }
+error_log("end openIdLogin()");//(**)
     }
 
     public static function userPrivateProfile($user_id)
