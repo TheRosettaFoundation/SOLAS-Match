@@ -391,6 +391,12 @@ class UserDao extends BaseDao
         return $ret;
     }
 
+    public function NotifyRegistered($userId)
+    {
+        $request = "{$this->siteApi}v0/users/NotifyRegistered/$userId";
+        $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT);
+    }
+
     public function assignBadge($email, $badgeId)
     {
         $ret = null;
@@ -808,21 +814,6 @@ class UserDao extends BaseDao
         $app->redirect($request);
     }
     
-    public function loginWithGooglePlus($accessToken)
-    {
-        $app = \Slim\Slim::getInstance();
-        $request = "{$this->siteApi}v0/users/gplus/login";
-        $postArg = "token=$accessToken"; 
-        $email = $this->client->call(
-            null,
-            $request,
-            Common\Enums\HttpMethodEnum::POST,
-            $postArg
-        );
-        error_log("loginWithGooglePlus, Login: $email");
-        self::requestAuthCode($email);
-    }
-
     public function loginWithAuthCode($authCode)
     {
         $app = \Slim\Slim::getInstance();
@@ -879,12 +870,15 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function register($email, $password)
+    public function register($email, $password, $first_name = '', $last_name = '', $communications_consent = 0)
     {
         $ret = null;
         $registerData = new Common\Protobufs\Models\Register();
         $registerData->setEmail($email);
         $registerData->setPassword($password);
+        $registerData->setFirstName($first_name);
+        $registerData->setLastName($last_name);
+        $registerData->setCommunicationsConsent($communications_consent);
         $request = "{$this->siteApi}v0/users/register";
         $registered = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST, $registerData);
         if ($registered) {
@@ -906,25 +900,25 @@ class UserDao extends BaseDao
 
     public function terms_accepted($user_id)
     {
-        $terms_accepted = false;
+        $terms_accepted = 0;
         $result = LibAPI\PDOWrapper::call('terms_accepted', LibAPI\PDOWrapper::cleanse($user_id));
         if (!empty($result)) {
-            $terms_accepted = $result[0]['accepted_level'] >= 1;
+            $terms_accepted = $result[0]['accepted_level'];
         }
         return $terms_accepted;
     }
 
     public function setRequiredProfileCompletedinSESSION($user_id)
     {
-        if ($this->terms_accepted($user_id)) {
-            $_SESSION['profile_completed'] = 1;
+        if ($accepted_level = $this->terms_accepted($user_id)) {
+            $_SESSION['profile_completed'] = $accepted_level;
         }
     }
 
-    public function update_terms_accepted($user_id)
+    public function update_terms_accepted($user_id, $accepted_level)
     {
-        $_SESSION['profile_completed'] = 1;
-        LibAPI\PDOWrapper::call('update_terms_accepted', LibAPI\PDOWrapper::cleanse($user_id) . ',1');
+        $_SESSION['profile_completed'] = $accepted_level;
+        LibAPI\PDOWrapper::call('update_terms_accepted', LibAPI\PDOWrapper::cleanse($user_id) . ",$accepted_level");
     }
 
     public function saveUser($user)
@@ -1402,8 +1396,8 @@ class UserDao extends BaseDao
     public function getURLList($user_id)
     {
         $url_list = [];
-        $url_list['proz']   = ['desc' => 'Your ProZ.com URL (if you have one)', 'state' => ''];
-        $url_list['linked'] = ['desc' => 'Your LinkedIn URL (if you have one)', 'state' => ''];
+        $url_list['proz']   = ['desc' => 'Your ProZ.com URL (optional)', 'state' => ''];
+        $url_list['linked'] = ['desc' => 'Your LinkedIn URL (optional)', 'state' => ''];
         $url_list['other']  = ['desc' => 'Other URL', 'state' => ''];
         $urls = $this->getUserURLs($user_id);
         foreach ($urls as $url) {
@@ -1505,6 +1499,13 @@ class UserDao extends BaseDao
         $certification_list['SATI']    = ['desc' => 'South African Translators’ Institute (SATI) - Accredited Translators or Sworn Translators', 'state' => 0, 'reviewed' => 0];
         $certification_list['CATTI']   = ['desc' => 'China Accreditation Test for Translators and Interpreters (CATTI) - Senior Translators or Level 1 Translators', 'state' => 0, 'reviewed' => 0];
         $certification_list['STIBC']   = ['desc' => 'Society of Translators and Interpreters of British Columbia (STIBC) - Certified Translators or Associate Members', 'state' => 0, 'reviewed' => 0];
+        $certification_list['ITA']     = ['desc' => 'Israel Translators Association (ITA) - Recognized translators', 'state' => 0, 'reviewed' => 0];
+        $certification_list['NITI']    = ['desc' => 'Nigerian Institute of Translators and Interpreters (NITI) - Full Members', 'state' => 0, 'reviewed' => 0];
+        $certification_list['CTINB']   = ['desc' => 'Corporation of Translators, Terminologists and Interpreters of New-Brunswick (CTINB) - Certified Translators or Associate Members', 'state' => 0, 'reviewed' => 0];
+        $certification_list['ATIA']    = ['desc' => 'Association of Translators and Interpreters of Alberta (ATIA) - Certified Members', 'state' => 0, 'reviewed' => 0];
+        $certification_list['ATIS']    = ['desc' => 'Association of Translators and Interpreters of Saskatchewan (ATIS) - Certified Members', 'state' => 0, 'reviewed' => 0];
+        $certification_list['ATINS']   = ['desc' => 'Association of Translators and Interpreters of Nova Scotia (ATINS) - Certified Members', 'state' => 0, 'reviewed' => 0];
+        usort($certification_list, function($a, $b){ return strcmp($a["desc"], $b["desc"]); }); 
         $certifications = $this->getUserCertifications($user_id);
         foreach ($certifications as $certification) {
             if (!empty($certification_list[$certification['certification_key']])) {
@@ -1992,5 +1993,17 @@ error_log(print_r($result, true));//(**)
         $results = LibAPI\PDOWrapper::call('get_referers', '');
         foreach ($results as $result) $referers[] = $result['referer'];
         return $referers;
+    }
+
+    public function set_google_user_details($email, $first_name, $last_name)
+    {
+        LibAPI\PDOWrapper::call('set_google_user_details', LibAPI\PDOWrapper::cleanseNullOrWrapStr($email) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($first_name) . ',' . LibAPI\PDOWrapper::cleanseNullOrWrapStr($last_name));
+    }
+
+    public function get_users_by_month()
+    {
+        $result = LibAPI\PDOWrapper::call('getUsersAddedLast30Days', '');
+        if (empty($result)) 0;
+        return $result[0]['users_joined'];
     }
 }

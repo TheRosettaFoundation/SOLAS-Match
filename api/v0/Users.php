@@ -396,6 +396,12 @@ class Users
                     '\SolasMatch\API\V0\Users::assignBadge'
                 );
 
+                $app->put(
+                    '/NotifyRegistered/:userId/',
+                    '\SolasMatch\API\Lib\Middleware::isloggedIn',
+                    '\SolasMatch\API\V0\Users::NotifyRegistered'
+                );
+
                 $app->get(
                     '/getClaimedTasksCount/:userId/',
                     '\SolasMatch\API\Lib\Middleware::authUserOwnsResource',
@@ -405,11 +411,6 @@ class Users
                 $app->post(
                     '/authCode/login(:format)/',
                     '\SolasMatch\API\V0\Users::getAccessToken'
-                );
-
-                $app->post(
-                    '/gplus/login(:format)/',
-                    '\SolasMatch\API\V0\Users::loginWithGooglePlus'
                 );
 
                 $app->get(
@@ -539,6 +540,16 @@ class Users
             $badgeId = $badgeId[0];
         }
         API\Dispatcher::sendResponse(null, DAO\BadgeDao::assignBadge($userId, $badgeId), null, $format);
+    }
+
+    public static function NotifyRegistered($userId, $format = '.json')
+    {
+        if (!is_numeric($userId) && strstr($userId, '.')) {
+            $userId = explode('.', $userId);
+            $format = '.' . $userId[1];
+            $userId = $userId[0];
+        }
+        API\Dispatcher::sendResponse(null, DAO\BadgeDao::NotifyRegistered($userId), null, $format);
     }
 
     public static function getUserTags($userId, $format = ".json")
@@ -1097,6 +1108,7 @@ class Users
             if ($google = DAO\UserDao::get_google_user_details($email)) {
                 $userInfo->setFirstName($google['first_name']);
                 $userInfo->setLastName($google['last_name']);
+                DAO\UserDao::update_terms_accepted($user->getId(), 1);
             }
 
             $personal_info = DAO\UserDao::savePersonalInfo($userInfo);
@@ -1189,43 +1201,6 @@ class Users
         }
         $data = DAO\TaskDao::getUserTasksCount($userId);
         API\Dispatcher::sendResponse(null, $data, null, $format);
-    }
-    
-    
-    public static function loginWithGooglePlus($format = '.json')
-    {
-        try {
-            $data = API\Dispatcher::getDispatcher()->request()->getBody();
-            $parsed_data = array();
-            parse_str($data, $parsed_data);
-            $id_token = $parsed_data['token'];
-
-            $request =  Common\Lib\Settings::get('googlePlus.token_validation_endpoint');
-            $client = new Common\Lib\APIHelper('');
-            $ret = $client->externalCall(
-                null,
-                $request,
-                Common\Enums\HttpMethodEnum::GET,
-                null,
-                array('id_token' => $id_token)
-            );
-            $response = json_decode($ret);
-            // error_log("oauth2/v3/tokeninfo response: " . print_r($response, true));
-
-            $client_id = Common\Lib\Settings::get('googlePlus.client_id');
-            if ($client_id != $response->aud) {
-                throw new \Exception("Received token is not intended for this application.");
-            }
-            if (empty($response->email)) {
-                throw new \Exception("Unable to obtain user's email address from Google.");
-           }
-
-            if (!empty($response->given_name) && !empty($response->family_name)) DAO\UserDao::set_google_user_details($response->email, $response->given_name, $response->family_name);
-
-            API\Dispatcher::sendResponse(null, $response->email, null, $format, null);
-        } catch (\Exception $e) {
-            API\Dispatcher::sendResponse(null, $e->getMessage(), Common\Enums\HttpStatusEnum::BAD_REQUEST, $format);
-        }
     }
 
     public static function getAccessToken($format = '.json')
@@ -1351,6 +1326,9 @@ class Users
         $english = DAO\LanguageDao::getLanguage(null, "en");
         $userInfo->setUserId($newUser->getId());
         $userInfo->setLanguagePreference($english->getId());
+        $userInfo->setFirstName($data->getFirstName());
+        $userInfo->setLastName($data->getLastName());
+        DAO\UserDao::insert_communications_consent($newUser->getId(), $data->getCommunicationsConsent());
         $personal_info = DAO\UserDao::savePersonalInfo($userInfo);
         
         API\Dispatcher::sendResponse(null, $registered, null, $format);

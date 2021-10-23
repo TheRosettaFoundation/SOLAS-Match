@@ -1779,6 +1779,12 @@ CREATE TABLE IF NOT EXISTS `GoogleUserDetails` (
   KEY (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `WillBeDeletedUsers` (
+  user_id     INT(10) UNSIGNED NOT NULL,
+  date_warned DATETIME DEFAULT NULL,
+  KEY user_id (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
@@ -9680,6 +9686,87 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_google_user_details`(IN mail VARCHAR(128))
 BEGIN
     SELECT * FROM GoogleUserDetails WHERE email=mail ORDER BY retrieved DESC;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getUsersAddedLast30Days`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUsersAddedLast30Days`()
+BEGIN
+    SELECT count(DATE_FORMAT(`created-time`, '%m/%d/%Y')) as users_joined
+    FROM Users
+    WHERE `created-time` BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE();
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `delete_not_accepted_user`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_not_accepted_user`()
+BEGIN
+    DECLARE uID INT;
+    DECLARE mail VARCHAR(128) CHARSET utf8mb4 COLLATE 'utf8mb4_unicode_ci';
+
+    SELECT u.id, u.email INTO uID, mail
+    FROM      Users               u
+    LEFT JOIN TermsAcceptedUsers ta ON u.id=ta.user_id
+    LEFT JOIN Admins              a ON u.id=a.user_id
+    LEFT JOIN OrganisationMembers o ON u.id=o.user_id
+    WHERE
+        (ta.user_id IS NULL OR ta.accepted_level!=3) AND
+        u.`created-time`>'2021-10-25 07:00:00' AND
+        u.`created-time`<(NOW() - INTERVAL 84 HOUR) AND
+        a.user_id IS NULL AND
+        o.user_id IS NULL
+        ORDER BY u.`created-time`
+    LIMIT 1;
+
+    IF uID IS NOT NULL THEN
+        DELETE FROM GoogleUserDetails WHERE email=mail;
+        DELETE FROM Users WHERE id=uID;
+    END IF;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `getRecordWarningUsers`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getRecordWarningUsers`()
+BEGIN
+    SELECT
+        u.id,
+        `display-name` AS display_name,
+        email,
+        u.password,
+        biography,
+        (SELECT `en-name`
+            FROM Languages
+            WHERE id=u.language_id) AS languageName,
+        (SELECT code
+            FROM Languages
+            WHERE id=u.language_id) AS languageCode,
+        (SELECT `en-name`
+            FROM Countries
+            WHERE id=u.country_id)  AS countryName,
+        (SELECT code
+            FROM Countries
+            WHERE id=u.country_id)  AS countryCode,
+        nonce,
+        `created-time` AS created_time
+    FROM      Users                u
+    LEFT JOIN TermsAcceptedUsers  ta ON u.id=ta.user_id
+    LEFT JOIN WillBeDeletedUsers wdu ON u.id=wdu.user_id
+    WHERE
+        (ta.user_id IS NULL OR ta.accepted_level!=3) AND
+        u.`created-time`>'2021-10-25 07:00:00' AND
+        u.`created-time`<(NOW() - INTERVAL 12 HOUR) AND
+        wdu.user_id IS NULL;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insertWillBeDeletedUser`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertWillBeDeletedUser`(IN uID INT)
+BEGIN
+    INSERT INTO WillBeDeletedUsers (user_id, date_warned) VALUES (uID, NOW());
 END//
 DELIMITER ;
 

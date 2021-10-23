@@ -5,7 +5,7 @@
 </h1>
 
 <p>
-    {Localisation::getTranslation('email_verification_welcome_to')} {Settings::get('site.name')} {Localisation::getTranslation('email_verification_1')}
+    {Localisation::getTranslation('email_verification_welcome_to')} {Settings::get('site.name')}. {Localisation::getTranslation('email_verification_1')}
     {Localisation::getTranslation('email_verification_2')} {Localisation::getTranslation('email_verification_3')} {Localisation::getTranslation('email_verification_4')}
 </p>
 

@@ -216,7 +216,6 @@ class UserDao
     {
         $args = Lib\PDOWrapper::cleanseNull($userId);
         $response = Lib\PDOWrapper::call('finishRegistration', $args);
-        BadgeDao::assignBadge($userId, Common\Enums\BadgeTypes::REGISTERED);
         if (!self::is_admin_or_org_member($userId)) {
         Lib\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', Lib\PDOWrapper::cleanse($userId) . ',2,1');
         }
@@ -228,7 +227,6 @@ class UserDao
         $args = Lib\PDOWrapper::cleanseNullOrWrapStr($email);
         $response = Lib\PDOWrapper::call('finishRegistrationManually', $args);
         if ($response[0]['result']) {
-            BadgeDao::assignBadge($response[0]['result'], Common\Enums\BadgeTypes::REGISTERED);
             if (!self::is_admin_or_org_member($response[0]['result'])) {
             Lib\PDOWrapper::call('userTaskStreamNotificationInsertAndUpdate', Lib\PDOWrapper::cleanse($response[0]['result']) . ',2,1');
             }
@@ -277,36 +275,6 @@ class UserDao
             $ret = '1';
         }
         return $ret;
-    }
-
-    public static function openIdLogin($openid, $app)
-    {
-        if (!$openid->mode) {
-            try {
-                $openid->identity = $openid->data['openid_identifier'];
-                $openid->required = array('contact/email');
-                $url = $openid->authUrl();
-                $app->redirect($openid->authUrl());
-            } catch (ErrorException $e) {
-                echo $e->getMessage();
-            }
-        } elseif ($openid->mode == 'cancel') {
-            throw new InvalidArgumentException('User has canceled authentication!');
-            return false;
-        } else {
-            $retvals = $openid->getAttributes();
-            if ($openid->validate()) {
-                $user = self::getUsers(null, $retvals['contact/email']);
-                if (is_array($user)) {
-                    $user = $user[0];
-                }
-                if (!is_object($user)) {
-                    $user = self::create($retvals['contact/email'], md5($retvals['contact/email']));
-                }
-                UserSession::setSession($user->getId());
-            }
-            return true;
-        }
     }
 
     public static function logout()
@@ -789,6 +757,13 @@ class UserDao
         }
         return $ret;
     }
+
+    public static function insert_communications_consent($user_id, $accepted)
+    {
+        Lib\PDOWrapper::call('insert_communications_consent',
+            Lib\PDOWrapper::cleanse($user_id) . ',' .
+            Lib\PDOWrapper::cleanse($accepted));
+    }
     
     public static function createSecondaryLanguage($userId, $locale)
     {
@@ -946,16 +921,16 @@ class UserDao
         }
     }
 
-    public static function set_google_user_details($email, $first_name, $last_name)
-    {
-        Lib\PDOWrapper::call('set_google_user_details', Lib\PDOWrapper::cleanseNullOrWrapStr($email) . ',' . Lib\PDOWrapper::cleanseNullOrWrapStr($first_name) . ',' . Lib\PDOWrapper::cleanseNullOrWrapStr($last_name));
-    }
-
     public static function get_google_user_details($email)
     {
         $result = Lib\PDOWrapper::call('get_google_user_details', Lib\PDOWrapper::cleanseNullOrWrapStr($email));
         if (empty($result)) return 0;
 
         return $result[0];
+    }
+
+    public static function update_terms_accepted($user_id, $accepted_level)
+    {
+        Lib\PDOWrapper::call('update_terms_accepted', Lib\PDOWrapper::cleanse($user_id) . ",$accepted_level");
     }
 }

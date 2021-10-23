@@ -130,6 +130,13 @@ class BadgeDao
         
         return 0;
     }
+
+    public static function NotifyRegistered($user_id)
+    {
+        Lib\Notify::sendUserAssignedBadgeEmail($user_id, 4);
+        Lib\PDOWrapper::call('assignBadge', Lib\PDOWrapper::cleanseNull($user_id) . ',4');
+        return 1;
+    }
     
     //! Removes a Badge from a User
     /*!

@@ -3,7 +3,6 @@
     <head>
         <meta charset="utf-8" content="application/xhtml+xml" />
 
-        <meta name="google-signin-client_id" content="{Settings::get('googlePlus.client_id')}" />
 <!--        <meta name="google-translate-customization" content="d0b5975e5905d60f-4e4c167261d2937a-g4574d0ff41a34d5b-10" />-->
 
         <!-- css -->
@@ -28,6 +27,7 @@
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/bootstrap/css/bootstrap.min1.css"/>
         <link rel="stylesheet" type="text/css" media="all" href="{urlFor name="home"}resources/css/style.2.css"/>
         <link rel="stylesheet" href="{urlFor name="home"}resources/css/jquery-ui.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 		<link rel="shortcut icon" type="image/x-icon" href="{urlFor name="home"}favicon.ico">
 		
@@ -59,14 +59,33 @@
         {if isset($extra_scripts)}
             {$extra_scripts}
         {/if}
+    <style>
+    .navbar .nav li a{
+        color:#143878 !important;
+    }
+     .main_nav li a:hover{
+        color:#FFFFFF !important;
+    }
+    .header-link{
+        margin-bottom:1%;
+        margin-right:1%;
+       }
+       .navbar-inner{
+           margin-top:0.2%;
+       }
+        .not-active {
+        pointer-events: none;
+        cursor: default;
+    }
+    </style>
     </head>
 
         <body {if isset($body_class)}class="{$body_class}"{/if} {if isset($body_id)}id="{$body_id}"{/if}>
         <div class="navbar navbar-fixed-top">
            <div class="navbar-inner">
                 <div class="container">
-                    <a href="{urlFor name='home'}" class="pull-left"><img height="40px" src="{urlFor name='home'}ui/img/logo_katotrommons.png"></a>
-                    <ul class="nav">
+                    <a href="{urlFor name='home'}" class="pull-left header-link"><img height="60px" width="85%"  src="{urlFor name='home'}ui/img/TWB_logo1.PNG"></a> 
+                    <ul class="nav main_nav">
                         {if !isset($site_admin)}
                         <li {if isset($current_page) && $current_page == 'home'}class="active"{/if} >
                             <a href="{urlFor name="home"}">{Localisation::getTranslation('header_home')}</a>
@@ -95,9 +114,11 @@
                                 <a href="{urlFor name="site-admin-dashboard" options="user_id.$user_id"}">{Localisation::getTranslation('header_admin')}</a>
                             </li>
                         {/if}
+                        {if !isset($site_admin)}
                              <li {if isset($current_page) && $current_page == 'faq'}class="active" {/if}>
                                 <a href="https://community.translatorswb.org/c/kato-q-a">{Localisation::getTranslation('common_faq')}</a>
                             </li>
+                        {/if}
                            	{if Settings::get('site.forum_enabled') == 'y'}
 	                            <li>
 	                                <a href="{Settings::get('site.forum_link')}" target="_blank">{Localisation::getTranslation('common_forum')}</a>
@@ -108,47 +129,37 @@
                                 <a href="https://analytics.translatorswb.org">Kató Analytics</a>
                             </li>
                         {/if}
+                        {if !isset($site_admin)}
                             <li>
                                 <a href="https://form.asana.com?k=dlsF11XkOwpfFllbq325dg&d=170818793545926" target="_blank">Feedback?</a>
                             </li>
+                        {/if}
                     </ul>
-                    <ul class="nav pull-right" style="max-height: 38px">
+                    <ul class="nav pull-right main_nav_right" style="max-height: 38px">
                         {if isset($userNotifications)}   
                             <li>
                                 <a>{Localisation::getTranslation('header_notifications')}<span id="notificationCount">{$userNotifications->lenght()}</span></a>
                             </li>
                         {/if}
-                        <li>
-                       
-                            {if isset($locs)}
-                            	
-                                <div class="languageForm">
-                                    <form id="languageListForm" method="post" action="{urlFor name="siteLanguage"}">
-                                        <select id="languageList" name="language" onchange="jQuery('#languageListForm').submit();">
-                                            {foreach $locs as $loc}
-                                                {if $loc->getCode() == {UserSession::getUserLanguage()}}
-                                                    <option value="{$loc->getCode()}" selected>{$loc->getName()}</option>
-                                                {else}
-                                                    <option value="{$loc->getCode()}">{$loc->getName()}</option>
-                                                {/if}
-                                            {/foreach}
-                                        </select>
-                                    </form>
-                                </div>
-                            {/if}
-                        </li>
                         {if isset($user)}
-                            <li>
+                            <li class="profile">
                                 <a href="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                                     <img src="https://www.gravatar.com/avatar/{md5( strtolower( trim($user->getEmail())))}?s=20{urlencode("&")}r=g" alt="" />
                                        {TemplateHelper::uiCleanseHTML($user->getDisplayName())}
                                 </a>
                             </li>
-                            <li>
+                            <li class="logout">
                                 <a href="{urlFor name="logout"}">{Localisation::getTranslation('header_log_out')}</a>
                             </li>
                         {else}
-                            <li><a href="{urlFor name="register"}">{Localisation::getTranslation('common_register')}</a></li>
+            
+                            <li><a href="https://facebook.com/translatorswithoutborders" target="_blank"><img style="width:30%;" src="{urlFor name='home'}ui/img/social_media_icons/facebook_logo_social network_icon.png" alt="FB_Logo"></a></li>
+                            <li><a href="https://www.instagram.com/translatorswb/?hl=en" target="_blank"><img style="width:30%;" src="{urlFor name='home'}ui/img/social_media_icons/instagram logo_icon.png" alt="FB_Logo"></a></li>
+                            <li><a href="https://linkedin.com/company/translators-without-borders" target="_blank"><img style="width:30%;" src="{urlFor name='home'}ui/img/social_media_icons/linkedin logo_icon.png" alt="FB_Logo"></a></li>
+                            <li><a href="https://twitter.com/TranslatorsWB" target="_blank"><img style="width:30%;" src="{urlFor name='home'}ui/img/social_media_icons/twitter logo_icon.png" alt="FB_Logo"></a></li>
+                            <br/>
+
+                            <li><a href="{urlFor name="register"}">Join</a></li>
                             <li><a href="{urlFor name="login"}">{Localisation::getTranslation('common_log_in')}</a></li>
                         {/if}
                     </ul>
@@ -176,3 +187,5 @@
 		    </a>
 		    </div>
 		{/if}
+        <br/>
+        <br/>

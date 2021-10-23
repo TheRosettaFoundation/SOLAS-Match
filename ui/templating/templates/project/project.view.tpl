@@ -7,7 +7,7 @@
             <small>{Localisation::getTranslation('project_view_overview_of_project_details')}</small>
         </span>
         {assign var="project_id" value=$project->getId()}
-        <div class="pull-right">
+        <div class="pull-right top_btn">
             <form id="copyChunksProjectForm" method="post" action="{urlFor name="project-view" options="project_id.$project_id"}">
                 {if $isSiteAdmin && !empty($matecat_analyze_url)}
                     <input type="hidden" name="copyChunks" value="1" />

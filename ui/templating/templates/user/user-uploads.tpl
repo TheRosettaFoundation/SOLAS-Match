@@ -55,9 +55,11 @@
         <input type="hidden" name="sesskey" value="{$sesskey}" />
     </form>
     {else}
+<!--
         <a href="javascript:window.close();" class="btn btn-primary">
             <i class="icon-remove-sign icon-white"></i> Click to Close Window
         </a>
+-->
     {/if}
 </div>
 
