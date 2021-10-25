@@ -35,7 +35,7 @@
         {/if}
         
         <!-- style overrides-->
-        <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas1.css"/>
+        <link rel="stylesheet" href="{urlFor name="home"}resources/css/solas2.css"/>
         
         <!-- google analytics -->
         <script type="text/javascript" src="{urlFor name="home"}ui/js/tracking.js"></script>
