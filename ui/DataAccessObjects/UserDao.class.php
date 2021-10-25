@@ -1398,6 +1398,7 @@ class UserDao extends BaseDao
         $url_list = [];
         $url_list['proz']   = ['desc' => 'Your ProZ.com URL (optional)', 'state' => ''];
         $url_list['linked'] = ['desc' => 'Your LinkedIn URL (optional)', 'state' => ''];
+        $url_list['face']   = ['desc' => 'Your Facebook URL (optional)', 'state' => ''];
         $url_list['other']  = ['desc' => 'Other URL', 'state' => ''];
         $urls = $this->getUserURLs($user_id);
         foreach ($urls as $url) {
