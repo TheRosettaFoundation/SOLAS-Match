@@ -1,6 +1,6 @@
 {include file="header.tpl"}
 
-    <h1 class="page-header" style="height: auto">
+    <h1 class="page-header" style="height: auto" >
         <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
             {if $task->getTitle() != ''}
                 {TemplateHelper::uiCleanseHTMLNewlineAndTabs($task->getTitle())}
@@ -28,11 +28,11 @@
 
         <div class="pull-right">
             {if $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM}
-                <a href="{urlFor name="task-claim-page" options="task_id.$task_id"}" class=" pull-right btn btn-primary">
-                <i class="icon-share-alt icon-white"></i> {Localisation::getTranslation('task_view_download_task')}</a>
+                <a href="{urlFor name="task-claim-page" options="task_id.$task_id"}" class=" pull-right btn btn-primary" style="margin-right:55%;">
+                <i class="icon-share-alt icon-white"></i> {Localisation::getTranslation('task_view_download_task')}</a>&nbsp;
             {/if}
             {if $isMember}
-                <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='pull-right fixMargin btn btn-primary'>
+                <a href="{urlFor name="task-alter" options="task_id.$task_id"}" class='pull-right fixMargin btn btn-primary' style="margin-top:-10.7%;">
                     <i class="icon-wrench icon-white"></i> {Localisation::getTranslation('task_view_edit_task_details')}
                 </a>
             {else}
@@ -80,6 +80,7 @@
     {/if}
 	
 	{if ($alsoViewedTasksCount>0)}
+    <div class="row"></div>
 		<div class="row">
 			 <div class="span4 pull-right">
 		    	<h3>{Localisation::getTranslation('users_also_viewed')}</h3>
