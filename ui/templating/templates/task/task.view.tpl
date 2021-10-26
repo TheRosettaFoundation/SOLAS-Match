@@ -28,7 +28,7 @@
 
         <div class="pull-right">
             {if $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM}
-                <a href="{urlFor name="task-claim-page" options="task_id.$task_id"}" class=" pull-right btn btn-primary" style="margin-right:55%;">
+                <a href="{urlFor name="task-claim-page" options="task_id.$task_id"}" class=" pull-right btn btn-primary claim_btn">
                 <i class="icon-share-alt icon-white"></i> {Localisation::getTranslation('task_view_download_task')}</a>&nbsp;
             {/if}
             {if $isMember}
