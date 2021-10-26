@@ -1402,6 +1402,7 @@ class UserDao extends BaseDao
         $url_list['other']  = ['desc' => 'Other URL', 'state' => ''];
         $urls = $this->getUserURLs($user_id);
         foreach ($urls as $url) {
+            if (strpos($url['url'], 'https://') === false) $url['url'] = 'https://' . $url['url'];
             $url_list[$url['url_key']]['state'] = $url['url'];
         }
         return $url_list;
