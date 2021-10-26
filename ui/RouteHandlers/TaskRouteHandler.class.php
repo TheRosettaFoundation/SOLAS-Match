@@ -1091,8 +1091,22 @@ class TaskRouteHandler
 
         $list_qualified_translators = array();
         if ($isSiteAdmin) $list_qualified_translators = $taskDao->list_qualified_translators($taskId);
+
+        
         
         $extra_scripts = file_get_contents(__DIR__."/../js/TaskView1.js");
+        $extra_scripts .= "<script type=\"text/javascript\" >
+        $(document).ready(function() {
+
+            var member = ".$isMember.";
+            if(member){
+
+                $('.claim_btn').css('margin-right', '55%');
+
+            }
+            console.log();
+          });
+        </script>";
 
         $app->view()->appendData(array(
             'sesskey' => $sesskey,
