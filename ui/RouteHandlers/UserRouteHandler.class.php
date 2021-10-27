@@ -1252,8 +1252,9 @@ class UserRouteHandler
                     if (!empty($post['communications_consent'])) $userDao->insert_communications_consent($user_id, 1);
                     else                                         $userDao->insert_communications_consent($user_id, 0);
 
+                    $notify = $userDao->terms_accepted($user_id) < 3;
                     $userDao->update_terms_accepted($user_id, 3);
-                    $userDao->NotifyRegistered($user_id);
+                    if ($notify) $userDao->NotifyRegistered($user_id);
 
                     $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user_id)));
                 } catch (\Exception $e) {
