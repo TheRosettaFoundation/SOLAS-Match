@@ -210,6 +210,8 @@ $from_neon_to_trommons_pair = array(
 'Twi' => array('tw', '--'),
 'Bambara' => array('bm', '--'),
 'Tamasheq (Mali)' => array('taq', 'ML'),
+
+'Pidgin (Nigeria)' => array('pcm', 'NG'),
 );
 
 $language_options_changes = [
