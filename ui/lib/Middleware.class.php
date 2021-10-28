@@ -29,6 +29,7 @@ class Middleware
                 $app->redirect($app->urlFor('user-private-profile', array('user_id' => $_SESSION['user_id'])));
             }
         } elseif ($_SESSION['profile_completed'] == 1) {
+            error_log('authUserIsLoggedIn() redirecting to googleregister, user_id: ' . $_SESSION['user_id']);
             $app->flash('error', 'You must accept the Code of Conduct before continuing'); // Since they are logged in (via Google)...
             $app->redirect($app->urlFor('googleregister', array('user_id' => $_SESSION['user_id'])));
         }
@@ -50,6 +51,7 @@ class Middleware
         }
 
         if (!empty($_SESSION['profile_completed']) && $_SESSION['profile_completed'] == 1 && !strpos($app->request()->getPathInfo(), '/googleregister')) {
+            error_log('authUserIsLoggedInNoProfile() redirecting to googleregister, user_id: ' . $_SESSION['user_id']);
             $app->flash('error', 'You must accept the Code of Conduct before continuing'); // Since they are logged in (via Google)...
             $app->redirect($app->urlFor('googleregister', array('user_id' => $_SESSION['user_id'])));
         }
