@@ -1096,9 +1096,10 @@ class TaskRouteHandler
         $extra_scripts .= "<script type=\"text/javascript\" >
         $(document).ready(function() {
             var member = ".$isMember.";
-            if (member) {
+           /* if (member) {
                 $('.claim_btn').css('margin-right', '55%');
             }
+            */
         });
         </script>";
 
