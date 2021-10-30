@@ -1582,8 +1582,6 @@ class TaskRouteHandler
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $adminDao = new DAO\AdminDao();
-        $currentTask = $taskDao->getTask($task_id);
-        $currentTaskStatus = $currentTask->getTaskStatus();
         $taskPreReqIds = array();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
@@ -1694,6 +1692,10 @@ class TaskRouteHandler
                 if ($validTime = Lib\TemplateHelper::isValidDateTime($post['deadline'])) {
                     $date = date("Y-m-d H:i:s", $validTime);
                     $task->setDeadline($date);
+                    if ($task->getTaskStatus() != Common\Enums\TaskStatusEnum::COMPLETE) {
+                        $userDao = new DAO\UserDao();
+                        $userDao->set_dateDue_in_memsource($task, $memsource_task, $date);
+                    }
                 } else {
                     $deadlineError = Lib\Localisation::getTranslation('task_alter_8');
                 }

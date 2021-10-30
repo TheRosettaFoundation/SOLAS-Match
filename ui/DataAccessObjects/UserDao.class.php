@@ -602,6 +602,41 @@ class UserDao extends BaseDao
         return $ret;
     }
 
+    public function set_dateDue_in_memsource($task, $memsource_task, $deadline)
+    {
+        if ($memsource_task) {
+            $memsource_user_id = 0;
+            $taskDao = new TaskDao();
+            $claimant = $taskDao->getUserClaimedTask($task_id);
+            if (!empty($claimant)) $memsource_user_id = $this->get_memsource_user($claimant->getId());
+            $projectDao = new ProjectDao();
+            $memsource_project = $projectDao->get_memsource_project($task->getProjectId());
+            $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
+            $url = $this->memsourceApiV1 . 'projects/' . $memsource_project['memsource_project_uid'] . '/jobs/' . $memsource_task['memsource_task_uid'];
+            $ch = curl_init($url);
+            $data = ['dateDue' => substr($deadline, 0, 10) . 'T' . substr($deadline, 11, 8) . 'Z'];
+            if ($memsource_user_id) {
+                $data['status'] = 'ACCEPTED';
+                $data['providers'] = [['type' => 'USER', 'id' => $memsource_user_id]];
+            } else {
+                $data['status'] = 'NEW';
+            }
+            $payload = json_encode($data);
+            error_log(set_dateDue_in_memsource(): $payload);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+            $result = curl_exec($ch);
+            if ($error_number = curl_errno($ch)) {
+                error_log("Failed: set_dateDue_in_memsource() $url Curl error ($error_number): " . curl_error($ch));
+            } elseif (($responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE)) > 204) {
+                error_log("Failed: set_dateDue_in_memsource() $url responseCode: $responseCode");
+            }
+            curl_close($ch);
+        }
+    }
+
     public function create_memsource_user($user_id)
     {
         $ch = curl_init($this->memsourceApiV2 . 'users');
