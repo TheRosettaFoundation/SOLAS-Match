@@ -622,7 +622,7 @@ class UserDao extends BaseDao
                 $data['status'] = 'NEW';
             }
             $payload = json_encode($data);
-            error_log(set_dateDue_in_memsource(): $payload);
+            error_log("set_dateDue_in_memsource(): $payload");
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
