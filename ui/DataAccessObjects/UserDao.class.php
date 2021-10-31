@@ -607,7 +607,7 @@ class UserDao extends BaseDao
         if ($memsource_task) {
             $memsource_user_id = 0;
             $taskDao = new TaskDao();
-            $claimant = $taskDao->getUserClaimedTask($task_id);
+            $claimant = $taskDao->getUserClaimedTask($task->getId());
             if (!empty($claimant)) $memsource_user_id = $this->get_memsource_user($claimant->getId());
             $projectDao = new ProjectDao();
             $memsource_project = $projectDao->get_memsource_project($task->getProjectId());
