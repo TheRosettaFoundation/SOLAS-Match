@@ -119,7 +119,7 @@ $from_neon_to_trommons_pair = array(
 'Welsh' => array('cy', 'GB'),
 'Xhosa' => array('xh', 'ZA'),
 'Yoruba' => array('yo', 'NG'),
-//'Zarma' => array('dje', 'NE'),
+'Zarma' => array('dje', '--'),
 'Zulu' => array('zu', 'ZA'),
 'Hmong' => array('hmn', '--'),
 'Karen' => array('kar', 'MM'),
@@ -212,6 +212,9 @@ $from_neon_to_trommons_pair = array(
 'Tamasheq (Mali)' => array('taq', 'ML'),
 
 'Pidgin (Nigeria)' => array('pcm', 'NG'),
+
+'Tene Kan Dogon' => array('dtk', '--'),
+'Koyraboro Senni Songhay' => array('ses', '--'),
 );
 
 $language_options_changes = [

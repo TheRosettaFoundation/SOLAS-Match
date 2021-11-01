@@ -558,6 +558,8 @@ $memsource_change_country_to_kp = [
         if ($trommons_country_code === 'LATN_ME') { $trommons_language_code = 'cnr'; $trommons_country_code = '90';} // These 2 should no longer come from Memsource
         if ($trommons_country_code === 'CYRL_ME') { $trommons_language_code = 'cnr'; $trommons_country_code = '91';}
         if ($trommons_language_code === 'mf0' && $trommons_country_code === '--') { $trommons_language_code = 'mfi'; $trommons_country_code = 'CM';}
+        if ($trommons_language_code === 'taq' && $trommons_country_code === '--') { $trommons_language_code = 'dtk';} // Temporary hack because Memsource does not support
+        if ($trommons_language_code === 'khq' && $trommons_country_code === 'ML') { $trommons_language_code = 'ses'; $trommons_country_code = '--';} // Temporary hack because Memsource does not support
 
         return [$trommons_language_code, $trommons_country_code];
     }
@@ -587,7 +589,7 @@ $memsource_change_country_to_kp = [
         ];
         if (!empty($kp_change_country_to_memsource[$kp_country])) $kp_country = $kp_change_country_to_memsource[$kp_country];
 
-        $memsource_valid = ['aa','af_za','sq','am_et','ar_sa','pga','apc','hy_am','as','ay','az_cyrl','az_latn','bm','eu','be_by','bem','bn_bd','bn_in','bik','bi','bs_cyrl','bs_latn','bg','bwr','my_mm','ca','ceb','ckb','ku_arab_iq','shu_td','shu_latn_ng','cbk','ce_ru','ny','zh_cn','zh_tw','ctg_bd','ckl','hr','cs','da','prs_af','dv_mv','din_ss','nl','dyu','tw','bin_ng','en_gb','en_us','et','fa_ir','fj','fil_ph','fi','fr_ca','fr_cd','fr_fr','ff','gl','mfi_ng','mfi','lg','ka_ge','de','glw','el','gn','gu_in','guz_ke','ht','ha','he','hi_in','hmn','hu','is','ig_ng','ilo_ph','hil','id_id','ga','it','ja','quc','kea_cv','kln_ke','kam_ke','hig','kn_in','kr','pam','kar','kk_kz','km','ki','rw','rn_bi','kg','kok','ko_kr','kri','ky_kg','hia','lo','lv','ln','ln_cd','lt','lua','luo_ke','mk_mk','mdh','mg_mg','ms_my','ml_in','mt_mt','mi_nz','mrw','mr_in','mrt','lol','mn_mn','nnb','ndc','ne_np','ngc','kmr','nd','nso','nb','nn','nus','om_et','pag','ps','ps_af','pis','pl','pt_br','pt_mz','pt_pt','pa_in','pa_arab_pk','qu','rhg_latn','rhg_beng','rhg_rohg','ro','ru_ru','sm','sg_cf','seh','cnr_cyrl','sr_cyrl_rs','cnr_latn','sr_latn_rs','shr','sn','sd','sd_arab','si_lk','sk','sl','so_et','so_so','nr','st','es_co','es_419','es_mx','es_es','sw','sw_cd','sv','syl','tl','tg_cyrl_tj','taq_ml','ta_in','ta_lk','tt','tsg_ph','te','th_th','bo','ti','tpi','to','ts','tn','tr','tk','uk_ua','ur_pk','uz_cyrl_uz','vi_vn','war','cy_gb','wo_sn','xh','yo','zu_za','tig','lu','wes_ng',];
+        $memsource_valid = ['aa','af_za','sq','am_et','ar_sa','pga','apc','hy_am','as','ay','az_cyrl','az_latn','bm','eu','be_by','bem','bn_bd','bn_in','bik','bi','bs_cyrl','bs_latn','bg','bwr','my_mm','ca','ceb','ckb','ku_arab_iq','shu_td','shu_latn_ng','cbk','ce_ru','ny','zh_cn','zh_tw','ctg_bd','ckl','hr','cs','da','prs_af','dv_mv','din_ss','nl','dyu','tw','bin_ng','en_gb','en_us','et','fa_ir','fj','fil_ph','fi','fr_ca','fr_cd','fr_fr','ff','gl','mfi_ng','mfi','lg','ka_ge','de','glw','el','gn','gu_in','guz_ke','ht','ha','he','hi_in','hmn','hu','is','ig_ng','ilo_ph','hil','id_id','ga','it','ja','quc','kea_cv','kln_ke','kam_ke','hig','kn_in','kr','pam','kar','kk_kz','km','ki','rw','rn_bi','kg','kok','ko_kr','kri','ky_kg','hia','lo','lv','ln','ln_cd','lt','lua','luo_ke','mk_mk','mdh','mg_mg','ms_my','ml_in','mt_mt','mi_nz','mrw','mr_in','mrt','lol','mn_mn','nnb','ndc','ne_np','ngc','kmr','nd','nso','nb','nn','nus','om_et','pag','ps','ps_af','pis','pl','pt_br','pt_mz','pt_pt','pa_in','pa_arab_pk','qu','rhg_latn','rhg_beng','rhg_rohg','ro','ru_ru','sm','sg_cf','seh','cnr_cyrl','sr_cyrl_rs','cnr_latn','sr_latn_rs','shr','sn','sd','sd_arab','si_lk','sk','sl','so_et','so_so','nr','st','es_co','es_419','es_mx','es_es','sw','sw_cd','sv','syl','tl','tg_cyrl_tj','taq_ml','ta_in','ta_lk','tt','tsg_ph','te','th_th','bo','ti','tpi','to','ts','tn','tr','tk','uk_ua','ur_pk','uz_cyrl_uz','vi_vn','war','cy_gb','wo_sn','xh','yo','dje','zu_za','tig','lu','wes_ng','taq','khq_ml','ses','dtk',];
 
         if ($kp_country != '--') $memsource_pair = $kp_language . '_' . $kp_country;
         else                     $memsource_pair = $kp_language;
@@ -603,6 +605,8 @@ $memsource_change_country_to_kp = [
         if ($memsource_pair === 'mfi_cm') $memsource_pair = 'mfi';
         if ($memsource_pair === 'kmr_arab_iq') $memsource_pair = 'ku_arab_iq';
         if ($memsource_pair === 'pa_pk') $memsource_pair = 'pa_arab_pk';
+        if ($memsource_pair === 'dtk') $memsource_pair = 'taq'; // Temporary hack because Memsource does not support
+        if ($memsource_pair === 'ses') $memsource_pair = 'khq_ml'; // Temporary hack because Memsource does not support
 
         if (in_array($memsource_pair, $memsource_valid)) return $memsource_pair;
         if (in_array($kp_language,    $memsource_valid)) return $kp_language;
