@@ -1,29 +1,37 @@
 body {
-	padding-top: 40px;
+    padding-top: 40px;
 }
+
 section {
-	margin-bottom: 60px;
+    margin-bottom: 60px;
 }
+
 #tasks h2:not(:first-child) {
     margin-top: 2em;
 }
+
 .label-close {
     color: white;
     margin-left: -8px;
 }
+
 .label-close:hover {
     background-color: red;
 }
+
 .tag {
     padding-top: 5px;
     padding-bottom: 5px;
 }
+
 .graph-view {
-    width : auto;
-    height :500px;
-    overflow : auto;
+    width: auto;
+    height: 500px;
+    overflow: auto;
 }
-button.btn.btn-small, input.btn.btn-small[type="submit"] {
+
+button.btn.btn-small,
+input.btn.btn-small[type="submit"] {
     font-size: 11px;
 }
 
@@ -33,65 +41,67 @@ button.btn.btn-small, input.btn.btn-small[type="submit"] {
 }
 
 .donate-button {
-	margin-top: 20px;
-	margin-bottom: 20px;
-	margin-left:auto;
-	margin-right:auto;
-	width: 220px;
-	text-align: center;
-	padding: 8px;
-	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
-	border-radius: 6px;
-	background-color: #ECB73C;
-	-webkit-box-shadow: #B3B3B3 2px 2px 2px;
-	-moz-box-shadow: #B3B3B3 2px 2px 2px;
-	box-shadow: #B3B3B3 2px 2px 2px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 220px;
+    text-align: center;
+    padding: 8px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    background-color: #ECB73C;
+    -webkit-box-shadow: #B3B3B3 2px 2px 2px;
+    -moz-box-shadow: #B3B3B3 2px 2px 2px;
+    box-shadow: #B3B3B3 2px 2px 2px;
 }
 
 #donate-trf-logo {
-	display: block;
-	margin-top: 5px;
-	margin-bottom: 5px;
-	margin-left:auto;
-	margin-right:auto;
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-#donate{
-	color:#000000;
+#donate {
+    color: #000000;
 }
 
 #donate:hover {
-	color:#4B031A;
+    color: #4B031A;
 }
 
-#footer-menu
-{
-	text-align:center;
-	margin-top:10px;
+#footer-menu {
+    text-align: center;
+    margin-top: 10px;
+    margin-left: 75px;
 }
 
-a.faq-anchor
-{
-   display: block;
-   position: relative;
-   top: -50px;
-   visibility: hidden;
+a.faq-anchor {
+    display: block;
+    position: relative;
+    top: -50px;
+    visibility: hidden;
 }
 
 hr.dotted {
-  	border: 0;
-    border-top: 1px dotted gray; padding-top: .7em; margin-bottom: .7em; 
+    border: 0;
+    border-top: 1px dotted gray;
+    padding-top: .7em;
+    margin-bottom: .7em;
 }
 
 .back-to-top {
-	position:relative;
-	top:-5px;
-	float: right;
-	
+    position: relative;
+    top: -5px;
+    float: right;
 }
 
+
 /* styles used in custom Google Plus Sign in button */
+
 #customGplusBtn {
     display: inline-block;
     background: #dd4b39;
@@ -119,16 +129,20 @@ hr.dotted {
 #customGplusBtnText {
     display: inline-block;
     vertical-align: middle;
-    padding-left:50px;
+    padding-left: 50px;
     padding-right: 35px;
     font-size: 14px;
     font-weight: bold;
     /* Use the Roboto font that is loaded in the <head> */
-    font-family: 'Roboto',arial,sans-serif;
+    font-family: 'Roboto', arial, sans-serif;
 }
+
+
 /* end of styles used in custom Google Plus Sign in button */
 
+
 /* styles used in ProZ Sign in button */
+
 #customProZBtn {
     display: inline-block;
     background: #fb8f37;
@@ -161,73 +175,93 @@ hr.dotted {
     width: 100%;
     text-align: center;
 }
+
+
 /* end of styles used in ProZ Sign in button */
 
-#recent-tasks .task, #also-viewed-tasks .task {
-  -moz-border-radius: 10px;
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
-  background: rgba(221, 221, 217, 0.59);
-  border: solid 1px rgb(202, 202, 202);
-  padding: 7px;
-  margin-bottom: 18px;
+#recent-tasks .task,
+#also-viewed-tasks .task {
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: rgba(221, 221, 217, 0.59);
+    border: solid 1px rgb(202, 202, 202);
+    padding: 7px;
+    margin-bottom: 18px;
 }
 
 #also-viewed-tasks h2 {
-  font-size: 18px;
-  line-height: 24px;
+    font-size: 18px;
+    line-height: 24px;
 }
 
 #also-viewed-tasks p {
-  margin: 0 0 9px;
-  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-  font-size: 11px;
-  line-height: 11px;
+    margin: 0 0 9px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    line-height: 11px;
 }
+
 
 /*banner related*/
-#banner-container
-{
-  max-width:1200px;
-  margin-bottom: 20px;
-  margin-top: 25px;
+
+#banner-container {
+    max-width: 1200px;
+    margin-bottom: 20px;
+    margin-top: 25px;
 }
 
-#banner-container-blocks
-{
- width:100%;
- float:left;
- background-color: rgba(232,153,28,1) !important;
- border-radius: 6px;
- margin-bottom: 20px;
+#banner-container-blocks {
+    width: 100%;
+    float: left;
+    background-color: rgba(232, 153, 28, 1) !important;
+    border-radius: 6px;
+    margin-bottom: 20px;
 }
 
-#banner-left { 
-	width: 25%;
-	float:left; 
+#banner-left {
+    width: 25%;
+    float: left;
 }
-#banner-mid { 
-	width: 50%;
-	float:left; 
-	text-align: center;
+
+#banner-mid {
+    width: 50%;
+    float: left;
+    text-align: center;
 }
-#banner-right { 
-	width: 25%;
-	float:left; 
-	text-align: right;
+
+#banner-right {
+    width: 25%;
+    float: left;
+    text-align: right;
 }
 
 @media only screen and (min-width: 481px) and (max-width: 1200px) and (orientation: landscape) {
-	#banner-left { width: 100%; text-align: center;}
-	#banner-mid { width: 100%; text-align: center;}
-	#banner-right { width: 100%; text-align: center;}
-	
+    #banner-left {
+        width: 100%;
+        text-align: center;
+    }
+    #banner-mid {
+        width: 100%;
+        text-align: center;
+    }
+    #banner-right {
+        width: 100%;
+        text-align: center;
+    }
 }
 
 @media only screen and (max-width: 480px) {
-	#banner-left { width: 100%; text-align: left;}
-	#banner-mid { width: 100%; text-align: left;}
-	#banner-right { width: 100%; text-align: left;}
+    #banner-left {
+        width: 100%;
+        text-align: left;
+    }
+    #banner-mid {
+        width: 100%;
+        text-align: left;
+    }
+    #banner-right {
+        width: 100%;
+        text-align: left;
+    }
 }
-
-
