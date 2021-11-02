@@ -113,13 +113,17 @@
                         </div>
                     </div>
                 </div>
+                <button onclick="deleteUser(); return false;" class="btn btn-inverse" id="deleteBtn">
+                    <i class="icon-fire icon-white"></i> Delete User Account
+                </button>
+
                 <a style="cursor:pointer;color:#FFFFFF;" href="#profile1" class="pull-right nexttab nnext1 nnext111 pull-right btn btn-primary" id="btnTrigger1">Next</a>
             </div>
             <div class="tab-pane fade profile" id="profile">
                 <br/>
                 <div class="row-fluid" >
                     <div class="span5">
-                        <label class="clear_brand required"><strong>Native language</strong> <i class="icon-question-sign" id="tool5" data-toggle="tooltip" title="Please choose your native language."></i></label>
+                        <label class="clear_brand required label_space"><strong>Native language</strong> <i class="icon-question-sign" id="tool5" data-toggle="tooltip" title="Please choose your native language."></i></label>
                         <select name="nativeLanguageSelect" class="nativeLanguageSelect" id="nativeLanguageSelect">
                             <option value="">--Select--</option>
                             {foreach $languages as $language}
@@ -128,7 +132,7 @@
                         </select>
                     </div>
                     <div class="span4">
-                        <label class="clear_brand required"><strong>Variant</strong> <i class="icon-question-sign" id="tool4" data-toggle="tooltip" title="Please choose the country of your native language dialect/variant)."></i></label>
+                        <label class="clear_brand required label_space"><strong>Variant</strong> <i class="icon-question-sign" id="tool4" data-toggle="tooltip" title="Please choose the country of your native language dialect/variant."></i></label>
                         <select name="nativeCountrySelect" class="variant">
                             <option value="">--Select--</option>
                             {foreach $countries as $country}
@@ -163,8 +167,8 @@
                                 {assign var="intervalId" value={NotificationIntervalEnum::DAILY}}
                             {/if}
                         {/if}
-                        How often do you want to receive tasks availability email <i class="icon-question-sign" id="tool1" data-toggle="tooltip" title="Let us know how often you want to receive email notifications about tasks available in your language pairs."></i><br/>
-                        <select name="interval">
+                        <strong> How often do you want to receive tasks availability email <i class="icon-question-sign" id="tool1" data-toggle="tooltip" title="Let us know how often you want to receive email notifications about tasks available in your language pairs."></i></strong><br/>
+                        <select name="interval" class="interval">
                             <option value="0"
                                 {if !isset($intervalId)}
                                     selected="true"
@@ -248,9 +252,7 @@
                 <a style="cursor:pointer;color:#FFFFFF;" href="#profile1" class="pull-right next111 btn btn-primary" id="btnTrigger11">Prev</a>
                 <br/>
                 <br/>
-                <button onclick="deleteUser(); return false;" class="btn btn-inverse" id="deleteBtn">
-                    <i class="icon-fire icon-white"></i> Delete User Account
-                </button>
+                
             </div>
         </div>
         <input type="hidden" name="sesskey" value="{$sesskey}" />
