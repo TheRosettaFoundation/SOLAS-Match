@@ -1307,13 +1307,6 @@ class UserRouteHandler
         $(document).ready(function() {
             $(".countclick").hide();
 
-            var newsletter_val = $("#communications_consent").val();
-            if (newsletter_val == 1) {
-                $("#communications_consent").attr("checked", true);
-            } else {
-                $("#communications_consent").attr("checked", false);
-            }
-
             //Admin
             var admin = "'.$isSiteAdmin.'";
 
