@@ -56,24 +56,24 @@
         </ul>
         <div id="myTabContent" class="tab-content">
             <div class="tab-pane fade active in" id="home">
-                <br/>
+                <br />
                 <div class="row-fluid">
                     <div class="span6">
                         <div>
                             <label for='displayName' class="clear_brand required">Username</label>
-                            <input type="text" name="displayName" value="{$user->getDisplayName()|escape:'html':'UTF-8'}" id="displayName" placeholder="username">
+                            <input type="text" name="displayName" value="{$user->getDisplayName()|escape:'html':'UTF-8'}" id="displayName" placeholder="username" />
                         </div>
                         <div>
                             <label for='firstName' class="clear_brand required">First name</label>
-                            <input type="text" name="firstName" value="{$userPersonalInfo->getFirstName()|escape:'html':'UTF-8'}" id="firstName" placeholder="First name" >
+                            <input type="text" name="firstName" value="{$userPersonalInfo->getFirstName()|escape:'html':'UTF-8'}" id="firstName" placeholder="First name" />
                         </div>
                         <div>
                             <label for='lastName' class="clear_brand required">Last name</label>
-                            <input type="text" name="lastName" value="{$userPersonalInfo->getLastName()|escape:'html':'UTF-8'}" id="lastName" placeholder="Last name" >
+                            <input type="text" name="lastName" value="{$userPersonalInfo->getLastName()|escape:'html':'UTF-8'}" id="lastName" placeholder="Last name" />
                         </div>
                         <div>
                             <label for='city' class="clear_brand">City</label>
-                            <input type="text" name="city" id="city" value="{$userPersonalInfo->getCity()|escape:'html':'UTF-8'}" placeholder="Your city">
+                            <input type="text" name="city" id="city" value="{$userPersonalInfo->getCity()|escape:'html':'UTF-8'}" placeholder="Your city" />
                         </div>
                         <div>
                             <label class="clear_brand">Country</label>
@@ -86,11 +86,11 @@
                                 {/foreach}
                             </select>
                         </div>
-                        <br/>
+                        <br />
                     
                         <div>
                             <label class="checkbox clear_brand">
-                            <input type="checkbox" name="receiveCredit"> Make my information including which nonprofits I contribute to visible to the TWB Community
+                            <input type="checkbox" name="receiveCredit" value="1" {if $userPersonalInfo->getReceiveCredit()}checked="checked"{/if} /> Make my information including which nonprofits I contribute to visible to the TWB Community
                             </label>
                         </div>
                     </div>
@@ -107,8 +107,8 @@
                         {/foreach}
                         <div>
                             <label class="checkbox clear_brand">
-                            <input name="communications_consent" id="communications_consent" value="{$communications_consent}" type="checkbox"> Subscribe to the TWB Email newsletter
-                            <br/><small><i>You can unsubscribe at any time </i></small>
+                            <input type="checkbox" name="communications_consent" id="communications_consent" value="1" {if $communications_consent}checked="checked"{/if} /> Subscribe to the TWB Email newsletter
+                            <br /><small><i>You can unsubscribe at any time </i></small>
                             </label>
                         </div>
                     </div>
@@ -120,7 +120,7 @@
                 <a style="cursor:pointer;color:#FFFFFF;" href="#profile1" class="pull-right nexttab nnext1 nnext111 pull-right btn btn-primary" id="btnTrigger1">Next</a>
             </div>
             <div class="tab-pane fade profile" id="profile">
-                <br/>
+                <br />
                 <div class="row-fluid" >
                     <div class="span5">
                         <label class="clear_brand required label_space"><strong>Native language</strong> <i class="icon-question-sign" id="tool5" data-toggle="tooltip" title="Please choose your native language."></i></label>
@@ -157,7 +157,7 @@
                             <label class="clear_brand required"><strong>Qualification Level</strong> <i class="icon-question-sign" id="tool2" data-toggle="tooltip" title="--"></i></label>
                         </div>
                         {/if}
-                        <span id="btnclick" class="countclick"><span>
+                        <span id="btnclick" class="countclick"></span>
                     </div>
                 </div>
                 <div class="row-fluid">
@@ -167,7 +167,7 @@
                                 {assign var="intervalId" value={NotificationIntervalEnum::DAILY}}
                             {/if}
                         {/if}
-                        <strong> How often do you want to receive tasks availability email <i class="icon-question-sign" id="tool1" data-toggle="tooltip" title="Let us know how often you want to receive email notifications about tasks available in your language pairs."></i></strong><br/>
+                        <strong> How often do you want to receive tasks availability email <i class="icon-question-sign" id="tool1" data-toggle="tooltip" title="Let us know how often you want to receive email notifications about tasks available in your language pairs."></i></strong><br />
                         <select name="interval" class="interval">
                             <option value="0"
                                 {if !isset($intervalId)}
@@ -212,7 +212,7 @@
                         <div class="ch1" id="ch1" style="color:#F00;"></div>
                         {assign var="i" value=0}
                         {foreach from=$capability_list key=name item=capability}
-                            <input type="checkbox" class="capabilities" {if $capability['state']}checked="checked"{/if} name="{$name}" id="capability{$i}" /> {$capability['desc']|escape:'html':'UTF-8'}  <br/>
+                            <input type="checkbox" class="capabilities" {if $capability['state']}checked="checked"{/if} name="{$name}" id="capability{$i}" /> {$capability['desc']|escape:'html':'UTF-8'}  <br />
                             {assign var="i" value=$i+1}
                         {/foreach}
                     </div>
@@ -222,36 +222,36 @@
                             <div class="ch" id="ch" style="color:#F00;"></div>
                             {assign var="i" value=0}
                             {foreach from=$expertise_list key=name item=expertise}
-                                <input type="checkbox" class="expertise" {if $expertise['state']}checked="checked"{/if} name="{$name}" id="expertise{$i}" /> {$expertise['desc']|escape:'html':'UTF-8'}<br/>
+                                <input type="checkbox" class="expertise" {if $expertise['state']}checked="checked"{/if} name="{$name}" id="expertise{$i}" /> {$expertise['desc']|escape:'html':'UTF-8'}<br />
                                 {assign var="i" value=$i+1}
                             {/foreach}
                         </div>
                     </div>
                 </div>
-                <br/>
+                <br />
         
                 <a style="cursor:pointer;color:#FFFFFF;margin-right:18%;" href="#verifications" class="pull-right nexttab1 next111 btn btn-primary" id="btnTrigger1">Next</a> <a style="cursor:pointer;color:#FFFFFF;" href="#home" class="pull-right next111 btn btn-primary" id="btnTrigger11">Prev</a>
             
             </div>
             <div class="tab-pane fade" id="verifications">
-                <br/>
+                <br />
                 <p class="desc">If you hold a certification or membership from any of the organizations below, you could qualify to be a verified translator. Please select the organization and click to submit a proof of certification/membership. You will be upgraded to Verified Translator, which will give you immediate access to all projects available, for the verified combination. If you have any questions or can't upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject=Translation%20Certification" target="_blank">translators@translatorswithoutborders.org</a></p>
                 <ul>
                     {foreach from=$certification_list key=name item=certification}
                         <li>{if $certification['state']}Already submitted{if $certification['reviewed'] == 1} and reviewed{/if}: {/if}<a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.$name"}" target="_blank">{$certification['desc']|escape:'html':'UTF-8'}</a></li>
                     {/foreach}
                 </ul>
-                <br/>
+                <br />
                 <h4 style="font-weight: bold"><br />Other Certificates and Documentation</h4>
                 <p class="desc">Certificates or other relevant documents about your translation qualifications. Please provide a short title for your qualification and upload the corresponding file. Project Officers will also upload here any certificates you obtain while volunteering with TWB. If you have any questions or can’t upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject=Translation%20Certification" target="_blank">translators@translatorswithoutborders.org</a></p>
                 <a href="{urlFor name="user-uploads" options="user_id.$user_id|cert_id.TRANSLATOR"}" target="_blank">Upload file</a>
-                <br/>
+                <br />
                 <button type="submit"  class='pull-right btn btn-primary' id="updateBtn">
                     <i class="icon-refresh icon-white"></i> Complete
                 </button>
                 <a style="cursor:pointer;color:#FFFFFF;" href="#profile1" class="pull-right next111 btn btn-primary" id="btnTrigger11">Prev</a>
-                <br/>
-                <br/>
+                <br />
+                <br />
                 
             </div>
         </div>
