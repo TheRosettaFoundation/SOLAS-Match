@@ -470,7 +470,7 @@ class UserDao extends BaseDao
                     'timezone' => $timezone,
                     'userName' => $this->usernamePrefix . str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '', $user_info->display_name) . "_$userId",
                     'receiveNewsletter' => false,
-                    'editorMachineTranslateEnabled' => false,
+                    // 'editorMachineTranslateEnabled' => false,
                 );
                 $payload = json_encode($data);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
@@ -655,7 +655,8 @@ class UserDao extends BaseDao
             'timezone' => $timezone,
             'userName' => $this->usernamePrefix . str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '', $user_info->display_name) . "_$user_id",
             'receiveNewsletter' => false,
-            'editorMachineTranslateEnabled' => false,
+            // 'editorMachineTranslateEnabled' => false,
+            'setupServer' => false,
         );
         $payload = json_encode($data);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
