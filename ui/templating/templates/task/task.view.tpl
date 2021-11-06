@@ -1,5 +1,7 @@
 {include file="header.tpl"}
 
+    {assign var="task_id" value=$task->getId()}
+
     <h1 class="page-header" style="height: auto" >
         <span style="height: auto; width: 750px; overflow-wrap: break-word; display: inline-block;">
             {if $task->getTitle() != ''}
@@ -22,9 +24,16 @@
                         <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">{Localisation::getTranslation('common_desegmentation_task')}</span>
                     {/if}
                 </strong>
+                {if $this_is_id}
+                    <a href="{urlFor name="task-view" options="task_id.$task_id"}">view</a>
+                {else}
+                    {if $task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS}
+                        <a href="{urlFor name="task" options="task_id.$task_id"}">id</a>
+                    {/if}
+                {/if}
+                <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">fb</a>
             </small>  
         </span>
-        {assign var="task_id" value=$task->getId()}
 
         <div class="pull-right">
             {if $task->getTaskStatus() == TaskStatusEnum::PENDING_CLAIM}

@@ -1127,6 +1127,7 @@ class TaskRouteHandler
             'matecat_url' => $taskDao->get_matecat_url_regardless($task, $memsource_task),
             'list_qualified_translators' => $list_qualified_translators,
             'display_treat_as_translated' => 0,
+            'this_is_id' => 1,
             'taskStatusTexts' => $taskStatusTexts
         ));
 
@@ -2053,6 +2054,7 @@ class TaskRouteHandler
                 'matecat_url' => $taskDao->get_matecat_url_regardless($task, $memsource_task),
                 'recorded_status' => $recorded_status,
                 'display_treat_as_translated' => !empty($matecat_id_job) && empty($taskDao->is_parent_of_chunk($task->getProjectId(), $task_id)),
+                'this_is_id' => 0,
                 "userSubscribedToOrganisation" => $userSubscribedToOrganisation
         ));
 
