@@ -24,9 +24,11 @@
                     <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">{Localisation::getTranslation('common_desegmentation_task')}</span>
                 {/if}
             </strong>
+            {if $isSiteAdmin}
             <a href="{urlFor name="task-view" options="task_id.$task_id"}">view</a>
             {if $task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS}
                 <a href="{urlFor name="task" options="task_id.$task_id"}">id</a>
+            {/if}
             {/if}
         </small>  
     </h1>

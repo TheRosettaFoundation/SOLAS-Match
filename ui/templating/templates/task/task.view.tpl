@@ -24,6 +24,7 @@
                         <span style="color: {$taskTypeColours[TaskTypeEnum::DESEGMENTATION]}">{Localisation::getTranslation('common_desegmentation_task')}</span>
                     {/if}
                 </strong>
+                {if $isSiteAdmin}
                 {if $this_is_id}
                     <a href="{urlFor name="task-view" options="task_id.$task_id"}">view</a>
                 {else}
@@ -32,6 +33,7 @@
                     {/if}
                 {/if}
                 <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">fb</a>
+                {/if}
             </small>  
         </span>
 
