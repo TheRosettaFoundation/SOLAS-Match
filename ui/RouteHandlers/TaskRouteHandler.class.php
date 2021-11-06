@@ -2380,10 +2380,12 @@ class TaskRouteHandler
         $userDao = new DAO\UserDao();
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
+        $adminDao = new DAO\AdminDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
+        $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
         $task = $taskDao->getTask($task_id);
         $taskClaimedDate = $taskDao->getClaimedDate($task_id);
         $project = $projectDao->getProject($task->getProjectId());
@@ -2472,6 +2474,7 @@ class TaskRouteHandler
             "task" => $task,
             "taskClaimedDate" => $taskClaimedDate,
             "claimant" => $claimant,
+            'isSiteAdmin' => $isSiteAdmin,
             "taskTypeColours" => $taskTypeColours,
             "task_tags" => $task_tags
         ));
