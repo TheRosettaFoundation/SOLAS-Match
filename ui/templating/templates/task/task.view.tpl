@@ -26,13 +26,13 @@
                 </strong>
                 {if $isSiteAdmin}
                 {if $this_is_id}
-                    <a href="{urlFor name="task-view" options="task_id.$task_id"}">view</a>
+                    — <a href="{urlFor name="task-view" options="task_id.$task_id"}">view</a>
                 {else}
                     {if $task->getTaskStatus() < TaskStatusEnum::IN_PROGRESS}
-                        <a href="{urlFor name="task" options="task_id.$task_id"}">id</a>
+                        — <a href="{urlFor name="task" options="task_id.$task_id"}">id</a>
                     {/if}
                 {/if}
-                <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">fb</a>
+                — <a href="{urlFor name="task-org-feedback" options="task_id.$task_id"}">fb</a>
                 {/if}
             </small>  
         </span>
