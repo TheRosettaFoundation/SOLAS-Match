@@ -72,7 +72,7 @@
 {/if}
 
 
-{if $private_access || $isSiteAdmin || $receive_credit}
+{if isset($this_user) && ($private_access || $isSiteAdmin || $receive_credit)}
 
 <span class="hidden">
 <div id="dialog_for_verification" title="Perform a translation test?">
