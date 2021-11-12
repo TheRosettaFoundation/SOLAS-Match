@@ -2059,7 +2059,7 @@ class UserRouteHandler
         $receive_credit = 0;
         try {
             $userPersonalInfo = $userDao->getUserPersonalInformation($user_id);
-            if ($userPersonalInfo->getReceiveCredit()) $receive_credit = 1;
+            if ($userPersonalInfo && $userPersonalInfo->getReceiveCredit()) $receive_credit = 1;
         } catch (Common\Exceptions\SolasMatchException $e) {
             // error_log("Error getting user personal info: $e");
         }
