@@ -235,10 +235,10 @@
             </div>
             <div class="tab-pane fade" id="verifications">
                 <br />
-                <p class="desc">This step in the profile creation process is optional. You can either submit a proof of certification/membership to become a Verified Translator, or proceed without completing this verification step.<br />
-If you have a certificate or are a member of any of the organizations below, please select the organization and submit your proof of certification/membership. When we review your proof, you will be upgraded to Verified Translator, which will give you immediate access to all available tasks for the verified combination.<br />
-If you don't have a certificate or proof of membership, you are still welcome to work on tasks in your language combinations. You may also be upgraded to Verified Translator when you receive multiple positive feedbacks on your translation.<br />
-After completing this step, please click "Complete" to save your information.<br />
+                <p class="desc">This step in the profile creation process is optional. You can either submit a proof of certification/membership to become a Verified Translator, or proceed without completing this verification step.<br /><br />
+If you have a certificate or are a member of any of the organizations below, please select the organization and submit your proof of certification/membership. When we review your proof, you will be upgraded to Verified Translator, which will give you immediate access to all available tasks for the verified combination.<br /><br />
+If you don't have a certificate or proof of membership, you are still welcome to work on tasks in your language combinations. You may also be upgraded to Verified Translator when you receive multiple positive feedbacks on your translation.<br /><br />
+After completing this step, please click "Complete" to save your information.<br /><br />
 If you have any questions or can't upload the certificate, please email <a href="mailto:translators@translatorswithoutborders.org?subject=Translation%20Certification" target="_blank">translators@translatorswithoutborders.org</a></p>
                 <ul>
                     {foreach from=$certification_list key=name item=certification}
