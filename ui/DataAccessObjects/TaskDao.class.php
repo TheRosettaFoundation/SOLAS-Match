@@ -681,7 +681,7 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
     public function get_creator($project_id, $memsource_project = 0) {
         if ($memsource_project) {
             $projectDao = new ProjectDao();
-            $user_id = $projectDao->get_user_id_from_memsource_user($memsource_project['created_by_id']);
+            $user_id = $projectDao->get_user_id_from_memsource_user($memsource_project['owner_id']);
             if (!$user_id) $user_id = 62927; // translators@translatorswithoutborders.org
 //(**)dev server            if (!$user_id) $user_id = 3297;
             $result = $projectDao->get_user($user_id);

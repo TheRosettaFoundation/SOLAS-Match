@@ -220,7 +220,7 @@ class ProjectRouteHandler
         // Create a topic in the Community forum (Discourse) and a project in Asana
         error_log("projectCreate create_discourse_topic($project_id, $target_languages)");
         try {
-            $this->create_discourse_topic($project_id, $target_languages, ['created_by_id' => empty($hook['createdBy']['id']) ? 0 : $hook['createdBy']['id']]);
+            $this->create_discourse_topic($project_id, $target_languages, ['owner_id' => empty($hook['owner']['id']) ? 0 : $hook['owner']['id']]);
         } catch (\Exception $e) {
             error_log('projectCreate create_discourse_topic Exception: ' . $e->getMessage());
         }
@@ -2623,8 +2623,8 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
 
                 $memsource_project = $projectDao->get_memsource_project($project_id);
                 $memsource_project_uid = $memsource_project['memsource_project_uid'];
-                $created_by_id         = $memsource_project['created_by_id'];
-                $user_id = $projectDao->get_user_id_from_memsource_user($created_by_id);
+                $owner_id              = $memsource_project['owner_id'];
+                $user_id = $projectDao->get_user_id_from_memsource_user($owner_id);
                 if (!$user_id) $user_id = 62927; // translators@translatorswithoutborders.org
 //(**)dev server                if (!$user_id) $user_id = 3297;
 
