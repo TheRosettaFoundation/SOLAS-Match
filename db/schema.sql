@@ -7820,17 +7820,13 @@ BEGIN
     SELECT
         mp.*,
         p.*,
-        mu.user_id AS creator_id0,
-        u.email    AS creator_email0,
-        pf.user_id AS creator_id2,
-        u2.email   AS creator_email2,
-        IFNULL(pf.user_id, mu.user_id) AS creator_id,
-        IFNULL(u2.email, u.email)      AS creator_email,
+        IF(mu.user_id IS NOT NULL AND mu.user_id!=99269, mu.user_id, pf.user_id) AS creator_id,
+        IF( u.email   IS NOT NULL AND  u.email!='projects@translatorswithoutborders.org', u.email, u2.email) AS creator_email,
         o.name
     FROM      MemsourceProjects mp
     JOIN      Projects           p ON mp.project_id=p.id
     JOIN      Organisations      o ON p.organisation_id=o.id
-    LEFT JOIN MemsourceUsers    mu ON mp.created_by_id=memsource_user_id
+    LEFT JOIN MemsourceUsers    mu ON mp.owner_id=memsource_user_id
     LEFT JOIN Users              u ON mu.user_id=u.id
     LEFT JOIN ProjectFiles      pf ON mp.project_id=pf.project_id
     LEFT JOIN Users             u2 ON pf.user_id=u2.id
