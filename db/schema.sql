@@ -10,490 +10,10 @@
 /*!40101 SET NAMES utf8mb4 */;
 SET FOREIGN_KEY_CHECKS=0;
 
-/*--------------------START OF ALTER TABLES TO NORMALISE DATA LENGTHS/TYPES -----------------------*/
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "OrgRequests"
-                                        AND COLUMN_NAME = "user_id"
-                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
-                    ALTER TABLE OrgRequests CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "PasswordResetRequests"
-                                        AND COLUMN_NAME = "user_id"
-                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
-                    ALTER TABLE PasswordResetRequests CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "TaskClaims"
-                                        AND COLUMN_NAME = "user_id"
-                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
-                    ALTER TABLE TaskClaims CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "TaskFileVersions"
-                                        AND COLUMN_NAME = "user_id"
-                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
-                    ALTER TABLE TaskFileVersions CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "TaskUnclaims"
-                                        AND COLUMN_NAME = "user_id"
-                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
-                    ALTER TABLE TaskUnclaims CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "UserBadges"
-                                        AND COLUMN_NAME = "user_id"
-                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
-                    ALTER TABLE UserBadges CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "UserNotifications"
-                                        AND COLUMN_NAME = "user_id"
-                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
-                    ALTER TABLE UserNotifications CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "UserTags"
-                                        AND COLUMN_NAME = "user_id"
-                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
-                    ALTER TABLE UserTags CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "UserTaskScores"
-                                        AND COLUMN_NAME = "user_id"
-                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
-                    ALTER TABLE UserTaskScores CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "UserTaskStreamNotifications"
-                                        AND COLUMN_NAME = "user_id"
-                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
-                    ALTER TABLE UserTaskStreamNotifications CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "ArchivedTasks"
-                                        AND COLUMN_NAME = "country_id-source"
-                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
-                    ALTER TABLE ArchivedTasks CHANGE `country_id-source` `country_id-source` INT(10) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "ArchivedTasks"
-                                        AND COLUMN_NAME = "country_id-target"
-                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
-                    ALTER TABLE ArchivedTasks CHANGE `country_id-target` `country_id-target` INT(10) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "Tasks"
-                                        AND COLUMN_NAME = "country_id-source"
-                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
-                    ALTER TABLE Tasks CHANGE `country_id-source` `country_id-source` INT(10) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "Tasks"
-                                        AND COLUMN_NAME = "country_id-target"
-                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
-                    ALTER TABLE Tasks CHANGE `country_id-target` `country_id-target` INT(10) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "TaskTranslatorBlacklist"
-                                        AND COLUMN_NAME = "task_id"
-                                        AND COLUMN_TYPE = 'BIGINT(10) UNSIGNED') then
-                    ALTER TABLE TaskTranslatorBlacklist CHANGE `task_id` `task_id` BIGINT(20) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "UserNotifications"
-                                        AND COLUMN_NAME = "task_id"
-                                        AND COLUMN_TYPE = 'BIGINT(11) UNSIGNED') then
-                    ALTER TABLE UserNotifications CHANGE `task_id` `task_id` BIGINT(20) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "UserTaskScores"
-                                        AND COLUMN_NAME = "task_id"
-                                        AND COLUMN_TYPE = 'BIGINT(11) UNSIGNED') then
-                    ALTER TABLE UserTaskScores CHANGE `task_id` `task_id` BIGINT(20) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "UserTrackedTasks"
-                                        AND COLUMN_NAME = "task_id"
-                                        AND COLUMN_TYPE = 'BIGINT(10) UNSIGNED') then
-                    ALTER TABLE UserTrackedTasks CHANGE `task_id` `task_id` BIGINT(20) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "ArchivedTasks"
-                                        AND COLUMN_NAME = "language_id-source"
-                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
-                    ALTER TABLE ArchivedTasks CHANGE `language_id-source` `language_id-source` INT(10) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "ArchivedTasks"
-                                        AND COLUMN_NAME = "language_id-target"
-                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
-                    ALTER TABLE ArchivedTasks CHANGE `language_id-target` `language_id-target` INT(10) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "Tasks"
-                                        AND COLUMN_NAME = "language_id-source"
-                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
-                    ALTER TABLE Tasks CHANGE `language_id-source` `language_id-source` INT(10) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "Tasks"
-                                        AND COLUMN_NAME = "language_id-target"
-                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
-                    ALTER TABLE Tasks CHANGE `language_id-target` `language_id-target` INT(10) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "OrgRequests"
-                                        AND COLUMN_NAME = "org_id"
-                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
-                    ALTER TABLE OrgRequests CHANGE `org_id` `org_id` INT(10) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "ArchivedTasks"
-                                        AND COLUMN_NAME = "project_id"
-                                        AND COLUMN_TYPE = 'INT(20) UNSIGNED') then
-                    ALTER TABLE ArchivedTasks CHANGE `project_id` `project_id` INT(10) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "Tasks"
-                                        AND COLUMN_NAME = "project_id"
-                                        AND COLUMN_TYPE = 'INT(20) UNSIGNED') then
-                    ALTER TABLE Tasks CHANGE `project_id` `project_id` INT(10) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "UserTags"
-                                        AND COLUMN_NAME = "tag_id"
-                                        AND COLUMN_TYPE = 'INT(11) UNSIGNED') then
-                    ALTER TABLE UserTags CHANGE `tag_id` `tag_id` INT(10) UNSIGNED NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-                 
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "ArchivedTasks"
-                                        AND COLUMN_NAME = "published"
-                                        AND DATA_TYPE = 'VARCHAR'
-                                        AND CHARACTER_MAXIMUM_LENGTH = 50) then
-                    ALTER TABLE ArchivedTasks MODIFY `published` BIT(1) DEFAULT 0 NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-
-DROP PROCEDURE IF EXISTS alterTable;
-                 DELIMITER //
-                 CREATE PROCEDURE alterTable()
-                 BEGIN
-                    IF EXISTS(SELECT 1
-                                        FROM information_schema.`COLUMNS`
-                                        WHERE TABLE_SCHEMA = database()
-                                        AND TABLE_NAME = "Tasks"
-                                        AND COLUMN_NAME = "published"
-                                        AND DATA_TYPE = 'VARCHAR'
-                                        AND CHARACTER_MAXIMUM_LENGTH = 50) then
-                    ALTER TABLE Tasks MODIFY `published` BIT(1) DEFAULT 0 NOT NULL;
-                    END IF;
-                 END//
-                 DELIMITER ;
-                 CALL alterTable();
-                 DROP PROCEDURE alterTable;
-
-/*-------------------------------------------END OF ALTER TABLES-----------------------------------*/
 
 /*--------------------------------------------------start of tables--------------------------------*/
 
--- Dumping structure for table Solas-Match-Test.Admins
+
 CREATE TABLE IF NOT EXISTS `Admins` (
 	`user_id` INT(10) UNSIGNED NOT NULL,
 	`organisation_id` INT(10) UNSIGNED NULL,
@@ -504,7 +24,6 @@ CREATE TABLE IF NOT EXISTS `Admins` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- Dumping structure for table debug-test.ArchivedProjects
 CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
   `id` int(10) unsigned NOT NULL,
   `title` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -529,42 +48,7 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjects` (
   CONSTRAINT `FK_ArchivedProjects_Countries` FOREIGN KEY (`country_id`) REFERENCES `Countries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-DROP PROCEDURE IF EXISTS alterTable;
- DELIMITER //
- CREATE PROCEDURE alterTable()
- BEGIN
-     IF NOT EXISTS(SELECT 1
-                     FROM information_schema.`COLUMNS`
-                     WHERE TABLE_SCHEMA = database()
-                     AND TABLE_NAME = "ArchivedProjects"
-                     AND COLUMN_NAME = "image_uploaded") then
-         ALTER TABLE ArchivedProjects
-             ADD `image_uploaded` BIT(1) DEFAULT 0 NOT NULL;
-     END IF;
- END//
- DELIMITER ;
- CALL alterTable();
- DROP PROCEDURE alterTable;
 
- 
- DROP PROCEDURE IF EXISTS alterTable;
- DELIMITER //
- CREATE PROCEDURE alterTable()
- BEGIN
-     IF NOT EXISTS(SELECT 1
-                     FROM information_schema.`COLUMNS`
-                     WHERE TABLE_SCHEMA = database()
-                     AND TABLE_NAME = "ArchivedProjects"
-                     AND COLUMN_NAME = "image_approved") then
-         ALTER TABLE ArchivedProjects
-             ADD `image_approved` BIT(1) DEFAULT 0 NOT NULL;
-     END IF;
- END//
- DELIMITER ;
- CALL alterTable();
- DROP PROCEDURE alterTable;
-
--- Dumping structure for table debug-test.ArchivedProjectsMetadata
 CREATE TABLE IF NOT EXISTS `ArchivedProjectsMetadata` (
   `archivedProject_id` int(10) unsigned NOT NULL,
   `user_id-archived` int(10) unsigned NOT NULL,
@@ -583,7 +67,6 @@ CREATE TABLE IF NOT EXISTS `ArchivedProjectsMetadata` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- Dumping structure for table debug-test.ArchivedTasks
 CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
   `id` bigint(20) unsigned NOT NULL,
   `project_id` int(10) unsigned NOT NULL,
@@ -615,7 +98,6 @@ CREATE TABLE IF NOT EXISTS `ArchivedTasks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- Dumping structure for table debug-test.ArchivedTasksMetadata
 CREATE TABLE IF NOT EXISTS `ArchivedTasksMetadata` (
   `archivedTask_id` bigint(20) unsigned NOT NULL,
   `version` int(10) unsigned DEFAULT NULL,
@@ -638,7 +120,6 @@ CREATE TABLE IF NOT EXISTS `ArchivedTasksMetadata` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- Dumping structure for table Solas-Match-Test.Badges
 CREATE TABLE IF NOT EXISTS `Badges` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `owner_id` int(11) unsigned DEFAULT NULL,
@@ -650,7 +131,6 @@ CREATE TABLE IF NOT EXISTS `Badges` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- Dumping structure for table debug-test3.BannedOrganisations
 CREATE TABLE IF NOT EXISTS `BannedOrganisations` (
   `org_id` int(10) unsigned NOT NULL,
   `user_id-admin` int(10) unsigned NOT NULL,
@@ -666,7 +146,6 @@ CREATE TABLE IF NOT EXISTS `BannedOrganisations` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- Dumping structure for table debug-test3.BannedTypes
 CREATE TABLE IF NOT EXISTS `BannedTypes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -681,7 +160,7 @@ REPLACE INTO `BannedTypes` (`id`, `type`) VALUES
 	(4, 'Permanent'),
     (5, 'Hour');
 
--- Dumping structure for table debug-test3.BannedUsers
+
 CREATE TABLE IF NOT EXISTS `BannedUsers` (
   `user_id` int(10) unsigned NOT NULL,
   `user_id-admin` int(10) unsigned NOT NULL,
@@ -696,7 +175,7 @@ CREATE TABLE IF NOT EXISTS `BannedUsers` (
   CONSTRAINT `FK_BannedUsers_Users_2` FOREIGN KEY (`user_id-admin`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table Solas-Match-Test.Badges: ~4 rows (approximately)
+
 /*!40000 ALTER TABLE `Badges` DISABLE KEYS */;
 REPLACE INTO `Badges` (`id`, `owner_id`, `title`, `description`) VALUES
     ( 3, NULL, 'Profile-Filler',      'Filled in all info for user  public profile.'),
@@ -712,7 +191,7 @@ REPLACE INTO `Badges` (`id`, `owner_id`, `title`, `description`) VALUES
     (13, NULL, 'Voiceover',           'This volunteer is available for voiceover tasks.');
 ALTER TABLE `Badges` AUTO_INCREMENT=100;
 
--- Dumping structure for table Solas-Match-Test.Countries
+
 CREATE TABLE IF NOT EXISTS `Countries` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(2) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '"IE", for example',
@@ -721,9 +200,7 @@ CREATE TABLE IF NOT EXISTS `Countries` (
   UNIQUE KEY `code` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
--- Dumping structure for table Solas-Match-Test.Languages
 CREATE TABLE IF NOT EXISTS `Languages` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(3) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '"en", for example',
@@ -732,10 +209,7 @@ CREATE TABLE IF NOT EXISTS `Languages` (
   UNIQUE KEY `code` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
-
--- Dumping structure for table Solas-Match-Test.NotificationIntervals
 CREATE TABLE IF NOT EXISTS `NotificationIntervals` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -748,7 +222,7 @@ REPLACE INTO `NotificationIntervals` (`id`, `name`) VALUES
 	(2, "Weekly"),
 	(3, "Monthly");
 
--- Dumping structure for table Solas-Match-Test.OrganisationMembers
+
 CREATE TABLE IF NOT EXISTS `OrganisationMembers` (
   `user_id` int(10) unsigned NOT NULL,
   `organisation_id` int(10) unsigned NOT NULL,
@@ -759,9 +233,7 @@ CREATE TABLE IF NOT EXISTS `OrganisationMembers` (
   CONSTRAINT `FK_organisation_member_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
--- Dumping structure for table Solas-Match-Test.Organisations
 CREATE TABLE IF NOT EXISTS `Organisations` (
 	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(128) NOT NULL COLLATE 'utf8mb4_unicode_ci',
@@ -775,8 +247,6 @@ CREATE TABLE IF NOT EXISTS `Organisations` (
 	PRIMARY KEY (`id`),
 	UNIQUE INDEX `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Data exporting was unselected.
 
 
 CREATE TABLE IF NOT EXISTS `OrganisationExtendedProfiles` (
@@ -809,7 +279,6 @@ CREATE TABLE IF NOT EXISTS `OrganisationExtendedProfiles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- Dumping structure for table Solas-Match-Test.OrgRequests
 CREATE TABLE IF NOT EXISTS `OrgRequests` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
@@ -822,9 +291,7 @@ CREATE TABLE IF NOT EXISTS `OrgRequests` (
   CONSTRAINT `FK_org_request_queue_user2` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
--- Dumping structure for table Solas-Match-Test.OrgTranslatorBlacklist
 CREATE TABLE IF NOT EXISTS `OrgTranslatorBlacklist` (
   `org_id` int(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
@@ -834,10 +301,7 @@ CREATE TABLE IF NOT EXISTS `OrgTranslatorBlacklist` (
   CONSTRAINT `FK_OrgTranslatorBlacklist_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
-
--- Dumping structure for table Solas-Match-Test.PasswordResetRequests
 CREATE TABLE IF NOT EXISTS `PasswordResetRequests` (
   `uid` char(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
@@ -846,10 +310,7 @@ CREATE TABLE IF NOT EXISTS `PasswordResetRequests` (
   CONSTRAINT `FK_password_reset_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
-
--- Dumping structure for table Solas-Match-Test.ProjectFiles
 CREATE TABLE IF NOT EXISTS `ProjectFiles` (
   `project_id` int(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
@@ -862,10 +323,7 @@ CREATE TABLE IF NOT EXISTS `ProjectFiles` (
   CONSTRAINT `FK_ProjectFiles_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
-
--- Dumping structure for table Solas-Match-Test.Projects
 CREATE TABLE IF NOT EXISTS `Projects` (
 	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`title` VARCHAR(128) NOT NULL COLLATE 'utf8mb4_unicode_ci',
@@ -889,43 +347,7 @@ CREATE TABLE IF NOT EXISTS `Projects` (
 	CONSTRAINT `FK_project_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `Organisations` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-DROP PROCEDURE IF EXISTS alterTable;
- DELIMITER //
- CREATE PROCEDURE alterTable()
- BEGIN
-     IF NOT EXISTS(SELECT 1
-                     FROM information_schema.`COLUMNS`
-                     WHERE TABLE_SCHEMA = database()
-                     AND TABLE_NAME = "Projects"
-                     AND COLUMN_NAME = "image_uploaded") then
-         ALTER TABLE Projects
-             ADD `image_uploaded` BIT(1) DEFAULT 0 NOT NULL;
-     END IF;
- END//
- DELIMITER ;
- CALL alterTable();
- DROP PROCEDURE alterTable;
 
-DROP PROCEDURE IF EXISTS alterTable;
- DELIMITER //
- CREATE PROCEDURE alterTable()
- BEGIN
-     IF NOT EXISTS(SELECT 1
-                     FROM information_schema.`COLUMNS`
-                     WHERE TABLE_SCHEMA = database()
-                     AND TABLE_NAME = "Projects"
-                     AND COLUMN_NAME = "image_approved") then
-         ALTER TABLE Projects
-             ADD `image_approved` BIT(1) DEFAULT 0 NOT NULL;
-     END IF;
- END//
- DELIMITER ;
- CALL alterTable();
- DROP PROCEDURE alterTable;
--- Data exporting was unselected.
-
-
--- Dumping structure for table Solas-Match-Test.ProjectTags
 CREATE TABLE IF NOT EXISTS `ProjectTags` (
   `project_id` int(10) unsigned NOT NULL,
   `tag_id` int(10) unsigned NOT NULL,
@@ -935,9 +357,7 @@ CREATE TABLE IF NOT EXISTS `ProjectTags` (
   CONSTRAINT `FK_ProjectTags_Tags` FOREIGN KEY (`tag_id`) REFERENCES `Tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
--- Dumping structure for table SolasMatch.RegisteredUsers
 CREATE TABLE IF NOT EXISTS `RegisteredUsers` (
   `user_id` int(10) unsigned NOT NULL,
   `unique_id` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -945,10 +365,7 @@ CREATE TABLE IF NOT EXISTS `RegisteredUsers` (
   CONSTRAINT `FK_RegisteredUsers_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
-
--- Dumping structure for table Solas-Match-Test.Statistics
 CREATE TABLE IF NOT EXISTS `Statistics` (
   `name` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   `value` double NOT NULL,
@@ -956,7 +373,6 @@ CREATE TABLE IF NOT EXISTS `Statistics` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- Dumping structure for table Solas-Match-Test.Tags
 CREATE TABLE IF NOT EXISTS `Tags` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `label` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -964,10 +380,7 @@ CREATE TABLE IF NOT EXISTS `Tags` (
   UNIQUE KEY `label` (`label`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
-
--- Dumping structure for table Solas-Match-Test.TaskClaims
 CREATE TABLE IF NOT EXISTS `TaskClaims` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `task_id` bigint(20) unsigned NOT NULL,
@@ -981,6 +394,7 @@ CREATE TABLE IF NOT EXISTS `TaskClaims` (
   CONSTRAINT `FK_task_claim_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `queue_claim_tasks` (
   task_id BIGINT(20) UNSIGNED NOT NULL,
   user_id INT(10)    UNSIGNED NOT NULL,
@@ -989,6 +403,7 @@ CREATE TABLE IF NOT EXISTS `queue_claim_tasks` (
   CONSTRAINT FK_queue_claim_tasks_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `AsanaProjects` (
   project_id INT(10) UNSIGNED NOT NULL,
   run_time   DATETIME NOT NULL,
@@ -996,6 +411,7 @@ CREATE TABLE IF NOT EXISTS `AsanaProjects` (
   KEY FK_AsanaProjects_project_id (project_id),
   CONSTRAINT FK_AsanaProjects_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 CREATE TABLE IF NOT EXISTS `AsanaTasks` (
   project_id INT(10) UNSIGNED NOT NULL,
@@ -1006,10 +422,6 @@ CREATE TABLE IF NOT EXISTS `AsanaTasks` (
   CONSTRAINT `FK_AsanaTasks_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
--- Data exporting was unselected.
-
--- Dumping structure for table SolasMatch.TaskFileVersions
 
 CREATE TABLE IF NOT EXISTS `TaskFileVersions` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -1026,10 +438,7 @@ CREATE TABLE IF NOT EXISTS `TaskFileVersions` (
   CONSTRAINT `FK_TaskFileVersions_Tasks` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
-
--- Dumping structure for table Solas-Match-Test.TaskPrerequisites
 CREATE TABLE IF NOT EXISTS `TaskPrerequisites` (
   `task_id` bigint(20) unsigned NOT NULL,
   `task_id-prerequisite` bigint(20) unsigned NOT NULL,
@@ -1040,10 +449,7 @@ CREATE TABLE IF NOT EXISTS `TaskPrerequisites` (
   CONSTRAINT `FK_TaskPrerequisites_Tasks_2` FOREIGN KEY (`task_id-prerequisite`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
-
--- Dumping structure for table Solas-Match-Test.TaskReviews
 CREATE TABLE IF NOT EXISTS `TaskReviews` (
   `project_id` int(10) unsigned NOT NULL,
   `task_id` bigint(20) unsigned DEFAULT NULL,
@@ -1061,9 +467,7 @@ CREATE TABLE IF NOT EXISTS `TaskReviews` (
   CONSTRAINT `FK_TaskReviews_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
--- Dumping structure for table Solas-Match-Test.Tasks
 CREATE TABLE IF NOT EXISTS `Tasks` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `project_id` int(10) unsigned NOT NULL,
@@ -1096,8 +500,6 @@ CREATE TABLE IF NOT EXISTS `Tasks` (
   CONSTRAINT `FK_Tasks_TaskTypes` FOREIGN KEY (`task-type_id`) REFERENCES `TaskTypes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
-
 
 CREATE TABLE IF NOT EXISTS `TaskNotificationSent` (
   `task_id` BIGINT(20) UNSIGNED NOT NULL,
@@ -1107,7 +509,6 @@ CREATE TABLE IF NOT EXISTS `TaskNotificationSent` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- Dumping structure for table Solas-Match-Test.TaskStatus
 CREATE TABLE IF NOT EXISTS `TaskStatus` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1122,7 +523,6 @@ REPLACE INTO `TaskStatus` (`id`, `name`) VALUES
 	(4, "Complete");
 
 
--- Dumping structure for table Solas-Match-Test.TaskTranslatorBlacklist
 CREATE TABLE IF NOT EXISTS `TaskTranslatorBlacklist` (
   `task_id` bigint(20) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
@@ -1133,10 +533,7 @@ CREATE TABLE IF NOT EXISTS `TaskTranslatorBlacklist` (
   CONSTRAINT `FK_TaskTranslatorBlacklist_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
-
--- Dumping structure for table Solas-Match-Test.TaskTypes
 CREATE TABLE IF NOT EXISTS `TaskTypes` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1150,7 +547,7 @@ REPLACE INTO `TaskTypes` (`id`, `name`) VALUES
 	(3, "Proofreading"),
 	(4, "Desegmentation");
 
--- Structure of table TaskUnclaims
+
 CREATE TABLE IF NOT EXISTS `TaskUnclaims` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `task_id` BIGINT(20) UNSIGNED NOT NULL,
@@ -1164,7 +561,7 @@ CREATE TABLE IF NOT EXISTS `TaskUnclaims` (
   CONSTRAINT `FK_task_unclaim_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping structure for table Solas-Match-Test.UserBadges
+
 CREATE TABLE IF NOT EXISTS `UserBadges` (
   `user_id` int(10) unsigned NOT NULL,
   `badge_id` int(11) NOT NULL,
@@ -1175,10 +572,7 @@ CREATE TABLE IF NOT EXISTS `UserBadges` (
   CONSTRAINT `FK_user_badges_users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
-
--- Dumping structure for table debug-test3.UserLogins
 CREATE TABLE IF NOT EXISTS `UserLogins` (
   `user_id` int(10) unsigned DEFAULT NULL,
   `email` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1189,7 +583,6 @@ CREATE TABLE IF NOT EXISTS `UserLogins` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
  
 
--- Dumping structure for table Solas-Match-Test.UserNotifications
 CREATE TABLE IF NOT EXISTS `UserNotifications` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
@@ -1202,7 +595,7 @@ CREATE TABLE IF NOT EXISTS `UserNotifications` (
   CONSTRAINT `FK_user_notifications_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping structure for table big-merge.UserPersonalInformation
+
 CREATE TABLE IF NOT EXISTS `UserPersonalInformation` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
@@ -1222,42 +615,7 @@ CREATE TABLE IF NOT EXISTS `UserPersonalInformation` (
   CONSTRAINT `FK_UserPersonalInformation_Languages` FOREIGN KEY (`language-preference`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-DROP PROCEDURE IF EXISTS alterTable;
-DELIMITER //
-CREATE PROCEDURE alterTable()
-BEGIN
-    IF EXISTS(SELECT 1 FROM information_schema.`COLUMNS`
-              WHERE TABLE_SCHEMA = database()
-              AND TABLE_NAME = "UserPersonalInformation"
-              AND COLUMN_NAME = "sip"
-              AND DATA_TYPE = 'VARCHAR'
-              AND CHARACTER_MAXIMUM_LENGTH = 128) THEN
-        ALTER TABLE UserPersonalInformation DROP COLUMN sip;
-    END IF;
-END//
-DELIMITER ;
-CALL alterTable();
-DROP PROCEDURE alterTable;
 
-DROP PROCEDURE IF EXISTS alterTable;
-DELIMITER //
-CREATE PROCEDURE alterTable()
-BEGIN
-    IF NOT EXISTS(SELECT 1 FROM information_schema.`COLUMNS`
-              WHERE TABLE_SCHEMA = database()
-              AND TABLE_NAME = "UserPersonalInformation"
-              AND COLUMN_NAME = "language-preference") THEN
-        ALTER TABLE UserPersonalInformation ADD `language-preference` INT(10) UNSIGNED DEFAULT NULL;
-        ALTER TABLE UserPersonalInformation ADD CONSTRAINT `FK_UserPersonalInformation_Languages` FOREIGN KEY (`language-preference`) REFERENCES `Languages` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-    END IF;
-END//
-DELIMITER ;
-CALL alterTable();
-DROP PROCEDURE alterTable;
-
--- Data exporting was unselected.
-
--- Dumping structure for table Solas-Match-Test.Users
 CREATE TABLE IF NOT EXISTS `Users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `display-name` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -1277,9 +635,7 @@ CREATE TABLE IF NOT EXISTS `Users` (
   CONSTRAINT `FK_user_language` FOREIGN KEY (`language_id`) REFERENCES `Languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
--- Dumping structure for table Solas-Match-Test.UserSecondaryLanguages
 CREATE TABLE IF NOT EXISTS `UserSecondaryLanguages` (
 	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`user_id` INT(10) UNSIGNED NOT NULL,
@@ -1293,7 +649,6 @@ CREATE TABLE IF NOT EXISTS `UserSecondaryLanguages` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- Dumping structure for table Solas-Match-Test.UserTags
 CREATE TABLE IF NOT EXISTS `UserTags` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
@@ -1305,10 +660,7 @@ CREATE TABLE IF NOT EXISTS `UserTags` (
   CONSTRAINT `FK_user_tag_user1` FOREIGN KEY (`tag_id`) REFERENCES `Tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
-
--- Dumping structure for table Solas-Match-Test.UserTaskScores
 CREATE TABLE IF NOT EXISTS `UserTaskScores` (
   `user_id` int(10) unsigned NOT NULL,
   `task_id` bigint(20) unsigned NOT NULL,
@@ -1320,7 +672,6 @@ CREATE TABLE IF NOT EXISTS `UserTaskScores` (
   CONSTRAINT `FK_user_task_score_user1` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
 CREATE TABLE IF NOT EXISTS `UserTaskScoresUpdatedTime` (
   `id` int(10) unsigned NOT NULL,
@@ -1328,7 +679,7 @@ CREATE TABLE IF NOT EXISTS `UserTaskScoresUpdatedTime` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping structure for table Solas-Match-Test.UserTaskStreamNotifications
+
 CREATE TABLE IF NOT EXISTS `UserTaskStreamNotifications` (
   `user_id` int(10) unsigned NOT NULL,
   `interval` int(10) unsigned NOT NULL,
@@ -1340,6 +691,7 @@ CREATE TABLE IF NOT EXISTS `UserTaskStreamNotifications` (
   CONSTRAINT `FK_user_task_stream_notification_interval1` FOREIGN KEY (`interval`) REFERENCES `NotificationIntervals` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `SpecialTranslators` (
     user_id INT (10) UNSIGNED NOT NULL,
     type    INT (10) UNSIGNED DEFAULT 0,
@@ -1347,10 +699,7 @@ CREATE TABLE IF NOT EXISTS `SpecialTranslators` (
     CONSTRAINT FK_special_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
-
--- Dumping structure for table Solas-Match-Test.UserTrackedProjects
 CREATE TABLE IF NOT EXISTS `UserTrackedProjects` (
 	`user_id` INT(10) UNSIGNED NOT NULL,
 	`Project_id` INT(10) UNSIGNED NOT NULL,
@@ -1359,10 +708,8 @@ CREATE TABLE IF NOT EXISTS `UserTrackedProjects` (
 	CONSTRAINT `FK_UserTrackedProjects_Projects` FOREIGN KEY (`Project_id`) REFERENCES `Projects` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT `FK_UserTrackedProjects_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
--- Data exporting was unselected.
 
 
--- Dumping structure for table Solas-Match-Test.UserTrackedTasks
 CREATE TABLE IF NOT EXISTS `UserTrackedTasks` (
 	`user_id` INT(10) UNSIGNED NOT NULL,
 	`task_id` BIGINT(20) UNSIGNED NOT NULL,
@@ -1372,7 +719,7 @@ CREATE TABLE IF NOT EXISTS `UserTrackedTasks` (
 	CONSTRAINT `FK_UserTrackedTasks_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping structure for table Solas-Match-UserTrackedOrganisations
+
 CREATE TABLE IF NOT EXISTS `UserTrackedOrganisations` (
     `user_id` INT(10) UNSIGNED NOT NULL,
     `organisation_id` INT(10) UNSIGNED NOT NULL,
@@ -1383,7 +730,7 @@ CREATE TABLE IF NOT EXISTS `UserTrackedOrganisations` (
     CONSTRAINT `FK_UserTrackedOrganisations_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Structure of table TaskViews
+
 CREATE TABLE IF NOT EXISTS `TaskViews` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `task_id` BIGINT(20) UNSIGNED NOT NULL,
@@ -1396,7 +743,6 @@ CREATE TABLE IF NOT EXISTS `TaskViews` (
   CONSTRAINT `FK_task_viewed_user` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Data exporting was unselected.
 
 CREATE TABLE IF NOT EXISTS Subscriptions (
   organisation_id INT(10) UNSIGNED NOT NULL,
@@ -1406,6 +752,7 @@ CREATE TABLE IF NOT EXISTS Subscriptions (
   comment VARCHAR(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
   PRIMARY KEY (organisation_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 CREATE TABLE IF NOT EXISTS SubscriptionsRecorded (
   time_stamp DATETIME NOT NULL,
@@ -1417,11 +764,13 @@ CREATE TABLE IF NOT EXISTS SubscriptionsRecorded (
   KEY (organisation_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `RestrictedTasks` (
   `restricted_task_id` BIGINT(20) UNSIGNED NOT NULL,
   UNIQUE KEY `FK_restricted_task_id` (`restricted_task_id`),
   CONSTRAINT `FK_restricted_task_id` FOREIGN KEY (`restricted_task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 CREATE TABLE IF NOT EXISTS `WordCountRequestForProjects` (
     project_id INT(10) UNSIGNED NOT NULL,
@@ -1437,6 +786,7 @@ CREATE TABLE IF NOT EXISTS `WordCountRequestForProjects` (
     CONSTRAINT FK_WordCountRequestForProjects_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `WordCountRequestForProjectsErrors` (
     project_id INT(10) UNSIGNED NOT NULL,
     status  VARCHAR(30)  NOT NULL,
@@ -1444,6 +794,7 @@ CREATE TABLE IF NOT EXISTS `WordCountRequestForProjectsErrors` (
     KEY FK_WordCountRequestForProjectsErrors_project_id (project_id),
     CONSTRAINT FK_WordCountRequestForProjectsErrors_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 CREATE TABLE IF NOT EXISTS `MatecatLanguagePairs` (
     task_id BIGINT(20) UNSIGNED NOT NULL,
@@ -1458,6 +809,7 @@ CREATE TABLE IF NOT EXISTS `MatecatLanguagePairs` (
     KEY FK_matecat_language_pair_project_id (project_id),
     CONSTRAINT FK_matecat_language_pair_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 CREATE TABLE IF NOT EXISTS `TaskChunks` (
     task_id BIGINT(20) UNSIGNED NOT NULL,
@@ -1474,6 +826,7 @@ CREATE TABLE IF NOT EXISTS `TaskChunks` (
     KEY FK_task_chunks_project_id (project_id),
     CONSTRAINT FK_task_chunks_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 CREATE TABLE IF NOT EXISTS `UserQualifiedPairs` (
   user_id              INT(10) UNSIGNED NOT NULL,
@@ -1495,6 +848,7 @@ CREATE TABLE IF NOT EXISTS `UserQualifiedPairs` (
   CONSTRAINT `FK_UserQualifiedPairs_country_id_target`  FOREIGN KEY (`country_id_target`)  REFERENCES `Countries` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `RequiredOrgQualificationLevels` (
   org_id                       INT(10) UNSIGNED NOT NULL,
   required_qualification_level INT(10) UNSIGNED NOT NULL,
@@ -1502,12 +856,14 @@ CREATE TABLE IF NOT EXISTS `RequiredOrgQualificationLevels` (
   CONSTRAINT `FK_RequiredOrgQualificationLevels_org_id` FOREIGN KEY (`org_id`) REFERENCES `Organisations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `RequiredTaskQualificationLevels` (
   task_id                      BIGINT(20) UNSIGNED NOT NULL,
   required_qualification_level INT(10)    UNSIGNED NOT NULL,
   PRIMARY KEY (task_id),
   CONSTRAINT `FK_RequiredTaskQualificationLevels_task_id` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 CREATE TABLE IF NOT EXISTS `OrgIDMatchingNeon` (
   org_id_neon  INT(10) UNSIGNED NOT NULL,
@@ -1518,10 +874,12 @@ CREATE TABLE IF NOT EXISTS `OrgIDMatchingNeon` (
   CONSTRAINT FK_OrgIDMatchingNeon_Organisations FOREIGN KEY (org_id) REFERENCES Organisations (id) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `TaskTranslatedInMatecat` (
   `task_id` BIGINT(20) UNSIGNED NOT NULL,
   PRIMARY KEY (`task_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 CREATE TABLE IF NOT EXISTS `TaskInviteSentToUsers` (
     task_id BIGINT(20) UNSIGNED NOT NULL,
@@ -1533,12 +891,14 @@ CREATE TABLE IF NOT EXISTS `TaskInviteSentToUsers` (
     CONSTRAINT FK_invite_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `TermsAcceptedUsers` (
     user_id        INT (10) UNSIGNED NOT NULL,
     accepted_level INT (10) UNSIGNED NOT NULL,
     UNIQUE KEY FK_terms_user_id (user_id),
     CONSTRAINT FK_terms_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 CREATE TABLE IF NOT EXISTS `PrivateTMKeys` (
     project_id INT(10) UNSIGNED NOT NULL,
@@ -1550,6 +910,7 @@ CREATE TABLE IF NOT EXISTS `PrivateTMKeys` (
     CONSTRAINT FK_PrivateTMKeys_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `UserNeonAccount` (
   user_id    INT(10) UNSIGNED NOT NULL,
   account_id INT(10) UNSIGNED NOT NULL,
@@ -1558,12 +919,14 @@ CREATE TABLE IF NOT EXISTS `UserNeonAccount` (
   CONSTRAINT FK_UserNeonAccount_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `MatecatRecordedJobStatus` (
     matecat_id_job          INT(10) UNSIGNED NOT NULL,
     matecat_id_job_password VARCHAR(50) NOT NULL,
     job_status              VARCHAR(20) NOT NULL,
     UNIQUE KEY job_job_password (matecat_id_job, matecat_id_job_password)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 CREATE TABLE IF NOT EXISTS `TaskCompleteDates` (
   task_id       BIGINT(20) UNSIGNED NOT NULL,
@@ -1573,12 +936,14 @@ CREATE TABLE IF NOT EXISTS `TaskCompleteDates` (
   CONSTRAINT `FK_TaskCompleteDates_task_id` FOREIGN KEY (`task_id`) REFERENCES `Tasks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `DiscourseID` (
   project_id INT(10) UNSIGNED NOT NULL,
   topic_id   INT(10) UNSIGNED NOT NULL,
   PRIMARY KEY (project_id),
   CONSTRAINT FK_DiscourseID_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 CREATE TABLE IF NOT EXISTS `UserURLs` (
   user_id INT(10) UNSIGNED NOT NULL,
@@ -1589,6 +954,7 @@ CREATE TABLE IF NOT EXISTS `UserURLs` (
   CONSTRAINT `FK_UserURLs_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `UserExpertises` (
   user_id       INT(10) UNSIGNED NOT NULL,
   expertise_key VARCHAR(20) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1596,6 +962,7 @@ CREATE TABLE IF NOT EXISTS `UserExpertises` (
   KEY `FK_UserExpertises_Users` (`user_id`),
   CONSTRAINT `FK_UserExpertises_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 CREATE TABLE IF NOT EXISTS `UserHowheards` (
   user_id      INT(10) UNSIGNED NOT NULL,
@@ -1606,12 +973,14 @@ CREATE TABLE IF NOT EXISTS `UserHowheards` (
   CONSTRAINT  `FK_UserHowheards_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `communications_consents` (
   user_id      INT(10) UNSIGNED NOT NULL,
   accepted     INT(10) UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY `FK_communications_consents_Users` (`user_id`),
   CONSTRAINT  `FK_communications_consents_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 CREATE TABLE IF NOT EXISTS `UserCertifications` (
   id                INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -1628,6 +997,7 @@ CREATE TABLE IF NOT EXISTS `UserCertifications` (
   CONSTRAINT `FK_UserCertifications_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `admin_comment` (
   id            INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   user_id       INT(10) UNSIGNED NOT NULL,
@@ -1639,6 +1009,7 @@ CREATE TABLE IF NOT EXISTS `admin_comment` (
   CONSTRAINT `FK_admin_comment_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `TrackCodes` (
   id INT(10) UNSIGNED NOT NULL,
   track_code VARCHAR(255) NOT NULL,
@@ -1646,12 +1017,14 @@ CREATE TABLE IF NOT EXISTS `TrackCodes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 INSERT INTO TrackCodes VALUES (1, '');
 
+
 CREATE TABLE IF NOT EXISTS `TrackedRegistrations` (
   user_id INT(10) UNSIGNED NOT NULL,
   referer VARCHAR(128) NOT NULL,
   PRIMARY KEY (user_id),
   CONSTRAINT `FK_TrackedRegistrations_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 CREATE TABLE IF NOT EXISTS `TestingCenterProjects` (
   user_id                 INT(10) UNSIGNED NOT NULL,
@@ -1665,6 +1038,7 @@ CREATE TABLE IF NOT EXISTS `TestingCenterProjects` (
   CONSTRAINT FK_TestingCenterProjects_Users FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `ProjectRestrictions` (
   project_id               INT(10) UNSIGNED NOT NULL,
   restrict_translate_tasks INT(10) UNSIGNED NOT NULL,
@@ -1672,6 +1046,7 @@ CREATE TABLE IF NOT EXISTS `ProjectRestrictions` (
   UNIQUE KEY `project_id` (`project_id`),
   CONSTRAINT `FK_ProjectRestrictions_Projects` FOREIGN KEY (`project_id`) REFERENCES `Projects` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 CREATE TABLE IF NOT EXISTS `MemsourceUsers` (
   user_id           INT(10) UNSIGNED NOT NULL,
@@ -1681,6 +1056,7 @@ CREATE TABLE IF NOT EXISTS `MemsourceUsers` (
   CONSTRAINT FK_MemsourceUsers_user_id FOREIGN KEY (user_id) REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `MemsourceClients` (
   org_id               INT(10) UNSIGNED NOT NULL,
   memsource_client_id  BIGINT(20) UNSIGNED NOT NULL,
@@ -1689,6 +1065,7 @@ CREATE TABLE IF NOT EXISTS `MemsourceClients` (
   UNIQUE  KEY memsource_client_id        (memsource_client_id),
   CONSTRAINT FK_MemsourceClients_org_id FOREIGN KEY (org_id) REFERENCES Organisations (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 CREATE TABLE IF NOT EXISTS `MemsourceProjects` (
   project_id            INT(10) UNSIGNED NOT NULL,
@@ -1714,6 +1091,7 @@ CREATE TABLE IF NOT EXISTS `MemsourceProjects` (
   CONSTRAINT FK_MemsourceProjects_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `MemsourceProjectLanguages` (
   project_id               INT(10) UNSIGNED NOT NULL,
   kp_source_language_pair  VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1722,10 +1100,12 @@ CREATE TABLE IF NOT EXISTS `MemsourceProjectLanguages` (
   CONSTRAINT FK_MemsourceProjectLanguages_project_id FOREIGN KEY (project_id) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `MemsourceSelfServiceProjects` (
   memsource_project_id  BIGINT(20) UNSIGNED NOT NULL,
   PRIMARY KEY (memsource_project_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 CREATE TABLE IF NOT EXISTS `MemsourceTasks` (
   task_id            BIGINT(20) UNSIGNED NOT NULL,
@@ -1742,10 +1122,12 @@ CREATE TABLE IF NOT EXISTS `MemsourceTasks` (
   CONSTRAINT FK_MemsourceTasks_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `ProcessedMemsourceTaskUIDs` (
   memsource_task_uid VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (memsource_task_uid)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 CREATE TABLE IF NOT EXISTS `memsource_statuses` (
   task_id            BIGINT(20) UNSIGNED NOT NULL,
@@ -1757,6 +1139,7 @@ CREATE TABLE IF NOT EXISTS `memsource_statuses` (
   CONSTRAINT FK_memsource_statuses_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `queue_copy_task_original_files` (
   project_id         INT(10) UNSIGNED NOT NULL,
   task_id            BIGINT(20) UNSIGNED NOT NULL,
@@ -1766,10 +1149,12 @@ CREATE TABLE IF NOT EXISTS `queue_copy_task_original_files` (
   CONSTRAINT FK_queue_copy_task_original_files_task_id FOREIGN KEY (task_id) REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `Referers` (
   referer VARCHAR(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (referer)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 CREATE TABLE IF NOT EXISTS `GoogleUserDetails` (
   email      VARCHAR(128) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1779,17 +1164,19 @@ CREATE TABLE IF NOT EXISTS `GoogleUserDetails` (
   KEY (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 CREATE TABLE IF NOT EXISTS `WillBeDeletedUsers` (
   user_id     INT(10) UNSIGNED NOT NULL,
   date_warned DATETIME DEFAULT NULL,
   KEY user_id (user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
 
--- Dumping structure for procedure Solas-Match-Test.acceptMemRequest
+
 DROP PROCEDURE IF EXISTS `acceptMemRequest`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `acceptMemRequest`(IN `uID` INT, IN `orgID` INT)
@@ -1814,7 +1201,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure debug-test3.addAdmin
 DROP PROCEDURE IF EXISTS `addAdmin`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addAdmin`(IN `userId` INT, IN `orgId` INT)
@@ -1828,7 +1214,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.addBadge
 DROP PROCEDURE IF EXISTS `addBadge`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addBadge`(IN `ownerID` INT, IN `name` VARCHAR(50), IN `disc` VARCHAR(50))
@@ -1844,7 +1229,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.addPasswordResetRequest
 DROP PROCEDURE IF EXISTS `addPasswordResetRequest`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addPasswordResetRequest`(IN `uniqueId` CHAR(40), IN `userId` INT)
@@ -1855,7 +1239,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.addProjectFile
 DROP PROCEDURE IF EXISTS `addProjectFile`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addProjectFile`(IN `pID` INT, IN `uID` INT, IN `fname` VARCHAR(128), IN `token` VARCHAR(128), IN `mime` varCHAR(128))
@@ -1883,7 +1266,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.addProjectTag
 DROP PROCEDURE IF EXISTS `addProjectTag`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addProjectTag`(IN `projectID` INT, IN `tagID` INT)
@@ -1899,7 +1281,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.addTaskPreReq
 DROP PROCEDURE IF EXISTS `addTaskPreReq`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addTaskPreReq`(IN `taskId` INT, IN `preReqId` INT)
@@ -1916,7 +1297,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.addUserToTaskBlacklist
 DROP PROCEDURE IF EXISTS `addUserToTaskBlacklist`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addUserToTaskBlacklist`(IN `userId` INT, IN `taskId` INT)
@@ -1940,7 +1320,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure debug-test.archiveProject
 DROP PROCEDURE IF EXISTS `archiveProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `archiveProject`(IN `projectId` INT, IN `user_id` INT)
@@ -2010,7 +1389,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure debug-test.archiveTask
 DROP PROCEDURE IF EXISTS `archiveTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `archiveTask`(IN `tID` INT, IN `uID` INT)
@@ -2059,7 +1437,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.assignBadge
 DROP PROCEDURE IF EXISTS `assignBadge`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `assignBadge`(IN `uid` INT, IN `bid` INT)
@@ -2074,7 +1451,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.badgeInsertAndUpdate
 DROP PROCEDURE IF EXISTS `badgeInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `badgeInsertAndUpdate`(IN `badgeID` INT, IN `ownerID` INT, IN `name` VARCHAR(50), IN `disc` MEDIUMTEXT)
@@ -2095,7 +1471,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure debug-test3.bannedOrgInsert
 DROP PROCEDURE IF EXISTS `bannedOrgInsert`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `bannedOrgInsert`(IN `orgId` INT, IN `userIdAdmin` INT, IN `bannedTypeId` INT, IN `adminComment` VARCHAR(4096))
@@ -2136,7 +1511,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure debug-test3.bannedUserInsert
 DROP PROCEDURE IF EXISTS `bannedUserInsert`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `bannedUserInsert`(IN `userId` INT, IN `userIdAdmin` INT, IN `bannedTypeId` INT, IN `adminComment` VARCHAR(4096))
@@ -2155,7 +1529,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.claimTask
 DROP PROCEDURE IF EXISTS `claimTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `claimTask`(IN `tID` INT, IN `uID` INT)
@@ -2198,7 +1571,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.deleteBadge
 DROP PROCEDURE IF EXISTS `deleteBadge`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteBadge`(IN `id` INT)
@@ -2213,7 +1585,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.deleteOrg
 DROP PROCEDURE IF EXISTS `deleteOrg`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteOrg`(IN `id` INT)
@@ -2229,7 +1600,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure debug-test3.deleteProject
 DROP PROCEDURE IF EXISTS `deleteProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteProject`(IN `projectId` INT)
@@ -2244,7 +1614,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure debug-test3.deleteProjectTags
 DROP PROCEDURE IF EXISTS `deleteProjectTags`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteProjectTags`(IN `projectId` INT)
@@ -2261,7 +1630,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.deleteTag
 DROP PROCEDURE IF EXISTS `deleteTag`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteTag`(IN `tagID` INT)
@@ -2276,7 +1644,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.deleteTask
 DROP PROCEDURE IF EXISTS `deleteTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteTask`(IN `id` INT)
@@ -2369,7 +1736,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.findOrganisation
 DROP PROCEDURE IF EXISTS `findOrganisation`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `findOrganisation`(IN `id` INT)
@@ -2383,7 +1749,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.findOrganisationsUserBelongsTo
 DROP PROCEDURE IF EXISTS `findOrganisationsUserBelongsTo`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `findOrganisationsUserBelongsTo`(IN `id` INT)
@@ -2406,7 +1771,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.finishRegistration
 DROP PROCEDURE IF EXISTS `finishRegistration`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `finishRegistration`(IN `userId` INT)
@@ -2424,7 +1788,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.finishRegistrationManually
 DROP PROCEDURE IF EXISTS `finishRegistrationManually`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `finishRegistrationManually`(IN `emailToVerify` VARCHAR(128))
@@ -2441,7 +1804,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getActiveLanguages
 DROP PROCEDURE IF EXISTS `getActiveLanguages`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getActiveLanguages`()
@@ -2458,7 +1820,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Dev.getActiveSourceLanguages
 DROP PROCEDURE IF EXISTS `getActiveSourceLanguages`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getActiveSourceLanguages`()
@@ -2474,7 +1835,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Dev.getActiveTargetLanguages
 DROP PROCEDURE IF EXISTS `getActiveTargetLanguages`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getActiveTargetLanguages`()
@@ -2490,7 +1850,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Dev.getAdmins
 DROP PROCEDURE IF EXISTS `getAdmins`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getAdmins`(IN `orgId` INT)
@@ -2526,7 +1885,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Dev.getAdmin
 DROP PROCEDURE IF EXISTS `getAdmin`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getAdmin`(IN `userId` INT, IN `orgId` INT)
@@ -2579,7 +1937,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure trommonsUpdateTest.getArchivedProject
 DROP PROCEDURE IF EXISTS `getArchivedProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `imp` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `archiveDate` DATETIME, IN `archiverId` INT, IN `lCode` VARCHAR(3), IN `cCode` VARCHAR(2), IN imageUploaded BIT(1), IN imageApproved BIT(1))
@@ -2638,7 +1995,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure debug-test.getArchivedTask
 DROP PROCEDURE IF EXISTS `getArchivedTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getArchivedTask`(IN `archiveId` BIGINT, IN `projectId` INT, IN `title` VARCHAR(128), IN `comment` VARCHAR(4096), IN `deadline` DATETIME, IN `wordCount` INT, IN `createdTime` DATETIME, IN `sourceLanguageId` INT, IN `targetLanguageId` INT, IN `sourceCountryId` INT, IN `targetCountryId` INT, IN `taskTypeId` INT, IN `taskStatusId` INT, IN `published` BIT(1))
@@ -2692,7 +2048,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Dev.getBadge
 DROP PROCEDURE IF EXISTS `getBadge`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getBadge`(IN `id` INT, IN `name` VARCHAR(128), IN `des` VARCHAR(512), IN `orgID` INT)
@@ -2714,7 +2069,6 @@ DELIMITER ;
 
 
 
--- Dumping structure for procedure Solas-Match-Dev.getBannedOrg
 DROP PROCEDURE IF EXISTS `getBannedOrg`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getBannedOrg`(IN `orgId` INT, IN `userIdAdmin` INT, IN `bannedTypeId` INT, IN `adminComment` VARCHAR(4096), IN `bannedDate` DATETIME)
@@ -2739,7 +2093,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Dev.getBannedUser
 DROP PROCEDURE IF EXISTS `getBannedUser`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getBannedUser`(IN `userId` INT, IN `userIdAdmin` INT, IN `bannedTypeId` INT, IN `adminComment` VARCHAR(4096), IN `bannedDate` DATETIME)
@@ -2761,7 +2114,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getCountries
 DROP PROCEDURE IF EXISTS `getCountries`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getCountries`()
@@ -2781,7 +2133,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Dev.getCountry
 DROP PROCEDURE IF EXISTS `getCountry`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getCountry`(IN `id` INT, IN `code` VARCHAR(3), IN `name` VARCHAR(128))
@@ -2799,7 +2150,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Dev.getLanguage
 DROP PROCEDURE IF EXISTS `getLanguage`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLanguage`(IN `id` INT, IN `code` VARCHAR(3), IN `name` VARCHAR(128))
@@ -2818,7 +2168,6 @@ DELIMITER ;
 
 
 
--- Dumping structure for procedure Solas-Match-Test.getLanguages
 DROP PROCEDURE IF EXISTS `getLanguages`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLanguages`()
@@ -2828,7 +2177,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Dev.getLatestAvailableTasks
 DROP PROCEDURE IF EXISTS `getLatestAvailableTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasks`(IN `lim` INT, IN `offset` INT)
@@ -2862,7 +2210,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure getLatestAvailableTasksCount
 DROP PROCEDURE IF EXISTS `getLatestAvailableTasksCount`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAvailableTasksCount`()
@@ -2882,7 +2229,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Dev.getLatestFileVersion
 DROP PROCEDURE IF EXISTS `getLatestFileVersion`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestFileVersion`(IN `id` INT, IN `uID` INT)
@@ -2897,7 +2243,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Dev.getLoginCount
 DROP PROCEDURE IF EXISTS `getLoginCount`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLoginCount`(IN `startDate` DATETIME, IN `endDate` DATETIME)
@@ -2911,7 +2256,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getMembershipRequests
 DROP PROCEDURE IF EXISTS `getMembershipRequests`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getMembershipRequests`(IN `orgID` INT)
@@ -2924,7 +2268,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getOrg
 DROP PROCEDURE IF EXISTS `getOrg`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrg`(IN `id` INT, IN `name` VARCHAR(128), IN `url` VARCHAR(128), IN `bio` VARCHAR(4096), IN `email` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128), IN `regionalFocus` VARCHAR(128))
@@ -2964,7 +2307,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure big-merge.getOrgMembers
 DROP PROCEDURE IF EXISTS `getOrgMembers`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOrgMembers`(IN `orgId` INT)
@@ -2991,7 +2333,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getOverdueTasks
 DROP PROCEDURE IF EXISTS `getOverdueTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getOverdueTasks`()
@@ -3077,7 +2418,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getPasswordResetRequests
 DROP PROCEDURE IF EXISTS `getPasswordResetRequests`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getPasswordResetRequests`(IN `unique_id` CHAR(40), IN `email` VARCHAR(128))
@@ -3095,7 +2435,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getProject
 DROP PROCEDURE IF EXISTS `getProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getProject`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `impactText` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `sourceCountryCode` VARCHAR(3), IN `sourceLanguageCode` VARCHAR(3), IN imageUploaded BIT(1), IN imageApproved BIT(1))
@@ -3187,7 +2526,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.getProjectByTag
 DROP PROCEDURE IF EXISTS `getProjectByTag`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getProjectByTag`(IN `tID` INT)
@@ -3206,7 +2544,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getProjectFile
 DROP PROCEDURE IF EXISTS `getProjectFile`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getProjectFile`(IN `pID` INT, IN `uID` INT, IN `fName` VARCHAR(128), IN `token` VARCHAR(128), IN `mime` VARCHAR(128))
@@ -3230,7 +2567,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getProjectTags
 DROP PROCEDURE IF EXISTS `getProjectTags`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getProjectTags`(IN `pID` INT)
@@ -3244,7 +2580,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getRegistrationId
 DROP PROCEDURE IF EXISTS `getRegistrationId`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getRegistrationId`(IN `userId` INT)
@@ -3256,7 +2591,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure SolasMatch.getRegisteredUser
 DROP PROCEDURE IF EXISTS `getRegisteredUser`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getRegisteredUser`(IN `uuid` VARCHAR(128))
@@ -3272,7 +2606,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getStatistics
 DROP PROCEDURE IF EXISTS `getStatistics`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getStatistics`(IN `statName` VARCHAR(128))
@@ -3286,7 +2619,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Dev.getSubscribedUsers
 DROP PROCEDURE IF EXISTS `getSubscribedUsers`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getSubscribedUsers`(IN `taskId` INT)
@@ -3320,7 +2652,6 @@ DELIMITER ;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 
 
--- Dumping structure for procedure Solas-Match-Test.getTag
 DROP PROCEDURE IF EXISTS `getTag`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTag`(IN `id` INT, IN `name` VARCHAR(50), IN `lim` INT)
@@ -3340,7 +2671,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getTaggedTasks
 DROP PROCEDURE IF EXISTS `getTaggedTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaggedTasks`(IN `tID` INT, IN `lim` INT)
@@ -3372,7 +2702,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getTask
 DROP PROCEDURE IF EXISTS `getTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTask`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(128), IN `wordCount` INT, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `created` DATETIME, IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `tType` INT, IN `tStatus` INT, IN `pub` BIT(1), IN `dLine` DATETIME)
@@ -3462,7 +2791,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure debug-test3.getTaskClaimedTime
 DROP PROCEDURE IF EXISTS `getTaskClaimedTime`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskClaimedTime`(IN `taskId` INT)
@@ -3476,7 +2804,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getTaskFileMetaData
 DROP PROCEDURE IF EXISTS `getTaskFileMetaData`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskFileMetaData`(IN `tID` INT, IN `vID` INT, IN `name` TEXT, IN `content` VARCHAR(255), IN `uID` INT, IN `uTime` DATETIME)
@@ -3502,7 +2829,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getTaskPreReqs
 DROP PROCEDURE IF EXISTS `getTaskPreReqs`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskPreReqs`(IN `taskId` INT)
@@ -3526,7 +2852,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.getTasksFromPreReq
 DROP PROCEDURE IF EXISTS `getTasksFromPreReq`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTasksFromPreReq`(IN `preReqId` INT, IN `projectId` INT)
@@ -3554,7 +2879,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getTaskReviews
 DROP PROCEDURE IF EXISTS `getTaskReviews`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskReviews`(IN `projectId` INT, IN `taskId` INT, IN `userId` INT, IN `correction` INT, IN `gram` INT, IN `spell` INT, IN `consis` INT, IN `comm` VARCHAR(2048))
@@ -3584,7 +2908,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure DropTableFix.getTaskTagIds
 DROP PROCEDURE IF EXISTS `getTaskTagIds`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskTagIds`(IN `lim` INT, IN `offs` INT)
@@ -3602,7 +2925,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getTaskTags
 DROP PROCEDURE IF EXISTS `getTaskTags`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskTags`(IN `tID` INT)
@@ -3613,7 +2935,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.getTaskType
 DROP PROCEDURE IF EXISTS `getTaskType`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTaskType`(IN `tID` INT)
@@ -3623,7 +2944,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getTopTags
 DROP PROCEDURE IF EXISTS `getTopTags`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTopTags`(IN `lim` INT)
@@ -3645,7 +2965,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.getTrackedProjects
 DROP PROCEDURE IF EXISTS `getTrackedProjects`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTrackedProjects`(IN `uID` INT)
@@ -3668,7 +2987,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getUser
 DROP PROCEDURE IF EXISTS `getUser`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUser`(IN `id` INT, IN `name` VARCHAR(128), IN `mail` VARCHAR(128), IN `pass` char(128), IN `bio` TEXT, IN `nonce` INT, IN `created` DATETIME, IN `lang_id` INT, IN `region_id` INT)
@@ -3706,7 +3024,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure debug-test.getUserArchivedTasks
 DROP PROCEDURE IF EXISTS `getUserArchivedTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserArchivedTasks`(IN `uID` INT, IN `lim` INT, IN `offset` INT)
@@ -3748,7 +3065,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.getUserBadges
 DROP PROCEDURE IF EXISTS `getUserBadges`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserBadges`(IN `id` INT)
@@ -3760,7 +3076,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getUserByOAuthToken
 DROP PROCEDURE IF EXISTS `getUserByOAuthToken`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserByOAuthToken`(IN `accessToken` CHAR(40))
@@ -3782,7 +3097,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getUserClaimedTask
 DROP PROCEDURE IF EXISTS `getUserClaimedTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserClaimedTask`(IN `taskID` INT)
@@ -3795,7 +3109,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.getUserIdsPendingTaskStreamNotification
 DROP PROCEDURE IF EXISTS `getUserIdsPendingTaskStreamNotification`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserIdsPendingTaskStreamNotification`()
@@ -3811,7 +3124,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure DropTableFix.getUserLCCodes
 DROP PROCEDURE IF EXISTS `getUserLCCodes`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserLCCodes`(IN `lim` INT, IN `offs` INT)
@@ -3832,7 +3144,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure DropTableFix.getUserNativeLCCodes
 DROP PROCEDURE IF EXISTS `getUserNativeLCCodes`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserNativeLCCodes`(IN `lim` INT, IN `offs` INT)
@@ -3851,7 +3162,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getUserNotifications
 DROP PROCEDURE IF EXISTS `getUserNotifications`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserNotifications`(IN `id` INT)
@@ -3863,7 +3173,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getUserRealName
 DROP PROCEDURE IF EXISTS `getUserRealName`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserRealName`(IN `userId` INT)
@@ -3882,7 +3191,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getUsersWithBadge
 DROP PROCEDURE IF EXISTS `getUsersWithBadge`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUsersWithBadge`(IN `bID` INT)
@@ -3899,7 +3207,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure DropTableFix.getUserTagIds
 DROP PROCEDURE IF EXISTS `getUserTagIds`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTagIds`(IN `lim` INT, IN `offs` INT)
@@ -3918,7 +3225,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getUserTags
 DROP PROCEDURE IF EXISTS `getUserTags`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTags`(IN `id` INT, IN `lim` INT)
@@ -3934,7 +3240,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getUserTasks
 DROP PROCEDURE IF EXISTS `getUserTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTasks`(IN `uID` INT, IN `lim` INT, IN `offs` INT)
@@ -3961,7 +3266,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.getUserTasksCount
 DROP PROCEDURE IF EXISTS `getUserTasksCount`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTasksCount`(IN `uID` INT)
@@ -3972,7 +3276,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.getUserTaskStreamNotification
 DROP PROCEDURE IF EXISTS `getUserTaskStreamNotification`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTaskStreamNotification`(IN `uID` INT)
@@ -3999,7 +3302,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.getUserTaskScore
 DROP PROCEDURE IF EXISTS `getUserTaskScore`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTaskScore`(IN `uID` INT, IN `tID` INT)
@@ -4015,7 +3317,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure debug-test3.getUserTopTasks
 DROP PROCEDURE IF EXISTS `getUserTopTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTopTasks`(IN `uID` INT, IN `strict` INT, IN `lim` INT, IN `offset` INT, IN `taskType` INT, IN `sourceLanguage` VARCHAR(3), IN `targetLanguage` VARCHAR(3))
@@ -4317,7 +3618,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getUserTrackedTasks
 DROP PROCEDURE IF EXISTS `getUserTrackedTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserTrackedTasks`(IN `id` INT)
@@ -4338,7 +3638,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.getUserWithBadge
 DROP PROCEDURE IF EXISTS `getUserWithBadge`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserWithBadge`(IN `id` INT)
@@ -4355,7 +3654,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.hasUserClaimedTask
 DROP PROCEDURE IF EXISTS `hasUserClaimedTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `hasUserClaimedTask`(IN `tID` INT, IN `uID` INT)
@@ -4370,7 +3668,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.hasUserClaimedSegmentationTask
 DROP PROCEDURE IF EXISTS `hasUserClaimedSegmentationTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `hasUserClaimedSegmentationTask`(IN `uID` INT, IN `pID` INT)
@@ -4384,7 +3681,6 @@ SELECT exists	 (	select 1
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.isAdmin
 DROP PROCEDURE IF EXISTS `isAdmin`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isAdmin`(IN `userId` INT, IN `orgId` INT)
@@ -4425,7 +3721,6 @@ DELIMITER ;
 
 
 
--- Dumping structure for procedure Solas-Match-Test.isUserVerified
 DROP PROCEDURE IF EXISTS `isUserVerified`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserVerified`(IN `userId` INT)
@@ -4444,7 +3739,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure debug-test3.isOrgBanned
 DROP PROCEDURE IF EXISTS `isOrgBanned`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isOrgBanned`(IN `orgId` INT)
@@ -4454,7 +3748,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure debug-test3.isUserBanned
 DROP PROCEDURE IF EXISTS `isUserBanned`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserBanned`(IN `userId` INT)
@@ -4481,7 +3774,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure debug-test3.isUserBlacklistedForTask
 DROP PROCEDURE IF EXISTS `isUserBlacklistedForTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isUserBlacklistedForTask`(IN `userId` INT, IN `taskId` INT)
@@ -4506,7 +3798,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.logFileDownload
 DROP PROCEDURE IF EXISTS `logFileDownload`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `logFileDownload`(IN `tID` INT, IN `vID` INT, IN `uID` INT)
@@ -4518,7 +3809,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.oauthAssociateAccessToken
 DROP PROCEDURE IF EXISTS `oauthAssociateAccessToken`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthAssociateAccessToken`(IN `sessionId` INT, IN `accessToken` CHAR(40), IN `expireTime` INT)
@@ -4531,7 +3821,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.oauthAssociateAuthCode
 DROP PROCEDURE IF EXISTS `oauthAssociateAuthCode`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthAssociateAuthCode`(IN `sessionId` INT, IN `authCode` CHAR(40), IN `expireTime` INT)
@@ -4544,7 +3833,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.oauthAssociateAuthCodeScope
 DROP PROCEDURE IF EXISTS `oauthAssociateAuthCodeScope`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthAssociateAuthCodeScope`(IN `authCodeId` INT, IN `scopeId` INT)
@@ -4556,7 +3844,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.oauthAssociateRedirectUri
 DROP PROCEDURE IF EXISTS `oauthAssociateRedirectUri`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthAssociateRedirectUri`(IN `sessionId` INT, IN `redirectUri` VARCHAR(255))
@@ -4568,7 +3855,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.oauthAssociateRefreshToken
 DROP PROCEDURE IF EXISTS `oauthAssociateRefreshToken`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthAssociateRefreshToken`(IN `accessTokenId` INT, IN `refreshToken` CHAR(40), IN `expireTime` INT, IN `clientId` CHAR(40))
@@ -4580,7 +3866,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.oauthAssociateScope
 DROP PROCEDURE IF EXISTS `oauthAssociateScope`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthAssociateScope`(IN `accessTokenId` INT, IN `scopeId` INT)
@@ -4592,7 +3877,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.oauthCreateSession
 DROP PROCEDURE IF EXISTS `oauthCreateSession`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthCreateSession`(IN `clientId` CHAR(40), IN `ownerType` ENUM('user', 'client'), IN `ownerId` VARCHAR(255))
@@ -4605,7 +3889,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.oauthDeleteSession
 DROP PROCEDURE IF EXISTS `oauthDeleteSession`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthDeleteSession`(IN `clientId` CHAR(40), IN `ownerType` ENUM('user', 'client'), IN `ownerId` VARCHAR(255))
@@ -4619,7 +3902,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.oauthGetAccessToken
 DROP PROCEDURE IF EXISTS `oauthGetAccessToken`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthGetAccessToken`(IN `accessTokenId` INT)
@@ -4632,7 +3914,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.oauthGetAuthCodeScopes
 DROP PROCEDURE IF EXISTS `oauthGetAuthCodeScopes`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthGetAuthCodeScopes`(IN `authCodeId` INT)
@@ -4645,7 +3926,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.oauthGetClient
 DROP PROCEDURE IF EXISTS `oauthGetClient`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthGetClient`(IN `clientId` CHAR(40), IN `clientSecret` CHAR(42), IN `redirectUri` VARCHAR(255))
@@ -4669,7 +3949,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.oauthGetScope
 DROP PROCEDURE IF EXISTS `oauthGetScope`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthGetScope`(IN `requestedScope` VARCHAR(255))
@@ -4682,7 +3961,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.oauthGetScopes
 DROP PROCEDURE IF EXISTS `oauthGetScopes`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthGetScopes`(IN `accessToken` VARCHAR(40))
@@ -4699,7 +3977,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.oauthRemoveAuthCode
 DROP PROCEDURE IF EXISTS `oauthRemoveAuthCode`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthRemoveAuthCode`(IN `sessionId` INT)
@@ -4711,7 +3988,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.oauthRemoveRefreshToken
 DROP PROCEDURE IF EXISTS `oauthRemoveRefreshToken`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthRemoveRefreshToken`(IN `refreshToken` CHAR(40))
@@ -4723,7 +3999,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.oauthValidateAccessToken
 DROP PROCEDURE IF EXISTS `oauthValidateAccessToken`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthValidateAccessToken`(IN `accessToken` CHAR(40))
@@ -4739,7 +4014,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.oauthValidateAuthCode
 DROP PROCEDURE IF EXISTS `oauthValidateAuthCode`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthValidateAuthCode`(IN `clientId` CHAR(40), IN `redirectUri` VARCHAR(255), IN `authCode` CHAR(40))
@@ -4759,7 +4033,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.oauthValidateRefreshToken
 DROP PROCEDURE IF EXISTS `oauthValidateRefreshToken`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `oauthValidateRefreshToken`(IN `refreshToken` CHAR(40), IN `clientId` CHAR(40))
@@ -4774,7 +4047,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.organisationInsertAndUpdate
 DROP PROCEDURE IF EXISTS `organisationInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `organisationInsertAndUpdate`(IN `id` INT(10), IN `url` TEXT, IN `companyName` VARCHAR(128), IN `bio` VARCHAR(4096), IN `email` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128), IN `regionalFocus` VARCHAR(128))
@@ -4942,7 +4214,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.orgHasMember
 DROP PROCEDURE IF EXISTS `orgHasMember`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `orgHasMember`(IN `oID` INT, IN `uID` INT)
@@ -4952,7 +4223,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.projectInsertAndUpdate
 DROP PROCEDURE IF EXISTS `projectInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `projectInsertAndUpdate`(IN `projectId` INT, IN `titleText` VARCHAR(128), IN `descr` VARCHAR(4096), IN `impactText` VARCHAR(4096), IN `deadlineTime` DATETIME, IN `orgId` INT, IN `ref` VARCHAR(128), IN `wordCount` INT, IN `createdTime` DATETIME, IN `sourceCountryCode` VARCHAR(3), IN `sourceLanguageCode` VARCHAR(3), IN imageUploaded BIT(1), IN imageApproved BIT(1))
@@ -5095,7 +4365,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.recordFileUpload
 DROP PROCEDURE IF EXISTS `recordFileUpload`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `recordFileUpload`(IN `tID` INT, IN `name` TeXT, IN `content` VARCHAR(255), IN `uID` INT, IN `ver` INT)
@@ -5141,7 +4410,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.registerUser
 DROP PROCEDURE IF EXISTS `registerUser`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `registerUser`(IN `userId` INT, IN `uuid` VARCHAR(128))
@@ -5160,7 +4428,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.changeEmail
 DROP PROCEDURE IF EXISTS `changeEmail`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `changeEmail`(IN `userId` INT, IN `eMail` VARCHAR(128))
@@ -5170,7 +4437,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure debug-test3.removeAdmin
 DROP PROCEDURE IF EXISTS `removeAdmin`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeAdmin`(IN `userId` INT, IN `orgId` INT)
@@ -5186,7 +4452,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure debug-test3.removeBannedOrg
 DROP PROCEDURE IF EXISTS `removeBannedOrg`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeBannedOrg`(IN `orgId` INT)
@@ -5195,7 +4460,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure debug-test3.removeBannedUser
 DROP PROCEDURE IF EXISTS `removeBannedUser`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeBannedUser`(IN `userId` INT)
@@ -5205,7 +4469,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.removeMembershipRequest
 DROP PROCEDURE IF EXISTS `removeMembershipRequest`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeMembershipRequest`(IN `userId` INT, IN `orgId` INT)
@@ -5225,7 +4488,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.removePasswordResetRequest
 DROP PROCEDURE IF EXISTS `removePasswordResetRequest`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removePasswordResetRequest`(IN `userId` INT)
@@ -5241,7 +4503,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.removeProjectTag
 DROP PROCEDURE IF EXISTS `removeProjectTag`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeProjectTag`(IN `projectID` INT, IN `tagID` INT)
@@ -5256,7 +4517,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.removeTaskPreReq
 DROP PROCEDURE IF EXISTS `removeTaskPreReq`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeTaskPreReq`(IN `taskId` INT, IN `preReqId` INT)
@@ -5274,7 +4534,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.removeTaskStreamNotification
 DROP PROCEDURE IF EXISTS `removeTaskStreamNotification`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeTaskStreamNotification`(IN `userId` INT)
@@ -5290,7 +4549,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.removeUserBadge
 DROP PROCEDURE IF EXISTS `removeUserBadge`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeUserBadge`(IN `uID` INT, IN `bID` INT)
@@ -5309,7 +4567,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.removeUserNotification
 DROP PROCEDURE IF EXISTS `removeUserNotification`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeUserNotification`(IN `userId` INT, IN `taskId` INT)
@@ -5328,7 +4585,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.removeUserTag
 DROP PROCEDURE IF EXISTS `removeUserTag`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `removeUserTag`(IN `id` INT, IN `tagID` INT)
@@ -5347,7 +4603,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.requestMembership
 DROP PROCEDURE IF EXISTS `requestMembership`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `requestMembership`(IN `userId` INT, IN `orgId` INT)
@@ -5369,7 +4624,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.revokeMembership
 DROP PROCEDURE IF EXISTS `revokeMembership`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `revokeMembership`(IN `userId` INT, IN `orgId` INT)
@@ -5389,7 +4643,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.saveUserTaskScore
 DROP PROCEDURE IF EXISTS `saveUserTaskScore`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `saveUserTaskScore`(IN `uID` INT, IN `tID` INT, IN `points` INT)
@@ -5423,7 +4676,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.searchForOrg
 DROP PROCEDURE IF EXISTS `searchForOrg`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `searchForOrg`(IN `org_name` VARCHAR(128))
@@ -5437,7 +4689,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.searchForTag
 DROP PROCEDURE IF EXISTS `searchForTag`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `searchForTag`(IN `tagName` VARCHAR(50))
@@ -5450,7 +4701,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.setTaskStatus
 DROP PROCEDURE IF EXISTS `setTaskStatus`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `setTaskStatus`(IN `tID` INT, IN `sID` INT)
@@ -5469,7 +4719,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.statsUpdateAll
 DROP PROCEDURE IF EXISTS `statsUpdateAll`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateAll`()
@@ -5491,7 +4740,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.statsUpdateArchivedProjects
 DROP PROCEDURE IF EXISTS `statsUpdateArchivedProjects`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateArchivedProjects`()
@@ -5504,7 +4752,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.statsUpdateArchivedTasks
 DROP PROCEDURE IF EXISTS `statsUpdateArchivedTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateArchivedTasks`()
@@ -5517,7 +4764,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.statsUpdateCompleteTasks
 DROP PROCEDURE IF EXISTS `statsUpdateCompleteTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateCompleteTasks`()
@@ -5533,7 +4779,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.statsUpdateBadges
 DROP PROCEDURE IF EXISTS `statsUpdateBadges`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateBadges`()
@@ -5546,7 +4791,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.statsUpdateClaimedTasks
 DROP PROCEDURE IF EXISTS `statsUpdateClaimedTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateClaimedTasks`()
@@ -5559,7 +4803,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.statsUpdateOrganisations
 DROP PROCEDURE IF EXISTS `statsUpdateOrganisations`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateOrganisations`()
@@ -5572,7 +4815,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.statsUpdateOrgMemberRequests
 DROP PROCEDURE IF EXISTS `statsUpdateOrgMemberRequests`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateOrgMemberRequests`()
@@ -5585,7 +4827,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.statsUpdateProjects
 DROP PROCEDURE IF EXISTS `statsUpdateProjects`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateProjects`()
@@ -5598,7 +4839,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.statsUpdateTags
 DROP PROCEDURE IF EXISTS `statsUpdateTags`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateTags`()
@@ -5611,7 +4851,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.statsUpdateTasks
 DROP PROCEDURE IF EXISTS `statsUpdateTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateTasks`()
@@ -5624,7 +4863,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.statsUpdateTasksWithPreReqs
 DROP PROCEDURE IF EXISTS `statsUpdateTasksWithPreReqs`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateTasksWithPreReqs`()
@@ -5637,7 +4875,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.statsUpdateUnclaimedTasks
 DROP PROCEDURE IF EXISTS `statsUpdateUnclaimedTasks`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateUnclaimedTasks`()
@@ -5655,7 +4892,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.statsUpdateUsers
 DROP PROCEDURE IF EXISTS `statsUpdateUsers`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `statsUpdateUsers`()
@@ -5686,7 +4922,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.tagInsert
 DROP PROCEDURE IF EXISTS `tagInsert`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `tagInsert`(IN `name` VARCHAR(50))
@@ -5697,7 +4932,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure debug-test3.taskInsertAndUpdate
 DROP PROCEDURE IF EXISTS `taskInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `taskInsertAndUpdate`(IN `id` BIGINT, IN `projectID` INT, IN `name` VARCHAR(128), IN `wordCount` INT, IN `sCode` VARCHAR(3), IN `tCode` VARCHAR(3), IN `taskComment` VARCHAR(4096), IN `sCC` VARCHAR(3), IN `tCC` VARCHAR(3), IN `dLine` DATETIME, IN `taskType` INT, IN `tStatus` INT, IN `pub` bit(1))
@@ -5832,7 +5066,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.taskIsClaimed
 DROP PROCEDURE IF EXISTS `taskIsClaimed`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `taskIsClaimed`(IN `tID` INT)
@@ -5842,7 +5075,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.taskStreamNotificationSent
 DROP PROCEDURE IF EXISTS `taskStreamNotificationSent`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `taskStreamNotificationSent`(IN `uID` INT, IN `sentDate` DATETIME)
@@ -5862,7 +5094,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.unClaimTask
 DROP PROCEDURE IF EXISTS `unClaimTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `unClaimTask`(IN `tID` INT, IN `uID` INT, IN `userFeedback` VARCHAR(4096), IN `unclaimByAdmin` BIT(1))
@@ -5941,7 +5172,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.userHasBadge
 DROP PROCEDURE IF EXISTS `userHasBadge`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userHasBadge`(IN `userID` INT, IN `badgeID` INT)
@@ -5951,7 +5181,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure debug-test3.userInsertAndUpdate
 DROP PROCEDURE IF EXISTS `userInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userInsertAndUpdate`(IN `email` VARCHAR(128), IN `nonce` int(11), IN `pass` char(128), IN `bio` TEXT, IN `name` VARCHAR(128), IN `lang` VARCHAR(3), IN `region` VARCHAR(3), IN `id` INT)
@@ -6068,7 +5297,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.userLikeTag
 DROP PROCEDURE IF EXISTS `userLikeTag`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userLikeTag`(IN `id` INT, IN `tagID` INT)
@@ -6086,7 +5314,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.userNotificationsInsertAndUpdate
 DROP PROCEDURE IF EXISTS `userNotificationsInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userNotificationsInsertAndUpdate`(IN `user_id` INT, IN `task_id` INT)
@@ -6097,7 +5324,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.userSubscribedToProject
 DROP PROCEDURE IF EXISTS `userSubscribedToProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userSubscribedToProject`(IN `userId` INT, IN `projectId` INT)
@@ -6114,7 +5340,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.userSubscribedToTask
 DROP PROCEDURE IF EXISTS `userSubscribedToTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userSubscribedToTask`(IN `userId` INT, IN `taskId` INT)
@@ -6142,7 +5367,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.userTrackProject
 DROP PROCEDURE IF EXISTS `userTrackProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userTrackProject`(IN `pID` INT, IN `uID` INT)
@@ -6180,7 +5404,6 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure Solas-Match-Test.userTrackTask
 DROP PROCEDURE IF EXISTS `userTrackTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userTrackTask`(IN `uID` INT, IN `tID` BIGINT)
@@ -6195,7 +5418,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.userUnTrackProject
 DROP PROCEDURE IF EXISTS `userUnTrackProject`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userUnTrackProject`(IN `pID` INT, IN `uID` INT)
@@ -6206,7 +5428,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.userUnTrackTask
 DROP PROCEDURE IF EXISTS `userUnTrackTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userUnTrackTask`(IN `uID` INT, IN `tID` BIGINT)
@@ -6220,7 +5441,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure SolasUpgrade2.userSecondaryLanguageInsert
 DROP PROCEDURE IF EXISTS `userSecondaryLanguageInsert`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userSecondaryLanguageInsert`(IN `userId` INT, IN `languageCode` VARCHAR(128), IN `countryCode` VARCHAR(128))
@@ -6244,7 +5464,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure Solas-Match-Test.getUserSecondaryLanguages
 DROP PROCEDURE IF EXISTS `getUserSecondaryLanguages`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserSecondaryLanguages`(IN `userId` INT)
@@ -6270,7 +5489,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure big-merge.userPersonalInfoInsertAndUpdate
 DROP PROCEDURE IF EXISTS `userPersonalInfoInsertAndUpdate`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userPersonalInfoInsertAndUpdate`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` VARCHAR(128), IN `businessNumber` VARCHAR(128), IN `languagePreference` INT, IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128), IN `receiveCredit` BIT(1))
@@ -6371,7 +5589,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure big-merge.getUserPersonalInfo
 DROP PROCEDURE IF EXISTS `getUserPersonalInfo`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserPersonalInfo`(IN `id` INT, IN `userId` INT, IN `firstName` VARCHAR(128), IN `lastName` VARCHAR(128), IN `mobileNumber` VARCHAR(128), IN `businessNumber` VARCHAR(128), IN `languagePreference` INT, IN `jobTitle` VARCHAR(128), IN `address` VARCHAR(128), IN `city` VARCHAR(128), IN `country` VARCHAR(128), IN `receiveCredit` BIT(1))
@@ -6435,7 +5652,6 @@ CLOSE createDefaultLangPref;
 END//
 DELIMITER ;
 
--- Dumping structure for procedure debug-test3.userLoginInsert
 DROP PROCEDURE IF EXISTS `userLoginInsert`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userLoginInsert`(IN `userId` INT, IN `eMail` VARCHAR(128), IN `loginSuccess` CHAR(1))
@@ -6450,8 +5666,6 @@ BEGIN
 END//
 DELIMITER ;
 
-
--- Dumping structure for procedure getTrackedOrganisations
 DROP PROCEDURE IF EXISTS `getTrackedOrganisations`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTrackedOrganisations`(IN `userId` INT)
@@ -6465,7 +5679,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure getUsersTrackingOrg
 DROP PROCEDURE IF EXISTS `getUsersTrackingOrg`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUsersTrackingOrg`(IN `orgId` INT)
@@ -6483,7 +5696,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure userTrackOrganisation
 DROP PROCEDURE IF EXISTS `userTrackOrganisation`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userTrackOrganisation`(IN `userId` INT, IN `orgId` INT)
@@ -6507,7 +5719,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure userUnTrackOrganisation
 DROP PROCEDURE IF EXISTS `userUnTrackOrganisation`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userUnTrackOrganisation`(IN `userId` INT, IN `orgId` INT)
@@ -6530,8 +5741,6 @@ BEGIN
 END//
 DELIMITER ;
 
-
--- Dumping structure for procedure userSubscribedToOrganisation
 DROP PROCEDURE IF EXISTS `userSubscribedToOrganisation`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `userSubscribedToOrganisation`(IN `userId` INT, IN `orgId` INT)
@@ -6551,7 +5760,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure updateProjectWordCount
 DROP PROCEDURE IF EXISTS `updateProjectWordCount`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `updateProjectWordCount`(IN `pID` INT, IN `newWordCount` INT)
@@ -6585,8 +5793,6 @@ BEGIN
 END//
 DELIMITER ;
 
-
--- Dumping structure for procedure Solas-Match-Test.recordTaskViews
 DROP PROCEDURE IF EXISTS `recordTaskView`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `recordTaskView`(IN `tID` INT, IN `uID` INT)
@@ -6606,7 +5812,6 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure getProofreadTask
 DROP PROCEDURE IF EXISTS `getProofreadTask`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getProofreadTask`(IN `tID` INT)
@@ -9766,12 +8971,13 @@ BEGIN
 END//
 DELIMITER ;
 
+
 /*---------------------------------------end of procs----------------------------------------------*/
 
 
 /*---------------------------------------start of triggers-----------------------------------------*/
 
--- Dumping structure for trigger Solas-Match-Dev.afterProjectUpdate
+
 DROP TRIGGER IF EXISTS `afterProjectUpdate`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
@@ -9781,9 +8987,11 @@ update Tasks set `language_id-source`=new.language_id, `country_id-source` = new
 end if;
 END//
 DELIMITER ;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 
--- Dumping structure for trigger debug-test3.beforeUserLoginInsert
+
 DROP TRIGGER IF EXISTS `beforeUserLoginInsert`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
@@ -9799,10 +9007,11 @@ set @loginAttempts = null;
 
 END//
 DELIMITER ;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger Solas-Match-Test.defaultUserName
 DROP TRIGGER IF EXISTS `defaultUserName`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
@@ -9810,13 +9019,16 @@ CREATE TRIGGER `defaultUserName` BEFORE INSERT ON `Users` FOR EACH ROW BEGIN
 if new.`display-name` is null then set new.`display-name` = substring_index(new.email,'@',1); end if;
 END//
 DELIMITER ;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8mb4 */;
 /*!40014 SET FOREIGN_KEY_CHECKS=0 */;
 
--- Dumping structure for trigger debug-test.deleteArchiveTaskOnArchiveProjectDeletion
+
 DROP TRIGGER IF EXISTS `deleteArchiveTaskOnArchiveProjectDeletion`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
@@ -9826,12 +9038,13 @@ CREATE TRIGGER `deleteArchiveTaskOnArchiveProjectDeletion` BEFORE DELETE ON `Arc
 
 END//
 DELIMITER ;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 /*!40014 SET FOREIGN_KEY_CHECKS=1 */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 
 
--- Dumping structure for trigger Solas-Match-Test.onTasksUpdate
 DROP TRIGGER IF EXISTS `onTasksUpdate`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
@@ -9876,13 +9089,13 @@ CREATE TRIGGER `onTasksUpdate` AFTER UPDATE ON `Tasks` FOR EACH ROW BEGIN
     end if;
 END//
 DELIMITER ;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 /*!40014 SET FOREIGN_KEY_CHECKS=1 */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 
 
-
--- Dumping structure for trigger Solas-Match-Test.updateDependentTaskOnComplete
 DROP TRIGGER IF EXISTS `updateDependentTaskOnComplete`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
@@ -9949,7 +9162,6 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger Solas-Match-Test.updateTaskStatusDeletePrereq
 DROP TRIGGER IF EXISTS `updateTaskStatusDeletePrereq`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
@@ -9975,7 +9187,6 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger Solas-Match-Test.updateTaskStatusOnAddPrereq
 DROP TRIGGER IF EXISTS `updateTaskStatusOnAddPrereq`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
@@ -10001,7 +9212,6 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger Solas-Match-Test.validateHomepageInsert
 DROP TRIGGER IF EXISTS `validateHomepageInsert`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
@@ -10014,7 +9224,6 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger Solas-Match-Test.validateHomepageUpdate
 DROP TRIGGER IF EXISTS `validateHomepageUpdate`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
@@ -10026,7 +9235,6 @@ END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
--- Dumping structure for trigger SolasUpgrade2.userSecondaryLanguageInsert
 DROP TRIGGER IF EXISTS `userSecondaryLanguageInsert`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
@@ -10041,7 +9249,6 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger Solas-Match.onUserUpdate
 DROP TRIGGER IF EXISTS `onUserUpdate`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
@@ -10056,10 +9263,11 @@ CREATE TRIGGER `onUserUpdate` BEFORE UPDATE ON `Users` FOR EACH ROW BEGIN
 	END IF;	
 END//
 DELIMITER ;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger debug-test3.afterTaskCreate
 DROP TRIGGER IF EXISTS `afterTaskCreate`;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
@@ -10082,9 +9290,11 @@ CREATE TRIGGER `afterTaskCreate` AFTER INSERT ON `Tasks` FOR EACH ROW BEGIN
 
 END//
 DELIMITER ;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 
--- Dumping structure for trigger debug-test3.afterDeleteTaskClaim
+
 DROP TRIGGER IF EXISTS `afterDeleteTaskClaim`;
 SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='';
 DELIMITER //
@@ -10100,4 +9310,3 @@ SET SQL_MODE=@OLDTMP_SQL_MODE;
 /*---------------------------------------end of triggers-------------------------------------------*/
 SET FOREIGN_KEY_CHECKS=1;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-
