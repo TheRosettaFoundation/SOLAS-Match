@@ -267,6 +267,11 @@ class ProjectRouteHandler
             if ($found_something) $projectDao->update_memsource_project($memsource_project['project_id'], $workflowLevels);
         }
 
+        if (!empty($hook['owner']['id'])) {
+            $projectDao->update_memsource_project_owner($memsource_project['project_id'], $hook['owner']['id']);
+            $projectDao->queue_asana_project($memsource_project['project_id']);
+        }
+
         if (empty($hook['client']['id'])) return;
         $memsource_client = $projectDao->get_memsource_client_by_memsource_id($hook['client']['id']);
         if (empty($memsource_client)) {
