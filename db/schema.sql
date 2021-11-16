@@ -8915,7 +8915,7 @@ BEGIN
     WHERE
         (ta.user_id IS NULL OR ta.accepted_level!=3) AND
         u.`created-time`>'2021-10-25 07:00:00' AND
-        u.`created-time`<(NOW() - INTERVAL 84 HOUR) AND
+        u.`created-time`<(NOW() - INTERVAL 204 HOUR) AND
         a.user_id IS NULL AND
         o.user_id IS NULL
         ORDER BY u.`created-time`
