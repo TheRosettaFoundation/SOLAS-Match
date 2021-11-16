@@ -2771,6 +2771,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
                             ),
                             "due_at" => $objDateTime->format('c'),
                             ));
+                        if (!$self_service) $data['data']['assignee'] = $pm;
                     }
                     $payload = json_encode($data);
                     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
