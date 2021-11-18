@@ -2254,6 +2254,7 @@ error_log("set_memsource_task($task_id... {$part['uid']}...), success: $success"
 
         $creator = $taskDao->get_creator($projectId, $memsource_project);
         $pm = $creator['email'];
+error_log("creator['email']: $pm");
         if (strpos($pm, '@translatorswithoutborders.org') === false) $pm = 'projects@translatorswithoutborders.org';
 
         $title = str_replace(array('\r\n', '\n', '\r', '\t'), ' ', $project->getTitle() . " $projectId"); // Discourse does not like duplicates
