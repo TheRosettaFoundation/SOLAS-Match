@@ -557,7 +557,8 @@ class UserRouteHandler
             }
 
             if (is_null($error) && !is_null($loggedInUserId) && $adminDao->isSiteAdmin($loggedInUserId)) {
-                if ($userDao->changeEmail($user_id, $post['email'])) {
+                $user = $userDao->getUser($user_id);
+                if ($userDao->changeEmail($user_id, $post['email']), $user->getEmail()) {
                     $app->flashNow('success', '');
                 } else {
                     $app->flashNow('error', '');

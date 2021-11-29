@@ -1061,7 +1061,7 @@ class UserDao extends BaseDao
         return $ret;
     }
 
-    public function changeEmail($user_id, $email)
+    public function changeEmail($user_id, $email, $old_email)
     {
         $ret = null;
         $registerData = new Common\Protobufs\Models\Register();
@@ -1070,10 +1070,31 @@ class UserDao extends BaseDao
         $request = "{$this->siteApi}v0/users/changeEmail";
         $registered = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST, $registerData);
         if ($registered) {
+            $record = $this->get_memsource_user_record($old_email);
+            if ($record) $this->change_memsource_user_email($user_id, $record, $email);
+            else error_log("changeEmail($user_id, $email, $old_email), can find email in Memsource");
             return true;
         } else {
             return false;
         }
+    }
+
+    public function get_memsource_user_record($old_email)
+    {
+        $url = $this->memsourceApiV2 . "users?email=$old_email";
+        $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
+        $result = curl_exec($ch);
+        curl_close($ch);
+        if (empty($result)) return 0;
+        $response_data = json_decode($result, true);
+        if (empty($response_data['content'])) return 0;
+        return $response_data['content'][0];
+    }
+
+    public function change_memsource_user_email($user_id, $record, $email)
     }
 
     public function createPersonalInfo($userId, $personalInfo)
