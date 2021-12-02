@@ -787,7 +787,7 @@ class TaskRouteHandler
                 "task_id" => $taskId
             )));
             }
-            $app->flashNow('error', 'The task could not be assigned, likely not found on memsource.');
+            $app->flashNow('error', 'This task can no longer be claimed, the job has been removed from Memsource and will soon be removed from here.');
         }
 
         $convert = $app->request()->get("convertToXliff");
@@ -994,7 +994,7 @@ class TaskRouteHandler
                         $app->flash("success", sprintf(Lib\Localisation::getTranslation('task_view_assign_task_success'), $userDisplayName));
                         $app->redirect($app->urlFor("project-view", array("project_id" => $task->getProjectId())));
                         }
-                        $app->flashNow('error', 'The task could not be assigned, likely not found on memsource.');
+                        $app->flashNow('error', 'This task can no longer be claimed, the job has been removed from Memsource and will soon be removed from here.');
                     }
                 }
                 $post['userIdOrEmail']="";
