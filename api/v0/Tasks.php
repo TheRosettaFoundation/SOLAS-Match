@@ -49,6 +49,11 @@ class Tasks
                     );
 
                     $app->put(
+                        '/orgFeedbackDeclined(:format)/',
+                        '\SolasMatch\API\V0\Tasks::sendOrgFeedbackDeclined'
+                    );
+
+                    $app->put(
                         '/userFeedback(:format)/',
                         '\SolasMatch\API\Lib\Middleware::authUserForClaimedTask',
                         '\SolasMatch\API\V0\Tasks::sendUserFeedback'
@@ -205,6 +210,33 @@ class Tasks
         $client = new Common\Lib\APIHelper($format);
         $feedbackData = $client->deserialize($data, "\SolasMatch\Common\Protobufs\Emails\OrgFeedback");
         Lib\Notify::sendOrgFeedback($feedbackData);
+        API\Dispatcher::sendResponse(null, null, null, $format);
+    }
+
+    // If DECLINED status comes from Memsource, notify claimant
+    public static function sendOrgFeedbackDeclined($taskId, $format = ".json")
+    {
+        $data = API\Dispatcher::getDispatcher()->request()->getBody();
+        $client = new Common\Lib\APIHelper($format);
+        $feedbackData = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Emails\OrgFeedback');
+        $task_id     = $feedbackData->getTaskId();
+        $claimant_id = $feedbackData->getClaimantId();
+        $user_id     = $feedbackData->getUserId();
+        $feedback    = $feedbackData->getFeedback();
+
+        $pos = strpos($feedback, '::');
+        $key = substr($feedback, 0, $pos);
+        $feedback = substr($feedback, $pos + 2);
+        $feedbackData->setFeedback($feedback);
+
+        $key = hex2bin($key);
+        $iv = substr($key, -16);
+        $encrypted = substr($key, 0, -18);
+        $task_claimant_user = openssl_decrypt($encrypted, 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
+
+        if ($task_claimant_user === "$task_id,$claimant_id,$user_id") Lib\Notify::sendOrgFeedback($feedbackData);
+        else error_log("Security mismatch: $task_claimant_user !== $task_id,$claimant_id,$user_id");
+
         API\Dispatcher::sendResponse(null, null, null, $format);
     }
 
