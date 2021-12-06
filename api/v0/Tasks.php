@@ -225,15 +225,11 @@ class Tasks
         $feedback    = $feedbackData->getFeedback();
 
         $pos = strpos($feedback, '::');
-        $key = substr($feedback, 0, $pos);
+        $data = substr($feedback, 0, $pos);
         $feedback = substr($feedback, $pos + 2);
         $feedbackData->setFeedback($feedback);
 
-        $key = hex2bin($key);
-        $iv = substr($key, -16);
-        $encrypted = substr($key, 0, -18);
-        $task_claimant_user = openssl_decrypt($encrypted, 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
-
+        $task_claimant_user = DAO\TaskDao::decrypt_to_verify_integrity($data)
         if ($task_claimant_user === "$task_id,$claimant_id,$user_id") Lib\Notify::sendOrgFeedback($feedbackData);
         else error_log("Security mismatch: $task_claimant_user !== $task_id,$claimant_id,$user_id");
 

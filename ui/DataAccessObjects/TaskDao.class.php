@@ -293,10 +293,7 @@ error_log("createTaskDirectly: $args");
         if (empty($result)) return;
         $email = $result[0]['email'];
 
-        // Since no session will be sent, encrypt and verify on other side
-        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
-        $encrypted = openssl_encrypt("$task_id,$claimant_id,$user_id", 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
-        $feedback = bin2hex("$encrypted::$iv") . "::Unfortunately the task has been revoked from you.\nIf you have questions please email: $email";
+        $feedback = $this->encrypt_to_ensure_integrity("$task_id,$claimant_id,$user_id") . "::Unfortunately the task has been revoked from you.\nIf you have questions please email: $email";
 
         $feedbackData = new Common\Protobufs\Emails\OrgFeedback();
         $feedbackData->setTaskId($task_id);
@@ -305,6 +302,12 @@ error_log("createTaskDirectly: $args");
         $feedbackData->setFeedback($feedback);
         $request = "{$this->siteApi}v0/tasks/$task_id/orgFeedbackDeclined";
         $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT, $feedbackData);
+    }
+
+    // Since no session will be sent, encrypt and verify on other side
+    public function encrypt_to_ensure_integrity($data) {
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+        return  bin2hex(openssl_encrypt($data, 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv) . "::$iv");
     }
 
     public function sendUserFeedback($taskId, $userId, $feedback)
