@@ -544,6 +544,8 @@ class UserDao extends BaseDao
                     }
                 }
             }
+        } else {
+            $this->client->call(null, "{$this->siteApi}v0/users/$userId/tasks/$taskId", Common\Enums\HttpMethodEnum::POST);
         }
 
         $matecat_tasks = $taskDao->getTaskChunk($taskId);
