@@ -229,7 +229,7 @@ class Tasks
         $feedback = substr($feedback, $pos + 2);
         $feedbackData->setFeedback($feedback);
 
-        $task_claimant_user = DAO\TaskDao::decrypt_to_verify_integrity($data)
+        $task_claimant_user = DAO\TaskDao::decrypt_to_verify_integrity($data);
         if ($task_claimant_user === "$task_id,$claimant_id,$user_id") Lib\Notify::sendOrgFeedback($feedbackData);
         else error_log("Security mismatch: $task_claimant_user !== $task_id,$claimant_id,$user_id");
 
