@@ -286,14 +286,18 @@ error_log("createTaskDirectly: $args");
 
     public function sendOrgFeedbackDeclined($task_id, $claimant_id, $memsource_project)
     {
+error_log("sendOrgFeedbackDeclined($task_id, $claimant_id");//(**)
         $projectDao = new ProjectDao();
         $user_id = $projectDao->get_user_id_from_memsource_user($memsource_project['owner_id']);
+error_log("sendOrgFeedbackDeclined($task_id, $claimant_id, user_id: $user_id");//(**)
         if (!$user_id) return;
         $result = $projectDao->get_user($user_id);
         if (empty($result)) return;
         $email = $result[0]['email'];
+error_log("sendOrgFeedbackDeclined($task_id, $claimant_id, email: $email");//(**)
 
         $feedback = $this->encrypt_to_ensure_integrity("$task_id,$claimant_id,$user_id") . "::Unfortunately the task has been revoked from you.\nIf you have questions please email: $email";
+error_log("$feedback");//(**)
 
         $feedbackData = new Common\Protobufs\Emails\OrgFeedback();
         $feedbackData->setTaskId($task_id);
@@ -301,7 +305,8 @@ error_log("createTaskDirectly: $args");
         $feedbackData->setClaimantId($claimant_id);
         $feedbackData->setFeedback($feedback);
         $request = "{$this->siteApi}v0/tasks/$task_id/orgFeedbackDeclined";
-        $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT, $feedbackData);
+        $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT, $feedbackData);
+error_log("RETURNED");//(**)
     }
 
     // Since no session will be sent, encrypt and verify on other side

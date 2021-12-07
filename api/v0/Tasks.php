@@ -223,6 +223,7 @@ class Tasks
         $claimant_id = $feedbackData->getClaimantId();
         $user_id     = $feedbackData->getUserId();
         $feedback    = $feedbackData->getFeedback();
+error_log("API $feedback");//(**)
 
         $pos = strpos($feedback, '::');
         $data = substr($feedback, 0, $pos);
@@ -230,6 +231,7 @@ class Tasks
         $feedbackData->setFeedback($feedback);
 
         $task_claimant_user = DAO\TaskDao::decrypt_to_verify_integrity($data);
+error_log("task_claimant_user: $task_claimant_user");//(**)
         if ($task_claimant_user === "$task_id,$claimant_id,$user_id") Lib\Notify::sendOrgFeedback($feedbackData);
         else error_log("Security mismatch: $task_claimant_user !== $task_id,$claimant_id,$user_id");
 
