@@ -296,7 +296,7 @@ error_log("sendOrgFeedbackDeclined($task_id, $claimant_id, user_id: $user_id");/
         $email = $result[0]['email'];
 error_log("sendOrgFeedbackDeclined($task_id, $claimant_id, email: $email");//(**)
 
-        $feedback = $this->encrypt_to_ensure_integrity("$task_id,$claimant_id,$user_id") . "::Unfortunately the task has been revoked from you.\nIf you have questions please email: $email";
+        $feedback = $this->encrypt_to_ensure_integrity("$task_id,$claimant_id,$user_id") . "::XUnfortunately the task has been revoked from you.\nIf you have questions please email: $email";
 error_log("$feedback");//(**)
 
         $feedbackData = new Common\Protobufs\Emails\OrgFeedback();
