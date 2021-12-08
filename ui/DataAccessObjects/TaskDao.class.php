@@ -294,7 +294,6 @@ error_log("createTaskDirectly: $args");
         $email = $result[0]['email'];
 
         $feedback = $this->encrypt_to_ensure_integrity("$task_id,$claimant_id,$user_id") . "::Unfortunately the task has been revoked from you.\nIf you have questions please email: $email";
-error_log("$feedback");//(**)
 
         $feedbackData = new Common\Protobufs\Emails\OrgFeedback();
         $feedbackData->setTaskId($task_id);
@@ -303,7 +302,6 @@ error_log("$feedback");//(**)
         $feedbackData->setFeedback($feedback);
         $request = "{$this->siteApi}v0/tasks/$task_id/sendOrgFeedbackDeclined";
         $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT, $feedbackData);
-error_log("RETURNED");//(**)
     }
 
     // Since no session will be sent, encrypt and verify on other side

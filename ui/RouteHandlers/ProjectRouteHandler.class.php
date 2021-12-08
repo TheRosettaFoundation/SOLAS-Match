@@ -536,9 +536,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
               }
             }
             if ($part['status'] == 'DECLINED_BY_LINGUIST' || $part['status'] == 'NEW') {
-error_log("task_id: $task_id, DECLINED_BY_LINGUIST memsource_task for {$part['uid']} in event JOB_STATUS_CHANGED, jobPart status: {$part['status']}");//(**)
                 if ($taskDao->taskIsClaimed($task_id)) {
-error_log("taskDao->taskIsClaimed($task_id), DECLINED_BY_LINGUIST memsource_task for {$part['uid']} in event JOB_STATUS_CHANGED, jobPart status: {$part['status']}");//(**)
                     if (empty($part['project']['id'])) {
                         error_log("No project id in {$part['uid']} in event JOB_STATUS_CHANGED, jobPart status: DECLINED_BY_LINGUIST");
                         continue;
@@ -550,9 +548,7 @@ error_log("taskDao->taskIsClaimed($task_id), DECLINED_BY_LINGUIST memsource_task
                     }
                     $old_status = $taskDao->getTaskStatus($task_id);
                     $user_id = $projectDao->getUserClaimedTask($task_id);
-error_log("$user_id = projectDao->getUserClaimedTask($task_id), DECLINED_BY_LINGUIST memsource_task for {$part['uid']} in event JOB_STATUS_CHANGED, jobPart status: {$part['status']}");//(**)
                     if ($user_id) {
-error_log("taskDao->unclaimTask($task_id, $user_id), project_id: {$memsource_project['project_id']}, part['project']['id']: {$part['project']['id']}");//(**)
                         $taskDao->unclaimTask($task_id, $user_id);
                         $taskDao->sendOrgFeedbackDeclined($task_id, $user_id, $memsource_project);
                     }

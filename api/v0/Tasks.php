@@ -216,7 +216,6 @@ class Tasks
     // If DECLINED status comes from Memsource, notify claimant
     public static function sendOrgFeedbackDeclined($taskId, $format = ".json")
     {
-error_log("TOP sendOrgFeedbackDeclined($taskId");//(**)
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $client = new Common\Lib\APIHelper($format);
         $feedbackData = $client->deserialize($data, '\SolasMatch\Common\Protobufs\Emails\OrgFeedback');
@@ -224,7 +223,6 @@ error_log("TOP sendOrgFeedbackDeclined($taskId");//(**)
         $claimant_id = $feedbackData->getClaimantId();
         $user_id     = $feedbackData->getUserId();
         $feedback    = $feedbackData->getFeedback();
-error_log("API $feedback");//(**)
 
         $pos = strpos($feedback, '::');
         $data = substr($feedback, 0, $pos);
@@ -232,7 +230,6 @@ error_log("API $feedback");//(**)
         $feedbackData->setFeedback($feedback);
 
         $task_claimant_user = DAO\TaskDao::decrypt_to_verify_integrity($data);
-error_log("task_claimant_user: $task_claimant_user");//(**)
         if ($task_claimant_user === "$task_id,$claimant_id,$user_id") Lib\Notify::sendOrgFeedback($feedbackData);
         else error_log("Security mismatch: $task_claimant_user !== $task_id,$claimant_id,$user_id");
 
