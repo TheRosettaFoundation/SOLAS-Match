@@ -50,6 +50,7 @@ class Tasks
 
                     $app->put(
                         '/orgFeedbackDeclined(:format)/',
+                        '\SolasMatch\API\Lib\Middleware::authOrgFeedbackDeclined',
                         '\SolasMatch\API\V0\Tasks::sendOrgFeedbackDeclined'
                     );
 
