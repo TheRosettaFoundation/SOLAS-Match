@@ -436,12 +436,6 @@ class Middleware
         }
     }
 
-    public static function authOrgFeedbackDeclined(\Slim\Route $route)
-    {
-        error_log("route $route");//(**)
-        return true;
-    }
-
     // Does the current user match the user id passed in the URL
     // or does the current user belong to the organisation that created the task id passed in the URL?
     public static function authUserOrOrgForTask(\Slim\Route $route)
