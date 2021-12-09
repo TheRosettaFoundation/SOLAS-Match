@@ -1361,7 +1361,10 @@ error_log("Sync update_task_from_job() task_id: $task_id, status: $status, job: 
             if ($taskDao->taskIsClaimed($task_id)) {
                 $old_status = $taskDao->getTaskStatus($task_id);
                 $user_id = $this->getUserClaimedTask($task_id);
-                if ($user_id) $taskDao->unclaimTask($task_id, $user_id);
+                if ($user_id) {
+                    $taskDao->unclaimTask($task_id, $user_id);
+                    $taskDao->sendOrgFeedbackDeclined($task_id, $user_id, $memsource_project);
+                }
                 error_log("Sync DECLINED task_id: $task_id, user_id: $user_id, memsource job: {$job['uid']}");
                 if ($old_status == Common\Enums\TaskStatusEnum::COMPLETE) {
                     // See if the current task is the Translation matching a prerequisite for a Revision, if so set Revision back to WAITING_FOR_PREREQUISITES

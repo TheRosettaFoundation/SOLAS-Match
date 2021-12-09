@@ -730,7 +730,7 @@ class Users
             $format = '.'.$taskId[1];
             $taskId = $taskId[0];
         }
-        API\Dispatcher::sendResponse(null, DAO\TaskDao::claimTask($taskId, $userId), null, $format);
+        API\Dispatcher::sendResponse(null, 1, null, $format); // Don't claim here, return 1, just do notifications...
         Lib\Notify::notifyUserClaimedTask($userId, $taskId);
         Lib\Notify::notifyOrgClaimedTask($userId, $taskId);
     }

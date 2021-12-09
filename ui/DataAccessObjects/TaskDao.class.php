@@ -284,6 +284,32 @@ error_log("createTaskDirectly: $args");
         $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT, $feedbackData);
     }
 
+    public function sendOrgFeedbackDeclined($task_id, $claimant_id, $memsource_project)
+    {
+        $projectDao = new ProjectDao();
+        $user_id = $projectDao->get_user_id_from_memsource_user($memsource_project['owner_id']);
+        if (!$user_id) return;
+        $result = $projectDao->get_user($user_id);
+        if (empty($result)) return;
+        $email = $result[0]['email'];
+
+        $feedback = $this->encrypt_to_ensure_integrity("$task_id,$claimant_id,$user_id") . "::Unfortunately the task has been revoked from you.\nIf you have questions please email: $email";
+
+        $feedbackData = new Common\Protobufs\Emails\OrgFeedback();
+        $feedbackData->setTaskId($task_id);
+        $feedbackData->setUserId($user_id);
+        $feedbackData->setClaimantId($claimant_id);
+        $feedbackData->setFeedback($feedback);
+        $request = "{$this->siteApi}v0/tasks/$task_id/sendOrgFeedbackDeclined";
+        $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT, $feedbackData);
+    }
+
+    // Since no session will be sent, encrypt and verify on other side
+    public function encrypt_to_ensure_integrity($data) {
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+        return  bin2hex(openssl_encrypt($data, 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv) . "::$iv");
+    }
+
     public function sendUserFeedback($taskId, $userId, $feedback)
     {
         $feedbackData = new Common\Protobufs\Emails\UserFeedback();

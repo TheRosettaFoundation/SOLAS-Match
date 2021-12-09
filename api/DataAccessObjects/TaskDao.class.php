@@ -763,6 +763,13 @@ error_log("removeTaskPreReq($taskId, $preReqId)");
         return $ret[0]['result'];
     }
 
+    public static function decrypt_to_verify_integrity($data)
+    {
+        $data = hex2bin($data);
+        $iv = substr($data, -16);
+        return openssl_decrypt(substr($data, 0, -18), 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
+    }
+
     public static function get_memsource_task($task_id)
     {
         $result = Lib\PDOWrapper::call('get_memsource_task', Lib\PDOWrapper::cleanse($task_id));

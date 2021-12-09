@@ -446,11 +446,10 @@ class UserDao extends BaseDao
 
     public function claimTask($userId, $taskId, $memsource_task, $project_id, $task)
     {
-        $ret = null;
-        $request = "{$this->siteApi}v0/users/$userId/tasks/$taskId";
-        $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST);
+        $taskDao = new TaskDao();
+        $taskDao->claimTask($taskId, $userId);
 
-        if ($memsource_task && !empty($ret)) {
+        if ($memsource_task) {
             $memsource_user_id = $this->get_memsource_user($userId);
             if (!$memsource_user_id) {
                 $url = $this->memsourceApiV2 . 'users';
@@ -521,52 +520,15 @@ class UserDao extends BaseDao
                 }
                 curl_close($ch);
                 if ($error_number) {
-                    $this->unclaimTask($userId, $taskId, null);
+                    $taskDao->unClaimTask($taskId, $userId);
                     return 0;
                 }
 
-/*
-                $url_notify = "https://cloud.memsource.com/web/api2/v1/projects/$projectUid/jobs/notifyAssigned";
-                $ch_notify = curl_init($url_notify);
-                $data = array(
-                    'jobs' => array(
-                        array(
-                            'uid' => $taskUid
-                        )
-                    ),
-                    'emailTemplate' => array('id' => '2213161'),
-                );
-                $payload = json_encode($data);
-                curl_setopt($ch_notify, CURLOPT_POSTFIELDS, $payload);
-                curl_setopt($ch_notify, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch_notify, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
-                curl_setopt($ch_notify, CURLOPT_RETURNTRANSFER, true);
-                $result = curl_exec($ch_notify);
-                curl_close($ch_notify);
-
-                $url = 'https://cloud.memsource.com/web/api2/v1/projects/' . $projectUid . '/jobs/' . $taskUid;
-                $ch = curl_init($url);
-                $data = array(
-                    'status' => 'ACCEPTED',
-                    'providers' => array(
-                        array(
-                            'type' => 'USER',
-                            'id' => $memsource_user_id
-                        )
-                    )
-                );
-                $payload = json_encode($data);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
-                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-                $result = curl_exec($ch);
-                curl_close($ch);
-*/
+                // This now only does the notifications
+                $this->client->call(null, "{$this->siteApi}v0/users/$userId/tasks/$taskId", Common\Enums\HttpMethodEnum::POST);
 
                 // If this is split, add corresponding task(s) to deny list for translator
                 $projectDao = new ProjectDao();
-                $taskDao = new TaskDao();
                 $top_level = $projectDao->get_top_level($memsource_task['internalId']);
                 $project_tasks = $projectDao->get_tasks_for_project($project_id);
                 foreach ($project_tasks as $project_task) {
@@ -582,9 +544,10 @@ class UserDao extends BaseDao
                     }
                 }
             }
+        } else {
+            $this->client->call(null, "{$this->siteApi}v0/users/$userId/tasks/$taskId", Common\Enums\HttpMethodEnum::POST);
         }
 
-        $taskDao = new TaskDao();
         $matecat_tasks = $taskDao->getTaskChunk($taskId);
         if (!empty($matecat_tasks)) {
             // We are a chunk
@@ -599,7 +562,7 @@ class UserDao extends BaseDao
             }
         }
 
-        return $ret;
+        return 1;
     }
 
     public function set_dateDue_in_memsource($task, $memsource_task, $deadline)
