@@ -1073,7 +1073,7 @@ class UserDao extends BaseDao
         if ($registered) {
             $record = $this->get_memsource_user_record($old_email);
             if ($record) $this->change_memsource_user_email($user_id, $record, $email);
-            else error_log("changeEmail($user_id, $email, $old_email), can find email in Memsource");
+            else error_log("changeEmail($user_id, $email, $old_email), can't find email in Memsource");
             return true;
         } else {
             return false;
@@ -1098,6 +1098,7 @@ class UserDao extends BaseDao
     public function change_memsource_user_email($user_id, $record, $email)
 (**)worry about user not exist in memsource will give hige list; do check and error??
 (**)PUT??? https://cloud.memsource.com/web/docs/api#operation/updateUserV3
+>>https://cloud.memsource.com/web/api2/v3/users/{userUid}
 echo "\n\nuid: {$record['uid']}\n\n";
 echo "\n\nid: {$record['id']}\n\n";
 echo "\n\nemail: {$record['email']}\n\n";
@@ -1106,8 +1107,6 @@ echo "\n\nuserName: {$record['userName']}\n\n";
 echo "\n\nnote: {$record['note']}\n\n";
 echo "\n\ntimezone: {$record['timezone']}\n\n";
 I will ignore these three and OVERWRITE with the KP values (the 3rd is intended to be changed in any case)...
-"firstName":"Maria",
-"lastName":"Himmelfahrt",
 "email":"katotester1@gmail.com"
 
 I will take these values from Memsource and REWRITE BACK the Memsource values when I issue the edit API...
@@ -1116,24 +1115,6 @@ I will take these values from Memsource and REWRITE BACK the Memsource values wh
 "userName":"DEV_katotester1_25288",
 (**)nulls"note":null,
 "timezone":"Europe/Rome",
-[[
-(**)ADD...
-                $data = array(
-                    'email' => $user_info->email,
-                    'password' => 'Ab#0' . uniqid(),
-                    'firstName' => $user_personal_info->firstName,
-                    'lastName' => $user_personal_info->lastName,
-                    'role' => Common\Enums\MemsourceRoleEnum::LINGUIST,
-                    'timezone' => $timezone,
-                    'userName' => $this->usernamePrefix . str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '', $user_info->display_name) . "_$userId",
-                    'receiveNewsletter' => false,
-                    'active' => true,
-                    'editAllTermsInTB' => false,
-                    'editTranslationsInTM' => false,
-                    'enableMT' => false,
-                    'mayRejectJobs' => false,
-                );
-]]
     {
         $url = $this->memsourceApiV2 . 'users';
         $ch = curl_init($url);
@@ -1144,15 +1125,18 @@ I will take these values from Memsource and REWRITE BACK the Memsource values wh
         $timezones = Common\Lib\MemsourceTimezone::timezones();
         $timezone = !empty($timezones[$user_country]) ? $timezones[$user_country] : 'Europe/Rome';
         $data = array(
-            'email' => $user_info->email,
-            'password' => 'Ab#0' . uniqid(),
+            'email' => $email,
             'firstName' => $user_personal_info->firstName,
             'lastName' => $user_personal_info->lastName,
             'role' => Common\Enums\MemsourceRoleEnum::LINGUIST,
             'timezone' => $timezone,
             'userName' => $this->usernamePrefix . str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '', $user_info->display_name) . "_$userId",
             'receiveNewsletter' => false,
-            // 'editorMachineTranslateEnabled' => false,
+            'active' => true,
+            'editAllTermsInTB' => false,
+            'editTranslationsInTM' => false,
+            'enableMT' => false,
+            'mayRejectJobs' => false,
         );
         $payload = json_encode($data);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
