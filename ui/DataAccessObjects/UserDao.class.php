@@ -469,7 +469,11 @@ class UserDao extends BaseDao
                     'timezone' => $timezone,
                     'userName' => $this->usernamePrefix . str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '', $user_info->display_name) . "_$userId",
                     'receiveNewsletter' => false,
-                    // 'editorMachineTranslateEnabled' => false,
+                    'active' => true,
+                    'editAllTermsInTB' => false,
+                    'editTranslationsInTM' => false,
+                    'enableMT' => false,
+                    'mayRejectJobs' => false,
                 );
                 $payload = json_encode($data);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
@@ -618,7 +622,41 @@ class UserDao extends BaseDao
             'timezone' => $timezone,
             'userName' => $this->usernamePrefix . str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '', $user_info->display_name) . "_$user_id",
             'receiveNewsletter' => false,
-            // 'editorMachineTranslateEnabled' => false,
+            'active' => true,
+            'projectCreate' => true,
+            'projectViewOther' => true,
+            'projectEditOther' => true,
+            'projectDeleteOther' => true,
+            'projectTemplateCreate' => true,
+            'projectTemplateViewOther' => true,
+            'projectTemplateEditOther' => true,
+            'projectTemplateDeleteOther' => true,
+            'transMemoryCreate' => true,
+            'transMemoryViewOther' => true,
+            'transMemoryEditOther' => true,
+            'transMemoryDeleteOther' => true,
+            'transMemoryExportOther' => true,
+            'transMemoryImportOther' => true,
+            'termBaseCreate' => true,
+            'termBaseViewOther' => true,
+            'termBaseEditOther' => true,
+            'termBaseDeleteOther' => true,
+            'termBaseExportOther' => true,
+            'termBaseImportOther' => true,
+            'termBaseApproveOther' => false,
+            'userCreate' => false,
+            'userViewOther' => true,
+            'userEditOther' => false,
+            'userDeleteOther' => false,
+            'clientDomainSubDomainCreate' => false,
+            'clientDomainSubDomainViewOther' => true,
+            'clientDomainSubDomainEditOther' => false,
+            'clientDomainSubDomainDeleteOther' => false,
+            'vendorCreate' => false,
+            'vendorViewOther' => true,
+            'vendorEditOther' => false,
+            'vendorDeleteOther' => false,
+            'dashboardSetting' => 'OWN_DATA',
             'setupServer' => false,
         );
         $payload = json_encode($data);
@@ -1078,6 +1116,24 @@ I will take these values from Memsource and REWRITE BACK the Memsource values wh
 "userName":"DEV_katotester1_25288",
 (**)nulls"note":null,
 "timezone":"Europe/Rome",
+[[
+(**)ADD...
+                $data = array(
+                    'email' => $user_info->email,
+                    'password' => 'Ab#0' . uniqid(),
+                    'firstName' => $user_personal_info->firstName,
+                    'lastName' => $user_personal_info->lastName,
+                    'role' => Common\Enums\MemsourceRoleEnum::LINGUIST,
+                    'timezone' => $timezone,
+                    'userName' => $this->usernamePrefix . str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '', $user_info->display_name) . "_$userId",
+                    'receiveNewsletter' => false,
+                    'active' => true,
+                    'editAllTermsInTB' => false,
+                    'editTranslationsInTM' => false,
+                    'enableMT' => false,
+                    'mayRejectJobs' => false,
+                );
+]]
     {
         $url = $this->memsourceApiV2 . 'users';
         $ch = curl_init($url);
