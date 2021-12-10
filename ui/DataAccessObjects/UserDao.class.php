@@ -1082,22 +1082,23 @@ class UserDao extends BaseDao
 
     public function get_memsource_user_record($old_email)
     {
-        $url = $this->memsourceApiV2 . "users?email=$old_email";
-        $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
-        $ch = curl_init($url);
+        $ch = curl_init("https://cloud.memsource.com/web/api2/v1/users?email=$old_email");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
         $result = curl_exec($ch);
         curl_close($ch);
         if (empty($result)) return 0;
         $response_data = json_decode($result, true);
         if (empty($response_data['content'])) return 0;
+        if (count($response_data['content']) != 1) {
+            error_log("More that one Memsource user returned for: $old_email");
+            return 0;
+        }
         return $response_data['content'][0];
     }
 
     public function change_memsource_user_email($user_id, $record, $email)
-(**)worry about user not exist in memsource will give hige list; do check and error??
-echo "\n\nemail: {$record['email']}\n\n";
 echo "\n\nnote: {$record['note']}\n\n";
 echo "\n\ntimezone: {$record['timezone']}\n\n";
 I will take these values from Memsource and REWRITE BACK the Memsource values when I issue the edit API...
@@ -1105,9 +1106,7 @@ I will take these values from Memsource and REWRITE BACK the Memsource values wh
 "timezone":"Europe/Rome",
     {
         if ($record['role'] === Common\Enums\MemsourceRoleEnum::LINGUIST) {
-        $url = $this->memsourceApiV2 . 'users'>>https://cloud.memsource.com/web/api2/v3/users/{$record['uid']};
-(**)PUT https://cloud.memsource.com/web/docs/api#operation/updateUserV3
-        $ch = curl_init($url);
+            $ch = curl_init("https://cloud.memsource.com/web/api2/v3/users/{$record['uid']}");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         (**)$user_personal_info = $this->getUserPersonalInformation($userId);
         $user_info = $this->getUser($userId);
@@ -1129,6 +1128,7 @@ I will take these values from Memsource and REWRITE BACK the Memsource values wh
             'mayRejectJobs' => false,
         );
         $payload = json_encode($data);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
         $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
