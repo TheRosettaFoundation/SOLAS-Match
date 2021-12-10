@@ -1097,26 +1097,16 @@ class UserDao extends BaseDao
 
     public function change_memsource_user_email($user_id, $record, $email)
 (**)worry about user not exist in memsource will give hige list; do check and error??
-(**)PUT??? https://cloud.memsource.com/web/docs/api#operation/updateUserV3
->>https://cloud.memsource.com/web/api2/v3/users/{userUid}
-echo "\n\nuid: {$record['uid']}\n\n";
-echo "\n\nid: {$record['id']}\n\n";
 echo "\n\nemail: {$record['email']}\n\n";
-echo "\n\nrole: {$record['role']}\n\n";
-echo "\n\nuserName: {$record['userName']}\n\n";
 echo "\n\nnote: {$record['note']}\n\n";
 echo "\n\ntimezone: {$record['timezone']}\n\n";
-I will ignore these three and OVERWRITE with the KP values (the 3rd is intended to be changed in any case)...
-"email":"katotester1@gmail.com"
-
 I will take these values from Memsource and REWRITE BACK the Memsource values when I issue the edit API...
-"uid":"Q1cIEKYgC8gN7WU0tyObOe", [used to edit the user]
-(**)"role":"LINGUIST", [I will only update LINGUIST users to avoid possible issues with updating other roles]
-"userName":"DEV_katotester1_25288",
 (**)nulls"note":null,
 "timezone":"Europe/Rome",
     {
-        $url = $this->memsourceApiV2 . 'users';
+        if ($record['role'] === Common\Enums\MemsourceRoleEnum::LINGUIST) {
+        $url = $this->memsourceApiV2 . 'users'>>https://cloud.memsource.com/web/api2/v3/users/{$record['uid']};
+(**)PUT https://cloud.memsource.com/web/docs/api#operation/updateUserV3
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         (**)$user_personal_info = $this->getUserPersonalInformation($userId);
@@ -1130,7 +1120,7 @@ I will take these values from Memsource and REWRITE BACK the Memsource values wh
             'lastName' => $user_personal_info->lastName,
             'role' => Common\Enums\MemsourceRoleEnum::LINGUIST,
             'timezone' => $timezone,
-            'userName' => $this->usernamePrefix . str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '', $user_info->display_name) . "_$userId",
+            'userName' => $record['userName'],
             'receiveNewsletter' => false,
             'active' => true,
             'editAllTermsInTB' => false,
@@ -1151,6 +1141,7 @@ I will take these values from Memsource and REWRITE BACK the Memsource values wh
         } else {
             error_log("No memsource user created for $userId");
             $memsource_user_id = 0;
+        }
         }
     }
 
