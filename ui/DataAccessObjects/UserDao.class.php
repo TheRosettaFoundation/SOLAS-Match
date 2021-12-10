@@ -1103,7 +1103,7 @@ class UserDao extends BaseDao
         if ($record['role'] === Common\Enums\MemsourceRoleEnum::LINGUIST) {
             $ch = curl_init("https://cloud.memsource.com/web/api2/v3/users/{$record['uid']}");
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        (**)$user_personal_info = $this->getUserPersonalInformation($userId);
+            $user_personal_info = $this->getUserPersonalInformation($user_id);
             $data = array(
                 'email' => $email,
                 'firstName' => $user_personal_info->firstName,
