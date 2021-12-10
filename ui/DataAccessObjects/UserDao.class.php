@@ -1099,49 +1099,41 @@ class UserDao extends BaseDao
     }
 
     public function change_memsource_user_email($user_id, $record, $email)
-echo "\n\nnote: {$record['note']}\n\n";
-echo "\n\ntimezone: {$record['timezone']}\n\n";
-I will take these values from Memsource and REWRITE BACK the Memsource values when I issue the edit API...
-(**)nulls"note":null,
-"timezone":"Europe/Rome",
     {
         if ($record['role'] === Common\Enums\MemsourceRoleEnum::LINGUIST) {
             $ch = curl_init("https://cloud.memsource.com/web/api2/v3/users/{$record['uid']}");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         (**)$user_personal_info = $this->getUserPersonalInformation($userId);
-        $user_info = $this->getUser($userId);
-        $user_country = $this->getUserPersonalInformation($userId)->country;
-        $timezones = Common\Lib\MemsourceTimezone::timezones();
-        $timezone = !empty($timezones[$user_country]) ? $timezones[$user_country] : 'Europe/Rome';
-        $data = array(
-            'email' => $email,
-            'firstName' => $user_personal_info->firstName,
-            'lastName' => $user_personal_info->lastName,
-            'role' => Common\Enums\MemsourceRoleEnum::LINGUIST,
-            'timezone' => $timezone,
-            'userName' => $record['userName'],
-            'receiveNewsletter' => false,
-            'active' => true,
-            'editAllTermsInTB' => false,
-            'editTranslationsInTM' => false,
-            'enableMT' => false,
-            'mayRejectJobs' => false,
-        );
-        $payload = json_encode($data);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-        $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
-        $result_exec = curl_exec($ch);
-        $result = json_decode($result_exec, true);
-        curl_close($ch);
-        if (!empty($result['id'])) {
-            $memsource_user_id = $result['id'];
-            $this->set_memsource_user($userId, $memsource_user_id);
-        } else {
-            error_log("No memsource user created for $userId");
-            $memsource_user_id = 0;
-        }
+            $data = array(
+                'email' => $email,
+                'firstName' => $user_personal_info->firstName,
+                'lastName' => $user_personal_info->lastName,
+                'role' => Common\Enums\MemsourceRoleEnum::LINGUIST,
+                'timezone' => $record['timezone'],
+                'userName' => $record['userName'],
+                'receiveNewsletter' => false,
+                'active' => true,
+                'editAllTermsInTB' => false,
+                'editTranslationsInTM' => false,
+                'enableMT' => false,
+                'mayRejectJobs' => false,
+            );
+            if (!empty($record['note'])) $data['note'] = $record['note'];
+            $payload = json_encode($data);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+            $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
+            $result_exec = curl_exec($ch);
+            $result = json_decode($result_exec, true);
+            curl_close($ch);
+            if (!empty($result['id'])) {
+                $memsource_user_id = $result['id'];
+                $this->set_memsource_user($userId, $memsource_user_id);
+            } else {
+                error_log("No memsource user created for $userId");
+                $memsource_user_id = 0;
+            }
         }
     }
 
