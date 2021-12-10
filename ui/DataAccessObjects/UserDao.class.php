@@ -1127,13 +1127,7 @@ class UserDao extends BaseDao
             $result_exec = curl_exec($ch);
             $result = json_decode($result_exec, true);
             curl_close($ch);
-            if (!empty($result['id'])) {
-                $memsource_user_id = $result['id'];
-                $this->set_memsource_user($userId, $memsource_user_id);
-            } else {
-                error_log("No memsource user created for $userId");
-                $memsource_user_id = 0;
-            }
+            if (empty($result['email'])) error_log("No email returned from Memsource in change_memsource_user_email($user_id, ..., $email)");
         }
     }
 
