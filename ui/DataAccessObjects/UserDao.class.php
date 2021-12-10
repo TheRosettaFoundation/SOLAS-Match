@@ -1080,57 +1080,6 @@ class UserDao extends BaseDao
         }
     }
 
-    public function get_memsource_user_record($old_email)
-    {
-        $ch = curl_init("https://cloud.memsource.com/web/api2/v1/users?email=$old_email");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
-        $result = curl_exec($ch);
-        curl_close($ch);
-        if (empty($result)) return 0;
-        $response_data = json_decode($result, true);
-        if (empty($response_data['content'])) return 0;
-        if (count($response_data['content']) != 1) {
-            error_log("More that one Memsource user returned for: $old_email");
-            return 0;
-        }
-        return $response_data['content'][0];
-    }
-
-    public function change_memsource_user_email($user_id, $record, $email)
-    {
-        if ($record['role'] === Common\Enums\MemsourceRoleEnum::LINGUIST) {
-            $ch = curl_init("https://cloud.memsource.com/web/api2/v3/users/{$record['uid']}");
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            $user_personal_info = $this->getUserPersonalInformation($user_id);
-            $data = array(
-                'email' => $email,
-                'firstName' => $user_personal_info->firstName,
-                'lastName' => $user_personal_info->lastName,
-                'role' => Common\Enums\MemsourceRoleEnum::LINGUIST,
-                'timezone' => $record['timezone'],
-                'userName' => $record['userName'],
-                'receiveNewsletter' => false,
-                'active' => true,
-                'editAllTermsInTB' => false,
-                'editTranslationsInTM' => false,
-                'enableMT' => false,
-                'mayRejectJobs' => false,
-            );
-            if (!empty($record['note'])) $data['note'] = $record['note'];
-            $payload = json_encode($data);
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-            $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
-            $result_exec = curl_exec($ch);
-            $result = json_decode($result_exec, true);
-            curl_close($ch);
-            if (empty($result['email'])) error_log("No email returned from Memsource in change_memsource_user_email($user_id, ..., $email)");
-        }
-    }
-
     public function createPersonalInfo($userId, $personalInfo)
     {
         $ret = null;
