@@ -486,6 +486,7 @@ class UserDao extends BaseDao
                     $this->set_memsource_user($userId, $memsource_user_id);
                 } else {
                     error_log("No memsource user created for $userId");
+                    error_log(print_r($result, true));
                     $memsource_user_id = 0;
                 }
             }
@@ -672,6 +673,7 @@ class UserDao extends BaseDao
             return $memsource_user_id;
         } else {
             error_log("No PROJECT_MANAGER memsource user created for $user_id");
+            error_log(print_r($result, true));
             return 0;
         }
     }
