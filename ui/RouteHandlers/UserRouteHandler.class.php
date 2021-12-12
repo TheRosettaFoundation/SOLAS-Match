@@ -2106,8 +2106,10 @@ class UserRouteHandler
             }
 
             if ($show_create_memsource_user && !empty($post['mark_create_memsource_user'])) {
-                if ($memsource_user_id = $userDao->create_memsource_user($user_id)) $app->flashNow('success', "Memsource user $memsource_user_id created");
-                $show_create_memsource_user = 0;
+                if ($memsource_user_uid = $userDao->create_memsource_user($user_id)) {
+                    $app->flashNow('success', "Memsource user $memsource_user_uid created");
+                    $show_create_memsource_user = 0;
+                } else $app->flashNow('error', "Unable to create Memsource user for $user_id");
             }
 
             if ($isSiteAdmin && !empty($post['mark_certification_reviewed'])) {

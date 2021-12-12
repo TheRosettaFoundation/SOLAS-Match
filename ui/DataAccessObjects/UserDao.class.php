@@ -481,9 +481,17 @@ class UserDao extends BaseDao
                 $result_exec = curl_exec($ch);
                 $result = json_decode($result_exec, true);                
                 curl_close($ch);
-                if (!empty($result['id'])) {
-                    $memsource_user_id = $result['id'];
-                    $this->set_memsource_user($userId, $memsource_user_id);
+                if (!empty($result['uid'])) {
+                    $memsource_user_uid = $result['uid'];
+                    $record = $this->get_memsource_user_record($user_info->email);
+                    if (empty($record['id'])) {
+                        error_log("claimTask($userId...), can't find email in Memsource");
+                        $memsource_user_id = 0;
+                    } else {
+                        $memsource_user_id = $record['id'];
+                        $this->set_memsource_user($userId, $memsource_user_id, $memsource_user_uid);
+                        error_log("LINGUIST memsource user $memsource_user_id, $memsource_user_uid created for $userId");
+                    }
                 } else {
                     error_log("No memsource user created for $userId");
                     error_log(print_r($result, true));
@@ -666,11 +674,17 @@ class UserDao extends BaseDao
         $result_exec = curl_exec($ch);
         $result = json_decode($result_exec, true);
         curl_close($ch);
-        if (!empty($result['id'])) {
-            $memsource_user_id = $result['id'];
-            $this->set_memsource_user($user_id, $memsource_user_id);
-            error_log("PROJECT_MANAGER memsource user $memsource_user_id created for $user_id");
-            return $memsource_user_id;
+        if (!empty($result['uid'])) {
+            $memsource_user_uid = $result['uid'];
+            $record = $this->get_memsource_user_record($user_info->email);
+            if (empty($record['id'])) {
+                error_log("create_memsource_user($user_id), can't find email in Memsource");
+                return 0;
+            }
+            $memsource_user_id = $record['id'];
+            $this->set_memsource_user($user_id, $memsource_user_id, $memsource_user_uid);
+            error_log("PROJECT_MANAGER memsource user $memsource_user_id, $memsource_user_uid created for $user_id");
+            return $memsource_user_uid;
         } else {
             error_log("No PROJECT_MANAGER memsource user created for $user_id");
             error_log(print_r($result, true));
@@ -1682,9 +1696,9 @@ class UserDao extends BaseDao
         return $result[0]['memsource_user_id'];
     }
 
-    public function set_memsource_user($user_id, $memsource_user_id)
+    public function set_memsource_user($user_id, $memsource_user_id, $memsource_user_uid)
     {
-        LibAPI\PDOWrapper::call('set_memsource_user', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($memsource_user_id));
+        LibAPI\PDOWrapper::call('set_memsource_user', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($memsource_user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($memsource_user_uid));
     }
 
     public function memsource_list_jobs($memsource_project_uid, $project_id)
