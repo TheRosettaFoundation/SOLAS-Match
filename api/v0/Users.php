@@ -70,7 +70,7 @@ class Users
                         
                         $app->post(
                             '/:taskId/',
-                            '\SolasMatch\API\Lib\Middleware::authenticateTaskNotClaimed',
+                            '\SolasMatch\API\Lib\Middleware::isloggedIn',
                             '\SolasMatch\API\V0\Users::userClaimTask'
                         );
                         

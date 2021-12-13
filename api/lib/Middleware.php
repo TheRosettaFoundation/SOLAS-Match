@@ -797,48 +797,7 @@ class Middleware
             }
         }
     }
-    
-    /*
-     * Test if the task the user is trying to claim has already been claimed
-     * Prevents two claiments on the same task, admins will still be able to claim a task in all cases 
-     */
-    public static function authenticateTaskNotClaimed(\Slim\Route $route)
-    {
-        if (self::isloggedIn()) {
-            $user = DAO\UserDao::getLoggedInUser();
-            if (self::isSiteAdmin($user->getId())) {
-                return true;
-            }
-            
-            $params = $route->getParams();
-            
-            $taskId = null;
-            if ($params != null) {
-                $taskId = $params['taskId'];
-                if (!is_numeric($taskId)&& strstr($taskId, '.')) {
-                    $taskId = explode('.', $taskId);
-                    $format = '.'.$taskId[1];
-                    $taskId = $taskId[0];
-                }
-            }
-         
-            $TaskIsUnclaimed = false;
-            $possibleUser = DAO\TaskDao::getUserClaimedTask($taskId);
-            if (is_null($possibleUser)) {
-                $TaskIsUnclaimed = true;
-            }
-                        
-            if ($TaskIsUnclaimed) {
-                return true;
-            } else {
-                Dispatcher::getDispatcher()->halt(
-                    Common\Enums\HttpStatusEnum::FORBIDDEN,
-                    "Unable to claim task. This Task has been claimed by another user"
-                );
-            }
-        }
-    }
-    
+
     public static function authenticateIsUserBanned(\Slim\Route $route)
     {
         $params = $route->getParams();
