@@ -486,7 +486,7 @@ class UserDao extends BaseDao
                     $record = $this->get_memsource_user_record($user_info->email);
                     if (empty($record['id'])) {
                         error_log("claimTask($userId...), can't find email in Memsource");
-                        $memsource_user_id = 0;
+                        return -1;
                     } else {
                         $memsource_user_id = $record['id'];
                         $this->set_memsource_user($userId, $memsource_user_id, $memsource_user_uid);
@@ -495,7 +495,7 @@ class UserDao extends BaseDao
                 } else {
                     error_log("No memsource user created for $userId");
                     error_log(print_r($result, true));
-                    $memsource_user_id = 0;
+                    return -1;
                 }
             }
             if ($memsource_user_id) {
