@@ -446,6 +446,7 @@ class UserDao extends BaseDao
 
     public function claimTask($userId, $taskId, $memsource_task, $project_id, $task)
     {
+error_log("claimTask($userId, $taskId, ..., $project_id, ...)");
         $taskDao = new TaskDao();
         $taskDao->claimTask($taskId, $userId);
 
@@ -525,7 +526,9 @@ class UserDao extends BaseDao
                 }
 
                 // This now only does the notifications
+error_log("claimTask($userId, $taskId, ..., $project_id, ...) Before Notify");
                 $this->client->call(null, "{$this->siteApi}v0/users/$userId/tasks/$taskId", Common\Enums\HttpMethodEnum::POST);
+error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
 
                 // If this is split, add corresponding task(s) to deny list for translator
                 $projectDao = new ProjectDao();
