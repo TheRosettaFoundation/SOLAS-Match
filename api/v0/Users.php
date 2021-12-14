@@ -725,6 +725,7 @@ class Users
 
     public static function userClaimTask($userId, $taskId, $format = ".json")
     {
+error_log("userClaimTask($userId, $taskId, $format)");
         if (!is_numeric($taskId) && strstr($taskId, '.')) {
             $taskId = explode('.', $taskId);
             $format = '.'.$taskId[1];

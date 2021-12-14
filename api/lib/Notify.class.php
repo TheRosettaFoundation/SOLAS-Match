@@ -123,6 +123,7 @@ class Notify
 
     public static function notifyUserClaimedTask($userId, $taskId)
     {
+error_log("notifyUserClaimedTask($userId, $taskId)");
         $messagingClient = new Lib\MessagingClient();
         if ($messagingClient->init()) {
             $message_type = new Common\Protobufs\Emails\UserTaskClaim();
@@ -134,6 +135,7 @@ class Notify
                 $messagingClient->MainExchange,
                 $messagingClient->UserTaskClaimTopic
             );
+error_log("notifyUserClaimedTask($userId, $taskId) After Send");
         }
     }
 
@@ -182,6 +184,7 @@ class Notify
 
     public static function notifyOrgClaimedTask($userId, $taskId)
     {
+error_log("notifyOrgClaimedTask($userId, $taskId)");
         $subscribed_users = DAO\TaskDao::getSubscribedUsers($taskId);
         if (!empty($subscribed_users) && count($subscribed_users) > 0) {
             $messagingClient = new Lib\MessagingClient();
@@ -197,6 +200,7 @@ class Notify
                         $messagingClient->MainExchange,
                         $messagingClient->TaskClaimedTopic
                     );
+error_log("notifyOrgClaimedTask($userId, $taskId) After Send to: " . $user->getId());
                 }
             }
         }
