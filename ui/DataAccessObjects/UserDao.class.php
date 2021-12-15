@@ -453,8 +453,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...)");
         if ($memsource_task) {
             $memsource_user_id = $this->get_memsource_user($userId);
             if (!$memsource_user_id) {
-                $url = $this->memsourceApiV2 . 'users';
-                $ch = curl_init($url);
+                $ch = curl_init('https://cloud.memsource.com/web/api2/v3/users');
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 $user_personal_info = $this->getUserPersonalInformation($userId);
                 $user_info = $this->getUser($userId);
@@ -470,7 +469,11 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...)");
                     'timezone' => $timezone,
                     'userName' => $this->usernamePrefix . str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '', $user_info->display_name) . "_$userId",
                     'receiveNewsletter' => false,
-                    // 'editorMachineTranslateEnabled' => false,
+                    'active' => true,
+                    'editAllTermsInTB' => false,
+                    'editTranslationsInTM' => false,
+                    'enableMT' => false,
+                    'mayRejectJobs' => false,
                 );
                 $payload = json_encode($data);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
@@ -479,12 +482,21 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...)");
                 $result_exec = curl_exec($ch);
                 $result = json_decode($result_exec, true);                
                 curl_close($ch);
-                if (!empty($result['id'])) {
-                    $memsource_user_id = $result['id'];
-                    $this->set_memsource_user($userId, $memsource_user_id);
+                if (!empty($result['uid'])) {
+                    $memsource_user_uid = $result['uid'];
+                    $record = $this->get_memsource_user_record($user_info->email);
+                    if (empty($record['id'])) {
+                        error_log("claimTask($userId...), can't find email in Memsource");
+                        return -1;
+                    } else {
+                        $memsource_user_id = $record['id'];
+                        $this->set_memsource_user($userId, $memsource_user_id, $memsource_user_uid);
+                        error_log("LINGUIST memsource user $memsource_user_id, $memsource_user_uid created for $userId");
+                    }
                 } else {
                     error_log("No memsource user created for $userId");
-                    $memsource_user_id = 0;
+                    error_log(print_r($result, true));
+                    return -1;
                 }
             }
             if ($memsource_user_id) {
@@ -605,7 +617,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
 
     public function create_memsource_user($user_id)
     {
-        $ch = curl_init($this->memsourceApiV2 . 'users');
+        $ch = curl_init('https://cloud.memsource.com/web/api2/v3/users');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $user_personal_info = $this->getUserPersonalInformation($user_id);
         $user_info = $this->getUser($user_id);
@@ -621,7 +633,41 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
             'timezone' => $timezone,
             'userName' => $this->usernamePrefix . str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '', $user_info->display_name) . "_$user_id",
             'receiveNewsletter' => false,
-            // 'editorMachineTranslateEnabled' => false,
+            'active' => true,
+            'projectCreate' => true,
+            'projectViewOther' => true,
+            'projectEditOther' => true,
+            'projectDeleteOther' => true,
+            'projectTemplateCreate' => true,
+            'projectTemplateViewOther' => true,
+            'projectTemplateEditOther' => true,
+            'projectTemplateDeleteOther' => true,
+            'transMemoryCreate' => true,
+            'transMemoryViewOther' => true,
+            'transMemoryEditOther' => true,
+            'transMemoryDeleteOther' => true,
+            'transMemoryExportOther' => true,
+            'transMemoryImportOther' => true,
+            'termBaseCreate' => true,
+            'termBaseViewOther' => true,
+            'termBaseEditOther' => true,
+            'termBaseDeleteOther' => true,
+            'termBaseExportOther' => true,
+            'termBaseImportOther' => true,
+            'termBaseApproveOther' => false,
+            'userCreate' => false,
+            'userViewOther' => true,
+            'userEditOther' => false,
+            'userDeleteOther' => false,
+            'clientDomainSubDomainCreate' => false,
+            'clientDomainSubDomainViewOther' => true,
+            'clientDomainSubDomainEditOther' => false,
+            'clientDomainSubDomainDeleteOther' => false,
+            'vendorCreate' => false,
+            'vendorViewOther' => true,
+            'vendorEditOther' => false,
+            'vendorDeleteOther' => false,
+            'dashboardSetting' => 'OWN_DATA',
             'setupServer' => false,
         );
         $payload = json_encode($data);
@@ -631,13 +677,20 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         $result_exec = curl_exec($ch);
         $result = json_decode($result_exec, true);
         curl_close($ch);
-        if (!empty($result['id'])) {
-            $memsource_user_id = $result['id'];
-            $this->set_memsource_user($user_id, $memsource_user_id);
-            error_log("PROJECT_MANAGER memsource user $memsource_user_id created for $user_id");
-            return $memsource_user_id;
+        if (!empty($result['uid'])) {
+            $memsource_user_uid = $result['uid'];
+            $record = $this->get_memsource_user_record($user_info->email);
+            if (empty($record['id'])) {
+                error_log("create_memsource_user($user_id), can't find email in Memsource");
+                return 0;
+            }
+            $memsource_user_id = $record['id'];
+            $this->set_memsource_user($user_id, $memsource_user_id, $memsource_user_uid);
+            error_log("PROJECT_MANAGER memsource user $memsource_user_id, $memsource_user_uid created for $user_id");
+            return $memsource_user_uid;
         } else {
             error_log("No PROJECT_MANAGER memsource user created for $user_id");
+            error_log(print_r($result, true));
             return 0;
         }
     }
@@ -1027,7 +1080,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         return $ret;
     }
 
-    public function changeEmail($user_id, $email)
+    public function changeEmail($user_id, $email, $old_email)
     {
         $ret = null;
         $registerData = new Common\Protobufs\Models\Register();
@@ -1036,9 +1089,63 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         $request = "{$this->siteApi}v0/users/changeEmail";
         $registered = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::POST, $registerData);
         if ($registered) {
+            $record = $this->get_memsource_user_record($old_email);
+            if ($record) $this->change_memsource_user_email($user_id, $record, $email);
+            else error_log("changeEmail($user_id, $email, $old_email), can't find email in Memsource");
             return true;
         } else {
             return false;
+        }
+    }
+
+    public function get_memsource_user_record($old_email)
+    {
+        $ch = curl_init("https://cloud.memsource.com/web/api2/v1/users?email=$old_email");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
+        $result = curl_exec($ch);
+        curl_close($ch);
+        if (empty($result)) return 0;
+        $response_data = json_decode($result, true);
+        if (empty($response_data['content'])) return 0;
+        if (count($response_data['content']) != 1) {
+            error_log("More that one Memsource user returned for: $old_email");
+            return 0;
+        }
+        return $response_data['content'][0];
+    }
+
+    public function change_memsource_user_email($user_id, $record, $email)
+    {
+        if ($record['role'] === Common\Enums\MemsourceRoleEnum::LINGUIST) {
+            $ch = curl_init("https://cloud.memsource.com/web/api2/v3/users/{$record['uid']}");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $user_personal_info = $this->getUserPersonalInformation($user_id);
+            $data = array(
+                'email' => $email,
+                'firstName' => $user_personal_info->firstName,
+                'lastName' => $user_personal_info->lastName,
+                'role' => Common\Enums\MemsourceRoleEnum::LINGUIST,
+                'timezone' => $record['timezone'],
+                'userName' => $record['userName'],
+                'receiveNewsletter' => false,
+                'active' => true,
+                'editAllTermsInTB' => false,
+                'editTranslationsInTM' => false,
+                'enableMT' => false,
+                'mayRejectJobs' => false,
+            );
+            if (!empty($record['note'])) $data['note'] = $record['note'];
+            $payload = json_encode($data);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+            $authorization = 'Authorization: Bearer ' . $this->memsourceApiToken;
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
+            $result_exec = curl_exec($ch);
+            $result = json_decode($result_exec, true);
+            curl_close($ch);
+            if (empty($result['email'])) error_log("No email returned from Memsource in change_memsource_user_email($user_id, ..., $email)");
         }
     }
 
@@ -1592,9 +1699,9 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         return $result[0]['memsource_user_id'];
     }
 
-    public function set_memsource_user($user_id, $memsource_user_id)
+    public function set_memsource_user($user_id, $memsource_user_id, $memsource_user_uid)
     {
-        LibAPI\PDOWrapper::call('set_memsource_user', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($memsource_user_id));
+        LibAPI\PDOWrapper::call('set_memsource_user', LibAPI\PDOWrapper::cleanse($user_id) . ',' . LibAPI\PDOWrapper::cleanse($memsource_user_id) . ',' . LibAPI\PDOWrapper::cleanseWrapStr($memsource_user_uid));
     }
 
     public function memsource_list_jobs($memsource_project_uid, $project_id)

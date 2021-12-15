@@ -782,12 +782,13 @@ class TaskRouteHandler
 
             $taskDao->record_task_if_translated_in_matecat($task);
             $success = $userDao->claimTask($user_id, $taskId, $memsource_task, $task->getProjectId(), $task);
-            if ($success) {
-            $app->redirect($app->urlFor("task-claimed", array(
-                "task_id" => $taskId
-            )));
+            if ($success == 1) {
+                $app->redirect($app->urlFor('task-claimed', array('task_id' => $taskId)));
+            } elseif ($success == -1) {
+                $app->flashNow('error', 'Unable to create user in Memsource.');
+            } else {
+                $app->flashNow('error', 'This task can no longer be claimed, the job has been removed from Memsource and will soon be removed from here.');
             }
-            $app->flashNow('error', 'This task can no longer be claimed, the job has been removed from Memsource and will soon be removed from here.');
         }
 
         $convert = $app->request()->get("convertToXliff");
@@ -990,11 +991,14 @@ class TaskRouteHandler
                     } else {
                         $taskDao->record_task_if_translated_in_matecat($task);
                         $success = $userDao->claimTask($assgneeId, $taskId, $memsource_task, $task->getProjectId(), $task);
-                        if ($success) {
-                        $app->flash("success", sprintf(Lib\Localisation::getTranslation('task_view_assign_task_success'), $userDisplayName));
-                        $app->redirect($app->urlFor("project-view", array("project_id" => $task->getProjectId())));
+                        if ($success == 1) {
+                            $app->flash('success', sprintf(Lib\Localisation::getTranslation('task_view_assign_task_success'), $userDisplayName));
+                            $app->redirect($app->urlFor('project-view', array('project_id' => $task->getProjectId())));
+                        } elseif ($success == -1) {
+                            $app->flashNow('error', 'Unable to create user in Memsource.');
+                        } else {
+                            $app->flashNow('error', 'This task can no longer be claimed, the job has been removed from Memsource and will soon be removed from here.');
                         }
-                        $app->flashNow('error', 'This task can no longer be claimed, the job has been removed from Memsource and will soon be removed from here.');
                     }
                 }
                 $post['userIdOrEmail']="";
