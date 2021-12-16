@@ -1145,7 +1145,10 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
             $result_exec = curl_exec($ch);
             $result = json_decode($result_exec, true);
             curl_close($ch);
-            if (empty($result['email'])) error_log("No email returned from Memsource in change_memsource_user_email($user_id, ..., $email)");
+            if (empty($result['email'])) {
+                error_log("No email returned from Memsource in change_memsource_user_email($user_id, ..., $email) {$record['uid']}");
+                error_log(print_r($result, true));
+            }
         }
     }
 
