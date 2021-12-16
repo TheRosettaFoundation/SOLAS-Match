@@ -42,6 +42,8 @@
     <p><a href="{urlFor name="download_covid_projects"}">[Download covid projects]</a></p>
     <p><a href="{urlFor name="download_afghanistan_2021_projects"}">[Download 2021-afghanistan projects]</a></p>
     <p><a href="{urlFor name="download_haiti_2021_projects"}">[Download 2021-haiti projects]</a></p>
+    <p><a href="https://analytics.translatorswb.org/metabase/public/dashboard/53c0c0f2-4b3f-4a94-87de-2cddd33c7ffd" target="_blank">Tasks Dashboard</a></p>
+    <p><a href="https://analytics.translatorswb.org/metabase/public/dashboard/7418a030-8e01-4582-9698-745d329d36a4" target="_blank">Project Dashboard</a></p>
     <hr />
 
     <form method="post" enctype="multipart/form-data" action="{urlFor name="search_users_by_language_pair"}" accept-charset="utf-8" target="_blank">
