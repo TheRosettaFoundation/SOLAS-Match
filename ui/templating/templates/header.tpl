@@ -62,6 +62,7 @@
     <style>
     .navbar .nav li a{
         color:#143878 !important;
+        margin-top: -4%;
     }
      .main_nav li a:hover{
         color:#FFFFFF !important;
@@ -84,7 +85,7 @@
         <div class="navbar navbar-fixed-top">
            <div class="navbar-inner">
                 <div class="container">
-                    <a href="{urlFor name='home'}" class="pull-left header-link"><img height="60px" width="85%"  src="{urlFor name='home'}ui/img/TWB_logo1.PNG"></a> 
+                    <a href="{urlFor name='home'}" class="pull-left header-link"><img height="50px" width="100%"  src="{urlFor name='home'}ui/img/TWB_Logo_horizontal_resized.png"></a> 
                     <ul class="nav main_nav">
                         {if !isset($site_admin)}
                         <li {if isset($current_page) && $current_page == 'home'}class="active"{/if} >
@@ -128,12 +129,20 @@
                             <li>
                                 <a href="https://analytics.translatorswb.org">Kató Analytics</a>
                             </li>
+                            <li>
+                              <a href="https://analytics.translatorswb.org/metabase/public/dashboard/53c0c0f2-4b3f-4a94-87de-2cddd33c7ffd" target="_blank">Tasks Dashboard</a>
+                            </li>
+                            <li>
+                             <a href="https://analytics.translatorswb.org/metabase/public/dashboard/7418a030-8e01-4582-9698-745d329d36a4" target="_blank">Project Dashboard</a>
+                            </li>
                         {/if}
                         {if !isset($site_admin)}
                             <li>
                                 <a href="https://form.asana.com?k=dlsF11XkOwpfFllbq325dg&d=170818793545926" target="_blank">Feedback?</a>
                             </li>
                         {/if}
+                          
+                        
                     </ul>
                     <ul class="nav pull-right main_nav_right" style="max-height: 38px">
                         {if isset($userNotifications)}   
