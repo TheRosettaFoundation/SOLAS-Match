@@ -1464,9 +1464,9 @@ class UserRouteHandler
                 placeholder: "Select a country",
                 templateResult: formatCountry
             });
-            $(".nativeLanguageSelect").select2({
-                placeholder: "Select a native language",
-            });
+            //$(".nativeLanguageSelect").select2({
+            //    placeholder: "Select a native language",
+            //});
             $(".variant").select2({
                 placeholder: "Select a variant",
             });
