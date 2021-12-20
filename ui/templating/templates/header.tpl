@@ -85,7 +85,7 @@
         <div class="navbar navbar-fixed-top">
            <div class="navbar-inner">
                 <div class="container">
-                    <a href="{urlFor name='home'}" class="pull-left header-link"><img height="50px" width="100%"  src="{urlFor name='home'}ui/img/TWB_Logo_horizontal_resized.png"></a> 
+                    <a href="{urlFor name='home'}" class="pull-left header-link"><img height="50px" width="170px"  src="{urlFor name='home'}ui/img/TWB_Logo_horizontal_resized.png"></a> 
                     <ul class="nav main_nav">
                         {if !isset($site_admin)}
                         <li {if isset($current_page) && $current_page == 'home'}class="active"{/if} >
