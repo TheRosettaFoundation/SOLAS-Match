@@ -1109,11 +1109,10 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         if (empty($result)) return 0;
         $response_data = json_decode($result, true);
         if (empty($response_data['content'])) return 0;
-        if (count($response_data['content']) != 1) {
-            error_log("More that one Memsource user returned for: $old_email");
-            return 0;
+        foreach ($response_data['content'] as $user) {
+            if ($user['email'] === $old_email) return $user
         }
-        return $response_data['content'][0];
+        return 0;
     }
 
     public function change_memsource_user_email($user_id, $record, $email)
