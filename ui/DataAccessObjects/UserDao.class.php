@@ -463,8 +463,8 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...)");
                 $data = array(
                     'email' => $user_info->email,
                     'password' => 'Ab#0' . uniqid(),
-                    'firstName' => $user_personal_info->firstName,
-                    'lastName' => $user_personal_info->lastName,
+                    'firstName' => str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '_', $user_personal_info->firstName),
+                    'lastName'  => str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '_', $user_personal_info->lastName),
                     'role' => Common\Enums\MemsourceRoleEnum::LINGUIST,
                     'timezone' => $timezone,
                     'userName' => $this->usernamePrefix . str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '', $user_info->display_name) . "_$userId",
@@ -627,8 +627,8 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         $data = array(
             'email' => $user_info->email,
             'password' => 'Ab#0' . uniqid(),
-            'firstName' => $user_personal_info->firstName,
-            'lastName' => $user_personal_info->lastName,
+            'firstName' => str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '_', $user_personal_info->firstName),
+            'lastName'  => str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '_', $user_personal_info->lastName),
             'role' => Common\Enums\MemsourceRoleEnum::PROJECT_MANAGER,
             'timezone' => $timezone,
             'userName' => $this->usernamePrefix . str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '', $user_info->display_name) . "_$user_id",
@@ -1123,8 +1123,8 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
             $user_personal_info = $this->getUserPersonalInformation($user_id);
             $data = array(
                 'email' => $email,
-                'firstName' => $user_personal_info->firstName,
-                'lastName' => $user_personal_info->lastName,
+                'firstName' => str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '_', $user_personal_info->firstName),
+                'lastName'  => str_replace(['<', '>', '&', '%', '{', '}', '[', ']', '^', '#', '*', '$'], '_', $user_personal_info->lastName),
                 'role' => Common\Enums\MemsourceRoleEnum::LINGUIST,
                 'timezone' => $record['timezone'],
                 'userName' => $record['userName'],
