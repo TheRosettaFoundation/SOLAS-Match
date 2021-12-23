@@ -1110,7 +1110,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         $response_data = json_decode($result, true);
         if (empty($response_data['content'])) return 0;
         foreach ($response_data['content'] as $user) {
-            if ($user['email'] === $old_email) return $user
+            if ($user['email'] === $old_email) return $user;
         }
         return 0;
     }
