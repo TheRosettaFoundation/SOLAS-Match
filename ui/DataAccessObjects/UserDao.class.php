@@ -1136,6 +1136,13 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
                 'mayRejectJobs' => false,
             );
             if (!empty($record['note'])) $data['note'] = $record['note'];
+            // Linguists should not have any of these
+            $data['sourceLocales'] = [];
+            $data['targetLocales'] = [];
+            $data['workflowSteps'] = [];
+            $data['clients'] = [];
+            $data['domains'] = [];
+            $data['subDomains'] = [];
             $payload = json_encode($data);
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
             curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
