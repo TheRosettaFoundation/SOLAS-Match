@@ -1578,6 +1578,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         } catch (\Exception $e) {
                         }
                     } else {
+                        $success = true;
                         $projectFileName = $_FILES['projectFile']['name'];
                         $extensionStartIndex = strrpos($projectFileName, '.');
                         // Check that file has an extension
@@ -1585,11 +1586,15 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                              $extension = substr($projectFileName, $extensionStartIndex + 1);
                              $extension = strtolower($extension);
                              $projectFileName = substr($projectFileName, 0, $extensionStartIndex + 1) . $extension;
+                            if (in_array($extension, ['pdf', 'jpg', 'png', 'gif'])) {
+                                error_log("Project File wrong extension $projectFileName ($user_id): " . $post['project_title']);
+                                $success = false;
+                            }
                         }
+                        if ($success) {
                         try {
                             $projectDao->saveProjectFile($project, $user_id, $projectFileName, $data);
                             error_log("Project File Saved($user_id): " . $post['project_title']);
-                            $success = true;
                             if ($create_memsource) {
                                 $memsource_project = $userDao->create_memsource_project($post, $project, $projectFileName, $data);
                                 if (!$memsource_project) $success = false;
@@ -1597,6 +1602,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                         } catch (\Exception $e) {
                             error_log("Project File Save Error($user_id): " . $post['project_title'] . ' ' . $e->getMessage());
                             $success = false;
+                        }
                         }
                         if (!$success) {
                             $app->flashNow('error', sprintf(Lib\Localisation::getTranslation('common_error_file_stopped_by_extension')));
