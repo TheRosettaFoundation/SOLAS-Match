@@ -1174,6 +1174,12 @@ CREATE TABLE IF NOT EXISTS `WillBeDeletedUsers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE TABLE IF NOT EXISTS `master_kato_tm_tasks` (
+  task_id BIGINT(20) UNSIGNED NOT NULL,
+  PRIMARY KEY (task_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 /*---------------------------------------end of tables---------------------------------------------*/
 
 /*---------------------------------------start of procs--------------------------------------------*/
