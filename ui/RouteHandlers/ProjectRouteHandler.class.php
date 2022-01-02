@@ -477,7 +477,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     }
 
                     if (!$taskDao->taskIsClaimed($task_id)) {
-                        $taskDao->claimTask($task_id, $user_id);
+                        $taskDao->claimTaskAndDeny($task_id, $user_id, $memsource_task);
                         error_log("JOB_STATUS_CHANGED ASSIGNED in memsource task_id: $task_id, user_id: $user_id, memsource job: {$part['uid']}, user: {$part['assignedTo'][0]['linguist']['id']}");
                     } else { // Probably being set by admin in Memsource from COMPLETED_BY_LINGUIST back to ASSIGNED
                       if ($taskDao->getTaskStatus($task_id) == Common\Enums\TaskStatusEnum::COMPLETE) {
@@ -591,7 +591,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 }
 
                 if (!$taskDao->taskIsClaimed($task_id)) {
-                    $taskDao->claimTask($task_id, $user_id);
+                    $taskDao->claimTaskAndDeny($task_id, $user_id, $memsource_task);
                     error_log("JOB_ASSIGNED in memsource task_id: $task_id, user_id: $user_id, memsource job: {$part['uid']}, user: {$part['assignedTo'][0]['linguist']['id']}");
                 }
             }
