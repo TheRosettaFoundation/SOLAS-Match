@@ -1070,8 +1070,7 @@ error_log("insertWordCountRequestForProjectsErrors($project_id, $status, $messag
 
     public function claimTaskAndDeny($task_id, $user_id, $memsource_task)
     {
-        $args = LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($user_id);
-        $result = LibAPI\PDOWrapper::call('claimTask', $args);
+        $result = LibAPI\PDOWrapper::call('claimTask', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($user_id));
         if ($success = $result[0]['result']) {
             // If either workflow split, add corresponding task(s) to deny list for translator
             $projectDao = new ProjectDao();
