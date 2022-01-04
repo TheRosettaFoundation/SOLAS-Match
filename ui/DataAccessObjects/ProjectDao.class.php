@@ -1099,6 +1099,8 @@ error_log("queue_asana_project($project_id)");//(**)
                 if (empty($memsource_task)) {
                     if (!$error = $this->create_task($memsource_project, $full_job)) {
                         error_log("Created task for job $uid {$full_job['innerId']} in project $project_id");
+                        $memsource_task = $this->get_memsource_task_by_memsource_uid($uid);
+                        $this->update_task_from_job($memsource_project, $full_job, $memsource_task);
                     } elseif ($error != '-') {
                         return $error;
                     }
