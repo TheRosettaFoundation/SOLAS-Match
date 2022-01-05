@@ -147,7 +147,7 @@ $from_neon_to_trommons_pair = array(
 'Norwegian Bokmål' => array('no', '--'),
 'Norwegian Nynorsk' => array('nn', '--'),
 'Pijin' => array('pis', 'SB'),
-'Kirundi' => array('run', 'BI'),
+//'Kirundi' => array('run', 'BI'),
 'Kinyarwanda' => array('rw', 'RW'),
 'Sango' => array('sg', 'CF'),
 'Samoan' => array('sm', 'WS'),
@@ -221,5 +221,5 @@ $language_options_changes = [
   'apc---#' => 'Arabic North Levantine',
   'bin-NG#' => 'Bini',
   'run-BI' => 'Rundi',
-  'run-BI#' => 'Kirundi',
+  //'run-BI#' => 'Kirundi',
 ];
