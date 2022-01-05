@@ -1523,7 +1523,7 @@ class UserRouteHandler
 
                 if (select_count == 0) {
                     var tool6tip = "<i class=\"icon-question-sign\" id=\"tool6\" data-toggle=\"tooltip\" title=\"Please choose your native language.\"></i>";
-                    var addButton = $("<div class=\"span1\" style=\"\"><input type=\"button\" class=\"add\" id=\"add\" value=\"+\" title=\"Please choose your native language.\" /><div>");
+                    var addButton = $("<div class=\"span1\" style=\"\"><input type=\"button\" class=\"add\" id=\"add\" value=\"+\" title=\"Add another translation pair.\" /><div>");
                     fieldWrapper.append(addButton);
                 } else {
                     var removeButton = $("<div class=\"span1\" style=\"\"><input type=\"button\" class=\"remove\" value=\"-\"  /><div>");
