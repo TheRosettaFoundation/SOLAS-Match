@@ -1548,6 +1548,8 @@ class UserRouteHandler
                     $("#qualification_level_"  + select_count).select2().val(getSetting("userQualifiedPairQualificationLevel_" + select_count)).trigger("change");
                 }
             }
+            $("#language_code_source_0").rules("add", { required: true });
+            $("#language_code_target_0").rules("add", { required: true });
         });
 
         $(document).on("click", "#btnTrigger", function(e) {
