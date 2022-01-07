@@ -371,23 +371,29 @@ alert('You have already requested to take a test in order to become a Kató Veri
 <hr/>
 <table border="0">
     <tr valign="top">
-        <td style="width: 80%"><h3>Administrative Section{if !empty($tracked_registration)} (Tracked Registration: {$tracked_registration}){/if}</h3></td><td style="width: 20%"></td>
+        <td style="width: 60%"><h3>Administrative Section{if !empty($tracked_registration)} (Tracked Registration: {$tracked_registration}){/if}</h3></td><td style="width: 20%"><td style="width: 20%"><td style="width: 20%"></td>
     </tr>
     <tr valign="top">
         <td>Comment</td>
         <td>Willingness to work again score (1 to 5)</td>
+        <td>Created</td>
+        <td>Created by</td>
     </tr>
 </table>
 
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
 <table border="0">
     <tr valign="top">
-        <td style="width: 80%"><input type='text' value="" name="comment" id="comment" style="width: 98%" /></td>
+        <td style="width: 60%"><input type='text' value="" name="comment" id="comment" style="width: 98%" /></td>
         <td style="width: 20%"><input type='text' value="" name="work_again" id="work_again" /></td>
+        <td style="width: 20%"></td>
+        <td style="width: 20%"></td>
     </tr>
     <tr valign="top">
         <td></td>
         <td><input type="submit" class="btn btn-primary" name="admin_comment" value="Submit" /></td>
+        <td></td>
+        <td></td>
     </tr>
 </table>
 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -396,7 +402,7 @@ alert('You have already requested to take a test in order to become a Kató Veri
 <table border="0">
 {foreach $admin_comments as $admin_comment}
     <tr valign="top">
-        <td style="width: 80%"><ul><li>{$admin_comment['admin_comment']|escape:'html':'UTF-8'}
+        <td style="width: 60%"><ul><li>{$admin_comment['admin_comment']|escape:'html':'UTF-8'}
             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                 <input type="submit" class="btn btn-danger" name="mark_comment_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this comment?')" />
                 <input type="hidden" name="comment_id" value="{$admin_comment['id']}" />
@@ -404,8 +410,18 @@ alert('You have already requested to take a test in order to become a Kató Veri
             </form>
         </li></ul></td>
         <td style="width: 20%"><ul><li>{$admin_comment['work_again']}</li></ul></td>
+        <td style="width: 20%">{$admin_comment['created']}</td>
+        <td style="width: 20%">{$admin_comment['admin_email']}</td>
     </tr>
 {/foreach}
+    {if !empty($admin_comments_average)}
+    <tr valign="top">
+        <td style="width: 60%"></td>
+        <td style="width: 20%">Average: {$admin_comments_average}</td>
+        <td style="width: 20%"></td>
+        <td style="width: 20%"></td>
+    </tr>
+    {/if}
 </table>
 <hr/>
 {/if}

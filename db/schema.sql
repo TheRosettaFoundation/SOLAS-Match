@@ -1003,6 +1003,7 @@ CREATE TABLE IF NOT EXISTS `admin_comment` (
   user_id       INT(10) UNSIGNED NOT NULL,
   admin_id      INT(10) UNSIGNED NOT NULL,
   work_again    INT(10) UNSIGNED NOT NULL,
+  created       DATETIME NOT NULL,
   admin_comment VARCHAR(2000) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_admin_comment_Users` (`user_id`),
@@ -8226,7 +8227,20 @@ DROP PROCEDURE IF EXISTS `admin_comments`;
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `admin_comments`(IN uID INT)
 BEGIN
-    SELECT * FROM admin_comment WHERE user_id=uID;
+    SELECT
+        ac.*,
+         u.email AS admin_email
+    FROM admin_comment ac
+    JOIN Users          u ON ac.admin_id=u.id
+    WHERE ac.user_id=uID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `admin_comments_average`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `admin_comments_average`(IN uID INT)
+BEGIN
+    SELECT ROUND(AVG(work_again), 2) AS average FROM admin_comment WHERE user_id=uID GROUP BY user_id;
 END//
 DELIMITER ;
 
@@ -8235,8 +8249,8 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_admin_comment`(IN uID INT, IN aID INT, IN work INT, IN comment VARCHAR(2000))
 BEGIN
     INSERT INTO admin_comment
-               (user_id, admin_id, work_again, admin_comment)
-        VALUES (    uID,      aID,       work,       comment);
+               (user_id, admin_id, work_again, created, admin_comment)
+        VALUES (    uID,      aID,       work,   NOW(),       comment);
 END//
 DELIMITER ;
 

@@ -2368,6 +2368,7 @@ class UserRouteHandler
             'supported_ngos'         => $userDao->supported_ngos($user_id),
             'quality_score'          => $userDao->quality_score($user_id),
             'admin_comments'         => $userDao->admin_comments($user_id),
+            'admin_comments_average' => $userDao->admin_comments_average($user_id),
             'certifications'         => $userDao->getUserCertifications($user_id),
             'tracked_registration'   => $userDao->get_tracked_registration($user_id),
             'testing_center_projects_by_code' => $testing_center_projects_by_code,
