@@ -377,10 +377,10 @@ alert('You have already requested to take a test in order to become a Kató Veri
         <td style="width: 20%"></td>
     </tr>
     <tr valign="top">
-        <td style="width: 40%">Comment</td>
-        <td style="width: 20%">Willingness to work again score (1 to 5)</td>
-        <td style="width: 20%">Created</td>
-        <td style="width: 20%">Created by</td>
+        <td style="width: 40%"><strong>Comment</strong></td>
+        <td style="width: 20%"><strong>Willingness to work again score (1 to 5)</strong></td>
+        <td style="width: 20%"><strong>Created</strong></td>
+        <td style="width: 20%"><strong>Created by</strong></td>
     </tr>
 </table>
 
