@@ -372,14 +372,14 @@ alert('You have already requested to take a test in order to become a Kató Veri
 <table border="0">
     <tr valign="top">
         <td style="width: 40%"><h3>Administrative Section{if !empty($tracked_registration)} (Tracked Registration: {$tracked_registration}){/if}</h3></td>
-        <td style="width: 20%"></td>
-        <td style="width: 20%"></td>
+        <td style="width: 22%"></td>
+        <td style="width: 18%"></td>
         <td style="width: 20%"></td>
     </tr>
     <tr valign="top">
         <td style="width: 40%"><strong>Comment</strong></td>
-        <td style="width: 20%"><strong>Willingness to work again score (1 to 5)</strong></td>
-        <td style="width: 20%"><strong>Created</strong></td>
+        <td style="width: 22%"><strong>Willingness to work again score (1 to 5)</strong></td>
+        <td style="width: 18%"><strong>Created</strong></td>
         <td style="width: 20%"><strong>Created by</strong></td>
     </tr>
 </table>
@@ -388,14 +388,14 @@ alert('You have already requested to take a test in order to become a Kató Veri
 <table border="0">
     <tr valign="top">
         <td style="width: 40%"><input type='text' value="" name="comment" id="comment" style="width: 98%" /></td>
-        <td style="width: 20%"><input type='text' value="" name="work_again" id="work_again" /></td>
-        <td style="width: 20%"></td>
+        <td style="width: 22%"><input type='text' value="" name="work_again" id="work_again" /></td>
+        <td style="width: 18%"></td>
         <td style="width: 20%"></td>
     </tr>
     <tr valign="top">
         <td style="width: 40%"></td>
-        <td style="width: 20%"><input type="submit" class="btn btn-primary" name="admin_comment" value="Submit" /></td>
-        <td style="width: 20%"></td>
+        <td style="width: 22%"><input type="submit" class="btn btn-primary" name="admin_comment" value="Submit" /></td>
+        <td style="width: 18%"></td>
         <td style="width: 20%"></td>
     </tr>
 </table>
@@ -412,16 +412,16 @@ alert('You have already requested to take a test in order to become a Kató Veri
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
         </li></ul></td>
-        <td style="width: 20%"><ul><li>{$admin_comment['work_again']}</li></ul></td>
-        <td style="width: 20%">{$admin_comment['created']}</td>
+        <td style="width: 22%"><ul><li>{$admin_comment['work_again']}</li></ul></td>
+        <td style="width: 18%">{$admin_comment['created']}</td>
         <td style="width: 20%">{$admin_comment['admin_email']}</td>
     </tr>
 {/foreach}
     {if !empty($admin_comments_average)}
     <tr valign="top">
         <td style="width: 40%"></td>
-        <td style="width: 20%">Average: {$admin_comments_average}</td>
-        <td style="width: 20%"></td>
+        <td style="width: 22%">Average: {$admin_comments_average}</td>
+        <td style="width: 18%"></td>
         <td style="width: 20%"></td>
     </tr>
     {/if}
