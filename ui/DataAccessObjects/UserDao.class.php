@@ -1661,7 +1661,7 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
     {
         $result = LibAPI\PDOWrapper::call('admin_comments_average', LibAPI\PDOWrapper::cleanse($user_id));
         if (empty($result)) return '';
-        return $result[0]['work_again'];
+        return $result[0]['average'];
     }
 
     public function insert_admin_comment($user_id, $admin_id, $work_again, $comment)
