@@ -1011,6 +1011,19 @@ CREATE TABLE IF NOT EXISTS `admin_comment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE TABLE IF NOT EXISTS `adjust_points` (
+  id            INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  user_id       INT(10) UNSIGNED NOT NULL,
+  admin_id      INT(10) UNSIGNED NOT NULL,
+  points        INT(10) SIGNED NOT NULL,
+  created       datetime NOT NULL,
+  admin_comment VARCHAR(2000) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_adjust_points_Users` (`user_id`),
+  CONSTRAINT `FK_adjust_points_Users` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 CREATE TABLE IF NOT EXISTS `TrackCodes` (
   id INT(10) UNSIGNED NOT NULL,
   track_code VARCHAR(255) NOT NULL,
@@ -8259,6 +8272,37 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_admin_comment`(IN primaryID INT)
 BEGIN
     DELETE FROM admin_comment WHERE id=primaryID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `adjust_points`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `adjust_points`(IN uID INT)
+BEGIN
+    SELECT
+        ap.*,
+         u.email AS admin_email
+    FROM adjust_points ap
+    JOIN Users          u ON ap.admin_id=u.id
+    WHERE ap.user_id=uID;
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `insert_adjust_points`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_adjust_points`(IN uID INT, IN aID INT, IN point INT, IN comment VARCHAR(2000))
+BEGIN
+    INSERT INTO adjust_points
+               (user_id, admin_id, points, created, admin_comment)
+        VALUES (    uID,      aID,  point,   NOW(),       comment);
+END//
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `delete_adjust_points`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_adjust_points`(IN primaryID INT)
+BEGIN
+    DELETE FROM adjust_points WHERE id=primaryID;
 END//
 DELIMITER ;
 

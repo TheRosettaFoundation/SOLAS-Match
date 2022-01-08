@@ -426,6 +426,57 @@ alert('You have already requested to take a test in order to become a Kató Veri
     </tr>
     {/if}
 </table>
+
+<hr/>
+<table border="0">
+    <tr valign="top">
+        <td style="width: 40%"><h3>Recognition Program Points Adjustment</h3></td>
+        <td style="width: 22%"></td>
+        <td style="width: 18%"></td>
+        <td style="width: 20%"></td>
+    </tr>
+    <tr valign="top">
+        <td style="width: 40%"><strong>Comment</strong></td>
+        <td style="width: 22%"><strong>Recognition points adjustment</strong></td>
+        <td style="width: 18%"><strong>Created</strong></td>
+        <td style="width: 20%"><strong>Created by</strong></td>
+    </tr>
+</table>
+
+<form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+<table border="0">
+    <tr valign="top">
+        <td style="width: 40%"><input type='text' value="" name="comment" id="comment" style="width: 98%" /></td>
+        <td style="width: 22%"><input type='text' value="" name="points" id="points" /></td>
+        <td style="width: 18%"></td>
+        <td style="width: 20%"></td>
+    </tr>
+    <tr valign="top">
+        <td style="width: 40%"></td>
+        <td style="width: 22%"><input type="submit" class="btn btn-primary" name="mark_adjust_points" value="Submit" /></td>
+        <td style="width: 18%"></td>
+        <td style="width: 20%"></td>
+    </tr>
+</table>
+{if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+</form>
+
+<table border="0">
+{foreach $adjust_points as $adjust_point}
+    <tr valign="top">
+        <td style="width: 40%"><ul><li>{$adjust_point['admin_comment']|escape:'html':'UTF-8'}
+            <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
+                <input type="submit" class="btn btn-danger" name="mark_points_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this points adjustment?')" />
+                <input type="hidden" name="comment_id" value="{$adjust_point['id']}" />
+                {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
+            </form>
+        </li></ul></td>
+        <td style="width: 22%"><ul><li>{$adjust_point['points']}</li></ul></td>
+        <td style="width: 18%">{$adjust_point['created']}</td>
+        <td style="width: 20%">{$adjust_point['admin_email']}</td>
+    </tr>
+{/foreach}
+</table>
 <hr/>
 {/if}
 

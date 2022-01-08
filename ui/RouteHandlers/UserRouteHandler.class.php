@@ -2103,6 +2103,18 @@ class UserRouteHandler
                 $userDao->delete_admin_comment($post['comment_id']);
             }
 
+            if ($isSiteAdmin && !empty($post['mark_adjust_points'])) {
+                if (empty($post['comment']) || !is_numeric($post['points'])) {
+                    $app->flashNow('error', 'You must enter a comment and integer points');
+                } else {
+                    $userDao->insert_adjust_points($user_id, $loggedInUserId, (int)$post['points'], $post['comment']);
+                }
+            }
+
+            if ($isSiteAdmin && !empty($post['mark_points_delete'])) {
+                $userDao->delete_adjust_points($post['comment_id']);
+            }
+
             if ($isSiteAdmin && !empty($post['mark_reviewed'])) {
                 $userDao->updateUserHowheard($user_id, 1);
             }
@@ -2369,6 +2381,7 @@ class UserRouteHandler
             'quality_score'          => $userDao->quality_score($user_id),
             'admin_comments'         => $userDao->admin_comments($user_id),
             'admin_comments_average' => $userDao->admin_comments_average($user_id),
+            'adjust_points'          => $userDao->adjust_points($user_id),
             'certifications'         => $userDao->getUserCertifications($user_id),
             'tracked_registration'   => $userDao->get_tracked_registration($user_id),
             'testing_center_projects_by_code' => $testing_center_projects_by_code,

@@ -1678,6 +1678,27 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         LibAPI\PDOWrapper::call('delete_admin_comment', LibAPI\PDOWrapper::cleanse($id));
     }
 
+    public function adjust_points($user_id)
+    {
+        $result = LibAPI\PDOWrapper::call('adjust_points', LibAPI\PDOWrapper::cleanse($user_id));
+        if (empty($result)) $result = [];
+        return $result;
+    }
+
+    public function insert_adjust_points($user_id, $admin_id, $points, $comment)
+    {
+        LibAPI\PDOWrapper::call('insert_adjust_points',
+            LibAPI\PDOWrapper::cleanse($user_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($admin_id) . ',' .
+            LibAPI\PDOWrapper::cleanse($points) . ',' .
+            LibAPI\PDOWrapper::cleanseWrapStr($comment));
+    }
+
+    public function delete_adjust_points($id)
+    {
+        LibAPI\PDOWrapper::call('delete_adjust_points', LibAPI\PDOWrapper::cleanse($id));
+    }
+
     public function record_track_code($track_code)
     {
         LibAPI\PDOWrapper::call('record_track_code', LibAPI\PDOWrapper::cleanseWrapStr($track_code));
