@@ -371,91 +371,101 @@ alert('You have already requested to take a test in order to become a Kató Veri
 <hr/>
 <table border="0">
     <tr valign="top">
-        <td style="width: 40%"><h3>Administrative Section{if !empty($tracked_registration)} (Tracked Registration: {$tracked_registration}){/if}</h3></td>
+        <td style="width: 30%"><h3>Administrative Section{if !empty($tracked_registration)} (Tracked Registration: {$tracked_registration}){/if}</h3></td>
         <td style="width: 22%"></td>
         <td style="width: 18%"></td>
-        <td style="width: 20%"></td>
+        <td style="width: 18%"></td>
+        <td style="width: 12%"></td>
     </tr>
     <tr valign="top">
-        <td style="width: 40%"><strong>Comment</strong></td>
+        <td style="width: 30%"><strong>Comment</strong></td>
         <td style="width: 22%"><strong>Willingness to work again score (1 to 5)</strong></td>
         <td style="width: 18%"><strong>Created</strong></td>
-        <td style="width: 20%"><strong>Created by</strong></td>
+        <td style="width: 18%"><strong>Created by</strong></td>
+        <td style="width: 12%"><strong></strong></td>
     </tr>
 </table>
 
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
 <table border="0">
     <tr valign="top">
-        <td style="width: 40%"><input type='text' value="" name="comment" id="comment" style="width: 98%" /></td>
+        <td style="width: 30%"><input type='text' value="" name="comment" id="comment" style="width: 98%" /></td>
         <td style="width: 22%"><input type='text' value="" name="work_again" id="work_again" /></td>
         <td style="width: 18%"></td>
-        <td style="width: 20%"></td>
+        <td style="width: 18%"></td>
+        <td style="width: 12%"></td>
     </tr>
     <tr valign="top">
-        <td style="width: 40%"></td>
+        <td style="width: 30%"></td>
         <td style="width: 22%"><input type="submit" class="btn btn-primary" name="admin_comment" value="Submit" /></td>
         <td style="width: 18%"></td>
-        <td style="width: 20%"></td>
+        <td style="width: 18%"></td>
+        <td style="width: 12%"></td>
     </tr>
 </table>
 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
 </form>
 
 <table border="0">
+    {if !empty($admin_comments_average)}
+    <tr valign="top">
+        <td style="width: 30%"></td>
+        <td style="width: 22%"><strong>Average: {$admin_comments_average}</strong></td>
+        <td style="width: 18%"></td>
+        <td style="width: 18%"></td>
+        <td style="width: 12%"></td>
+    </tr>
+    {/if}
 {foreach $admin_comments as $admin_comment}
     <tr valign="top">
-        <td style="width: 40%"><ul><li>{$admin_comment['admin_comment']|escape:'html':'UTF-8'}
+        <td style="width: 30%"><ul><li>{$admin_comment['admin_comment']|escape:'html':'UTF-8'}</li></ul></td>
+        <td style="width: 22%">{$admin_comment['work_again']}</td>
+        <td style="width: 18%">{$admin_comment['created']}</td>
+        <td style="width: 18%">{$admin_comment['admin_email']}</td>
+        <td style="width: 12%">
             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                 <input type="submit" class="btn btn-danger" name="mark_comment_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this comment?')" />
                 <input type="hidden" name="comment_id" value="{$admin_comment['id']}" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
-        </li></ul></td>
-        <td style="width: 22%"><ul><li>{$admin_comment['work_again']}</li></ul></td>
-        <td style="width: 18%">{$admin_comment['created']}</td>
-        <td style="width: 20%">{$admin_comment['admin_email']}</td>
+        </td>
     </tr>
 {/foreach}
-    {if !empty($admin_comments_average)}
-    <tr valign="top">
-        <td style="width: 40%"></td>
-        <td style="width: 22%">Average: {$admin_comments_average}</td>
-        <td style="width: 18%"></td>
-        <td style="width: 20%"></td>
-    </tr>
-    {/if}
 </table>
 
 <hr/>
 <table border="0">
     <tr valign="top">
-        <td style="width: 40%"><h3>Recognition Program Points Adjustment</h3></td>
+        <td style="width: 30%"><h3>Recognition Program Points Adjustment</h3></td>
         <td style="width: 22%"></td>
         <td style="width: 18%"></td>
-        <td style="width: 20%"></td>
+        <td style="width: 18%"></td>
+        <td style="width: 12%"></td>
     </tr>
     <tr valign="top">
-        <td style="width: 40%"><strong>Comment</strong></td>
+        <td style="width: 30%"><strong>Comment</strong></td>
         <td style="width: 22%"><strong>Recognition points adjustment</strong></td>
         <td style="width: 18%"><strong>Created</strong></td>
-        <td style="width: 20%"><strong>Created by</strong></td>
+        <td style="width: 18%"><strong>Created by</strong></td>
+        <td style="width: 12%"><strong></strong></td>
     </tr>
 </table>
 
 <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
 <table border="0">
     <tr valign="top">
-        <td style="width: 40%"><input type='text' value="" name="comment" id="comment" style="width: 98%" /></td>
+        <td style="width: 30%"><input type='text' value="" name="comment" id="comment" style="width: 98%" /></td>
         <td style="width: 22%"><input type='text' value="" name="points" id="points" /></td>
         <td style="width: 18%"></td>
-        <td style="width: 20%"></td>
+        <td style="width: 18%"></td>
+        <td style="width: 12%"></td>
     </tr>
     <tr valign="top">
-        <td style="width: 40%"></td>
+        <td style="width: 30%"></td>
         <td style="width: 22%"><input type="submit" class="btn btn-primary" name="mark_adjust_points" value="Submit" /></td>
         <td style="width: 18%"></td>
-        <td style="width: 20%"></td>
+        <td style="width: 18%"></td>
+        <td style="width: 12%"></td>
     </tr>
 </table>
 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
@@ -464,16 +474,17 @@ alert('You have already requested to take a test in order to become a Kató Veri
 <table border="0">
 {foreach $adjust_points as $adjust_point}
     <tr valign="top">
-        <td style="width: 40%"><ul><li>{$adjust_point['admin_comment']|escape:'html':'UTF-8'}
+        <td style="width: 30%"><ul><li>{$adjust_point['admin_comment']|escape:'html':'UTF-8'}</li></ul></td>
+        <td style="width: 22%">{$adjust_point['points']}</td>
+        <td style="width: 18%">{$adjust_point['created']}</td>
+        <td style="width: 18%">{$adjust_point['admin_email']}</td>
+        <td style="width: 12%">
             <form method="post" action="{urlFor name="user-public-profile" options="user_id.$user_id"}">
                 <input type="submit" class="btn btn-danger" name="mark_points_delete" value="Delete" onclick="return confirm('Are you sure you want to permanently delete this points adjustment?')" />
                 <input type="hidden" name="comment_id" value="{$adjust_point['id']}" />
                 {if isset($sesskey)}<input type="hidden" name="sesskey" value="{$sesskey}" />{/if}
             </form>
-        </li></ul></td>
-        <td style="width: 22%"><ul><li>{$adjust_point['points']}</li></ul></td>
-        <td style="width: 18%">{$adjust_point['created']}</td>
-        <td style="width: 20%">{$adjust_point['admin_email']}</td>
+        </td>
     </tr>
 {/foreach}
 </table>
