@@ -179,6 +179,11 @@ class UserRouteHandler
             '/no_application_error/',
             array($this, 'no_application_error')
         )->name('no_application_error');
+
+        $app->get(
+            '/native_languages/:term/',
+            array($this, 'native_languages')
+        )->via('GET', 'POST')->name('native_languages');
     }
 
     public function home($currentScrollPage = 1, $selectedTaskType = 0, $selectedSourceLanguageCode = 0, $selectedTargetLanguageCode = 0)
@@ -1068,9 +1073,11 @@ class UserRouteHandler
         $nativeLocale = $user->getNativeLocale();
         if ($nativeLocale) {
             $nativeLanguageSelectCode = $nativeLocale->getLanguageCode();
+            $nativeLanguageSelectName = $nativeLocale->getLanguageName();
             $nativeCountrySelectCode = $nativeLocale->getCountryCode();
         } else {
             $nativeLanguageSelectCode = '999999999';
+            $nativeLanguageSelectName = '999999999';
             $nativeCountrySelectCode = '999999999';
         }
 
@@ -1465,7 +1472,14 @@ class UserRouteHandler
                 templateResult: formatCountry
             });
             $(".nativeLanguageSelect").select2({
+                ajax: {
+                    url: function (params) {
+                        return getSetting("siteLocation") + "native_languages/" + params.term + "/";
+                    },
+                    dataType: "json",
+                },
                 placeholder: "Select a native language",
+                minimumInputLength: 2,
             });
             $(".variant").select2({
                 placeholder: "Select a variant",
@@ -1700,10 +1714,10 @@ class UserRouteHandler
             'user'             => $user,
             'user_id'          => $user_id,
             'userPersonalInfo' => $userPersonalInfo,
-            'languages' => $languages,
             'countries' => $countries,
             'language_selection' => $language_selection,
             'nativeLanguageSelectCode' => $nativeLanguageSelectCode,
+            'nativeLanguageSelectName' => $nativeLanguageSelectName,
             'nativeCountrySelectCode'  => $nativeCountrySelectCode,
             'userQualifiedPairs'       => $userQualifiedPairs,
             'userQualifiedPairsLimit'  => $isSiteAdmin ? 120 : max(6, count($userQualifiedPairs)),
@@ -1723,6 +1737,20 @@ class UserRouteHandler
         ));
 
         $app->render('user/user-private-profile.tpl');
+    }
+
+    public function native_languages($term)
+    {
+        $langDao = new DAO\LanguageDao();
+        $languages = $langDao->getLanguages();
+
+        $results = [];
+        foreach ($languages as $language) {
+            $name = $language->getName();
+            if (mb_stripos($name, $_REQUEST['term']) !== false) $results[] = ['id' => $language->getCode(), 'text' => $name];
+        }
+        echo json_encode(['results' => $results]);
+        die;
     }
 
     public static function userCodeOfConduct($user_id)
