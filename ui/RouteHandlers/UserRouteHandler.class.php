@@ -181,7 +181,7 @@ class UserRouteHandler
         )->name('no_application_error');
 
         $app->get(
-            '/native_languages/:term/',
+            '/native_languages/:term/search/',
             array($this, 'native_languages')
         )->name('native_languages');
     }
@@ -1474,7 +1474,7 @@ class UserRouteHandler
             $(".nativeLanguageSelect").select2({
                 ajax: {
                     url: function (params) {
-                        return getSetting("siteLocation") + "native_languages/" + params.term + "/";
+                        return getSetting("siteLocation") + "native_languages/" + params.term + "/search/";
                     },
                     dataType: "json",
                 },
