@@ -1747,7 +1747,7 @@ class UserRouteHandler
         $results = [];
         foreach ($languages as $language) {
             $name = $language->getName();
-            if (mb_stripos($name, $_REQUEST['term']) !== false) $results[] = ['id' => $language->getCode(), 'text' => $name];
+            if (mb_stripos($name, $term) !== false) $results[] = ['id' => $language->getCode(), 'text' => $name];
         }
         echo json_encode(['results' => $results]);
         die;
