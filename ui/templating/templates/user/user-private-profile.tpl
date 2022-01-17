@@ -126,7 +126,7 @@
                         <label class="clear_brand required label_space"><strong>Native language</strong> <i class="icon-question-sign" id="tool5" data-toggle="tooltip" title="Please choose your native language."></i></label>
                         <select name="nativeLanguageSelect" class="nativeLanguageSelect" id="nativeLanguageSelect">
                             {if $nativeLanguageSelectCode != '999999999'}
-                                <option value="{$nativeLanguageSelectCode}" selected="selected">$nativeLanguageSelectName</option>
+                                <option value="{$nativeLanguageSelectCode}" selected="selected">{$nativeLanguageSelectName}</option>
                             {/if}
                         </select>
                     </div>
