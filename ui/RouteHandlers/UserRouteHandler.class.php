@@ -183,7 +183,7 @@ class UserRouteHandler
         $app->get(
             '/native_languages/:term/',
             array($this, 'native_languages')
-        )->via('GET', 'POST')->name('native_languages');
+        )->name('native_languages');
     }
 
     public function home($currentScrollPage = 1, $selectedTaskType = 0, $selectedSourceLanguageCode = 0, $selectedTargetLanguageCode = 0)
