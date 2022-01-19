@@ -129,10 +129,10 @@
                                 <a href="https://analytics.translatorswb.org" target="_blank">Analytics</a>
                             </li>
                             <li>
-                                <a href="https://analytics.translatorswb.org/metabase/public/dashboard/53c0c0f2-4b3f-4a94-87de-2cddd33c7ffd" target="_blank">Task</a>
+                                <a href="{Settings::get('site.dashboard_task_link')}" target="_blank">Task</a>
                             </li>
                             <li>
-                                <a href="https://analytics.translatorswb.org/metabase/public/dashboard/7418a030-8e01-4582-9698-745d329d36a4" target="_blank">Project</a>
+                                <a href="{Settings::get('site.dashboard_project_link')}" target="_blank">Project</a>
                             </li>
                         {/if}
                         {if !isset($site_admin)}
