@@ -4943,6 +4943,13 @@ BEGIN
 END//
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `delete_review`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_review`(IN taskID BIGINT, IN userID INT)
+BEGIN
+    DELETE FROM TaskReviews WHERE task_id=taskID AND user_id=userID;
+END//
+DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `tagInsert`;
 DELIMITER //

@@ -168,7 +168,7 @@ class UserRouteHandler
             "/user/task/:task_id/reviews/",
             array($middleware, "authenticateUserForTask"),
             array($this, "userTaskReviews")
-        )->name("user-task-reviews");
+        )->via('POST')->name('user-task-reviews');
 
         $app->get(
             '/no_application/',
@@ -2533,6 +2533,18 @@ class UserRouteHandler
     {
         $app = \Slim\Slim::getInstance();
         $taskDao = new DAO\TaskDao();
+        $adminDao = new DAO\AdminDao();
+
+        $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
+        $isSiteAdmin = false;
+        if (!empty($loggedInUserId) && $adminDao->isSiteAdmin($loggedInUserId)) $isSiteAdmin = true;
+
+        $sesskey = Common\Lib\UserSession::getCSRFKey();
+        if ($isSiteAdmin && $app->request()->isPost()) {
+            $post = $app->request()->post();
+            Common\Lib\UserSession::checkCSRFKey($post, 'userTaskReviews');
+            if (!empty($post['user_id'])) $taskDao->delete_review($taskId, $post['user_id']);
+        }
 
         $task = $taskDao->getTask($taskId);
         $reviews = $taskDao->getTaskReviews($taskId);
@@ -2544,6 +2556,8 @@ class UserRouteHandler
         $app->view()->appendData(array(
             'task'          => $task,
             'reviews'       => $reviews,
+            'isSiteAdmin'   => $isSiteAdmin,
+            'sesskey'       => $sesskey,
             'extra_scripts' => $extra_scripts
         ));
 

@@ -154,6 +154,11 @@ class TaskDao extends BaseDao
         return $ret;
     }
 
+    public function delete_review($task_id, $user_id)
+    {
+        LibAPI\PDOWrapper::call('delete_review', LibAPI\PDOWrapper::cleanse($task_id) . ',' . LibAPI\PDOWrapper::cleanse($user_id));
+    }
+
     public function createTask($task)
     {
         $u = Common\Lib\UserSession::getCurrentUserID();
