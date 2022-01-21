@@ -20,7 +20,7 @@
             <h2>
             	{sprintf({Localisation::getTranslation('task_review_count')}, {$count})}
               {if $isSiteAdmin}
-                  <form id="delete_review_form{$count}" method="post" action="{urlFor name="user-task-reviews" options="task_id.$task_id"}">
+                  <form id="delete_review_form{$count}" method="post" action="{urlFor name="user-task-reviews" options="task_id.$id"}">
                       <input type="hidden" name="user_id" value="{$review->getUserId()}" />
                       <a class="btn btn-small btn-inverse" onclick="if (confirm('Are you sure you want to delete this review?')) $('#delete_review_form{$count}').submit();" >
                           <i class="icon-fire icon-white"></i> {Localisation::getTranslation('common_delete')}
