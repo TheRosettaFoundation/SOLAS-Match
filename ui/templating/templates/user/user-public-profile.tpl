@@ -377,9 +377,14 @@ alert('You have already requested to take a test in order to become a Kató Veri
 
 <table border="0">
     <tr valign="top">
-        <td style="width: 38%">
+        <td style="width: 48%">
             <div>
-                <h2 style="color: #9e6100;">Rewards chart</h2>
+                <h2>
+                <span style="color: #9e6100;">Rewards chart</span>
+                <a href="mailto:xxx@twb.org?subject=Request reward" target="_blank" class="pull-right btn btn-primary" style="position:relative; right:-30px; top:12px;">
+                    <i class="icon-list icon-white"></i> Request reward
+                </a>
+                </h2>
                 <table width="40%" style="border: 2px solid #e8991c; border-collapse: collapse; overflow-wrap: break-word; word-break: break-all;">
                     <tbody>
                         <tr><td style="border:2px solid #e8991c; color: #576e82;">Points</td><td style="border:2px solid #e8991c; color: #576e82;">Reward</td></tr>
@@ -407,14 +412,8 @@ alert('You have already requested to take a test in order to become a Kató Veri
             </div>
         </td>
 
-        <td style="width: 20%">
-            <a href="mailto:xxx@twb.org?subject=Request reward" target="_blank" class="btn btn-primary">
-                <i class="icon-list icon-white"></i> Request reward
-            </a>
-        </td>
-
         <td style="width: 4%" />
-        <td style="width: 38%">
+        <td style="width: 48%">
             <div>
                 <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
                     <tbody align="left" width="48%">
