@@ -381,7 +381,7 @@ alert('You have already requested to take a test in order to become a Kató Veri
             <div>
                 <h2>
                 <span style="color: #9e6100;">Rewards chart</span>
-                <a href="mailto:xxx@twb.org?subject=Request reward" target="_blank" class="pull-right btn btn-primary" style="position:relative; right:-30px; top:12px;">
+                <a href="mailto:xxx@twb.org?subject=Request reward" target="_blank" class="pull-right btn btn-primary">
                     <i class="icon-list icon-white"></i> Request reward
                 </a>
                 </h2>
