@@ -2381,6 +2381,8 @@ class UserRouteHandler
             $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
             $encrypted = openssl_encrypt("$user_id", 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
             $certificate = 'https://badge.translatorswb.org/index.php?volunteer_id=' . urlencode(base64_encode("$encrypted::$iv"));
+            $recognition = 'https://badge.translatorswb.org/index.php?volunteer_id=' . urlencode(base64_encode("$encrypted::$iv"));
+
         }
 
         $euser_id = $user_id + 999999; // Ensure we don't use identical (shared profile) key as word count badge (for a bit of extra security)
@@ -2397,6 +2399,7 @@ class UserRouteHandler
 
         $app->view()->appendData(array(
             'certificate'            => $certificate,
+            'recognition'            => $recognition,
             'key'                    => $key,
             'private_access'         => $private_access,
             'receive_credit'         => $receive_credit,
@@ -2437,6 +2440,7 @@ class UserRouteHandler
         $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
         $encrypted = openssl_encrypt("$user_id", 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
         $certificate = 'https://badge.translatorswb.org/index.php?volunteer_id=' . urlencode(base64_encode("$encrypted::$iv"));
+        $recognition = 'https://badge.translatorswb.org/index.php?volunteer_id=' . urlencode(base64_encode("$encrypted::$iv"));
 
         $app->view()->appendData(array(
             'current_page' => 'user-profile',
@@ -2444,6 +2448,7 @@ class UserRouteHandler
             'userPersonalInfo' => $userPersonalInfo,
             'userQualifiedPairs' => $userQualifiedPairs,
             'certificate' => $certificate,
+            'recognition' => $recognition,
             'isSiteAdmin'            => 0,
             'private_access'         => 0,
             'receive_credit'         => 1,

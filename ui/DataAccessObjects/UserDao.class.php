@@ -2154,4 +2154,9 @@ error_log(print_r($result, true));//(**)
         if (empty($result)) 0;
         return $result[0]['users_joined'];
     }
+
+    public function user_has_strategic_languages($user_id)
+    {
+        return LibAPI\PDOWrapper::call('user_has_strategic_languages', LibAPI\PDOWrapper::cleanse($user_id));
+    }
 }
