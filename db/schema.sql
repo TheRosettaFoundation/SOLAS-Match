@@ -9064,7 +9064,7 @@ BEGIN
         WHERE
             uqp.user_id=userID AND
             uqp.language_code_target IN
-            ('am', 'bn', 'my', 'bwr', 'ckl', 'ctg', 'ff', 'ht', 'ha', 'hia', 'kr', 'ku', 'ln', 'lol', 'lg', 'mfi', 'mrt', 'ngc', 'nnb', 'om', 'prs', 'ps', 'shr', 'shu', 'so', 'sw', 'ti', 'rhl');
+            ('am', 'bn', 'my', 'bwr', 'ckl', 'ctg', 'ff', 'ht', 'ha', 'hia', 'kr', 'ku', 'ln', 'lol', 'lg', 'mfi', 'mrt', 'ngc', 'nnb', 'om', 'prs', 'ps', 'shr', 'shu', 'so', 'sw', 'ti', 'rhl', 'mf0');
 END//
 DELIMITER ;
 
