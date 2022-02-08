@@ -424,6 +424,7 @@ alert('You have already requested to take a test in order to become a Kató Veri
                                 <img src="{$recognition}" width="50%" />
                             </td>
                         </tr>
+                        {/if}
                     </tbody>
                 </table>
             </div>
