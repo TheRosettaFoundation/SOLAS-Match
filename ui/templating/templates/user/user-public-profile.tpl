@@ -380,10 +380,10 @@ alert('You have already requested to take a test in order to become a Kató Veri
         <td style="width: 48%">
             <div>
                 <h2>
-                <span style="color: #9e6100;">Rewards chart</span>
-                <a href="mailto:xxx@twb.org?subject=Request reward" target="_blank" class="pull-right btn btn-primary">
-                    <i class="icon-list icon-white"></i> Request reward
-                </a>
+                    <span style="color: #9e6100;">Rewards chart</span>
+                    <a href="mailto:xxx@twb.org?subject=Request reward" target="_blank" class="pull-right btn btn-primary">
+                        <i class="icon-list icon-white"></i> Request reward
+                    </a>
                 </h2>
                 <table width="40%" style="border: 2px solid #e8991c; border-collapse: collapse; overflow-wrap: break-word; word-break: break-all;">
                     <tbody>
@@ -438,9 +438,14 @@ Hausa, Kanuri, Fulfulde, Shuwa Arabic, Bura-Pabir, Marghi, Waha, Kibaku, Mandara
 
 <table border="0">
     <tr valign="top">
-        <td style="width: 80%">
+        <td style="width: 60%">
             <div>
-                <h2 style="color: #9e6100;">Rewards chart for work in strategic languages</h2>
+                <h2>
+                    <span style="color: #9e6100;">Rewards chart for work in strategic languages</span>
+                    <a href="mailto:xxx@twb.org?subject=Request reward for work in strategic languages" target="_blank" class="pull-right btn btn-primary">
+                        <i class="icon-list icon-white"></i> Request reward
+                    </a>
+                </h2>
                 <table width="40%" style="border: 2px solid #e8991c; border-collapse: collapse; overflow-wrap: break-word; word-break: break-all;">
                     <tbody>
                         <tr><td style="border:2px solid #e8991c; color: #576e82;">Points in strategic languages</td><td style="border:2px solid #e8991c; color: #576e82;">Status</td><td style="border:2px solid #e8991c; color: #576e82;">Recognition reward</td></tr>
@@ -457,11 +462,7 @@ Hausa, Kanuri, Fulfulde, Shuwa Arabic, Bura-Pabir, Marghi, Waha, Kibaku, Mandara
             </div>
         </td>
 
-        <td style="width: 20%">
-            <a href="mailto:xxx@twb.org?subject=Request reward for work in strategic languages" target="_blank" class="btn btn-primary">
-                <i class="icon-list icon-white"></i> Request reward
-            </a>
-        </td>
+        <td style="width: 40%"></td>
     </tr>
 </table>
 {/if}
