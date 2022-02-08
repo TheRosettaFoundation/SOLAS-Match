@@ -2400,6 +2400,7 @@ class UserRouteHandler
         $app->view()->appendData(array(
             'certificate'            => $certificate,
             'recognition'            => $recognition,
+            'user_has_strategic_languages' => $userDao->user_has_strategic_languages($user_id),
             'key'                    => $key,
             'private_access'         => $private_access,
             'receive_credit'         => $receive_credit,
@@ -2449,6 +2450,7 @@ class UserRouteHandler
             'userQualifiedPairs' => $userQualifiedPairs,
             'certificate' => $certificate,
             'recognition' => $recognition,
+            'user_has_strategic_languages' => 0,
             'isSiteAdmin'            => 0,
             'private_access'         => 0,
             'receive_credit'         => 1,

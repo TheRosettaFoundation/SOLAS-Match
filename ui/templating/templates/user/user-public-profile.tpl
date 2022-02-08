@@ -367,6 +367,105 @@ alert('You have already requested to take a test in order to become a Kató Veri
     </tr>
 </table>
 
+<div class="page-header">
+    <h1>Community Recognition Program<small>Contribute to our mission and obtain rewards</small></h1>
+</div>
+<p style="margin-bottom:50px;" />
+<hr />
+<p>Translators without Borders believe it is important to acknowledge the value and impact of the support that our community members provide. As part of our Community Recognition Program, our volunteers can receive rewards depending on their level of contribution. Please remember that when you join our TWB Community, you agree to abide by TWB’s <a href="https://translatorswithoutborders.org/wp-content/uploads/2020/07/Plain-language-Code-of-Conduct-for-Translators-July-2020.pdf" target="_blank">Code of conduct</a> and commit to deliver the highest standard of professional translations, and only undertake work you are competent to perform in the languages and subject areas for which you are qualified.</p>
+<p>Deliver tasks on the TWB platform to build up points. Once you reach the thresholds described in the rewards chart, you can request the respective rewards.</p>
+
+<table border="0">
+    <tr valign="top">
+        <td style="width: 38%">
+            <div>
+                <h2 style="color: #9e6100;">Rewards chart</h2>
+                <table width="40%" style="border: 2px solid #e8991c; border-collapse: collapse; overflow-wrap: break-word; word-break: break-all;">
+                    <tbody>
+                        <tr><td style="border:2px solid #e8991c; color: #576e82;">Points</td><td style="border:2px solid #e8991c; color: #576e82;">Reward</td></tr>
+                        <tr><td style="border:2px solid #e8991c"><strong>5,000</strong></td> <td style="border:2px solid #e8991c">Certification of volunteer activity</td></tr>
+                        <tr><td style="border:2px solid #e8991c"><strong>15,000</strong></td><td style="border:2px solid #e8991c">Reference letter</td></tr>
+                        <tr><td style="border:2px solid #e8991c"><strong>30,000</strong></td><td style="border:2px solid #e8991c">Recommendation on professional platforms</td></tr>
+                        <tr><td style="border:2px solid #e8991c"><strong>50,000</strong></td><td style="border:2px solid #e8991c">Shout-out post on TWB social media account</td></tr>
+                    </tbody>
+                </table>
+
+                <h2 style="color: #9e6100;">How do I earn points?</h2>
+                The points are calculated as follows:
+                <table width="40%" style="border: 2px solid #e8991c; border-collapse: collapse; overflow-wrap: break-word; word-break: break-all;">
+                    <tbody>
+                        <tr><td style="border:2px solid #e8991c; color: #576e82;">Type of task</td><td style="border:2px solid #e8991c; color: #576e82;">Unit</td><td style="border:2px solid #e8991c; color: #576e82;">Points accrued per unit</td></tr>
+                        <tr><td style="border:2px solid #e8991c">Translation</td>                  <td style="border:2px solid #e8991c">1 word</td>               <td style="border:2px solid #e8991c">1</td></tr>
+                        <tr><td style="border:2px solid #e8991c">Revision</td>                     <td style="border:2px solid #e8991c">1 word</td>               <td style="border:2px solid #e8991c">0.5</td></tr>
+                        <tr><td style="border:2px solid #e8991c">Transcription</td>                <td style="border:2px solid #e8991c">1 word</td>               <td style="border:2px solid #e8991c">0.5</td></tr>
+                        <tr><td style="border:2px solid #e8991c">Voice recording</td>              <td style="border:2px solid #e8991c">1 word</td>               <td style="border:2px solid #e8991c">1</td></tr>
+                        <tr><td style="border:2px solid #e8991c">Translation if subtitles</td>     <td style="border:2px solid #e8991c">1 word</td>               <td style="border:2px solid #e8991c">1</td></tr>
+                        <tr><td style="border:2px solid #e8991c">Revision of subtitles</td>        <td style="border:2px solid #e8991c">1 word</td>               <td style="border:2px solid #e8991c">0.5</td></tr>
+                        <tr><td style="border:2px solid #e8991c">Terminology</td>                  <td style="border:2px solid #e8991c">1 term</td>               <td style="border:2px solid #e8991c">10</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </td>
+
+        <td style="width: 20%">
+            <a href="mailto:xxx@twb.org?subject=Request reward" target="_blank" class="btn btn-primary">
+                <i class="icon-list icon-white"></i> Request reward
+            </a>
+        </td>
+
+        <td style="width: 4%" />
+        <td style="width: 38%">
+            <div>
+                <table border="0" width="40%" style="overflow-wrap: break-word; word-break:break-all;">
+                    <tbody align="left" width="48%">
+                        {if !empty($recognition)}
+                        <tr>
+                            <td>
+                                <img src="{$recognition}" width="50%" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </td>
+    </tr>
+</table>
+
+{if !empty($user_has_strategic_languages)}
+<p>Your work in strategic languages for TWB allows you to access further special rewards. These do not constitute payments, but support towards expenses incurred while volunteering for TWB, such as connectivity costs.</p>
+<p>This is our current list of strategic languages:<br />
+Hausa, Kanuri, Fulfulde, Shuwa Arabic, Bura-Pabir, Marghi, Waha, Kibaku, Mandara, Burmese, Rohingyalish, Bengali, Chittagonian, Amharic, Haitian Creole, Dari, Kurdish, Lingala, Luganda/Ganda, Mongo, Nande, Ngombe, Oromo, Pashto, Shi, Somali, Swahili, Tigrinya</p>
+
+<table border="0">
+    <tr valign="top">
+        <td style="width: 80%">
+            <div>
+                <h2 style="color: #9e6100;">Rewards chart for work in strategic languages</h2>
+                <table width="40%" style="border: 2px solid #e8991c; border-collapse: collapse; overflow-wrap: break-word; word-break: break-all;">
+                    <tbody>
+                        <tr><td style="border:2px solid #e8991c; color: #576e82;">Points in strategic languages</td><td style="border:2px solid #e8991c; color: #576e82;">Status</td><td style="border:2px solid #e8991c; color: #576e82;">Recognition reward</td></tr>
+                        <tr><td style="border:2px solid #e8991c">5,000</td>                                         <td style="border:2px solid #e8991c">TWB New Community Member</td><td style="border:2px solid #e8991c">100 USD phone top-up or online voucher, where applicable</td></tr>
+                        <tr><td style="border:2px solid #e8991c">25,000</td>                                        <td style="border:2px solid #e8991c">TWB Traveler</td>            <td style="border:2px solid #e8991c">100 USD bank transfer</td></tr>
+                        <tr><td style="border:2px solid #e8991c">50,000</td>                                        <td style="border:2px solid #e8991c">TWB Pathfinder</td>          <td style="border:2px solid #e8991c">150 USD bank transfer</td></tr>
+                        <tr><td style="border:2px solid #e8991c">100,000</td>                                       <td style="border:2px solid #e8991c">TWB Explorer</td>            <td style="border:2px solid #e8991c">400 USD bank transfer</td></tr>
+                        <tr><td style="border:2px solid #e8991c">200,000</td>                                       <td style="border:2px solid #e8991c">TWB Navigator</td>           <td style="border:2px solid #e8991c">750 USD bank transfer</td></tr>
+                        <tr><td style="border:2px solid #e8991c">300,000</td>                                       <td style="border:2px solid #e8991c">TWB Voyager</td>             <td style="border:2px solid #e8991c">750 USD bank transfer</td></tr>
+                        <tr><td style="border:2px solid #e8991c">400,000</td>                                       <td style="border:2px solid #e8991c">TWB Trailblazer</td>         <td style="border:2px solid #e8991c">750 USD bank transfer</td></tr>
+                        <tr><td style="border:2px solid #e8991c">500,000</td>                                       <td style="border:2px solid #e8991c">TWB Pioneer</td>             <td style="border:2px solid #e8991c">750 USD bank transfer</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </td>
+
+        <td style="width: 20%">
+            <a href="mailto:xxx@twb.org?subject=Request reward for work in strategic languages" target="_blank" class="btn btn-primary">
+                <i class="icon-list icon-white"></i> Request reward
+            </a>
+        </td>
+    </tr>
+</table>
+{/if}
+
 {if $isSiteAdmin}
 <hr/>
 <table border="0">
