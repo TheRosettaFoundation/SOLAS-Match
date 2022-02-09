@@ -386,7 +386,7 @@ alert('You have already requested to take a test in order to become a Kató Veri
                 </h2>
                 <table width="40%" style="border: 2px solid #e8991c; border-collapse: collapse; overflow-wrap: break-word; word-break: break-all;">
                     <tbody>
-                        <tr><td style="border:2px solid #e8991c; color: #576e82;">Points</td><td style="border:2px solid #e8991c; color: #576e82;">Reward</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c; color: #576e82;">Points</td><td style="border:2px solid #e8991c; color: #576e82;">Reward</td></tr>
                         <tr><td style="border:2px solid #e8991c">5,000</td>                  <td style="border:2px solid #e8991c">Certification of volunteer activity</td></tr>
                         <tr><td style="border:2px solid #e8991c">15,000</td>                 <td style="border:2px solid #e8991c">Reference letter</td></tr>
                         <tr><td style="border:2px solid #e8991c">30,000</td>                 <td style="border:2px solid #e8991c">Recommendation on professional platforms</td></tr>
