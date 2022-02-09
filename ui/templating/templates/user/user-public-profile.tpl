@@ -368,9 +368,8 @@ alert('You have already requested to take a test in order to become a Kató Veri
 </table>
 
 <div class="page-header">
-    <h1>Community Recognition Program<small>Contribute to our mission and obtain rewards</small></h1>
+    <h1>Community Recognition Program <small>Contribute to our mission and obtain rewards</small></h1>
 </div>
-<p style="margin-bottom:50px;" />
 <hr />
 <p>Translators without Borders believe it is important to acknowledge the value and impact of the support that our community members provide. As part of our Community Recognition Program, our volunteers can receive rewards depending on their level of contribution. Please remember that when you join our TWB Community, you agree to abide by TWB’s <a href="https://translatorswithoutborders.org/wp-content/uploads/2020/07/Plain-language-Code-of-Conduct-for-Translators-July-2020.pdf" target="_blank">Code of conduct</a> and commit to deliver the highest standard of professional translations, and only undertake work you are competent to perform in the languages and subject areas for which you are qualified.</p>
 <p>Deliver tasks on the TWB platform to build up points. Once you reach the thresholds described in the rewards chart, you can request the respective rewards.</p>
