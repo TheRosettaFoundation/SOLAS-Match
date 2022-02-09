@@ -394,7 +394,7 @@ alert('You have already requested to take a test in order to become a Kató Veri
                     </tbody>
                 </table>
 
-                <p style="margin-bottom:50px;" />
+                <p style="margin-bottom:20px;" />
                 <h2 style="color: #9e6100;">How do I earn points?</h2>
                 The points are calculated as follows:
                 <table width="40%" style="border: 2px solid #e8991c; border-collapse: collapse; overflow-wrap: break-word; word-break: break-all;">
