@@ -432,6 +432,7 @@ alert('You have already requested to take a test in order to become a Kató Veri
 </table>
 
 {if !empty($user_has_strategic_languages)}
+<p style="margin-bottom:20px;" />
 <p>Your work in strategic languages for TWB allows you to access further special rewards. These do not constitute payments, but support towards expenses incurred while volunteering for TWB, such as connectivity costs.</p>
 <p>This is our current list of strategic languages:<br />
 Hausa, Kanuri, Fulfulde, Shuwa Arabic, Bura-Pabir, Marghi, Waha, Kibaku, Mandara, Burmese, Rohingyalish, Bengali, Chittagonian, Amharic, Haitian Creole, Dari, Kurdish, Lingala, Luganda/Ganda, Mongo, Nande, Ngombe, Oromo, Pashto, Shi, Somali, Swahili, Tigrinya</p>
