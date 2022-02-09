@@ -398,7 +398,7 @@ alert('You have already requested to take a test in order to become a Kató Veri
                 The points are calculated as follows:
                 <table width="40%" style="border: 2px solid #e8991c; border-collapse: collapse; overflow-wrap: break-word; word-break: break-all;">
                     <tbody>
-                        <tr><td align="center" style="border:2px solid #e8991c; color: #576e82;">Type of task</td><td align="center" style="border:2px solid #e8991c; color: #576e82;">Unit</td><td style="border:2px solid #e8991c; color: #576e82;">Points accrued per unit</td></tr>
+                        <tr><td align="center" style="border:2px solid #e8991c; color: #576e82;">Type of task</td><td align="center" style="border:2px solid #e8991c; color: #576e82;">Unit</td><td align="center" style="border:2px solid #e8991c; color: #576e82;">Points accrued per unit</td></tr>
                         <tr><td align="center" style="border:2px solid #e8991c">Translation</td>                  <td align="center" style="border:2px solid #e8991c">1 word</td>               <td align="center" style="border:2px solid #e8991c">1</td></tr>
                         <tr><td align="center" style="border:2px solid #e8991c">Revision</td>                     <td align="center" style="border:2px solid #e8991c">1 word</td>               <td align="center" style="border:2px solid #e8991c">0.5</td></tr>
                         <tr><td align="center" style="border:2px solid #e8991c">Transcription</td>                <td align="center" style="border:2px solid #e8991c">1 word</td>               <td align="center" style="border:2px solid #e8991c">0.5</td></tr>
