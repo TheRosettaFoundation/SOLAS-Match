@@ -372,6 +372,7 @@ alert('You have already requested to take a test in order to become a Kató Veri
 </div>
 <p>Translators without Borders believe it is important to acknowledge the value and impact of the support that our community members provide. As part of our Community Recognition Program, our volunteers can receive rewards depending on their level of contribution. Please remember that when you join our TWB Community, you agree to abide by TWB’s <a href="https://translatorswithoutborders.org/wp-content/uploads/2020/07/Plain-language-Code-of-Conduct-for-Translators-July-2020.pdf" target="_blank">Code of conduct</a> and commit to deliver the highest standard of professional translations, and only undertake work you are competent to perform in the languages and subject areas for which you are qualified.</p>
 <p>Deliver tasks on the TWB platform to build up points. Once you reach the thresholds described in the rewards chart, you can request the respective rewards.</p>
+<p style="margin-bottom:50px;" />
 
 <table border="0">
     <tr valign="top">
@@ -386,10 +387,10 @@ alert('You have already requested to take a test in order to become a Kató Veri
                 <table width="40%" style="border: 2px solid #e8991c; border-collapse: collapse; overflow-wrap: break-word; word-break: break-all;">
                     <tbody>
                         <tr><td style="border:2px solid #e8991c; color: #576e82;">Points</td><td style="border:2px solid #e8991c; color: #576e82;">Reward</td></tr>
-                        <tr><td style="border:2px solid #e8991c"><strong>5,000</strong></td> <td style="border:2px solid #e8991c">Certification of volunteer activity</td></tr>
-                        <tr><td style="border:2px solid #e8991c"><strong>15,000</strong></td><td style="border:2px solid #e8991c">Reference letter</td></tr>
-                        <tr><td style="border:2px solid #e8991c"><strong>30,000</strong></td><td style="border:2px solid #e8991c">Recommendation on professional platforms</td></tr>
-                        <tr><td style="border:2px solid #e8991c"><strong>50,000</strong></td><td style="border:2px solid #e8991c">Shout-out post on TWB social media account</td></tr>
+                        <tr><td style="border:2px solid #e8991c">5,000</td>                  <td style="border:2px solid #e8991c">Certification of volunteer activity</td></tr>
+                        <tr><td style="border:2px solid #e8991c">15,000</td>                 <td style="border:2px solid #e8991c">Reference letter</td></tr>
+                        <tr><td style="border:2px solid #e8991c">30,000</td>                 <td style="border:2px solid #e8991c">Recommendation on professional platforms</td></tr>
+                        <tr><td style="border:2px solid #e8991c">50,000</td>                 <td style="border:2px solid #e8991c">Shout-out post on TWB social media account</td></tr>
                     </tbody>
                 </table>
 
