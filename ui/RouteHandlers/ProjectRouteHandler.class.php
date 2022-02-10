@@ -61,8 +61,6 @@ class ProjectRouteHandler
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForProjectImage')
             ->setName('download-project-image');
 
-        $app->get('/project/:project_id/test/', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:test'));
-
         $app->get(
             '/project_cron_1_minute/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:project_cron_1_minute')
@@ -611,47 +609,6 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             }
             if (!empty($part['dateDue'])) $projectDao->update_task_due_date($memsource_task['task_id'], substr($part['dateDue'], 0, 10) . ' ' . substr($part['dateDue'], 11, 8));
         }
-    }
-
-    public function test($projectId)
-    {
-        $app = \Slim\Slim::getInstance();
-        $extra_scripts = "";
-
-        $time = microtime();
-        $time = explode(" ", $time);
-        $time = $time[1] + $time[0];
-        $time1 = $time;
-
-        $projectDao = new DAO\ProjectDao();
-        $graph = $projectDao->getProjectGraph($projectId);
-        $viewer = new Lib\GraphViewer($graph);
-        $body = $viewer->constructView();
-
-        $extra_scripts .= $viewer->generateDataScript();
-        $extra_scripts .=
-            "<script type=\"text/javascript\" src=\"{$app->urlFor("home")}ui/js/GraphHelper.js\"></script>";
-        $extra_scripts .= "<script>
-                $(window).load(runStartup);
-                function runStartup()
-                {
-                    prepareGraph();
-                    $( \"#tabs\" ).tabs();
-                }
-            </script>";
-
-        $time = microtime();
-        $time = explode(" ", $time);
-        $time = $time[1] + $time[0];
-        $time2 = $time;
-
-        $totaltime = ($time2 - $time1);
-        $body .= "<br />Running Time: $totaltime seconds.";
-        $app->view()->appendData(array(
-                    "body"          => $body,
-                    "extra_scripts" => $extra_scripts
-        ));
-        $app->render("empty.tpl");
     }
 
     public function projectView($project_id)
