@@ -19,18 +19,21 @@ class TagRouteHandler
             array($middleware, "authUserIsLoggedIn"),
             array($this, "tagsList")
         )->via("POST")->name("tags-list");
+            ->setName('tags-list');
 
         $app->get(
             "/tag/:id/:subscribe/:sesskey/",
             array($middleware, "authUserIsLoggedIn"),
             array($this, "tagSubscribe")
         )->via("POST")->name("tag-subscribe");
+            ->setName('tag-subscribe');
         
         $app->get(
             "/tag/:id/",
             array($middleware, "authUserIsLoggedIn"),
             array($this, "tagDetails")
         )->via("POST")->name("tag-details");
+            ->setName('tag-details');
     }
 
     public function tagsList()

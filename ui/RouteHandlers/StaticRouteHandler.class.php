@@ -15,16 +15,31 @@ class StaticRouteHandler
         global $app;
 
         $app->get('/static/statistics/', array($this, 'statistics'))->name("statistics");
+            ->setName('statistics');
+
         $app->get("/static/privacy/", array($this, "privacy"))->name("privacy");
+            ->setName('privacy');
+
         $app->get("/static/terms/", array($this, "terms"))->name("terms");
-        // $app->get("/static/faq/", array($this, "faq"))->name("faq");
+            ->setName('terms');
+
         $app->get("/static/videos/", array($this, "videos"))->name("videos");
+            ->setName('videos');
+
         $app->get("/static/siteLanguage/", array($this, "siteLanguage"))->via("POST")->name("siteLanguage");
+            ->setName('siteLanguage');
+
         $app->get("/static/getDefaultStrings/", array($this, "getDefaultStrings"))->name("staticGetDefaultStrings");
+            ->setName('staticGetDefaultStrings');
+
         $app->get("/static/getUserStrings/", array($this, "getUserStrings"))->name("staticGetUserStrings");
-        // Security: $app->get("/static/getUser/", array($this, "getUser"))->name("staticGetUser");
+            ->setName('staticGetUserStrings');
+
         $app->get("/static/getUserHash/", array($this, "getUserHash"))->name("staticGetUserHash");
+            ->setName('staticGetUserHash');
+
         $app->notFound("\SolasMatch\UI\Lib\Middleware::notFound");
+            ??????????????????->setName('home');
     }
 
     public function statistics()

@@ -25,166 +25,196 @@ class UserRouteHandler
             "/",
             array($this, "home")
         )->via("POST")->name("home");
+            ->setName('home');
 
         $app->get(
             "/paged/:page_no/tt/:tt/sl/:sl/tl/:tl/",
             array($this, "home")
         )->via("POST")->name("home-paged");
+            ->setName('home-paged');
 
         $app->get(
             "/register/",
             array($this, "register")
         )->via("GET", "POST")->name("register");
+            ->setName('register');
 
         $app->get(
             '/register_track/:track_code/',
             array($this, 'register')
         )->via('GET', 'POST')->name('register_track');
+            ->setName('register_track');
 
         $app->get(
             "/:user_id/change_email/",
             array($this, "changeEmail")
         )->via("GET", "POST")->name("change-email");
+            ->setName('change-email');
 
         $app->get(
             "/user/:uuid/verification/",
             array($this, 'emailVerification')
         )->via('POST')->name('email-verification');
+            ->setName('email-verification');
 
         $app->get(
             "/:uid/password/reset/",
             array($this, "passwordReset")
         )->via("POST")->name("password-reset");
+            ->setName('password-reset');
 
         $app->get(
             "/password/reset/",
             array($this, "passResetRequest")
         )->via("POST")->name("password-reset-request");
+            ->setName('password-reset-request');
 
         $app->get(
             "/logout/",
             array($this, "logout")
         )->name("logout");
+            ->setName('logout');
 
         $app->get(
             "/login/",
             array($this, "login")
         )->via("GET", "POST")->name("login");
+            ->setName('login');
 
         $app->get(
             '/loggedin/',
             array($this, "login_proz")
         )->via('GET', 'POST')->name('loggedin');
+            ->setName('loggedin');
 
         $app->get(
             "/:user_id/profile/",
             array($middleware, 'authUserIsLoggedIn'),
             array($this, "userPublicProfile")
         )->via("POST")->name("user-public-profile");
+            ->setName('user-public-profile');
 
         $app->get(
             '/:key/key/',
             array($this, "profile_shared_with_key")
         )->name('shared_with_key');
+            ->setName('shared_with_key');
 
         $app->get(
             "/:user_id/privateProfile/",
             array($middleware, "authUserIsLoggedInNoProfile"),
             array($this, "userPrivateProfile")
         )->via("POST")->name("user-private-profile");
+            ->setName('user-private-profile');
 
         $app->get(
             "/:user_id/googleregister/",
             array($middleware, "authUserIsLoggedInNoProfile"),
             array($this, "googleregister")
         )->via("POST")->name("googleregister");
+            ->setName('googleregister');
 
         $app->get(
             '/:user_id/user-code-of-conduct/',
             array($middleware, 'authUserIsLoggedInNoProfile'),
             array($this, 'userCodeOfConduct')
         )->via("POST")->name('user-code-of-conduct');
+            ->setName('user-code-of-conduct');
 
         $app->get(
             '/:user_id/user-uploads/:cert_id/',
             array($middleware, 'authUserIsLoggedInNoProfile'),
             array($this, 'userUploads')
         )->via("POST")->name('user-uploads');
+            ->setName('user-uploads');
 
         $app->get(
             '/:id/user-download/',
             array($middleware, 'authUserIsLoggedIn'),
             array($this, 'userDownload')
         )->name('user-download');
+            ->setName('user-download');
 
         $app->get(
             '/users_review/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'users_review')
         )->name('users_review');
+            ->setName('users_review');
 
         $app->get(
             '/users_new/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'users_new')
         )->via('POST')->name('users_new');
+            ->setName('users_new');
 
         $app->get(
             '/users_tracked/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'users_tracked')
         )->name('users_tracked');
+            ->setName('users_tracked');
 
         $app->get(
             '/add_tracking_code/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'add_tracking_code')
         )->via('POST')->name('add_tracking_code');
+            ->setName('add_tracking_code');
 
         $app->get(
             '/download_users_tracked/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'download_users_tracked')
         )->name('download_users_tracked');
+            ->setName('download_users_tracked');
 
         $app->get(
             '/download_users_new/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'download_users_new')
         )->name('download_users_new');
+            ->setName('download_users_new');
 
         $app->get(
             '/download_users_new_unreviewed/',
             array($middleware, 'authIsSiteAdmin'),
             array($this, 'download_users_new_unreviewed')
         )->name('download_users_new_unreviewed');
+            ->setName('download_users_new_unreviewed');
 
         $app->get(
             "/:user_id/notification/stream/",
             array($middleware, "authUserIsLoggedIn"),
             array($this, "editTaskStreamNotification")
         )->via("POST")->name("stream-notification-edit");
+            ->setName('stream-notification-edit');
 
         $app->get(
             "/user/task/:task_id/reviews/",
             array($middleware, "authenticateUserForTask"),
             array($this, "userTaskReviews")
         )->via('POST')->name('user-task-reviews');
+            ->setName('user-task-reviews');
 
         $app->get(
             '/no_application/',
             array($this, 'no_application')
         )->name('no_application');
+            ->setName('no_application');
 
         $app->get(
             '/no_application_error/',
             array($this, 'no_application_error')
         )->name('no_application_error');
+            ->setName('no_application_error');
 
         $app->get(
             '/native_languages/:term/search/',
             array($this, 'native_languages')
         )->name('native_languages');
+            ->setName('native_languages');
     }
 
     public function home($currentScrollPage = 1, $selectedTaskType = 0, $selectedSourceLanguageCode = 0, $selectedTargetLanguageCode = 0)

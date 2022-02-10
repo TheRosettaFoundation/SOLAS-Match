@@ -19,6 +19,7 @@ class BadgeRouteHandler
             array($middleware, "authUserIsLoggedIn"),
             array($this, "badgeList")
         )->name("badge-list");
+            ->setName('badge-list');
     }
 
     public function badgeList()
