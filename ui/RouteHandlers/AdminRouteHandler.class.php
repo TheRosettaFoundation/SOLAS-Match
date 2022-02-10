@@ -16,253 +16,253 @@ class AdminRouteHandler
                           
         $app->map(['GET', 'POST'],
             '/admin/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:adminDashboard')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:adminDashboard')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('site-admin-dashboard');
 
         $app->map(['GET', 'POST'],
             '/all_users/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:all_users')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:all_users')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('all_users');
 
         $app->map(['GET', 'POST'],
             '/all_users_plain/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:all_users_plain')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:all_users_plain')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('all_users_plain');
 
         $app->map(['GET', 'POST'],
             '/active_now/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:active_now')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:active_now')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('active_now');
 
         $app->map(['GET', 'POST'],
             '/active_now_matecat/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:active_now_matecat')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:active_now_matecat')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('active_now_matecat');
 
         $app->map(['GET', 'POST'],
             '/testing_center/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:testing_center')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:testing_center')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('testing_center');
 
         $app->map(['GET', 'POST'],
             '/download_testing_center/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_testing_center')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_testing_center')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('download_testing_center');
 
         $app->map(['GET', 'POST'],
             '/matecat_analyse_status/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:matecat_analyse_status')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:matecat_analyse_status')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('matecat_analyse_status');
 
         $app->get(
             '/list_memsource_projects/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:list_memsource_projects')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:list_memsource_projects')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('list_memsource_projects');
 
         $app->map(['GET', 'POST'],
             '/download_covid_projects/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_covid_projects')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_covid_projects')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('download_covid_projects');
 
         $app->map(['GET', 'POST'],
             '/download_afghanistan_2021_projects/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_afghanistan_2021_projects')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_afghanistan_2021_projects')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('download_afghanistan_2021_projects');
 
         $app->map(['GET', 'POST'],
             '/download_haiti_2021_projects/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_haiti_2021_projects')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_haiti_2021_projects')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('download_haiti_2021_projects');
 
         $app->map(['GET', 'POST'],
             '/late_matecat/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:late_matecat')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:late_matecat')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('late_matecat');
 
         $app->map(['GET', 'POST'],
             '/complete_matecat/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:complete_matecat')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:complete_matecat')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('complete_matecat');
 
         $app->map(['GET', 'POST'],
             '/user_task_reviews/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:user_task_reviews')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:user_task_reviews')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('user_task_reviews');
 
         $app->get(
             '/peer_to_peer_vetting/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:peer_to_peer_vetting')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:peer_to_peer_vetting')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('peer_to_peer_vetting');
 
         $app->get(
             '/submitted_task_reviews/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:submitted_task_reviews')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:submitted_task_reviews')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('submitted_task_reviews');
 
         $app->get(
             '/tasks_no_reviews/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:tasks_no_reviews')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:tasks_no_reviews')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('tasks_no_reviews');
 
         $app->get(
             '/project_source_file_scores/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:project_source_file_scores')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:project_source_file_scores')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('project_source_file_scores');
 
         $app->get(
             '/download_submitted_task_reviews/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_submitted_task_reviews')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_submitted_task_reviews')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('download_submitted_task_reviews');
 
         $app->get(
             '/download_tasks_no_reviews/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_tasks_no_reviews')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_tasks_no_reviews')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('download_tasks_no_reviews');
 
         $app->get(
             '/download_project_source_file_scores/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_project_source_file_scores')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_project_source_file_scores')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('download_project_source_file_scores');
 
         $app->map(['GET', 'POST'],
             '/first_completed_task/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:first_completed_task')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:first_completed_task')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('first_completed_task');
 
         $app->map(['GET', 'POST'],
             '/active_users/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:active_users')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:active_users')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('active_users');
 
         $app->map(['GET', 'POST'],
             '/active_users_unique/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:active_users_unique')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:active_users_unique')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('active_users_unique');
 
         $app->map(['GET', 'POST'],
             '/unclaimed_tasks/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:unclaimed_tasks')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:unclaimed_tasks')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('unclaimed_tasks');
 
         $app->map(['GET', 'POST'],
             '/search_users_by_language_pair/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:search_users_by_language_pair')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:search_users_by_language_pair')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('search_users_by_language_pair');
 
         $app->map(['GET', 'POST'],
             '/user_languages/:code',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:user_languages')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:user_languages')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('user_languages');
 
         $app->get(
             '/download_user_languages/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_user_languages')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_user_languages')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('download_user_languages');
 
         $app->map(['GET', 'POST'],
             '/user_task_languages/:code',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:user_task_languages')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:user_task_languages')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('user_task_languages');
 
         $app->map(['GET', 'POST'],
             '/user_words_by_language/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:user_words_by_language')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:user_words_by_language')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('user_words_by_language');
 
         $app->get(
             '/download_user_words_by_language/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_user_words_by_language')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_user_words_by_language')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('download_user_words_by_language');
 
         $app->get(
             '/download_user_task_languages/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_user_task_languages')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_user_task_languages')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('download_user_task_languages');
 
         $app->get(
             '/download_all_users/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_all_users')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_all_users')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('download_all_users');
 
         $app->get(
             '/download_active_users/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_active_users')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_active_users')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('download_active_users');
 
         $app->get(
             '/community_stats/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:community_stats')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:community_stats')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('community_stats');
 
         $app->get(
             '/org_stats/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:org_stats')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:org_stats')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('org_stats');
 
         $app->get(
             '/community_dashboard/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:community_dashboard')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:community_dashboard')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('community_dashboard');
 
         $app->get(
             '/language_work_requested/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:language_work_requested')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:language_work_requested')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('language_work_requested');
 
         $app->get(
             '/download_language_work_requested/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_language_work_requested')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_language_work_requested')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('download_language_work_requested');
 
         $app->get(
             '/translators_for_language_pairs/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:translators_for_language_pairs')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:translators_for_language_pairs')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('translators_for_language_pairs');
 
         $app->get(
             '/download_translators_for_language_pairs/',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_translators_for_language_pairs')
+            '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:download_translators_for_language_pairs')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('download_translators_for_language_pairs');
     }
