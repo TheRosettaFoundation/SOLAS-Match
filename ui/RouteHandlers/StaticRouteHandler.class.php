@@ -14,28 +14,28 @@ class StaticRouteHandler
     {
         global $app;
 
-        $app->get('/static/statistics/', array($this, 'statistics'))->name("statistics");
+        $app->get('/static/statistics/', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:statistics'))->name("statistics");
             ->setName('statistics');
 
-        $app->get("/static/privacy/", array($this, "privacy'))->name("privacy");
+        $app->get("/static/privacy/", '\SolasMatch\UI\RouteHandlers\UserRouteHandler:privacy'))->name("privacy");
             ->setName('privacy');
 
-        $app->get("/static/terms/", array($this, "terms'))->name("terms");
+        $app->get("/static/terms/", '\SolasMatch\UI\RouteHandlers\UserRouteHandler:terms'))->name("terms");
             ->setName('terms');
 
-        $app->get("/static/videos/", array($this, "videos'))->name("videos");
+        $app->get("/static/videos/", '\SolasMatch\UI\RouteHandlers\UserRouteHandler:videos'))->name("videos");
             ->setName('videos');
 
-        $app->get("/static/siteLanguage/", array($this, "siteLanguage'))->via("POST")->name("siteLanguage");
+        $app->get("/static/siteLanguage/", '\SolasMatch\UI\RouteHandlers\UserRouteHandler:siteLanguage'))->via("POST")->name("siteLanguage");
             ->setName('siteLanguage');
 
-        $app->get("/static/getDefaultStrings/", array($this, "getDefaultStrings'))->name("staticGetDefaultStrings");
+        $app->get("/static/getDefaultStrings/", '\SolasMatch\UI\RouteHandlers\UserRouteHandler:getDefaultStrings'))->name("staticGetDefaultStrings");
             ->setName('staticGetDefaultStrings');
 
-        $app->get("/static/getUserStrings/", array($this, "getUserStrings'))->name("staticGetUserStrings");
+        $app->get("/static/getUserStrings/", '\SolasMatch\UI\RouteHandlers\UserRouteHandler:getUserStrings'))->name("staticGetUserStrings");
             ->setName('staticGetUserStrings');
 
-        $app->get("/static/getUserHash/", array($this, "getUserHash'))->name("staticGetUserHash");
+        $app->get("/static/getUserHash/", '\SolasMatch\UI\RouteHandlers\UserRouteHandler:getUserHash'))->name("staticGetUserHash");
             ->setName('staticGetUserHash');
     }
 

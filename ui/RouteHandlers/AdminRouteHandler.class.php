@@ -16,294 +16,294 @@ class AdminRouteHandler
                           
         $app->get(
             "/admin/",
-            array($this, "adminDashboard')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:adminDashboard')
         )->via("POST")->name("site-admin-dashboard");
             array($middleware, 'authIsSiteAdmin'),
             ->setName('site-admin-dashboard');
 
         $app->get(
             '/all_users/',
-            array($this, 'all_users')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:all_users')
         )->via('POST')->name('all_users');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('all_users');
 
         $app->get(
             '/all_users_plain/',
-            array($this, 'all_users_plain')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:all_users_plain')
         )->via('POST')->name('all_users_plain');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('all_users_plain');
 
         $app->get(
             '/active_now/',
-            array($this, 'active_now')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:active_now')
         )->via('POST')->name('active_now');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('active_now');
 
         $app->get(
             '/active_now_matecat/',
-            array($this, 'active_now_matecat')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:active_now_matecat')
         )->via('POST')->name('active_now_matecat');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('active_now_matecat');
 
         $app->get(
             '/testing_center/',
-            array($this, 'testing_center')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:testing_center')
         )->via('POST')->name('testing_center');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('testing_center');
 
         $app->get(
             '/download_testing_center/',
-            array($this, 'download_testing_center')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_testing_center')
         )->via('POST')->name('download_testing_center');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('download_testing_center');
 
         $app->get(
             '/matecat_analyse_status/',
-            array($this, 'matecat_analyse_status')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:matecat_analyse_status')
         )->via('POST')->name('matecat_analyse_status');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('matecat_analyse_status');
 
         $app->get(
             '/list_memsource_projects/',
-            array($this, 'list_memsource_projects')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:list_memsource_projects')
         )->name('list_memsource_projects');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('list_memsource_projects');
 
         $app->get(
             '/download_covid_projects/',
-            array($this, 'download_covid_projects')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_covid_projects')
         )->via('POST')->name('download_covid_projects');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('download_covid_projects');
 
         $app->get(
             '/download_afghanistan_2021_projects/',
-            array($this, 'download_afghanistan_2021_projects')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_afghanistan_2021_projects')
         )->via('POST')->name('download_afghanistan_2021_projects');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('download_afghanistan_2021_projects');
 
         $app->get(
             '/download_haiti_2021_projects/',
-            array($this, 'download_haiti_2021_projects')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_haiti_2021_projects')
         )->via('POST')->name('download_haiti_2021_projects');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('download_haiti_2021_projects');
 
         $app->get(
             '/late_matecat/',
-            array($this, 'late_matecat')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:late_matecat')
         )->via('POST')->name('late_matecat');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('late_matecat');
 
         $app->get(
             '/complete_matecat/',
-            array($this, 'complete_matecat')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:complete_matecat')
         )->via('POST')->name('complete_matecat');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('complete_matecat');
 
         $app->get(
             '/user_task_reviews/',
-            array($this, 'user_task_reviews')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:user_task_reviews')
         )->via('POST')->name('user_task_reviews');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('user_task_reviews');
 
         $app->get(
             '/peer_to_peer_vetting/',
-            array($this, 'peer_to_peer_vetting')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:peer_to_peer_vetting')
         )->name('peer_to_peer_vetting');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('peer_to_peer_vetting');
 
         $app->get(
             '/submitted_task_reviews/',
-            array($this, 'submitted_task_reviews')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:submitted_task_reviews')
         )->name('submitted_task_reviews');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('submitted_task_reviews');
 
         $app->get(
             '/tasks_no_reviews/',
-            array($this, 'tasks_no_reviews')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:tasks_no_reviews')
         )->name('tasks_no_reviews');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('tasks_no_reviews');
 
         $app->get(
             '/project_source_file_scores/',
-            array($this, 'project_source_file_scores')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:project_source_file_scores')
         )->name('project_source_file_scores');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('project_source_file_scores');
 
         $app->get(
             '/download_submitted_task_reviews/',
-            array($this, 'download_submitted_task_reviews')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_submitted_task_reviews')
         )->name('download_submitted_task_reviews');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('download_submitted_task_reviews');
 
         $app->get(
             '/download_tasks_no_reviews/',
-            array($this, 'download_tasks_no_reviews')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_tasks_no_reviews')
         )->name('download_tasks_no_reviews');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('download_tasks_no_reviews');
 
         $app->get(
             '/download_project_source_file_scores/',
-            array($this, 'download_project_source_file_scores')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_project_source_file_scores')
         )->name('download_project_source_file_scores');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('download_project_source_file_scores');
 
         $app->get(
             '/first_completed_task/',
-            array($this, 'first_completed_task')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:first_completed_task')
         )->via('POST')->name('first_completed_task');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('first_completed_task');
 
         $app->get(
             '/active_users/',
-            array($this, 'active_users')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:active_users')
         )->via('POST')->name('active_users');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('active_users');
 
         $app->get(
             '/active_users_unique/',
-            array($this, 'active_users_unique')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:active_users_unique')
         )->via('POST')->name('active_users_unique');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('active_users_unique');
 
         $app->get(
             '/unclaimed_tasks/',
-            array($this, 'unclaimed_tasks')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:unclaimed_tasks')
         )->via('POST')->name('unclaimed_tasks');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('unclaimed_tasks');
 
         $app->get(
             '/search_users_by_language_pair/',
-            array($this, 'search_users_by_language_pair')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:search_users_by_language_pair')
         )->via('POST')->name('search_users_by_language_pair');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('search_users_by_language_pair');
 
         $app->get(
             '/user_languages/:code',
-            array($this, 'user_languages')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:user_languages')
         )->via('POST')->name('user_languages');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('user_languages');
 
         $app->get(
             '/download_user_languages/',
-            array($this, 'download_user_languages')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_user_languages')
         )->name('download_user_languages');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('download_user_languages');
 
         $app->get(
             '/user_task_languages/:code',
-            array($this, 'user_task_languages')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:user_task_languages')
         )->via('POST')->name('user_task_languages');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('user_task_languages');
 
         $app->get(
             '/user_words_by_language/',
-            array($this, 'user_words_by_language')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:user_words_by_language')
         )->via('POST')->name('user_words_by_language');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('user_words_by_language');
 
         $app->get(
             '/download_user_words_by_language/',
-            array($this, 'download_user_words_by_language')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_user_words_by_language')
         )->name('download_user_words_by_language');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('download_user_words_by_language');
 
         $app->get(
             '/download_user_task_languages/',
-            array($this, 'download_user_task_languages')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_user_task_languages')
         )->name('download_user_task_languages');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('download_user_task_languages');
 
         $app->get(
             '/download_all_users/',
-            array($this, 'download_all_users')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_all_users')
         )->name('download_all_users');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('download_all_users');
 
         $app->get(
             '/download_active_users/',
-            array($this, 'download_active_users')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_active_users')
         )->name('download_active_users');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('download_active_users');
 
         $app->get(
             '/community_stats/',
-            array($this, 'community_stats')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:community_stats')
         )->name('community_stats');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('community_stats');
 
         $app->get(
             '/org_stats/',
-            array($this, 'org_stats')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:org_stats')
         )->name('org_stats');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('org_stats');
 
         $app->get(
             '/community_dashboard/',
-            array($this, 'community_dashboard')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:community_dashboard')
         )->name('community_dashboard');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('community_dashboard');
 
         $app->get(
             '/language_work_requested/',
-            array($this, 'language_work_requested')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:language_work_requested')
         )->name('language_work_requested');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('language_work_requested');
 
         $app->get(
             '/download_language_work_requested/',
-            array($this, 'download_language_work_requested')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_language_work_requested')
         )->name('download_language_work_requested');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('download_language_work_requested');
 
         $app->get(
             '/translators_for_language_pairs/',
-            array($this, 'translators_for_language_pairs')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:translators_for_language_pairs')
         )->name('translators_for_language_pairs');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('translators_for_language_pairs');
 
         $app->get(
             '/download_translators_for_language_pairs/',
-            array($this, 'download_translators_for_language_pairs')
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_translators_for_language_pairs')
         )->name('download_translators_for_language_pairs');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('download_translators_for_language_pairs');
