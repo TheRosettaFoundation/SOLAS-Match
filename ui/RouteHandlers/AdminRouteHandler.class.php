@@ -177,7 +177,7 @@ class AdminRouteHandler
             ->setName('search_users_by_language_pair');
 
         $app->map(['GET', 'POST'],
-            '/user_languages/:code',
+            '/user_languages/{code}',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:user_languages')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('user_languages');
@@ -189,7 +189,7 @@ class AdminRouteHandler
             ->setName('download_user_languages');
 
         $app->map(['GET', 'POST'],
-            '/user_task_languages/:code',
+            '/user_task_languages/{code}',
             '\SolasMatch\UI\RouteHandlers\AdminRouteHandler:user_task_languages')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('user_task_languages');
