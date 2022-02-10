@@ -5,13 +5,14 @@ namespace SolasMatch\UI\RouteHandlers;
 use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
 use \SolasMatch\Common as Common;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 class StaticRouteHandler
 {
     public function init()
     {
-
-        $app = \Slim\Slim::getInstance();
+        global $app;
 
         $app->get('/static/statistics/', array($this, 'statistics'))->name("statistics");
         $app->get("/static/privacy/", array($this, "privacy"))->name("privacy");

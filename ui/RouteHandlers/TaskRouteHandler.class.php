@@ -6,6 +6,8 @@ use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
 use \SolasMatch\Common as Common;
 use SolasMatch\Common\Lib\APIHelper;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 require_once __DIR__.'/../../api/lib/IO.class.php';
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
@@ -14,8 +16,7 @@ class TaskRouteHandler
 {
     public function init()
     {
-        $app = \Slim\Slim::getInstance();
-        $middleware = new Lib\Middleware();
+        global $app;
 
         $app->get(
             "/tasks/archive/p/:page_no/",
