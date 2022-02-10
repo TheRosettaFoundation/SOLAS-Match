@@ -16,7 +16,7 @@ class AdminRouteHandler
                           
         $app->get(
             "/admin/",
-            array($this, "adminDashboard")
+            array($this, "adminDashboard')
         )->via("POST")->name("site-admin-dashboard");
             array($middleware, 'authIsSiteAdmin'),
             ->setName('site-admin-dashboard');

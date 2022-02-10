@@ -17,25 +17,25 @@ class StaticRouteHandler
         $app->get('/static/statistics/', array($this, 'statistics'))->name("statistics");
             ->setName('statistics');
 
-        $app->get("/static/privacy/", array($this, "privacy"))->name("privacy");
+        $app->get("/static/privacy/", array($this, "privacy'))->name("privacy");
             ->setName('privacy');
 
-        $app->get("/static/terms/", array($this, "terms"))->name("terms");
+        $app->get("/static/terms/", array($this, "terms'))->name("terms");
             ->setName('terms');
 
-        $app->get("/static/videos/", array($this, "videos"))->name("videos");
+        $app->get("/static/videos/", array($this, "videos'))->name("videos");
             ->setName('videos');
 
-        $app->get("/static/siteLanguage/", array($this, "siteLanguage"))->via("POST")->name("siteLanguage");
+        $app->get("/static/siteLanguage/", array($this, "siteLanguage'))->via("POST")->name("siteLanguage");
             ->setName('siteLanguage');
 
-        $app->get("/static/getDefaultStrings/", array($this, "getDefaultStrings"))->name("staticGetDefaultStrings");
+        $app->get("/static/getDefaultStrings/", array($this, "getDefaultStrings'))->name("staticGetDefaultStrings");
             ->setName('staticGetDefaultStrings');
 
-        $app->get("/static/getUserStrings/", array($this, "getUserStrings"))->name("staticGetUserStrings");
+        $app->get("/static/getUserStrings/", array($this, "getUserStrings'))->name("staticGetUserStrings");
             ->setName('staticGetUserStrings');
 
-        $app->get("/static/getUserHash/", array($this, "getUserHash"))->name("staticGetUserHash");
+        $app->get("/static/getUserHash/", array($this, "getUserHash'))->name("staticGetUserHash");
             ->setName('staticGetUserHash');
     }
 

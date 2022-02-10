@@ -18,14 +18,14 @@ class OrgRouteHandler
 
         $app->get(
             "/org/create/",
-            array($this, "createOrg")
+            array($this, "createOrg')
         )->via("POST")->name("create-org");
             array($middleware, "authUserIsLoggedIn"),
             ->setName('create-org');
 
         $app->get(
             "/org/dashboard/",
-            array($this, "orgDashboard")
+            array($this, "orgDashboard')
         )->via("POST")->name("org-dashboard");
             array($middleware, "authUserIsLoggedIn"),
             ->setName('org-dashboard');
@@ -39,77 +39,77 @@ class OrgRouteHandler
 
         $app->get(
             "/org/:org_id/request/",
-            array($this, "orgRequestMembership")
+            array($this, "orgRequestMembership')
         )->name("org-request-membership");
             array($middleware, "authUserIsLoggedIn"),
             ->setName('org-request-membership');
 
         $app->get(
             "/org/:org_id/request/queue/",
-            array($this, "orgRequestQueue")
+            array($this, "orgRequestQueue')
         )->via("POST")->name("org-request-queue");
             array($middleware, "authUserForOrg"),
             ->setName('org-request-queue');
 
         $app->get(
             "/org/:org_id/private/",
-            array($this, "orgPrivateProfile")
+            array($this, "orgPrivateProfile')
         )->via("POST")->name("org-private-profile");
             array($middleware, "authUserForOrg"),
             ->setName('org-private-profile');
 
         $app->get(
             "/org/:org_id/profile/",
-            array($this, "orgPublicProfile")
+            array($this, "orgPublicProfile')
         )->via("POST")->name("org-public-profile");
             array($middleware, "authUserIsLoggedIn"),
             ->setName('org-public-profile');
 
         $app->get(
             "/org/:org_id/manage/:badge_id/",
-            array($this, "orgManageBadge")
+            array($this, "orgManageBadge')
         )->via("POST")->name("org-manage-badge");
             array($middleware, "authUserForOrg"),
             ->setName('org-manage-badge');
 
         $app->get(
             "/org/:org_id/create/badge/",
-            array($this, "orgCreateBadge")
+            array($this, "orgCreateBadge')
         )->via("POST")->name("org-create-badge");
             array($middleware, "authUserForOrg"),
             ->setName('org-create-badge');
 
         $app->get(
             "/org/search/",
-            array($this, "orgSearch")
+            array($this, "orgSearch')
         )->via("POST")->name("org-search");
             array($middleware, "authUserIsLoggedIn"),
             ->setName('org-search');
         
         $app->get(
             "/org/:org_id/edit/:badge_id/",
-            array($this, "orgEditBadge")
+            array($this, "orgEditBadge')
         )->via("POST")->name("org-edit-badge");
             array($middleware, "authUserForOrg"),
             ->setName('org-edit-badge');
 
         $app->get(
             "/org/:org_id/task/:task_id/complete/",
-            array($this, "orgTaskComplete")
+            array($this, "orgTaskComplete')
         )->name("org-task-complete");
             array($middleware, "authUserForOrg"),
             ->setName('org-task-complete');
 
         $app->get(
             "/org/:org_id/task/:task_id/review/",
-            array($this, "orgTaskReview")
+            array($this, "orgTaskReview')
         )->via("POST")->name("org-task-review");
             array($middleware, "authUserForOrg"),
             ->setName('org-task-review');
 
         $app->get(
             "/org/:org_id/task/:task_id/reviews/",
-            array($this, "orgTaskReviews")
+            array($this, "orgTaskReviews')
         )->name("org-task-reviews");
             array($middleware, "authUserForOrg"),
             ->setName('org-task-reviews');

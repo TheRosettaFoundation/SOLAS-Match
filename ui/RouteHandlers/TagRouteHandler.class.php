@@ -16,21 +16,21 @@ class TagRouteHandler
 
         $app->get(
             "/all/tags/",
-            array($this, "tagsList")
+            array($this, "tagsList')
         )->via("POST")->name("tags-list");
             array($middleware, "authUserIsLoggedIn"),
             ->setName('tags-list');
 
         $app->get(
             "/tag/:id/:subscribe/:sesskey/",
-            array($this, "tagSubscribe")
+            array($this, "tagSubscribe')
         )->via("POST")->name("tag-subscribe");
             array($middleware, "authUserIsLoggedIn"),
             ->setName('tag-subscribe');
         
         $app->get(
             "/tag/:id/",
-            array($this, "tagDetails")
+            array($this, "tagDetails')
         )->via("POST")->name("tag-details");
             array($middleware, "authUserIsLoggedIn"),
             ->setName('tag-details');
