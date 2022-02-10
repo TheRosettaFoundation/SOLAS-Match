@@ -37,9 +37,6 @@ class StaticRouteHandler
 
         $app->get("/static/getUserHash/", array($this, "getUserHash"))->name("staticGetUserHash");
             ->setName('staticGetUserHash');
-
-        $app->notFound("\SolasMatch\UI\Lib\Middleware::notFound");
-            ??????????????????->setName('home');
     }
 
     public function statistics()
