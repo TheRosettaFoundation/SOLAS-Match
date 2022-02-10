@@ -19,49 +19,49 @@ class TaskRouteHandler
         global $app;
 
         $app->get(
-            "/tasks/archive/p/:page_no/",
+            '/tasks/archive/p/:page_no/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:archivedTasks')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('archived-tasks');
 
         $app->map(['GET', 'POST'],
-            "/user/:user_id/claimed/tasks/",
+            '/user/:user_id/claimed/tasks/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:claimedTasks')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn)
             ->setName('claimed-tasks');
         
         $app->get(
-            "/user/:user_id/recent/tasks/paged/:page_no/",
+            '/user/:user_id/recent/tasks/paged/:page_no/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:recentTasks')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('recent-tasks-paged');
         
         $app->get(
-            "/user/:user_id/recent/tasks",
+            '/user/:user_id/recent/tasks',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:recentTasks')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('recent-tasks');
         
         $app->get(
-            "/user/:user_id/claimed/tasks/paged/:page_no/tt/:tt/ts/:ts/o/:o/",
+            '/user/:user_id/claimed/tasks/paged/:page_no/tt/:tt/ts/:ts/o/:o/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:claimedTasks')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('claimed-tasks-paged');
 
         $app->get(
-            "/task/:task_id/download-task-latest-file/",
+            '/task/:task_id/download-task-latest-file/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:downloadTaskLatestVersion')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForTaskDownload')
             ->setName('download-task-latest-version');
 
         $app->get(
-            "/task/:task_id/mark-archived/",
+            '/task/:task_id/mark-archived/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:archiveTask')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgTask')
             ->setName('archive-task');
 
         $app->get(
-            "/task/:task_id/download-file-user/",
+            '/task/:task_id/download-file-user/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:downloadTask')
             ->setName('download-task');
 
@@ -71,31 +71,31 @@ class TaskRouteHandler
             ->setName('download-task-external');
 
         $app->map(['GET', 'POST'],
-            "/task/:task_id/claim/",
+            '/task/:task_id/claim/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:taskClaim')
             ->add('\SolasMatch\UI\Lib\Middleware:isBlackListed')
             ->setName('task-claim-page');
 
         $app->get(
-            "/task/:task_id/claimed/",
+            '/task/:task_id/claimed/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:taskClaimed')
             ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
             ->setName('task-claimed');
 
         $app->get(
-            "/task/:task_id/download-file/v/:version/",
+            '/task/:task_id/download-file/v/:version/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:downloadTaskVersion')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForTaskDownload')
             ->setName('download-task-version');
 
         $app->map(['GET', 'POST'],
-            "/task/:task_id/id/",
+            '/task/:task_id/id/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:task')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('task');
 
         $app->map(['GET', 'POST'],
-            "/task/:task_id/simple-upload/",
+            '/task/:task_id/simple-upload/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:taskSimpleUpload')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
@@ -109,7 +109,7 @@ class TaskRouteHandler
             ->setName('task-chunk-complete');
 
         $app->get(
-            "/task/:task_id/uploaded/",
+            '/task/:task_id/uploaded/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:taskUploaded')
             ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
             ->setName('task-uploaded');
@@ -121,55 +121,55 @@ class TaskRouteHandler
             ->setName('task-chunk-completed');
 
         $app->map(['GET', 'POST'],
-            "/task/:task_id/alter/",
+            '/task/:task_id/alter/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:taskAlter')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgTask')
             ->setName('task-alter');
 
         $app->map(['GET', 'POST'],
-            "/task/:task_id/view/",
+            '/task/:task_id/view/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:taskView')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('task-view');
 
         $app->map(['GET', 'POST'],
-            "/task/:task_id/search_translators/",
+            '/task/:task_id/search_translators/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:task_search_translators')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('task-search_translators');
 
         $app->map(['GET', 'POST'],
-            "/task/:task_id/task_invites_sent/:sesskey/",
+            '/task/:task_id/task_invites_sent/:sesskey/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:task_invites_sent')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('task-invites_sent');
 
         $app->map(['GET', 'POST'],
-            "/project/:project_id/create-task/",
+            '/project/:project_id/create-task/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:taskCreate')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgProject')
             ->setName('task-create');
 
         $app->get(
-            "/task/:task_id/created/",
+            '/task/:task_id/created/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:taskCreated')
             ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
             ->setName('task-created');
 
         $app->map(['GET', 'POST'],
-            "/task/:task_id/org-feedback/",
+            '/task/:task_id/org-feedback/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:taskOrgFeedback')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgTask')
             ->setName('task-org-feedback');
 
         $app->map(['GET', 'POST'],
-            "/task/:task_id/user-feedback/",
+            '/task/:task_id/user-feedback/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:taskUserFeedback')
             ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
             ->setName('task-user-feedback');
 
         $app->map(['GET', 'POST'],
-            "/task/:task_id/review/",
+            '/task/:task_id/review/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:taskReview')
             ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
             ->setName('task-review');

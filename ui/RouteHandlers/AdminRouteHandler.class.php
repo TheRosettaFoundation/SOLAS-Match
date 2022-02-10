@@ -15,7 +15,7 @@ class AdminRouteHandler
         global $app;
                           
         $app->map(['GET', 'POST'],
-            "/admin/",
+            '/admin/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:adminDashboard')
             ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('site-admin-dashboard');

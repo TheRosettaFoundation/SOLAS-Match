@@ -17,25 +17,25 @@ class StaticRouteHandler
         $app->get('/static/statistics/', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:statistics')
             ->setName('statistics');
 
-        $app->get("/static/privacy/", '\SolasMatch\UI\RouteHandlers\UserRouteHandler:privacy')
+        $app->get('/static/privacy/', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:privacy')
             ->setName('privacy');
 
-        $app->get("/static/terms/", '\SolasMatch\UI\RouteHandlers\UserRouteHandler:terms')
+        $app->get('/static/terms/', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:terms')
             ->setName('terms');
 
-        $app->get("/static/videos/", '\SolasMatch\UI\RouteHandlers\UserRouteHandler:videos')
+        $app->get('/static/videos/', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:videos')
             ->setName('videos');
 
         $app->map(['GET', 'POST'], '/static/siteLanguage/', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:siteLanguage')
             ->setName('siteLanguage');
 
-        $app->get("/static/getDefaultStrings/", '\SolasMatch\UI\RouteHandlers\UserRouteHandler:getDefaultStrings')
+        $app->get('/static/getDefaultStrings/', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:getDefaultStrings')
             ->setName('staticGetDefaultStrings');
 
-        $app->get("/static/getUserStrings/", '\SolasMatch\UI\RouteHandlers\UserRouteHandler:getUserStrings')
+        $app->get('/static/getUserStrings/', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:getUserStrings')
             ->setName('staticGetUserStrings');
 
-        $app->get("/static/getUserHash/", '\SolasMatch\UI\RouteHandlers\UserRouteHandler:getUserHash')
+        $app->get('/static/getUserHash/', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:getUserHash')
             ->setName('staticGetUserHash');
     }
 

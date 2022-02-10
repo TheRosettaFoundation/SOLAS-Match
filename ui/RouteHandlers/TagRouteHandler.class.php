@@ -15,19 +15,19 @@ class TagRouteHandler
         global $app;
 
         $app->map(['GET', 'POST'],
-            "/all/tags/",
+            '/all/tags/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:tagsList')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('tags-list');
 
         $app->map(['GET', 'POST'],
-            "/tag/:id/:subscribe/:sesskey/",
+            '/tag/:id/:subscribe/:sesskey/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:tagSubscribe')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('tag-subscribe');
         
         $app->map(['GET', 'POST'],
-            "/tag/:id/",
+            '/tag/:id/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:tagDetails')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('tag-details');

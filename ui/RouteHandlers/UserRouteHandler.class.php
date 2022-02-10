@@ -49,17 +49,17 @@ class UserRouteHandler
             ->setName('memsource_hook');
 ]]]
         $app->map(['GET', 'POST'],
-            "/",
+            '/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:home')
             ->setName('home');
 
         $app->map(['GET', 'POST'],
-            "/paged/:page_no/tt/:tt/sl/:sl/tl/:tl/",
+            '/paged/:page_no/tt/:tt/sl/:sl/tl/:tl/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:home')
             ->setName('home-paged');
 
         $app->map(['GET', 'POST'],
-            "/register/",
+            '/register/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:register')
             ->setName('register');
 
@@ -69,32 +69,32 @@ class UserRouteHandler
             ->setName('register_track');
 
         $app->map(['GET', 'POST'],
-            "/:user_id/change_email/",
+            '/:user_id/change_email/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:changeEmail')
             ->setName('change-email');
 
         $app->map(['GET', 'POST'],
-            "/user/:uuid/verification/",
+            '/user/:uuid/verification/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:emailVerification')
             ->setName('email-verification');
 
         $app->map(['GET', 'POST'],
-            "/:uid/password/reset/",
+            '/:uid/password/reset/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:passwordReset')
             ->setName('password-reset');
 
         $app->map(['GET', 'POST'],
-            "/password/reset/",
+            '/password/reset/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:passResetRequest')
             ->setName('password-reset-request');
 
         $app->get(
-            "/logout/",
+            '/logout/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:logout')
             ->setName('logout');
 
         $app->map(['GET', 'POST'],
-            "/login/",
+            '/login/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:login')
             ->setName('login');
 
@@ -104,7 +104,7 @@ class UserRouteHandler
             ->setName('loggedin');
 
         $app->map(['GET', 'POST'],
-            "/:user_id/profile/",
+            '/:user_id/profile/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userPublicProfile')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('user-public-profile');
@@ -115,13 +115,13 @@ class UserRouteHandler
             ->setName('shared_with_key');
 
         $app->map(['GET', 'POST'],
-            "/:user_id/privateProfile/",
+            '/:user_id/privateProfile/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userPrivateProfile')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedInNoProfile')
             ->setName('user-private-profile');
 
         $app->map(['GET', 'POST'],
-            "/:user_id/googleregister/",
+            '/:user_id/googleregister/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:googleregister')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedInNoProfile')
             ->setName('googleregister');
@@ -187,13 +187,13 @@ class UserRouteHandler
             ->setName('download_users_new_unreviewed');
 
         $app->map(['GET', 'POST'],
-            "/:user_id/notification/stream/",
+            '/:user_id/notification/stream/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:editTaskStreamNotification')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('stream-notification-edit');
 
         $app->map(['GET', 'POST'],
-            "/user/task/:task_id/reviews/",
+            '/user/task/:task_id/reviews/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userTaskReviews')
             ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
             ->setName('user-task-reviews');
