@@ -22,6 +22,9 @@ class UserRouteHandler
         global $app;
 
 [[[
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn'),
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+
         $app->get('/v4[/]', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:test')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('home');
@@ -103,7 +106,7 @@ class UserRouteHandler
         $app->map(['GET', 'POST'],
             "/:user_id/profile/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userPublicProfile')
-            array($middleware, 'authUserIsLoggedIn'),
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('user-public-profile');
 
         $app->get(
@@ -114,85 +117,85 @@ class UserRouteHandler
         $app->map(['GET', 'POST'],
             "/:user_id/privateProfile/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userPrivateProfile')
-            array($middleware, "authUserIsLoggedInNoProfile"),
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedInNoProfile')
             ->setName('user-private-profile');
 
         $app->map(['GET', 'POST'],
             "/:user_id/googleregister/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:googleregister')
-            array($middleware, "authUserIsLoggedInNoProfile"),
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedInNoProfile')
             ->setName('googleregister');
 
         $app->map(['GET', 'POST'],
             '/:user_id/user-code-of-conduct/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userCodeOfConduct')
-            array($middleware, 'authUserIsLoggedInNoProfile'),
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedInNoProfile')
             ->setName('user-code-of-conduct');
 
         $app->map(['GET', 'POST'],
             '/:user_id/user-uploads/:cert_id/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userUploads')
-            array($middleware, 'authUserIsLoggedInNoProfile'),
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedInNoProfile')
             ->setName('user-uploads');
 
         $app->get(
             '/:id/user-download/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userDownload')
-            array($middleware, 'authUserIsLoggedIn'),
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('user-download');
 
         $app->get(
             '/users_review/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:users_review')
-            array($middleware, 'authIsSiteAdmin'),
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('users_review');
 
         $app->map(['GET', 'POST'],
             '/users_new/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:users_new')
-            array($middleware, 'authIsSiteAdmin'),
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('users_new');
 
         $app->get(
             '/users_tracked/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:users_tracked')
-            array($middleware, 'authIsSiteAdmin'),
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('users_tracked');
 
         $app->map(['GET', 'POST'],
             '/add_tracking_code/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:add_tracking_code')
-            array($middleware, 'authIsSiteAdmin'),
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('add_tracking_code');
 
         $app->get(
             '/download_users_tracked/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_users_tracked')
-            array($middleware, 'authIsSiteAdmin'),
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('download_users_tracked');
 
         $app->get(
             '/download_users_new/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_users_new')
-            array($middleware, 'authIsSiteAdmin'),
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('download_users_new');
 
         $app->get(
             '/download_users_new_unreviewed/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_users_new_unreviewed')
-            array($middleware, 'authIsSiteAdmin'),
+            ->add('\SolasMatch\UI\Lib\Middleware:authIsSiteAdmin')
             ->setName('download_users_new_unreviewed');
 
         $app->map(['GET', 'POST'],
             "/:user_id/notification/stream/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:editTaskStreamNotification')
-            array($middleware, "authUserIsLoggedIn"),
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('stream-notification-edit');
 
         $app->map(['GET', 'POST'],
             "/user/task/:task_id/reviews/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userTaskReviews')
-            array($middleware, "authenticateUserForTask"),
+            ->add('\SolasMatch\UI\Lib\Middleware:authenticateUserForTask')
             ->setName('user-task-reviews');
 
         $app->get(

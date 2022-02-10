@@ -17,7 +17,7 @@ class BadgeRouteHandler
         $app->get(
             "/badge/list/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:badgeList')
-            array($middleware, "authUserIsLoggedIn"),
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('badge-list');
     }
 
