@@ -16,14 +16,14 @@ class OrgRouteHandler
     {
         global $app;
 
-        $app->get(
+        $app->map(['GET', 'POST'],
             "/org/create/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:createOrg')
         )->via("POST")->name("create-org");
             array($middleware, "authUserIsLoggedIn"),
             ->setName('create-org');
 
-        $app->get(
+        $app->map(['GET', 'POST'],
             "/org/dashboard/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:orgDashboard')
         )->via("POST")->name("org-dashboard");
@@ -44,49 +44,49 @@ class OrgRouteHandler
             array($middleware, "authUserIsLoggedIn"),
             ->setName('org-request-membership');
 
-        $app->get(
+        $app->map(['GET', 'POST'],
             "/org/:org_id/request/queue/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:orgRequestQueue')
         )->via("POST")->name("org-request-queue");
             array($middleware, "authUserForOrg"),
             ->setName('org-request-queue');
 
-        $app->get(
+        $app->map(['GET', 'POST'],
             "/org/:org_id/private/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:orgPrivateProfile')
         )->via("POST")->name("org-private-profile");
             array($middleware, "authUserForOrg"),
             ->setName('org-private-profile');
 
-        $app->get(
+        $app->map(['GET', 'POST'],
             "/org/:org_id/profile/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:orgPublicProfile')
         )->via("POST")->name("org-public-profile");
             array($middleware, "authUserIsLoggedIn"),
             ->setName('org-public-profile');
 
-        $app->get(
+        $app->map(['GET', 'POST'],
             "/org/:org_id/manage/:badge_id/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:orgManageBadge')
         )->via("POST")->name("org-manage-badge");
             array($middleware, "authUserForOrg"),
             ->setName('org-manage-badge');
 
-        $app->get(
+        $app->map(['GET', 'POST'],
             "/org/:org_id/create/badge/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:orgCreateBadge')
         )->via("POST")->name("org-create-badge");
             array($middleware, "authUserForOrg"),
             ->setName('org-create-badge');
 
-        $app->get(
+        $app->map(['GET', 'POST'],
             "/org/search/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:orgSearch')
         )->via("POST")->name("org-search");
             array($middleware, "authUserIsLoggedIn"),
             ->setName('org-search');
         
-        $app->get(
+        $app->map(['GET', 'POST'],
             "/org/:org_id/edit/:badge_id/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:orgEditBadge')
         )->via("POST")->name("org-edit-badge");
@@ -100,7 +100,7 @@ class OrgRouteHandler
             array($middleware, "authUserForOrg"),
             ->setName('org-task-complete');
 
-        $app->get(
+        $app->map(['GET', 'POST'],
             "/org/:org_id/task/:task_id/review/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:orgTaskReview')
         )->via("POST")->name("org-task-review");

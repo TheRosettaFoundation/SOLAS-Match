@@ -26,7 +26,7 @@ class StaticRouteHandler
         $app->get("/static/videos/", '\SolasMatch\UI\RouteHandlers\UserRouteHandler:videos'))->name("videos");
             ->setName('videos');
 
-        $app->get("/static/siteLanguage/", '\SolasMatch\UI\RouteHandlers\UserRouteHandler:siteLanguage'))->via("POST")->name("siteLanguage");
+        $app->map(['GET', 'POST'],"/static/siteLanguage/", '\SolasMatch\UI\RouteHandlers\UserRouteHandler:siteLanguage'))->via("POST")->name("siteLanguage");
             ->setName('siteLanguage');
 
         $app->get("/static/getDefaultStrings/", '\SolasMatch\UI\RouteHandlers\UserRouteHandler:getDefaultStrings'))->name("staticGetDefaultStrings");
