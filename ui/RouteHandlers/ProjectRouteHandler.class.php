@@ -5,6 +5,8 @@ namespace SolasMatch\UI\RouteHandlers;
 use \SolasMatch\UI\DAO as DAO;
 use \SolasMatch\UI\Lib as Lib;
 use \SolasMatch\Common as Common;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 require_once __DIR__."/../../Common/Enums/TaskTypeEnum.class.php";
 require_once __DIR__."/../../Common/Enums/TaskStatusEnum.class.php";
@@ -15,72 +17,71 @@ class ProjectRouteHandler
 {
     public function init()
     {
-        $app = \Slim\Slim::getInstance();
-        $middleware = new Lib\Middleware();
+        global $app;
+
+        $app->map(['GET', 'POST'],
+            '/project/:project_id/view/',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:projectView')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('project-view');
+
+        $app->map(['GET', 'POST'],
+            '/project/:project_id/alter/',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:projectAlter')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgProject')
+            ->setName('project-alter');
+
+        $app->map(['GET', 'POST'],
+            '/project/:org_id/create/',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:projectCreate')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
+            ->setName('project-create');
 
         $app->get(
-            "/project/:project_id/view/",
-            array($middleware, "authUserIsLoggedIn"),
-            array($this, "projectView")
-        )->via("POST")->name("project-view");
+            '/project/id/:project_id/created/',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:projectCreated')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgProject')
+            ->setName('project-created');
 
         $app->get(
-            "/project/:project_id/alter/",
-            array($middleware, "authUserForOrgProject"),
-            array($this, "projectAlter")
-        )->via("POST")->name("project-alter");
+            '/project/id/:project_id/mark-archived/:sesskey/',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:archiveProject')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgProject')
+            ->setName('archive-project');
 
         $app->get(
-            "/project/:org_id/create/",
-            array($middleware, "authUserForOrg"),
-            array($this, "projectCreate")
-        )->via("GET", "POST")->name("project-create");
+            '/project/:project_id/file/',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:downloadProjectFile')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('download-project-file');
 
         $app->get(
-            "/project/id/:project_id/created/",
-            array($middleware, "authUserForOrgProject"),
-            array($this, "projectCreated")
-        )->name("project-created");
+            '/project/:project_id/image/',
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:downloadProjectImageFile')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserForProjectImage')
+            ->setName('download-project-image');
 
-        $app->get(
-            "/project/id/:project_id/mark-archived/:sesskey/",
-            array($middleware, "authUserForOrgProject"),
-            array($this, "archiveProject")
-        )->name("archive-project");
-
-        $app->get(
-            "/project/:project_id/file/",
-            array($middleware, "authUserIsLoggedIn"),
-            array($this, "downloadProjectFile")
-        )->name("download-project-file");
-
-        $app->get(
-            "/project/:project_id/image/",
-            array($middleware, "authUserForProjectImage"),
-            array($this, "downloadProjectImageFile")
-        )->name("download-project-image");
-
-        $app->get("/project/:project_id/test/", array($this, "test"));
+        $app->get('/project/:project_id/test/', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:test'));
 
         $app->get(
             '/project_cron_1_minute/',
-            array($this, 'project_cron_1_minute')
-        )->name('project_cron_1_minute');
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:project_cron_1_minute')
+            ->setName('project_cron_1_minute');
 
         $app->get(
             '/task_cron_1_minute/',
-            array($this, 'task_cron_1_minute')
-        )->name('task_cron_1_minute');
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:task_cron_1_minute')
+            ->setName('task_cron_1_minute');
 
         $app->get(
             '/project/:project_id/getwordcount/',
-            array($this, 'project_get_wordcount')
-        )->name('project_get_wordcount');
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:project_get_wordcount')
+            ->setName('project_get_wordcount');
 
-        $app->get(
+        $app->map(['GET', 'POST'],
             '/memsource_hook/',
-            array($this, 'memsourceHook')
-        )->via("POST")->name('memsource_hook');
+            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:memsourceHook')
+            ->setName('memsource_hook');
     }
 
     public function memsourceHook()

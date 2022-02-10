@@ -22,31 +22,12 @@ class UserRouteHandler
         global $app;
 
 [[[
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn'),
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
-
         $app->get('/v4[/]', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:test')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
-            ->setName('home');
-
         $app->get('/v4/login[/]', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:login')
-            ->setName('login');
-
-        $app->get('/v4/logout[/]', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:logout')
-            ->setName('logout');
-
         $app->map(['GET', 'POST'], '/v4/testpost/{user_id}[/]', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:testpost')
-            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
-            ->setName('testpost');
-
         $app->get('/v4/downloadx[/]', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:downloadx')
-            ->setName('downloadx');
-
         $app->get('/v4/testref[/]', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:testref')
-            ->setName('testref');
-
         $app->map(['GET', 'POST'], '/v4/memsource_hook', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:test')
-            ->setName('memsource_hook');
 ]]]
         $app->map(['GET', 'POST'],
             '/',
