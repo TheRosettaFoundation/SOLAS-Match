@@ -89,9 +89,9 @@ class UserRouteHandler
 
         $app->get(
             "/:user_id/profile/",
-            array($middleware, 'authUserIsLoggedIn'),
             array($this, "userPublicProfile")
         )->via("POST")->name("user-public-profile");
+            array($middleware, 'authUserIsLoggedIn'),
             ->setName('user-public-profile');
 
         $app->get(
@@ -102,100 +102,100 @@ class UserRouteHandler
 
         $app->get(
             "/:user_id/privateProfile/",
-            array($middleware, "authUserIsLoggedInNoProfile"),
             array($this, "userPrivateProfile")
         )->via("POST")->name("user-private-profile");
+            array($middleware, "authUserIsLoggedInNoProfile"),
             ->setName('user-private-profile');
 
         $app->get(
             "/:user_id/googleregister/",
-            array($middleware, "authUserIsLoggedInNoProfile"),
             array($this, "googleregister")
         )->via("POST")->name("googleregister");
+            array($middleware, "authUserIsLoggedInNoProfile"),
             ->setName('googleregister');
 
         $app->get(
             '/:user_id/user-code-of-conduct/',
-            array($middleware, 'authUserIsLoggedInNoProfile'),
             array($this, 'userCodeOfConduct')
         )->via("POST")->name('user-code-of-conduct');
+            array($middleware, 'authUserIsLoggedInNoProfile'),
             ->setName('user-code-of-conduct');
 
         $app->get(
             '/:user_id/user-uploads/:cert_id/',
-            array($middleware, 'authUserIsLoggedInNoProfile'),
             array($this, 'userUploads')
         )->via("POST")->name('user-uploads');
+            array($middleware, 'authUserIsLoggedInNoProfile'),
             ->setName('user-uploads');
 
         $app->get(
             '/:id/user-download/',
-            array($middleware, 'authUserIsLoggedIn'),
             array($this, 'userDownload')
         )->name('user-download');
+            array($middleware, 'authUserIsLoggedIn'),
             ->setName('user-download');
 
         $app->get(
             '/users_review/',
-            array($middleware, 'authIsSiteAdmin'),
             array($this, 'users_review')
         )->name('users_review');
+            array($middleware, 'authIsSiteAdmin'),
             ->setName('users_review');
 
         $app->get(
             '/users_new/',
-            array($middleware, 'authIsSiteAdmin'),
             array($this, 'users_new')
         )->via('POST')->name('users_new');
+            array($middleware, 'authIsSiteAdmin'),
             ->setName('users_new');
 
         $app->get(
             '/users_tracked/',
-            array($middleware, 'authIsSiteAdmin'),
             array($this, 'users_tracked')
         )->name('users_tracked');
+            array($middleware, 'authIsSiteAdmin'),
             ->setName('users_tracked');
 
         $app->get(
             '/add_tracking_code/',
-            array($middleware, 'authIsSiteAdmin'),
             array($this, 'add_tracking_code')
         )->via('POST')->name('add_tracking_code');
+            array($middleware, 'authIsSiteAdmin'),
             ->setName('add_tracking_code');
 
         $app->get(
             '/download_users_tracked/',
-            array($middleware, 'authIsSiteAdmin'),
             array($this, 'download_users_tracked')
         )->name('download_users_tracked');
+            array($middleware, 'authIsSiteAdmin'),
             ->setName('download_users_tracked');
 
         $app->get(
             '/download_users_new/',
-            array($middleware, 'authIsSiteAdmin'),
             array($this, 'download_users_new')
         )->name('download_users_new');
+            array($middleware, 'authIsSiteAdmin'),
             ->setName('download_users_new');
 
         $app->get(
             '/download_users_new_unreviewed/',
-            array($middleware, 'authIsSiteAdmin'),
             array($this, 'download_users_new_unreviewed')
         )->name('download_users_new_unreviewed');
+            array($middleware, 'authIsSiteAdmin'),
             ->setName('download_users_new_unreviewed');
 
         $app->get(
             "/:user_id/notification/stream/",
-            array($middleware, "authUserIsLoggedIn"),
             array($this, "editTaskStreamNotification")
         )->via("POST")->name("stream-notification-edit");
+            array($middleware, "authUserIsLoggedIn"),
             ->setName('stream-notification-edit');
 
         $app->get(
             "/user/task/:task_id/reviews/",
-            array($middleware, "authenticateUserForTask"),
             array($this, "userTaskReviews")
         )->via('POST')->name('user-task-reviews');
+            array($middleware, "authenticateUserForTask"),
             ->setName('user-task-reviews');
 
         $app->get(
