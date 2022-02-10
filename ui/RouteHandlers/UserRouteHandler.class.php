@@ -21,21 +21,45 @@ class UserRouteHandler
     {
         global $app;
 
+[[[
+        $app->get('/v4[/]', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:test')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('home');
+
+        $app->get('/v4/login[/]', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:login')
+            ->setName('login');
+
+        $app->get('/v4/logout[/]', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:logout')
+            ->setName('logout');
+
+        $app->map(['GET', 'POST'], '/v4/testpost/{user_id}[/]', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:testpost')
+            ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
+            ->setName('testpost');
+
+        $app->get('/v4/downloadx[/]', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:downloadx')
+            ->setName('downloadx');
+
+        $app->get('/v4/testref[/]', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:testref')
+            ->setName('testref');
+
+        $app->map(['GET', 'POST'], '/v4/memsource_hook', '\SolasMatch\UI\RouteHandlers\UserRouteHandler:test')
+            ->setName('memsource_hook');
+]]]
         $app->get(
             "/",
-            array($this, "home")
+            array($this, "home')
         )->via("POST")->name("home");
             ->setName('home');
 
         $app->get(
             "/paged/:page_no/tt/:tt/sl/:sl/tl/:tl/",
-            array($this, "home")
+            array($this, "home')
         )->via("POST")->name("home-paged");
             ->setName('home-paged');
 
         $app->get(
             "/register/",
-            array($this, "register")
+            array($this, "register')
         )->via("GET", "POST")->name("register");
             ->setName('register');
 
@@ -47,7 +71,7 @@ class UserRouteHandler
 
         $app->get(
             "/:user_id/change_email/",
-            array($this, "changeEmail")
+            array($this, "changeEmail')
         )->via("GET", "POST")->name("change-email");
             ->setName('change-email');
 
@@ -59,57 +83,57 @@ class UserRouteHandler
 
         $app->get(
             "/:uid/password/reset/",
-            array($this, "passwordReset")
+            array($this, "passwordReset')
         )->via("POST")->name("password-reset");
             ->setName('password-reset');
 
         $app->get(
             "/password/reset/",
-            array($this, "passResetRequest")
+            array($this, "passResetRequest')
         )->via("POST")->name("password-reset-request");
             ->setName('password-reset-request');
 
         $app->get(
             "/logout/",
-            array($this, "logout")
+            array($this, "logout')
         )->name("logout");
             ->setName('logout');
 
         $app->get(
             "/login/",
-            array($this, "login")
+            array($this, "login')
         )->via("GET", "POST")->name("login");
             ->setName('login');
 
         $app->get(
             '/loggedin/',
-            array($this, "login_proz")
+            array($this, "login_proz')
         )->via('GET', 'POST')->name('loggedin');
             ->setName('loggedin');
 
         $app->get(
             "/:user_id/profile/",
-            array($this, "userPublicProfile")
+            array($this, "userPublicProfile')
         )->via("POST")->name("user-public-profile");
             array($middleware, 'authUserIsLoggedIn'),
             ->setName('user-public-profile');
 
         $app->get(
             '/:key/key/',
-            array($this, "profile_shared_with_key")
+            array($this, "profile_shared_with_key')
         )->name('shared_with_key');
             ->setName('shared_with_key');
 
         $app->get(
             "/:user_id/privateProfile/",
-            array($this, "userPrivateProfile")
+            array($this, "userPrivateProfile')
         )->via("POST")->name("user-private-profile");
             array($middleware, "authUserIsLoggedInNoProfile"),
             ->setName('user-private-profile');
 
         $app->get(
             "/:user_id/googleregister/",
-            array($this, "googleregister")
+            array($this, "googleregister')
         )->via("POST")->name("googleregister");
             array($middleware, "authUserIsLoggedInNoProfile"),
             ->setName('googleregister');
@@ -186,14 +210,14 @@ class UserRouteHandler
 
         $app->get(
             "/:user_id/notification/stream/",
-            array($this, "editTaskStreamNotification")
+            array($this, "editTaskStreamNotification')
         )->via("POST")->name("stream-notification-edit");
             array($middleware, "authUserIsLoggedIn"),
             ->setName('stream-notification-edit');
 
         $app->get(
             "/user/task/:task_id/reviews/",
-            array($this, "userTaskReviews")
+            array($this, "userTaskReviews')
         )->via('POST')->name('user-task-reviews');
             array($middleware, "authenticateUserForTask"),
             ->setName('user-task-reviews');
