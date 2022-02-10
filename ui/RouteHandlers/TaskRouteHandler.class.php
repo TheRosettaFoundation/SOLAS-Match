@@ -199,12 +199,6 @@ class TaskRouteHandler
         )->via("POST")->name("task-review");
             array($middleware, "authenticateUserForTask"),
             ->setName('task-review');
-
-        $app->get(
-            Common\Lib\Settings::get("site.api"),
-        )->name("api");
-            array($middleware, "authUserForOrgTask")
-            ->setName('api');
     }
 
     public function archivedTasks($page_no)
