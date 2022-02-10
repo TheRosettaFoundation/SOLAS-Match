@@ -20,64 +20,64 @@ class ProjectRouteHandler
         global $app;
 
         $app->map(['GET', 'POST'],
-            '/project/{project_id}/view/',
+            '/project/{project_id}/view[/]',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:projectView')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('project-view');
 
         $app->map(['GET', 'POST'],
-            '/project/{project_id}/alter/',
+            '/project/{project_id}/alter[/]',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:projectAlter')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgProject')
             ->setName('project-alter');
 
         $app->map(['GET', 'POST'],
-            '/project/{org_id}/create/',
+            '/project/{org_id}/create[/]',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:projectCreate')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrg')
             ->setName('project-create');
 
         $app->get(
-            '/project/id/{project_id}/created/',
+            '/project/id/{project_id}/created[/]',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:projectCreated')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgProject')
             ->setName('project-created');
 
         $app->get(
-            '/project/id/{project_id}/mark-archived/{sesskey}/',
+            '/project/id/{project_id}/mark-archived/{sesskey}[/]',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:archiveProject')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForOrgProject')
             ->setName('archive-project');
 
         $app->get(
-            '/project/{project_id}/file/',
+            '/project/{project_id}/file[/]',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:downloadProjectFile')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserIsLoggedIn')
             ->setName('download-project-file');
 
         $app->get(
-            '/project/{project_id}/image/',
+            '/project/{project_id}/image[/]',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:downloadProjectImageFile')
             ->add('\SolasMatch\UI\Lib\Middleware:authUserForProjectImage')
             ->setName('download-project-image');
 
         $app->get(
-            '/project_cron_1_minute/',
+            '/project_cron_1_minute',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:project_cron_1_minute')
             ->setName('project_cron_1_minute');
 
         $app->get(
-            '/task_cron_1_minute/',
+            '/task_cron_1_minute',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:task_cron_1_minute')
             ->setName('task_cron_1_minute');
 
         $app->get(
-            '/project/{project_id}/getwordcount/',
+            '/project/{project_id}/getwordcount[/]',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:project_get_wordcount')
             ->setName('project_get_wordcount');
 
         $app->map(['GET', 'POST'],
-            '/memsource_hook/',
+            '/memsource_hook',
             '\SolasMatch\UI\RouteHandlers\ProjectRouteHandler:memsourceHook')
             ->setName('memsource_hook');
     }

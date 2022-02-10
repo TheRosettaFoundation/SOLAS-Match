@@ -14,28 +14,28 @@ class StaticRouteHandler
     {
         global $app;
 
-        $app->get('/static/statistics/', '\SolasMatch\UI\RouteHandlers\StaticRouteHandler:statistics')
+        $app->get('/static/statistics[/]', '\SolasMatch\UI\RouteHandlers\StaticRouteHandler:statistics')
             ->setName('statistics');
 
-        $app->get('/static/privacy/', '\SolasMatch\UI\RouteHandlers\StaticRouteHandler:privacy')
+        $app->get('/static/privacy[/]', '\SolasMatch\UI\RouteHandlers\StaticRouteHandler:privacy')
             ->setName('privacy');
 
-        $app->get('/static/terms/', '\SolasMatch\UI\RouteHandlers\StaticRouteHandler:terms')
+        $app->get('/static/terms[/]', '\SolasMatch\UI\RouteHandlers\StaticRouteHandler:terms')
             ->setName('terms');
 
-        $app->get('/static/videos/', '\SolasMatch\UI\RouteHandlers\StaticRouteHandler:videos')
+        $app->get('/static/videos[/]', '\SolasMatch\UI\RouteHandlers\StaticRouteHandler:videos')
             ->setName('videos');
 
-        $app->map(['GET', 'POST'], '/static/siteLanguage/', '\SolasMatch\UI\RouteHandlers\StaticRouteHandler:siteLanguage')
+        $app->map(['GET', 'POST'], '/static/siteLanguage[/]', '\SolasMatch\UI\RouteHandlers\StaticRouteHandler:siteLanguage')
             ->setName('siteLanguage');
 
-        $app->get('/static/getDefaultStrings/', '\SolasMatch\UI\RouteHandlers\StaticRouteHandler:getDefaultStrings')
+        $app->get('/static/getDefaultStrings[/]', '\SolasMatch\UI\RouteHandlers\StaticRouteHandler:getDefaultStrings')
             ->setName('staticGetDefaultStrings');
 
-        $app->get('/static/getUserStrings/', '\SolasMatch\UI\RouteHandlers\StaticRouteHandler:getUserStrings')
+        $app->get('/static/getUserStrings[/]', '\SolasMatch\UI\RouteHandlers\StaticRouteHandler:getUserStrings')
             ->setName('staticGetUserStrings');
 
-        $app->get('/static/getUserHash/', '\SolasMatch\UI\RouteHandlers\StaticRouteHandler:getUserHash')
+        $app->get('/static/getUserHash[/]', '\SolasMatch\UI\RouteHandlers\StaticRouteHandler:getUserHash')
             ->setName('staticGetUserHash');
     }
 
