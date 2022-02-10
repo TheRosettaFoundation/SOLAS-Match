@@ -48,196 +48,166 @@ class UserRouteHandler
         $app->map(['GET', 'POST'],
             "/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:home')
-        )->via("POST")->name("home");
             ->setName('home');
 
         $app->map(['GET', 'POST'],
             "/paged/:page_no/tt/:tt/sl/:sl/tl/:tl/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:home')
-        )->via("POST")->name("home-paged");
             ->setName('home-paged');
 
         $app->map(['GET', 'POST'],
             "/register/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:register')
-        )->via("GET", "POST")->name("register");
             ->setName('register');
 
         $app->map(['GET', 'POST'],
             '/register_track/:track_code/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:register')
-        )->via('GET', 'POST')->name('register_track');
             ->setName('register_track');
 
         $app->map(['GET', 'POST'],
             "/:user_id/change_email/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:changeEmail')
-        )->via("GET", "POST")->name("change-email");
             ->setName('change-email');
 
         $app->map(['GET', 'POST'],
             "/user/:uuid/verification/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:emailVerification')
-        )->via('POST')->name('email-verification');
             ->setName('email-verification');
 
         $app->map(['GET', 'POST'],
             "/:uid/password/reset/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:passwordReset')
-        )->via("POST")->name("password-reset");
             ->setName('password-reset');
 
         $app->map(['GET', 'POST'],
             "/password/reset/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:passResetRequest')
-        )->via("POST")->name("password-reset-request");
             ->setName('password-reset-request');
 
         $app->get(
             "/logout/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:logout')
-        )->name("logout");
             ->setName('logout');
 
         $app->map(['GET', 'POST'],
             "/login/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:login')
-        )->via("GET", "POST")->name("login");
             ->setName('login');
 
         $app->map(['GET', 'POST'],
             '/loggedin/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:login_proz')
-        )->via('GET', 'POST')->name('loggedin');
             ->setName('loggedin');
 
         $app->map(['GET', 'POST'],
             "/:user_id/profile/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userPublicProfile')
-        )->via("POST")->name("user-public-profile");
             array($middleware, 'authUserIsLoggedIn'),
             ->setName('user-public-profile');
 
         $app->get(
             '/:key/key/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:profile_shared_with_key')
-        )->name('shared_with_key');
             ->setName('shared_with_key');
 
         $app->map(['GET', 'POST'],
             "/:user_id/privateProfile/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userPrivateProfile')
-        )->via("POST")->name("user-private-profile");
             array($middleware, "authUserIsLoggedInNoProfile"),
             ->setName('user-private-profile');
 
         $app->map(['GET', 'POST'],
             "/:user_id/googleregister/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:googleregister')
-        )->via("POST")->name("googleregister");
             array($middleware, "authUserIsLoggedInNoProfile"),
             ->setName('googleregister');
 
         $app->map(['GET', 'POST'],
             '/:user_id/user-code-of-conduct/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userCodeOfConduct')
-        )->via("POST")->name('user-code-of-conduct');
             array($middleware, 'authUserIsLoggedInNoProfile'),
             ->setName('user-code-of-conduct');
 
         $app->map(['GET', 'POST'],
             '/:user_id/user-uploads/:cert_id/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userUploads')
-        )->via("POST")->name('user-uploads');
             array($middleware, 'authUserIsLoggedInNoProfile'),
             ->setName('user-uploads');
 
         $app->get(
             '/:id/user-download/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userDownload')
-        )->name('user-download');
             array($middleware, 'authUserIsLoggedIn'),
             ->setName('user-download');
 
         $app->get(
             '/users_review/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:users_review')
-        )->name('users_review');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('users_review');
 
         $app->map(['GET', 'POST'],
             '/users_new/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:users_new')
-        )->via('POST')->name('users_new');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('users_new');
 
         $app->get(
             '/users_tracked/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:users_tracked')
-        )->name('users_tracked');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('users_tracked');
 
         $app->map(['GET', 'POST'],
             '/add_tracking_code/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:add_tracking_code')
-        )->via('POST')->name('add_tracking_code');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('add_tracking_code');
 
         $app->get(
             '/download_users_tracked/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_users_tracked')
-        )->name('download_users_tracked');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('download_users_tracked');
 
         $app->get(
             '/download_users_new/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_users_new')
-        )->name('download_users_new');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('download_users_new');
 
         $app->get(
             '/download_users_new_unreviewed/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:download_users_new_unreviewed')
-        )->name('download_users_new_unreviewed');
             array($middleware, 'authIsSiteAdmin'),
             ->setName('download_users_new_unreviewed');
 
         $app->map(['GET', 'POST'],
             "/:user_id/notification/stream/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:editTaskStreamNotification')
-        )->via("POST")->name("stream-notification-edit");
             array($middleware, "authUserIsLoggedIn"),
             ->setName('stream-notification-edit');
 
         $app->map(['GET', 'POST'],
             "/user/task/:task_id/reviews/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:userTaskReviews')
-        )->via('POST')->name('user-task-reviews');
             array($middleware, "authenticateUserForTask"),
             ->setName('user-task-reviews');
 
         $app->get(
             '/no_application/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:no_application')
-        )->name('no_application');
             ->setName('no_application');
 
         $app->get(
             '/no_application_error/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:no_application_error')
-        )->name('no_application_error');
             ->setName('no_application_error');
 
         $app->get(
             '/native_languages/:term/search/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:native_languages')
-        )->name('native_languages');
             ->setName('native_languages');
     }
 

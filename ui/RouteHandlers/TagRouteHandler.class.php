@@ -17,21 +17,18 @@ class TagRouteHandler
         $app->map(['GET', 'POST'],
             "/all/tags/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:tagsList')
-        )->via("POST")->name("tags-list");
             array($middleware, "authUserIsLoggedIn"),
             ->setName('tags-list');
 
         $app->map(['GET', 'POST'],
             "/tag/:id/:subscribe/:sesskey/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:tagSubscribe')
-        )->via("POST")->name("tag-subscribe");
             array($middleware, "authUserIsLoggedIn"),
             ->setName('tag-subscribe');
         
         $app->map(['GET', 'POST'],
             "/tag/:id/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:tagDetails')
-        )->via("POST")->name("tag-details");
             array($middleware, "authUserIsLoggedIn"),
             ->setName('tag-details');
     }

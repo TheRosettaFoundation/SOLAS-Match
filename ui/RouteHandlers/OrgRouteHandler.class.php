@@ -19,98 +19,84 @@ class OrgRouteHandler
         $app->map(['GET', 'POST'],
             "/org/create/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:createOrg')
-        )->via("POST")->name("create-org");
             array($middleware, "authUserIsLoggedIn"),
             ->setName('create-org');
 
         $app->map(['GET', 'POST'],
             "/org/dashboard/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:orgDashboard')
-        )->via("POST")->name("org-dashboard");
             array($middleware, "authUserIsLoggedIn"),
             ->setName('org-dashboard');
 
         $app->get(
             '/org/:org_id/org_dashboard/',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:org_orgDashboard')
-        )->name('org-projects');
             array($middleware, "authUserIsLoggedIn"),
             ->setName('org-projects');
 
         $app->get(
             "/org/:org_id/request/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:orgRequestMembership')
-        )->name("org-request-membership");
             array($middleware, "authUserIsLoggedIn"),
             ->setName('org-request-membership');
 
         $app->map(['GET', 'POST'],
             "/org/:org_id/request/queue/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:orgRequestQueue')
-        )->via("POST")->name("org-request-queue");
             array($middleware, "authUserForOrg"),
             ->setName('org-request-queue');
 
         $app->map(['GET', 'POST'],
             "/org/:org_id/private/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:orgPrivateProfile')
-        )->via("POST")->name("org-private-profile");
             array($middleware, "authUserForOrg"),
             ->setName('org-private-profile');
 
         $app->map(['GET', 'POST'],
             "/org/:org_id/profile/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:orgPublicProfile')
-        )->via("POST")->name("org-public-profile");
             array($middleware, "authUserIsLoggedIn"),
             ->setName('org-public-profile');
 
         $app->map(['GET', 'POST'],
             "/org/:org_id/manage/:badge_id/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:orgManageBadge')
-        )->via("POST")->name("org-manage-badge");
             array($middleware, "authUserForOrg"),
             ->setName('org-manage-badge');
 
         $app->map(['GET', 'POST'],
             "/org/:org_id/create/badge/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:orgCreateBadge')
-        )->via("POST")->name("org-create-badge");
             array($middleware, "authUserForOrg"),
             ->setName('org-create-badge');
 
         $app->map(['GET', 'POST'],
             "/org/search/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:orgSearch')
-        )->via("POST")->name("org-search");
             array($middleware, "authUserIsLoggedIn"),
             ->setName('org-search');
         
         $app->map(['GET', 'POST'],
             "/org/:org_id/edit/:badge_id/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:orgEditBadge')
-        )->via("POST")->name("org-edit-badge");
             array($middleware, "authUserForOrg"),
             ->setName('org-edit-badge');
 
         $app->get(
             "/org/:org_id/task/:task_id/complete/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:orgTaskComplete')
-        )->name("org-task-complete");
             array($middleware, "authUserForOrg"),
             ->setName('org-task-complete');
 
         $app->map(['GET', 'POST'],
             "/org/:org_id/task/:task_id/review/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:orgTaskReview')
-        )->via("POST")->name("org-task-review");
             array($middleware, "authUserForOrg"),
             ->setName('org-task-review');
 
         $app->get(
             "/org/:org_id/task/:task_id/reviews/",
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:orgTaskReviews')
-        )->name("org-task-reviews");
             array($middleware, "authUserForOrg"),
             ->setName('org-task-reviews');
     }
