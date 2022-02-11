@@ -267,7 +267,7 @@ class AdminRouteHandler
             ->setName('download_translators_for_language_pairs');
     }
     
-    public function adminDashboard(Request $request, Response $response, $args)
+    public function adminDashboard(Request $request, Response $response)
     {
         global $app;
         $userId = Common\Lib\UserSession::getCurrentUserID();
@@ -454,7 +454,7 @@ class AdminRouteHandler
         $app->render("admin/site-admin.dashboard.tpl");
     }
 
-    public function all_users(Request $request, Response $response, $args)
+    public function all_users(Request $request, Response $response)
     {
         global $app;
         $statsDao = new DAO\StatisticsDao();
@@ -465,7 +465,7 @@ class AdminRouteHandler
         $app->render('admin/all_users.tpl');
     }
 
-    public function all_users_plain(Request $request, Response $response, $args)
+    public function all_users_plain(Request $request, Response $response)
     {
         global $app;
         $statsDao = new DAO\StatisticsDao();
@@ -476,7 +476,7 @@ class AdminRouteHandler
         $app->render('admin/all_users_plain.tpl');
     }
 
-    public function active_now(Request $request, Response $response, $args)
+    public function active_now(Request $request, Response $response)
     {
         global $app;
         $statsDao = new DAO\StatisticsDao();
@@ -487,7 +487,7 @@ class AdminRouteHandler
         $app->render('admin/active_now.tpl');
     }
 
-    public function active_now_matecat(Request $request, Response $response, $args)
+    public function active_now_matecat(Request $request, Response $response)
     {
         global $app;
         $statsDao = new DAO\StatisticsDao();
@@ -498,7 +498,7 @@ class AdminRouteHandler
         $app->render('admin/active_now_matecat.tpl');
     }
 
-    public function testing_center(Request $request, Response $response, $args)
+    public function testing_center(Request $request, Response $response)
     {
         global $app;
         $statsDao = new DAO\StatisticsDao();
@@ -509,7 +509,7 @@ class AdminRouteHandler
         $app->render('admin/testing_center.tpl');
     }
 
-    public function download_testing_center(Request $request, Response $response, $args)
+    public function download_testing_center(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
 
@@ -545,7 +545,7 @@ class AdminRouteHandler
         die;
     }
 
-    public function late_matecat(Request $request, Response $response, $args)
+    public function late_matecat(Request $request, Response $response)
     {
         global $app;
         $statsDao = new DAO\StatisticsDao();
@@ -556,7 +556,7 @@ class AdminRouteHandler
         $app->render('admin/late_matecat.tpl');
     }
 
-    public function complete_matecat(Request $request, Response $response, $args)
+    public function complete_matecat(Request $request, Response $response)
     {
         global $app;
         $statsDao = new DAO\StatisticsDao();
@@ -567,7 +567,7 @@ class AdminRouteHandler
         $app->render('admin/complete_matecat.tpl');
     }
 
-    public function user_task_reviews(Request $request, Response $response, $args)
+    public function user_task_reviews(Request $request, Response $response)
     {
         global $app;
         $statsDao = new DAO\StatisticsDao();
@@ -589,7 +589,7 @@ class AdminRouteHandler
         $app->render('admin/submitted_task_reviews.tpl');
     }
 
-    public function download_submitted_task_reviews(Request $request, Response $response, $args)
+    public function download_submitted_task_reviews(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->submitted_task_reviews();
@@ -620,7 +620,7 @@ class AdminRouteHandler
         die;
     }
 
-    public function peer_to_peer_vetting(Request $request, Response $response, $args)
+    public function peer_to_peer_vetting(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->peer_to_peer_vetting();
@@ -650,7 +650,7 @@ class AdminRouteHandler
         die;
     }
 
-    public function tasks_no_reviews(Request $request, Response $response, $args)
+    public function tasks_no_reviews(Request $request, Response $response)
     {
         global $app;
         $statsDao = new DAO\StatisticsDao();
@@ -661,7 +661,7 @@ class AdminRouteHandler
         $app->render('admin/tasks_no_reviews.tpl');
     }
 
-    public function download_tasks_no_reviews(Request $request, Response $response, $args)
+    public function download_tasks_no_reviews(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->tasks_no_reviews();
@@ -685,7 +685,7 @@ class AdminRouteHandler
         die;
     }
 
-    public function project_source_file_scores(Request $request, Response $response, $args)
+    public function project_source_file_scores(Request $request, Response $response)
     {
         global $app;
         $statsDao = new DAO\StatisticsDao();
@@ -696,7 +696,7 @@ class AdminRouteHandler
         $app->render('admin/project_source_file_scores.tpl');
     }
 
-    public function download_project_source_file_scores(Request $request, Response $response, $args)
+    public function download_project_source_file_scores(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->project_source_file_scores();
@@ -725,7 +725,7 @@ class AdminRouteHandler
         die;
     }
 
-    public function first_completed_task(Request $request, Response $response, $args)
+    public function first_completed_task(Request $request, Response $response)
     {
         global $app;
         $statsDao = new DAO\StatisticsDao();
@@ -752,7 +752,7 @@ class AdminRouteHandler
         $app->render('admin/first_completed_task.tpl');
     }
 
-    public function active_users(Request $request, Response $response, $args)
+    public function active_users(Request $request, Response $response)
     {
         global $app;
         $statsDao = new DAO\StatisticsDao();
@@ -763,7 +763,7 @@ class AdminRouteHandler
         $app->render('admin/active_users.tpl');
     }
 
-    public function active_users_unique(Request $request, Response $response, $args)
+    public function active_users_unique(Request $request, Response $response)
     {
         global $app;
         $statsDao = new DAO\StatisticsDao();
@@ -778,7 +778,7 @@ class AdminRouteHandler
         $app->render('admin/active_users_unique.tpl');
     }
 
-    public function unclaimed_tasks(Request $request, Response $response, $args)
+    public function unclaimed_tasks(Request $request, Response $response)
     {
         global $app;
         $statsDao = new DAO\StatisticsDao();
@@ -789,7 +789,7 @@ class AdminRouteHandler
         $app->render('admin/unclaimed_tasks.tpl');
     }
 
-    public function search_users_by_language_pair(Request $request, Response $response, $args)
+    public function search_users_by_language_pair(Request $request, Response $response)
     {
         global $app;
         $statsDao = new DAO\StatisticsDao();
@@ -809,9 +809,11 @@ class AdminRouteHandler
         $app->render('admin/search_users_by_language_pair.tpl');
     }
 
-    public function user_languages(Request $request, Response $response, $args$code)
+    public function user_languages(Request $request, Response $response, $args)
     {
         global $app;
+        $code = $args['code'];
+
         $statsDao = new DAO\StatisticsDao();
 
         if ($code === 'full') $code = null;
@@ -821,7 +823,7 @@ class AdminRouteHandler
         $app->render('admin/user_languages.tpl');
     }
 
-    public function download_user_languages(Request $request, Response $response, $args)
+    public function download_user_languages(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->user_languages(null);
@@ -842,9 +844,11 @@ class AdminRouteHandler
         die;
     }
 
-    public function user_task_languages(Request $request, Response $response, $args$code)
+    public function user_task_languages(Request $request, Response $response, $args)
     {
         global $app;
+        $code = $args['code'];
+
         $statsDao = new DAO\StatisticsDao();
 
         if ($code === 'full') $code = null;
@@ -854,7 +858,7 @@ class AdminRouteHandler
         $app->render('admin/user_task_languages.tpl');
     }
 
-    public function user_words_by_language(Request $request, Response $response, $args)
+    public function user_words_by_language(Request $request, Response $response)
     {
         global $app;
         $statsDao = new DAO\StatisticsDao();
@@ -865,7 +869,7 @@ class AdminRouteHandler
         $app->render('admin/user_words_by_language.tpl');
     }
 
-    public function download_user_words_by_language(Request $request, Response $response, $args)
+    public function download_user_words_by_language(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->user_words_by_language();
@@ -886,7 +890,7 @@ class AdminRouteHandler
         die;
     }
 
-    public function download_user_task_languages(Request $request, Response $response, $args)
+    public function download_user_task_languages(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->user_task_languages(null);
@@ -916,7 +920,7 @@ class AdminRouteHandler
         die;
     }
 
-    public function download_all_users(Request $request, Response $response, $args)
+    public function download_all_users(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->getUsers();
@@ -946,7 +950,7 @@ class AdminRouteHandler
         die;
     }
 
-    public function download_active_users(Request $request, Response $response, $args)
+    public function download_active_users(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->active_users();
@@ -970,7 +974,7 @@ class AdminRouteHandler
         die;
     }
 
-    public function community_stats(Request $request, Response $response, $args)
+    public function community_stats(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users0                 = $statsDao->community_stats();
@@ -1021,7 +1025,7 @@ class AdminRouteHandler
         die;
     }
 
-    public function org_stats(Request $request, Response $response, $args)
+    public function org_stats(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_orgs0           = $statsDao->all_orgs();
@@ -1122,7 +1126,7 @@ class AdminRouteHandler
         die;
     }
 
-    public function community_dashboard(Request $request, Response $response, $args)
+    public function community_dashboard(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $users_active               = $statsDao->users_active();
@@ -1264,7 +1268,7 @@ class AdminRouteHandler
         die;
     }
 
-    public function language_work_requested(Request $request, Response $response, $args)
+    public function language_work_requested(Request $request, Response $response)
     {
         global $app;
         $statsDao = new DAO\StatisticsDao();
@@ -1304,7 +1308,7 @@ class AdminRouteHandler
 
     }
 
-    public function download_language_work_requested(Request $request, Response $response, $args)
+    public function download_language_work_requested(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $language_work_requested = $statsDao->language_work_requested();
@@ -1364,7 +1368,7 @@ class AdminRouteHandler
         die;
     }
 
-    public function translators_for_language_pairs(Request $request, Response $response, $args)
+    public function translators_for_language_pairs(Request $request, Response $response)
     {
         global $app;
         $statsDao = new DAO\StatisticsDao();
@@ -1386,7 +1390,7 @@ class AdminRouteHandler
         $app->render('admin/translators_for_language_pairs.tpl');
     }
 
-    public function download_translators_for_language_pairs(Request $request, Response $response, $args)
+    public function download_translators_for_language_pairs(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $translators_for_language_pairs = $statsDao->translators_for_language_pairs();
@@ -1423,7 +1427,7 @@ class AdminRouteHandler
         die;
     }
 
-    public function matecat_analyse_status(Request $request, Response $response, $args)
+    public function matecat_analyse_status(Request $request, Response $response)
     {
         global $app;
         $statsDao = new DAO\StatisticsDao();
@@ -1434,7 +1438,7 @@ class AdminRouteHandler
         $app->render('admin/matecat_analyse_status.tpl');
     }
 
-    public function list_memsource_projects(Request $request, Response $response, $args)
+    public function list_memsource_projects(Request $request, Response $response)
     {
         global $app;
         $statsDao = new DAO\StatisticsDao();
@@ -1445,7 +1449,7 @@ class AdminRouteHandler
         $app->render('admin/list_memsource_projects.tpl');
     }
 
-    public function download_covid_projects(Request $request, Response $response, $args)
+    public function download_covid_projects(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->covid_projects();
@@ -1474,7 +1478,7 @@ class AdminRouteHandler
         die;
     }
 
-    public function download_afghanistan_2021_projects(Request $request, Response $response, $args)
+    public function download_afghanistan_2021_projects(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->afghanistan_2021_projects();
@@ -1504,7 +1508,7 @@ class AdminRouteHandler
         die;
     }
 
-    public function download_haiti_2021_projects(Request $request, Response $response, $args)
+    public function download_haiti_2021_projects(Request $request, Response $response)
     {
         $statsDao = new DAO\StatisticsDao();
         $all_users = $statsDao->haiti_2021_projects();
