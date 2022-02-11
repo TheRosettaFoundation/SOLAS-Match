@@ -82,14 +82,14 @@ class ProjectRouteHandler
             ->setName('memsource_hook');
     }
 
-    public function memsourceHook(Request $request, Response $response, $args)
+    public function memsourceHook(Request $request)
     {
         global $app;
-        if ($app->request->headers->get('X-Memsource-Token') !== Common\Lib\Settings::get('memsource.X-Memsource-Token')) {
+        if ($request->getHeaderLine('X-Memsource-Token') !== Common\Lib\Settings::get('memsource.X-Memsource-Token')) {
             error_log('X-Memsource-Token does not match!');
             die;
         }
-        $body = $app->request()->getBody();
+        $body = (string)$request->getBody();
         $hook = json_decode($body, true);
         if (empty($hook)) {
             error_log("Hook not decoded: $body");
