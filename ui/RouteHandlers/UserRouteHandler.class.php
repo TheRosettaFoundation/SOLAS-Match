@@ -172,24 +172,19 @@ class UserRouteHandler
             ->setName('user-task-reviews');
 
         $app->get(
-            '/no_application[/]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:no_application')
-            ->setName('no_application');
-
-        $app->get(
-            '/no_application_error[/]',
-            '\SolasMatch\UI\RouteHandlers\UserRouteHandler:no_application_error')
-            ->setName('no_application_error');
-
-        $app->get(
             '/native_languages/{term}/search[/]',
             '\SolasMatch\UI\RouteHandlers\UserRouteHandler:native_languages')
             ->setName('native_languages');
     }
 
-    public function home(Request $request, Response $response, $args$currentScrollPage = 1, $selectedTaskType = 0, $selectedSourceLanguageCode = 0, $selectedTargetLanguageCode = 0)
+    public function home(Request $request, Response $response, $args)
     {
         global $app;
+        $currentScrollPage          = !empty($args['page_no']) ? $args['page_no'] : 1;
+        $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : 0;
+        $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
+        $selectedTargetLanguageCode = !empty($args['tl'])      ? $args['tl'] : 0;
+
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
@@ -423,18 +418,11 @@ class UserRouteHandler
         $app->render('index-home.tpl');
     }
 
-    public function videos(Request $request, Response $response, $args)
+    public function register(Request $request, Response $response, $args)
     {
         global $app;
-        $app->view()->appendData(array('current_page' => 'videos'));
-        $app->render("videos.tpl");
-    }
+        if (!empty($args['track_code'])) $_SESSION['track_code'] = $args['track_code'];
 
-    public function register(Request $request, Response $response, $args$track_code = '')
-    {
-        if (!empty($track_code)) $_SESSION['track_code'] = $track_code;
-
-        global $app;
         $userDao = new DAO\UserDao();
         $langDao = new DAO\LanguageDao();
 
@@ -541,9 +529,11 @@ class UserRouteHandler
         $app->render("user/register.tpl");
     }
 
-    public function changeEmail(Request $request, Response $response, $args$user_id)
+    public function changeEmail(Request $request, Response $response, $args)
     {
         global $app;
+        $user_id = $args['user_id'];
+
         $userDao = new DAO\UserDao();
         $adminDao = new DAO\AdminDao();
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
@@ -582,9 +572,11 @@ class UserRouteHandler
         $app->render("user/change-email.tpl");
     }
 
-    public function emailVerification(Request $request, Response $response, $args$uuid)
+    public function emailVerification(Request $request, Response $response, $args)
     {
         global $app;
+        $uuid = $args['uuid'];
+
         $userDao = new DAO\UserDao();
 
         $user = $userDao->getRegisteredUser($uuid);
@@ -611,9 +603,11 @@ class UserRouteHandler
         $app->render("user/email.verification.tpl");
     }
 
-    public function passwordReset(Request $request, Response $response, $args$uid)
+    public function passwordReset(Request $request, Response $response, $args)
     {
         global $app;
+        $uid = $args['uid'];
+
         $userDao = new DAO\UserDao();
 
         $reset_request = $userDao->getPasswordResetRequest($uid);
@@ -650,7 +644,7 @@ class UserRouteHandler
         $app->render("user/password-reset.tpl");
     }
 
-    public function passResetRequest(Request $request, Response $response, $args)
+    public function passResetRequest(Request $request, Response $response)
     {
         global $app;
         $userDao = new DAO\UserDao();
@@ -695,16 +689,18 @@ class UserRouteHandler
         $app->render("user/user.reset-password.tpl");
     }
 
-    public function logout(Request $request, Response $response, $args)
+    public function logout(Request $request, Response $response)
     {
         global $app;
+
         Common\Lib\UserSession::destroySession();
         $app->redirect($app->urlFor("home"));
     }
 
-    public function login(Request $request, Response $response, $args)
+    public function login(Request $request, Response $response)
     {
         global $app;
+
         $userDao = new DAO\UserDao();
         $langDao = new DAO\LanguageDao();
 
@@ -877,7 +873,7 @@ class UserRouteHandler
         $app->render("user/login.tpl");
     }
 
-    public function login_proz(Request $request, Response $response, $args)
+    public function login_proz(Request $request, Response $response)
     {
         global $app;
         $userDao = new DAO\UserDao();
@@ -969,9 +965,11 @@ class UserRouteHandler
         return '<script src="https://accounts.google.com/gsi/client" async defer></script>';
     }
 
-    public function googleregister(Request $request, Response $response, $args$user_id)
+    public function googleregister(Request $request, Response $response, $args)
     {
         global $app;
+        $user_id = $args['user_id'];
+
         $userDao = new DAO\UserDao();
         $adminDao = new DAO\AdminDao();
 
@@ -1029,9 +1027,10 @@ class UserRouteHandler
         }
     }
 
-    public static function userPrivateProfile($user_id)
+    public static function userPrivateProfile(Request $request, Response $response, $args)
     {
         global $app;
+        $user_id = $args['user_id'];
 
         $userDao = new DAO\UserDao();
         $adminDao = new DAO\AdminDao();
@@ -1740,8 +1739,10 @@ class UserRouteHandler
         $app->render('user/user-private-profile.tpl');
     }
 
-    public function native_languages(Request $request, Response $response, $args$term)
+    public function native_languages(Request $request, Response $response, $args)
     {
+        $term = $args['term'];
+
         $langDao = new DAO\LanguageDao();
         $languages = $langDao->getLanguages();
 
@@ -1754,9 +1755,10 @@ class UserRouteHandler
         die;
     }
 
-    public static function userCodeOfConduct($user_id)
+    public static function userCodeOfConduct(Request $request, Response $response, $args)
     {
         global $app;
+        $user_id = $args['user_id'];
 
         $userDao = new DAO\UserDao();
         $adminDao = new DAO\AdminDao();
@@ -1835,9 +1837,11 @@ class UserRouteHandler
         $app->render('user/user-code-of-conduct.tpl');
     }
 
-    public static function userUploads($user_id, $cert_id)
+    public static function userUploads(Request $request, Response $response, $args)
     {
         global $app;
+        $user_id = $args['user_id'];
+        $cert_id = $args['cert_id'];
 
         $userDao = new DAO\UserDao();
         $adminDao = new DAO\AdminDao();
@@ -1890,8 +1894,10 @@ class UserRouteHandler
         $app->render('user/user-uploads.tpl');
     }
 
-    public static function userDownload($id)
+    public static function userDownload(Request $request, Response $response, $args)
     {
+        $id = $args['id'];
+
         $userDao = new DAO\UserDao();
         $adminDao = new DAO\AdminDao();
 
@@ -1903,7 +1909,7 @@ class UserRouteHandler
         $userDao->userDownload($certification);
     }
 
-    public function users_review(Request $request, Response $response, $args)
+    public function users_review(Request $request, Response $response)
     {
         global $app;
         $userDao = new DAO\UserDao();
@@ -1914,7 +1920,7 @@ class UserRouteHandler
         $app->render('user/users_review.tpl');
     }
 
-    public function users_new(Request $request, Response $response, $args)
+    public function users_new(Request $request, Response $response)
     {
         global $app;
         $userDao = new DAO\UserDao();
@@ -1942,10 +1948,10 @@ class UserRouteHandler
 
     public function download_users_new(Request $request, Response $response, $args)
     {
-        $this->download_users_new_unreviewed(true);
+        $this->download_users_new_unreviewed($request, $response, $args, true);
     }
 
-    public function download_users_new_unreviewed(Request $request, Response $response, $args$all = false)
+    public function download_users_new_unreviewed(Request $request, Response $response, $args, $all = false)
     {
         $userDao = new DAO\UserDao();
         $all_users = $userDao->users_new();
@@ -1974,7 +1980,7 @@ class UserRouteHandler
         die;
     }
 
-    public function users_tracked(Request $request, Response $response, $args)
+    public function users_tracked(Request $request, Response $response)
     {
         global $app;
         $userDao = new DAO\UserDao();
@@ -1983,7 +1989,7 @@ class UserRouteHandler
         $app->render('user/users_tracked.tpl');
     }
 
-    public function add_tracking_code(Request $request, Response $response, $args)
+    public function add_tracking_code(Request $request, Response $response)
     {
         global $app;
         $userDao = new DAO\UserDao();
@@ -2006,7 +2012,7 @@ class UserRouteHandler
         $app->render('user/add_tracking_code.tpl');
     }
 
-    public function download_users_tracked(Request $request, Response $response, $args)
+    public function download_users_tracked(Request $request, Response $response)
     {
         $userDao = new DAO\UserDao();
         $all_users = $userDao->users_tracked();
@@ -2053,9 +2059,11 @@ class UserRouteHandler
         return $string;
     }
 
-    public static function userPublicProfile($user_id)
+    public static function userPublicProfile(Request $request, Response $response, $args)
     {
         global $app;
+        $user_id = $args['user_id'];
+
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
         $adminDao = new DAO\AdminDao();
@@ -2424,8 +2432,11 @@ class UserRouteHandler
         $app->render("user/user-public-profile.tpl");
     }
 
-    public static function profile_shared_with_key($key)
+    public static function profile_shared_with_key(Request $request, Response $response, $args)
     {
+        global $app;
+        $key = $args['key'];
+
         $key = hex2bin($key);
         $iv = substr($key, -16);
         $encrypted = substr($key, 0, -18);
@@ -2468,9 +2479,11 @@ class UserRouteHandler
         $app->render('user/user-public-profile.tpl');
     }
 
-    public function editTaskStreamNotification(Request $request, Response $response, $args$userId)
+    public function editTaskStreamNotification(Request $request, Response $response, $args)
     {
         global $app;
+        $userId = $args['user_id'];
+
         $userDao = new DAO\UserDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
@@ -2537,9 +2550,11 @@ class UserRouteHandler
         $app->render("user/user.task-stream-notification-edit.tpl");
     }
 
-    public function userTaskReviews(Request $request, Response $response, $args$taskId)
+    public function userTaskReviews(Request $request, Response $response, $args)
     {
         global $app;
+        $taskId = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $adminDao = new DAO\AdminDao();
 
@@ -2570,18 +2585,6 @@ class UserRouteHandler
         ));
 
         $app->render("user/user.task-reviews.tpl");
-    }
-
-    public function no_application(Request $request, Response $response, $args)
-    {
-        global $app;
-        $app->render('user/no_application.tpl');
-    }
-
-    public function no_application_error(Request $request, Response $response, $args)
-    {
-        global $app;
-        $app->render('user/no_application_error.tpl');
     }
 }
 
