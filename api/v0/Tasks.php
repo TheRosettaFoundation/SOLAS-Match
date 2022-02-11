@@ -13,7 +13,6 @@ require_once __DIR__."/../../Common/protobufs/emails/UserFeedback.php";
 require_once __DIR__."/../../Common/protobufs/emails/OrgFeedback.php";
 require_once __DIR__."/../lib/IO.class.php";
 require_once __DIR__."/../lib/Upload.class.php";
-require_once __DIR__."/../lib/FormatConverter.php";
 require_once __DIR__."/../../Common/lib/SolasMatchException.php";
 
 class Tasks

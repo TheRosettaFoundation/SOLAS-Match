@@ -191,7 +191,6 @@ class IO
         $helper = new Common\Lib\APIHelper(".json");
 
         $version = API\Dispatcher::clenseArgs('version', Common\Enums\HttpMethodEnum::GET, 0);
-        $convert = API\Dispatcher::clenseArgs('convertToXliff', Common\Enums\HttpMethodEnum::GET, false);
         $fileName = DAO\TaskDao::getFilename($taskId, $version);
         $task = DAO\TaskDao::getTask($taskId);
         $projectId = $task->getProjectId();
@@ -232,12 +231,11 @@ class IO
         }
         $task = DAO\TaskDao::getTask($taskId);
         $version = API\Dispatcher::clenseArgs('version', Common\Enums\HttpMethodEnum::GET, null);
-        $convert = API\Dispatcher::clenseArgs('convertFromXliff', Common\Enums\HttpMethodEnum::GET, false);
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $projectFile = DAO\ProjectDao::getProjectFileInfo($task->getProjectId(), null, null, null, null);
         $filename = $projectFile->getFilename();
         try {
-            self::uploadFile($task, $convert, $data, $version, $userId, $filename);
+            self::uploadFile($task, $data, $version, $userId, $filename);
         } catch (Common\Exceptions\SolasMatchException $e) {
             API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
             return;
@@ -254,12 +252,11 @@ class IO
         }
         $task = DAO\TaskDao::getTask($taskId);
         $version = API\Dispatcher::clenseArgs('version', Common\Enums\HttpMethodEnum::GET, null);
-        $convert = API\Dispatcher::clenseArgs('convertFromXliff', Common\Enums\HttpMethodEnum::GET, false);
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         $projectFile = DAO\ProjectDao::getProjectFileInfo($task->getProjectId(), null, null, null, null);
         $filename = $projectFile->getFilename();
         try {
-            self::uploadFile($task, false, $data, $version, $userId, $filename, true);
+            self::uploadFile($task, $data, $version, $userId, $filename, true);
         } catch (Common\Exceptions\SolasMatchException $e) {
             API\Dispatcher::sendResponse(null, $e->getMessage(), $e->getCode());
             return;
@@ -277,11 +274,10 @@ class IO
         $task = DAO\TaskDao::getTask($taskId);
         $projectFile = DAO\ProjectDao::getProjectFileInfo($task->getProjectId(), null, null, null, null);
         $filename = $projectFile->getFilename();
-        $convert = API\Dispatcher::clenseArgs('convertFromXliff', Common\Enums\HttpMethodEnum::GET, false);
         $data = API\Dispatcher::getDispatcher()->request()->getBody();
         try {
             error_log("Before uploadOutputFile($taskId..., $userId, $filename)");
-        self::uploadOutputFile($task, $convert, $data, $userId, $filename);
+        self::uploadOutputFile($task, $data, $userId, $filename);
             error_log("After uploadOutputFile($taskId..., $userId, $filename)");
 $task = DAO\TaskDao::getTask($taskId + 1);
 if (!empty($task) && $task->getTaskType() == 3) {
@@ -334,30 +330,19 @@ if (!empty($task) && $task->getTaskType() == 3) {
 
     //! Upload a Task file
     /*!
-     Used to store Task file upload details and save the file to the filesystem. If convert is true then the file will
-    be converted to XLIFF before being saved.
+     Used to store Task file upload details and save the file to the filesystem.
     @param Task $task is a Task object
-    @param bool $convert determines if the file should be converted to XLIFF
     @param String $file is the contents of the file (passed as reference)
     @param int $version is the version of the file being uploaded
     @param int $userId is the id of the User uploading the file
     @param String $filename is the name of the uploaded file
     @return No return
     */
-    private static function uploadFile($task, $convert, &$file, $version, $userId, $filename, $from_project_physical_pointer = false)
+    private static function uploadFile($task, &$file, $version, $userId, $filename, $from_project_physical_pointer = false)
     {
         $success = null;
-        if ($convert) {
-            $success = self::saveTaskFileToFs(
-                $task,
-                $userId,
-                Lib\FormatConverter::convertFromXliff($file),
-                $filename,
-                $version
-            );
-        } else {
-            $success = self::saveTaskFileToFs($task, $userId, $file, $filename, $version, $from_project_physical_pointer);
-        }
+        $success = self::saveTaskFileToFs($task, $userId, $file, $filename, $version, $from_project_physical_pointer);
+
         if (!$success) {
             throw new Common\Exceptions\SolasMatchException(
                 "Failed to write file data.",
@@ -372,15 +357,14 @@ if (!empty($task) && $task->getTaskType() == 3) {
      This uploads a new version of a Task file. It also copies the uploaded file to version 0 of all Tasks that are
     dependant on this Task.
     @param Task $task is a Task object
-    @param bool $convert determines if the file should be converted to XLIFF before being saved
     @param String $file is the contents of the uploaded file (passed as reference)
     @param int $userId is the id of the User uploading the file
     @param String filename is the name of the file
     @return No Return
     */
-    private static function uploadOutputFile($task, $convert, &$file, $userId, $filename)
+    private static function uploadOutputFile($task, &$file, $userId, $filename)
     {
-        $physical_pointer = self::uploadFile($task, $convert, $file, null, $userId, $filename);
+        $physical_pointer = self::uploadFile($task, $file, null, $userId, $filename);
         $graphBuilder = new Lib\APIWorkflowBuilder();
         $graph = $graphBuilder->buildProjectGraph($task->getProjectId());
         if ($graph) {
@@ -390,9 +374,9 @@ if (!empty($task) && $task->getTaskType() == 3) {
                 $result = DAO\TaskDao::getTasks($nextTaskId);
                 $nextTask = $result[0];
                 if ($physical_pointer) {
-                    self::uploadFile($nextTask, false, $physical_pointer, 0, $userId, $filename, true);
+                    self::uploadFile($nextTask, $physical_pointer, 0, $userId, $filename, true);
                 } else {
-                    self::uploadFile($nextTask, $convert, $file, 0, $userId, $filename);
+                    self::uploadFile($nextTask, $file, 0, $userId, $filename);
                 }
             }
         }
