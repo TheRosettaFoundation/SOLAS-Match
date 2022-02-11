@@ -101,7 +101,7 @@ class OrgRouteHandler
             ->setName('org-task-reviews');
     }
 
-    public function createOrg(Request $request, Response $response, $args)
+    public function createOrg(Request $request, Response $response)
     {
         global $app;
 
@@ -420,7 +420,7 @@ class OrgRouteHandler
         $app->render("org/create-org.tpl");
     }
 
-    public function orgDashboard(Request $request, Response $response, $args)
+    public function orgDashboard(Request $request, Response $response)
     {
         global $app;
         $current_user_id = Common\Lib\UserSession::getCurrentUserID();
@@ -532,9 +532,11 @@ class OrgRouteHandler
         $app->render("org/org.dashboard.tpl");
     }
 
-    public function org_orgDashboard(Request $request, Response $response, $args$org_id)
+    public function org_orgDashboard(Request $request, Response $response, $args)
     {
         global $app;
+        $org_id = $args['org_id'];
+
         $current_user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
         $projectDao = new DAO\ProjectDao();
@@ -600,9 +602,11 @@ class OrgRouteHandler
         $app->render('org/org.dashboard.tpl');
     }
 
-    public function orgRequestMembership(Request $request, Response $response, $args$org_id)
+    public function orgRequestMembership(Request $request, Response $response, $args)
     {
         global $app;
+        $org_id = $args['org_id'];
+
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
 
@@ -625,9 +629,11 @@ class OrgRouteHandler
         $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org_id)));
     }
 
-    public function orgRequestQueue(Request $request, Response $response, $args$org_id)
+    public function orgRequestQueue(Request $request, Response $response, $args)
     {
         global $app;
+        $org_id = $args['org_id'];
+
         $orgDao = new DAO\OrganisationDao();
         $userDao = new DAO\UserDao();
 
@@ -703,9 +709,10 @@ class OrgRouteHandler
         $app->render("org/org.request_queue.tpl");
     }
 
-    public function orgPrivateProfile(Request $request, Response $response, $args$org_id)
+    public function orgPrivateProfile(Request $request, Response $response, $args)
     {
         global $app;
+        $org_id = $args['org_id'];
 
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
             $_SESSION['SESSION_CSRF_KEY'] = Common\Lib\UserSession::random_string(10);
@@ -1674,9 +1681,11 @@ class OrgRouteHandler
         );
     }
 
-    public function orgPublicProfile(Request $request, Response $response, $args$org_id)
+    public function orgPublicProfile(Request $request, Response $response, $args)
     {
         global $app;
+        $org_id = $args['org_id'];
+
         $adminDao = new DAO\AdminDao();
         $orgDao = new DAO\OrganisationDao();
         $userDao = new DAO\UserDao();
@@ -2004,9 +2013,12 @@ class OrgRouteHandler
         $app->render("org/org-public-profile.tpl");
     }
 
-    public function orgManageBadge(Request $request, Response $response, $args$org_id, $badge_id)
+    public function orgManageBadge(Request $request, Response $response, $args)
     {
         global $app;
+        $org_id = $args['org_id'];
+        $badge_id = $args['badge_id'];
+
         $badgeDao = new DAO\BadgeDao();
         $userDao = new DAO\UserDao();
 
@@ -2073,9 +2085,11 @@ class OrgRouteHandler
         $app->render("org/org.manage-badge.tpl");
     }
 
-    public function orgCreateBadge(Request $request, Response $response, $args$org_id)
+    public function orgCreateBadge(Request $request, Response $response, $args)
     {
         global $app;
+        $org_id = $args['org_id'];
+
         $badgeDao = new DAO\BadgeDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
@@ -2105,7 +2119,7 @@ class OrgRouteHandler
         $app->render("org/org.create-badge.tpl");
     }
 
-    public function orgSearch(Request $request, Response $response, $args)
+    public function orgSearch(Request $request, Response $response)
     {
         global $app;
         $orgDao = new DAO\OrganisationDao();
@@ -2134,9 +2148,12 @@ class OrgRouteHandler
         $app->render("org/org-search.tpl");
     }
     
-    public function orgEditBadge(Request $request, Response $response, $args$org_id, $badge_id)
+    public function orgEditBadge(Request $request, Response $response, $args)
     {
         global $app;
+        $org_id = $args['org_id'];
+        $badge_id = $args['badge_id'];
+
         $badgeDao = new DAO\BadgeDao();
 
         $badge = $badgeDao->getBadge($badge_id);
@@ -2146,9 +2163,12 @@ class OrgRouteHandler
         $app->render("org/org.edit-badge.tpl");
     }
 
-    public function orgTaskComplete(Request $request, Response $response, $args$orgId, $taskId)
+    public function orgTaskComplete(Request $request, Response $response, $args)
     {
         global $app;
+        $orgId = $args['org_id'];
+        $taskId = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $userDao = new DAO\UserDao();
         $projectDao = new DAO\ProjectDao();
@@ -2179,9 +2199,12 @@ class OrgRouteHandler
         $app->render("org/org.task-complete.tpl");
     }
 
-    public function orgTaskReview(Request $request, Response $response, $args$orgId, $taskId)
+    public function orgTaskReview(Request $request, Response $response, $args)
     {
         global $app;
+        $orgId = $args['org_id'];
+        $taskId = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $userDao = new DAO\UserDao();
 
@@ -2300,9 +2323,12 @@ class OrgRouteHandler
         $app->render("org/org.task-review.tpl");
     }
 
-    public function orgTaskReviews(Request $request, Response $response, $args$orgId, $taskId)
+    public function orgTaskReviews(Request $request, Response $response, $args)
     {
         global $app;
+        $orgId = $args['org_id'];
+        $taskId = $args['task_id'];
+
         $viewData = array();
         $taskDao = new DAO\TaskDao();
         $task = $taskDao->getTask($taskId);
