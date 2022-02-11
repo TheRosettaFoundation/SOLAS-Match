@@ -39,7 +39,7 @@ class StaticRouteHandler
             ->setName('staticGetUserHash');
     }
 
-    public function statistics()
+    public function statistics(Request $request, Response $response, $args)
     {
         global $app;
         $extraScripts = "
@@ -54,19 +54,19 @@ class StaticRouteHandler
         $app->render("static/statistics.tpl");
     }
 
-    public function privacy()
+    public function privacy(Request $request, Response $response, $args)
     {
          global $app;
          $app->render("static/privacy.tpl");
     }
     
-    public function terms()
+    public function terms(Request $request, Response $response, $args)
     {
          global $app;
          $app->render("static/terms.tpl");
     }
     
-    public function faq()
+    public function faq(Request $request, Response $response, $args)
     {
          $currentUILanguage ="";
          $currentUILanguage = Common\Lib\UserSession::getUserLanguage();
@@ -96,16 +96,15 @@ class StaticRouteHandler
          $app->render("static/FAQ.tpl");
     }
     
-    public function videos()
+    public function videos(Request $request, Response $response, $args)
     {
          global $app;
          $app->view()->setData("current_page", "videos");
          $app->render("static/videos.tpl");
     }
     
-    public function siteLanguage()
+    public function siteLanguage(Request $request, Response $response, $args)
     {
-
         global $app;
         if ($post = $app->request()->post()) {
             if (isset($post['language'])) {
@@ -117,7 +116,7 @@ class StaticRouteHandler
         }
     }
     
-    public function getUser()
+    public function getUser(Request $request, Response $response, $args)
     {
         if (!is_null(Common\Lib\UserSession::getCurrentUserID())) {
             $dao = new DAO\UserDao();
@@ -126,19 +125,19 @@ class StaticRouteHandler
         }
     }
     
-    public function getUserHash()
+    public function getUserHash(Request $request, Response $response, $args)
     {
         if (!is_null(Common\Lib\UserSession::getAccessToken())) {
             \Slim\Slim::getInstance()->response()->body(Common\Lib\UserSession::getAccessToken()->getToken());
         }
     }
     
-    public function getDefaultStrings()
+    public function getDefaultStrings(Request $request, Response $response, $args)
     {
         \Slim\Slim::getInstance()->response()->body(Lib\Localisation::getDefaultStrings());
     }
 
-    public function getUserStrings()
+    public function getUserStrings(Request $request, Response $response, $args)
     {
         \Slim\Slim::getInstance()->response()->body(Lib\Localisation::getUserStrings());
     }

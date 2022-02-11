@@ -82,7 +82,7 @@ class ProjectRouteHandler
             ->setName('memsource_hook');
     }
 
-    public function memsourceHook()
+    public function memsourceHook(Request $request, Response $response, $args)
     {
         global $app;
         if ($app->request->headers->get('X-Memsource-Token') !== Common\Lib\Settings::get('memsource.X-Memsource-Token')) {
@@ -611,7 +611,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         }
     }
 
-    public function projectView($project_id)
+    public function projectView(Request $request, Response $response, $args$project_id)
     {
         $matecat_api = Common\Lib\Settings::get('matecat.url');
         global $app;
@@ -1176,7 +1176,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         return $task_id;
     }
 
-    public function projectAlter($project_id)
+    public function projectAlter(Request $request, Response $response, $args$project_id)
     {
         $matecat_api = Common\Lib\Settings::get('matecat.url');
         global $app;
@@ -1459,7 +1459,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $app->render("project/project.alter.tpl");
     }
 
-    public function projectCreate($org_id)
+    public function projectCreate(Request $request, Response $response, $args$org_id)
     {
         global $app;
         $user_id = Common\Lib\UserSession::getCurrentUserID();
@@ -2076,7 +2076,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         return $string;
     }
 
-    public function projectCreated($project_id)
+    public function projectCreated(Request $request, Response $response, $args$project_id)
     {
         global $app;
         $projectDao = new DAO\ProjectDao();
@@ -2091,7 +2091,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $app->render("project/project.created.tpl");
     }
 
-    public function archiveProject($project_id, $sesskey)
+    public function archiveProject(Request $request, Response $response, $args$project_id, $sesskey)
     {
         global $app;
         $projectDao = new DAO\ProjectDao();
@@ -2117,7 +2117,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $app->redirect($ref = $app->request()->getReferrer());
     }
 
-    public function downloadProjectFile($projectId)
+    public function downloadProjectFile(Request $request, Response $response, $args$projectId)
     {
         global $app;
         $projectDao = new DAO\ProjectDao();
@@ -2170,7 +2170,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         }
     }
 
-    public function downloadProjectImageFile($projectId)
+    public function downloadProjectImageFile(Request $request, Response $response, $args$projectId)
     {
         global $app;
         $projectDao = new DAO\ProjectDao();

@@ -21,7 +21,7 @@ class BadgeRouteHandler
             ->setName('badge-list');
     }
 
-    public function badgeList()
+    public function badgeList(Request $request, Response $response, $args)
     {
         global $app;
 

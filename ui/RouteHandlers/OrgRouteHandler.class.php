@@ -101,7 +101,7 @@ class OrgRouteHandler
             ->setName('org-task-reviews');
     }
 
-    public function createOrg()
+    public function createOrg(Request $request, Response $response, $args)
     {
         global $app;
 
@@ -420,7 +420,7 @@ class OrgRouteHandler
         $app->render("org/create-org.tpl");
     }
 
-    public function orgDashboard()
+    public function orgDashboard(Request $request, Response $response, $args)
     {
         global $app;
         $current_user_id = Common\Lib\UserSession::getCurrentUserID();
@@ -532,7 +532,7 @@ class OrgRouteHandler
         $app->render("org/org.dashboard.tpl");
     }
 
-    public function org_orgDashboard($org_id)
+    public function org_orgDashboard(Request $request, Response $response, $args$org_id)
     {
         global $app;
         $current_user_id = Common\Lib\UserSession::getCurrentUserID();
@@ -600,7 +600,7 @@ class OrgRouteHandler
         $app->render('org/org.dashboard.tpl');
     }
 
-    public function orgRequestMembership($org_id)
+    public function orgRequestMembership(Request $request, Response $response, $args$org_id)
     {
         global $app;
         $userDao = new DAO\UserDao();
@@ -625,7 +625,7 @@ class OrgRouteHandler
         $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org_id)));
     }
 
-    public function orgRequestQueue($org_id)
+    public function orgRequestQueue(Request $request, Response $response, $args$org_id)
     {
         global $app;
         $orgDao = new DAO\OrganisationDao();
@@ -703,7 +703,7 @@ class OrgRouteHandler
         $app->render("org/org.request_queue.tpl");
     }
 
-    public function orgPrivateProfile($org_id)
+    public function orgPrivateProfile(Request $request, Response $response, $args$org_id)
     {
         global $app;
 
@@ -1674,7 +1674,7 @@ class OrgRouteHandler
         );
     }
 
-    public function orgPublicProfile($org_id)
+    public function orgPublicProfile(Request $request, Response $response, $args$org_id)
     {
         global $app;
         $adminDao = new DAO\AdminDao();
@@ -2004,7 +2004,7 @@ class OrgRouteHandler
         $app->render("org/org-public-profile.tpl");
     }
 
-    public function orgManageBadge($org_id, $badge_id)
+    public function orgManageBadge(Request $request, Response $response, $args$org_id, $badge_id)
     {
         global $app;
         $badgeDao = new DAO\BadgeDao();
@@ -2073,7 +2073,7 @@ class OrgRouteHandler
         $app->render("org/org.manage-badge.tpl");
     }
 
-    public function orgCreateBadge($org_id)
+    public function orgCreateBadge(Request $request, Response $response, $args$org_id)
     {
         global $app;
         $badgeDao = new DAO\BadgeDao();
@@ -2105,7 +2105,7 @@ class OrgRouteHandler
         $app->render("org/org.create-badge.tpl");
     }
 
-    public function orgSearch()
+    public function orgSearch(Request $request, Response $response, $args)
     {
         global $app;
         $orgDao = new DAO\OrganisationDao();
@@ -2134,7 +2134,7 @@ class OrgRouteHandler
         $app->render("org/org-search.tpl");
     }
     
-    public function orgEditBadge($org_id, $badge_id)
+    public function orgEditBadge(Request $request, Response $response, $args$org_id, $badge_id)
     {
         global $app;
         $badgeDao = new DAO\BadgeDao();
@@ -2146,7 +2146,7 @@ class OrgRouteHandler
         $app->render("org/org.edit-badge.tpl");
     }
 
-    public function orgTaskComplete($orgId, $taskId)
+    public function orgTaskComplete(Request $request, Response $response, $args$orgId, $taskId)
     {
         global $app;
         $taskDao = new DAO\TaskDao();
@@ -2179,7 +2179,7 @@ class OrgRouteHandler
         $app->render("org/org.task-complete.tpl");
     }
 
-    public function orgTaskReview($orgId, $taskId)
+    public function orgTaskReview(Request $request, Response $response, $args$orgId, $taskId)
     {
         global $app;
         $taskDao = new DAO\TaskDao();
@@ -2300,7 +2300,7 @@ class OrgRouteHandler
         $app->render("org/org.task-review.tpl");
     }
 
-    public function orgTaskReviews($orgId, $taskId)
+    public function orgTaskReviews(Request $request, Response $response, $args$orgId, $taskId)
     {
         global $app;
         $viewData = array();
