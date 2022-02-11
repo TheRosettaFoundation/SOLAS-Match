@@ -23,12 +23,6 @@ class StaticRouteHandler
         $app->get('/static/terms[/]', '\SolasMatch\UI\RouteHandlers\StaticRouteHandler:terms')
             ->setName('terms');
 
-        $app->get('/static/videos[/]', '\SolasMatch\UI\RouteHandlers\StaticRouteHandler:videos')
-            ->setName('videos');
-
-        $app->map(['GET', 'POST'], '/static/siteLanguage[/]', '\SolasMatch\UI\RouteHandlers\StaticRouteHandler:siteLanguage')
-            ->setName('siteLanguage');
-
         $app->get('/static/getDefaultStrings[/]', '\SolasMatch\UI\RouteHandlers\StaticRouteHandler:getDefaultStrings')
             ->setName('staticGetDefaultStrings');
 
@@ -39,7 +33,7 @@ class StaticRouteHandler
             ->setName('staticGetUserHash');
     }
 
-    public function statistics(Request $request, Response $response, $args)
+    public function statistics(Request $request, Response $response)
     {
         global $app;
         $extraScripts = "
@@ -54,56 +48,19 @@ class StaticRouteHandler
         $app->render("static/statistics.tpl");
     }
 
-    public function privacy(Request $request, Response $response, $args)
+    public function privacy(Request $request, Response $response)
     {
          global $app;
          $app->render("static/privacy.tpl");
     }
     
-    public function terms(Request $request, Response $response, $args)
+    public function terms(Request $request, Response $response)
     {
          global $app;
          $app->render("static/terms.tpl");
     }
     
-    public function faq(Request $request, Response $response, $args)
-    {
-         $currentUILanguage ="";
-         $currentUILanguage = Common\Lib\UserSession::getUserLanguage();
-         $langDao = new DAO\LanguageDao();
-         $locales = array();
-         //get default language code
-         $locales[] = $langDao->getLanguageByCode(Common\Lib\Settings::get('site.default_site_language_code'));
-         $defaultCode = $locales[0]->getCode();
-         if (trim($currentUILanguage)=="") //if current language is nothing, set it to default language
-         {
-             $currentUILanguage = $defaultCode;
-         }
-         $includePath = __DIR__."/../localisation/FAQ_".$currentUILanguage.".html";
-         $htmlFileExists = False;
-         if (file_exists($includePath)) { //check whether FAQ html exists for the currently selected locale
-             $htmlFileExists = True;
-         } else {
-             //fallback to English version
-             $htmlFileExists = False;
-             $includePath = __DIR__."/../localisation/FAQ_".$defaultCode.".html";
-         }
-         global $app;
-         $app->view()->appendData(array(
-             'current_page' => 'faq', 
-             'includeFile' => $includePath, 
-             'htmlFileExist' => $htmlFileExists));
-         $app->render("static/FAQ.tpl");
-    }
-    
-    public function videos(Request $request, Response $response, $args)
-    {
-         global $app;
-         $app->view()->setData("current_page", "videos");
-         $app->render("static/videos.tpl");
-    }
-    
-    public function siteLanguage(Request $request, Response $response, $args)
+    public function siteLanguage(Request $request, Response $response)
     {
         global $app;
         if ($post = $app->request()->post()) {
@@ -115,29 +72,20 @@ class StaticRouteHandler
             $app->response()->body(Common\Lib\UserSession::getUserLanguage());
         }
     }
-    
-    public function getUser(Request $request, Response $response, $args)
-    {
-        if (!is_null(Common\Lib\UserSession::getCurrentUserID())) {
-            $dao = new DAO\UserDao();
 
-            \Slim\Slim::getInstance()->response()->body($dao->getUserDart(Common\Lib\UserSession::getCurrentUserID()));
-        }
-    }
-    
-    public function getUserHash(Request $request, Response $response, $args)
+    public function getUserHash(Request $request, Response $response)
     {
         if (!is_null(Common\Lib\UserSession::getAccessToken())) {
             \Slim\Slim::getInstance()->response()->body(Common\Lib\UserSession::getAccessToken()->getToken());
         }
     }
     
-    public function getDefaultStrings(Request $request, Response $response, $args)
+    public function getDefaultStrings(Request $request, Response $response)
     {
         \Slim\Slim::getInstance()->response()->body(Lib\Localisation::getDefaultStrings());
     }
 
-    public function getUserStrings(Request $request, Response $response, $args)
+    public function getUserStrings(Request $request, Response $response)
     {
         \Slim\Slim::getInstance()->response()->body(Lib\Localisation::getUserStrings());
     }

@@ -28,13 +28,6 @@ class UserDao extends BaseDao
         $this->memsourceApiToken = Common\Lib\Settings::get("memsource.memsource_api_token");
     }
     
-    public function getUserDart($userId)
-    {
-        $ret = null;
-        $helper = new Common\Lib\APIHelper(Common\Enums\FormatEnum::JSON);
-        return $helper->serialize($this->getUser($userId));
-    }
-    
     public function getUser($userId)
     {
         $ret = null;
