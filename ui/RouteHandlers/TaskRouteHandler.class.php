@@ -175,9 +175,11 @@ class TaskRouteHandler
             ->setName('task-review');
     }
 
-    public function archivedTasks(Request $request, Response $response, $args$page_no)
+    public function archivedTasks(Request $request, Response $response, $args)
     {
         global $app;
+        $page_no = $args['page_no'];
+
         $userDao = new DAO\UserDao();
         $userId = Common\Lib\UserSession::getCurrentUserID();
 
@@ -230,9 +232,15 @@ class TaskRouteHandler
         $app->render("task/archived-tasks.tpl");
     }
 
-    public function claimedTasks(Request $request, Response $response, $args$user_id, $currentScrollPage = 1, $selectedTaskType = 0, $selectedTaskStatus = 3, $selectedOrdering = 0)
+    public function claimedTasks(Request $request, Response $response, $args)
     {
         global $app;
+        $user_id = $args['user_id'];
+        $currentScrollPage  = !empty($args['page_no']) ? $args['page_no'] : 1;
+        $selectedTaskType   = !empty($args['tt'])      ? $args['tt'] : 0;
+        $selectedTaskStatus = !empty($args['ts'])      ? $args['ts'] : 3;
+        $selectedOrdering   = !empty($args['o'])       ? $args['o'] : 0;
+
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
         $projectDao = new DAO\ProjectDao();
@@ -466,9 +474,12 @@ class TaskRouteHandler
         $app->render('task/claimed-tasks.tpl');
     }
 
-    public function recentTasks(Request $request, Response $response, $args$user_id, $currentScrollPage = 1)
+    public function recentTasks(Request $request, Response $response, $args)
     {
         global $app;
+        $user_id = $args['user_id'];
+        $currentScrollPage  = !empty($args['page_no']) ? $args['page_no'] : 1;
+
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
         $projectDao = new DAO\ProjectDao();
@@ -591,9 +602,11 @@ class TaskRouteHandler
         $app->render('task/recent-tasks.tpl');
     }
 
-    public function downloadTaskLatestVersion(Request $request, Response $response, $args$task_id)
+    public function downloadTaskLatestVersion(Request $request, Response $response, $args)
     {
         global $app;
+        $task_id = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
 
         $task = $taskDao->getTask($task_id);
@@ -626,7 +639,8 @@ class TaskRouteHandler
                 echo $file;
                 die;
             } else {
-                $this->downloadTaskVersion($task_id, $latest_version);
+                $args['version'] = $latest_version;
+                $this->downloadTaskVersion($request, $response, $args);
             }
         } catch (Common\Exceptions\SolasMatchException $e) {
             $app->flash(
@@ -641,9 +655,11 @@ class TaskRouteHandler
         }
     }
 
-    public function archiveTask(Request $request, Response $response, $args$task_id)
+    public function archiveTask(Request $request, Response $response, $args)
     {
         global $app;
+        $task_id = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
 
         $task = $taskDao->getTask($task_id);
@@ -674,13 +690,12 @@ class TaskRouteHandler
         $app->redirect($ref = $app->request()->getReferrer());
     }
 
-    public function downloadTask(Request $request, Response $response, $args$taskId)
+    public function downloadTask(Request $request, Response $response, $args)
     {
         global $app;
-        $convert = $app->request()->get("convertToXliff");
 
         try {
-            $this->downloadTaskVersion($taskId, 0, $convert);
+            $this->downloadTaskVersion(Request $request, $response, $args);
         } catch (Common\Exceptions\SolasMatchException $e) {
             $app->flash(
                 "error",
@@ -694,14 +709,15 @@ class TaskRouteHandler
         }
     }
 
-    public function downloadTaskExternal(Request $request, Response $response, $args$taskId)
+    public function downloadTaskExternal(Request $request, Response $response, $args)
     {
         global $app;
+        $taskId = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
-        $convert = $app->request()->get("convertToXliff");
 
         try {
-            $headerArr = $taskDao->downloadTaskVersion($this->decrypt_task_id($taskId), 0, $convert);
+            $headerArr = $taskDao->downloadTaskVersion($this->decrypt_task_id($taskId), 0);
             if (!empty($headerArr)) {
                 $headerArr = unserialize($headerArr);
                 foreach ($headerArr as $key => $val) {
@@ -744,9 +760,11 @@ class TaskRouteHandler
     /*
      *  Claim and download a task
      */
-    public function taskClaim(Request $request, Response $response, $args$taskId)
+    public function taskClaim(Request $request, Response $response, $args)
     {
         global $app;
+        $taskId = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $userDao = new DAO\UserDao();
         $languageDao = new DAO\LanguageDao();
@@ -785,12 +803,8 @@ class TaskRouteHandler
             }
         }
 
-        $convert = $app->request()->get("convertToXliff");
-        if (!is_null($convert)) {
-            $app->view()->setData("convert", $convert);
-        } else {
-            $app->view()->setData("convert", "false");
-        }
+        $app->view()->setData("convert", "false");
+
 
         $sourcelocale = $task->getSourceLocale();
         $targetLocale = $task->getTargetLocale();
@@ -818,9 +832,11 @@ class TaskRouteHandler
         $app->render("task/task.claim.tpl");
     }
 
-    public function taskClaimed(Request $request, Response $response, $args$task_id)
+    public function taskClaimed(Request $request, Response $response, $args)
     {
         global $app;
+        $task_id = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $adminDao = new DAO\AdminDao();
         $projectDao = new DAO\ProjectDao();
@@ -841,9 +857,12 @@ class TaskRouteHandler
         $app->render("task/task.claimed.tpl");
     }
 
-    public function downloadTaskVersion(Request $request, Response $response, $args$taskId, $version, $convert = 0)
+    public function downloadTaskVersion(Request $request, Response $response, $args)
     {
         global $app;
+        $taskId = $args['task_id'];
+        $version = !empty($args['version']) ? $args['version'] : 0;
+
         $taskDao = new DAO\TaskDao();
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
@@ -852,7 +871,7 @@ class TaskRouteHandler
             $app->redirect($app->urlFor('home'));
         }
 
-        $headerArr = $taskDao->downloadTaskVersion($taskId, $version, $convert);
+        $headerArr = $taskDao->downloadTaskVersion($taskId, $version);
         if (!empty($headerArr)) {
             $headerArr = unserialize($headerArr);
             foreach ($headerArr as $key => $val) {
@@ -861,9 +880,11 @@ class TaskRouteHandler
         }
     }
 
-    public function task(Request $request, Response $response, $args$taskId)
+    public function task(Request $request, Response $response, $args)
     {
         global $app;
+        $taskId = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $userDao = new DAO\UserDao();
@@ -1133,10 +1154,12 @@ class TaskRouteHandler
         }
     }
 
-    public function taskSimpleUpload(Request $request, Response $response, $args$taskId)
+    public function taskSimpleUpload(Request $request, Response $response, $args)
     {
-        $matecat_api = Common\Lib\Settings::get('matecat.url');
         global $app;
+        $taskId = $args['task_id'];
+
+        $matecat_api = Common\Lib\Settings::get('matecat.url');
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $orgDao = new DAO\OrganisationDao();
@@ -1409,10 +1432,12 @@ class TaskRouteHandler
         $app->render("task/task-simple-upload.tpl");
     }
 
-    public function taskChunkComplete(Request $request, Response $response, $args$taskId)
+    public function taskChunkComplete(Request $request, Response $response, $args)
     {
-        $matecat_api = Common\Lib\Settings::get('matecat.url');
         global $app;
+        $taskId = $args['task_id'];
+
+        $matecat_api = Common\Lib\Settings::get('matecat.url');
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
 
@@ -1533,9 +1558,11 @@ class TaskRouteHandler
         $app->render('task/task-chunk-complete.tpl');
     }
 
-    public function taskUploaded(Request $request, Response $response, $args$task_id)
+    public function taskUploaded(Request $request, Response $response, $args)
     {
         global $app;
+        $task_id = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $orgDao = new DAO\OrganisationDao();
@@ -1554,9 +1581,11 @@ class TaskRouteHandler
         $app->render("task/task.uploaded.tpl");
     }
 
-    public function taskChunkCompleted(Request $request, Response $response, $args$task_id)
+    public function taskChunkCompleted(Request $request, Response $response, $args)
     {
         global $app;
+        $task_id = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $orgDao = new DAO\OrganisationDao();
@@ -1575,9 +1604,11 @@ class TaskRouteHandler
         $app->render('task/task-chunk-completed.tpl');
     }
 
-    public function taskAlter(Request $request, Response $response, $args$task_id)
+    public function taskAlter(Request $request, Response $response, $args)
     {
         global $app;
+        $task_id = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $adminDao = new DAO\AdminDao();
@@ -1872,9 +1903,11 @@ class TaskRouteHandler
         $app->render("task/task.alter.tpl");
     }
 
-    public function taskView(Request $request, Response $response, $args$task_id)
+    public function taskView(Request $request, Response $response, $args)
     {
         global $app;
+        $task_id = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $userDao = new DAO\UserDao();
@@ -2059,9 +2092,11 @@ class TaskRouteHandler
         $app->render("task/task.view.tpl");
     }
 
-    public function task_search_translators(Request $request, Response $response, $args$task_id)
+    public function task_search_translators(Request $request, Response $response, $args)
     {
         global $app;
+        $task_id = $args['task_id'];
+
         $taskDao    = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $task       = $taskDao->getTask($task_id);
@@ -2161,9 +2196,12 @@ class TaskRouteHandler
         $app->render("task/task.search_translators.tpl");
     }
 
-    public function task_invites_sent(Request $request, Response $response, $args$task_id, $sesskey)
+    public function task_invites_sent(Request $request, Response $response, $args)
     {
         global $app;
+        $task_id = $args['task_id'];
+        $sesskey = $args['sesskey'];
+
         $taskDao = new DAO\TaskDao();
 
         Common\Lib\UserSession::checkCSRFKey($sesskey, 'task_invites_sent');
@@ -2199,9 +2237,11 @@ class TaskRouteHandler
         }
     }
 
-    public function taskCreate(Request $request, Response $response, $args$project_id)
+    public function taskCreate(Request $request, Response $response, $args)
     {
         global $app;
+        $project_id = $args['project_id'];
+
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
         $user_id = Common\Lib\UserSession::getCurrentUserID();
@@ -2359,9 +2399,11 @@ class TaskRouteHandler
         $app->render("task/task.create.tpl");
     }
 
-    public function taskCreated(Request $request, Response $response, $args$taskId)
+    public function taskCreated(Request $request, Response $response, $args)
     {
         global $app;
+        $taskId = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $task = $taskDao->getTask($taskId);
         $app->view()->appendData(array(
@@ -2372,9 +2414,11 @@ class TaskRouteHandler
         $app->render("task/task.created.tpl");
     }
 
-    public function taskOrgFeedback(Request $request, Response $response, $args$task_id)
+    public function taskOrgFeedback(Request $request, Response $response, $args)
     {
         global $app;
+        $task_id = $args['task_id'];
+
         $userDao = new DAO\UserDao();
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
@@ -2480,9 +2524,11 @@ class TaskRouteHandler
         $app->render("task/task.org-feedback.tpl");
     }
 
-    public function taskUserFeedback(Request $request, Response $response, $args$task_id)
+    public function taskUserFeedback(Request $request, Response $response, $args)
     {
         global $app;
+        $task_id = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $userDao = new DAO\UserDao();
@@ -2573,9 +2619,11 @@ class TaskRouteHandler
         $app->render("task/task.user-feedback.tpl");
     }
 
-    public function taskReview(Request $request, Response $response, $args$taskId)
+    public function taskReview(Request $request, Response $response, $args)
     {
         global $app;
+        $taskId = $args['task_id'];
+
         $taskDao = new DAO\TaskDao();
         $userDao = new DAO\UserDao();
         $userId = Common\Lib\UserSession::getCurrentUserID();

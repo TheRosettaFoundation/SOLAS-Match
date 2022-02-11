@@ -332,15 +332,12 @@ error_log("createTaskDirectly: $args");
         return $response;
     }
 
-    public function saveTaskFile($taskId, $userId, $fileData, $version = null, $convert = null)
+    public function saveTaskFile($taskId, $userId, $fileData, $version = null)
     {
         $request = "{$this->siteApi}v0/io/upload/task/$taskId/$userId";
         $args = array();
         if (!is_null($version)) {
             $args["version"] = $version;
-        }
-        if (!is_null($convert)) {
-            $args['convertFromXliff'] = $convert ? 1 : 0;
         }
 
         $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT, null, $args, $fileData);
@@ -375,15 +372,12 @@ error_log("createTaskDirectly: $args");
         }
     }
 
-    public function saveTaskFileFromProject($taskId, $userId, $fileData, $version = null, $convert = null)
+    public function saveTaskFileFromProject($taskId, $userId, $fileData, $version = null)
     {
         $request = "{$this->siteApi}v0/io/upload/taskfromproject/$taskId/$userId";
         $args = array();
         if (!is_null($version)) {
             $args["version"] = $version;
-        }
-        if (!is_null($convert)) {
-            $args['convertFromXliff'] = $convert ? 1 : 0;
         }
 
         $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT, null, $args, $fileData);
@@ -418,14 +412,11 @@ error_log("createTaskDirectly: $args");
         }
     }
 
-    public function uploadOutputFile($taskId, $userId, $fileData, $convert = false)
+    public function uploadOutputFile($taskId, $userId, $fileData)
     {
         $request = "{$this->siteApi}v0/io/upload/taskOutput/$taskId/$userId";
 
         $args = null;
-        if ($convert) {
-            $args= array('convertFromXliff' => $convert);
-        }
         
         $response = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::PUT, null, $args, $fileData);
     }
@@ -444,15 +435,12 @@ error_log("createTaskDirectly: $args");
         return $ret;
     }
     
-    public function downloadTaskVersion($taskId, $version, $convert)
+    public function downloadTaskVersion($taskId, $version)
     {
         $ret = null;
         $request = "{$this->siteApi}v0/io/download/task/$taskId";
         $args = array();
         $args['version'] = $version;
-        if ($convert) {
-            $args['convertToXliff'] = $convert;
-        }
         
         $ret = $this->client->call(null, $request, Common\Enums\HttpMethodEnum::GET, null, $args);
 

@@ -33,7 +33,7 @@ class TagRouteHandler
             ->setName('tag-details');
     }
 
-    public function tagsList(Request $request, Response $response, $args)
+    public function tagsList(Request $request, Response $response)
     {
         global $app;
         $userDao = new DAO\UserDao();
@@ -78,9 +78,13 @@ class TagRouteHandler
         $app->render("tag/tag-list.tpl");
     }
 
-    public function tagSubscribe(Request $request, Response $response, $args$id, $subscribe, $sesskey)
+    public function tagSubscribe(Request $request, Response $response, $args)
     {
         global $app;
+        $id = $args['id'];
+        $subscribe = $args['subscribe'];
+        $sesskey = $args['sesskey'];
+
         $tagDao = new DAO\TagDao();
         $userDao = new DAO\UserDao();
 
@@ -122,9 +126,11 @@ class TagRouteHandler
         $app->response()->redirect($app->request()->getReferer());
     }
 
-    public function tagDetails(Request $request, Response $response, $args$id)
+    public function tagDetails(Request $request, Response $response, $args)
     {
         global $app;
+        $id = $args['id'];
+
         $tagDao = new DAO\TagDao();
         $projectDao = new DAO\ProjectDao();
         $orgDao = new DAO\OrganisationDao();

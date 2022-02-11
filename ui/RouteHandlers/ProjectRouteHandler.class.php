@@ -2159,7 +2159,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     $app->flash('error', 'We could not find a matching file.');
                     $app->redirect($app->urlFor('home'));
                 }
-                $headArr = $taskDao->downloadTaskVersion($task_id, 0, 0); // Download an original Task file as "Project" file
+                $headArr = $taskDao->downloadTaskVersion($task_id, 0); // Download an original Task file as "Project" file
             } else {
             $headArr = $projectDao->downloadProjectFile($projectId);
             }
