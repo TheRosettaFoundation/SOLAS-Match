@@ -84,7 +84,7 @@ class ProjectRouteHandler
 
     public function memsourceHook()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         if ($app->request->headers->get('X-Memsource-Token') !== Common\Lib\Settings::get('memsource.X-Memsource-Token')) {
             error_log('X-Memsource-Token does not match!');
             die;
@@ -614,7 +614,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
     public function projectView($project_id)
     {
         $matecat_api = Common\Lib\Settings::get('matecat.url');
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $adminDao = new DAO\AdminDao();
         $projectDao = new DAO\ProjectDao();
@@ -1179,7 +1179,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
     public function projectAlter($project_id)
     {
         $matecat_api = Common\Lib\Settings::get('matecat.url');
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $user_id = Common\Lib\UserSession::getCurrentUserID();
 
         $projectDao = new DAO\ProjectDao();
@@ -1461,7 +1461,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
     public function projectCreate($org_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $user_id = Common\Lib\UserSession::getCurrentUserID();
 
         $adminDao = new DAO\AdminDao();
@@ -2078,7 +2078,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
     public function projectCreated($project_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $projectDao = new DAO\ProjectDao();
         $project = $projectDao->getProject($project_id);
         $org_id = $project->getOrganisationId();
@@ -2093,7 +2093,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
     public function archiveProject($project_id, $sesskey)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $projectDao = new DAO\ProjectDao();
 
         Common\Lib\UserSession::checkCSRFKey($sesskey, 'archiveProject');
@@ -2119,7 +2119,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
     public function downloadProjectFile($projectId)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
 
@@ -2172,7 +2172,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
     public function downloadProjectImageFile($projectId)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $projectDao = new DAO\ProjectDao();
 
         try {
@@ -2199,7 +2199,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
     public function create_discourse_topic($projectId, $targetlanguages, $memsource_project = 0)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
         $project = $projectDao->getProject($projectId);
@@ -2568,7 +2568,7 @@ error_log("fields: $fields targetlanguages: $targetlanguages");//(**)
       }
       fclose($fp_for_lock);
 
-        //$app = \Slim\Slim::getInstance();
+        //global $app;
         //$app->view()->appendData(array(
         //    'body' => 'Dummy',
         //));

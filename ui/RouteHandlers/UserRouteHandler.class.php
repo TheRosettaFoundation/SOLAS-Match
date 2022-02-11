@@ -189,7 +189,7 @@ class UserRouteHandler
 
     public function home($currentScrollPage = 1, $selectedTaskType = 0, $selectedSourceLanguageCode = 0, $selectedTargetLanguageCode = 0)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
@@ -425,7 +425,7 @@ class UserRouteHandler
 
     public function videos()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $app->view()->appendData(array('current_page' => 'videos'));
         $app->render("videos.tpl");
     }
@@ -434,7 +434,7 @@ class UserRouteHandler
     {
         if (!empty($track_code)) $_SESSION['track_code'] = $track_code;
 
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $userDao = new DAO\UserDao();
         $langDao = new DAO\LanguageDao();
 
@@ -543,7 +543,7 @@ class UserRouteHandler
 
     public function changeEmail($user_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $userDao = new DAO\UserDao();
         $adminDao = new DAO\AdminDao();
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
@@ -584,7 +584,7 @@ class UserRouteHandler
 
     public function emailVerification($uuid)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $userDao = new DAO\UserDao();
 
         $user = $userDao->getRegisteredUser($uuid);
@@ -613,7 +613,7 @@ class UserRouteHandler
 
     public function passwordReset($uid)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $userDao = new DAO\UserDao();
 
         $reset_request = $userDao->getPasswordResetRequest($uid);
@@ -652,7 +652,7 @@ class UserRouteHandler
 
     public function passResetRequest()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $userDao = new DAO\UserDao();
 
         if ($app->request()->isPost()) {
@@ -697,14 +697,14 @@ class UserRouteHandler
 
     public function logout()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         Common\Lib\UserSession::destroySession();
         $app->redirect($app->urlFor("home"));
     }
 
     public function login()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $userDao = new DAO\UserDao();
         $langDao = new DAO\LanguageDao();
 
@@ -879,7 +879,7 @@ class UserRouteHandler
 
     public function login_proz()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $userDao = new DAO\UserDao();
 
         error_log("login_proz() Redirect from ProZ");
@@ -971,7 +971,7 @@ class UserRouteHandler
 
     public function googleregister($user_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $userDao = new DAO\UserDao();
         $adminDao = new DAO\AdminDao();
 
@@ -1031,7 +1031,7 @@ class UserRouteHandler
 
     public static function userPrivateProfile($user_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
 
         $userDao = new DAO\UserDao();
         $adminDao = new DAO\AdminDao();
@@ -1756,7 +1756,7 @@ class UserRouteHandler
 
     public static function userCodeOfConduct($user_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
 
         $userDao = new DAO\UserDao();
         $adminDao = new DAO\AdminDao();
@@ -1837,7 +1837,7 @@ class UserRouteHandler
 
     public static function userUploads($user_id, $cert_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
 
         $userDao = new DAO\UserDao();
         $adminDao = new DAO\AdminDao();
@@ -1905,7 +1905,7 @@ class UserRouteHandler
 
     public function users_review()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $userDao = new DAO\UserDao();
 
         $all_users = $userDao->users_review();
@@ -1916,7 +1916,7 @@ class UserRouteHandler
 
     public function users_new()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $userDao = new DAO\UserDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
@@ -1976,7 +1976,7 @@ class UserRouteHandler
 
     public function users_tracked()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $userDao = new DAO\UserDao();
         $all_users = $userDao->users_tracked();
         $app->view()->appendData(array('all_users' => $all_users));
@@ -1985,7 +1985,7 @@ class UserRouteHandler
 
     public function add_tracking_code()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $userDao = new DAO\UserDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
@@ -2055,7 +2055,7 @@ class UserRouteHandler
 
     public static function userPublicProfile($user_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
         $adminDao = new DAO\AdminDao();
@@ -2432,7 +2432,7 @@ class UserRouteHandler
         $user_id = (int)openssl_decrypt($encrypted, 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
         $user_id -= 999999; // Ensure we don't use identical key to word count badge
 
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $userDao = new DAO\UserDao();
 
         $user = $userDao->getUser($user_id);
@@ -2470,7 +2470,7 @@ class UserRouteHandler
 
     public function editTaskStreamNotification($userId)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $userDao = new DAO\UserDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
@@ -2539,7 +2539,7 @@ class UserRouteHandler
 
     public function userTaskReviews($taskId)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $taskDao = new DAO\TaskDao();
         $adminDao = new DAO\AdminDao();
 
@@ -2574,13 +2574,13 @@ class UserRouteHandler
 
     public function no_application()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $app->render('user/no_application.tpl');
     }
 
     public function no_application_error()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $app->render('user/no_application_error.tpl');
     }
 }

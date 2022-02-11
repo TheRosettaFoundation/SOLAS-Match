@@ -35,7 +35,7 @@ class TagRouteHandler
 
     public function tagsList()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $userDao = new DAO\UserDao();
         $tagDao = new DAO\TagDao();
 
@@ -80,7 +80,7 @@ class TagRouteHandler
 
     public function tagSubscribe($id, $subscribe, $sesskey)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $tagDao = new DAO\TagDao();
         $userDao = new DAO\UserDao();
 
@@ -124,7 +124,7 @@ class TagRouteHandler
 
     public function tagDetails($id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $tagDao = new DAO\TagDao();
         $projectDao = new DAO\ProjectDao();
         $orgDao = new DAO\OrganisationDao();

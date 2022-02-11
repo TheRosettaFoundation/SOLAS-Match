@@ -23,7 +23,7 @@ class BadgeRouteHandler
 
     public function badgeList()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
 
         $org_list = array();
         $orgDao = new DAO\OrganisationDao();

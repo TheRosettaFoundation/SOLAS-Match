@@ -41,7 +41,7 @@ class StaticRouteHandler
 
     public function statistics()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $extraScripts = "
 <script type=\"text/javascript\" src=\"https://www.google.com/jsapi\"></script>
 <script type=\"application/dart\" src=\"{$app->urlFor("home")}ui/dart/web/Scripts/statistics.dart\"></script>
@@ -56,13 +56,13 @@ class StaticRouteHandler
 
     public function privacy()
     {
-         $app = \Slim\Slim::getInstance();
+         global $app;
          $app->render("static/privacy.tpl");
     }
     
     public function terms()
     {
-         $app = \Slim\Slim::getInstance();
+         global $app;
          $app->render("static/terms.tpl");
     }
     
@@ -88,7 +88,7 @@ class StaticRouteHandler
              $htmlFileExists = False;
              $includePath = __DIR__."/../localisation/FAQ_".$defaultCode.".html";
          }
-         $app = \Slim\Slim::getInstance();
+         global $app;
          $app->view()->appendData(array(
              'current_page' => 'faq', 
              'includeFile' => $includePath, 
@@ -98,7 +98,7 @@ class StaticRouteHandler
     
     public function videos()
     {
-         $app = \Slim\Slim::getInstance();
+         global $app;
          $app->view()->setData("current_page", "videos");
          $app->render("static/videos.tpl");
     }
@@ -106,7 +106,7 @@ class StaticRouteHandler
     public function siteLanguage()
     {
 
-        $app = \Slim\Slim::getInstance();
+        global $app;
         if ($post = $app->request()->post()) {
             if (isset($post['language'])) {
                 Common\Lib\UserSession::setUserLanguage($post['language']);

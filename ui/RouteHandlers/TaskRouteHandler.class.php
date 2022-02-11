@@ -177,7 +177,7 @@ class TaskRouteHandler
 
     public function archivedTasks($page_no)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $userDao = new DAO\UserDao();
         $userId = Common\Lib\UserSession::getCurrentUserID();
 
@@ -232,7 +232,7 @@ class TaskRouteHandler
 
     public function claimedTasks($user_id, $currentScrollPage = 1, $selectedTaskType = 0, $selectedTaskStatus = 3, $selectedOrdering = 0)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
         $projectDao = new DAO\ProjectDao();
@@ -468,7 +468,7 @@ class TaskRouteHandler
 
     public function recentTasks($user_id, $currentScrollPage = 1)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
         $projectDao = new DAO\ProjectDao();
@@ -593,7 +593,7 @@ class TaskRouteHandler
 
     public function downloadTaskLatestVersion($task_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $taskDao = new DAO\TaskDao();
 
         $task = $taskDao->getTask($task_id);
@@ -643,7 +643,7 @@ class TaskRouteHandler
 
     public function archiveTask($task_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $taskDao = new DAO\TaskDao();
 
         $task = $taskDao->getTask($task_id);
@@ -676,7 +676,7 @@ class TaskRouteHandler
 
     public function downloadTask($taskId)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $convert = $app->request()->get("convertToXliff");
 
         try {
@@ -696,7 +696,7 @@ class TaskRouteHandler
 
     public function downloadTaskExternal($taskId)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $taskDao = new DAO\TaskDao();
         $convert = $app->request()->get("convertToXliff");
 
@@ -746,7 +746,7 @@ class TaskRouteHandler
      */
     public function taskClaim($taskId)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $taskDao = new DAO\TaskDao();
         $userDao = new DAO\UserDao();
         $languageDao = new DAO\LanguageDao();
@@ -820,7 +820,7 @@ class TaskRouteHandler
 
     public function taskClaimed($task_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $taskDao = new DAO\TaskDao();
         $adminDao = new DAO\AdminDao();
         $projectDao = new DAO\ProjectDao();
@@ -843,7 +843,7 @@ class TaskRouteHandler
 
     public function downloadTaskVersion($taskId, $version, $convert = 0)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $taskDao = new DAO\TaskDao();
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
@@ -863,7 +863,7 @@ class TaskRouteHandler
 
     public function task($taskId)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $userDao = new DAO\UserDao();
@@ -1136,7 +1136,7 @@ class TaskRouteHandler
     public function taskSimpleUpload($taskId)
     {
         $matecat_api = Common\Lib\Settings::get('matecat.url');
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $orgDao = new DAO\OrganisationDao();
@@ -1412,7 +1412,7 @@ class TaskRouteHandler
     public function taskChunkComplete($taskId)
     {
         $matecat_api = Common\Lib\Settings::get('matecat.url');
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
 
@@ -1535,7 +1535,7 @@ class TaskRouteHandler
 
     public function taskUploaded($task_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $orgDao = new DAO\OrganisationDao();
@@ -1556,7 +1556,7 @@ class TaskRouteHandler
 
     public function taskChunkCompleted($task_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $orgDao = new DAO\OrganisationDao();
@@ -1577,7 +1577,7 @@ class TaskRouteHandler
 
     public function taskAlter($task_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $adminDao = new DAO\AdminDao();
@@ -1874,7 +1874,7 @@ class TaskRouteHandler
 
     public function taskView($task_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $userDao = new DAO\UserDao();
@@ -2061,7 +2061,7 @@ class TaskRouteHandler
 
     public function task_search_translators($task_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $taskDao    = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $task       = $taskDao->getTask($task_id);
@@ -2163,7 +2163,7 @@ class TaskRouteHandler
 
     public function task_invites_sent($task_id, $sesskey)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $taskDao = new DAO\TaskDao();
 
         Common\Lib\UserSession::checkCSRFKey($sesskey, 'task_invites_sent');
@@ -2201,7 +2201,7 @@ class TaskRouteHandler
 
     public function taskCreate($project_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $projectDao = new DAO\ProjectDao();
         $taskDao = new DAO\TaskDao();
         $user_id = Common\Lib\UserSession::getCurrentUserID();
@@ -2361,7 +2361,7 @@ class TaskRouteHandler
 
     public function taskCreated($taskId)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $taskDao = new DAO\TaskDao();
         $task = $taskDao->getTask($taskId);
         $app->view()->appendData(array(
@@ -2374,7 +2374,7 @@ class TaskRouteHandler
 
     public function taskOrgFeedback($task_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $userDao = new DAO\UserDao();
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
@@ -2482,7 +2482,7 @@ class TaskRouteHandler
 
     public function taskUserFeedback($task_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $taskDao = new DAO\TaskDao();
         $projectDao = new DAO\ProjectDao();
         $userDao = new DAO\UserDao();
@@ -2575,7 +2575,7 @@ class TaskRouteHandler
 
     public function taskReview($taskId)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $taskDao = new DAO\TaskDao();
         $userDao = new DAO\UserDao();
         $userId = Common\Lib\UserSession::getCurrentUserID();

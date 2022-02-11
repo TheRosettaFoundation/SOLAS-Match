@@ -269,7 +269,7 @@ class AdminRouteHandler
     
     public function adminDashboard()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $userId = Common\Lib\UserSession::getCurrentUserID();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
@@ -456,7 +456,7 @@ class AdminRouteHandler
 
     public function all_users()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->getUsers();
@@ -467,7 +467,7 @@ class AdminRouteHandler
 
     public function all_users_plain()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->getUsers();
@@ -478,7 +478,7 @@ class AdminRouteHandler
 
     public function active_now()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->active_now();
@@ -489,7 +489,7 @@ class AdminRouteHandler
 
     public function active_now_matecat()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->active_now_matecat();
@@ -500,7 +500,7 @@ class AdminRouteHandler
 
     public function testing_center()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->testing_center();
@@ -547,7 +547,7 @@ class AdminRouteHandler
 
     public function late_matecat()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->late_matecat();
@@ -558,7 +558,7 @@ class AdminRouteHandler
 
     public function complete_matecat()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->complete_matecat();
@@ -569,7 +569,7 @@ class AdminRouteHandler
 
     public function user_task_reviews()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->user_task_reviews();
@@ -580,7 +580,7 @@ class AdminRouteHandler
 
     public function submitted_task_reviews()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->submitted_task_reviews();
@@ -652,7 +652,7 @@ class AdminRouteHandler
 
     public function tasks_no_reviews()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->tasks_no_reviews();
@@ -687,7 +687,7 @@ class AdminRouteHandler
 
     public function project_source_file_scores()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->project_source_file_scores();
@@ -727,7 +727,7 @@ class AdminRouteHandler
 
     public function first_completed_task()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->complete_matecat();
@@ -754,7 +754,7 @@ class AdminRouteHandler
 
     public function active_users()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->active_users();
@@ -765,7 +765,7 @@ class AdminRouteHandler
 
     public function active_users_unique()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->active_users();
@@ -780,7 +780,7 @@ class AdminRouteHandler
 
     public function unclaimed_tasks()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->unclaimed_tasks();
@@ -791,7 +791,7 @@ class AdminRouteHandler
 
     public function search_users_by_language_pair()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $statsDao = new DAO\StatisticsDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
@@ -811,7 +811,7 @@ class AdminRouteHandler
 
     public function user_languages($code)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $statsDao = new DAO\StatisticsDao();
 
         if ($code === 'full') $code = null;
@@ -844,7 +844,7 @@ class AdminRouteHandler
 
     public function user_task_languages($code)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $statsDao = new DAO\StatisticsDao();
 
         if ($code === 'full') $code = null;
@@ -856,7 +856,7 @@ class AdminRouteHandler
 
     public function user_words_by_language()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->user_words_by_language();
@@ -1266,7 +1266,7 @@ class AdminRouteHandler
 
     public function language_work_requested()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $statsDao = new DAO\StatisticsDao();
         $language_work_requested = $statsDao->language_work_requested();
 
@@ -1366,7 +1366,7 @@ class AdminRouteHandler
 
     public function translators_for_language_pairs()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $statsDao = new DAO\StatisticsDao();
         $translators_for_language_pairs = $statsDao->translators_for_language_pairs();
 
@@ -1425,7 +1425,7 @@ class AdminRouteHandler
 
     public function matecat_analyse_status()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->matecat_analyse_status();
@@ -1436,7 +1436,7 @@ class AdminRouteHandler
 
     public function list_memsource_projects()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->list_memsource_projects();

@@ -103,7 +103,7 @@ class OrgRouteHandler
 
     public function createOrg()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
 
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
             $_SESSION['SESSION_CSRF_KEY'] = Common\Lib\UserSession::random_string(10);
@@ -422,7 +422,7 @@ class OrgRouteHandler
 
     public function orgDashboard()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $current_user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
@@ -534,7 +534,7 @@ class OrgRouteHandler
 
     public function org_orgDashboard($org_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $current_user_id = Common\Lib\UserSession::getCurrentUserID();
         $userDao = new DAO\UserDao();
         $projectDao = new DAO\ProjectDao();
@@ -602,7 +602,7 @@ class OrgRouteHandler
 
     public function orgRequestMembership($org_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $userDao = new DAO\UserDao();
         $orgDao = new DAO\OrganisationDao();
 
@@ -627,7 +627,7 @@ class OrgRouteHandler
 
     public function orgRequestQueue($org_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $orgDao = new DAO\OrganisationDao();
         $userDao = new DAO\UserDao();
 
@@ -705,7 +705,7 @@ class OrgRouteHandler
 
     public function orgPrivateProfile($org_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
 
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
             $_SESSION['SESSION_CSRF_KEY'] = Common\Lib\UserSession::random_string(10);
@@ -1676,7 +1676,7 @@ class OrgRouteHandler
 
     public function orgPublicProfile($org_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $adminDao = new DAO\AdminDao();
         $orgDao = new DAO\OrganisationDao();
         $userDao = new DAO\UserDao();
@@ -2006,7 +2006,7 @@ class OrgRouteHandler
 
     public function orgManageBadge($org_id, $badge_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $badgeDao = new DAO\BadgeDao();
         $userDao = new DAO\UserDao();
 
@@ -2075,7 +2075,7 @@ class OrgRouteHandler
 
     public function orgCreateBadge($org_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $badgeDao = new DAO\BadgeDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
@@ -2107,7 +2107,7 @@ class OrgRouteHandler
 
     public function orgSearch()
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $orgDao = new DAO\OrganisationDao();
         $foundOrgs = array();
 
@@ -2136,7 +2136,7 @@ class OrgRouteHandler
     
     public function orgEditBadge($org_id, $badge_id)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $badgeDao = new DAO\BadgeDao();
 
         $badge = $badgeDao->getBadge($badge_id);
@@ -2148,7 +2148,7 @@ class OrgRouteHandler
 
     public function orgTaskComplete($orgId, $taskId)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $taskDao = new DAO\TaskDao();
         $userDao = new DAO\UserDao();
         $projectDao = new DAO\ProjectDao();
@@ -2181,7 +2181,7 @@ class OrgRouteHandler
 
     public function orgTaskReview($orgId, $taskId)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $taskDao = new DAO\TaskDao();
         $userDao = new DAO\UserDao();
 
@@ -2302,7 +2302,7 @@ class OrgRouteHandler
 
     public function orgTaskReviews($orgId, $taskId)
     {
-        $app = \Slim\Slim::getInstance();
+        global $app;
         $viewData = array();
         $taskDao = new DAO\TaskDao();
         $task = $taskDao->getTask($taskId);
