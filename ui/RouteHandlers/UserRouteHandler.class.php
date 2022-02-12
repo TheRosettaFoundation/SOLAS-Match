@@ -583,7 +583,7 @@ class UserRouteHandler
 
         if (is_null($user)) {
             UserRouteHandler::flash("error", Lib\Localisation::getTranslation('email_verification_7'));
-            $app->redirect($app->urlFor("home"));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
         }
 
         if ($app->request()->isPost()) {
@@ -594,7 +594,7 @@ class UserRouteHandler
                 } else {
                     UserRouteHandler::flash('error', 'Failed to finish registration');  // TODO: remove inline text
                 }
-                $app->redirect($app->urlFor('login'));
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
             }
         }
 
@@ -613,7 +613,7 @@ class UserRouteHandler
         $reset_request = $userDao->getPasswordResetRequest($uid);
         if (!is_object($reset_request)) {
             UserRouteHandler::flash("error", Lib\Localisation::getTranslation('password_reset_1'));
-            $app->redirect($app->urlFor("home"));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
         }
 
         $user_id = $reset_request->getUserId();
@@ -630,7 +630,7 @@ class UserRouteHandler
                     $response = $userDao->resetPassword($post['new_password'], $uid);
                     if ($response) {
                         UserRouteHandler::flash("success", Lib\Localisation::getTranslation('password_reset_2'));
-                        $app->redirect($app->urlFor("home"));
+                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
                     } else {
                         UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
                     }
@@ -660,7 +660,7 @@ class UserRouteHandler
                         //send request
                         if ($userDao->requestPasswordReset($email)) {
                             UserRouteHandler::flash("success", Lib\Localisation::getTranslation('user_reset_password_2'));
-                            $app->redirect($app->urlFor("home"));
+                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
                         } else {
                             UserRouteHandler::flashNow(
                                 "error",
@@ -694,7 +694,7 @@ class UserRouteHandler
         global $app;
 
         Common\Lib\UserSession::destroySession();
-        $app->redirect($app->urlFor("home"));
+        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
     }
 
     public function login(Request $request, Response $response)
@@ -749,22 +749,22 @@ class UserRouteHandler
                     //Redirect to homepage, or the page the page user was previously on e.g. if their
                     //session timed out and they are logging in again.
                     if ($request) {
-                        $app->redirect($request);
+                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()$request);
                     } else {
                         if ($userDao->is_admin_or_org_member($user->getId())) {
-                            $app->redirect($app->urlFor('home'));
+                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
                         } else {
                             $nativeLocale = $user->getNativeLocale();
                             if ($nativeLocale && $nativeLocale->getLanguageCode()) {
-                                $app->redirect($app->urlFor("home"));
+                                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
                             } else {
-                                $app->redirect($app->urlFor('user-private-profile', array('user_id' => $user->getId())));
+                                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user->getId())));
                             }
                         }
                     }
                 }
             } elseif (isset($post['password_reset'])) {
-                $app->redirect($app->urlFor("password-reset-request"));
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("password-reset-request"));
             } elseif (isset($post['credential'])) { // Google Sign-In
                 if (empty($post['g_csrf_token']))    $error = 'No CSRF token in post body.';
                 if (empty($_COOKIE['g_csrf_token'])) $error = 'No CSRF token in Cookie.';
@@ -790,7 +790,7 @@ class UserRouteHandler
 
                 $error = sprintf(Lib\Localisation::getTranslation('gplus_error'), $app->urlFor('login'), $app->urlFor('register'), "[$error]");
                 UserRouteHandler::flash('error', $error);
-                $app->redirect($app->urlFor('home'));
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
             }
         } else {
             $authCode = $app->request()->get('code');
@@ -807,7 +807,7 @@ class UserRouteHandler
                         $e->getMessage()
                     );
                     UserRouteHandler::flash('error', $error);
-                    $app->redirect($app->urlFor('login'));
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
                 }
                 error_log('OAuth, Login: ' . $user->getEmail());
                 Common\Lib\UserSession::setSession($user->getId());
@@ -834,20 +834,20 @@ class UserRouteHandler
                 $userDao->setRequiredProfileCompletedinSESSION($user->getId());
 
                 if ($request) {
-                    $app->redirect($request);
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()$request);
                 } else {
                     if ($userDao->is_admin_or_org_member($user->getId())) {
-                        $app->redirect($app->urlFor('home'));
+                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
                     } else {
                         $nativeLocale = $user->getNativeLocale();
                         if ($nativeLocale && $nativeLocale->getLanguageCode()) {
-                            $app->redirect($app->urlFor("home"));
+                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
                         } else {
                             if ($userDao->terms_accepted($user->getId()) == 1) {
                                 // Since they are logged in (via Google)...
-                                $app->redirect($app->urlFor('googleregister', array('user_id' => $user->getId())));
+                                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('googleregister', array('user_id' => $user->getId())));
                             }
-                            $app->redirect($app->urlFor('user-private-profile', array('user_id' => $user->getId())));
+                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user->getId())));
                         }
                     }
                 }
@@ -957,7 +957,7 @@ class UserRouteHandler
         error_log($bad_message);
 
         UserRouteHandler::flash('error', $error);
-        $app->redirect($app->urlFor('home'));
+        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
     }
 
     private static function createGooglePlusJavaScript()
@@ -977,7 +977,7 @@ class UserRouteHandler
         $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
         if ($user_id != $loggedInUserId && !$isSiteAdmin) {
             UserRouteHandler::flash('error', Lib\Localisation::getTranslation('common_login_required_to_access_page'));
-            $app->redirect($app->urlFor('login'));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
         }
 
         $user_info = $userDao->getUser($user_id);
@@ -996,7 +996,7 @@ class UserRouteHandler
             $userDao->updatePersonalInfo($user_id, $user_personal_info);
             array_key_exists('newsletter_consent', $post) ? $userDao->insert_communications_consent($user_id, 1) : $userDao->insert_communications_consent($user_id, 0);
             if ($userDao->terms_accepted($user_id) < 2) $userDao->update_terms_accepted($user_id, 2);
-            $app->redirect($app->urlFor('user-private-profile', array('user_id' => $user_id)));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user_id)));
         } else {
             $extra_scripts  = '<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script> ';
             $extra_scripts .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" type="text/javascript"></script> ';
@@ -1053,7 +1053,7 @@ class UserRouteHandler
 
         if (!is_object($user)) {
             UserRouteHandler::flash("error", Lib\Localisation::getTranslation('common_login_required_to_access_page'));
-            $app->redirect($app->urlFor("login"));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("login"));
         }
 
         $userPersonalInfo = null;
@@ -1264,7 +1264,7 @@ class UserRouteHandler
                     $userDao->update_terms_accepted($user_id, 3);
                     if ($notify) $userDao->NotifyRegistered($user_id);
 
-                    $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user_id)));
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-public-profile', array('user_id' => $user_id)));
                 } catch (\Exception $e) {
                     UserRouteHandler::flashNow('error', 'Failed to Update');
                 }
@@ -1764,7 +1764,7 @@ class UserRouteHandler
         $adminDao = new DAO\AdminDao();
 
         if (!$userDao->is_admin_or_org_member($user_id)) {
-            $app->redirect($app->urlFor('user-private-profile', array('user_id' => $user_id)));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('user-private-profile', array('user_id' => $user_id)));
         }
 
         if (empty($_SESSION['SESSION_CSRF_KEY'])) {
@@ -1777,7 +1777,7 @@ class UserRouteHandler
 
         if (!is_object($user)) {
             UserRouteHandler::flash("error", Lib\Localisation::getTranslation('common_login_required_to_access_page'));
-            $app->redirect($app->urlFor("login"));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("login"));
         }
 
         $userPersonalInfo = null;
@@ -1811,7 +1811,7 @@ class UserRouteHandler
                     $userDao->update_terms_accepted($user_id, 3);
                     $userDao->NotifyRegistered($user_id);
 
-                    $app->redirect($app->urlFor('org-dashboard'));
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('org-dashboard'));
                 } catch (\Exception $e) {
                     UserRouteHandler::flashNow('error', 'Failed to Update');
                 }
@@ -2093,7 +2093,7 @@ class UserRouteHandler
             $user = $userDao->getUser($user_id);
         } catch (Common\Exceptions\SolasMatchException $e) {
             UserRouteHandler::flash('error', Lib\Localisation::getTranslation('common_login_required_to_access_page'));
-            $app->redirect($app->urlFor('login'));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('login'));
         }
         $userPersonalInfo = null;
         $receive_credit = 0;
@@ -2507,7 +2507,7 @@ class UserRouteHandler
                 }
 
                 UserRouteHandler::flash("success", Lib\Localisation::getTranslation('user_public_profile_17'));
-                $app->redirect($app->urlFor("user-public-profile", array("user_id" => $userId)));
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("user-public-profile", array("user_id" => $userId)));
             }
         }
 

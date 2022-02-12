@@ -629,12 +629,12 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
         $project = $projectDao->getProject($project_id);
         if (empty($project)) {
             UserRouteHandler::flash('error', 'That project does not exist!');
-            $app->redirect($app->urlFor('home'));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
 
         if ($taskDao->isUserRestrictedFromProject($project_id, $user_id)) {
             UserRouteHandler::flash('error', 'You cannot access this project!');
-            $app->redirect($app->urlFor('home'));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
 
         $memsource_project = $projectDao->get_memsource_project($project_id);
@@ -1338,7 +1338,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                     }
                                 }
                                 try {
-                                     $app->redirect($app->urlFor('project-view', array('project_id' => $project->getId())));
+                                     return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('project-view', array('project_id' => $project->getId())));
                                 } catch (\Exception $e) { // redirect throws \Slim\Exception\Stop
                                 }
                             }
@@ -1850,7 +1850,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                                         }
                                         try {
                                             UserRouteHandler::flash('success', 'It may take a while for all Tasks to appear below, please refresh the page until they all appear');
-                                            $app->redirect($app->urlFor('project-view', array('project_id' => $project->getId())));
+                                            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('project-view', array('project_id' => $project->getId())));
                                         } catch (\Exception $e) { // redirect throws \Slim\Exception\Stop
                                         }
                                     } catch (\Exception $e) {
@@ -2125,7 +2125,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             );
         }
 
-        $app->redirect($ref = $app->request()->getReferrer());
+        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()$ref = $app->request()->getReferrer());
     }
 
     public function downloadProjectFile(Request $request, Response $response, $args)
@@ -2138,7 +2138,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
 
         if ($taskDao->isUserRestrictedFromProject($projectId, Common\Lib\UserSession::getCurrentUserID())) {
             UserRouteHandler::flash('error', 'You cannot access this project!');
-            $app->redirect($app->urlFor('home'));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
 
         $project_tasks = $projectDao->get_tasks_for_project($projectId); // Is a memsource project if any memsource jobs
@@ -2157,7 +2157,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                 }
                 if (!$unitary) {
                     UserRouteHandler::flash('error', 'We could not find a matching file.');
-                    $app->redirect($app->urlFor('home'));
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
                 }
                 $headArr = $taskDao->downloadTaskVersion($task_id, 0); // Download an original Task file as "Project" file
             } else {
@@ -2179,7 +2179,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     Common\Lib\Settings::get("site.system_email_address")
                 )
             );
-            $app->redirect($app->urlFor('home'));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
     }
 
@@ -2208,7 +2208,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
                     Common\Lib\Settings::get("site.system_email_address")
                 )
             );
-            $app->redirect($app->urlFor('home'));
+            return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
         }
     }
 

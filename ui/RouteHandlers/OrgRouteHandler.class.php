@@ -381,7 +381,7 @@ class OrgRouteHandler
                         $res = json_decode($result, true);
                         $projectDao->set_memsource_client($new_org->getId(), $res['id'], $res['uid']);
 
-                        $app->redirect($app->urlFor('org-dashboard'));
+                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('org-dashboard'));
                     }
                 } catch (Common\Exceptions\SolasMatchException $ex) {
                     $org_name = $org->getName();
@@ -626,7 +626,7 @@ class OrgRouteHandler
         } else {
             UserRouteHandler::flash("error", Lib\Localisation::getTranslation('org_public_profile_13'));
         }
-        $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org_id)));
+        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("org-public-profile", array("org_id" => $org_id)));
     }
 
     public function orgRequestQueue(Request $request, Response $response, $args)
@@ -970,7 +970,7 @@ class OrgRouteHandler
                     try {
                         $orgDao->updateOrg($org);
                         $orgDao->updateOrgExtendedProfile($org2);
-                        $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org->getId())));
+                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("org-public-profile", array("org_id" => $org->getId())));
                     } catch (Common\Exceptions\SolasMatchException $ex) {
                         $org_name = $org->getName();
                         UserRouteHandler::flashNow(
@@ -995,7 +995,7 @@ class OrgRouteHandler
                                 $org->getName()
                             )
                         );
-                        $app->redirect($app->urlFor("home"));
+                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("home"));
                     } else {
                         UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('org_private_profile_delete_fail'));
                     }
@@ -1755,7 +1755,7 @@ class OrgRouteHandler
                     $badge->setDescription($post['description']);
                     $badge->setOwnerId("");
                     $badgeDao->updateBadge($badge);
-                    $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org_id)));
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("org-public-profile", array("org_id" => $org_id)));
                 }
             }
             
@@ -2108,7 +2108,7 @@ class OrgRouteHandler
                 $badgeDao->createBadge($badge);
                 
                 UserRouteHandler::flash("success", Lib\Localisation::getTranslation('org_create_badge_33'));
-                $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org_id)));
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("org-public-profile", array("org_id" => $org_id)));
             }
         }
         
@@ -2278,12 +2278,12 @@ class OrgRouteHandler
                             $task->getTitle()
                         )
                     );
-                    $app->redirect($app->urlFor('project-view', array("project_id" => $task->getProjectId())));
+                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('project-view', array("project_id" => $task->getProjectId())));
                 }
             }
 
             if (isset($post['skip'])) {
-                $app->redirect($app->urlFor("project-view", array('project_id' => $task->getProjectId())));
+                return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor("project-view", array('project_id' => $task->getProjectId())));
             }
         }
 
