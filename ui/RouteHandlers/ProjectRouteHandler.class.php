@@ -2175,9 +2175,10 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             if (!empty($headArr)) {
                 $headArr = unserialize($headArr);
                 foreach ($headArr as $key => $val) {
-                    $app->response->headers->set($key, $val);
+                    $response->withHeader($key, $val);
                 }
             }
+            return $response;
         } catch (Common\Exceptions\SolasMatchException $e) {
             UserRouteHandler::flash(
                 "error",
@@ -2204,9 +2205,10 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             if (!empty($headArr)) {
                 $headArr = unserialize($headArr);
                 foreach ($headArr as $key => $val) {
-                    $app->response->headers->set($key, $val);
+                    $response->withHeader($key, $val);
                 }
             }
+            return $response;
         } catch (Common\Exceptions\SolasMatchException $e) {
             UserRouteHandler::flash(
                 "error",
