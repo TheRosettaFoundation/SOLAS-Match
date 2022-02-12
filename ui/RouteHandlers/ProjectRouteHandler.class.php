@@ -2125,7 +2125,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
             );
         }
 
-        return $response->withStatus(302)->withHeader('Location', $app->request()->getReferrer());
+        return $response->withStatus(302)->withHeader('Location', $request->getUri());
     }
 
     public function downloadProjectFile(Request $request, Response $response, $args)

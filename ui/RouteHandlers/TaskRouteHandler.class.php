@@ -687,7 +687,7 @@ class TaskRouteHandler
             );
         }
 
-        return $response->withStatus(302)->withHeader('Location', $app->request()->getReferrer());
+        return $response->withStatus(302)->withHeader('Location', $request->getUri());
     }
 
     public function downloadTask(Request $request, Response $response, $args)
