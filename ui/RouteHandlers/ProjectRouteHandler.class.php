@@ -2812,8 +2812,10 @@ error_log("get_queue_asana_projects: $projectId");//(**)
         return '';
     }
 
-    public function project_get_wordcount($project_id)
+    public function project_get_wordcount(Request $request, Response $response, $args)
     {
+        $project_id = $args['project_id'];
+
         $projectDao = new DAO\ProjectDao();
         $project = $projectDao->getProject($project_id);
 
@@ -2824,7 +2826,7 @@ error_log("get_queue_asana_projects: $projectId");//(**)
         }
         if (empty($word_count) || $word_count == 1) $word_count = '-';
 
-        \Slim\Slim::getInstance()->response()->body($word_count);
+        return $response->getBody()->write($word_count);
     }
 }
 
