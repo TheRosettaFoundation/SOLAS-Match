@@ -805,7 +805,8 @@ class UserRouteHandler
                 return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
             }
         } else {
-            $authCode = $app->request()->get('code');
+            $parms = $request->getQueryParams();
+            $authCode = !empty($parms['code']) ? $parms['code'] : null;
             if (!is_null($authCode)) {
                 // Exchange auth code for access token
                 $user = null;
@@ -865,14 +866,15 @@ class UserRouteHandler
                 }
             }
 
-            $return_to_SAML_url = $app->request()->get('ReturnTo');
+            $parms = $request->getQueryParams();
+            $return_to_SAML_url = !empty($parms['ReturnTo']) ? $parms['ReturnTo'] : null;
             if (!empty($return_to_SAML_url)) {
                 $_SESSION['return_to_SAML_url'] = $return_to_SAML_url;
             }
 
-            $error = $app->request()->get('error');
+            $error = !empty($parms['error']) ? $parms['error'] : null;
             if (!is_null($error)) {
-                UserRouteHandler::flashNow('error', $app->request()->get('error_message'));
+                UserRouteHandler::flashNow('error', !empty($parms['error_message']) ? $parms['error_message'] : '');
             }
         }
 
@@ -895,7 +897,8 @@ class UserRouteHandler
 
         $bad_message = '';
 
-        $code = $app->request()->get('code');
+        $parms = $request->getQueryParams();
+        $code = !empty($parms['code']) ? $parms['code'] : null;
         if (!empty($code)) {
             // Exchange the authorization code for an access token
             $client_id = Common\Lib\Settings::get('proz.client_id');
