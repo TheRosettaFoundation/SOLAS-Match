@@ -178,6 +178,7 @@ class TaskRouteHandler
     public function archivedTasks(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $page_no = $args['page_no'];
 
         $userDao = new DAO\UserDao();
@@ -235,6 +236,7 @@ class TaskRouteHandler
     public function claimedTasks(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $user_id = $args['user_id'];
         $currentScrollPage  = !empty($args['page_no']) ? $args['page_no'] : 1;
         $selectedTaskType   = !empty($args['tt'])      ? $args['tt'] : 0;
@@ -477,6 +479,7 @@ class TaskRouteHandler
     public function recentTasks(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $user_id = $args['user_id'];
         $currentScrollPage  = !empty($args['page_no']) ? $args['page_no'] : 1;
 
@@ -763,6 +766,7 @@ class TaskRouteHandler
     public function taskClaim(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $taskId = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();
@@ -835,6 +839,7 @@ class TaskRouteHandler
     public function taskClaimed(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $task_id = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();
@@ -883,6 +888,7 @@ class TaskRouteHandler
     public function task(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $taskId = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();
@@ -1157,6 +1163,7 @@ class TaskRouteHandler
     public function taskSimpleUpload(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $taskId = $args['task_id'];
 
         $matecat_api = Common\Lib\Settings::get('matecat.url');
@@ -1435,6 +1442,7 @@ class TaskRouteHandler
     public function taskChunkComplete(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $taskId = $args['task_id'];
 
         $matecat_api = Common\Lib\Settings::get('matecat.url');
@@ -1561,6 +1569,7 @@ class TaskRouteHandler
     public function taskUploaded(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $task_id = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();
@@ -1584,6 +1593,7 @@ class TaskRouteHandler
     public function taskChunkCompleted(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $task_id = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();
@@ -1607,6 +1617,7 @@ class TaskRouteHandler
     public function taskAlter(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $task_id = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();
@@ -1906,6 +1917,7 @@ class TaskRouteHandler
     public function taskView(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $task_id = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();
@@ -2095,6 +2107,7 @@ class TaskRouteHandler
     public function task_search_translators(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $task_id = $args['task_id'];
 
         $taskDao    = new DAO\TaskDao();
@@ -2240,6 +2253,7 @@ class TaskRouteHandler
     public function taskCreate(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $project_id = $args['project_id'];
 
         $projectDao = new DAO\ProjectDao();
@@ -2402,6 +2416,7 @@ class TaskRouteHandler
     public function taskCreated(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $taskId = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();
@@ -2417,6 +2432,7 @@ class TaskRouteHandler
     public function taskOrgFeedback(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $task_id = $args['task_id'];
 
         $userDao = new DAO\UserDao();
@@ -2527,6 +2543,7 @@ class TaskRouteHandler
     public function taskUserFeedback(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $task_id = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();
@@ -2622,6 +2639,7 @@ class TaskRouteHandler
     public function taskReview(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $taskId = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();

@@ -614,6 +614,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
     public function projectView(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $project_id = $args['project_id'];
 
         $matecat_api = Common\Lib\Settings::get('matecat.url');
@@ -1181,6 +1182,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
     public function projectAlter(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $project_id = $args['project_id'];
 
         $matecat_api = Common\Lib\Settings::get('matecat.url');
@@ -1466,6 +1468,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
     public function projectCreate(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $org_id = $args['org_id'];
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
@@ -2085,6 +2088,7 @@ error_log("task_id: $task_id, memsource_task for {$part['uid']} in event JOB_STA
     public function projectCreated(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $project_id = $args['project_id'];
 
         $projectDao = new DAO\ProjectDao();

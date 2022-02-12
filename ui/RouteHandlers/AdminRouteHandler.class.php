@@ -270,6 +270,7 @@ class AdminRouteHandler
     public function adminDashboard(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $userId = Common\Lib\UserSession::getCurrentUserID();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
@@ -457,6 +458,7 @@ class AdminRouteHandler
     public function all_users(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->getUsers();
@@ -468,6 +470,7 @@ class AdminRouteHandler
     public function all_users_plain(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->getUsers();
@@ -479,6 +482,7 @@ class AdminRouteHandler
     public function active_now(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->active_now();
@@ -490,6 +494,7 @@ class AdminRouteHandler
     public function active_now_matecat(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->active_now_matecat();
@@ -501,6 +506,7 @@ class AdminRouteHandler
     public function testing_center(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->testing_center();
@@ -548,6 +554,7 @@ class AdminRouteHandler
     public function late_matecat(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->late_matecat();
@@ -559,6 +566,7 @@ class AdminRouteHandler
     public function complete_matecat(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->complete_matecat();
@@ -570,6 +578,7 @@ class AdminRouteHandler
     public function user_task_reviews(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->user_task_reviews();
@@ -581,6 +590,7 @@ class AdminRouteHandler
     public function submitted_task_reviews(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->submitted_task_reviews();
@@ -653,6 +663,7 @@ class AdminRouteHandler
     public function tasks_no_reviews(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->tasks_no_reviews();
@@ -688,6 +699,7 @@ class AdminRouteHandler
     public function project_source_file_scores(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->project_source_file_scores();
@@ -728,6 +740,7 @@ class AdminRouteHandler
     public function first_completed_task(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->complete_matecat();
@@ -755,6 +768,7 @@ class AdminRouteHandler
     public function active_users(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->active_users();
@@ -766,6 +780,7 @@ class AdminRouteHandler
     public function active_users_unique(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->active_users();
@@ -781,6 +796,7 @@ class AdminRouteHandler
     public function unclaimed_tasks(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->unclaimed_tasks();
@@ -792,6 +808,7 @@ class AdminRouteHandler
     public function search_users_by_language_pair(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $statsDao = new DAO\StatisticsDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
@@ -812,6 +829,7 @@ class AdminRouteHandler
     public function user_languages(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $code = $args['code'];
 
         $statsDao = new DAO\StatisticsDao();
@@ -847,6 +865,7 @@ class AdminRouteHandler
     public function user_task_languages(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $code = $args['code'];
 
         $statsDao = new DAO\StatisticsDao();
@@ -861,6 +880,7 @@ class AdminRouteHandler
     public function user_words_by_language(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->user_words_by_language();
@@ -1271,6 +1291,7 @@ class AdminRouteHandler
     public function language_work_requested(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $statsDao = new DAO\StatisticsDao();
         $language_work_requested = $statsDao->language_work_requested();
 
@@ -1371,6 +1392,7 @@ class AdminRouteHandler
     public function translators_for_language_pairs(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $statsDao = new DAO\StatisticsDao();
         $translators_for_language_pairs = $statsDao->translators_for_language_pairs();
 
@@ -1430,6 +1452,7 @@ class AdminRouteHandler
     public function matecat_analyse_status(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->matecat_analyse_status();
@@ -1441,6 +1464,7 @@ class AdminRouteHandler
     public function list_memsource_projects(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $statsDao = new DAO\StatisticsDao();
 
         $all_users = $statsDao->list_memsource_projects();

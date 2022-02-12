@@ -180,6 +180,7 @@ class UserRouteHandler
     public function home(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $currentScrollPage          = !empty($args['page_no']) ? $args['page_no'] : 1;
         $selectedTaskType           = !empty($args['tt'])      ? $args['tt'] : 0;
         $selectedSourceLanguageCode = !empty($args['sl'])      ? $args['sl'] : 0;
@@ -421,6 +422,7 @@ class UserRouteHandler
     public function register(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         if (!empty($args['track_code'])) $_SESSION['track_code'] = $args['track_code'];
 
         $userDao = new DAO\UserDao();
@@ -532,6 +534,7 @@ class UserRouteHandler
     public function changeEmail(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $user_id = $args['user_id'];
 
         $userDao = new DAO\UserDao();
@@ -575,6 +578,7 @@ class UserRouteHandler
     public function emailVerification(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $uuid = $args['uuid'];
 
         $userDao = new DAO\UserDao();
@@ -606,6 +610,7 @@ class UserRouteHandler
     public function passwordReset(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $uid = $args['uid'];
 
         $userDao = new DAO\UserDao();
@@ -647,6 +652,7 @@ class UserRouteHandler
     public function passResetRequest(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $userDao = new DAO\UserDao();
 
         if ($request->getMethod() === 'POST') {
@@ -700,6 +706,7 @@ class UserRouteHandler
     public function login(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
 
         $userDao = new DAO\UserDao();
         $langDao = new DAO\LanguageDao();
@@ -968,6 +975,7 @@ class UserRouteHandler
     public function googleregister(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $user_id = $args['user_id'];
 
         $userDao = new DAO\UserDao();
@@ -1030,6 +1038,7 @@ class UserRouteHandler
     public static function userPrivateProfile(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $user_id = $args['user_id'];
 
         $userDao = new DAO\UserDao();
@@ -1758,6 +1767,7 @@ class UserRouteHandler
     public static function userCodeOfConduct(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $user_id = $args['user_id'];
 
         $userDao = new DAO\UserDao();
@@ -1840,6 +1850,7 @@ class UserRouteHandler
     public static function userUploads(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $user_id = $args['user_id'];
         $cert_id = $args['cert_id'];
 
@@ -1912,6 +1923,7 @@ class UserRouteHandler
     public function users_review(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $userDao = new DAO\UserDao();
 
         $all_users = $userDao->users_review();
@@ -1923,6 +1935,7 @@ class UserRouteHandler
     public function users_new(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $userDao = new DAO\UserDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
@@ -1983,6 +1996,7 @@ class UserRouteHandler
     public function users_tracked(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $userDao = new DAO\UserDao();
         $all_users = $userDao->users_tracked();
         $app->view()->appendData(array('all_users' => $all_users));
@@ -1992,6 +2006,7 @@ class UserRouteHandler
     public function add_tracking_code(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $userDao = new DAO\UserDao();
 
         $sesskey = Common\Lib\UserSession::getCSRFKey();
@@ -2062,6 +2077,7 @@ class UserRouteHandler
     public static function userPublicProfile(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $user_id = $args['user_id'];
 
         $userDao = new DAO\UserDao();
@@ -2435,6 +2451,7 @@ class UserRouteHandler
     public static function profile_shared_with_key(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $key = $args['key'];
 
         $key = hex2bin($key);
@@ -2443,7 +2460,6 @@ class UserRouteHandler
         $user_id = (int)openssl_decrypt($encrypted, 'aes-256-cbc', base64_decode(Common\Lib\Settings::get('badge.key')), 0, $iv);
         $user_id -= 999999; // Ensure we don't use identical key to word count badge
 
-        global $app;
         $userDao = new DAO\UserDao();
 
         $user = $userDao->getUser($user_id);
@@ -2482,6 +2498,7 @@ class UserRouteHandler
     public function editTaskStreamNotification(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $userId = $args['user_id'];
 
         $userDao = new DAO\UserDao();
@@ -2553,6 +2570,7 @@ class UserRouteHandler
     public function userTaskReviews(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $taskId = $args['task_id'];
 
         $taskDao = new DAO\TaskDao();

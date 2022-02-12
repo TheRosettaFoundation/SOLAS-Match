@@ -36,6 +36,7 @@ class TagRouteHandler
     public function tagsList(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $userDao = new DAO\UserDao();
         $tagDao = new DAO\TagDao();
 
@@ -81,6 +82,7 @@ class TagRouteHandler
     public function tagSubscribe(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $id = $args['id'];
         $subscribe = $args['subscribe'];
         $sesskey = $args['sesskey'];
@@ -129,6 +131,7 @@ class TagRouteHandler
     public function tagDetails(Request $request, Response $response, $args)
     {
         global $app;
+        $template_data = [];
         $id = $args['id'];
 
         $tagDao = new DAO\TagDao();

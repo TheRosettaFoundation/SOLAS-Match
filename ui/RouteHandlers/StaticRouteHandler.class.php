@@ -36,6 +36,7 @@ class StaticRouteHandler
     public function statistics(Request $request, Response $response)
     {
         global $app;
+        $template_data = [];
         $extraScripts = "
 <script type=\"text/javascript\" src=\"https://www.google.com/jsapi\"></script>
 <script type=\"application/dart\" src=\"{$app->getRouteCollector()->getRouteParser()->urlFor("home")}ui/dart/web/Scripts/statistics.dart\"></script>
