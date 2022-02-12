@@ -147,11 +147,6 @@ $app->error(function (\Exception $e) use ($app) {
     $app->render('SlimError.tpl');
 });
 
-function isValidPost(&$app)
-{
-    return $app->request()->isPost() && sizeof($app->request()->post()) > 2;
-}
-
 $app->hook('slim.before.dispatch', function () use ($app) {
     if (!is_null($token = Common\Lib\UserSession::getAccessToken()) && $token->getExpires() <  time()) {
         Common\Lib\UserSession::clearCurrentUserID();

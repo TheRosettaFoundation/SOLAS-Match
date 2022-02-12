@@ -490,7 +490,7 @@ class UserRouteHandler
         $template_data = array_merge($template_data, array('extra_scripts' => $extra_scripts));
 
         $error = null;
-        if (\SolasMatch\UI\isValidPost($app)) {
+        if ($request->getMethod() === 'POST' && sizeof($request->getParsedBody()) > 2) {
             $post = $request->getParsedBody();
             $temp = md5($post['email'] . substr(Common\Lib\Settings::get("session.site_key"), 0, 20));
             Common\Lib\UserSession::clearCurrentUserID();

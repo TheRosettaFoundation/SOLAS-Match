@@ -1694,7 +1694,7 @@ class TaskRouteHandler
 
         $app->view()->setData("task", $task);
 
-        if (\SolasMatch\UI\isValidPost($app)) {
+        if ($request->getMethod() === 'POST' && sizeof($request->getParsedBody()) > 2) {
             $post = $request->getParsedBody();
             Common\Lib\UserSession::checkCSRFKey($post, 'taskAlter');
 
