@@ -1445,21 +1445,6 @@ error_log("claimTask($userId, $taskId, ..., $project_id, ...) After Notify");
         LibAPI\PDOWrapper::call('deleteCertification', LibAPI\PDOWrapper::cleanse($id));
     }
 
-    public function userDownload($certification)
-    {
-        $app = \Slim\Slim::getInstance();
-
-        $destination = Common\Lib\Settings::get('files.upload_path') . "certs/{$certification['user_id']}/{$certification['certification_key']}/{$certification['vid']}/{$certification['filename']}";
-
-        $app->response->headers->set('Content-type', $certification['mimetype']);
-        $app->response->headers->set('Content-Disposition', "attachment; filename=\"" . trim($certification['filename'], '"') . "\"");
-        $app->response->headers->set('Content-length', filesize($destination));
-        $app->response->headers->set('X-Frame-Options', 'ALLOWALL');
-        $app->response->headers->set('Pragma', 'no-cache');
-        $app->response->headers->set('Cache-control', 'no-cache, must-revalidate, no-transform');
-        $app->response->headers->set('X-Sendfile', realpath($destination));
-    }
-
     public function detectMimeType($file, $filename)
     {
         $result = null;

@@ -1928,9 +1928,18 @@ class UserRouteHandler
         $certification = $userDao->getUserCertificationByID($id);
 
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
-        if (empty($certification) || ($certification['user_id'] != $loggedInUserId && !$adminDao->isSiteAdmin($loggedInUserId))) return;
+        if (empty($certification) || ($certification['user_id'] != $loggedInUserId && !$adminDao->isSiteAdmin($loggedInUserId))) return $response;
 
-        $userDao->userDownload($certification);
+        $destination = Common\Lib\Settings::get('files.upload_path') . "certs/{$certification['user_id']}/{$certification['certification_key']}/{$certification['vid']}/{$certification['filename']}";
+
+        header('Content-type: ' . $certification['mimetype']);
+        header("Content-Disposition: attachment; filename=\"" . trim($certification['filename'], '"') . "\"");
+        header('Content-length: ' . filesize($destination));
+        header('X-Frame-Options: ALLOWALL');
+        header('Pragma: no-cache');
+        header('Cache-control: no-cache, must-revalidate, no-transform');
+        header('X-Sendfile: ' . realpath($destination));
+        die;
     }
 
     public function users_review(Request $request, Response $response)
