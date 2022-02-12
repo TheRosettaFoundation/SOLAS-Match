@@ -736,13 +736,13 @@ class UserRouteHandler
                 if (!is_null($user)) {
                     error_log("Password, Login: {$post['email']}");
                     Common\Lib\UserSession::setSession($user->getId());
-                    $request = Common\Lib\UserSession::getReferer();
+                    $request_url = Common\Lib\UserSession::getReferer();
                     Common\Lib\UserSession::clearReferer();
 
                     // Check have we previously been redirected from SAML to do login, if so get return address so we can redirect to it below
-                    if (!$request) {
+                    if (!$request_url) {
                         if (!empty($_SESSION['return_to_SAML_url'])) {
-                            $request = $_SESSION['return_to_SAML_url'];
+                            $request_url = $_SESSION['return_to_SAML_url'];
                         }
                     }
                     unset($_SESSION['return_to_SAML_url']);
@@ -760,8 +760,8 @@ class UserRouteHandler
 
                     //Redirect to homepage, or the page the page user was previously on e.g. if their
                     //session timed out and they are logging in again.
-                    if ($request) {
-                        return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()$request);
+                    if ($request_url) {
+                        return $response->withStatus(302)->withHeader('Location', $request_url);
                     } else {
                         if ($userDao->is_admin_or_org_member($user->getId())) {
                             return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
@@ -824,13 +824,13 @@ class UserRouteHandler
                 }
                 error_log('OAuth, Login: ' . $user->getEmail());
                 Common\Lib\UserSession::setSession($user->getId());
-                $request = Common\Lib\UserSession::getReferer();
+                $request_url = Common\Lib\UserSession::getReferer();
                 Common\Lib\UserSession::clearReferer();
 
                 // Check have we previously been redirected from SAML to do login, if so get return address so we can redirect to it below
-                if (!$request) {
+                if (!$request_url) {
                     if (!empty($_SESSION['return_to_SAML_url'])) {
-                        $request = $_SESSION['return_to_SAML_url'];
+                        $request_url = $_SESSION['return_to_SAML_url'];
                     }
                 }
                 unset($_SESSION['return_to_SAML_url']);
@@ -846,8 +846,8 @@ class UserRouteHandler
 
                 $userDao->setRequiredProfileCompletedinSESSION($user->getId());
 
-                if ($request) {
-                    return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()$request);
+                if ($request_url) {
+                    return $response->withStatus(302)->withHeader('Location', $request_url);
                 } else {
                     if ($userDao->is_admin_or_org_member($user->getId())) {
                         return $response->withStatus(302)->withHeader('Location', $app->getRouteCollector()->getRouteParser()->urlFor('home'));
