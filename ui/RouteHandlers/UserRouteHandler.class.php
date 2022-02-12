@@ -249,7 +249,7 @@ class UserRouteHandler
             } elseif ($maintenanceCustomMsg == 'y') {
                 $msg = Common\Lib\Settings::get('maintenance.maintenance_custom_message');
             }
-            $app->flashNow('warning', $msg);
+            UserRouteHandler::flashNow('warning', $msg);
         }
 
         $app->view()->appendData($viewData);
@@ -511,12 +511,12 @@ class UserRouteHandler
             if (is_null($error)) {
                 array_key_exists('newsletter_consent', $post) ? $communications_consent = 1 : $communications_consent = 0;
                 if ($userDao->register($post['email'], $post['password'], $post['first_name'], $post['last_name'], $communications_consent)) {
-                    $app->flashNow(
+                    UserRouteHandler::flashNow(
                         "success",
                         sprintf(Lib\Localisation::getTranslation('register_4'), $app->urlFor("login"))
                     );
                 } else {
-                    $app->flashNow(
+                    UserRouteHandler::flashNow(
                         'error',
                         'Failed to register'
                     );
@@ -555,9 +555,9 @@ class UserRouteHandler
             if (is_null($error) && !is_null($loggedInUserId) && $adminDao->isSiteAdmin($loggedInUserId)) {
                 $user = $userDao->getUser($user_id);
                 if ($userDao->changeEmail($user_id, $post['email'], $user->getEmail())) {
-                    $app->flashNow('success', '');
+                    UserRouteHandler::flashNow('success', '');
                 } else {
-                    $app->flashNow('error', '');
+                    UserRouteHandler::flashNow('error', '');
                 }
             }
         }
@@ -582,7 +582,7 @@ class UserRouteHandler
         $user = $userDao->getRegisteredUser($uuid);
 
         if (is_null($user)) {
-            $app->flash("error", Lib\Localisation::getTranslation('email_verification_7'));
+            UserRouteHandler::flash("error", Lib\Localisation::getTranslation('email_verification_7'));
             $app->redirect($app->urlFor("home"));
         }
 
@@ -590,9 +590,9 @@ class UserRouteHandler
             $post = $app->request()->post();
             if (isset($post['verify'])) {
                 if ($userDao->finishRegistration($uuid)) {
-                    $app->flash('success', Lib\Localisation::getTranslation('email_verification_8'));
+                    UserRouteHandler::flash('success', Lib\Localisation::getTranslation('email_verification_8'));
                 } else {
-                    $app->flash('error', 'Failed to finish registration');  // TODO: remove inline text
+                    UserRouteHandler::flash('error', 'Failed to finish registration');  // TODO: remove inline text
                 }
                 $app->redirect($app->urlFor('login'));
             }
@@ -612,7 +612,7 @@ class UserRouteHandler
 
         $reset_request = $userDao->getPasswordResetRequest($uid);
         if (!is_object($reset_request)) {
-            $app->flash("error", Lib\Localisation::getTranslation('password_reset_1'));
+            UserRouteHandler::flash("error", Lib\Localisation::getTranslation('password_reset_1'));
             $app->redirect($app->urlFor("home"));
         }
 
@@ -629,16 +629,16 @@ class UserRouteHandler
 
                     $response = $userDao->resetPassword($post['new_password'], $uid);
                     if ($response) {
-                        $app->flash("success", Lib\Localisation::getTranslation('password_reset_2'));
+                        UserRouteHandler::flash("success", Lib\Localisation::getTranslation('password_reset_2'));
                         $app->redirect($app->urlFor("home"));
                     } else {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
+                        UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
                     }
                 } else {
-                    $app->flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
+                    UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
                 }
             } else {
-                $app->flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
+                UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('password_reset_1'));
             }
         }
         $app->render("user/password-reset.tpl");
@@ -659,10 +659,10 @@ class UserRouteHandler
                     if (!$hasUserRequestedPwReset) {
                         //send request
                         if ($userDao->requestPasswordReset($email)) {
-                            $app->flash("success", Lib\Localisation::getTranslation('user_reset_password_2'));
+                            UserRouteHandler::flash("success", Lib\Localisation::getTranslation('user_reset_password_2'));
                             $app->redirect($app->urlFor("home"));
                         } else {
-                            $app->flashNow(
+                            UserRouteHandler::flashNow(
                                 "error",
                                 "Failed to request password reset, are you sure you entered your email " .
                                     "address correctly?"
@@ -672,7 +672,7 @@ class UserRouteHandler
                         //get request time
                         $response = $userDao->getPasswordResetRequestTime($email);
                         if ($response != null) {
-                            $app->flashNow(
+                            UserRouteHandler::flashNow(
                                 "info",
                                 Lib\Localisation::getTranslation('user_reset_password_3'),
                                 $response
@@ -682,7 +682,7 @@ class UserRouteHandler
                         }
                     }
                 } else {
-                    $app->flashNow("error", Lib\Localisation::getTranslation('user_reset_password_4'));
+                    UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('user_reset_password_4'));
                 }
             }
         }
@@ -719,7 +719,7 @@ class UserRouteHandler
                         $app->urlFor("register"),
                         $e->getMessage()
                     );
-                    $app->flashNow('error', $error);
+                    UserRouteHandler::flashNow('error', $error);
                 }
                 if (!is_null($user)) {
                     error_log("Password, Login: {$post['email']}");
@@ -789,7 +789,7 @@ class UserRouteHandler
                 }
 
                 $error = sprintf(Lib\Localisation::getTranslation('gplus_error'), $app->urlFor('login'), $app->urlFor('register'), "[$error]");
-                $app->flash('error', $error);
+                UserRouteHandler::flash('error', $error);
                 $app->redirect($app->urlFor('home'));
             }
         } else {
@@ -806,7 +806,7 @@ class UserRouteHandler
                         $app->urlFor("register"),
                         $e->getMessage()
                     );
-                    $app->flash('error', $error);
+                    UserRouteHandler::flash('error', $error);
                     $app->redirect($app->urlFor('login'));
                 }
                 error_log('OAuth, Login: ' . $user->getEmail());
@@ -860,7 +860,7 @@ class UserRouteHandler
 
             $error = $app->request()->get('error');
             if (!is_null($error)) {
-                $app->flashNow('error', $app->request()->get('error_message'));
+                UserRouteHandler::flashNow('error', $app->request()->get('error_message'));
             }
         }
 
@@ -956,7 +956,7 @@ class UserRouteHandler
         );
         error_log($bad_message);
 
-        $app->flash('error', $error);
+        UserRouteHandler::flash('error', $error);
         $app->redirect($app->urlFor('home'));
     }
 
@@ -976,7 +976,7 @@ class UserRouteHandler
         $loggedInUserId = Common\Lib\UserSession::getCurrentUserID();
         $isSiteAdmin = $adminDao->isSiteAdmin($loggedInUserId);
         if ($user_id != $loggedInUserId && !$isSiteAdmin) {
-            $app->flash('error', Lib\Localisation::getTranslation('common_login_required_to_access_page'));
+            UserRouteHandler::flash('error', Lib\Localisation::getTranslation('common_login_required_to_access_page'));
             $app->redirect($app->urlFor('login'));
         }
 
@@ -1052,7 +1052,7 @@ class UserRouteHandler
         Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER . $user_id);
 
         if (!is_object($user)) {
-            $app->flash("error", Lib\Localisation::getTranslation('common_login_required_to_access_page'));
+            UserRouteHandler::flash("error", Lib\Localisation::getTranslation('common_login_required_to_access_page'));
             $app->redirect($app->urlFor("login"));
         }
 
@@ -1097,7 +1097,7 @@ class UserRouteHandler
 
         if ($post = $app->request()->post()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
-                $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
+                UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
             } else {
                 // error_log("POST" . print_r($post, true));
                 $user->setDisplayName($post['displayName']);
@@ -1266,7 +1266,7 @@ class UserRouteHandler
 
                     $app->redirect($app->urlFor('user-public-profile', array('user_id' => $user_id)));
                 } catch (\Exception $e) {
-                    $app->flashNow('error', 'Failed to Update');
+                    UserRouteHandler::flashNow('error', 'Failed to Update');
                 }
             }
         }
@@ -1776,7 +1776,7 @@ class UserRouteHandler
         Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER . $user_id);
 
         if (!is_object($user)) {
-            $app->flash("error", Lib\Localisation::getTranslation('common_login_required_to_access_page'));
+            UserRouteHandler::flash("error", Lib\Localisation::getTranslation('common_login_required_to_access_page'));
             $app->redirect($app->urlFor("login"));
         }
 
@@ -1795,7 +1795,7 @@ class UserRouteHandler
 
         if ($post = $app->request()->post()) {
             if (empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['displayName'])) {
-                $app->flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
+                UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('user_private_profile_2'));
             } else {
                 $user->setDisplayName($post['displayName']);
                 $userPersonalInfo->setFirstName($post['firstName']);
@@ -1813,7 +1813,7 @@ class UserRouteHandler
 
                     $app->redirect($app->urlFor('org-dashboard'));
                 } catch (\Exception $e) {
-                    $app->flashNow('error', 'Failed to Update');
+                    UserRouteHandler::flashNow('error', 'Failed to Update');
                 }
             }
         }
@@ -1864,7 +1864,7 @@ class UserRouteHandler
                 empty($post['sesskey']) || $post['sesskey'] !== $sesskey || empty($post['note']) || empty($_FILES['userFile']['name']) || !empty($_FILES['userFile']['error'])
                 || (($data = file_get_contents($_FILES['userFile']['tmp_name'])) === false)
             ) {
-                $app->flashNow('error', 'Could not upload file, you must specify a file and a note');
+                UserRouteHandler::flashNow('error', 'Could not upload file, you must specify a file and a note');
             } else {
                 $userFileName = $_FILES['userFile']['name'];
                 $extensionStartIndex = strrpos($userFileName, '.');
@@ -1875,8 +1875,8 @@ class UserRouteHandler
                 }
                 $userDao->saveUserFile($user_id, $cert_id, $post['note'], $userFileName, $data);
                 $upload_pending = 0;
-                // $app->flashNow('success', 'Certificate uploaded sucessfully, please click <a href="javascript:window.close();">Close Window</a>');
-                $app->flashNow('success', 'Certificate uploaded sucessfully, please close this window to get back to your profile page');
+                // UserRouteHandler::flashNow('success', 'Certificate uploaded sucessfully, please click <a href="javascript:window.close();">Close Window</a>');
+                UserRouteHandler::flashNow('success', 'Certificate uploaded sucessfully, please close this window to get back to your profile page');
             }
         }
 
@@ -2002,7 +2002,7 @@ class UserRouteHandler
 
             if (!empty($post['tracking_code'])) {
                 $url = $userDao->record_referer($post['tracking_code']);
-                $app->flashNow('success', "Added Tracking Code (if not already present), URL: $url");
+                UserRouteHandler::flashNow('success', "Added Tracking Code (if not already present), URL: $url");
             }
         }
         $app->view()->appendData(array(
@@ -2092,7 +2092,7 @@ class UserRouteHandler
             Common\Lib\CacheHelper::unCache(Common\Lib\CacheHelper::GET_USER . $user_id);
             $user = $userDao->getUser($user_id);
         } catch (Common\Exceptions\SolasMatchException $e) {
-            $app->flash('error', Lib\Localisation::getTranslation('common_login_required_to_access_page'));
+            UserRouteHandler::flash('error', Lib\Localisation::getTranslation('common_login_required_to_access_page'));
             $app->redirect($app->urlFor('login'));
         }
         $userPersonalInfo = null;
@@ -2130,7 +2130,7 @@ class UserRouteHandler
 
             if ($isSiteAdmin && !empty($post['admin_comment'])) {
                 if (empty($post['comment']) || (int)$post['work_again'] < 1 || (int)$post['work_again'] > 5) {
-                    $app->flashNow('error', 'You must enter a comment and a score between 1 and 5');
+                    UserRouteHandler::flashNow('error', 'You must enter a comment and a score between 1 and 5');
                 } else {
                     $userDao->insert_admin_comment($user_id, $loggedInUserId, (int)$post['work_again'], $post['comment']);
                 }
@@ -2142,7 +2142,7 @@ class UserRouteHandler
 
             if ($isSiteAdmin && !empty($post['mark_adjust_points'])) {
                 if (empty($post['comment']) || !is_numeric($post['points'])) {
-                    $app->flashNow('error', 'You must enter a comment and integer points');
+                    UserRouteHandler::flashNow('error', 'You must enter a comment and integer points');
                 } else {
                     $userDao->insert_adjust_points($user_id, $loggedInUserId, (int)$post['points'], $post['comment']);
                 }
@@ -2158,9 +2158,9 @@ class UserRouteHandler
 
             if ($show_create_memsource_user && !empty($post['mark_create_memsource_user'])) {
                 if ($memsource_user_uid = $userDao->create_memsource_user($user_id)) {
-                    $app->flashNow('success', "Memsource user $memsource_user_uid created");
+                    UserRouteHandler::flashNow('success', "Memsource user $memsource_user_uid created");
                     $show_create_memsource_user = 0;
-                } else $app->flashNow('error', "Unable to create Memsource user for $user_id");
+                } else UserRouteHandler::flashNow('error', "Unable to create Memsource user for $user_id");
             }
 
             if ($isSiteAdmin && !empty($post['mark_certification_reviewed'])) {
@@ -2200,7 +2200,7 @@ class UserRouteHandler
                         $test_number = ($test_number + 1) % $n;
                     }
                     if ($i < 0) {
-                        $app->flashNow('error', "Unable to create test project for $user_id, no projects");
+                        UserRouteHandler::flashNow('error', "Unable to create test project for $user_id, no projects");
                         error_log("Unable to create test project for $user_id, no projects");
                     } else {
                         $project_to_copy_id = $projects_to_copy[$test_number];
@@ -2222,7 +2222,7 @@ class UserRouteHandler
 
                         $project = $projectDao->createProjectDirectly($project);
                         if (empty($project)) {
-                            $app->flashNow('error', "Unable to create test project for $user_id");
+                            UserRouteHandler::flashNow('error', "Unable to create test project for $user_id");
                             error_log("Unable to create test project for $user_id");
                         } else {
                             $project_id = $project->getId();
@@ -2289,7 +2289,7 @@ class UserRouteHandler
                             }
                             curl_close($re);
 
-                            $app->flashNow('success', '<a href="' . $app->urlFor('task-view', ['task_id' => $translation_task_id]) .
+                            UserRouteHandler::flashNow('success', '<a href="' . $app->urlFor('task-view', ['task_id' => $translation_task_id]) .
                                 '">This is your Translation Test</a>, which you <strong>must</strong> translate using Kató TM. You will find the <strong>Translate using Kató TM</strong> button under the Translation Test task in your <strong>Claimed Tasks</strong> section, which you can find in the upper menu. You will need to refresh that page after a few minutes in order to see the task and button. Please check your email inbox in a few minutes for instructions on completing the test');
                         }
                     }
@@ -2506,7 +2506,7 @@ class UserRouteHandler
                     $success = $userDao->requestTaskStreamNotification($notifData);
                 }
 
-                $app->flash("success", Lib\Localisation::getTranslation('user_public_profile_17'));
+                UserRouteHandler::flash("success", Lib\Localisation::getTranslation('user_public_profile_17'));
                 $app->redirect($app->urlFor("user-public-profile", array("user_id" => $userId)));
             }
         }

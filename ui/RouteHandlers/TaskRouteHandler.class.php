@@ -252,7 +252,7 @@ class TaskRouteHandler
         if ($loggedInUserId != $user_id) {
             $adminDao = new DAO\AdminDao();
             if (!$adminDao->isSiteAdmin($loggedInUserId)) {
-                $app->flash('error', 'You are not authorized to view this page');
+                UserRouteHandler::flash('error', 'You are not authorized to view this page');
                 $app->redirect($app->urlFor('home'));
             }
         }
@@ -491,7 +491,7 @@ class TaskRouteHandler
         if ($loggedInUserId != $user_id) {
             $adminDao = new DAO\AdminDao();
             if (!$adminDao->isSiteAdmin($loggedInUserId)) {
-                $app->flash('error', "You are not authorized to view this page"); //need to move to strings.xml
+                UserRouteHandler::flash('error', "You are not authorized to view this page"); //need to move to strings.xml
                 $app->redirect($app->urlFor('home'));
             }
         }
@@ -617,14 +617,14 @@ class TaskRouteHandler
             if ($memsource_task) {
                 $user_id = Common\Lib\UserSession::getCurrentUserID();
                 if (is_null($user_id) || $taskDao->isUserRestrictedFromTaskButAllowTranslatorToDownload($task_id, $user_id)) {
-                    $app->flash('error', 'You are not authorized to view this page');
+                    UserRouteHandler::flash('error', 'You are not authorized to view this page');
                     $app->redirect($app->urlFor('home'));
                 }
                 $memsource_project = $projectDao->get_memsource_project($task->getProjectId());
                 $userDao = new DAO\UserDao();
                 $file = $userDao->memsource_get_target_file($memsource_project['memsource_project_uid'], $memsource_task['memsource_task_uid']);
                 if (empty($file)) {
-                    $app->flash('error', 'Could not retrieve file');
+                    UserRouteHandler::flash('error', 'Could not retrieve file');
                     $app->redirect($app->urlFor('home'));
                 }
                 $task_file_info = $taskDao->getTaskInfo($task_id, 0);
@@ -643,7 +643,7 @@ class TaskRouteHandler
                 $this->downloadTaskVersion($request, $response, $args);
             }
         } catch (Common\Exceptions\SolasMatchException $e) {
-            $app->flash(
+            UserRouteHandler::flash(
                 "error",
                 sprintf(
                     Lib\Localisation::getTranslation('common_error_file_not_found'),
@@ -668,7 +668,7 @@ class TaskRouteHandler
         $taskType = Lib\TemplateHelper::getTaskTypeFromId($task->getTaskType());
         $result = $taskDao->archiveTask($task_id, $userId);
         if ($result) {
-            $app->flash(
+            UserRouteHandler::flash(
                 "success",
                 sprintf(
                     Lib\Localisation::getTranslation('project_view_17'),
@@ -677,7 +677,7 @@ class TaskRouteHandler
                 )
             );
         } else {
-            $app->flash(
+            UserRouteHandler::flash(
                 "error",
                 sprintf(
                     Lib\Localisation::getTranslation('project_view_18'),
@@ -697,7 +697,7 @@ class TaskRouteHandler
         try {
             $this->downloadTaskVersion(Request $request, $response, $args);
         } catch (Common\Exceptions\SolasMatchException $e) {
-            $app->flash(
+            UserRouteHandler::flash(
                 "error",
                 sprintf(
                     Lib\Localisation::getTranslation('common_error_file_not_found'),
@@ -725,7 +725,7 @@ class TaskRouteHandler
                 }
             }
         } catch (Common\Exceptions\SolasMatchException $e) {
-            $app->flash(
+            UserRouteHandler::flash(
                 "error",
                 sprintf(
                     Lib\Localisation::getTranslation('common_error_file_not_found'),
@@ -779,7 +779,7 @@ class TaskRouteHandler
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         if ($taskDao->isUserRestrictedFromTask($taskId, $user_id)) {
-            $app->flash('error', "You are not authorized to view this page");
+            UserRouteHandler::flash('error', "You are not authorized to view this page");
             $app->redirect($app->urlFor('home'));
         }
 
@@ -797,9 +797,9 @@ class TaskRouteHandler
             if ($success == 1) {
                 $app->redirect($app->urlFor('task-claimed', array('task_id' => $taskId)));
             } elseif ($success == -1) {
-                $app->flashNow('error', 'Unable to create user in Memsource.');
+                UserRouteHandler::flashNow('error', 'Unable to create user in Memsource.');
             } else {
-                $app->flashNow('error', 'This task can no longer be claimed, the job has been removed from Memsource and will soon be removed from here.');
+                UserRouteHandler::flashNow('error', 'This task can no longer be claimed, the job has been removed from Memsource and will soon be removed from here.');
             }
         }
 
@@ -867,7 +867,7 @@ class TaskRouteHandler
 
         $user_id = Common\Lib\UserSession::getCurrentUserID();
         if (is_null($user_id) || $taskDao->isUserRestrictedFromTaskButAllowTranslatorToDownload($taskId, $user_id)) {
-            $app->flash('error', "You are not authorized to view this page");
+            UserRouteHandler::flash('error', "You are not authorized to view this page");
             $app->redirect($app->urlFor('home'));
         }
 
@@ -898,12 +898,12 @@ class TaskRouteHandler
 
         $task = $taskDao->getTask($taskId);
         if (is_null($task)) {
-            $app->flash("error", sprintf(Lib\Localisation::getTranslation('task_view_5'), $taskId));
+            UserRouteHandler::flash("error", sprintf(Lib\Localisation::getTranslation('task_view_5'), $taskId));
             $app->redirect($app->urlFor("home"));
         }
 
         if ($taskDao->isUserRestrictedFromTask($taskId, $user_id)) {
-            $app->flash('error', "You are not authorized to view this page");
+            UserRouteHandler::flash('error', "You are not authorized to view this page");
             $app->redirect($app->urlFor('home'));
         }
 
@@ -923,12 +923,12 @@ class TaskRouteHandler
                 if ($post['trackOrganisation']) {
                     $userTrackOrganisation = $userDao->trackOrganisation($user_id, $org_id);
                     if ($userTrackOrganisation) {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             Lib\Localisation::getTranslation('org_public_profile_org_track_success')
                         );
                     } else {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             Lib\Localisation::getTranslation('org_public_profile_org_track_error')
                         );
@@ -936,12 +936,12 @@ class TaskRouteHandler
                 } else {
                     $userUntrackOrganisation = $userDao->unTrackOrganisation($user_id, $org_id);
                     if ($userUntrackOrganisation) {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             Lib\Localisation::getTranslation('org_public_profile_org_untrack_success')
                         );
                     } else {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             Lib\Localisation::getTranslation('org_public_profile_org_untrack_error')
                         );
@@ -950,7 +950,7 @@ class TaskRouteHandler
             }
         }
         if ($taskClaimed) {
-            $app->flashKeep();
+            UserRouteHandler::flashKeep();
 
            if ($memsource_task) $app->redirect($app->urlFor('task-view', array('task_id' => $taskId)));
 
@@ -981,18 +981,18 @@ class TaskRouteHandler
                 if (ctype_digit($emailOrUserId)) { //checking for intergers in a string (user id)
                     $userToBeAssigned = $userDao->getUser($emailOrUserId);
                     if (is_null($userToBeAssigned)) {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_assign_id_error'));
+                        UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('task_view_assign_id_error'));
                         $errorOccured = True;
                     }
                 } else if (Lib\Validator::validateEmail($emailOrUserId)) {
                     $userToBeAssigned = $userDao->getUserByEmail($emailOrUserId);
                     if (is_null($userToBeAssigned)) {
                         $errorOccured = True;
-                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_assign_email_error'));
+                        UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('task_view_assign_email_error'));
                     }
                 } else {
                     $errorOccured = True;
-                    $app->flashNow("error",Lib\Localisation::getTranslation('task_view_assign_id_or_email_error'));
+                    UserRouteHandler::flashNow("error",Lib\Localisation::getTranslation('task_view_assign_id_or_email_error'));
                 }
 
                 if (!$errorOccured && !is_null($userToBeAssigned))
@@ -1002,17 +1002,17 @@ class TaskRouteHandler
                     $isUserBlackListedForTask = $userDao->isBlacklistedForTask($assgneeId, $taskId);
                     if ($isUserBlackListedForTask)
                     {
-                        $app->flashNow("error", sprintf(Lib\Localisation::getTranslation('task_view_assign_task_banned_error'), $userDisplayName));
+                        UserRouteHandler::flashNow("error", sprintf(Lib\Localisation::getTranslation('task_view_assign_task_banned_error'), $userDisplayName));
                     } else {
                         $taskDao->record_task_if_translated_in_matecat($task);
                         $success = $userDao->claimTask($assgneeId, $taskId, $memsource_task, $task->getProjectId(), $task);
                         if ($success == 1) {
-                            $app->flash('success', sprintf(Lib\Localisation::getTranslation('task_view_assign_task_success'), $userDisplayName));
+                            UserRouteHandler::flash('success', sprintf(Lib\Localisation::getTranslation('task_view_assign_task_success'), $userDisplayName));
                             $app->redirect($app->urlFor('project-view', array('project_id' => $task->getProjectId())));
                         } elseif ($success == -1) {
-                            $app->flashNow('error', 'Unable to create user in Memsource.');
+                            UserRouteHandler::flashNow('error', 'Unable to create user in Memsource.');
                         } else {
-                            $app->flashNow('error', 'This task can no longer be claimed, the job has been removed from Memsource and will soon be removed from here.');
+                            UserRouteHandler::flashNow('error', 'This task can no longer be claimed, the job has been removed from Memsource and will soon be removed from here.');
                         }
                     }
                 }
@@ -1023,10 +1023,10 @@ class TaskRouteHandler
                 if (ctype_digit($userIdOrEmail)) $remove_deny_user = $userDao->getUser($userIdOrEmail);
                 else                             $remove_deny_user = $userDao->getUserByEmail($userIdOrEmail);
                 if (empty($remove_deny_user)) {
-                    $app->flashNow('error', 'User does not exist.');
+                    UserRouteHandler::flashNow('error', 'User does not exist.');
                 } else {
                     $taskDao->removeUserFromTaskBlacklist($remove_deny_user->getId(), $taskId);
-                    $app->flashNow('success', 'Removed (assuming was actually in deny list)');
+                    UserRouteHandler::flashNow('success', 'Removed (assuming was actually in deny list)');
                 }
             }
 
@@ -1295,7 +1295,7 @@ class TaskRouteHandler
           if (is_null($errorMessage)) {
               $app->redirect($app->urlFor("task-review", array("task_id" => $taskId)));
           } else {
-              $app->flashNow("error", $errorMessage);
+              UserRouteHandler::flashNow("error", $errorMessage);
           }
         }
 
@@ -1920,7 +1920,7 @@ class TaskRouteHandler
         $isSiteAdmin = $adminDao->isSiteAdmin($user_id);
 
         if ($taskDao->isUserRestrictedFromTask($task_id, $user_id)) {
-            $app->flash('error', "You are not authorized to view this page");
+            UserRouteHandler::flash('error', "You are not authorized to view this page");
             $app->redirect($app->urlFor('home'));
         }
 
@@ -1966,15 +1966,15 @@ class TaskRouteHandler
                 error_log("taskView");
                 if ($taskDao->updateTask($task)) {
                     if ($post['published']) {
-                        $app->flashNow("success", Lib\Localisation::getTranslation('task_view_1'));
+                        UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('task_view_1'));
                     } else {
-                        $app->flashNow("success", Lib\Localisation::getTranslation('task_view_2'));
+                        UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('task_view_2'));
                     }
                 } else {
                     if ($post['published']) {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_3'));
+                        UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('task_view_3'));
                     } else {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_4'));
+                        UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('task_view_4'));
                     }
                 }
             }
@@ -1983,16 +1983,16 @@ class TaskRouteHandler
                 if ($post['track'] == "Ignore") {
                     $response = $userDao->untrackTask($user_id, $task->getId());
                     if ($response) {
-                        $app->flashNow("success", Lib\Localisation::getTranslation('task_view_12'));
+                        UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('task_view_12'));
                     } else {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_13'));
+                        UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('task_view_13'));
                     }
                 } else {
                     $response = $userDao->trackTask($user_id, $task->getId());
                     if ($response) {
-                        $app->flashNow("success", Lib\Localisation::getTranslation('task_view_10'));
+                        UserRouteHandler::flashNow("success", Lib\Localisation::getTranslation('task_view_10'));
                     } else {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('task_view_11'));
+                        UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('task_view_11'));
                     }
                 }
             }
@@ -2002,12 +2002,12 @@ class TaskRouteHandler
                 if ($post['trackOrganisation']) {
                     $userTrackOrganisation = $userDao->trackOrganisation($user_id, $org_id);
                     if ($userTrackOrganisation) {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             Lib\Localisation::getTranslation('org_public_profile_org_track_success')
                         );
                     } else {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             Lib\Localisation::getTranslation('org_public_profile_org_track_error')
                         );
@@ -2015,12 +2015,12 @@ class TaskRouteHandler
                 } else {
                     $userUntrackOrganisation = $userDao->unTrackOrganisation($user_id, $org_id);
                     if ($userUntrackOrganisation) {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             Lib\Localisation::getTranslation('org_public_profile_org_untrack_success')
                         );
                     } else {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             Lib\Localisation::getTranslation('org_public_profile_org_untrack_error')
                         );
@@ -2034,7 +2034,7 @@ class TaskRouteHandler
                     $recorded_status = 'approved';
                 }
                 $taskDao->insertMatecatRecordedJobStatus($matecat_id_job, $matecat_id_job_password, $recorded_status);
-                $app->flashNow('success', "Task will be treated as fully $recorded_status in Kató TM.");
+                UserRouteHandler::flashNow('success', "Task will be treated as fully $recorded_status in Kató TM.");
             }
         }
 
@@ -2448,7 +2448,7 @@ class TaskRouteHandler
                 if ($post['feedback'] != "") {
                     if ($claimant != null) {
                         $taskDao->sendOrgFeedback($task_id, $user_id, $claimant->getId(), $post['feedback']);
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             sprintf(
                                 Lib\Localisation::getTranslation('task_org_feedback_6'),
@@ -2468,7 +2468,7 @@ class TaskRouteHandler
                         }
                         if ($taskRevoke) {
                             if ($claimant != null) {
-                                $app->flash(
+                                UserRouteHandler::flash(
                                     "taskSuccess",
                                     sprintf(
                                         Lib\Localisation::getTranslation('task_org_feedback_3'),
@@ -2479,7 +2479,7 @@ class TaskRouteHandler
                                     )
                                 );
                             } else {
-                                $app->flash(
+                                UserRouteHandler::flash(
                                     "taskSuccess",
                                     sprintf(
                                         Lib\Localisation::getTranslation('task_org_feedback_3'),
@@ -2492,7 +2492,7 @@ class TaskRouteHandler
                             }
                             $app->redirect($app->urlFor("project-view", array("project_id" => $task->getProjectId())));
                         } else {
-                            $app->flashNow(
+                            UserRouteHandler::flashNow(
                                 "error",
                                 sprintf(
                                     Lib\Localisation::getTranslation('task_org_feedback_4'),
@@ -2505,7 +2505,7 @@ class TaskRouteHandler
                         }
                     }
                 } else {
-                    $app->flashNow("error", Lib\Localisation::getTranslation('task_org_feedback_5'));
+                    UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('task_org_feedback_5'));
                 }
             }
         }
@@ -2562,7 +2562,7 @@ class TaskRouteHandler
                             $taskRevoke = true;
                         }
                         if ($taskRevoke) {
-                            $app->flash(
+                            UserRouteHandler::flash(
                                 "success",
                                 sprintf(
                                     Lib\Localisation::getTranslation('task_user_feedback_3'),
@@ -2572,7 +2572,7 @@ class TaskRouteHandler
                             );
                             $app->redirect($app->urlFor("home"));
                         } else {
-                            $app->flashNow(
+                            UserRouteHandler::flashNow(
                                 "error",
                                 sprintf(
                                     Lib\Localisation::getTranslation('task_user_feedback_4'),
@@ -2583,7 +2583,7 @@ class TaskRouteHandler
                         }
                     } else {
                         $orgProfile = $app->urlFor("org-public-profile", array('org_id' => $organisation->getId()));
-                        $app->flash(
+                        UserRouteHandler::flash(
                             "success",
                             sprintf(
                                 Lib\Localisation::getTranslation('task_org_feedback_6'),
@@ -2594,7 +2594,7 @@ class TaskRouteHandler
                         $app->redirect($app->urlFor("task", array("task_id" => $task_id)));
                     }
                 } else {
-                    $app->flashNow('error', Lib\Localisation::getTranslation('task_user_feedback_5'));
+                    UserRouteHandler::flashNow('error', Lib\Localisation::getTranslation('task_user_feedback_5'));
                 }
             }
         }
@@ -2715,7 +2715,7 @@ class TaskRouteHandler
         }
 
         if (!empty($reviews) && count($reviews) > 0) {
-            $app->flashNow("info", Lib\Localisation::getTranslation('task_review_4'));
+            UserRouteHandler::flashNow("info", Lib\Localisation::getTranslation('task_review_4'));
         }
 
         if ($app->request()->isPost()) {
@@ -2787,12 +2787,12 @@ class TaskRouteHandler
                         }
                     } else {
                         if ($error != null) {
-                            $app->flashNow("error", $error);
+                            UserRouteHandler::flashNow("error", $error);
                         }
                     }
                 }
                 if ($error == null) {
-                    $app->flash(
+                    UserRouteHandler::flash(
                         "success",
                         sprintf(Lib\Localisation::getTranslation('task_review_10'), $tasks_titles)
                     );
@@ -2802,7 +2802,7 @@ class TaskRouteHandler
                         $app->redirect($app->urlFor('task-uploaded', array("task_id" => $taskId)));
                     }
                 } else {
-                    $app->flashNow("error", $error);
+                    UserRouteHandler::flashNow("error", $error);
                 }
             }
 

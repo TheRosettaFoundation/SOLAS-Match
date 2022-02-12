@@ -285,35 +285,35 @@ class AdminRouteHandler
             if (!empty($post['search_user'])) {
                 $items_found = $statsDao->search_user($post['search_user']);
                 if (!empty($items_found)) {
-                    $app->flashNow('search_user_results', $items_found);
+                    UserRouteHandler::flashNow('search_user_results', $items_found);
                 } else {
-                    $app->flashNow('search_user_fail', 'Not Found');
+                    UserRouteHandler::flashNow('search_user_fail', 'Not Found');
                 }
             }
 
             if (!empty($post['search_organisation'])) {
                 $items_found = $statsDao->search_organisation($post['search_organisation']);
                 if (!empty($items_found)) {
-                    $app->flashNow('search_organisation_results', $items_found);
+                    UserRouteHandler::flashNow('search_organisation_results', $items_found);
                 } else {
-                    $app->flashNow('search_organisation_fail', 'Not Found');
+                    UserRouteHandler::flashNow('search_organisation_fail', 'Not Found');
                 }
             }
 
             if (!empty($post['search_project'])) {
                 $items_found = $statsDao->search_project($post['search_project']);
                 if (!empty($items_found)) {
-                    $app->flashNow('search_project_results', $items_found);
+                    UserRouteHandler::flashNow('search_project_results', $items_found);
                 } else {
-                    $app->flashNow('search_project_fail', 'Not Found');
+                    UserRouteHandler::flashNow('search_project_fail', 'Not Found');
                 }
             }
 
             if (isset($post['verify'])) {
                 if ($userDao->finishRegistrationManually($post['userEmail'])) {
-                    $app->flashNow('verifySuccess', Lib\Localisation::getTranslation('email_verification_email_verification'));
+                    UserRouteHandler::flashNow('verifySuccess', Lib\Localisation::getTranslation('email_verification_email_verification'));
                 } else {
-                    $app->flashNow('verifyError', Lib\Localisation::getTranslation('site_admin_dashboard_user_not_found'));
+                    UserRouteHandler::flashNow('verifyError', Lib\Localisation::getTranslation('site_admin_dashboard_user_not_found'));
                 }
             }
 
@@ -363,12 +363,12 @@ class AdminRouteHandler
                 $user = $userDao->getUserByEmail(urlencode($post['userEmail']));
                 if (!is_null($user)) {
                     $userDao->deleteUser($user->getId());
-                    $app->flashNow(
+                    UserRouteHandler::flashNow(
                         "deleteSuccess",
                         Lib\Localisation::getTranslation('site_admin_dashboard_successfully_deleted_user')
                     );
                 } else {
-                    $app->flashNow(
+                    UserRouteHandler::flashNow(
                         "deleteError",
                         Lib\Localisation::getTranslation('site_admin_dashboard_user_not_found')
                     );
@@ -382,19 +382,19 @@ class AdminRouteHandler
                     $claimantId = $taskDao->getUserClaimedTask($taskId)->getId();
                     if ($claimantId != $userToRevokeFrom->getId()) {
                         //user specified did not claim the task specified
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "revokeTaskError",
                             Lib\Localisation::getTranslation('site_admin_dashboard_revoke_task_error_no_claim')
                         );
                     } else {
                         $adminDao->revokeTaskFromUser($taskId, $userId);
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "revokeTaskSuccess",
                             Lib\Localisation::getTranslation('site_admin_dashboard_revoke_task_success'));
                     }
                 } else {
                     //Invalid input supplied for user email and/or task id
-                    $app->flashNow(
+                    UserRouteHandler::flashNow(
                         "revokeTaskError",
                         Lib\Localisation::getTranslation('site_admin_dashboard_revoke_task_error_invalid'));
                 }

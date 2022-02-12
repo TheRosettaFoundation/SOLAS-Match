@@ -356,7 +356,7 @@ class OrgRouteHandler
                         $org_name = $org->getName();
                         $org_biography = $org->getBiography();
                         error_log("Called createOrg() for: $org_name");
-                        $app->flash(
+                        UserRouteHandler::flash(
                             'success',
                             sprintf(Lib\Localisation::getTranslation('create_org_created'), $org_name)
                         );
@@ -453,12 +453,12 @@ class OrgRouteHandler
                 if ($post['track'] == "Ignore") {
                     $success = $userDao->untrackProject($current_user_id, $project_id);
                     if ($success) {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             sprintf(Lib\Localisation::getTranslation('org_dashboard_5'), $project_title)
                         );
                     } else {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             sprintf(Lib\Localisation::getTranslation('org_dashboard_6'), $project_title)
                         );
@@ -466,12 +466,12 @@ class OrgRouteHandler
                 } elseif ($post['track'] == "Track") {
                     $success = $userDao->trackProject($current_user_id, $project_id);
                     if ($success) {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             sprintf(Lib\Localisation::getTranslation('org_dashboard_7'), $project_title)
                         );
                     } else {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             sprintf(Lib\Localisation::getTranslation('org_dashboard_8'), $project_title)
                         );
@@ -616,15 +616,15 @@ class OrgRouteHandler
         if (is_null($user_orgs) || !in_array($org_id, $user_orgs)) {
             $requestMembership = $orgDao->createMembershipRequest($org_id, $userId);
             if ($requestMembership) {
-                $app->flash("success", Lib\Localisation::getTranslation('org_public_profile_membership_requested'));
+                UserRouteHandler::flash("success", Lib\Localisation::getTranslation('org_public_profile_membership_requested'));
             } else {
-                $app->flash(
+                UserRouteHandler::flash(
                     "error",
                     Lib\Localisation::getTranslation('org_public_profile_membership_already_requested')
                 );
             }
         } else {
-            $app->flash("error", Lib\Localisation::getTranslation('org_public_profile_13'));
+            UserRouteHandler::flash("error", Lib\Localisation::getTranslation('org_public_profile_13'));
         }
         $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org_id)));
     }
@@ -651,7 +651,7 @@ class OrgRouteHandler
                     {
                         $success = $orgDao->addMember($post['email'], $org_id);
                         if ($success) {
-                            $app->flashNow(
+                            UserRouteHandler::flashNow(
                                 "success",
                                 sprintf(
                                     Lib\Localisation::getTranslation('common_successfully_added_member'),
@@ -660,26 +660,26 @@ class OrgRouteHandler
                                 )
                             );
                         } else {
-                            $app->flashNow(
+                            UserRouteHandler::flashNow(
                                 "error",
                                 sprintf(Lib\Localisation::getTranslation('org_public_profile_20'), $post['email'])
                             );
                         }
                     } else {
                         $email = $post['email'];
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             sprintf(Lib\Localisation::getTranslation('org_public_profile_21'), $email)
                         );
                     }
                 } else {
-                    $app->flashNow("error", Lib\Localisation::getTranslation('common_no_valid_email'));
+                    UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('common_no_valid_email'));
                 }
             } elseif (isset($post['accept'])) {
                 if ($user_id = $post['user_id']) {
                     $orgDao->acceptMembershipRequest($org_id, $user_id);
                 } else {
-                    $app->flashNow(
+                    UserRouteHandler::flashNow(
                         "error",
                         sprintf(Lib\Localisation::getTranslation('org_request_queue_7'), $user_id)
                     );
@@ -688,7 +688,7 @@ class OrgRouteHandler
                 if ($user_id = $post['user_id']) {
                     $orgDao->rejectMembershipRequest($org_id, $user_id);
                 } else {
-                    $app->flashNow(
+                    UserRouteHandler::flashNow(
                         "error",
                         sprintf(Lib\Localisation::getTranslation('org_request_queue_7'), $user_id)
                     );
@@ -973,7 +973,7 @@ class OrgRouteHandler
                         $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org->getId())));
                     } catch (Common\Exceptions\SolasMatchException $ex) {
                         $org_name = $org->getName();
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             sprintf(
                                 Lib\Localisation::getTranslation('common_error_org_name_in_use'),
@@ -988,7 +988,7 @@ class OrgRouteHandler
                 $deleteId = $post['deleteId'];
                 if ($deleteId) {
                     if (!empty($post['sesskey']) && $post['sesskey'] === $sesskey && $orgDao->deleteOrg($org->getId())) {
-                        $app->flash(
+                        UserRouteHandler::flash(
                             "success",
                             sprintf(
                                 Lib\Localisation::getTranslation('org_private_profile_delete_success'),
@@ -997,7 +997,7 @@ class OrgRouteHandler
                         );
                         $app->redirect($app->urlFor("home"));
                     } else {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('org_private_profile_delete_fail'));
+                        UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('org_private_profile_delete_fail'));
                     }
                 }
             }
@@ -1747,7 +1747,7 @@ class OrgRouteHandler
             
             if (isset($post['title']) && isset($post['description'])) {
                 if ($post['title'] == "" || $post['description'] == "") {
-                    $app->flash("error", sprintf(Lib\Localisation::getTranslation('org_public_profile_19')));
+                    UserRouteHandler::flash("error", sprintf(Lib\Localisation::getTranslation('org_public_profile_19')));
                 } else {
                     $badge = new Common\Protobufs\Models\Badge();
                     $badge->setId($post['badge_id']);
@@ -1777,7 +1777,7 @@ class OrgRouteHandler
                             } else {
                                 $org_name = "Organisation $org_id";
                             }
-                            $app->flashNow(
+                            UserRouteHandler::flashNow(
                                 "success",
                                 sprintf(
                                     Lib\Localisation::getTranslation('common_successfully_added_member'),
@@ -1786,20 +1786,20 @@ class OrgRouteHandler
                                 )
                             );
                         } else {
-                            $app->flashNow(
+                            UserRouteHandler::flashNow(
                                 "error",
                                 sprintf(Lib\Localisation::getTranslation('org_public_profile_20'), $user_name)
                             );
                         }
                     } else {
                         $email = $post['email'];
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             sprintf(Lib\Localisation::getTranslation('org_public_profile_21'), $email)
                         );
                     }
                 } else {
-                    $app->flashNow("error", Lib\Localisation::getTranslation('common_no_valid_email'));
+                    UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('common_no_valid_email'));
                 }
             } elseif (isset($post['accept'])) {
                 if ($user_id = $post['user_id']) {
@@ -1807,7 +1807,7 @@ class OrgRouteHandler
                         $user = $userDao->getUser($user_id);
                         $user_name = $user->getDisplayName();
                         $org_name = $org->getName();
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             sprintf(
                                 Lib\Localisation::getTranslation('org_public_profile_23'),
@@ -1817,11 +1817,11 @@ class OrgRouteHandler
                             )
                         );
                     } else {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('org_public_profile_24'));
+                        UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('org_public_profile_24'));
                     }
 
                 } else {
-                    $app->flashNow(
+                    UserRouteHandler::flashNow(
                         "error",
                         sprintf(Lib\Localisation::getTranslation('common_invalid_userid'), $user_id)
                     );
@@ -1831,7 +1831,7 @@ class OrgRouteHandler
                     $orgDao->rejectMembershipRequest($org_id, $user_id);
                     $user = $userDao->getUser($user_id);
                     $user_name = $user->getDisplayName();
-                    $app->flashNow(
+                    UserRouteHandler::flashNow(
                         "success",
                         sprintf(
                             Lib\Localisation::getTranslation('org_public_profile_25'),
@@ -1840,7 +1840,7 @@ class OrgRouteHandler
                         )
                     );
                 } else {
-                    $app->flashNow(
+                    UserRouteHandler::flashNow(
                         "error",
                         sprintf(Lib\Localisation::getTranslation('common_invalid_userid'), $user_id)
                     );
@@ -1851,7 +1851,7 @@ class OrgRouteHandler
                 if ($user) {
                     $userName = $user->getDisplayName();
                     if ($userDao->leaveOrganisation($userId, $org_id)) {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             sprintf(
                                 Lib\Localisation::getTranslation('org_public_profile_26'),
@@ -1860,7 +1860,7 @@ class OrgRouteHandler
                             )
                         );
                     } else {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             sprintf(
                                 Lib\Localisation::getTranslation('org_public_profile_27'),
@@ -1870,7 +1870,7 @@ class OrgRouteHandler
                         );
                     }
                 } else {
-                    $app->flashNow("error", Lib\Localisation::getTranslation('org_public_profile_28'));
+                    UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('org_public_profile_28'));
                 }
             } elseif (isset($post['revokeOrgAdmin'])) {
                 $userId = $post['revokeOrgAdmin'];
@@ -1885,22 +1885,22 @@ class OrgRouteHandler
                 if ($post['trackOrganisation']) {
                     $userTrackOrganisation = $userDao->trackOrganisation($user_id, $org_id);
                     if ($userTrackOrganisation) {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             Lib\Localisation::getTranslation('org_public_profile_org_track_success')
                         );
                     } else {
-                        $app->flashNow("error", Lib\Localisation::getTranslation('org_public_profile_org_track_error'));
+                        UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('org_public_profile_org_track_error'));
                     }
                 } else {
                     $userUntrackOrganisation = $userDao->unTrackOrganisation($user_id, $org_id);
                     if ($userUntrackOrganisation) {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             Lib\Localisation::getTranslation('org_public_profile_org_untrack_success')
                         );
                     } else {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             Lib\Localisation::getTranslation('org_public_profile_org_untrack_error')
                         );
@@ -2041,7 +2041,7 @@ class OrgRouteHandler
                 if (Lib\Validator::validateEmail($post['email'])) {
                     $success = $userDao->assignBadge($post['email'], $badge->getId());
                     if ($success) {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "success",
                             sprintf(
                                 Lib\Localisation::getTranslation('org_manage_badge_29'),
@@ -2050,13 +2050,13 @@ class OrgRouteHandler
                             )
                         );
                     } else {
-                        $app->flashNow(
+                        UserRouteHandler::flashNow(
                             "error",
                             sprintf(Lib\Localisation::getTranslation('org_manage_badge_30'), $post['email'])
                         );
                     }
                 } else {
-                    $app->flashNow("error", Lib\Localisation::getTranslation('common_no_valid_email'));
+                    UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('common_no_valid_email'));
                 }
             } elseif (isset($post['user_id']) && $post['user_id'] != "") {
                 $user_id = $post['user_id'];
@@ -2068,7 +2068,7 @@ class OrgRouteHandler
                 } else {
                     $user_name = $user->getEmail();
                 }
-                $app->flashNow(
+                UserRouteHandler::flashNow(
                     "success",
                     sprintf(Lib\Localisation::getTranslation('org_manage_badge_32'), $user_name)
                 );
@@ -2099,7 +2099,7 @@ class OrgRouteHandler
             Common\Lib\UserSession::checkCSRFKey($post, 'orgCreateBadge');
             
             if ($post['title'] == "" || $post['description'] == "") {
-                $app->flashNow("error", Lib\Localisation::getTranslation('common_all_fields'));
+                UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('common_all_fields'));
             } else {
                 $badge = new Common\Protobufs\Models\Badge();
                 $badge->setTitle($post['title']);
@@ -2107,7 +2107,7 @@ class OrgRouteHandler
                 $badge->setOwnerId($org_id);
                 $badgeDao->createBadge($badge);
                 
-                $app->flash("success", Lib\Localisation::getTranslation('org_create_badge_33'));
+                UserRouteHandler::flash("success", Lib\Localisation::getTranslation('org_create_badge_33'));
                 $app->redirect($app->urlFor("org-public-profile", array("org_id" => $org_id)));
             }
         }
@@ -2131,7 +2131,7 @@ class OrgRouteHandler
             if (isset($post['search_name']) && $post['search_name'] != '') {
                 $foundOrgs = $orgDao->searchForOrgByName(urlencode($post['search_name']));
                 if (empty($foundOrgs)) {
-                    $app->flashNow("error", Lib\Localisation::getTranslation('org_search_34'));
+                    UserRouteHandler::flashNow("error", Lib\Localisation::getTranslation('org_search_34'));
                 }
                 $app->view()->appendData(array('searchedText' => $post['search_name']));
             }
@@ -2269,9 +2269,9 @@ class OrgRouteHandler
                 }
 
                 if ($error != '') {
-                    $app->flashNow("error", $error);
+                    UserRouteHandler::flashNow("error", $error);
                 } else {
-                    $app->flash(
+                    UserRouteHandler::flash(
                         "success",
                         sprintf(
                             Lib\Localisation::getTranslation('org_task_review_40'),
@@ -2289,7 +2289,7 @@ class OrgRouteHandler
 
         $taskReview = $userDao->getUserTaskReviews($userId, $taskId);
         if (!is_null($taskReview)) {
-            $app->flashNow("info", Lib\Localisation::getTranslation('org_task_review_41'));
+            UserRouteHandler::flashNow("info", Lib\Localisation::getTranslation('org_task_review_41'));
         }
 
         $translator = $taskDao->getUserClaimedTask($taskId);
